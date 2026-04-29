@@ -38,16 +38,16 @@ export default function BottomNavigation() {
       className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md rounded-t-3xl shadow-2xl border-t border-gray-200 z-40"
     >
       <div className="max-w-2xl mx-auto px-4 py-3">
-        {/* Main Navigation - Simple Grid */}
-        <div className="grid grid-cols-5 gap-2">
+        {/* Main Navigation - Flex with horizontal scroll */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
           {navItems.map(item => (
-            <Link key={item.path} to={item.path}>
+            <Link key={item.path} to={item.path} className="flex-shrink-0">
               <motion.button
                 whileTap={{ scale: 0.88 }}
                 whileHover={{ scale: 1.05 }}
-                className={`w-full flex flex-col items-center gap-1 py-3 px-2 rounded-2xl transition-all duration-200 ${
+                className={`flex flex-col items-center gap-1 py-3 px-4 rounded-2xl transition-all duration-200 min-w-max ${
                   isActive(item.path)
-                    ? 'bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg scale-105'
+                    ? 'bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg'
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
