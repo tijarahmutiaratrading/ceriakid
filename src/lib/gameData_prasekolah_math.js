@@ -47,7 +47,7 @@ export const prasekolah_mathematics = [
     { image: '⭐', options: ['Bintang','Bulatan','Segi Tiga'], answer: 0 },
     { image: '🔶', options: ['Heksagon','Berlian','Segi Empat'], answer: 0 },
     { image: '🔷', options: ['Berlian','Bujur','Segi Tiga'], answer: 0 },
-    { image: '🔴', options: ['Bulatan','Bola','Cakera'], answer: 0 },
+    { image: '🔴', options: ['Bulatan','Bola','Cakera'], answer: 1 },
   ]}},
   { title: 'Lebih Besar atau Lebih Kecil', type: 'math_puzzle', emoji: '📏', difficulty: 'easy', gameData: { questions: [
     { problem: '3 atau 5?', options: ['3 lebih besar','5 lebih besar','Sama'], answer: 1 },

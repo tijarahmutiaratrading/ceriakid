@@ -117,7 +117,7 @@ export const prasekolah_bahasa_melayu = [
     { image: '🧢', options: ['Topi','Tudung','Skaf'], answer: 0 },
     { image: '👗', options: ['Baju','Gaun','Seluar'], answer: 1 },
     { image: '🧥', options: ['Jaket','Baju','Seluar'], answer: 0 },
-    { image: '👔', options: ['Baju Kemeja','T-shirt','Baju Melayu'], answer: 0 },
+    { image: '👔', options: ['Tali Leher','T-shirt','Baju Melayu'], answer: 0 },
   ]}},
   { title: 'Nama Pengangkutan', type: 'picture_quiz', emoji: '🚗', difficulty: 'easy', gameData: { questions: [
     { image: '🚗', options: ['Kereta','Bas','Lori'], answer: 0 },

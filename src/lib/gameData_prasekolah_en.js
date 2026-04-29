@@ -107,7 +107,7 @@ export const prasekolah_english = [
     { image: '🧢', options: ['Hat','Scarf','Hood'], answer: 0 },
     { image: '👗', options: ['Shirt','Dress','Pants'], answer: 1 },
     { image: '🧥', options: ['Jacket','Shirt','Pants'], answer: 0 },
-    { image: '👔', options: ['T-shirt','Shirt','Blouse'], answer: 1 },
+    { image: '👔', options: ['T-shirt','Tie','Blouse'], answer: 1 },
   ]}},
   { title: 'Transport Names', type: 'picture_quiz', emoji: '🚗', difficulty: 'easy', gameData: { questions: [
     { image: '🚗', options: ['Car','Bus','Truck'], answer: 0 },
