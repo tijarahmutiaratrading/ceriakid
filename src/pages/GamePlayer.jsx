@@ -49,7 +49,7 @@ export default function GamePlayer() {
 
   const questions = useMemo(() => {
     if (!game?.gameData?.questions) return [];
-    const baseQuestions = game.gameData.questions.slice(0, game.totalQuestions || 8);
+    const baseQuestions = game.gameData.questions.slice(0, game.totalQuestions || 20);
     
     // Shuffle answer options while tracking correct answer
     return baseQuestions.map(q => {
@@ -353,7 +353,7 @@ export default function GamePlayer() {
           </div>
           <div className="flex items-center gap-2 text-sm font-bold text-gray-600">
             <Clock className="w-4 h-4" />
-            {game.totalQuestions || 8} soalan
+            {game.totalQuestions || 20} soalan
           </div>
         </div>
 
