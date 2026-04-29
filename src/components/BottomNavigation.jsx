@@ -37,15 +37,15 @@ export default function BottomNavigation() {
       transition={{ delay: 0.3 }}
       className="fixed bottom-0 inset-x-0 z-40 px-4 py-4"
     >
-      <div className="max-w-2xl mx-auto bg-gradient-to-br from-slate-700 to-slate-800 rounded-full shadow-2xl px-3 py-3">
-        {/* Navigation - Flex centered */}
-        <div className="flex items-center justify-between gap-1">
+      <div className="max-w-2xl mx-auto bg-gradient-to-br from-slate-700 to-slate-800 rounded-full shadow-2xl px-2 py-3">
+        {/* Navigation - Horizontal scroll on mobile, flex on desktop */}
+        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide md:justify-center">
           {navItems.map(item => (
-            <Link key={item.path} to={item.path} className="flex-1 min-w-0">
+            <Link key={item.path} to={item.path} className="flex-shrink-0">
               <motion.button
                 whileTap={{ scale: 0.88 }}
                 whileHover={{ scale: 1.05 }}
-                className={`w-full flex flex-col items-center gap-1 py-2.5 px-2 rounded-2xl transition-all duration-200 ${
+                className={`flex flex-col items-center gap-1 py-2 px-3 rounded-2xl transition-all duration-200 min-w-max ${
                   isActive(item.path)
                     ? 'bg-slate-500/50 text-white shadow-lg'
                     : 'text-slate-400 hover:text-slate-300'
