@@ -22,6 +22,16 @@ export default function Home() {
           </div>
           <div className="flex gap-2">
             <LanguageToggle />
+            {isAuthenticated && (
+              <Link to="/parent-dashboard">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  className="clay-button rounded-full px-4 py-2 text-sm font-bold bg-game-purple/20"
+                >
+                  📊
+                </motion.button>
+              </Link>
+            )}
             {!isAuthenticated && (
               <Link to="/pricing">
                 <motion.button

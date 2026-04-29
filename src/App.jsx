@@ -13,6 +13,7 @@ import Pricing from '@/pages/Pricing';
 import Home from '@/pages/Home';
 import GamesList from '@/pages/GamesList';
 import GamePlayer from '@/pages/GamePlayer';
+import ParentDashboard from '@/pages/ParentDashboard';
 import ABCGame from '@/pages/ABCGame';
 import NumberGame from '@/pages/NumberGame';
 import QuizGame from '@/pages/QuizGame';
@@ -54,6 +55,7 @@ const AuthenticatedApp = () => {
           <Route path="/" element={<Home />} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
+          <Route path="/parent-dashboard" element={<ParentDashboard />} />
           
           {/* Legacy games */}
           <Route path="/abc" element={<ABCGame />} />
