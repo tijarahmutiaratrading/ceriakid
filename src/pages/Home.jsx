@@ -4,7 +4,6 @@ import { useLang } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
 import { Link } from 'react-router-dom';
 import LanguageToggle from '@/components/game/LanguageToggle';
-import AgeGroupSelector from '@/components/home/AgeGroupSelector';
 import CategoryGrid from '@/components/home/CategoryGrid';
 
 export default function Home() {
@@ -43,8 +42,7 @@ export default function Home() {
           </motion.p>
         )}
 
-        {/* Age Group Selector */}
-        <AgeGroupSelector />
+
 
         {/* Category Grid */}
         <h2 className="text-xl font-black mb-4">Pilih Kategori</h2>

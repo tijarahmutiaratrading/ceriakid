@@ -26,16 +26,41 @@ const getCategoryEmoji = (category) => {
 
 export default function GamesList() {
   const { category } = useParams();
-  const { ageGroup } = useAgeGroup();
   const { user } = useAuth();
-  const games = getGamesByAgeAndCategory(ageGroup, category);
+  const [userSubscription, setUserSubscription] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState({});
 
+  // Load user subscription to get locked age group
   useEffect(() => {
     if (user) {
+      loadUserSubscription();
+    }
+  }, [user]);
+
+  const loadUserSubscription = async () => {
+    try {
+      const subData = await base44.entities.UserSubscription.filter({
+        email: user.email,
+      });
+      if (subData.length > 0) {
+        setUserSubscription(subData[0]);
+      }
+    } catch (error) {
+      console.error('Failed to load subscription:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const ageGroup = userSubscription?.selectedAgeGroup || 'prasekolah';
+  const games = getGamesByAgeAndCategory(ageGroup, category);
+
+  useEffect(() => {
+    if (user && userSubscription) {
       loadProgress();
     }
-  }, [user, category, ageGroup]);
+  }, [user, category, userSubscription]);
 
   const loadProgress = async () => {
     try {
@@ -52,6 +77,17 @@ export default function GamesList() {
       console.error('Failed to load progress:', error);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-pattern flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl animate-bounce mb-4">🎓</div>
+          <div className="w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full animate-spin mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-pattern">

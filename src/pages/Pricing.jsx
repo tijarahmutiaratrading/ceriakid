@@ -90,6 +90,30 @@ export default function Pricing() {
     }
   };
 
+  const renderAgeGroupSelector = () => {
+    return (
+      <div className="clay rounded-3xl p-6 mb-8">
+        <p className="text-sm font-bold text-gray-600 mb-4">Pilih peringkat untuk anak Anda:</p>
+        <div className="flex gap-3">
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.05 }}
+            className="flex-1 rounded-xl py-2 px-3 font-bold bg-game-yellow/30 border-2 border-game-yellow text-gray-800 text-sm"
+          >
+            👶 Pra Sekolah (3-5)
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.05 }}
+            className="flex-1 rounded-xl py-2 px-3 font-bold bg-gray-100 border-2 border-gray-300 text-gray-600 text-sm"
+          >
+            👧 Sekolah Rendah (6-12)
+          </motion.button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-pattern">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12">
@@ -107,6 +131,8 @@ export default function Pricing() {
           <h1 className="text-3xl md:text-5xl font-black mb-4">Paket Langganan</h1>
           <p className="text-lg md:text-xl text-gray-600">Pilih paket yang sesuai untuk anak-anak Anda</p>
         </div>
+
+        {renderAgeGroupSelector()}
 
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
