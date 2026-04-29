@@ -481,31 +481,7 @@ export default function Landing() {
         </div>
       </footer>
 
-      {/* ── STICKY CTA BAR ── */}
-      <AnimatePresence>
-        {stickyVisible && (
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-orange-300 shadow-2xl px-4 py-3"
-          >
-            <div className="max-w-xl mx-auto flex items-center justify-between gap-4">
-              <div>
-                <p className="font-black text-gray-900 text-sm">🔥 Tawaran Terhad — Diskaun 50%</p>
-                <p className="text-xs text-gray-500">Tamat dalam <span className="text-red-500 font-black">{String(countdown.m).padStart(2,'0')}:{String(countdown.s).padStart(2,'0')}</span></p>
-              </div>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={scrollToPricing}
-                className="flex-shrink-0 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-black text-sm shadow-lg"
-              >
-                Cuba Percuma →
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
     </div>
   );
 }
