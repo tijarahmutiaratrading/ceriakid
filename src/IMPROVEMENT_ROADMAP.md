@@ -1,12 +1,12 @@
 # 🚀 Jom Belajar - Improvement Roadmap 2026
 
 ## Phase 1: Core Monetization (Week 1-2)
-### 🎯 Ads Integration
-- [ ] Integrate Google AdMob for free tier
+### 🎯 Ads Integration (Facebook Ads)
+- [ ] Integrate Facebook Ads for free tier
   - Banner ads on home page for free users
-  - Interstitial ads after every 3 games
-  - Reward ads for bonus stars
-- [ ] Estimated revenue: RM 200-500/month for 1000 DAU
+  - In-stream ads between games
+  - Audience targeting by age group & performance
+- [ ] Estimated revenue: RM 300-600/month for 1000 DAU
 
 ### 📧 Email Notifications
 - [ ] Weekly progress reports to parents

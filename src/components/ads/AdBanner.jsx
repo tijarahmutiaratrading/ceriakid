@@ -2,36 +2,40 @@ import React, { useEffect } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 
 /**
- * AdBanner - Google AdMob Integration
+ * AdBanner - Facebook Ads Integration
  * Only shows ads to free tier users
  * 
  * Setup:
- * 1. Get Google AdMob App ID from https://admob.google.com
- * 2. Create ad unit (banner) → Copy unit ID
- * 3. Set GOOGLE_ADMOB_APP_ID in env
- * 4. Use: <AdBanner unitId="ca-app-pub-xxxxxxxxxxxxxxxx/yyyyyyyyyy" />
+ * 1. Get Facebook App ID from https://developers.facebook.com
+ * 2. Set FB_APP_ID in env
+ * 3. Create audience segmentation in Ads Manager
+ * 4. Use: <AdBanner position="bottom" />
  */
 
-export default function AdBanner({ unitId, position = 'bottom' }) {
+export default function AdBanner({ position = 'bottom' }) {
   const { user } = useAuth();
 
   useEffect(() => {
-    // Only load ads for free tier users
+    // Only load FB SDK for free tier users
     if (!user || user.subscription?.tier !== 'free') return;
 
-    // Load Google Mobile Ads SDK
-    if (!window.adsbygoogle) {
+    // Load Facebook SDK
+    window.fbAsyncInit = function() {
+      if (window.FB) {
+        window.FB.init({
+          appId: import.meta.env.VITE_FB_APP_ID,
+          xfbml: true,
+          version: 'v18.0'
+        });
+      }
+    };
+
+    if (!window.FB) {
       const script = document.createElement('script');
       script.async = true;
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-xxxxxxxxxxxxxxxx';
-      script.onload = () => {
-        if (window.adsbygoogle) {
-          window.adsbygoogle.push({});
-        }
-      };
-      document.head.appendChild(script);
-    } else if (window.adsbygoogle) {
-      window.adsbygoogle.push({});
+      script.defer = true;
+      script.src = 'https://connect.facebook.net/ms_MY/sdk.js#xfbml=1&version=v18.0&appId=' + import.meta.env.VITE_FB_APP_ID;
+      document.body.appendChild(script);
     }
   }, [user]);
 
@@ -44,22 +48,15 @@ export default function AdBanner({ unitId, position = 'bottom' }) {
     <div
       className={`w-full ${
         position === 'bottom'
-          ? 'fixed bottom-0 left-0 right-0'
+          ? 'fixed bottom-0 left-0 right-0 z-40'
           : 'sticky top-0 pt-2 pb-2 bg-white border-b'
       }`}
-      style={{ minHeight: '80px' }}
     >
-      <ins
-        className="adsbygoogle"
-        style={{
-          display: 'block',
-          width: '100%',
-          height: '80px',
-        }}
-        data-ad-client="ca-app-pub-xxxxxxxxxxxxxxxx"
-        data-ad-slot={unitId}
-        data-ad-format="horizontal"
-        data-full-width-responsive="false"
+      <div
+        className="fb-ad"
+        data-placement-id="YOUR_PLACEMENT_ID"
+        data-format="banner"
+        data-height="250"
       />
     </div>
   );
