@@ -72,13 +72,13 @@ export default function Landing() {
         {/* Main Headline */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-16">
           <h1 className="text-5xl md:text-6xl font-black leading-tight mb-6">
-            Anak Bijak,<br />Ibu Ayah <span className="bg-yellow-300 px-4 py-2 inline-block rounded-lg">Happy</span>
+            Anak Suka Belajar,<br />Orang Tua <span className="bg-yellow-300 px-4 py-2 inline-block rounded-lg">Tenang</span>
           </h1>
           <p className="text-xl text-gray-700 mb-8 max-w-2xl font-semibold">
-            <span className="text-game-orange font-black">Bayar Sekali,</span> Belajar Selamanya
+            <span className="text-game-orange font-black">200+ Permainan Edukatif</span> — Semua Subjek, Satu Aplikasi
           </p>
           <p className="text-lg text-gray-600 max-w-3xl mb-8 leading-relaxed">
-            200+ permainan interaktif, kuiz menyeronokkan, lembaran kerja siap print & e-storybook — semua dalam satu platform. Untuk anak pra-sekolah sampai Tahun 6, ikut silibus KSSR. Tak payah bayar tiap bulan! 🎉
+            Permainan interaktif yang dirancang untuk anak prasekolah hingga tahun 6, mengikut kurikulum KBSR. Tiada iklan mengganggu, tiada pembelian tersembunyi. Anak bermain sambil belajar, orang tua boleh relaks. 🎮✨
           </p>
 
           {/* CTA Buttons */}
@@ -132,18 +132,18 @@ export default function Landing() {
       <div className="bg-white py-20">
         <div className="max-w-5xl mx-auto px-6">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mb-12 text-center">
-            <p className="text-3xl mb-4">😩 Ibu bapa, jujur sikit...</p>
-            <h2 className="text-4xl font-black text-gray-800 mb-4">Pening kepala bila anak tak nak belajar?</h2>
-            <p className="text-lg text-gray-600">Kalau salah satu situasi ni rasa familiar — anda bukan keseorangan.</p>
+            <p className="text-3xl mb-4">🤔 Masalah Biasa?</p>
+            <h2 className="text-4xl font-black text-gray-800 mb-4">Anak kurang minat belajar?</h2>
+            <p className="text-lg text-gray-600">Banyak orang tua hadapi cabaran yang sama. Anda bukan sorang-sorang.</p>
           </motion.div>
 
           {/* Problems Grid */}
           <div className="grid md:grid-cols-2 gap-8">
             {[
-              { emoji: '😩', title: 'Anak dok scroll TikTok & YouTube je kerja...', desc: 'Tengok video tak berfaedah berjam-jam. Panggil pun tak dengar. Naik tension ibu ayah!' },
-              { emoji: '💸', title: 'Tuisyen mahal gila, tapi result still sama je', desc: 'RM300–RM800 sebulan keluar. Dah abih duit, tapi anak masih struggle.' },
-              { emoji: '😴', title: 'Buku teks? Anak lari jauh-jauh...', desc: 'Buka buku sekejap, terus ngantuk. Nak paksa belajar pun jadi gaduh.' },
-              { emoji: '⏰', title: 'Ibu ayah penat kerja, mana ada masa nak ajar', desc: 'Balik kerja dah exhausted. Tapi kena jadi cikgu pulak malam-malam.' },
+              { emoji: '📱', title: 'Anak lebih suka gadget dari buku', desc: 'Game dan sosial media lebih menarik. Sukar disuruh duduk untuk belajar akademik.' },
+              { emoji: '😔', title: 'Prestasi akademik stagnan', desc: 'Walaupun sudah pergi tuisyen, nilai tidak meningkat. Diambang pelepasan ujian lagi.' },
+              { emoji: '😫', title: 'Sulit fokus dengan pembelajaran tradisional', desc: 'Gaya belajar dari buku teks tidak sesuai dengan minat anak zaman sekarang.' },
+              { emoji: '⏱️', title: 'Orang tua sibuk, sulit beri bimbingan langsung', desc: 'Masa terbatas untuk membantu anak belajar. Ingin ada solusi yang praktis.' },
             ].map((problem, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-amber-100 rounded-2xl p-6 border-2 border-amber-200">
                 <p className="text-4xl mb-3">{problem.emoji}</p>
@@ -154,8 +154,8 @@ export default function Landing() {
           </div>
 
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mt-12">
-            <p className="text-2xl font-bold text-gray-800 mb-2">"Mestilah ada cara lain yang lebih senang..."</p>
-            <p className="text-2xl font-black text-game-orange">ADA. Jom tengok 👇</p>
+            <p className="text-2xl font-bold text-gray-800 mb-2">"Kalau saja ada cara yang lebih efektif dan menyeronokkan..."</p>
+            <p className="text-2xl font-black text-game-orange">Ada! Lihat di bawah. ⬇️</p>
           </motion.div>
         </div>
       </div>
@@ -163,18 +163,18 @@ export default function Landing() {
       {/* Features/Content */}
       <div className="max-w-5xl mx-auto px-6 py-20">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-16">
-          <h2 className="text-4xl font-black text-gray-800 mb-4">✅ Penyelesaiannya ada di sini</h2>
-          <p className="text-2xl font-black text-gray-800">Perkenalkan — <span className="text-game-orange">Jom Belajar Collection</span></p>
-          <p className="text-lg text-gray-600 mt-4">Satu koleksi yang ada <span className="font-bold">5 jenis bahan belajar berbeza</span> — semua ikut silibus KSSR.</p>
+          <h2 className="text-4xl font-black text-gray-800 mb-4">✨ Solusi Kami</h2>
+          <p className="text-2xl font-black text-gray-800"><span className="text-game-orange">Jom Belajar</span> — Permainan Edukatif yang Berkesan</p>
+          <p className="text-lg text-gray-600 mt-4">Ratusan permainan interaktif dirancang oleh pendidik profesional, mengikut kurikulum KBSR. Setiap permainan telah diuji untuk memastikan anak belajar dengan efektif.</p>
         </motion.div>
 
         {/* Content Types */}
         <div className="grid md:grid-cols-2 gap-8 mb-16">
           {[
-            { icon: '🎬', title: 'Video Animasi', desc: 'Sains, Pengetahuan Am, Life Lesson — dalam BM & English. Anak duduk diam sendiri menonton!', badge: '1,000+' },
-            { icon: '🎮', title: 'Kuiz Interaktif', desc: 'Kuiz gaya game — ada animasi, suara & visual cantik. Anak ingat macam main, tapi belajar!', badge: '200+' },
-            { icon: '📝', title: 'Worksheet Printable', desc: 'Siap print, bagi kat anak. Tracing, counting, matching — pra-sekolah sampai Tahun 6.', badge: '500+' },
-            { icon: '📚', title: 'E-Storybook', desc: 'Buku cerita penuh warna dalam digital. Bina minat membaca dari kecil tanpa paksa.', badge: '100+' },
+            { icon: '🎮', title: 'Permainan Bahasa Melayu', desc: 'Pelajari huruf, perkataan, dan tatabahasa melalui permainan yang asyik. Cocok untuk semua peringkat.', badge: '50+' },
+            { icon: '🔢', title: 'Permainan Matematik', desc: 'Tambah, tolak, darab, bahagi — semua dalam bentuk permainan interaktif yang tidak membosankan.', badge: '45+' },
+            { icon: '🧪', title: 'Permainan Sains', desc: 'Jelajahi dunia sains dengan eksperimen virtual yang aman dan menyeronokkan untuk rumah.', badge: '40+' },
+            { icon: '🌍', title: 'Permainan Umum', desc: 'Pelajari geografi, sejarah, dan kemahiran hidup lewat permainan yang menghibur.', badge: '65+' },
           ].map((feature, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-game-orange hover:shadow-lg transition-all">
               <div className="flex items-start justify-between mb-4">
@@ -188,20 +188,20 @@ export default function Landing() {
         </div>
 
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="bg-amber-100 rounded-3xl p-8 text-center border-2 border-game-orange">
-          <p className="text-xl font-black text-gray-800">📈 Content baru masuk setiap bulan!</p>
-          <p className="text-gray-700 mt-2">topik trending, request dari ibu bapa & isi terbaru ikut silibus. Semua dapat percuma tau! 🙌</p>
+          <p className="text-xl font-black text-gray-800">🆕 Permainan baru ditambah setiap bulan</p>
+          <p className="text-gray-700 mt-2">Kami terus mengembangkan koleksi berdasarkan feedback orang tua dan keperluan pendidikan terkini.</p>
         </motion.div>
       </div>
 
       {/* Testimonials */}
       <div className="bg-white py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-4xl font-black text-center text-gray-800 mb-16">💬 Jangan percaya cakap kami sahaja...</h2>
+          <h2 className="text-4xl font-black text-center text-gray-800 mb-16">💬 Apa Kata Orang Tua?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: 'Nur Amirah', location: 'Kuala Lumpur', quote: 'Anak saya jadi suka belajar lepas guna Jom Belajar. Video animasi dia suka sangat, dan yang best bayar sekali je!' },
-              { name: 'Encik Ahmad Firdaus', location: 'Johor Bahru', quote: 'Dulu bayar tuisyen mahal tapi anak still struggle. Sekarang dengan Jom Belajar, anak belajar sendiri & score meningkat!' },
-              { name: 'Puan Siti Maisarah', location: 'Kuantan', quote: 'Worksheet dia cantik-cantik, senang nak print. Anak saya excited setiap kali buat aktiviti baru. Team customer service pun helpful!' },
+              { name: 'Ibu Nurul', location: 'Selangor', quote: 'Sejak pakai Jom Belajar, anak saya lebih fokus belajar. Permainannya menarik dan tidak bikin stress macam tuisyen biasa.' },
+              { name: 'Pak Ismail', location: 'Melaka', quote: 'Saya suka dashboard yang boleh lihat progres anak. Tahu dia belajar apa, berapa skor. Transparent dan senang dipantau.' },
+              { name: 'Ibu Rohani', location: 'Johor', quote: 'Harganya sangat berpatutan untuk berapa banyak permainan. Anak boleh main berkali-kali, takut tak cukup waktu!' },
             ].map((testimonial, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-amber-50 rounded-2xl p-6 border-2 border-amber-200">
                 <div className="flex gap-1 mb-3">
@@ -212,7 +212,7 @@ export default function Landing() {
                 <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
                 <div>
                   <p className="font-black text-gray-800">{testimonial.name}</p>
-                  <p className="text-sm text-gray-600">Ibu/Ayah - {testimonial.location}</p>
+                  <p className="text-sm text-gray-600">{testimonial.location}</p>
                 </div>
               </motion.div>
             ))}
