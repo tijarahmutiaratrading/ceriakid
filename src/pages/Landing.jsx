@@ -301,21 +301,17 @@ export default function Landing() {
         </div>
 
         {/* Checkout Form */}
-        {selectedTier && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-md mx-auto mb-12 clay rounded-3xl p-8"
-          >
-            <h3 className="text-2xl font-black mb-6">{selectedTier.nameMY}</h3>
-            <PricingCheckout
-              tier={selectedTier}
-              tierName={selectedTier.name}
-              ageGroup={selectedAgeGroup}
-              onClose={() => setSelectedTier(null)}
-            />
-          </motion.div>
-        )}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-md mx-auto mb-12 clay rounded-3xl p-8"
+        >
+          <h3 className="text-2xl font-black mb-6">Langganan Sekarang</h3>
+          <PricingCheckout
+            ageGroup={selectedAgeGroup}
+            onClose={() => setSelectedTier(null)}
+          />
+        </motion.div>
 
         {/* FAQ Section */}
         <div className="max-w-2xl mx-auto">
