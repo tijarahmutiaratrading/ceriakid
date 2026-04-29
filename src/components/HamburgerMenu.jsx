@@ -3,10 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
+import { useAgeGroup } from '@/lib/AgeGroupContext';
 
 export default function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated } = useAuth();
+  const { ageGroup, setAgeGroup } = useAgeGroup();
   const location = useLocation();
 
   // Don't show on landing, pricing, admin & client dashboards
@@ -81,6 +83,30 @@ export default function HamburgerMenu() {
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
             className="fixed left-0 top-0 z-40 h-screen w-64 bg-white rounded-r-2xl shadow-2xl pt-20 px-4 overflow-y-auto"
           >
+            {/* Age Group Selector */}
+            <div className="mb-6 pb-4 border-b-2 border-gray-200">
+              <p className="text-xs font-bold text-gray-600 uppercase mb-3">Umur Anak</p>
+              <div className="flex gap-2">
+                {[
+                  { key: 'prasekolah', label: 'Pra Sekolah' },
+                  { key: 'sekolah_rendah', label: 'Sekolah Rendah' }
+                ].map((age) => (
+                  <motion.button
+                    key={age.key}
+                    onClick={() => setAgeGroup(age.key)}
+                    whileTap={{ scale: 0.95 }}
+                    className={`flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all ${
+                      ageGroup === age.key
+                        ? 'bg-game-purple text-white shadow-lg'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {age.label}
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+
             <nav className="space-y-3">
               {navItems.map((item) => (
                 <Link
