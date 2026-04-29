@@ -95,7 +95,11 @@ export default function HamburgerMenu() {
                 ].map((age) => (
                   <motion.button
                     key={age.key}
-                    onClick={() => setAgeGroup(age.key)}
+                    onClick={() => {
+                      if (ageGroupContext?.setAgeGroup) {
+                        ageGroupContext.setAgeGroup(age.key);
+                      }
+                    }}
                     whileTap={{ scale: 0.95 }}
                     className={`flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all ${
                       ageGroup === age.key
