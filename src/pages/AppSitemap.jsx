@@ -63,13 +63,7 @@ export default function AppSitemap() {
         { name: 'Settings', path: '/admin-settings', users: 'Admins', emoji: '⚙️' },
       ]
     },
-    {
-      category: '🏢 B2B',
-      desc: 'School partnerships & enterprise',
-      items: [
-        { name: 'B2B Landing', path: '/b2b', users: 'Schools', emoji: '🏫' },
-      ]
-    },
+
   ];
 
   return (

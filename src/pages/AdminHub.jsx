@@ -41,12 +41,7 @@ export default function AdminHub() {
         { name: 'Webhooks', path: '#', icon: Users, desc: 'Stripe & integrations' },
       ]
     },
-    {
-      title: '🏢 B2B',
-      items: [
-        { name: 'B2B Landing', path: '/b2b', icon: TrendingUp, desc: 'School partnerships' },
-      ]
-    },
+
   ];
 
   return (

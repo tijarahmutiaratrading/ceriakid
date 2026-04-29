@@ -16,7 +16,6 @@ import AdminSettings from '@/pages/AdminSettings';
 import AdminAnalyticsEnhanced from '@/pages/AdminAnalyticsEnhanced';
 import ClientDashboard from '@/pages/ClientDashboard';
 import GamesList from '@/pages/GamesList';
-import B2BLanding from '@/pages/B2BLanding';
 import AdminHub from '@/pages/AdminHub';
 import AppSitemap from '@/pages/AppSitemap';
 import GamePlayer from '@/pages/GamePlayer';
@@ -69,7 +68,6 @@ const AuthenticatedApp = () => {
           <Route path="/admin-analytics-advanced" element={<AdminAnalyticsEnhanced />} />
           <Route path="/admin-settings" element={<AdminSettings />} />
           <Route path="/sitemap" element={<AppSitemap />} />
-          <Route path="/b2b" element={<B2BLanding />} />
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
