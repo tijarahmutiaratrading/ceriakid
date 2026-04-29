@@ -47,8 +47,8 @@ export const checkAchievements = async (user, childName, progressData, base44) =
       });
     }
     
-    // Check perfect score
-    if (progressData?.lastScore === 8 && progressData?.lastStars === 3 && !existingBadgeIds.includes('perfect_8')) {
+    // Check perfect score (100% accuracy on any game)
+    if (progressData?.lastScore === progressData?.lastTotal && progressData?.lastStars === 3 && !existingBadgeIds.includes('perfect_8')) {
       unlockedBadges.push({
         badgeId: 'perfect_8',
         badgeName: ACHIEVEMENTS['perfect_8'].name,
@@ -123,16 +123,27 @@ export const calculateStreak = async (user, childName, base44) => {
 };
 
 const calculateConsecutiveDays = (progressArray) => {
-  let streak = 1;
   if (progressArray.length === 0) return 0;
   
-  const sorted = [...progressArray].sort((a, b) => 
+  // Create unique dates map to avoid counting same-day replays
+  const uniqueDates = new Map();
+  progressArray.forEach(p => {
+    const dateKey = new Date(p.lastPlayedDate).toISOString().split('T')[0];
+    if (!uniqueDates.has(dateKey)) {
+      uniqueDates.set(dateKey, p);
+    }
+  });
+  
+  if (uniqueDates.size === 0) return 0;
+  
+  const uniqueSorted = Array.from(uniqueDates.values()).sort((a, b) => 
     new Date(b.lastPlayedDate) - new Date(a.lastPlayedDate)
   );
   
-  for (let i = 0; i < sorted.length - 1; i++) {
-    const current = new Date(sorted[i].lastPlayedDate);
-    const next = new Date(sorted[i + 1].lastPlayedDate);
+  let streak = 1;
+  for (let i = 0; i < uniqueSorted.length - 1; i++) {
+    const current = new Date(uniqueSorted[i].lastPlayedDate);
+    const next = new Date(uniqueSorted[i + 1].lastPlayedDate);
     current.setHours(0, 0, 0, 0);
     next.setHours(0, 0, 0, 0);
     

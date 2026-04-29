@@ -193,12 +193,17 @@ export default function GamePlayer() {
         ageGroup: ageGroup,
       });
 
-      const totalStars = (progressData.bestStars || 0) + (leaderboardData[0]?.totalStars || 0);
+      // Calculate total stars: if first time, use progressData.bestStars; if updating, add only new stars earned
+      const oldTotalStars = leaderboardData[0]?.totalStars || 0;
+      const previousBestStars = leaderboardData[0]?.bestStars || 0;
+      const newStarsEarned = Math.max(stars - previousBestStars, 0);
+      const totalStars = oldTotalStars + newStarsEarned;
+
       const leaderboardEntry = {
         userEmail: user.email,
         childName: childName,
         ageGroup: ageGroup,
-        totalStars: Math.max(totalStars, 0),
+        totalStars: totalStars,
         gamesCompleted: (leaderboardData[0]?.gamesCompleted || 0) + 1,
         currentStreak: await calculateStreak({ email: user.email }, childName, base44),
         lastPlayedDate: new Date().toISOString(),
