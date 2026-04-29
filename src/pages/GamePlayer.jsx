@@ -270,7 +270,7 @@ export default function GamePlayer() {
 
   return (
     <div className="min-h-screen bg-pattern">
-      <div className="max-w-lg mx-auto px-4 py-6 pb-24">
+      <div className="max-w-lg mx-auto px-4 py-6 pb-32">
         <Link to={`/games/${category}`}>
           <motion.button
             whileTap={{ scale: 0.9 }}
