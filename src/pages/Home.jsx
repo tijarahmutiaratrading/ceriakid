@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useLang } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
+import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { Link } from 'react-router-dom';
 import LanguageToggle from '@/components/game/LanguageToggle';
 import CategoryGrid from '@/components/home/CategoryGrid';
@@ -9,6 +10,7 @@ import CategoryGrid from '@/components/home/CategoryGrid';
 export default function Home() {
   const { t } = useLang();
   const { isAuthenticated, user } = useAuth();
+  const { ageGroup, setAgeGroup } = useAgeGroup();
 
   return (
     <div className="min-h-screen bg-pattern">
@@ -42,7 +44,29 @@ export default function Home() {
           </motion.p>
         )}
 
-
+        {/* Age Group Toggle */}
+        <div className="mb-6 pb-4 border-b-2 border-gray-200">
+          <p className="text-xs font-bold text-gray-600 uppercase mb-3">Umur Anak</p>
+          <div className="flex gap-2">
+            {[
+              { key: 'prasekolah', label: 'Pra Sekolah' },
+              { key: 'sekolah_rendah', label: 'Sekolah Rendah' }
+            ].map((age) => (
+              <motion.button
+                key={age.key}
+                onClick={() => setAgeGroup(age.key)}
+                whileTap={{ scale: 0.95 }}
+                className={`flex-1 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
+                  ageGroup === age.key
+                    ? 'bg-game-purple text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {age.label}
+              </motion.button>
+            ))}
+          </div>
+        </div>
 
         {/* Category Grid */}
         <h2 className="text-xl font-black mb-4">Pilih Subjek</h2>
