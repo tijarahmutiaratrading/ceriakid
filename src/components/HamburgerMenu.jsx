@@ -20,6 +20,7 @@ export default function HamburgerMenu() {
 
   const navItems = [
     { path: '/', emoji: '🏠', label: 'Rumah' },
+    { path: '/sitemap', emoji: '🗺️', label: 'App Guide' },
     { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
     { path: '/games/english', emoji: '🇬🇧', label: 'English' },
     { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
@@ -30,6 +31,7 @@ export default function HamburgerMenu() {
       { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
       { path: '/friends', emoji: '👥', label: 'Kawan' },
       { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
+      { path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' },
     ] : []),
   ];
 
