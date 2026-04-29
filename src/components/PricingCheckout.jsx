@@ -4,6 +4,12 @@ import { base44 } from '@/api/base44Client';
 
 const TIERS = [
   {
+    name: 'free',
+    nameMY: 'Percuma',
+    priceMYR: '0',
+    description: '5 permainan percuma',
+  },
+  {
     name: 'premium',
     nameMY: 'Premium',
     priceMYR: '24.90',
@@ -19,6 +25,7 @@ const TIERS = [
 
 export default function PricingCheckout({ ageGroup, onClose }) {
   const [formData, setFormData] = useState({
+    email: '',
     name: '',
     phone: '',
     selectedTier: 'premium',
@@ -30,6 +37,10 @@ export default function PricingCheckout({ ageGroup, onClose }) {
     e.preventDefault();
     setError('');
 
+    if (!formData.email.trim()) {
+      setError('Sila masukkan email');
+      return;
+    }
     if (!formData.name.trim()) {
       setError('Sila masukkan nama');
       return;
@@ -51,6 +62,7 @@ export default function PricingCheckout({ ageGroup, onClose }) {
       const response = await base44.functions.invoke('createCheckoutSession', {
         tier: formData.selectedTier,
         ageGroup: ageGroup,
+        email: formData.email,
         name: formData.name,
         phone: formData.phone,
         returnUrl: window.location.href,
@@ -69,6 +81,20 @@ export default function PricingCheckout({ ageGroup, onClose }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Email */}
+      <div>
+        <label className="block text-sm font-bold mb-2">Email</label>
+        <input
+          type="email"
+          placeholder="email@example.com"
+          value={formData.email}
+          onChange={(e) =>
+            setFormData({ ...formData, email: e.target.value })
+          }
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple"
+        />
+      </div>
+
       {/* Name */}
       <div>
         <label className="block text-sm font-bold mb-2">Nama Ibu Bapa</label>
