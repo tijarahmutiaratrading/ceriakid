@@ -79,130 +79,131 @@ export default function ClientDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50">
-      <div className="max-w-2xl mx-auto px-4 py-8 pb-24">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-b from-game-purple/5 to-white">
+      <div className="max-w-2xl mx-auto px-4 py-6 pb-24">
         <Link to="/">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6"
-          >
+          <motion.button whileTap={{ scale: 0.9 }} className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6">
             <ArrowLeft className="w-6 h-6" />
           </motion.button>
         </Link>
 
-        <h1 className="text-4xl font-black mb-8 text-gray-800">Akaun Saya</h1>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
+          <h1 className="text-4xl font-black text-gray-900 mb-2">🎓 Akaun Saya</h1>
+          <p className="text-gray-600">Lihat maklumat langganan & akaun anda</p>
+        </motion.div>
 
         {/* Subscription Card */}
-        {subscription && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-br from-white to-amber-50 rounded-3xl p-8 mb-8 border-2 border-amber-200 shadow-lg"
-          >
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <p className="text-sm text-gray-700 font-bold mb-2">📦 Paket Semasa</p>
-                <h2 className="text-3xl font-black text-game-orange">
-                  {tierNames[subscription.tier]}
-                </h2>
-                <p className="text-2xl font-bold mt-2">
-                  {tierPrices[subscription.tier]}/{subscription.tier === 'free' ? '' : 'bulan'}
-                </p>
-              </div>
-              <CreditCard className="w-16 h-16 text-game-purple opacity-20" />
-            </div>
-
-            {/* Status */}
-            <div className="flex items-center gap-3 mb-6 p-4 bg-green-100 rounded-2xl">
-              <CheckCircle className="w-6 h-6 text-green-600" />
-              <div>
-                <p className="font-bold text-green-700">Aktif</p>
-                <p className="text-sm text-green-600">Paket anda aktif dan berfungsi</p>
-              </div>
-            </div>
-
-            {/* Renewal Date */}
-            {subscription.currentPeriodEnd && (
-              <div className="flex items-center gap-3 p-4 bg-blue-100 rounded-2xl mb-6">
-                <Calendar className="w-6 h-6 text-game-blue" />
-                <div>
-                  <p className="text-sm text-gray-600">Tarikh Pembaruan</p>
-                  <p className="font-bold text-game-blue">
-                    {new Date(subscription.currentPeriodEnd).toLocaleDateString('ms-MY')}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Features */}
-            <div className="mt-8">
-              <p className="font-bold text-lg mb-4">Ciri-ciri Paket:</p>
-              <div className="space-y-3">
-                {tierFeatures[subscription.tier].map((feature, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="flex items-center gap-3"
-                  >
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">{feature}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* No Subscription */}
-        {!subscription && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-3xl p-8 text-center border-2 border-amber-200 shadow-lg"
-          >
-            <p className="text-2xl font-black mb-4">📦</p>
-            <p className="font-bold text-lg mb-2">Tiada Paket Aktif</p>
-            <p className="text-gray-600 mb-6">
-              Mulai langganan sekarang untuk akses 200+ permainan seru!
-            </p>
-            <Link to="/landing">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                className="px-8 py-3 bg-game-orange text-white rounded-full font-bold hover:bg-orange-600 transition-all"
+        {subscription ? (
+          <div className="space-y-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <h2 className="text-xl font-black text-gray-800 mb-4">💎 Paket Langganan</h2>
+              <motion.div
+                whileHover={{ scale: 1.02, y: -4 }}
+                className={`rounded-3xl p-8 border-2 shadow-lg ${
+                  subscription.tier === 'free' ? 'bg-gradient-to-br from-gray-100 to-gray-50 border-gray-300' :
+                  subscription.tier === 'premium' ? 'bg-gradient-to-br from-blue-100 to-blue-50 border-blue-300' :
+                  'bg-gradient-to-br from-purple-100 to-purple-50 border-purple-300'
+                }`}
               >
-                Lihat Paket
-              </motion.button>
-            </Link>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <p className="text-sm font-bold text-gray-600 mb-1">Paket Semasa</p>
+                    <h3 className={`text-4xl font-black ${
+                      subscription.tier === 'free' ? 'text-gray-700' :
+                      subscription.tier === 'premium' ? 'text-blue-600' :
+                      'text-purple-600'
+                    }`}>
+                      {tierNames[subscription.tier]}
+                    </h3>
+                  </div>
+                  <div className="text-5xl opacity-30">
+                    {subscription.tier === 'free' ? '🎯' : subscription.tier === 'premium' ? '💎' : '👑'}
+                  </div>
+                </div>
+
+                <div className="space-y-3 mb-6">
+                  <div className={`p-4 rounded-2xl flex items-center gap-3 ${
+                    subscription.tier === 'free' ? 'bg-white/60' :
+                    subscription.tier === 'premium' ? 'bg-blue-200/60' :
+                    'bg-purple-200/60'
+                  }`}>
+                    <span className="text-2xl font-black">{tierPrices[subscription.tier]}</span>
+                    <span className="text-sm text-gray-700 font-bold">{subscription.tier !== 'free' ? '/bulan' : 'Selamanya'}</span>
+                  </div>
+
+                  {subscription.currentPeriodEnd && (
+                    <div className="p-4 bg-white/60 rounded-2xl flex items-center gap-3">
+                      <Calendar className="w-5 h-5 text-gray-700" />
+                      <div>
+                        <p className="text-xs text-gray-600">Pembaruan</p>
+                        <p className="font-bold text-sm">{new Date(subscription.currentPeriodEnd).toLocaleDateString('ms-MY')}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="bg-white/40 rounded-2xl p-4">
+                  <p className="text-xs font-bold text-gray-600 mb-3">✅ Ciri-ciri:</p>
+                  <div className="grid grid-cols-1 gap-2">
+                    {tierFeatures[subscription.tier].map((feature, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className="flex items-center gap-2 text-sm font-semibold text-gray-700"
+                      >
+                        <span className="text-green-500">✓</span> {feature}
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        ) : (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+            <h2 className="text-xl font-black text-gray-800 mb-4">💎 Paket Langganan</h2>
+            <motion.div
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="bg-gradient-to-br from-amber-100 to-amber-50 rounded-3xl p-8 text-center border-2 border-amber-300 shadow-lg"
+            >
+              <p className="text-4xl mb-4">📦</p>
+              <p className="font-black text-xl text-gray-800 mb-2">Tiada Paket Aktif</p>
+              <p className="text-gray-700 mb-6">Mulai langganan untuk akses semua permainan & ciri-ciri premium!</p>
+              <Link to="/landing">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-3 bg-gradient-to-r from-game-orange to-orange-500 text-white rounded-full font-bold shadow-lg"
+                >
+                  Lihat Paket
+                </motion.button>
+              </Link>
+            </motion.div>
           </motion.div>
         )}
 
         {/* User Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-3xl p-8 border-2 border-amber-200 shadow-lg"
-        >
-          <h2 className="text-2xl font-black mb-6 text-gray-800">👤 Maklumat Akaun</h2>
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-gray-600 mb-1">Nama</p>
-              <p className="font-bold">{user?.full_name}</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+          <h2 className="text-xl font-black text-gray-800 mb-4">👤 Maklumat Akaun</h2>
+          <motion.div whileHover={{ scale: 1.02, y: -4 }} className="bg-white rounded-3xl p-6 border-2 border-game-purple/20 shadow-lg">
+            <div className="space-y-4">
+              {[
+                { label: 'Nama', value: user?.full_name, icon: '👤' },
+                { label: 'Email', value: user?.email, icon: '📧' },
+                { label: 'Ahli Sejak', value: new Date(user?.created_date).toLocaleDateString('ms-MY'), icon: '📅' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3 pb-4 border-b border-gray-200 last:border-0">
+                  <span className="text-xl">{item.icon}</span>
+                  <div className="flex-1">
+                    <p className="text-xs text-gray-600 font-bold">{item.label}</p>
+                    <p className="font-bold text-gray-800">{item.value}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div>
-              <p className="text-sm text-gray-600 mb-1">Email</p>
-              <p className="font-bold">{user?.email}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600 mb-1">Ahli Sejak</p>
-              <p className="font-bold">
-                {new Date(user?.created_date).toLocaleDateString('ms-MY')}
-              </p>
-            </div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>
