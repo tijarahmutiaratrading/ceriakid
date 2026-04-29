@@ -1,0 +1,181 @@
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useAuth } from '@/lib/AuthContext';
+import { base44 } from '@/api/base44Client';
+import { ArrowLeft, BarChart3, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+export default function AdminDashboard() {
+  const { user } = useAuth();
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user?.role === 'admin') {
+      loadSubscriptions();
+    }
+  }, [user]);
+
+  const loadSubscriptions = async () => {
+    try {
+      const data = await base44.entities.UserSubscription.list();
+      setSubscriptions(data);
+    } catch (error) {
+      console.error('Failed to load subscriptions:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (user?.role !== 'admin') {
+    return (
+      <div className="min-h-screen bg-pattern flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-2xl font-black mb-4">🔒</p>
+          <p className="font-bold">Akses Ditolak</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-pattern flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full animate-spin mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
+
+  const totalRevenue = subscriptions
+    .filter(s => s.tier !== 'free')
+    .reduce((sum, s) => {
+      const price = s.tier === 'premium' ? 24.90 : s.tier === 'pro' ? 44.90 : 0;
+      return sum + price;
+    }, 0);
+
+  const tierBreakdown = {
+    free: subscriptions.filter(s => s.tier === 'free').length,
+    premium: subscriptions.filter(s => s.tier === 'premium').length,
+    pro: subscriptions.filter(s => s.tier === 'pro').length,
+  };
+
+  return (
+    <div className="min-h-screen bg-pattern">
+      <div className="max-w-7xl mx-auto px-4 py-8 pb-24">
+        {/* Header */}
+        <Link to="/">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </motion.button>
+        </Link>
+
+        <h1 className="text-4xl font-black mb-8 flex items-center gap-3">
+          <BarChart3 className="w-10 h-10 text-game-purple" />
+          Admin Dashboard
+        </h1>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="clay rounded-2xl p-6"
+          >
+            <p className="text-sm text-gray-600 mb-2">Jumlah Pembeli</p>
+            <p className="text-3xl font-black text-game-purple">{subscriptions.length}</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="clay rounded-2xl p-6"
+          >
+            <p className="text-sm text-gray-600 mb-2">Premium</p>
+            <p className="text-3xl font-black text-game-blue">{tierBreakdown.premium}</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="clay rounded-2xl p-6"
+          >
+            <p className="text-sm text-gray-600 mb-2">Pro</p>
+            <p className="text-3xl font-black text-game-purple">{tierBreakdown.pro}</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="clay rounded-2xl p-6"
+          >
+            <p className="text-sm text-gray-600 mb-2">Pendapatan (RM)</p>
+            <p className="text-3xl font-black text-game-green">{totalRevenue.toFixed(2)}</p>
+          </motion.div>
+        </div>
+
+        {/* Clients Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="clay rounded-2xl p-6 overflow-x-auto"
+        >
+          <h2 className="text-2xl font-black mb-6 flex items-center gap-3">
+            <Users className="w-7 h-7 text-game-purple" />
+            Daftar Pembeli
+          </h2>
+
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b-2 border-gray-300">
+                <th className="text-left py-3 px-4 font-bold">Email</th>
+                <th className="text-left py-3 px-4 font-bold">Paket</th>
+                <th className="text-left py-3 px-4 font-bold">Status</th>
+                <th className="text-left py-3 px-4 font-bold">Tarikh Daftar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {subscriptions.map((sub, i) => (
+                <motion.tr
+                  key={sub.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="border-b border-gray-200 hover:bg-gray-50"
+                >
+                  <td className="py-3 px-4">{sub.email}</td>
+                  <td className="py-3 px-4">
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                      sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
+                      sub.tier === 'premium' ? 'bg-game-blue/20 text-game-blue' :
+                      'bg-game-purple/20 text-game-purple'
+                    }`}>
+                      {sub.tier === 'free' ? 'Percuma' : sub.tier === 'premium' ? 'Premium' : 'Pro'}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4">
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                      sub.status === 'active' ? 'bg-green-200 text-green-700' :
+                      'bg-red-200 text-red-700'
+                    }`}>
+                      {sub.status === 'active' ? 'Aktif' : 'Batal'}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
