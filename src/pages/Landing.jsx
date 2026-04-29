@@ -306,6 +306,23 @@ export default function Landing() {
           ))}
         </div>
 
+        {/* Checkout Form */}
+        {selectedTier && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-md mx-auto mb-12 clay rounded-3xl p-8"
+          >
+            <h3 className="text-2xl font-black mb-6">{selectedTier.nameMY}</h3>
+            <PricingCheckout
+              tier={selectedTier}
+              tierName={selectedTier.name}
+              ageGroup={selectedAgeGroup}
+              onClose={() => setSelectedTier(null)}
+            />
+          </motion.div>
+        )}
+
         {/* FAQ Section */}
         <div className="max-w-2xl mx-auto">
           <h2 className="text-3xl font-black text-center mb-8">Soalan Lazim Ibu Bapa 🤔</h2>
@@ -330,18 +347,6 @@ export default function Landing() {
       <footer className="bg-gray-900 text-white text-center py-8">
         <p>&copy; 2026 Jom Belajar. Semua hak terpelihara. ❤️</p>
       </footer>
-
-      {/* Checkout Modal */}
-      <AnimatePresence>
-        {selectedTier && (
-          <PricingCheckout
-            tier={selectedTier}
-            tierName={selectedTier.name}
-            ageGroup={selectedAgeGroup}
-            onClose={() => setSelectedTier(null)}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }
