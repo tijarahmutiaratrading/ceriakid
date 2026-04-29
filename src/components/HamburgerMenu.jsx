@@ -20,7 +20,7 @@ export default function HamburgerMenu() {
 
   const navItems = [
     { path: '/', emoji: '🏠', label: 'Rumah' },
-    { path: '/sitemap', emoji: '🗺️', label: 'App Guide' },
+
     { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
     { path: '/games/english', emoji: '🇬🇧', label: 'English' },
     { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },

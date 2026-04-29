@@ -15,7 +15,7 @@ import AdminSettings from '@/pages/AdminSettings';
 import ClientDashboard from '@/pages/ClientDashboard';
 import GamesList from '@/pages/GamesList';
 import AdminHub from '@/pages/AdminHub';
-import AppSitemap from '@/pages/AppSitemap';
+
 import GamePlayer from '@/pages/GamePlayer';
 import ParentDashboard from '@/pages/ParentDashboard';
 import FriendsList from '@/pages/FriendsList';
@@ -63,7 +63,7 @@ const AuthenticatedApp = () => {
           <Route path="/admin-hub" element={<AdminHub />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-settings" element={<AdminSettings />} />
-          <Route path="/sitemap" element={<AppSitemap />} />
+
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
