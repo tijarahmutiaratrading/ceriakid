@@ -1,14 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useLang } from '@/lib/LanguageContext';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { Link } from 'react-router-dom';
-import LanguageToggle from '@/components/game/LanguageToggle';
 import CategoryGrid from '@/components/home/CategoryGrid';
 
 export default function Home() {
-  const { t } = useLang();
   const { isAuthenticated, user } = useAuth();
   const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
   const safeAgeGroup = ageGroup || 'prasekolah';

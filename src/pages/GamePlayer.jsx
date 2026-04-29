@@ -107,16 +107,14 @@ export default function GamePlayer() {
 
 
   const handleTracingComplete = (result) => {
-    if (result.accuracy >= 70) {
-      setState(prev => ({
-        ...prev,
-        showFeedback: true,
-        isCorrect: true,
-        feedbackMsg: '✨ Sempurna! Jejas Terbaik!',
-        score: prev.score + 1,
-        showTracing: false,
-      }));
-    }
+    const correct = result.accuracy >= 70;
+    setState(prev => ({
+      ...prev,
+      showFeedback: true,
+      isCorrect: correct,
+      feedbackMsg: correct ? '✨ Sempurna! Bagus Sangat!' : '💪 Cuba Lagi! Hampir Dah!',
+      score: correct ? prev.score + 1 : prev.score,
+    }));
   };
 
   const saveGameProgress = async () => {
@@ -221,39 +219,32 @@ export default function GamePlayer() {
   }
 
   const currentQuestion = questions[state.currentQ];
-  const isTracingQuestion = currentQuestion?.type === 'tracing' || 
-    (currentQuestion?.tracingTarget && (category === 'bahasa_melayu' || category === 'mathematics'));
+  const isTracingGame = game?.type === 'tracing';
 
-  // Show tracing canvas instead of options
-  if (isTracingQuestion && state.showTracing === null) {
+  // Tracing game — render canvas for each letter
+  if (isTracingGame) {
     return (
-      <div className="min-h-screen bg-pattern">
+      <div className="min-h-screen bg-amber-50">
         <div className="max-w-lg mx-auto px-4 py-6 pb-24">
           <Link to={`/games/${category}`}>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6"
-            >
+            <motion.button whileTap={{ scale: 0.9 }} className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6">
               <ArrowLeft className="w-6 h-6" />
             </motion.button>
           </Link>
-
-          <GameHeader
-            title={game.title}
-            score={state.score}
-            total={questions.length}
-            currentQ={state.currentQ + 1}
-            totalQ={questions.length}
-          />
-
-          <TracingCanvas
-            targetShape={currentQuestion.tracingTarget || currentQuestion.letter}
-            emoji={game.emoji}
-            width={350}
-            height={350}
-            onComplete={handleTracingComplete}
-          />
+          <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} />
+          {state.finished ? (
+            <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} />
+          ) : (
+            <TracingCanvas
+              targetShape={currentQuestion?.letter || currentQuestion?.tracingTarget || 'A'}
+              emoji={game.emoji}
+              width={350}
+              height={350}
+              onComplete={handleTracingComplete}
+            />
+          )}
         </div>
+        <FeedbackOverlay show={state.showFeedback} isCorrect={state.isCorrect} message={state.feedbackMsg} onDone={handleFeedbackDone} />
       </div>
     );
   }

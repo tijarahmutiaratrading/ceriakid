@@ -13,6 +13,8 @@ const categoryLabels = {
   english: 'English',
   mathematics: 'Matematik',
   science: 'Sains',
+  jawi: 'Aksara Jawi',
+  worksheet: 'Worksheet & Tracing',
 };
 
 const getCategoryEmoji = (category) => {
@@ -21,6 +23,8 @@ const getCategoryEmoji = (category) => {
     english: '🇬🇧',
     mathematics: '🔢',
     science: '🧪',
+    jawi: '🕌',
+    worksheet: '✏️',
   };
   return emojis[category] || '📚';
 };
@@ -34,9 +38,7 @@ export default function GamesList() {
 
   // Load progress data
   useEffect(() => {
-    if (user) {
-      setLoading(false);
-    }
+    setLoading(false);
   }, [user]);
 
   const games = getGamesByAgeAndCategory(ageGroup, category);
