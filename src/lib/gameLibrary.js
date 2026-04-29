@@ -276,7 +276,27 @@ export const gameLibrary = {
         },
       },
       ],
-    english: [
+      jawi: [
+      {
+        title: 'Aksara Jawi - Asas',
+        type: 'letter_match',
+        emoji: '🕌',
+        difficulty: 'medium',
+        gameData: {
+          questions: [
+            { letter: 'ا', emoji: '🍎', word: 'Alif - Epal', options: ['ا', 'ب', 'ت', 'ث'], answer: 0 },
+            { letter: 'ب', emoji: '🐦', word: 'Ba - Burung', options: ['ا', 'ب', 'ت', 'ث'], answer: 1 },
+            { letter: 'ت', emoji: '🐯', word: 'Ta - Harimau', options: ['ا', 'ب', 'ت', 'ث'], answer: 2 },
+            { letter: 'ث', emoji: '🧊', word: 'Tha - Ais', options: ['ا', 'ب', 'ت', 'ث'], answer: 3 },
+            { letter: 'ج', emoji: '🦒', word: 'Jim - Jerapah', options: ['ج', 'ح', 'خ', 'د'], answer: 0 },
+            { letter: 'ح', emoji: '🌸', word: 'Ha - Bunga', options: ['ج', 'ح', 'خ', 'د'], answer: 1 },
+            { letter: 'خ', emoji: '🌾', word: 'Kha - Padi', options: ['ج', 'ح', 'خ', 'د'], answer: 2 },
+            { letter: 'د', emoji: '💎', word: 'Dal - Batu Permata', options: ['ج', 'ح', 'خ', 'د'], answer: 3 },
+          ],
+        },
+      },
+      ],
+      english: [
       {
         title: 'Consonants G-Z',
         type: 'letter_match',
@@ -474,7 +494,15 @@ export function getGamesByAgeAndCategory(ageGroup, category) {
 }
 
 export function getGamesByAge(ageGroup) {
-  return gameLibrary[ageGroup] || {};
+  const games = gameLibrary[ageGroup] || {};
+  // Filter categories: sekolah_rendah includes jawi, prasekolah doesn't
+  if (ageGroup === 'sekolah_rendah') {
+    return games; // Includes jawi
+  }
+  // For prasekolah, exclude jawi if it exists
+  const filtered = { ...games };
+  delete filtered.jawi;
+  return filtered;
 }
 
 export function getAllGamesForAge(ageGroup) {
