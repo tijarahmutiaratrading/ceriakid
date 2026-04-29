@@ -9,7 +9,6 @@ import { LanguageProvider } from '@/lib/LanguageContext';
 import { AgeGroupProvider } from '@/lib/AgeGroupContext';
 
 import Landing from '@/pages/Landing';
-import Pricing from '@/pages/Pricing';
 import Home from '@/pages/Home';
 import GamesList from '@/pages/GamesList';
 import GamePlayer from '@/pages/GamePlayer';
@@ -52,7 +51,6 @@ const AuthenticatedApp = () => {
         <Routes>
           {/* Public pages - check if not authenticated */}
           <Route path="/landing" element={<Landing />} />
-          <Route path="/pricing" element={<Pricing />} />
 
           {/* App pages - authenticated */}
           <Route path="/" element={<Home />} />
