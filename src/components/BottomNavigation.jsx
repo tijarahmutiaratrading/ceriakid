@@ -3,12 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, BookOpen, Calculator, Microscope, BarChart3, LogOut } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
-import { useAgeGroup } from '@/lib/AgeGroupContext';
 import LanguageToggle from '@/components/game/LanguageToggle';
 
 export default function BottomNavigation() {
   const { isAuthenticated, logout } = useAuth();
-  const { ageGroup } = useAgeGroup();
   const location = useLocation();
 
   // Don't show nav on landing & pricing
