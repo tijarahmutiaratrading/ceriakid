@@ -40,7 +40,7 @@ export default function ParentDashboard() {
     try {
       const progressData = await base44.entities.ChildGameProgress.filter({
         userEmail: user.email,
-      });
+      }) || [];
 
       const grouped = {};
       progressData.forEach(progress => {
@@ -58,6 +58,7 @@ export default function ParentDashboard() {
       }
     } catch (error) {
       console.error('Failed to load progress:', error);
+      setChildrenData({});
     } finally {
       setLoading(false);
     }

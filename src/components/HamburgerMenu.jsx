@@ -13,7 +13,8 @@ export default function HamburgerMenu() {
 
   // Don't show on landing, pricing, admin & client dashboards
   if (location.pathname === '/landing' || location.pathname === '/pricing' || 
-      location.pathname === '/admin-dashboard' || location.pathname === '/client-dashboard') {
+      location.pathname === '/admin-dashboard' || location.pathname === '/client-dashboard' ||
+      location.pathname === '/b2b') {
     return null;
   }
 
@@ -25,7 +26,11 @@ export default function HamburgerMenu() {
     { path: '/games/science', emoji: '🔬', label: 'Sains' },
     ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
-    ...(isAuthenticated ? [{ path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' }] : []),
+    ...(isAuthenticated ? [
+      { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
+      { path: '/friends', emoji: '👥', label: 'Kawan' },
+      { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
+    ] : []),
   ];
 
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);

@@ -40,18 +40,22 @@ export default function B2BLanding() {
           Gamified learning platform trusted by 100+ schools in Malaysia. Proven to increase engagement by 40%.
         </p>
         <div className="flex gap-4 justify-center mb-16">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            className="px-8 py-4 bg-game-purple text-white rounded-full font-black text-lg shadow-lg"
-          >
-            Schedule Demo
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            className="px-8 py-4 border-2 border-game-purple text-game-purple rounded-full font-black text-lg"
-          >
-            View Pricing
-          </motion.button>
+          <a href="mailto:schools@jombelajar.app?subject=Demo%20Request">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              className="px-8 py-4 bg-game-purple text-white rounded-full font-black text-lg shadow-lg"
+            >
+              Schedule Demo
+            </motion.button>
+          </a>
+          <Link to="/landing">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              className="px-8 py-4 border-2 border-game-purple text-game-purple rounded-full font-black text-lg"
+            >
+              View Pricing
+            </motion.button>
+          </Link>
         </div>
 
         {/* Stats */}
@@ -104,28 +108,29 @@ export default function B2BLanding() {
               { name: 'Professional', price: 'RM 999', students: 'Up to 200', highlighted: true },
               { name: 'Enterprise', price: 'Custom', students: '500+' },
             ].map((plan, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.1 }}
-                className={`rounded-2xl p-8 text-center ${
-                  plan.highlighted
-                    ? 'bg-game-purple text-white border-4 border-game-purple transform scale-105'
-                    : 'bg-white border-2 border-amber-200'
-                }`}
-              >
-                <h3 className="text-2xl font-black mb-4">{plan.name}</h3>
-                <p className="text-4xl font-black mb-2">{plan.price}</p>
-                <p className={`font-bold mb-6 ${plan.highlighted ? 'text-white/80' : 'text-gray-600'}`}>{plan.students}</p>
-                <button className={`w-full py-3 rounded-full font-black ${
-                  plan.highlighted
-                    ? 'bg-white text-game-purple'
-                    : 'bg-game-purple text-white'
-                }`}>
-                  Get Started
-                </button>
-              </motion.div>
+              <a key={i} href="mailto:schools@jombelajar.app?subject=School%20Plan">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.1 }}
+                  className={`rounded-2xl p-8 text-center cursor-pointer ${
+                    plan.highlighted
+                      ? 'bg-game-purple text-white border-4 border-game-purple transform scale-105'
+                      : 'bg-white border-2 border-amber-200'
+                  }`}
+                >
+                  <h3 className="text-2xl font-black mb-4">{plan.name}</h3>
+                  <p className="text-4xl font-black mb-2">{plan.price}</p>
+                  <p className={`font-bold mb-6 ${plan.highlighted ? 'text-white/80' : 'text-gray-600'}`}>{plan.students}</p>
+                  <button className={`w-full py-3 rounded-full font-black ${
+                    plan.highlighted
+                      ? 'bg-white text-game-purple'
+                      : 'bg-game-purple text-white'
+                  }`}>
+                    Get Started
+                  </button>
+                </motion.div>
+              </a>
             ))}
           </div>
         </div>
