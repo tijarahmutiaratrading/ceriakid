@@ -14,7 +14,7 @@ export const sekolah_bahasa_melayu = [
     { letter: 'H', emoji: '🏠', word: 'Rumah', options: ['F','G','H','I'], answer: 2 },
   ]}},
   { title: 'Suku Kata KV (ka, bu, si)', type: 'word_builder', emoji: '🔡', difficulty: 'easy', darjah: 1, gameData: { questions: [
-    { problem: 'Bunyi: ka + ki = ?', options: ['kaki','kuku','kaki'], answer: 0 },
+    { problem: 'Bunyi: ka + ki = ?', options: ['kaki','kuku','keke'], answer: 0 },
     { problem: 'Bunyi: bu + ku = ?', options: ['buku','baka','boke'], answer: 0 },
     { problem: 'Bunyi: ma + ta = ?', options: ['mata','mota','muta'], answer: 0 },
     { problem: 'Bunyi: su + su = ?', options: ['sosi','susu','sisu'], answer: 1 },

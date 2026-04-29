@@ -165,7 +165,7 @@ export const sekolah_english = [
   // ===== YEAR 6 =====
   { title: 'Compound Words - Year 6', type: 'word_builder', emoji: '🔗', difficulty: 'hard', darjah: 6, gameData: { questions: [
     { problem: 'sun + flower = ?', options: ['sunflower','flowerun','sunfly'], answer: 0 },
-    { problem: 'rain + bow = ?', options: ['bowrain','rainbow','rainbow'], answer: 1 },
+    { problem: 'rain + bow = ?', options: ['bowrain','rainbow','rainboo'], answer: 1 },
     { problem: 'foot + ball = ?', options: ['ballfoot','football','footbal'], answer: 1 },
     { problem: 'tooth + brush = ?', options: ['brushooth','toothbrush','toothrush'], answer: 1 },
     { problem: 'book + shelf = ?', options: ['bookshelf','shelfbook','bookshef'], answer: 0 },
