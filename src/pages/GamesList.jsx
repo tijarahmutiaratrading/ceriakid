@@ -152,7 +152,7 @@ export default function GamesList() {
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-game-purple">🎮 {allGames.length} Permainan</span>
+            <span className="text-sm font-bold text-game-purple">🎮 {games.length} Permainan</span>
             <span className="text-gray-400">•</span>
             <span className="text-sm text-gray-600">Pilih untuk bermain</span>
           </div>
