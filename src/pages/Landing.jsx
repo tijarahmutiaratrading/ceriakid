@@ -15,7 +15,6 @@ export default function Landing() {
         name: 'free',
         nameMY: 'Percuma',
         nameEN: 'Free',
-        price: '0',
         priceMYR: '0',
         games: '5',
         features: [
@@ -26,14 +25,13 @@ export default function Landing() {
           '❌ Tanpa dashboard ibu bapa',
           '❌ Tanpa peringkat Sekolah Rendah',
         ],
-        cta: 'Coba Gratis',
+        cta: 'Coba Percuma',
         highlighted: false,
       },
       {
         name: 'premium',
         nameMY: 'Premium',
         nameEN: 'Premium',
-        price: '4.99',
         priceMYR: '24.90',
         games: '100+',
         features: [
@@ -52,7 +50,6 @@ export default function Landing() {
         name: 'pro',
         nameMY: 'Pro (Keluarga)',
         nameEN: 'Pro (Family)',
-        price: '8.99',
         priceMYR: '44.90',
         games: '200+',
         features: [
@@ -275,10 +272,9 @@ export default function Landing() {
               <div className="mb-6">
                 <h3 className="text-2xl font-black mb-2">{tier.nameMY}</h3>
                 <p className="text-4xl font-black text-game-purple mb-1">
-                  ${tier.price}
+                  RM {tier.priceMYR}
                   <span className="text-lg text-gray-600">/bln</span>
                 </p>
-                <p className="text-sm text-gray-600">RM {tier.priceMYR}/bln</p>
                 <p className="text-sm font-bold text-game-purple mt-2">
                   {tier.games} Permainan
                 </p>
