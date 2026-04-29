@@ -60,14 +60,18 @@ const AuthenticatedApp = () => {
     <LanguageProvider>
       <AgeGroupProvider>
         <Routes>
+          {/* Public pages - check if not authenticated */}
+          <Route path="/landing" element={<Landing />} />
+
           {/* App pages - authenticated */}
           <Route path="/" element={<Home />} />
-          <Route path="/admin-hub" element={<AdminGuard><AdminHub /></AdminGuard>} />
-          <Route path="/admin-dashboard" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
-          <Route path="/admin-analytics" element={<AdminGuard><AdminAnalytics /></AdminGuard>} />
-          <Route path="/admin-analytics-advanced" element={<AdminGuard><AdminAnalyticsEnhanced /></AdminGuard>} />
-          <Route path="/admin-settings" element={<AdminGuard><AdminSettings /></AdminGuard>} />
+          <Route path="/admin-hub" element={<AdminHub />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin-analytics" element={<AdminAnalytics />} />
+          <Route path="/admin-analytics-advanced" element={<AdminAnalyticsEnhanced />} />
+          <Route path="/admin-settings" element={<AdminSettings />} />
           <Route path="/sitemap" element={<AppSitemap />} />
+          <Route path="/b2b" element={<B2BLanding />} />
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
@@ -93,14 +97,6 @@ const AuthenticatedApp = () => {
   );
 };
 
-const AdminGuard = ({ children }) => {
-  const { user } = useAuth();
-  if (user?.role !== 'admin') {
-    return <PageNotFound />;
-  }
-  return children;
-};
-
 function App() {
   return (
     <AuthProvider>
@@ -108,14 +104,7 @@ function App() {
         <Router>
           <OfflineBanner />
           <HamburgerMenu />
-          <Routes>
-            {/* Public routes (no auth required) */}
-            <Route path="/landing" element={<Landing />} />
-            <Route path="/b2b" element={<B2BLanding />} />
-            
-            {/* All other routes require auth */}
-            <Route element={<AuthenticatedApp />} />
-          </Routes>
+          <AuthenticatedApp />
           <Footer />
         </Router>
         <Toaster />
