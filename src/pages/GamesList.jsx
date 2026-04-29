@@ -69,7 +69,7 @@ export default function GamesList() {
   const isGameLocked = useCallback((globalIdx) => {
     if (!isAuthenticated) return globalIdx >= 5; // guests: first 5 only
     if (userTier === 'pro') return false; // pro: semua
-    if (userTier === 'premium') return globalIdx >= 150; // premium: 150+
+    if (userTier === 'premium') return globalIdx >= 100; // premium: 100+
     if (userTier === 'starter') return globalIdx >= 50; // starter: 50+
     return globalIdx >= 5; // free: first 5
   }, [isAuthenticated, userTier]);
@@ -99,7 +99,7 @@ export default function GamesList() {
     : allGames;
 
   useEffect(() => {
-    if (user) {
+    if (user && category) {
       loadProgress();
     }
   }, [user, category]);
@@ -216,7 +216,7 @@ export default function GamesList() {
               const locked = isGameLocked(globalIdx);
               return (
                 <GameListCard
-                  key={globalIdx}
+                  key={`game-${globalIdx}`}
                   game={game}
                   gameKey={gameKey}
                   gameProgress={gameProgress}
@@ -225,7 +225,7 @@ export default function GamesList() {
                   locked={locked}
                   badge={
                     locked ? 'locked' :
-                    i < 2 ? 'new' :
+                    globalIdx < 2 ? 'new' :
                     gameProgress && gameProgress.bestStars < 2 ? 'recommended' :
                     null
                   }

@@ -184,7 +184,6 @@ export default function ParentDashboard() {
             )}
 
             {Object.entries(childrenData).map(([childName, games], idx) => {
-              if (selectedChild) setSelectedChild(childName);
               const weakSubjects = analyzeWeakSubjects(games);
               const totalGames = games.length;
               const totalStars = games.reduce((sum, g) => sum + (g.bestStars || 0), 0);
