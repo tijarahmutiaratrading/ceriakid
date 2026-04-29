@@ -15,7 +15,6 @@ import GameTutorial from '@/components/game/GameTutorial';
 import AudioPlayer from '@/components/audio/AudioPlayer';
 import ProgressBar from '@/components/game/ProgressBar';
 import AchievementBadges from '@/components/game/AchievementBadges';
-import ShareButton from '@/components/game/ShareButton';
 import { playSound } from '@/lib/soundManager';
 import { checkAchievements, calculateStreak } from '@/lib/achievementManager';
 import { queueGameProgress, syncOfflineProgress } from '@/lib/offlineSyncManager';
@@ -358,16 +357,13 @@ export default function GamePlayer() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <GameHeader
-            title={game.title}
-            score={state.score}
-            total={questions.length}
-            currentQ={state.currentQ + 1}
-            totalQ={questions.length}
-          />
-          <ShareButton gameTitle={game.title} category={category} index={index} />
-        </div>
+        <GameHeader
+          title={game.title}
+          score={state.score}
+          total={questions.length}
+          currentQ={state.currentQ + 1}
+          totalQ={questions.length}
+        />
 
         {/* Progress Bar with encouraging messages */}
         <ProgressBar current={state.currentQ + 1} total={questions.length} score={state.score} />
