@@ -1,0 +1,23 @@
+{
+  "name": "Jom Belajar! 🎓",
+  "short_name": "Jom Belajar",
+  "description": "200+ Permainan Pembelajaran untuk Anak Prasekolah & Sekolah Rendah",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fefce8",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ms",
+  "categories": ["education", "kids"],
+  "icons": [
+    {
+      "src": "https://base44.com/logo_v2.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

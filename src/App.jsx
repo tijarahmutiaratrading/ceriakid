@@ -23,6 +23,7 @@ import ShapesGame from '@/pages/ShapesGame';
 import Scoreboard from '@/pages/Scoreboard';
 import HamburgerMenu from '@/components/HamburgerMenu';
 import Footer from '@/components/Footer';
+import OfflineBanner from '@/components/OfflineBanner';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -85,6 +86,7 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
+          <OfflineBanner />
           <HamburgerMenu />
           <AuthenticatedApp />
           <Footer />
