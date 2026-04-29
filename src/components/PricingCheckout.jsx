@@ -80,49 +80,7 @@ export default function PricingCheckout({ ageGroup, onClose, selectedTier: initi
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Email */}
-      <div>
-        <label className="block text-sm font-bold mb-2">Email</label>
-        <input
-          type="email"
-          placeholder="email@example.com"
-          value={formData.email}
-          onChange={(e) =>
-            setFormData({ ...formData, email: e.target.value })
-          }
-          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple"
-        />
-      </div>
-
-      {/* Name */}
-      <div>
-        <label className="block text-sm font-bold mb-2">Nama Ibu Bapa</label>
-        <input
-          type="text"
-          placeholder="Nama anda"
-          value={formData.name}
-          onChange={(e) =>
-            setFormData({ ...formData, name: e.target.value })
-          }
-          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple"
-        />
-      </div>
-
-      {/* Phone */}
-      <div>
-        <label className="block text-sm font-bold mb-2">Nombor Telefon</label>
-        <input
-          type="tel"
-          placeholder="01234567890"
-          value={formData.phone}
-          onChange={(e) =>
-            setFormData({ ...formData, phone: e.target.value })
-          }
-          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple"
-        />
-      </div>
-
-      {/* Tier Selection — always visible */}
+      {/* Tier Selection — always visible, at top */}
       <div>
         <label className="block text-sm font-bold mb-3">Pilih Paket</label>
         <div className="space-y-3">
@@ -164,6 +122,42 @@ export default function PricingCheckout({ ageGroup, onClose, selectedTier: initi
             );
           })}
         </div>
+      </div>
+
+      {/* Email */}
+      <div>
+        <label className="block text-sm font-bold mb-2">Email</label>
+        <input
+          type="email"
+          placeholder="email@example.com"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple"
+        />
+      </div>
+
+      {/* Name */}
+      <div>
+        <label className="block text-sm font-bold mb-2">Nama Ibu Bapa</label>
+        <input
+          type="text"
+          placeholder="Nama anda"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple"
+        />
+      </div>
+
+      {/* Phone */}
+      <div>
+        <label className="block text-sm font-bold mb-2">Nombor Telefon</label>
+        <input
+          type="tel"
+          placeholder="01234567890"
+          value={formData.phone}
+          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple"
+        />
       </div>
 
       {error && (
