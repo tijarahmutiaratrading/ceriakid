@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 export default function Footer() {
   const location = useLocation();
 
-  // Don't show footer on landing & pricing
-  if (location.pathname === '/landing' || location.pathname === '/pricing') {
+  // Only show footer on landing page
+  if (location.pathname !== '/landing') {
     return null;
   }
 
