@@ -30,41 +30,65 @@ export default function BottomNavigation() {
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.3 }}
-      className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md rounded-t-2xl shadow-2xl border-t border-gray-200"
+      className="fixed bottom-0 inset-x-0 bg-gradient-to-r from-white via-white to-white/95 backdrop-blur-lg rounded-t-3xl shadow-2xl border-t-2 border-gray-100 z-40"
     >
-      <div className="max-w-xl mx-auto px-2 py-3 flex items-center justify-around gap-1">
-        {/* Nav Items */}
-        {navItems.map(item => (
-          <Link key={item.path} to={item.path} className="flex-1">
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.05 }}
-              className={`w-full flex flex-col items-center gap-1 py-3 rounded-xl transition-all ${
-                isActive(item.path)
-                  ? 'bg-game-purple/20 text-game-purple'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <span className="text-2xl">{item.emoji}</span>
-              <span className="text-xs font-semibold">{item.label}</span>
-            </motion.button>
-          </Link>
-        ))}
+      <div className="max-w-2xl mx-auto px-3 py-4 flex items-center justify-between">
+        {/* Nav Items - Main Categories */}
+        <div className="flex-1 flex items-center justify-around gap-1">
+          {navItems.slice(0, -1).map(item => (
+            <Link key={item.path} to={item.path} className="flex-1 max-w-[70px]">
+              <motion.button
+                whileTap={{ scale: 0.85 }}
+                whileHover={{ scale: 1.08 }}
+                className={`w-full flex flex-col items-center gap-1.5 py-3 px-2 rounded-2xl transition-all duration-200 ${
+                  isActive(item.path)
+                    ? 'bg-gradient-to-br from-game-purple/30 to-game-pink/20 text-game-purple shadow-md'
+                    : 'text-gray-500 hover:bg-gray-50'
+                }`}
+              >
+                <span className="text-2xl">{item.emoji}</span>
+                <span className="text-xs font-bold tracking-wide">{item.label}</span>
+              </motion.button>
+            </Link>
+          ))}
+        </div>
 
-        {/* Separator */}
-        <div className="w-px h-8 bg-gray-300" />
+        {/* Divider */}
+        <div className="flex flex-col gap-1">
+          <div className="w-0.5 h-6 bg-gradient-to-b from-transparent via-gray-300 to-transparent" />
+        </div>
 
-        {/* Right Actions */}
-        <div className="flex flex-col items-center gap-2">
+        {/* Right Actions - Dashboard & Settings */}
+        <div className="flex items-center gap-2">
+          {isAuthenticated && (
+            <Link to="/parent-dashboard" className="flex-1">
+              <motion.button
+                whileTap={{ scale: 0.85 }}
+                whileHover={{ scale: 1.08 }}
+                className={`flex flex-col items-center gap-1.5 py-3 px-3 rounded-2xl transition-all duration-200 ${
+                  isActive('/parent-dashboard')
+                    ? 'bg-gradient-to-br from-game-purple/30 to-game-pink/20 text-game-purple shadow-md'
+                    : 'text-gray-500 hover:bg-gray-50'
+                }`}
+              >
+                <span className="text-2xl">📊</span>
+                <span className="text-xs font-bold">Prestasi</span>
+              </motion.button>
+            </Link>
+          )}
+
           <LanguageToggle />
+
           {isAuthenticated && (
             <motion.button
-              whileTap={{ scale: 0.9 }}
+              whileTap={{ scale: 0.85 }}
+              whileHover={{ scale: 1.08 }}
               onClick={logout}
-              className="text-gray-600 hover:text-red-600 transition-all"
+              className="flex flex-col items-center gap-1.5 py-3 px-3 rounded-2xl text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
               title="Keluar"
             >
               <LogOut className="w-5 h-5" />
+              <span className="text-xs font-bold">Keluar</span>
             </motion.button>
           )}
         </div>
