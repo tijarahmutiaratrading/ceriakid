@@ -54,7 +54,7 @@ export const gameLibrary = {
         },
       },
       {
-        title: 'Suara Awal - Haiwan',
+        title: 'Suara Haiwan',
         type: 'sound_match',
         emoji: '🔊',
         difficulty: 'easy',
@@ -181,7 +181,7 @@ export const gameLibrary = {
         },
       },
       {
-        title: 'Warna di Alam (Colors in Nature)',
+        title: 'Warna-Warni di Alam',
         type: 'color_match',
         emoji: '🌈',
         difficulty: 'easy',
@@ -204,7 +204,7 @@ export const gameLibrary = {
   sekolah_rendah: {
     bahasa_melayu: [
       {
-        title: 'Huruf Konsonan G-Z',
+        title: 'Huruf G-Z',
         type: 'letter_match',
         emoji: '🔤',
         difficulty: 'medium',
@@ -222,7 +222,7 @@ export const gameLibrary = {
         },
       },
       {
-        title: 'Ayat Mudah - Terbaca',
+        title: 'Ayat Senang - Baca',
         type: 'reading',
         emoji: '📖',
         difficulty: 'medium',
@@ -240,7 +240,7 @@ export const gameLibrary = {
         },
       },
       {
-        title: 'Kosa Kata Harian',
+        title: 'Kata-Kata Hari-Hari',
         type: 'word_builder',
         emoji: '🔠',
         difficulty: 'medium',

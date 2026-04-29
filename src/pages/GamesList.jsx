@@ -111,9 +111,9 @@ export default function GamesList() {
             </h1>
           </div>
           <div className="flex items-center gap-2 ml-13">
-            <span className="text-sm font-bold text-game-purple">🎮 {games.length} Permainan</span>
+            <span className="text-sm font-bold text-game-purple">🎮 {games.length} Game</span>
             <span className="text-gray-400">•</span>
-            <span className="text-sm text-gray-600">Pilih untuk main</span>
+            <span className="text-sm text-gray-600">Pilih nak main</span>
           </div>
         </motion.div>
 
@@ -125,14 +125,14 @@ export default function GamesList() {
             className="clay rounded-3xl p-8 text-center mt-12"
           >
             <p className="text-5xl mb-4">🚀</p>
-            <p className="text-xl font-bold mb-2">Permainan Baru Segera Hadir!</p>
-            <p className="text-gray-600 mb-6">Kami sedang menyediakan permainan yang lebih seru untuk kategori ini.</p>
+            <p className="text-xl font-bold mb-2">Game Baru Nak Dtg!</p>
+            <p className="text-gray-600 mb-6">Tengah kita siapkan game2 best untuk kategori ni.</p>
             <Link to="/">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 className="px-6 py-3 bg-game-purple text-white rounded-full font-bold"
               >
-                ← Kembali ke Rumah
+                ← Balik ke Rumah
               </motion.button>
             </Link>
           </motion.div>
