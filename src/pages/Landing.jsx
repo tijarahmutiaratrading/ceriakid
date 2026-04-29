@@ -366,9 +366,9 @@ export default function Landing() {
 
                 <div className="flex items-baseline gap-2 mb-1">
                   {tier.originalPrice && (
-                    <span className={`text-lg line-through opacity-60 ${tier.highlighted ? 'text-white' : 'text-gray-400'}`}>RM{tier.originalPrice}</span>
+                    <span className={`text-sm line-through opacity-60 ${tier.highlighted ? 'text-white' : 'text-gray-400'}`}>RM{tier.originalPrice}</span>
                   )}
-                  <span className={`text-5xl font-black ${tier.highlighted ? 'text-white' : 'text-game-orange'}`}>RM{tier.priceMYR}</span>
+                  <span className={`text-3xl font-black ${tier.highlighted ? 'text-white' : 'text-game-orange'}`}>RM{tier.priceMYR}</span>
                 </div>
                 <p className={`text-sm font-bold mb-6 ${tier.highlighted ? 'text-white/80' : 'text-gray-500'}`}>{tier.period}</p>
 
