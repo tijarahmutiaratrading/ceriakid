@@ -25,28 +25,63 @@ export default function FeedbackOverlay({ isCorrect, show, message, onDone }) {
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.5 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
         >
           <motion.div
-            initial={{ scale: 0, rotate: -10 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0 }}
-            transition={{ type: 'spring', damping: 12 }}
-            className={`rounded-3xl p-8 text-center ${
+            initial={isCorrect ? { scale: 0, rotate: -20, y: 50 } : { scale: 0.5, rotate: 10, y: -20 }}
+            animate={{ scale: 1, rotate: 0, y: 0 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={isCorrect ? { type: 'spring', damping: 10, mass: 0.8, stiffness: 200 } : { type: 'spring', damping: 15, stiffness: 150 }}
+            className={`rounded-3xl p-8 text-center shadow-2xl ${
               isCorrect
-                ? 'bg-gradient-to-br from-green-100 to-emerald-200'
-                : 'bg-gradient-to-br from-orange-100 to-amber-200'
-            } clay`}
+                ? 'bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100 border-2 border-green-400'
+                : 'bg-gradient-to-br from-orange-100 via-amber-100 to-rose-100 border-2 border-orange-400'
+            }`}
           >
-            <div className="text-6xl mb-3">
-              {isCorrect ? '🎉' : '🤔'}
-            </div>
-            <p className="text-2xl font-black">
+            {/* Emoji with bounce animation */}
+            <motion.div
+              animate={isCorrect ? { y: [0, -15, 0] } : { rotate: [0, -5, 5, 0] }}
+              transition={isCorrect ? { duration: 0.6, delay: 0.2 } : { duration: 0.5, delay: 0.2 }}
+              className="text-7xl mb-4"
+            >
+              {isCorrect ? '🎉' : '💪'}
+            </motion.div>
+
+            {/* Message with fade-in */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+              className={`text-3xl font-black ${isCorrect ? 'text-green-700' : 'text-orange-700'}`}
+            >
               {message}
-            </p>
+            </motion.p>
+
+            {/* Correct answer bonus stars */}
+            {isCorrect && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="flex justify-center gap-2 mt-4"
+              >
+                {[1, 2, 3].map((i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 0.6 + i * 0.1, type: 'spring', damping: 10 }}
+                    className="text-3xl"
+                  >
+                    ⭐
+                  </motion.span>
+                ))}
+              </motion.div>
+            )}
           </motion.div>
         </motion.div>
       )}
