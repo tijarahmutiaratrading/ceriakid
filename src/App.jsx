@@ -11,6 +11,7 @@ import { AgeGroupProvider } from '@/lib/AgeGroupContext';
 import Landing from '@/pages/Landing';
 import Home from '@/pages/Home';
 import AdminDashboard from '@/pages/AdminDashboard';
+import AdminAnalytics from '@/pages/AdminAnalytics';
 import AdminSettings from '@/pages/AdminSettings';
 import ClientDashboard from '@/pages/ClientDashboard';
 import GamesList from '@/pages/GamesList';
@@ -59,6 +60,7 @@ const AuthenticatedApp = () => {
           {/* App pages - authenticated */}
           <Route path="/" element={<Home />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin-analytics" element={<AdminAnalytics />} />
           <Route path="/admin-settings" element={<AdminSettings />} />
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/games/:category" element={<GamesList />} />

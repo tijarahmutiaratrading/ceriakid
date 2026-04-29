@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
-import { ArrowLeft, BarChart3, Users, Settings } from 'lucide-react';
+import { ArrowLeft, BarChart3, Users, Settings, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function AdminDashboard() {
@@ -79,11 +79,18 @@ export default function AdminDashboard() {
             <BarChart3 className="w-10 h-10 text-game-orange" />
             Admin Dashboard
           </h1>
-          <Link to="/admin-settings">
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center gap-2 px-5 py-2.5 bg-game-purple text-white rounded-xl font-bold shadow-md">
-              <Settings className="w-4 h-4" /> Tetapan
-            </motion.button>
-          </Link>
+          <div className="flex gap-3">
+            <Link to="/admin-analytics">
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center gap-2 px-5 py-2.5 bg-game-orange text-white rounded-xl font-bold shadow-md">
+                <TrendingUp className="w-4 h-4" /> Analitik
+              </motion.button>
+            </Link>
+            <Link to="/admin-settings">
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center gap-2 px-5 py-2.5 bg-game-purple text-white rounded-xl font-bold shadow-md">
+                <Settings className="w-4 h-4" /> Tetapan
+              </motion.button>
+            </Link>
+          </div>
         </div>
 
         {/* Stats Cards */}
