@@ -13,36 +13,23 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-pattern">
-      <div className="max-w-lg mx-auto px-4 py-6">
+      <div className="max-w-lg mx-auto px-4 py-6 pb-24">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <span className="text-3xl">🎓</span>
             <h1 className="text-2xl font-black">Jom Belajar</h1>
           </div>
-          <div className="flex gap-2">
-            <LanguageToggle />
-            {isAuthenticated && (
-              <Link to="/parent-dashboard">
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  className="clay-button rounded-full px-4 py-2 text-sm font-bold bg-game-purple/20"
-                >
-                  📊
-                </motion.button>
-              </Link>
-            )}
-            {!isAuthenticated && (
-              <Link to="/pricing">
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  className="clay-button rounded-full px-4 py-2 text-sm font-bold bg-game-purple/20"
-                >
-                  Masuk
-                </motion.button>
-              </Link>
-            )}
-          </div>
+          {!isAuthenticated && (
+            <Link to="/pricing">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                className="clay-button rounded-full px-4 py-2 text-sm font-bold bg-game-purple/20"
+              >
+                Masuk
+              </motion.button>
+            </Link>
+          )}
         </div>
 
         {/* Welcome */}

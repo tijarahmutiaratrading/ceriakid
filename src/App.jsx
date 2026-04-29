@@ -19,6 +19,7 @@ import NumberGame from '@/pages/NumberGame';
 import QuizGame from '@/pages/QuizGame';
 import ShapesGame from '@/pages/ShapesGame';
 import Scoreboard from '@/pages/Scoreboard';
+import Navigation from '@/components/Navigation';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -77,6 +78,7 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
+          <Navigation />
           <AuthenticatedApp />
         </Router>
         <Toaster />

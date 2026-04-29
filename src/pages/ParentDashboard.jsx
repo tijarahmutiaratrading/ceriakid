@@ -90,21 +90,11 @@ export default function ParentDashboard() {
 
   return (
     <div className="min-h-screen bg-pattern">
-      <div className="max-w-lg mx-auto px-4 py-6">
+      <div className="max-w-lg mx-auto px-4 py-6 pb-24">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <Link to="/">
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className="clay-button rounded-full w-12 h-12 flex items-center justify-center"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </motion.button>
-          </Link>
-          <div>
-            <h1 className="text-3xl font-black">📊 Prestasi Anak</h1>
-            <p className="text-sm text-gray-600">{totalChildren} anak terdaftar</p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-black mb-1">📊 Prestasi Anak</h1>
+          <p className="text-sm text-gray-600 mb-6">{totalChildren} anak terdaftar</p>
         </div>
 
         {/* Children Summary */}
@@ -222,18 +212,7 @@ export default function ParentDashboard() {
           </div>
         )}
 
-        {/* Action Button */}
-        <div className="mt-8 flex gap-3">
-          <Link to="/" className="flex-1">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full clay-button rounded-2xl py-4 font-bold text-center"
-            >
-              ← Kembali ke Menu
-            </motion.button>
-          </Link>
-        </div>
+
       </div>
     </div>
   );
