@@ -8,7 +8,9 @@ import LanguageToggle from '@/components/game/LanguageToggle';
 
 export default function BottomNavigation() {
   const { isAuthenticated, logout } = useAuth();
-  const { ageGroup, setAgeGroup } = useAgeGroup();
+  const ageGroupContext = useAgeGroup();
+  const ageGroup = ageGroupContext?.ageGroup;
+  const setAgeGroup = ageGroupContext?.setAgeGroup;
   const location = useLocation();
 
   // Don't show nav on landing & pricing
@@ -61,32 +63,34 @@ export default function BottomNavigation() {
         </div>
 
         {/* Age Group Selector */}
-        <div className="flex items-center gap-1">
-          <motion.button
-            whileTap={{ scale: 0.85 }}
-            whileHover={{ scale: 1.05 }}
-            onClick={() => setAgeGroup('prasekolah')}
-            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${
-              ageGroup === 'prasekolah'
-                ? 'bg-game-yellow/40 text-gray-800 shadow-md'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            4-6 Tahun
-          </motion.button>
-          <motion.button
-            whileTap={{ scale: 0.85 }}
-            whileHover={{ scale: 1.05 }}
-            onClick={() => setAgeGroup('sekolah_rendah')}
-            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${
-              ageGroup === 'sekolah_rendah'
-                ? 'bg-game-blue/40 text-gray-800 shadow-md'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            7-12 Tahun
-          </motion.button>
-        </div>
+        {ageGroup && setAgeGroup && (
+          <div className="flex items-center gap-1">
+            <motion.button
+              whileTap={{ scale: 0.85 }}
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setAgeGroup('prasekolah')}
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                ageGroup === 'prasekolah'
+                  ? 'bg-game-yellow/40 text-gray-800 shadow-md'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              4-6 Tahun
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.85 }}
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setAgeGroup('sekolah_rendah')}
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                ageGroup === 'sekolah_rendah'
+                  ? 'bg-game-blue/40 text-gray-800 shadow-md'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              7-12 Tahun
+            </motion.button>
+          </div>
+        )}
 
         {/* Divider */}
         <div className="w-0.5 h-6 bg-gradient-to-b from-transparent via-gray-300 to-transparent" />
