@@ -1,0 +1,38 @@
+{
+  "name": "DailyChallenge",
+  "type": "object",
+  "properties": {
+    "challengeDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of challenge (YYYY-MM-DD)"
+    },
+    "gameCategory": {
+      "type": "string",
+      "description": "Game category for daily challenge"
+    },
+    "gameIndex": {
+      "type": "number",
+      "description": "Game index in category"
+    },
+    "bonusReward": {
+      "type": "number",
+      "default": 50,
+      "description": "Extra points if completed today"
+    },
+    "ageGroup": {
+      "type": "string",
+      "enum": [
+        "prasekolah",
+        "sekolah_rendah"
+      ],
+      "description": "Target age group"
+    }
+  },
+  "required": [
+    "challengeDate",
+    "gameCategory",
+    "gameIndex",
+    "ageGroup"
+  ]
+}

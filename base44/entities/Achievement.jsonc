@@ -1,0 +1,41 @@
+{
+  "name": "Achievement",
+  "type": "object",
+  "properties": {
+    "userEmail": {
+      "type": "string",
+      "description": "User email"
+    },
+    "badgeId": {
+      "type": "string",
+      "enum": [
+        "5_games",
+        "10_games",
+        "3_day_streak",
+        "perfect_8",
+        "100_stars",
+        "all_subjects"
+      ],
+      "description": "Achievement badge ID"
+    },
+    "badgeName": {
+      "type": "string",
+      "description": "Badge display name"
+    },
+    "badgeEmoji": {
+      "type": "string",
+      "description": "Badge emoji"
+    },
+    "unlockedDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When badge was unlocked"
+    }
+  },
+  "required": [
+    "userEmail",
+    "badgeId",
+    "badgeName",
+    "badgeEmoji"
+  ]
+}

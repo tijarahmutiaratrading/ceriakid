@@ -1,0 +1,47 @@
+{
+  "name": "Leaderboard",
+  "type": "object",
+  "properties": {
+    "userEmail": {
+      "type": "string",
+      "description": "Parent email"
+    },
+    "childName": {
+      "type": "string",
+      "description": "Child name/identifier"
+    },
+    "totalStars": {
+      "type": "number",
+      "default": 0,
+      "description": "Total stars earned across all games"
+    },
+    "gamesCompleted": {
+      "type": "number",
+      "default": 0,
+      "description": "Total games played"
+    },
+    "currentStreak": {
+      "type": "number",
+      "default": 0,
+      "description": "Current day streak"
+    },
+    "lastPlayedDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time child played"
+    },
+    "ageGroup": {
+      "type": "string",
+      "enum": [
+        "prasekolah",
+        "sekolah_rendah"
+      ],
+      "description": "Child age group"
+    }
+  },
+  "required": [
+    "userEmail",
+    "childName",
+    "ageGroup"
+  ]
+}

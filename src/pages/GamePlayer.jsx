@@ -13,7 +13,11 @@ import ScoreScreen from '@/components/game/ScoreScreen';
 import TracingCanvas from '@/components/drawing/TracingCanvas';
 import GameTutorial from '@/components/game/GameTutorial';
 import AudioPlayer from '@/components/audio/AudioPlayer';
+import ProgressBar from '@/components/game/ProgressBar';
+import AchievementBadges from '@/components/game/AchievementBadges';
 import { playSound } from '@/lib/soundManager';
+import { checkAchievements, calculateStreak } from '@/lib/achievementManager';
+import { queueGameProgress, syncOfflineProgress } from '@/lib/offlineSyncManager';
 
 export default function GamePlayer() {
   const { category, index } = useParams();
@@ -33,6 +37,7 @@ export default function GamePlayer() {
     selectedIdx: null,
     startTime: Date.now(),
     showTracing: false,
+    unlockedBadges: [],
   });
 
   // Save progress after game finishes
@@ -106,6 +111,7 @@ export default function GamePlayer() {
       finished: false,
       selectedIdx: null,
       showTracing: false,
+      unlockedBadges: [],
     });
   };
 
@@ -135,16 +141,18 @@ export default function GamePlayer() {
         stars: stars,
       };
 
+      const childName = user.full_name || 'Default';
+
       // Check if progress exists
       const existing = await base44.entities.ChildGameProgress.filter({
         userEmail: user.email,
-        childName: user.full_name || 'Default',
+        childName: childName,
         gameType: gameKey,
       });
 
       const progressData = {
         userEmail: user.email,
-        childName: user.full_name || 'Default',
+        childName: childName,
         gameType: gameKey,
         category: category,
         ageGroup: ageGroup,
@@ -163,8 +171,57 @@ export default function GamePlayer() {
       } else {
         await base44.entities.ChildGameProgress.create(progressData);
       }
+
+      // Update leaderboard
+      const leaderboardData = await base44.entities.Leaderboard.filter({
+        userEmail: user.email,
+        childName: childName,
+        ageGroup: ageGroup,
+      });
+
+      const totalStars = (progressData.bestStars || 0) + (leaderboardData[0]?.totalStars || 0);
+      const leaderboardEntry = {
+        userEmail: user.email,
+        childName: childName,
+        ageGroup: ageGroup,
+        totalStars: Math.max(totalStars, 0),
+        gamesCompleted: (leaderboardData[0]?.gamesCompleted || 0) + 1,
+        currentStreak: await calculateStreak({ email: user.email }, childName, base44),
+        lastPlayedDate: new Date().toISOString(),
+      };
+
+      if (leaderboardData.length > 0) {
+        await base44.entities.Leaderboard.update(leaderboardData[0].id, leaderboardEntry);
+      } else {
+        await base44.entities.Leaderboard.create(leaderboardEntry);
+      }
+
+      // Check for achievements
+      const badges = await checkAchievements(user, childName, progressData, base44);
+      if (badges.length > 0) {
+        setState(prev => ({ ...prev, unlockedBadges: badges }));
+      }
+
+      // Queue for offline sync if needed
+      if (navigator.onLine === false) {
+        queueGameProgress(progressData);
+      }
     } catch (error) {
       console.error('Failed to save progress:', error);
+      // Queue for retry
+      if (user) {
+        queueGameProgress({
+          userEmail: user.email,
+          childName: user.full_name || 'Default',
+          gameType: `${ageGroup}-${category}-${gameIndex}`,
+          category: category,
+          ageGroup: ageGroup,
+          lastScore: state.score,
+          lastTotal: questions.length,
+          lastStars: calculateStars(state.score, questions.length),
+          lastPlayedDate: new Date().toISOString(),
+        });
+      }
     }
   };
 
@@ -289,6 +346,9 @@ export default function GamePlayer() {
           totalQ={questions.length}
         />
 
+        {/* Progress Bar with encouraging messages */}
+        <ProgressBar current={state.currentQ + 1} total={questions.length} score={state.score} />
+
         {/* Question Display - Adaptive based on game type */}
         <motion.div
           key={state.currentQ}
@@ -376,6 +436,8 @@ export default function GamePlayer() {
         message={state.feedbackMsg}
         onDone={handleFeedbackDone}
       />
+
+      <AchievementBadges badges={state.unlockedBadges} />
     </div>
   );
 }

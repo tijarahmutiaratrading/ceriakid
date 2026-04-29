@@ -3,8 +3,11 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, TrendingDown, Zap, BookOpen, Share2, Award, Flame, Target, Sparkles, Download } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
+import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { base44 } from '@/api/base44Client';
 import SubjectBreakdown from '@/components/home/SubjectBreakdown';
+import SmartRecommendations from '@/components/dashboard/SmartRecommendations';
+import LeaderboardWidget from '@/components/dashboard/LeaderboardWidget';
 
 const categoryLabels = {
   bahasa_melayu: 'Bahasa Melayu',
@@ -15,8 +18,10 @@ const categoryLabels = {
 
 export default function ParentDashboard() {
   const { user, isAuthenticated, navigateToLogin } = useAuth();
+  const { ageGroup } = useAgeGroup();
   const [childrenData, setChildrenData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [selectedChild, setSelectedChild] = useState(null);
 
   // Auth guard
   useEffect(() => {
@@ -46,6 +51,11 @@ export default function ParentDashboard() {
       });
 
       setChildrenData(grouped);
+      
+      // Set first child as selected if not already set
+      if (Object.keys(grouped).length > 0 && !selectedChild) {
+        setSelectedChild(Object.keys(grouped)[0]);
+      }
     } catch (error) {
       console.error('Failed to load progress:', error);
     } finally {
@@ -155,7 +165,26 @@ export default function ParentDashboard() {
           </motion.div>
         ) : (
           <div className="space-y-6">
+            {/* Smart Recommendations for selected child */}
+            {selectedChild && (
+              <SmartRecommendations 
+                userEmail={user.email} 
+                childName={selectedChild}
+                ageGroup={ageGroup}
+              />
+            )}
+
+            {/* Leaderboard Widget */}
+            {selectedChild && (
+              <LeaderboardWidget 
+                userEmail={user.email} 
+                childName={selectedChild}
+                ageGroup={ageGroup}
+              />
+            )}
+
             {Object.entries(childrenData).map(([childName, games], idx) => {
+              if (selectedChild) setSelectedChild(childName);
               const weakSubjects = analyzeWeakSubjects(games);
               const totalGames = games.length;
               const totalStars = games.reduce((sum, g) => sum + (g.bestStars || 0), 0);

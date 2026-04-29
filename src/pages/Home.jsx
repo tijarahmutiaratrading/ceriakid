@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { Link } from 'react-router-dom';
 import CategoryGrid from '@/components/home/CategoryGrid';
+import DailyChallenge from '@/components/home/DailyChallenge';
 
 export default function Home() {
   const { isAuthenticated, user } = useAuth();
@@ -81,6 +82,11 @@ export default function Home() {
             <span className="ml-auto text-2xl">→</span>
           </motion.div>
         </Link>
+
+        {/* Daily Challenge */}
+        {isAuthenticated && (
+          <DailyChallenge ageGroup={safeAgeGroup} />
+        )}
 
         {/* Category Grid */}
         <h2 className="text-2xl font-black text-gray-800 mb-6">Pilih Subjek</h2>
