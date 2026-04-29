@@ -12,6 +12,8 @@ import FeedbackOverlay from '@/components/game/FeedbackOverlay';
 import ScoreScreen from '@/components/game/ScoreScreen';
 import TracingCanvas from '@/components/drawing/TracingCanvas';
 import GameTutorial from '@/components/game/GameTutorial';
+import AudioPlayer from '@/components/audio/AudioPlayer';
+import { playSound } from '@/lib/soundManager';
 
 export default function GamePlayer() {
   const { category, index } = useParams();
@@ -52,11 +54,14 @@ export default function GamePlayer() {
     const correct = selectedIndex === currentQuestion.answer;
 
     if (correct) {
+      playSound('correct');
       confetti({
         particleCount: 60,
         spread: 50,
         colors: ['#f59e0b', '#ec4899', '#3b82f6', '#10b981'],
       });
+    } else {
+      playSound('wrong');
     }
 
     setState(prev => ({
@@ -107,14 +112,16 @@ export default function GamePlayer() {
 
 
   const handleTracingComplete = (result) => {
-    const correct = result.accuracy >= 70;
-    setState(prev => ({
-      ...prev,
-      showFeedback: true,
-      isCorrect: correct,
-      feedbackMsg: correct ? '✨ Sempurna! Bagus Sangat!' : '💪 Cuba Lagi! Hampir Dah!',
-      score: correct ? prev.score + 1 : prev.score,
-    }));
+   const correct = result.accuracy >= 70;
+   if (correct) playSound('complete');
+   else playSound('wrong');
+   setState(prev => ({
+     ...prev,
+     showFeedback: true,
+     isCorrect: correct,
+     feedbackMsg: correct ? '✨ Sempurna! Bagus Sangat!' : '💪 Cuba Lagi! Hampir Dah!',
+     score: correct ? prev.score + 1 : prev.score,
+   }));
   };
 
   const saveGameProgress = async () => {
@@ -313,19 +320,29 @@ export default function GamePlayer() {
           )}
 
           {/* Text Question (math, multiple choice) */}
-          {currentQuestion.problem && (
-            <div className={`font-black text-game-purple ${currentQuestion.problem.length > 20 ? 'text-2xl' : 'text-4xl'}`}>
-              {currentQuestion.problem}
-            </div>
-          )}
+           {currentQuestion.problem && (
+             <div className={`font-black text-game-purple ${currentQuestion.problem.length > 20 ? 'text-2xl' : 'text-4xl'}`}>
+               {currentQuestion.problem}
+             </div>
+           )}
 
-          {/* "Apakah ini?" label for picture quizzes */}
-          {currentQuestion.image && !currentQuestion.problem && (
-            <p className="text-lg font-bold text-gray-700 mt-2">
-              Apakah ini?
-            </p>
-          )}
-        </motion.div>
+           {/* "Apakah ini?" label for picture quizzes */}
+           {currentQuestion.image && !currentQuestion.problem && (
+             <p className="text-lg font-bold text-gray-700 mt-2">
+               Apakah ini?
+             </p>
+           )}
+
+           {/* Audio button for pronunciations */}
+           {(currentQuestion.word || currentQuestion.letter || currentQuestion.problem) && (
+             <div className="mt-4">
+               <AudioPlayer 
+                 text={currentQuestion.word || currentQuestion.letter || currentQuestion.problem}
+                 language={category === 'english' ? 'en-US' : 'ms-MY'}
+               />
+             </div>
+           )}
+          </motion.div>
 
         {/* Options Grid */}
         <div className="grid grid-cols-2 gap-3">
