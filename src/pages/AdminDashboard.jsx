@@ -29,10 +29,10 @@ export default function AdminDashboard() {
 
   if (user?.role !== 'admin') {
     return (
-      <div className="min-h-screen bg-pattern flex items-center justify-center">
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-2xl font-black mb-4">🔒</p>
-          <p className="font-bold">Akses Ditolak</p>
+          <p className="text-3xl mb-4">🔒</p>
+          <p className="text-white font-semibold">Akses Ditolak</p>
         </div>
       </div>
     );
@@ -40,10 +40,8 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-pattern flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full animate-spin mx-auto"></div>
-        </div>
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="w-8 h-8 border-3 border-slate-600 border-t-blue-500 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -62,26 +60,20 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50">
-      <div className="max-w-7xl mx-auto px-4 py-8 pb-24">
+    <div className="min-h-screen bg-slate-900">
+      <div className="max-w-7xl mx-auto px-6 py-8 pb-24">
         {/* Header */}
-        <Link to="/">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </motion.button>
-        </Link>
-
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-black flex items-center gap-3 text-gray-800">
-            <BarChart3 className="w-10 h-10 text-game-orange" />
-            Admin Dashboard
-          </h1>
+        <div className="flex items-center justify-between mb-12">
+          <div>
+            <h1 className="text-4xl font-bold text-white flex items-center gap-3">
+              <BarChart3 className="w-10 h-10 text-blue-400" />
+              Admin Dashboard
+            </h1>
+            <p className="text-slate-400 mt-2">Sales & Subscription Overview</p>
+          </div>
           <Link to="/admin-settings">
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center gap-2 px-5 py-2.5 bg-game-purple text-white rounded-xl font-bold shadow-md">
-              <Settings className="w-4 h-4" /> Tetapan
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold shadow-lg transition-colors">
+              <Settings className="w-5 h-5" /> Tetapan
             </motion.button>
           </Link>
         </div>
@@ -91,96 +83,104 @@ export default function AdminDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-md"
+            className="bg-slate-800 border border-slate-700 rounded-lg p-6 shadow-lg hover:border-slate-600 transition-colors"
           >
-            <p className="text-sm text-gray-600 mb-2 font-bold">📊 Jumlah Pembeli</p>
-            <p className="text-3xl font-black text-game-orange">{subscriptions.length}</p>
+            <p className="text-slate-400 text-sm font-semibold mb-2">Total Subscribers</p>
+            <p className="text-4xl font-bold text-white">{subscriptions.length}</p>
+            <p className="text-slate-500 text-xs mt-3">Semua Paket</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-md"
+            className="bg-slate-800 border border-slate-700 rounded-lg p-6 shadow-lg hover:border-slate-600 transition-colors"
           >
-            <p className="text-sm text-gray-600 mb-2 font-bold">💎 Premium</p>
-            <p className="text-3xl font-black text-game-blue">{tierBreakdown.premium}</p>
+            <p className="text-slate-400 text-sm font-semibold mb-2">Premium</p>
+            <p className="text-4xl font-bold text-blue-400">{tierBreakdown.premium}</p>
+            <p className="text-slate-500 text-xs mt-3">RM 24.90/bulan</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-md"
+            className="bg-slate-800 border border-slate-700 rounded-lg p-6 shadow-lg hover:border-slate-600 transition-colors"
           >
-            <p className="text-sm text-gray-600 mb-2 font-bold">👑 Pro</p>
-            <p className="text-3xl font-black text-game-purple">{tierBreakdown.pro}</p>
+            <p className="text-slate-400 text-sm font-semibold mb-2">Pro</p>
+            <p className="text-4xl font-bold text-purple-400">{tierBreakdown.pro}</p>
+            <p className="text-slate-500 text-xs mt-3">RM 44.90/bulan</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-md"
+            className="bg-slate-800 border border-slate-700 rounded-lg p-6 shadow-lg hover:border-slate-600 transition-colors"
           >
-            <p className="text-sm text-gray-600 mb-2 font-bold">💰 Pendapatan (RM)</p>
-            <p className="text-3xl font-black text-game-green">{totalRevenue.toFixed(2)}</p>
+            <p className="text-slate-400 text-sm font-semibold mb-2">Monthly Revenue</p>
+            <p className="text-4xl font-bold text-green-400">RM {totalRevenue.toFixed(2)}</p>
+            <p className="text-slate-500 text-xs mt-3">Paid Tiers</p>
           </motion.div>
         </div>
 
-        {/* Clients Table */}
+        {/* Subscribers Table */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white rounded-2xl p-6 overflow-x-auto border-2 border-amber-200 shadow-md"
+          className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden shadow-lg"
         >
-          <h2 className="text-2xl font-black mb-6 flex items-center gap-3 text-gray-800">
-            <Users className="w-7 h-7 text-game-orange" />
-            Daftar Pembeli
-          </h2>
+          <div className="px-6 py-4 border-b border-slate-700">
+            <h2 className="text-xl font-bold text-white flex items-center gap-3">
+              <Users className="w-6 h-6 text-blue-400" />
+              Subscribers Database
+            </h2>
+          </div>
 
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b-2 border-gray-300">
-                <th className="text-left py-3 px-4 font-bold">Email</th>
-                <th className="text-left py-3 px-4 font-bold">Paket</th>
-                <th className="text-left py-3 px-4 font-bold">Status</th>
-                <th className="text-left py-3 px-4 font-bold">Tarikh Daftar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {subscriptions.map((sub, i) => (
-                <motion.tr
-                  key={sub.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="border-b border-gray-200 hover:bg-gray-50"
-                >
-                  <td className="py-3 px-4">{sub.email}</td>
-                  <td className="py-3 px-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
-                      sub.tier === 'premium' ? 'bg-game-blue/20 text-game-blue' :
-                      'bg-game-purple/20 text-game-purple'
-                    }`}>
-                      {sub.tier === 'free' ? 'Percuma' : sub.tier === 'premium' ? 'Premium' : 'Pro'}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      sub.status === 'active' ? 'bg-green-200 text-green-700' :
-                      'bg-red-200 text-red-700'
-                    }`}>
-                      {sub.status === 'active' ? 'Aktif' : 'Batal'}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-700 bg-slate-900/50">
+                  <th className="text-left py-4 px-6 font-semibold text-slate-300">Email</th>
+                  <th className="text-left py-4 px-6 font-semibold text-slate-300">Plan</th>
+                  <th className="text-left py-4 px-6 font-semibold text-slate-300">Status</th>
+                  <th className="text-left py-4 px-6 font-semibold text-slate-300">Join Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subscriptions.map((sub, i) => (
+                  <motion.tr
+                    key={sub.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.02 }}
+                    className="border-b border-slate-700 hover:bg-slate-700/50 transition-colors"
+                  >
+                    <td className="py-4 px-6 text-slate-300">{sub.email}</td>
+                    <td className="py-4 px-6">
+                      <span className={`px-3 py-1 rounded text-xs font-semibold ${
+                        sub.tier === 'free' ? 'bg-slate-700 text-slate-300' :
+                        sub.tier === 'premium' ? 'bg-blue-900/50 text-blue-300' :
+                        'bg-purple-900/50 text-purple-300'
+                      }`}>
+                        {sub.tier === 'free' ? 'Free' : sub.tier === 'premium' ? 'Premium' : 'Pro'}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className={`px-3 py-1 rounded text-xs font-semibold ${
+                        sub.status === 'active' ? 'bg-green-900/50 text-green-300' :
+                        'bg-red-900/50 text-red-300'
+                      }`}>
+                        {sub.status === 'active' ? 'Active' : 'Cancelled'}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-slate-400">{new Date(sub.created_date).toLocaleDateString('ms-MY', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </motion.div>
       </div>
     </div>
