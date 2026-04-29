@@ -61,10 +61,8 @@ const AuthenticatedApp = () => {
       <AgeGroupProvider>
         <Routes>
           {/* Public pages - check if not authenticated */}
-          <Route path="/landing" element={<Landing />} />
-
-          {/* App pages - authenticated */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/dashboard" element={<Home />} />
           <Route path="/admin-hub" element={<AdminHub />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-analytics" element={<AdminAnalytics />} />
