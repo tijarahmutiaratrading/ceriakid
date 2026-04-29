@@ -39,8 +39,9 @@
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1234567890');
+      fbq('init', '1234567890'); // TODO: Replace with real Pixel ID from Facebook Ads Manager
       fbq('track', 'PageView');
+      // Track custom events: fbq('track', 'Purchase', {value: '99.90', currency: 'MYR'});
     </script>
   </head>
   <body>

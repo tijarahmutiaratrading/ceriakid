@@ -16,9 +16,12 @@ import AudioPlayer from '@/components/audio/AudioPlayer';
 import ProgressBar from '@/components/game/ProgressBar';
 import AchievementBadges from '@/components/game/AchievementBadges';
 import ShareButton from '@/components/game/ShareButton';
+import ErrorBoundary from '@/components/game/ErrorBoundary';
+import LoadingSkeleton from '@/components/game/LoadingSkeleton';
 import { playSound } from '@/lib/soundManager';
 import { checkAchievements, calculateStreak } from '@/lib/achievementManager';
 import { queueGameProgress, syncOfflineProgress } from '@/lib/offlineSyncManager';
+import { trackGameCompletion } from '@/lib/analyticsManager';
 
 export default function GamePlayer() {
   const { category, index } = useParams();
@@ -181,6 +184,9 @@ export default function GamePlayer() {
         playHistory: [playRecord, ...(existing[0]?.playHistory || [])].slice(0, 10),
       };
 
+      // Track event
+      trackGameCompletion(game.title, state.score, questions.length, stars);
+
       if (existing.length > 0) {
         await base44.entities.ChildGameProgress.update(existing[0].id, progressData);
       } else {
@@ -269,6 +275,9 @@ export default function GamePlayer() {
     );
   }
 
+  if (questions.length === 0) {
+    return <LoadingSkeleton />;
+
 
 
   if (state.finished) {
@@ -334,7 +343,8 @@ export default function GamePlayer() {
   }
 
   return (
-    <div className="min-h-screen bg-pattern">
+    <ErrorBoundary>
+      <div className="min-h-screen bg-pattern">
       <div className="max-w-lg mx-auto px-4 py-6 pb-32">
         <Link to={`/games/${category}`}>
           <motion.button
@@ -462,5 +472,7 @@ export default function GamePlayer() {
 
       <AchievementBadges badges={state.unlockedBadges} />
     </div>
+
+    </ErrorBoundary>
   );
 }

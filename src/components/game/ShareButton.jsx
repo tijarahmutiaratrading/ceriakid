@@ -40,7 +40,7 @@ export default function ShareButton({ gameTitle, category, index }) {
       <motion.button
         whileTap={{ scale: 0.9 }}
         onClick={() => setShowMenu(!showMenu)}
-        className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-game-blue to-purple-500 text-white rounded-full font-bold text-sm shadow-lg hover:shadow-xl transition-all"
+        className="flex items-center gap-2 px-5 py-3 md:px-4 md:py-2.5 bg-gradient-to-r from-game-blue to-purple-500 text-white rounded-full font-bold text-sm md:text-xs shadow-lg hover:shadow-xl transition-all min-h-[44px] min-w-[44px]"
       >
         <Share2 className="w-4 h-4" />
         Kongsi
