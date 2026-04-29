@@ -386,10 +386,10 @@ export default function GamePlayer() {
              </div>
            )}
 
-           {/* "Apakah ini?" label for picture quizzes */}
+           {/* Question label based on game type */}
            {currentQuestion.image && !currentQuestion.problem && (
              <p className="text-lg font-bold text-gray-700 mt-2">
-               Apakah ini?
+               {game.type === 'counting' ? 'Berapakah ini?' : 'Apakah ini?'}
              </p>
            )}
 
