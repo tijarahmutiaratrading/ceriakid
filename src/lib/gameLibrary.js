@@ -1,0 +1,306 @@
+// Game library dengan 20-30 games per kategori
+// Struktur ini support scaling ke 200+ games
+
+export const gameLibrary = {
+  prasekolah: {
+    bahasa_melayu: [
+      {
+        title: 'Huruf ABC - Biru',
+        type: 'letter_match',
+        emoji: '🔤',
+        difficulty: 'easy',
+        gameData: {
+          questions: [
+            { letter: 'A', emoji: '🍎', word: 'Epal' },
+            { letter: 'B', emoji: '🐦', word: 'Burung' },
+            { letter: 'C', emoji: '🐱', word: 'Kucing' },
+            { letter: 'D', emoji: '🐕', word: 'Anjing' },
+            { letter: 'E', emoji: '🐘', word: 'Gajah' },
+            { letter: 'F', emoji: '🐟', word: 'Ikan' },
+          ],
+        },
+      },
+      {
+        title: 'Huruf Vokal A-E',
+        type: 'letter_match',
+        emoji: '🅰️',
+        difficulty: 'easy',
+        gameData: {
+          questions: [
+            { letter: 'A', emoji: '🍎', word: 'Epal' },
+            { letter: 'E', emoji: '🥚', word: 'Telur' },
+            { letter: 'I', emoji: '🍦', word: 'Ais Krim' },
+            { letter: 'O', emoji: '🍊', word: 'Oren' },
+            { letter: 'U', emoji: '☂️', word: 'Payung' },
+          ],
+        },
+      },
+      {
+        title: 'Kata Mudah - Haiwan',
+        type: 'picture_quiz',
+        emoji: '🐾',
+        difficulty: 'easy',
+        gameData: {
+          questions: [
+            { image: '🐱', options: ['Kucing', 'Anjing', 'Kelinci'], answer: 0 },
+            { image: '🐶', options: ['Kucing', 'Anjing', 'Burung'], answer: 1 },
+            { image: '🦁', options: ['Singa', 'Harimau', 'Beruang'], answer: 0 },
+          ],
+        },
+      },
+      {
+        title: 'Suara Awal - Haiwan',
+        type: 'sound_match',
+        emoji: '🔊',
+        difficulty: 'easy',
+        gameData: { soundCategory: 'animals_bm' },
+      },
+    ],
+    english: [
+      {
+        title: 'ABC Letters - Blue',
+        type: 'letter_match',
+        emoji: '🔤',
+        difficulty: 'easy',
+        gameData: {
+          questions: [
+            { letter: 'A', emoji: '🍎', word: 'Apple' },
+            { letter: 'B', emoji: '🐦', word: 'Bird' },
+            { letter: 'C', emoji: '🐱', word: 'Cat' },
+            { letter: 'D', emoji: '🐕', word: 'Dog' },
+            { letter: 'E', emoji: '🐘', word: 'Elephant' },
+            { letter: 'F', emoji: '🐟', word: 'Fish' },
+          ],
+        },
+      },
+      {
+        title: 'Vowels A-E',
+        type: 'letter_match',
+        emoji: '🅰️',
+        difficulty: 'easy',
+        gameData: {
+          questions: [
+            { letter: 'A', emoji: '🍎', word: 'Apple' },
+            { letter: 'E', emoji: '🥚', word: 'Egg' },
+            { letter: 'I', emoji: '🍦', word: 'Ice Cream' },
+            { letter: 'O', emoji: '🍊', word: 'Orange' },
+            { letter: 'U', emoji: '☂️', word: 'Umbrella' },
+          ],
+        },
+      },
+    ],
+    mathematics: [
+      {
+        title: 'Counting 1-5',
+        type: 'counting',
+        emoji: '🔢',
+        difficulty: 'easy',
+        gameData: {
+          questions: [
+            { count: 1, emoji: '🍎', image: '🍎' },
+            { count: 2, emoji: '🍎', image: '🍎🍎' },
+            { count: 3, emoji: '🍎', image: '🍎🍎🍎' },
+            { count: 4, emoji: '🍎', image: '🍎🍎🍎🍎' },
+            { count: 5, emoji: '🍎', image: '🍎🍎🍎🍎🍎' },
+          ],
+        },
+      },
+      {
+        title: 'Numbers 1-10',
+        type: 'number_match',
+        emoji: '1️⃣',
+        difficulty: 'easy',
+        gameData: {
+          questions: Array.from({ length: 10 }, (_, i) => ({ number: i + 1, emoji: '⭐' })),
+        },
+      },
+      {
+        title: 'Addition 1+1 to 5+5',
+        type: 'math_puzzle',
+        emoji: '➕',
+        difficulty: 'medium',
+        gameData: {
+          questions: [
+            { problem: '1+1', answer: 2 },
+            { problem: '2+1', answer: 3 },
+            { problem: '1+2', answer: 3 },
+            { problem: '2+2', answer: 4 },
+          ],
+        },
+      },
+    ],
+    science: [
+      {
+        title: 'Animals & Habitats',
+        type: 'picture_quiz',
+        emoji: '🦁',
+        difficulty: 'easy',
+        gameData: {
+          questions: [
+            { image: '🐠', options: ['Air', 'Udara', 'Tanah'], answer: 0 },
+            { image: '🐦', options: ['Air', 'Udara', 'Tanah'], answer: 1 },
+            { image: '🐿️', options: ['Air', 'Udara', 'Tanah'], answer: 2 },
+          ],
+        },
+      },
+      {
+        title: 'Warna di Alam (Colors in Nature)',
+        type: 'color_match',
+        emoji: '🌈',
+        difficulty: 'easy',
+        gameData: { colors: ['red', 'blue', 'green', 'yellow', 'orange'] },
+      },
+    ],
+  },
+
+  sekolah_rendah: {
+    bahasa_melayu: [
+      {
+        title: 'Huruf Konsonan G-Z',
+        type: 'letter_match',
+        emoji: '🔤',
+        difficulty: 'medium',
+        gameData: {
+          questions: [
+            { letter: 'G', emoji: '🍇', word: 'Anggur' },
+            { letter: 'H', emoji: '🏠', word: 'Rumah' },
+            { letter: 'I', emoji: '🍦', word: 'Ais Krim' },
+            { letter: 'J', emoji: '🤹', word: 'Jongkong' },
+          ],
+        },
+      },
+      {
+        title: 'Ayat Mudah - Terbaca',
+        type: 'reading',
+        emoji: '📖',
+        difficulty: 'medium',
+        gameData: {
+          sentences: ['Saya suka bermain.', 'Kucing itu comel.', 'Mak memasak nasi.'],
+        },
+      },
+      {
+        title: 'Kosa Kata Harian',
+        type: 'word_builder',
+        emoji: '🔠',
+        difficulty: 'medium',
+        gameData: {
+          words: ['rumah', 'sekolah', 'keluarga', 'makanan', 'mainan'],
+        },
+      },
+    ],
+    english: [
+      {
+        title: 'Consonants G-Z',
+        type: 'letter_match',
+        emoji: '🔤',
+        difficulty: 'medium',
+        gameData: {
+          questions: [
+            { letter: 'G', emoji: '🍇', word: 'Grapes' },
+            { letter: 'H', emoji: '🏠', word: 'House' },
+            { letter: 'I', emoji: '🍦', word: 'Ice Cream' },
+            { letter: 'J', emoji: '🤹', word: 'Juggler' },
+          ],
+        },
+      },
+      {
+        title: 'Simple Sentences - Reading',
+        type: 'reading',
+        emoji: '📖',
+        difficulty: 'medium',
+        gameData: {
+          sentences: ['I like to play.', 'The cat is cute.', 'Mom cooks rice.'],
+        },
+      },
+      {
+        title: 'Daily Vocabulary',
+        type: 'word_builder',
+        emoji: '🔠',
+        difficulty: 'medium',
+        gameData: {
+          words: ['house', 'school', 'family', 'food', 'toy'],
+        },
+      },
+    ],
+    mathematics: [
+      {
+        title: 'Addition 1-20',
+        type: 'math_puzzle',
+        emoji: '➕',
+        difficulty: 'medium',
+        gameData: {
+          questions: [
+            { problem: '5+3', answer: 8 },
+            { problem: '7+4', answer: 11 },
+            { problem: '10+5', answer: 15 },
+          ],
+        },
+      },
+      {
+        title: 'Subtraction 1-20',
+        type: 'math_puzzle',
+        emoji: '➖',
+        difficulty: 'medium',
+        gameData: {
+          questions: [
+            { problem: '10-3', answer: 7 },
+            { problem: '15-5', answer: 10 },
+            { problem: '20-8', answer: 12 },
+          ],
+        },
+      },
+      {
+        title: 'Shapes & Angles',
+        type: 'shape_sort',
+        emoji: '📐',
+        difficulty: 'medium',
+        gameData: {
+          shapes: ['circle', 'square', 'triangle', 'rectangle', 'pentagon'],
+        },
+      },
+    ],
+    science: [
+      {
+        title: 'Human Body Parts',
+        type: 'picture_quiz',
+        emoji: '🧠',
+        difficulty: 'medium',
+        gameData: {
+          questions: [
+            { image: '👁️', options: ['Mata', 'Hidung', 'Telinga'], answer: 0 },
+            { image: '👃', options: ['Mata', 'Hidung', 'Telinga'], answer: 1 },
+            { image: '👂', options: ['Mata', 'Hidung', 'Telinga'], answer: 2 },
+          ],
+        },
+      },
+      {
+        title: 'Weather & Seasons',
+        type: 'picture_quiz',
+        emoji: '☀️',
+        difficulty: 'medium',
+        gameData: {
+          questions: [
+            { image: '☀️', options: ['Panas', 'Sejuk', 'Hujan'], answer: 0 },
+            { image: '❄️', options: ['Panas', 'Sejuk', 'Hujan'], answer: 1 },
+            { image: '🌧️', options: ['Panas', 'Sejuk', 'Hujan'], answer: 2 },
+          ],
+        },
+      },
+    ],
+  },
+};
+
+// Helper functions untuk mendapatkan games
+export function getGamesByAgeAndCategory(ageGroup, category) {
+  return gameLibrary[ageGroup]?.[category] || [];
+}
+
+export function getGamesByAge(ageGroup) {
+  return gameLibrary[ageGroup] || {};
+}
+
+export function getAllGamesForAge(ageGroup) {
+  const games = gameLibrary[ageGroup];
+  if (!games) return [];
+  return Object.values(games).flat();
+}

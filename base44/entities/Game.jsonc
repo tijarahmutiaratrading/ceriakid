@@ -1,0 +1,103 @@
+{
+  "name": "Game",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Game title in both BM/EN"
+    },
+    "description": {
+      "type": "string",
+      "description": "Game description"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "letter_match",
+        "number_match",
+        "picture_quiz",
+        "drag_drop",
+        "multiple_choice",
+        "counting",
+        "word_builder",
+        "math_puzzle",
+        "science_quiz",
+        "shape_sort",
+        "color_match",
+        "pattern_fill",
+        "memory_game",
+        "sound_match",
+        "spelling",
+        "reading",
+        "phonics"
+      ],
+      "description": "Game mechanics type"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "bahasa_melayu",
+        "english",
+        "mathematics",
+        "science",
+        "general"
+      ],
+      "description": "Subject category"
+    },
+    "ageGroup": {
+      "type": "string",
+      "enum": [
+        "prasekolah",
+        "sekolah_rendah"
+      ],
+      "description": "Target age group"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard"
+      ],
+      "default": "easy"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "free",
+        "premium",
+        "pro"
+      ],
+      "default": "free",
+      "description": "Subscription tier required"
+    },
+    "emoji": {
+      "type": "string",
+      "description": "Game icon emoji"
+    },
+    "totalQuestions": {
+      "type": "number",
+      "default": 8,
+      "description": "Number of questions in game"
+    },
+    "gameData": {
+      "type": "object",
+      "description": "Structured game content (questions, options, etc.)",
+      "additionalProperties": true
+    },
+    "isPublished": {
+      "type": "boolean",
+      "default": true
+    },
+    "order": {
+      "type": "number",
+      "description": "Display order"
+    }
+  },
+  "required": [
+    "title",
+    "type",
+    "category",
+    "ageGroup"
+  ]
+}

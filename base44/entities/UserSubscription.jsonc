@@ -1,0 +1,59 @@
+{
+  "name": "UserSubscription",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "User email"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "free",
+        "premium",
+        "pro"
+      ],
+      "default": "free"
+    },
+    "stripeCustomerId": {
+      "type": "string",
+      "description": "Stripe customer ID"
+    },
+    "stripeSubscriptionId": {
+      "type": "string",
+      "description": "Stripe subscription ID"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "canceled",
+        "past_due",
+        "incomplete",
+        "trial"
+      ],
+      "default": "active"
+    },
+    "currentPeriodStart": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "currentPeriodEnd": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "selectedAgeGroup": {
+      "type": "string",
+      "enum": [
+        "prasekolah",
+        "sekolah_rendah"
+      ],
+      "default": "prasekolah",
+      "description": "Currently selected age group"
+    }
+  },
+  "required": [
+    "email",
+    "tier"
+  ]
+}

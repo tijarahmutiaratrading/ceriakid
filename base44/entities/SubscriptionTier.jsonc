@@ -1,0 +1,43 @@
+{
+  "name": "SubscriptionTier",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": [
+        "free",
+        "premium",
+        "pro"
+      ]
+    },
+    "priceUSD": {
+      "type": "number",
+      "description": "Price in USD per month"
+    },
+    "priceMYR": {
+      "type": "number",
+      "description": "Price in MYR per month"
+    },
+    "description": {
+      "type": "string"
+    },
+    "gameLimit": {
+      "type": "number",
+      "description": "Number of games accessible"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of features included"
+    },
+    "stripePriceId": {
+      "type": "string",
+      "description": "Stripe price ID for billing"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

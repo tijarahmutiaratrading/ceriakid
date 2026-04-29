@@ -6,8 +6,13 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { LanguageProvider } from '@/lib/LanguageContext';
+import { AgeGroupProvider } from '@/lib/AgeGroupContext';
 
+import Landing from '@/pages/Landing';
+import Pricing from '@/pages/Pricing';
 import Home from '@/pages/Home';
+import GamesList from '@/pages/GamesList';
+import GamePlayer from '@/pages/GamePlayer';
 import ABCGame from '@/pages/ABCGame';
 import NumberGame from '@/pages/NumberGame';
 import QuizGame from '@/pages/QuizGame';
@@ -39,15 +44,28 @@ const AuthenticatedApp = () => {
 
   return (
     <LanguageProvider>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/abc" element={<ABCGame />} />
-        <Route path="/numbers" element={<NumberGame />} />
-        <Route path="/quiz" element={<QuizGame />} />
-        <Route path="/shapes" element={<ShapesGame />} />
-        <Route path="/scoreboard" element={<Scoreboard />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+      <AgeGroupProvider>
+        <Routes>
+          {/* Public pages - check if not authenticated */}
+          <Route path="/landing" element={<Landing />} />
+          <Route path="/pricing" element={<Pricing />} />
+
+          {/* App pages - authenticated */}
+          <Route path="/" element={<Home />} />
+          <Route path="/games/:category" element={<GamesList />} />
+          <Route path="/play/:category/:index" element={<GamePlayer />} />
+          
+          {/* Legacy games */}
+          <Route path="/abc" element={<ABCGame />} />
+          <Route path="/numbers" element={<NumberGame />} />
+          <Route path="/quiz" element={<QuizGame />} />
+          <Route path="/shapes" element={<ShapesGame />} />
+          <Route path="/scoreboard" element={<Scoreboard />} />
+          
+          {/* Catch all */}
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </AgeGroupProvider>
     </LanguageProvider>
   );
 };

@@ -1,74 +1,80 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useLang } from '@/lib/LanguageContext';
+import { useAuth } from '@/lib/AuthContext';
+import { Link } from 'react-router-dom';
 import LanguageToggle from '@/components/game/LanguageToggle';
-import GameCard from '@/components/home/GameCard';
+import AgeGroupSelector from '@/components/home/AgeGroupSelector';
+import CategoryGrid from '@/components/home/CategoryGrid';
 
 export default function Home() {
   const { t } = useLang();
-
-  const games = [
-    { to: '/abc', emoji: '🔤', title: t('abcGame'), desc: t('abcDesc'), color: 'yellow' },
-    { to: '/numbers', emoji: '🔢', title: t('numberGame'), desc: t('numberDesc'), color: 'pink' },
-    { to: '/quiz', emoji: '🧩', title: t('quizGame'), desc: t('quizDesc'), color: 'blue' },
-    { to: '/shapes', emoji: '🎨', title: t('shapeGame'), desc: t('shapeDesc'), color: 'green' },
-    { to: '/scoreboard', emoji: '🏆', title: t('scoreboard'), desc: t('scoreDesc'), color: 'purple' },
-  ];
+  const { isAuthenticated, user } = useAuth();
 
   return (
     <div className="min-h-screen bg-pattern">
       <div className="max-w-lg mx-auto px-4 py-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-2">
-          <div />
-          <LanguageToggle />
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <span className="text-3xl">🎓</span>
+            <h1 className="text-2xl font-black">Jom Belajar</h1>
+          </div>
+          <div className="flex gap-2">
+            <LanguageToggle />
+            {!isAuthenticated && (
+              <Link to="/pricing">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  className="clay-button rounded-full px-4 py-2 text-sm font-bold bg-game-purple/20"
+                >
+                  Masuk
+                </motion.button>
+              </Link>
+            )}
+          </div>
         </div>
 
-        {/* Hero */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <motion.div
-            className="text-7xl mb-3"
-            animate={{ y: [0, -8, 0] }}
-            transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
+        {/* Welcome */}
+        {isAuthenticated && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-sm font-semibold text-game-purple mb-6"
           >
-            🎓
+            👋 Halo, {user?.full_name || 'Teman'}!
+          </motion.p>
+        )}
+
+        {/* Age Group Selector */}
+        <AgeGroupSelector />
+
+        {/* Category Grid */}
+        <h2 className="text-xl font-black mb-4">Pilih Kategori</h2>
+        <CategoryGrid />
+
+        {/* Legacy games fallback */}
+        {!isAuthenticated && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-12 p-6 clay rounded-3xl text-center"
+          >
+            <p className="text-lg font-bold mb-4">🎮 Belum Mendaftar?</p>
+            <p className="text-sm text-gray-600 mb-4">
+              Langgani sekarang untuk akses 200+ permainan!
+            </p>
+            <Link to="/pricing">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                className="px-6 py-3 bg-game-purple text-white rounded-full font-bold"
+              >
+                Lihat Paket
+              </motion.button>
+            </Link>
           </motion.div>
-          <h1 className="text-4xl font-black bg-gradient-to-r from-game-purple via-game-pink to-game-orange bg-clip-text text-transparent">
-            {t('appTitle')}
-          </h1>
-          <p className="text-lg font-bold text-muted-foreground mt-1">
-            {t('appSubtitle')}
-          </p>
-        </motion.div>
-
-        {/* Game Selection */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-sm font-extrabold text-muted-foreground uppercase tracking-wider mb-4 px-1"
-        >
-          {t('selectGame')} ✨
-        </motion.p>
-
-        <div className="grid grid-cols-2 gap-4">
-          {games.map((game, i) => (
-            <GameCard key={game.to} {...game} index={i} />
-          ))}
-        </div>
-
-        {/* Footer decorations */}
-        <motion.div
-          className="text-center mt-8 text-3xl"
-          animate={{ rotate: [0, 10, -10, 0] }}
-          transition={{ repeat: Infinity, duration: 3 }}
-        >
-          🌈 ⭐ 🎈
-        </motion.div>
+        )}
       </div>
     </div>
   );
