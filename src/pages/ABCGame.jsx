@@ -102,7 +102,7 @@ export default function ABCGame() {
 
   return (
     <div className="min-h-screen bg-pattern">
-      <div className="max-w-lg mx-auto px-4 py-6">
+      <div className="max-w-lg mx-auto px-4 py-6 pb-24">
         <GameHeader
           title={t('abcGame')}
           score={state.score}
