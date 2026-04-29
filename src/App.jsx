@@ -20,6 +20,7 @@ import QuizGame from '@/pages/QuizGame';
 import ShapesGame from '@/pages/ShapesGame';
 import Scoreboard from '@/pages/Scoreboard';
 import Navigation from '@/components/Navigation';
+import MobileMenu from '@/components/MobileMenu';
 import Footer from '@/components/Footer';
 
 const AuthenticatedApp = () => {
@@ -79,6 +80,7 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
+          <MobileMenu />
           <Navigation />
           <AuthenticatedApp />
           <Footer />
