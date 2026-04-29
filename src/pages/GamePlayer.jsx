@@ -10,6 +10,7 @@ import { getGamesByAgeAndCategory, shuffleArray, calculateStars, saveScore } fro
 import GameHeader from '@/components/game/GameHeader';
 import FeedbackOverlay from '@/components/game/FeedbackOverlay';
 import ScoreScreen from '@/components/game/ScoreScreen';
+import TracingCanvas from '@/components/drawing/TracingCanvas';
 
 export default function GamePlayer() {
   const { category, index } = useParams();
@@ -28,6 +29,7 @@ export default function GamePlayer() {
     finished: false,
     selectedIdx: null,
     startTime: Date.now(),
+    showTracing: false,
   });
 
   // Save progress after game finishes
@@ -97,7 +99,21 @@ export default function GamePlayer() {
       feedbackMsg: '',
       finished: false,
       selectedIdx: null,
+      showTracing: false,
     });
+  };
+
+  const handleTracingComplete = (result) => {
+    if (result.accuracy >= 70) {
+      setState(prev => ({
+        ...prev,
+        showFeedback: true,
+        isCorrect: true,
+        feedbackMsg: '✨ Bagus! Tracing Sempurna!',
+        score: prev.score + 1,
+        showTracing: false,
+      }));
+    }
   };
 
   const saveGameProgress = async () => {
@@ -200,6 +216,42 @@ export default function GamePlayer() {
   }
 
   const currentQuestion = questions[state.currentQ];
+  const isTracingQuestion = currentQuestion?.type === 'tracing' || 
+    (currentQuestion?.tracingTarget && (category === 'bahasa_melayu' || category === 'mathematics'));
+
+  // Show tracing canvas instead of options
+  if (isTracingQuestion && state.showTracing === null) {
+    return (
+      <div className="min-h-screen bg-pattern">
+        <div className="max-w-lg mx-auto px-4 py-6 pb-24">
+          <Link to={`/games/${category}`}>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </motion.button>
+          </Link>
+
+          <GameHeader
+            title={game.title}
+            score={state.score}
+            total={questions.length}
+            currentQ={state.currentQ + 1}
+            totalQ={questions.length}
+          />
+
+          <TracingCanvas
+            targetShape={currentQuestion.tracingTarget || currentQuestion.letter}
+            emoji={game.emoji}
+            width={350}
+            height={350}
+            onComplete={handleTracingComplete}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-pattern">
