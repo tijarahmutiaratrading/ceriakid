@@ -77,7 +77,7 @@ const tiers = [
 export default function Landing() {
   const countdown = useCountdown(15);
   const [stickyVisible, setStickyVisible] = useState(false);
-  const [selectedTierForCheckout, setSelectedTierForCheckout] = useState(null);
+  const [selectedTierForCheckout, setSelectedTierForCheckout] = useState('premium');
 
   useEffect(() => {
     const onScroll = () => setStickyVisible(window.scrollY > 600);
