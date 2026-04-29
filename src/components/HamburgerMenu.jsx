@@ -98,6 +98,7 @@ export default function HamburgerMenu() {
                     onClick={() => {
                       if (ageGroupContext?.setAgeGroup) {
                         ageGroupContext.setAgeGroup(age.key);
+                        setIsOpen(false);
                       }
                     }}
                     whileTap={{ scale: 0.95 }}
