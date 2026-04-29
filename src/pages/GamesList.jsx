@@ -42,10 +42,10 @@ export default function GamesList() {
   const games = getGamesByAgeAndCategory(ageGroup, category);
 
   useEffect(() => {
-    if (user && userSubscription) {
+    if (user) {
       loadProgress();
     }
-  }, [user, category, userSubscription]);
+  }, [user, category]);
 
   const loadProgress = async () => {
     try {
