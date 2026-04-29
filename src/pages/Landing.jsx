@@ -8,7 +8,7 @@ import PricingCheckout from '@/components/PricingCheckout';
 export default function Landing() {
   const [selectedAgeGroup, setSelectedAgeGroup] = useState('prasekolah');
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedTier, setSelectedTier] = useState(null);
+    const [selectedTier, setSelectedTier] = useState('premium');
 
     const tiers = [
       {
@@ -67,11 +67,6 @@ export default function Landing() {
     ];
 
   const handleSubscribe = (tier) => {
-    const user = base44.auth.isAuthenticated();
-    if (!user) {
-      base44.auth.redirectToLogin();
-      return;
-    }
     setSelectedTier(tier);
   };
 
