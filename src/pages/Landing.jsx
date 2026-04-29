@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check, Shield, Star, Zap, Gift, Clock } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
+import PricingCheckout from '@/components/PricingCheckout';
 
 // Countdown Timer Hook
 function useCountdown(minutes = 15) {
@@ -76,6 +77,7 @@ const tiers = [
 export default function Landing() {
   const countdown = useCountdown(15);
   const [stickyVisible, setStickyVisible] = useState(false);
+  const [selectedTierForCheckout, setSelectedTierForCheckout] = useState(null);
 
   useEffect(() => {
     const onScroll = () => setStickyVisible(window.scrollY > 600);
@@ -84,6 +86,18 @@ export default function Landing() {
   }, []);
 
   const scrollToPricing = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+
+  const handleTierSelect = (tierName) => {
+    if (tierName === 'free') {
+      // Free tier just goes to app
+      window.location.href = '/';
+      return;
+    }
+    setSelectedTierForCheckout(tierName);
+    setTimeout(() => {
+      document.getElementById('checkout-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  };
 
   return (
     <div className="min-h-screen bg-amber-50 font-nunito">
@@ -361,10 +375,10 @@ export default function Landing() {
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
-                  onClick={scrollToPricing}
+                  onClick={() => handleTierSelect(tier.name)}
                   className={`w-full py-4 rounded-2xl font-black text-base mb-6 shadow-md transition-all ${
                     tier.highlighted ? 'bg-white text-orange-600 hover:bg-yellow-50' : 'bg-game-orange text-white hover:bg-orange-600'
-                  }`}
+                  } ${selectedTierForCheckout === tier.name ? 'ring-4 ring-yellow-400' : ''}`}
                 >
                   {tier.cta}
                 </motion.button>
@@ -384,6 +398,28 @@ export default function Landing() {
               </motion.div>
             ))}
           </div>
+
+          {/* Inline Checkout Form */}
+          <AnimatePresence>
+            {selectedTierForCheckout && (
+              <motion.div
+                id="checkout-form"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="mt-10 bg-white border-2 border-game-purple rounded-3xl p-8 max-w-lg mx-auto shadow-2xl"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-black text-gray-900">Daftar & Bayar 🔒</h3>
+                    <p className="text-sm text-gray-500 mt-1">Paket: <span className="font-black text-game-purple capitalize">{selectedTierForCheckout === 'premium' ? 'Premium — RM24.90/bln' : 'Pro Keluarga — RM44.90/bln'}</span></p>
+                  </div>
+                  <button onClick={() => setSelectedTierForCheckout(null)} className="text-gray-400 hover:text-gray-600 text-2xl font-black">✕</button>
+                </div>
+                <PricingCheckout selectedTier={selectedTierForCheckout} />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Money Back Guarantee */}
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-10 bg-green-50 border-2 border-green-300 rounded-2xl p-6 text-center max-w-xl mx-auto">

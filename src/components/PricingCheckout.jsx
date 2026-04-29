@@ -23,12 +23,13 @@ const TIERS = [
   },
 ];
 
-export default function PricingCheckout({ ageGroup, onClose }) {
+export default function PricingCheckout({ ageGroup, onClose, selectedTier: initialTier }) {
+  // If initialTier is passed, hide tier selection (already chosen)
   const [formData, setFormData] = useState({
     email: '',
     name: '',
     phone: '',
-    selectedTier: 'premium',
+    selectedTier: initialTier || 'premium',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -123,50 +124,52 @@ export default function PricingCheckout({ ageGroup, onClose }) {
         />
       </div>
 
-      {/* Tier Selection */}
-      <div>
-        <label className="block text-sm font-bold mb-4">Pilih Paket</label>
-        <div className="space-y-3">
-          {TIERS.map((tier) => (
-            <motion.label
-              key={tier.name}
-              whileHover={{ scale: 1.02 }}
-              className="flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all"
-              style={{
-                borderColor:
-                  formData.selectedTier === tier.name
-                    ? 'hsl(280, 60%, 55%)'
-                    : '#e5e7eb',
-                backgroundColor:
-                  formData.selectedTier === tier.name
-                    ? 'hsl(280, 60%, 55%, 0.05)'
-                    : 'transparent',
-              }}
-            >
-              <input
-                type="radio"
-                name="tier"
-                value={tier.name}
-                checked={formData.selectedTier === tier.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, selectedTier: e.target.value })
-                }
-                className="w-5 h-5 cursor-pointer"
-              />
-              <div className="ml-4 flex-1">
-                <p className="font-bold text-lg">{tier.nameMY}</p>
-                <p className="text-sm text-gray-600">{tier.description}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-2xl font-black text-game-purple">
-                  RM {tier.priceMYR}
-                </p>
-                <p className="text-xs text-gray-600">/bulan</p>
-              </div>
-            </motion.label>
-          ))}
+      {/* Tier Selection — only show if no tier pre-selected */}
+      {!initialTier && (
+        <div>
+          <label className="block text-sm font-bold mb-4">Pilih Paket</label>
+          <div className="space-y-3">
+            {TIERS.map((tier) => (
+              <motion.label
+                key={tier.name}
+                whileHover={{ scale: 1.02 }}
+                className="flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all"
+                style={{
+                  borderColor:
+                    formData.selectedTier === tier.name
+                      ? 'hsl(280, 60%, 55%)'
+                      : '#e5e7eb',
+                  backgroundColor:
+                    formData.selectedTier === tier.name
+                      ? 'hsl(280, 60%, 55%, 0.05)'
+                      : 'transparent',
+                }}
+              >
+                <input
+                  type="radio"
+                  name="tier"
+                  value={tier.name}
+                  checked={formData.selectedTier === tier.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, selectedTier: e.target.value })
+                  }
+                  className="w-5 h-5 cursor-pointer"
+                />
+                <div className="ml-4 flex-1">
+                  <p className="font-bold text-lg">{tier.nameMY}</p>
+                  <p className="text-sm text-gray-600">{tier.description}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-black text-game-purple">
+                    RM {tier.priceMYR}
+                  </p>
+                  <p className="text-xs text-gray-600">/bulan</p>
+                </div>
+              </motion.label>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {error && (
         <p className="text-red-500 text-sm font-bold">{error}</p>
