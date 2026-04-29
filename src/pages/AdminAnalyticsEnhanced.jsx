@@ -115,15 +115,22 @@ export default function AdminAnalyticsEnhanced() {
       setCohortData(cohortDataFormatted);
       setRetentionData(retentionFormatted);
       setLtvData({
-        totalRevenue,
-        avgLTV,
-        paidUsers: paidUsers.length,
-        conversionRate: ((paidUsers.length / allUsers.length) * 100).toFixed(1),
+        totalRevenue: totalRevenue || 0,
+        avgLTV: avgLTV || 0,
+        paidUsers: paidUsers.length || 0,
+        conversionRate: allUsers.length > 0 ? ((paidUsers.length / allUsers.length) * 100).toFixed(1) : 0,
       });
 
       setLoading(false);
     } catch (error) {
       console.error('Analytics load failed:', error);
+      setCohortData([]);
+      setRetentionData([
+        { day: 'D7', rate: 0 },
+        { day: 'D14', rate: 0 },
+        { day: 'D30', rate: 0 },
+      ]);
+      setLtvData({ totalRevenue: 0, avgLTV: 0, paidUsers: 0, conversionRate: 0 });
       setLoading(false);
     }
   };
@@ -140,6 +147,21 @@ export default function AdminAnalyticsEnhanced() {
     return (
       <div className="min-h-screen bg-pattern flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
+
+  if (!cohortData.length && !retentionData.length) {
+    return (
+      <div className="min-h-screen bg-amber-50 pb-32">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <Link to="/admin-dashboard">
+            <motion.button whileTap={{ scale: 0.9 }} className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6">
+              <ArrowLeft className="w-6 h-6" />
+            </motion.button>
+          </Link>
+          <p className="text-center text-xl font-black text-gray-500">📊 No analytics data available yet</p>
+        </div>
       </div>
     );
   }
