@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Users, Globe, Zap, Star, Lightbulb, Target, Check } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import PricingCheckout from '@/components/PricingCheckout';
 
 export default function Landing() {
   const [selectedAgeGroup, setSelectedAgeGroup] = useState('prasekolah');
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedTier, setSelectedTier] = useState(null);
 
   const tiers = [
     {
@@ -64,30 +66,13 @@ export default function Landing() {
     },
   ];
 
-  const handleSubscribe = async (tierName) => {
-    setIsLoading(true);
-    try {
-      const user = await base44.auth.me();
-      if (!user) {
-        base44.auth.redirectToLogin();
-        return;
-      }
-      const response = await base44.functions.invoke('createCheckoutSession', {
-        tier: tierName,
-        ageGroup: selectedAgeGroup,
-        returnUrl: window.location.href,
-      });
-      
-      if (tierName === 'free' && response.redirectUrl) {
-        window.location.href = response.redirectUrl;
-      } else if (response.checkoutUrl) {
-        window.location.href = response.checkoutUrl;
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setIsLoading(false);
+  const handleSubscribe = (tier) => {
+    const user = base44.auth.isAuthenticated();
+    if (!user) {
+      base44.auth.redirectToLogin();
+      return;
     }
+    setSelectedTier(tier);
   };
 
   return (
@@ -299,15 +284,14 @@ export default function Landing() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => handleSubscribe(tier.name)}
-                disabled={isLoading}
+                onClick={() => handleSubscribe(tier)}
                 className={`w-full py-3 rounded-2xl font-bold mb-6 transition-all ${
                   tier.highlighted
                     ? 'bg-game-purple text-white shadow-lg hover:shadow-xl'
                     : 'clay text-game-purple hover:shadow-lg'
                 }`}
               >
-                {isLoading ? 'Memproses...' : tier.cta}
+                {tier.cta}
               </motion.button>
 
               <div className="space-y-3">
@@ -346,6 +330,18 @@ export default function Landing() {
       <footer className="bg-gray-900 text-white text-center py-8">
         <p>&copy; 2026 Jom Belajar. Semua hak terpelihara. ❤️</p>
       </footer>
+
+      {/* Checkout Modal */}
+      <AnimatePresence>
+        {selectedTier && (
+          <PricingCheckout
+            tier={selectedTier}
+            tierName={selectedTier.name}
+            ageGroup={selectedAgeGroup}
+            onClose={() => setSelectedTier(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
