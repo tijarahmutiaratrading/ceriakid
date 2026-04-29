@@ -257,8 +257,8 @@ export const gameLibrary = {
           ],
         },
       },
-      ],
-      jawi: [
+    ],
+    jawi: [
       {
         title: 'Aksara Jawi - Asas',
         type: 'letter_match',
@@ -277,8 +277,8 @@ export const gameLibrary = {
           ],
         },
       },
-      ],
-      english: [
+    ],
+    english: [
       {
         title: 'Consonants G-Z',
         type: 'letter_match',
