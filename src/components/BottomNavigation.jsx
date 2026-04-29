@@ -13,8 +13,9 @@ export default function BottomNavigation() {
   const setAgeGroup = ageGroupContext?.setAgeGroup;
   const location = useLocation();
 
-  // Don't show nav on landing & pricing
-  if (location.pathname === '/landing' || location.pathname === '/pricing') {
+  // Don't show nav on landing, pricing, admin & client dashboards
+  if (location.pathname === '/landing' || location.pathname === '/pricing' || 
+      location.pathname === '/admin-dashboard' || location.pathname === '/client-dashboard') {
     return null;
   }
 
