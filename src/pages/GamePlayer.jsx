@@ -172,8 +172,8 @@ export default function GamePlayer() {
           className="clay rounded-3xl p-8 text-center max-w-sm"
         >
           <p className="text-5xl mb-4">🎮</p>
-          <p className="text-2xl font-black mb-2 text-gray-800">Game Tak Ada</p>
-          <p className="text-gray-600 mb-6">Game yang nak main tak ada la bro.</p>
+          <p className="text-2xl font-black mb-2 text-gray-800">Permainan Tidak Dijumpai</p>
+          <p className="text-gray-600 mb-6">Permainan yang diminta tidak tersedia.</p>
           <Link to={`/games/${category}`}>
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -205,8 +205,8 @@ export default function GamePlayer() {
       <div className="min-h-screen bg-pattern flex items-center justify-center p-4">
         <div className="clay rounded-3xl p-8 text-center max-w-sm">
           <p className="text-3xl mb-3">⚠️</p>
-          <p className="text-lg font-bold mb-4">Game Belum Siap</p>
-          <p className="text-gray-600 mb-6">Game ni tengah dibangun lagi la.</p>
+          <p className="text-lg font-bold mb-4">Permainan Belum Siap</p>
+          <p className="text-gray-600 mb-6">Permainan ini masih dalam pembangunan.</p>
           <Link to={`/games/${category}`}>
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -327,7 +327,7 @@ export default function GamePlayer() {
 
           {currentQuestion.image && !currentQuestion.problem && (
             <p className="text-lg font-bold text-gray-700">
-              Apa ni?
+              Apakah ini?
             </p>
           )}
         </motion.div>

@@ -25,7 +25,7 @@ export default function Home() {
                 whileTap={{ scale: 0.95 }}
                 className="clay-button rounded-full px-4 py-2 text-sm font-bold bg-game-purple/20"
               >
-                Log In
+                Masuk
               </motion.button>
             </Link>
           )}
@@ -38,7 +38,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             className="text-sm font-semibold text-game-purple mb-6"
           >
-            👋 Hallo {user?.full_name || 'Kawan'}!
+            👋 Halo, {user?.full_name || 'Teman'}!
           </motion.p>
         )}
 
@@ -56,9 +56,9 @@ export default function Home() {
             transition={{ delay: 0.5 }}
             className="mt-12 p-6 clay rounded-3xl text-center"
           >
-            <p className="text-lg font-bold mb-4">🎮 Tak Register Lagi?</p>
+            <p className="text-lg font-bold mb-4">🎮 Belum Mendaftar?</p>
             <p className="text-sm text-gray-600 mb-4">
-              Daftar la skrang dapat akses 200+ games!
+              Daftarlah sekarang untuk mendapatkan akses 200+ permainan!
             </p>
             <Link to="/pricing">
               <motion.button
