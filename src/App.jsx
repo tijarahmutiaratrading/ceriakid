@@ -15,6 +15,7 @@ import ClientDashboard from '@/pages/ClientDashboard';
 import GamesList from '@/pages/GamesList';
 import GamePlayer from '@/pages/GamePlayer';
 import ParentDashboard from '@/pages/ParentDashboard';
+import DrawingStudio from '@/pages/DrawingStudio';
 import ABCGame from '@/pages/ABCGame';
 import NumberGame from '@/pages/NumberGame';
 import QuizGame from '@/pages/QuizGame';
@@ -60,6 +61,9 @@ const AuthenticatedApp = () => {
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
           <Route path="/parent-dashboard" element={<ParentDashboard />} />
+          
+          {/* Drawing Studio */}
+          <Route path="/drawing" element={<DrawingStudio />} />
           
           {/* Legacy games */}
           <Route path="/abc" element={<ABCGame />} />

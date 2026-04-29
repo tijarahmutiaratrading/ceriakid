@@ -70,6 +70,22 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Drawing Studio Shortcut */}
+        <Link to="/drawing">
+          <motion.div
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="mb-6 bg-gradient-to-r from-pink-400 to-purple-400 rounded-2xl p-4 flex items-center gap-4 text-white shadow-lg cursor-pointer"
+          >
+            <span className="text-4xl">🎨</span>
+            <div>
+              <p className="font-black text-lg">Studio Lukisan</p>
+              <p className="text-sm opacity-90">Lukis bebas atau buat tracing huruf & bentuk!</p>
+            </div>
+            <span className="ml-auto text-2xl">→</span>
+          </motion.div>
+        </Link>
+
         {/* Category Grid */}
         <h2 className="text-2xl font-black text-gray-800 mb-6">Pilih Subjek</h2>
         <CategoryGrid />

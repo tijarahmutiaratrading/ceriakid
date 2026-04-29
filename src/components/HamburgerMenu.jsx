@@ -26,6 +26,7 @@ export default function HamburgerMenu() {
     { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
     { path: '/games/science', emoji: '🔬', label: 'Sains' },
     ...(safeAgeGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
+    { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
     ...(isAuthenticated ? [{ path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' }] : []),
   ];
 
