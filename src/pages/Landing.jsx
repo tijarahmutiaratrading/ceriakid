@@ -32,27 +32,27 @@ const testimonials = [
 
 const tiers = [
   {
-    name: 'free',
-    nameMY: 'Percuma',
-    priceMYR: '0',
+    name: 'starter',
+    nameMY: 'Starter',
+    priceMYR: '24',
     originalPrice: null,
-    period: 'selamanya',
-    games: '5',
-    features: ['5 permainan pilihan', 'Prasekolah & Sekolah Rendah', 'Tanpa kad kredit'],
-    noFeatures: ['Dashboard ibu bapa', 'Semua mata pelajaran', 'Muat turun offline'],
-    cta: 'Cuba Percuma',
+    period: '/bulan',
+    games: '50+',
+    features: ['50+ permainan', 'Prasekolah & Sekolah Rendah', 'Semua 5 mata pelajaran', 'Boleh guna offline 📲', 'Kemas kini mingguan'],
+    noFeatures: ['Dashboard ibu bapa', 'Sehingga 4 anak'],
+    cta: 'Mulakan Sekarang',
     highlighted: false,
-    color: 'from-gray-100 to-gray-200',
+    color: 'from-blue-100 to-blue-200',
   },
   {
     name: 'premium',
-    nameMY: 'Premium',
-    priceMYR: '24.90',
-    originalPrice: '49.90',
+    nameMY: '🔥 Premium',
+    priceMYR: '49',
+    originalPrice: null,
     period: '/bulan',
-    savings: 'Jimat RM25!',
-    games: '100+',
-    features: ['100+ permainan', 'Semua 5 mata pelajaran', 'Dashboard progres anak', 'Boleh guna offline 📲', 'Kemas kini setiap minggu', 'Sokongan WhatsApp'],
+    savings: 'PALING POPULAR',
+    games: '150+',
+    features: ['150+ permainan', 'Semua 5 mata pelajaran', 'Dashboard progres anak', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sokongan WhatsApp'],
     noFeatures: [],
     cta: '🔥 Mulakan Sekarang',
     highlighted: true,
@@ -61,10 +61,9 @@ const tiers = [
   {
     name: 'pro',
     nameMY: 'Pro Keluarga',
-    priceMYR: '44.90',
-    originalPrice: '89.90',
+    priceMYR: '99',
+    originalPrice: null,
     period: '/bulan',
-    savings: 'Jimat RM45!',
     games: '200+',
     features: ['200+ permainan', 'Sehingga 4 anak', 'Laporan kemajuan PDF', 'Akses semua peringkat', 'Jawi & Worksheet', 'Sokongan Prioriti 24/7'],
     noFeatures: [],
@@ -88,11 +87,6 @@ export default function Landing() {
   const scrollToPricing = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
 
   const handleTierSelect = (tierName) => {
-    if (tierName === 'free') {
-      // Free tier just goes to app
-      window.location.href = '/';
-      return;
-    }
     setSelectedTierForCheckout(tierName);
     setTimeout(() => {
       document.getElementById('checkout-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -412,7 +406,7 @@ export default function Landing() {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="text-2xl font-black text-gray-900">Daftar & Bayar 🔒</h3>
-                    <p className="text-sm text-gray-500 mt-1">Paket: <span className="font-black text-game-purple capitalize">{selectedTierForCheckout === 'premium' ? 'Premium — RM24.90/bln' : 'Pro Keluarga — RM44.90/bln'}</span></p>
+                    <p className="text-sm text-gray-500 mt-1">Paket: <span className="font-black text-game-purple capitalize">{selectedTierForCheckout === 'starter' ? 'Starter — RM24/bln' : selectedTierForCheckout === 'premium' ? 'Premium — RM49/bln' : 'Pro Keluarga — RM99/bln'}</span></p>
                   </div>
                   <button onClick={() => setSelectedTierForCheckout(null)} className="text-gray-400 hover:text-gray-600 text-2xl font-black">✕</button>
                 </div>
