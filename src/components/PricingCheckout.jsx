@@ -4,22 +4,20 @@ import { base44 } from '@/api/base44Client';
 
 const TIERS = [
   {
-    name: 'free',
-    nameMY: 'Percuma',
-    priceMYR: '0',
-    description: '5 permainan percuma',
-  },
-  {
     name: 'premium',
-    nameMY: 'Premium',
+    nameMY: '🔥 Premium',
     priceMYR: '24.90',
-    description: '100+ permainan',
+    originalPrice: '49.90',
+    description: '100+ permainan • 1 anak • Dashboard ibu bapa',
+    badge: 'PALING POPULAR',
   },
   {
     name: 'pro',
-    nameMY: 'Pro (Keluarga)',
+    nameMY: '👨‍👩‍👧 Pro Keluarga',
     priceMYR: '44.90',
-    description: '200+ permainan untuk 4 anak',
+    originalPrice: '89.90',
+    description: '200+ permainan • Sehingga 4 anak • Laporan PDF',
+    badge: null,
   },
 ];
 
@@ -124,52 +122,49 @@ export default function PricingCheckout({ ageGroup, onClose, selectedTier: initi
         />
       </div>
 
-      {/* Tier Selection — only show if no tier pre-selected */}
-      {!initialTier && (
-        <div>
-          <label className="block text-sm font-bold mb-4">Pilih Paket</label>
-          <div className="space-y-3">
-            {TIERS.map((tier) => (
+      {/* Tier Selection — always visible */}
+      <div>
+        <label className="block text-sm font-bold mb-3">Pilih Paket</label>
+        <div className="space-y-3">
+          {TIERS.map((tier) => {
+            const isSelected = formData.selectedTier === tier.name;
+            return (
               <motion.label
                 key={tier.name}
-                whileHover={{ scale: 1.02 }}
-                className="flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all"
-                style={{
-                  borderColor:
-                    formData.selectedTier === tier.name
-                      ? 'hsl(280, 60%, 55%)'
-                      : '#e5e7eb',
-                  backgroundColor:
-                    formData.selectedTier === tier.name
-                      ? 'hsl(280, 60%, 55%, 0.05)'
-                      : 'transparent',
-                }}
+                whileHover={{ scale: 1.01 }}
+                onClick={() => setFormData({ ...formData, selectedTier: tier.name })}
+                className={`relative flex items-center p-4 border-2 rounded-2xl cursor-pointer transition-all ${
+                  isSelected
+                    ? 'border-game-purple bg-purple-50'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
+                }`}
               >
-                <input
-                  type="radio"
-                  name="tier"
-                  value={tier.name}
-                  checked={formData.selectedTier === tier.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, selectedTier: e.target.value })
-                  }
-                  className="w-5 h-5 cursor-pointer"
-                />
-                <div className="ml-4 flex-1">
-                  <p className="font-bold text-lg">{tier.nameMY}</p>
-                  <p className="text-sm text-gray-600">{tier.description}</p>
+                {tier.badge && (
+                  <span className="absolute -top-2.5 left-4 bg-orange-500 text-white text-xs font-black px-2.5 py-0.5 rounded-full">
+                    {tier.badge}
+                  </span>
+                )}
+                <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${isSelected ? 'border-game-purple' : 'border-gray-300'}`}>
+                  {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-game-purple" />}
                 </div>
-                <div className="text-right">
-                  <p className="text-2xl font-black text-game-purple">
-                    RM {tier.priceMYR}
+                <div className="ml-3 flex-1">
+                  <p className="font-black text-gray-900">{tier.nameMY}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{tier.description}</p>
+                </div>
+                <div className="text-right ml-3">
+                  {tier.originalPrice && (
+                    <p className="text-xs text-gray-400 line-through">RM{tier.originalPrice}</p>
+                  )}
+                  <p className={`text-xl font-black ${isSelected ? 'text-game-purple' : 'text-gray-700'}`}>
+                    RM{tier.priceMYR}
                   </p>
-                  <p className="text-xs text-gray-600">/bulan</p>
+                  <p className="text-xs text-gray-400">/bulan</p>
                 </div>
               </motion.label>
-            ))}
-          </div>
+            );
+          })}
         </div>
-      )}
+      </div>
 
       {error && (
         <p className="text-red-500 text-sm font-bold">{error}</p>
