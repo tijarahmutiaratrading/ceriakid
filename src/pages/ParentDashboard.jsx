@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, TrendingDown, Zap, BookOpen } from 'lucide-react';
+import { ArrowLeft, TrendingDown, Zap, BookOpen, Share2 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 
@@ -73,6 +73,24 @@ export default function ParentDashboard() {
         ...stats,
       }))
       .sort((a, b) => a.averageStars - b.averageStars);
+  };
+
+  const shareToWhatsApp = (childName, stats) => {
+    const message = `🎓 Prestasi ${childName} di Jom Belajar!\n\n📊 ${stats.totalGames} permainan diselesaikan\n⭐ ${stats.avgStars} bintang rata-rata\n\nCubit terus! 💪`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const shareToFacebook = (childName, stats) => {
+    const url = window.location.href;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(`Prestasi ${childName}: ${stats.totalGames} games, ${stats.avgStars} stars! 🎓`)}`;
+    window.open(facebookUrl, '_blank');
+  };
+
+  const shareToTwitter = (childName, stats) => {
+    const message = `🎓 Prestasi ${childName} di @JomBelajarMY:\n${stats.totalGames} permainan, ${stats.avgStars}⭐ rata-rata!\n\n#Pendidikan #Pembelajaran #JomBelajar`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+    window.open(twitterUrl, '_blank');
   };
 
   if (loading) {
@@ -206,6 +224,37 @@ export default function ParentDashboard() {
                       </div>
                     </motion.div>
                   )}
+
+                  {/* Share Buttons */}
+                  <div className="pt-2 border-t">
+                    <p className="text-xs font-bold text-gray-600 mb-3 flex items-center gap-2">
+                      <Share2 className="w-4 h-4" />
+                      Kongsi Prestasi
+                    </p>
+                    <div className="grid grid-cols-3 gap-2">
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => shareToWhatsApp(childName, { totalGames, avgStars })}
+                        className="bg-green-100 hover:bg-green-200 rounded-xl py-2 font-bold text-sm transition-all"
+                      >
+                        💬 WhatsApp
+                      </motion.button>
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => shareToFacebook(childName, { totalGames, avgStars })}
+                        className="bg-blue-100 hover:bg-blue-200 rounded-xl py-2 font-bold text-sm transition-all"
+                      >
+                        f Facebook
+                      </motion.button>
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => shareToTwitter(childName, { totalGames, avgStars })}
+                        className="bg-blue-300 hover:bg-blue-400 rounded-xl py-2 font-bold text-sm transition-all text-white"
+                      >
+                        𝕏 Twitter
+                      </motion.button>
+                    </div>
+                  </div>
                 </motion.div>
               );
             })}
