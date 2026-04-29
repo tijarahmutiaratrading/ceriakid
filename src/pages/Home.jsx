@@ -15,21 +15,21 @@ export default function Home() {
   const safeToggle = toggleAgeGroup || (() => {});
 
   return (
-    <div className="min-h-screen bg-pattern">
+    <div className="min-h-screen bg-amber-50">
       <div className="max-w-lg mx-auto px-4 py-6 pb-24">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <span className="text-3xl">🎓</span>
-            <h1 className="text-2xl font-black">Jom Belajar</h1>
+            <h1 className="text-2xl font-black text-gray-800">Jom Belajar</h1>
           </div>
           {!isAuthenticated && (
-            <Link to="/pricing">
+            <Link to="/landing">
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                className="clay-button rounded-full px-4 py-2 text-sm font-bold bg-game-purple/20"
+                className="px-4 py-2 bg-game-orange text-white rounded-full text-sm font-bold hover:bg-orange-600 transition-all"
               >
-                Masuk
+                Log Masuk
               </motion.button>
             </Link>
           )}
@@ -47,9 +47,9 @@ export default function Home() {
         )}
 
         {/* Age Group Toggle */}
-        <div className="mb-6 pb-4 border-b-2 border-gray-200">
-          <p className="text-xs font-bold text-gray-600 uppercase mb-3">Umur Anak</p>
-          <div className="flex gap-2">
+        <div className="mb-8 pb-6 border-b-2 border-amber-200">
+          <p className="text-xs font-bold text-gray-700 uppercase mb-3">Umur Anak</p>
+          <div className="flex gap-3">
             {[
               { key: 'prasekolah', label: 'Pra Sekolah' },
               { key: 'sekolah_rendah', label: 'Sekolah Rendah' }
@@ -58,10 +58,10 @@ export default function Home() {
                 key={age.key}
                 onClick={() => safeToggle(age.key)}
                 whileTap={{ scale: 0.95 }}
-                className={`flex-1 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
+                className={`flex-1 px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                   safeAgeGroup === age.key
-                    ? 'bg-game-purple text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-game-orange text-white shadow-lg'
+                    : 'bg-amber-100 text-gray-700 hover:bg-amber-200'
                 }`}
               >
                 {age.label}
@@ -71,27 +71,29 @@ export default function Home() {
         </div>
 
         {/* Category Grid */}
-        <h2 className="text-xl font-black mb-4">Pilih Subjek</h2>
+        <h2 className="text-2xl font-black text-gray-800 mb-6">Pilih Subjek</h2>
         <CategoryGrid />
 
-        {/* Legacy games fallback */}
+        {/* CTA Section */}
         {!isAuthenticated && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="mt-12 p-6 clay rounded-3xl text-center"
+            className="mt-12 bg-gradient-to-br from-game-orange to-orange-400 rounded-3xl p-8 text-center text-white shadow-lg"
           >
-            <p className="text-lg font-bold mb-4">🎮 Belum Mendaftar?</p>
-            <p className="text-sm text-gray-600 mb-4">
-              Daftarlah sekarang untuk mendapatkan akses 200+ permainan!
+            <p className="text-4xl mb-3">🎮</p>
+            <p className="text-xl font-black mb-3">Belum Mendaftar?</p>
+            <p className="text-sm mb-6 opacity-95">
+              Daftarlah sekarang untuk akses 200+ permainan edukatif!
             </p>
-            <Link to="/pricing">
+            <Link to="/landing">
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                className="px-6 py-3 bg-game-purple text-white rounded-full font-bold"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-3 bg-white text-game-orange rounded-full font-black shadow-lg hover:shadow-xl transition-all"
               >
-                Lihat Paket
+                Lihat Paket Sekarang
               </motion.button>
             </Link>
           </motion.div>

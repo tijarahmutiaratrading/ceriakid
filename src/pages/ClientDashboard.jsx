@@ -79,7 +79,7 @@ export default function ClientDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-pattern">
+    <div className="min-h-screen bg-amber-50">
       <div className="max-w-2xl mx-auto px-4 py-8 pb-24">
         {/* Header */}
         <Link to="/">
@@ -91,19 +91,19 @@ export default function ClientDashboard() {
           </motion.button>
         </Link>
 
-        <h1 className="text-4xl font-black mb-8">Akaun Saya</h1>
+        <h1 className="text-4xl font-black mb-8 text-gray-800">Akaun Saya</h1>
 
         {/* Subscription Card */}
         {subscription && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="clay rounded-3xl p-8 mb-8"
+            className="bg-gradient-to-br from-white to-amber-50 rounded-3xl p-8 mb-8 border-2 border-amber-200 shadow-lg"
           >
             <div className="flex items-center justify-between mb-6">
               <div>
-                <p className="text-sm text-gray-600 mb-2">Paket Semasa</p>
-                <h2 className="text-3xl font-black text-game-purple">
+                <p className="text-sm text-gray-700 font-bold mb-2">📦 Paket Semasa</p>
+                <h2 className="text-3xl font-black text-game-orange">
                   {tierNames[subscription.tier]}
                 </h2>
                 <p className="text-2xl font-bold mt-2">
@@ -161,7 +161,7 @@ export default function ClientDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="clay rounded-3xl p-8 text-center"
+            className="bg-white rounded-3xl p-8 text-center border-2 border-amber-200 shadow-lg"
           >
             <p className="text-2xl font-black mb-4">📦</p>
             <p className="font-bold text-lg mb-2">Tiada Paket Aktif</p>
@@ -171,7 +171,7 @@ export default function ClientDashboard() {
             <Link to="/landing">
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                className="px-8 py-3 bg-game-purple text-white rounded-full font-bold"
+                className="px-8 py-3 bg-game-orange text-white rounded-full font-bold hover:bg-orange-600 transition-all"
               >
                 Lihat Paket
               </motion.button>
@@ -184,9 +184,9 @@ export default function ClientDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="clay rounded-3xl p-8"
+          className="bg-white rounded-3xl p-8 border-2 border-amber-200 shadow-lg"
         >
-          <h2 className="text-2xl font-black mb-6">Maklumat Akaun</h2>
+          <h2 className="text-2xl font-black mb-6 text-gray-800">👤 Maklumat Akaun</h2>
           <div className="space-y-4">
             <div>
               <p className="text-sm text-gray-600 mb-1">Nama</p>

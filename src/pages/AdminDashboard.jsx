@@ -62,7 +62,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-pattern">
+    <div className="min-h-screen bg-amber-50">
       <div className="max-w-7xl mx-auto px-4 py-8 pb-24">
         {/* Header */}
         <Link to="/">
@@ -74,8 +74,8 @@ export default function AdminDashboard() {
           </motion.button>
         </Link>
 
-        <h1 className="text-4xl font-black mb-8 flex items-center gap-3">
-          <BarChart3 className="w-10 h-10 text-game-purple" />
+        <h1 className="text-4xl font-black mb-8 flex items-center gap-3 text-gray-800">
+          <BarChart3 className="w-10 h-10 text-game-orange" />
           Admin Dashboard
         </h1>
 
@@ -84,19 +84,19 @@ export default function AdminDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="clay rounded-2xl p-6"
+            className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-md"
           >
-            <p className="text-sm text-gray-600 mb-2">Jumlah Pembeli</p>
-            <p className="text-3xl font-black text-game-purple">{subscriptions.length}</p>
+            <p className="text-sm text-gray-600 mb-2 font-bold">📊 Jumlah Pembeli</p>
+            <p className="text-3xl font-black text-game-orange">{subscriptions.length}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="clay rounded-2xl p-6"
+            className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-md"
           >
-            <p className="text-sm text-gray-600 mb-2">Premium</p>
+            <p className="text-sm text-gray-600 mb-2 font-bold">💎 Premium</p>
             <p className="text-3xl font-black text-game-blue">{tierBreakdown.premium}</p>
           </motion.div>
 
@@ -104,9 +104,9 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="clay rounded-2xl p-6"
+            className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-md"
           >
-            <p className="text-sm text-gray-600 mb-2">Pro</p>
+            <p className="text-sm text-gray-600 mb-2 font-bold">👑 Pro</p>
             <p className="text-3xl font-black text-game-purple">{tierBreakdown.pro}</p>
           </motion.div>
 
@@ -114,9 +114,9 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="clay rounded-2xl p-6"
+            className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-md"
           >
-            <p className="text-sm text-gray-600 mb-2">Pendapatan (RM)</p>
+            <p className="text-sm text-gray-600 mb-2 font-bold">💰 Pendapatan (RM)</p>
             <p className="text-3xl font-black text-game-green">{totalRevenue.toFixed(2)}</p>
           </motion.div>
         </div>
@@ -126,10 +126,10 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="clay rounded-2xl p-6 overflow-x-auto"
+          className="bg-white rounded-2xl p-6 overflow-x-auto border-2 border-amber-200 shadow-md"
         >
-          <h2 className="text-2xl font-black mb-6 flex items-center gap-3">
-            <Users className="w-7 h-7 text-game-purple" />
+          <h2 className="text-2xl font-black mb-6 flex items-center gap-3 text-gray-800">
+            <Users className="w-7 h-7 text-game-orange" />
             Daftar Pembeli
           </h2>
 

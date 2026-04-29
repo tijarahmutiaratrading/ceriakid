@@ -119,7 +119,7 @@ export default function ParentDashboard() {
   const totalChildren = Object.keys(childrenData).length;
 
   return (
-    <div className="min-h-screen bg-pattern">
+    <div className="min-h-screen bg-amber-50">
       <div className="max-w-lg mx-auto px-4 py-6 pb-24">
         {/* Header */}
         <motion.div
@@ -128,8 +128,8 @@ export default function ParentDashboard() {
           className="mb-8"
         >
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-4xl">🎯</span>
-            <h1 className="text-3xl font-black bg-gradient-to-r from-game-purple to-game-pink bg-clip-text text-transparent">Prestasi Anak</h1>
+            <span className="text-4xl">📊</span>
+            <h1 className="text-3xl font-black text-gray-800">Prestasi Anak</h1>
           </div>
           <p className="text-sm text-gray-600 ml-13">{totalChildren} anak sedang belajar dengan kami</p>
         </motion.div>
@@ -139,7 +139,7 @@ export default function ParentDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="clay rounded-3xl p-6 text-center"
+            className="bg-white rounded-3xl p-6 text-center border-2 border-amber-200 shadow-lg"
           >
             <p className="text-lg font-bold mb-2">Belum ada data</p>
             <p className="text-sm text-gray-600">
@@ -160,12 +160,12 @@ export default function ParentDashboard() {
                    initial={{ opacity: 0, y: 20 }}
                    animate={{ opacity: 1, y: 0 }}
                    transition={{ delay: idx * 0.1 }}
-                   className="bg-gradient-to-br from-white to-game-purple/5 rounded-3xl p-6 space-y-5 border border-game-purple/10 shadow-lg"
+                   className="bg-gradient-to-br from-white to-amber-50 rounded-3xl p-6 space-y-5 border-2 border-amber-200 shadow-lg"
                  >
                    {/* Child Header */}
-                   <div className="flex items-start justify-between pb-4 border-b border-game-purple/10">
+                   <div className="flex items-start justify-between pb-4 border-b border-amber-200">
                      <div>
-                       <h2 className="text-2xl font-black bg-gradient-to-r from-game-purple to-game-pink bg-clip-text text-transparent mb-3">
+                       <h2 className="text-2xl font-black text-gray-800 mb-3">
                          {childName} 🌟
                        </h2>
                        <div className="flex gap-6">
@@ -189,7 +189,7 @@ export default function ParentDashboard() {
                    </div>
 
                   {/* Progress Bars */}
-                  <div className="space-y-4 bg-gradient-to-br from-white to-gray-50 rounded-2xl p-4 border border-gray-100">
+                  <div className="space-y-4 bg-white rounded-2xl p-4 border-2 border-amber-200">
                     <h3 className="font-bold text-sm text-gray-800 flex items-center gap-2">
                       <Target className="w-4 h-4 text-game-purple" />
                       Prestasi Per Subjek
@@ -234,7 +234,7 @@ export default function ParentDashboard() {
                   </div>
 
                   {/* Subject Breakdown Detailed */}
-                  <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-4 border border-gray-100">
+                  <div className="bg-white rounded-2xl p-4 border-2 border-amber-200">
                     <SubjectBreakdown progress={games} />
                   </div>
 
@@ -243,7 +243,7 @@ export default function ParentDashboard() {
                     <motion.div
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="bg-orange-100 rounded-2xl p-4 flex gap-3"
+                      className="bg-orange-100 rounded-2xl p-4 flex gap-3 border border-orange-200"
                     >
                       <TrendingDown className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
                       <div className="text-sm">
@@ -287,7 +287,7 @@ export default function ParentDashboard() {
                   )}
 
                   {/* Share & Export Buttons */}
-                  <div className="pt-4 border-t border-game-purple/10 space-y-3">
+                  <div className="pt-4 border-t border-amber-200 space-y-3">
                     <p className="text-xs font-bold text-game-purple flex items-center gap-2">
                       <Share2 className="w-4 h-4" />
                       Kongsi Pencapaian Luar Biasa
