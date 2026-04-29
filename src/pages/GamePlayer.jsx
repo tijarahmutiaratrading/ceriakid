@@ -289,9 +289,12 @@ export default function GamePlayer() {
           animate={{ opacity: 1, x: 0 }}
           className="clay rounded-3xl p-6 text-center mb-6 bg-gradient-to-br from-sky-50 to-blue-100"
         >
-          <div className="text-5xl mb-3">{game.emoji}</div>
+          {/* Show game emoji only if no question-specific image/letter */}
+          {!currentQuestion.image && !currentQuestion.letter && (
+            <div className="text-5xl mb-3">{game.emoji}</div>
+          )}
 
-          {/* Picture Quiz */}
+          {/* Picture Quiz — image only */}
           {currentQuestion.image && (
             <div className="text-6xl mb-3">{currentQuestion.image}</div>
           )}
@@ -309,15 +312,16 @@ export default function GamePlayer() {
             </p>
           )}
 
-          {/* Text Question */}
+          {/* Text Question (math, multiple choice) */}
           {currentQuestion.problem && (
-            <div className="text-4xl font-black text-game-purple">
+            <div className={`font-black text-game-purple ${currentQuestion.problem.length > 20 ? 'text-2xl' : 'text-4xl'}`}>
               {currentQuestion.problem}
             </div>
           )}
 
+          {/* "Apakah ini?" label for picture quizzes */}
           {currentQuestion.image && !currentQuestion.problem && (
-            <p className="text-lg font-bold text-gray-700">
+            <p className="text-lg font-bold text-gray-700 mt-2">
               Apakah ini?
             </p>
           )}
