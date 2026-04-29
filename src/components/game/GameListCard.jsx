@@ -1,98 +1,114 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import GameBadge from './GameBadge';
 
 const difficultyConfig = {
-  easy: { label: 'Mudah', icon: '🟢', color: 'text-green-600 bg-green-100' },
-  medium: { label: 'Sederhana', icon: '🟡', color: 'text-yellow-600 bg-yellow-100' },
-  hard: { label: 'Sukar', icon: '🔴', color: 'text-red-600 bg-red-100' },
-};
-
-const categoryColors = {
-  bahasa_melayu: 'bg-amber-100 border-amber-300',
-  english: 'bg-sky-100 border-sky-300',
-  mathematics: 'bg-pink-100 border-pink-300',
-  science: 'bg-emerald-100 border-emerald-300',
-  jawi: 'bg-purple-100 border-purple-300',
-  worksheet: 'bg-orange-100 border-orange-300',
-};
-
-const categoryAccent = {
-  bahasa_melayu: 'from-amber-300 to-yellow-400',
-  english: 'from-sky-300 to-blue-400',
-  mathematics: 'from-pink-300 to-rose-400',
-  science: 'from-emerald-300 to-green-400',
-  jawi: 'from-purple-300 to-indigo-400',
-  worksheet: 'from-orange-300 to-amber-400',
+  easy: { label: 'Mudah', color: 'bg-green-400', icon: '🟢', badge: 'from-green-400 to-green-500' },
+  medium: { label: 'Sederhana', color: 'bg-yellow-400', icon: '🟡', badge: 'from-yellow-400 to-yellow-500' },
+  hard: { label: 'Sukar', color: 'bg-red-400', icon: '🔴', badge: 'from-red-400 to-red-500' },
 };
 
 export default function GameListCard({ game, gameKey, gameProgress, idx, category, badge }) {
   const difficulty = difficultyConfig[game.difficulty || 'easy'];
-  const cardBg = categoryColors[category] || 'bg-gray-100 border-gray-300';
-  const accent = categoryAccent[category] || 'from-gray-300 to-gray-400';
-
-  const stars = gameProgress?.bestStars ?? null;
-
+  
   return (
-    <Link to={`/play/${category}/${idx}`}>
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: idx * 0.04 }}
-        whileHover={{ scale: 1.02, y: -2 }}
-        whileTap={{ scale: 0.97 }}
-        className={`relative flex items-center gap-4 rounded-2xl border-2 p-4 cursor-pointer group shadow-sm hover:shadow-md transition-all ${cardBg}`}
-      >
-        {/* Left accent bar */}
-        <div className={`absolute left-0 top-3 bottom-3 w-1 rounded-full bg-gradient-to-b ${accent}`} />
+    <div className="relative">
+      <Link to={`/play/${category}/${idx}`}>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: idx * 0.04 }}
+          whileHover={{ scale: 1.02, x: 6 }}
+          whileTap={{ scale: 0.97 }}
+          className="clay rounded-2xl p-4 cursor-pointer flex items-center gap-4 group hover:shadow-lg transition-all"
+        >
+          {/* Game Emoji */}
+          <div className="text-4xl group-hover:scale-110 transition-transform">{game.emoji}</div>
 
-        {/* Emoji */}
-        <div className="text-4xl pl-2 group-hover:scale-110 transition-transform flex-shrink-0">
-          {game.emoji}
-        </div>
+          {/* Main Content */}
+          <div className="flex-1 min-w-0">
+            {/* Title + Badge */}
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="font-bold text-base truncate group-hover:text-game-purple transition-colors">
+                {game.title}
+              </h3>
+              {badge && <GameBadge type={badge} />}
+            </div>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-black text-gray-800 text-base leading-tight truncate group-hover:text-game-purple transition-colors">
-              {game.title}
-            </h3>
-            {badge && <GameBadge type={badge} />}
-          </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${difficulty.color}`}>
-              {difficulty.icon} {difficulty.label}
-            </span>
-
-            {stars !== null ? (
-              <span className="text-xs font-bold text-gray-500">
-                {'⭐'.repeat(stars)}{'☆'.repeat(3 - stars)}
-                <span className="ml-1 text-gray-400">({gameProgress.timesPlayed}x main)</span>
+            {/* Metadata Row */}
+            <div className="flex items-center gap-2">
+              {/* Difficulty Badge */}
+              <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full text-white bg-gradient-to-r ${difficulty.badge}`}>
+                {difficulty.icon}
+                {difficulty.label}
               </span>
-            ) : (
-              <span className="text-xs text-gray-400">Belum dimainkan</span>
+
+              {/* Game Type */}
+              <span className="text-xs text-gray-500 font-semibold capitalize truncate">
+                {game.type.replace(/_/g, ' ')}
+              </span>
+            </div>
+
+            {/* Progress Info */}
+            {gameProgress && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="mt-2 pt-2 border-t border-gray-100"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm font-black text-game-purple">
+                      ⭐ {gameProgress.bestStars}/3
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      ({gameProgress.timesPlayed}x)
+                    </span>
+                  </div>
+                  
+                  {/* Mini Progress Bar */}
+                  <div className="flex-1 max-w-[60px] h-2.5 bg-gray-300 rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(gameProgress.bestStars / 3) * 100}%` }}
+                      transition={{ duration: 0.5 }}
+                      className="h-full bg-gradient-to-r from-game-yellow via-game-pink to-game-orange shadow-md"
+                    />
+                  </div>
+                </div>
+              </motion.div>
             )}
           </div>
 
-          {/* Progress bar if played */}
-          {stars !== null && (
-            <div className="mt-2 h-1.5 bg-white/70 rounded-full overflow-hidden w-full">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${(stars / 3) * 100}%` }}
-                transition={{ duration: 0.6, delay: idx * 0.04 + 0.2 }}
-                className={`h-full rounded-full bg-gradient-to-r ${accent}`}
-              />
-            </div>
-          )}
-        </div>
+          {/* CTA Arrow */}
+          <motion.div
+            animate={{ x: gameProgress ? [0, 0] : [0, 2, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="text-xl opacity-50 group-hover:opacity-100 flex-shrink-0"
+          >
+            →
+          </motion.div>
+        </motion.div>
+      </Link>
 
-        {/* Arrow */}
-        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-game-purple group-hover:translate-x-1 transition-all flex-shrink-0" />
-      </motion.div>
-    </Link>
+      {/* Repeat Play Button - Bottom Right */}
+      {gameProgress && (
+        <Link to={`/play/${category}/${idx}`}>
+          <motion.button
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: idx * 0.04 + 0.2 }}
+            whileHover={{ scale: 1.15, rotate: -10 }}
+            whileTap={{ scale: 0.9 }}
+            className="absolute bottom-2 right-2 bg-gradient-to-r from-game-purple to-game-pink text-white p-2 rounded-full shadow-lg hover:shadow-xl transition-all"
+            title="Main lagi"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </motion.button>
+        </Link>
+      )}
+    </div>
   );
 }
