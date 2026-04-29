@@ -32,7 +32,6 @@ import Scoreboard from '@/pages/Scoreboard';
 import HamburgerMenu from '@/components/HamburgerMenu';
 import Footer from '@/components/Footer';
 import OfflineBanner from '@/components/OfflineBanner';
-import UpdateNotification from '@/components/UpdateNotification';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -108,7 +107,6 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <OfflineBanner />
-          <UpdateNotification />
           <HamburgerMenu />
           <Routes>
             {/* Public routes (no auth required) */}
