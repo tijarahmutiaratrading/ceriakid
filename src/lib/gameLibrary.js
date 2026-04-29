@@ -199,6 +199,52 @@ export const gameLibrary = {
         },
       },
     ],
+    worksheet: [
+      {
+        title: 'Tracing Huruf A-E',
+        type: 'tracing',
+        emoji: '✏️',
+        difficulty: 'easy',
+        gameData: {
+          questions: [
+            { letter: 'A', strokes: [[{x:0.5,y:0.1},{x:0.2,y:0.9}],[{x:0.5,y:0.1},{x:0.8,y:0.9}],[{x:0.3,y:0.55},{x:0.7,y:0.55}]] },
+            { letter: 'B', strokes: [[{x:0.3,y:0.1},{x:0.3,y:0.9}],[{x:0.3,y:0.1},{x:0.6,y:0.3},{x:0.3,y:0.5}],[{x:0.3,y:0.5},{x:0.65,y:0.7},{x:0.3,y:0.9}]] },
+            { letter: 'C', strokes: [[{x:0.7,y:0.2},{x:0.4,y:0.1},{x:0.2,y:0.3},{x:0.2,y:0.7},{x:0.4,y:0.9},{x:0.7,y:0.8}]] },
+            { letter: 'D', strokes: [[{x:0.3,y:0.1},{x:0.3,y:0.9}],[{x:0.3,y:0.1},{x:0.6,y:0.3},{x:0.7,y:0.5},{x:0.6,y:0.7},{x:0.3,y:0.9}]] },
+            { letter: 'E', strokes: [[{x:0.7,y:0.1},{x:0.3,y:0.1},{x:0.3,y:0.9},{x:0.7,y:0.9}],[{x:0.3,y:0.5},{x:0.6,y:0.5}]] },
+          ],
+        },
+      },
+      {
+        title: 'Tracing Nombor 1-5',
+        type: 'tracing',
+        emoji: '🔢',
+        difficulty: 'easy',
+        gameData: {
+          questions: [
+            { letter: '1', strokes: [[{x:0.5,y:0.1},{x:0.5,y:0.9}]] },
+            { letter: '2', strokes: [[{x:0.3,y:0.2},{x:0.6,y:0.1},{x:0.7,y:0.4},{x:0.3,y:0.7},{x:0.3,y:0.9},{x:0.7,y:0.9}]] },
+            { letter: '3', strokes: [[{x:0.3,y:0.1},{x:0.7,y:0.1},{x:0.5,y:0.5},{x:0.7,y:0.9},{x:0.3,y:0.9}]] },
+            { letter: '4', strokes: [[{x:0.6,y:0.1},{x:0.6,y:0.9}],[{x:0.6,y:0.1},{x:0.3,y:0.6},{x:0.7,y:0.6}]] },
+            { letter: '5', strokes: [[{x:0.7,y:0.1},{x:0.3,y:0.1},{x:0.3,y:0.5},{x:0.6,y:0.5},{x:0.7,y:0.7},{x:0.5,y:0.9},{x:0.3,y:0.85}]] },
+          ],
+        },
+      },
+      {
+        title: 'Lukis Bentuk Mudah',
+        type: 'tracing',
+        emoji: '🔵',
+        difficulty: 'easy',
+        gameData: {
+          questions: [
+            { letter: '⭕', strokes: [[{x:0.5,y:0.1},{x:0.85,y:0.35},{x:0.9,y:0.5},{x:0.85,y:0.65},{x:0.5,y:0.9},{x:0.15,y:0.65},{x:0.1,y:0.5},{x:0.15,y:0.35},{x:0.5,y:0.1}]] },
+            { letter: '⬜', strokes: [[{x:0.2,y:0.2},{x:0.8,y:0.2},{x:0.8,y:0.8},{x:0.2,y:0.8},{x:0.2,y:0.2}]] },
+            { letter: '△', strokes: [[{x:0.5,y:0.1},{x:0.85,y:0.85},{x:0.15,y:0.85},{x:0.5,y:0.1}]] },
+            { letter: '⭐', strokes: [[{x:0.5,y:0.1},{x:0.6,y:0.4},{x:0.9,y:0.4},{x:0.68,y:0.6},{x:0.78,y:0.9},{x:0.5,y:0.72},{x:0.22,y:0.9},{x:0.32,y:0.6},{x:0.1,y:0.4},{x:0.4,y:0.4},{x:0.5,y:0.1}]] },
+          ],
+        },
+      },
+    ],
   },
 
   sekolah_rendah: {
@@ -504,7 +550,7 @@ export function getGamesByAge(ageGroup) {
   // For prasekolah, exclude jawi if it exists
   const filtered = { ...games };
   delete filtered.jawi;
-  return filtered;
+  return filtered; // worksheet is included
 }
 
 export function getAllGamesForAge(ageGroup) {
