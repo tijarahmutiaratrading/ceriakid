@@ -94,27 +94,37 @@ export default function Home() {
 
         {/* CTA Section */}
         {!isAuthenticated && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="mt-12 bg-gradient-to-br from-game-orange to-orange-400 rounded-3xl p-8 text-center text-white shadow-lg"
-          >
-            <p className="text-4xl mb-3">🎮</p>
-            <p className="text-xl font-black mb-3">Belum Mendaftar?</p>
-            <p className="text-sm mb-6 opacity-95">
-              Daftarlah sekarang untuk akses 200+ permainan edukatif!
-            </p>
-            <Link to="/landing">
-              <motion.button
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 bg-white text-game-orange rounded-full font-black shadow-lg hover:shadow-xl transition-all"
-              >
-                Lihat Paket Sekarang
-              </motion.button>
-            </Link>
-          </motion.div>
+          <>
+            {/* Games Preview with CTA */}
+            <div className="mb-8">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">Pilih Subjek</h2>
+              <CategoryGrid />
+            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-gradient-to-br from-game-orange via-orange-400 to-red-500 rounded-3xl p-8 text-center text-white shadow-2xl"
+            >
+              <p className="text-5xl mb-3">🎮</p>
+              <p className="text-2xl font-black mb-2">Anak Malas Belajar?</p>
+              <p className="text-lg font-bold mb-4 opacity-95">
+                Tukar jadi suka bermain sambil belajar dengan 200+ permainan interaktif!
+              </p>
+              <div className="flex flex-col gap-3">
+                <Link to="/landing" className="w-full">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-full px-8 py-4 bg-white text-game-orange rounded-full font-black text-lg shadow-lg hover:shadow-xl transition-all"
+                  >
+                    🎓 Cuba Percuma Sekarang
+                  </motion.button>
+                </Link>
+                <p className="text-sm opacity-90">✅ Tanpa Kad Kredit • ✅ Setup 2 Minit • ✅ Jaminan 30 Hari</p>
+              </div>
+            </motion.div>
+          </>
         )}
       </div>
     </div>

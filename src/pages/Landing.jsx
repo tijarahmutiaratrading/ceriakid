@@ -34,11 +34,11 @@ const tiers = [
   {
     name: 'starter',
     nameMY: 'Starter',
-    priceMYR: '24',
+    priceMYR: '24.90',
     originalPrice: null,
     period: '/bulan',
     games: '50+',
-    features: ['50+ permainan', 'Prasekolah & Sekolah Rendah', 'Semua 5 mata pelajaran', 'Boleh guna offline 📲', 'Kemas kini mingguan'],
+    features: ['50+ permainan', 'Prasekolah & Sekolah Rendah', 'Semua 4 mata pelajaran', 'Boleh guna offline 📲', 'Kemas kini mingguan'],
     noFeatures: ['Dashboard ibu bapa', 'Sehingga 4 anak'],
     cta: 'Mulakan Sekarang',
     highlighted: false,
@@ -47,12 +47,12 @@ const tiers = [
   {
     name: 'premium',
     nameMY: '🔥 Premium',
-    priceMYR: '49',
+    priceMYR: '49.90',
     originalPrice: null,
     period: '/bulan',
     savings: 'PALING POPULAR',
     games: '150+',
-    features: ['150+ permainan', 'Semua 5 mata pelajaran', 'Dashboard progres anak', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sokongan WhatsApp'],
+    features: ['150+ permainan', 'Semua 4 mata pelajaran', 'Dashboard progres anak', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sokongan WhatsApp'],
     noFeatures: [],
     cta: '🔥 Mulakan Sekarang',
     highlighted: true,
@@ -61,7 +61,7 @@ const tiers = [
   {
     name: 'pro',
     nameMY: 'Pro Keluarga',
-    priceMYR: '99',
+    priceMYR: '99.90',
     originalPrice: null,
     period: '/bulan',
     games: '200+',
@@ -406,7 +406,7 @@ export default function Landing() {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="text-2xl font-black text-gray-900">Daftar & Bayar 🔒</h3>
-                    <p className="text-sm text-gray-500 mt-1">Paket: <span className="font-black text-game-purple capitalize">{selectedTierForCheckout === 'starter' ? 'Starter — RM24/bln' : selectedTierForCheckout === 'premium' ? 'Premium — RM49/bln' : 'Pro Keluarga — RM99/bln'}</span></p>
+                    <p className="text-sm text-gray-500 mt-1">Paket: <span className="font-black text-game-purple capitalize">{selectedTierForCheckout === 'starter' ? 'Starter — RM24.90/bln' : selectedTierForCheckout === 'premium' ? 'Premium — RM49.90/bln' : 'Pro Keluarga — RM99.90/bln'}</span></p>
                   </div>
                   <button onClick={() => setSelectedTierForCheckout(null)} className="text-gray-400 hover:text-gray-600 text-2xl font-black">✕</button>
                 </div>
