@@ -130,6 +130,28 @@ export const sekolah_science = [
     { image: '🌕', options: ['Bulan Baru','Bulan Penuh','Bintang'], answer: 1 },
   ]}},
 
+  // ===== DARJAH 4 — TAMBAHAN =====
+  { title: 'Ekosistem dan Habitat Darjah 4', type: 'multiple_choice', emoji: '🌿', difficulty: 'medium', darjah: 4, gameData: { questions: [
+    { problem: 'Ekosistem hutan mengandungi?', options: ['Ikan sahaja','Pelbagai tumbuhan dan haiwan','Batu sahaja'], answer: 1 },
+    { problem: 'Habitat ikan ialah?', options: ['Tanah kering','Air','Udara'], answer: 1 },
+    { problem: 'Haiwan yang boleh hidup di dua habitat?', options: ['Singa','Katak','Ikan'], answer: 1 },
+    { problem: 'Penebangan hutan menjejaskan?', options: ['Hanya cuaca','Habitat hidupan liar','Lautan'], answer: 1 },
+    { problem: 'Apa berlaku jika sumber air habis?', options: ['Ekosistem lestari','Hidupan terancam','Cuaca baik'], answer: 1 },
+    { problem: 'Spesies terancam bermaksud?', options: ['Haiwan biasa','Bilangan semakin berkurangan','Haiwan baru'], answer: 1 },
+    { problem: 'Cara perlindungan habitat liar?', options: ['Bina lebih kilang','Tubuh taman negara','Tebang lebih pokok'], answer: 1 },
+    { problem: 'Biodiversiti bermaksud?', options: ['Satu spesies sahaja','Kepelbagaian spesies','Ketiadaan hidupan'], answer: 1 },
+  ]}},
+  { title: 'Pembiakan Manusia & Haiwan D4', type: 'multiple_choice', emoji: '🧬', difficulty: 'medium', darjah: 4, gameData: { questions: [
+    { problem: 'Haiwan yang melahirkan anak hidup?', options: ['Ayam','Ikan','Kucing'], answer: 2 },
+    { problem: 'Haiwan yang mengerami telur?', options: ['Lembu','Burung','Arnab'], answer: 1 },
+    { problem: 'Manusia membiak melalui?', options: ['Bertelur','Melahirkan anak','Bercambah'], answer: 1 },
+    { problem: 'Tempoh mengandung manusia?', options: ['6 bulan','9 bulan','12 bulan'], answer: 1 },
+    { problem: 'Katak bertelur di?', options: ['Tanah kering','Air','Pokok'], answer: 1 },
+    { problem: 'Telur ikan disebut?', options: ['Benih','Telur','Roe'], answer: 2 },
+    { problem: 'Haiwan yang boleh membiak tanpa pasangan?', options: ['Kucing','Cacing tanah','Harimau'], answer: 1 },
+    { problem: 'Bayi manusia minum?', options: ['Air biasa','Susu ibu','Jus buah'], answer: 1 },
+  ]}},
+
   // ===== DARJAH 5 =====
   { title: 'Daya dan Gerakan Darjah 5', type: 'multiple_choice', emoji: '⚙️', difficulty: 'hard', darjah: 5, gameData: { questions: [
     { problem: 'Daya tarikan bumi dipanggil?', options: ['Daya Magnet','Graviti','Daya Tolak'], answer: 1 },
@@ -160,6 +182,28 @@ export const sekolah_science = [
     { problem: 'Singa memakan daging. Singa ialah?', options: ['Herbivor','Karnivor','Omnivor'], answer: 1 },
     { problem: 'Manusia makan sayur dan daging. Manusia ialah?', options: ['Herbivor','Karnivor','Omnivor'], answer: 2 },
     { problem: 'Pokok → Ulat → Burung. Siapa pengguna pertama?', options: ['Pokok','Ulat','Burung'], answer: 1 },
+  ]}},
+
+  // ===== DARJAH 5 — TAMBAHAN =====
+  { title: 'Perubahan Jirim Darjah 5', type: 'multiple_choice', emoji: '🔬', difficulty: 'hard', darjah: 5, gameData: { questions: [
+    { problem: 'Air dipanaskan → menjadi?', options: ['Ais','Wap air','Batu'], answer: 1 },
+    { problem: 'Air dibekukan → menjadi?', options: ['Wap','Ais','Gas'], answer: 1 },
+    { problem: 'Perubahan fizikal contohnya?', options: ['Kayu terbakar','Ais cair','Besi berkarat'], answer: 1 },
+    { problem: 'Perubahan kimia contohnya?', options: ['Air beku','Kayu dipotong','Kertas terbakar'], answer: 2 },
+    { problem: 'Besi berkarat adalah perubahan?', options: ['Fizikal','Kimia','Tiada'], answer: 1 },
+    { problem: 'Ais cair adalah perubahan?', options: ['Fizikal','Kimia','Tiada'], answer: 0 },
+    { problem: 'Perubahan kimia boleh dikembalikan?', options: ['Ya','Tidak','Kadang-kadang'], answer: 1 },
+    { problem: 'Memanaskan gula → karamel adalah?', options: ['Fizikal','Kimia','Tiada perubahan'], answer: 1 },
+  ]}},
+  { title: 'Haiwan Vertebrat & Invertebrat D5', type: 'multiple_choice', emoji: '🦴', difficulty: 'hard', darjah: 5, gameData: { questions: [
+    { problem: 'Vertebrat bermaksud?', options: ['Tiada tulang belakang','Ada tulang belakang','Ada cengkerang'], answer: 1 },
+    { problem: 'Ikan tergolong dalam?', options: ['Vertebrat','Invertebrat','Amfibia'], answer: 0 },
+    { problem: 'Cacing tergolong dalam?', options: ['Vertebrat','Invertebrat','Reptilia'], answer: 1 },
+    { problem: 'Serangga tergolong dalam?', options: ['Vertebrat','Invertebrat','Mamalia'], answer: 1 },
+    { problem: 'Manusia tergolong dalam?', options: ['Invertebrat','Vertebrat Mamalia','Reptilia'], answer: 1 },
+    { problem: 'Ketam tergolong dalam?', options: ['Vertebrat','Invertebrat Krustasea','Mamalia'], answer: 1 },
+    { problem: 'Burung tergolong dalam?', options: ['Reptilia','Amfibia','Vertebrat Burung'], answer: 2 },
+    { problem: 'Bintang laut tergolong dalam?', options: ['Vertebrat','Invertebrat','Mamalia'], answer: 1 },
   ]}},
 
   // ===== DARJAH 6 =====

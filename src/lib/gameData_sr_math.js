@@ -162,6 +162,28 @@ export const sekolah_mathematics = [
     { problem: '2.5 × 4 = ?', options: ['8','10','12'], answer: 1 },
   ]}},
 
+  // ===== DARJAH 5 — TAMBAHAN =====
+  { title: 'Pecahan Tak Wajar & Nombor Bercampur D5', type: 'math_puzzle', emoji: '🍕', difficulty: 'hard', darjah: 5, gameData: { questions: [
+    { problem: '7/4 sebagai nombor bercampur?', options: ['1¾','2¼','1½'], answer: 0 },
+    { problem: '2½ sebagai pecahan tak wajar?', options: ['3/2','5/2','4/2'], answer: 1 },
+    { problem: '1¾ + 2¼ = ?', options: ['3','4','3½'], answer: 1 },
+    { problem: '3½ - 1¼ = ?', options: ['2¼','2½','2¾'], answer: 0 },
+    { problem: '9/4 sebagai nombor bercampur?', options: ['2¼','2½','2¾'], answer: 0 },
+    { problem: '3¾ sebagai pecahan tak wajar?', options: ['13/4','15/4','11/4'], answer: 0 },
+    { problem: '2⅓ + 1⅔ = ?', options: ['3','4','3⅓'], answer: 1 },
+    { problem: '5/3 sebagai nombor bercampur?', options: ['1⅓','1⅔','2⅓'], answer: 1 },
+  ]}},
+  { title: 'Nisbah dan Kadar Darjah 5', type: 'math_puzzle', emoji: '📊', difficulty: 'hard', darjah: 5, gameData: { questions: [
+    { problem: 'Nisbah 2:4 dalam bentuk paling mudah?', options: ['1:2','2:4','1:3'], answer: 0 },
+    { problem: 'Nisbah merah:biru = 3:5. Ada 8 bola, berapa merah?', options: ['2','3','5'], answer: 1 },
+    { problem: '6:9 = 2:?', options: ['2','3','4'], answer: 1 },
+    { problem: 'Harga 3 buku = RM15. Harga 1 buku?', options: ['RM3','RM5','RM6'], answer: 1 },
+    { problem: '5 pen = RM10. 8 pen = ?', options: ['RM14','RM16','RM20'], answer: 1 },
+    { problem: 'Nisbah pelajar lelaki:perempuan = 2:3. 20 lelaki, berapa perempuan?', options: ['25','30','15'], answer: 1 },
+    { problem: '10:15 = ?:3', options: ['1','2','4'], answer: 1 },
+    { problem: 'Harga 4 epal = RM8. Harga 6 epal?', options: ['RM10','RM12','RM14'], answer: 1 },
+  ]}},
+
   // ===== DARJAH 6 =====
   { title: 'Perimeter dan Luas Darjah 6', type: 'multiple_choice', emoji: '📐', difficulty: 'hard', darjah: 6, gameData: { questions: [
     { problem: 'Perimeter segi empat 4cm × 4cm?', options: ['12cm','16cm','8cm'], answer: 1 },
@@ -192,5 +214,46 @@ export const sekolah_mathematics = [
     { problem: '3/4 dalam peratus?', options: ['50%','75%','80%'], answer: 1 },
     { problem: '50% daripada 80 = ?', options: ['30','40','50'], answer: 1 },
     { problem: '25% daripada 100 = ?', options: ['20','25','30'], answer: 1 },
+  ]}},
+  // ===== DARJAH 6 — TAMBAHAN =====
+  { title: 'Nombor Negatif Darjah 6', type: 'math_puzzle', emoji: '➖', difficulty: 'hard', darjah: 6, gameData: { questions: [
+    { problem: '-3 + 5 = ?', options: ['1','2','3'], answer: 1 },
+    { problem: '-4 + (-2) = ?', options: ['-5','-6','-7'], answer: 1 },
+    { problem: '7 - 10 = ?', options: ['-2','-3','-4'], answer: 1 },
+    { problem: '-5 × 2 = ?', options: ['-8','-10','-12'], answer: 1 },
+    { problem: '-6 ÷ 2 = ?', options: ['-2','-3','-4'], answer: 1 },
+    { problem: 'Mana lebih besar: -3 atau -7?', options: ['-7','-3','Sama'], answer: 1 },
+    { problem: '-2 + 2 = ?', options: ['-1','0','1'], answer: 1 },
+    { problem: '(-4) × (-3) = ?', options: ['10','12','14'], answer: 1 },
+  ]}},
+  { title: 'Algebra Asas Darjah 6', type: 'math_puzzle', emoji: '🔢', difficulty: 'hard', darjah: 6, gameData: { questions: [
+    { problem: 'x + 5 = 9, x = ?', options: ['3','4','5'], answer: 1 },
+    { problem: '2x = 10, x = ?', options: ['4','5','6'], answer: 1 },
+    { problem: 'x - 3 = 7, x = ?', options: ['9','10','11'], answer: 1 },
+    { problem: '3x + 2 = 11, x = ?', options: ['2','3','4'], answer: 1 },
+    { problem: 'x/4 = 3, x = ?', options: ['10','12','14'], answer: 1 },
+    { problem: '2x - 4 = 8, x = ?', options: ['5','6','7'], answer: 1 },
+    { problem: 'Nilai 3x jika x = 4?', options: ['10','12','14'], answer: 1 },
+    { problem: 'Nilai x² jika x = 5?', options: ['20','25','30'], answer: 1 },
+  ]}},
+  { title: 'Statistik - Graf & Data Darjah 6', type: 'multiple_choice', emoji: '📊', difficulty: 'hard', darjah: 6, gameData: { questions: [
+    { problem: 'Graf yang tunjuk perubahan masa ialah?', options: ['Carta Pai','Graf Garis','Carta Bar'], answer: 1 },
+    { problem: 'Carta pai tunjuk?', options: ['Perubahan masa','Perbandingan bahagian dari keseluruhan','Frekuensi'], answer: 1 },
+    { problem: 'Mod ialah?', options: ['Nilai tengah','Nilai paling kerap','Nilai terbesar'], answer: 1 },
+    { problem: 'Median ialah?', options: ['Nilai tengah data tersusun','Nilai terbesar','Nilai paling kerap'], answer: 0 },
+    { problem: 'Min = jumlah data ÷ ?', options: ['nilai terbesar','bilangan data','nilai tengah'], answer: 1 },
+    { problem: 'Julat = nilai terbesar ___?', options: ['+ nilai terkecil','- nilai terkecil','× nilai terkecil'], answer: 1 },
+    { problem: 'Data: 2,3,3,5,7. Modnya?', options: ['2','3','5'], answer: 1 },
+    { problem: 'Data: 1,2,3,4,5. Min = ?', options: ['2','3','4'], answer: 1 },
+  ]}},
+  { title: 'Perimeter, Luas & Isipadu D6', type: 'math_puzzle', emoji: '📐', difficulty: 'hard', darjah: 6, gameData: { questions: [
+    { problem: 'Perimeter segi empat 5cm × 3cm?', options: ['15cm','16cm','8cm'], answer: 1 },
+    { problem: 'Luas segi tiga tapak=6, tinggi=4?', options: ['10cm²','12cm²','24cm²'], answer: 1 },
+    { problem: 'Isipadu kiub sisi 3cm?', options: ['9cm³','27cm³','18cm³'], answer: 1 },
+    { problem: 'Luas bulatan (π=3.14, r=7)?', options: ['43.96cm²','153.86cm²','21.98cm²'], answer: 1 },
+    { problem: 'Isipadu kuboid 4×3×2?', options: ['20cm³','24cm³','28cm³'], answer: 1 },
+    { problem: 'Perimeter segi tiga 3+4+5?', options: ['10cm','12cm','14cm'], answer: 1 },
+    { problem: 'Luas segiempat tepat 8×5?', options: ['35cm²','40cm²','45cm²'], answer: 1 },
+    { problem: 'Keliling bulatan = 2πr. Jika r=7, π=22/7, keliling = ?', options: ['22cm','44cm','66cm'], answer: 1 },
   ]}},
 ];

@@ -162,6 +162,28 @@ export const sekolah_bahasa_melayu = [
     { problem: 'air + mata = ?', options: ['Mata Air','Air Mata','Bermata'], answer: 1 },
   ]}},
 
+  // ===== DARJAH 5 — TAMBAHAN =====
+  { title: 'Tanda Baca Darjah 5', type: 'multiple_choice', emoji: '✏️', difficulty: 'hard', darjah: 5, gameData: { questions: [
+    { problem: 'Tanda baca hujung ayat penyata?', options: ['?','!','.'], answer: 2 },
+    { problem: 'Tanda baca hujung ayat tanya?', options: ['?','!','.'], answer: 0 },
+    { problem: 'Tanda baca hujung ayat seruan?', options: ['?','!','.'], answer: 1 },
+    { problem: 'Koma (,) digunakan untuk?', options: ['Hujung ayat','Pisahkan senarai','Tanda tanya'], answer: 1 },
+    { problem: 'Tanda petik (" ") digunakan untuk?', options: ['Ayat tanya','Dialog/Petikan','Senarai'], answer: 1 },
+    { problem: 'Tanda sempang (-) digunakan untuk?', options: ['Menyambung perkataan','Hujung ayat','Dialog'], answer: 0 },
+    { problem: 'Huruf besar digunakan pada?', options: ['Hujung ayat','Awal nama khas & ayat','Tengah ayat'], answer: 1 },
+    { problem: 'Titik bertindih (:) digunakan sebelum?', options: ['Nama khas','Senarai item','Tanda tanya'], answer: 1 },
+  ]}},
+  { title: 'Kata Hubung Darjah 5', type: 'multiple_choice', emoji: '🔗', difficulty: 'hard', darjah: 5, gameData: { questions: [
+    { problem: 'Saya suka nasi ___ lauk pauk', options: ['tetapi','dan','kerana'], answer: 1 },
+    { problem: 'Dia tidak pergi sekolah ___ sakit', options: ['dan','tetapi','kerana'], answer: 2 },
+    { problem: 'Ali pandai ___ dia rajin belajar', options: ['walaupun','kerana','tetapi'], answer: 1 },
+    { problem: 'Saya suka makan ___ adik tidak suka', options: ['dan','tetapi','kerana'], answer: 1 },
+    { problem: 'Dia datang lewat ___ tiada masalah', options: ['tetapi','dan','kerana'], answer: 0 },
+    { problem: '___ hujan, kami tidak keluar', options: ['Dan','Kerana','Tetapi'], answer: 1 },
+    { problem: 'Dia kaya ___ baik hati', options: ['tetapi','dan','kerana'], answer: 1 },
+    { problem: 'Rajin belajar ___ berjaya', options: ['supaya','kerana','tetapi'], answer: 0 },
+  ]}},
+
   // ===== DARJAH 6 =====
   { title: 'Peribahasa Lanjutan Darjah 6', type: 'multiple_choice', emoji: '📜', difficulty: 'hard', darjah: 6, gameData: { questions: [
     { problem: '"Bagai aur dengan tebing" bermaksud?', options: ['Berpecah belah','Tolong-menolong','Bergaduh'], answer: 1 },
@@ -192,5 +214,35 @@ export const sekolah_bahasa_melayu = [
     { problem: 'Paragraf pertama karangan dipanggil?', options: ['Penutup','Pendahuluan','Isi'], answer: 1 },
     { problem: 'Paragraf terakhir karangan dipanggil?', options: ['Penutup','Pendahuluan','Isi'], answer: 0 },
     { problem: 'Karangan fakta berbeza dengan karangan cerita kerana?', options: ['Fakta menggunakan cerita','Fakta menggunakan maklumat benar','Tiada perbezaan'], answer: 1 },
+  ]}},
+  { title: 'Jenis-Jenis Ayat Darjah 6', type: 'multiple_choice', emoji: '📝', difficulty: 'hard', darjah: 6, gameData: { questions: [
+    { problem: '"Ali pergi ke sekolah." — jenis ayat?', options: ['Ayat Tanya','Ayat Penyata','Ayat Seruan'], answer: 1 },
+    { problem: '"Di mana buku saya?" — jenis ayat?', options: ['Ayat Penyata','Ayat Tanya','Ayat Perintah'], answer: 1 },
+    { problem: '"Ambil buku itu!" — jenis ayat?', options: ['Ayat Tanya','Ayat Penyata','Ayat Perintah'], answer: 2 },
+    { problem: '"Alangkah cantiknya bunga itu!" — jenis ayat?', options: ['Ayat Seruan','Ayat Tanya','Ayat Penyata'], answer: 0 },
+    { problem: 'Ayat majmuk mengandungi berapa klausa?', options: ['Satu','Dua atau lebih','Tiga sahaja'], answer: 1 },
+    { problem: 'Ayat tunggal mengandungi?', options: ['Satu klausa','Dua klausa','Tiga klausa'], answer: 0 },
+    { problem: '"Walaupun hujan, dia tetap datang." — jenis?', options: ['Ayat Tunggal','Ayat Majmuk','Ayat Tanya'], answer: 1 },
+    { problem: 'Binaan ayat asas BM ialah?', options: ['Predikat + Subjek','Subjek + Predikat','Kata Kerja + Objek'], answer: 1 },
+  ]}},
+  { title: 'Kata Adjektif & Penggunaan Darjah 6', type: 'multiple_choice', emoji: '🎨', difficulty: 'hard', darjah: 6, gameData: { questions: [
+    { problem: 'Ayat dengan kata adjektif?', options: ['Dia berlari','Bunga itu cantik','Ibu memasak'], answer: 1 },
+    { problem: 'Kata adjektif dalam "Budak itu pandai"?', options: ['Budak','itu','pandai'], answer: 2 },
+    { problem: 'Darjah perbandingan "paling tinggi" ialah?', options: ['Darjah biasa','Darjah bandingan','Darjah paling'], answer: 2 },
+    { problem: '"Lebih cantik" ialah darjah?', options: ['Biasa','Bandingan','Paling'], answer: 1 },
+    { problem: 'Kata adjektif perasaan?', options: ['Tinggi','Gembira','Merah'], answer: 1 },
+    { problem: 'Kata adjektif ukuran?', options: ['Tinggi','Sedih','Merah'], answer: 0 },
+    { problem: 'Kata adjektif warna?', options: ['Panjang','Gembira','Merah'], answer: 2 },
+    { problem: '"Dia lebih rajin daripada abangnya" — kata adjektif?', options: ['Dia','rajin','daripada'], answer: 1 },
+  ]}},
+  { title: 'Golongan Kata Darjah 6', type: 'multiple_choice', emoji: '📖', difficulty: 'hard', darjah: 6, gameData: { questions: [
+    { problem: '"Buku" tergolong dalam?', options: ['Kata Kerja','Kata Nama','Kata Adjektif'], answer: 1 },
+    { problem: '"Berlari" tergolong dalam?', options: ['Kata Kerja','Kata Nama','Kata Sendi'], answer: 0 },
+    { problem: '"Cantik" tergolong dalam?', options: ['Kata Nama','Kata Kerja','Kata Adjektif'], answer: 2 },
+    { problem: '"Di" tergolong dalam?', options: ['Kata Nama','Kata Sendi Nama','Kata Kerja'], answer: 1 },
+    { problem: '"Saya" tergolong dalam?', options: ['Kata Nama Am','Kata Ganti Nama','Kata Kerja'], answer: 1 },
+    { problem: '"Malaysia" tergolong dalam?', options: ['Kata Nama Am','Kata Nama Khas','Kata Adjektif'], answer: 1 },
+    { problem: '"Dengan" tergolong dalam?', options: ['Kata Hubung','Kata Nama','Kata Kerja'], answer: 0 },
+    { problem: '"Sangat" tergolong dalam?', options: ['Kata Adjektif','Kata Penguat','Kata Nama'], answer: 1 },
   ]}},
 ];

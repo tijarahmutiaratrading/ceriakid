@@ -162,6 +162,28 @@ export const sekolah_english = [
     { problem: 'John is taller than Ali. Who is taller?', options: ['Ali','John','Both'], answer: 1 },
   ]}},
 
+  // ===== YEAR 5 — TAMBAHAN =====
+  { title: 'Passive Voice - Year 5', type: 'multiple_choice', emoji: '✍️', difficulty: 'hard', darjah: 5, gameData: { questions: [
+    { problem: 'Active: "Ali eats the apple." Passive?', options: ['The apple ate Ali','The apple is eaten by Ali','Ali eating apple'], answer: 1 },
+    { problem: 'Which is passive?', options: ['She reads the book','The book is read by her','She is reading'], answer: 1 },
+    { problem: 'Passive verb form?', options: ['eat','is eaten','eating'], answer: 1 },
+    { problem: '"The cake was baked by Mum." — subject?', options: ['Mum','cake','baked'], answer: 1 },
+    { problem: '"The letter ___ written by him."', options: ['is','was','were'], answer: 1 },
+    { problem: 'Active: "They built the house." Passive?', options: ['House built them','The house was built by them','They were building'], answer: 1 },
+    { problem: '"The ball ___ kicked by the boy."', options: ['is','was','were'], answer: 1 },
+    { problem: 'By whom? "The song was sung by ___ choir."', options: ['a','an','the'], answer: 2 },
+  ]}},
+  { title: 'Reported Speech - Year 5', type: 'multiple_choice', emoji: '💬', difficulty: 'hard', darjah: 5, gameData: { questions: [
+    { problem: 'Ali said, "I am happy." Reported: Ali said ___', options: ['he is happy','he was happy','I was happy'], answer: 1 },
+    { problem: '"I will come." → She said she ___', options: ['will come','would come','comes'], answer: 1 },
+    { problem: '"I eat rice." → She said she ___', options: ['eats rice','ate rice','eating rice'], answer: 1 },
+    { problem: 'Direct: "Are you ready?" Reported: He asked if ___', options: ['I was ready','am I ready','I am ready'], answer: 0 },
+    { problem: 'Tag for reported command: "Go home!" → She told him ___', options: ['go home','to go home','going home'], answer: 1 },
+    { problem: 'Present simple → past simple in reported speech?', options: ['Yes','No','Sometimes'], answer: 0 },
+    { problem: '"I can swim." → He said he ___', options: ['can swim','could swim','swim'], answer: 1 },
+    { problem: '"Don\'t run!" → She told him ___', options: ['not run','not to run','to not running'], answer: 1 },
+  ]}},
+
   // ===== YEAR 6 =====
   { title: 'Compound Words - Year 6', type: 'word_builder', emoji: '🔗', difficulty: 'hard', darjah: 6, gameData: { questions: [
     { problem: 'sun + flower = ?', options: ['sunflower','flowerun','sunfly'], answer: 0 },
@@ -192,5 +214,35 @@ export const sekolah_english = [
     { problem: 'A good essay has introduction, body, and ___?', options: ['Title','Conclusion','Index'], answer: 1 },
     { problem: 'Topic sentence is usually at the ___ of a paragraph?', options: ['End','Middle','Beginning'], answer: 2 },
     { problem: 'Which is a linking word?', options: ['apple','however','run'], answer: 1 },
+  ]}},
+  { title: 'Idioms & Expressions - Year 6', type: 'multiple_choice', emoji: '💬', difficulty: 'hard', darjah: 6, gameData: { questions: [
+    { problem: '"Break a leg" means?', options: ['Hurt yourself','Good luck','Run fast'], answer: 1 },
+    { problem: '"It\'s raining cats and dogs" means?', options: ['Pets are falling','Heavy rain','Weird weather'], answer: 1 },
+    { problem: '"Piece of cake" means?', options: ['Something to eat','Very easy','A dessert'], answer: 1 },
+    { problem: '"Hit the books" means?', options: ['Throw books','Study hard','Read slowly'], answer: 1 },
+    { problem: '"Under the weather" means?', options: ['Feeling sick','Standing in rain','Cold weather'], answer: 0 },
+    { problem: '"Spill the beans" means?', options: ['Drop food','Reveal a secret','Make a mess'], answer: 1 },
+    { problem: '"Bite the bullet" means?', options: ['Eat something hard','Endure pain/difficulty','Shoot a gun'], answer: 1 },
+    { problem: '"Cost an arm and a leg" means?', options: ['Injury cost','Very expensive','Medical bill'], answer: 1 },
+  ]}},
+  { title: 'Modal Verbs - Year 6', type: 'multiple_choice', emoji: '🔧', difficulty: 'hard', darjah: 6, gameData: { questions: [
+    { problem: 'Asking permission politely?', options: ['I will go','May I go?','I go now'], answer: 1 },
+    { problem: '"You ___ wear a helmet." (obligation)', options: ['may','must','might'], answer: 1 },
+    { problem: '"She ___ swim very well." (ability)', options: ['must','can','should'], answer: 1 },
+    { problem: '"It ___ rain today." (possibility)', options: ['must','can','might'], answer: 2 },
+    { problem: '"You ___ eat vegetables." (advice)', options: ['must','should','might'], answer: 1 },
+    { problem: '"___ I borrow your pen?" (request)', options: ['Will','Could','Should'], answer: 1 },
+    { problem: '"He ___ be at home now." (certainty)', options: ['might','must','should'], answer: 1 },
+    { problem: '"You ___ run in the corridor." (prohibition)', options: ['should not','must not','might not'], answer: 1 },
+  ]}},
+  { title: 'Reading Comprehension - Year 6', type: 'reading', emoji: '📚', difficulty: 'hard', darjah: 6, gameData: { questions: [
+    { problem: 'Topic sentence tells us the ___ of a paragraph.', options: ['end','main idea','length'], answer: 1 },
+    { problem: 'Inference means to?', options: ['Read aloud','Guess based on clues','Copy the text'], answer: 1 },
+    { problem: 'A synonym of "happy" in a passage?', options: ['sad','joyful','angry'], answer: 1 },
+    { problem: 'Author\'s purpose: to inform means?', options: ['Entertain','Give facts/information','Persuade'], answer: 1 },
+    { problem: 'Author\'s purpose: to persuade means?', options: ['Tell a story','Convince the reader','List facts'], answer: 1 },
+    { problem: 'Antonym of "ancient" in context?', options: ['old','modern','historic'], answer: 1 },
+    { problem: 'Context clues help you understand?', options: ['Grammar rules','Unknown word meaning','Spelling'], answer: 1 },
+    { problem: 'A conclusion paragraph should?', options: ['Introduce new ideas','Summarise main points','Ask questions'], answer: 1 },
   ]}},
 ];
