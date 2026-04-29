@@ -199,9 +199,24 @@ export default function Landing() {
           <h2 className="text-4xl font-black text-center text-gray-800 mb-16">💬 Apa Kata Orang Tua?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: 'Ibu Nurul', location: 'Selangor', quote: 'Sejak pakai Jom Belajar, anak saya lebih fokus belajar. Permainannya menarik dan tidak bikin stress macam tuisyen biasa.' },
-              { name: 'Pak Ismail', location: 'Melaka', quote: 'Saya suka dashboard yang boleh lihat progres anak. Tahu dia belajar apa, berapa skor. Transparent dan senang dipantau.' },
-              { name: 'Ibu Rohani', location: 'Johor', quote: 'Harganya sangat berpatutan untuk berapa banyak permainan. Anak boleh main berkali-kali, takut tak cukup waktu!' },
+              { 
+                name: 'Ibu Nurul', 
+                location: 'Selangor', 
+                quote: 'Sejak pakai Jom Belajar, anak saya lebih fokus belajar. Permainannya menarik dan tidak bikin stress macam tuisyen biasa.',
+                avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2b50ffa6a_generated_image.png'
+              },
+              { 
+                name: 'Pak Ismail', 
+                location: 'Melaka', 
+                quote: 'Saya suka dashboard yang boleh lihat progres anak. Tahu dia belajar apa, berapa skor. Transparent dan senang dipantau.',
+                avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0120578d7_generated_image.png'
+              },
+              { 
+                name: 'Ibu Rohani', 
+                location: 'Johor', 
+                quote: 'Harganya sangat berpatutan untuk berapa banyak permainan. Anak boleh main berkali-kali, takut tak cukup waktu!',
+                avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b20705224_generated_image.png'
+              },
             ].map((testimonial, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-amber-50 rounded-2xl p-6 border-2 border-amber-200">
                 <div className="flex gap-1 mb-3">
@@ -210,9 +225,12 @@ export default function Landing() {
                   ))}
                 </div>
                 <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
-                <div>
-                  <p className="font-black text-gray-800">{testimonial.name}</p>
-                  <p className="text-sm text-gray-600">{testimonial.location}</p>
+                <div className="flex items-center gap-3">
+                  <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover" />
+                  <div>
+                    <p className="font-black text-gray-800">{testimonial.name}</p>
+                    <p className="text-sm text-gray-600">{testimonial.location}</p>
+                  </div>
                 </div>
               </motion.div>
             ))}
