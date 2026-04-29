@@ -5,10 +5,8 @@ import { motion } from 'framer-motion';
 export default function Footer() {
   const location = useLocation();
 
-  // Only show footer on landing page
-  if (location.pathname !== '/landing') {
-    return null;
-  }
+  // Landing page has its own built-in footer — hide global footer everywhere
+  return null;
 
   return (
     <motion.footer

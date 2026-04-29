@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, TrendingDown, Zap, BookOpen, Share2, Award, Flame, Target, Sparkles, Download } from 'lucide-react';
@@ -14,9 +15,16 @@ const categoryLabels = {
 };
 
 export default function ParentDashboard() {
-  const { user } = useAuth();
+  const { user, isAuthenticated, navigateToLogin } = useAuth();
   const [childrenData, setChildrenData] = useState({});
   const [loading, setLoading] = useState(true);
+
+  // Auth guard
+  useEffect(() => {
+    if (!isAuthenticated && !loading) {
+      navigateToLogin();
+    }
+  }, [isAuthenticated, loading]);
 
   useEffect(() => {
     if (user) {

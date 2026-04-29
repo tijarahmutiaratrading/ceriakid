@@ -39,7 +39,7 @@ export default function CategoryCard({ category, gameCount, idx }) {
           
           <div className="flex items-end justify-between">
             <div className="bg-white/30 backdrop-blur-sm rounded-full px-3 py-1">
-              <p className="text-sm font-bold text-white">{gameCount} Games</p>
+              <p className="text-sm font-bold text-white">{gameCount} Permainan</p>
             </div>
             <motion.div
               animate={{ x: [0, 4, 0] }}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
@@ -40,15 +40,37 @@ const DARJAH_LABELS = {
 
 export default function GamesList() {
   const { category } = useParams();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { ageGroup } = useAgeGroup();
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState({});
   const [selectedDarjah, setSelectedDarjah] = useState(null);
+  const [userTier, setUserTier] = useState('free');
 
   useEffect(() => {
+    if (user) {
+      loadUserTier();
+    }
     setLoading(false);
   }, [user]);
+
+  const loadUserTier = async () => {
+    try {
+      const subs = await base44.entities.UserSubscription.filter({ email: user.email });
+      if (subs.length > 0 && subs[0].status === 'active') {
+        setUserTier(subs[0].tier || 'free');
+      }
+    } catch (e) {
+      // default free
+    }
+  };
+
+  // Determine if a game index is accessible based on tier
+  const isGameLocked = useCallback((globalIdx) => {
+    if (!isAuthenticated) return globalIdx >= 5; // guests: first 5 only
+    if (userTier === 'pro' || userTier === 'premium') return false;
+    return globalIdx >= 5; // free: first 5 per category
+  }, [isAuthenticated, userTier]);
 
   const allGames = getGamesByAgeAndCategory(ageGroup, category);
 
@@ -189,6 +211,7 @@ export default function GamesList() {
               const gameKey = `${ageGroup}-${category}-${globalIdx}`;
               const gameProgress = progress[gameKey];
 
+              const locked = isGameLocked(globalIdx);
               return (
                 <GameListCard
                   key={globalIdx}
@@ -197,7 +220,9 @@ export default function GamesList() {
                   gameProgress={gameProgress}
                   idx={globalIdx}
                   category={category}
+                  locked={locked}
                   badge={
+                    locked ? 'locked' :
                     i < 2 ? 'new' :
                     gameProgress && gameProgress.bestStars < 2 ? 'recommended' :
                     null

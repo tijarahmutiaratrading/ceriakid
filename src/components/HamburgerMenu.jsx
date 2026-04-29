@@ -30,7 +30,7 @@ export default function HamburgerMenu() {
     ...(isAuthenticated ? [{ path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' }] : []),
   ];
 
-  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path);
+  const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
 
   return (
     <>

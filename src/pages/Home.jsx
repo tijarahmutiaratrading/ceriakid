@@ -21,14 +21,13 @@ export default function Home() {
             <h1 className="text-2xl font-black text-gray-800">Jom Belajar</h1>
           </div>
           {!isAuthenticated && (
-            <Link to="/landing">
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                className="px-4 py-2 bg-game-orange text-white rounded-full text-sm font-bold hover:bg-orange-600 transition-all"
-              >
-                Log Masuk
-              </motion.button>
-            </Link>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => { import('@/api/base44Client').then(m => m.base44.auth.redirectToLogin(window.location.href)); }}
+              className="px-4 py-2 bg-game-orange text-white rounded-full text-sm font-bold hover:bg-orange-600 transition-all"
+            >
+              Log Masuk
+            </motion.button>
           )}
         </div>
 

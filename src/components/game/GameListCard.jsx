@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, Lock } from 'lucide-react';
 import GameBadge from './GameBadge';
 
 const difficultyConfig = {
@@ -10,9 +10,38 @@ const difficultyConfig = {
   hard: { label: 'Sukar', color: 'bg-red-400', icon: '🔴', badge: 'from-red-400 to-red-500' },
 };
 
-export default function GameListCard({ game, gameKey, gameProgress, idx, category, badge }) {
+export default function GameListCard({ game, gameKey, gameProgress, idx, category, badge, locked }) {
   const difficulty = difficultyConfig[game.difficulty || 'easy'];
-  
+
+  if (locked) {
+    return (
+      <div className="relative">
+        <Link to="/landing">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: idx * 0.04 }}
+            className="clay rounded-2xl p-4 flex items-center gap-4 opacity-60 cursor-pointer hover:opacity-80 transition-all"
+          >
+            <div className="text-4xl grayscale">{game.emoji}</div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-bold text-base truncate text-gray-500">{game.title}</h3>
+              </div>
+              <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full text-white bg-gradient-to-r ${difficulty.badge}`}>
+                {difficulty.icon} {difficulty.label}
+              </span>
+            </div>
+            <div className="flex flex-col items-center gap-1 flex-shrink-0">
+              <Lock className="w-5 h-5 text-gray-400" />
+              <span className="text-xs text-gray-400 font-bold">Premium</span>
+            </div>
+          </motion.div>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
       <Link to={`/play/${category}/${idx}`}>
