@@ -51,7 +51,7 @@ export default function BottomNavigation() {
                     : 'text-slate-400 hover:text-slate-300'
                 }`}
               >
-                <span className="text-lg">{item.emoji}</span>
+                <span className="text-base">{item.emoji}</span>
                 <span className="text-xs font-semibold tracking-tight">{item.label}</span>
               </motion.button>
             </Link>
