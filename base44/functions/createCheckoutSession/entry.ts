@@ -22,18 +22,19 @@ Deno.serve(async (req) => {
 
     // Free tier doesn't need checkout
     if (tier === 'free') {
-      const userSub = await base44.asServiceRole.entities.UserSubscription.filter({
+      const userSubs = await base44.asServiceRole.entities.UserSubscription.filter({
         email: user.email,
       });
 
-      if (userSub.length === 0) {
+      if (userSubs.length === 0) {
         await base44.asServiceRole.entities.UserSubscription.create({
           email: user.email,
           tier: 'free',
           status: 'active',
+          selectedAgeGroup: 'prasekolah',
         });
       } else {
-        await base44.asServiceRole.entities.UserSubscription.update(userSub[0].id, {
+        await base44.asServiceRole.entities.UserSubscription.update(userSubs[0].id, {
           tier: 'free',
           status: 'active',
         });

@@ -41,11 +41,15 @@ Deno.serve(async (req) => {
           if (priceId === Deno.env.get('STRIPE_PRICE_PREMIUM')) tier = 'premium';
           if (priceId === Deno.env.get('STRIPE_PRICE_PRO')) tier = 'pro';
 
-          // Get email from metadata or customer
+          // Get email from metadata or customer object
           let email = subscription.metadata?.base44_user_email;
-          if (!email && subscription.customer) {
-            const customer = await stripe.customers.retrieve(subscription.customer);
-            email = customer.email;
+          if (!email) {
+            try {
+              const customer = await stripe.customers.retrieve(subscription.customer);
+              email = customer.email;
+            } catch (e) {
+              console.error('Failed to retrieve customer:', e);
+            }
           }
 
           if (email) {

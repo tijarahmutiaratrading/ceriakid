@@ -72,7 +72,13 @@ export default function Pricing() {
         tier: tierName,
         returnUrl: window.location.href,
       });
-      window.location.href = response.checkoutUrl;
+      
+      // Handle free tier redirect
+      if (tierName === 'free' && response.redirectUrl) {
+        window.location.href = response.redirectUrl;
+      } else if (response.checkoutUrl) {
+        window.location.href = response.checkoutUrl;
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {
