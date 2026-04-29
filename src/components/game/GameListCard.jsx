@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { RotateCcw } from 'lucide-react';
+import GameBadge from './GameBadge';
 
 const difficultyConfig = {
   easy: { label: 'Mudah', color: 'bg-green-400', icon: '🟢', badge: 'from-green-400 to-green-500' },
@@ -9,7 +10,7 @@ const difficultyConfig = {
   hard: { label: 'Sukar', color: 'bg-red-400', icon: '🔴', badge: 'from-red-400 to-red-500' },
 };
 
-export default function GameListCard({ game, gameKey, gameProgress, idx, category }) {
+export default function GameListCard({ game, gameKey, gameProgress, idx, category, badge }) {
   const difficulty = difficultyConfig[game.difficulty || 'easy'];
   
   return (
@@ -28,13 +29,16 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
-            {/* Title */}
-            <h3 className="font-bold text-base truncate group-hover:text-game-purple transition-colors">
-              {game.title}
-            </h3>
+            {/* Title + Badge */}
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="font-bold text-base truncate group-hover:text-game-purple transition-colors">
+                {game.title}
+              </h3>
+              {badge && <GameBadge type={badge} />}
+            </div>
 
             {/* Metadata Row */}
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex items-center gap-2">
               {/* Difficulty Badge */}
               <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full text-white bg-gradient-to-r ${difficulty.badge}`}>
                 {difficulty.icon}
@@ -65,12 +69,12 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
                   </div>
                   
                   {/* Mini Progress Bar */}
-                  <div className="flex-1 max-w-[60px] h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="flex-1 max-w-[60px] h-2.5 bg-gray-300 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(gameProgress.bestStars / 3) * 100}%` }}
                       transition={{ duration: 0.5 }}
-                      className="h-full bg-gradient-to-r from-game-yellow to-game-pink"
+                      className="h-full bg-gradient-to-r from-game-yellow via-game-pink to-game-orange shadow-md"
                     />
                   </div>
                 </div>

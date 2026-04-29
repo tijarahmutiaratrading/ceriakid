@@ -106,15 +106,38 @@ export default function GamesList() {
         <motion.div className="mb-6">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-4xl">{getCategoryEmoji(category)}</span>
-            <h1 className="text-3xl font-black bg-gradient-to-r from-game-purple to-game-pink bg-clip-text text-transparent">
+            <h1 className="text-3xl font-black text-gray-900">
               {categoryLabels[category]}
             </h1>
           </div>
-          <p className="text-gray-600 ml-13 font-semibold">{games.length} Permainan • Seru & Edukatif</p>
+          <div className="flex items-center gap-2 ml-13">
+            <span className="text-sm font-bold text-game-purple">🎮 {games.length} Permainan</span>
+            <span className="text-gray-400">•</span>
+            <span className="text-sm text-gray-600">Pilih untuk main</span>
+          </div>
         </motion.div>
 
         {/* Games Grid */}
-        <div className="space-y-3">
+        {games.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="clay rounded-3xl p-8 text-center mt-12"
+          >
+            <p className="text-5xl mb-4">🚀</p>
+            <p className="text-xl font-bold mb-2">Permainan Baru Segera Hadir!</p>
+            <p className="text-gray-600 mb-6">Kami sedang menyediakan permainan yang lebih seru untuk kategori ini.</p>
+            <Link to="/">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                className="px-6 py-3 bg-game-purple text-white rounded-full font-bold"
+              >
+                ← Kembali ke Rumah
+              </motion.button>
+            </Link>
+          </motion.div>
+        ) : (
+          <div className="space-y-4">
           {games.map((game, i) => {
             const gameKey = `${ageGroup}-${category}-${i}`;
             const gameProgress = progress[gameKey];
@@ -127,10 +150,16 @@ export default function GamesList() {
                 gameProgress={gameProgress}
                 idx={i}
                 category={category}
+                badge={
+                  i < 2 ? 'new' : 
+                  gameProgress && gameProgress.bestStars < 2 ? 'recommended' : 
+                  null
+                }
               />
             );
           })}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
