@@ -14,11 +14,12 @@ export default function AgeGroupSelector() {
         <motion.button
           key={group.id}
           whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.05 }}
           onClick={() => toggleAgeGroup(group.id)}
-          className={`flex-1 rounded-2xl py-3 px-4 font-bold flex items-center justify-center gap-2 transition-all ${
+          className={`flex-1 rounded-2xl py-3 px-4 font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
             ageGroup === group.id
               ? 'clay-button bg-gradient-to-br from-game-purple/30 to-game-pink/30 ring-2 ring-game-purple'
-              : 'clay-button'
+              : 'clay-button hover:bg-gray-50'
           }`}
         >
           <span className="text-2xl">{group.emoji}</span>
