@@ -17,8 +17,9 @@ Deno.serve(async (req) => {
 
     // Tier pricing (MYR to sen)
     const pricing = {
-      premium: { amount: 2490, name: 'Premium - RM24.90/month' },
-      pro: { amount: 4490, name: 'Pro Keluarga - RM44.90/month' }
+      starter: { amount: 2400, name: 'Starter - RM24/month' },
+      premium: { amount: 4900, name: 'Premium - RM49/month' },
+      pro: { amount: 9900, name: 'Pro Keluarga - RM99/month' }
     };
 
     if (!pricing[tier]) {

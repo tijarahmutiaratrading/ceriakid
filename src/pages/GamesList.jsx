@@ -68,8 +68,10 @@ export default function GamesList() {
   // Determine if a game index is accessible based on tier
   const isGameLocked = useCallback((globalIdx) => {
     if (!isAuthenticated) return globalIdx >= 5; // guests: first 5 only
-    if (userTier === 'pro' || userTier === 'premium') return false;
-    return globalIdx >= 5; // free: first 5 per category
+    if (userTier === 'pro') return false; // pro: semua
+    if (userTier === 'premium') return globalIdx >= 150; // premium: 150+
+    if (userTier === 'starter') return globalIdx >= 50; // starter: 50+
+    return globalIdx >= 5; // free: first 5
   }, [isAuthenticated, userTier]);
 
   const allGames = getGamesByAgeAndCategory(ageGroup, category);
