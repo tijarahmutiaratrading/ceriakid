@@ -1,0 +1,82 @@
+{
+  "name": "ChildGameProgress",
+  "type": "object",
+  "properties": {
+    "userEmail": {
+      "type": "string",
+      "description": "Parent/user email"
+    },
+    "childName": {
+      "type": "string",
+      "description": "Child's name or identifier"
+    },
+    "gameType": {
+      "type": "string",
+      "description": "Game category-index (e.g., prasekolah-bahasa_melayu-0)"
+    },
+    "category": {
+      "type": "string",
+      "description": "Game category"
+    },
+    "ageGroup": {
+      "type": "string",
+      "enum": [
+        "prasekolah",
+        "sekolah_rendah"
+      ]
+    },
+    "lastScore": {
+      "type": "number",
+      "description": "Last score achieved"
+    },
+    "lastTotal": {
+      "type": "number",
+      "description": "Total questions in game"
+    },
+    "lastStars": {
+      "type": "number",
+      "description": "Stars earned (0-3)"
+    },
+    "timesPlayed": {
+      "type": "number",
+      "default": 0,
+      "description": "How many times played"
+    },
+    "bestScore": {
+      "type": "number",
+      "description": "Best score ever achieved"
+    },
+    "bestStars": {
+      "type": "number",
+      "description": "Best stars achieved"
+    },
+    "lastPlayedDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When last played"
+    },
+    "playHistory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          },
+          "stars": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Last 10 play attempts"
+    }
+  },
+  "required": [
+    "userEmail",
+    "childName",
+    "gameType"
+  ]
+}

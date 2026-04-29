@@ -1,9 +1,11 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
+import { useAuth } from '@/lib/AuthContext';
+import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory, shuffleArray, calculateStars, saveScore } from '@/lib/gameLibrary';
 import GameHeader from '@/components/game/GameHeader';
 import FeedbackOverlay from '@/components/game/FeedbackOverlay';
@@ -12,6 +14,7 @@ import ScoreScreen from '@/components/game/ScoreScreen';
 export default function GamePlayer() {
   const { category, index } = useParams();
   const { ageGroup } = useAgeGroup();
+  const { user } = useAuth();
   const games = getGamesByAgeAndCategory(ageGroup, category);
   const gameIndex = parseInt(index);
   const game = games[gameIndex];
@@ -25,6 +28,13 @@ export default function GamePlayer() {
     finished: false,
     selectedIdx: null,
   });
+
+  // Save progress after game finishes
+  useEffect(() => {
+    if (state.finished && user && game) {
+      saveGameProgress();
+    }
+  }, [state.finished]);
 
   const questions = useMemo(() => {
     if (!game?.gameData?.questions) return [];
@@ -87,6 +97,50 @@ export default function GamePlayer() {
       finished: false,
       selectedIdx: null,
     });
+  };
+
+  const saveGameProgress = async () => {
+    if (!user || !game) return;
+    try {
+      const gameKey = `${ageGroup}-${category}-${gameIndex}`;
+      const stars = calculateStars(state.score, questions.length);
+      const playRecord = {
+        date: new Date().toISOString(),
+        score: state.score,
+        stars: stars,
+      };
+
+      // Check if progress exists
+      const existing = await base44.entities.ChildGameProgress.filter({
+        userEmail: user.email,
+        childName: user.full_name || 'Default',
+        gameType: gameKey,
+      });
+
+      const progressData = {
+        userEmail: user.email,
+        childName: user.full_name || 'Default',
+        gameType: gameKey,
+        category: category,
+        ageGroup: ageGroup,
+        lastScore: state.score,
+        lastTotal: questions.length,
+        lastStars: stars,
+        lastPlayedDate: new Date().toISOString(),
+        timesPlayed: (existing[0]?.timesPlayed || 0) + 1,
+        bestScore: Math.max(state.score, existing[0]?.bestScore || 0),
+        bestStars: Math.max(stars, existing[0]?.bestStars || 0),
+        playHistory: [playRecord, ...(existing[0]?.playHistory || [])].slice(0, 10),
+      };
+
+      if (existing.length > 0) {
+        await base44.entities.ChildGameProgress.update(existing[0].id, progressData);
+      } else {
+        await base44.entities.ChildGameProgress.create(progressData);
+      }
+    } catch (error) {
+      console.error('Failed to save progress:', error);
+    }
   };
 
   if (!game) {
