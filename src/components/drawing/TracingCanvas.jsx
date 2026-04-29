@@ -1,146 +1,200 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { isStrokeValid, calculateStrokeAccuracy, tracingPaths } from '@/lib/tracingHelper';
 
 export default function TracingCanvas({ 
-  targetShape, // 'A', '1', 'circle', etc
-  onComplete, // callback when tracing is done
-  width = 400, 
-  height = 400,
+  targetShape,
+  onComplete,
+  width = 320, 
+  height = 320,
   emoji = '✏️'
 }) {
   const canvasRef = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [currentStroke, setCurrentStroke] = useState([]);
+  const isDrawingRef = useRef(false);
+  const currentStrokeRef = useRef([]);
   const [strokes, setStrokes] = useState([]);
   const [accuracy, setAccuracy] = useState(0);
   const [completed, setCompleted] = useState(false);
 
   const referencePath = tracingPaths[targetShape] || [];
-  const canvasCtx = canvasRef.current?.getContext('2d');
 
-  // Scale reference path to canvas size
-  const scaledReferencePath = referencePath.map(p => ({
-    x: p.x * width,
-    y: p.y * height,
-  }));
+  const getScaledPath = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return [];
+    return referencePath.map(p => ({
+      x: p.x * canvas.width,
+      y: p.y * canvas.height,
+    }));
+  }, [referencePath]);
 
-  // Draw reference path as light ghost
-  useEffect(() => {
-    if (!canvasCtx) return;
-    
-    canvasCtx.fillStyle = '#f5f5f5';
-    canvasCtx.fillRect(0, 0, width, height);
+  const redraw = useCallback((strokesToRender) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const scaledPath = getScaledPath();
 
-    // Draw reference path lightly
-    canvasCtx.strokeStyle = 'rgba(200, 200, 200, 0.4)';
-    canvasCtx.lineWidth = 3;
-    canvasCtx.lineCap = 'round';
-    canvasCtx.lineJoin = 'round';
-    
-    if (scaledReferencePath.length > 0) {
-      canvasCtx.beginPath();
-      canvasCtx.moveTo(scaledReferencePath[0].x, scaledReferencePath[0].y);
-      for (let i = 1; i < scaledReferencePath.length; i++) {
-        canvasCtx.lineTo(scaledReferencePath[i].x, scaledReferencePath[i].y);
-      }
-      canvasCtx.stroke();
-    }
+    // Clear
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#f9f5ff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw existing strokes
-    canvasCtx.strokeStyle = '#8b5cf6';
-    canvasCtx.lineWidth = 4;
-    strokes.forEach(stroke => {
-      canvasCtx.beginPath();
-      canvasCtx.moveTo(stroke[0].x, stroke[0].y);
-      for (let i = 1; i < stroke.length; i++) {
-        canvasCtx.lineTo(stroke[i].x, stroke[i].y);
-      }
-      canvasCtx.stroke();
-    });
-  }, [canvasCtx, width, height, strokes, scaledReferencePath]);
-
-  const handlePointerDown = (e) => {
-    setIsDrawing(true);
-    setCurrentStroke([]);
-    
-    const rect = canvasRef.current.getBoundingClientRect();
-    const point = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    };
-    
-    setCurrentStroke([point]);
-  };
-
-  const handlePointerMove = (e) => {
-    if (!isDrawing) return;
-
-    const rect = canvasRef.current.getBoundingClientRect();
-    const point = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    };
-
-    setCurrentStroke(prev => {
-      const newStroke = [...prev, point];
-
-      if (!canvasCtx) return newStroke;
-
-      canvasCtx.strokeStyle = '#8b5cf6';
-      canvasCtx.lineWidth = 4;
-      canvasCtx.lineCap = 'round';
-      canvasCtx.lineJoin = 'round';
-      canvasCtx.beginPath();
-      canvasCtx.moveTo(prev[prev.length - 1].x, prev[prev.length - 1].y);
-      canvasCtx.lineTo(point.x, point.y);
-      canvasCtx.stroke();
-
-      return newStroke;
-    });
-  };
-
-  const handlePointerUp = () => {
-    if (isDrawing && currentStroke.length > 5) {
-      const isValid = isStrokeValid(currentStroke, scaledReferencePath);
-      
-      if (isValid) {
-        const acc = calculateStrokeAccuracy(currentStroke, scaledReferencePath);
-        setAccuracy(acc);
-        setStrokes(prev => [...prev, currentStroke]);
-        
-        if (acc >= 70) {
-          setCompleted(true);
-          confetti({
-            particleCount: 50,
-            spread: 50,
-            origin: { y: 0.6 },
-            colors: ['#8b5cf6', '#ec4899', '#3b82f6'],
-          });
-          
-          setTimeout(() => {
-            onComplete?.({
-              accuracy: acc,
-              completedAt: new Date().toISOString(),
-            });
-          }, 1000);
+    // Draw dashed ghost reference path
+    if (scaledPath.length > 0) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(180, 160, 220, 0.6)';
+      ctx.lineWidth = 18;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.setLineDash([24, 16]);
+      scaledPath.forEach(seg => {
+        if (!Array.isArray(seg)) return;
+        ctx.beginPath();
+        ctx.moveTo(seg[0].x, seg[0].y);
+        for (let i = 1; i < seg.length; i++) {
+          ctx.lineTo(seg[i].x, seg[i].y);
         }
-      }
+        ctx.stroke();
+      });
+      ctx.restore();
     }
 
-    setIsDrawing(false);
-    setCurrentStroke([]);
+    // Draw user strokes
+    ctx.strokeStyle = '#7c3aed';
+    ctx.lineWidth = 8;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.setLineDash([]);
+    strokesToRender.forEach(stroke => {
+      if (stroke.length < 2) return;
+      ctx.beginPath();
+      ctx.moveTo(stroke[0].x, stroke[0].y);
+      for (let i = 1; i < stroke.length; i++) {
+        ctx.lineTo(stroke[i].x, stroke[i].y);
+      }
+      ctx.stroke();
+    });
+  }, [getScaledPath]);
+
+  // Init canvas on mount and when shape changes
+  useEffect(() => {
+    setStrokes([]);
+    setAccuracy(0);
+    setCompleted(false);
+    isDrawingRef.current = false;
+    currentStrokeRef.current = [];
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Set actual pixel size (handle device pixel ratio for sharp rendering)
+    const dpr = window.devicePixelRatio || 1;
+    const displayW = width;
+    const displayH = height;
+    canvas.width = displayW * dpr;
+    canvas.height = displayH * dpr;
+    canvas.style.width = displayW + 'px';
+    canvas.style.height = displayH + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    redraw([]);
+  }, [targetShape, width, height]);
+
+  useEffect(() => {
+    redraw(strokes);
+  }, [strokes, redraw]);
+
+  const getPoint = (e) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+
+    let clientX, clientY;
+    if (e.touches && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+      clientX = e.changedTouches[0].clientX;
+      clientY = e.changedTouches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+
+    // Scale to actual canvas coordinates (accounting for DPR and any CSS scaling)
+    const scaleX = (canvas.width / dpr) / rect.width;
+    const scaleY = (canvas.height / dpr) / rect.height;
+
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY,
+    };
+  };
+
+  const onStart = (e) => {
+    e.preventDefault();
+    isDrawingRef.current = true;
+    const pt = getPoint(e);
+    currentStrokeRef.current = [pt];
+  };
+
+  const onMove = (e) => {
+    e.preventDefault();
+    if (!isDrawingRef.current) return;
+    const pt = getPoint(e);
+    currentStrokeRef.current = [...currentStrokeRef.current, pt];
+
+    // Live draw current stroke on top
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const prev = currentStrokeRef.current;
+    if (prev.length < 2) return;
+    ctx.strokeStyle = '#7c3aed';
+    ctx.lineWidth = 8;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(prev[prev.length - 2].x, prev[prev.length - 2].y);
+    ctx.lineTo(pt.x, pt.y);
+    ctx.stroke();
+  };
+
+  const onEnd = (e) => {
+    e.preventDefault();
+    if (!isDrawingRef.current) return;
+    isDrawingRef.current = false;
+
+    const stroke = currentStrokeRef.current;
+    currentStrokeRef.current = [];
+
+    if (stroke.length < 5) return;
+
+    const scaledPath = getScaledPath();
+    const flatPath = scaledPath.flat ? scaledPath.flat() : [].concat(...scaledPath);
+    const acc = calculateStrokeAccuracy(stroke, flatPath);
+    setAccuracy(acc);
+    const newStrokes = [...strokes, stroke];
+    setStrokes(newStrokes);
+
+    if (acc >= 60) {
+      setCompleted(true);
+      confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 }, colors: ['#8b5cf6', '#ec4899', '#3b82f6'] });
+      setTimeout(() => {
+        onComplete?.({ accuracy: acc, completedAt: new Date().toISOString() });
+      }, 1000);
+    }
   };
 
   const handleClear = () => {
     setStrokes([]);
     setAccuracy(0);
     setCompleted(false);
-    if (canvasCtx) {
-      canvasCtx.fillStyle = '#f5f5f5';
-      canvasCtx.fillRect(0, 0, width, height);
-    }
+    isDrawingRef.current = false;
+    currentStrokeRef.current = [];
+    redraw([]);
   };
 
   return (
@@ -152,20 +206,28 @@ export default function TracingCanvas({
       <div className="text-center">
         <div className="text-5xl mb-2">{emoji}</div>
         <p className="text-lg font-bold text-gray-800">Telusuri "{targetShape}"</p>
-        <p className="text-sm text-gray-600">Ikuti garis abu-abu dengan jari atau pensil</p>
+        <p className="text-sm text-gray-600">Ikuti garis ungu dengan jari atau pensil ✏️</p>
       </div>
 
       <div className="flex justify-center">
         <canvas
           ref={canvasRef}
-          width={width}
-          height={height}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerLeave={handlePointerUp}
-          className="border-4 border-game-purple rounded-2xl cursor-crosshair touch-none shadow-lg"
-          style={{ backgroundColor: '#f5f5f5' }}
+          // Touch events
+          onTouchStart={onStart}
+          onTouchMove={onMove}
+          onTouchEnd={onEnd}
+          onTouchCancel={onEnd}
+          // Mouse/Pointer events (desktop)
+          onMouseDown={onStart}
+          onMouseMove={onMove}
+          onMouseUp={onEnd}
+          onMouseLeave={onEnd}
+          className="border-4 border-game-purple rounded-2xl shadow-lg bg-purple-50"
+          style={{ 
+            touchAction: 'none',
+            cursor: 'crosshair',
+            maxWidth: '100%',
+          }}
         />
       </div>
 
@@ -177,41 +239,22 @@ export default function TracingCanvas({
         >
           <p className="text-sm text-gray-600">Ketepatan Tracing</p>
           <p className="text-3xl font-black text-game-purple">{accuracy}%</p>
-        </motion.div>
-      )}
-
-      {completed && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="clay rounded-2xl p-4 bg-green-100 text-center"
-        >
-          <p className="text-lg font-bold text-green-700">✅ Sempurna! Bagus sangat!</p>
+          {accuracy >= 60 ? (
+            <p className="text-green-600 font-bold">✅ Bagus sekali!</p>
+          ) : (
+            <p className="text-orange-500 font-bold">💪 Cuba lagi, hampir dah!</p>
+          )}
         </motion.div>
       )}
 
       <div className="flex gap-3 justify-center">
-        {!completed && (
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={handleClear}
-            className="px-6 py-3 bg-gray-300 text-gray-800 rounded-xl font-bold"
-          >
-            🔄 Ulang
-          </motion.button>
-        )}
-        {completed && (
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              handleClear();
-              setCompleted(false);
-            }}
-            className="px-6 py-3 bg-game-blue text-white rounded-xl font-bold"
-          >
-            🎯 Cuba Lagi
-          </motion.button>
-        )}
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          onClick={handleClear}
+          className="px-6 py-3 bg-gray-300 text-gray-800 rounded-xl font-bold"
+        >
+          🔄 Ulang
+        </motion.button>
       </div>
     </motion.div>
   );
