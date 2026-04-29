@@ -31,7 +31,6 @@ export default function GamePlayer() {
     selectedIdx: null,
     startTime: Date.now(),
     showTracing: false,
-    showTutorial: true,
   });
 
   // Save progress after game finishes
@@ -102,13 +101,10 @@ export default function GamePlayer() {
       finished: false,
       selectedIdx: null,
       showTracing: false,
-      showTutorial: false,
     });
   };
 
-  const handleTutorialComplete = () => {
-    setState(prev => ({ ...prev, showTutorial: false }));
-  };
+
 
   const handleTracingComplete = (result) => {
     if (result.accuracy >= 70) {
@@ -191,13 +187,7 @@ export default function GamePlayer() {
     );
   }
 
-  if (state.showTutorial && state.currentQ === 0) {
-    return (
-      <div className="min-h-screen bg-pattern">
-        <GameTutorial gameType={game.type} onComplete={handleTutorialComplete} />
-      </div>
-    );
-  }
+
 
   if (state.finished) {
     return (
