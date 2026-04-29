@@ -38,14 +38,14 @@ export default function BottomNavigation() {
       className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md rounded-t-3xl shadow-2xl border-t border-gray-200 z-40"
     >
       <div className="max-w-2xl mx-auto px-4 py-3">
-        {/* Main Navigation - Full Width Grid */}
-        <div className="grid grid-cols-5 gap-2 mb-3">
-          {navItems.slice(0, -1).map(item => (
+        {/* Main Navigation - Simple Grid */}
+        <div className="grid grid-cols-5 gap-2">
+          {navItems.map(item => (
             <Link key={item.path} to={item.path}>
               <motion.button
                 whileTap={{ scale: 0.88 }}
                 whileHover={{ scale: 1.05 }}
-                className={`w-full flex flex-col items-center gap-1 py-2.5 px-2 rounded-2xl transition-all duration-200 ${
+                className={`w-full flex flex-col items-center gap-1 py-3 px-2 rounded-2xl transition-all duration-200 ${
                   isActive(item.path)
                     ? 'bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg scale-105'
                     : 'text-gray-600 hover:bg-gray-100'
@@ -56,72 +56,6 @@ export default function BottomNavigation() {
               </motion.button>
             </Link>
           ))}
-        </div>
-
-        {/* Secondary Controls - Age Selector, Language, Dashboard */}
-        <div className="flex items-center justify-between gap-2 pt-2 border-t border-gray-100">
-          {/* Age Group Selector */}
-          {ageGroup && setAgeGroup && (
-            <div className="flex gap-2 flex-1">
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setAgeGroup('prasekolah')}
-                className={`flex-1 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
-                  ageGroup === 'prasekolah'
-                    ? 'bg-game-yellow text-gray-900 shadow-md'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                4-6 Tahun
-              </motion.button>
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setAgeGroup('sekolah_rendah')}
-                className={`flex-1 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
-                  ageGroup === 'sekolah_rendah'
-                    ? 'bg-game-blue text-white shadow-md'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                7-12 Tahun
-              </motion.button>
-            </div>
-          )}
-
-          {/* Right Actions */}
-          <div className="flex items-center gap-2">
-            {isAuthenticated && (
-              <Link to="/parent-dashboard">
-                <motion.button
-                  whileTap={{ scale: 0.88 }}
-                  whileHover={{ scale: 1.05 }}
-                  className={`flex flex-col items-center gap-1 py-2.5 px-3 rounded-2xl transition-all duration-200 ${
-                    isActive('/parent-dashboard')
-                      ? 'bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg'
-                      : 'text-gray-600 hover:bg-gray-100'
-                  }`}
-                >
-                  <span className="text-lg">📊</span>
-                  <span className="text-xs font-bold">Prestasi</span>
-                </motion.button>
-              </Link>
-            )}
-
-            <LanguageToggle />
-
-            {isAuthenticated && (
-              <motion.button
-                whileTap={{ scale: 0.88 }}
-                whileHover={{ scale: 1.05 }}
-                onClick={logout}
-                className="flex flex-col items-center gap-1 py-2.5 px-3 rounded-2xl text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
-                title="Keluar"
-              >
-                <LogOut className="w-4 h-4" />
-                <span className="text-xs font-bold">Keluar</span>
-              </motion.button>
-            )}
-          </div>
         </div>
       </div>
     </motion.nav>
