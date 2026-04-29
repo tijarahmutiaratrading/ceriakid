@@ -472,7 +472,6 @@ export default function GamePlayer() {
 
       <AchievementBadges badges={state.unlockedBadges} />
     </div>
-
     </ErrorBoundary>
   );
 }
