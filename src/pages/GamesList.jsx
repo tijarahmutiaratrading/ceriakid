@@ -28,33 +28,17 @@ const getCategoryEmoji = (category) => {
 export default function GamesList() {
   const { category } = useParams();
   const { user } = useAuth();
-  const [userSubscription, setUserSubscription] = useState(null);
+  const { ageGroup } = useAgeGroup();
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState({});
 
-  // Load user subscription to get locked age group
+  // Load progress data
   useEffect(() => {
     if (user) {
-      loadUserSubscription();
+      setLoading(false);
     }
   }, [user]);
 
-  const loadUserSubscription = async () => {
-    try {
-      const subData = await base44.entities.UserSubscription.filter({
-        email: user.email,
-      });
-      if (subData.length > 0) {
-        setUserSubscription(subData[0]);
-      }
-    } catch (error) {
-      console.error('Failed to load subscription:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const ageGroup = userSubscription?.selectedAgeGroup || 'prasekolah';
   const games = getGamesByAgeAndCategory(ageGroup, category);
 
   useEffect(() => {
