@@ -8,7 +8,9 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 export default function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated } = useAuth();
-  const { ageGroup, setAgeGroup } = useAgeGroup();
+  const ageGroupContext = useAgeGroup();
+  const ageGroup = ageGroupContext?.ageGroup || 'prasekolah';
+  const setAgeGroup = ageGroupContext?.setAgeGroup || (() => {});
   const location = useLocation();
 
   // Don't show on landing, pricing, admin & client dashboards
