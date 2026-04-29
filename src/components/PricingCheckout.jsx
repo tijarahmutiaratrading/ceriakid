@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
 
 const TIERS = [
   {
@@ -22,7 +23,7 @@ const TIERS = [
 ];
 
 export default function PricingCheckout({ ageGroup, onClose, selectedTier: initialTier }) {
-  // If initialTier is passed, hide tier selection (already chosen)
+  const { isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     name: '',
@@ -52,23 +53,22 @@ export default function PricingCheckout({ ageGroup, onClose, selectedTier: initi
     setLoading(true);
 
     try {
-      const user = await base44.auth.me();
-      if (!user) {
+      if (!isAuthenticated) {
         base44.auth.redirectToLogin();
         return;
       }
 
-      const response = await base44.functions.invoke('createCheckoutSession', {
+      const response = await base44.functions.invoke('chipCheckout', {
         tier: formData.selectedTier,
-        ageGroup: ageGroup,
         email: formData.email,
         name: formData.name,
         phone: formData.phone,
-        returnUrl: window.location.href,
       });
 
-      if (response.checkoutUrl) {
-        window.location.href = response.checkoutUrl;
+      if (response.data?.checkoutUrl) {
+        window.location.href = response.data.checkoutUrl;
+      } else {
+        setError('Tidak dapat membuat pembayaran. Sila cuba lagi.');
       }
     } catch (err) {
       setError('Ralat semasa memproses pembayaran. Sila cuba lagi.');
