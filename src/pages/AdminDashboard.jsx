@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
-import { ArrowLeft, BarChart3, Users } from 'lucide-react';
+import { ArrowLeft, BarChart3, Users, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function AdminDashboard() {
@@ -74,10 +74,17 @@ export default function AdminDashboard() {
           </motion.button>
         </Link>
 
-        <h1 className="text-4xl font-black mb-8 flex items-center gap-3 text-gray-800">
-          <BarChart3 className="w-10 h-10 text-game-orange" />
-          Admin Dashboard
-        </h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-4xl font-black flex items-center gap-3 text-gray-800">
+            <BarChart3 className="w-10 h-10 text-game-orange" />
+            Admin Dashboard
+          </h1>
+          <Link to="/admin-settings">
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center gap-2 px-5 py-2.5 bg-game-purple text-white rounded-xl font-bold shadow-md">
+              <Settings className="w-4 h-4" /> Tetapan
+            </motion.button>
+          </Link>
+        </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
