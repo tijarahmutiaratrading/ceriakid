@@ -29,19 +29,50 @@ const getCategoryEmoji = (category) => {
   return emojis[category] || '📚';
 };
 
+const DARJAH_LABELS = {
+  1: 'Darjah 1',
+  2: 'Darjah 2',
+  3: 'Darjah 3',
+  4: 'Darjah 4',
+  5: 'Darjah 5',
+  6: 'Darjah 6',
+};
+
 export default function GamesList() {
   const { category } = useParams();
   const { user } = useAuth();
   const { ageGroup } = useAgeGroup();
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState({});
+  const [selectedDarjah, setSelectedDarjah] = useState(null);
 
-  // Load progress data
   useEffect(() => {
     setLoading(false);
   }, [user]);
 
-  const games = getGamesByAgeAndCategory(ageGroup, category);
+  const allGames = getGamesByAgeAndCategory(ageGroup, category);
+
+  // Check if games have darjah field (sekolah rendah)
+  const hasDarjah = ageGroup === 'sekolah_rendah' && allGames.some(g => g.darjah);
+
+  // Get available darjah levels
+  const availableDarjah = hasDarjah
+    ? [...new Set(allGames.map(g => g.darjah).filter(Boolean))].sort()
+    : [];
+
+  // Set default darjah on first load
+  useEffect(() => {
+    if (hasDarjah && availableDarjah.length > 0 && selectedDarjah === null) {
+      setSelectedDarjah(availableDarjah[0]);
+    } else if (!hasDarjah) {
+      setSelectedDarjah(null);
+    }
+  }, [hasDarjah, ageGroup, category]);
+
+  // Filter games by darjah
+  const games = hasDarjah && selectedDarjah !== null
+    ? allGames.filter(g => g.darjah === selectedDarjah)
+    : allGames;
 
   useEffect(() => {
     if (user) {
@@ -89,19 +120,47 @@ export default function GamesList() {
           </motion.button>
         </Link>
 
-        <motion.div className="mb-6">
+        <motion.div className="mb-4">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-4xl">{getCategoryEmoji(category)}</span>
             <h1 className="text-3xl font-black text-gray-900">
               {categoryLabels[category]}
             </h1>
           </div>
-          <div className="flex items-center gap-2 ml-13">
-            <span className="text-sm font-bold text-game-purple">🎮 {games.length} Permainan</span>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-bold text-game-purple">🎮 {allGames.length} Permainan</span>
             <span className="text-gray-400">•</span>
             <span className="text-sm text-gray-600">Pilih untuk bermain</span>
           </div>
         </motion.div>
+
+        {/* Darjah Tabs - Only for Sekolah Rendah */}
+        {hasDarjah && (
+          <div className="mb-5">
+            <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Pilih Darjah:</p>
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+              {availableDarjah.map(d => (
+                <motion.button
+                  key={d}
+                  whileTap={{ scale: 0.92 }}
+                  onClick={() => setSelectedDarjah(d)}
+                  className={`flex-shrink-0 px-4 py-2 rounded-2xl font-bold text-sm transition-all border-2 ${
+                    selectedDarjah === d
+                      ? 'bg-game-purple text-white border-game-purple shadow-lg'
+                      : 'bg-white text-gray-700 border-amber-200 hover:border-game-purple'
+                  }`}
+                >
+                  {DARJAH_LABELS[d] || `Darjah ${d}`}
+                  <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full ${
+                    selectedDarjah === d ? 'bg-white/30 text-white' : 'bg-gray-100 text-gray-500'
+                  }`}>
+                    {allGames.filter(g => g.darjah === d).length}
+                  </span>
+                </motion.button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Games Grid */}
         {games.length === 0 ? (
@@ -124,26 +183,28 @@ export default function GamesList() {
           </motion.div>
         ) : (
           <div className="space-y-4">
-          {games.map((game, i) => {
-            const gameKey = `${ageGroup}-${category}-${i}`;
-            const gameProgress = progress[gameKey];
-            
-            return (
-              <GameListCard
-                key={i}
-                game={game}
-                gameKey={gameKey}
-                gameProgress={gameProgress}
-                idx={i}
-                category={category}
-                badge={
-                  i < 2 ? 'new' : 
-                  gameProgress && gameProgress.bestStars < 2 ? 'recommended' : 
-                  null
-                }
-              />
-            );
-          })}
+            {games.map((game, i) => {
+              // For darjah-filtered games, calculate global index for routing
+              const globalIdx = allGames.findIndex((g, idx) => g === game);
+              const gameKey = `${ageGroup}-${category}-${globalIdx}`;
+              const gameProgress = progress[gameKey];
+
+              return (
+                <GameListCard
+                  key={globalIdx}
+                  game={game}
+                  gameKey={gameKey}
+                  gameProgress={gameProgress}
+                  idx={globalIdx}
+                  category={category}
+                  badge={
+                    i < 2 ? 'new' :
+                    gameProgress && gameProgress.bestStars < 2 ? 'recommended' :
+                    null
+                  }
+                />
+              );
+            })}
           </div>
         )}
       </div>

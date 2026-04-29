@@ -1,55 +1,73 @@
+// Sekolah Rendah - English
+// Syllabus based on KSSR (Year 1-6)
+
 export const sekolah_english = [
-  { title: 'Consonants G-N', type: 'letter_match', emoji: '🔤', difficulty: 'medium', gameData: { questions: [
-    { letter: 'G', emoji: '🍇', word: 'Grapes', options: ['G','H','I','J'], answer: 0 },
-    { letter: 'H', emoji: '🏠', word: 'House', options: ['G','H','I','J'], answer: 1 },
-    { letter: 'I', emoji: '🍦', word: 'Ice Cream', options: ['G','H','I','J'], answer: 2 },
-    { letter: 'J', emoji: '🤹', word: 'Juggler', options: ['G','H','I','J'], answer: 3 },
-    { letter: 'K', emoji: '🪀', word: 'Kite', options: ['J','K','L','M'], answer: 1 },
-    { letter: 'L', emoji: '🦁', word: 'Lion', options: ['J','K','L','M'], answer: 2 },
-    { letter: 'M', emoji: '🌙', word: 'Moon', options: ['J','K','L','M'], answer: 3 },
-    { letter: 'N', emoji: '🥜', word: 'Nut', options: ['M','N','O','P'], answer: 1 },
+  // ===== YEAR 1 =====
+  { title: 'ABC Phonics - Letters A to H', type: 'letter_match', emoji: '🔤', difficulty: 'easy', darjah: 1, gameData: { questions: [
+    { letter: 'A', emoji: '🍎', word: 'Apple', options: ['A','B','C','D'], answer: 0 },
+    { letter: 'B', emoji: '🐦', word: 'Bird', options: ['A','B','C','D'], answer: 1 },
+    { letter: 'C', emoji: '🐱', word: 'Cat', options: ['A','B','C','D'], answer: 2 },
+    { letter: 'D', emoji: '🐕', word: 'Dog', options: ['A','B','C','D'], answer: 3 },
+    { letter: 'E', emoji: '🐘', word: 'Elephant', options: ['D','E','F','G'], answer: 1 },
+    { letter: 'F', emoji: '🐟', word: 'Fish', options: ['D','E','F','G'], answer: 2 },
+    { letter: 'G', emoji: '🦒', word: 'Giraffe', options: ['E','F','G','H'], answer: 2 },
+    { letter: 'H', emoji: '🐎', word: 'Horse', options: ['F','G','H','I'], answer: 2 },
   ]}},
-  { title: 'Simple Sentences - Reading', type: 'reading', emoji: '📖', difficulty: 'medium', gameData: { questions: [
-    { problem: 'I like to play.', options: ['Play','Sleep','Eat'], answer: 0 },
-    { problem: 'The cat is cute.', options: ['Cute','Big','Small'], answer: 0 },
-    { problem: 'Mom cooks rice.', options: ['Rice','Bread','Noodle'], answer: 0 },
-    { problem: 'Dad fixes the car.', options: ['Car','Bike','Bus'], answer: 0 },
-    { problem: 'Sister plays with doll.', options: ['Doll','Ball','Toy'], answer: 0 },
-    { problem: 'School is closed today.', options: ['Today','Tomorrow','Next week'], answer: 0 },
-    { problem: 'We play in the park.', options: ['Park','Home','School'], answer: 0 },
-    { problem: 'Brother drinks hot milk.', options: ['Milk','Water','Juice'], answer: 0 },
+  { title: 'Simple Words - Animals & Things', type: 'picture_quiz', emoji: '🧸', difficulty: 'easy', darjah: 1, gameData: { questions: [
+    { image: '🐱', options: ['Cat','Dog','Rabbit'], answer: 0 },
+    { image: '🐶', options: ['Cat','Dog','Bird'], answer: 1 },
+    { image: '🏠', options: ['House','School','Shop'], answer: 0 },
+    { image: '📚', options: ['Book','Pencil','Paper'], answer: 0 },
+    { image: '✏️', options: ['Pen','Pencil','Ruler'], answer: 1 },
+    { image: '🍎', options: ['Apple','Orange','Banana'], answer: 0 },
+    { image: '🚗', options: ['Bus','Car','Truck'], answer: 1 },
+    { image: '🛏️', options: ['Bed','Chair','Table'], answer: 0 },
   ]}},
-  { title: 'Daily Vocabulary', type: 'word_builder', emoji: '🔠', difficulty: 'medium', gameData: { questions: [
-    { problem: 'h-u-s-', options: ['house','horse','haste'], answer: 0 },
-    { problem: 's-h-o-l', options: ['school','shall','shoal'], answer: 0 },
-    { problem: 'f-m-l-', options: ['family','female','formal'], answer: 0 },
-    { problem: 'f-o-', options: ['food','fool','foot'], answer: 0 },
-    { problem: 't-y', options: ['toy','try','tray'], answer: 0 },
-    { problem: 'b-o-k', options: ['book','brook','break'], answer: 0 },
-    { problem: 'p-n-i-', options: ['pencil','penal','panel'], answer: 0 },
-    { problem: 't-b-l-', options: ['table','tablet','taboo'], answer: 0 },
+  { title: 'Greetings & Simple Sentences', type: 'multiple_choice', emoji: '👋', difficulty: 'easy', darjah: 1, gameData: { questions: [
+    { problem: 'How do you greet in the morning?', options: ['Good night','Good morning','Good evening'], answer: 1 },
+    { problem: '"___ are you?" (asking how someone feels)', options: ['Who','Where','How'], answer: 2 },
+    { problem: 'Reply to "Good morning"?', options: ['Good morning!','Good night!','Goodbye!'], answer: 0 },
+    { problem: 'I ___ a student.', options: ['are','is','am'], answer: 2 },
+    { problem: 'She ___ my friend.', options: ['am','is','are'], answer: 1 },
+    { problem: 'They ___ playing football.', options: ['is','am','are'], answer: 2 },
+    { problem: 'My name ___ Ali.', options: ['am','are','is'], answer: 2 },
+    { problem: '"Goodbye" means?', options: ['Hello','Bye','Thank you'], answer: 1 },
   ]}},
-  { title: 'Grammar - Nouns', type: 'multiple_choice', emoji: '📝', difficulty: 'medium', gameData: { questions: [
+
+  // ===== YEAR 2 =====
+  { title: 'Nouns and Verbs - Year 2', type: 'multiple_choice', emoji: '📝', difficulty: 'easy', darjah: 2, gameData: { questions: [
     { problem: 'Which is a noun?', options: ['run','book','happy'], answer: 1 },
-    { problem: 'Which is a noun?', options: ['table','sleep','red'], answer: 0 },
-    { problem: 'Which is a noun?', options: ['jump','school','big'], answer: 1 },
-    { problem: 'Which is a noun?', options: ['green','cry','flower'], answer: 2 },
-    { problem: 'Which is a noun?', options: ['tree','run','strong'], answer: 0 },
-    { problem: 'Which is a noun?', options: ['small','drink','car'], answer: 2 },
-    { problem: 'Which is a noun?', options: ['fly','bird','tall'], answer: 1 },
-    { problem: 'Which is a noun?', options: ['river','swim','cold'], answer: 0 },
-  ]}},
-  { title: 'Grammar - Verbs', type: 'multiple_choice', emoji: '⚡', difficulty: 'medium', gameData: { questions: [
-    { problem: 'Which is a verb?', options: ['run','book','happy'], answer: 0 },
     { problem: 'Which is a verb?', options: ['table','sleep','red'], answer: 1 },
-    { problem: 'Which is a verb?', options: ['jump','school','big'], answer: 0 },
+    { problem: 'Which is a noun?', options: ['jump','school','big'], answer: 1 },
     { problem: 'Which is a verb?', options: ['green','cry','flower'], answer: 1 },
-    { problem: 'Which is a verb?', options: ['tree','run','strong'], answer: 1 },
+    { problem: 'Which is a noun?', options: ['tree','run','strong'], answer: 0 },
     { problem: 'Which is a verb?', options: ['small','drink','car'], answer: 1 },
-    { problem: 'Which is a verb?', options: ['fly','bird','tall'], answer: 0 },
+    { problem: 'Which is a noun?', options: ['fly','bird','tall'], answer: 1 },
     { problem: 'Which is a verb?', options: ['river','swim','cold'], answer: 1 },
   ]}},
-  { title: 'Antonyms (Opposite Words)', type: 'multiple_choice', emoji: '↔️', difficulty: 'medium', gameData: { questions: [
+  { title: 'Colors, Shapes & Numbers', type: 'picture_quiz', emoji: '🌈', difficulty: 'easy', darjah: 2, gameData: { questions: [
+    { image: '🔴', options: ['Red','Blue','Green'], answer: 0 },
+    { image: '🔵', options: ['Red','Blue','Yellow'], answer: 1 },
+    { image: '🟢', options: ['Purple','Green','Orange'], answer: 1 },
+    { image: '🟡', options: ['Yellow','Orange','White'], answer: 0 },
+    { image: '⭕', options: ['Square','Circle','Triangle'], answer: 1 },
+    { image: '⬜', options: ['Circle','Square','Triangle'], answer: 1 },
+    { image: '△', options: ['Circle','Square','Triangle'], answer: 2 },
+    { image: '⭐', options: ['Star','Cross','Diamond'], answer: 0 },
+  ]}},
+  { title: 'Simple Present Tense - Year 2', type: 'multiple_choice', emoji: '⏰', difficulty: 'easy', darjah: 2, gameData: { questions: [
+    { problem: 'She ___ to school every day.', options: ['go','goes','gone'], answer: 1 },
+    { problem: 'They ___ football.', options: ['plays','play','played'], answer: 1 },
+    { problem: 'He ___ a book.', options: ['read','reads','reading'], answer: 1 },
+    { problem: 'I ___ rice for lunch.', options: ['eats','eating','eat'], answer: 2 },
+    { problem: 'We ___ friends.', options: ['is','am','are'], answer: 2 },
+    { problem: 'The dog ___ very fast.', options: ['run','runs','ran'], answer: 1 },
+    { problem: 'The bird ___ in the sky.', options: ['fly','flying','flies'], answer: 2 },
+    { problem: 'She ___ a cat.', options: ['have','has','had'], answer: 1 },
+  ]}},
+
+  // ===== YEAR 3 =====
+  { title: 'Antonyms - Year 3', type: 'multiple_choice', emoji: '↔️', difficulty: 'medium', darjah: 3, gameData: { questions: [
     { problem: 'Opposite of "big"?', options: ['small','medium','long'], answer: 0 },
     { problem: 'Opposite of "hot"?', options: ['warm','cold','cool'], answer: 1 },
     { problem: 'Opposite of "dark"?', options: ['dim','bright','dull'], answer: 1 },
@@ -59,27 +77,7 @@ export const sekolah_english = [
     { problem: 'Opposite of "hard"?', options: ['soft','fine','smooth'], answer: 0 },
     { problem: 'Opposite of "fast"?', options: ['late','slow','quick'], answer: 1 },
   ]}},
-  { title: 'Spelling Practice', type: 'spelling', emoji: '🔡', difficulty: 'medium', gameData: { questions: [
-    { problem: 'Correct spelling of "frend"?', options: ['friend','frend','friand'], answer: 0 },
-    { problem: 'Correct spelling of "lern"?', options: ['lerne','learn','leern'], answer: 1 },
-    { problem: 'Correct spelling of "teecher"?', options: ['teacher','teecher','techer'], answer: 0 },
-    { problem: 'Correct spelling of "moter"?', options: ['motor','moter','motir'], answer: 0 },
-    { problem: 'Correct spelling of "wether"?', options: ['weather','wether','wethar'], answer: 0 },
-    { problem: 'Correct spelling of "bycycle"?', options: ['bicycle','bycycle','bicycal'], answer: 0 },
-    { problem: 'Correct spelling of "intresting"?', options: ['intresting','interesting','intersting'], answer: 1 },
-    { problem: 'Correct spelling of "libary"?', options: ['library','libary','librery'], answer: 0 },
-  ]}},
-  { title: 'Tenses - Past & Present', type: 'multiple_choice', emoji: '⏰', difficulty: 'medium', gameData: { questions: [
-    { problem: 'Past tense of "run"?', options: ['runned','ran','runs'], answer: 1 },
-    { problem: 'Past tense of "eat"?', options: ['eated','ate','eats'], answer: 1 },
-    { problem: 'Past tense of "play"?', options: ['played','play','plays'], answer: 0 },
-    { problem: 'Past tense of "go"?', options: ['goed','went','goes'], answer: 1 },
-    { problem: 'Past tense of "see"?', options: ['seed','saw','sees'], answer: 1 },
-    { problem: 'Past tense of "drink"?', options: ['drinked','drank','drinks'], answer: 1 },
-    { problem: 'Present tense: "She ___ to school"', options: ['go','goes','went'], answer: 1 },
-    { problem: 'Present tense: "They ___ football"', options: ['plays','play','played'], answer: 1 },
-  ]}},
-  { title: 'Phonics - Letter Sounds', type: 'phonics', emoji: '🔊', difficulty: 'medium', gameData: { questions: [
+  { title: 'Phonics - Blends & Digraphs', type: 'phonics', emoji: '🔊', difficulty: 'medium', darjah: 3, gameData: { questions: [
     { problem: 'What sound does "ch" make in "chair"?', options: ['k','sh','ch'], answer: 2 },
     { problem: 'What sound does "th" make in "the"?', options: ['t','th','d'], answer: 1 },
     { problem: 'Word with "oo" sound?', options: ['moon','man','men'], answer: 0 },
@@ -89,37 +87,39 @@ export const sekolah_english = [
     { problem: 'Word that rhymes with "dog"?', options: ['fog','dug','dig'], answer: 0 },
     { problem: 'Word that rhymes with "ball"?', options: ['bill','bell','tall'], answer: 2 },
   ]}},
-  { title: 'Comprehension - Short Paragraphs', type: 'reading', emoji: '📚', difficulty: 'hard', gameData: { questions: [
-    { problem: 'Ali has a dog. The dog is brown. What colour is the dog?', options: ['Black','White','Brown'], answer: 2 },
-    { problem: 'Siti eats an apple every day. What does Siti eat?', options: ['Orange','Apple','Banana'], answer: 1 },
-    { problem: 'The sun rises in the morning. When does the sun rise?', options: ['Evening','Morning','Night'], answer: 1 },
-    { problem: 'Tom reads books at the library. Where does Tom read?', options: ['Home','School','Library'], answer: 2 },
-    { problem: 'Birds fly in the sky. Where do birds fly?', options: ['In the sea','In the sky','On the ground'], answer: 1 },
-    { problem: 'She has two cats and one dog. How many pets does she have?', options: ['Two','Three','One'], answer: 1 },
-    { problem: 'The children play after school. When do they play?', options: ['Before school','After school','During school'], answer: 1 },
-    { problem: 'John is taller than Ali. Who is taller?', options: ['Ali','John','Both'], answer: 1 },
+  { title: 'Past Tense - Year 3', type: 'multiple_choice', emoji: '⏰', difficulty: 'medium', darjah: 3, gameData: { questions: [
+    { problem: 'Past tense of "run"?', options: ['runned','ran','runs'], answer: 1 },
+    { problem: 'Past tense of "eat"?', options: ['eated','ate','eats'], answer: 1 },
+    { problem: 'Past tense of "play"?', options: ['played','play','plays'], answer: 0 },
+    { problem: 'Past tense of "go"?', options: ['goed','went','goes'], answer: 1 },
+    { problem: 'Past tense of "see"?', options: ['seed','saw','sees'], answer: 1 },
+    { problem: 'Past tense of "drink"?', options: ['drinked','drank','drinks'], answer: 1 },
+    { problem: 'Past tense of "write"?', options: ['writed','wrote','writes'], answer: 1 },
+    { problem: 'Past tense of "buy"?', options: ['buyed','bought','buys'], answer: 1 },
   ]}},
-  { title: 'Grammar - Adjectives', type: 'multiple_choice', emoji: '🎨', difficulty: 'medium', gameData: { questions: [
+
+  // ===== YEAR 4 =====
+  { title: 'Adjectives & Adverbs - Year 4', type: 'multiple_choice', emoji: '🎨', difficulty: 'medium', darjah: 4, gameData: { questions: [
     { problem: 'Which is an adjective?', options: ['run','book','happy'], answer: 2 },
-    { problem: 'Which is an adjective?', options: ['table','sleep','red'], answer: 2 },
+    { problem: 'Which is an adverb?', options: ['table','quickly','red'], answer: 1 },
     { problem: 'Which is an adjective?', options: ['jump','school','big'], answer: 2 },
-    { problem: 'Which is an adjective?', options: ['green','cry','flower'], answer: 0 },
+    { problem: 'Which is an adverb?', options: ['green','slowly','flower'], answer: 1 },
     { problem: 'Which is an adjective?', options: ['tree','run','strong'], answer: 2 },
-    { problem: 'Which is an adjective?', options: ['small','drink','car'], answer: 0 },
+    { problem: 'Which is an adverb?', options: ['small','softly','car'], answer: 1 },
     { problem: 'Which is an adjective?', options: ['fly','bird','tall'], answer: 2 },
-    { problem: 'Which is an adjective?', options: ['river','swim','cold'], answer: 2 },
+    { problem: 'Which is an adverb?', options: ['river','swim','happily'], answer: 2 },
   ]}},
-  { title: 'Prepositions', type: 'multiple_choice', emoji: '📌', difficulty: 'medium', gameData: { questions: [
+  { title: 'Prepositions - Year 4', type: 'multiple_choice', emoji: '📌', difficulty: 'medium', darjah: 4, gameData: { questions: [
     { problem: 'The book is ___ the table.', options: ['in','on','under'], answer: 1 },
     { problem: 'The cat is hiding ___ the chair.', options: ['on','above','under'], answer: 2 },
     { problem: 'She lives ___ Kuala Lumpur.', options: ['at','in','on'], answer: 1 },
     { problem: 'He put the bag ___ the door.', options: ['near','in','on'], answer: 0 },
     { problem: 'The bird flew ___ the house.', options: ['under','over','between'], answer: 1 },
     { problem: 'She sat ___ her friends.', options: ['between','above','under'], answer: 0 },
-    { problem: 'He arrived ___ 8 oclock.', options: ['in','at','on'], answer: 1 },
+    { problem: 'He arrived ___ 8 o\'clock.', options: ['in','at','on'], answer: 1 },
     { problem: 'We go to school ___ Monday.', options: ['in','at','on'], answer: 2 },
   ]}},
-  { title: 'Synonyms - Similar Words', type: 'multiple_choice', emoji: '🔄', difficulty: 'medium', gameData: { questions: [
+  { title: 'Synonyms - Year 4', type: 'multiple_choice', emoji: '🔄', difficulty: 'medium', darjah: 4, gameData: { questions: [
     { problem: 'Synonym of "happy"?', options: ['sad','joyful','angry'], answer: 1 },
     { problem: 'Synonym of "big"?', options: ['small','large','tiny'], answer: 1 },
     { problem: 'Synonym of "fast"?', options: ['slow','quick','lazy'], answer: 1 },
@@ -129,18 +129,20 @@ export const sekolah_english = [
     { problem: 'Synonym of "start"?', options: ['end','begin','stop'], answer: 1 },
     { problem: 'Synonym of "tired"?', options: ['energetic','exhausted','awake'], answer: 1 },
   ]}},
-  { title: 'Future Tense - Will', type: 'multiple_choice', emoji: '🔮', difficulty: 'medium', gameData: { questions: [
+
+  // ===== YEAR 5 =====
+  { title: 'Future Tense - Year 5', type: 'multiple_choice', emoji: '🔮', difficulty: 'hard', darjah: 5, gameData: { questions: [
     { problem: 'Tomorrow I ___ go to school.', options: ['went','will','going'], answer: 1 },
     { problem: 'She ___ cook dinner tonight.', options: ['cooked','will','is'], answer: 1 },
     { problem: 'They ___ play football next week.', options: ['played','will','are'], answer: 1 },
     { problem: 'He ___ finish his homework soon.', options: ['finished','will','has'], answer: 1 },
-    { problem: '"Will" is used for?', options: ['Past','Future','Present'], answer: 1 },
     { problem: 'Correct sentence?', options: ['I will went home','I will go home','I will goes home'], answer: 1 },
     { problem: 'She will ___ (eat)?', options: ['eating','ate','eat'], answer: 2 },
     { problem: 'They will ___ (play)?', options: ['playing','played','play'], answer: 2 },
+    { problem: '"Will" is used for?', options: ['Past','Future','Present'], answer: 1 },
   ]}},
-  { title: 'Singular and Plural', type: 'multiple_choice', emoji: '🔢', difficulty: 'medium', gameData: { questions: [
-    { problem: 'Plural of "cat"?', options: ['cats','cates','cates'], answer: 0 },
+  { title: 'Singular and Plural - Year 5', type: 'multiple_choice', emoji: '🔢', difficulty: 'hard', darjah: 5, gameData: { questions: [
+    { problem: 'Plural of "cat"?', options: ['cats','cates','caties'], answer: 0 },
     { problem: 'Plural of "box"?', options: ['boxs','boxes','boxies'], answer: 1 },
     { problem: 'Plural of "child"?', options: ['childs','childes','children'], answer: 2 },
     { problem: 'Plural of "mouse"?', options: ['mouses','mice','mouse'], answer: 1 },
@@ -149,7 +151,19 @@ export const sekolah_english = [
     { problem: 'Plural of "sheep"?', options: ['sheeps','sheep','sheepes'], answer: 1 },
     { problem: 'Plural of "man"?', options: ['mans','men','manes'], answer: 1 },
   ]}},
-  { title: 'Compound Words', type: 'word_builder', emoji: '🔗', difficulty: 'medium', gameData: { questions: [
+  { title: 'Comprehension - Short Passage Year 5', type: 'reading', emoji: '📚', difficulty: 'hard', darjah: 5, gameData: { questions: [
+    { problem: 'Ali has a dog. The dog is brown. What colour is the dog?', options: ['Black','White','Brown'], answer: 2 },
+    { problem: 'Siti eats an apple every day. What does Siti eat?', options: ['Orange','Apple','Banana'], answer: 1 },
+    { problem: 'The sun rises in the morning. When does the sun rise?', options: ['Evening','Morning','Night'], answer: 1 },
+    { problem: 'Tom reads books at the library. Where does Tom read?', options: ['Home','School','Library'], answer: 2 },
+    { problem: 'Birds fly in the sky. Where do birds fly?', options: ['In the sea','In the sky','On the ground'], answer: 1 },
+    { problem: 'She has two cats and one dog. How many pets?', options: ['Two','Three','One'], answer: 1 },
+    { problem: 'The children play after school. When do they play?', options: ['Before school','After school','During school'], answer: 1 },
+    { problem: 'John is taller than Ali. Who is taller?', options: ['Ali','John','Both'], answer: 1 },
+  ]}},
+
+  // ===== YEAR 6 =====
+  { title: 'Compound Words - Year 6', type: 'word_builder', emoji: '🔗', difficulty: 'hard', darjah: 6, gameData: { questions: [
     { problem: 'sun + flower = ?', options: ['sunflower','flowerun','sunfly'], answer: 0 },
     { problem: 'rain + bow = ?', options: ['bowrain','rainbow','rainbow'], answer: 1 },
     { problem: 'foot + ball = ?', options: ['ballfoot','football','footbal'], answer: 1 },
@@ -159,44 +173,24 @@ export const sekolah_english = [
     { problem: 'fire + work = ?', options: ['firework','workfire','firement'], answer: 0 },
     { problem: 'butter + fly = ?', options: ['flybutter','butterfli','butterfly'], answer: 2 },
   ]}},
-  { title: 'Pronouns', type: 'multiple_choice', emoji: '👤', difficulty: 'medium', gameData: { questions: [
+  { title: 'Pronouns & Question Words - Year 6', type: 'multiple_choice', emoji: '❓', difficulty: 'hard', darjah: 6, gameData: { questions: [
     { problem: 'Replace "Ali": "___ is tall."', options: ['She','He','They'], answer: 1 },
     { problem: 'Replace "Siti": "___ is clever."', options: ['He','She','They'], answer: 1 },
-    { problem: 'Replace "the children": "___ are playing."', options: ['He','She','They'], answer: 2 },
-    { problem: 'I told ___ (Ali) about it.', options: ['he','him','his'], answer: 1 },
-    { problem: 'This is ___ (Siti\'s) book.', options: ['she','her','hers'], answer: 1 },
-    { problem: 'We play with ___ (the children).', options: ['they','them','their'], answer: 1 },
-    { problem: 'The dog wagged ___ tail.', options: ['it','its','it\'s'], answer: 1 },
-    { problem: '"We" refers to?', options: ['One person','Two or more','Three only'], answer: 1 },
-  ]}},
-  { title: 'Questions Words - 5W1H', type: 'multiple_choice', emoji: '❓', difficulty: 'medium', gameData: { questions: [
     { problem: '"___ is your name?" — asking about person', options: ['Where','What','Who'], answer: 2 },
     { problem: '"___ do you live?" — asking about place', options: ['When','Where','Why'], answer: 1 },
     { problem: '"___ do you go to school?" — asking about time', options: ['Where','Who','When'], answer: 2 },
     { problem: '"___ are you late?" — asking for reason', options: ['How','Why','Where'], answer: 1 },
-    { problem: '"___ is your favourite colour?" — asking about thing', options: ['What','Who','When'], answer: 0 },
-    { problem: '"___ did you come to school?" — asking about manner', options: ['Why','Where','How'], answer: 2 },
-    { problem: '"___ books do you have?" — asking about number', options: ['How many','How much','How far'], answer: 0 },
-    { problem: '"___ is your teacher?" — asking about person', options: ['What','Who','Which'], answer: 1 },
+    { problem: 'I told ___ (Ali) about it.', options: ['he','him','his'], answer: 1 },
+    { problem: 'This is ___ (Siti\'s) book.', options: ['she','her','hers'], answer: 1 },
   ]}},
-  { title: 'Paragraph Writing - Fill in Blanks', type: 'reading', emoji: '✍️', difficulty: 'hard', gameData: { questions: [
+  { title: 'Essay Writing & Tenses - Year 6', type: 'reading', emoji: '✍️', difficulty: 'hard', darjah: 6, gameData: { questions: [
     { problem: 'My name ___ Ali.', options: ['are','is','am'], answer: 1 },
     { problem: 'I ___ a student at SK Jaya.', options: ['are','is','am'], answer: 2 },
-    { problem: 'My school ___ very big.', options: ['are','is','am'], answer: 1 },
-    { problem: 'My friends ___ always kind.', options: ['are','is','am'], answer: 0 },
-    { problem: 'We ___ learning English together.', options: ['are','is','am'], answer: 0 },
-    { problem: 'Our teacher ___ very patient.', options: ['are','is','am'], answer: 1 },
-    { problem: 'I ___ happy to be at school.', options: ['are','is','am'], answer: 2 },
-    { problem: 'School ___ fun and exciting.', options: ['are','is','am'], answer: 1 },
-  ]}},
-  { title: 'Adverbs of Time', type: 'multiple_choice', emoji: '⏰', difficulty: 'medium', gameData: { questions: [
-    { problem: 'I brush my teeth ___ (before sleeping).', options: ['yesterday','at night','tomorrow'], answer: 1 },
-    { problem: 'She ___ goes to school on time.', options: ['never','always','yesterday'], answer: 1 },
-    { problem: 'He was late ___.', options: ['today','tomorrow','yesterday'], answer: 2 },
-    { problem: 'We will go ___ (the next day).', options: ['yesterday','today','tomorrow'], answer: 2 },
-    { problem: 'She ___ eats vegetables (not at all).', options: ['always','often','never'], answer: 2 },
-    { problem: 'He goes swimming ___ (from time to time).', options: ['never','sometimes','always'], answer: 1 },
-    { problem: 'They ___ win the game (most of the time).', options: ['never','sometimes','usually'], answer: 2 },
-    { problem: 'I eat breakfast ___ (each morning).', options: ['never','every day','sometimes'], answer: 1 },
+    { problem: 'Yesterday, I ___ to school.', options: ['go','went','goes'], answer: 1 },
+    { problem: 'Tomorrow, she ___ visit us.', options: ['visit','visited','will visit'], answer: 2 },
+    { problem: 'They ___ playing since morning.', options: ['has been','have been','is'], answer: 1 },
+    { problem: 'A good essay has introduction, body, and ___?', options: ['Title','Conclusion','Index'], answer: 1 },
+    { problem: 'Topic sentence is usually at the ___ of a paragraph?', options: ['End','Middle','Beginning'], answer: 2 },
+    { problem: 'Which is a linking word?', options: ['apple','however','run'], answer: 1 },
   ]}},
 ];
