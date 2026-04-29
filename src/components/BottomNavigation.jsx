@@ -30,41 +30,41 @@ export default function BottomNavigation() {
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.3 }}
-      className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-game-purple/95 via-game-pink/95 to-game-blue/95 rounded-t-3xl px-3 py-3 max-w-lg mx-auto shadow-2xl border-t-2 border-white/20"
-      style={{ left: '50%', transform: 'translateX(-50%)' }}
+      className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md rounded-t-2xl shadow-2xl border-t border-gray-200"
     >
-      <div className="flex items-center justify-between gap-1">
-        {/* Nav Items - Scrollable */}
-        <div className="flex gap-1 flex-1 overflow-x-auto pb-1">
-          {navItems.map(item => (
-            <Link key={item.path} to={item.path}>
-              <motion.button
-                whileTap={{ scale: 0.85 }}
-                whileHover={{ scale: 1.05 }}
-                className={`px-3 py-2 rounded-2xl font-bold text-sm whitespace-nowrap transition-all ${
-                  isActive(item.path)
-                    ? 'bg-white/90 text-game-purple shadow-lg'
-                    : 'bg-white/20 text-white hover:bg-white/30'
-                }`}
-              >
-                <span className="text-base">{item.emoji}</span>
-                <span className="hidden sm:inline ml-1">{item.label}</span>
-              </motion.button>
-            </Link>
-          ))}
-        </div>
+      <div className="max-w-xl mx-auto px-2 py-3 flex items-center justify-around gap-1">
+        {/* Nav Items */}
+        {navItems.map(item => (
+          <Link key={item.path} to={item.path} className="flex-1">
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              className={`w-full flex flex-col items-center gap-1 py-3 rounded-xl transition-all ${
+                isActive(item.path)
+                  ? 'bg-game-purple/20 text-game-purple'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <span className="text-2xl">{item.emoji}</span>
+              <span className="text-xs font-semibold">{item.label}</span>
+            </motion.button>
+          </Link>
+        ))}
+
+        {/* Separator */}
+        <div className="w-px h-8 bg-gray-300" />
 
         {/* Right Actions */}
-        <div className="flex gap-1 flex-shrink-0">
+        <div className="flex flex-col items-center gap-2">
           <LanguageToggle />
           {isAuthenticated && (
             <motion.button
-              whileTap={{ scale: 0.85 }}
+              whileTap={{ scale: 0.9 }}
               onClick={logout}
-              className="bg-white/20 hover:bg-white/30 text-white rounded-2xl p-2 font-bold transition-all"
+              className="text-gray-600 hover:text-red-600 transition-all"
               title="Keluar"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-5 h-5" />
             </motion.button>
           )}
         </div>
