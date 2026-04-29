@@ -3,7 +3,13 @@ import { motion } from 'framer-motion';
 import { useLang } from '@/lib/LanguageContext';
 
 export default function LanguageToggle() {
-  const { lang, toggleLang } = useLang();
+  const langContext = useLang();
+  
+  if (!langContext) {
+    return null;
+  }
+  
+  const { lang, toggleLang } = langContext;
 
   return (
     <motion.button
