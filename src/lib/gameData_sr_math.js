@@ -3,7 +3,7 @@
 
 export const sekolah_mathematics = [
   // ===== DARJAH 1 =====
-  { title: 'Nombor 1-10 Darjah 1', type: 'number_match', emoji: '1️⃣', difficulty: 'easy', darjah: 1, gameData: { questions: [
+  { title: 'Nombor 1-10 Darjah 1', type: 'number_match', emoji: '1️⃣', difficulty: 'easy', darjah: 1, totalQuestions: 10, gameData: { questions: [
     { problem: '⭐', options: ['1','2','3'], answer: 0 },
     { problem: '⭐⭐', options: ['1','2','3'], answer: 1 },
     { problem: '⭐⭐⭐', options: ['1','2','3'], answer: 2 },

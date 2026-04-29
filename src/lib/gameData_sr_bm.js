@@ -3,7 +3,7 @@
 
 export const sekolah_bahasa_melayu = [
   // ===== DARJAH 1 =====
-  { title: 'Huruf Besar A-Z', type: 'letter_match', emoji: '🔤', difficulty: 'easy', darjah: 1, gameData: { questions: [
+  { title: 'Huruf Besar A-Z', type: 'letter_match', emoji: '🔤', difficulty: 'easy', darjah: 1, totalQuestions: 10, gameData: { questions: [
     { letter: 'A', emoji: '🍎', word: 'Epal', options: ['A','B','C','D'], answer: 0 },
     { letter: 'B', emoji: '🐦', word: 'Burung', options: ['A','B','C','D'], answer: 1 },
     { letter: 'C', emoji: '🐱', word: 'Kucing', options: ['A','B','C','D'], answer: 2 },

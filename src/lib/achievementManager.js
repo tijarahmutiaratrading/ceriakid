@@ -114,9 +114,8 @@ export const calculateStreak = async (user, childName, base44) => {
     
     const daysDiff = Math.floor((today - lastPlayedDate) / (1000 * 60 * 60 * 24));
     
-    if (daysDiff === 0) return calculateConsecutiveDays(sorted);
-    if (daysDiff === 1) return calculateConsecutiveDays(sorted);
-    return 0;
+    if (daysDiff > 1) return 0; // Streak broken
+    return calculateConsecutiveDays(sorted);
   } catch (error) {
     console.error('Streak calculation failed:', error);
     return 0;

@@ -49,7 +49,21 @@ export default function GamePlayer() {
 
   const questions = useMemo(() => {
     if (!game?.gameData?.questions) return [];
-    return game.gameData.questions.slice(0, game.totalQuestions || 8);
+    const baseQuestions = game.gameData.questions.slice(0, game.totalQuestions || 8);
+    
+    // Shuffle answer options while tracking correct answer
+    return baseQuestions.map(q => {
+      if (!Array.isArray(q.options) || q.options.length <= 1) return q;
+      
+      const optionsWithIndex = q.options.map((opt, idx) => ({ opt, isCorrect: idx === q.answer }));
+      const shuffled = optionsWithIndex.sort(() => Math.random() - 0.5);
+      
+      return {
+        ...q,
+        options: shuffled.map(x => x.opt),
+        answer: shuffled.findIndex(x => x.isCorrect),
+      };
+    });
   }, [game]);
 
   const handleAnswer = useCallback((selectedIndex) => {
