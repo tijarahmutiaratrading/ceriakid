@@ -6,25 +6,16 @@ import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 
 export default function HamburgerMenu() {
-  try {
-    const location = useLocation();
-    
-    // Don't show on landing, pricing, admin & client dashboards
-    if (location.pathname === '/landing' || location.pathname === '/pricing' || 
-        location.pathname === '/admin-dashboard' || location.pathname === '/client-dashboard') {
-      return null;
-    }
-  } catch {
-    // Not in Router context — return null
+  const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useAuth() || {};
+  const { ageGroup = 'prasekolah', toggleAgeGroup = () => {} } = useAgeGroup() || {};
+  const location = useLocation();
+
+  // Don't show on landing, pricing, admin & client dashboards
+  if (location.pathname === '/landing' || location.pathname === '/pricing' || 
+      location.pathname === '/admin-dashboard' || location.pathname === '/client-dashboard') {
     return null;
   }
-
-  const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated } = useAuth();
-  const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
-  const safeAgeGroup = ageGroup || 'prasekolah';
-  const safeToggle = toggleAgeGroup || (() => {});
-  const location = useLocation();
 
   const navItems = [
     { path: '/', emoji: '🏠', label: 'Rumah' },
@@ -32,7 +23,7 @@ export default function HamburgerMenu() {
     { path: '/games/english', emoji: '🇬🇧', label: 'English' },
     { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
     { path: '/games/science', emoji: '🔬', label: 'Sains' },
-    ...(safeAgeGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
+    ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
     ...(isAuthenticated ? [{ path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' }] : []),
   ];
