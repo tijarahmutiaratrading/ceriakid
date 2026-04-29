@@ -13,8 +13,10 @@ import Home from '@/pages/Home';
 import AdminDashboard from '@/pages/AdminDashboard';
 import AdminAnalytics from '@/pages/AdminAnalytics';
 import AdminSettings from '@/pages/AdminSettings';
+import AdminAnalyticsEnhanced from '@/pages/AdminAnalyticsEnhanced';
 import ClientDashboard from '@/pages/ClientDashboard';
 import GamesList from '@/pages/GamesList';
+import B2BLanding from '@/pages/B2BLanding';
 import GamePlayer from '@/pages/GamePlayer';
 import ParentDashboard from '@/pages/ParentDashboard';
 import DrawingStudio from '@/pages/DrawingStudio';
@@ -61,7 +63,9 @@ const AuthenticatedApp = () => {
           <Route path="/" element={<Home />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-analytics" element={<AdminAnalytics />} />
+          <Route path="/admin-analytics-advanced" element={<AdminAnalyticsEnhanced />} />
           <Route path="/admin-settings" element={<AdminSettings />} />
+          <Route path="/b2b" element={<B2BLanding />} />
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />

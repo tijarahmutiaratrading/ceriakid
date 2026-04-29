@@ -1,0 +1,36 @@
+{
+  "name": "Friend",
+  "type": "object",
+  "properties": {
+    "userEmail": {
+      "type": "string",
+      "description": "User's email who sent invite"
+    },
+    "friendEmail": {
+      "type": "string",
+      "description": "Friend's email"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted"
+      ],
+      "default": "pending",
+      "description": "Friend request status"
+    },
+    "inviteCode": {
+      "type": "string",
+      "description": "Unique 6-char code for sharing invite"
+    },
+    "acceptedDate": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "userEmail",
+    "friendEmail",
+    "inviteCode"
+  ]
+}

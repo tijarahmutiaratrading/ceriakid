@@ -80,9 +80,9 @@ export default function AdminDashboard() {
             Admin Dashboard
           </h1>
           <div className="flex gap-3">
-            <Link to="/admin-analytics">
+            <Link to="/admin-analytics-advanced">
               <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center gap-2 px-5 py-2.5 bg-game-orange text-white rounded-xl font-bold shadow-md">
-                <TrendingUp className="w-4 h-4" /> Analitik
+                <TrendingUp className="w-4 h-4" /> Analytics+
               </motion.button>
             </Link>
             <Link to="/admin-settings">

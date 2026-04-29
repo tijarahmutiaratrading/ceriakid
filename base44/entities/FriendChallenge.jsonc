@@ -1,0 +1,54 @@
+{
+  "name": "FriendChallenge",
+  "type": "object",
+  "properties": {
+    "challengeId": {
+      "type": "string",
+      "description": "Unique challenge ID"
+    },
+    "createdBy": {
+      "type": "string",
+      "description": "Email of user who created challenge"
+    },
+    "opponent": {
+      "type": "string",
+      "description": "Friend's email"
+    },
+    "gameCategory": {
+      "type": "string",
+      "description": "Category (bahasa_melayu, english, etc)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "completed"
+      ],
+      "default": "pending"
+    },
+    "creatorScore": {
+      "type": "number",
+      "default": 0
+    },
+    "opponentScore": {
+      "type": "number",
+      "default": 0
+    },
+    "dueDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Challenge expires in 7 days"
+    },
+    "winnerEmail": {
+      "type": "string",
+      "description": "Email of winner"
+    }
+  },
+  "required": [
+    "challengeId",
+    "createdBy",
+    "opponent",
+    "gameCategory"
+  ]
+}
