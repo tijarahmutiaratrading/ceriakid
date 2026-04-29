@@ -10,7 +10,9 @@ import CategoryGrid from '@/components/home/CategoryGrid';
 export default function Home() {
   const { t } = useLang();
   const { isAuthenticated, user } = useAuth();
-  const { ageGroup, setAgeGroup } = useAgeGroup();
+  const ageGroupContext = useAgeGroup();
+  const ageGroup = ageGroupContext?.ageGroup || 'prasekolah';
+  const setAgeGroup = ageGroupContext?.setAgeGroup || (() => {});
 
   return (
     <div className="min-h-screen bg-pattern">
