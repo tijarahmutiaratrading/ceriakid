@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
+import GameListCard from '@/components/game/GameListCard';
 
 const categoryLabels = {
   bahasa_melayu: 'Bahasa Melayu',
@@ -119,44 +120,14 @@ export default function GamesList() {
             const gameProgress = progress[gameKey];
             
             return (
-              <div key={i} className="relative">
-                <Link to={`/play/${category}/${i}`}>
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    whileHover={{ scale: 1.02, x: 4 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="clay rounded-2xl p-4 cursor-pointer flex items-center gap-4"
-                  >
-                    <span className="text-3xl">{game.emoji}</span>
-                    <div className="flex-1">
-                      <h3 className="font-bold">{game.title}</h3>
-                      <p className="text-xs text-gray-600 capitalize">
-                        {game.type.replace(/_/g, ' ')} • {game.difficulty}
-                      </p>
-                      {gameProgress && (
-                        <p className="text-xs text-game-purple font-semibold mt-1">
-                          ⭐ {gameProgress.bestStars}/3 • {gameProgress.timesPlayed}x dimainkan
-                        </p>
-                      )}
-                    </div>
-                    <span className="text-xl">→</span>
-                  </motion.div>
-                </Link>
-                
-                {gameProgress && (
-                  <Link to={`/play/${category}/${i}`}>
-                    <motion.button
-                      whileTap={{ scale: 0.9 }}
-                      className="absolute top-2 right-2 bg-game-purple text-white p-1.5 rounded-full shadow-lg"
-                      title="Main lagi"
-                    >
-                      <RotateCcw className="w-4 h-4" />
-                    </motion.button>
-                  </Link>
-                )}
-              </div>
+              <GameListCard
+                key={i}
+                game={game}
+                gameKey={gameKey}
+                gameProgress={gameProgress}
+                idx={i}
+                category={category}
+              />
             );
           })}
         </div>
