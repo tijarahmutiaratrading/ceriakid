@@ -343,48 +343,29 @@ export default function GamePlayer() {
         </motion.div>
 
         {/* Options Grid */}
-        {currentQuestion.options && currentQuestion.options.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3">
-            {currentQuestion.options.map((option, i) => (
-              <motion.button
-                key={`${state.currentQ}-${i}`}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.05 }}
-                whileTap={{ scale: 0.9 }}
-                whileHover={{ scale: 1.05 }}
-                onClick={() => handleAnswer(i)}
-                disabled={state.showFeedback}
-                className={`clay-button rounded-2xl py-4 px-3 font-bold text-center transition-all ${
-                  state.showFeedback && state.selectedIdx === i
-                    ? state.isCorrect
-                      ? 'bg-green-200 ring-2 ring-green-500'
-                      : 'bg-red-200 ring-2 ring-red-500'
-                    : ''
-                }`}
-              >
-                {typeof option === 'string' ? option : option.label || option}
-              </motion.button>
-            ))}
-          </div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="clay rounded-3xl p-6 text-center bg-amber-50"
-          >
-            <p className="text-lg font-bold text-gray-700 mb-4">Tekan tombol di bawah untuk jawab</p>
+        <div className="grid grid-cols-2 gap-3">
+          {currentQuestion.options?.map((option, i) => (
             <motion.button
+              key={`${state.currentQ}-${i}`}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.05 }}
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.05 }}
-              onClick={() => handleAnswer(0)}
+              onClick={() => handleAnswer(i)}
               disabled={state.showFeedback}
-              className="clay-button rounded-2xl py-4 px-8 font-bold text-lg bg-gradient-to-r from-game-purple to-game-pink text-white"
+              className={`clay-button rounded-2xl py-4 px-3 font-bold text-center transition-all ${
+                state.showFeedback && state.selectedIdx === i
+                  ? state.isCorrect
+                    ? 'bg-green-200 ring-2 ring-green-500'
+                    : 'bg-red-200 ring-2 ring-red-500'
+                  : ''
+              }`}
             >
-              ✅ Jawapan Betul
+              {typeof option === 'string' ? option : option.label || option}
             </motion.button>
-          </motion.div>
-        )}
+          ))}
+        </div>
       </div>
 
       <FeedbackOverlay
