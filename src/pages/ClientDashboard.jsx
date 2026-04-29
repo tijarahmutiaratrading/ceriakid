@@ -96,7 +96,7 @@ export default function ClientDashboard() {
         {subscription ? (
           <div className="space-y-8">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <h2 className="text-xl font-black text-gray-800 mb-4">💎 Paket Langganan</h2>
+              <h2 className="text-xl font-black text-gray-800 mb-4">💎 Pakej Langganan</h2>
               <motion.div
                 whileHover={{ scale: 1.02, y: -4 }}
                 className={`rounded-3xl p-8 border-2 shadow-lg ${
@@ -107,7 +107,7 @@ export default function ClientDashboard() {
               >
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <p className="text-sm font-bold text-gray-600 mb-1">Paket Semasa</p>
+                    <p className="text-sm font-bold text-gray-600 mb-1">Pakej Semasa</p>
                     <h3 className={`text-4xl font-black ${
                       subscription.tier === 'free' ? 'text-gray-700' :
                       subscription.tier === 'premium' ? 'text-blue-600' :
@@ -163,13 +163,13 @@ export default function ClientDashboard() {
           </div>
         ) : (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-            <h2 className="text-xl font-black text-gray-800 mb-4">💎 Paket Langganan</h2>
+            <h2 className="text-xl font-black text-gray-800 mb-4">💎 Pakej Langganan</h2>
             <motion.div
               whileHover={{ scale: 1.02, y: -4 }}
               className="bg-gradient-to-br from-amber-100 to-amber-50 rounded-3xl p-8 text-center border-2 border-amber-300 shadow-lg"
             >
               <p className="text-4xl mb-4">📦</p>
-              <p className="font-black text-xl text-gray-800 mb-2">Tiada Paket Aktif</p>
+              <p className="font-black text-xl text-gray-800 mb-2">Tiada Pakej Aktif</p>
               <p className="text-gray-700 mb-6">Mulai langganan untuk akses semua permainan & ciri-ciri premium!</p>
               <Link to="/landing">
                 <motion.button
@@ -177,7 +177,7 @@ export default function ClientDashboard() {
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-3 bg-gradient-to-r from-game-orange to-orange-500 text-white rounded-full font-bold shadow-lg"
                 >
-                  Lihat Paket
+                  Lihat Pakej
                 </motion.button>
               </Link>
             </motion.div>
