@@ -8,9 +8,9 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 export default function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated } = useAuth();
-  const ageGroupContext = useAgeGroup();
-  const ageGroup = ageGroupContext?.ageGroup || 'prasekolah';
-  const setAgeGroup = ageGroupContext?.setAgeGroup || (() => {});
+  const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
+  const safeAgeGroup = ageGroup || 'prasekolah';
+  const safeToggle = toggleAgeGroup || (() => {});
   const location = useLocation();
 
   // Don't show on landing, pricing, admin & client dashboards
@@ -25,7 +25,7 @@ export default function HamburgerMenu() {
     { path: '/games/english', emoji: '🇬🇧', label: 'English' },
     { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
     { path: '/games/science', emoji: '🔬', label: 'Sains' },
-    ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
+    ...(safeAgeGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
     ...(isAuthenticated ? [{ path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' }] : []),
   ];
 
@@ -97,14 +97,12 @@ export default function HamburgerMenu() {
                   <motion.button
                     key={age.key}
                     onClick={() => {
-                      if (ageGroupContext?.setAgeGroup) {
-                        ageGroupContext.setAgeGroup(age.key);
-                        setIsOpen(false);
-                      }
+                      safeToggle(age.key);
+                      setIsOpen(false);
                     }}
                     whileTap={{ scale: 0.95 }}
                     className={`flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all ${
-                      ageGroup === age.key
+                      safeAgeGroup === age.key
                         ? 'bg-game-purple text-white shadow-lg'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
