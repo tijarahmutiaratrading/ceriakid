@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import PricingCheckout from '@/components/PricingCheckout';
+import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 
 export default function Landing() {
   const [selectedAgeGroup, setSelectedAgeGroup] = useState('prasekolah');
@@ -109,10 +110,8 @@ export default function Landing() {
           </div>
         </motion.div>
 
-        {/* Hero Image */}
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-game-yellow via-game-pink to-game-blue aspect-video flex items-center justify-center">
-          <div className="text-7xl animate-bounce">🎮</div>
-        </motion.div>
+        {/* Hero Image - Interactive Game Demo */}
+        <InteractiveGameDemo />
       </div>
 
       {/* Rating & Review */}
