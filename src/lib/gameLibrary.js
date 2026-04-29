@@ -1,7 +1,11 @@
 import { prasekolah_bahasa_melayu } from './gameData_prasekolah_bm.js';
+import { prasekolah_bahasa_melayu_expansion } from './gameData_prasekolah_bm_expansion.js';
 import { prasekolah_english } from './gameData_prasekolah_en.js';
+import { prasekolah_english_expansion } from './gameData_prasekolah_en_expansion.js';
 import { prasekolah_mathematics } from './gameData_prasekolah_math.js';
+import { prasekolah_mathematics_expansion } from './gameData_prasekolah_math_expansion.js';
 import { prasekolah_science } from './gameData_prasekolah_science.js';
+import { prasekolah_science_expansion } from './gameData_prasekolah_science_expansion.js';
 import { prasekolah_worksheet } from './gameData_prasekolah_worksheet.js';
 import { sekolah_bahasa_melayu } from './gameData_sr_bm.js';
 import { sekolah_jawi } from './gameData_sr_jawi.js';
@@ -11,10 +15,10 @@ import { sekolah_science } from './gameData_sr_science.js';
 
 export const gameLibrary = {
   prasekolah: {
-    bahasa_melayu: prasekolah_bahasa_melayu,
-    english: prasekolah_english,
-    mathematics: prasekolah_mathematics,
-    science: prasekolah_science,
+    bahasa_melayu: [...prasekolah_bahasa_melayu, ...prasekolah_bahasa_melayu_expansion],
+    english: [...prasekolah_english, ...prasekolah_english_expansion],
+    mathematics: [...prasekolah_mathematics, ...prasekolah_mathematics_expansion],
+    science: [...prasekolah_science, ...prasekolah_science_expansion],
     worksheet: prasekolah_worksheet,
   },
   sekolah_rendah: {
