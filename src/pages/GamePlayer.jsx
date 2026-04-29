@@ -25,7 +25,7 @@ export default function GamePlayer() {
   const { user } = useAuth();
   const games = getGamesByAgeAndCategory(ageGroup, category);
   const gameIndex = parseInt(index);
-  const game = games[gameIndex];
+  const game = games && gameIndex >= 0 && gameIndex < games.length ? games[gameIndex] : null;
 
   const [state, setState] = useState({
     currentQ: 0,
