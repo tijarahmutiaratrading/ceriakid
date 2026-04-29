@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Clock, Zap } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useAuth } from '@/lib/AuthContext';
@@ -27,6 +27,7 @@ export default function GamePlayer() {
     feedbackMsg: '',
     finished: false,
     selectedIdx: null,
+    startTime: Date.now(),
   });
 
   // Save progress after game finishes
@@ -145,18 +146,24 @@ export default function GamePlayer() {
 
   if (!game) {
     return (
-      <div className="min-h-screen bg-pattern flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-2xl font-black mb-4">Game not found</p>
+      <div className="min-h-screen bg-pattern flex items-center justify-center p-4">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="clay rounded-3xl p-8 text-center max-w-sm"
+        >
+          <p className="text-5xl mb-4">🎮</p>
+          <p className="text-2xl font-black mb-2 text-gray-800">Game Tidak Ditemukan</p>
+          <p className="text-gray-600 mb-6">Game yang diminta tidak tersedia.</p>
           <Link to={`/games/${category}`}>
             <motion.button
               whileHover={{ scale: 1.05 }}
               className="px-6 py-3 bg-game-purple text-white rounded-full font-bold"
             >
-              Back to Games
+              ← Kembali
             </motion.button>
           </Link>
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -205,6 +212,19 @@ export default function GamePlayer() {
             <ArrowLeft className="w-6 h-6" />
           </motion.button>
         </Link>
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2 text-sm font-bold text-game-purple">
+            {game.difficulty === 'hard' && <Zap className="w-4 h-4" />}
+            <span className="capitalize px-3 py-1 bg-game-purple/10 rounded-full">
+              {game.difficulty === 'easy' ? '🟢 Mudah' : game.difficulty === 'medium' ? '🟡 Sederhana' : '🔴 Sukar'}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-sm font-bold text-gray-600">
+            <Clock className="w-4 h-4" />
+            {game.totalQuestions || 8} soalan
+          </div>
+        </div>
 
         <GameHeader
           title={game.title}

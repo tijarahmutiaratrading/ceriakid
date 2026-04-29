@@ -14,6 +14,16 @@ const categoryLabels = {
   science: 'Sains',
 };
 
+const getCategoryEmoji = (category) => {
+  const emojis = {
+    bahasa_melayu: '🇲🇾',
+    english: '🇬🇧',
+    mathematics: '🔢',
+    science: '🧪',
+  };
+  return emojis[category] || '📚';
+};
+
 export default function GamesList() {
   const { category } = useParams();
   const { ageGroup } = useAgeGroup();
@@ -56,8 +66,15 @@ export default function GamesList() {
           </motion.button>
         </Link>
 
-        <h1 className="text-3xl font-black mb-2">{categoryLabels[category]}</h1>
-        <p className="text-gray-600 mb-6">{games.length} Permainan Tersedia</p>
+        <motion.div className="mb-6">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-4xl">{getCategoryEmoji(category)}</span>
+            <h1 className="text-3xl font-black bg-gradient-to-r from-game-purple to-game-pink bg-clip-text text-transparent">
+              {categoryLabels[category]}
+            </h1>
+          </div>
+          <p className="text-gray-600 ml-13 font-semibold">{games.length} Permainan • Seru & Edukatif</p>
+        </motion.div>
 
         {/* Games Grid */}
         <div className="space-y-3">

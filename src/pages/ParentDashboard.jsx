@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, TrendingDown, Zap, BookOpen, Share2, Award, Flame, Target, Sparkles } from 'lucide-react';
+import { ArrowLeft, TrendingDown, Zap, BookOpen, Share2, Award, Flame, Target, Sparkles, Download } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 
@@ -91,6 +91,17 @@ export default function ParentDashboard() {
     const message = `🎓 Prestasi ${childName} di @JomBelajarMY:\n${stats.totalGames} permainan, ${stats.avgStars}⭐ rata-rata!\n\n#Pendidikan #Pembelajaran #JomBelajar`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
     window.open(twitterUrl, '_blank');
+  };
+
+  const exportAsText = (childName, stats) => {
+    const text = `LAPORAN PRESTASI ${childName.toUpperCase()}\n${'='.repeat(40)}\n\nTanggal: ${new Date().toLocaleDateString('ms-MY')}\n\nRINGKASAN PRESTASI:\n- Total Permainan: ${stats.totalGames}\n- Rata-rata Bintang: ${stats.avgStars}/3\n- Status: ${stats.avgStars >= 2.5 ? 'Cemerlang! 🔥' : 'Terus Berkembang ✨'}\n\nUntuk laporan detail, masuk ke aplikasi Jom Belajar.\n\n🎓 Jom Belajar - Platform Pembelajaran Anak`;
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', `prestasi-${childName}-${new Date().getTime()}.txt`);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   if (loading) {
@@ -269,9 +280,9 @@ export default function ParentDashboard() {
                     </motion.div>
                   )}
 
-                  {/* Share Buttons */}
-                  <div className="pt-4 border-t border-game-purple/10">
-                    <p className="text-xs font-bold text-game-purple mb-3 flex items-center gap-2">
+                  {/* Share & Export Buttons */}
+                  <div className="pt-4 border-t border-game-purple/10 space-y-3">
+                    <p className="text-xs font-bold text-game-purple flex items-center gap-2">
                       <Share2 className="w-4 h-4" />
                       Kongsi Pencapaian Luar Biasa
                     </p>
@@ -301,6 +312,15 @@ export default function ParentDashboard() {
                         𝕏 Twitter
                       </motion.button>
                     </div>
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.02 }}
+                      onClick={() => exportAsText(childName, { totalGames, avgStars })}
+                      className="w-full bg-gradient-to-r from-game-orange to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white rounded-xl py-2 px-4 font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-lg"
+                    >
+                      <Download className="w-4 h-4" />
+                      Export Laporan
+                    </motion.button>
                   </div>
                 </motion.div>
               );

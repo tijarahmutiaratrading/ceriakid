@@ -88,7 +88,7 @@ export default function Pricing() {
 
   return (
     <div className="min-h-screen bg-pattern">
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12">
         {/* Header */}
         <Link to="/">
           <motion.button
@@ -99,13 +99,13 @@ export default function Pricing() {
           </motion.button>
         </Link>
 
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-black mb-4">Paket Langganan</h1>
-          <p className="text-xl text-gray-600">Pilih paket yang sesuai untuk anak-anak Anda</p>
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-5xl font-black mb-4">Paket Langganan</h1>
+          <p className="text-lg md:text-xl text-gray-600">Pilih paket yang sesuai untuk anak-anak Anda</p>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {tiers.map((tier, i) => (
             <motion.div
               key={tier.name}
