@@ -123,7 +123,7 @@ export default function GamesList() {
             </Link>
           </motion.div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          <div className="flex flex-col gap-3">
           {games.map((game, i) => {
             const gameKey = `${ageGroup}-${category}-${i}`;
             const gameProgress = progress[gameKey];
