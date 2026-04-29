@@ -3,7 +3,12 @@ import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 export default function Footer() {
-  const location = useLocation();
+  try {
+    const location = useLocation();
+  } catch {
+    // Not in Router context — return null
+    return null;
+  }
 
   // Landing page has its own built-in footer — hide global footer everywhere
   return null;
