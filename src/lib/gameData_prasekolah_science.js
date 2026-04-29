@@ -100,7 +100,7 @@ export const prasekolah_science = [
     { image: '🌬️', options: ['Angin Kencang','Hujan Lebat','Hari Panas'], answer: 0 },
   ]}},
   { title: 'Bahagian Tumbuhan', type: 'picture_quiz', emoji: '🌱', difficulty: 'easy', gameData: { questions: [
-    { image: '🌱', options: ['Akar','Batang','Daun'], answer: 1 },
+    { image: '🌱', options: ['Akar','Batang','Daun'], answer: 0 },
     { image: '🍂', options: ['Bunga','Daun','Buah'], answer: 1 },
     { image: '🌸', options: ['Daun','Bunga','Biji'], answer: 1 },
     { image: '🍎', options: ['Biji','Batang','Buah'], answer: 2 },

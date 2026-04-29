@@ -2,11 +2,11 @@ export const prasekolah_mathematics = [
   { title: 'Kira 1 hingga 5', type: 'counting', emoji: '🔢', difficulty: 'easy', gameData: { questions: [
     { image: '🍎', options: ['1','2','3'], answer: 0 },
     { image: '🍎🍎', options: ['1','2','3'], answer: 1 },
-    { image: '🍎🍎🍎', options: ['2','3','4'], answer: 1 },
+    { image: '🍎🍎🍎', options: ['1','2','3'], answer: 2 },
     { image: '🍎🍎🍎🍎', options: ['3','4','5'], answer: 1 },
     { image: '🍎🍎🍎🍎🍎', options: ['4','5','6'], answer: 1 },
     { image: '🌟🌟', options: ['1','2','3'], answer: 1 },
-    { image: '🌟🌟🌟', options: ['2','3','4'], answer: 1 },
+    { image: '🌟🌟🌟', options: ['1','2','3'], answer: 1 },
     { image: '🌟🌟🌟🌟', options: ['3','4','5'], answer: 1 },
   ]}},
   { title: 'Kira 6 hingga 10', type: 'counting', emoji: '🔟', difficulty: 'easy', gameData: { questions: [
@@ -17,7 +17,7 @@ export const prasekolah_mathematics = [
     { image: '🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎', options: ['9','10','11'], answer: 1 },
     { image: '⭐⭐⭐⭐⭐⭐', options: ['5','6','7'], answer: 1 },
     { image: '⭐⭐⭐⭐⭐⭐⭐', options: ['6','7','8'], answer: 1 },
-    { image: '⭐⭐⭐⭐⭐⭐⭐⭐', options: ['7','8','9'], answer: 1 },
+    { image: '⭐⭐⭐⭐⭐⭐⭐⭐⭐', options: ['7','8','9'], answer: 1 },
   ]}},
   { title: 'Nombor 1 hingga 10', type: 'number_match', emoji: '1️⃣', difficulty: 'easy', gameData: { questions: [
     { problem: '⭐', options: ['1','2','3'], answer: 0 },
@@ -45,9 +45,9 @@ export const prasekolah_mathematics = [
     { image: '△', options: ['Bulatan','Segi Empat','Segi Tiga'], answer: 2 },
     { image: '▭', options: ['Segiempat Tepat','Segi Empat','Bujur'], answer: 0 },
     { image: '⭐', options: ['Bintang','Bulatan','Segi Tiga'], answer: 0 },
-    { image: '🔶', options: ['Berlian','Heksagon','Segi Empat'], answer: 0 },
+    { image: '🔶', options: ['Heksagon','Berlian','Segi Empat'], answer: 0 },
     { image: '🔷', options: ['Berlian','Bujur','Segi Tiga'], answer: 0 },
-    { image: '🔴', options: ['Bola','Bulatan','Cakera'], answer: 1 },
+    { image: '🔴', options: ['Bulatan','Bola','Cakera'], answer: 0 },
   ]}},
   { title: 'Lebih Besar atau Lebih Kecil', type: 'math_puzzle', emoji: '📏', difficulty: 'easy', gameData: { questions: [
     { problem: '3 atau 5?', options: ['3 lebih besar','5 lebih besar','Sama'], answer: 1 },
@@ -272,7 +272,7 @@ export const prasekolah_mathematics = [
   { title: 'Wang — Duit Syiling dan Nota', type: 'counting', emoji: '💰', difficulty: 'medium', gameData: { questions: [
     { image: '🪙🪙🪙🪙🪙', options: ['40 sen','50 sen','60 sen'], answer: 1 },
     { image: '💵', options: ['RM 1','RM 2','RM 5'], answer: 0 },
-    { image: '💵💵', options: ['RM 2','RM 3','RM 4'], answer: 0 },
+    { image: '💵💵', options: ['RM 1','RM 2','RM 3'], answer: 1 },
     { image: '💵💵💵💵💵', options: ['RM 4','RM 5','RM 6'], answer: 1 },
     { image: '🪙×10', options: ['RM 1','RM 2','RM 3'], answer: 0 },
     { image: '💵+🪙🪙', options: ['RM 1.10','RM 1.20','RM 2.10'], answer: 1 },
@@ -302,8 +302,8 @@ export const prasekolah_mathematics = [
   { title: 'Tambah Tiga Digit Mudah', type: 'math_puzzle', emoji: '➕', difficulty: 'medium', gameData: { questions: [
     { problem: '50+30', options: ['70','80','90'], answer: 0 },
     { problem: '40+40', options: ['70','80','90'], answer: 1 },
-    { problem: '60+20', options: ['70','80','90'], answer: 1 },
-    { problem: '30+50', options: ['70','80','90'], answer: 1 },
+    { problem: '60+20', options: ['70','80','90'], answer: 0 },
+    { problem: '30+50', options: ['70','80','90'], answer: 0 },
     { problem: '25+25', options: ['40','50','60'], answer: 1 },
     { problem: '45+5', options: ['50','60','70'], answer: 0 },
     { problem: '35+15', options: ['45','50','55'], answer: 1 },
