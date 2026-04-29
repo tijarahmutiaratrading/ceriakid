@@ -7,64 +7,67 @@ import PricingCheckout from '@/components/PricingCheckout';
 
 export default function Landing() {
   const [selectedAgeGroup, setSelectedAgeGroup] = useState('prasekolah');
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedTier, setSelectedTier] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedTier, setSelectedTier] = useState(null);
 
-  const tiers = [
-    {
-      name: 'free',
-      nameMY: 'Percuma',
-      price: '0',
-      priceMYR: '0',
-      games: '5',
-      features: [
-        '✅ 5 permainan gratis (tanpa kad kredit)',
-        '✅ Prasekolah saja',
-        '✅ Dwibahasa (BM & EN)',
-        '✅ Tanpa iklan',
-        '❌ Tiada dashboard orang tua',
-        '❌ Tiada sekolah rendah',
-      ],
-      cta: 'Coba Gratis',
-      highlighted: false,
-    },
-    {
-      name: 'premium',
-      nameMY: 'Premium',
-      price: '4.99',
-      priceMYR: '24.90',
-      games: '100+',
-      features: [
-        '✅ 100+ permainan premium',
-        '✅ Prasekolah & Sekolah Rendah',
-        '✅ Semua kategori (BM, EN, Math, Sains)',
-        '✅ Dashboard progres orang tua LENGKAP',
-        '✅ Tanpa iklan',
-        '✅ Update game mingguan',
-        '❌ Hanya 1 anak (Pro untuk 4 anak)',
-      ],
-      cta: 'Langganan Premium',
-      highlighted: true,
-    },
-    {
-      name: 'pro',
-      nameMY: 'Pro (Keluarga)',
-      price: '8.99',
-      priceMYR: '44.90',
-      games: '200+',
-      features: [
-        '✅ 200+ permainan eksklusif',
-        '✅ Untuk 4 anak SEKALIGUS',
-        '✅ Semua kategori + konten khusus',
-        '✅ Laporan pembelajaran bulanan (Email)',
-        '✅ Dukungan prioritas 24/7',
-        '✅ Offline mode (boleh main tanpa internet)',
-        '✅ BEST VALUE: RM11.22 per anak/bulan',
-      ],
-      cta: 'Langganan Pro',
-      highlighted: false,
-    },
-  ];
+    const tiers = [
+      {
+        name: 'free',
+        nameMY: 'Percuma',
+        nameEN: 'Free',
+        price: '0',
+        priceMYR: '0',
+        games: '5',
+        features: [
+          '✅ 5 permainan percuma (tanpa kad kredit)',
+          '✅ Peringkat Prasekolah sahaja',
+          '✅ Dwibahasa (BM & Inggeris)',
+          '✅ Tanpa iklan',
+          '❌ Tanpa dashboard ibu bapa',
+          '❌ Tanpa peringkat Sekolah Rendah',
+        ],
+        cta: 'Coba Gratis',
+        highlighted: false,
+      },
+      {
+        name: 'premium',
+        nameMY: 'Premium',
+        nameEN: 'Premium',
+        price: '4.99',
+        priceMYR: '24.90',
+        games: '100+',
+        features: [
+          '✅ 100+ permainan premium',
+          '✅ Prasekolah & Sekolah Rendah',
+          '✅ Semua mata pelajaran (BM, Inggeris, Matematik, Sains)',
+          '✅ Dashboard progres ibu bapa yang LENGKAP',
+          '✅ Tanpa iklan',
+          '✅ Kemas kini permainan mingguan',
+          '❌ Hanya 1 anak (Pro untuk 4 anak)',
+        ],
+        cta: 'Langganan Premium',
+        highlighted: true,
+      },
+      {
+        name: 'pro',
+        nameMY: 'Pro (Keluarga)',
+        nameEN: 'Pro (Family)',
+        price: '8.99',
+        priceMYR: '44.90',
+        games: '200+',
+        features: [
+          '✅ 200+ permainan eksklusif',
+          '✅ Untuk 4 anak SEKALIGUS',
+          '✅ Semua mata pelajaran + konten khas',
+          '✅ Laporan pembelajaran bulanan (Email)',
+          '✅ Sokongan prioritas 24/7',
+          '✅ Mod luar talian (main tanpa internet)',
+          '✅ NILAI TERBAIK: RM11.22 per anak/bulan',
+        ],
+        cta: 'Langganan Pro',
+        highlighted: false,
+      },
+    ];
 
   const handleSubscribe = (tier) => {
     const user = base44.auth.isAuthenticated();
@@ -100,10 +103,10 @@ export default function Landing() {
           className="space-y-6 mb-12"
         >
           <h1 className="text-5xl md:text-6xl font-black leading-tight">
-            Belajar Jadi <span className="bg-gradient-to-r from-game-purple via-game-pink to-game-orange bg-clip-text text-transparent">Menyenangkan</span>
+            Belajar Sambil <span className="bg-gradient-to-r from-game-purple via-game-pink to-game-orange bg-clip-text text-transparent">Bermain</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            200+ permainan interaktif untuk anak prasekolah & sekolah rendah. Belajar Bahasa Melayu, Inggeris, Matematik & Sains dengan cara yang seru! 🎮
+            200+ permainan interaktif untuk anak prasekolah & sekolah rendah. Belajar BM, Inggeris, Matematik & Sains dengan cara yang seru! 🎮
           </p>
           <div className="flex gap-4 justify-center">
            <a href="#pricing">
@@ -133,13 +136,13 @@ export default function Landing() {
 
       {/* Features */}
       <div className="max-w-7xl mx-auto px-6 py-20">
-        <h2 className="text-4xl font-black text-center mb-12">Kenapa Pilih Jom Belajar?</h2>
+        <h2 className="text-4xl font-black text-center mb-12">Mengapa Pilih Jom Belajar?</h2>
         <div className="grid md:grid-cols-4 gap-6">
           {[
-            { icon: Sparkles, title: '200+ Games', desc: 'Permainan seru untuk semua mata pelajaran' },
-            { icon: Users, title: '2 Tahap Umur', desc: 'Prasekolah & Sekolah Rendah dengan konten disesuaikan' },
-            { icon: Globe, title: 'Dwibahasa', desc: 'Bahasa Melayu & Inggeris dalam setiap game' },
-            { icon: Zap, title: 'Progres Tracking', desc: 'Pantau kemajuan anak dengan dashboard orang tua' },
+            { icon: Sparkles, title: '200+ Permainan', desc: 'Permainan seru untuk semua mata pelajaran' },
+            { icon: Users, title: '2 Peringkat Umur', desc: 'Prasekolah & Sekolah Rendah dengan kandungan yang sesuai' },
+            { icon: Globe, title: 'Dwibahasa', desc: 'Bahasa Melayu & Inggeris dalam setiap permainan' },
+            { icon: Zap, title: 'Jejak Kemajuan', desc: 'Pantau kemajuan anak dengan dashboard ibu bapa' },
           ].map((feature, i) => (
             <motion.div
               key={i}
@@ -161,9 +164,9 @@ export default function Landing() {
         <h2 className="text-4xl font-black text-center mb-12">Apa Kata Ibu Bapa? 💬</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {[
-            { name: 'Ibu Siti', kid: 'Amira (5 tahun)', quote: 'Amira sekarang suka belajar! Sebelum ini nak belajar pun susah, tapi dengan permainan ini dia boleh main sambil belajar. Rating 5 bintang! ⭐⭐⭐⭐⭐', emoji: '👩‍👧' },
-            { name: 'Pak Ahmad', kid: 'Zain (7 tahun)', quote: 'Dashboard orang tua sangat membantu. Saya boleh lihat kemajuan Zain setiap hari. Lama tak jumpa nilai Matematik dia naik! 📈', emoji: '👨‍👦' },
-            { name: 'Ibu Nurul', kid: 'Maya & Hana', quote: 'Pro plan worth it! Dua anak saya boleh main bersama. Suara mereka semakin bagus dalam Bahasa Inggeris. Terima kasih Jom Belajar! 🙏', emoji: '👩‍👧‍👧' },
+            { name: 'Ibu Siti', kid: 'Amira (5 tahun)', quote: 'Amira sekarang suka belajar! Dulu susah nak belajar, tapi dengan permainan ini dia boleh main sambil belajar. Rating 5 bintang! ⭐⭐⭐⭐⭐', emoji: '👩‍👧' },
+            { name: 'Pak Ahmad', kid: 'Zain (7 tahun)', quote: 'Dashboard ibu bapa sangat membantu. Saya boleh lihat kemajuan Zain setiap hari. Lama tak jumpa nilai Matematik dia naik! 📈', emoji: '👨‍👦' },
+            { name: 'Ibu Nurul', kid: 'Maya & Hana', quote: 'Paket Pro sangat bernilai! Dua anak saya boleh main bersama. Kemampuan mereka dalam Bahasa Inggeris semakin bagus. Terima kasih Jom Belajar! 🙏', emoji: '👩‍👧‍👧' },
           ].map((testimonial, i) => (
             <motion.div
               key={i}
@@ -194,9 +197,9 @@ export default function Landing() {
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="grid md:grid-cols-3 gap-8">
           {[
-            { icon: Target, title: 'Kurikulum Selaras', desc: 'Dirancang mengikuti Kurikulum Kementerian Pendidikan Malaysia (KBSR)' },
+            { icon: Target, title: 'Kurikulum Selaras', desc: 'Dirancang mengikuti Kurikulum KBSR Kementerian Pendidikan Malaysia' },
             { icon: Lightbulb, title: 'Terbukti Efektif', desc: '87% ibu bapa nampak peningkatan prestasi akademik dalam 4 minggu' },
-            { icon: Users, title: '10,000+ Keluarga', desc: 'Dipercaya oleh ribuan keluarga Malaysia sejak 2024' },
+            { icon: Users, title: '10,000+ Keluarga', desc: 'Dipercayai oleh ribuan keluarga Malaysia sejak 2024' },
           ].map((signal, i) => (
             <motion.div
               key={i}
@@ -221,7 +224,7 @@ export default function Landing() {
 
           {/* Age Group Selector */}
           <div className="clay rounded-3xl p-6 mb-8 inline-block">
-            <p className="text-sm font-bold text-gray-600 mb-4">Pilih peringkat untuk anak Anda:</p>
+            <p className="text-sm font-bold text-gray-600 mb-4">Pilih peringkat untuk anak Anda</p>
             <div className="flex gap-3">
               <motion.button
                 whileTap={{ scale: 0.95 }}
@@ -328,11 +331,11 @@ export default function Landing() {
           <h2 className="text-3xl font-black text-center mb-8">Soalan Lazim Ibu Bapa 🤔</h2>
           <div className="space-y-4">
             {[
-              { q: 'Adakah aman untuk anak bermain aplikasi ini?', a: '✅ Ya! Tiada iklan, tiada data collection, tiada in-app purchase. Dirancang khusus untuk anak dengan tetap mempertahankan privasi keluarga.' },
-              { q: 'Boleh saya membatalkan langganan kapan saja?', a: '✅ Tentu saja. Pembatalan sekejap saja, tiada penalti atau pertanyaan yang merepotkan.' },
-              { q: 'Adakah ada percubaan gratis?', a: '✅ Paket Percuma memberi anda 5 permainan tanpa kad kredit. Cukup untuk coba-coba dulu!' },
-              { q: 'Berapa lama permainan baru ditambah?', a: '✅ Kami menambah 10-20 permainan baru setiap minggu. Anak takkan bosan!' },
-              { q: 'Pro plan untuk 4 anak - boleh saya tukar anak?', a: '✅ Boleh! Satu akaun untuk keseluruhan keluarga. Setiap anak ada progress sendiri.' },
+              { q: 'Adakah selamat untuk anak bermain?', a: '✅ Ya! Tiada iklan, tiada pengumpulan data, tiada pembelian dalam aplikasi. Dirancang khusus untuk anak dengan menjaga privasi keluarga.' },
+              { q: 'Boleh saya membatalkan langganan kapan saja?', a: '✅ Tentu saja. Pembatalan boleh dilakukan segera, tiada penalti atau pertanyaan yang merepotkan.' },
+              { q: 'Adakah ada percubaan percuma?', a: '✅ Paket Percuma memberi anda 5 permainan tanpa kad kredit. Cukup untuk mencuba dahulu!' },
+              { q: 'Berapa kerap permainan baru ditambah?', a: '✅ Kami menambah 10-20 permainan baru setiap minggu. Anak takkan bosan!' },
+              { q: 'Paket Pro untuk 4 anak - boleh saya tukar anak?', a: '✅ Boleh! Satu akaun untuk seluruh keluarga. Setiap anak mempunyai progres sendiri.' },
             ].map((faq, i) => (
               <div key={i} className="clay rounded-2xl p-6">
                 <p className="font-bold text-lg mb-2">{faq.q}</p>
