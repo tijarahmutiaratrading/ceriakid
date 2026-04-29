@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, TrendingDown, Zap, BookOpen, Share2, Award, Flame, Target, Sparkles, Download } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
+import SubjectBreakdown from '@/components/home/SubjectBreakdown';
 
 const categoryLabels = {
   bahasa_melayu: 'Bahasa Melayu',
@@ -230,6 +231,11 @@ export default function ParentDashboard() {
                         </motion.div>
                       );
                     })}
+                  </div>
+
+                  {/* Subject Breakdown Detailed */}
+                  <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-4 border border-gray-100">
+                    <SubjectBreakdown progress={games} />
                   </div>
 
                   {/* Weak Subjects Alert */}

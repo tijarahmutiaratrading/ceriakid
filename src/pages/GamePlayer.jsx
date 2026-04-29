@@ -11,6 +11,7 @@ import GameHeader from '@/components/game/GameHeader';
 import FeedbackOverlay from '@/components/game/FeedbackOverlay';
 import ScoreScreen from '@/components/game/ScoreScreen';
 import TracingCanvas from '@/components/drawing/TracingCanvas';
+import GameTutorial from '@/components/game/GameTutorial';
 
 export default function GamePlayer() {
   const { category, index } = useParams();
@@ -30,6 +31,7 @@ export default function GamePlayer() {
     selectedIdx: null,
     startTime: Date.now(),
     showTracing: false,
+    showTutorial: true,
   });
 
   // Save progress after game finishes
@@ -100,7 +102,12 @@ export default function GamePlayer() {
       finished: false,
       selectedIdx: null,
       showTracing: false,
+      showTutorial: false,
     });
+  };
+
+  const handleTutorialComplete = () => {
+    setState(prev => ({ ...prev, showTutorial: false }));
   };
 
   const handleTracingComplete = (result) => {
@@ -180,6 +187,14 @@ export default function GamePlayer() {
             </motion.button>
           </Link>
         </motion.div>
+      </div>
+    );
+  }
+
+  if (state.showTutorial && state.currentQ === 0) {
+    return (
+      <div className="min-h-screen bg-pattern">
+        <GameTutorial gameType={game.type} onComplete={handleTutorialComplete} />
       </div>
     );
   }
