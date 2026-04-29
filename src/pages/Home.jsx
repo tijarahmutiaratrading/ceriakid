@@ -10,9 +10,9 @@ import CategoryGrid from '@/components/home/CategoryGrid';
 export default function Home() {
   const { t } = useLang();
   const { isAuthenticated, user } = useAuth();
-  const ageGroupContext = useAgeGroup();
-  const ageGroup = ageGroupContext?.ageGroup || 'prasekolah';
-  const setAgeGroup = ageGroupContext?.setAgeGroup || (() => {});
+  const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
+  const safeAgeGroup = ageGroup || 'prasekolah';
+  const safeToggle = toggleAgeGroup || (() => {});
 
   return (
     <div className="min-h-screen bg-pattern">
@@ -56,10 +56,10 @@ export default function Home() {
             ].map((age) => (
               <motion.button
                 key={age.key}
-                onClick={() => setAgeGroup(age.key)}
+                onClick={() => safeToggle(age.key)}
                 whileTap={{ scale: 0.95 }}
                 className={`flex-1 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
-                  ageGroup === age.key
+                  safeAgeGroup === age.key
                     ? 'bg-game-purple text-white shadow-lg'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
