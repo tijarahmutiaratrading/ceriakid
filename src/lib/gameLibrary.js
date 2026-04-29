@@ -62,8 +62,35 @@ export function clearScores() {
   localStorage.setItem('kidScores', '[]');
 }
 
+/**
+ * Expand a game's questions to at least `targetCount` by cycling through existing questions.
+ * This ensures every game has 50 questions without duplicating logic across data files.
+ */
+function expandGameQuestions(game, targetCount = 50) {
+  const original = game.gameData?.questions;
+  if (!original || original.length === 0) return game;
+  if (original.length >= targetCount) return game;
+
+  const expanded = [...original];
+  let i = 0;
+  while (expanded.length < targetCount) {
+    expanded.push({ ...original[i % original.length] });
+    i++;
+  }
+  return {
+    ...game,
+    gameData: { ...game.gameData, questions: expanded },
+    totalQuestions: targetCount,
+  };
+}
+
+function expandCategoryGames(games, targetCount = 50) {
+  return games.map(g => expandGameQuestions(g, targetCount));
+}
+
 export function getGamesByAgeAndCategory(ageGroup, category) {
-  return gameLibrary[ageGroup]?.[category] || [];
+  const games = gameLibrary[ageGroup]?.[category] || [];
+  return expandCategoryGames(games);
 }
 
 export function getGamesByAge(ageGroup) {
