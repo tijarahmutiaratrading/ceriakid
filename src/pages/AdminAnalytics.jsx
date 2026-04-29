@@ -98,16 +98,14 @@ export default function AdminAnalytics() {
   return (
     <div className="min-h-screen bg-amber-50">
       <div className="max-w-7xl mx-auto px-4 py-8 pb-24">
-        <div className="fixed top-4 left-4 z-40">
-          <Link to="/admin-dashboard">
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className="clay-button rounded-full w-12 h-12 flex items-center justify-center"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </motion.button>
-          </Link>
-        </div>
+        <Link to="/admin-dashboard">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </motion.button>
+        </Link>
 
         <h1 className="text-4xl font-black flex items-center gap-3 text-gray-800 mb-8">
           <TrendingUp className="w-10 h-10 text-game-orange" />
