@@ -113,15 +113,9 @@ export default function Landing() {
           <a href="#faq" className="hover:text-orange-500 transition-colors">Soalan Lazim</a>
         </div>
         <div className="flex items-center gap-3">
-           {isAuthenticated ? (
-             <motion.button whileTap={{ scale: 0.95 }} onClick={() => { base44.auth.logout(); window.location.reload(); }} className="px-5 py-2.5 bg-red-500 text-white rounded-full font-black text-sm shadow-md">
-               Log Keluar
-             </motion.button>
-           ) : (
-             <motion.button whileTap={{ scale: 0.95 }} onClick={() => base44.auth.redirectToLogin('/dashboard')} className="px-5 py-2.5 bg-orange-500 text-white rounded-full font-black text-sm shadow-md">
-               Log Masuk
-             </motion.button>
-           )}
+           <motion.button whileTap={{ scale: 0.95 }} onClick={() => base44.auth.redirectToLogin('/dashboard')} className="px-5 py-2.5 bg-orange-500 text-white rounded-full font-black text-sm shadow-md">
+             Log Masuk
+           </motion.button>
          </div>
       </nav>
 
