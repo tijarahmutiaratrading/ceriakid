@@ -119,7 +119,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -300, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="fixed left-0 top-0 z-50 h-screen w-72 bg-white shadow-2xl pt-6 px-4 overflow-y-auto backdrop-filter-none"
+            className="fixed left-0 top-0 z-50 h-screen w-60 sm:w-72 bg-white shadow-2xl pt-6 px-4 overflow-y-auto backdrop-filter-none"
           >
             {/* Drawer Header */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
