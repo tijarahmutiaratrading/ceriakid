@@ -75,7 +75,7 @@ const avatars = [
 
 export default function Landing() {
   const countdown = useCountdown(15);
-  const [selectedTierForCheckout, setSelectedTierForCheckout] = useState(null);
+  const [selectedTierForCheckout, setSelectedTierForCheckout] = useState('standard');
 
   const scrollToPricing = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
 
@@ -441,29 +441,19 @@ export default function Landing() {
             ))}
           </div>
 
-          {/* Checkout Form */}
-          <AnimatePresence>
-            {selectedTierForCheckout && (
-              <motion.div
-                id="checkout-form"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="mt-10 bg-white border-2 border-orange-200 rounded-3xl p-6 md:p-10 max-w-lg mx-auto shadow-xl"
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className="text-2xl font-black text-gray-900">Daftar & Bayar 🔒</h3>
-                    <p className="text-sm text-gray-400 mt-1">Paket: <span className="font-black text-orange-500 capitalize">
-                      {selectedTierForCheckout === 'asas' ? 'Asas — RM49/tahun' : selectedTierForCheckout === 'standard' ? 'Standard — RM99/tahun' : 'Keluarga — RM199/tahun'}
-                    </span></p>
-                  </div>
-                  <button onClick={() => setSelectedTierForCheckout(null)} className="text-gray-300 hover:text-gray-500 text-2xl font-black">✕</button>
-                </div>
-                <PricingCheckout selectedTier={selectedTierForCheckout} />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Checkout Form - Always visible */}
+          <motion.div
+            id="checkout-form"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="mt-10 bg-white border-2 border-orange-200 rounded-3xl p-6 md:p-10 max-w-lg mx-auto shadow-xl"
+          >
+            <div className="mb-6">
+              <h3 className="text-2xl font-black text-gray-900">Daftar & Bayar 🔒</h3>
+              <p className="text-sm text-gray-400 mt-1">Pilih pakej di bawah dan isi maklumat untuk checkout</p>
+            </div>
+            <PricingCheckout selectedTier={selectedTierForCheckout} onTierChange={setSelectedTierForCheckout} />
+          </motion.div>
 
           {/* Money Back */}
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-10 bg-white border border-green-200 rounded-2xl p-6 text-center max-w-xl mx-auto shadow-sm">

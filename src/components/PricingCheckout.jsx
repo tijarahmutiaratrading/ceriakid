@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
@@ -28,7 +28,7 @@ const TIERS = [
   },
 ];
 
-export default function PricingCheckout({ onClose, selectedTier: initialTier }) {
+export default function PricingCheckout({ onClose, selectedTier: initialTier, onTierChange }) {
   const { isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
@@ -38,6 +38,13 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier }) 
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Sync when parent changes the selected tier (via pricing card buttons)
+  useEffect(() => {
+    if (initialTier && initialTier !== formData.selectedTier) {
+      setFormData(prev => ({ ...prev, selectedTier: initialTier }));
+    }
+  }, [initialTier]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,7 +94,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier }) 
               <motion.label
                 key={tier.name}
                 whileHover={{ scale: 1.01 }}
-                onClick={() => setFormData({ ...formData, selectedTier: tier.name })}
+                onClick={() => { setFormData({ ...formData, selectedTier: tier.name }); onTierChange?.(tier.name); }}
                 className={`relative flex items-center p-4 border-2 rounded-2xl cursor-pointer transition-all ${
                   isSelected ? 'border-game-purple bg-purple-50' : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
