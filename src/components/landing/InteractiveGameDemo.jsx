@@ -60,7 +60,7 @@ export default function InteractiveGameDemo() {
   };
 
   return (
-    <div className="rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-game-yellow via-game-pink to-game-blue aspect-video flex items-center justify-center relative">
+    <div className="rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-game-yellow via-game-pink to-game-blue min-h-[320px] flex items-center justify-center relative py-8 px-4">
       <AnimatePresence mode="wait">
         {!gameStarted ? (
           <motion.div
@@ -70,15 +70,15 @@ export default function InteractiveGameDemo() {
             exit={{ opacity: 0, scale: 0.8 }}
             className="text-center"
           >
-            <div className="text-7xl mb-6 animate-bounce">🎮</div>
-            <p className="text-2xl font-black text-white mb-6">Coba Permainan!</p>
+            <div className="text-6xl mb-4 animate-bounce">🎮</div>
+            <p className="text-xl font-black text-white mb-5">Cuba Permainan Demo!</p>
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleStart}
-              className="px-8 py-3 bg-white text-game-orange rounded-full font-black text-lg shadow-lg"
+              className="px-8 py-3 bg-white text-game-orange rounded-full font-black text-base shadow-lg"
             >
-              Mulai Bermain ✨
+              Mula Bermain ✨
             </motion.button>
           </motion.div>
         ) : showFeedback ? (
@@ -89,11 +89,11 @@ export default function InteractiveGameDemo() {
             exit={{ opacity: 0, scale: 0 }}
             className="text-center"
           >
-            <div className="text-9xl mb-4 animate-bounce">
+            <div className="text-7xl mb-3 animate-bounce">
               {isCorrect ? '🎉' : '😅'}
             </div>
-            <p className="text-3xl font-black text-white">
-              {isCorrect ? 'Betul!' : 'Hampir!'}
+            <p className="text-2xl font-black text-white">
+              {isCorrect ? 'Betul! 🌟' : 'Hampir!'}
             </p>
           </motion.div>
         ) : (
@@ -102,30 +102,30 @@ export default function InteractiveGameDemo() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="text-center w-full px-8"
+            className="text-center w-full max-w-sm mx-auto"
           >
-            <p className="text-white text-sm font-bold mb-4">
+            <p className="text-white text-sm font-bold mb-3">
               Soalan {currentQ + 1}/{questions.length}
             </p>
-            <div className="text-8xl mb-8">{questions[currentQ].emoji}</div>
-            <p className="text-white text-2xl font-black mb-8">
+            <div className="text-6xl mb-4">{questions[currentQ].emoji}</div>
+            <p className="text-white text-xl font-black mb-5">
               {questions[currentQ].question}
             </p>
-            <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto">
+            <div className="grid grid-cols-3 gap-3">
               {questions[currentQ].options.map((option, idx) => (
                 <motion.button
                   key={idx}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleAnswer(idx)}
-                  className="py-4 bg-white text-gray-800 rounded-2xl font-bold text-sm shadow-lg hover:shadow-xl"
+                  className="py-3 bg-white text-gray-800 rounded-2xl font-bold text-sm shadow-lg"
                 >
                   {option}
                 </motion.button>
               ))}
             </div>
-            <p className="text-white text-xs font-bold mt-6 opacity-75">
-              ✨ Senang je! Anak-anak suka permainan macam ni.
+            <p className="text-white text-xs font-bold mt-4 opacity-75">
+              ✨ Anak-anak suka permainan macam ni!
             </p>
           </motion.div>
         )}
