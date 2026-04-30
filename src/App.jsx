@@ -75,6 +75,7 @@ const AuthenticatedApp = () => {
           <Route path="/settings" element={<ClientDashboard />} />
           <Route path="/games-hub" element={<GamesHub />} />
           <Route path="/games-type/:type" element={<GameTypeSelector />} />
+          <Route path="/play-game/:gameId" element={<GamePlayer />} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
           <Route path="/parent-dashboard" element={<ParentDashboard />} />
