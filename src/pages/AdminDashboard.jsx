@@ -51,14 +51,15 @@ export default function AdminDashboard() {
   const totalRevenue = subscriptions
     .filter(s => s.tier !== 'free')
     .reduce((sum, s) => {
-      const price = s.tier === 'premium' ? 24.90 : s.tier === 'pro' ? 44.90 : 0;
+      const price = s.tier === 'asas' ? 49 : s.tier === 'standard' ? 99 : s.tier === 'keluarga' ? 199 : 0;
       return sum + price;
     }, 0);
 
   const tierBreakdown = {
     free: subscriptions.filter(s => s.tier === 'free').length,
-    premium: subscriptions.filter(s => s.tier === 'premium').length,
-    pro: subscriptions.filter(s => s.tier === 'pro').length,
+    asas: subscriptions.filter(s => s.tier === 'asas').length,
+    standard: subscriptions.filter(s => s.tier === 'standard').length,
+    keluarga: subscriptions.filter(s => s.tier === 'keluarga').length,
   };
 
   return (
@@ -80,7 +81,7 @@ export default function AdminDashboard() {
           {[
             { label: 'Total Pembeli', value: subscriptions.length, icon: '👥' },
             { label: 'Pendapatan (RM)', value: totalRevenue.toFixed(0), icon: '💰' },
-            { label: 'Premium/Pro', value: (tierBreakdown.premium + tierBreakdown.pro), icon: '💎' },
+            { label: 'Berbayar (Asas+Std+Kel)', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎' },
           ].map((stat, i) => (
             <motion.div
               key={i}
@@ -104,9 +105,10 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 { label: 'Percuma', value: tierBreakdown.free, color: 'bg-gray-100', textColor: 'text-gray-700' },
-                { label: 'Premium', value: tierBreakdown.premium, color: 'bg-blue-100', textColor: 'text-blue-700' },
-                { label: 'Pro', value: tierBreakdown.pro, color: 'bg-purple-100', textColor: 'text-purple-700' },
-                { label: 'Total Revenue', value: `RM ${totalRevenue.toFixed(2)}`, color: 'bg-green-100', textColor: 'text-green-700' },
+                { label: 'Asas (RM49)', value: tierBreakdown.asas, color: 'bg-green-100', textColor: 'text-green-700' },
+                { label: 'Standard (RM99)', value: tierBreakdown.standard, color: 'bg-blue-100', textColor: 'text-blue-700' },
+                { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, color: 'bg-purple-100', textColor: 'text-purple-700' },
+                { label: 'Total Revenue', value: `RM ${totalRevenue.toFixed(2)}`, color: 'bg-orange-100', textColor: 'text-orange-700' },
               ].map((item, idx) => (
                 <motion.div
                   key={idx}
@@ -143,10 +145,11 @@ export default function AdminDashboard() {
                       <td className="py-2 px-3">
                         <span className={`px-2 py-1 rounded-full text-xs font-bold ${
                           sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
-                          sub.tier === 'premium' ? 'bg-blue-200 text-blue-700' :
+                          sub.tier === 'asas' ? 'bg-green-200 text-green-700' :
+                          sub.tier === 'standard' ? 'bg-blue-200 text-blue-700' :
                           'bg-purple-200 text-purple-700'
                         }`}>
-                          {sub.tier === 'free' ? 'Percuma' : sub.tier === 'premium' ? 'Premium' : 'Pro'}
+                          {sub.tier === 'free' ? 'Percuma' : sub.tier === 'asas' ? 'Asas' : sub.tier === 'standard' ? 'Standard' : 'Keluarga'}
                         </span>
                       </td>
                       <td className="py-2 px-3">
