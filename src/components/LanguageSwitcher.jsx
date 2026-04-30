@@ -41,10 +41,10 @@ export default function LanguageSwitcher() {
               className="fixed inset-0"
             />
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              className="absolute top-full mt-2 right-0 bg-white border-2 border-game-purple/20 rounded-2xl shadow-lg overflow-hidden w-56"
+              exit={{ opacity: 0, y: 8 }}
+              className="absolute bottom-full mb-2 right-0 bg-white border-2 border-game-purple/20 rounded-2xl shadow-lg overflow-hidden w-56"
             >
               {languages.map(l => (
                 <motion.button
