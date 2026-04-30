@@ -42,7 +42,7 @@ export default function HamburgerMenu() {
       {/* Menu Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-50 p-2 rounded-full bg-game-purple text-white shadow-lg"
+        className="fixed top-3 left-3 z-50 p-2 rounded-full bg-game-purple text-white shadow-lg"
         whileTap={{ scale: 0.9 }}
         whileHover={{ scale: 1.05 }}
       >
