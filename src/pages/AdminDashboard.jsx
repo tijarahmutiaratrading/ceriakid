@@ -20,9 +20,9 @@ const defaultSettings = {
 
 function FieldGroup({ label, hint, children }) {
   return (
-    <div className="mb-5">
-      <label className="block text-sm font-black text-gray-800 mb-1">{label}</label>
-      {hint && <p className="text-xs text-gray-500 mb-2">{hint}</p>}
+    <div className="mb-6">
+      <label className="block text-sm font-black text-white mb-2">{label}</label>
+      {hint && <p className="text-xs text-gray-400 mb-3">{hint}</p>}
       {children}
     </div>
   );
@@ -37,9 +37,9 @@ function SecretInput({ value, onChange, placeholder }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 pr-12 text-sm font-mono focus:outline-none focus:border-game-purple transition-all"
+        className="w-full border border-white/20 bg-white/10 rounded-xl px-4 py-3 pr-12 text-sm font-mono text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:bg-white/15 transition-all"
       />
-      <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700">
+      <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300">
         {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
       </button>
     </div>
@@ -53,7 +53,7 @@ function TextInput({ value, onChange, placeholder }) {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-game-purple transition-all"
+      className="w-full border border-white/20 bg-white/10 rounded-xl px-4 py-3 text-sm font-mono text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:bg-white/15 transition-all"
     />
   );
 }
@@ -152,38 +152,34 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-game-purple/5 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <AppHeader />
-      <div className="max-w-4xl mx-auto px-4 py-6 pb-24">
+      <div className="max-w-5xl mx-auto px-4 py-8 pb-24">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Link to="/">
-            <motion.button whileTap={{ scale: 0.9 }} className="clay-button rounded-full w-12 h-12 flex items-center justify-center">
-              <ArrowLeft className="w-6 h-6" />
-            </motion.button>
-          </Link>
-          <div>
-            <h1 className="text-4xl font-black text-gray-900">🎛️ Admin Dashboard</h1>
-            <p className="text-gray-600 text-sm">Analytics, Settings & Configurations</p>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+          <div className="flex items-center gap-4 mb-2">
+            <div className="text-4xl">🎛️</div>
+            <h1 className="text-5xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Admin Dashboard</h1>
           </div>
-        </div>
+          <p className="text-purple-200 text-sm font-semibold ml-16">Real-time analytics & platform configuration</p>
+        </motion.div>
 
         {/* Main Tabs */}
-        <div className="flex gap-2 mb-8 bg-white border-2 border-gray-100 rounded-2xl p-1.5 shadow-sm">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-3 mb-10 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-2 shadow-2xl">
           {tabs.map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all ${
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all ${
                 activeTab === tab.key
-                  ? 'bg-game-purple text-white shadow-md'
-                  : 'text-gray-600 hover:bg-gray-50'
+                  ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg'
+                  : 'text-gray-300 hover:bg-white/10'
               }`}
             >
               {tab.icon} {tab.label}
             </button>
           ))}
-        </div>
+        </motion.div>
 
         {/* ═══ ANALYTICS TAB ═══ */}
         {activeTab === 'analytics' && (
@@ -192,44 +188,49 @@ export default function AdminDashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-3 gap-4 mb-12"
+              className="grid grid-cols-3 gap-5 mb-12"
             >
               {[
-                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥' },
-                { label: 'Pendapatan (RM)', value: totalRevenue.toFixed(0), icon: '💰' },
-                { label: 'Berbayar (Asas+Std+Kel)', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎' },
+                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', gradient: 'from-blue-500 to-cyan-500' },
+                { label: 'Pendapatan (RM)', value: totalRevenue.toFixed(0), icon: '💰', gradient: 'from-green-500 to-emerald-500' },
+                { label: 'Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', gradient: 'from-purple-500 to-pink-500' },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-white rounded-2xl p-4 text-center border-2 border-game-purple/20 shadow-md"
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className={`bg-gradient-to-br ${stat.gradient} rounded-2xl p-6 text-white shadow-xl border border-white/20`}
                 >
-                  <p className="text-2xl mb-2">{stat.icon}</p>
-                  <p className="text-2xl font-black text-game-purple">{stat.value}</p>
-                  <p className="text-xs text-gray-600 font-bold mt-1">{stat.label}</p>
+                  <p className="text-3xl mb-3">{stat.icon}</p>
+                  <p className="text-4xl font-black mb-2">{stat.value}</p>
+                  <p className="text-sm font-semibold opacity-90">{stat.label}</p>
                 </motion.div>
               ))}
             </motion.div>
 
             {/* Sales Breakdown */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-12">
-              <h2 className="text-xl font-black text-gray-800 mb-4">💳 Jualan</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <h2 className="text-2xl font-black text-white mb-6">💳 Jualan Mengikut Pelan</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { label: 'Percuma', value: tierBreakdown.free, color: 'bg-gray-100', textColor: 'text-gray-700' },
-                  { label: 'Asas (RM49)', value: tierBreakdown.asas, color: 'bg-green-100', textColor: 'text-green-700' },
-                  { label: 'Standard (RM99)', value: tierBreakdown.standard, color: 'bg-blue-100', textColor: 'text-blue-700' },
-                  { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, color: 'bg-purple-100', textColor: 'text-purple-700' },
+                  { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', gradient: 'from-gray-600 to-gray-700' },
+                  { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', gradient: 'from-green-600 to-emerald-600' },
+                  { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', gradient: 'from-blue-600 to-cyan-600' },
+                  { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', gradient: 'from-purple-600 to-pink-600' },
                 ].map((item, idx) => (
                   <motion.div
                     key={idx}
-                    whileHover={{ scale: 1.02, y: -4 }}
-                    className={`${item.color} rounded-2xl p-5 border-2 border-amber-200 shadow-md text-center`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 + idx * 0.08 }}
+                    whileHover={{ scale: 1.05, y: -4 }}
+                    className={`bg-gradient-to-br ${item.gradient} rounded-2xl p-6 text-white text-center border border-white/10 shadow-xl`}
                   >
-                    <p className="text-sm text-gray-600 font-bold mb-2">{item.label}</p>
-                    <p className={`text-3xl font-black ${item.textColor}`}>{item.value}</p>
+                    <p className="text-3xl mb-2">{item.icon}</p>
+                    <p className="text-sm font-semibold opacity-90 mb-2">{item.label}</p>
+                    <p className="text-4xl font-black">{item.value}</p>
                   </motion.div>
                 ))}
               </div>
@@ -237,47 +238,47 @@ export default function AdminDashboard() {
 
             {/* Customer Database */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-              <h2 className="text-xl font-black text-gray-800 mb-4">📋 Database Pelanggan</h2>
+              <h2 className="text-2xl font-black text-white mb-6">📋 Database Pelanggan</h2>
               <motion.div
-                whileHover={{ scale: 1.01, y: -2 }}
-                className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-md overflow-x-auto"
+                whileHover={{ y: -4 }}
+                className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl overflow-x-auto"
               >
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b-2 border-gray-300">
-                      <th className="text-left py-2 px-3 font-bold text-gray-800">Email</th>
-                      <th className="text-left py-2 px-3 font-bold text-gray-800">Paket</th>
-                      <th className="text-left py-2 px-3 font-bold text-gray-800">Status</th>
-                      <th className="text-left py-2 px-3 font-bold text-gray-800">Tarikh</th>
+                    <tr className="border-b border-white/10">
+                      <th className="text-left py-3 px-4 font-bold text-cyan-300">Email</th>
+                      <th className="text-left py-3 px-4 font-bold text-cyan-300">Paket</th>
+                      <th className="text-left py-3 px-4 font-bold text-cyan-300">Status</th>
+                      <th className="text-left py-3 px-4 font-bold text-cyan-300">Tarikh</th>
                     </tr>
                   </thead>
                   <tbody>
                     {subscriptions.slice(0, 10).map((sub) => (
-                      <tr key={sub.id} className="border-b border-gray-200 hover:bg-gray-50">
-                        <td className="py-2 px-3 text-xs">{sub.email}</td>
-                        <td className="py-2 px-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                            sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
-                            sub.tier === 'asas' ? 'bg-green-200 text-green-700' :
-                            sub.tier === 'standard' ? 'bg-blue-200 text-blue-700' :
-                            'bg-purple-200 text-purple-700'
+                      <tr key={sub.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                        <td className="py-3 px-4 text-xs text-gray-300">{sub.email}</td>
+                        <td className="py-3 px-4">
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                            sub.tier === 'free' ? 'bg-gray-500/30 text-gray-300' :
+                            sub.tier === 'asas' ? 'bg-green-500/30 text-green-300' :
+                            sub.tier === 'standard' ? 'bg-blue-500/30 text-blue-300' :
+                            'bg-purple-500/30 text-purple-300'
                           }`}>
                             {sub.tier === 'free' ? 'Percuma' : sub.tier === 'asas' ? 'Asas' : sub.tier === 'standard' ? 'Standard' : 'Keluarga'}
                           </span>
                         </td>
-                        <td className="py-2 px-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                            sub.status === 'active' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'
+                        <td className="py-3 px-4">
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                            sub.status === 'active' ? 'bg-green-500/30 text-green-300' : 'bg-red-500/30 text-red-300'
                           }`}>
                             {sub.status === 'active' ? '✓ Aktif' : '✕ Batal'}
                           </span>
                         </td>
-                        <td className="py-2 px-3 text-xs text-gray-600">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
+                        <td className="py-3 px-4 text-xs text-gray-400">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <p className="text-xs text-gray-500 mt-4 text-center">Menunjukkan {Math.min(10, subscriptions.length)} daripada {subscriptions.length} pelanggan</p>
+                <p className="text-xs text-gray-400 mt-4 text-center">Menunjukkan {Math.min(10, subscriptions.length)} daripada {subscriptions.length} pelanggan</p>
               </motion.div>
             </motion.div>
           </>
@@ -287,32 +288,32 @@ export default function AdminDashboard() {
         {activeTab === 'settings' && (
           <>
             {/* Settings Sub-tabs */}
-            <div className="flex gap-2 mb-8 bg-white border-2 border-gray-100 rounded-2xl p-1.5 shadow-sm">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3 mb-10 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-2 shadow-2xl">
               {settingsTabs.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setSettingsTab(tab.key)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all ${
                     settingsTab === tab.key
-                      ? 'bg-game-purple text-white shadow-md'
-                      : 'text-gray-600 hover:bg-gray-50'
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                      : 'text-gray-300 hover:bg-white/10'
                   }`}
                 >
                   {tab.icon} {tab.label}
                 </button>
               ))}
-            </div>
+            </motion.div>
 
             {/* Facebook Pixel */}
             {settingsTab === 'pixel' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-7 border-2 border-gray-100 shadow-md mb-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-                    <Facebook className="w-5 h-5 text-white" />
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl mb-8">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <Facebook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-gray-900">Meta / Facebook Pixel</h2>
-                    <p className="text-xs text-gray-500">Untuk tracking FB Ads & conversion events</p>
+                    <h2 className="font-black text-white text-lg">Meta / Facebook Pixel</h2>
+                    <p className="text-xs text-gray-400">Untuk tracking FB Ads & conversion events</p>
                   </div>
                 </div>
 
@@ -324,7 +325,7 @@ export default function AdminDashboard() {
                   <SecretInput value={settings.fb_access_token} onChange={v => set('fb_access_token', v)} placeholder="EAABsbCS1iHg..." />
                 </FieldGroup>
 
-                <div className="mt-4 bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
+                <div className="mt-6 bg-blue-500/20 border border-blue-400/30 rounded-xl p-4 text-sm text-blue-200">
                   <p className="font-black mb-1">📌 Cara pasang Pixel ID:</p>
                   <ol className="list-decimal list-inside space-y-1 text-xs leading-relaxed">
                     <li>Pergi ke <strong>Meta Business Suite → Events Manager</strong></li>
@@ -338,14 +339,14 @@ export default function AdminDashboard() {
 
             {/* Chip Payment */}
             {settingsTab === 'chip' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-7 border-2 border-gray-100 shadow-md mb-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center">
-                    <CreditCard className="w-5 h-5 text-white" />
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl mb-8">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                    <CreditCard className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-gray-900">Chip Payment Gateway</h2>
-                    <p className="text-xs text-gray-500">FPX, kad kredit & e-wallet Malaysia</p>
+                    <h2 className="font-black text-white text-lg">Chip Payment Gateway</h2>
+                    <p className="text-xs text-gray-400">FPX, kad kredit & e-wallet Malaysia</p>
                   </div>
                 </div>
 
@@ -377,7 +378,7 @@ export default function AdminDashboard() {
                   <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="sk_live_..." />
                 </FieldGroup>
 
-                <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4 text-sm text-green-800">
+                <div className="mt-6 bg-green-500/20 border border-green-400/30 rounded-xl p-4 text-sm text-green-200">
                   <p className="font-black mb-1">📌 Cara dapatkan Chip credentials:</p>
                   <ol className="list-decimal list-inside space-y-1 text-xs leading-relaxed">
                     <li>Log in ke <strong>merchant.chip-in.asia</strong></li>
@@ -391,14 +392,14 @@ export default function AdminDashboard() {
 
             {/* Webhook */}
             {settingsTab === 'webhook' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-7 border-2 border-gray-100 shadow-md mb-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center">
-                    <Webhook className="w-5 h-5 text-white" />
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl mb-8">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+                    <Webhook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-gray-900">Webhook Settings</h2>
-                    <p className="text-xs text-gray-500">Untuk receive payment callbacks dari Chip</p>
+                    <h2 className="font-black text-white text-lg">Webhook Settings</h2>
+                    <p className="text-xs text-gray-400">Untuk receive payment callbacks dari Chip</p>
                   </div>
                 </div>
 
@@ -425,7 +426,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-sm text-purple-800">
+                <div className="bg-purple-500/20 border border-purple-400/30 rounded-xl p-4 text-sm text-purple-200">
                   <p className="font-black mb-1">📌 Events yang perlu didaftarkan:</p>
                   <div className="space-y-1 text-xs">
                     {['payment.paid', 'payment.pending', 'payment.expired', 'payment.cancelled'].map(event => (
@@ -446,10 +447,10 @@ export default function AdminDashboard() {
                 whileTap={{ scale: 0.97 }}
                 onClick={handleSave}
                 disabled={saving}
-                className={`w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-lg transition-all ${
+                className={`w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-2xl transition-all ${
                   saved
-                    ? 'bg-green-500 text-white'
-                    : 'bg-gradient-to-r from-game-purple to-game-blue text-white hover:shadow-xl'
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
+                    : 'bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-white hover:shadow-2xl'
                 }`}
               >
                 {saving ? (
@@ -460,7 +461,7 @@ export default function AdminDashboard() {
                   <><Save className="w-5 h-5" /> Simpan Tetapan</>
                 )}
               </motion.button>
-              <p className="text-center text-xs text-gray-400 mt-3">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
+              <p className="text-center text-xs text-gray-400 mt-4">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
             </motion.div>
           </>
         )}
