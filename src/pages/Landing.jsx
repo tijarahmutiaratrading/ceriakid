@@ -94,7 +94,6 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen font-nunito" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fff3e6 40%, #fff9f0 100%)' }}>
-      <AppHeader />
 
 
 
