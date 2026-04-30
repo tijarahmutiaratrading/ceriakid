@@ -14,7 +14,7 @@ export default function BottomNavigation() {
   const location = useLocation();
 
   // Don't show nav on landing page only
-  if (location.pathname === '/landing' || location.pathname === '/') {
+  if (location.pathname === '/landing') {
     return null;
   }
 
