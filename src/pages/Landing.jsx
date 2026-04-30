@@ -146,9 +146,9 @@ export default function Landing() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
             onClick={scrollToPricing}
-            className="px-10 py-5 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-2xl font-black text-xl shadow-2xl flex items-center gap-3"
+            className="px-7 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-2xl font-black text-lg shadow-2xl flex items-center gap-2"
           >
-            🎮 Pilih Pelan Sekarang <ArrowRight className="w-6 h-6" />
+            🎮 Pilih Pelan Sekarang <ArrowRight className="w-5 h-5" />
           </motion.button>
           <p className="text-sm text-gray-500 font-semibold">✅ Setup dalam 2 minit &nbsp;•&nbsp; ✅ Jaminan Wang Balik 30 Hari &nbsp;•&nbsp; ✅ Cancel bila-bila</p>
         </motion.div>
