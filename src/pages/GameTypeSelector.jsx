@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useParams } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
+import { playSound } from '@/lib/soundManager';
 
 const gameTypeInfo = {
   memory_game: { emoji: '🧠', name: 'Permainan Ingatan', color: 'from-purple-400 to-pink-400' },
@@ -86,7 +87,7 @@ export default function GameTypeSelector() {
                 transition={{ delay: idx * 0.05 }}
                 whileHover={{ y: -4 }}
               >
-                <Link to={`/play-game/${game.id}`} className="block h-full">
+                <Link to={`/play-game/${game.id}`} onClick={() => playSound('click')} className="block h-full">
                   <div className={`bg-gradient-to-br ${gameInfo.color} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all h-full text-white flex flex-col`}>
                     <h3 className="text-lg font-black mb-2">{game.title}</h3>
                     <p className="text-sm font-semibold opacity-90 flex-1">{game.description}</p>

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Zap, Brain, BookOpen, Copy, Gamepad2, Scroll, Rocket, Pen } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import { playSound } from '@/lib/soundManager';
 
 export default function GamesHub() {
   const games = [
@@ -111,7 +112,7 @@ export default function GamesHub() {
                 whileHover={{ y: -8 }}
                 className="h-full"
               >
-                <Link to={`/games-type/${game.gameType}`} className="h-full block">
+                <Link to={`/games-type/${game.gameType}`} onClick={() => playSound('click')} className="h-full block">
                   <div className={`bg-gradient-to-br ${game.color} rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all h-full flex flex-col justify-between text-white`}>
                     <div>
                       <div className="text-4xl mb-3">{game.title.split(' ')[0]}</div>
