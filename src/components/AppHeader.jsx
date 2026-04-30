@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowLeft } from 'lucide-react';
+import { Menu, X, ArrowLeft, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
-import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [expandedSection, setExpandedSection] = useState(null);
   const { isAuthenticated, user } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
@@ -17,50 +17,45 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
 
+  const subjectItems = [
+    { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
+    { path: '/games/english', emoji: '🇬🇧', label: 'English' },
+    { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
+    { path: '/games/science', emoji: '🔬', label: 'Sains' },
+    ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
+  ];
+
+  const otherItems = [
+    { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
+    { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
+    { path: '/friends', emoji: '👥', label: 'Kawan' },
+    { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
+  ];
+
   // Determine menu based on user role and location
-  let navItems = [];
+  let topItems = [];
+  let showSubjectsSection = true;
+  let adminItems = [];
 
   if (isLanding && !isAuthenticated) {
-    // Public/Landing page menu
-    navItems = [
+    topItems = [
       { path: '/', emoji: '🏠', label: 'Rumah' },
       { path: '#features', emoji: '⭐', label: 'Ciri-ciri', external: true },
       { path: '#testimonials', emoji: '💬', label: 'Testimoni', external: true },
       { path: '#pricing', emoji: '💰', label: 'Harga', external: true },
       { path: '#faq', emoji: '❓', label: 'Soalan Lazim', external: true },
     ];
-  } else if (isAdmin) {
-    // Admin menu + full client access
-    navItems = [
-      { path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' },
-      { path: '/admin-dashboard', emoji: '📊', label: 'Dashboard Admin' },
-      { path: '/admin-settings', emoji: '⚙️', label: 'Settings' },
-      { path: '/', emoji: '🏠', label: 'Rumah' },
-      { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
-      { path: '/games/english', emoji: '🇬🇧', label: 'English' },
-      { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
-      { path: '/games/science', emoji: '🔬', label: 'Sains' },
-      ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
-      { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
-      { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
-      { path: '/friends', emoji: '👥', label: 'Kawan' },
-      { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
-    ];
-  } else if (isAuthenticated) {
-    // Client menu
-    navItems = [
-      { path: '/', emoji: '🏠', label: 'Rumah' },
-      { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
-      { path: '/games/english', emoji: '🇬🇧', label: 'English' },
-      { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
-      { path: '/games/science', emoji: '🔬', label: 'Sains' },
-      ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
-      { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
-      { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
-      { path: '/friends', emoji: '👥', label: 'Kawan' },
-      { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
-      ...(isAdmin ? [{ path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' }] : []),
-    ];
+    showSubjectsSection = false;
+  } else {
+    topItems = [{ path: '/', emoji: '🏠', label: 'Rumah' }];
+    
+    if (isAdmin) {
+      adminItems = [
+        { path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' },
+        { path: '/admin-dashboard', emoji: '📊', label: 'Dashboard Admin' },
+        { path: '/admin-settings', emoji: '⚙️', label: 'Settings' },
+      ];
+    }
   }
 
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
@@ -136,8 +131,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               </button>
             </div>
 
-            <nav className="space-y-2">
-              {navItems.map((item) => (
+            <nav className="space-y-3">
+              {/* Top Items */}
+              {topItems.map((item) => (
                 item.external ? (
                   <a
                     key={item.path}
@@ -149,11 +145,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     <span>{item.label}</span>
                   </a>
                 ) : (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsOpen(false)}
-                  >
+                  <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                     <motion.button
                       whileHover={{ x: 8 }}
                       whileTap={{ scale: 0.95 }}
@@ -169,6 +161,96 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   </Link>
                 )
               ))}
+
+              {/* Subjects Section */}
+              {showSubjectsSection && (
+                <>
+                  <button
+                    onClick={() => setExpandedSection(expandedSection === 'subjects' ? null : 'subjects')}
+                    className="w-full text-left flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all border-2 border-game-purple/20"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">📚</span>
+                      <span>Subjek</span>
+                    </div>
+                    <motion.div
+                      animate={{ rotate: expandedSection === 'subjects' ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronDown className="w-4 h-4 text-game-purple" />
+                    </motion.div>
+                  </button>
+
+                  <AnimatePresence>
+                    {expandedSection === 'subjects' && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="space-y-1 pl-4"
+                      >
+                        {subjectItems.map((item) => (
+                          <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
+                            <motion.button
+                              whileHover={{ x: 8 }}
+                              whileTap={{ scale: 0.95 }}
+                              className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                                isActive(item.path)
+                                  ? 'bg-game-purple text-white shadow-lg'
+                                  : 'text-gray-700 hover:bg-gray-100'
+                              }`}
+                            >
+                              <span className="text-xl">{item.emoji}</span>
+                              <span>{item.label}</span>
+                            </motion.button>
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </>
+              )}
+
+              {/* Other Items */}
+              {otherItems.map((item) => (
+                <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
+                  <motion.button
+                    whileHover={{ x: 8 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                      isActive(item.path)
+                        ? 'bg-game-purple text-white shadow-lg'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    <span className="text-xl">{item.emoji}</span>
+                    <span>{item.label}</span>
+                  </motion.button>
+                </Link>
+              ))}
+
+              {/* Admin Items */}
+              {adminItems.length > 0 && (
+                <>
+                  <div className="border-t border-gray-200 my-2" />
+                  {adminItems.map((item) => (
+                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
+                      <motion.button
+                        whileHover={{ x: 8 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                          isActive(item.path)
+                            ? 'bg-red-500 text-white shadow-lg'
+                            : 'text-red-600 hover:bg-red-50'
+                        }`}
+                      >
+                        <span className="text-xl">{item.emoji}</span>
+                        <span>{item.label}</span>
+                      </motion.button>
+                    </Link>
+                  ))}
+                </>
+              )}
             </nav>
           </motion.div>
         )}
