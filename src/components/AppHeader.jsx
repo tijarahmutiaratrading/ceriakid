@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 
-export default function AppHeader({ showBack = false, backTo = '/', title = null }) {
+export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated, user } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
@@ -14,6 +14,9 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
   const isAdmin = user?.role === 'admin';
   const isLanding = location.pathname === '/landing' || location.pathname === '/';
   const isHeaderVisible = useScrollDirection();
+  
+  // Auto-show back button on non-home pages
+  const shouldShowBack = showBack !== null ? showBack : !isLanding;
 
   // Determine menu based on user role and location
   let navItems = [];
@@ -93,7 +96,7 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
           </Link>
 
           {/* Right: Back button or spacer */}
-          {showBack ? (
+          {shouldShowBack ? (
             <Link to={backTo}>
               <button className="p-2 flex items-center justify-center text-white hover:opacity-75 transition-opacity">
                 <ArrowLeft className="w-6 h-6" />
