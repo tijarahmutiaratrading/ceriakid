@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function InteractiveGameDemo() {
-  const [gameStarted, setGameStarted] = useState(false);
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -43,9 +42,8 @@ export default function InteractiveGameDemo() {
         setCurrentQ(currentQ + 1);
         setShowFeedback(false);
       } else {
-        // Game complete
+        // Game complete - reset
         setTimeout(() => {
-          setGameStarted(false);
           setCurrentQ(0);
           setScore(0);
         }, 2000);
