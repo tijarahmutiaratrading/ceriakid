@@ -69,9 +69,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     
     if (isAdmin) {
       adminItems = [
-        { path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' },
-        { path: '/admin-dashboard', emoji: '📊', label: 'Dashboard Admin' },
-        { path: '/admin-settings', emoji: '⚙️', label: 'Settings' },
+        { path: '/admin-dashboard', emoji: '🎛️', label: 'Admin Dashboard' },
       ];
     }
   }
