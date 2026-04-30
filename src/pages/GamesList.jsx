@@ -135,7 +135,7 @@ export default function GamesList() {
 
     // Legacy tiers
     if (userTier === 'pro') return false;
-    if (userTier === 'premium') return globalIdx >= 100;
+    if (userTier === 'premium') return false;
 
     return globalIdx >= 5; // free
   }, [isAuthenticated, userTier, ageGroup]);
