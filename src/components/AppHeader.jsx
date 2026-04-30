@@ -7,6 +7,7 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [expandedAgeGroup, setExpandedAgeGroup] = useState(null);
   const { isAuthenticated, user } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
@@ -16,12 +17,30 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
 
-  const subjectItems = [
-    { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
-    { path: '/games/english', emoji: '🇬🇧', label: 'English' },
-    { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
-    { path: '/games/science', emoji: '🔬', label: 'Sains' },
-    ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
+  const ageGroups = [
+    {
+      key: 'prasekolah',
+      label: 'Pra Sekolah',
+      emoji: '🎨',
+      subjects: [
+        { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
+        { path: '/games/english', emoji: '🇬🇧', label: 'English' },
+        { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
+        { path: '/games/science', emoji: '🔬', label: 'Sains' },
+      ]
+    },
+    {
+      key: 'sekolah_rendah',
+      label: 'Sekolah Rendah',
+      emoji: '📚',
+      subjects: [
+        { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
+        { path: '/games/english', emoji: '🇬🇧', label: 'English' },
+        { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
+        { path: '/games/science', emoji: '🔬', label: 'Sains' },
+        { path: '/games/jawi', emoji: '🕌', label: 'Jawi' },
+      ]
+    }
   ];
 
   const otherItems = [
@@ -163,25 +182,59 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                  )
               ))}
 
-              {/* Subjects Section */}
+              {/* Age Groups & Subjects Section */}
               {showSubjectsSection && (
-                <div className="space-y-1">
-                  {subjectItems.map((item) => (
-                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
-                      <motion.button
+                <div className="space-y-2">
+                  {ageGroups.map((ageGroupItem) => (
+                    <div key={ageGroupItem.key} className="space-y-1">
+                      {/* Age Group Header */}
+                      <button
                         type="button"
-                        whileHover={{ x: 8 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
-                          isActive(item.path)
-                            ? 'bg-game-purple text-white shadow-lg'
-                            : 'text-gray-700 hover:bg-gray-100'
-                        }`}
+                        onClick={() => setExpandedAgeGroup(expandedAgeGroup === ageGroupItem.key ? null : ageGroupItem.key)}
+                        className="w-full text-left flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all border-2 border-game-purple/20"
                       >
-                        <span className="text-xl">{item.emoji}</span>
-                        <span>{item.label}</span>
-                      </motion.button>
-                    </Link>
+                        <div className="flex items-center gap-3">
+                          <span className="text-xl">{ageGroupItem.emoji}</span>
+                          <span>{ageGroupItem.label}</span>
+                        </div>
+                        <motion.div
+                          animate={{ rotate: expandedAgeGroup === ageGroupItem.key ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ChevronDown className="w-4 h-4 text-game-purple" />
+                        </motion.div>
+                      </button>
+
+                      {/* Subjects */}
+                      <AnimatePresence>
+                        {expandedAgeGroup === ageGroupItem.key && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="space-y-1 pl-4 overflow-hidden"
+                          >
+                            {ageGroupItem.subjects.map((item) => (
+                              <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
+                                <motion.button
+                                  type="button"
+                                  whileHover={{ x: 8 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                                    isActive(item.path)
+                                      ? 'bg-game-purple text-white shadow-lg'
+                                      : 'text-gray-700 hover:bg-gray-100'
+                                  }`}
+                                >
+                                  <span className="text-xl">{item.emoji}</span>
+                                  <span>{item.label}</span>
+                                </motion.button>
+                              </Link>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   ))}
                 </div>
               )}
