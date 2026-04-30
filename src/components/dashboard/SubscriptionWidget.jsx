@@ -41,6 +41,16 @@ export default function SubscriptionWidget({ userEmail }) {
   };
 
   const isExpired = subscription?.currentPeriodEnd && new Date(subscription.currentPeriodEnd) < new Date();
+  
+  const getDaysRemaining = () => {
+    if (!subscription?.currentPeriodEnd) return null;
+    const endDate = new Date(subscription.currentPeriodEnd);
+    const today = new Date();
+    const daysLeft = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+    return daysLeft > 0 ? daysLeft : 0;
+  };
+
+  const daysRemaining = getDaysRemaining();
 
   return (
     <motion.div
@@ -61,9 +71,14 @@ export default function SubscriptionWidget({ userEmail }) {
       </div>
 
       {subscription?.currentPeriodEnd && !isExpired && (
-        <p className="text-xs opacity-90 mb-3">
-          Renews: {new Date(subscription.currentPeriodEnd).toLocaleDateString('ms-MY')}
-        </p>
+        <div className="text-xs opacity-90 mb-3 space-y-1">
+          <p>📅 Renews: {new Date(subscription.currentPeriodEnd).toLocaleDateString('ms-MY')}</p>
+          {daysRemaining !== null && (
+            <p className={daysRemaining <= 7 ? 'font-bold text-yellow-200' : ''}>
+              ⏳ {daysRemaining} hari lagi
+            </p>
+          )}
+        </div>
       )}
 
       {subscription?.tier === 'free' && (
