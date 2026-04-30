@@ -192,7 +192,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                       {/* Age Group Header */}
                       <button
                         type="button"
-                        onClick={() => setExpandedAgeGroup(expandedAgeGroup === ageGroupItem.key ? null : ageGroupItem.key)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setExpandedAgeGroup(expandedAgeGroup === ageGroupItem.key ? null : ageGroupItem.key);
+                        }}
                         className="w-full text-left flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all border-2 border-game-purple/20"
                       >
                         <div className="flex items-center gap-3">
