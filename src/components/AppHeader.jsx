@@ -70,34 +70,37 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
       {/* Header Bar */}
       <motion.div
         initial={{ y: 0 }}
-        animate={{ y: isHeaderVisible ? 0 : -60 }}
+        animate={{ y: isHeaderVisible ? 0 : -80 }}
         transition={{ duration: 0.3 }}
-        className="fixed top-0 left-0 right-0 z-40 bg-game-orange border-b border-white/20 shadow-lg"
+        className="fixed top-4 left-0 right-0 z-40 flex justify-center px-4"
       >
-        <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
+        <div className="w-full max-w-lg bg-gradient-to-r from-yellow-400 via-orange-400 to-purple-500 rounded-full px-6 h-16 flex items-center justify-between backdrop-blur-md bg-opacity-85 shadow-2xl"
+             style={{
+               boxShadow: '0 8px 32px rgba(245, 158, 11, 0.3), 0 0 60px rgba(168, 85, 247, 0.2)'
+             }}>
           {/* Left: Hamburger or Back */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-xl bg-white text-game-orange shadow-md flex items-center justify-center"
+            className="p-2 flex items-center justify-center text-amber-800 hover:opacity-75 transition-opacity"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-6 h-6" />
           </button>
 
           {/* Center: Logo / Title */}
-          <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl">🎓</span>
-            <span className="font-black text-white text-lg">CeriaJaya</span>
+          <Link to="/" className="flex items-center gap-2 flex-1 justify-center">
+            <span className="text-2xl">🎓</span>
+            <span className="font-black text-white text-xl">CeriaJaya</span>
           </Link>
 
           {/* Right: Back button or spacer */}
           {showBack ? (
             <Link to={backTo}>
-              <button className="p-2 rounded-xl bg-white text-game-orange flex items-center justify-center">
-                <ArrowLeft className="w-5 h-5" />
+              <button className="p-2 flex items-center justify-center text-white hover:opacity-75 transition-opacity">
+                <ArrowLeft className="w-6 h-6" />
               </button>
             </Link>
           ) : (
-            <div className="w-9" />
+            <div className="w-10" />
           )}
         </div>
       </motion.div>
