@@ -19,31 +19,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
 
-  const ageGroups = [
-    {
-      key: 'prasekolah',
-      label: 'Pra Sekolah',
-      emoji: '🎨',
-      subjects: [
-        { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
-        { path: '/games/english', emoji: '🇬🇧', label: 'English' },
-        { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
-        { path: '/games/science', emoji: '🔬', label: 'Sains' },
-      ]
-    },
-    {
-      key: 'sekolah_rendah',
-      label: 'Sekolah Rendah',
-      emoji: '📚',
-      subjects: [
-        { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
-        { path: '/games/english', emoji: '🇬🇧', label: 'English' },
-        { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
-        { path: '/games/science', emoji: '🔬', label: 'Sains' },
-        { path: '/games/jawi', emoji: '🕌', label: 'Jawi' },
-      ]
-    }
-  ];
+
 
   const otherItems = [
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
@@ -54,7 +30,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   // Determine menu based on user role and location
   let topItems = [];
-  let showSubjectsSection = true;
   let adminItems = [];
   let dashboardItems = [];
 
@@ -66,7 +41,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
       { path: '#pricing', emoji: '💰', label: 'Harga', external: true },
       { path: '#faq', emoji: '❓', label: 'Soalan Lazim', external: true },
     ];
-    showSubjectsSection = false;
   } else {
     topItems = [{ path: '/', emoji: '🏠', label: 'Halaman Utama' }];
     
@@ -190,66 +164,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                  )
               ))}
 
-              {/* Age Groups & Subjects Section */}
-              {showSubjectsSection && (
-                <div className="space-y-2">
-                  {ageGroups.map((ageGroupItem) => (
-                    <div key={ageGroupItem.key} className="space-y-1">
-                      {/* Age Group Header */}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setExpandedAgeGroup(expandedAgeGroup === ageGroupItem.key ? null : ageGroupItem.key);
-                        }}
-                        className="w-full text-left flex items-center justify-between px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-all border border-gray-200"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl">{ageGroupItem.emoji}</span>
-                          <span className="text-sm">{ageGroupItem.label}</span>
-                        </div>
-                        <motion.div
-                          animate={{ rotate: expandedAgeGroup === ageGroupItem.key ? 180 : 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <ChevronDown className="w-4 h-4 text-gray-600" />
-                        </motion.div>
-                      </button>
 
-                      {/* Subjects */}
-                      <AnimatePresence>
-                        {expandedAgeGroup === ageGroupItem.key && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="space-y-1 pl-4 overflow-hidden"
-                          >
-                            {ageGroupItem.subjects.map((item) => (
-                              <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
-                                <motion.button
-                                  type="button"
-                                  whileHover={{ x: 4 }}
-                                  whileTap={{ scale: 0.98 }}
-                                  className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all ${
-                                    isActive(item.path)
-                                      ? 'bg-game-purple text-white shadow-md'
-                                      : 'text-gray-700 hover:bg-gray-100'
-                                  }`}
-                                >
-                                  <span className="text-2xl">{item.emoji}</span>
-                                  <span>{item.label}</span>
-                                </motion.button>
-                              </Link>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ))}
-                </div>
-              )}
 
               {/* Dashboard Items */}
               {dashboardItems.length > 0 && (
