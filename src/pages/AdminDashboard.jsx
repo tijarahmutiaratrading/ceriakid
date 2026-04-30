@@ -154,7 +154,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-pattern">
       <AppHeader />
-      <div className="max-w-5xl mx-auto px-4 py-8 pb-24">
+      <div className="max-w-5xl mx-auto px-3 md:px-4 py-6 md:py-8 pb-24">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
           <div className="flex items-center gap-4 mb-2">
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-3 gap-5 mb-12"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-12"
             >
               {[
                 { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', gradient: 'from-game-blue to-cyan-400', bgColor: 'bg-blue-50' },
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
             {/* Sales Breakdown */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-12">
               <h2 className="text-2xl font-black text-gray-900 mb-6">💳 Jualan Mengikut Pelan</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {[
                   { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', gradient: 'from-gray-500 to-gray-600', bgColor: 'bg-gray-100' },
                   { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', gradient: 'from-game-green to-emerald-500', bgColor: 'bg-green-100' },

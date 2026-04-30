@@ -140,7 +140,7 @@ export default function ParentDashboard() {
   return (
     <div className="min-h-screen bg-amber-50">
       <AppHeader />
-      <div className="max-w-lg mx-auto px-4 py-6 pb-24 pt-20">
+      <div className="max-w-lg mx-auto px-3 md:px-4 py-4 md:py-6 pb-24 pt-20">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -330,7 +330,7 @@ export default function ParentDashboard() {
                       <Share2 className="w-4 h-4" />
                       Kongsi Pencapaian Luar Biasa
                     </p>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                       <motion.button
                         whileTap={{ scale: 0.95 }}
                         whileHover={{ scale: 1.05 }}

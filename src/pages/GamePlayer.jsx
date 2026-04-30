@@ -334,7 +334,7 @@ export default function GamePlayer() {
 
   return (
     <div className="min-h-screen bg-pattern">
-      <div className="max-w-lg mx-auto px-4 py-6 pb-32">
+      <div className="max-w-lg mx-auto px-3 md:px-4 py-4 md:py-6 pb-32">
         <Link to={`/games/${category}`}>
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -424,7 +424,7 @@ export default function GamePlayer() {
           </motion.div>
 
         {/* Options Grid */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
           {currentQuestion.options?.map((option, i) => (
             <motion.button
               key={`${state.currentQ}-${i}`}
