@@ -109,6 +109,15 @@ export const prasekolah_bahasa_tamil = [
       { letter: 'ச', options: ['க', 'ங', 'ச', 'ஞ'], answer: 2 },
       { letter: 'ஞ', options: ['க', 'ங', 'ச', 'ஞ'], answer: 3 },
       { letter: 'ட', options: ['ட', 'ண', 'த', 'ந'], answer: 0 },
+      { letter: 'ண', options: ['ட', 'ண', 'த', 'ந'], answer: 1 },
+      { letter: 'த', options: ['ட', 'ண', 'த', 'ந'], answer: 2 },
+      { letter: 'ந', options: ['ட', 'ண', 'த', 'ந'], answer: 3 },
+      { letter: 'ப', options: ['ப', 'ம', 'ய', 'ர'], answer: 0 },
+      { letter: 'ம', options: ['ப', 'ம', 'ய', 'ர'], answer: 1 },
+      { letter: 'ய', options: ['ப', 'ம', 'ய', 'ர'], answer: 2 },
+      { letter: 'ர', options: ['ப', 'ம', 'ய', 'ர'], answer: 3 },
+      { letter: 'ல', options: ['ல', 'வ', 'ழ', 'ள'], answer: 0 },
+      { letter: 'வ', options: ['ல', 'வ', 'ழ', 'ள'], answer: 1 },
     ]}
   },
   {
@@ -125,6 +134,15 @@ export const prasekolah_bahasa_tamil = [
       { image: '👧', options: ['அக்கா', 'தங்கை', 'பாட்டி'], answer: 0 },
       { image: '👶', options: ['குழந்தை', 'தம்பி', 'சிறுவன்'], answer: 0 },
       { image: '👨‍👩‍👧', options: ['குடும்பம்', 'நண்பர்கள்', 'அண்டை வீட்டார்'], answer: 0 },
+      { image: '👴‍👵', options: ['தாத்தா பாட்டி', 'அப்பா அம்மா', 'அண்ணன் தம்பி'], answer: 0 },
+      { image: '👨‍👩‍👧‍👦', options: ['சிறிய குடும்பம்', 'பெரிய குடும்பம்', 'நண்பர்கள்'], answer: 1 },
+      { image: '🤝', options: ['நண்பர்கள்', 'குடும்பம்', 'அண்டை வீட்டார்'], answer: 0 },
+      { image: '💕', options: ['அன்பு', 'வெறுப்பு', 'சோகம்'], answer: 0 },
+      { image: '👪', options: ['குடும்பம்', 'பள்ளி', 'வீடு'], answer: 0 },
+      { image: '🏠', options: ['வீடு', 'பள்ளி', 'கடை'], answer: 0 },
+      { image: '❤️', options: ['அன்பு', 'கோபம்', 'பயம்'], answer: 0 },
+      { image: '👨‍🤝‍👨', options: ['நண்பர்கள்', 'சகோதரர்', 'அப்பா'], answer: 0 },
+      { image: '👩‍🤝‍👩', options: ['நண்பிகள்', 'சகோதரிகள்', 'தாய்'], answer: 0 },
     ]}
   },
   {
@@ -279,6 +297,15 @@ export const prasekolah_bahasa_tamil = [
     gameData: { questions: [
       { image: '🌳', options: ['மரம்', 'புல்', 'பூ'], answer: 0 },
       { image: '🌸', options: ['மரம்', 'பூ', 'இலை'], answer: 1 },
+      { image: '🌼', options: ['சூரியகாந்தி', 'ரோஜா', 'செம்பருத்தி'], answer: 0 },
+      { image: '🌷', options: ['டூலிப்', 'ரோஜா', 'லில்லி'], answer: 0 },
+      { image: '🌻', options: ['ரோஜா', 'சூரியகாந்தி', 'செம்பருத்தி'], answer: 1 },
+      { image: '🥀', options: ['பூ', 'இலை', 'மரம்'], answer: 0 },
+      { image: '🍀', options: ['மூங்கில்', 'புல்', 'செடி'], answer: 1 },
+      { image: '🌲', options: ['தேங்காய் மரம்', 'பைன் மரம்', 'இறப்பர் மரம்'], answer: 1 },
+      { image: '🌳', options: ['பலா மரம்', 'வேம்பு மரம்', 'மர இனம்'], answer: 2 },
+      { image: '🌱', options: ['விதை', 'இளம் செடி', 'வேர்'], answer: 1 },
+      { image: '🍂', options: ['பழுத்த இலை', 'வாடிய இலை', 'பச்சை இலை'], answer: 1 },
       { image: '🌊', options: ['ஆறு', 'கடல்', 'ஏரி'], answer: 1 },
       { image: '☀️', options: ['சூரியன்', 'நிலவு', 'விண்மீன்'], answer: 0 },
       { image: '🌙', options: ['சூரியன்', 'நிலவு', 'விண்மீன்'], answer: 1 },
@@ -397,6 +424,8 @@ export const prasekolah_bahasa_tamil = [
       { problem: 'நண்பருக்கு உதவுவது?', options: ['தீங்கானது', 'நல்லது', 'சரியில்லை'], answer: 1 },
       { problem: 'வகுப்பில் என்ன செய்ய வேண்டும்?', options: ['கத்துவது', 'கவனித்துக் கேட்பது', 'தூங்குவது'], answer: 1 },
       { problem: 'குப்பையை எங்கே போட வேண்டும்?', options: ['தரையில்', 'குப்பை தொட்டியில்', 'எங்கும்'], answer: 1 },
+      { problem: 'பெரியவர்களுக்கு மரியாதை செய்ய வேண்டுமா?', options: ['இல்லை', 'ஆம்', 'சில நேரம்'], answer: 1 },
+      { problem: 'பொய் சொல்வது சரியா?', options: ['ஆம்', 'இல்லை', 'சில நேரம்'], answer: 1 },
     ]}
   },
   {
@@ -445,6 +474,15 @@ export const prasekolah_bahasa_tamil = [
       { image: '✈️', options: ['விமான ஓட்டுநர்', 'மருத்துவர்', 'கப்பிட்டான்'], answer: 0 },
       { image: '🚒', options: ['காவல்காரர்', 'தீயணைப்பு வீரர்', 'மருத்துவர்'], answer: 1 },
       { image: '📚', options: ['ஆசிரியர்', 'மருத்துவர்', 'பொறியாளர்'], answer: 0 },
+      { image: '👨‍⚖️', options: ['நீதிபதி', 'வக்கீல்', 'போலீஸ்'], answer: 1 },
+      { image: '🧑‍💼', options: ['வியாபாரி', 'கணக்குதாரர்', 'ஆலோசகர்'], answer: 0 },
+      { image: '👨‍🔧', options: ['மின்சாரம் செய்பவர்', 'தச்சர்', 'கொட்டை சுட்டவர்'], answer: 2 },
+      { image: '🚔', options: ['காவல்காரர்', 'டிரைவர்', 'விமான ஓட்டுநர்'], answer: 0 },
+      { image: '🏥', options: ['மருத்துவர்', 'நர்ஸ்', 'பொறியாளர்'], answer: 1 },
+      { image: '🎓', options: ['ஆசிரியர்', 'மாணவர்', 'கல்விமான்'], answer: 0 },
+      { image: '🛠️', options: ['தொழிலாளி', 'இயந்திரவாளி', 'பொறியாளர்'], answer: 1 },
+      { image: '🧑‍🎨', options: ['வரைகலை வளைந்தவர்', 'கலைஞன்', 'சிற்பி'], answer: 1 },
+      { image: '📖', options: ['ஆசிரியர்', 'எழுத்தாளர்', 'பத்திரிகையாளர்'], answer: 1 },
     ]}
   },
 ];
