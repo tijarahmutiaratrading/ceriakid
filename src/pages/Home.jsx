@@ -18,9 +18,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-amber-50">
       <AppHeader />
-      <div className="max-w-lg mx-auto px-4 py-6 pb-24 pt-20">
+      <div className="max-w-lg mx-auto px-4 py-8 pb-24 pt-24">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-2">
             <span className="text-3xl">🎓</span>
             <h1 className="text-2xl font-black text-gray-800">Jom Belajar</h1>
@@ -41,7 +41,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center gap-3 mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-amber-100"
+            className="flex items-center gap-3 mb-10 p-5 bg-white rounded-2xl shadow-sm border-2 border-amber-100"
           >
             <img 
               src={getDefaultAvatar(user?.full_name || 'User', user?.gender)} 
@@ -56,7 +56,7 @@ export default function Home() {
         )}
 
         {/* Age Group Toggle */}
-        <div className="mb-8 pb-6 border-b-2 border-amber-200">
+        <div className="mb-12 pb-8 border-b-2 border-amber-200">
           <p className="text-xs font-bold text-gray-700 uppercase mb-3">Umur Anak</p>
           <div className="flex gap-3">
             {[
@@ -84,7 +84,7 @@ export default function Home() {
           <motion.div
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="mb-6 bg-gradient-to-r from-pink-400 to-purple-400 rounded-2xl p-4 flex items-center gap-4 text-white shadow-lg cursor-pointer"
+            className="mb-12 bg-gradient-to-r from-pink-400 to-purple-400 rounded-2xl p-6 flex items-center gap-4 text-white shadow-lg cursor-pointer"
           >
             <span className="text-4xl">🎨</span>
             <div>
@@ -97,11 +97,13 @@ export default function Home() {
 
         {/* Daily Challenge */}
         {isAuthenticated && (
-          <DailyChallenge ageGroup={safeAgeGroup} />
+          <div className="mb-12">
+            <DailyChallenge ageGroup={safeAgeGroup} />
+          </div>
         )}
 
         {/* Category Grid */}
-        <h2 className="text-2xl font-black text-gray-800 mb-6">Pilih Subjek</h2>
+        <h2 className="text-2xl font-black text-gray-800 mb-8">Pilih Subjek</h2>
         <CategoryGrid />
 
         {/* CTA Section */}
