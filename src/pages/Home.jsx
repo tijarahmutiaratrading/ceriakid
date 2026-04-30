@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
-import { Link } from 'react-router-dom';
+
 import AppHeader from '@/components/AppHeader';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
@@ -51,15 +52,6 @@ export default function Home() {
               <p className="text-xs text-gray-500 font-semibold">Selamat datang!</p>
               <p className="text-lg font-black text-game-purple">{user?.full_name || 'Teman'}</p>
             </div>
-            <Link to="/client-dashboard" className="ml-auto">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2 rounded-full bg-game-purple text-white text-sm font-bold"
-              >
-                ⚙️
-              </motion.button>
-            </Link>
           </motion.div>
         )}
 
