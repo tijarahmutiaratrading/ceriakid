@@ -1,4 +1,3 @@
-export const prasekolah_math_expansion = [
 export const prasekolah_mathematics_expansion = [
   { title: 'Kira 1 hingga 5 Lanjutan', type: 'counting', emoji: '🔢', difficulty: 'easy', gameData: { questions: [
     { image: '🍎', options: ['1','2','3'], answer: 0 },
