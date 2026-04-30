@@ -57,9 +57,9 @@ export default function Home() {
         )}
 
         {/* Age Group Toggle */}
-        <div className="mb-12 pb-8 border-b-2 border-amber-200">
-          <p className="text-sm font-black text-gray-900 uppercase mb-4">{lang === 'bm' ? '🎯 Pilih Umur Anak' : lang === 'en' ? "🎯 Child's Age" : lang === 'zh' ? '🎯 儿童年龄' : '🎯 குழந்தையின் வயது'}</p>
-          <div className="grid grid-cols-2 gap-4">
+        <div className="mb-8 sm:mb-12 pb-4 sm:pb-8 border-b-2 border-amber-200">
+          <p className="text-xs sm:text-sm font-black text-gray-900 uppercase mb-3 sm:mb-4">{lang === 'bm' ? '🎯 Pilih Umur Anak' : lang === 'en' ? "🎯 Child's Age" : lang === 'zh' ? '🎯 儿童年龄' : '🎯 குழந்தையின் வயது'}</p>
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
             {[
               { key: 'prasekolah', label: t('prasekolah', lang), emoji: '🎨' },
               { key: 'sekolah_rendah', label: t('sekolahRendah', lang), emoji: '📚' }
@@ -69,13 +69,13 @@ export default function Home() {
                 onClick={() => safeToggle(age.key)}
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ y: -4 }}
-                className={`px-6 py-4 rounded-3xl font-black text-base transition-all border-2 flex flex-col items-center gap-2 ${
+                className={`px-3 sm:px-6 py-2 sm:py-4 rounded-2xl sm:rounded-3xl font-black text-xs sm:text-base transition-all border-2 flex flex-col items-center gap-1 sm:gap-2 ${
                   safeAgeGroup === age.key
                     ? 'bg-gradient-to-br from-game-orange to-orange-500 text-white border-orange-600 shadow-xl'
                     : 'bg-white text-gray-800 border-amber-200 hover:border-orange-300 shadow-md'
                 }`}
               >
-                <span className="text-3xl">{age.emoji}</span>
+                <span className="text-2xl sm:text-3xl">{age.emoji}</span>
                 <span>{age.label}</span>
               </motion.button>
             ))}
