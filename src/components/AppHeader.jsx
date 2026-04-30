@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useState as useStateImport } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowLeft, ChevronDown } from 'lucide-react';
@@ -55,6 +56,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   let topItems = [];
   let showSubjectsSection = true;
   let adminItems = [];
+  let dashboardItems = [];
 
   if (isLanding && !isAuthenticated) {
     topItems = [
@@ -66,7 +68,13 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     ];
     showSubjectsSection = false;
   } else {
-    topItems = [{ path: '/', emoji: '🏠', label: 'Rumah' }];
+    topItems = [{ path: '/', emoji: '🏠', label: 'Halaman Utama' }];
+    
+    if (isAuthenticated) {
+      dashboardItems = [
+        { path: '/dashboard', emoji: '👨‍👩‍👧', label: 'Dashboard Pengguna' },
+      ];
+    }
     
     if (isAdmin) {
       adminItems = [
@@ -243,6 +251,30 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     </div>
                   ))}
                 </div>
+              )}
+
+              {/* Dashboard Items */}
+              {dashboardItems.length > 0 && (
+                <>
+                  <div className="border-t border-gray-200 my-2" />
+                  {dashboardItems.map((item) => (
+                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
+                      <motion.button
+                        type="button"
+                        whileHover={{ x: 8 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                          isActive(item.path)
+                            ? 'bg-blue-500 text-white shadow-lg'
+                            : 'text-blue-600 hover:bg-blue-50'
+                        }`}
+                      >
+                        <span className="text-xl">{item.emoji}</span>
+                        <span>{item.label}</span>
+                      </motion.button>
+                    </Link>
+                  ))}
+                </>
               )}
 
               {/* Other Items */}
