@@ -24,7 +24,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const otherItems = [
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
     { path: '/parent-dashboard', emoji: '🏆', label: 'Prestasi' },
-    { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
   ];
 
   // Determine menu based on user role and location
