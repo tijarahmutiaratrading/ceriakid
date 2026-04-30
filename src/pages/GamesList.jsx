@@ -3,18 +3,57 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useAuth } from '@/lib/AuthContext';
+import { useLang } from '@/lib/LanguageContext';
+import { t } from '@/lib/i18n';
 import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
 import GameListCard from '@/components/game/GameListCard';
 import AppHeader from '@/components/AppHeader';
 
-const categoryLabels = {
-  bahasa_melayu: 'Bahasa Melayu',
-  english: 'English',
-  mathematics: 'Matematik',
-  science: 'Sains',
-  jawi: 'Aksara Jawi',
-  worksheet: 'Worksheet & Tracing',
+const getCategoryLabel = (category, lang) => {
+  const labels = {
+    bm: {
+      bahasa_melayu: 'Bahasa Melayu',
+      english: 'English',
+      mathematics: 'Matematik',
+      science: 'Sains',
+      jawi: 'Aksara Jawi',
+      worksheet: 'Worksheet & Tracing',
+      bahasa_tamil: 'Bahasa Tamil',
+      bahasa_mandarin: 'Bahasa Mandarin',
+    },
+    en: {
+      bahasa_melayu: 'Bahasa Melayu',
+      english: 'English',
+      mathematics: 'Mathematics',
+      science: 'Science',
+      jawi: 'Jawi',
+      worksheet: 'Worksheet & Tracing',
+      bahasa_tamil: 'Tamil Language',
+      bahasa_mandarin: 'Mandarin Language',
+    },
+    zh: {
+      bahasa_melayu: '马来语',
+      english: '英文',
+      mathematics: '数学',
+      science: '科学',
+      jawi: '爪夷文',
+      worksheet: '工作表和追踪',
+      bahasa_tamil: '泰米尔语',
+      bahasa_mandarin: '汉语',
+    },
+    ta: {
+      bahasa_melayu: 'மலாய் மொழி',
+      english: 'ஆங்கிலம்',
+      mathematics: 'கணிதம்',
+      science: 'அறிவியல்',
+      jawi: 'ஜாவி',
+      worksheet: 'பணிப்புத்தகம் மற்றும் ട്രേസ്',
+      bahasa_tamil: 'தமிழ் மொழி',
+      bahasa_mandarin: 'மாண்டரின் மொழி',
+    }
+  };
+  return labels[lang]?.[category] || labels.bm[category] || category;
 };
 
 const getCategoryEmoji = (category) => {
@@ -42,6 +81,7 @@ export default function GamesList() {
   const { category } = useParams();
   const { user, isAuthenticated } = useAuth();
   const { ageGroup } = useAgeGroup();
+  const { lang } = useLang();
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState({});
   const [selectedDarjah, setSelectedDarjah] = useState(null);
@@ -157,20 +197,20 @@ export default function GamesList() {
           <div className="flex items-center gap-3 mb-2">
             <span className="text-4xl">{getCategoryEmoji(category)}</span>
             <h1 className="text-3xl font-black text-gray-900">
-              {categoryLabels[category]}
+              {getCategoryLabel(category, lang)}
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-game-purple">🎮 {games.length} Permainan</span>
+            <span className="text-sm font-bold text-game-purple">🎮 {games.length} {t('games', lang)}</span>
             <span className="text-gray-400">•</span>
-            <span className="text-sm text-gray-600">Pilih untuk bermain</span>
+            <span className="text-sm text-gray-600">{t('selectForPlay', lang)}</span>
           </div>
         </motion.div>
 
         {/* Darjah Tabs - Only for Sekolah Rendah */}
         {hasDarjah && (
           <div className="mb-5">
-            <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Pilih Darjah:</p>
+            <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">{t('selectDarjah', lang)}</p>
             <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
               {availableDarjah.map(d => (
                 <motion.button
@@ -203,15 +243,15 @@ export default function GamesList() {
             className="clay rounded-3xl p-8 text-center mt-12"
           >
             <p className="text-5xl mb-4">🚀</p>
-            <p className="text-xl font-bold mb-2">Permainan Baru Akan Datang!</p>
-            <p className="text-gray-600 mb-6">Kami sedang menyediakan permainan terbaik untuk kategori ini.</p>
-            <Link to="/">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                className="px-6 py-3 bg-game-purple text-white rounded-full font-bold"
-              >
-                ← Kembali ke Rumah
-              </motion.button>
+             <p className="text-xl font-bold mb-2">{t('newGamesComingSoon', lang)}</p>
+             <p className="text-gray-600 mb-6">{t('gamesBeingPrepared', lang)}</p>
+             <Link to="/">
+               <motion.button
+                 whileHover={{ scale: 1.05 }}
+                 className="px-6 py-3 bg-game-purple text-white rounded-full font-bold"
+               >
+                 ← {t('backToHome', lang)}
+               </motion.button>
             </Link>
           </motion.div>
         ) : (
