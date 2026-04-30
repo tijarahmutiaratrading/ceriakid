@@ -191,9 +191,9 @@ export default function AdminDashboard() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-12"
             >
               {[
-                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', gradient: 'from-game-blue to-cyan-400', bgColor: 'bg-blue-50' },
-                { label: 'Pendapatan (RM)', value: totalRevenue.toFixed(0), icon: '💰', gradient: 'from-game-green to-emerald-400', bgColor: 'bg-green-50' },
-                { label: 'Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', gradient: 'from-game-purple to-pink-400', bgColor: 'bg-purple-50' },
+                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', gradient: 'from-slate-600 to-slate-700', bgColor: 'bg-slate-50' },
+                { label: 'Pendapatan (RM)', value: totalRevenue.toFixed(0), icon: '💰', gradient: 'from-slate-600 to-slate-700', bgColor: 'bg-slate-50' },
+                { label: 'Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', gradient: 'from-slate-600 to-slate-700', bgColor: 'bg-slate-50' },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
@@ -215,10 +215,10 @@ export default function AdminDashboard() {
               <h2 className="text-2xl font-black text-gray-900 mb-6">💳 Jualan Mengikut Pelan</h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {[
-                  { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', gradient: 'from-gray-500 to-gray-600', bgColor: 'bg-gray-100' },
-                  { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', gradient: 'from-game-green to-emerald-500', bgColor: 'bg-green-100' },
-                  { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', gradient: 'from-game-blue to-cyan-500', bgColor: 'bg-blue-100' },
-                  { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', gradient: 'from-game-purple to-pink-500', bgColor: 'bg-purple-100' },
+                   { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', gradient: 'from-slate-500 to-slate-600', bgColor: 'bg-slate-100' },
+                   { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', gradient: 'from-slate-500 to-slate-600', bgColor: 'bg-slate-100' },
+                   { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', gradient: 'from-slate-500 to-slate-600', bgColor: 'bg-slate-100' },
+                   { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', gradient: 'from-slate-500 to-slate-600', bgColor: 'bg-slate-100' },
                 ].map((item, idx) => (
                   <motion.div
                     key={idx}
