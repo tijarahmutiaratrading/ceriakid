@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { Link } from 'react-router-dom';
+import AppHeader from '@/components/AppHeader';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
 
@@ -14,6 +15,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-amber-50">
+      <AppHeader />
       <div className="max-w-lg mx-auto px-4 py-6 pb-24">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
