@@ -7,11 +7,15 @@ import { prasekolah_mathematics_expansion } from './gameData_prasekolah_math_exp
 import { prasekolah_science } from './gameData_prasekolah_science.js';
 import { prasekolah_science_expansion } from './gameData_prasekolah_science_expansion.js';
 import { prasekolah_worksheet } from './gameData_prasekolah_worksheet.js';
+import { prasekolah_bahasa_tamil } from './gameData_prasekolah_tamil.js';
+import { prasekolah_bahasa_mandarin } from './gameData_prasekolah_mandarin.js';
 import { sekolah_bahasa_melayu } from './gameData_sr_bm.js';
 import { sekolah_jawi } from './gameData_sr_jawi.js';
 import { sekolah_english } from './gameData_sr_english.js';
 import { sekolah_mathematics } from './gameData_sr_math.js';
 import { sekolah_science } from './gameData_sr_science.js';
+import { sekolah_bahasa_tamil } from './gameData_sr_tamil.js';
+import { sekolah_bahasa_mandarin } from './gameData_sr_mandarin.js';
 
 export const gameLibrary = {
   prasekolah: {
@@ -20,6 +24,8 @@ export const gameLibrary = {
     mathematics: [...prasekolah_mathematics, ...prasekolah_mathematics_expansion],
     science: [...prasekolah_science, ...prasekolah_science_expansion],
     worksheet: prasekolah_worksheet,
+    bahasa_tamil: prasekolah_bahasa_tamil,
+    bahasa_mandarin: prasekolah_bahasa_mandarin,
   },
   sekolah_rendah: {
     bahasa_melayu: sekolah_bahasa_melayu,
@@ -27,6 +33,8 @@ export const gameLibrary = {
     english: sekolah_english,
     mathematics: sekolah_mathematics,
     science: sekolah_science,
+    bahasa_tamil: sekolah_bahasa_tamil,
+    bahasa_mandarin: sekolah_bahasa_mandarin,
   },
 };
 

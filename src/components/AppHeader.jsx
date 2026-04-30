@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowLeft, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -101,16 +102,19 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             <span className="font-black text-white text-xl">CeriaJaya</span>
           </Link>
 
-          {/* Right: Back button or spacer */}
-          {shouldShowBack ? (
-            <Link to={backTo}>
-              <button type="button" className="p-2 flex items-center justify-center text-white hover:opacity-75 transition-opacity">
-                <ArrowLeft className="w-6 h-6" />
-              </button>
-            </Link>
-          ) : (
-            <div className="w-10" />
-          )}
+          {/* Right: Language Switcher or Back */}
+          <div className="flex items-center gap-2">
+            {!isLanding && <LanguageSwitcher />}
+            {shouldShowBack ? (
+              <Link to={backTo}>
+                <button type="button" className="p-2 flex items-center justify-center text-white hover:opacity-75 transition-opacity">
+                  <ArrowLeft className="w-6 h-6" />
+                </button>
+              </Link>
+            ) : (
+              <div className="w-10" />
+            )}
+          </div>
         </div>
       </div>
 

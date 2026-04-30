@@ -8,16 +8,17 @@ export function LanguageProvider({ children }) {
     localStorage.getItem('kidLang') || 'bm'
   );
 
-  const toggleLang = () => {
-    const newLang = lang === 'bm' ? 'en' : 'bm';
-    setLang(newLang);
-    localStorage.setItem('kidLang', newLang);
+  const setLanguage = (newLang) => {
+    if (['bm', 'en', 'zh', 'ta'].includes(newLang)) {
+      setLang(newLang);
+      localStorage.setItem('kidLang', newLang);
+    }
   };
 
   const tr = (key) => t(key, lang);
 
   return (
-    <LanguageContext.Provider value={{ lang, toggleLang, t: tr }}>
+    <LanguageContext.Provider value={{ lang, setLanguage, t: tr }}>
       {children}
     </LanguageContext.Provider>
   );
