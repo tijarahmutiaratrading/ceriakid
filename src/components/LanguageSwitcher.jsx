@@ -21,7 +21,7 @@ export default function LanguageSwitcher() {
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center w-8 h-8 bg-white border border-game-purple/30 rounded-full hover:border-game-purple transition-all shadow-sm text-lg"
+        className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-white border border-game-purple/30 rounded-full hover:border-game-purple transition-all shadow-sm text-base sm:text-lg"
       >
         {currentLang?.flag}
       </motion.button>
