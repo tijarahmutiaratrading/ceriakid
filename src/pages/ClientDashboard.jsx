@@ -7,6 +7,7 @@ import { base44 } from '@/api/base44Client';
 import { Upload, Loader, User, Mail, Calendar } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { getDefaultAvatar } from '@/lib/avatarGenerator';
+import SubscriptionWidget from '@/components/dashboard/SubscriptionWidget';
 
 export default function ClientDashboard() {
   const { user } = useAuth();
@@ -61,8 +62,11 @@ export default function ClientDashboard() {
           <p className="text-gray-600 text-sm">{t('updateProfile', lang)}</p>
         </motion.div>
 
+        {/* Subscription Status */}
+         <SubscriptionWidget userEmail={user?.email} />
+
         {/* Avatar Section */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <motion.div
             whileHover={{ scale: 1.02 }}
             className="bg-white rounded-2xl p-6 border-2 border-amber-100 shadow-sm text-center"

@@ -9,8 +9,7 @@ import AppHeader from '@/components/AppHeader';
 import SubjectBreakdown from '@/components/home/SubjectBreakdown';
 import SmartRecommendations from '@/components/dashboard/SmartRecommendations';
 import LeaderboardWidget from '@/components/dashboard/LeaderboardWidget';
-import SubscriptionWidget from '@/components/dashboard/SubscriptionWidget';
-import PaymentHistory from '@/components/dashboard/PaymentHistory';
+
 
 const categoryLabels = {
   bahasa_melayu: 'Bahasa Melayu',
@@ -170,12 +169,6 @@ export default function ParentDashboard() {
           </motion.div>
         ) : (
           <div className="space-y-6">
-            {/* Subscription Status */}
-            <SubscriptionWidget userEmail={user.email} />
-
-            {/* Payment History */}
-            <PaymentHistory userEmail={user.email} />
-
             {/* Smart Recommendations for selected child */}
             {selectedChild && (
               <SmartRecommendations 
