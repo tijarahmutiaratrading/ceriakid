@@ -88,10 +88,10 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 font-nunito">
+    <div className="min-h-screen bg-gray-50 font-nunito">
 
       {/* ── TOP URGENCY BAR ── */}
-      <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-2.5 px-4">
+      <div className="bg-gray-900 text-white text-center py-2.5 px-4">
         <p className="text-sm font-black">
           🔥 TAWARAN TERHAD — Diskaun 50% untuk <span className="underline">50 pendaftar pertama</span> hari ini!
           &nbsp;⏱️ Tamat dalam: <span className="font-black text-yellow-200">{String(countdown.m).padStart(2,'0')}:{String(countdown.s).padStart(2,'0')}</span>
@@ -173,7 +173,7 @@ export default function Landing() {
       </div>
 
       {/* ── RESULTS / PROOF NUMBERS ── */}
-      <div className="bg-gradient-to-r from-game-purple to-game-blue py-12">
+      <div className="bg-gray-800 py-12">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
             {[
@@ -183,9 +183,9 @@ export default function Landing() {
               { num: '92%', label: 'Markah Anak Naik', icon: '📈' },
             ].map((stat, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-                <div className="text-4xl mb-2">{stat.icon}</div>
-                <div className="text-3xl font-black">{stat.num}</div>
-                <div className="text-white/80 text-sm font-semibold mt-1">{stat.label}</div>
+                <div className="text-3xl mb-2">{stat.icon}</div>
+                <div className="text-2xl font-black">{stat.num}</div>
+                <div className="text-white/70 text-sm font-semibold mt-1">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -193,7 +193,7 @@ export default function Landing() {
       </div>
 
       {/* ── PROBLEM SECTION ── */}
-      <div className="bg-white py-12">
+      <div className="bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
             <p className="text-4xl mb-3">😮‍💨</p>
@@ -264,7 +264,7 @@ export default function Landing() {
       </div>
 
       {/* ── TESTIMONIALS ── */}
-      <div className="bg-white py-12">
+      <div className="bg-white py-12 border-t border-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
             <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_,i) => <span key={i} className="text-2xl text-yellow-400">★</span>)}</div>
@@ -273,14 +273,14 @@ export default function Landing() {
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {testimonials.map((t, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-amber-50 rounded-2xl p-6 border-2 border-amber-200 flex flex-col justify-between">
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-gray-50 rounded-2xl p-6 border border-gray-200 flex flex-col justify-between">
                 <div>
                   <div className="flex gap-1 mb-3">{[...Array(t.stars)].map((_,j) => <span key={j} className="text-yellow-400">★</span>)}</div>
                   <p className="text-gray-800 mb-4 leading-relaxed">"{t.quote}"</p>
                   <div className="inline-block bg-green-100 text-green-700 text-xs font-black px-3 py-1 rounded-full mb-4">✅ {t.highlight}</div>
                 </div>
-                <div className="flex items-center gap-3 pt-3 border-t border-amber-200">
-                  <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-amber-300" />
+                <div className="flex items-center gap-3 pt-3 border-t border-gray-200">
+                  <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-gray-300" />
                   <div>
                     <p className="font-black text-gray-900 text-sm">{t.name}</p>
                     <p className="text-xs text-gray-500">{t.location}</p>
@@ -315,7 +315,7 @@ export default function Landing() {
       </div>
 
       {/* ── PRICING ── */}
-      <div id="pricing" className="bg-gray-50 py-12">
+      <div id="pricing" className="bg-white py-12 border-t border-gray-100">
         <div className="max-w-5xl mx-auto px-4">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-4">
             <span className="inline-block bg-red-100 text-red-600 font-black px-4 py-1.5 rounded-full text-sm mb-4">
@@ -437,7 +437,7 @@ export default function Landing() {
       </div>
 
       {/* ── FINAL CTA SECTION ── */}
-      <div className="bg-gradient-to-br from-game-purple to-game-blue py-12 text-white">
+      <div className="bg-gray-900 py-12 text-white">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
             <p className="text-5xl mb-5">🎓</p>
@@ -447,7 +447,7 @@ export default function Landing() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
               onClick={scrollToPricing}
-              className="px-10 py-5 bg-white text-game-purple rounded-2xl font-black text-xl shadow-2xl inline-flex items-center gap-3"
+              className="px-8 py-4 bg-white text-gray-900 rounded-2xl font-black text-lg shadow-2xl inline-flex items-center gap-3"
             >
               🎮 Pilih Pelan Sekarang <ArrowRight className="w-6 h-6" />
             </motion.button>
