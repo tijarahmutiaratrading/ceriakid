@@ -104,7 +104,7 @@ export default function Landing() {
         <div className="flex items-center gap-2">
           <Link to="/"><span className="text-sm text-gray-600 font-bold cursor-pointer hover:text-game-purple hidden sm:inline">Log Masuk</span></Link>
           <motion.button whileTap={{ scale: 0.95 }} onClick={scrollToPricing} className="px-4 py-2 bg-game-orange text-white rounded-full font-black text-sm shadow-md whitespace-nowrap">
-            Cuba Percuma →
+            Lihat Pelan →
           </motion.button>
         </div>
       </nav>
@@ -148,9 +148,9 @@ export default function Landing() {
             onClick={scrollToPricing}
             className="px-10 py-5 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-2xl font-black text-xl shadow-2xl flex items-center gap-3"
           >
-            🎮 Cuba PERCUMA Sekarang <ArrowRight className="w-6 h-6" />
+            🎮 Pilih Pelan Sekarang <ArrowRight className="w-6 h-6" />
           </motion.button>
-          <p className="text-sm text-gray-500 font-semibold">✅ Tanpa kad kredit &nbsp;•&nbsp; ✅ Setup dalam 2 minit &nbsp;•&nbsp; ✅ Cancel bila-bila</p>
+          <p className="text-sm text-gray-500 font-semibold">✅ Setup dalam 2 minit &nbsp;•&nbsp; ✅ Jaminan Wang Balik 30 Hari &nbsp;•&nbsp; ✅ Cancel bila-bila</p>
         </motion.div>
 
         {/* Quick trust signals */}
@@ -300,7 +300,7 @@ export default function Landing() {
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {[
-            { step: '1', icon: '📲', title: 'Daftar Percuma', desc: 'Buka app, daftar dengan email. Tiada kad kredit diperlukan.' },
+            { step: '1', icon: '📲', title: 'Daftar & Langganan', desc: 'Buka app, pilih pelan, dan mula belajar dalam masa 2 minit.' },
             { step: '2', icon: '🎯', title: 'Pilih Peringkat Anak', desc: 'Prasekolah atau Sekolah Rendah. App auto-suggest permainan yang sesuai.' },
             { step: '3', icon: '🏆', title: 'Anak Terus Main & Belajar', desc: 'Pantau progress dari dashboard. Lihat markah naik minggu demi minggu.' },
           ].map((s, i) => (
@@ -322,7 +322,7 @@ export default function Landing() {
               ⏱️ Tawaran Tamat Dalam: {String(countdown.m).padStart(2,'0')}:{String(countdown.s).padStart(2,'0')}
             </span>
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">Pilih Pelan Anda</h2>
-            <p className="text-gray-600">Cuba percuma dulu. Upgrade bila-bila masa. Cancel senang je.</p>
+            <p className="text-gray-600">Pilih pelan yang sesuai. Cancel bila-bila masa. Jaminan 30 hari.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-8">
@@ -425,8 +425,8 @@ export default function Landing() {
             { q: 'Apakah peranti yang disokong?', a: 'Semua jenis smartphone, tablet, dan komputer. iOS, Android, dan browser. Boleh download untuk guna offline.' },
             { q: 'Boleh cancel bila-bila masa?', a: 'Ya! Cancel dari settings dalam 10 saat. Tiada penalti, tiada fee tersembunyi. Janji kami.' },
             { q: 'Adakah ikut silibus sekolah Malaysia?', a: 'Ya — kami ikut KSSR (Kurikulum Standard Sekolah Rendah) sepenuhnya. Sama persis dengan apa yang diajar di sekolah, Darjah 1-6.' },
-            { q: 'Berapa anak boleh guna?', a: 'Premium untuk 1 anak. Pro untuk sehingga 4 anak dalam 1 akaun — jimat lebih!' },
-            { q: 'Macam mana nak mula?', a: 'Daftar percuma dalam 2 minit. Terus boleh akses 5 permainan tanpa kad kredit. Seronok dulu, bayar kemudian!' },
+            { q: 'Berapa anak boleh guna?', a: 'Pelan Asas & Standard untuk 1 peringkat. Pelan Keluarga untuk Prasekolah & Sekolah Rendah dengan sehingga 4 profil anak — jimat lebih!' },
+            { q: 'Macam mana nak mula?', a: 'Pilih pelan, isikan maklumat, bayar melalui FPX, dan anak terus boleh mula belajar dalam masa 2 minit!' },
           ].map((faq, i) => (
             <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl p-5 border-2 border-gray-100 shadow-sm hover:border-game-orange transition-all">
               <p className="font-black text-gray-900 mb-1.5">❓ {faq.q}</p>
@@ -442,16 +442,16 @@ export default function Landing() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
             <p className="text-5xl mb-5">🎓</p>
             <h2 className="text-3xl md:text-4xl font-black mb-4">Anak Anda Layak Dapat<br />Yang Terbaik</h2>
-            <p className="text-white/80 text-lg mb-8 max-w-xl mx-auto">Setiap hari yang berlalu tanpa belajar dengan cara yang betul ialah peluang yang terlepas. Mula hari ini — percuma.</p>
+            <p className="text-white/80 text-lg mb-8 max-w-xl mx-auto">Setiap hari yang berlalu tanpa belajar dengan cara yang betul ialah peluang yang terlepas. Mula hari ini.</p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
               onClick={scrollToPricing}
               className="px-10 py-5 bg-white text-game-purple rounded-2xl font-black text-xl shadow-2xl inline-flex items-center gap-3"
             >
-              🎮 Cuba Percuma Sekarang <ArrowRight className="w-6 h-6" />
+              🎮 Pilih Pelan Sekarang <ArrowRight className="w-6 h-6" />
             </motion.button>
-            <p className="text-white/60 text-sm mt-4">✅ Tanpa kad kredit &nbsp;•&nbsp; ✅ Setup 2 minit &nbsp;•&nbsp; ✅ Jaminan 30 hari</p>
+            <p className="text-white/60 text-sm mt-4">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Jaminan Wang Balik 30 Hari &nbsp;•&nbsp; ✅ Cancel bila-bila</p>
           </motion.div>
         </div>
       </div>
