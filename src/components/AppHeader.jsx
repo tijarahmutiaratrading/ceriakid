@@ -39,26 +39,13 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
       { path: '#pricing', emoji: '💰', label: 'Harga', external: true },
       { path: '#faq', emoji: '❓', label: 'Soalan Lazim', external: true },
     ];
-  } else if (isAdmin) {
-    // Admin menu + full client access
-    navItems = [
-      { path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' },
-      { path: '/admin-dashboard', emoji: '📊', label: 'Dashboard Admin' },
-      { path: '/admin-settings', emoji: '⚙️', label: 'Settings' },
-      { path: '/', emoji: '🏠', label: 'Rumah' },
-      { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
-      { path: '/games/english', emoji: '🇬🇧', label: 'English' },
-      { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
-      { path: '/games/science', emoji: '🔬', label: 'Sains' },
-      ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
-      { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
-      { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
-      { path: '/friends', emoji: '👥', label: 'Kawan' },
-      { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
-    ];
   } else if (isAuthenticated) {
-    // Client menu - will use grouped structure below
-    navItems = [];
+    // Client/Admin menu - will use grouped structure below
+    navItems = isAdmin ? [
+      { path: '/admin-hub', label: 'Admin Hub', icon: LayoutDashboard },
+      { path: '/admin-dashboard', label: 'Dashboard Admin', icon: LayoutDashboard },
+      { path: '/admin-settings', label: 'Settings', icon: Settings },
+    ] : [];
   }
 
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
@@ -137,36 +124,24 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             <nav className="space-y-2">
               {/* Landing/Admin menu items */}
               {navItems.map((item) => (
-                item.external ? (
-                  <a
-                    key={item.path}
-                    href={item.path}
-                    onClick={() => setIsOpen(false)}
-                    className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all"
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <motion.button
+                    whileHover={{ x: 8 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                      isActive(item.path)
+                        ? 'bg-game-purple text-white shadow-lg'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
                   >
-                    <span className="text-xl">{item.emoji}</span>
+                    <item.icon className="w-5 h-5" />
                     <span>{item.label}</span>
-                  </a>
-                ) : (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <motion.button
-                      whileHover={{ x: 8 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
-                        isActive(item.path)
-                          ? 'bg-game-purple text-white shadow-lg'
-                          : 'text-gray-700 hover:bg-gray-100'
-                      }`}
-                    >
-                      <span className="text-xl">{item.emoji}</span>
-                      <span>{item.label}</span>
-                    </motion.button>
-                  </Link>
-                )
+                  </motion.button>
+                </Link>
               ))}
 
               {/* Client user menu - organized by age group */}
