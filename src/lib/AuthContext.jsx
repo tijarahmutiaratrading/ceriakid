@@ -132,6 +132,11 @@ export const AuthProvider = ({ children }) => {
     base44.auth.redirectToLogin(window.location.href);
   };
 
+  // Refresh auth after login (called after returning from login flow)
+  const refreshAuth = async () => {
+    await checkAppState();
+  };
+
   return (
     <AuthContext.Provider value={{ 
       user, 
@@ -144,7 +149,8 @@ export const AuthProvider = ({ children }) => {
       logout,
       navigateToLogin,
       checkUserAuth,
-      checkAppState
+      checkAppState,
+      refreshAuth
     }}>
       {children}
     </AuthContext.Provider>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
 import AppHeader from '@/components/AppHeader';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
@@ -75,10 +76,19 @@ const avatars = [
 ];
 
 export default function Landing() {
-  const countdown = useCountdown(15);
-  const [selectedTierForCheckout, setSelectedTierForCheckout] = useState('standard');
+   const countdown = useCountdown(15);
+   const [selectedTierForCheckout, setSelectedTierForCheckout] = useState('standard');
+   const { isAuthenticated, refreshAuth } = useAuth();
+   const navigate = useNavigate();
 
-  const scrollToPricing = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+   // Check if authenticated and redirect
+   useEffect(() => {
+     if (isAuthenticated) {
+       navigate('/dashboard');
+     }
+   }, [isAuthenticated, navigate]);
+
+   const scrollToPricing = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
 
   const handleTierSelect = (tierName) => {
     setSelectedTierForCheckout(tierName);
@@ -103,10 +113,10 @@ export default function Landing() {
           <a href="#faq" className="hover:text-orange-500 transition-colors">Soalan Lazim</a>
         </div>
         <div className="flex items-center gap-3">
-          <motion.button whileTap={{ scale: 0.95 }} onClick={() => base44.auth.redirectToLogin()} className="px-5 py-2.5 bg-orange-500 text-white rounded-full font-black text-sm shadow-md">
-            Log Masuk
-          </motion.button>
-        </div>
+           <motion.button whileTap={{ scale: 0.95 }} onClick={() => base44.auth.redirectToLogin('/dashboard')} className="px-5 py-2.5 bg-orange-500 text-white rounded-full font-black text-sm shadow-md">
+             Log Masuk
+           </motion.button>
+         </div>
       </nav>
 
       {/* ── HERO ── */}
