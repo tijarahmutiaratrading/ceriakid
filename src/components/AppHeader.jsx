@@ -7,7 +7,6 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [expandedSection, setExpandedSection] = useState(null);
   const { isAuthenticated, user } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
@@ -167,54 +166,23 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Subjects Section */}
               {showSubjectsSection && (
                 <div className="space-y-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const newState = expandedSection === 'subjects' ? null : 'subjects';
-                      setExpandedSection(newState);
-                    }}
-                    className="w-full text-left flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all border-2 border-game-purple/20"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">📚</span>
-                      <span>Subjek</span>
-                    </div>
-                    <motion.div
-                      animate={{ rotate: expandedSection === 'subjects' ? 180 : 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ChevronDown className="w-4 h-4 text-game-purple" />
-                    </motion.div>
-                  </button>
-
-                  <AnimatePresence>
-                    {expandedSection === 'subjects' && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="space-y-1 pl-4 overflow-hidden"
+                  {subjectItems.map((item) => (
+                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
+                      <motion.button
+                        type="button"
+                        whileHover={{ x: 8 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                          isActive(item.path)
+                            ? 'bg-game-purple text-white shadow-lg'
+                            : 'text-gray-700 hover:bg-gray-100'
+                        }`}
                       >
-                        {subjectItems.map((item) => (
-                          <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
-                            <motion.button
-                              type="button"
-                              whileHover={{ x: 8 }}
-                              whileTap={{ scale: 0.95 }}
-                              className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
-                                isActive(item.path)
-                                  ? 'bg-game-purple text-white shadow-lg'
-                                  : 'text-gray-700 hover:bg-gray-100'
-                              }`}
-                            >
-                              <span className="text-xl">{item.emoji}</span>
-                              <span>{item.label}</span>
-                            </motion.button>
-                          </Link>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        <span className="text-xl">{item.emoji}</span>
+                        <span>{item.label}</span>
+                      </motion.button>
+                    </Link>
+                  ))}
                 </div>
               )}
 
