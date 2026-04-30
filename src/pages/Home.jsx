@@ -46,11 +46,9 @@ export default function Home() {
             animate={{ opacity: 1 }}
             className="flex items-center gap-3 mb-10 p-5 bg-white rounded-2xl shadow-sm border-2 border-amber-100"
           >
-            <img 
-              src={getDefaultAvatar(user?.full_name || 'User', user?.gender)} 
-              alt="avatar"
-              className="w-12 h-12 rounded-full object-cover bg-amber-100"
-            />
+            <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-2xl">
+              🐱
+            </div>
             <div>
               <p className="text-xs text-gray-500 font-semibold">{lang === 'bm' ? 'Selamat datang!' : lang === 'en' ? 'Welcome!' : lang === 'zh' ? '欢迎!' : 'வரவேற்கிறோம்!'}</p>
               <p className="text-lg font-black text-game-purple">{user?.full_name || 'Teman'}</p>
