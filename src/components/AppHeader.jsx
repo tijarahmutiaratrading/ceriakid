@@ -70,7 +70,7 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
       {/* Header Bar */}
       <motion.div
         initial={{ y: 0 }}
-        animate={{ y: isHeaderVisible ? 0 : 80 }}
+        animate={{ y: !isHeaderVisible ? 0 : 80 }}
         transition={{ duration: 0.3 }}
         className="fixed bottom-4 left-0 right-0 z-40 flex justify-center px-4"
       >
