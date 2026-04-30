@@ -215,25 +215,25 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                       <AnimatePresence>
                         {expandedAgeGroup === ageGroupItem.key && (
                           <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="space-y-1 pl-4 overflow-hidden"
+                            initial={{ opacity: 0, width: 0 }}
+                            animate={{ opacity: 1, width: 'auto' }}
+                            exit={{ opacity: 0, width: 0 }}
+                            className="flex gap-2 overflow-hidden"
                           >
                             {ageGroupItem.subjects.map((item) => (
-                              <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
+                              <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                                 <motion.button
                                   type="button"
-                                  whileHover={{ x: 8 }}
+                                  whileHover={{ y: -4 }}
                                   whileTap={{ scale: 0.95 }}
-                                  className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all whitespace-nowrap ${
                                     isActive(item.path)
                                       ? 'bg-game-purple text-white shadow-lg'
                                       : 'text-gray-700 hover:bg-gray-100'
                                   }`}
                                 >
-                                  <span className="text-xl">{item.emoji}</span>
-                                  <span>{item.label}</span>
+                                  <span className="text-lg">{item.emoji}</span>
+                                  <span className="text-sm">{item.label}</span>
                                 </motion.button>
                               </Link>
                             ))}
