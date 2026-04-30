@@ -25,6 +25,16 @@ import QuizGame from '@/pages/QuizGame';
 import ShapesGame from '@/pages/ShapesGame';
 import Scoreboard from '@/pages/Scoreboard';
 
+// Interactive Games
+import MemoryGame from '@/pages/games/MemoryGame';
+import DragDropGame from '@/pages/games/DragDropGame';
+import WordBuilderGame from '@/pages/games/WordBuilderGame';
+import SortingGame from '@/pages/games/SortingGame';
+import TileMatchGame from '@/pages/games/TileMatchGame';
+import StoryAdventureGame from '@/pages/games/StoryAdventureGame';
+import PhysicsGame from '@/pages/games/PhysicsGame';
+import TracingGameGamified from '@/pages/games/TracingGameGamified';
+
 import Footer from '@/components/Footer';
 import OfflineBanner from '@/components/OfflineBanner';
 
@@ -76,6 +86,16 @@ const AuthenticatedApp = () => {
           <Route path="/quiz" element={<QuizGame />} />
           <Route path="/shapes" element={<ShapesGame />} />
           <Route path="/scoreboard" element={<Scoreboard />} />
+          
+          {/* Interactive Games */}
+          <Route path="/games/memory" element={<MemoryGame />} />
+          <Route path="/games/dragdrop" element={<DragDropGame />} />
+          <Route path="/games/wordbuilder" element={<WordBuilderGame />} />
+          <Route path="/games/sorting" element={<SortingGame />} />
+          <Route path="/games/tilematch" element={<TileMatchGame />} />
+          <Route path="/games/story" element={<StoryAdventureGame />} />
+          <Route path="/games/physics" element={<PhysicsGame />} />
+          <Route path="/games/tracing" element={<TracingGameGamified />} />
           
           {/* Catch all */}
           <Route path="*" element={<PageNotFound />} />
