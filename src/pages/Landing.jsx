@@ -99,35 +99,35 @@ export default function Landing() {
       </div>
 
       {/* ── NAVBAR ── */}
-      <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
-        <div className="text-2xl font-black">🎓 <span className="text-game-purple">Jom Belajar</span></div>
-        <div className="flex items-center gap-3">
-          <Link to="/"><span className="text-sm text-gray-600 font-bold cursor-pointer hover:text-game-purple">Log Masuk</span></Link>
-          <motion.button whileTap={{ scale: 0.95 }} onClick={scrollToPricing} className="px-5 py-2.5 bg-game-orange text-white rounded-full font-black text-sm shadow-md">
+      <nav className="flex items-center justify-between px-4 py-3 max-w-6xl mx-auto">
+        <div className="text-xl font-black">🎓 <span className="text-game-purple">Jom Belajar</span></div>
+        <div className="flex items-center gap-2">
+          <Link to="/"><span className="text-sm text-gray-600 font-bold cursor-pointer hover:text-game-purple hidden sm:inline">Log Masuk</span></Link>
+          <motion.button whileTap={{ scale: 0.95 }} onClick={scrollToPricing} className="px-4 py-2 bg-game-orange text-white rounded-full font-black text-sm shadow-md whitespace-nowrap">
             Cuba Percuma →
           </motion.button>
         </div>
       </nav>
 
       {/* ── HERO ── */}
-      <div className="max-w-5xl mx-auto px-6 pt-8 pb-16">
+      <div className="max-w-5xl mx-auto px-4 pt-6 pb-12">
 
         {/* Social proof badge */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-center mb-8">
-          <div className="inline-flex items-center gap-3 bg-green-50 border-2 border-green-300 rounded-full px-5 py-2.5">
-            <div className="flex -space-x-2">
+          <div className="inline-flex items-center gap-2 bg-green-50 border-2 border-green-300 rounded-full px-4 py-2">
+            <div className="flex -space-x-2 flex-shrink-0">
               {[testimonials[0], testimonials[1], testimonials[2]].map((t, i) => (
-                <img key={i} src={t.avatar} className="w-8 h-8 rounded-full border-2 border-white object-cover" />
+                <img key={i} src={t.avatar} className="w-7 h-7 rounded-full border-2 border-white object-cover" />
               ))}
             </div>
-            <div className="flex gap-0.5">{[...Array(5)].map((_,i) => <span key={i} className="text-yellow-400 text-sm">★</span>)}</div>
-            <span className="text-sm font-black text-green-800">5,000+ keluarga Malaysia guna setiap hari 🇲🇾</span>
+            <div className="flex gap-0.5 flex-shrink-0">{[...Array(5)].map((_,i) => <span key={i} className="text-yellow-400 text-xs">★</span>)}</div>
+            <span className="text-xs font-black text-green-800">5,000+ keluarga Malaysia 🇲🇾</span>
           </div>
         </motion.div>
 
         {/* Headline */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-center mb-6">
-          <h1 className="text-4xl md:text-6xl font-black leading-tight mb-5 text-gray-900">
+          <h1 className="text-3xl md:text-6xl font-black leading-tight mb-5 text-gray-900">
             Anak Malas Belajar?<br />
             <span className="relative inline-block mt-2">
               <span className="relative z-10 text-game-orange">Tukar Jadi Suka</span>
@@ -193,14 +193,14 @@ export default function Landing() {
       </div>
 
       {/* ── PROBLEM SECTION ── */}
-      <div className="bg-white py-16">
-        <div className="max-w-4xl mx-auto px-6">
+      <div className="bg-white py-12">
+        <div className="max-w-4xl mx-auto px-4">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
             <p className="text-4xl mb-3">😮‍💨</p>
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">Rasanya familiar tak?</h2>
             <p className="text-gray-600 text-lg">Ramai ibu bapa Malaysia hadapi situasi ni setiap hari...</p>
           </motion.div>
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
               { emoji: '😤', pain: '"Anak main game je, tak nak belajar"', desc: 'Screen time jadi perang setiap malam. Stress anak, stress ibu bapa.' },
               { emoji: '💸', pain: '"Dah bayar tuisyen RM200-400, result sama je"', desc: 'Wang habis tapi anak masih tak faham apa yang diajar.' },
@@ -224,14 +224,14 @@ export default function Landing() {
       </div>
 
       {/* ── SOLUTION ── */}
-      <div className="max-w-5xl mx-auto px-6 py-16">
+      <div className="max-w-5xl mx-auto px-4 py-12">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
           <span className="inline-block bg-green-100 text-green-700 font-black px-4 py-1.5 rounded-full text-sm mb-4">✅ SOLUSI TERBUKTI</span>
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Jom Belajar — Cikgu Peribadi<br />Yang Sentiasa Ada</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">Permainan edukatif yang direka bersama cikgu berpengalaman. Anak rasa macam main game, tapi sebenarnya belajar.</p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-10">
           {[
             { icon: '🎮', title: 'Belajar Sambil Main', desc: '200+ permainan interaktif. Anak tak sedar pun dia tengah belajar — tapi otak dia dah absorb semua.' },
             { icon: '📊', title: 'Pantau Progress Anak', desc: 'Dashboard ibu bapa tunjuk apa yang anak dah belajar, markah, dan mana yang perlu lebih latihan.' },
@@ -264,14 +264,14 @@ export default function Landing() {
       </div>
 
       {/* ── TESTIMONIALS ── */}
-      <div className="bg-white py-16">
-        <div className="max-w-6xl mx-auto px-6">
+      <div className="bg-white py-12">
+        <div className="max-w-6xl mx-auto px-4">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
             <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_,i) => <span key={i} className="text-2xl text-yellow-400">★</span>)}</div>
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-2">Ibu Bapa Dah Buktikan</h2>
             <p className="text-gray-600">Bukan kami cakap — mereka yang cerita sendiri 👇</p>
           </motion.div>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {testimonials.map((t, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-amber-50 rounded-2xl p-6 border-2 border-amber-200 flex flex-col justify-between">
                 <div>
@@ -293,12 +293,12 @@ export default function Landing() {
       </div>
 
       {/* ── HOW IT WORKS ── */}
-      <div className="max-w-4xl mx-auto px-6 py-16">
+      <div className="max-w-4xl mx-auto px-4 py-12">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
           <h2 className="text-3xl font-black text-gray-900 mb-3">Mulakan Dalam 3 Langkah</h2>
           <p className="text-gray-600">Setup dalam 2 minit. Anak terus boleh mula belajar.</p>
         </motion.div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {[
             { step: '1', icon: '📲', title: 'Daftar Percuma', desc: 'Buka app, daftar dengan email. Tiada kad kredit diperlukan.' },
             { step: '2', icon: '🎯', title: 'Pilih Peringkat Anak', desc: 'Prasekolah atau Sekolah Rendah. App auto-suggest permainan yang sesuai.' },
@@ -315,8 +315,8 @@ export default function Landing() {
       </div>
 
       {/* ── PRICING ── */}
-      <div id="pricing" className="bg-gray-50 py-16">
-        <div className="max-w-5xl mx-auto px-6">
+      <div id="pricing" className="bg-gray-50 py-12">
+        <div className="max-w-5xl mx-auto px-4">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-4">
             <span className="inline-block bg-red-100 text-red-600 font-black px-4 py-1.5 rounded-full text-sm mb-4">
               ⏱️ Tawaran Tamat Dalam: {String(countdown.m).padStart(2,'0')}:{String(countdown.s).padStart(2,'0')}
@@ -325,16 +325,16 @@ export default function Landing() {
             <p className="text-gray-600">Cuba percuma dulu. Upgrade bila-bila masa. Cancel senang je.</p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-8">
             {tiers.map((tier, i) => (
               <motion.div
                 key={tier.name}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className={`rounded-3xl p-7 relative overflow-hidden border-2 transition-all ${
+                className={`rounded-3xl p-5 md:p-7 relative overflow-hidden border-2 transition-all ${
                   tier.highlighted
-                    ? 'bg-gradient-to-br from-orange-500 to-red-500 border-orange-400 shadow-2xl scale-105'
+                    ? 'bg-gradient-to-br from-orange-500 to-red-500 border-orange-400 shadow-2xl md:scale-105'
                     : 'bg-white border-gray-200 shadow-md'
                 }`}
               >
@@ -391,7 +391,7 @@ export default function Landing() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="mt-10 bg-white border-2 border-game-purple rounded-3xl p-8 max-w-lg mx-auto shadow-2xl"
+                className="mt-8 bg-white border-2 border-game-purple rounded-3xl p-5 md:p-8 max-w-lg mx-auto shadow-2xl"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div>
@@ -417,7 +417,7 @@ export default function Landing() {
       </div>
 
       {/* ── FAQ ── */}
-      <div className="max-w-3xl mx-auto px-6 py-16">
+      <div className="max-w-3xl mx-auto px-4 py-12">
         <h2 className="text-3xl font-black text-center text-gray-900 mb-10">Soalan Lazim 🤔</h2>
         <div className="space-y-4">
           {[
@@ -437,8 +437,8 @@ export default function Landing() {
       </div>
 
       {/* ── FINAL CTA SECTION ── */}
-      <div className="bg-gradient-to-br from-game-purple to-game-blue py-16 text-white">
-        <div className="max-w-3xl mx-auto px-6 text-center">
+      <div className="bg-gradient-to-br from-game-purple to-game-blue py-12 text-white">
+        <div className="max-w-3xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
             <p className="text-5xl mb-5">🎓</p>
             <h2 className="text-3xl md:text-4xl font-black mb-4">Anak Anda Layak Dapat<br />Yang Terbaik</h2>
