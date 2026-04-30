@@ -1,26 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 
-export default function HamburgerMenu() {
+export default function AppHeader({ showBack = false, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated } = useAuth() || {};
-  const { ageGroup = 'prasekolah', toggleAgeGroup = () => {} } = useAgeGroup() || {};
+  const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
-
-  // Don't show on landing, pricing, admin & client dashboards
-  if (location.pathname === '/landing' || location.pathname === '/pricing' || 
-      location.pathname === '/admin-dashboard' || location.pathname === '/client-dashboard' ||
-      location.pathname === '/b2b') {
-    return null;
-  }
 
   const navItems = [
     { path: '/', emoji: '🏠', label: 'Rumah' },
-
     { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
     { path: '/games/english', emoji: '🇬🇧', label: 'English' },
     { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
@@ -39,6 +31,36 @@ export default function HamburgerMenu() {
 
   return (
     <>
+      {/* Header Bar */}
+      <div className="bg-white/90 backdrop-blur-sm border-b border-amber-100 shadow-sm">
+        <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
+          {/* Left: Hamburger or Back */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 rounded-xl bg-game-purple text-white shadow-md flex items-center justify-center"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
+          {/* Center: Logo / Title */}
+          <Link to="/" className="flex items-center gap-2">
+            <span className="text-xl">🎓</span>
+            <span className="font-black text-game-purple text-lg">CeriaJaya</span>
+          </Link>
+
+          {/* Right: Back button or spacer */}
+          {showBack ? (
+            <Link to={backTo}>
+              <button className="p-2 rounded-xl bg-gray-100 text-gray-600 flex items-center justify-center">
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+            </Link>
+          ) : (
+            <div className="w-9" />
+          )}
+        </div>
+      </div>
+
       {/* Overlay */}
       <AnimatePresence>
         {isOpen && (
@@ -60,9 +82,20 @@ export default function HamburgerMenu() {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -300, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="fixed left-0 top-0 z-40 h-screen w-64 bg-white rounded-r-2xl shadow-2xl pt-20 px-4 overflow-y-auto"
+            className="fixed left-0 top-0 z-50 h-screen w-64 bg-white rounded-r-2xl shadow-2xl pt-6 px-4 overflow-y-auto"
           >
-            <nav className="space-y-3">
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🎓</span>
+                <span className="font-black text-game-purple text-lg">CeriaJaya</span>
+              </div>
+              <button onClick={() => setIsOpen(false)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <nav className="space-y-2">
               {navItems.map((item) => (
                 <Link
                   key={item.path}

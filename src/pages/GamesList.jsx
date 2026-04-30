@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
 import GameListCard from '@/components/game/GameListCard';
+import AppHeader from '@/components/AppHeader';
 
 const categoryLabels = {
   bahasa_melayu: 'Bahasa Melayu',
@@ -133,16 +133,8 @@ export default function GamesList() {
 
   return (
     <div className="min-h-screen bg-pattern pb-32">
-      <div className="max-w-lg mx-auto px-4 pt-16 pb-6">
-        {/* Header */}
-        <Link to="/">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </motion.button>
-        </Link>
+      <AppHeader showBack={true} backTo="/" />
+      <div className="max-w-lg mx-auto px-4 pt-4 pb-6">
 
         <motion.div className="mb-4">
           <div className="flex items-center gap-3 mb-2">
