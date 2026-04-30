@@ -76,10 +76,10 @@ const avatars = [
 ];
 
 export default function Landing() {
-   const countdown = useCountdown(15);
-   const [selectedTierForCheckout, setSelectedTierForCheckout] = useState('standard');
    const { isAuthenticated, refreshAuth } = useAuth();
    const navigate = useNavigate();
+   const countdown = useCountdown(15);
+   const [selectedTierForCheckout, setSelectedTierForCheckout] = useState('standard');
 
 
 
