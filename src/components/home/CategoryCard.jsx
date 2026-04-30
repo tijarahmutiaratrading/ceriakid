@@ -22,7 +22,7 @@ export default function CategoryCard({ category, gameCount, idx }) {
         transition={{ delay: idx * 0.08 }}
         whileHover={{ scale: 1.04, y: -6 }}
         whileTap={{ scale: 0.96 }}
-        className={`clay rounded-3xl overflow-hidden cursor-pointer h-full min-h-[160px] group relative`}
+        className={`clay rounded-3xl overflow-hidden cursor-pointer h-full min-h-[200px] group relative`}
       >
         {/* Gradient Background */}
         <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-90`} />
@@ -31,10 +31,10 @@ export default function CategoryCard({ category, gameCount, idx }) {
         <div className={`absolute -top-8 -right-8 w-32 h-32 rounded-full ${config.accentBg} blur-2xl opacity-50 group-hover:opacity-70 transition-opacity`} />
 
         {/* Content */}
-        <div className="relative z-10 p-6 h-full flex flex-col justify-between">
+        <div className="relative z-10 p-8 h-full flex flex-col justify-between">
           <div>
-            <div className="text-5xl mb-3 group-hover:scale-110 transition-transform origin-left">{config.emoji}</div>
-            <h3 className="font-black text-xl text-white drop-shadow-sm">{config.label}</h3>
+            <div className="text-6xl mb-4 group-hover:scale-110 transition-transform origin-left">{config.emoji}</div>
+            <h3 className="font-black text-2xl text-white drop-shadow-sm">{config.label}</h3>
           </div>
           
           <div className="flex items-end justify-between">
