@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import AppHeader from '@/components/AppHeader';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
+import { getDefaultAvatar } from '@/lib/avatarGenerator';
 
 export default function Home() {
   const { isAuthenticated, user } = useAuth();
@@ -36,13 +37,30 @@ export default function Home() {
 
         {/* Welcome */}
         {isAuthenticated && (
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-sm font-semibold text-game-purple mb-6"
+            className="flex items-center gap-3 mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-amber-100"
           >
-            👋 Halo, {user?.full_name || 'Teman'}!
-          </motion.p>
+            <img 
+              src={getDefaultAvatar(user?.full_name || 'User')} 
+              alt="avatar"
+              className="w-12 h-12 rounded-full object-cover bg-amber-100"
+            />
+            <div>
+              <p className="text-xs text-gray-500 font-semibold">Selamat datang!</p>
+              <p className="text-lg font-black text-game-purple">{user?.full_name || 'Teman'}</p>
+            </div>
+            <Link to="/client-dashboard" className="ml-auto">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full bg-game-purple text-white text-sm font-bold"
+              >
+                ⚙️
+              </motion.button>
+            </Link>
+          </motion.div>
         )}
 
         {/* Age Group Toggle */}
