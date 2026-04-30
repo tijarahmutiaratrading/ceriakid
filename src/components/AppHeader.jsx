@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowLeft } from 'lucide-react';
+import { Menu, X, ArrowLeft, Home, BookOpen, Globe, Calculator, Beaker, Palette, BarChart3, Users, Zap, Settings, LayoutDashboard, Baby, GraduationCap } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
-import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -175,7 +174,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 <>
                   <Link to="/" onClick={() => setIsOpen(false)}>
                     <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
-                      <span className="text-xl">🏠</span>
+                      <Home className="w-5 h-5" />
                       <span>Rumah</span>
                     </motion.button>
                   </Link>
@@ -186,21 +185,21 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                       onClick={() => toggleSection('prasekolah')}
                       className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all"
                     >
-                      <span className="text-xl">👶</span>
+                      <Baby className="w-5 h-5" />
                       <span>Pra Sekolah</span>
                       <span className={`ml-auto text-sm transition-transform ${expandedSections.prasekolah ? 'rotate-180' : ''}`}>▼</span>
                     </button>
                     {expandedSections.prasekolah && (
                       <div className="ml-4 space-y-1 border-l-2 border-gray-200 pl-2 mt-1">
                         {[
-                          { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
-                          { path: '/games/english', emoji: '🇬🇧', label: 'English' },
-                          { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
-                          { path: '/games/science', emoji: '🔬', label: 'Sains' },
+                          { path: '/games/bahasa_melayu', icon: Globe, label: 'Bahasa Melayu' },
+                          { path: '/games/english', icon: BookOpen, label: 'English' },
+                          { path: '/games/mathematics', icon: Calculator, label: 'Matematik' },
+                          { path: '/games/science', icon: Beaker, label: 'Sains' },
                         ].map(sub => (
                           <Link key={sub.path} to={sub.path} onClick={() => setIsOpen(false)}>
                             <motion.button whileHover={{ x: 4 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${isActive(sub.path) ? 'bg-game-purple text-white' : 'text-gray-700 hover:bg-gray-100'}`}>
-                              <span>{sub.emoji}</span>
+                              <sub.icon className="w-4 h-4" />
                               <span>{sub.label}</span>
                             </motion.button>
                           </Link>
@@ -215,22 +214,22 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                       onClick={() => toggleSection('sekolahRendah')}
                       className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all"
                     >
-                      <span className="text-xl">👨‍🎓</span>
+                      <GraduationCap className="w-5 h-5" />
                       <span>Sekolah Rendah</span>
                       <span className={`ml-auto text-sm transition-transform ${expandedSections.sekolahRendah ? 'rotate-180' : ''}`}>▼</span>
                     </button>
                     {expandedSections.sekolahRendah && (
                       <div className="ml-4 space-y-1 border-l-2 border-gray-200 pl-2 mt-1">
                         {[
-                          { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
-                          { path: '/games/english', emoji: '🇬🇧', label: 'English' },
-                          { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
-                          { path: '/games/science', emoji: '🔬', label: 'Sains' },
-                          { path: '/games/jawi', emoji: '🕌', label: 'Aksara Jawi' },
+                          { path: '/games/bahasa_melayu', icon: Globe, label: 'Bahasa Melayu' },
+                          { path: '/games/english', icon: BookOpen, label: 'English' },
+                          { path: '/games/mathematics', icon: Calculator, label: 'Matematik' },
+                          { path: '/games/science', icon: Beaker, label: 'Sains' },
+                          { path: '/games/jawi', icon: BookOpen, label: 'Aksara Jawi' },
                         ].map(sub => (
                           <Link key={sub.path} to={sub.path} onClick={() => setIsOpen(false)}>
                             <motion.button whileHover={{ x: 4 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${isActive(sub.path) ? 'bg-game-purple text-white' : 'text-gray-700 hover:bg-gray-100'}`}>
-                              <span>{sub.emoji}</span>
+                              <sub.icon className="w-4 h-4" />
                               <span>{sub.label}</span>
                             </motion.button>
                           </Link>
@@ -242,28 +241,28 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   {/* Other Features */}
                   <Link to="/drawing" onClick={() => setIsOpen(false)}>
                     <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/drawing') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
-                      <span className="text-xl">🎨</span>
+                      <Palette className="w-5 h-5" />
                       <span>Studio Lukisan</span>
                     </motion.button>
                   </Link>
 
                   <Link to="/parent-dashboard" onClick={() => setIsOpen(false)}>
                     <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/parent-dashboard') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
-                      <span className="text-xl">📊</span>
+                      <BarChart3 className="w-5 h-5" />
                       <span>Dashboard Prestasi</span>
                     </motion.button>
                   </Link>
 
                   <Link to="/friends" onClick={() => setIsOpen(false)}>
                     <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/friends') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
-                      <span className="text-xl">👥</span>
+                      <Users className="w-5 h-5" />
                       <span>Kawan</span>
                     </motion.button>
                   </Link>
 
                   <Link to="/challenges" onClick={() => setIsOpen(false)}>
                     <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/challenges') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
-                      <span className="text-xl">⚡</span>
+                      <Zap className="w-5 h-5" />
                       <span>Cabaran</span>
                     </motion.button>
                   </Link>
@@ -271,7 +270,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   {isAdmin && (
                     <Link to="/admin-hub" onClick={() => setIsOpen(false)}>
                       <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/admin-hub') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
-                        <span className="text-xl">🎛️</span>
+                        <LayoutDashboard className="w-5 h-5" />
                         <span>Admin Hub</span>
                       </motion.button>
                     </Link>
