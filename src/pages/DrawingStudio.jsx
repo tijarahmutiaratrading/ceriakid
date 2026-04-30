@@ -363,26 +363,26 @@ export default function DrawingStudio() {
         )}
 
         {/* Action buttons */}
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <motion.button
             whileTap={{ scale: 0.92 }}
             onClick={undo}
             disabled={history.length === 0}
-            className="flex-1 flex items-center justify-center gap-2 py-3 bg-white border-2 border-amber-200 rounded-2xl font-bold text-gray-700 disabled:opacity-40"
+            className="flex-1 flex items-center justify-center gap-2 py-3 bg-white border-2 border-amber-200 rounded-2xl font-bold text-gray-700 disabled:opacity-40 text-sm"
           >
             <Undo2 className="w-4 h-4" /> Undo
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.92 }}
             onClick={initCanvas}
-            className="flex-1 flex items-center justify-center gap-2 py-3 bg-white border-2 border-red-200 rounded-2xl font-bold text-red-600"
+            className="flex-1 flex items-center justify-center gap-2 py-3 bg-white border-2 border-red-200 rounded-2xl font-bold text-red-600 text-sm"
           >
             <Trash2 className="w-4 h-4" /> Kosongkan
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.92 }}
             onClick={downloadCanvas}
-            className="flex-1 flex items-center justify-center gap-2 py-3 bg-game-orange text-white rounded-2xl font-bold shadow"
+            className="flex-1 flex items-center justify-center gap-2 py-3 bg-game-orange text-white rounded-2xl font-bold shadow text-sm"
           >
             <Download className="w-4 h-4" /> Simpan
           </motion.button>
