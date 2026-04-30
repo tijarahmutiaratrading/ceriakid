@@ -90,8 +90,8 @@ export default function Landing() {
     <div className="min-h-screen font-nunito" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fff3e6 40%, #fff9f0 100%)' }}>
 
       {/* ── URGENCY BAR ── */}
-      <div className="bg-orange-500 text-white text-center py-2.5 px-4">
-        <p className="text-sm font-black">
+      <div className="bg-orange-500 text-white text-center py-1.5 px-4">
+        <p className="text-xs font-semibold">
           🔥 TAWARAN TERHAD — Diskaun 50% untuk <span className="underline">50 pendaftar pertama</span> hari ini!
           &nbsp;⏱️ Tamat dalam: <span className="font-black text-yellow-200">{String(countdown.m).padStart(2,'0')}:{String(countdown.s).padStart(2,'0')}</span>
         </p>
