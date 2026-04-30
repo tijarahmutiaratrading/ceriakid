@@ -1,11 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Zap, Brain, BookOpen, Copy, Gamepad2, Scroll, Rocket, Pen } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { playSound } from '@/lib/soundManager';
 
 export default function GamesHub() {
+  const navigate = useNavigate();
   const games = [
     {
       id: 1,
@@ -83,7 +84,7 @@ export default function GamesHub() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50">
-      <AppHeader showBack={true} backTo="/dashboard" />
+      <AppHeader showBack={true} onBack={() => navigate(-1)} />
       
       <div className="max-w-5xl mx-auto px-4 py-8 pb-24 pt-20">
         {/* Header */}
