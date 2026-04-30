@@ -43,38 +43,47 @@ export default function ClientDashboard() {
 
   const tierNames = {
     free: 'Percuma',
-    premium: 'Premium',
-    pro: 'Pro (Keluarga)',
+    asas: '🌱 Asas',
+    standard: '⭐ Standard',
+    keluarga: '👑 Keluarga',
   };
 
   const tierPrices = {
     free: 'RM 0',
-    premium: 'RM 24.90',
-    pro: 'RM 44.90',
+    asas: 'RM 49',
+    standard: 'RM 99',
+    keluarga: 'RM 199',
   };
 
   const tierFeatures = {
     free: [
-      '5 permainan percuma',
+      'Beberapa permainan percuma',
       'Prasekolah sahaja',
-      'Dwibahasa (BM & EN)',
+      'Akses terhad',
       'Tanpa iklan',
     ],
-    premium: [
-      '100+ permainan premium',
+    asas: [
+      'Semua subjek',
+      'Prasekolah sahaja',
+      'Tanpa iklan',
+      'Boleh guna offline 📲',
+      'Kemas kini mingguan',
+    ],
+    standard: [
+      'Semua subjek',
+      'Sekolah Rendah sahaja',
+      'Dashboard ibu bapa',
+      'Tanpa iklan',
+      'Boleh guna offline 📲',
+      'Kemas kini mingguan',
+    ],
+    keluarga: [
+      'Semua subjek',
       'Prasekolah & Sekolah Rendah',
-      'Semua mata pelajaran',
+      'Sehingga 4 profil anak',
       'Dashboard ibu bapa lengkap',
-      'Tanpa iklan',
-      'Update mingguan',
-    ],
-    pro: [
-      '200+ permainan eksklusif',
-      'Untuk 4 anak sekaligus',
-      'Semua mata pelajaran + eksklusif',
-      'Laporan bulanan email',
-      'Sokongan 24/7',
-      'Mod luar talian',
+      'Boleh guna offline 📲',
+      'Sokongan prioriti',
     ],
   };
 
@@ -101,7 +110,8 @@ export default function ClientDashboard() {
                 whileHover={{ scale: 1.02, y: -4 }}
                 className={`rounded-3xl p-8 border-2 shadow-lg ${
                   subscription.tier === 'free' ? 'bg-gradient-to-br from-gray-100 to-gray-50 border-gray-300' :
-                  subscription.tier === 'premium' ? 'bg-gradient-to-br from-blue-100 to-blue-50 border-blue-300' :
+                  subscription.tier === 'asas' ? 'bg-gradient-to-br from-green-100 to-green-50 border-green-300' :
+                  subscription.tier === 'standard' ? 'bg-gradient-to-br from-blue-100 to-blue-50 border-blue-300' :
                   'bg-gradient-to-br from-purple-100 to-purple-50 border-purple-300'
                 }`}
               >
@@ -110,25 +120,27 @@ export default function ClientDashboard() {
                     <p className="text-sm font-bold text-gray-600 mb-1">Pakej Semasa</p>
                     <h3 className={`text-4xl font-black ${
                       subscription.tier === 'free' ? 'text-gray-700' :
-                      subscription.tier === 'premium' ? 'text-blue-600' :
+                      subscription.tier === 'asas' ? 'text-green-600' :
+                      subscription.tier === 'standard' ? 'text-blue-600' :
                       'text-purple-600'
                     }`}>
                       {tierNames[subscription.tier]}
                     </h3>
                   </div>
                   <div className="text-5xl opacity-30">
-                    {subscription.tier === 'free' ? '🎯' : subscription.tier === 'premium' ? '💎' : '👑'}
+                    {subscription.tier === 'free' ? '🎯' : subscription.tier === 'asas' ? '🌱' : subscription.tier === 'standard' ? '⭐' : '👑'}
                   </div>
                 </div>
 
                 <div className="space-y-3 mb-6">
                   <div className={`p-4 rounded-2xl flex items-center gap-3 ${
                     subscription.tier === 'free' ? 'bg-white/60' :
-                    subscription.tier === 'premium' ? 'bg-blue-200/60' :
+                    subscription.tier === 'asas' ? 'bg-green-200/60' :
+                    subscription.tier === 'standard' ? 'bg-blue-200/60' :
                     'bg-purple-200/60'
                   }`}>
                     <span className="text-2xl font-black">{tierPrices[subscription.tier]}</span>
-                    <span className="text-sm text-gray-700 font-bold">{subscription.tier !== 'free' ? '/bulan' : 'Selamanya'}</span>
+                    <span className="text-sm text-gray-700 font-bold">{subscription.tier !== 'free' ? '/tahun' : 'Selamanya'}</span>
                   </div>
 
                   {subscription.currentPeriodEnd && (
