@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 export default function AppHeader({ showBack = false, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +13,7 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
   const location = useLocation();
   const isAdmin = user?.role === 'admin';
   const isLanding = location.pathname === '/landing' || location.pathname === '/';
+  const isHeaderVisible = useScrollDirection();
 
   // Determine menu based on user role and location
   let navItems = [];
@@ -66,7 +68,12 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
   return (
     <>
       {/* Header Bar */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-game-orange border-b border-white/20 shadow-lg">
+      <motion.div
+        initial={{ y: 0 }}
+        animate={{ y: isHeaderVisible ? 0 : -60 }}
+        transition={{ duration: 0.3 }}
+        className="fixed top-0 left-0 right-0 z-40 bg-game-orange border-b border-white/20 shadow-lg"
+      >
         <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
           {/* Left: Hamburger or Back */}
           <button
@@ -93,7 +100,7 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
             <div className="w-9" />
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* Overlay */}
       <AnimatePresence>
