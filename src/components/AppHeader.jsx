@@ -13,7 +13,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const location = useLocation();
   const isAdmin = user?.role === 'admin';
   const isLanding = location.pathname === '/landing';
-  const isHeaderVisible = useScrollDirection();
   
   // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
@@ -71,12 +70,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   return (
     <>
       {/* Header Bar */}
-      <motion.div
-        initial={{ y: 0 }}
-        animate={{ y: !isHeaderVisible ? 0 : 80 }}
-        transition={{ duration: 0.3 }}
-        className="fixed bottom-4 left-0 right-0 z-40 flex justify-center px-4"
-      >
+      <div className="fixed bottom-4 left-0 right-0 z-40 flex justify-center px-4">
         <div className="w-full max-w-lg bg-gradient-to-r from-yellow-400 via-orange-400 to-purple-500 rounded-full px-6 h-16 flex items-center justify-between backdrop-blur-md bg-opacity-85 shadow-2xl"
              style={{
                boxShadow: '0 8px 32px rgba(245, 158, 11, 0.3), 0 0 60px rgba(168, 85, 247, 0.2)'
@@ -106,7 +100,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             <div className="w-10" />
           )}
         </div>
-      </motion.div>
+      </div>
 
       {/* Overlay */}
       <AnimatePresence>
