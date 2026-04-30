@@ -23,7 +23,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   const otherItems = [
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
-    { path: '/parent-dashboard', emoji: '🏆', label: 'Prestasi' },
+    { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi Anak' },
     { path: '/friends', emoji: '👥', label: 'Kawan' },
     { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
   ];
