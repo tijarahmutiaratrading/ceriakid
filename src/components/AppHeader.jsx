@@ -89,23 +89,23 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     <>
       {/* Header Bar */}
       <div className="fixed bottom-4 left-0 right-0 z-40 flex justify-center px-4">
-        <div className="w-full max-w-lg bg-gradient-to-r from-yellow-400 via-orange-400 to-purple-500 rounded-full px-6 h-16 flex items-center justify-between backdrop-blur-md bg-opacity-85 shadow-2xl"
+        <div className="w-full max-w-lg bg-white rounded-2xl px-5 h-16 flex items-center justify-between shadow-lg border border-gray-200/50"
              style={{
-               boxShadow: '0 8px 32px rgba(245, 158, 11, 0.3), 0 0 60px rgba(168, 85, 247, 0.2)'
+               boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)'
              }}>
-          {/* Left: Hamburger or Back */}
+          {/* Left: Hamburger */}
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 flex items-center justify-center text-amber-800 hover:opacity-75 transition-opacity"
+            className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
           >
-            <Menu className="w-6 h-6" />
+            <Menu className="w-5 h-5" />
           </button>
 
           {/* Center: Logo / Title */}
           <Link to="/" className="flex items-center gap-2 flex-1 justify-center">
-            <span className="text-2xl">🎓</span>
-            <span className="font-black text-white text-xl">CeriaJaya</span>
+            <span className="text-xl">🎓</span>
+            <span className="font-bold text-gray-900 text-lg">CeriaJaya</span>
           </Link>
 
           {/* Right: Language Switcher or Back */}
@@ -113,8 +113,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             {!isLanding && <LanguageSwitcher />}
             {shouldShowBack ? (
               <Link to={backTo}>
-                <button type="button" className="p-2 flex items-center justify-center text-white hover:opacity-75 transition-opacity">
-                  <ArrowLeft className="w-6 h-6" />
+                <button type="button" className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
+                  <ArrowLeft className="w-5 h-5" />
                 </button>
               </Link>
             ) : (
@@ -145,17 +145,17 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -300, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="fixed left-0 top-0 z-50 h-screen w-64 bg-white rounded-r-2xl shadow-2xl pt-6 px-4 overflow-y-auto backdrop-filter-none"
+            className="fixed left-0 top-0 z-50 h-screen w-72 bg-white shadow-2xl pt-6 px-4 overflow-y-auto backdrop-filter-none"
           >
             {/* Drawer Header */}
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">🎓</span>
-                <span className="font-black text-game-purple text-lg">CeriaJaya</span>
-              </div>
-              <button type="button" onClick={() => setIsOpen(false)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600">
-                <X className="w-5 h-5" />
-              </button>
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🎓</span>
+              <span className="font-bold text-gray-900 text-lg">CeriaJaya</span>
+            </div>
+            <button type="button" onClick={() => setIsOpen(false)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
+              <X className="w-5 h-5" />
+            </button>
             </div>
 
             <nav className="space-y-3">
@@ -166,24 +166,24 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     key={item.path}
                     href={item.path}
                     onClick={() => setIsOpen(false)}
-                    className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all"
+                    className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-all text-sm"
                   >
-                    <span className="text-xl">{item.emoji}</span>
+                    <span className="text-lg">{item.emoji}</span>
                     <span>{item.label}</span>
                   </a>
                 ) : (
                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
                      <motion.button
                        type="button"
-                       whileHover={{ x: 8 }}
-                       whileTap={{ scale: 0.95 }}
-                       className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                       whileHover={{ x: 4 }}
+                       whileTap={{ scale: 0.98 }}
+                       className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all ${
                          isActive(item.path)
-                           ? 'bg-game-purple text-white shadow-lg'
+                           ? 'bg-game-purple text-white shadow-md'
                            : 'text-gray-700 hover:bg-gray-100'
                        }`}
                      >
-                       <span className="text-xl">{item.emoji}</span>
+                       <span className="text-lg">{item.emoji}</span>
                        <span>{item.label}</span>
                      </motion.button>
                    </Link>
@@ -203,17 +203,17 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                           e.stopPropagation();
                           setExpandedAgeGroup(expandedAgeGroup === ageGroupItem.key ? null : ageGroupItem.key);
                         }}
-                        className="w-full text-left flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all border-2 border-game-purple/20"
+                        className="w-full text-left flex items-center justify-between px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-all border border-gray-200"
                       >
                         <div className="flex items-center gap-3">
-                          <span className="text-xl">{ageGroupItem.emoji}</span>
-                          <span>{ageGroupItem.label}</span>
+                          <span className="text-lg">{ageGroupItem.emoji}</span>
+                          <span className="text-sm">{ageGroupItem.label}</span>
                         </div>
                         <motion.div
                           animate={{ rotate: expandedAgeGroup === ageGroupItem.key ? 180 : 0 }}
                           transition={{ duration: 0.2 }}
                         >
-                          <ChevronDown className="w-4 h-4 text-game-purple" />
+                          <ChevronDown className="w-4 h-4 text-gray-600" />
                         </motion.div>
                       </button>
 
@@ -230,15 +230,15 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                               <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
                                 <motion.button
                                   type="button"
-                                  whileHover={{ x: 8 }}
-                                  whileTap={{ scale: 0.95 }}
-                                  className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                                  whileHover={{ x: 4 }}
+                                  whileTap={{ scale: 0.98 }}
+                                  className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all ${
                                     isActive(item.path)
-                                      ? 'bg-game-purple text-white shadow-lg'
+                                      ? 'bg-game-purple text-white shadow-md'
                                       : 'text-gray-700 hover:bg-gray-100'
                                   }`}
                                 >
-                                  <span className="text-xl">{item.emoji}</span>
+                                  <span className="text-lg">{item.emoji}</span>
                                   <span>{item.label}</span>
                                 </motion.button>
                               </Link>
@@ -259,15 +259,15 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
                       <motion.button
                         type="button"
-                        whileHover={{ x: 8 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                        whileHover={{ x: 4 }}
+                        whileTap={{ scale: 0.98 }}
+                        className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all ${
                           isActive(item.path)
-                            ? 'bg-blue-500 text-white shadow-lg'
-                            : 'text-blue-600 hover:bg-blue-50'
+                            ? 'bg-blue-600 text-white shadow-md'
+                            : 'text-gray-700 hover:bg-gray-100'
                         }`}
                       >
-                        <span className="text-xl">{item.emoji}</span>
+                        <span className="text-lg">{item.emoji}</span>
                         <span>{item.label}</span>
                       </motion.button>
                     </Link>
@@ -280,15 +280,15 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
                   <motion.button
                     type="button"
-                    whileHover={{ x: 8 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                    whileHover={{ x: 4 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all ${
                       isActive(item.path)
-                        ? 'bg-game-purple text-white shadow-lg'
+                        ? 'bg-game-purple text-white shadow-md'
                         : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
-                    <span className="text-xl">{item.emoji}</span>
+                    <span className="text-lg">{item.emoji}</span>
                     <span>{item.label}</span>
                   </motion.button>
                 </Link>
@@ -302,15 +302,15 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                      <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
                        <motion.button
                          type="button"
-                         whileHover={{ x: 8 }}
-                         whileTap={{ scale: 0.95 }}
-                         className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                         whileHover={{ x: 4 }}
+                         whileTap={{ scale: 0.98 }}
+                         className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all ${
                            isActive(item.path)
-                             ? 'bg-red-500 text-white shadow-lg'
-                             : 'text-red-600 hover:bg-red-50'
+                             ? 'bg-red-600 text-white shadow-md'
+                             : 'text-gray-700 hover:bg-gray-100'
                          }`}
                        >
-                         <span className="text-xl">{item.emoji}</span>
+                         <span className="text-lg">{item.emoji}</span>
                          <span>{item.label}</span>
                        </motion.button>
                      </Link>
@@ -324,15 +324,15 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   <div className="border-t border-gray-200 my-2" />
                   <motion.button
                     type="button"
-                    whileHover={{ x: 8 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ x: 4 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => {
                       setIsOpen(false);
                       logout?.();
                     }}
-                    className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-red-600 hover:bg-red-50 transition-all"
+                    className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all"
                   >
-                    <LogOut className="w-5 h-5" />
+                    <LogOut className="w-4 h-4" />
                     <span>Log Keluar</span>
                   </motion.button>
                 </>
