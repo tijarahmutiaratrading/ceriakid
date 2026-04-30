@@ -21,13 +21,9 @@ export default function LanguageSwitcher() {
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-game-purple/30 rounded-full hover:border-game-purple transition-all shadow-sm"
+        className="flex items-center justify-center w-8 h-8 bg-white border border-game-purple/30 rounded-full hover:border-game-purple transition-all shadow-sm text-lg"
       >
-        <Globe className="w-4 h-4 text-game-purple" />
-        <span className="font-bold text-sm">{currentLang?.flag} {currentLang?.name.split(' ')[0]}</span>
-        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-          <ChevronDown className="w-4 h-4 text-game-purple" />
-        </motion.div>
+        {currentLang?.flag}
       </motion.button>
 
       <AnimatePresence>
