@@ -72,7 +72,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     
     if (isAuthenticated) {
       dashboardItems = [
-        { path: '/dashboard', emoji: '👨‍👩‍👧', label: 'Dashboard Pengguna' },
+        { path: '/dashboard', emoji: '📊', label: 'Dashboard Pengguna' },
       ];
     }
     
