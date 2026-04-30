@@ -201,24 +201,25 @@ export default function Landing() {
                 </div>
               </div>
             </div>
+
+            {/* Mini badges below game demo */}
+            <div className="flex flex-wrap gap-2 mt-8 justify-center">
+              {[
+                { icon: '🏆', text: 'Ikut KSSR' },
+                { icon: '🚫', text: 'Tiada Iklan' },
+                { icon: '📲', text: 'Offline' },
+                { icon: '🔒', text: '100% Selamat' },
+                { icon: '💰', text: 'Jaminan 30 Hari' },
+              ].map((s, i) => (
+                <span key={i} className="flex items-center gap-1 bg-white border border-orange-100 rounded-full px-2.5 py-1 text-xs font-semibold text-gray-600 shadow-sm">
+                  {s.icon} {s.text}
+                </span>
+              ))}
+            </div>
           </motion.div>
         </div>
 
-        {/* Trusted by logos/badges */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="grid grid-cols-3 md:grid-cols-5 gap-3 mt-16 pt-12 border-t border-orange-100">
-          {[
-            { icon: '🏆', text: 'Ikut KSSR 2024' },
-            { icon: '🚫', text: 'Tiada Iklan' },
-            { icon: '📲', text: 'Boleh Main Offline' },
-            { icon: '🔒', text: '100% Selamat' },
-            { icon: '💰', text: 'Jaminan 30 Hari' },
-          ].map((s, i) => (
-            <div key={i} className="flex flex-col items-center gap-1.5 bg-white px-3 py-3 rounded-2xl border border-orange-100 shadow-sm text-xs font-bold text-gray-700 text-center">
-              <span className="text-xl">{s.icon}</span>
-              <span>{s.text}</span>
-            </div>
-          ))}
-        </motion.div>
+
       </div>
 
       {/* ── STATS STRIP ── */}
