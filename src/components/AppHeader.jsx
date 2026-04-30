@@ -169,9 +169,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 <div className="space-y-1">
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setExpandedSection(expandedSection === 'subjects' ? null : 'subjects');
+                    onClick={() => {
+                      const newState = expandedSection === 'subjects' ? null : 'subjects';
+                      setExpandedSection(newState);
                     }}
                     className="w-full text-left flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all border-2 border-game-purple/20"
                   >
@@ -196,8 +196,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                         className="space-y-1 pl-4 overflow-hidden"
                       >
                         {subjectItems.map((item) => (
-                          <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
+                          <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
                             <motion.button
+                              type="button"
                               whileHover={{ x: 8 }}
                               whileTap={{ scale: 0.95 }}
                               className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
