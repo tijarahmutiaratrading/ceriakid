@@ -98,23 +98,25 @@ export default function Landing() {
 
 
       {/* ── NAVBAR ── */}
-      <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
-        <div className="text-xl font-black text-gray-900">🎓 <span className="text-orange-500">Jom Belajar</span></div>
-        <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600">
-          <a href="#features" className="hover:text-orange-500 transition-colors">Ciri-ciri</a>
-          <a href="#testimonials" className="hover:text-orange-500 transition-colors">Testimoni</a>
-          <a href="#pricing" className="hover:text-orange-500 transition-colors">Harga</a>
-          <a href="#faq" className="hover:text-orange-500 transition-colors">Soalan Lazim</a>
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-white/95 backdrop-blur shadow-sm">
+        <div className="max-w-6xl mx-auto w-full flex items-center justify-between">
+          <div className="text-xl font-black text-gray-900">🎓 <span className="text-orange-500">Jom Belajar</span></div>
+          <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600">
+            <a href="#features" className="hover:text-orange-500 transition-colors">Ciri-ciri</a>
+            <a href="#testimonials" className="hover:text-orange-500 transition-colors">Testimoni</a>
+            <a href="#pricing" className="hover:text-orange-500 transition-colors">Harga</a>
+            <a href="#faq" className="hover:text-orange-500 transition-colors">Soalan Lazim</a>
+          </div>
+          <div className="flex items-center gap-3">
+             <motion.button whileTap={{ scale: 0.95 }} onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')} className="px-5 py-2.5 bg-orange-500 text-white rounded-full font-black text-sm shadow-md hover:bg-orange-600 transition-colors">
+               {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
+             </motion.button>
+           </div>
         </div>
-        <div className="flex items-center gap-3">
-           <motion.button whileTap={{ scale: 0.95 }} onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')} className="px-5 py-2.5 bg-orange-500 text-white rounded-full font-black text-sm shadow-md">
-             {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
-           </motion.button>
-         </div>
       </nav>
 
       {/* ── HERO ── */}
-      <div className="max-w-6xl mx-auto px-6 pt-8 pb-20">
+      <div className="max-w-6xl mx-auto px-6 pt-32 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           {/* Left: Text */}
@@ -222,7 +224,7 @@ export default function Landing() {
       </div>
 
       {/* ── STATS STRIP ── */}
-      <div className="py-6 md:py-12" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+      <div className="py-8 md:py-10" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 text-center">
             {[
@@ -248,7 +250,7 @@ export default function Landing() {
       </div>
 
       {/* ── PROBLEM SECTION ── */}
-      <div className="py-16 px-6" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fffaf5 100%)' }}>
+      <div className="py-12 md:py-16 px-6" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fffaf5 100%)' }}>
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
             <p className="text-4xl mb-3">😮‍💨</p>
@@ -279,7 +281,7 @@ export default function Landing() {
       </div>
 
       {/* ── SOLUTION / FEATURES ── */}
-      <div id="features" className="py-16 px-6 bg-white">
+      <div id="features" className="py-12 md:py-16 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <span className="inline-block bg-green-100 text-green-700 font-black px-4 py-1.5 rounded-full text-sm mb-4">✅ PENYELESAIAN TERBUKTI</span>
@@ -321,7 +323,7 @@ export default function Landing() {
       </div>
 
       {/* ── HOW IT WORKS ── */}
-      <div className="py-16 px-6" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fffaf5 100%)' }}>
+      <div className="py-12 md:py-16 px-6" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fffaf5 100%)' }}>
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <h2 className="text-3xl font-black text-gray-900 mb-3">Mulakan Dalam 3 Langkah</h2>
@@ -345,7 +347,7 @@ export default function Landing() {
       </div>
 
       {/* ── TESTIMONIALS ── */}
-      <div id="testimonials" className="py-16 px-6 bg-white">
+      <div id="testimonials" className="py-12 md:py-16 px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_,i) => <span key={i} className="text-2xl text-orange-400">★</span>)}</div>
@@ -374,7 +376,7 @@ export default function Landing() {
       </div>
 
       {/* ── PRICING ── */}
-      <div id="pricing" className="py-16 px-6" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fffaf5 100%)' }}>
+      <div id="pricing" className="py-12 md:py-16 px-6" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fffaf5 100%)' }}>
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
             <span className="inline-block bg-red-100 text-red-500 font-black px-4 py-1.5 rounded-full text-sm mb-4">
@@ -464,7 +466,7 @@ export default function Landing() {
       </div>
 
       {/* ── FAQ ── */}
-      <div id="faq" className="py-16 px-6 bg-white">
+      <div id="faq" className="py-12 md:py-16 px-6 bg-white">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl font-black text-center text-gray-900 mb-12">Soalan Lazim 🤔</h2>
           <div className="space-y-4">
@@ -486,7 +488,7 @@ export default function Landing() {
       </div>
 
       {/* ── FINAL CTA ── */}
-      <div className="bg-orange-500 py-16 px-6 text-white">
+      <div className="bg-orange-500 py-12 md:py-16 px-6 text-white">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
             <p className="text-5xl mb-5">🎓</p>
@@ -506,7 +508,7 @@ export default function Landing() {
       </div>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-orange-600 text-white py-10 text-center">
+      <footer className="bg-orange-600 text-white py-8 md:py-10 text-center">
         <p className="font-black text-lg mb-1">🎓 Jom Belajar © 2026</p>
         <p className="text-orange-100 text-sm mb-5">Belajar sambil bermain, bermain sambil belajar 🎮📚</p>
         <div className="flex justify-center gap-6 text-xs text-orange-200">
