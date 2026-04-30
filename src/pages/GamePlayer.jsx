@@ -1,12 +1,13 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Clock, Zap } from 'lucide-react';
+import { Clock, Zap } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory, shuffleArray, calculateStars, saveScore } from '@/lib/gameLibrary';
+import AppHeader from '@/components/AppHeader';
 import GameHeader from '@/components/game/GameHeader';
 import FeedbackOverlay from '@/components/game/FeedbackOverlay';
 import ScoreScreen from '@/components/game/ScoreScreen';
@@ -308,12 +309,8 @@ export default function GamePlayer() {
   if (isTracingGame) {
     return (
       <div className="min-h-screen bg-pattern">
-        <div className="max-w-lg mx-auto px-4 py-6 pb-24">
-          <Link to={`/games/${category}`}>
-            <motion.button whileTap={{ scale: 0.9 }} className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6">
-              <ArrowLeft className="w-6 h-6" />
-            </motion.button>
-          </Link>
+        <AppHeader showBack={true} backTo={`/games/${category}`} />
+        <div className="max-w-lg mx-auto px-4 py-4 md:py-6 pb-24 pt-20">
           <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} />
           {state.finished ? (
             <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} />
@@ -334,15 +331,8 @@ export default function GamePlayer() {
 
   return (
     <div className="min-h-screen bg-pattern">
-      <div className="max-w-lg mx-auto px-3 md:px-4 py-4 md:py-6 pb-32">
-        <Link to={`/games/${category}`}>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </motion.button>
-        </Link>
+      <AppHeader showBack={true} backTo={`/games/${category}`} />
+      <div className="max-w-lg mx-auto px-3 md:px-4 py-4 md:py-6 pb-32 pt-20">
 
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2 text-sm font-bold text-game-purple">
