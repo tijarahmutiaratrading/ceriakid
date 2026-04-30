@@ -60,7 +60,7 @@ export default function InteractiveGameDemo() {
   };
 
   return (
-    <div className="rounded-3xl overflow-hidden shadow-xl bg-white min-h-[320px] flex items-center justify-center relative py-8 px-4 border-2 border-orange-200">
+    <div className="rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-orange-100 to-orange-50 min-h-[320px] flex items-center justify-center relative py-8 px-4 border-2 border-orange-200">
       <AnimatePresence mode="wait">
         {!gameStarted ? (
           <motion.div
