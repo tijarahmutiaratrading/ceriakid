@@ -12,7 +12,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
   const isAdmin = user?.role === 'admin';
-  const isLanding = location.pathname === '/landing' || location.pathname === '/';
+  const isLanding = location.pathname === '/landing';
   const isHeaderVisible = useScrollDirection();
   
   // Auto-show back button on non-home pages
