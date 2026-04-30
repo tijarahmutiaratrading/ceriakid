@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, UserPlus, Share2, Trash2 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
+import AppHeader from '@/components/AppHeader';
 
 export default function FriendsList() {
   const { user, isAuthenticated, navigateToLogin } = useAuth();
@@ -58,6 +59,7 @@ export default function FriendsList() {
 
   return (
     <div className="min-h-screen bg-pattern">
+      <AppHeader />
       <div className="max-w-lg mx-auto px-4 py-6 pb-24">
         <Link to="/">
           <motion.button whileTap={{ scale: 0.9 }} className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6">
