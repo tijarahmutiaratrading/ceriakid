@@ -53,35 +53,12 @@ export default function InteractiveGameDemo() {
     }, 1500);
   };
 
-  const handleStart = () => {
-    setGameStarted(true);
-    setScore(0);
-    setCurrentQ(0);
-  };
+
 
   return (
     <div className="rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-game-yellow via-game-pink to-game-blue min-h-[320px] flex items-center justify-center relative py-8 px-4">
       <AnimatePresence mode="wait">
-        {!gameStarted ? (
-          <motion.div
-            key="start"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            className="text-center"
-          >
-            <div className="text-6xl mb-4 animate-bounce">🎮</div>
-            <p className="text-xl font-black text-white mb-5">Cuba Permainan Demo!</p>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleStart}
-              className="px-8 py-3 bg-white text-game-orange rounded-full font-black text-base shadow-lg"
-            >
-              Mula Bermain ✨
-            </motion.button>
-          </motion.div>
-        ) : showFeedback ? (
+        {showFeedback ? (
           <motion.div
             key="feedback"
             initial={{ opacity: 0, scale: 0 }}
