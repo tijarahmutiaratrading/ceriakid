@@ -289,7 +289,7 @@ export default function Landing() {
               { icon: '📊', title: 'Pantau Progress Anak', desc: 'Dashboard ibu bapa tunjuk apa yang anak dah belajar, markah, dan mana yang perlu lebih latihan.' },
               { icon: '📲', title: 'Boleh Main Offline', desc: 'Dalam kereta, dalam flight, tiada wifi — tak kisah. App boleh dimuat turun ke telefon.' },
             ].map((f, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-orange-50 rounded-2xl p-7 border border-orange-100 text-center hover:shadow-md transition-shadow">
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-orange-50 rounded-2xl p-7 border border-orange-100 text-center mx-auto hover:shadow-md transition-shadow">
                 <div className="text-5xl mb-4">{f.icon}</div>
                 <h3 className="font-black text-gray-900 text-lg mb-2">{f.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
