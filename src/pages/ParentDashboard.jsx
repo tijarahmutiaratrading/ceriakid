@@ -137,7 +137,7 @@ export default function ParentDashboard() {
   const totalChildren = Object.keys(childrenData).length;
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen bg-pattern">
       <div className="max-w-lg mx-auto px-4 py-6 pb-24">
         {/* Header */}
         <motion.div

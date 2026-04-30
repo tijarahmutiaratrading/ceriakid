@@ -57,7 +57,7 @@ export default function FriendsList() {
   }
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen bg-pattern">
       <div className="max-w-lg mx-auto px-4 py-6 pb-24">
         <Link to="/">
           <motion.button whileTap={{ scale: 0.9 }} className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6">
