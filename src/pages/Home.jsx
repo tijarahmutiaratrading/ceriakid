@@ -44,7 +44,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center gap-3 mb-10 p-5 bg-white/40 backdrop-blur-xl rounded-2xl shadow-lg border-2 border-white/30"
+            className="flex items-center gap-3 mb-10 p-5 bg-white/40 backdrop-blur-xl rounded-2xl shadow-xl border-2 border-white/30"
           >
             <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-2xl">
               🐱
