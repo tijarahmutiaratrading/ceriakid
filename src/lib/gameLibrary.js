@@ -16,6 +16,7 @@ import { prasekolah_bahasa_mandarin_expansion } from './gameData_prasekolah_mand
 import { sekolah_bahasa_melayu } from './gameData_sr_bm.js';
 import { sekolah_bahasa_melayu_expansion } from './gameData_sr_bm_expansion.js';
 import { sekolah_bahasa_melayu_expansion_full } from './gameData_sr_bm_expansion_full.js';
+import { sekolah_bahasa_melayu_expansion_full_part2 } from './gameData_sr_bm_expansion_full_part2.js';
 import { sekolah_jawi } from './gameData_sr_jawi.js';
 import { sekolah_jawi_expansion } from './gameData_sr_jawi_expansion.js';
 import { sekolah_jawi_expansion_full } from './gameData_sr_jawi_expansion_full.js';
@@ -45,7 +46,7 @@ export const gameLibrary = {
     bahasa_mandarin: [...prasekolah_bahasa_mandarin, ...prasekolah_bahasa_mandarin_expansion],
   },
   sekolah_rendah: {
-    bahasa_melayu: [...sekolah_bahasa_melayu, ...sekolah_bahasa_melayu_expansion, ...sekolah_bahasa_melayu_expansion_full],
+    bahasa_melayu: [...sekolah_bahasa_melayu, ...sekolah_bahasa_melayu_expansion, ...sekolah_bahasa_melayu_expansion_full, ...sekolah_bahasa_melayu_expansion_full_part2],
     jawi: [...sekolah_jawi, ...sekolah_jawi_expansion, ...sekolah_jawi_expansion_full],
     english: [...sekolah_english, ...sekolah_english_expansion, ...sekolah_english_expansion_full],
     mathematics: [...sekolah_mathematics, ...sekolah_mathematics_expansion],
