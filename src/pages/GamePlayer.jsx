@@ -309,7 +309,7 @@ export default function GamePlayer() {
   if (isTracingGame) {
     return (
       <div className="min-h-screen bg-pattern">
-        <AppHeader showBack={true} backTo={`/games/${category}`} />
+        <AppHeader showBack={true} backTo="/dashboard" />
         <div className="max-w-lg mx-auto px-4 py-4 md:py-6 pb-24 pt-20">
           <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} />
           {state.finished ? (
@@ -331,7 +331,7 @@ export default function GamePlayer() {
 
   return (
     <div className="min-h-screen bg-pattern">
-      <AppHeader showBack={true} backTo={`/games/${category}`} />
+      <AppHeader showBack={true} backTo="/dashboard" />
       <div className="max-w-lg mx-auto px-3 md:px-4 py-4 md:py-6 pb-32 pt-20">
 
         <div className="flex items-center justify-between mb-4">
