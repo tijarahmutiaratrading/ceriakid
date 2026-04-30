@@ -150,9 +150,9 @@ export default function Landing() {
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={scrollToPricing}
-                className="px-8 py-4 bg-orange-500 text-white rounded-full font-black text-lg shadow-lg flex items-center gap-2 justify-center"
+                className="px-6 py-3 bg-orange-500 text-white rounded-full font-black text-base shadow-lg flex items-center gap-2 justify-center"
               >
-                🎮 Dapatkan Akses Sekarang <ArrowRight className="w-5 h-5" />
+                🎮 Dapatkan Akses Sekarang <ArrowRight className="w-4 h-4" />
               </motion.button>
               <Link to="/dashboard">
                 <button className="px-6 py-4 border-2 border-gray-300 text-gray-700 rounded-full font-bold text-base hover:border-orange-400 transition-colors w-full sm:w-auto">
