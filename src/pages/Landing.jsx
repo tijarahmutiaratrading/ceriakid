@@ -223,18 +223,19 @@ export default function Landing() {
       </div>
 
       {/* ── STATS STRIP ── */}
-      <div className="bg-white py-10 border-t-2 border-b-2 border-orange-500">
+      <div className="py-12" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
         <div className="max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x-2 divide-orange-400 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/20 text-center">
             {[
-              { num: '5,000+', label: 'Keluarga Aktif 👨‍👩‍👧' },
-              { num: '200+', label: 'Permainan 🎮' },
-              { num: '4.9/5', label: 'Rating ⭐' },
-              { num: '92%', label: 'Markah Anak Naik 📈' },
+              { num: '5,000+', label: 'Keluarga Aktif', icon: '👨‍👩‍👧' },
+              { num: '200+', label: 'Permainan', icon: '🎮' },
+              { num: '4.9/5', label: 'Rating', icon: '⭐' },
+              { num: '92%', label: 'Markah Anak Naik', icon: '📈' },
             ].map((stat, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="px-6 py-4">
-                <div className="text-4xl md:text-5xl font-black text-orange-500">{stat.num}</div>
-                <div className="text-gray-500 text-sm font-semibold mt-2">{stat.label}</div>
+                <div className="text-2xl mb-1">{stat.icon}</div>
+                <div className="text-4xl md:text-5xl font-black text-orange-400">{stat.num}</div>
+                <div className="text-white/60 text-sm font-semibold mt-2">{stat.label}</div>
               </motion.div>
             ))}
           </div>
