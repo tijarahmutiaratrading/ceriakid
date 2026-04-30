@@ -125,7 +125,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -300, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="fixed left-4 top-6 z-50 h-[calc(100vh-3rem)] w-60 sm:w-72 bg-white/40 backdrop-blur-xl shadow-2xl pt-6 px-4 overflow-y-auto border border-white/30 rounded-3xl"
+            className={`fixed left-4 top-6 z-50 h-[calc(100vh-3rem)] w-60 sm:w-72 pt-6 px-4 overflow-y-auto rounded-3xl ${
+              isPlayingGame
+                ? 'bg-white shadow-2xl border border-gray-200'
+                : 'bg-white/40 backdrop-blur-xl shadow-2xl border border-white/30'
+            }`}
           >
             {/* Drawer Header */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
