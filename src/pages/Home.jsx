@@ -44,7 +44,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center gap-3 mb-10 p-5 bg-white rounded-2xl shadow-sm border-2 border-amber-100"
+            className="flex items-center gap-3 mb-10 p-5 bg-white/40 backdrop-blur-xl rounded-2xl shadow-lg border-2 border-white/30"
           >
             <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-2xl">
               🐱
@@ -85,9 +85,9 @@ export default function Home() {
         {/* Drawing Studio Shortcut */}
         <Link to="/drawing">
           <motion.div
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="mb-12 bg-gradient-to-r from-pink-400 to-purple-400 rounded-2xl p-6 flex items-center gap-4 text-white shadow-lg cursor-pointer"
+           whileHover={{ scale: 1.03 }}
+           whileTap={{ scale: 0.97 }}
+           className="mb-12 bg-gradient-to-r from-pink-400/70 to-purple-400/70 backdrop-blur-xl rounded-2xl p-6 flex items-center gap-4 text-white shadow-xl border border-white/30 cursor-pointer"
           >
             <span className="text-4xl">🎨</span>
             <div>
@@ -115,7 +115,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="mt-12 bg-gradient-to-br from-game-orange to-orange-400 rounded-3xl p-8 text-center text-white shadow-lg"
+            className="mt-12 bg-gradient-to-br from-game-orange/70 to-orange-400/70 backdrop-blur-xl rounded-3xl p-8 text-center text-white shadow-xl border border-white/30"
           >
             <p className="text-4xl mb-3">🎮</p>
              <p className="text-xl font-black mb-3">{lang === 'bm' ? 'Belum Mendaftar?' : lang === 'en' ? 'Not Registered Yet?' : lang === 'zh' ? '还没有注册?' : 'இன்னும் பதிவு செய்யவில்லையா?'}</p>
