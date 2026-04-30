@@ -13,6 +13,7 @@ import { sekolah_bahasa_melayu } from './gameData_sr_bm.js';
 import { sekolah_jawi } from './gameData_sr_jawi.js';
 import { sekolah_english } from './gameData_sr_english.js';
 import { sekolah_mathematics } from './gameData_sr_math.js';
+import { sekolah_mathematics_expansion } from './gameData_sr_math_expansion.js';
 import { sekolah_science } from './gameData_sr_science.js';
 import { sekolah_bahasa_tamil } from './gameData_sr_tamil.js';
 import { sekolah_bahasa_mandarin } from './gameData_sr_mandarin.js';
@@ -31,7 +32,7 @@ export const gameLibrary = {
     bahasa_melayu: sekolah_bahasa_melayu,
     jawi: sekolah_jawi,
     english: sekolah_english,
-    mathematics: sekolah_mathematics,
+    mathematics: [...sekolah_mathematics, ...sekolah_mathematics_expansion],
     science: sekolah_science,
     bahasa_tamil: sekolah_bahasa_tamil,
     bahasa_mandarin: sekolah_bahasa_mandarin,
