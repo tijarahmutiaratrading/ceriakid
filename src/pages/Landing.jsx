@@ -344,7 +344,11 @@ export default function Landing() {
                   </div>
                 )}
 
-
+                {tier.savings && (
+                  <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 mt-2 ${tier.highlighted ? 'bg-white/20 text-white' : 'bg-green-100 text-green-700'}`}>
+                    💰 {tier.savings}
+                  </div>
+                )}
 
                 <h3 className={`text-2xl font-black mb-2 ${tier.highlighted ? 'text-white' : 'text-gray-900'}`}>{tier.nameMY}</h3>
 
