@@ -67,11 +67,17 @@ export default function ClientDashboard() {
             whileHover={{ scale: 1.02 }}
             className="bg-white rounded-2xl p-6 border-2 border-amber-100 shadow-sm text-center"
           >
-            <img
-              src={avatarUrl || getDefaultAvatar(user?.full_name || 'User')}
-              alt="Avatar"
-              className="w-20 h-20 rounded-full object-cover mx-auto mb-4 border-4 border-game-purple/20"
-            />
+            {avatarUrl && avatarUrl.includes('http') ? (
+              <img
+                src={avatarUrl}
+                alt="Avatar"
+                className="w-20 h-20 rounded-full object-cover mx-auto mb-4 border-4 border-game-purple/20"
+              />
+            ) : (
+              <div className="w-20 h-20 rounded-full bg-amber-100 mx-auto mb-4 border-4 border-game-purple/20 flex items-center justify-center text-4xl">
+                🐱
+              </div>
+            )}
             
             <label className="block">
               <input
