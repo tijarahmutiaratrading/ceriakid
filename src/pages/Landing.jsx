@@ -223,7 +223,7 @@ export default function Landing() {
       </div>
 
       {/* ── STATS STRIP ── */}
-      <div className="py-12" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+      <div className="py-6 md:py-12" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 text-center">
             {[
