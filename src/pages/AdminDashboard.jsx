@@ -21,8 +21,8 @@ const defaultSettings = {
 function FieldGroup({ label, hint, children }) {
   return (
     <div className="mb-6">
-      <label className="block text-sm font-black text-white mb-2">{label}</label>
-      {hint && <p className="text-xs text-gray-400 mb-3">{hint}</p>}
+      <label className="block text-sm font-black text-gray-900 mb-2">{label}</label>
+      {hint && <p className="text-xs text-gray-600 mb-3">{hint}</p>}
       {children}
     </div>
   );
@@ -37,9 +37,9 @@ function SecretInput({ value, onChange, placeholder }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full border border-white/20 bg-white/10 rounded-xl px-4 py-3 pr-12 text-sm font-mono text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:bg-white/15 transition-all"
+        className="w-full border-2 border-amber-200 rounded-xl px-4 py-3 pr-12 text-sm font-mono focus:outline-none focus:border-game-purple focus:bg-amber-50 transition-all"
       />
-      <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300">
+      <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700">
         {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
       </button>
     </div>
@@ -53,7 +53,7 @@ function TextInput({ value, onChange, placeholder }) {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full border border-white/20 bg-white/10 rounded-xl px-4 py-3 text-sm font-mono text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:bg-white/15 transition-all"
+      className="w-full border-2 border-amber-200 rounded-xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-game-purple focus:bg-amber-50 transition-all"
     />
   );
 }
@@ -152,28 +152,28 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-pattern">
       <AppHeader />
       <div className="max-w-5xl mx-auto px-4 py-8 pb-24">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
           <div className="flex items-center gap-4 mb-2">
-            <div className="text-4xl">🎛️</div>
-            <h1 className="text-5xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Admin Dashboard</h1>
+            <div className="text-5xl">🎛️</div>
+            <h1 className="text-5xl font-black text-gray-900">Admin Dashboard</h1>
           </div>
-          <p className="text-purple-200 text-sm font-semibold ml-16">Real-time analytics & platform configuration</p>
+          <p className="text-gray-600 text-sm font-semibold ml-20">Analytics, Settings & Configurations</p>
         </motion.div>
 
         {/* Main Tabs */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-3 mb-10 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-2 shadow-2xl">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-3 mb-10 bg-white border-2 border-amber-200 rounded-2xl p-2 shadow-lg">
           {tabs.map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all ${
                 activeTab === tab.key
-                  ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg'
-                  : 'text-gray-300 hover:bg-white/10'
+                  ? 'bg-gradient-to-r from-game-purple to-game-pink text-white shadow-md'
+                  : 'text-gray-700 hover:bg-amber-50'
               }`}
             >
               {tab.icon} {tab.label}
@@ -191,9 +191,9 @@ export default function AdminDashboard() {
               className="grid grid-cols-3 gap-5 mb-12"
             >
               {[
-                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', gradient: 'from-blue-500 to-cyan-500' },
-                { label: 'Pendapatan (RM)', value: totalRevenue.toFixed(0), icon: '💰', gradient: 'from-green-500 to-emerald-500' },
-                { label: 'Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', gradient: 'from-purple-500 to-pink-500' },
+                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', gradient: 'from-game-blue to-cyan-400', bgColor: 'bg-blue-50' },
+                { label: 'Pendapatan (RM)', value: totalRevenue.toFixed(0), icon: '💰', gradient: 'from-game-green to-emerald-400', bgColor: 'bg-green-50' },
+                { label: 'Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', gradient: 'from-game-purple to-pink-400', bgColor: 'bg-purple-50' },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
@@ -201,24 +201,24 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -8, scale: 1.02 }}
-                  className={`bg-gradient-to-br ${stat.gradient} rounded-2xl p-6 text-white shadow-xl border border-white/20`}
+                  className={`bg-gradient-to-br ${stat.gradient} rounded-2xl p-6 text-white shadow-lg border-2 border-white/40`}
                 >
-                  <p className="text-3xl mb-3">{stat.icon}</p>
+                  <p className="text-4xl mb-3">{stat.icon}</p>
                   <p className="text-4xl font-black mb-2">{stat.value}</p>
-                  <p className="text-sm font-semibold opacity-90">{stat.label}</p>
+                  <p className="text-sm font-bold opacity-95">{stat.label}</p>
                 </motion.div>
               ))}
             </motion.div>
 
             {/* Sales Breakdown */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-12">
-              <h2 className="text-2xl font-black text-white mb-6">💳 Jualan Mengikut Pelan</h2>
+              <h2 className="text-2xl font-black text-gray-900 mb-6">💳 Jualan Mengikut Pelan</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', gradient: 'from-gray-600 to-gray-700' },
-                  { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', gradient: 'from-green-600 to-emerald-600' },
-                  { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', gradient: 'from-blue-600 to-cyan-600' },
-                  { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', gradient: 'from-purple-600 to-pink-600' },
+                  { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', gradient: 'from-gray-500 to-gray-600', bgColor: 'bg-gray-100' },
+                  { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', gradient: 'from-game-green to-emerald-500', bgColor: 'bg-green-100' },
+                  { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', gradient: 'from-game-blue to-cyan-500', bgColor: 'bg-blue-100' },
+                  { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', gradient: 'from-game-purple to-pink-500', bgColor: 'bg-purple-100' },
                 ].map((item, idx) => (
                   <motion.div
                     key={idx}
@@ -226,10 +226,10 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
                     whileHover={{ scale: 1.05, y: -4 }}
-                    className={`bg-gradient-to-br ${item.gradient} rounded-2xl p-6 text-white text-center border border-white/10 shadow-xl`}
+                    className={`bg-gradient-to-br ${item.gradient} rounded-2xl p-6 text-white text-center border-2 border-white/40 shadow-lg`}
                   >
-                    <p className="text-3xl mb-2">{item.icon}</p>
-                    <p className="text-sm font-semibold opacity-90 mb-2">{item.label}</p>
+                    <p className="text-4xl mb-3">{item.icon}</p>
+                    <p className="text-sm font-bold mb-2">{item.label}</p>
                     <p className="text-4xl font-black">{item.value}</p>
                   </motion.div>
                 ))}
@@ -238,47 +238,47 @@ export default function AdminDashboard() {
 
             {/* Customer Database */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-              <h2 className="text-2xl font-black text-white mb-6">📋 Database Pelanggan</h2>
+              <h2 className="text-2xl font-black text-gray-900 mb-6">📋 Database Pelanggan</h2>
               <motion.div
                 whileHover={{ y: -4 }}
-                className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl overflow-x-auto"
+                className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-lg overflow-x-auto"
               >
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-white/10">
-                      <th className="text-left py-3 px-4 font-bold text-cyan-300">Email</th>
-                      <th className="text-left py-3 px-4 font-bold text-cyan-300">Paket</th>
-                      <th className="text-left py-3 px-4 font-bold text-cyan-300">Status</th>
-                      <th className="text-left py-3 px-4 font-bold text-cyan-300">Tarikh</th>
+                    <tr className="border-b-2 border-amber-300">
+                      <th className="text-left py-3 px-4 font-black text-gray-900">Email</th>
+                      <th className="text-left py-3 px-4 font-black text-gray-900">Paket</th>
+                      <th className="text-left py-3 px-4 font-black text-gray-900">Status</th>
+                      <th className="text-left py-3 px-4 font-black text-gray-900">Tarikh</th>
                     </tr>
                   </thead>
                   <tbody>
                     {subscriptions.slice(0, 10).map((sub) => (
-                      <tr key={sub.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                        <td className="py-3 px-4 text-xs text-gray-300">{sub.email}</td>
+                      <tr key={sub.id} className="border-b border-amber-100 hover:bg-amber-50 transition-colors">
+                        <td className="py-3 px-4 text-xs text-gray-700">{sub.email}</td>
                         <td className="py-3 px-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                            sub.tier === 'free' ? 'bg-gray-500/30 text-gray-300' :
-                            sub.tier === 'asas' ? 'bg-green-500/30 text-green-300' :
-                            sub.tier === 'standard' ? 'bg-blue-500/30 text-blue-300' :
-                            'bg-purple-500/30 text-purple-300'
+                            sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
+                            sub.tier === 'asas' ? 'bg-green-200 text-green-700' :
+                            sub.tier === 'standard' ? 'bg-blue-200 text-blue-700' :
+                            'bg-purple-200 text-purple-700'
                           }`}>
                             {sub.tier === 'free' ? 'Percuma' : sub.tier === 'asas' ? 'Asas' : sub.tier === 'standard' ? 'Standard' : 'Keluarga'}
                           </span>
                         </td>
                         <td className="py-3 px-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                            sub.status === 'active' ? 'bg-green-500/30 text-green-300' : 'bg-red-500/30 text-red-300'
+                            sub.status === 'active' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'
                           }`}>
                             {sub.status === 'active' ? '✓ Aktif' : '✕ Batal'}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-xs text-gray-400">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
+                        <td className="py-3 px-4 text-xs text-gray-600">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <p className="text-xs text-gray-400 mt-4 text-center">Menunjukkan {Math.min(10, subscriptions.length)} daripada {subscriptions.length} pelanggan</p>
+                <p className="text-xs text-gray-500 mt-4 text-center">Menunjukkan {Math.min(10, subscriptions.length)} daripada {subscriptions.length} pelanggan</p>
               </motion.div>
             </motion.div>
           </>
@@ -288,15 +288,15 @@ export default function AdminDashboard() {
         {activeTab === 'settings' && (
           <>
             {/* Settings Sub-tabs */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3 mb-10 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-2 shadow-2xl">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3 mb-10 bg-white border-2 border-amber-200 rounded-2xl p-2 shadow-lg">
               {settingsTabs.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setSettingsTab(tab.key)}
                   className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all ${
                     settingsTab === tab.key
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                      : 'text-gray-300 hover:bg-white/10'
+                      ? 'bg-gradient-to-r from-game-purple to-game-pink text-white shadow-md'
+                      : 'text-gray-700 hover:bg-amber-50'
                   }`}
                 >
                   {tab.icon} {tab.label}
@@ -306,14 +306,14 @@ export default function AdminDashboard() {
 
             {/* Facebook Pixel */}
             {settingsTab === 'pixel' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl mb-8">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-8 border-2 border-amber-200 shadow-lg mb-8">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
                     <Facebook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg">Meta / Facebook Pixel</h2>
-                    <p className="text-xs text-gray-400">Untuk tracking FB Ads & conversion events</p>
+                    <h2 className="font-black text-gray-900 text-lg">Meta / Facebook Pixel</h2>
+                    <p className="text-xs text-gray-600">Untuk tracking FB Ads & conversion events</p>
                   </div>
                 </div>
 
@@ -325,7 +325,7 @@ export default function AdminDashboard() {
                   <SecretInput value={settings.fb_access_token} onChange={v => set('fb_access_token', v)} placeholder="EAABsbCS1iHg..." />
                 </FieldGroup>
 
-                <div className="mt-6 bg-blue-500/20 border border-blue-400/30 rounded-xl p-4 text-sm text-blue-200">
+                <div className="mt-6 bg-blue-50 border-2 border-blue-200 rounded-xl p-4 text-sm text-blue-800">
                   <p className="font-black mb-1">📌 Cara pasang Pixel ID:</p>
                   <ol className="list-decimal list-inside space-y-1 text-xs leading-relaxed">
                     <li>Pergi ke <strong>Meta Business Suite → Events Manager</strong></li>
@@ -339,14 +339,14 @@ export default function AdminDashboard() {
 
             {/* Chip Payment */}
             {settingsTab === 'chip' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl mb-8">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-8 border-2 border-amber-200 shadow-lg mb-8">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
                     <CreditCard className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg">Chip Payment Gateway</h2>
-                    <p className="text-xs text-gray-400">FPX, kad kredit & e-wallet Malaysia</p>
+                    <h2 className="font-black text-gray-900 text-lg">Chip Payment Gateway</h2>
+                    <p className="text-xs text-gray-600">FPX, kad kredit & e-wallet Malaysia</p>
                   </div>
                 </div>
 
@@ -378,7 +378,7 @@ export default function AdminDashboard() {
                   <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="sk_live_..." />
                 </FieldGroup>
 
-                <div className="mt-6 bg-green-500/20 border border-green-400/30 rounded-xl p-4 text-sm text-green-200">
+                <div className="mt-6 bg-green-50 border-2 border-green-200 rounded-xl p-4 text-sm text-green-800">
                   <p className="font-black mb-1">📌 Cara dapatkan Chip credentials:</p>
                   <ol className="list-decimal list-inside space-y-1 text-xs leading-relaxed">
                     <li>Log in ke <strong>merchant.chip-in.asia</strong></li>
@@ -392,14 +392,14 @@ export default function AdminDashboard() {
 
             {/* Webhook */}
             {settingsTab === 'webhook' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl mb-8">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-8 border-2 border-amber-200 shadow-lg mb-8">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
                     <Webhook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg">Webhook Settings</h2>
-                    <p className="text-xs text-gray-400">Untuk receive payment callbacks dari Chip</p>
+                    <h2 className="font-black text-gray-900 text-lg">Webhook Settings</h2>
+                    <p className="text-xs text-gray-600">Untuk receive payment callbacks dari Chip</p>
                   </div>
                 </div>
 
@@ -426,7 +426,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="bg-purple-500/20 border border-purple-400/30 rounded-xl p-4 text-sm text-purple-200">
+                <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4 text-sm text-purple-800">
                   <p className="font-black mb-1">📌 Events yang perlu didaftarkan:</p>
                   <div className="space-y-1 text-xs">
                     {['payment.paid', 'payment.pending', 'payment.expired', 'payment.cancelled'].map(event => (
@@ -447,10 +447,10 @@ export default function AdminDashboard() {
                 whileTap={{ scale: 0.97 }}
                 onClick={handleSave}
                 disabled={saving}
-                className={`w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-2xl transition-all ${
+                className={`w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-lg transition-all ${
                   saved
-                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
-                    : 'bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-white hover:shadow-2xl'
+                    ? 'bg-gradient-to-r from-game-green to-emerald-500 text-white'
+                    : 'bg-gradient-to-r from-game-purple to-game-pink text-white hover:shadow-xl'
                 }`}
               >
                 {saving ? (
@@ -461,7 +461,7 @@ export default function AdminDashboard() {
                   <><Save className="w-5 h-5" /> Simpan Tetapan</>
                 )}
               </motion.button>
-              <p className="text-center text-xs text-gray-400 mt-4">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
+              <p className="text-center text-xs text-gray-600 mt-4">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
             </motion.div>
           </>
         )}
