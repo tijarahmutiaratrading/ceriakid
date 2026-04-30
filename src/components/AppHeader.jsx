@@ -64,7 +64,7 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
   return (
     <>
       {/* Header Bar */}
-      <div className="sticky top-0 z-40 clay bg-gradient-to-r from-game-orange to-orange-500 border-b border-white/40 shadow-lg">
+      <div className="sticky top-0 z-40 bg-game-orange border-b border-white/20 shadow-lg">
         <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
           {/* Left: Hamburger or Back */}
           <button
