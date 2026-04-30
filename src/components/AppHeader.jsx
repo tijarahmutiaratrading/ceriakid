@@ -26,11 +26,21 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
       { path: '#faq', emoji: '❓', label: 'Soalan Lazim', external: true },
     ];
   } else if (isAdmin) {
-    // Admin menu
+    // Admin menu + full client access
     navItems = [
       { path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' },
-      { path: '/admin-dashboard', emoji: '📊', label: 'Dashboard' },
+      { path: '/admin-dashboard', emoji: '📊', label: 'Dashboard Admin' },
       { path: '/admin-settings', emoji: '⚙️', label: 'Settings' },
+      { path: '/', emoji: '🏠', label: 'Rumah' },
+      { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
+      { path: '/games/english', emoji: '🇬🇧', label: 'English' },
+      { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
+      { path: '/games/science', emoji: '🔬', label: 'Sains' },
+      ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
+      { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
+      { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
+      { path: '/friends', emoji: '👥', label: 'Kawan' },
+      { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
     ];
   } else if (isAuthenticated) {
     // Client menu
