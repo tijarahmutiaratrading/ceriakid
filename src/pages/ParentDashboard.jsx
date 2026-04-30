@@ -5,6 +5,7 @@ import { ArrowLeft, TrendingDown, Zap, BookOpen, Share2, Award, Flame, Target, S
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { base44 } from '@/api/base44Client';
+import AppHeader from '@/components/AppHeader';
 import SubjectBreakdown from '@/components/home/SubjectBreakdown';
 import SmartRecommendations from '@/components/dashboard/SmartRecommendations';
 import LeaderboardWidget from '@/components/dashboard/LeaderboardWidget';
@@ -137,8 +138,9 @@ export default function ParentDashboard() {
   const totalChildren = Object.keys(childrenData).length;
 
   return (
-    <div className="min-h-screen bg-pattern">
-      <div className="max-w-lg mx-auto px-4 py-6 pb-24">
+    <div className="min-h-screen bg-amber-50">
+      <AppHeader />
+      <div className="max-w-lg mx-auto px-4 py-6 pb-24 pt-20">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

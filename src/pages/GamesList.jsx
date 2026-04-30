@@ -149,9 +149,9 @@ export default function GamesList() {
   }
 
   return (
-    <div className="min-h-screen bg-pattern pb-32">
+    <div className="min-h-screen bg-amber-50">
       <AppHeader showBack={true} backTo="/" />
-      <div className="max-w-lg mx-auto px-4 pt-4 pb-6">
+      <div className="max-w-lg mx-auto px-4 py-6 pb-24 pt-20">
 
         <motion.div className="mb-4">
           <div className="flex items-center gap-3 mb-2">
