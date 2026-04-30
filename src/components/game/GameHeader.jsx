@@ -4,19 +4,19 @@ import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLang } from '@/lib/LanguageContext';
 
-export default function GameHeader({ title, score, total, currentQ, totalQ }) {
+export default function GameHeader({ title, score, total, currentQ, totalQ, onPrevious }) {
   const { t } = useLang();
 
   return (
     <div className="flex items-center justify-between mb-6 px-2">
-      <Link to="/">
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          className="clay-button rounded-full w-12 h-12 flex items-center justify-center"
-        >
-          <ArrowLeft className="w-6 h-6" />
-        </motion.button>
-      </Link>
+      <motion.button
+        whileTap={{ scale: 0.9 }}
+        onClick={onPrevious}
+        disabled={currentQ === 1}
+        className="clay-button rounded-full w-12 h-12 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <ArrowLeft className="w-6 h-6" />
+      </motion.button>
 
       <div className="text-center">
         <h2 className="text-xl font-extrabold">{title}</h2>

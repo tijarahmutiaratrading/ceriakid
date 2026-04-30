@@ -116,6 +116,17 @@ export default function GamePlayer() {
     });
   }, [questions.length, ageGroup, category, gameIndex]);
 
+  const handlePrevious = useCallback(() => {
+    if (state.currentQ > 0) {
+      setState(prev => ({
+        ...prev,
+        currentQ: prev.currentQ - 1,
+        showFeedback: false,
+        selectedIdx: null,
+      }));
+    }
+  }, [state.currentQ]);
+
   const handlePlayAgain = () => {
     setState({
       currentQ: 0,
@@ -353,6 +364,7 @@ export default function GamePlayer() {
           total={questions.length}
           currentQ={state.currentQ + 1}
           totalQ={questions.length}
+          onPrevious={handlePrevious}
         />
 
         {/* Progress Bar with encouraging messages */}
