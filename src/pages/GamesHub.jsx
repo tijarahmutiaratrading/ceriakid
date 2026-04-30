@@ -10,7 +10,7 @@ export default function GamesHub() {
       id: 1,
       title: '🧠 Permainan Ingatan',
       description: 'Cari pasangan kad yang sama. Latih ingatan anda!',
-      path: '/games/memory',
+      gameType: 'memory_game',
       icon: Brain,
       color: 'from-purple-400 to-pink-400',
       difficulty: '⭐ Mudah'
@@ -19,7 +19,7 @@ export default function GamesHub() {
       id: 2,
       title: '🎯 Padankan Huruf',
       description: 'Seret huruf ke gambar yang betul. Belajar sambil bermain!',
-      path: '/games/dragdrop',
+      gameType: 'drag_drop',
       icon: Zap,
       color: 'from-blue-400 to-cyan-400',
       difficulty: '⭐⭐ Sederhana'
@@ -28,7 +28,7 @@ export default function GamesHub() {
       id: 3,
       title: '📝 Bentuk Perkataan',
       description: 'Pilih huruf untuk bentuk perkataan. Susun dengan betul!',
-      path: '/games/wordbuilder',
+      gameType: 'word_builder',
       icon: BookOpen,
       color: 'from-green-400 to-emerald-400',
       difficulty: '⭐⭐ Sederhana'
@@ -37,7 +37,7 @@ export default function GamesHub() {
       id: 4,
       title: '🗂️ Isih Kategori',
       description: 'Seret item ke kategori yang betul. Pelajari pengelompokan!',
-      path: '/games/sorting',
+      gameType: 'shape_sort',
       icon: Copy,
       color: 'from-orange-400 to-yellow-400',
       difficulty: '⭐⭐ Sederhana'
@@ -46,7 +46,7 @@ export default function GamesHub() {
       id: 5,
       title: '🎨 Padankan 3 Sama',
       description: 'Pilih 3 petak dengan nilai sama. Seperti Candy Crush!',
-      path: '/games/tilematch',
+      gameType: 'pattern_fill',
       icon: Gamepad2,
       color: 'from-pink-400 to-purple-400',
       difficulty: '⭐⭐⭐ Sukar'
@@ -55,7 +55,7 @@ export default function GamesHub() {
       id: 6,
       title: '📖 Petualangan Harta Karun',
       description: 'Pilih jalan yang tepat untuk cari harta. Cerita interaktif!',
-      path: '/games/story',
+      gameType: 'reading',
       icon: Scroll,
       color: 'from-amber-400 to-orange-400',
       difficulty: '⭐ Mudah'
@@ -64,7 +64,7 @@ export default function GamesHub() {
       id: 7,
       title: '🎯 Lontarkan Bola',
       description: 'Atur kuasa & sudut untuk kena sasaran. Physics fun!',
-      path: '/games/physics',
+      gameType: 'math_puzzle',
       icon: Rocket,
       color: 'from-sky-400 to-blue-400',
       difficulty: '⭐⭐⭐ Sukar'
@@ -73,7 +73,7 @@ export default function GamesHub() {
       id: 8,
       title: '✏️ Seni Menulis',
       description: 'Lukis & sura huruf dengan garis panduan. Belajar menulis!',
-      path: '/games/tracing',
+      gameType: 'writing',
       icon: Pen,
       color: 'from-violet-400 to-purple-400',
       difficulty: '⭐⭐ Sederhana'
@@ -111,7 +111,7 @@ export default function GamesHub() {
                 whileHover={{ y: -8 }}
                 className="h-full"
               >
-                <Link to={game.path} className="h-full block">
+                <Link to={`/games-type/${game.gameType}`} className="h-full block">
                   <div className={`bg-gradient-to-br ${game.color} rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all h-full flex flex-col justify-between text-white`}>
                     <div>
                       <div className="text-4xl mb-3">{game.title.split(' ')[0]}</div>
