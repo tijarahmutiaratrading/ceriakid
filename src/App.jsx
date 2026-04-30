@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { LanguageProvider } from '@/lib/LanguageContext';
 import { AgeGroupProvider } from '@/lib/AgeGroupContext';
+import { SelectedChildProvider } from '@/lib/SelectedChildContext';
 
 import Landing from '@/pages/Landing';
 import Home from '@/pages/Home';
@@ -114,10 +115,12 @@ function App() {
     <QueryClientProvider client={queryClientInstance}>
       <Router>
         <AuthProvider>
-          <OfflineBanner />
-          <AuthenticatedApp />
-          <Footer />
-          <Toaster />
+          <SelectedChildProvider>
+            <OfflineBanner />
+            <AuthenticatedApp />
+            <Footer />
+            <Toaster />
+          </SelectedChildProvider>
         </AuthProvider>
       </Router>
     </QueryClientProvider>

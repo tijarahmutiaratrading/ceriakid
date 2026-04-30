@@ -5,6 +5,7 @@ import { Clock, Zap } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useAuth } from '@/lib/AuthContext';
+import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory, shuffleArray, calculateStars, saveScore } from '@/lib/gameLibrary';
 import AppHeader from '@/components/AppHeader';
@@ -24,6 +25,7 @@ export default function GamePlayer() {
   const { category, index } = useParams();
   const { ageGroup } = useAgeGroup();
   const { user } = useAuth();
+  const { selectedChild } = useSelectedChild();
   const games = getGamesByAgeAndCategory(ageGroup, category);
   const gameIndex = parseInt(index);
   const game = games && gameIndex >= 0 && gameIndex < games.length ? games[gameIndex] : null;
@@ -43,10 +45,10 @@ export default function GamePlayer() {
 
   // Save progress after game finishes
   useEffect(() => {
-    if (state.finished && user && game) {
+    if (state.finished && user && game && selectedChild) {
       saveGameProgress();
     }
-  }, [state.finished]);
+  }, [state.finished, selectedChild]);
 
   const questions = useMemo(() => {
     if (!game?.gameData?.questions) return [];
@@ -167,7 +169,7 @@ export default function GamePlayer() {
         stars: stars,
       };
 
-      const childName = user.full_name || 'Default';
+      const childName = selectedChild?.name || user.full_name || 'Default';
 
       // Check if progress exists
       const existing = await base44.entities.ChildGameProgress.filter({

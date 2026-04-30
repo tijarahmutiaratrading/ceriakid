@@ -9,6 +9,7 @@ import { t } from '@/lib/i18n';
 import AppHeader from '@/components/AppHeader';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
+import ChildSelector from '@/components/ChildSelector';
 import { getDefaultAvatar } from '@/lib/avatarGenerator';
 
 export default function Home() {
@@ -22,6 +23,11 @@ export default function Home() {
     <div className="min-h-screen bg-amber-50">
       <AppHeader />
       <div className="max-w-lg mx-auto px-4 py-8 pb-32 pt-8">
+        {/* Child Selector */}
+        <div className="flex justify-center mb-6">
+          <ChildSelector />
+        </div>
+
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-2">
