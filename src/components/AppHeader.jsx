@@ -168,7 +168,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     onClick={() => setIsOpen(false)}
                     className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-all text-sm"
                   >
-                    <span className="text-lg">{item.emoji}</span>
+                    <span className="text-2xl">{item.emoji}</span>
                     <span>{item.label}</span>
                   </a>
                 ) : (
@@ -183,7 +183,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                            : 'text-gray-700 hover:bg-gray-100'
                        }`}
                      >
-                       <span className="text-lg">{item.emoji}</span>
+                       <span className="text-2xl">{item.emoji}</span>
                        <span>{item.label}</span>
                      </motion.button>
                    </Link>
@@ -206,7 +206,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                         className="w-full text-left flex items-center justify-between px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-all border border-gray-200"
                       >
                         <div className="flex items-center gap-3">
-                          <span className="text-lg">{ageGroupItem.emoji}</span>
+                          <span className="text-2xl">{ageGroupItem.emoji}</span>
                           <span className="text-sm">{ageGroupItem.label}</span>
                         </div>
                         <motion.div
@@ -238,7 +238,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                                       : 'text-gray-700 hover:bg-gray-100'
                                   }`}
                                 >
-                                  <span className="text-lg">{item.emoji}</span>
+                                  <span className="text-2xl">{item.emoji}</span>
                                   <span>{item.label}</span>
                                 </motion.button>
                               </Link>
@@ -267,7 +267,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                             : 'text-gray-700 hover:bg-gray-100'
                         }`}
                       >
-                        <span className="text-lg">{item.emoji}</span>
+                        <span className="text-2xl">{item.emoji}</span>
                         <span>{item.label}</span>
                       </motion.button>
                     </Link>
@@ -310,7 +310,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                              : 'text-gray-700 hover:bg-gray-100'
                          }`}
                        >
-                         <span className="text-lg">{item.emoji}</span>
+                         <span className="text-2xl">{item.emoji}</span>
                          <span>{item.label}</span>
                        </motion.button>
                      </Link>
@@ -332,7 +332,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     }}
                     className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all"
                   >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-5 h-5" />
                     <span>Log Keluar</span>
                   </motion.button>
                 </>
