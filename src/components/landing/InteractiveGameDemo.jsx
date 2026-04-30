@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function InteractiveGameDemo() {
-  const [gameStarted, setGameStarted] = useState(true);
+  const [gameStarted, setGameStarted] = useState(false);
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -60,7 +60,7 @@ export default function InteractiveGameDemo() {
   };
 
   return (
-    <div className="rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-orange-100 to-orange-50 min-h-[320px] flex items-center justify-center relative py-8 px-4 border-2 border-orange-200">
+    <div className="rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-game-yellow via-game-pink to-game-blue min-h-[320px] flex items-center justify-center relative py-8 px-4">
       <AnimatePresence mode="wait">
         {!gameStarted ? (
           <motion.div
