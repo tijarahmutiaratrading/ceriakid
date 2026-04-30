@@ -164,7 +164,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
               {/* Subjects Section */}
               {showSubjectsSection && (
-                <>
+                <div className="space-y-1">
                   <button
                     onClick={() => setExpandedSection(expandedSection === 'subjects' ? null : 'subjects')}
                     className="w-full text-left flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all border-2 border-game-purple/20"
@@ -187,7 +187,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="space-y-1 pl-4"
+                        className="space-y-1 pl-4 overflow-hidden"
                       >
                         {subjectItems.map((item) => (
                           <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
@@ -208,7 +208,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </>
+                </div>
               )}
 
               {/* Other Items */}
