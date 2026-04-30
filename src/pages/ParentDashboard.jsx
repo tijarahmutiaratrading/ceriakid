@@ -160,7 +160,7 @@ export default function ParentDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-3xl p-6 text-center border-2 border-amber-200 shadow-lg"
+            className="bg-white/40 backdrop-blur-xl rounded-3xl p-6 text-center border-2 border-white/30 shadow-xl"
           >
             <p className="text-lg font-bold mb-2">Belum ada data</p>
             <p className="text-sm text-gray-600">
@@ -199,10 +199,10 @@ export default function ParentDashboard() {
                    initial={{ opacity: 0, y: 20 }}
                    animate={{ opacity: 1, y: 0 }}
                    transition={{ delay: idx * 0.1 }}
-                   className="bg-gradient-to-br from-white to-amber-50 rounded-3xl p-6 space-y-5 border-2 border-amber-200 shadow-lg"
+                   className="bg-white/40 backdrop-blur-xl rounded-3xl p-6 space-y-5 border-2 border-white/30 shadow-xl"
                  >
                    {/* Child Header */}
-                   <div className="flex items-start justify-between pb-4 border-b border-amber-200">
+                   <div className="flex items-start justify-between pb-4 border-b border-white/20">
                      <div>
                        <h2 className="text-2xl font-black text-gray-800 mb-3">
                          {childName} 🌟
@@ -228,7 +228,7 @@ export default function ParentDashboard() {
                    </div>
 
                   {/* Progress Bars */}
-                  <div className="space-y-4 bg-white rounded-2xl p-4 border-2 border-amber-200">
+                  <div className="space-y-4 bg-white/40 backdrop-blur-xl rounded-2xl p-4 border-2 border-white/30">
                     <h3 className="font-bold text-sm text-gray-800 flex items-center gap-2">
                       <Target className="w-4 h-4 text-game-purple" />
                       Prestasi Per Subjek
@@ -273,7 +273,7 @@ export default function ParentDashboard() {
                   </div>
 
                   {/* Subject Breakdown Detailed */}
-                  <div className="bg-white rounded-2xl p-4 border-2 border-amber-200">
+                  <div className="bg-white/40 backdrop-blur-xl rounded-2xl p-4 border-2 border-white/30">
                     <SubjectBreakdown progress={games} />
                   </div>
 
@@ -326,7 +326,7 @@ export default function ParentDashboard() {
                   )}
 
                   {/* Share & Export Buttons */}
-                  <div className="pt-4 border-t border-amber-200 space-y-3">
+                  <div className="pt-4 border-t border-white/20 space-y-3">
                     <p className="text-xs font-bold text-game-purple flex items-center gap-2">
                       <Share2 className="w-4 h-4" />
                       Kongsi Pencapaian Luar Biasa
