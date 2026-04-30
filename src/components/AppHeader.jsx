@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useState as useStateImport } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowLeft, ChevronDown } from 'lucide-react';
+import { Menu, X, ArrowLeft, ChevronDown, LogOut } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -10,7 +10,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedAgeGroup, setExpandedAgeGroup] = useState(null);
-  const { isAuthenticated, user } = useAuth() || {};
+  const { isAuthenticated, user, logout } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
   const isAdmin = user?.role === 'admin';
@@ -297,27 +297,47 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Admin Items */}
               {adminItems.length > 0 && (
                 <>
+                   <div className="border-t border-gray-200 my-2" />
+                   {adminItems.map((item) => (
+                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
+                       <motion.button
+                         type="button"
+                         whileHover={{ x: 8 }}
+                         whileTap={{ scale: 0.95 }}
+                         className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                           isActive(item.path)
+                             ? 'bg-red-500 text-white shadow-lg'
+                             : 'text-red-600 hover:bg-red-50'
+                         }`}
+                       >
+                         <span className="text-xl">{item.emoji}</span>
+                         <span>{item.label}</span>
+                       </motion.button>
+                     </Link>
+                   ))}
+                 </>
+               )}
+
+              {/* Logout */}
+              {isAuthenticated && (
+                <>
                   <div className="border-t border-gray-200 my-2" />
-                  {adminItems.map((item) => (
-                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
-                      <motion.button
-                        type="button"
-                        whileHover={{ x: 8 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
-                          isActive(item.path)
-                            ? 'bg-red-500 text-white shadow-lg'
-                            : 'text-red-600 hover:bg-red-50'
-                        }`}
-                      >
-                        <span className="text-xl">{item.emoji}</span>
-                        <span>{item.label}</span>
-                      </motion.button>
-                    </Link>
-                  ))}
+                  <motion.button
+                    type="button"
+                    whileHover={{ x: 8 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      setIsOpen(false);
+                      logout?.();
+                    }}
+                    className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-red-600 hover:bg-red-50 transition-all"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span>Log Keluar</span>
+                  </motion.button>
                 </>
               )}
-            </nav>
+              </nav>
           </motion.div>
         )}
       </AnimatePresence>
