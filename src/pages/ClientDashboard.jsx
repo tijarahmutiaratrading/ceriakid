@@ -2,21 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
-import { ArrowLeft, Upload, Loader } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Upload, Loader, User, Mail, Calendar } from 'lucide-react';
+import AppHeader from '@/components/AppHeader';
 import { getDefaultAvatar } from '@/lib/avatarGenerator';
 
 export default function ClientDashboard() {
   const { user } = useAuth();
-  const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [gender, setGender] = useState(user?.gender || '');
-  const [fullName, setFullName] = useState(user?.full_name || '');
 
   useEffect(() => {
     if (user?.gender) {
-      setGender(user.gender);
       setAvatarUrl(getDefaultAvatar(user.full_name, user.gender));
     } else {
       setAvatarUrl(getDefaultAvatar(user?.full_name || 'User'));
@@ -41,10 +38,8 @@ export default function ClientDashboard() {
   const handleSave = async () => {
     try {
       setSaving(true);
-      await base44.auth.updateMe({
-        gender,
-      });
-      alert('Profile updated successfully!');
+      await base44.auth.updateMe({ gender });
+      alert('Profile updated!');
     } catch (error) {
       console.error('Save failed:', error);
       alert('Failed to save profile');
@@ -54,30 +49,25 @@ export default function ClientDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-game-purple/5 to-white">
-      <div className="max-w-2xl mx-auto px-4 py-6 pb-24">
-        <Link to="/">
-          <motion.button whileTap={{ scale: 0.9 }} className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6">
-            <ArrowLeft className="w-6 h-6" />
-          </motion.button>
-        </Link>
-
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-          <h1 className="text-4xl font-black text-gray-900 mb-2">⚙️ Tetapan Profil</h1>
-          <p className="text-gray-600">Kemaskini avatar, gender, dan maklumat anda</p>
+    <div className="min-h-screen bg-amber-50">
+      <AppHeader />
+      <div className="max-w-lg mx-auto px-4 py-6 pb-24 pt-20">
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <h1 className="text-3xl font-black text-gray-900 mb-2">⚙️ Tetapan Profil</h1>
+          <p className="text-gray-600 text-sm">Kemaskini avatar, jantina, & maklumat anda</p>
         </motion.div>
 
         {/* Avatar Section */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <h2 className="text-xl font-black text-gray-800 mb-4">📸 Avatar Anda</h2>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <motion.div
-            whileHover={{ scale: 1.02, y: -4 }}
-            className="bg-white rounded-3xl p-8 border-2 border-game-purple/20 shadow-lg text-center"
+            whileHover={{ scale: 1.02 }}
+            className="bg-white rounded-2xl p-6 border-2 border-amber-100 shadow-sm text-center"
           >
             <img
               src={avatarUrl || getDefaultAvatar(user?.full_name || 'User')}
               alt="Avatar"
-              className="w-24 h-24 rounded-full object-cover mx-auto mb-6 border-4 border-game-purple/30"
+              className="w-20 h-20 rounded-full object-cover mx-auto mb-4 border-4 border-game-purple/20"
             />
             
             <label className="block">
@@ -92,7 +82,7 @@ export default function ClientDashboard() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 disabled={saving}
-                className="px-6 py-3 bg-game-purple text-white rounded-full font-bold flex items-center gap-2 mx-auto disabled:opacity-50"
+                className="px-5 py-2.5 bg-game-orange text-white rounded-full font-bold flex items-center gap-2 mx-auto text-sm disabled:opacity-50"
               >
                 {saving ? <Loader className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                 {saving ? 'Muat naik...' : 'Tukar Avatar'}
@@ -101,63 +91,68 @@ export default function ClientDashboard() {
           </motion.div>
         </motion.div>
 
-        {/* Gender Selection */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-8">
-          <h2 className="text-xl font-black text-gray-800 mb-4">⚡ Jantina</h2>
-          <motion.div whileHover={{ scale: 1.02, y: -4 }} className="bg-white rounded-3xl p-6 border-2 border-game-purple/20 shadow-lg">
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { value: 'male', label: '👨 Lelaki', emoji: '👨' },
-                { value: 'female', label: '👩 Perempuan', emoji: '👩' },
-              ].map((option) => (
-                <motion.button
-                  key={option.value}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setGender(option.value)}
-                  className={`py-4 rounded-2xl font-bold text-lg transition-all border-2 ${
-                    gender === option.value
-                      ? 'bg-game-purple text-white border-game-purple'
-                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-game-purple'
-                  }`}
-                >
-                  <span className="text-2xl mr-2">{option.emoji}</span>
-                  {option.label.split(' ')[1]}
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
+        {/* Gender Section */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-6">
+          <p className="text-xs font-bold text-gray-700 uppercase mb-3">Jantina</p>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { value: 'male', label: 'Lelaki', emoji: '👨' },
+              { value: 'female', label: 'Perempuan', emoji: '👩' },
+            ].map((option) => (
+              <motion.button
+                key={option.value}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setGender(option.value)}
+                className={`py-3.5 rounded-2xl font-bold transition-all border-2 text-sm ${
+                  gender === option.value
+                    ? 'bg-game-orange text-white border-game-orange shadow-lg'
+                    : 'bg-white text-gray-700 border-amber-100 hover:border-game-orange'
+                }`}
+              >
+                <span className="text-xl block mb-1">{option.emoji}</span>
+                {option.label}
+              </motion.button>
+            ))}
+          </div>
         </motion.div>
 
         {/* Account Info */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8">
-          <h2 className="text-xl font-black text-gray-800 mb-4">👤 Maklumat Akaun</h2>
-          <motion.div whileHover={{ scale: 1.02, y: -4 }} className="bg-white rounded-3xl p-6 border-2 border-game-purple/20 shadow-lg">
-            <div className="space-y-4">
-              {[
-                { label: 'Nama', value: user?.full_name, icon: '👤' },
-                { label: 'Email', value: user?.email, icon: '📧' },
-                { label: 'Ahli Sejak', value: new Date(user?.created_date).toLocaleDateString('ms-MY'), icon: '📅' },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 pb-4 border-b border-gray-200 last:border-0">
-                  <span className="text-xl">{item.icon}</span>
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-600 font-bold">{item.label}</p>
-                    <p className="font-bold text-gray-800">{item.value}</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8 pb-6 border-b-2 border-amber-200">
+          <p className="text-xs font-bold text-gray-700 uppercase mb-3">Maklumat Akaun</p>
+          <div className="space-y-3">
+            {[
+              { label: 'Nama', value: user?.full_name, icon: User },
+              { label: 'Email', value: user?.email, icon: Mail },
+              { label: 'Ahli Sejak', value: new Date(user?.created_date).toLocaleDateString('ms-MY'), icon: Calendar },
+            ].map((item, i) => {
+              const IconComponent = item.icon;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 + i * 0.05 }}
+                  className="flex items-center gap-3 bg-white p-3.5 rounded-xl border border-amber-100"
+                >
+                  <IconComponent className="w-5 h-5 text-game-orange flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-gray-500 font-bold">{item.label}</p>
+                    <p className="font-bold text-gray-800 text-sm truncate">{item.value}</p>
                   </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+                </motion.div>
+              );
+            })}
+          </div>
         </motion.div>
 
         {/* Save Button */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={handleSave}
             disabled={saving}
-            className="w-full py-4 bg-gradient-to-r from-game-purple to-game-purple/80 text-white rounded-full font-black text-lg shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-3.5 bg-gradient-to-r from-game-orange to-orange-500 text-white rounded-2xl font-black shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {saving ? <Loader className="w-5 h-5 animate-spin" /> : '💾'}
             {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
