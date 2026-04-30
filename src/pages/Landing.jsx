@@ -338,11 +338,7 @@ export default function Landing() {
                     : 'bg-white border-gray-200 shadow-md'
                 }`}
               >
-                {tier.highlighted && (
-                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 bg-yellow-400 text-gray-900 px-5 py-1.5 rounded-full text-xs font-black shadow-md">
-                    🔥 PALING POPULAR
-                  </div>
-                )}
+
 
                 {tier.savings && (
                   <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 mt-2 ${tier.highlighted ? 'bg-white/20 text-white' : 'bg-green-100 text-green-700'}`}>
