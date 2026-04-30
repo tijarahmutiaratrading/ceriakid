@@ -59,13 +59,8 @@ export default function FriendsList() {
 
   return (
     <div className="min-h-screen bg-pattern">
-      <AppHeader />
-      <div className="max-w-lg mx-auto px-4 py-6 pb-24">
-        <Link to="/">
-          <motion.button whileTap={{ scale: 0.9 }} className="clay-button rounded-full w-12 h-12 flex items-center justify-center mb-6">
-            <ArrowLeft className="w-6 h-6" />
-          </motion.button>
-        </Link>
+      <AppHeader showBack={true} backTo="/dashboard" />
+      <div className="max-w-lg mx-auto px-4 py-6 pb-24 pt-20">
 
         <h1 className="text-3xl font-black text-gray-800 mb-8">👥 Kawan-Kawan</h1>
 

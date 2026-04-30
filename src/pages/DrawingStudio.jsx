@@ -216,17 +216,10 @@ export default function DrawingStudio() {
 
   return (
     <div className="min-h-screen bg-amber-50 pb-24">
-      <AppHeader />
-      <div className="max-w-lg mx-auto px-4 py-5">
+      <AppHeader showBack={true} backTo="/dashboard" />
+      <div className="max-w-lg mx-auto px-4 py-5 pt-20">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-5">
-          <Link to="/">
-            <motion.button whileTap={{ scale: 0.9 }} className="w-10 h-10 rounded-full bg-white border-2 border-amber-200 flex items-center justify-center shadow">
-              <ArrowLeft className="w-5 h-5" />
-            </motion.button>
-          </Link>
-          <h1 className="text-2xl font-black text-gray-800">🎨 Studio Lukisan</h1>
-        </div>
+        <h1 className="text-2xl font-black text-gray-800 mb-5">🎨 Studio Lukisan</h1>
 
         {/* Mode Toggle */}
         <div className="flex gap-2 mb-4 bg-amber-100 rounded-2xl p-1">

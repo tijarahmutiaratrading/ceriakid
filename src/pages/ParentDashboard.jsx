@@ -139,7 +139,7 @@ export default function ParentDashboard() {
 
   return (
     <div className="min-h-screen bg-amber-50">
-      <AppHeader />
+      <AppHeader showBack={true} backTo="/dashboard" />
       <div className="max-w-lg mx-auto px-3 md:px-4 py-4 md:py-6 pb-24 pt-20">
         {/* Header */}
         <motion.div
