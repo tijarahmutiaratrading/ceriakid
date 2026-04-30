@@ -8,11 +8,22 @@ import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({
+    prasekolah: true,
+    sekolahRendah: false
+  });
   const { isAuthenticated, user } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
   const isAdmin = user?.role === 'admin';
   const isLanding = location.pathname === '/landing';
+
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
   
   // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
@@ -47,20 +58,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
       { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
     ];
   } else if (isAuthenticated) {
-    // Client menu
-    navItems = [
-      { path: '/', emoji: '🏠', label: 'Rumah' },
-      { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
-      { path: '/games/english', emoji: '🇬🇧', label: 'English' },
-      { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
-      { path: '/games/science', emoji: '🔬', label: 'Sains' },
-      ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
-      { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
-      { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
-      { path: '/friends', emoji: '👥', label: 'Kawan' },
-      { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
-      ...(isAdmin ? [{ path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' }] : []),
-    ];
+    // Client menu - will use grouped structure below
+    navItems = [];
   }
 
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
@@ -137,6 +136,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             </div>
 
             <nav className="space-y-2">
+              {/* Landing/Admin menu items */}
               {navItems.map((item) => (
                 item.external ? (
                   <a
@@ -169,6 +169,115 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   </Link>
                 )
               ))}
+
+              {/* Client user menu - organized by age group */}
+              {isAuthenticated && !isAdmin && (
+                <>
+                  <Link to="/" onClick={() => setIsOpen(false)}>
+                    <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
+                      <span className="text-xl">🏠</span>
+                      <span>Rumah</span>
+                    </motion.button>
+                  </Link>
+
+                  {/* Pra Sekolah Section */}
+                  <div>
+                    <button
+                      onClick={() => toggleSection('prasekolah')}
+                      className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all"
+                    >
+                      <span className="text-xl">👶</span>
+                      <span>Pra Sekolah</span>
+                      <span className={`ml-auto text-sm transition-transform ${expandedSections.prasekolah ? 'rotate-180' : ''}`}>▼</span>
+                    </button>
+                    {expandedSections.prasekolah && (
+                      <div className="ml-4 space-y-1 border-l-2 border-gray-200 pl-2 mt-1">
+                        {[
+                          { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
+                          { path: '/games/english', emoji: '🇬🇧', label: 'English' },
+                          { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
+                          { path: '/games/science', emoji: '🔬', label: 'Sains' },
+                        ].map(sub => (
+                          <Link key={sub.path} to={sub.path} onClick={() => setIsOpen(false)}>
+                            <motion.button whileHover={{ x: 4 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${isActive(sub.path) ? 'bg-game-purple text-white' : 'text-gray-700 hover:bg-gray-100'}`}>
+                              <span>{sub.emoji}</span>
+                              <span>{sub.label}</span>
+                            </motion.button>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Sekolah Rendah Section */}
+                  <div>
+                    <button
+                      onClick={() => toggleSection('sekolahRendah')}
+                      className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all"
+                    >
+                      <span className="text-xl">👨‍🎓</span>
+                      <span>Sekolah Rendah</span>
+                      <span className={`ml-auto text-sm transition-transform ${expandedSections.sekolahRendah ? 'rotate-180' : ''}`}>▼</span>
+                    </button>
+                    {expandedSections.sekolahRendah && (
+                      <div className="ml-4 space-y-1 border-l-2 border-gray-200 pl-2 mt-1">
+                        {[
+                          { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
+                          { path: '/games/english', emoji: '🇬🇧', label: 'English' },
+                          { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
+                          { path: '/games/science', emoji: '🔬', label: 'Sains' },
+                          { path: '/games/jawi', emoji: '🕌', label: 'Aksara Jawi' },
+                        ].map(sub => (
+                          <Link key={sub.path} to={sub.path} onClick={() => setIsOpen(false)}>
+                            <motion.button whileHover={{ x: 4 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${isActive(sub.path) ? 'bg-game-purple text-white' : 'text-gray-700 hover:bg-gray-100'}`}>
+                              <span>{sub.emoji}</span>
+                              <span>{sub.label}</span>
+                            </motion.button>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Other Features */}
+                  <Link to="/drawing" onClick={() => setIsOpen(false)}>
+                    <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/drawing') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
+                      <span className="text-xl">🎨</span>
+                      <span>Studio Lukisan</span>
+                    </motion.button>
+                  </Link>
+
+                  <Link to="/parent-dashboard" onClick={() => setIsOpen(false)}>
+                    <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/parent-dashboard') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
+                      <span className="text-xl">📊</span>
+                      <span>Dashboard Prestasi</span>
+                    </motion.button>
+                  </Link>
+
+                  <Link to="/friends" onClick={() => setIsOpen(false)}>
+                    <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/friends') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
+                      <span className="text-xl">👥</span>
+                      <span>Kawan</span>
+                    </motion.button>
+                  </Link>
+
+                  <Link to="/challenges" onClick={() => setIsOpen(false)}>
+                    <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/challenges') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
+                      <span className="text-xl">⚡</span>
+                      <span>Cabaran</span>
+                    </motion.button>
+                  </Link>
+
+                  {isAdmin && (
+                    <Link to="/admin-hub" onClick={() => setIsOpen(false)}>
+                      <motion.button whileHover={{ x: 8 }} whileTap={{ scale: 0.95 }} className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${isActive('/admin-hub') ? 'bg-game-purple text-white shadow-lg' : 'text-gray-700 hover:bg-gray-100'}`}>
+                        <span className="text-xl">🎛️</span>
+                        <span>Admin Hub</span>
+                      </motion.button>
+                    </Link>
+                  )}
+                </>
+              )}
             </nav>
           </motion.div>
         )}
