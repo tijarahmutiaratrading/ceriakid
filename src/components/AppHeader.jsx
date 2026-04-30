@@ -12,7 +12,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
   const isAdmin = user?.role === 'admin';
-  const isLanding = location.pathname === '/landing';
+  const isLanding = location.pathname === '/' || location.pathname === '/landing';
   
   // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
