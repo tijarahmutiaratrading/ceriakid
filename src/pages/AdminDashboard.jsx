@@ -191,9 +191,9 @@ export default function AdminDashboard() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-12"
             >
               {[
-                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', gradient: 'from-slate-600 to-slate-700', bgColor: 'bg-slate-50' },
-                { label: 'Pendapatan (RM)', value: totalRevenue.toFixed(0), icon: '💰', gradient: 'from-slate-600 to-slate-700', bgColor: 'bg-slate-50' },
-                { label: 'Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', gradient: 'from-slate-600 to-slate-700', bgColor: 'bg-slate-50' },
+                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', bgColor: 'bg-white/40 backdrop-blur-xl' },
+                { label: 'Pendapatan (RM)', value: totalRevenue.toFixed(0), icon: '💰', bgColor: 'bg-white/40 backdrop-blur-xl' },
+                { label: 'Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', bgColor: 'bg-white/40 backdrop-blur-xl' },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
@@ -201,11 +201,11 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -8, scale: 1.02 }}
-                  className={`bg-gradient-to-br ${stat.gradient}/70 backdrop-blur-xl rounded-2xl p-6 text-white shadow-xl border-2 border-white/30`}
+                  className={`${stat.bgColor} rounded-2xl p-6 text-gray-900 shadow-xl border-2 border-white/30`}
                 >
                   <p className="text-4xl mb-3">{stat.icon}</p>
-                  <p className="text-4xl font-black mb-2">{stat.value}</p>
-                  <p className="text-sm font-bold opacity-95">{stat.label}</p>
+                  <p className="text-4xl font-black mb-2 text-gray-900">{stat.value}</p>
+                  <p className="text-sm font-bold text-gray-600">{stat.label}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -215,10 +215,10 @@ export default function AdminDashboard() {
               <h2 className="text-2xl font-black text-gray-900 mb-6">💳 Jualan Mengikut Pelan</h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {[
-                   { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', gradient: 'from-slate-500 to-slate-600', bgColor: 'bg-slate-100' },
-                   { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', gradient: 'from-slate-500 to-slate-600', bgColor: 'bg-slate-100' },
-                   { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', gradient: 'from-slate-500 to-slate-600', bgColor: 'bg-slate-100' },
-                   { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', gradient: 'from-slate-500 to-slate-600', bgColor: 'bg-slate-100' },
+                   { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', bgColor: 'bg-white/40 backdrop-blur-xl' },
+                   { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', bgColor: 'bg-white/40 backdrop-blur-xl' },
+                   { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', bgColor: 'bg-white/40 backdrop-blur-xl' },
+                   { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', bgColor: 'bg-white/40 backdrop-blur-xl' },
                 ].map((item, idx) => (
                   <motion.div
                     key={idx}
@@ -226,11 +226,11 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
                     whileHover={{ scale: 1.05, y: -4 }}
-                    className={`bg-gradient-to-br ${item.gradient}/70 backdrop-blur-xl rounded-2xl p-6 text-white text-center border-2 border-white/30 shadow-xl`}
+                    className={`${item.bgColor} rounded-2xl p-6 text-gray-900 text-center border-2 border-white/30 shadow-xl`}
                   >
                     <p className="text-4xl mb-3">{item.icon}</p>
-                    <p className="text-sm font-bold mb-2">{item.label}</p>
-                    <p className="text-4xl font-black">{item.value}</p>
+                    <p className="text-sm font-bold mb-2 text-gray-600">{item.label}</p>
+                    <p className="text-4xl font-black text-gray-900">{item.value}</p>
                   </motion.div>
                 ))}
               </div>
