@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-amber-50">
       <AppHeader />
-      <div className="max-w-lg mx-auto px-4 py-6 pb-24">
+      <div className="max-w-lg mx-auto px-4 py-6 pb-24 pt-20">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
