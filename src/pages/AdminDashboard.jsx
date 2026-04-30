@@ -5,6 +5,7 @@ import { base44 } from '@/api/base44Client';
 import { ArrowLeft, Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, Cog } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
+import AppHeader from '@/components/AppHeader';
 
 const SETTINGS_KEY = 'admin_app_settings';
 
@@ -152,6 +153,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-game-purple/5 to-white">
+      <AppHeader />
       <div className="max-w-4xl mx-auto px-4 py-6 pb-24">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
