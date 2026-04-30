@@ -72,6 +72,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
              }}>
           {/* Left: Hamburger or Back */}
           <button
+            type="button"
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 flex items-center justify-center text-amber-800 hover:opacity-75 transition-opacity"
           >
@@ -87,7 +88,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           {/* Right: Back button or spacer */}
           {shouldShowBack ? (
             <Link to={backTo}>
-              <button className="p-2 flex items-center justify-center text-white hover:opacity-75 transition-opacity">
+              <button type="button" className="p-2 flex items-center justify-center text-white hover:opacity-75 transition-opacity">
                 <ArrowLeft className="w-6 h-6" />
               </button>
             </Link>
@@ -126,7 +127,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 <span className="text-2xl">🎓</span>
                 <span className="font-black text-game-purple text-lg">CeriaJaya</span>
               </div>
-              <button onClick={() => setIsOpen(false)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600">
+              <button type="button" onClick={() => setIsOpen(false)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -145,21 +146,22 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     <span>{item.label}</span>
                   </a>
                 ) : (
-                  <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
-                    <motion.button
-                      whileHover={{ x: 8 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
-                        isActive(item.path)
-                          ? 'bg-game-purple text-white shadow-lg'
-                          : 'text-gray-700 hover:bg-gray-100'
-                      }`}
-                    >
-                      <span className="text-xl">{item.emoji}</span>
-                      <span>{item.label}</span>
-                    </motion.button>
-                  </Link>
-                )
+                   <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
+                     <motion.button
+                       type="button"
+                       whileHover={{ x: 8 }}
+                       whileTap={{ scale: 0.95 }}
+                       className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                         isActive(item.path)
+                           ? 'bg-game-purple text-white shadow-lg'
+                           : 'text-gray-700 hover:bg-gray-100'
+                       }`}
+                     >
+                       <span className="text-xl">{item.emoji}</span>
+                       <span>{item.label}</span>
+                     </motion.button>
+                   </Link>
+                 )
               ))}
 
               {/* Subjects Section */}
@@ -217,8 +219,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
               {/* Other Items */}
               {otherItems.map((item) => (
-                <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
+                <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
                   <motion.button
+                    type="button"
                     whileHover={{ x: 8 }}
                     whileTap={{ scale: 0.95 }}
                     className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
@@ -238,8 +241,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 <>
                   <div className="border-t border-gray-200 my-2" />
                   {adminItems.map((item) => (
-                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
+                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
                       <motion.button
+                        type="button"
                         whileHover={{ x: 8 }}
                         whileTap={{ scale: 0.95 }}
                         className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
