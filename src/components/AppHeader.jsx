@@ -167,7 +167,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 <div className="space-y-1">
                   <button
                     type="button"
-                    onClick={() => setExpandedSection(expandedSection === 'subjects' ? null : 'subjects')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setExpandedSection(expandedSection === 'subjects' ? null : 'subjects');
+                    }}
                     className="w-full text-left flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all border-2 border-game-purple/20"
                   >
                     <div className="flex items-center gap-3">
