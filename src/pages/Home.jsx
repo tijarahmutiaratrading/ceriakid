@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
+import { useLang } from '@/lib/LanguageContext';
+import { t } from '@/lib/i18n';
 
 import AppHeader from '@/components/AppHeader';
 import CategoryGrid from '@/components/home/CategoryGrid';
@@ -12,6 +14,7 @@ import { getDefaultAvatar } from '@/lib/avatarGenerator';
 export default function Home() {
   const { isAuthenticated, user } = useAuth();
   const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
+  const { lang } = useLang();
   const safeAgeGroup = ageGroup || 'prasekolah';
   const safeToggle = toggleAgeGroup || (() => {});
 
@@ -31,7 +34,7 @@ export default function Home() {
               onClick={() => { import('@/api/base44Client').then(m => m.base44.auth.redirectToLogin(window.location.href)); }}
               className="px-4 py-2 bg-game-orange text-white rounded-full text-sm font-bold hover:bg-orange-600 transition-all"
             >
-              Log Masuk
+              {t('backToMenu', lang)}
             </motion.button>
           )}
         </div>
@@ -49,7 +52,7 @@ export default function Home() {
               className="w-12 h-12 rounded-full object-cover bg-amber-100"
             />
             <div>
-              <p className="text-xs text-gray-500 font-semibold">Selamat datang!</p>
+              <p className="text-xs text-gray-500 font-semibold">{lang === 'bm' ? 'Selamat datang!' : lang === 'en' ? 'Welcome!' : lang === 'zh' ? '欢迎!' : 'வரவேற்கிறோம்!'}</p>
               <p className="text-lg font-black text-game-purple">{user?.full_name || 'Teman'}</p>
             </div>
           </motion.div>
@@ -57,11 +60,11 @@ export default function Home() {
 
         {/* Age Group Toggle */}
         <div className="mb-12 pb-8 border-b-2 border-amber-200">
-          <p className="text-xs font-bold text-gray-700 uppercase mb-3">Umur Anak</p>
+          <p className="text-xs font-bold text-gray-700 uppercase mb-3">{lang === 'bm' ? 'Umur Anak' : lang === 'en' ? "Child's Age" : lang === 'zh' ? '儿童年龄' : 'குழந்தையின் வயது'}</p>
           <div className="flex gap-3">
             {[
-              { key: 'prasekolah', label: 'Pra Sekolah' },
-              { key: 'sekolah_rendah', label: 'Sekolah Rendah' }
+              { key: 'prasekolah', label: t('prasekolah', lang) },
+              { key: 'sekolah_rendah', label: t('sekolahRendah', lang) }
             ].map((age) => (
               <motion.button
                 key={age.key}
@@ -88,8 +91,8 @@ export default function Home() {
           >
             <span className="text-4xl">🎨</span>
             <div>
-              <p className="font-black text-lg">Studio Lukisan</p>
-              <p className="text-sm opacity-90">Lukis bebas atau buat tracing huruf & bentuk!</p>
+              <p className="font-black text-lg">{lang === 'bm' ? 'Studio Lukisan' : lang === 'en' ? 'Drawing Studio' : lang === 'zh' ? '绘画工作室' : 'வரைதல் ஸ்டுடியோ'}</p>
+              <p className="text-sm opacity-90">{lang === 'bm' ? 'Lukis bebas atau buat tracing huruf & bentuk!' : lang === 'en' ? 'Draw freely or trace letters & shapes!' : lang === 'zh' ? '自由绘画或跟踪字母和形状!' : 'சுதந்திரமாக வரையவும் அல்லது எழுத்து மற்றும் வடிவங்களை ट्रेस செய்யவும்!'}</p>
             </div>
             <span className="ml-auto text-2xl">→</span>
           </motion.div>
@@ -103,7 +106,7 @@ export default function Home() {
         )}
 
         {/* Category Grid */}
-        <h2 className="text-2xl font-black text-gray-800 mb-8">Pilih Subjek</h2>
+        <h2 className="text-2xl font-black text-gray-800 mb-8">{lang === 'bm' ? 'Pilih Subjek' : lang === 'en' ? 'Choose Subject' : lang === 'zh' ? '选择主题' : 'विषय चुनें'}</h2>
         <CategoryGrid />
 
         {/* CTA Section */}
@@ -115,18 +118,18 @@ export default function Home() {
             className="mt-12 bg-gradient-to-br from-game-orange to-orange-400 rounded-3xl p-8 text-center text-white shadow-lg"
           >
             <p className="text-4xl mb-3">🎮</p>
-            <p className="text-xl font-black mb-3">Belum Mendaftar?</p>
-            <p className="text-sm mb-6 opacity-95">
-              Daftarlah sekarang untuk akses 200+ permainan edukatif!
-            </p>
+             <p className="text-xl font-black mb-3">{lang === 'bm' ? 'Belum Mendaftar?' : lang === 'en' ? 'Not Registered Yet?' : lang === 'zh' ? '还没有注册?' : 'இன்னும் பதிவு செய்யவில்லையா?'}</p>
+             <p className="text-sm mb-6 opacity-95">
+               {lang === 'bm' ? 'Daftarlah sekarang untuk akses 200+ permainan edukatif!' : lang === 'en' ? 'Sign up now to access 200+ educational games!' : lang === 'zh' ? '立即注册以访问 200+ 教育游戏!' : '200+ கல்வி விளையாட்டுகளை அணுக இப்போது பதிவு செய்யுங்கள்!'}
+             </p>
             <Link to="/landing">
               <motion.button
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-3 bg-white text-game-orange rounded-full font-black shadow-lg hover:shadow-xl transition-all"
-              >
-                Lihat Paket Sekarang
-              </motion.button>
+                >
+                 {lang === 'bm' ? 'Lihat Paket Sekarang' : lang === 'en' ? 'View Packages Now' : lang === 'zh' ? '现在查看套餐' : 'இப்போது தொகுப்புகளைப் பார்க்கவும்'}
+                </motion.button>
             </Link>
           </motion.div>
         )}
