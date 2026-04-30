@@ -24,31 +24,18 @@ const gameComponentMap = {
 };
 
 export default function GamePlayer() {
-  const { gameId, category, index } = useParams();
+  const { gameId } = useParams();
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     loadGame();
-  }, [gameId, category, index]);
+  }, [gameId]);
 
   const loadGame = async () => {
     try {
-      let data;
-      
-      if (gameId) {
-        // Load by game ID (from GamesHub)
-        data = await base44.entities.Game.get(gameId);
-      } else if (category && index !== undefined) {
-        // Load by category and index (from GamesList)
-        const games = await base44.entities.Game.filter({ 
-          category: category,
-          ageGroup: 'prasekolah' // Default age group
-        });
-        data = games[parseInt(index)];
-      }
-      
+      const data = await base44.entities.Game.get(gameId);
       if (!data) {
         setError('Game not found');
       } else {
