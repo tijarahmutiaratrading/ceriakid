@@ -61,6 +61,8 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
 
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
 
+  if (isLanding) return null;
+
   return (
     <>
       {/* Header Bar */}
