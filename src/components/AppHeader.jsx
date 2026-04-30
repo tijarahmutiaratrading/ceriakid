@@ -31,7 +31,6 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
       { path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' },
       { path: '/admin-dashboard', emoji: '📊', label: 'Dashboard' },
       { path: '/admin-settings', emoji: '⚙️', label: 'Settings' },
-      { path: '/admin-games', emoji: '🎮', label: 'Games Manager' },
     ];
   } else if (isAuthenticated) {
     // Client menu
