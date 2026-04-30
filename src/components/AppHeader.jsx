@@ -64,12 +64,12 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
   return (
     <>
       {/* Header Bar */}
-      <div className="clay border-b border-white/40 shadow-lg">
+      <div className="sticky top-0 z-40 clay bg-gradient-to-r from-game-orange to-orange-500 border-b border-white/40 shadow-lg">
         <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
           {/* Left: Hamburger or Back */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-xl bg-game-purple text-white shadow-md flex items-center justify-center"
+            className="p-2 rounded-xl bg-white text-game-orange shadow-md flex items-center justify-center"
           >
             <Menu className="w-5 h-5" />
           </button>
@@ -77,13 +77,13 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
           {/* Center: Logo / Title */}
           <Link to="/" className="flex items-center gap-2">
             <span className="text-xl">🎓</span>
-            <span className="font-black text-game-purple text-lg">CeriaJaya</span>
+            <span className="font-black text-white text-lg">CeriaJaya</span>
           </Link>
 
           {/* Right: Back button or spacer */}
           {showBack ? (
             <Link to={backTo}>
-              <button className="p-2 rounded-xl bg-gray-100 text-gray-600 flex items-center justify-center">
+              <button className="p-2 rounded-xl bg-white text-game-orange flex items-center justify-center">
                 <ArrowLeft className="w-5 h-5" />
               </button>
             </Link>
