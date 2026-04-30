@@ -25,6 +25,7 @@ import QuizGame from '@/pages/QuizGame';
 import ShapesGame from '@/pages/ShapesGame';
 import Scoreboard from '@/pages/Scoreboard';
 import GamesHub from '@/pages/GamesHub';
+import ChildrenProfiles from '@/pages/ChildrenProfiles';
 
 // Interactive Games
 import MemoryGame from '@/pages/games/MemoryGame';
@@ -73,6 +74,7 @@ const AuthenticatedApp = () => {
 
           <Route path="/settings" element={<ClientDashboard />} />
           <Route path="/games-hub" element={<GamesHub />} />
+          <Route path="/children-profiles" element={<ChildrenProfiles />} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
           <Route path="/parent-dashboard" element={<ParentDashboard />} />
