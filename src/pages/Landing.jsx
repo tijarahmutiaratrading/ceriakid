@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/AuthContext';
 import AppHeader from '@/components/AppHeader';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
+import FreeTrialButton from '@/components/FreeTrialButton';
 
 // Countdown Timer Hook
 function useCountdown(minutes = 15) {
@@ -158,11 +159,11 @@ export default function Landing() {
                 onClick={scrollToPricing}
                 className="px-6 py-3 bg-orange-500 text-white rounded-full font-black text-base shadow-lg flex items-center gap-2 justify-center"
               >
-                🎮 Dapatkan Akses Sekarang <ArrowRight className="w-4 h-4" />
+                🎮 Bayar Sekarang <ArrowRight className="w-4 h-4" />
               </motion.button>
               <Link to="/dashboard">
-                <button className="px-6 py-4 border-2 border-gray-300 text-gray-700 rounded-full font-bold text-base hover:border-orange-400 transition-colors w-full sm:w-auto">
-                  Log Masuk →
+                <button className="px-6 py-3 border-2 border-green-500 text-green-600 rounded-full font-bold text-base hover:border-green-600 hover:bg-green-50 transition-colors w-full sm:w-auto">
+                  🎁 Coba Gratis 7 Hari
                 </button>
               </Link>
             </motion.div>
