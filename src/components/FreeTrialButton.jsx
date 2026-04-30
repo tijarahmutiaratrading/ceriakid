@@ -51,7 +51,7 @@ export default function FreeTrialButton({ onTrialStarted }) {
         onClick={handleStartTrial}
         className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl font-bold transition-all hover:shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
       >
-        {loading ? '⏳ Sedang Memproses...' : '🎁 Coba Gratis 7 Hari'}
+        {loading ? '⏳ Sedang Memproses...' : '🎁 Cuba Percuma 7 Hari'}
       </motion.button>
       <p className="text-xs text-gray-500 text-center">
         ✅ Akses penuh • Tiada kad kredit diperlukan • Cancel bila-bila

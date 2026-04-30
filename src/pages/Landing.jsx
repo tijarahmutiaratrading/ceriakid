@@ -163,7 +163,7 @@ export default function Landing() {
               </motion.button>
               <Link to="/dashboard">
                 <button className="px-6 py-3 border-2 border-green-500 text-green-600 rounded-full font-bold text-base hover:border-green-600 hover:bg-green-50 transition-colors w-full sm:w-auto">
-                  🎁 Coba Gratis 7 Hari
+                  🎁 Cuba Percuma 7 Hari
                 </button>
               </Link>
             </motion.div>
