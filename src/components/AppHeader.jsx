@@ -7,25 +7,48 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 
 export default function AppHeader({ showBack = false, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated } = useAuth() || {};
+  const { isAuthenticated, user } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
+  const isAdmin = user?.role === 'admin';
+  const isLanding = location.pathname === '/landing' || location.pathname === '/';
 
-  const navItems = [
-    { path: '/', emoji: '🏠', label: 'Rumah' },
-    { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
-    { path: '/games/english', emoji: '🇬🇧', label: 'English' },
-    { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
-    { path: '/games/science', emoji: '🔬', label: 'Sains' },
-    ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
-    { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
-    ...(isAuthenticated ? [
+  // Determine menu based on user role and location
+  let navItems = [];
+
+  if (isLanding && !isAuthenticated) {
+    // Public/Landing page menu
+    navItems = [
+      { path: '/', emoji: '🏠', label: 'Rumah' },
+      { path: '#features', emoji: '⭐', label: 'Ciri-ciri', external: true },
+      { path: '#testimonials', emoji: '💬', label: 'Testimoni', external: true },
+      { path: '#pricing', emoji: '💰', label: 'Harga', external: true },
+      { path: '#faq', emoji: '❓', label: 'Soalan Lazim', external: true },
+    ];
+  } else if (isAdmin) {
+    // Admin menu
+    navItems = [
+      { path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' },
+      { path: '/admin-dashboard', emoji: '📊', label: 'Dashboard' },
+      { path: '/admin-settings', emoji: '⚙️', label: 'Settings' },
+      { path: '/admin-games', emoji: '🎮', label: 'Games Manager' },
+    ];
+  } else if (isAuthenticated) {
+    // Client menu
+    navItems = [
+      { path: '/', emoji: '🏠', label: 'Rumah' },
+      { path: '/games/bahasa_melayu', emoji: '🇲🇾', label: 'Bahasa Melayu' },
+      { path: '/games/english', emoji: '🇬🇧', label: 'English' },
+      { path: '/games/mathematics', emoji: '🔢', label: 'Matematik' },
+      { path: '/games/science', emoji: '🔬', label: 'Sains' },
+      ...(ageGroup === 'sekolah_rendah' ? [{ path: '/games/jawi', emoji: '🕌', label: 'Jawi' }] : []),
+      { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
       { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
       { path: '/friends', emoji: '👥', label: 'Kawan' },
       { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
-      { path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' },
-    ] : []),
-  ];
+      ...(isAdmin ? [{ path: '/admin-hub', emoji: '🎛️', label: 'Admin Hub' }] : []),
+    ];
+  }
 
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
 
@@ -97,24 +120,36 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
 
             <nav className="space-y-2">
               {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <motion.button
-                    whileHover={{ x: 8 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
-                      isActive(item.path)
-                        ? 'bg-game-purple text-white shadow-lg'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
+                item.external ? (
+                  <a
+                    key={item.path}
+                    href={item.path}
+                    onClick={() => setIsOpen(false)}
+                    className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all"
                   >
                     <span className="text-xl">{item.emoji}</span>
                     <span>{item.label}</span>
-                  </motion.button>
-                </Link>
+                  </a>
+                ) : (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <motion.button
+                      whileHover={{ x: 8 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                        isActive(item.path)
+                          ? 'bg-game-purple text-white shadow-lg'
+                          : 'text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      <span className="text-xl">{item.emoji}</span>
+                      <span>{item.label}</span>
+                    </motion.button>
+                  </Link>
+                )
               ))}
             </nav>
           </motion.div>
