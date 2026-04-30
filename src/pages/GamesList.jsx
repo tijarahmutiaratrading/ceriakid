@@ -65,14 +65,31 @@ export default function GamesList() {
     }
   };
 
-  // Determine if a game index is accessible based on tier
+  // Determine if a game index is accessible based on tier + ageGroup rules
   const isGameLocked = useCallback((globalIdx) => {
     if (!isAuthenticated) return globalIdx >= 5; // guests: first 5 only
-    if (userTier === 'pro') return false; // pro: semua
-    if (userTier === 'premium') return globalIdx >= 100; // premium: 100+
-    if (userTier === 'starter') return globalIdx >= 50; // starter: 50+
-    return globalIdx >= 5; // free: first 5
-  }, [isAuthenticated, userTier]);
+
+    // Tier: keluarga — akses penuh semua peringkat
+    if (userTier === 'keluarga') return false;
+
+    // Tier: standard — Sekolah Rendah sahaja
+    if (userTier === 'standard') {
+      if (ageGroup === 'prasekolah') return true; // blocked for prasekolah
+      return false; // full access for sekolah rendah
+    }
+
+    // Tier: asas — Prasekolah sahaja
+    if (userTier === 'asas') {
+      if (ageGroup === 'sekolah_rendah') return true; // blocked for sekolah rendah
+      return false; // full access for prasekolah
+    }
+
+    // Legacy tiers
+    if (userTier === 'pro') return false;
+    if (userTier === 'premium') return globalIdx >= 100;
+
+    return globalIdx >= 5; // free
+  }, [isAuthenticated, userTier, ageGroup]);
 
   const allGames = getGamesByAgeAndCategory(ageGroup, category);
 

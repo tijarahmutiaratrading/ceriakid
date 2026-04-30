@@ -15,11 +15,11 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Tier pricing (MYR to sen)
+    // Tier pricing — yearly plans (MYR to sen)
     const pricing = {
-      starter: { amount: 2400, name: 'Starter - RM24/month' },
-      premium: { amount: 4900, name: 'Premium - RM49/month' },
-      pro: { amount: 9900, name: 'Pro Keluarga - RM99/month' }
+      asas:     { amount: 4900,  label: 'Asas — RM49/tahun' },
+      standard: { amount: 9900,  label: 'Standard — RM99/tahun' },
+      keluarga: { amount: 19900, label: 'Keluarga — RM199/tahun' },
     };
 
     if (!pricing[tier]) {
@@ -33,51 +33,72 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Payment gateway not configured' }, { status: 500 });
     }
 
-    // Create Chip charge
-    const chargeData = {
-      amount: pricing[tier].amount,
-      currency: 'MYR',
-      description: pricing[tier].name,
-      metadata: {
-        user_email: user.email,
-        tier: tier,
-        name: name,
+    const origin = new URL(req.url).origin;
+
+    // Create Chip purchase (FPX one-time payment)
+    const purchaseData = {
+      purchase: {
+        currency: 'MYR',
+        products: [
+          {
+            name: pricing[tier].label,
+            price: pricing[tier].amount,
+            quantity: 1
+          }
+        ]
+      },
+      brand_id: brandId,
+      client: {
+        email: email,
+        full_name: name,
         phone: phone
       },
-      customer_name: name,
-      customer_email: email,
-      customer_phone: phone,
-      redirect_url: `${new URL(req.url).origin}/?payment=success&tier=${tier}`,
-      callback_url: `${new URL(req.url).origin}/api/webhooks/chip`
+      success_redirect: `${origin}/?payment=success&tier=${tier}`,
+      failure_redirect: `${origin}/?payment=failed`,
+      success_callback: `${origin}/api/functions/chipWebhook`,
+      send_receipt: true,
+      reference: `${user.email}__${tier}__${Date.now()}`,
     };
 
-    const response = await fetch('https://api.chip-in.asia/v1/charges', {
+    const response = await fetch('https://gate.chip-in.asia/api/v1/purchases/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${secretKey}`
       },
-      body: JSON.stringify(chargeData)
+      body: JSON.stringify(purchaseData)
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Chip API error:', data);
+      console.error('Chip API error:', JSON.stringify(data));
       return Response.json({ error: 'Payment gateway error' }, { status: 500 });
     }
 
-    // Store subscription intent
-    await base44.asServiceRole.entities.UserSubscription.create({
+    // Store pending subscription intent
+    const existing = await base44.asServiceRole.entities.UserSubscription.filter({ email: user.email });
+    const expiryDate = new Date();
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+    const subData = {
       email: user.email,
       tier: tier,
-      status: 'pending',
-      selectedAgeGroup: 'prasekolah'
-    });
+      status: 'incomplete',
+      currentPeriodStart: new Date().toISOString(),
+      currentPeriodEnd: expiryDate.toISOString(),
+      stripeCustomerId: data.id, // store Chip purchase ID here for webhook matching
+    };
+
+    if (existing.length > 0) {
+      await base44.asServiceRole.entities.UserSubscription.update(existing[0].id, subData);
+    } else {
+      await base44.asServiceRole.entities.UserSubscription.create(subData);
+    }
 
     return Response.json({
-      checkoutUrl: data.checkout_url || data.payment_url,
-      chargeId: data.id
+      checkoutUrl: data.checkout_url,
+      purchaseId: data.id
     });
 
   } catch (error) {

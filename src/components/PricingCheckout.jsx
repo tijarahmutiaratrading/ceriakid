@@ -5,30 +5,36 @@ import { useAuth } from '@/lib/AuthContext';
 
 const TIERS = [
   {
-    name: 'premium',
-    nameMY: '🔥 Premium',
-    priceMYR: '24.90',
-    originalPrice: '49.90',
-    description: '100+ permainan • 1 anak • Dashboard ibu bapa',
+    name: 'asas',
+    nameMY: '🌱 Asas',
+    priceMYR: '49',
+    perMonth: '4.08',
+    description: 'Semua subjek • Prasekolah sahaja',
+  },
+  {
+    name: 'standard',
+    nameMY: '⭐ Standard',
+    priceMYR: '99',
+    perMonth: '8.25',
+    description: 'Semua subjek • Sekolah Rendah sahaja',
     badge: 'PALING POPULAR',
   },
   {
-    name: 'pro',
-    nameMY: '👨‍👩‍👧 Pro Keluarga',
-    priceMYR: '44.90',
-    originalPrice: '89.90',
-    description: '200+ permainan • Sehingga 4 anak • Laporan PDF',
-    badge: null,
+    name: 'keluarga',
+    nameMY: '👑 Keluarga',
+    priceMYR: '199',
+    perMonth: '16.58',
+    description: 'Semua subjek • Semua peringkat • 4 profil anak',
   },
 ];
 
-export default function PricingCheckout({ ageGroup, onClose, selectedTier: initialTier }) {
+export default function PricingCheckout({ onClose, selectedTier: initialTier }) {
   const { isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     name: '',
     phone: '',
-    selectedTier: initialTier || 'premium',
+    selectedTier: initialTier || 'standard',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -37,18 +43,9 @@ export default function PricingCheckout({ ageGroup, onClose, selectedTier: initi
     e.preventDefault();
     setError('');
 
-    if (!formData.email.trim()) {
-      setError('Sila masukkan email');
-      return;
-    }
-    if (!formData.name.trim()) {
-      setError('Sila masukkan nama');
-      return;
-    }
-    if (!formData.phone.trim()) {
-      setError('Sila masukkan nombor telefon');
-      return;
-    }
+    if (!formData.email.trim()) { setError('Sila masukkan email'); return; }
+    if (!formData.name.trim()) { setError('Sila masukkan nama'); return; }
+    if (!formData.phone.trim()) { setError('Sila masukkan nombor telefon'); return; }
 
     setLoading(true);
 
@@ -80,9 +77,9 @@ export default function PricingCheckout({ ageGroup, onClose, selectedTier: initi
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Tier Selection — always visible, at top */}
+      {/* Tier Selection */}
       <div>
-        <label className="block text-sm font-bold mb-3">Pilih Paket</label>
+        <label className="block text-sm font-bold mb-3">Pilih Pelan Tahunan</label>
         <div className="space-y-3">
           {TIERS.map((tier) => {
             const isSelected = formData.selectedTier === tier.name;
@@ -92,9 +89,7 @@ export default function PricingCheckout({ ageGroup, onClose, selectedTier: initi
                 whileHover={{ scale: 1.01 }}
                 onClick={() => setFormData({ ...formData, selectedTier: tier.name })}
                 className={`relative flex items-center p-4 border-2 rounded-2xl cursor-pointer transition-all ${
-                  isSelected
-                    ? 'border-game-purple bg-purple-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
+                  isSelected ? 'border-game-purple bg-purple-50' : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
                 {tier.badge && (
@@ -110,13 +105,11 @@ export default function PricingCheckout({ ageGroup, onClose, selectedTier: initi
                   <p className="text-xs text-gray-500 mt-0.5">{tier.description}</p>
                 </div>
                 <div className="text-right ml-3">
-                  {tier.originalPrice && (
-                    <p className="text-xs text-gray-400 line-through">RM{tier.originalPrice}</p>
-                  )}
                   <p className={`text-xl font-black ${isSelected ? 'text-game-purple' : 'text-gray-700'}`}>
                     RM{tier.priceMYR}
                   </p>
-                  <p className="text-xs text-gray-400">/bulan</p>
+                  <p className="text-xs text-gray-400">/tahun</p>
+                  <p className="text-xs text-green-600 font-bold">≈ RM{tier.perMonth}/bln</p>
                 </div>
               </motion.label>
             );
@@ -160,9 +153,7 @@ export default function PricingCheckout({ ageGroup, onClose, selectedTier: initi
         />
       </div>
 
-      {error && (
-        <p className="text-red-500 text-sm font-bold">{error}</p>
-      )}
+      {error && <p className="text-red-500 text-sm font-bold">{error}</p>}
 
       <motion.button
         whileHover={{ scale: 1.02 }}
@@ -171,11 +162,11 @@ export default function PricingCheckout({ ageGroup, onClose, selectedTier: initi
         type="submit"
         className="w-full py-3 bg-game-purple text-white rounded-2xl font-bold transition-all hover:shadow-lg disabled:opacity-50"
       >
-        {loading ? 'Memproses...' : 'Langganan Sekarang'}
+        {loading ? 'Memproses...' : '🏦 Bayar via FPX Sekarang'}
       </motion.button>
 
       <p className="text-xs text-gray-600 text-center">
-        Pembayaran selamat dengan Stripe
+        🔒 Pembayaran selamat via Chip • FPX Internet Banking Malaysia
       </p>
     </form>
   );

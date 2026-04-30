@@ -32,44 +32,38 @@ const testimonials = [
 
 const tiers = [
   {
-    name: 'starter',
-    nameMY: 'Starter',
-    priceMYR: '24',
-    originalPrice: null,
-    period: '/bulan',
-    games: '50+',
-    features: ['50+ permainan', 'Prasekolah & Sekolah Rendah', 'Semua 5 mata pelajaran', 'Boleh guna offline 📲', 'Kemas kini mingguan'],
-    noFeatures: ['Dashboard ibu bapa', 'Sehingga 4 anak'],
+    name: 'asas',
+    nameMY: '🌱 Asas',
+    priceMYR: '49',
+    perMonth: '4.08',
+    period: '/tahun',
+    features: ['Semua subjek', 'Prasekolah sahaja', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan'],
+    noFeatures: ['Sekolah Rendah', 'Sehingga 4 anak'],
     cta: 'Mulakan Sekarang',
     highlighted: false,
-    color: 'from-blue-100 to-blue-200',
   },
   {
-    name: 'premium',
-    nameMY: '🔥 Premium',
-    priceMYR: '49',
-    originalPrice: null,
-    period: '/bulan',
-    savings: 'PALING POPULAR',
-    games: '150+',
-    features: ['150+ permainan', 'Semua 5 mata pelajaran', 'Dashboard progres anak', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sokongan WhatsApp'],
-    noFeatures: [],
-    cta: '🔥 Mulakan Sekarang',
-    highlighted: true,
-    color: 'from-orange-400 to-yellow-400',
-  },
-  {
-    name: 'pro',
-    nameMY: 'Pro Keluarga',
+    name: 'standard',
+    nameMY: '⭐ Standard',
     priceMYR: '99',
-    originalPrice: null,
-    period: '/bulan',
-    games: '200+',
-    features: ['200+ permainan', 'Sehingga 4 anak', 'Laporan kemajuan PDF', 'Akses semua peringkat', 'Jawi & Worksheet', 'Sokongan Prioriti 24/7'],
+    perMonth: '8.25',
+    period: '/tahun',
+    savings: 'PALING POPULAR',
+    features: ['Semua subjek', 'Sekolah Rendah sahaja', 'Dashboard ibu bapa', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan'],
+    noFeatures: ['Sehingga 4 anak'],
+    cta: '🔥 Pilih Standard',
+    highlighted: true,
+  },
+  {
+    name: 'keluarga',
+    nameMY: '👑 Keluarga',
+    priceMYR: '199',
+    perMonth: '16.58',
+    period: '/tahun',
+    features: ['Semua subjek', 'Prasekolah & Sekolah Rendah', 'Sehingga 4 profil anak', 'Dashboard ibu bapa lengkap', 'Boleh guna offline 📲', 'Sokongan prioriti'],
     noFeatures: [],
-    cta: 'Mulakan Pro',
+    cta: 'Pilih Keluarga',
     highlighted: false,
-    color: 'from-purple-100 to-purple-200',
   },
 ];
 
@@ -358,13 +352,13 @@ export default function Landing() {
 
                 <h3 className={`text-2xl font-black mb-2 ${tier.highlighted ? 'text-white' : 'text-gray-900'}`}>{tier.nameMY}</h3>
 
-                <div className="flex items-baseline gap-2 mb-1">
-                  {tier.originalPrice && (
-                    <span className={`text-sm line-through opacity-60 ${tier.highlighted ? 'text-white' : 'text-gray-400'}`}>RM{tier.originalPrice}</span>
-                  )}
+                <div className="flex items-baseline gap-1 mb-0.5">
                   <span className={`text-3xl font-black ${tier.highlighted ? 'text-white' : 'text-game-orange'}`}>RM{tier.priceMYR}</span>
+                  <span className={`text-sm font-bold ${tier.highlighted ? 'text-white/80' : 'text-gray-500'}`}>{tier.period}</span>
                 </div>
-                <p className={`text-sm font-bold mb-6 ${tier.highlighted ? 'text-white/80' : 'text-gray-500'}`}>{tier.period}</p>
+                <p className={`text-xs font-bold mb-6 ${tier.highlighted ? 'text-yellow-200' : 'text-gray-400'}`}>
+                  ≈ RM{tier.perMonth}/bulan
+                </p>
 
                 <motion.button
                   whileHover={{ scale: 1.04 }}
@@ -406,7 +400,9 @@ export default function Landing() {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="text-2xl font-black text-gray-900">Daftar & Bayar 🔒</h3>
-                    <p className="text-sm text-gray-500 mt-1">Paket: <span className="font-black text-game-purple capitalize">{selectedTierForCheckout === 'starter' ? 'Starter — RM24/bln' : selectedTierForCheckout === 'premium' ? 'Premium — RM49/bln' : 'Pro Keluarga — RM99/bln'}</span></p>
+                    <p className="text-sm text-gray-500 mt-1">Paket: <span className="font-black text-game-purple capitalize">
+                      {selectedTierForCheckout === 'asas' ? 'Asas — RM49/tahun' : selectedTierForCheckout === 'standard' ? 'Standard — RM99/tahun' : 'Keluarga — RM199/tahun'}
+                    </span></p>
                   </div>
                   <button onClick={() => setSelectedTierForCheckout(null)} className="text-gray-400 hover:text-gray-600 text-2xl font-black">✕</button>
                 </div>
