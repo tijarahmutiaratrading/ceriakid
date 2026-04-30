@@ -101,7 +101,7 @@ export default function Landing() {
       {/* ── NAVBAR ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-white/95 backdrop-blur shadow-sm">
         <div className="max-w-6xl mx-auto w-full flex items-center justify-between">
-          <div className="text-xl font-black text-gray-900">🎓 <span className="text-orange-500">Jom Belajar</span></div>
+          <div className="text-xl font-black text-gray-900">🎓 <span className="text-orange-500">CeriaKid</span></div>
           <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600">
             <a href="#features" className="hover:text-orange-500 transition-colors">Ciri-ciri</a>
             <a href="#testimonials" className="hover:text-orange-500 transition-colors">Testimoni</a>
@@ -286,7 +286,7 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <span className="inline-block bg-green-100 text-green-700 font-black px-4 py-1.5 rounded-full text-sm mb-4">✅ PENYELESAIAN TERBUKTI</span>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Perkenalkan — <span className="text-orange-500">Jom Belajar</span><br />Cikgu Peribadi Yang Sentiasa Ada</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Perkenalkan — <span className="text-orange-500">CeriaKid</span><br />Cikgu Peribadi Yang Sentiasa Ada</h2>
             <p className="text-lg text-gray-500 max-w-2xl mx-auto">Permainan edukatif yang direka bersama cikgu berpengalaman. Anak rasa macam main game, tapi sebenarnya belajar.</p>
           </motion.div>
 
@@ -510,8 +510,8 @@ export default function Landing() {
 
       {/* ── FOOTER ── */}
       <footer className="bg-orange-600 text-white py-8 md:py-10 text-center">
-        <p className="font-black text-lg mb-1">🎓 Jom Belajar © 2026</p>
-        <p className="text-orange-100 text-sm mb-5">Belajar sambil bermain, bermain sambil belajar 🎮📚</p>
+        <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
+        <p className="text-orange-100 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
         <div className="flex justify-center gap-6 text-xs text-orange-200">
           <span className="cursor-pointer hover:text-white">Terma Penggunaan</span>
           <span className="cursor-pointer hover:text-white">Dasar Privasi</span>

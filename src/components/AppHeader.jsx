@@ -85,7 +85,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           {/* Center: Logo / Title */}
           <Link to="/" className="flex items-center gap-2 flex-1 justify-center">
             <span className="text-xl">🎓</span>
-            <span className="font-bold text-gray-900 text-lg">CeriaJaya</span>
+            <span className="font-bold text-gray-900 text-lg">CeriaKid</span>
           </Link>
 
           {/* Right: Language Switcher or Back */}
@@ -135,7 +135,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🎓</span>
-              <span className="font-bold text-gray-900 text-lg">CeriaJaya</span>
+              <span className="font-bold text-gray-900 text-lg">CeriaKid</span>
             </div>
             <button type="button" onClick={() => setIsOpen(false)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
               <X className="w-5 h-5" />
