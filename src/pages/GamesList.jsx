@@ -100,6 +100,12 @@ export default function GamesList() {
       if (subs.length > 0 && subs[0].status === 'active') {
         setUserTier(subs[0].tier || 'free');
       }
+      
+      // Check if user is in active free trial
+      const userProfile = await base44.auth.me();
+      if (userProfile?.trialActive) {
+        setUserTier('trial');
+      }
     } catch (e) {
       // default free
     }
@@ -108,6 +114,9 @@ export default function GamesList() {
   // Determine if a game index is accessible based on tier + ageGroup rules
   const isGameLocked = useCallback((globalIdx) => {
     if (!isAuthenticated) return globalIdx >= 5; // guests: first 5 only
+
+    // Trial tier — AKSES PENUH SEMUA GAMES
+    if (userTier === 'trial') return false;
 
     // Tier: keluarga — akses penuh semua peringkat
     if (userTier === 'keluarga') return false;
