@@ -165,7 +165,7 @@ export default function AdminDashboard() {
         </motion.div>
 
         {/* Main Tabs */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-3 mb-10 bg-white border-2 border-amber-200 rounded-2xl p-2 shadow-lg">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-3 mb-10 bg-white/40 backdrop-blur-xl border-2 border-white/30 rounded-2xl p-2 shadow-xl">
           {tabs.map(tab => (
             <button
               key={tab.key}
@@ -201,7 +201,7 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -8, scale: 1.02 }}
-                  className={`bg-gradient-to-br ${stat.gradient} rounded-2xl p-6 text-white shadow-lg border-2 border-white/40`}
+                  className={`bg-gradient-to-br ${stat.gradient}/70 backdrop-blur-xl rounded-2xl p-6 text-white shadow-xl border-2 border-white/30`}
                 >
                   <p className="text-4xl mb-3">{stat.icon}</p>
                   <p className="text-4xl font-black mb-2">{stat.value}</p>
@@ -226,7 +226,7 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
                     whileHover={{ scale: 1.05, y: -4 }}
-                    className={`bg-gradient-to-br ${item.gradient} rounded-2xl p-6 text-white text-center border-2 border-white/40 shadow-lg`}
+                    className={`bg-gradient-to-br ${item.gradient}/70 backdrop-blur-xl rounded-2xl p-6 text-white text-center border-2 border-white/30 shadow-xl`}
                   >
                     <p className="text-4xl mb-3">{item.icon}</p>
                     <p className="text-sm font-bold mb-2">{item.label}</p>
@@ -240,8 +240,8 @@ export default function AdminDashboard() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
               <h2 className="text-2xl font-black text-gray-900 mb-6">📋 Database Pelanggan</h2>
               <motion.div
-                whileHover={{ y: -4 }}
-                className="bg-white rounded-2xl p-6 border-2 border-amber-200 shadow-lg overflow-x-auto"
+               whileHover={{ y: -4 }}
+               className="bg-white/40 backdrop-blur-xl rounded-2xl p-6 border-2 border-white/30 shadow-xl overflow-x-auto"
               >
                 <table className="w-full text-sm">
                   <thead>
@@ -288,7 +288,7 @@ export default function AdminDashboard() {
         {activeTab === 'settings' && (
           <>
             {/* Settings Sub-tabs */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3 mb-10 bg-white border-2 border-amber-200 rounded-2xl p-2 shadow-lg">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3 mb-10 bg-white/40 backdrop-blur-xl border-2 border-white/30 rounded-2xl p-2 shadow-xl">
               {settingsTabs.map(tab => (
                 <button
                   key={tab.key}
@@ -306,7 +306,7 @@ export default function AdminDashboard() {
 
             {/* Facebook Pixel */}
             {settingsTab === 'pixel' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-8 border-2 border-amber-200 shadow-lg mb-8">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/30 shadow-xl mb-8">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
                     <Facebook className="w-6 h-6 text-white" />
@@ -339,7 +339,7 @@ export default function AdminDashboard() {
 
             {/* Chip Payment */}
             {settingsTab === 'chip' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-8 border-2 border-amber-200 shadow-lg mb-8">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/30 shadow-xl mb-8">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
                     <CreditCard className="w-6 h-6 text-white" />
@@ -392,7 +392,7 @@ export default function AdminDashboard() {
 
             {/* Webhook */}
             {settingsTab === 'webhook' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-8 border-2 border-amber-200 shadow-lg mb-8">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/30 shadow-xl mb-8">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
                     <Webhook className="w-6 h-6 text-white" />
