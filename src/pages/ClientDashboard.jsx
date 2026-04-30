@@ -69,7 +69,7 @@ export default function ClientDashboard() {
          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="bg-white rounded-2xl p-6 border-2 border-amber-100 shadow-sm text-center"
+            className="bg-white/40 backdrop-blur-xl rounded-2xl p-6 border-2 border-white/30 shadow-lg text-center"
           >
             {avatarUrl && avatarUrl.includes('http') ? (
               <img
@@ -118,8 +118,8 @@ export default function ClientDashboard() {
                 onClick={() => setGender(option.value)}
                 className={`py-3.5 rounded-2xl font-bold transition-all border-2 text-sm ${
                   gender === option.value
-                    ? 'bg-game-orange text-white border-game-orange shadow-lg'
-                    : 'bg-white text-gray-700 border-amber-100 hover:border-game-orange'
+                    ? 'bg-game-orange/70 backdrop-blur-xl text-white border-white/30 shadow-lg'
+                    : 'bg-white/40 backdrop-blur-xl text-gray-700 border-white/30 hover:border-white/50'
                 }`}
               >
                 <span className="text-xl block mb-1">{option.emoji}</span>
@@ -130,7 +130,7 @@ export default function ClientDashboard() {
         </motion.div>
 
         {/* Account Info */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8 pb-6 border-b-2 border-amber-200">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8 pb-6 border-b-2 border-white/30">
           <p className="text-xs font-bold text-gray-700 uppercase mb-3">{t('accountInfo', lang)}</p>
           <div className="space-y-3">
             {[
@@ -145,7 +145,7 @@ export default function ClientDashboard() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 + i * 0.05 }}
-                  className="flex items-center gap-3 bg-white p-3.5 rounded-xl border border-amber-100"
+                  className="flex items-center gap-3 bg-white/40 backdrop-blur-xl p-3.5 rounded-xl border border-white/30"
                 >
                   <IconComponent className="w-5 h-5 text-game-orange flex-shrink-0" />
                   <div className="flex-1 min-w-0">
