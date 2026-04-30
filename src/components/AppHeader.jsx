@@ -15,6 +15,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const location = useLocation();
   const isAdmin = user?.role === 'admin';
   const isLanding = location.pathname === '/' || location.pathname === '/landing';
+  const isPlayingGame = location.pathname.startsWith('/play/');
   
   // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
@@ -64,9 +65,13 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     <>
       {/* Header Bar */}
       <div className="fixed bottom-4 left-0 right-0 z-40 flex justify-center px-4">
-        <div className="w-full md:max-w-lg bg-white/30 backdrop-blur-xl rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-between shadow-xl border border-white/30"
+        <div className={`w-full md:max-w-lg rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-between ${
+          isPlayingGame
+            ? 'bg-white shadow-lg border border-gray-200'
+            : 'bg-white/30 backdrop-blur-xl shadow-xl border border-white/30'
+        }`}
              style={{
-               boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)'
+               boxShadow: isPlayingGame ? '0 4px 12px rgba(0, 0, 0, 0.1)' : '0 10px 30px rgba(0, 0, 0, 0.1)'
              }}>
           {/* Left: Hamburger */}
           <button
