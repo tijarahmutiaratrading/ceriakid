@@ -44,11 +44,11 @@ export default function AudioPlayer({ text, language = 'ms-MY', autoplay = false
     <button
       onClick={handlePlayAudio}
       disabled={isSpeaking}
-      className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all ${
+      className={`flex items-center justify-center gap-2 px-5 py-3 sm:px-4 sm:py-2 rounded-lg font-semibold transition-all text-sm sm:text-base ${
         isSpeaking
           ? 'bg-blue-500 text-white scale-105'
           : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
-      } disabled:opacity-75`}
+      } disabled:opacity-75 active:scale-95`}
     >
       {isSpeaking ? (
         <>
