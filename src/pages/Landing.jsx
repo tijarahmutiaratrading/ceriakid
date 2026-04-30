@@ -223,19 +223,18 @@ export default function Landing() {
       </div>
 
       {/* ── STATS STRIP ── */}
-      <div className="bg-orange-500 py-12">
+      <div className="bg-white py-10 border-t-2 border-b-2 border-orange-500">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x-2 divide-orange-400 text-center">
             {[
-              { num: '5,000+', label: 'Keluarga Aktif', icon: '👨‍👩‍👧' },
-              { num: '200+', label: 'Permainan', icon: '🎮' },
-              { num: '4.9/5', label: 'Rating', icon: '⭐' },
-              { num: '92%', label: 'Markah Anak Naik', icon: '📈' },
+              { num: '5,000+', label: 'Keluarga Aktif 👨‍👩‍👧' },
+              { num: '200+', label: 'Permainan 🎮' },
+              { num: '4.9/5', label: 'Rating ⭐' },
+              { num: '92%', label: 'Markah Anak Naik 📈' },
             ].map((stat, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-                <div className="text-3xl mb-2">{stat.icon}</div>
-                <div className="text-3xl font-black">{stat.num}</div>
-                <div className="text-white/80 text-sm font-semibold mt-1">{stat.label}</div>
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="px-6 py-4">
+                <div className="text-4xl md:text-5xl font-black text-orange-500">{stat.num}</div>
+                <div className="text-gray-500 text-sm font-semibold mt-2">{stat.label}</div>
               </motion.div>
             ))}
           </div>
