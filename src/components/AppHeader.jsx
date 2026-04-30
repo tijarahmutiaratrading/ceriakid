@@ -64,7 +64,7 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
   return (
     <>
       {/* Header Bar */}
-      <div className="bg-white/90 backdrop-blur-sm border-b border-amber-100 shadow-sm">
+      <div className="clay border-b border-white/40 shadow-lg">
         <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
           {/* Left: Hamburger or Back */}
           <button
