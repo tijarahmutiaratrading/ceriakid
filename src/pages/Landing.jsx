@@ -81,12 +81,7 @@ export default function Landing() {
    const { isAuthenticated, refreshAuth } = useAuth();
    const navigate = useNavigate();
 
-   // Check if authenticated and redirect
-   useEffect(() => {
-     if (isAuthenticated) {
-       navigate('/dashboard');
-     }
-   }, [isAuthenticated, navigate]);
+
 
    const scrollToPricing = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
 
