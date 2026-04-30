@@ -64,7 +64,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     <>
       {/* Header Bar */}
       <div className="fixed bottom-4 left-0 right-0 z-40 flex justify-center px-4">
-        <div className="w-full md:max-w-lg bg-white rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-between shadow-lg border border-gray-200/50"
+        <div className="w-full md:max-w-lg bg-white/30 backdrop-blur-xl rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-between shadow-xl border border-white/30"
              style={{
                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)'
              }}>
