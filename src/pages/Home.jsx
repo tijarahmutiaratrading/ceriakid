@@ -32,7 +32,7 @@ export default function Home() {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => { import('@/api/base44Client').then(m => m.base44.auth.redirectToLogin(window.location.href)); }}
-              className="px-4 py-2 backdrop-blur-xl text-gray-900 rounded-full text-sm font-bold transition-all border border-white/20"
+              className="px-4 py-2 backdrop-blur-xl text-white rounded-full text-sm font-bold transition-all border border-white/30"
             >
               {t('backToMenu', lang)}
             </motion.button>
