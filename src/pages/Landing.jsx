@@ -205,7 +205,7 @@ export default function Landing() {
         </div>
 
         {/* Trusted by logos/badges */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="flex flex-wrap justify-center gap-4 mt-16 pt-12 border-t border-orange-100">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="grid grid-cols-3 md:grid-cols-5 gap-3 mt-16 pt-12 border-t border-orange-100">
           {[
             { icon: '🏆', text: 'Ikut KSSR 2024' },
             { icon: '🚫', text: 'Tiada Iklan' },
@@ -213,8 +213,9 @@ export default function Landing() {
             { icon: '🔒', text: '100% Selamat' },
             { icon: '💰', text: 'Jaminan 30 Hari' },
           ].map((s, i) => (
-            <div key={i} className="flex items-center gap-2 bg-white px-5 py-2.5 rounded-full border border-orange-100 shadow-sm text-sm font-bold text-gray-700">
-              <span>{s.icon}</span> {s.text}
+            <div key={i} className="flex flex-col items-center gap-1.5 bg-white px-3 py-3 rounded-2xl border border-orange-100 shadow-sm text-xs font-bold text-gray-700 text-center">
+              <span className="text-xl">{s.icon}</span>
+              <span>{s.text}</span>
             </div>
           ))}
         </motion.div>
