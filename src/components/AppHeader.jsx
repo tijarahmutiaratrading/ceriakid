@@ -77,7 +77,7 @@ export default function AppHeader({ showBack = false, backTo = '/', title = null
           {/* Center: Logo / Title */}
           <Link to="/" className="flex items-center gap-2">
             <span className="text-xl">🎓</span>
-            <span className="font-black text-white text-lg">CeriaJaya</span>
+            <span className="font-black text-yellow-300 text-lg drop-shadow-lg">CeriaJaya</span>
           </Link>
 
           {/* Right: Back button or spacer */}
