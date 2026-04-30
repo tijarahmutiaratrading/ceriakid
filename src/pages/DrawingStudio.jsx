@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Trash2, Download, Undo2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import AppHeader from '@/components/AppHeader';
 
 const COLORS = [
   '#1a1a1a', '#ef4444', '#f97316', '#eab308',
@@ -215,6 +216,7 @@ export default function DrawingStudio() {
 
   return (
     <div className="min-h-screen bg-amber-50 pb-24">
+      <AppHeader />
       <div className="max-w-lg mx-auto px-4 py-5">
         {/* Header */}
         <div className="flex items-center gap-3 mb-5">
