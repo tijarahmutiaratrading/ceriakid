@@ -84,8 +84,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
           {/* Center: Logo / Title */}
           <Link to="/" className="flex items-center gap-2 flex-1 justify-center">
-            <span className="text-xl">🎓</span>
-            <span className="font-bold text-gray-900 text-lg">CeriaKid</span>
+            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9519ccb9a_ChatGPTImageApr302026at06_37_02PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
           </Link>
 
           {/* Right: Language Switcher or Back */}
@@ -134,8 +133,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             {/* Drawer Header */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
             <div className="flex items-center gap-2">
-              <span className="text-2xl">🎓</span>
-              <span className="font-bold text-gray-900 text-lg">CeriaKid</span>
+              <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9519ccb9a_ChatGPTImageApr302026at06_37_02PM.png" alt="CeriaKid" className="h-9 rounded-lg" />
             </div>
             <button type="button" onClick={() => setIsOpen(false)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
               <X className="w-5 h-5" />
