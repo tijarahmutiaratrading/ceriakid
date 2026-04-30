@@ -190,7 +190,7 @@ export default function GamesList() {
 
   return (
     <div className="min-h-screen bg-amber-50">
-      <AppHeader showBack={true} backTo="/" />
+      <AppHeader showBack={true} backTo="/dashboard" />
       <div className="max-w-lg mx-auto px-4 py-6 pb-24 pt-20">
 
         <motion.div className="mb-4">
