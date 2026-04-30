@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import AppHeader from '@/components/AppHeader';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
 
@@ -88,6 +89,7 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen font-nunito" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fff3e6 40%, #fff9f0 100%)' }}>
+      <AppHeader />
 
       {/* ── URGENCY BAR ── */}
       <div className="bg-orange-500 text-white text-center py-1.5 px-4">
