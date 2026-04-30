@@ -82,6 +82,22 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Games Hub Shortcut */}
+        <Link to="/games-hub">
+          <motion.div
+           whileHover={{ scale: 1.03 }}
+           whileTap={{ scale: 0.97 }}
+           className="mb-8 bg-gradient-to-r from-purple-400/70 to-indigo-400/70 backdrop-blur-xl rounded-2xl p-6 flex items-center gap-4 text-white shadow-xl border border-white/30 cursor-pointer"
+          >
+            <span className="text-4xl">🎮</span>
+            <div>
+              <p className="font-black text-lg">{lang === 'bm' ? 'Game Hub Interaktif' : lang === 'en' ? 'Interactive Games' : lang === 'zh' ? '互动游戏' : 'ஆட்டம் Hub'}</p>
+              <p className="text-sm opacity-90">{lang === 'bm' ? '8 permainan seru dengan bintang & poin!' : lang === 'en' ? '8 fun interactive games with stars & points!' : lang === 'zh' ? '8 个有趣的互动游戏与星星和积分!' : '8 வ재ல குரூபங்களை விளையாடவும்!'}</p>
+            </div>
+            <span className="ml-auto text-2xl">→</span>
+          </motion.div>
+        </Link>
+
         {/* Drawing Studio Shortcut */}
         <Link to="/drawing">
           <motion.div

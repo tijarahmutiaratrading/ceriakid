@@ -24,6 +24,7 @@ import NumberGame from '@/pages/NumberGame';
 import QuizGame from '@/pages/QuizGame';
 import ShapesGame from '@/pages/ShapesGame';
 import Scoreboard from '@/pages/Scoreboard';
+import GamesHub from '@/pages/GamesHub';
 
 // Interactive Games
 import MemoryGame from '@/pages/games/MemoryGame';
@@ -71,6 +72,7 @@ const AuthenticatedApp = () => {
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
           <Route path="/settings" element={<ClientDashboard />} />
+          <Route path="/games-hub" element={<GamesHub />} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
           <Route path="/parent-dashboard" element={<ParentDashboard />} />
