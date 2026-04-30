@@ -26,6 +26,7 @@ import { sekolah_mathematics } from './gameData_sr_math.js';
 import { sekolah_mathematics_expansion } from './gameData_sr_math_expansion.js';
 import { sekolah_science } from './gameData_sr_science.js';
 import { sekolah_science_expansion } from './gameData_sr_science_expansion.js';
+import { sekolah_science_expansion_full } from './gameData_sr_science_expansion_full.js';
 import { sekolah_bahasa_tamil } from './gameData_sr_tamil.js';
 import { sekolah_bahasa_tamil_expansion } from './gameData_sr_tamil_expansion.js';
 import { sekolah_bahasa_tamil_expansion_full } from './gameData_sr_tamil_expansion_full.js';
@@ -48,7 +49,7 @@ export const gameLibrary = {
     jawi: [...sekolah_jawi, ...sekolah_jawi_expansion, ...sekolah_jawi_expansion_full],
     english: [...sekolah_english, ...sekolah_english_expansion, ...sekolah_english_expansion_full],
     mathematics: [...sekolah_mathematics, ...sekolah_mathematics_expansion],
-    science: [...sekolah_science, ...sekolah_science_expansion],
+    science: [...sekolah_science, ...sekolah_science_expansion, ...sekolah_science_expansion_full],
     bahasa_tamil: [...sekolah_bahasa_tamil, ...sekolah_bahasa_tamil_expansion, ...sekolah_bahasa_tamil_expansion_full],
     bahasa_mandarin: [...sekolah_bahasa_mandarin, ...sekolah_bahasa_mandarin_expansion, ...sekolah_bahasa_mandarin_expansion_full],
   },
