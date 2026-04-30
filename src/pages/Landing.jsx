@@ -91,7 +91,7 @@ export default function Landing() {
     <div className="min-h-screen bg-gray-50 font-nunito">
 
       {/* ── TOP URGENCY BAR ── */}
-      <div className="bg-gray-900 text-white text-center py-2.5 px-4">
+      <div className="bg-game-orange text-white text-center py-2.5 px-4">
         <p className="text-sm font-black">
           🔥 TAWARAN TERHAD — Diskaun 50% untuk <span className="underline">50 pendaftar pertama</span> hari ini!
           &nbsp;⏱️ Tamat dalam: <span className="font-black text-yellow-200">{String(countdown.m).padStart(2,'0')}:{String(countdown.s).padStart(2,'0')}</span>
@@ -173,7 +173,7 @@ export default function Landing() {
       </div>
 
       {/* ── RESULTS / PROOF NUMBERS ── */}
-      <div className="bg-gray-800 py-12">
+      <div className="bg-game-orange py-12">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
             {[
@@ -437,33 +437,34 @@ export default function Landing() {
       </div>
 
       {/* ── FINAL CTA SECTION ── */}
-      <div className="bg-gray-900 py-12 text-white">
+      <div className="bg-game-orange py-12 text-white">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
             <p className="text-5xl mb-5">🎓</p>
             <h2 className="text-3xl md:text-4xl font-black mb-4">Anak Anda Layak Dapat<br />Yang Terbaik</h2>
-            <p className="text-white/80 text-lg mb-8 max-w-xl mx-auto">Setiap hari yang berlalu tanpa belajar dengan cara yang betul ialah peluang yang terlepas. Mula hari ini.</p>
+            <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">Setiap hari yang berlalu tanpa belajar dengan cara yang betul ialah peluang yang terlepas. Mula hari ini.</p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
               onClick={scrollToPricing}
-              className="px-8 py-4 bg-white text-gray-900 rounded-2xl font-black text-lg shadow-2xl inline-flex items-center gap-3"
+              className="px-8 py-4 bg-white text-game-orange rounded-2xl font-black text-lg shadow-2xl inline-flex items-center gap-3"
             >
               🎮 Pilih Pelan Sekarang <ArrowRight className="w-6 h-6" />
             </motion.button>
-            <p className="text-white/60 text-sm mt-4">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Jaminan Wang Balik 30 Hari &nbsp;•&nbsp; ✅ Cancel bila-bila</p>
+            <p className="text-white/80 text-sm mt-4">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Jaminan Wang Balik 30 Hari &nbsp;•&nbsp; ✅ Cancel bila-bila</p>
           </motion.div>
         </div>
       </div>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-gray-900 text-white py-10 text-center">
+      <footer className="bg-orange-600 text-white py-10 text-center">
         <p className="font-black text-lg mb-1">🎓 Jom Belajar © 2026</p>
-        <p className="text-gray-400 text-sm mb-4">Belajar sambil bermain, bermain sambil belajar 🎮📚</p>
-        <div className="flex justify-center gap-6 text-xs text-gray-500">
+        <p className="text-orange-100 text-sm mb-4">Belajar sambil bermain, bermain sambil belajar 🎮📚</p>
+        <div className="flex justify-center gap-6 text-xs text-orange-200">
           <span className="cursor-pointer hover:text-white">Terma Penggunaan</span>
           <span className="cursor-pointer hover:text-white">Dasar Privasi</span>
           <span className="cursor-pointer hover:text-white">Hubungi Kami</span>
+
         </div>
       </footer>
 
