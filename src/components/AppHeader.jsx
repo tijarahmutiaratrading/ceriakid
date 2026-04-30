@@ -47,7 +47,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   const otherItems = [
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
-    { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
+    { path: '/parent-dashboard', emoji: '🏆', label: 'Prestasi' },
     { path: '/friends', emoji: '👥', label: 'Kawan' },
     { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
   ];
@@ -277,18 +277,18 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
               {/* Other Items */}
               {otherItems.map((item) => (
-                <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
-                  <motion.button
-                    type="button"
-                    whileHover={{ x: 4 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all ${
-                      isActive(item.path)
-                        ? 'bg-game-purple text-white shadow-md'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    <span className="text-lg">{item.emoji}</span>
+               <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
+                 <motion.button
+                   type="button"
+                   whileHover={{ x: 4 }}
+                   whileTap={{ scale: 0.98 }}
+                   className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all ${
+                     isActive(item.path)
+                       ? 'bg-game-purple text-white shadow-md'
+                       : 'text-gray-700 hover:bg-gray-100'
+                   }`}
+                 >
+                   <span className="text-2xl">{item.emoji}</span>
                     <span>{item.label}</span>
                   </motion.button>
                 </Link>
