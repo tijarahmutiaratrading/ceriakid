@@ -44,7 +44,7 @@ export default function Home() {
             className="flex items-center gap-3 mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-amber-100"
           >
             <img 
-              src={getDefaultAvatar(user?.full_name || 'User')} 
+              src={getDefaultAvatar(user?.full_name || 'User', user?.gender)} 
               alt="avatar"
               className="w-12 h-12 rounded-full object-cover bg-amber-100"
             />
