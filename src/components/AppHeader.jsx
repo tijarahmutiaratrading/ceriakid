@@ -7,7 +7,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
-export default function AppHeader({ showBack = null, backTo = '/', title = null, onBack = null }) {
+export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedAgeGroup, setExpandedAgeGroup] = useState(null);
   const { isAuthenticated, user, logout } = useAuth() || {};
@@ -92,17 +92,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           <div className="flex items-center gap-2">
             {!isLanding && <LanguageSwitcher />}
             {shouldShowBack ? (
-              onBack ? (
-                <button type="button" onClick={onBack} className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
+              <Link to={backTo}>
+                <button type="button" className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
                   <ArrowLeft className="w-5 h-5" />
                 </button>
-              ) : (
-                <Link to={backTo}>
-                  <button type="button" className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
-                    <ArrowLeft className="w-5 h-5" />
-                  </button>
-                </Link>
-              )
+              </Link>
             ) : (
               <div className="w-10" />
             )}

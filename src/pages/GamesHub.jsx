@@ -1,18 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Zap, Brain, BookOpen, Copy, Gamepad2, Scroll, Rocket, Pen } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
-import { playSound } from '@/lib/soundManager';
 
 export default function GamesHub() {
-  const navigate = useNavigate();
   const games = [
     {
       id: 1,
       title: '🧠 Permainan Ingatan',
       description: 'Cari pasangan kad yang sama. Latih ingatan anda!',
-      gameType: 'memory_game',
+      path: '/games/memory',
       icon: Brain,
       color: 'from-purple-400 to-pink-400',
       difficulty: '⭐ Mudah'
@@ -21,7 +19,7 @@ export default function GamesHub() {
       id: 2,
       title: '🎯 Padankan Huruf',
       description: 'Seret huruf ke gambar yang betul. Belajar sambil bermain!',
-      gameType: 'drag_drop',
+      path: '/games/dragdrop',
       icon: Zap,
       color: 'from-blue-400 to-cyan-400',
       difficulty: '⭐⭐ Sederhana'
@@ -30,7 +28,7 @@ export default function GamesHub() {
       id: 3,
       title: '📝 Bentuk Perkataan',
       description: 'Pilih huruf untuk bentuk perkataan. Susun dengan betul!',
-      gameType: 'word_builder',
+      path: '/games/wordbuilder',
       icon: BookOpen,
       color: 'from-green-400 to-emerald-400',
       difficulty: '⭐⭐ Sederhana'
@@ -39,7 +37,7 @@ export default function GamesHub() {
       id: 4,
       title: '🗂️ Isih Kategori',
       description: 'Seret item ke kategori yang betul. Pelajari pengelompokan!',
-      gameType: 'shape_sort',
+      path: '/games/sorting',
       icon: Copy,
       color: 'from-orange-400 to-yellow-400',
       difficulty: '⭐⭐ Sederhana'
@@ -48,7 +46,7 @@ export default function GamesHub() {
       id: 5,
       title: '🎨 Padankan 3 Sama',
       description: 'Pilih 3 petak dengan nilai sama. Seperti Candy Crush!',
-      gameType: 'pattern_fill',
+      path: '/games/tilematch',
       icon: Gamepad2,
       color: 'from-pink-400 to-purple-400',
       difficulty: '⭐⭐⭐ Sukar'
@@ -57,7 +55,7 @@ export default function GamesHub() {
       id: 6,
       title: '📖 Petualangan Harta Karun',
       description: 'Pilih jalan yang tepat untuk cari harta. Cerita interaktif!',
-      gameType: 'reading',
+      path: '/games/story',
       icon: Scroll,
       color: 'from-amber-400 to-orange-400',
       difficulty: '⭐ Mudah'
@@ -66,7 +64,7 @@ export default function GamesHub() {
       id: 7,
       title: '🎯 Lontarkan Bola',
       description: 'Atur kuasa & sudut untuk kena sasaran. Physics fun!',
-      gameType: 'math_puzzle',
+      path: '/games/physics',
       icon: Rocket,
       color: 'from-sky-400 to-blue-400',
       difficulty: '⭐⭐⭐ Sukar'
@@ -75,7 +73,7 @@ export default function GamesHub() {
       id: 8,
       title: '✏️ Seni Menulis',
       description: 'Lukis & sura huruf dengan garis panduan. Belajar menulis!',
-      gameType: 'writing',
+      path: '/games/tracing',
       icon: Pen,
       color: 'from-violet-400 to-purple-400',
       difficulty: '⭐⭐ Sederhana'
@@ -84,7 +82,7 @@ export default function GamesHub() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50">
-      <AppHeader showBack={true} onBack={() => navigate(-1)} />
+      <AppHeader showBack={true} backTo="/dashboard" />
       
       <div className="max-w-5xl mx-auto px-4 py-8 pb-24 pt-20">
         {/* Header */}
@@ -113,7 +111,7 @@ export default function GamesHub() {
                 whileHover={{ y: -8 }}
                 className="h-full"
               >
-                <Link to={`/games-type/${game.gameType}`} onClick={() => playSound('click')} className="h-full block">
+                <Link to={game.path} className="h-full block">
                   <div className={`bg-gradient-to-br ${game.color} rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all h-full flex flex-col justify-between text-white`}>
                     <div>
                       <div className="text-4xl mb-3">{game.title.split(' ')[0]}</div>
