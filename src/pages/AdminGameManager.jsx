@@ -423,8 +423,15 @@ export default function AdminGameManager() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+      {/* Background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
+
+      <div className="relative max-w-4xl mx-auto p-4">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8 pt-4">
           <h1 className="text-4xl font-black text-white mb-2">⚙️ Admin Game Manager</h1>
@@ -432,7 +439,7 @@ export default function AdminGameManager() {
         </motion.div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 flex-wrap">
+        <div className="flex gap-2 mb-6 flex-wrap overflow-x-auto pb-2">
           {[
             { id: 'games', label: '📚 Games List', icon: '📚' },
             { id: 'create', label: '➕ Create Game', icon: '+' },
@@ -458,10 +465,10 @@ export default function AdminGameManager() {
                 setActiveTab(tab.id);
                 setPreview(null);
               }}
-              className={`px-4 py-2 rounded-xl font-bold transition-all ${
+              className={`flex-shrink-0 px-4 py-2.5 rounded-2xl font-bold transition-all ${
                 activeTab === tab.id
-                  ? 'bg-white text-indigo-600 shadow-lg'
-                  : 'bg-white/20 text-white hover:bg-white/30'
+                  ? 'bg-white text-indigo-600 shadow-2xl'
+                  : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/20'
               }`}
             >
               {tab.label}
@@ -470,11 +477,16 @@ export default function AdminGameManager() {
         </div>
 
         {/* Content */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-3xl p-6 shadow-2xl mb-6">
+        <motion.div 
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }} 
+          className="rounded-3xl p-6 mb-6 backdrop-blur-xl"
+          style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}
+        >
           {/* GAMES LIST */}
           {activeTab === 'games' && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-black text-gray-800 mb-6">📚 All Games</h2>
+              <h2 className="text-2xl font-black text-white mb-6">📚 All Games</h2>
               <GamesListView />
             </div>
           )}
@@ -482,7 +494,7 @@ export default function AdminGameManager() {
           {/* CREATE GAME */}
           {activeTab === 'create' && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-black text-gray-800 mb-6">➕ Create New Game</h2>
+              <h2 className="text-2xl font-black text-white mb-6">➕ Create New Game</h2>
 
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Title</label>
@@ -553,11 +565,11 @@ export default function AdminGameManager() {
           {/* DELETE GAME */}
           {activeTab === 'delete' && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-black text-gray-800 mb-6">🗑️ Delete Games</h2>
+              <h2 className="text-2xl font-black text-white mb-6">🗑️ Delete Games</h2>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
-                <select value={selectedFile} onChange={(e) => setSelectedFile(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl font-medium">
+                <label className="block text-sm font-bold text-white/90 mb-2">File</label>
+                <select value={selectedFile} onChange={(e) => setSelectedFile(e.target.value)} className="w-full p-3 border-2 border-white/30 rounded-xl font-medium bg-white/20 text-white placeholder-white/50 backdrop-blur-md focus:border-white/50 focus:outline-none">
                   {GAME_FILES.map(file => (
                     <option key={file} value={file}>{file}</option>
                   ))}
@@ -565,8 +577,8 @@ export default function AdminGameManager() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Game Indices (comma-separated)</label>
-                <input type="text" value={deleteIndices} onChange={(e) => setDeleteIndices(e.target.value)} placeholder="e.g. 0,2,5" className="w-full p-3 border-2 border-gray-300 rounded-xl" />
+                <label className="block text-sm font-bold text-white/90 mb-2">Game Indices (comma-separated)</label>
+                <input type="text" value={deleteIndices} onChange={(e) => setDeleteIndices(e.target.value)} placeholder="e.g. 0,2,5" className="w-full p-3 border-2 border-white/30 rounded-xl bg-white/20 text-white placeholder-white/50 backdrop-blur-md focus:border-white/50 focus:outline-none" />
               </div>
 
               <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-4 text-sm">
@@ -1338,21 +1350,26 @@ export default function AdminGameManager() {
 
         {/* History */}
         {history.length > 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-3xl p-6 shadow-2xl">
-            <h3 className="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            className="rounded-3xl p-6 backdrop-blur-xl"
+            style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}
+          >
+            <h3 className="text-lg font-black text-white mb-4 flex items-center gap-2">
               <CheckCircle2 className="w-6 h-6 text-green-500" />
               Activity History ({history.length})
             </h3>
             <div className="space-y-3">
               {history.map((item, idx) => (
-                <div key={idx} className="flex items-center justify-between bg-green-50 p-4 rounded-xl">
+                <div key={idx} className="flex items-center justify-between p-4 rounded-xl backdrop-blur-md" style={{ background: 'rgba(74,222,128,0.2)', border: '1px solid rgba(74,222,128,0.3)' }}>
                   <div>
-                    <p className="font-bold text-gray-800">{item.gameTitle}</p>
-                    <p className="text-xs text-gray-600">{item.type.toUpperCase()}</p>
+                    <p className="font-bold text-white">{item.gameTitle}</p>
+                    <p className="text-xs text-white/60">{item.type.toUpperCase()}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-black text-green-600">+{item.newQuestionsAdded || 0}</p>
-                    <p className="text-xs text-gray-600">Total: {item.totalQuestions}</p>
+                    <p className="text-2xl font-black text-green-300">+{item.newQuestionsAdded || 0}</p>
+                    <p className="text-xs text-white/60">Total: {item.totalQuestions}</p>
                   </div>
                 </div>
               ))}
