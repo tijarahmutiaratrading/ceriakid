@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { Loader2, Plus, Minus, X } from 'lucide-react';
+import { Loader2, Plus, Minus, X, BarChart3 } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 
 const GAME_FILES = [
@@ -55,6 +56,16 @@ export default function AdminGameManager() {
         </motion.div>
 
         {/* Message */}
+        {/* Analytics Button */}
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <Link to="/game-analytics">
+            <button className="w-full bg-gradient-to-br from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold py-3 rounded-2xl shadow-lg flex items-center justify-center gap-2 transition-all">
+              <BarChart3 className="w-5 h-5" />
+              <span>📊 View Analytics</span>
+            </button>
+          </Link>
+        </motion.div>
+
         {message && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
