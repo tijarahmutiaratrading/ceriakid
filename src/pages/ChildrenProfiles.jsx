@@ -1,41 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import AppHeader from '@/components/AppHeader';
 import { base44 } from '@/api/base44Client';
 
+const AGE_OPTIONS = [
+  { value: 'prasekolah', label: 'Prasekolah', sub: '3–5 tahun', emoji: '🎨' },
+  { value: 'sekolah_rendah', label: 'Sekolah Rendah', sub: '6–12 tahun', emoji: '📚' },
+];
+
+const AVATARS = ['🐱', '🐶', '🐸', '🦊', '🐼', '🐨', '🦁', '🐯'];
+
 export default function ChildrenProfiles() {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ name: '', ageGroup: 'prasekolah' });
   const [error, setError] = useState('');
 
   const MAX_CHILDREN = 4;
 
   useEffect(() => {
-    if (user) {
-      loadChildren();
-    }
+    if (user) loadChildren();
   }, [user]);
 
   const loadChildren = async () => {
     try {
-      // For now, we'll store children as a local array in UserSubscription data
-      // In a real app, you might want a separate Children entity
-      const subscriptions = await base44.asServiceRole.entities.UserSubscription.filter({
-        email: user.email
-      });
-      
-      if (subscriptions[0]?.children) {
-        setChildren(subscriptions[0].children);
-      } else {
-        setChildren([]);
-      }
+      const subscriptions = await base44.asServiceRole.entities.UserSubscription.filter({ email: user.email });
+      setChildren(subscriptions[0]?.children || []);
     } catch (err) {
-      console.error('Error loading children:', err);
       setChildren([]);
     } finally {
       setLoading(false);
@@ -43,68 +39,37 @@ export default function ChildrenProfiles() {
   };
 
   const saveChildren = async (updatedChildren) => {
-    try {
-      const subscriptions = await base44.asServiceRole.entities.UserSubscription.filter({
-        email: user.email
-      });
-      
-      if (subscriptions[0]) {
-        await base44.asServiceRole.entities.UserSubscription.update(subscriptions[0].id, {
-          children: updatedChildren
-        });
-      }
-    } catch (err) {
-      console.error('Error saving children:', err);
-      setError('Gagal menyimpan profil anak');
+    const subscriptions = await base44.asServiceRole.entities.UserSubscription.filter({ email: user.email });
+    if (subscriptions[0]) {
+      await base44.asServiceRole.entities.UserSubscription.update(subscriptions[0].id, { children: updatedChildren });
     }
   };
 
   const handleAddChild = async () => {
-    if (children.length >= MAX_CHILDREN) {
-      setError(`Maksimum ${MAX_CHILDREN} anak yang boleh didaftar`);
-      return;
-    }
-
-    if (!formData.name.trim()) {
-      setError('Sila masukkan nama anak');
-      return;
-    }
-
-    const newChild = {
-      id: Date.now(),
-      name: formData.name,
-      ageGroup: formData.ageGroup,
-      createdAt: new Date().toISOString()
-    };
-
+    if (children.length >= MAX_CHILDREN) { setError(`Maksimum ${MAX_CHILDREN} anak`); return; }
+    if (!formData.name.trim()) { setError('Sila masukkan nama anak'); return; }
+    const newChild = { id: Date.now(), name: formData.name, ageGroup: formData.ageGroup, createdAt: new Date().toISOString() };
     const updated = [...children, newChild];
     setChildren(updated);
     await saveChildren(updated);
     setFormData({ name: '', ageGroup: 'prasekolah' });
+    setShowForm(false);
     setError('');
   };
 
   const handleUpdateChild = async () => {
-    if (!formData.name.trim()) {
-      setError('Sila masukkan nama anak');
-      return;
-    }
-
-    const updated = children.map(child =>
-      child.id === editingId
-        ? { ...child, name: formData.name, ageGroup: formData.ageGroup }
-        : child
-    );
-
+    if (!formData.name.trim()) { setError('Sila masukkan nama anak'); return; }
+    const updated = children.map(c => c.id === editingId ? { ...c, name: formData.name, ageGroup: formData.ageGroup } : c);
     setChildren(updated);
     await saveChildren(updated);
     setEditingId(null);
+    setShowForm(false);
     setFormData({ name: '', ageGroup: 'prasekolah' });
     setError('');
   };
 
   const handleDeleteChild = async (id) => {
-    const updated = children.filter(child => child.id !== id);
+    const updated = children.filter(c => c.id !== id);
     setChildren(updated);
     await saveChildren(updated);
   };
@@ -112,149 +77,188 @@ export default function ChildrenProfiles() {
   const handleEdit = (child) => {
     setEditingId(child.id);
     setFormData({ name: child.name, ageGroup: child.ageGroup });
+    setShowForm(true);
   };
 
   const handleCancel = () => {
     setEditingId(null);
+    setShowForm(false);
     setFormData({ name: '', ageGroup: 'prasekolah' });
     setError('');
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-amber-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
         <div className="text-center">
           <div className="text-6xl animate-bounce mb-4">👶</div>
-          <div className="w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+      {/* Background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
+
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="max-w-lg mx-auto px-4 py-8 pb-24 pt-20">
+
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-5 p-5 rounded-3xl flex items-center justify-between"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
         >
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-3">
             <span className="text-4xl">👨‍👩‍👧‍👦</span>
-            <h1 className="text-3xl font-black text-gray-800">Profil Anak-anak</h1>
+            <div>
+              <h1 className="text-2xl font-black text-white">Profil Anak</h1>
+              <p className="text-white/70 text-xs font-semibold">{children.length}/{MAX_CHILDREN} anak terdaftar</p>
+            </div>
           </div>
-          <p className="text-sm text-gray-600 ml-14">{children.length}/{MAX_CHILDREN} anak terdaftar</p>
+          {children.length < MAX_CHILDREN && !showForm && (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah' }); }}
+              className="flex items-center gap-2 bg-white text-purple-600 rounded-2xl px-4 py-2.5 font-black text-sm shadow-lg"
+            >
+              <Plus className="w-4 h-4" /> Tambah
+            </motion.button>
+          )}
         </motion.div>
 
-        {/* Error Message */}
-        {error && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mb-6 bg-red-100 border border-red-300 rounded-xl p-3 text-red-700 text-sm font-semibold"
-          >
-            {error}
-          </motion.div>
-        )}
+        {/* Error */}
+        <AnimatePresence>
+          {error && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+              className="mb-4 bg-red-500/20 border border-red-300/40 rounded-2xl p-3 text-white text-sm font-semibold backdrop-blur">
+              ⚠️ {error}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Form Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white/40 backdrop-blur-xl rounded-3xl p-6 border-2 border-white/30 shadow-xl mb-8"
-        >
-          <p className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-            {editingId ? '✏️ Ubah Anak' : '➕ Tambah Anak Baru'}
-          </p>
-          
-          <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="Nama anak..."
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-game-purple focus:outline-none font-semibold text-gray-800 placeholder-gray-400"
-            />
-            
-            <select
-              value={formData.ageGroup}
-              onChange={(e) => setFormData({ ...formData, ageGroup: e.target.value })}
-              className="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-game-purple focus:outline-none font-semibold text-gray-800"
+        {/* Add/Edit Form */}
+        <AnimatePresence>
+          {showForm && (
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              className="mb-5 rounded-3xl p-5"
+              style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
             >
-              <option value="prasekolah">🎨 Prasekolah (3-5 tahun)</option>
-              <option value="sekolah_rendah">📚 Sekolah Rendah (6-12 tahun)</option>
-            </select>
+              <p className="text-white font-black text-sm mb-4">{editingId ? '✏️ Ubah Profil Anak' : '➕ Tambah Anak Baru'}</p>
 
-            <div className="flex gap-3">
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={editingId ? handleUpdateChild : handleAddChild}
-                className="flex-1 bg-gradient-to-r from-game-purple to-purple-600 text-white rounded-2xl py-3 font-black flex items-center justify-center gap-2 hover:shadow-lg transition-all"
-              >
-                <Save className="w-4 h-4" />
-                {editingId ? 'Simpan Perubahan' : 'Tambah Anak'}
-              </motion.button>
-              
-              {editingId && (
+              <input
+                type="text"
+                placeholder="Nama anak..."
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full px-4 py-3 rounded-2xl bg-white/30 border border-white/40 text-white placeholder-white/60 font-semibold focus:outline-none focus:bg-white/40 mb-3 text-sm"
+              />
+
+              <p className="text-white/80 text-xs font-bold mb-2">Peringkat Umur</p>
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                {AGE_OPTIONS.map(opt => (
+                  <motion.button
+                    key={opt.value}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setFormData({ ...formData, ageGroup: opt.value })}
+                    className={`py-3 rounded-2xl font-bold text-sm flex flex-col items-center gap-1 transition-all ${
+                      formData.ageGroup === opt.value
+                        ? 'bg-white text-purple-600 shadow-lg'
+                        : 'bg-white/20 text-white border border-white/30'
+                    }`}
+                  >
+                    <span className="text-2xl">{opt.emoji}</span>
+                    <span>{opt.label}</span>
+                    <span className={`text-xs ${formData.ageGroup === opt.value ? 'text-purple-400' : 'text-white/60'}`}>{opt.sub}</span>
+                  </motion.button>
+                ))}
+              </div>
+
+              <div className="flex gap-3">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={editingId ? handleUpdateChild : handleAddChild}
+                  className="flex-1 bg-white text-purple-600 rounded-2xl py-3 font-black flex items-center justify-center gap-2 shadow-lg text-sm"
+                >
+                  <Save className="w-4 h-4" />
+                  {editingId ? 'Simpan' : 'Tambah Anak'}
+                </motion.button>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={handleCancel}
-                  className="flex-1 bg-gray-300 text-gray-800 rounded-2xl py-3 font-black flex items-center justify-center gap-2 hover:bg-gray-400 transition-all"
+                  className="px-4 bg-white/20 text-white rounded-2xl py-3 font-black flex items-center justify-center border border-white/30"
                 >
                   <X className="w-4 h-4" />
-                  Batal
                 </motion.button>
-              )}
-            </div>
-          </div>
-        </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Children List */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {children.length === 0 ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="bg-white/40 backdrop-blur-xl rounded-3xl p-8 text-center border-2 border-white/30 shadow-xl"
+              className="rounded-3xl p-10 text-center"
+              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
             >
-              <p className="text-lg font-bold text-gray-800 mb-2">Belum ada anak terdaftar</p>
-              <p className="text-sm text-gray-600">Tambah anak pertama untuk memulai pembelajaran</p>
+              <div className="text-6xl mb-3">👶</div>
+              <p className="text-white font-black text-lg mb-1">Belum ada anak terdaftar</p>
+              <p className="text-white/70 text-sm">Tekan "Tambah" untuk daftar profil anak pertama!</p>
             </motion.div>
           ) : (
             children.map((child, idx) => (
               <motion.div
                 key={child.id}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.05 }}
-                className="bg-white/40 backdrop-blur-xl rounded-3xl p-5 border-2 border-white/30 shadow-xl flex items-center justify-between"
+                transition={{ delay: idx * 0.06 }}
+                className="rounded-3xl p-4 flex items-center gap-4"
+                style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
               >
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-3xl">{child.ageGroup === 'prasekolah' ? '🎨' : '📚'}</span>
-                    <div>
-                      <p className="font-black text-lg text-gray-800">{child.name}</p>
-                      <p className="text-xs text-gray-600 font-semibold">
-                        {child.ageGroup === 'prasekolah' ? 'Prasekolah' : 'Sekolah Rendah'}
-                      </p>
-                    </div>
+                {/* Avatar */}
+                <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner">
+                  {AVATARS[idx % AVATARS.length]}
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-black text-base leading-tight">{child.name}</p>
+                  <div className="flex items-center gap-1.5 mt-1">
+                    <span className="text-sm">{child.ageGroup === 'prasekolah' ? '🎨' : '📚'}</span>
+                    <span className="text-white/70 text-xs font-semibold">
+                      {child.ageGroup === 'prasekolah' ? 'Prasekolah · 3–5 thn' : 'Sekolah Rendah · 6–12 thn'}
+                    </span>
                   </div>
                 </div>
 
-                <div className="flex gap-2">
+                {/* Actions */}
+                <div className="flex gap-2 flex-shrink-0">
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleEdit(child)}
-                    className="p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-all"
+                    className="w-9 h-9 bg-white/20 text-white rounded-xl flex items-center justify-center hover:bg-white/30 transition-all border border-white/30"
                   >
                     <Edit2 className="w-4 h-4" />
                   </motion.button>
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleDeleteChild(child.id)}
-                    className="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-all"
+                    className="w-9 h-9 bg-red-500/30 text-white rounded-xl flex items-center justify-center hover:bg-red-500/50 transition-all border border-red-300/30"
                   >
                     <Trash2 className="w-4 h-4" />
                   </motion.button>
@@ -264,18 +268,30 @@ export default function ChildrenProfiles() {
           )}
         </div>
 
-        {/* Capacity Info */}
-        {children.length > 0 && children.length < MAX_CHILDREN && (
+        {/* Capacity bar */}
+        {children.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-8 bg-gradient-to-r from-game-blue/10 to-blue-100/50 rounded-2xl p-4 border border-game-blue/20"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="mt-4 rounded-2xl p-4"
+            style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)' }}
           >
-            <p className="text-sm text-game-blue font-semibold">
-              Boleh tambah {MAX_CHILDREN - children.length} anak lagi ({children.length}/{MAX_CHILDREN})
-            </p>
+            <div className="flex justify-between text-white/80 text-xs font-bold mb-2">
+              <span>Kapasiti Profil</span>
+              <span>{children.length}/{MAX_CHILDREN}</span>
+            </div>
+            <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${(children.length / MAX_CHILDREN) * 100}%` }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                className="h-full bg-white rounded-full"
+              />
+            </div>
           </motion.div>
         )}
+
       </div>
     </div>
   );
