@@ -11,17 +11,11 @@ const GAME_FILES = [
 
 export default function AdminGameManager() {
   const [activeModal, setActiveModal] = useState(null);
-  const [selectedFile, setSelectedFile] = useState('');
   const [targetCount, setTargetCount] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
   const handleAction = async (action) => {
-    if (!selectedFile) {
-      setMessage('❌ Sila pilih file');
-      return;
-    }
-
     if ((action === 'soalan' || action === 'games') && !targetCount) {
       setMessage('❌ Sila masukkan target jumlah');
       return;
@@ -30,13 +24,13 @@ export default function AdminGameManager() {
     setLoading(true);
     try {
       let functionName = '';
-      let payload = { fileName: selectedFile };
+      let payload = {};
 
       if (action === 'soalan') {
-        functionName = 'syncGameQuestions';
+        functionName = 'syncAllGameQuestions';
         payload.targetCount = parseInt(targetCount);
       } else if (action === 'games') {
-        functionName = 'syncGames';
+        functionName = 'syncAllGames';
         payload.targetCount = parseInt(targetCount);
       }
 
@@ -57,23 +51,8 @@ export default function AdminGameManager() {
       <div className="max-w-2xl mx-auto px-4 pt-24">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="text-4xl font-black text-gray-900 mb-2">🎮 Admin Game Manager</h1>
-          <p className="text-gray-600">Manage soalan dan games</p>
+          <p className="text-gray-600">Auto apply ke semua files</p>
         </motion.div>
-
-        {/* File Selector */}
-        <div className="mb-6">
-          <label className="block text-sm font-bold text-gray-700 mb-2">Pilih File</label>
-          <select
-            value={selectedFile}
-            onChange={(e) => setSelectedFile(e.target.value)}
-            className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
-          >
-            <option value="">-- Pilih File --</option>
-            {GAME_FILES.map(file => (
-              <option key={file} value={file}>{file}</option>
-            ))}
-          </select>
-        </div>
 
         {/* Message */}
         {message && (
