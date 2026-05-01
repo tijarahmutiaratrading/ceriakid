@@ -4,15 +4,27 @@ import { useAuth } from '@/lib/AuthContext';
 import { useLang } from '@/lib/LanguageContext';
 import { t } from '@/lib/i18n';
 import { base44 } from '@/api/base44Client';
-import { Upload, Loader, User, Mail, Calendar } from 'lucide-react';
+import { Upload, Loader, User, Mail, Calendar, Shield, Smartphone, Crown, CheckCircle } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { getDefaultAvatar } from '@/lib/avatarGenerator';
 import SubscriptionWidget from '@/components/dashboard/SubscriptionWidget';
 import ManageDevices from '@/components/ManageDevices';
 
+const TIER_CONFIG = {
+  free:      { label: 'Percuma',  emoji: '🆓', color: 'from-gray-400 to-gray-500' },
+  asas:      { label: 'Asas',     emoji: '🌱', color: 'from-green-400 to-emerald-500' },
+  standard:  { label: 'Standard', emoji: '⭐', color: 'from-blue-400 to-indigo-500' },
+  keluarga:  { label: 'Keluarga', emoji: '👑', color: 'from-purple-500 to-pink-500' },
+};
+
 export default function ClientDashboard() {
   const { user } = useAuth();
+  const { lang } = useLang();
+  const [saving, setSaving] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [gender, setGender] = useState(user?.gender || '');
   const [userTier, setUserTier] = useState('free');
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (user?.email) {
@@ -21,10 +33,6 @@ export default function ClientDashboard() {
       });
     }
   }, [user?.email]);
-  const { lang } = useLang();
-  const [saving, setSaving] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState(null);
-  const [gender, setGender] = useState(user?.gender || '');
 
   useEffect(() => {
     if (user?.gender) {
@@ -32,161 +40,179 @@ export default function ClientDashboard() {
     } else {
       setAvatarUrl(getDefaultAvatar(user?.full_name || 'User'));
     }
+    setGender(user?.gender || '');
   }, [user]);
 
   const handleAvatarUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    try {
-      setSaving(true);
-      const { url } = await base44.integrations.Core.UploadFile({ file });
-      setAvatarUrl(url);
-    } catch (error) {
-      console.error('Upload failed:', error);
-    } finally {
-      setSaving(false);
-    }
+    setSaving(true);
+    const { url } = await base44.integrations.Core.UploadFile({ file });
+    setAvatarUrl(url);
+    setSaving(false);
   };
 
   const handleSave = async () => {
-    try {
-      setSaving(true);
-      await base44.auth.updateMe({ gender });
-      alert('Profile updated!');
-    } catch (error) {
-      console.error('Save failed:', error);
-      alert('Failed to save profile');
-    } finally {
-      setSaving(false);
-    }
+    setSaving(true);
+    await base44.auth.updateMe({ gender });
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
   };
 
+  const tier = TIER_CONFIG[userTier] || TIER_CONFIG.free;
+
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+      {/* Background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
+
       <AppHeader />
-      <div className="max-w-lg mx-auto px-4 py-6 pb-24 pt-20">
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <h1 className="text-3xl font-black text-gray-900 mb-2">⚙️ {t('profileSettings', lang)}</h1>
-          <p className="text-gray-600 text-sm">{t('updateProfile', lang)}</p>
-        </motion.div>
 
-        {/* Subscription Status */}
-         <SubscriptionWidget userEmail={user?.email} />
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
 
-        {/* Avatar Section */}
-         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="bg-white/40 backdrop-blur-xl rounded-2xl p-6 border-2 border-white/30 shadow-lg text-center"
-          >
-            {avatarUrl && avatarUrl.includes('http') ? (
-              <img
-                src={avatarUrl}
-                alt="Avatar"
-                className="w-20 h-20 rounded-full object-cover mx-auto mb-4 border-4 border-game-purple/20"
-              />
-            ) : (
-              <div className="w-20 h-20 rounded-full bg-amber-100 mx-auto mb-4 border-4 border-game-purple/20 flex items-center justify-center text-4xl">
-                🐱
+        {/* Hero Profile Card */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-5 rounded-3xl overflow-hidden shadow-2xl"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.4)' }}
+        >
+          {/* Top gradient strip */}
+          <div className={`h-24 bg-gradient-to-r ${tier.color} relative`}>
+            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, white 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+            {/* Tier badge */}
+            <div className="absolute top-3 right-4 flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1.5">
+              <span className="text-lg">{tier.emoji}</span>
+              <span className="text-white font-black text-xs">{tier.label}</span>
+            </div>
+          </div>
+
+          {/* Avatar overlapping strip */}
+          <div className="px-6 pb-6">
+            <div className="flex items-end gap-4 -mt-10 mb-4">
+              <div className="relative">
+                {avatarUrl && avatarUrl.includes('http') ? (
+                  <img src={avatarUrl} alt="Avatar" className="w-20 h-20 rounded-2xl object-cover border-4 border-white shadow-xl" />
+                ) : (
+                  <div className="w-20 h-20 rounded-2xl bg-white/40 border-4 border-white shadow-xl flex items-center justify-center text-4xl">🐱</div>
+                )}
+                <label className="absolute -bottom-2 -right-2 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-orange-600 transition-colors">
+                  <input type="file" accept="image/*" onChange={handleAvatarUpload} disabled={saving} className="hidden" />
+                  {saving ? <Loader className="w-3.5 h-3.5 text-white animate-spin" /> : <Upload className="w-3.5 h-3.5 text-white" />}
+                </label>
               </div>
-            )}
-            
-            <label className="block">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarUpload}
-                disabled={saving}
-                className="hidden"
-              />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                disabled={saving}
-                className="px-5 py-2.5 bg-game-orange text-white rounded-full font-bold flex items-center gap-2 mx-auto text-sm disabled:opacity-50"
-              >
-                {saving ? <Loader className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                {saving ? t('uploading', lang) : t('changeAvatar', lang)}
-              </motion.button>
-            </label>
-          </motion.div>
+              <div className="mb-1">
+                <p className="text-white font-black text-xl leading-tight">{user?.full_name || 'Pengguna'}</p>
+                <p className="text-white/70 text-xs font-semibold">{user?.email}</p>
+              </div>
+            </div>
+
+            {/* Account info row */}
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { icon: Mail, label: 'E-mel', value: user?.email },
+                { icon: Calendar, label: 'Ahli Sejak', value: user?.created_date ? new Date(user.created_date).toLocaleDateString('ms-MY') : '-' },
+              ].map((item, i) => {
+                const Icon = item.icon;
+                return (
+                  <div key={i} className="bg-white/20 rounded-2xl p-3">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Icon className="w-3.5 h-3.5 text-white/70" />
+                      <p className="text-white/70 text-xs font-bold">{item.label}</p>
+                    </div>
+                    <p className="text-white font-black text-xs truncate">{item.value}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </motion.div>
 
-        {/* Gender Section */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-6">
-          <p className="text-xs font-bold text-gray-700 uppercase mb-3">{t('gender', lang)}</p>
+        {/* Gender Picker */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-4 rounded-3xl p-5"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+        >
+          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">👤 Jantina</p>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { value: 'male', label: t('male', lang), emoji: '👨' },
-              { value: 'female', label: t('female', lang), emoji: '👩' },
+              { value: 'male', label: 'Lelaki', emoji: '👨' },
+              { value: 'female', label: 'Perempuan', emoji: '👩' },
             ].map((option) => (
               <motion.button
                 key={option.value}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setGender(option.value)}
-                className={`py-3.5 rounded-2xl font-bold transition-all border-2 text-sm ${
+                className={`py-4 rounded-2xl font-bold transition-all text-sm flex flex-col items-center gap-1 ${
                   gender === option.value
-                    ? 'bg-game-orange/70 backdrop-blur-xl text-white border-white/30 shadow-lg'
-                    : 'bg-white/40 backdrop-blur-xl text-gray-700 border-white/30 hover:border-white/50'
+                    ? 'bg-white text-purple-600 shadow-xl'
+                    : 'bg-white/20 text-white border border-white/30'
                 }`}
               >
-                <span className="text-xl block mb-1">{option.emoji}</span>
+                <span className="text-2xl">{option.emoji}</span>
                 {option.label}
               </motion.button>
             ))}
           </div>
         </motion.div>
 
-        {/* Account Info */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8 pb-6 border-b-2 border-white/30">
-          <p className="text-xs font-bold text-gray-700 uppercase mb-3">{t('accountInfo', lang)}</p>
-          <div className="space-y-3">
-            {[
-              { label: t('name', lang), value: user?.full_name, icon: User },
-              { label: t('email', lang), value: user?.email, icon: Mail },
-              { label: t('memberSince', lang), value: new Date(user?.created_date).toLocaleDateString('ms-MY'), icon: Calendar },
-            ].map((item, i) => {
-              const IconComponent = item.icon;
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + i * 0.05 }}
-                  className="flex items-center gap-3 bg-white/40 backdrop-blur-xl p-3.5 rounded-xl border border-white/30"
-                >
-                  <IconComponent className="w-5 h-5 text-game-orange flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs text-gray-500 font-bold">{item.label}</p>
-                    <p className="font-bold text-gray-800 text-sm truncate">{item.value}</p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+        {/* Subscription */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="mb-4"
+        >
+          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3 px-1">💎 Langganan Saya</p>
+          <SubscriptionWidget userEmail={user?.email} />
         </motion.div>
 
         {/* Manage Devices */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mb-6">
-          <p className="text-xs font-bold text-gray-700 uppercase mb-3">🔒 Device Berdaftar</p>
-          <ManageDevices userEmail={user?.email} tier={userTier} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-5"
+        >
+          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3 px-1">📱 Device Berdaftar</p>
+          <div className="rounded-3xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}>
+            <div className="p-4">
+              <ManageDevices userEmail={user?.email} tier={userTier} />
+            </div>
+          </div>
         </motion.div>
 
         {/* Save Button */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
           <motion.button
             whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileTap={{ scale: 0.97 }}
             onClick={handleSave}
             disabled={saving}
-            className="w-full py-3.5 bg-gradient-to-r from-game-orange to-orange-500 text-white rounded-2xl font-black shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+            className={`w-full py-4 rounded-2xl font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all ${
+              saved
+                ? 'bg-green-500 text-white'
+                : 'bg-white text-purple-600 hover:bg-white/90'
+            } disabled:opacity-60`}
           >
-            {saving ? <Loader className="w-5 h-5 animate-spin" /> : '💾'}
-            {saving ? t('saving', lang) : t('saveChanges', lang)}
+            {saving ? (
+              <><Loader className="w-5 h-5 animate-spin" /> Menyimpan...</>
+            ) : saved ? (
+              <><CheckCircle className="w-5 h-5" /> Tersimpan!</>
+            ) : (
+              <>💾 Simpan Perubahan</>
+            )}
           </motion.button>
         </motion.div>
+
       </div>
     </div>
   );
