@@ -30,7 +30,7 @@ export default function SubjectBreakdown({ progress }) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="clay rounded-2xl p-4"
+            className="rounded-2xl p-4 bg-white/10"
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
