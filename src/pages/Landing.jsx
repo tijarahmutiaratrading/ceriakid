@@ -140,7 +140,7 @@ export default function Landing() {
                 <span className="relative z-10">Tukar Jadi</span>
                 <span className="absolute inset-0 bg-yellow-300 rounded-lg transform -rotate-1 z-0"></span>
               </span>
-              {' '}Suka! 🎉
+              {' '}Rajin! 🎉
             </motion.h1>
 
             {/* Subtext */}
