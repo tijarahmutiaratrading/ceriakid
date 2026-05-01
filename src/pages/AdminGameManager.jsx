@@ -42,6 +42,156 @@ export default function AdminGameManager() {
   // Export states
   const [exportFormat, setExportFormat] = useState('json');
 
+  // ============ CREATE GAME ============
+  const [createForm, setCreateForm] = useState({
+    title: '',
+    type: 'letter_match',
+    category: 'bahasa_melayu',
+    difficulty: 'easy',
+    tier: 'free',
+    emoji: '🎮',
+    totalQuestions: 8,
+  });
+
+  const handleCreateGame = async () => {
+    if (!createForm.title) return alert('Title required');
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminCreate', {
+        fileName: selectedFile,
+        gameData: createForm,
+      });
+      setHistory([...history, { type: 'create', gameTitle: createForm.title, emoji: createForm.emoji }]);
+      setCreateForm({ title: '', type: 'letter_match', category: 'bahasa_melayu', difficulty: 'easy', tier: 'free', emoji: '🎮', totalQuestions: 8 });
+      alert('✅ Game created (backend integration needed to persist)');
+    } catch (err) {
+      alert('Error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ DELETE GAME ============
+  const [deleteIndices, setDeleteIndices] = useState('');
+  const handleDeleteGames = async () => {
+    if (!deleteIndices) return alert('Enter game indices');
+    setLoading(true);
+    try {
+      const indices = deleteIndices.split(',').map(x => parseInt(x.trim())).filter(n => !isNaN(n));
+      const res = await base44.functions.invoke('gameAdminDelete', {
+        fileName: selectedFile,
+        gameIndices: indices,
+      });
+      setHistory([...history, { type: 'delete', count: res.data.deletedGames.length }]);
+      setDeleteIndices('');
+      alert(`✅ Deleted ${res.data.deletedGames.length} game(s)`);
+    } catch (err) {
+      alert('Error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ TOGGLE PUBLISH ============
+  const handleTogglePublish = async () => {
+    if (!selectedFile || gameIndex === '') return;
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminTogglePublish', {
+        fileName: selectedFile,
+        gameIndex: parseInt(gameIndex),
+      });
+      alert(`✅ ${res.data.message}`);
+    } catch (err) {
+      alert('Error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ UPDATE METADATA ============
+  const [metaUpdates, setMetaUpdates] = useState({});
+  const handleUpdateMetadata = async () => {
+    if (!selectedFile || gameIndex === '' || Object.keys(metaUpdates).length === 0) return alert('Select game and updates');
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminUpdateMetadata', {
+        fileName: selectedFile,
+        gameIndex: parseInt(gameIndex),
+        updates: metaUpdates,
+      });
+      setHistory([...history, { type: 'metadata', gameIndex, fields: Object.keys(metaUpdates).length }]);
+      setMetaUpdates({});
+      alert(`✅ Updated ${Object.keys(metaUpdates).length} field(s)`);
+    } catch (err) {
+      alert('Error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ REORDER ============
+  const [reorderFrom, setReorderFrom] = useState('');
+  const [reorderTo, setReorderTo] = useState('');
+  const handleReorder = async () => {
+    if (reorderFrom === '' || reorderTo === '') return alert('Enter from and to indices');
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminReorder', {
+        fileName: selectedFile,
+        fromIndex: parseInt(reorderFrom),
+        toIndex: parseInt(reorderTo),
+      });
+      setHistory([...history, { type: 'reorder', title: res.data.moved.title, from: reorderFrom, to: reorderTo }]);
+      setReorderFrom('');
+      setReorderTo('');
+      alert(`✅ ${res.data.message}`);
+    } catch (err) {
+      alert('Error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ VALIDATE ============
+  const [validation, setValidation] = useState(null);
+  const handleValidate = async () => {
+    if (!selectedFile) return;
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminValidate', {
+        fileName: selectedFile,
+      });
+      setValidation(res.data);
+    } catch (err) {
+      alert('Error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ RESTORE BACKUP ============
+  const [restoreFile, setRestoreFile] = useState(null);
+  const handleRestoreBackup = async () => {
+    if (!restoreFile || !selectedFile) return alert('Select backup file and target');
+    setLoading(true);
+    try {
+      const text = await restoreFile.text();
+      const backupData = JSON.parse(text);
+      const res = await base44.functions.invoke('gameAdminRestoreBackup', {
+        fileName: selectedFile,
+        backupData,
+      });
+      setHistory([...history, { type: 'restore', count: res.data.gamesRestored }]);
+      setRestoreFile(null);
+      alert(`✅ ${res.data.message}`);
+    } catch (err) {
+      alert('Error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // ============ SEARCH ============
   const handleSearch = async () => {
     if (!selectedFile) return;
@@ -285,6 +435,13 @@ export default function AdminGameManager() {
         <div className="flex gap-2 mb-6 flex-wrap">
           {[
             { id: 'games', label: '📚 Games List', icon: '📚' },
+            { id: 'create', label: '➕ Create Game', icon: '+' },
+            { id: 'delete', label: '🗑️ Delete Game', icon: '🗑️' },
+            { id: 'metadata', label: '✏️ Edit Properties', icon: '✏️' },
+            { id: 'publish', label: '📤 Publish/Draft', icon: '📤' },
+            { id: 'reorder', label: '↕️ Reorder', icon: '↕️' },
+            { id: 'validate', label: '✓ Validate', icon: '✓' },
+            { id: 'restore', label: '⬆️ Restore Backup', icon: '⬆️' },
             { id: 'expand', label: '📈 Expand Soalan', icon: '+' },
             { id: 'search', label: '🔍 Search Games', icon: '🔍' },
             { id: 'analytics', label: '📊 Analytics', icon: '📊' },
@@ -319,6 +476,274 @@ export default function AdminGameManager() {
             <div className="space-y-4">
               <h2 className="text-2xl font-black text-gray-800 mb-6">📚 All Games</h2>
               <GamesListView />
+            </div>
+          )}
+
+          {/* CREATE GAME */}
+          {activeTab === 'create' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">➕ Create New Game</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Title</label>
+                <input type="text" value={createForm.title} onChange={(e) => setCreateForm({...createForm, title: e.target.value})} placeholder="Game title..." className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Type</label>
+                  <select value={createForm.type} onChange={(e) => setCreateForm({...createForm, type: e.target.value})} className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium">
+                    <option value="letter_match">Letter Match</option>
+                    <option value="number_match">Number Match</option>
+                    <option value="picture_quiz">Picture Quiz</option>
+                    <option value="multiple_choice">Multiple Choice</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Emoji</label>
+                  <input type="text" value={createForm.emoji} onChange={(e) => setCreateForm({...createForm, emoji: e.target.value})} placeholder="🎮" className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none" maxLength="2" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Category</label>
+                  <select value={createForm.category} onChange={(e) => setCreateForm({...createForm, category: e.target.value})} className="w-full p-3 border-2 border-gray-300 rounded-xl font-medium">
+                    <option value="bahasa_melayu">Bahasa Melayu</option>
+                    <option value="english">English</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="science">Science</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Difficulty</label>
+                  <select value={createForm.difficulty} onChange={(e) => setCreateForm({...createForm, difficulty: e.target.value})} className="w-full p-3 border-2 border-gray-300 rounded-xl font-medium">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Tier</label>
+                  <select value={createForm.tier} onChange={(e) => setCreateForm({...createForm, tier: e.target.value})} className="w-full p-3 border-2 border-gray-300 rounded-xl font-medium">
+                    <option value="free">Free</option>
+                    <option value="premium">Premium</option>
+                    <option value="pro">Pro</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Questions</label>
+                  <input type="number" min="1" max="50" value={createForm.totalQuestions} onChange={(e) => setCreateForm({...createForm, totalQuestions: parseInt(e.target.value)})} className="w-full p-3 border-2 border-gray-300 rounded-xl" />
+                </div>
+              </div>
+
+              <motion.button whileTap={{ scale: 0.95 }} onClick={handleCreateGame} disabled={loading || !createForm.title} className="w-full bg-green-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2">
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
+                {loading ? 'Creating...' : 'Create Game'}
+              </motion.button>
+            </div>
+          )}
+
+          {/* DELETE GAME */}
+          {activeTab === 'delete' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">🗑️ Delete Games</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
+                <select value={selectedFile} onChange={(e) => setSelectedFile(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl font-medium">
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Game Indices (comma-separated)</label>
+                <input type="text" value={deleteIndices} onChange={(e) => setDeleteIndices(e.target.value)} placeholder="e.g. 0,2,5" className="w-full p-3 border-2 border-gray-300 rounded-xl" />
+              </div>
+
+              <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-4 text-sm">
+                <p className="font-bold text-red-900">⚠️ Warning: This action cannot be undone!</p>
+              </div>
+
+              <motion.button whileTap={{ scale: 0.95 }} onClick={handleDeleteGames} disabled={loading || !deleteIndices} className="w-full bg-red-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2">
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
+                {loading ? 'Deleting...' : 'Delete Games'}
+              </motion.button>
+            </div>
+          )}
+
+          {/* METADATA EDITOR */}
+          {activeTab === 'metadata' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">✏️ Edit Game Properties</h2>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
+                  <select value={selectedFile} onChange={(e) => setSelectedFile(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl font-medium">
+                    {GAME_FILES.map(file => (
+                      <option key={file} value={file}>{file}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Game Index</label>
+                  <input type="number" min="0" value={gameIndex} onChange={(e) => { setGameIndex(e.target.value); setMetaUpdates({}); }} className="w-full p-3 border-2 border-gray-300 rounded-xl" />
+                </div>
+              </div>
+
+              <div className="bg-blue-50 rounded-lg p-4 space-y-3">
+                <p className="text-sm font-bold text-gray-800">Update Fields (leave empty to keep)</p>
+                <input type="text" placeholder="New title" onChange={(e) => e.target.value ? setMetaUpdates({...metaUpdates, title: e.target.value}) : setMetaUpdates({...metaUpdates, title: undefined})} className="w-full p-2.5 border border-blue-300 rounded-lg text-sm" />
+                <input type="text" placeholder="New emoji" maxLength="2" onChange={(e) => e.target.value ? setMetaUpdates({...metaUpdates, emoji: e.target.value}) : setMetaUpdates({...metaUpdates, emoji: undefined})} className="w-full p-2.5 border border-blue-300 rounded-lg text-sm" />
+                <select onChange={(e) => e.target.value ? setMetaUpdates({...metaUpdates, difficulty: e.target.value}) : setMetaUpdates({...metaUpdates, difficulty: undefined})} className="w-full p-2.5 border border-blue-300 rounded-lg text-sm font-medium">
+                  <option value="">-- Difficulty --</option>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+
+              <motion.button whileTap={{ scale: 0.95 }} onClick={handleUpdateMetadata} disabled={loading || gameIndex === '' || Object.keys(metaUpdates).length === 0} className="w-full bg-blue-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2">
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+                {loading ? 'Updating...' : 'Save Changes'}
+              </motion.button>
+            </div>
+          )}
+
+          {/* PUBLISH/DRAFT */}
+          {activeTab === 'publish' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">📤 Publish/Draft Management</h2>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
+                  <select value={selectedFile} onChange={(e) => setSelectedFile(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl font-medium">
+                    {GAME_FILES.map(file => (
+                      <option key={file} value={file}>{file}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Game Index</label>
+                  <input type="number" min="0" value={gameIndex} onChange={(e) => setGameIndex(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl" />
+                </div>
+              </div>
+
+              <motion.button whileTap={{ scale: 0.95 }} onClick={handleTogglePublish} disabled={loading || gameIndex === ''} className="w-full bg-purple-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2">
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : '📤'}
+                {loading ? 'Toggling...' : 'Toggle Publish Status'}
+              </motion.button>
+            </div>
+          )}
+
+          {/* REORDER */}
+          {activeTab === 'reorder' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">↕️ Reorder Games</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
+                <select value={selectedFile} onChange={(e) => setSelectedFile(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl font-medium">
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">From Index</label>
+                  <input type="number" min="0" value={reorderFrom} onChange={(e) => setReorderFrom(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl" />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">To Index</label>
+                  <input type="number" min="0" value={reorderTo} onChange={(e) => setReorderTo(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl" />
+                </div>
+              </div>
+
+              <motion.button whileTap={{ scale: 0.95 }} onClick={handleReorder} disabled={loading || reorderFrom === '' || reorderTo === ''} className="w-full bg-orange-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2">
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : '↕️'}
+                {loading ? 'Moving...' : 'Move Game'}
+              </motion.button>
+            </div>
+          )}
+
+          {/* VALIDATE */}
+          {activeTab === 'validate' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">✓ Validate Games</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
+                <select value={selectedFile} onChange={(e) => { setSelectedFile(e.target.value); setValidation(null); }} className="w-full p-3 border-2 border-gray-300 rounded-xl font-medium">
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <motion.button whileTap={{ scale: 0.95 }} onClick={handleValidate} disabled={loading || !selectedFile} className="w-full bg-indigo-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2">
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : '✓'}
+                {loading ? 'Validating...' : 'Start Validation'}
+              </motion.button>
+
+              {validation && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`rounded-lg p-4 space-y-3 ${validation.isValid ? 'bg-green-50 border-l-4 border-green-500' : 'bg-red-50 border-l-4 border-red-500'}`}>
+                  <p className="font-black text-lg">{validation.message}</p>
+                  <p className="text-sm font-bold">{validation.totalGames} games • {validation.issues.length} issue(s) • {validation.warnings.length} warning(s)</p>
+                  {validation.issues.length > 0 && (
+                    <div className="space-y-1">
+                      <p className="text-xs font-bold text-red-700">Issues:</p>
+                      {validation.issues.map((issue, i) => (
+                        <p key={i} className="text-xs text-red-600 ml-2">• {issue}</p>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </div>
+          )}
+
+          {/* RESTORE BACKUP */}
+          {activeTab === 'restore' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">⬆️ Restore Backup</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Target File</label>
+                <select value={selectedFile} onChange={(e) => setSelectedFile(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl font-medium">
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Select Backup File</label>
+                <input type="file" accept=".json" onChange={(e) => setRestoreFile(e.target.files?.[0] || null)} className="w-full p-3 border-2 border-gray-300 rounded-xl" />
+              </div>
+
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 rounded-lg p-4 text-sm">
+                <p className="font-bold text-yellow-900">⚠️ This will replace all games in the selected file!</p>
+              </div>
+
+              <motion.button whileTap={{ scale: 0.95 }} onClick={handleRestoreBackup} disabled={loading || !restoreFile || !selectedFile} className="w-full bg-blue-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2">
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Upload'}
+                {loading ? 'Restoring...' : 'Restore Backup'}
+              </motion.button>
             </div>
           )}
 
