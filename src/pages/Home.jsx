@@ -10,7 +10,6 @@ import AppHeader from '@/components/AppHeader';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
 import ChildSelector from '@/components/ChildSelector';
-import { getDefaultAvatar } from '@/lib/avatarGenerator';
 
 export default function Home() {
   const { isAuthenticated, user } = useAuth();
@@ -20,138 +19,184 @@ export default function Home() {
   const safeToggle = toggleAgeGroup || (() => {});
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+      {/* Background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
+
       <AppHeader />
-      <div className="max-w-lg mx-auto px-4 py-8 pb-32 pt-8">
-        {/* Child Selector */}
-        <div className="flex justify-center mb-6">
-          <ChildSelector />
-        </div>
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-2">
-            <span className="text-3xl">🎓</span>
-            <h1 className="text-2xl font-black text-gray-800">Jom Belajar</h1>
-          </div>
-          {!isAuthenticated && (
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => { import('@/api/base44Client').then(m => m.base44.auth.redirectToLogin(window.location.href)); }}
-              className="px-4 py-2 backdrop-blur-xl text-white rounded-full text-sm font-bold transition-all border border-white/30"
-            >
-              {t('backToMenu', lang)}
-            </motion.button>
-          )}
-        </div>
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
 
-        {/* Welcome */}
+        {/* Welcome Card */}
         {isAuthenticated && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex items-center gap-3 mb-10 p-5 bg-white/40 backdrop-blur-xl rounded-2xl shadow-xl border-2 border-white/30"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 rounded-3xl flex items-center gap-4"
+            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
           >
-            <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-2xl">
-              🐱
+            <div className="w-14 h-14 rounded-2xl bg-white/40 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">🐱</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white/80 text-xs font-bold">
+                {lang === 'bm' ? 'Selamat datang kembali!' : 'Welcome back!'}
+              </p>
+              <p className="text-white font-black text-lg truncate">{user?.full_name || 'Teman'}</p>
             </div>
-            <div>
-              <p className="text-xs text-gray-500 font-semibold">{lang === 'bm' ? 'Selamat datang!' : lang === 'en' ? 'Welcome!' : lang === 'zh' ? '欢迎!' : 'வரவேற்கிறோம்!'}</p>
-              <p className="text-lg font-black text-game-purple">{user?.full_name || 'Teman'}</p>
+            <div className="flex-shrink-0">
+              <ChildSelector />
             </div>
           </motion.div>
         )}
 
+        {/* Not logged in welcome */}
+        {!isAuthenticated && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 rounded-3xl flex items-center justify-between"
+            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">🎓</span>
+              <p className="text-white font-black text-lg">Jom Belajar!</p>
+            </div>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => { import('@/api/base44Client').then(m => m.base44.auth.redirectToLogin(window.location.href)); }}
+              className="px-4 py-2 bg-white text-purple-600 rounded-full text-sm font-black shadow-lg"
+            >
+              Log Masuk
+            </motion.button>
+          </motion.div>
+        )}
+
         {/* Age Group Toggle */}
-        <div className="mb-8 sm:mb-12 pb-4 sm:pb-8 border-b-2 border-amber-200">
-          <p className="text-xs sm:text-sm font-black text-gray-900 uppercase mb-3 sm:mb-4">{lang === 'bm' ? '🎯 Pilih Umur Anak' : lang === 'en' ? "🎯 Child's Age" : lang === 'zh' ? '🎯 儿童年龄' : '🎯 குழந்தையின் வயது'}</p>
-          <div className="grid grid-cols-2 gap-2 sm:gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-5 p-4 rounded-3xl"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+        >
+          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
+          <div className="grid grid-cols-2 gap-3">
             {[
-              { key: 'prasekolah', label: t('prasekolah', lang), emoji: '🎨' },
-              { key: 'sekolah_rendah', label: t('sekolahRendah', lang), emoji: '📚' }
+              { key: 'prasekolah', label: t('prasekolah', lang), emoji: '🎨', sub: '4–6 tahun' },
+              { key: 'sekolah_rendah', label: t('sekolahRendah', lang), emoji: '📚', sub: '7–12 tahun' }
             ].map((age) => (
               <motion.button
                 key={age.key}
                 onClick={() => safeToggle(age.key)}
                 whileTap={{ scale: 0.95 }}
-                whileHover={{ y: -4 }}
-                className={`px-3 sm:px-6 py-2 sm:py-4 rounded-2xl sm:rounded-3xl font-black text-xs sm:text-base transition-all border-2 flex flex-col items-center gap-1 sm:gap-2 ${
+                whileHover={{ scale: 1.02 }}
+                className={`py-3 px-4 rounded-2xl font-black text-sm transition-all flex items-center gap-3 ${
                   safeAgeGroup === age.key
-                    ? 'bg-gradient-to-br from-game-orange to-orange-500 text-white border-orange-600 shadow-xl'
-                    : 'bg-white text-gray-800 border-amber-200 hover:border-orange-300 shadow-md'
+                    ? 'bg-white text-purple-600 shadow-xl'
+                    : 'bg-white/20 text-white border border-white/30'
                 }`}
               >
-                <span className="text-2xl sm:text-3xl">{age.emoji}</span>
-                <span>{age.label}</span>
+                <span className="text-2xl">{age.emoji}</span>
+                <div className="text-left">
+                  <div className="font-black text-sm leading-tight">{age.label}</div>
+                  <div className={`text-xs font-semibold ${safeAgeGroup === age.key ? 'text-purple-400' : 'text-white/60'}`}>{age.sub}</div>
+                </div>
               </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        {/* Games Hub Shortcut */}
-        <Link to="/games-hub">
-          <motion.div
-           whileHover={{ scale: 1.03 }}
-           whileTap={{ scale: 0.97 }}
-           className="mb-8 bg-gradient-to-r from-purple-400/70 to-indigo-400/70 backdrop-blur-xl rounded-2xl p-6 flex items-center gap-4 text-white shadow-xl border border-white/30 cursor-pointer"
-          >
-            <span className="text-4xl">🎮</span>
-            <div>
-              <p className="font-black text-lg">{lang === 'bm' ? 'Game Hub Interaktif' : lang === 'en' ? 'Interactive Games' : lang === 'zh' ? '互动游戏' : 'ஆட்டம் Hub'}</p>
-              <p className="text-sm opacity-90">{lang === 'bm' ? '8 permainan seru dengan bintang & poin!' : lang === 'en' ? '8 fun interactive games with stars & points!' : lang === 'zh' ? '8 个有趣的互动游戏与星星和积分!' : '8 வ재ல குரூபங்களை விளையாடவும்!'}</p>
-            </div>
-            <span className="ml-auto text-2xl">→</span>
-          </motion.div>
-        </Link>
+        {/* Quick Access Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="grid grid-cols-2 gap-3 mb-5"
+        >
+          <Link to="/games-hub" className="block">
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="p-4 rounded-2xl h-full"
+              style={{ background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+            >
+              <div className="text-3xl mb-2">🎮</div>
+              <p className="text-white font-black text-sm leading-tight">Game Hub</p>
+              <p className="text-white/70 text-xs mt-1">8 permainan seru</p>
+              <div className="mt-2 text-white/60 text-xs">→</div>
+            </motion.div>
+          </Link>
 
-        {/* Drawing Studio Shortcut */}
-        <Link to="/drawing">
-          <motion.div
-           whileHover={{ scale: 1.03 }}
-           whileTap={{ scale: 0.97 }}
-           className="mb-12 bg-gradient-to-r from-pink-400/70 to-purple-400/70 backdrop-blur-xl rounded-2xl p-6 flex items-center gap-4 text-white shadow-xl border border-white/30 cursor-pointer"
-          >
-            <span className="text-4xl">🎨</span>
-            <div>
-              <p className="font-black text-lg">{lang === 'bm' ? 'Studio Lukisan' : lang === 'en' ? 'Drawing Studio' : lang === 'zh' ? '绘画工作室' : 'வரைதல் ஸ்டுடியோ'}</p>
-              <p className="text-sm opacity-90">{lang === 'bm' ? 'Lukis bebas atau buat tracing huruf & bentuk!' : lang === 'en' ? 'Draw freely or trace letters & shapes!' : lang === 'zh' ? '自由绘画或跟踪字母和形状!' : 'சுதந்திரமாக வரையவும் அல்லது எழுத்து மற்றும் வடிவங்களை ट्रेस செய்யவும்!'}</p>
-            </div>
-            <span className="ml-auto text-2xl">→</span>
-          </motion.div>
-        </Link>
+          <Link to="/drawing" className="block">
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="p-4 rounded-2xl h-full"
+              style={{ background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+            >
+              <div className="text-3xl mb-2">🎨</div>
+              <p className="text-white font-black text-sm leading-tight">Studio Lukisan</p>
+              <p className="text-white/70 text-xs mt-1">Lukis bebas & tracing</p>
+              <div className="mt-2 text-white/60 text-xs">→</div>
+            </motion.div>
+          </Link>
+        </motion.div>
 
         {/* Daily Challenge */}
         {isAuthenticated && (
-          <div className="mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-5"
+          >
             <DailyChallenge ageGroup={safeAgeGroup} />
-          </div>
+          </motion.div>
         )}
 
-        {/* Category Grid */}
-        <h2 className="text-2xl font-black text-gray-800 mb-8">{lang === 'bm' ? 'Pilih Subjek' : lang === 'en' ? 'Choose Subject' : lang === 'zh' ? '选择主题' : 'विषय चुनें'}</h2>
-        <CategoryGrid />
+        {/* Subject Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-1 w-6 rounded-full bg-white/60" />
+            <p className="text-white font-black text-base uppercase tracking-wider">
+              {lang === 'bm' ? 'Pilih Subjek' : 'Choose Subject'}
+            </p>
+            <div className="h-1 flex-1 rounded-full bg-white/20" />
+          </div>
+          <CategoryGrid />
+        </motion.div>
 
-        {/* CTA Section */}
+        {/* CTA if not logged in */}
         {!isAuthenticated && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="mt-12 bg-gradient-to-br from-game-orange/70 to-orange-400/70 backdrop-blur-xl rounded-3xl p-8 text-center text-white shadow-xl border border-white/30"
+            transition={{ delay: 0.4 }}
+            className="mt-8 p-6 rounded-3xl text-center"
+            style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}
           >
             <p className="text-4xl mb-3">🎮</p>
-             <p className="text-xl font-black mb-3">{lang === 'bm' ? 'Belum Mendaftar?' : lang === 'en' ? 'Not Registered Yet?' : lang === 'zh' ? '还没有注册?' : 'இன்னும் பதிவு செய்யவில்லையா?'}</p>
-             <p className="text-sm mb-6 opacity-95">
-               {lang === 'bm' ? 'Daftarlah sekarang untuk akses 200+ permainan edukatif!' : lang === 'en' ? 'Sign up now to access 200+ educational games!' : lang === 'zh' ? '立即注册以访问 200+ 教育游戏!' : '200+ கல்வி விளையாட்டுகளை அணுக இப்போது பதிவு செய்யுங்கள்!'}
-             </p>
+            <p className="text-white font-black text-lg mb-2">
+              {lang === 'bm' ? 'Belum Mendaftar?' : 'Not Registered Yet?'}
+            </p>
+            <p className="text-white/80 text-sm mb-5">
+              {lang === 'bm' ? 'Daftar sekarang untuk akses 200+ permainan edukatif!' : 'Sign up now to access 200+ educational games!'}
+            </p>
             <Link to="/landing">
               <motion.button
-                whileHover={{ scale: 1.08 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 bg-white text-game-orange rounded-full font-black shadow-lg hover:shadow-xl transition-all"
-                >
-                 {lang === 'bm' ? 'Lihat Paket Sekarang' : lang === 'en' ? 'View Packages Now' : lang === 'zh' ? '现在查看套餐' : 'இப்போது தொகுப்புகளைப் பார்க்கவும்'}
-                </motion.button>
+                className="px-8 py-3 bg-white text-purple-600 rounded-full font-black shadow-lg hover:shadow-xl transition-all"
+              >
+                {lang === 'bm' ? 'Lihat Paket Sekarang' : 'View Packages'}
+              </motion.button>
             </Link>
           </motion.div>
         )}
