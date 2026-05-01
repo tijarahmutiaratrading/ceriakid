@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { Loader2, Plus, Trash2, ChevronDown, CheckCircle2, AlertCircle, Search, BarChart3, Download, Copy, Settings, Save } from 'lucide-react';
+import GamesListView from '@/components/admin/GamesListView';
 
 const GAME_FILES = [
   'gameData_prasekolah_bm',
@@ -283,6 +284,7 @@ export default function AdminGameManager() {
         {/* Tabs */}
         <div className="flex gap-2 mb-6 flex-wrap">
           {[
+            { id: 'games', label: '📚 Games List', icon: '📚' },
             { id: 'expand', label: '📈 Expand Soalan', icon: '+' },
             { id: 'search', label: '🔍 Search Games', icon: '🔍' },
             { id: 'analytics', label: '📊 Analytics', icon: '📊' },
@@ -312,6 +314,14 @@ export default function AdminGameManager() {
 
         {/* Content */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-3xl p-6 shadow-2xl mb-6">
+          {/* GAMES LIST */}
+          {activeTab === 'games' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">📚 All Games</h2>
+              <GamesListView />
+            </div>
+          )}
+
           {/* EXPAND SOALAN */}
           {activeTab === 'expand' && (
             <div className="space-y-4">
