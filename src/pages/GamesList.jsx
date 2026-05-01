@@ -188,89 +188,102 @@ export default function GamesList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-pattern flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
         <div className="text-center">
           <div className="text-6xl animate-bounce mb-4">🎓</div>
-          <div className="w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-amber-50">
-      <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="max-w-lg mx-auto px-4 py-6 pb-24 pt-20">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+      {/* Background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
 
-        <motion.div className="mb-4">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-4xl">{getCategoryEmoji(category)}</span>
-            <h1 className="text-3xl font-black text-gray-900">
-              {getCategoryLabel(category, lang)}
-            </h1>
+      <AppHeader showBack={true} backTo="/dashboard" />
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
+
+        {/* Header Card */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-5 p-5 rounded-3xl flex items-center gap-4"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+        >
+          <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">
+            {getCategoryEmoji(category)}
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-game-purple">🎮 {games.length} {t('games', lang)}</span>
-            <span className="text-gray-400">•</span>
-            <span className="text-sm text-gray-600">{t('selectForPlay', lang)}</span>
+          <div>
+            <h1 className="text-2xl font-black text-white leading-tight">{getCategoryLabel(category, lang)}</h1>
+            <p className="text-white/70 text-xs font-semibold mt-0.5">🎮 {games.length} {t('games', lang)} · {t('selectForPlay', lang)}</p>
           </div>
         </motion.div>
 
         {/* Darjah Tabs - Only for Sekolah Rendah */}
         {hasDarjah && (
-          <div className="mb-5">
-            <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">{t('selectDarjah', lang)}</p>
-            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4"
+          >
+            <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2 px-1">{t('selectDarjah', lang)}</p>
+            <div className="flex gap-2 overflow-x-auto pb-1">
               {availableDarjah.map(d => (
                 <motion.button
                   key={d}
                   whileTap={{ scale: 0.92 }}
                   onClick={() => setSelectedDarjah(d)}
-                  className={`flex-shrink-0 px-4 py-2 rounded-2xl font-bold text-sm transition-all border-2 ${
+                  className={`flex-shrink-0 px-4 py-2 rounded-2xl font-bold text-sm transition-all ${
                     selectedDarjah === d
-                      ? 'bg-game-purple text-white border-game-purple shadow-lg'
-                      : 'bg-white text-gray-700 border-amber-200 hover:border-game-purple'
+                      ? 'bg-white text-purple-600 shadow-lg'
+                      : 'bg-white/20 text-white border border-white/30'
                   }`}
                 >
                   {DARJAH_LABELS[d] || `Darjah ${d}`}
                   <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full ${
-                    selectedDarjah === d ? 'bg-white/30 text-white' : 'bg-gray-100 text-gray-500'
+                    selectedDarjah === d ? 'bg-purple-100 text-purple-600' : 'bg-white/20 text-white/80'
                   }`}>
                     {allGames.filter(g => g.darjah === d).length}
                   </span>
                 </motion.button>
               ))}
             </div>
-          </div>
+          </motion.div>
         )}
 
-        {/* Games Grid */}
+        {/* Games List */}
         {games.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="clay rounded-3xl p-8 text-center mt-12"
+            className="rounded-3xl p-10 text-center"
+            style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
           >
             <p className="text-5xl mb-4">🚀</p>
-             <p className="text-xl font-bold mb-2">{t('newGamesComingSoon', lang)}</p>
-             <p className="text-gray-600 mb-6">{t('gamesBeingPrepared', lang)}</p>
-             <Link to="/">
-               <motion.button
-                 whileHover={{ scale: 1.05 }}
-                 className="px-6 py-3 bg-game-purple text-white rounded-full font-bold"
-               >
-                 ← {t('backToHome', lang)}
-               </motion.button>
+            <p className="text-xl font-black text-white mb-2">{t('newGamesComingSoon', lang)}</p>
+            <p className="text-white/70 text-sm mb-6">{t('gamesBeingPrepared', lang)}</p>
+            <Link to="/">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-3 bg-white text-purple-600 rounded-full font-black shadow-lg"
+              >
+                ← {t('backToHome', lang)}
+              </motion.button>
             </Link>
           </motion.div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {games.map((game, i) => {
-              // For darjah-filtered games, calculate global index for routing
-              const globalIdx = allGames.findIndex((g, idx) => g === game);
+              const globalIdx = allGames.findIndex((g) => g === game);
               const gameKey = `${ageGroup}-${category}-${globalIdx}`;
               const gameProgress = progress[gameKey];
-
               const locked = isGameLocked(globalIdx);
               return (
                 <GameListCard

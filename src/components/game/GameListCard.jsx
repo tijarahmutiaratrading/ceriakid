@@ -1,143 +1,102 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { RotateCcw, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import GameBadge from './GameBadge';
 
 const difficultyConfig = {
-  easy: { label: 'Mudah', color: 'bg-green-400', icon: '🟢', badge: 'from-green-400 to-green-500' },
-  medium: { label: 'Sederhana', color: 'bg-yellow-400', icon: '🟡', badge: 'from-yellow-400 to-yellow-500' },
-  hard: { label: 'Sukar', color: 'bg-red-400', icon: '🔴', badge: 'from-red-400 to-red-500' },
+  easy:   { label: 'Mudah',     color: 'bg-green-400/80',  icon: '🟢' },
+  medium: { label: 'Sederhana', color: 'bg-yellow-400/80', icon: '🟡' },
+  hard:   { label: 'Sukar',     color: 'bg-red-400/80',    icon: '🔴' },
 };
 
 export default function GameListCard({ game, gameKey, gameProgress, idx, category, badge, locked }) {
   const difficulty = difficultyConfig[game.difficulty || 'easy'];
 
+  const cardStyle = {
+    background: locked ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)',
+    backdropFilter: 'blur(20px)',
+    border: '1px solid rgba(255,255,255,0.35)',
+  };
+
   if (locked) {
     return (
-      <div className="relative">
-        <Link to="/landing">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: idx * 0.04 }}
-            className="clay rounded-2xl p-4 flex items-center gap-4 opacity-60 cursor-pointer hover:opacity-80 transition-all"
-          >
-            <div className="text-4xl grayscale">{game.emoji}</div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <h3 className="font-bold text-base truncate text-gray-500">{game.title}</h3>
-              </div>
-              <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full text-white bg-gradient-to-r ${difficulty.badge}`}>
-                {difficulty.icon} {difficulty.label}
-              </span>
+      <Link to="/landing">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: Math.min(idx * 0.03, 0.5) }}
+          className="rounded-2xl p-4 flex items-center gap-4 opacity-60 cursor-pointer"
+          style={cardStyle}
+        >
+          <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl grayscale flex-shrink-0">
+            {game.emoji}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-bold text-sm truncate text-white/60">{game.title}</h3>
+            <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full text-white/70 ${difficulty.color} mt-1`}>
+              {difficulty.icon} {difficulty.label}
+            </span>
+          </div>
+          <div className="flex flex-col items-center gap-1 flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+              <Lock className="w-4 h-4 text-white/60" />
             </div>
-            <div className="flex flex-col items-center gap-1 flex-shrink-0">
-              <Lock className="w-5 h-5 text-gray-400" />
-              <span className="text-xs text-gray-400 font-bold">Premium</span>
-            </div>
-          </motion.div>
-        </Link>
-      </div>
+            <span className="text-xs text-white/50 font-bold">Premium</span>
+          </div>
+        </motion.div>
+      </Link>
     );
   }
 
   return (
-    <div className="relative">
-      <Link to={`/play/${category}/${idx}`}>
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: idx * 0.04 }}
-          whileHover={{ scale: 1.02, x: 6 }}
-          whileTap={{ scale: 0.97 }}
-          className="clay rounded-2xl p-4 cursor-pointer flex items-center gap-4 group hover:shadow-lg transition-all"
-        >
-          {/* Game Emoji */}
-          <div className="text-4xl group-hover:scale-110 transition-transform">{game.emoji}</div>
+    <Link to={`/play/${category}/${idx}`}>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: Math.min(idx * 0.03, 0.5) }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
+        className="rounded-2xl p-4 flex items-center gap-4 cursor-pointer group"
+        style={cardStyle}
+      >
+        {/* Emoji */}
+        <div className="w-12 h-12 rounded-xl bg-white/25 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner group-hover:scale-110 transition-transform">
+          {game.emoji}
+        </div>
 
-          {/* Main Content */}
-          <div className="flex-1 min-w-0">
-            {/* Title + Badge */}
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-bold text-base truncate group-hover:text-game-purple transition-colors">
-                {game.title}
-              </h3>
-              {badge && <GameBadge type={badge} />}
-            </div>
-
-            {/* Metadata Row */}
-            <div className="flex items-center gap-2">
-              {/* Difficulty Badge */}
-              <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full text-white bg-gradient-to-r ${difficulty.badge}`}>
-                {difficulty.icon}
-                {difficulty.label}
-              </span>
-
-              {/* Game Type */}
-              <span className="text-xs text-gray-500 font-semibold capitalize truncate">
-                {game.type.replace(/_/g, ' ')}
-              </span>
-            </div>
-
-            {/* Progress Info */}
-            {gameProgress && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="mt-2 pt-2 border-t border-gray-100"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1">
-                    <span className="text-sm font-black text-game-purple">
-                      ⭐ {gameProgress.bestStars}/3
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      ({gameProgress.timesPlayed}x)
-                    </span>
-                  </div>
-                  
-                  {/* Mini Progress Bar */}
-                  <div className="flex-1 max-w-[60px] h-2.5 bg-gray-300 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(gameProgress.bestStars / 3) * 100}%` }}
-                      transition={{ duration: 0.5 }}
-                      className="h-full bg-gradient-to-r from-game-yellow via-game-pink to-game-orange shadow-md"
-                    />
-                  </div>
-                </div>
-              </motion.div>
-            )}
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="font-black text-sm text-white truncate">{game.title}</h3>
+            {badge && badge !== 'locked' && <GameBadge type={badge} />}
           </div>
 
-          {/* CTA Arrow */}
-          <motion.div
-            animate={{ x: gameProgress ? [0, 0] : [0, 2, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="text-xl opacity-50 group-hover:opacity-100 flex-shrink-0"
-          >
-            →
-          </motion.div>
-        </motion.div>
-      </Link>
+          <div className="flex items-center gap-2">
+            <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full text-white ${difficulty.color}`}>
+              {difficulty.icon} {difficulty.label}
+            </span>
+            <span className="text-white/50 text-xs font-semibold capitalize truncate">
+              {game.type?.replace(/_/g, ' ')}
+            </span>
+          </div>
 
-      {/* Repeat Play Button - Bottom Right */}
-      {gameProgress && (
-        <Link to={`/play/${category}/${idx}`}>
-          <motion.button
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: idx * 0.04 + 0.2 }}
-            whileHover={{ scale: 1.15, rotate: -10 }}
-            whileTap={{ scale: 0.9 }}
-            className="absolute bottom-2 right-2 bg-gradient-to-r from-game-purple to-game-pink text-white p-2 rounded-full shadow-lg hover:shadow-xl transition-all"
-            title="Main lagi"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </motion.button>
-        </Link>
-      )}
-    </div>
+          {/* Progress */}
+          {gameProgress && (
+            <div className="flex items-center gap-2 mt-2">
+              <div className="flex gap-0.5">
+                {[1,2,3].map(s => (
+                  <span key={s} className={`text-xs ${s <= gameProgress.bestStars ? 'text-yellow-300' : 'text-white/25'}`}>★</span>
+                ))}
+              </div>
+              <span className="text-white/50 text-xs">{gameProgress.timesPlayed}x dimainkan</span>
+            </div>
+          )}
+        </div>
+
+        {/* Arrow */}
+        <div className="text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all flex-shrink-0 text-lg">→</div>
+      </motion.div>
+    </Link>
   );
 }
