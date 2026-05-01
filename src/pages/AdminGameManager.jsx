@@ -22,8 +22,8 @@ export default function AdminGameManager() {
       return;
     }
 
-    if ((action === 'expandQ' || action === 'reduceQ') && !targetCount) {
-      setMessage('❌ Sila masukkan target jumlah soalan');
+    if ((action === 'soalan' || action === 'games') && !targetCount) {
+      setMessage('❌ Sila masukkan target jumlah');
       return;
     }
 
@@ -32,16 +32,12 @@ export default function AdminGameManager() {
       let functionName = '';
       let payload = { fileName: selectedFile };
 
-      if (action === 'expandQ') {
-        functionName = 'expandGameQuestions';
+      if (action === 'soalan') {
+        functionName = 'syncGameQuestions';
         payload.targetCount = parseInt(targetCount);
-      } else if (action === 'reduceQ') {
-        functionName = 'reduceGameQuestions';
+      } else if (action === 'games') {
+        functionName = 'syncGames';
         payload.targetCount = parseInt(targetCount);
-      } else if (action === 'expandG') {
-        functionName = 'expandGames';
-      } else if (action === 'reduceG') {
-        functionName = 'reduceGames';
       }
 
       const res = await base44.functions.invoke(functionName, payload);
@@ -130,7 +126,7 @@ export default function AdminGameManager() {
               className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl"
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-black text-gray-900">📝 Edit Soalan</h2>
+                <h2 className="text-2xl font-black text-gray-900">📝 Set Soalan</h2>
                 <button
                   onClick={() => setActiveModal(null)}
                   className="p-1 hover:bg-gray-100 rounded-lg transition-all"
@@ -139,8 +135,12 @@ export default function AdminGameManager() {
                 </button>
               </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-bold text-gray-700 mb-2">Target Jumlah (per game)</label>
+              <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg mb-4">
+                ℹ️ Sistem auto expand/reduce semua games ke jumlah ini
+              </p>
+
+              <div className="mb-6">
+                <label className="block text-sm font-bold text-gray-700 mb-2">Target Soalan (per game)</label>
                 <input
                   type="number"
                   min="4"
@@ -152,27 +152,15 @@ export default function AdminGameManager() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleAction('expandQ')}
-                  disabled={loading}
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
-                >
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                  Expand
-                </motion.button>
-
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleAction('reduceQ')}
-                  disabled={loading}
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
-                >
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Minus className="w-4 h-4" />}
-                  Reduce
-                </motion.button>
-              </div>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleAction('soalan')}
+                disabled={loading || !targetCount}
+                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+              >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>✓</span>}
+                {loading ? 'Processing...' : 'Apply'}
+              </motion.button>
             </motion.div>
           </motion.div>
         )}
@@ -196,7 +184,7 @@ export default function AdminGameManager() {
               className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl"
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-black text-gray-900">🎮 Edit Games</h2>
+                <h2 className="text-2xl font-black text-gray-900">🎮 Set Games</h2>
                 <button
                   onClick={() => setActiveModal(null)}
                   className="p-1 hover:bg-gray-100 rounded-lg transition-all"
@@ -206,32 +194,30 @@ export default function AdminGameManager() {
               </div>
 
               <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg mb-4">
-                ℹ️ Expand: Tambah 5 games (duplicate last)
-                <br />
-                Reduce: Buang 5 games (delete last)
+                ℹ️ Sistem auto expand/reduce ke jumlah ini (5 setiap kali)
               </p>
 
-              <div className="grid grid-cols-2 gap-3">
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleAction('expandG')}
-                  disabled={loading || !selectedFile}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
-                >
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                  Expand
-                </motion.button>
-
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleAction('reduceG')}
-                  disabled={loading || !selectedFile}
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
-                >
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Minus className="w-4 h-4" />}
-                  Reduce
-                </motion.button>
+              <div className="mb-6">
+                <label className="block text-sm font-bold text-gray-700 mb-2">Target Jumlah Games</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={targetCount}
+                  onChange={(e) => setTargetCount(e.target.value)}
+                  placeholder="e.g. 25"
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
+                />
               </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleAction('games')}
+                disabled={loading || !targetCount}
+                className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+              >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>✓</span>}
+                {loading ? 'Processing...' : 'Apply'}
+              </motion.button>
             </motion.div>
           </motion.div>
         )}
