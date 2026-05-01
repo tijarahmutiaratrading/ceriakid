@@ -509,7 +509,7 @@ export default function Landing() {
       </div>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-[hsl(var(--border))] text-white py-8 text-center md:py-10">
+      <footer className="bg-[hsl(var(--game-red))] text-white py-8 text-center md:py-10">
         <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
         <p className="text-orange-100 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
         <div className="flex justify-center gap-6 text-xs text-orange-200">
