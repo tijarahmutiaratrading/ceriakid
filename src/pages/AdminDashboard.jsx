@@ -156,12 +156,12 @@ export default function AdminDashboard() {
       <AppHeader />
       <div className="max-w-5xl mx-auto px-3 md:px-4 py-6 md:py-8 pb-24">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <div className="flex items-center gap-4 mb-2">
-            <div className="text-5xl">🎛️</div>
-            <h1 className="text-5xl font-black text-gray-900">Admin Dashboard</h1>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+          <div className="flex items-center gap-3 mb-1">
+            <div className="text-3xl">🎛️</div>
+            <h1 className="text-2xl md:text-4xl font-black text-gray-900">Admin Dashboard</h1>
           </div>
-          <p className="text-gray-600 text-sm font-semibold ml-20">Analytics, Settings & Configurations</p>
+          <p className="text-gray-600 text-sm font-semibold ml-10">Analytics, Settings & Configurations</p>
         </motion.div>
 
         {/* Main Tabs */}
@@ -288,25 +288,25 @@ export default function AdminDashboard() {
         {activeTab === 'settings' && (
           <>
             {/* Settings Sub-tabs */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3 mb-10 bg-white/40 backdrop-blur-xl border-2 border-white/30 rounded-2xl p-2 shadow-xl">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 mb-8 bg-white/40 backdrop-blur-xl border-2 border-white/30 rounded-2xl p-2 shadow-xl">
               {settingsTabs.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setSettingsTab(tab.key)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl font-bold text-xs md:text-sm transition-all ${
                     settingsTab === tab.key
                       ? 'bg-gradient-to-r from-game-purple to-game-pink text-white shadow-md'
                       : 'text-gray-700 hover:bg-amber-50'
                   }`}
                 >
-                  {tab.icon} {tab.label}
+                  {tab.icon} <span className="hidden sm:inline">{tab.label}</span><span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                 </button>
               ))}
             </motion.div>
 
             {/* Facebook Pixel */}
             {settingsTab === 'pixel' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/30 shadow-xl mb-8">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-xl rounded-2xl p-4 md:p-8 border-2 border-white/30 shadow-xl mb-8">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
                     <Facebook className="w-6 h-6 text-white" />
@@ -339,7 +339,7 @@ export default function AdminDashboard() {
 
             {/* Chip Payment */}
             {settingsTab === 'chip' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/30 shadow-xl mb-8">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-xl rounded-2xl p-4 md:p-8 border-2 border-white/30 shadow-xl mb-8">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
                     <CreditCard className="w-6 h-6 text-white" />
@@ -392,7 +392,7 @@ export default function AdminDashboard() {
 
             {/* Webhook */}
             {settingsTab === 'webhook' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/30 shadow-xl mb-8">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-xl rounded-2xl p-4 md:p-8 border-2 border-white/30 shadow-xl mb-8">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
                     <Webhook className="w-6 h-6 text-white" />
@@ -411,7 +411,7 @@ export default function AdminDashboard() {
                   <label className="block text-sm font-black text-gray-800 mb-1">Webhook URL Anda</label>
                   <p className="text-xs text-gray-500 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
                   <div className="flex gap-2">
-                    <div className="flex-1 bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl px-4 py-3 text-xs font-mono text-gray-600 break-all">
+                    <div className="flex-1 bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl px-3 py-3 text-xs font-mono text-gray-600 break-all overflow-x-auto">
                       {window.location.origin}/api/webhook/chip
                     </div>
                     <button
