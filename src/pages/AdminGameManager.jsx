@@ -16,12 +16,14 @@ const GAME_FILES = [
 ];
 
 export default function AdminGameManager() {
-  const [activeTab, setActiveTab] = useState('expand');
+  const [activeTab, setActiveTab] = useState('games');
   const [selectedFile, setSelectedFile] = useState('');
   const [gameIndex, setGameIndex] = useState('');
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [history, setHistory] = useState([]);
+  const [expandTargetCount, setExpandTargetCount] = useState(20);
+  const [activeCategory, setActiveCategory] = useState('core');
   
   // Search states
   const [searchQuery, setSearchQuery] = useState('');
@@ -354,6 +356,7 @@ export default function AdminGameManager() {
       const res = await base44.functions.invoke('expandGameQuestions', {
         fileName: selectedFile,
         gameIndex: parseInt(gameIndex),
+        targetCount: parseInt(expandTargetCount),
         previewOnly: true
       });
       if (res.data.success) setPreview(res.data);
@@ -370,6 +373,7 @@ export default function AdminGameManager() {
       const res = await base44.functions.invoke('expandGameQuestions', {
         fileName: selectedFile,
         gameIndex: parseInt(gameIndex),
+        targetCount: parseInt(expandTargetCount),
         previewOnly: false
       });
       if (res.data.success) {
@@ -377,6 +381,7 @@ export default function AdminGameManager() {
         setPreview(null);
         setSelectedFile('');
         setGameIndex('');
+        setExpandTargetCount(20);
         alert(`✅ ${res.data.gameTitle} expanded!`);
       }
     } catch (err) {
@@ -438,41 +443,62 @@ export default function AdminGameManager() {
           <p className="text-white/80">Urus semua game data - tambah, kurang, expand, delete</p>
         </motion.div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6 flex-wrap overflow-x-auto pb-2">
+        {/* Category Buttons */}
+        <div className="flex gap-2 mb-4 flex-wrap">
           {[
-            { id: 'games', label: '📚 Games List', icon: '📚' },
-            { id: 'create', label: '➕ Create Game', icon: '+' },
-            { id: 'delete', label: '🗑️ Delete Game', icon: '🗑️' },
-            { id: 'metadata', label: '✏️ Edit Properties', icon: '✏️' },
-            { id: 'publish', label: '📤 Publish/Draft', icon: '📤' },
-            { id: 'reorder', label: '↕️ Reorder', icon: '↕️' },
-            { id: 'validate', label: '✓ Validate', icon: '✓' },
-            { id: 'restore', label: '⬆️ Restore Backup', icon: '⬆️' },
-            { id: 'expand', label: '📈 Expand Soalan', icon: '+' },
-            { id: 'search', label: '🔍 Search Games', icon: '🔍' },
-            { id: 'analytics', label: '📊 Analytics', icon: '📊' },
-            { id: 'preview', label: '👁️ Preview Game', icon: '👁️' },
-            { id: 'export', label: '⬇️ Export', icon: '⬇️' },
-            { id: 'clone', label: '📋 Clone Game', icon: '📋' },
-            { id: 'batch', label: '⚡ Batch Edit', icon: '⚡' },
-            { id: 'backup', label: '💾 Backup', icon: '💾' },
-          ].map(tab => (
+            { id: 'core', label: '⚡ Core', desc: 'CRUD operations' },
+            { id: 'metadata', label: '✏️ Metadata', desc: 'Edit properties' },
+            { id: 'advanced', label: '🚀 Advanced', desc: 'Expand, Clone, Batch' },
+            { id: 'tools', label: '🛠️ Tools', desc: 'Validate, Backup, Export' },
+          ].map(cat => (
             <motion.button
-              key={tab.id}
+              key={cat.id}
               whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                setActiveTab(tab.id);
-                setPreview(null);
-              }}
-              className={`flex-shrink-0 px-4 py-2.5 rounded-2xl font-bold transition-all ${
-                activeTab === tab.id
-                  ? 'bg-white text-indigo-600 shadow-2xl'
+              onClick={() => setActiveCategory(cat.id)}
+              className={`flex-shrink-0 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                activeCategory === cat.id
+                  ? 'bg-white text-indigo-600 shadow-lg'
                   : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/20'
               }`}
             >
-              {tab.label}
+              {cat.label}
             </motion.button>
+          ))}
+        </div>
+
+        {/* Tabs by Category */}
+        <div className="flex gap-2 mb-6 flex-wrap overflow-x-auto pb-2">
+          {activeCategory === 'core' && [
+            { id: 'games', label: '📚 Games List' },
+            { id: 'create', label: '➕ Create' },
+            { id: 'delete', label: '🗑️ Delete' },
+          ].map(tab => (
+            <motion.button key={tab.id} whileTap={{ scale: 0.95 }} onClick={() => setActiveTab(tab.id)} className={`flex-shrink-0 px-4 py-2.5 rounded-2xl font-bold transition-all ${activeTab === tab.id ? 'bg-white text-indigo-600 shadow-2xl' : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/20'}`}>{tab.label}</motion.button>
+          ))}
+          {activeCategory === 'metadata' && [
+            { id: 'metadata', label: '✏️ Edit Properties' },
+            { id: 'publish', label: '📤 Publish/Draft' },
+            { id: 'reorder', label: '↕️ Reorder' },
+          ].map(tab => (
+            <motion.button key={tab.id} whileTap={{ scale: 0.95 }} onClick={() => setActiveTab(tab.id)} className={`flex-shrink-0 px-4 py-2.5 rounded-2xl font-bold transition-all ${activeTab === tab.id ? 'bg-white text-indigo-600 shadow-2xl' : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/20'}`}>{tab.label}</motion.button>
+          ))}
+          {activeCategory === 'advanced' && [
+            { id: 'expand', label: '📈 Expand Soalan' },
+            { id: 'clone', label: '📋 Clone' },
+            { id: 'batch', label: '⚡ Batch Edit' },
+            { id: 'search', label: '🔍 Search' },
+            { id: 'analytics', label: '📊 Analytics' },
+          ].map(tab => (
+            <motion.button key={tab.id} whileTap={{ scale: 0.95 }} onClick={() => setActiveTab(tab.id)} className={`flex-shrink-0 px-4 py-2.5 rounded-2xl font-bold transition-all ${activeTab === tab.id ? 'bg-white text-indigo-600 shadow-2xl' : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/20'}`}>{tab.label}</motion.button>
+          ))}
+          {activeCategory === 'tools' && [
+            { id: 'validate', label: '✓ Validate' },
+            { id: 'backup', label: '💾 Backup' },
+            { id: 'restore', label: '⬆️ Restore' },
+            { id: 'export', label: '⬇️ Export' },
+            { id: 'preview', label: '👁️ Preview' },
+          ].map(tab => (
+            <motion.button key={tab.id} whileTap={{ scale: 0.95 }} onClick={() => setActiveTab(tab.id)} className={`flex-shrink-0 px-4 py-2.5 rounded-2xl font-bold transition-all ${activeTab === tab.id ? 'bg-white text-indigo-600 shadow-2xl' : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/20'}`}>{tab.label}</motion.button>
           ))}
         </div>
 
@@ -795,6 +821,22 @@ export default function AdminGameManager() {
                   placeholder="e.g. 0, 1, 2..."
                   className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Target Soalan Count</label>
+                <div className="flex gap-3 items-center">
+                  <input
+                    type="number"
+                    min="8"
+                    max="100"
+                    value={expandTargetCount}
+                    onChange={(e) => setExpandTargetCount(e.target.value)}
+                    className="flex-1 p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                  />
+                  <span className="text-gray-700 text-sm font-bold min-w-fit">soalan</span>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Boleh set dari 8 hingga 100</p>
               </div>
 
               <motion.button
