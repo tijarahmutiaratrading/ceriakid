@@ -19,7 +19,7 @@ export default function SubjectBreakdown({ progress }) {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-black mb-4">Prestasi Mengikut Mata Pelajaran</h3>
+      <h3 className="text-lg font-black mb-4 text-white">Prestasi Mengikut Mata Pelajaran</h3>
       {subjects.map((subject, i) => {
         const data = getSubjectData(subject.name.toLowerCase().replace(' ', '_'));
         const percentage = (data.avg / 3) * 100 || 0;
