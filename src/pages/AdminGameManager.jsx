@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
-import { Loader2, Plus, Trash2, ChevronDown, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, Plus, Trash2, ChevronDown, CheckCircle2, AlertCircle, Search, BarChart3, Download, Copy, Settings, Save } from 'lucide-react';
 
 const GAME_FILES = [
   'gameData_prasekolah_bm',
@@ -21,6 +21,179 @@ export default function AdminGameManager() {
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [history, setHistory] = useState([]);
+  
+  // Search states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchCategory, setSearchCategory] = useState('');
+  const [searchDifficulty, setSearchDifficulty] = useState('');
+  
+  // Analytics states
+  const [analytics, setAnalytics] = useState(null);
+  
+  // Clone states
+  const [cloneNewTitle, setCloneNewTitle] = useState('');
+  
+  // Batch edit states
+  const [batchIndices, setBatchIndices] = useState('');
+  const [batchUpdates, setBatchUpdates] = useState({});
+  
+  // Export states
+  const [exportFormat, setExportFormat] = useState('json');
+
+  // ============ SEARCH ============
+  const handleSearch = async () => {
+    if (!selectedFile) return;
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminSearch', {
+        fileName: selectedFile,
+        searchQuery,
+        category: searchCategory,
+        difficulty: searchDifficulty,
+      });
+      setSearchResults(res.data.results || []);
+    } catch (err) {
+      alert('Search error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ ANALYTICS ============
+  const handleAnalytics = async () => {
+    if (!selectedFile) return;
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminAnalytics', {
+        fileName: selectedFile,
+      });
+      setAnalytics(res.data.stats);
+    } catch (err) {
+      alert('Analytics error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ EXPORT ============
+  const handleExport = async () => {
+    if (!selectedFile) return;
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminExport', {
+        fileName: selectedFile,
+        format: exportFormat,
+      });
+      
+      const blob = new Blob([res.data.data], {
+        type: exportFormat === 'csv' ? 'text/csv' : 'application/json'
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${selectedFile}.${exportFormat}`;
+      a.click();
+      
+      setHistory([...history, { type: 'export', fileName: selectedFile, format: exportFormat, size: res.data.size }]);
+    } catch (err) {
+      alert('Export error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ CLONE ============
+  const handleClone = async () => {
+    if (!selectedFile || gameIndex === '' || !cloneNewTitle) return;
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminClone', {
+        fileName: selectedFile,
+        gameIndex: parseInt(gameIndex),
+        newTitle: cloneNewTitle,
+      });
+      
+      setHistory([...history, { type: 'clone', message: res.data.message }]);
+      setCloneNewTitle('');
+      setGameIndex('');
+      alert('✅ Game cloned successfully!');
+    } catch (err) {
+      alert('Clone error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ BATCH EDIT ============
+  const handleBatchEdit = async () => {
+    if (!selectedFile || !batchIndices) return;
+    
+    const indices = batchIndices.split(',').map(x => parseInt(x.trim())).filter(n => !isNaN(n));
+    if (indices.length === 0) return alert('Invalid indices');
+    
+    if (Object.keys(batchUpdates).length === 0) return alert('No updates specified');
+    
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminBatchEdit', {
+        fileName: selectedFile,
+        gameIndices: indices,
+        updates: batchUpdates,
+      });
+      
+      setHistory([...history, { type: 'batch', updated: res.data.successCount, fileName: selectedFile }]);
+      setBatchIndices('');
+      setBatchUpdates({});
+      alert(`✅ ${res.data.successCount} games updated!`);
+    } catch (err) {
+      alert('Batch edit error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ BACKUP ============
+  const handleBackup = async () => {
+    if (!selectedFile) return;
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminBackup', {
+        action: 'create',
+        fileName: selectedFile,
+      });
+      
+      const blob = new Blob([JSON.stringify(res.data.backup, null, 2)]);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `backup-${selectedFile}-${new Date().getTime()}.json`;
+      a.click();
+      
+      setHistory([...history, { type: 'backup', fileName: selectedFile, games: res.data.backup.gameCount }]);
+    } catch (err) {
+      alert('Backup error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============ PREVIEW ============
+  const handlePreview = async () => {
+    if (!selectedFile || gameIndex === '') return;
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('gameAdminPreview', {
+        fileName: selectedFile,
+        gameIndex: parseInt(gameIndex),
+      });
+      setPreview(res.data.preview);
+    } catch (err) {
+      alert('Preview error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // ============ EXPAND QUESTIONS ============
   const handleExpandPreview = async () => {
@@ -111,9 +284,13 @@ export default function AdminGameManager() {
         <div className="flex gap-2 mb-6 flex-wrap">
           {[
             { id: 'expand', label: '📈 Expand Soalan', icon: '+' },
-            { id: 'reduce', label: '📉 Kurang Soalan', icon: '−' },
-            { id: 'add', label: '➕ Tambah Game Baru', icon: '+' },
-            { id: 'delete', label: '🗑️ Buang Game', icon: '✕' },
+            { id: 'search', label: '🔍 Search Games', icon: '🔍' },
+            { id: 'analytics', label: '📊 Analytics', icon: '📊' },
+            { id: 'preview', label: '👁️ Preview Game', icon: '👁️' },
+            { id: 'export', label: '⬇️ Export', icon: '⬇️' },
+            { id: 'clone', label: '📋 Clone Game', icon: '📋' },
+            { id: 'batch', label: '⚡ Batch Edit', icon: '⚡' },
+            { id: 'backup', label: '💾 Backup', icon: '💾' },
           ].map(tab => (
             <motion.button
               key={tab.id}
@@ -269,6 +446,438 @@ export default function AdminGameManager() {
                 <Plus className="w-5 h-5" />
                 Coming Soon
               </motion.button>
+            </div>
+          )}
+
+          {/* SEARCH */}
+          {activeTab === 'search' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">🔍 Search & Filter Games</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
+                <select
+                  value={selectedFile}
+                  onChange={(e) => {
+                    setSelectedFile(e.target.value);
+                    setSearchResults([]);
+                  }}
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                >
+                  <option value="">-- Pilih File --</option>
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Search by Title</label>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="e.g. Huruf, Nombor..."
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Category</label>
+                  <select value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium">
+                    <option value="">All</option>
+                    <option value="bahasa_melayu">Bahasa Melayu</option>
+                    <option value="english">English</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="science">Science</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Difficulty</label>
+                  <select value={searchDifficulty} onChange={(e) => setSearchDifficulty(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium">
+                    <option value="">All</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </div>
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handleSearch}
+                disabled={!selectedFile || loading}
+                className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />}
+                {loading ? 'Searching...' : 'Search'}
+              </motion.button>
+
+              {searchResults.length > 0 && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-blue-50 rounded-2xl p-4 space-y-3">
+                  <p className="font-black text-gray-800">Found {searchResults.length} games</p>
+                  {searchResults.map((game, idx) => (
+                    <div key={idx} className="bg-white rounded-lg p-3 border-l-4 border-indigo-500">
+                      <p className="font-bold text-gray-800 flex items-center gap-2">{game.emoji} {game.title}</p>
+                      <p className="text-xs text-gray-600">Index: {game.index} | Type: {game.type} | Questions: {game.questionCount}</p>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </div>
+          )}
+
+          {/* ANALYTICS */}
+          {activeTab === 'analytics' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">📊 Game Analytics</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Select File</label>
+                <select
+                  value={selectedFile}
+                  onChange={(e) => {
+                    setSelectedFile(e.target.value);
+                    setAnalytics(null);
+                  }}
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                >
+                  <option value="">-- Pilih File --</option>
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handleAnalytics}
+                disabled={!selectedFile || loading}
+                className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <BarChart3 className="w-5 h-5" />}
+                {loading ? 'Analyzing...' : 'Generate Analytics'}
+              </motion.button>
+
+              {analytics && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-indigo-50 rounded-2xl p-4 text-center">
+                      <p className="text-3xl font-black text-indigo-600">{analytics.totalGames}</p>
+                      <p className="text-xs text-gray-600 mt-1">Total Games</p>
+                    </div>
+                    <div className="bg-pink-50 rounded-2xl p-4 text-center">
+                      <p className="text-3xl font-black text-pink-600">{analytics.totalQuestions}</p>
+                      <p className="text-xs text-gray-600 mt-1">Total Questions</p>
+                    </div>
+                    <div className="bg-purple-50 rounded-2xl p-4 text-center">
+                      <p className="text-3xl font-black text-purple-600">{analytics.avgQuestionsPerGame}</p>
+                      <p className="text-xs text-gray-600 mt-1">Avg per Game</p>
+                    </div>
+                    <div className="bg-green-50 rounded-2xl p-4 text-center">
+                      <p className="text-3xl font-black text-green-600">{Object.keys(analytics.byCategory).length}</p>
+                      <p className="text-xs text-gray-600 mt-1">Categories</p>
+                    </div>
+                  </div>
+
+                  {Object.keys(analytics.byCategory).length > 0 && (
+                    <div className="bg-gray-50 rounded-2xl p-4">
+                      <p className="font-bold text-gray-800 mb-3">By Category</p>
+                      {Object.entries(analytics.byCategory).map(([cat, count]) => (
+                        <div key={cat} className="flex justify-between items-center mb-2">
+                          <span className="text-gray-700">{cat}</span>
+                          <span className="bg-indigo-500 text-white px-3 py-1 rounded-lg font-bold">{count}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </div>
+          )}
+
+          {/* PREVIEW */}
+          {activeTab === 'preview' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">👁️ Preview Game</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
+                <select
+                  value={selectedFile}
+                  onChange={(e) => {
+                    setSelectedFile(e.target.value);
+                    setPreview(null);
+                  }}
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                >
+                  <option value="">-- Pilih File --</option>
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Game Index</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={gameIndex}
+                  onChange={(e) => {
+                    setGameIndex(e.target.value);
+                    setPreview(null);
+                  }}
+                  placeholder="e.g. 0, 1, 2..."
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                />
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handlePreview}
+                disabled={!selectedFile || gameIndex === '' || loading}
+                className="w-full bg-blue-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : '👁️'}
+                {loading ? 'Loading...' : 'Preview Game'}
+              </motion.button>
+
+              {preview && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-blue-50 rounded-2xl p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xl font-black text-gray-800 flex items-center gap-2">{preview.emoji} {preview.title}</p>
+                      <p className="text-xs text-gray-600">Type: {preview.type} | Difficulty: {preview.difficulty}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm font-bold text-gray-700">Total Questions: {preview.totalQuestions}</p>
+                  <div className="max-h-64 overflow-y-auto space-y-2">
+                    {preview.previewQuestions.map((q, idx) => (
+                      <div key={idx} className="bg-white rounded-lg p-3 border-l-4 border-blue-500">
+                        <p className="font-bold text-gray-800">Q{idx + 1}</p>
+                        <p className="text-sm text-gray-600 mt-1">{JSON.stringify(q).substring(0, 100)}...</p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          )}
+
+          {/* EXPORT */}
+          {activeTab === 'export' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">⬇️ Export Games</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
+                <select
+                  value={selectedFile}
+                  onChange={(e) => setSelectedFile(e.target.value)}
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                >
+                  <option value="">-- Pilih File --</option>
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Format</label>
+                <div className="flex gap-3">
+                  {['json', 'csv'].map(fmt => (
+                    <motion.button
+                      key={fmt}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setExportFormat(fmt)}
+                      className={`flex-1 py-3 rounded-xl font-bold transition-all ${
+                        exportFormat === fmt
+                          ? 'bg-indigo-500 text-white'
+                          : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                      }`}
+                    >
+                      {fmt.toUpperCase()}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handleExport}
+                disabled={!selectedFile || loading}
+                className="w-full bg-green-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
+                {loading ? 'Exporting...' : 'Export Now'}
+              </motion.button>
+            </div>
+          )}
+
+          {/* CLONE */}
+          {activeTab === 'clone' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">📋 Clone Game</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
+                <select
+                  value={selectedFile}
+                  onChange={(e) => {
+                    setSelectedFile(e.target.value);
+                    setGameIndex('');
+                  }}
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                >
+                  <option value="">-- Pilih File --</option>
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Game Index to Clone</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={gameIndex}
+                  onChange={(e) => setGameIndex(e.target.value)}
+                  placeholder="e.g. 0"
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">New Game Title</label>
+                <input
+                  type="text"
+                  value={cloneNewTitle}
+                  onChange={(e) => setCloneNewTitle(e.target.value)}
+                  placeholder="e.g. Huruf ABC - Edisi 2"
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
+                />
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handleClone}
+                disabled={!selectedFile || gameIndex === '' || !cloneNewTitle || loading}
+                className="w-full bg-purple-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Copy className="w-5 h-5" />}
+                {loading ? 'Cloning...' : 'Clone Game'}
+              </motion.button>
+            </div>
+          )}
+
+          {/* BATCH EDIT */}
+          {activeTab === 'batch' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">⚡ Batch Edit</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">File</label>
+                <select
+                  value={selectedFile}
+                  onChange={(e) => setSelectedFile(e.target.value)}
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                >
+                  <option value="">-- Pilih File --</option>
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Game Indices (comma-separated)</label>
+                <input
+                  type="text"
+                  value={batchIndices}
+                  onChange={(e) => setBatchIndices(e.target.value)}
+                  placeholder="e.g. 0,1,2,5"
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Change Difficulty</label>
+                <select
+                  value={batchUpdates.difficulty || ''}
+                  onChange={(e) => setBatchUpdates({ ...batchUpdates, difficulty: e.target.value || undefined })}
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                >
+                  <option value="">-- Keep Same --</option>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Change Tier</label>
+                <select
+                  value={batchUpdates.tier || ''}
+                  onChange={(e) => setBatchUpdates({ ...batchUpdates, tier: e.target.value || undefined })}
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                >
+                  <option value="">-- Keep Same --</option>
+                  <option value="free">Free</option>
+                  <option value="premium">Premium</option>
+                  <option value="pro">Pro</option>
+                </select>
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handleBatchEdit}
+                disabled={!selectedFile || !batchIndices || Object.keys(batchUpdates).length === 0 || loading}
+                className="w-full bg-orange-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Settings className="w-5 h-5" />}
+                {loading ? 'Updating...' : 'Apply Batch Changes'}
+              </motion.button>
+            </div>
+          )}
+
+          {/* BACKUP */}
+          {activeTab === 'backup' && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-black text-gray-800 mb-6">💾 Backup & Restore</h2>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Select File to Backup</label>
+                <select
+                  value={selectedFile}
+                  onChange={(e) => setSelectedFile(e.target.value)}
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+                >
+                  <option value="">-- Pilih File --</option>
+                  {GAME_FILES.map(file => (
+                    <option key={file} value={file}>{file}</option>
+                  ))}
+                </select>
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handleBackup}
+                disabled={!selectedFile || loading}
+                className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : '⬇️'}
+                {loading ? 'Creating Backup...' : 'Create Backup'}
+              </motion.button>
+
+              <div className="bg-blue-50 rounded-2xl p-4 border-l-4 border-blue-500">
+                <p className="font-bold text-gray-800">ℹ️ How it works</p>
+                <p className="text-sm text-gray-700 mt-2">- Creates JSON backup of entire file<br/>- Auto-downloads to your device<br/>- Keep safe for restoration later</p>
+              </div>
             </div>
           )}
 
