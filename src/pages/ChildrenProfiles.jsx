@@ -119,7 +119,7 @@ export default function ChildrenProfiles() {
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
         >
           <div className="flex items-center gap-3">
-            <span className="text-4xl">👨‍👩‍👧‍👦</span>
+            <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner">👨‍👩‍👧‍👦</div>
             <div>
               <h1 className="text-2xl font-black text-white">Profil Anak</h1>
               <p className="text-white/70 text-xs font-semibold">{children.length}/{MAX_CHILDREN} anak terdaftar</p>
