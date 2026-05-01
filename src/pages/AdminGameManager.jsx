@@ -809,7 +809,7 @@ export default function AdminGameManager() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Game Index (Nomor Urut)</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Game Index <span className="text-xs text-gray-500">(Nombor urutan game)</span></label>
                 <input
                   type="number"
                   min="0"
@@ -818,9 +818,10 @@ export default function AdminGameManager() {
                     setGameIndex(e.target.value);
                     setPreview(null);
                   }}
-                  placeholder="e.g. 0, 1, 2..."
+                  placeholder="e.g. 0 = game pertama, 1 = game kedua..."
                   className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
                 />
+                <p className="text-xs text-gray-500 mt-2 bg-blue-50 p-2 rounded-lg">💡 Tip: Pergi tab <strong>📚 Games List</strong> dulu untuk cari "Index:" game yang nak expand</p>
               </div>
 
               <div>
