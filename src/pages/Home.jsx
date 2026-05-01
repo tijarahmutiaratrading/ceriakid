@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
@@ -12,11 +12,20 @@ import DailyChallenge from '@/components/home/DailyChallenge';
 import ChildSelector from '@/components/ChildSelector';
 
 export default function Home() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoadingAuth } = useAuth();
   const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
   const { lang } = useLang();
   const safeAgeGroup = ageGroup || 'prasekolah';
   const safeToggle = toggleAgeGroup || (() => {});
+
+  // Redirect to login if not authenticated
+  React.useEffect(() => {
+    if (!isLoadingAuth && !isAuthenticated) {
+      import('@/api/base44Client').then(m => m.base44.auth.redirectToLogin(window.location.href));
+    }
+  }, [isLoadingAuth, isAuthenticated]);
+
+  if (!isAuthenticated) return null;
 
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
