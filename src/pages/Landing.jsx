@@ -140,7 +140,7 @@ export default function Landing() {
                 <span className="relative z-10">Tukar Jadi</span>
                 <span className="absolute inset-0 bg-yellow-300 rounded-lg transform -rotate-1 z-0"></span>
               </span>
-              {' '}Rajin! 🎉
+              {' '}Suka! 🎉
             </motion.h1>
 
             {/* Subtext */}
@@ -162,7 +162,7 @@ export default function Landing() {
                 🎮 Bayar Sekarang <ArrowRight className="w-4 h-4" />
               </motion.button>
               <Link to="/dashboard">
-                <button className="bg-transparent text-[hsl(var(--card-foreground))] px-6 py-3 text-base font-bold rounded-full border-2 border-orange-500 hover:border-orange-600 hover:bg-orange-50 transition-colors w-full sm:w-auto">
+                <button className="bg-transparent text-[hsl(var(--card-foreground))] px-6 py-3 text-base font-bold rounded-full border-2 border-green-500 hover:border-green-600 hover:bg-green-50 transition-colors w-full sm:w-auto">
                   🎁 Cuba Percuma 7 Hari
                 </button>
               </Link>
@@ -509,7 +509,7 @@ export default function Landing() {
       </div>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-orange-600 text-white py-8 md:py-10 text-center">
+      <footer className="bg-[hsl(var(--border))] text-white py-8 text-center md:py-10">
         <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
         <p className="text-orange-100 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
         <div className="flex justify-center gap-6 text-xs text-orange-200">
