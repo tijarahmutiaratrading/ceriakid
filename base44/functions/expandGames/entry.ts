@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
       fileName,
       totalGames: games.length,
       addedCount: duplicateCount,
-      message: `✅ ${duplicateCount} games ditambah. Total sekarang: ${games.length}`,
+      message: `✅ ${duplicateCount} games ditambah. Total: ${games.length}`,
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

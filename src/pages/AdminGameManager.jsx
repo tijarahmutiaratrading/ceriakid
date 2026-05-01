@@ -12,14 +12,13 @@ const GAME_FILES = [
 export default function AdminGameManager() {
   const [activeTab, setActiveTab] = useState('expand-questions');
   const [selectedFile, setSelectedFile] = useState('');
-  const [gameIndex, setGameIndex] = useState('');
   const [targetCount, setTargetCount] = useState('');
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [message, setMessage] = useState('');
 
   const handleExpandQuestions = async () => {
-    if (!selectedFile || gameIndex === '' || !targetCount) {
+    if (!selectedFile || !targetCount) {
       setMessage('❌ Sila isi semua field');
       return;
     }
@@ -28,12 +27,10 @@ export default function AdminGameManager() {
     try {
       const res = await base44.functions.invoke('expandGameQuestions', {
         fileName: selectedFile,
-        gameIndex: parseInt(gameIndex),
         targetCount: parseInt(targetCount),
       });
-      setMessage(`✅ Berhasil! Game "${res.data.gameTitle}" sekarang ada ${res.data.totalQuestions} soalan`);
+      setMessage(`✅ Berhasil! ${res.data.gamesUpdated} games expand. Total soalan baru: ${res.data.totalQuestions}`);
       setPreview(res.data);
-      setGameIndex('');
       setTargetCount('');
     } catch (err) {
       setMessage(`❌ Error: ${err.message}`);
@@ -43,7 +40,7 @@ export default function AdminGameManager() {
   };
 
   const handleReduceQuestions = async () => {
-    if (!selectedFile || gameIndex === '' || !targetCount) {
+    if (!selectedFile || !targetCount) {
       setMessage('❌ Sila isi semua field');
       return;
     }
@@ -52,12 +49,10 @@ export default function AdminGameManager() {
     try {
       const res = await base44.functions.invoke('reduceGameQuestions', {
         fileName: selectedFile,
-        gameIndex: parseInt(gameIndex),
         targetCount: parseInt(targetCount),
       });
-      setMessage(`✅ Berhasil! Game dikurang kepada ${res.data.totalQuestions} soalan`);
+      setMessage(`✅ Berhasil! ${res.data.gamesUpdated} games dikurang. Target soalan: ${res.data.targetCount}`);
       setPreview(res.data);
-      setGameIndex('');
       setTargetCount('');
     } catch (err) {
       setMessage(`❌ Error: ${err.message}`);
@@ -157,7 +152,7 @@ export default function AdminGameManager() {
         {/* EXPAND SOALAN */}
         {activeTab === 'expand-questions' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-2xl p-6 space-y-4">
-            <h2 className="text-2xl font-black text-gray-900">📈 Expand Soalan</h2>
+            <h2 className="text-2xl font-black text-gray-900">📈 Expand Soalan (Semua Games)</h2>
             
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">Pilih File</label>
@@ -174,22 +169,7 @@ export default function AdminGameManager() {
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">
-                Game Index <span className="text-xs text-gray-500">(Nomor urutan: 0, 1, 2...)</span>
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={gameIndex}
-                onChange={(e) => setGameIndex(e.target.value)}
-                placeholder="e.g. 0"
-                className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
-              />
-              <p className="text-xs text-gray-500 mt-1">💡 0 = game pertama, 1 = game kedua, dst</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Target Jumlah Soalan</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Target Jumlah Soalan (per game)</label>
               <input
                 type="number"
                 min="8"
@@ -199,6 +179,7 @@ export default function AdminGameManager() {
                 placeholder="e.g. 20"
                 className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
               />
+              <p className="text-xs text-gray-500 mt-1">💡 Semua games dalam file akan expand kepada jumlah ini</p>
             </div>
 
             <motion.button
@@ -208,7 +189,7 @@ export default function AdminGameManager() {
               className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
-              {loading ? 'Processing...' : 'Expand Soalan'}
+              {loading ? 'Processing...' : 'Expand Semua'}
             </motion.button>
           </motion.div>
         )}
@@ -216,7 +197,7 @@ export default function AdminGameManager() {
         {/* REDUCE SOALAN */}
         {activeTab === 'reduce-questions' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-2xl p-6 space-y-4">
-            <h2 className="text-2xl font-black text-gray-900">📉 Reduce Soalan</h2>
+            <h2 className="text-2xl font-black text-gray-900">📉 Reduce Soalan (Semua Games)</h2>
             
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">Pilih File</label>
@@ -233,22 +214,7 @@ export default function AdminGameManager() {
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">
-                Game Index <span className="text-xs text-gray-500">(Nomor urutan: 0, 1, 2...)</span>
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={gameIndex}
-                onChange={(e) => setGameIndex(e.target.value)}
-                placeholder="e.g. 0"
-                className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
-              />
-              <p className="text-xs text-gray-500 mt-1">💡 0 = game pertama, 1 = game kedua, dst</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Target Jumlah Soalan</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Target Jumlah Soalan (per game)</label>
               <input
                 type="number"
                 min="4"
@@ -257,6 +223,7 @@ export default function AdminGameManager() {
                 placeholder="e.g. 8"
                 className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
               />
+              <p className="text-xs text-gray-500 mt-1">💡 Semua games dalam file akan dikurang kepada jumlah ini</p>
             </div>
 
             <motion.button
@@ -266,7 +233,7 @@ export default function AdminGameManager() {
               className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Minus className="w-5 h-5" />}
-              {loading ? 'Processing...' : 'Reduce Soalan'}
+              {loading ? 'Processing...' : 'Reduce Semua'}
             </motion.button>
           </motion.div>
         )}

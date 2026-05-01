@@ -27,7 +27,7 @@ Deno.serve(async (req) => {
       totalGames: games.length,
       deletedCount: deleteCount,
       deletedTitles: deleted.map(g => g.title),
-      message: `✅ ${deleteCount} games dihapus. Total sekarang: ${games.length}`,
+      message: `✅ ${deleteCount} games dihapus. Total: ${games.length}`,
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
