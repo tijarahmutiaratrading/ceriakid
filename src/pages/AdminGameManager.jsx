@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Loader2, Plus, Minus } from 'lucide-react';
+import { Loader2, Plus, Minus, X } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 
 const GAME_FILES = [
@@ -10,90 +10,43 @@ const GAME_FILES = [
 ];
 
 export default function AdminGameManager() {
-  const [activeTab, setActiveTab] = useState('expand-questions');
+  const [activeModal, setActiveModal] = useState(null);
   const [selectedFile, setSelectedFile] = useState('');
   const [targetCount, setTargetCount] = useState('');
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState(null);
   const [message, setMessage] = useState('');
 
-  const handleExpandQuestions = async () => {
-    if (!selectedFile || !targetCount) {
-      setMessage('❌ Sila isi semua field');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await base44.functions.invoke('expandGameQuestions', {
-        fileName: selectedFile,
-        targetCount: parseInt(targetCount),
-      });
-      setMessage(`✅ Berhasil! ${res.data.gamesUpdated} games expand. Total soalan baru: ${res.data.totalQuestions}`);
-      setPreview(res.data);
-      setTargetCount('');
-    } catch (err) {
-      setMessage(`❌ Error: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleReduceQuestions = async () => {
-    if (!selectedFile || !targetCount) {
-      setMessage('❌ Sila isi semua field');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await base44.functions.invoke('reduceGameQuestions', {
-        fileName: selectedFile,
-        targetCount: parseInt(targetCount),
-      });
-      setMessage(`✅ Berhasil! ${res.data.gamesUpdated} games dikurang. Target soalan: ${res.data.targetCount}`);
-      setPreview(res.data);
-      setTargetCount('');
-    } catch (err) {
-      setMessage(`❌ Error: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleExpandGames = async () => {
+  const handleAction = async (action) => {
     if (!selectedFile) {
       setMessage('❌ Sila pilih file');
       return;
     }
 
-    setLoading(true);
-    try {
-      const res = await base44.functions.invoke('expandGames', {
-        fileName: selectedFile,
-      });
-      setMessage(`✅ Berhasil! File sekarang ada ${res.data.totalGames} games`);
-      setPreview(res.data);
-    } catch (err) {
-      setMessage(`❌ Error: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleReduceGames = async () => {
-    if (!selectedFile) {
-      setMessage('❌ Sila pilih file');
+    if ((action === 'expandQ' || action === 'reduceQ') && !targetCount) {
+      setMessage('❌ Sila masukkan target jumlah soalan');
       return;
     }
 
     setLoading(true);
     try {
-      const res = await base44.functions.invoke('reduceGames', {
-        fileName: selectedFile,
-      });
-      setMessage(`✅ Berhasil! File sekarang ada ${res.data.totalGames} games`);
-      setPreview(res.data);
+      let functionName = '';
+      let payload = { fileName: selectedFile };
+
+      if (action === 'expandQ') {
+        functionName = 'expandGameQuestions';
+        payload.targetCount = parseInt(targetCount);
+      } else if (action === 'reduceQ') {
+        functionName = 'reduceGameQuestions';
+        payload.targetCount = parseInt(targetCount);
+      } else if (action === 'expandG') {
+        functionName = 'expandGames';
+      } else if (action === 'reduceG') {
+        functionName = 'reduceGames';
+      }
+
+      const res = await base44.functions.invoke(functionName, payload);
+      setMessage(`✅ Berhasil! ${res.data.message}`);
+      setTargetCount('');
     } catch (err) {
       setMessage(`❌ Error: ${err.message}`);
     } finally {
@@ -108,34 +61,22 @@ export default function AdminGameManager() {
       <div className="max-w-2xl mx-auto px-4 pt-24">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="text-4xl font-black text-gray-900 mb-2">🎮 Admin Game Manager</h1>
-          <p className="text-gray-600">Expand atau reduce soalan & games</p>
+          <p className="text-gray-600">Manage soalan dan games</p>
         </motion.div>
 
-        {/* Tabs */}
-        <div className="flex gap-3 mb-8 flex-wrap">
-          {[
-            { id: 'expand-questions', label: '📈 Expand Soalan', icon: '➕' },
-            { id: 'reduce-questions', label: '📉 Reduce Soalan', icon: '➖' },
-            { id: 'expand-games', label: '📚 Expand Games', icon: '➕' },
-            { id: 'reduce-games', label: '🗑️ Reduce Games', icon: '➖' },
-          ].map(tab => (
-            <motion.button
-              key={tab.id}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                setActiveTab(tab.id);
-                setMessage('');
-                setPreview(null);
-              }}
-              className={`px-4 py-2.5 rounded-xl font-bold transition-all ${
-                activeTab === tab.id
-                  ? 'bg-indigo-600 text-white shadow-lg'
-                  : 'bg-white text-gray-800 border-2 border-gray-200 hover:border-indigo-300'
-              }`}
-            >
-              {tab.icon} {tab.label}
-            </motion.button>
-          ))}
+        {/* File Selector */}
+        <div className="mb-6">
+          <label className="block text-sm font-bold text-gray-700 mb-2">Pilih File</label>
+          <select
+            value={selectedFile}
+            onChange={(e) => setSelectedFile(e.target.value)}
+            className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
+          >
+            <option value="">-- Pilih File --</option>
+            {GAME_FILES.map(file => (
+              <option key={file} value={file}>{file}</option>
+            ))}
+          </select>
         </div>
 
         {/* Message */}
@@ -149,173 +90,152 @@ export default function AdminGameManager() {
           </motion.div>
         )}
 
-        {/* EXPAND SOALAN */}
-        {activeTab === 'expand-questions' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-2xl p-6 space-y-4">
-            <h2 className="text-2xl font-black text-gray-900">📈 Expand Soalan (Semua Games)</h2>
-            
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Pilih File</label>
-              <select
-                value={selectedFile}
-                onChange={(e) => setSelectedFile(e.target.value)}
-                className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
-              >
-                <option value="">-- Pilih File --</option>
-                {GAME_FILES.map(file => (
-                  <option key={file} value={file}>{file}</option>
-                ))}
-              </select>
-            </div>
+        {/* Main Buttons */}
+        <div className="grid grid-cols-2 gap-4">
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setActiveModal('soalan')}
+            className="bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-2 transition-all"
+          >
+            <span className="text-3xl">📝</span>
+            <span>Edit Soalan</span>
+          </motion.button>
 
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Target Jumlah Soalan (per game)</label>
-              <input
-                type="number"
-                min="8"
-                max="100"
-                value={targetCount}
-                onChange={(e) => setTargetCount(e.target.value)}
-                placeholder="e.g. 20"
-                className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
-              />
-              <p className="text-xs text-gray-500 mt-1">💡 Semua games dalam file akan expand kepada jumlah ini</p>
-            </div>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={handleExpandQuestions}
-              disabled={loading}
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
-            >
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
-              {loading ? 'Processing...' : 'Expand Semua'}
-            </motion.button>
-          </motion.div>
-        )}
-
-        {/* REDUCE SOALAN */}
-        {activeTab === 'reduce-questions' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-2xl p-6 space-y-4">
-            <h2 className="text-2xl font-black text-gray-900">📉 Reduce Soalan (Semua Games)</h2>
-            
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Pilih File</label>
-              <select
-                value={selectedFile}
-                onChange={(e) => setSelectedFile(e.target.value)}
-                className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
-              >
-                <option value="">-- Pilih File --</option>
-                {GAME_FILES.map(file => (
-                  <option key={file} value={file}>{file}</option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Target Jumlah Soalan (per game)</label>
-              <input
-                type="number"
-                min="4"
-                value={targetCount}
-                onChange={(e) => setTargetCount(e.target.value)}
-                placeholder="e.g. 8"
-                className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
-              />
-              <p className="text-xs text-gray-500 mt-1">💡 Semua games dalam file akan dikurang kepada jumlah ini</p>
-            </div>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={handleReduceQuestions}
-              disabled={loading}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
-            >
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Minus className="w-5 h-5" />}
-              {loading ? 'Processing...' : 'Reduce Semua'}
-            </motion.button>
-          </motion.div>
-        )}
-
-        {/* EXPAND GAMES */}
-        {activeTab === 'expand-games' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-2xl p-6 space-y-4">
-            <h2 className="text-2xl font-black text-gray-900">📚 Expand Games (Add More)</h2>
-            
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Pilih File</label>
-              <select
-                value={selectedFile}
-                onChange={(e) => setSelectedFile(e.target.value)}
-                className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
-              >
-                <option value="">-- Pilih File --</option>
-                {GAME_FILES.map(file => (
-                  <option key={file} value={file}>{file}</option>
-                ))}
-              </select>
-            </div>
-
-            <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
-              ℹ️ Ini akan duplicate game terakhir dalam file 5 kali
-            </p>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={handleExpandGames}
-              disabled={loading || !selectedFile}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
-            >
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
-              {loading ? 'Adding Games...' : 'Add 5 More Games'}
-            </motion.button>
-          </motion.div>
-        )}
-
-        {/* REDUCE GAMES */}
-        {activeTab === 'reduce-games' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-2xl p-6 space-y-4">
-            <h2 className="text-2xl font-black text-gray-900">🗑️ Reduce Games (Delete)</h2>
-            
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Pilih File</label>
-              <select
-                value={selectedFile}
-                onChange={(e) => setSelectedFile(e.target.value)}
-                className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none font-medium"
-              >
-                <option value="">-- Pilih File --</option>
-                {GAME_FILES.map(file => (
-                  <option key={file} value={file}>{file}</option>
-                ))}
-              </select>
-            </div>
-
-            <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg font-bold">
-              ⚠️ Ini akan DELETE 5 games terakhir dari file! TIDAK boleh undo!
-            </p>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={handleReduceGames}
-              disabled={loading || !selectedFile}
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
-            >
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Minus className="w-5 h-5" />}
-              {loading ? 'Deleting Games...' : 'Delete 5 Games'}
-            </motion.button>
-          </motion.div>
-        )}
-
-        {/* Preview */}
-        {preview && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-6 bg-indigo-50 rounded-2xl p-4 border-l-4 border-indigo-500">
-            <p className="font-black text-indigo-900">{preview.gameTitle || preview.fileName}</p>
-            <p className="text-sm text-indigo-700 mt-1">Total: {preview.totalQuestions || preview.totalGames} {preview.gameTitle ? 'soalan' : 'games'}</p>
-          </motion.div>
-        )}
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setActiveModal('games')}
+            className="bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-4 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-2 transition-all"
+          >
+            <span className="text-3xl">🎮</span>
+            <span>Edit Games</span>
+          </motion.button>
+        </div>
       </div>
+
+      {/* SOALAN MODAL */}
+      <AnimatePresence>
+        {activeModal === 'soalan' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveModal(null)}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-black text-gray-900">📝 Edit Soalan</h2>
+                <button
+                  onClick={() => setActiveModal(null)}
+                  className="p-1 hover:bg-gray-100 rounded-lg transition-all"
+                >
+                  <X className="w-6 h-6 text-gray-600" />
+                </button>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-bold text-gray-700 mb-2">Target Jumlah (per game)</label>
+                <input
+                  type="number"
+                  min="4"
+                  max="100"
+                  value={targetCount}
+                  onChange={(e) => setTargetCount(e.target.value)}
+                  placeholder="e.g. 20"
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleAction('expandQ')}
+                  disabled={loading}
+                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                  Expand
+                </motion.button>
+
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleAction('reduceQ')}
+                  disabled={loading}
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Minus className="w-4 h-4" />}
+                  Reduce
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* GAMES MODAL */}
+      <AnimatePresence>
+        {activeModal === 'games' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveModal(null)}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-black text-gray-900">🎮 Edit Games</h2>
+                <button
+                  onClick={() => setActiveModal(null)}
+                  className="p-1 hover:bg-gray-100 rounded-lg transition-all"
+                >
+                  <X className="w-6 h-6 text-gray-600" />
+                </button>
+              </div>
+
+              <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg mb-4">
+                ℹ️ Expand: Tambah 5 games (duplicate last)
+                <br />
+                Reduce: Buang 5 games (delete last)
+              </p>
+
+              <div className="grid grid-cols-2 gap-3">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleAction('expandG')}
+                  disabled={loading || !selectedFile}
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                  Expand
+                </motion.button>
+
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleAction('reduceG')}
+                  disabled={loading || !selectedFile}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Minus className="w-4 h-4" />}
+                  Reduce
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
