@@ -66,10 +66,11 @@ export default function Home() {
 
         {/* Welcome Card */}
         {isAuthenticated && (
+          <Link to="/settings">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 rounded-3xl flex items-center gap-4"
+            className="mb-6 p-4 rounded-3xl flex items-center gap-4 cursor-pointer hover:scale-[1.01] transition-transform"
             style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
           >
             <div className="w-14 h-14 rounded-2xl bg-white/40 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">🐱</div>
@@ -83,6 +84,7 @@ export default function Home() {
               <ChildSelector />
             </div>
           </motion.div>
+          </Link>
         )}
 
         {/* Not logged in welcome */}
