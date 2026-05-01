@@ -162,7 +162,7 @@ export default function Landing() {
                 🎮 Bayar Sekarang <ArrowRight className="w-4 h-4" />
               </motion.button>
               <Link to="/dashboard">
-                <button className="text-gray-300 px-6 py-3 text-base font-bold rounded-full border-2 border-green-500 hover:border-green-600 hover:bg-green-50 transition-colors w-full sm:w-auto">
+                <button className="text-[hsl(var(--card-foreground))] px-6 py-3 text-base font-bold rounded-full border-2 border-green-500 hover:border-green-600 hover:bg-green-50 transition-colors w-full sm:w-auto">
                   🎁 Cuba Percuma 7 Hari
                 </button>
               </Link>
