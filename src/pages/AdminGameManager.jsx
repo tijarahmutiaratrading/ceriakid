@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { Loader2, Plus, Minus, X, BarChart3 } from 'lucide-react';
+import { Loader2, Plus, Minus, X, BarChart3, MessageSquare } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import GameManagerAI from '@/components/admin/GameManagerAI';
 
 const GAME_FILES = [
   'gameData_prasekolah_bm', 'gameData_prasekolah_en', 'gameData_prasekolah_math', 'gameData_prasekolah_science',
@@ -12,6 +13,7 @@ const GAME_FILES = [
 
 export default function AdminGameManager() {
   const [activeModal, setActiveModal] = useState(null);
+  const [showAI, setShowAI] = useState(false);
   const [targetCount, setTargetCount] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -50,9 +52,19 @@ export default function AdminGameManager() {
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
       <div className="max-w-2xl mx-auto px-4 pt-24">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <h1 className="text-4xl font-black text-gray-900 mb-2">🎮 Admin Game Manager</h1>
-          <p className="text-gray-600">Auto apply ke semua files</p>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-4xl font-black text-gray-900 mb-2">🎮 Admin Game Manager</h1>
+            <p className="text-gray-600">Auto apply ke semua files</p>
+          </div>
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowAI(!showAI)}
+            className="bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold p-3 rounded-full shadow-lg flex items-center justify-center transition-all"
+            title="AI Game Manager Assistant"
+          >
+            <MessageSquare className="w-6 h-6" />
+          </motion.button>
         </motion.div>
 
         {/* Message */}
@@ -284,6 +296,11 @@ export default function AdminGameManager() {
             </motion.div>
           </motion.div>
         )}
+      </AnimatePresence>
+
+      {/* AI Assistant */}
+      <AnimatePresence>
+        {showAI && <GameManagerAI onClose={() => setShowAI(false)} />}
       </AnimatePresence>
     </div>
   );
