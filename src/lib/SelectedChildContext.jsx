@@ -26,7 +26,7 @@ export function SelectedChildProvider({ children }) {
 
   const loadChildren = async () => {
     try {
-      const subscriptions = await base44.asServiceRole.entities.UserSubscription.filter({
+      const subscriptions = await base44.entities.UserSubscription.filter({
         email: user.email
       });
       
