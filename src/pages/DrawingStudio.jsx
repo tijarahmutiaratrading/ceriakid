@@ -215,27 +215,53 @@ export default function DrawingStudio() {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 pb-24">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+      {/* Background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
+
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="max-w-lg mx-auto px-4 py-5 pt-20">
+
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
+
         {/* Header */}
-        <h1 className="text-2xl font-black text-gray-800 mb-5">🎨 Studio Lukisan</h1>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-5 p-5 rounded-3xl flex items-center gap-4"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+        >
+          <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">🎨</div>
+          <div>
+            <h1 className="text-2xl font-black text-white leading-tight">Studio Lukisan</h1>
+            <p className="text-white/70 text-xs font-semibold mt-0.5">Lukis bebas atau ikut tracing</p>
+          </div>
+        </motion.div>
 
         {/* Mode Toggle */}
-        <div className="flex gap-2 mb-4 bg-amber-100 rounded-2xl p-1">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="flex gap-2 mb-4 p-1 rounded-2xl"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+        >
           {MODES.map(m => (
             <motion.button
               key={m.id}
               whileTap={{ scale: 0.95 }}
               onClick={() => setMode(m.id)}
               className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${
-                mode === m.id ? 'bg-white text-game-orange shadow-md' : 'text-gray-600'
+                mode === m.id ? 'bg-white text-purple-600 shadow-md' : 'text-white'
               }`}
             >
               {m.label}
             </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Tracing shape selector */}
         <AnimatePresence>
@@ -244,19 +270,20 @@ export default function DrawingStudio() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="mb-4"
+              className="mb-4 rounded-3xl p-4"
+              style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
             >
-              <p className="text-xs font-bold text-gray-600 mb-2">Pilih bentuk untuk tracing:</p>
+              <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-2">Pilih bentuk:</p>
               <div className="flex gap-2 overflow-x-auto pb-1">
                 {TRACING_SHAPES.map(s => (
                   <motion.button
                     key={s.label}
                     whileTap={{ scale: 0.92 }}
                     onClick={() => setSelectedShape(s)}
-                    className={`flex-shrink-0 px-3 py-2 rounded-xl font-bold text-xs border-2 transition-all ${
+                    className={`flex-shrink-0 px-3 py-2 rounded-xl font-bold text-xs transition-all ${
                       selectedShape.label === s.label
-                        ? 'bg-game-purple text-white border-game-purple shadow'
-                        : 'bg-white text-gray-700 border-amber-200'
+                        ? 'bg-white text-purple-600 shadow'
+                        : 'bg-white/20 text-white border border-white/30'
                     }`}
                   >
                     {s.label}
@@ -267,23 +294,23 @@ export default function DrawingStudio() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className={`mt-3 rounded-2xl p-3 text-center font-bold ${
-                    tracingAccuracy >= 70 ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                  className={`mt-3 rounded-2xl p-3 text-center font-bold flex items-center justify-center gap-3 ${
+                    tracingAccuracy >= 70 ? 'bg-green-500/30 text-white' : 'bg-orange-500/30 text-white'
                   }`}
                 >
-                  {tracingAccuracy >= 70 ? `🌟 Hebat! Ketepatan ${tracingAccuracy}%` : `💪 Cuba lagi! Ketepatan ${tracingAccuracy}%`}
+                  <span>{tracingAccuracy >= 70 ? `🌟 Hebat! Ketepatan ${tracingAccuracy}%` : `💪 Cuba lagi! Ketepatan ${tracingAccuracy}%`}</span>
                   <motion.button
                     whileTap={{ scale: 0.95 }}
                     onClick={resetTracing}
-                    className="ml-3 px-3 py-1 bg-white rounded-full text-sm font-bold text-gray-700 border"
+                    className="px-3 py-1 bg-white/30 rounded-full text-xs font-bold border border-white/40"
                   >
                     Reset
                   </motion.button>
                 </motion.div>
               )}
               {!tracingDone && (
-                <p className="text-xs text-gray-500 mt-2">
-                  📝 Ikuti laluan putus-putus. Siapkan {selectedShape.strokes.length} strok. ({userStrokes.length}/{selectedShape.strokes.length} selesai)
+                <p className="text-white/60 text-xs mt-2">
+                  📝 Ikuti laluan putus-putus. ({userStrokes.length}/{selectedShape.strokes.length} strok selesai)
                 </p>
               )}
             </motion.div>
@@ -291,7 +318,13 @@ export default function DrawingStudio() {
         </AnimatePresence>
 
         {/* Canvas */}
-        <div className="relative rounded-3xl overflow-hidden border-4 border-amber-300 shadow-xl mb-4 bg-white">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="relative rounded-3xl overflow-hidden shadow-2xl mb-4"
+          style={{ border: '2px solid rgba(255,255,255,0.4)' }}
+        >
           <canvas
             ref={canvasRef}
             width={560}
@@ -306,7 +339,7 @@ export default function DrawingStudio() {
             className="w-full touch-none cursor-crosshair block"
             style={{ backgroundColor: '#fff9f0' }}
           />
-        </div>
+        </motion.div>
 
         {/* Tools Row */}
         {mode === 'draw' && (
@@ -316,10 +349,10 @@ export default function DrawingStudio() {
                 key={t.id}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setTool(t)}
-                className={`flex-shrink-0 flex flex-col items-center gap-1 px-4 py-2 rounded-2xl border-2 transition-all ${
+                className={`flex-shrink-0 flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all ${
                   tool.id === t.id
-                    ? 'bg-game-purple text-white border-game-purple shadow-lg'
-                    : 'bg-white border-amber-200 text-gray-700'
+                    ? 'bg-white text-purple-600 shadow-lg'
+                    : 'bg-white/20 text-white border border-white/30'
                 }`}
               >
                 <span className="text-xl">{t.emoji}</span>
@@ -331,8 +364,8 @@ export default function DrawingStudio() {
 
         {/* Color Palette */}
         {(mode === 'draw' && tool.id !== 'eraser') && (
-          <div className="bg-white rounded-2xl p-3 border-2 border-amber-200 mb-3">
-            <p className="text-xs font-bold text-gray-600 mb-2">Warna:</p>
+          <div className="rounded-2xl p-4 mb-3" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}>
+            <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎨 Warna</p>
             <div className="grid grid-cols-6 gap-2">
               {COLORS.map(c => (
                 <motion.button
@@ -342,55 +375,56 @@ export default function DrawingStudio() {
                   className="w-10 h-10 rounded-full border-4 transition-all"
                   style={{
                     backgroundColor: c,
-                    borderColor: color === c ? '#8b5cf6' : 'transparent',
-                    boxShadow: color === c ? '0 0 0 2px #8b5cf6' : '0 1px 3px rgba(0,0,0,0.2)',
+                    borderColor: color === c ? '#ffffff' : 'transparent',
+                    boxShadow: color === c ? '0 0 0 2px rgba(255,255,255,0.8)' : '0 1px 3px rgba(0,0,0,0.2)',
                   }}
                 />
               ))}
             </div>
-            {/* Custom color picker */}
             <div className="flex items-center gap-3 mt-3">
-              <p className="text-xs font-bold text-gray-600">Warna lain:</p>
+              <p className="text-white/70 text-xs font-bold">Warna lain:</p>
               <input
                 type="color"
                 value={color}
                 onChange={e => setColor(e.target.value)}
-                className="w-10 h-10 rounded-full cursor-pointer border-2 border-amber-200"
+                className="w-10 h-10 rounded-full cursor-pointer border-2 border-white/30"
               />
-              <div className="w-8 h-8 rounded-full border-2 border-amber-200" style={{ backgroundColor: color }} />
+              <div className="w-8 h-8 rounded-full border-2 border-white/40" style={{ backgroundColor: color }} />
             </div>
           </div>
         )}
 
         {/* Action buttons */}
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex gap-2">
           <motion.button
             whileTap={{ scale: 0.92 }}
             onClick={undo}
             disabled={history.length === 0}
-            className="flex-1 flex items-center justify-center gap-2 py-3 bg-white border-2 border-amber-200 rounded-2xl font-bold text-gray-700 disabled:opacity-40 text-sm"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-white text-sm disabled:opacity-40 transition-all"
+            style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.35)' }}
           >
             <Undo2 className="w-4 h-4" /> Undo
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.92 }}
             onClick={initCanvas}
-            className="flex-1 flex items-center justify-center gap-2 py-3 bg-white border-2 border-red-200 rounded-2xl font-bold text-red-600 text-sm"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-sm transition-all"
+            style={{ background: 'rgba(239,68,68,0.3)', border: '1px solid rgba(239,68,68,0.4)', color: 'white' }}
           >
-            <Trash2 className="w-4 h-4" /> Kosongkan
+            <Trash2 className="w-4 h-4" /> Kosong
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.92 }}
             onClick={downloadCanvas}
-            className="flex-1 flex items-center justify-center gap-2 py-3 bg-game-orange text-white rounded-2xl font-bold shadow text-sm"
+            className="flex-1 flex items-center justify-center gap-2 py-3 bg-white text-purple-600 rounded-2xl font-black shadow-lg text-sm"
           >
             <Download className="w-4 h-4" /> Simpan
           </motion.button>
         </div>
 
         {mode === 'draw' && (
-          <p className="text-center text-xs text-gray-500 mt-4">
-            💡 Pilih alat, warna, dan mula melukis! Tekan Simpan untuk download hasil karya anda.
+          <p className="text-center text-white/50 text-xs mt-4">
+            💡 Pilih alat & warna, mula melukis! Tekan Simpan untuk download.
           </p>
         )}
       </div>
