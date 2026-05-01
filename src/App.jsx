@@ -12,6 +12,7 @@ import { SelectedChildProvider } from '@/lib/SelectedChildContext';
 import Landing from '@/pages/Landing';
 import Home from '@/pages/Home';
 import AdminDashboard from '@/pages/AdminDashboard';
+import GameExpansionTool from '@/pages/GameExpansionTool';
 import ClientDashboard from '@/pages/ClientDashboard';
 import GamesList from '@/pages/GamesList';
 
@@ -72,6 +73,7 @@ const AuthenticatedApp = () => {
           <Route path="/" element={<Landing />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/game-expansion-tool" element={<GameExpansionTool />} />
 
           <Route path="/settings" element={<ClientDashboard />} />
           <Route path="/games-hub" element={<GamesHub />} />
