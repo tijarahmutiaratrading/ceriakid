@@ -10,6 +10,9 @@ import AppHeader from '@/components/AppHeader';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
 import ChildSelector from '@/components/ChildSelector';
+import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
+import { checkAndRegisterDevice } from '@/lib/deviceManager';
+import { base44 } from '@/api/base44Client';
 
 export default function Home() {
   const { isAuthenticated, user, isLoadingAuth } = useAuth();
@@ -17,15 +20,36 @@ export default function Home() {
   const { lang } = useLang();
   const safeAgeGroup = ageGroup || 'prasekolah';
   const safeToggle = toggleAgeGroup || (() => {});
+  const [deviceCheck, setDeviceCheck] = React.useState({ status: 'checking', devices: [] });
 
   // Redirect to login if not authenticated
   React.useEffect(() => {
     if (!isLoadingAuth && !isAuthenticated) {
-      import('@/api/base44Client').then(m => m.base44.auth.redirectToLogin(window.location.href));
+      base44.auth.redirectToLogin(window.location.href);
     }
   }, [isLoadingAuth, isAuthenticated]);
 
+  // Check device registration once user is known
+  React.useEffect(() => {
+    if (!isAuthenticated || !user?.email) return;
+    base44.entities.UserSubscription.filter({ email: user.email }).then(async (subs) => {
+      const tier = subs?.[0]?.tier || 'free';
+      const result = await checkAndRegisterDevice(user.email, tier);
+      setDeviceCheck({ status: result.allowed ? 'allowed' : 'blocked', devices: result.devices, tier });
+    });
+  }, [isAuthenticated, user?.email]);
+
   if (!isAuthenticated) return null;
+
+  if (isAuthenticated && deviceCheck.status === 'blocked') {
+    return (
+      <DeviceBlockedScreen
+        devices={deviceCheck.devices}
+        tier={deviceCheck.tier || 'free'}
+        onDeviceRemoved={() => setDeviceCheck({ status: 'checking', devices: [] })}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>

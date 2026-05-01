@@ -1,0 +1,33 @@
+{
+  "name": "RegisteredDevice",
+  "type": "object",
+  "properties": {
+    "userEmail": {
+      "type": "string",
+      "description": "User email"
+    },
+    "deviceId": {
+      "type": "string",
+      "description": "Unique device fingerprint"
+    },
+    "deviceName": {
+      "type": "string",
+      "description": "Human-readable device name (e.g. Chrome on Windows)"
+    },
+    "lastSeen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time this device was used"
+    },
+    "isCurrentDevice": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is the current device"
+    }
+  },
+  "required": [
+    "userEmail",
+    "deviceId",
+    "deviceName"
+  ]
+}

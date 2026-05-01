@@ -8,9 +8,19 @@ import { Upload, Loader, User, Mail, Calendar } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { getDefaultAvatar } from '@/lib/avatarGenerator';
 import SubscriptionWidget from '@/components/dashboard/SubscriptionWidget';
+import ManageDevices from '@/components/ManageDevices';
 
 export default function ClientDashboard() {
   const { user } = useAuth();
+  const [userTier, setUserTier] = useState('free');
+
+  useEffect(() => {
+    if (user?.email) {
+      base44.entities.UserSubscription.filter({ email: user.email }).then(subs => {
+        if (subs?.length > 0) setUserTier(subs[0].tier || 'free');
+      });
+    }
+  }, [user?.email]);
   const { lang } = useLang();
   const [saving, setSaving] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(null);
@@ -156,6 +166,12 @@ export default function ClientDashboard() {
               );
             })}
           </div>
+        </motion.div>
+
+        {/* Manage Devices */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mb-6">
+          <p className="text-xs font-bold text-gray-700 uppercase mb-3">🔒 Device Berdaftar</p>
+          <ManageDevices userEmail={user?.email} tier={userTier} />
         </motion.div>
 
         {/* Save Button */}
