@@ -16,7 +16,7 @@ export default function AdminGameManager() {
   const [message, setMessage] = useState('');
 
   const handleAction = async (action) => {
-    if ((action === 'soalan' || action === 'games') && !targetCount) {
+    if (!targetCount) {
       setMessage('❌ Sila masukkan target jumlah');
       return;
     }
@@ -24,14 +24,14 @@ export default function AdminGameManager() {
     setLoading(true);
     try {
       let functionName = '';
-      let payload = {};
+      let payload = { targetCount: parseInt(targetCount) };
 
-      if (action === 'soalan') {
-        functionName = 'syncAllGameQuestions';
-        payload.targetCount = parseInt(targetCount);
-      } else if (action === 'games') {
-        functionName = 'syncAllGames';
-        payload.targetCount = parseInt(targetCount);
+      if (action === 'subject_soalan') {
+        functionName = 'syncSubjectGameQuestions';
+      } else if (action === 'subject_games') {
+        functionName = 'syncSubjectGames';
+      } else if (action === 'hub_games') {
+        functionName = 'syncGameHubGames';
       }
 
       const res = await base44.functions.invoke(functionName, payload);
@@ -65,31 +65,47 @@ export default function AdminGameManager() {
           </motion.div>
         )}
 
-        {/* Main Buttons */}
-        <div className="grid grid-cols-2 gap-4">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveModal('soalan')}
-            className="bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-2 transition-all"
-          >
-            <span className="text-3xl">📝</span>
-            <span>Edit Soalan</span>
-          </motion.button>
+        {/* Subject Games Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">📚 Subjek Games</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setActiveModal('subject_soalan')}
+              className="bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-2 transition-all"
+            >
+              <span className="text-3xl">📝</span>
+              <span>Edit Soalan</span>
+            </motion.button>
 
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setActiveModal('subject_games')}
+              className="bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-4 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-2 transition-all"
+            >
+              <span className="text-3xl">🎮</span>
+              <span>Edit Games</span>
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Game Hub Section */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">🎪 Game Hub</h2>
           <motion.button
             whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveModal('games')}
-            className="bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-4 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-2 transition-all"
+            onClick={() => setActiveModal('hub_games')}
+            className="w-full bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-2 transition-all"
           >
-            <span className="text-3xl">🎮</span>
-            <span>Edit Games</span>
+            <span className="text-3xl">🎯</span>
+            <span>Edit Game Hub</span>
           </motion.button>
         </div>
       </div>
 
-      {/* SOALAN MODAL */}
+      {/* SUBJECT SOALAN MODAL */}
       <AnimatePresence>
-        {activeModal === 'soalan' && (
+        {activeModal === 'subject_soalan' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -115,7 +131,7 @@ export default function AdminGameManager() {
               </div>
 
               <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg mb-4">
-                ℹ️ Sistem auto expand/reduce semua games ke jumlah ini
+                ℹ️ Subjek: BM, English, Math, Science (semua jajaran)
               </p>
 
               <div className="mb-6">
@@ -133,7 +149,7 @@ export default function AdminGameManager() {
 
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() => handleAction('soalan')}
+                onClick={() => handleAction('subject_soalan')}
                 disabled={loading || !targetCount}
                 className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
               >
@@ -145,9 +161,9 @@ export default function AdminGameManager() {
         )}
       </AnimatePresence>
 
-      {/* GAMES MODAL */}
+      {/* SUBJECT GAMES MODAL */}
       <AnimatePresence>
-        {activeModal === 'games' && (
+        {activeModal === 'subject_games' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -173,7 +189,7 @@ export default function AdminGameManager() {
               </div>
 
               <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg mb-4">
-                ℹ️ Sistem auto expand/reduce ke jumlah ini (5 setiap kali)
+                ℹ️ Subjek: BM, English, Math, Science (semua jajaran)
               </p>
 
               <div className="mb-6">
@@ -190,9 +206,66 @@ export default function AdminGameManager() {
 
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() => handleAction('games')}
+                onClick={() => handleAction('subject_games')}
                 disabled={loading || !targetCount}
                 className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+              >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>✓</span>}
+                {loading ? 'Processing...' : 'Apply'}
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* GAME HUB GAMES MODAL */}
+      <AnimatePresence>
+        {activeModal === 'hub_games' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveModal(null)}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-black text-gray-900">🎯 Set Game Hub</h2>
+                <button
+                  onClick={() => setActiveModal(null)}
+                  className="p-1 hover:bg-gray-100 rounded-lg transition-all"
+                >
+                  <X className="w-6 h-6 text-gray-600" />
+                </button>
+              </div>
+
+              <p className="text-sm text-gray-600 bg-orange-50 p-3 rounded-lg mb-4">
+                ℹ️ Mini-games: Memory, DragDrop, WordBuilder, Sorting, TileMatch, Story, Physics, Tracing
+              </p>
+
+              <div className="mb-6">
+                <label className="block text-sm font-bold text-gray-700 mb-2">Target Jumlah Games</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={targetCount}
+                  onChange={(e) => setTargetCount(e.target.value)}
+                  placeholder="e.g. 8"
+                  className="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none"
+                />
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleAction('hub_games')}
+                disabled={loading || !targetCount}
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 rounded-xl disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>✓</span>}
                 {loading ? 'Processing...' : 'Apply'}
