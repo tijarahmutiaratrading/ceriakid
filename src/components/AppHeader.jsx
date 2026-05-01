@@ -86,7 +86,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
           {/* Center: Logo / Title */}
           <Link to="/" className="flex items-center gap-2 flex-1 justify-center">
-            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9519ccb9a_ChatGPTImageApr302026at06_37_02PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
+            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
           </Link>
 
           {/* Right: Language Switcher or Back */}

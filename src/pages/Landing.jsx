@@ -101,7 +101,7 @@ export default function Landing() {
       {/* ── NAVBAR ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-white/95 backdrop-blur shadow-sm">
         <div className="max-w-6xl mx-auto w-full flex items-center justify-between">
-          <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9519ccb9a_ChatGPTImageApr302026at06_37_02PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
+          <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
           <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600">
             <a href="#features" className="hover:text-orange-500 transition-colors">Ciri-ciri</a>
             <a href="#testimonials" className="hover:text-orange-500 transition-colors">Testimoni</a>
