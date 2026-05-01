@@ -24,7 +24,7 @@ export default function CategoryCard({ category, gameCount, idx }) {
         transition={{ delay: idx * 0.08 }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.96 }}
-        className={`clay rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative`}
+        className={`rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative`}
         >
          {/* Gradient Background */}
         <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-90`} />
