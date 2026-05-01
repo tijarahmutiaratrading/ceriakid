@@ -40,7 +40,7 @@ const tiers = [
   priceMYR: '49',
   perMonth: '4.08',
   period: '/tahun',
-  features: ['Semua subjek', 'Prasekolah sahaja', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan'],
+  features: ['Semua subjek', 'Prasekolah sahaja', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', '1 peranti sahaja 📱'],
   noFeatures: ['Sekolah Rendah', 'Sehingga 4 anak'],
   cta: 'Mulakan Sekarang',
   highlighted: false
@@ -52,7 +52,7 @@ const tiers = [
   perMonth: '8.25',
   period: '/tahun',
   savings: 'PALING POPULAR',
-  features: ['Semua subjek', 'Sekolah Rendah sahaja', 'Dashboard ibu bapa', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan'],
+  features: ['Semua subjek', 'Sekolah Rendah sahaja', 'Dashboard ibu bapa', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sehingga 2 peranti 📱📱'],
   noFeatures: ['Sehingga 4 anak'],
   cta: '🔥 Pilih Standard',
   highlighted: true
@@ -63,7 +63,7 @@ const tiers = [
   priceMYR: '199',
   perMonth: '16.58',
   period: '/tahun',
-  features: ['Semua subjek', 'Prasekolah & Sekolah Rendah', 'Sehingga 4 profil anak', 'Dashboard ibu bapa lengkap', 'Boleh guna offline 📲', 'Sokongan prioriti'],
+  features: ['Semua subjek', 'Prasekolah & Sekolah Rendah', 'Sehingga 4 profil anak', 'Dashboard ibu bapa lengkap', 'Boleh guna offline 📲', 'Sokongan prioriti', 'Sehingga 4 peranti 📱📱📱📱'],
   noFeatures: [],
   cta: 'Pilih Keluarga',
   highlighted: false
