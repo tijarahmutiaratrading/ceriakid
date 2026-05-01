@@ -22,20 +22,19 @@ export default function CategoryCard({ category, gameCount, idx }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: idx * 0.08 }}
-        whileHover={{ scale: 1.04, y: -6 }}
+        whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.96 }}
         className={`clay rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative`}
         >
          {/* Gradient Background */}
         <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-90`} />
 
-         {/* Floating Accent */}
-        <div className={`absolute -top-8 -right-8 w-24 sm:w-32 h-24 sm:h-32 rounded-full ${config.accentBg} blur-2xl opacity-50 group-hover:opacity-70 transition-opacity`} />
+        
 
          {/* Content */}
         <div className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-between">
           <div>
-            <div className="text-4xl sm:text-5xl md:text-6xl mb-2 sm:mb-4 group-hover:scale-110 transition-transform origin-left">{config.emoji}</div>
+            <div className="text-4xl sm:text-5xl md:text-6xl mb-2 sm:mb-4">{config.emoji}</div>
             <h3 className="font-black text-lg sm:text-xl md:text-2xl text-white drop-shadow-sm">{config.label}</h3>
           </div>
 
@@ -43,13 +42,7 @@ export default function CategoryCard({ category, gameCount, idx }) {
             <div className="bg-white/30 backdrop-blur-sm rounded-full px-2 sm:px-3 py-0.5 sm:py-1">
               <p className="text-xs sm:text-sm font-bold text-white">{gameCount} Permainan</p>
             </div>
-            <motion.div
-              animate={{ x: [0, 4, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="text-2xl opacity-70 group-hover:opacity-100"
-            >
-              →
-            </motion.div>
+            <div className="text-2xl opacity-70">→</div>
           </div>
         </div>
       </motion.div>
