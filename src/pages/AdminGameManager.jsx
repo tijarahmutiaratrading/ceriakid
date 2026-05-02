@@ -5,7 +5,7 @@ import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X, Databas
 import AppHeader from '@/components/AppHeader';
 import { gameLibrary } from '@/lib/gameLibrary';
 import EditGameModal from '@/components/admin/EditGameModal';
-import BulkEditModal from '@/components/admin/BulkEditModal';
+import SyncAndEditModal from '@/components/admin/SyncAndEditModal';
 
 const SUBJECT_CONFIG = [
   // Prasekolah
@@ -44,7 +44,7 @@ export default function AdminGameManager() {
   const [toast, setToast] = useState(null);
   const [modal, setModal] = useState(null);
   const [editGame, setEditGame] = useState(null); // single game edit
-  const [bulkEdit, setBulkEdit] = useState(null); // { games, label, ageGroup, subject }
+  const [syncAndEdit, setSyncAndEdit] = useState(null); // { games, label, ageGroup, subject }
   const [dbGamesCache, setDbGamesCache] = useState({}); // cache DB games by subject key
   const [collapsedSections, setCollapsedSections] = useState({ prasekolah: false, sekolah_rendah: false });
 
@@ -117,6 +117,10 @@ export default function AdminGameManager() {
 
   const openModal = (file, label, currentGames, currentAvgQ, ageGroup, subject) => {
     setModal({ file, label, ageGroup, subject, gamesValue: String(currentGames), questionsValue: String(currentAvgQ || '') });
+  };
+
+  const openSyncAndEditModal = (games, label, ageGroup, subject) => {
+    setSyncAndEdit({ games, label, ageGroup, subject });
   };
 
   const handleModalConfirm = async () => {
@@ -452,18 +456,7 @@ export default function AdminGameManager() {
                          {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
                          <span className="hidden sm:inline">Sync</span>
                        </button>
-                       <button
-                         onClick={() => {
-                           const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
-                           if (dbGames.length === 0) { showToast('Import ke DB dulu sebelum bulk edit', false); return; }
-                           setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject });
-                         }}
-                         disabled={!!actionLoading}
-                         className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all text-xs font-bold"
-                       >
-                         <Layers className="w-3 h-3 md:w-3.5 md:h-3.5" />
-                         <span className="hidden sm:inline">Bulk</span>
-                       </button>
+
                        <button
                          onClick={async () => {
                            const verifyKey = `verify-${s.file}`;
@@ -655,13 +648,9 @@ export default function AdminGameManager() {
                           <Users className="w-3 h-3" />{s.games.reduce((a, g) => a + g.players, 0)}
                         </span>
                       )}
-                      <button onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)} disabled={!!actionLoading} className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all text-xs font-bold">
-                        {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
-                        <span className="hidden sm:inline">Sync</span>
-                      </button>
-                      <button onClick={() => { const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (dbGames.length === 0) { showToast('Import ke DB dulu sebelum bulk edit', false); return; } setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject }); }} disabled={!!actionLoading} className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all text-xs font-bold">
-                        <Layers className="w-3 h-3 md:w-3.5 md:h-3.5" />
-                        <span className="hidden sm:inline">Bulk</span>
+                      <button onClick={() => { const games = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (games.length === 0) { showToast('Import ke DB dulu', false); return; } openSyncAndEditModal(games, s.label, s.ageGroup, s.subject); }} disabled={!!actionLoading} className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all text-xs font-bold">
+                       {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
+                       <span className="hidden sm:inline">Sync & Edit</span>
                       </button>
                       <button
                         onClick={async () => {
@@ -823,14 +812,16 @@ export default function AdminGameManager() {
         )}
       </AnimatePresence>
 
-      {/* Bulk Edit Modal */}
+      {/* Sync & Edit Modal */}
       <AnimatePresence>
-        {bulkEdit && (
-          <BulkEditModal
-            games={bulkEdit.games}
-            subjectLabel={bulkEdit.label}
-            onClose={() => setBulkEdit(null)}
-            onSaved={() => { showToast('✅ Bulk edit berjaya!'); fetchStats(); }}
+        {syncAndEdit && (
+          <SyncAndEditModal
+            games={syncAndEdit.games}
+            subjectLabel={syncAndEdit.label}
+            ageGroup={syncAndEdit.ageGroup}
+            subject={syncAndEdit.subject}
+            onClose={() => setSyncAndEdit(null)}
+            onSaved={() => { showToast('✅ Proses selesai!'); fetchStats(); }}
           />
         )}
       </AnimatePresence>
