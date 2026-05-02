@@ -118,13 +118,22 @@ SEMAK:
       return false;
     })
     .map((q) => {
+      // Preserve different question types with proper structure
+      const base = { type: q.type, problem: q.soalan };
+      
+      if (q.type === 'true_false' || q.type === 'yes_no') {
+        return { ...base, options: q.pilihan || ['Betul', 'Salah'], answer: q.pilihan?.indexOf(q.jawapan) || 0 };
+      } else if (q.type === 'short_answer' || q.type === 'fill_blank') {
+        return { ...base, answer: q.jawapan };
+      } else if (q.type === 'matching') {
+        return { ...base, pairs: q.pairs || [] };
+      } else if (q.type === 'ordering') {
+        return { ...base, items: q.items || [], correctOrder: q.correctOrder || [] };
+      }
+      
+      // Multiple choice and default
       const answerIndex = q.pilihan ? q.pilihan.indexOf(q.jawapan) : -1;
-      return {
-        type: q.type,
-        problem: q.soalan,
-        options: q.pilihan || [],
-        answer: answerIndex >= 0 ? answerIndex : 0,
-      };
+      return { ...base, options: q.pilihan || [], answer: answerIndex >= 0 ? answerIndex : 0 };
     });
 }
 
