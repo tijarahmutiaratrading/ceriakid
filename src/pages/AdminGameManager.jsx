@@ -497,27 +497,27 @@ export default function AdminGameManager() {
               Delete All Games
             </button>
 
-            <button
-              onClick={async () => {
-                if (!window.confirm('Buang semua soalan kosong?')) return;
-                setActionLoading('clean');
-                showToast('⏳ Membersihkan...', true);
-                try {
-                  const res = await base44.functions.invoke('cleanEmptyQuestions', {});
-                  showToast(`✅ ${res.data.totalRemoved} soalan kosong dibuang!`);
-                  await fetchStats();
-                } catch (err) {
-                  showToast('❌ ' + err.message, false);
-                } finally {
-                  setActionLoading(null);
-                }
-              }}
-              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-green-700 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all hidden">
-              
-              
-              {actionLoading === 'clean' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-              Clean
-            </button>
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
             <button
               onClick={async () => {
                 setActionLoading('audit-all');
