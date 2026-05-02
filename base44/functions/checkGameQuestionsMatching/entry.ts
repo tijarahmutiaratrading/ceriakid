@@ -11,16 +11,13 @@ Deno.serve(async (req) => {
 
     const { ageGroup, category } = await req.json();
 
-    if (!ageGroup || !category) {
-      return Response.json({ error: 'ageGroup and category required' }, { status: 400 });
-    }
+    // Get all games (no filter = all games)
+    const filter = {};
+    if (ageGroup) filter.ageGroup = ageGroup;
+    if (category) filter.category = category;
+    filter.isPublished = true;
 
-    // Get all games for this subject
-    const games = await base44.asServiceRole.entities.Game.filter({
-      ageGroup,
-      category,
-      isPublished: true,
-    });
+    const games = await base44.asServiceRole.entities.Game.filter(filter);
 
     const issues = [];
     let totalQuestions = 0;
