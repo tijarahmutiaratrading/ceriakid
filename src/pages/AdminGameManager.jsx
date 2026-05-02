@@ -902,16 +902,9 @@ export default function AdminGameManager() {
                 </div>
               </div>
             </motion.div>
-            </motion.div>
           )}
         </AnimatePresence>
       </div>
     );
   }
-}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
 }
