@@ -27,10 +27,8 @@ const GAME_HUB = [
   { id: 'tracing', title: 'Tracing Game' },
 ];
 
-
 export default function AdminGameManager() {
   const [subjects, setSubjects] = useState([]);
-  
   const [loading, setLoading] = useState(true);
   const [expandedFile, setExpandedFile] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
@@ -39,13 +37,12 @@ export default function AdminGameManager() {
 
   const showToast = (msg, ok = true) => {
     setToast({ msg, ok });
-    setTimeout(() => setToast(null), 3000);
+    setTimeout(() => setToast(null), 4000);
   };
 
   const fetchStats = async () => {
     setLoading(true);
     try {
-      // Fetch play stats AND actual DB games in parallel
       const [statsRes, ...dbGameGroups] = await Promise.all([
         base44.functions.invoke('getGameDatabase', {}),
         ...SUBJECT_CONFIG.map(sc =>
@@ -53,7 +50,6 @@ export default function AdminGameManager() {
         ),
       ]);
 
-      // Build play stats map from backend
       const stats = {};
       for (const sub of statsRes.data.subjects) {
         for (const g of sub.games) {
@@ -62,10 +58,8 @@ export default function AdminGameManager() {
         }
       }
 
-      // Build subject data from DB games (not hardcoded library)
       const builtSubjects = SUBJECT_CONFIG.map(({ file, label, ageGroup, subject, color }, i) => {
         const dbGames = (dbGameGroups[i] || []).sort((a, b) => (a.order || 0) - (b.order || 0));
-        // Fallback to gameLibrary if DB empty
         const libGames = gameLibrary[ageGroup]?.[subject] || [];
         const source = dbGames.length > 0 ? dbGames : libGames;
 
@@ -79,7 +73,6 @@ export default function AdminGameManager() {
               index: idx,
               title: g.title || `Game ${idx + 1}`,
               type: g.type || '-',
-              // Use DB totalQuestions if from DB, else count from gameData
               questionCount: dbGames.length > 0 ? (g.totalQuestions || g.gameData?.questions?.length || 0) : (g.gameData?.questions?.length || 0),
               players: stat.players,
               timesPlayed: stat.timesPlayed,
@@ -111,7 +104,6 @@ export default function AdminGameManager() {
     setActionLoading(file);
 
     try {
-      // Step 1: Sync game count first (fast)
       if (games && games > 0) {
         showToast('⏳ Mengemas kini bilangan games...', true);
         await base44.functions.invoke('syncSubjectGames', {
@@ -121,9 +113,7 @@ export default function AdminGameManager() {
         });
       }
 
-      // Step 2: Sync questions — process game by game to avoid timeout
       if (questions && questions > 0) {
-        // Get current games list
         const dbGames = await base44.entities.Game.filter({ ageGroup, category: subject, isPublished: true });
         const total = dbGames.length;
 
@@ -136,7 +126,6 @@ export default function AdminGameManager() {
             category: subject,
             gameId: g.id,
           });
-          // Delay 3s between games to avoid rate limit
           if (i < dbGames.length - 1) {
             await new Promise(r => setTimeout(r, 3000));
           }
@@ -156,18 +145,14 @@ export default function AdminGameManager() {
     setActionLoading('import');
     showToast('⏳ Mengimport games ke database...', true);
     try {
-      // Collect all games from gameLibrary and send to importGamesToDB
       const allGames = [];
       for (const sc of SUBJECT_CONFIG) {
-        const ageKey = sc.ageGroup;
-        const subKey = sc.subject;
-        const games = gameLibrary[ageKey]?.[subKey] || [];
+        const games = gameLibrary[sc.ageGroup]?.[sc.subject] || [];
         games.forEach((g, idx) => {
           allGames.push({ ...g, ageGroup: sc.ageGroup, category: sc.subject, index: idx });
         });
       }
 
-      // Strip heavy gameData to avoid network payload limits, send metadata only
       const lightGames = allGames.map(g => ({
         title: g.title,
         type: g.type,
@@ -178,10 +163,9 @@ export default function AdminGameManager() {
         category: g.category,
         index: g.index,
         totalQuestions: g.gameData?.questions?.length || 8,
-        gameData: { questions: (g.gameData?.questions || []).slice(0, 20) }, // max 20 questions per game
+        gameData: { questions: (g.gameData?.questions || []).slice(0, 20) },
       }));
 
-      // Batch in groups of 10 to avoid timeout
       const BATCH = 10;
       for (let i = 0; i < lightGames.length; i += BATCH) {
         const batch = lightGames.slice(i, i + BATCH);
@@ -205,7 +189,6 @@ export default function AdminGameManager() {
     <div className="min-h-screen bg-gray-50 pb-32">
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
-      {/* Toast */}
       <AnimatePresence>
         {toast && (
           <motion.div
@@ -219,7 +202,6 @@ export default function AdminGameManager() {
         )}
       </AnimatePresence>
 
-      {/* Input Modal */}
       <AnimatePresence>
         {modal && (
           <motion.div
@@ -288,7 +270,6 @@ export default function AdminGameManager() {
       </AnimatePresence>
 
       <div className="max-w-4xl mx-auto px-4 pt-24">
-        {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <div>
             <h1 className="text-2xl font-black text-gray-900">🎮 Game Manager</h1>
@@ -310,7 +291,6 @@ export default function AdminGameManager() {
           </div>
         </div>
 
-        {/* Summary */}
         <div className="grid grid-cols-3 gap-3 mb-5">
           <div className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 text-center">
             <p className="text-2xl font-black text-indigo-600">{totalGames}</p>
@@ -344,7 +324,6 @@ export default function AdminGameManager() {
                   transition={{ delay: idx * 0.04 }}
                   className={`bg-white rounded-2xl shadow-sm border border-gray-100 border-l-4 ${s.color.border} mb-3 overflow-hidden`}
                 >
-                  {/* Header row */}
                   <div className="flex items-center justify-between px-4 py-3">
                     <button
                       onClick={() => setExpandedFile(isExpanded ? null : s.file)}
@@ -364,8 +343,6 @@ export default function AdminGameManager() {
                           <Users className="w-3 h-3" />{s.games.reduce((a, g) => a + g.players, 0)}
                         </span>
                       )}
-
-                      {/* Action button */}
                       <button
                         onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)}
                         disabled={!!actionLoading}
@@ -374,14 +351,12 @@ export default function AdminGameManager() {
                       >
                         {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
                       </button>
-
                       <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-1">
                         {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
                       </button>
                     </div>
                   </div>
 
-                  {/* Games list */}
                   <AnimatePresence>
                     {isExpanded && (
                       <motion.div
@@ -427,7 +402,6 @@ export default function AdminGameManager() {
               );
             })}
 
-            {/* Game Hub */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-orange-400 p-4 mt-3">
               <div className="flex items-center justify-between mb-3">
                 <div>
