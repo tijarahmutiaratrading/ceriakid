@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X, Database, Layers } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X, Database, Layers, Trash2 } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { gameLibrary } from '@/lib/gameLibrary';
 import EditGameModal from '@/components/admin/EditGameModal';
@@ -308,6 +308,28 @@ export default function AdminGameManager() {
             >
               {actionLoading === 'import' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
               Import DB
+            </button>
+            <button
+              onClick={async () => {
+                if (!window.confirm('Buang semua soalan kosong dari database?')) return;
+                setActionLoading('clean');
+                showToast('⏳ Membersihkan soalan kosong...', true);
+                try {
+                  const res = await base44.functions.invoke('cleanEmptyQuestions', {});
+                  showToast(`✅ ${res.data.totalRemoved} soalan kosong dibuang dari ${res.data.cleaned} games!`);
+                  await fetchStats();
+                } catch (err) {
+                  showToast('❌ ' + err.message, false);
+                } finally {
+                  setActionLoading(null);
+                }
+              }}
+              disabled={!!actionLoading}
+              title="Buang soalan kosong"
+              className="flex items-center gap-1.5 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl shadow text-xs font-bold transition-all disabled:opacity-50"
+            >
+              {actionLoading === 'clean' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+              Clean
             </button>
             <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white rounded-xl shadow border border-gray-100 hover:bg-gray-50 transition-all">
               <RefreshCw className={`w-5 h-5 text-gray-500 ${loading ? 'animate-spin' : ''}`} />
