@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X, Database } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X, Database, Layers } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { gameLibrary } from '@/lib/gameLibrary';
+import EditGameModal from '@/components/admin/EditGameModal';
+import BulkEditModal from '@/components/admin/BulkEditModal';
 
 const SUBJECT_CONFIG = [
   { file: 'gameData_prasekolah_bm', label: 'Prasekolah - BM', ageGroup: 'prasekolah', subject: 'bahasa_melayu', color: { border: 'border-l-blue-500', badge: 'bg-blue-100 text-blue-700', dot: 'bg-blue-500' } },
@@ -34,6 +36,9 @@ export default function AdminGameManager() {
   const [actionLoading, setActionLoading] = useState(null);
   const [toast, setToast] = useState(null);
   const [modal, setModal] = useState(null);
+  const [editGame, setEditGame] = useState(null); // single game edit
+  const [bulkEdit, setBulkEdit] = useState(null); // { games, label, ageGroup, subject }
+  const [dbGamesCache, setDbGamesCache] = useState({}); // cache DB games by subject key
 
   const showToast = (msg, ok = true) => {
     setToast({ msg, ok });
@@ -58,10 +63,13 @@ export default function AdminGameManager() {
         }
       }
 
+      const newDbGamesCache = {};
       const builtSubjects = SUBJECT_CONFIG.map(({ file, label, ageGroup, subject, color }, i) => {
         const dbGames = (dbGameGroups[i] || []).sort((a, b) => (a.order || 0) - (b.order || 0));
         const libGames = gameLibrary[ageGroup]?.[subject] || [];
         const source = dbGames.length > 0 ? dbGames : libGames;
+        const cacheKey = `${ageGroup}-${subject}`;
+        newDbGamesCache[cacheKey] = dbGames;
 
         return {
           file, label, ageGroup, subject, color,
@@ -71,17 +79,24 @@ export default function AdminGameManager() {
             const stat = stats[key] || { players: 0, timesPlayed: 0, avgScore: null };
             return {
               index: idx,
+              id: g.id,
               title: g.title || `Game ${idx + 1}`,
               type: g.type || '-',
+              ageGroup,
+              category: subject,
               questionCount: dbGames.length > 0 ? (g.totalQuestions || g.gameData?.questions?.length || 0) : (g.gameData?.questions?.length || 0),
+              totalQuestions: g.totalQuestions || g.gameData?.questions?.length || 0,
               players: stat.players,
               timesPlayed: stat.timesPlayed,
               avgScore: stat.avgScore,
+              // full DB game object for editing
+              _raw: dbGames.length > 0 ? g : null,
             };
           }),
         };
       });
 
+      setDbGamesCache(newDbGamesCache);
       setSubjects(builtSubjects);
     } catch (err) {
       showToast('Stats tidak dapat diload', false);
@@ -347,9 +362,21 @@ export default function AdminGameManager() {
                         onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)}
                         disabled={!!actionLoading}
                         className="p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all"
-                        title="Edit games & soalan"
+                        title="Sync games & soalan"
                       >
                         {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
+                      </button>
+                      <button
+                        onClick={() => {
+                          const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
+                          if (dbGames.length === 0) { showToast('Import ke DB dulu sebelum bulk edit', false); return; }
+                          setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject });
+                        }}
+                        disabled={!!actionLoading}
+                        className="p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all"
+                        title="Bulk Edit games"
+                      >
+                        <Layers className="w-3.5 h-3.5" />
                       </button>
                       <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-1">
                         {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
@@ -367,16 +394,17 @@ export default function AdminGameManager() {
                       >
                         <div className="grid grid-cols-12 gap-1 px-4 py-2 bg-gray-50 text-xs font-bold text-gray-400 uppercase tracking-wide">
                           <span className="col-span-1">#</span>
-                          <span className="col-span-5">Nama Game</span>
+                          <span className="col-span-4">Nama Game</span>
                           <span className="col-span-2">Type</span>
                           <span className="col-span-2 text-center">Soalan</span>
                           <span className="col-span-2 text-center">Players</span>
+                          <span className="col-span-1"></span>
                         </div>
                         <div className="max-h-64 overflow-y-auto divide-y divide-gray-50">
                           {s.games.map((g) => (
                             <div key={g.index} className="grid grid-cols-12 gap-1 items-center px-4 py-2.5 hover:bg-gray-50 transition-all">
                               <span className="col-span-1 text-xs font-bold text-gray-300">{g.index + 1}</span>
-                              <span className="col-span-5 text-xs font-semibold text-gray-800 truncate">{g.title}</span>
+                              <span className="col-span-4 text-xs font-semibold text-gray-800 truncate">{g.title}</span>
                               <span className="col-span-2 text-xs text-gray-400 truncate">{g.type}</span>
                               <div className="col-span-2 flex justify-center">
                                 <span className={`text-xs font-black px-2 py-0.5 rounded-full ${
@@ -391,6 +419,17 @@ export default function AdminGameManager() {
                                     <Users className="w-3 h-3" />{g.players}
                                   </span>
                                 ) : <span className="text-xs text-gray-200">—</span>}
+                              </div>
+                              <div className="col-span-1 flex justify-end pr-1">
+                                {g._raw && (
+                                  <button
+                                    onClick={() => setEditGame(g._raw)}
+                                    className="p-1 text-indigo-400 hover:bg-indigo-50 rounded-lg transition-all"
+                                    title="Edit game ini"
+                                  >
+                                    <Edit3 className="w-3 h-3" />
+                                  </button>
+                                )}
                               </div>
                             </div>
                           ))}
@@ -422,6 +461,29 @@ export default function AdminGameManager() {
           </>
         )}
       </div>
+
+      {/* Single Game Edit Modal */}
+      <AnimatePresence>
+        {editGame && (
+          <EditGameModal
+            game={editGame}
+            onClose={() => setEditGame(null)}
+            onSaved={() => { showToast('✅ Game berjaya disimpan!'); fetchStats(); }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Bulk Edit Modal */}
+      <AnimatePresence>
+        {bulkEdit && (
+          <BulkEditModal
+            games={bulkEdit.games}
+            subjectLabel={bulkEdit.label}
+            onClose={() => setBulkEdit(null)}
+            onSaved={() => { showToast('✅ Bulk edit berjaya!'); fetchStats(); }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
