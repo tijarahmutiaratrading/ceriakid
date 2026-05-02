@@ -764,41 +764,18 @@ export default function AdminGameManager() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setRegenerationTasks(null)}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           >
             <motion.div
               initial={{ scale: 0.92, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.92, y: 20 }}
-              onClick={e => e.stopPropagation()}
               className="bg-white rounded-3xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
             >
               {/* Header */}
               <div className="bg-gradient-to-r from-red-600 to-orange-600 px-6 py-4">
                 <h3 className="font-black text-white text-lg">🚀 Regeneration Executor</h3>
                 <p className="text-white/80 text-xs mt-1">Execute tasks sequentially. Wait for each to complete.</p>
-              </div>
-
-              {/* Overall Progress Bar */}
-              <div className="px-6 pt-4">
-                <div className="bg-gray-100 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs font-bold text-gray-600">Overall Progress</p>
-                    <p className="text-xs font-bold text-gray-700">{taskProgress.length}/{regenerationTasks.length}</p>
-                  </div>
-                  <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-300"
-                      style={{ width: `${regenerationTasks.length > 0 ? (taskProgress.length / regenerationTasks.length) * 100 : 0}%` }}
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    {taskProgress.length === regenerationTasks.length
-                      ? '✅ All tasks completed!'
-                      : `⏳ ${regenerationTasks.length - taskProgress.length} tasks pending`}
-                  </p>
-                </div>
               </div>
 
               {/* Task List */}
@@ -808,7 +785,7 @@ export default function AdminGameManager() {
                     const progress = taskProgress.find(p => p.taskId === task.taskId);
                     const isCompleted = progress?.status === 'completed';
                     const isRunning = progress?.status === 'running';
-
+                    
                     return (
                       <div key={task.taskId} className={`p-3 rounded-2xl border-2 transition-all ${
                         isCompleted ? 'bg-green-50 border-green-300' :
@@ -886,7 +863,7 @@ export default function AdminGameManager() {
 
                         // Auto-run next task after 2 seconds
                         await new Promise(r => setTimeout(r, 2000));
-
+                        
                         // Check if there are more tasks
                         const nextTask = regenerationTasks.find(t => !updatedProgress.find(p => p.taskId === t.taskId));
                         if (nextTask) {
@@ -899,7 +876,7 @@ export default function AdminGameManager() {
                             gamesCount: nextTask.gamesCount,
                             questionsPerGame: nextTask.questionsPerGame,
                           });
-
+                          
                           const finalProgress = updatedProgress.map(p =>
                             p.taskId === nextTask.taskId
                               ? { ...p, status: 'completed', message: nextRes.data.message }
@@ -925,9 +902,16 @@ export default function AdminGameManager() {
                 </div>
               </div>
             </motion.div>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
+    );
+  }
+}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
