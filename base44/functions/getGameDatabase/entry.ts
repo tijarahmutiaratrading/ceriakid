@@ -20,6 +20,17 @@ Deno.serve(async (req) => {
       { file: 'gameData_sr_science', label: 'Sekolah Rendah - Science', ageGroup: 'sekolah_rendah', subject: 'science' },
     ];
 
+    // Get all play progress records to compute play counts
+    const allProgress = await base44.asServiceRole.entities.ChildGameProgress.list();
+
+    // Build a map: category -> index -> unique player count
+    const playMap = {};
+    for (const p of allProgress) {
+      const key = p.gameType; // e.g. "prasekolah-bahasa_melayu-0"
+      if (!playMap[key]) playMap[key] = new Set();
+      playMap[key].add(p.userEmail);
+    }
+
     const result = [];
 
     for (const { file, label, ageGroup, subject } of subjectFiles) {
@@ -28,21 +39,28 @@ Deno.serve(async (req) => {
         const games = module[Object.keys(module)[0]];
         if (!games || games.length === 0) continue;
 
+        const categoryKey = `${ageGroup}-${subject}`;
+
         result.push({
           file,
           label,
           ageGroup,
           subject,
           totalGames: games.length,
-          games: games.map((g, idx) => ({
-            index: idx,
-            title: g.title || `Game ${idx + 1}`,
-            type: g.type || 'unknown',
-            difficulty: g.difficulty || 'easy',
-            questionCount: g.gameData?.questions?.length || 0,
-            totalQuestions: g.totalQuestions || 0,
-            isPublished: g.isPublished !== false,
-          })),
+          games: games.map((g, idx) => {
+            const gameTypeKey = `${ageGroup}-${subject}-${idx}`;
+            const players = playMap[gameTypeKey] ? playMap[gameTypeKey].size : 0;
+            return {
+              index: idx,
+              title: g.title || `Game ${idx + 1}`,
+              type: g.type || 'unknown',
+              difficulty: g.difficulty || 'easy',
+              questionCount: g.gameData?.questions?.length || 0,
+              totalQuestions: g.totalQuestions || 0,
+              isPublished: g.isPublished !== false,
+              players,
+            };
+          }),
         });
       } catch (err) {
         // skip missing files
@@ -51,14 +69,14 @@ Deno.serve(async (req) => {
 
     // Game Hub
     const gameHub = [
-      { id: 'memory', title: 'Memory Game', path: '/games/memory' },
-      { id: 'dragdrop', title: 'Drag Drop Game', path: '/games/dragdrop' },
-      { id: 'wordbuilder', title: 'Word Builder', path: '/games/wordbuilder' },
-      { id: 'sorting', title: 'Sorting Game', path: '/games/sorting' },
-      { id: 'tilematch', title: 'Tile Match', path: '/games/tilematch' },
-      { id: 'story', title: 'Story Adventure', path: '/games/story' },
-      { id: 'physics', title: 'Physics Game', path: '/games/physics' },
-      { id: 'tracing', title: 'Tracing Game', path: '/games/tracing' },
+      { id: 'memory', title: 'Memory Game' },
+      { id: 'dragdrop', title: 'Drag & Drop' },
+      { id: 'wordbuilder', title: 'Word Builder' },
+      { id: 'sorting', title: 'Sorting Game' },
+      { id: 'tilematch', title: 'Tile Match' },
+      { id: 'story', title: 'Story Adventure' },
+      { id: 'physics', title: 'Physics Game' },
+      { id: 'tracing', title: 'Tracing Game' },
     ];
 
     return Response.json({ success: true, subjects: result, gameHub });
