@@ -778,6 +778,27 @@ export default function AdminGameManager() {
                 <p className="text-white/80 text-xs mt-1">Execute tasks sequentially. Wait for each to complete.</p>
               </div>
 
+              {/* Overall Progress Bar */}
+              <div className="px-6 pt-4">
+                <div className="bg-gray-100 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-xs font-bold text-gray-600">Overall Progress</p>
+                    <p className="text-xs font-bold text-gray-700">{taskProgress.length}/{regenerationTasks.length}</p>
+                  </div>
+                  <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-300"
+                      style={{ width: `${regenerationTasks.length > 0 ? (taskProgress.length / regenerationTasks.length) * 100 : 0}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    {taskProgress.length === regenerationTasks.length
+                      ? '✅ All tasks completed!'
+                      : `⏳ ${regenerationTasks.length - taskProgress.length} tasks pending`}
+                  </p>
+                </div>
+              </div>
+
               {/* Task List */}
               <div className="flex-1 overflow-y-auto px-6 py-4">
                 <div className="space-y-2">
@@ -908,10 +929,4 @@ export default function AdminGameManager() {
       </div>
     );
   }
-}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
 }
