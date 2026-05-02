@@ -530,45 +530,51 @@ export default function AdminGameManager() {
                         className="overflow-hidden border-t border-white/30"
                       >
                         <div className="hidden md:grid grid-cols-12 gap-1 px-4 py-2 bg-amber-50/50 text-xs font-bold text-gray-400 uppercase tracking-wide">
-                          <span className="col-span-1">#</span>
-                          <span className="col-span-4">Nama Game</span>
-                          <span className="col-span-2">Type</span>
-                          <span className="col-span-2 text-center">Soalan</span>
-                          <span className="col-span-2 text-center">Players</span>
-                          <span className="col-span-1"></span>
-                        </div>
+                           <span className="col-span-1">#</span>
+                           <span className="col-span-3">Nama Game</span>
+                           <span className="col-span-2">Type</span>
+                           <span className="col-span-2 text-center">Soalan</span>
+                           <span className="col-span-2 text-center">Status</span>
+                           <span className="col-span-1"></span>
+                         </div>
                         <div className="max-h-52 md:max-h-64 overflow-y-auto">
                           {s.games.map((g) => (
                             <div key={g.index} className="hidden md:grid grid-cols-12 gap-1 items-center px-4 py-2.5 border-b border-amber-100/50 hover:bg-white/30 transition-all">
-                              <span className="col-span-1 text-xs font-bold text-gray-300">{g.index + 1}</span>
-                              <span className="col-span-4 text-xs font-semibold text-gray-800 truncate">{g.title}</span>
-                              <span className="col-span-2 text-xs text-gray-400 truncate">{g.type}</span>
-                              <div className="col-span-2 flex justify-center">
-                                <span className={`text-xs font-black px-2 py-0.5 rounded-full ${
-                                  g.questionCount >= 20 ? 'bg-green-100 text-green-700' :
-                                  g.questionCount >= 10 ? 'bg-yellow-100 text-yellow-700' :
-                                  'bg-red-100 text-red-600'
-                                }`}>{g.questionCount}</span>
-                              </div>
-                              <div className="col-span-2 flex justify-center">
-                                {g.players > 0 ? (
-                                  <span className="text-xs font-bold text-pink-500 flex items-center gap-0.5">
-                                    <Users className="w-3 h-3" />{g.players}
-                                  </span>
-                                ) : <span className="text-xs text-gray-200">—</span>}
-                              </div>
-                              <div className="col-span-1 flex justify-end pr-1">
-                                {g._raw && (
-                                  <button
-                                    onClick={() => setEditGame(g._raw)}
-                                    className="p-1 text-indigo-400 hover:bg-indigo-50 rounded-lg transition-all"
-                                    title="Edit game ini"
-                                  >
-                                    <Edit3 className="w-3 h-3" />
-                                  </button>
-                                )}
-                              </div>
-                            </div>
+                               <span className="col-span-1 text-xs font-bold text-gray-300">{g.index + 1}</span>
+                               <span className="col-span-3 text-xs font-semibold text-gray-800 truncate">{g.title}</span>
+                               <span className="col-span-2 text-xs text-gray-400 truncate">{g.type}</span>
+                               <div className="col-span-2 flex justify-center">
+                                 <span className={`text-xs font-black px-2 py-0.5 rounded-full ${
+                                   g.questionCount >= 20 ? 'bg-green-100 text-green-700' :
+                                   g.questionCount >= 10 ? 'bg-yellow-100 text-yellow-700' :
+                                   'bg-red-100 text-red-600'
+                                 }`}>{g.questionCount}</span>
+                               </div>
+                               <div className="col-span-2 flex justify-center">
+                                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                                   g._raw?.status === 'ready' ? 'bg-green-100 text-green-700' :
+                                   g._raw?.status === 'in_progress' ? 'bg-yellow-100 text-yellow-700' :
+                                   g._raw?.status === 'not_ready' ? 'bg-red-100 text-red-600' :
+                                   'bg-gray-100 text-gray-600'
+                                 }`}>
+                                   {g._raw?.status === 'ready' ? '✅ Ready' :
+                                    g._raw?.status === 'in_progress' ? '⏳ In Progress' :
+                                    g._raw?.status === 'not_ready' ? '❌ Not Ready' :
+                                    '—'}
+                                 </span>
+                               </div>
+                               <div className="col-span-1 flex justify-end pr-1">
+                                 {g._raw && (
+                                   <button
+                                     onClick={() => setEditGame(g._raw)}
+                                     className="p-1 text-indigo-400 hover:bg-indigo-50 rounded-lg transition-all"
+                                     title="Edit game ini"
+                                   >
+                                     <Edit3 className="w-3 h-3" />
+                                   </button>
+                                 )}
+                               </div>
+                             </div>
                           ))}
                           <div className="md:hidden space-y-2 p-3">
                             {s.games.map((g) => (
@@ -719,24 +725,34 @@ export default function AdminGameManager() {
                     {isExpanded && (
                       <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t border-white/30">
                         <div className="hidden md:grid grid-cols-12 gap-1 px-4 py-2 bg-amber-50/50 text-xs font-bold text-gray-400 uppercase tracking-wide">
-                          <span className="col-span-1">#</span><span className="col-span-4">Nama Game</span><span className="col-span-2">Type</span><span className="col-span-2 text-center">Soalan</span><span className="col-span-2 text-center">Players</span><span className="col-span-1"></span>
+                          <span className="col-span-1">#</span><span className="col-span-3">Nama Game</span><span className="col-span-2">Type</span><span className="col-span-2 text-center">Soalan</span><span className="col-span-2 text-center">Status</span><span className="col-span-1"></span>
                         </div>
                         <div className="max-h-52 md:max-h-64 overflow-y-auto">
                           {s.games.map((g) => (
                             <div key={g.index} className="hidden md:grid grid-cols-12 gap-1 items-center px-4 py-2.5 border-b border-amber-100/50 hover:bg-white/30 transition-all">
-                              <span className="col-span-1 text-xs font-bold text-gray-300">{g.index + 1}</span>
-                              <span className="col-span-4 text-xs font-semibold text-gray-800 truncate">{g.title}</span>
-                              <span className="col-span-2 text-xs text-gray-400 truncate">{g.type}</span>
-                              <div className="col-span-2 flex justify-center">
-                                <span className={`text-xs font-black px-2 py-0.5 rounded-full ${g.questionCount >= 20 ? 'bg-green-100 text-green-700' : g.questionCount >= 10 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-600'}`}>{g.questionCount}</span>
-                              </div>
-                              <div className="col-span-2 flex justify-center">
-                                {g.players > 0 ? <span className="text-xs font-bold text-pink-500 flex items-center gap-0.5"><Users className="w-3 h-3" />{g.players}</span> : <span className="text-xs text-gray-200">—</span>}
-                              </div>
-                              <div className="col-span-1 flex justify-end pr-1">
-                                {g._raw && <button onClick={() => setEditGame(g._raw)} className="p-1 text-indigo-400 hover:bg-indigo-50 rounded-lg transition-all" title="Edit game ini"><Edit3 className="w-3 h-3" /></button>}
-                              </div>
-                            </div>
+                               <span className="col-span-1 text-xs font-bold text-gray-300">{g.index + 1}</span>
+                               <span className="col-span-3 text-xs font-semibold text-gray-800 truncate">{g.title}</span>
+                               <span className="col-span-2 text-xs text-gray-400 truncate">{g.type}</span>
+                               <div className="col-span-2 flex justify-center">
+                                 <span className={`text-xs font-black px-2 py-0.5 rounded-full ${g.questionCount >= 20 ? 'bg-green-100 text-green-700' : g.questionCount >= 10 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-600'}`}>{g.questionCount}</span>
+                               </div>
+                               <div className="col-span-2 flex justify-center">
+                                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                                   g._raw?.status === 'ready' ? 'bg-green-100 text-green-700' :
+                                   g._raw?.status === 'in_progress' ? 'bg-yellow-100 text-yellow-700' :
+                                   g._raw?.status === 'not_ready' ? 'bg-red-100 text-red-600' :
+                                   'bg-gray-100 text-gray-600'
+                                 }`}>
+                                   {g._raw?.status === 'ready' ? '✅ Ready' :
+                                    g._raw?.status === 'in_progress' ? '⏳ In Progress' :
+                                    g._raw?.status === 'not_ready' ? '❌ Not Ready' :
+                                    '—'}
+                                 </span>
+                               </div>
+                               <div className="col-span-1 flex justify-end pr-1">
+                                 {g._raw && <button onClick={() => setEditGame(g._raw)} className="p-1 text-indigo-400 hover:bg-indigo-50 rounded-lg transition-all" title="Edit game ini"><Edit3 className="w-3 h-3" /></button>}
+                               </div>
+                             </div>
                           ))}
                           <div className="md:hidden space-y-2 p-3">
                             {s.games.map((g) => (

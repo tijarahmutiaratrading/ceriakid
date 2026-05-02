@@ -14,6 +14,7 @@ export default function EditGameModal({ game, onClose, onSaved }) {
     difficulty: game.difficulty || 'easy',
     tier: game.tier || 'free',
     emoji: game.emoji || '🎮',
+    status: game.status || 'ready',
     isPublished: game.isPublished !== false,
   });
   const [questions, setQuestions] = useState(game.gameData?.questions || []);
@@ -136,6 +137,14 @@ export default function EditGameModal({ game, onClose, onSaved }) {
               <label className="text-xs font-bold text-gray-500 mb-1 block">Tier</label>
               <select value={form.tier} onChange={e => setForm(f => ({ ...f, tier: e.target.value }))} className="w-full border-2 border-gray-200 rounded-xl p-2.5 text-sm focus:border-indigo-400 focus:outline-none">
                 {TIERS.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="text-xs font-bold text-gray-500 mb-1 block">Status Permainan</label>
+              <select value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value }))} className="w-full border-2 border-gray-200 rounded-xl p-2.5 text-sm focus:border-indigo-400 focus:outline-none">
+                <option value="ready">✅ Ready</option>
+                <option value="in_progress">⏳ In Progress</option>
+                <option value="not_ready">❌ Not Ready</option>
               </select>
             </div>
           </div>

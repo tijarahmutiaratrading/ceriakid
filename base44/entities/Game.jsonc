@@ -89,6 +89,16 @@
       "type": "boolean",
       "default": true
     },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "in_progress",
+        "not_ready"
+      ],
+      "default": "ready",
+      "description": "Game development status"
+    },
     "order": {
       "type": "number",
       "description": "Display order"
