@@ -152,11 +152,26 @@ export default function AdminGameManager() {
         });
       }
 
-      // Batch in groups of 50 to avoid timeout
-      const BATCH = 50;
-      for (let i = 0; i < allGames.length; i += BATCH) {
-        const batch = allGames.slice(i, i + BATCH);
+      // Strip heavy gameData to avoid network payload limits, send metadata only
+      const lightGames = allGames.map(g => ({
+        title: g.title,
+        type: g.type,
+        emoji: g.emoji,
+        difficulty: g.difficulty,
+        tier: g.tier,
+        ageGroup: g.ageGroup,
+        category: g.category,
+        index: g.index,
+        totalQuestions: g.gameData?.questions?.length || 8,
+        gameData: { questions: (g.gameData?.questions || []).slice(0, 20) }, // max 20 questions per game
+      }));
+
+      // Batch in groups of 10 to avoid timeout
+      const BATCH = 10;
+      for (let i = 0; i < lightGames.length; i += BATCH) {
+        const batch = lightGames.slice(i, i + BATCH);
         await base44.functions.invoke('importGamesToDB', { games: batch });
+        showToast(`⏳ Mengimport... ${Math.min(i + BATCH, lightGames.length)}/${lightGames.length}`, true);
       }
       showToast(`✅ ${allGames.length} games berjaya diimport!`);
       await fetchStats();
