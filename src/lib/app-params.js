@@ -49,6 +49,13 @@ const getAppParams = () => {
 }
 
 
-export const appParams = {
-	...getAppParams()
-}
+let _cachedAppParams = null;
+
+export const appParams = new Proxy({}, {
+	get: (target, prop) => {
+		if (!_cachedAppParams) {
+			_cachedAppParams = getAppParams();
+		}
+		return _cachedAppParams[prop];
+	}
+});

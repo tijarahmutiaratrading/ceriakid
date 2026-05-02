@@ -12,10 +12,12 @@ export const AuthProvider = ({ children }) => {
   const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(true);
   const [authError, setAuthError] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
-  const [appPublicSettings, setAppPublicSettings] = useState(null); // Contains only { id, public_settings }
+  const [appPublicSettings, setAppPublicSettings] = useState(null);
 
   useEffect(() => {
-    checkAppState();
+    // Defer initialization to next tick to ensure React is fully initialized
+    const timer = setTimeout(() => checkAppState(), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const checkAppState = async () => {
