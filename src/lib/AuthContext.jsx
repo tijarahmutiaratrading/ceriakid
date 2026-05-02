@@ -15,123 +15,44 @@ export const AuthProvider = ({ children }) => {
   const [appPublicSettings, setAppPublicSettings] = useState(null);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const initializeApp = async () => {
-      try {
-        setIsLoadingPublicSettings(true);
-        setAuthError(null);
-        
-        // First, check app public settings (with token if available)
-        const appClient = createAxiosClient({
-          baseURL: `/api/apps/public`,
-          headers: {
-            'X-App-Id': appParams.appId
-          },
-          token: appParams.token,
-          interceptResponses: true
-        });
-        
-        try {
-          const publicSettings = await appClient.get(`/prod/public-settings/by-id/${appParams.appId}`);
-          if (!isMounted) return;
-          setAppPublicSettings(publicSettings);
-          
-          if (appParams.token) {
-            await checkUserAuth();
-          } else {
-            if (isMounted) {
-              setIsLoadingAuth(false);
-              setIsAuthenticated(false);
-              setAuthChecked(true);
-            }
-          }
-          if (isMounted) setIsLoadingPublicSettings(false);
-        } catch (appError) {
-          console.error('App state check failed:', appError);
-          
-          if (!isMounted) return;
-          
-          if (appError.status === 403 && appError.data?.extra_data?.reason) {
-            const reason = appError.data.extra_data.reason;
-            if (reason === 'auth_required') {
-              setAuthError({
-                type: 'auth_required',
-                message: 'Authentication required'
-              });
-            } else if (reason === 'user_not_registered') {
-              setAuthError({
-                type: 'user_not_registered',
-                message: 'User not registered for this app'
-              });
-            } else {
-              setAuthError({
-                type: reason,
-                message: appError.message
-              });
-            }
-          } else {
-            setAuthError({
-              type: 'unknown',
-              message: appError.message || 'Failed to load app'
-            });
-          }
-          setIsLoadingPublicSettings(false);
-          setIsLoadingAuth(false);
-        }
-      } catch (error) {
-        console.error('Unexpected error:', error);
-        if (!isMounted) return;
-        setAuthError({
-          type: 'unknown',
-          message: error.message || 'An unexpected error occurred'
-        });
-        setIsLoadingPublicSettings(false);
-        setIsLoadingAuth(false);
-      }
-    };
-
-    initializeApp();
-
-    return () => {
-      isMounted = false;
-    };
+    // Defer initialization to next tick to ensure React is fully initialized
+    const timer = setTimeout(() => checkAppState(), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const checkAppState = async () => {
-    let isMounted = true;
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
       
+      // First, check app public settings (with token if available)
+      // This will tell us if auth is required, user not registered, etc.
       const appClient = createAxiosClient({
         baseURL: `/api/apps/public`,
         headers: {
           'X-App-Id': appParams.appId
         },
-        token: appParams.token,
+        token: appParams.token, // Include token if available
         interceptResponses: true
       });
       
       try {
         const publicSettings = await appClient.get(`/prod/public-settings/by-id/${appParams.appId}`);
-        if (!isMounted) return;
         setAppPublicSettings(publicSettings);
         
+        // If we got the app public settings successfully, check if user is authenticated
         if (appParams.token) {
           await checkUserAuth();
         } else {
-          if (isMounted) {
-            setIsLoadingAuth(false);
-            setIsAuthenticated(false);
-            setAuthChecked(true);
-          }
+          setIsLoadingAuth(false);
+          setIsAuthenticated(false);
+          setAuthChecked(true);
         }
-        if (isMounted) setIsLoadingPublicSettings(false);
+        setIsLoadingPublicSettings(false);
       } catch (appError) {
         console.error('App state check failed:', appError);
-        if (!isMounted) return;
         
+        // Handle app-level errors
         if (appError.status === 403 && appError.data?.extra_data?.reason) {
           const reason = appError.data.extra_data.reason;
           if (reason === 'auth_required') {
@@ -161,7 +82,6 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Unexpected error:', error);
-      if (!isMounted) return;
       setAuthError({
         type: 'unknown',
         message: error.message || 'An unexpected error occurred'
