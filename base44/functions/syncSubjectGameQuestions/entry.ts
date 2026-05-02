@@ -124,23 +124,30 @@ VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
     prompt,
     model: 'claude_sonnet_4_6',
     response_json_schema: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          soalan: { type: 'string', description: 'Teks soalan' },
-          pilihan: { type: 'array', items: { type: 'string' }, minItems: min, maxItems: max, description: 'Pilihan jawapan' },
-          jawapan: { type: 'string', description: 'Jawapan yang tepat (mesti wujud dalam pilihan)' },
+      type: 'object',
+      properties: {
+        questions: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              soalan: { type: 'string', description: 'Teks soalan' },
+              pilihan: { type: 'array', items: { type: 'string' }, minItems: min, maxItems: max, description: 'Pilihan jawapan' },
+              jawapan: { type: 'string', description: 'Jawapan yang tepat (mesti wujud dalam pilihan)' },
+            },
+            required: ['soalan', 'pilihan', 'jawapan'],
+          },
+          minItems: needed,
+          maxItems: needed,
         },
-        required: ['soalan', 'pilihan', 'jawapan'],
       },
-      minItems: needed,
-      maxItems: needed,
+      required: ['questions'],
     },
   });
 
   // Transform format
-  return (result || [])
+  const questions = result?.questions || [];
+  return questions
     .filter(q => q.soalan && q.pilihan?.length >= min && q.pilihan?.length <= max && q.jawapan && q.pilihan.includes(q.jawapan))
     .map((q) => {
       // Transform to internal format: problem, options, answer (index)
@@ -220,7 +227,8 @@ Deno.serve(async (req) => {
           gameData: { ...game.gameData, questions: newQuestions },
         });
       } catch (err) {
-        console.error(`Error game ${game.id}: ${err.message}`);
+        console.error(`Error game ${game.id} (${game.title}): ${err.message}`);
+        console.error(`Stack:`, err.stack);
         errors++;
       }
     }
