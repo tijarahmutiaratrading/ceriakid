@@ -8,7 +8,6 @@ const TIERS = ['free', 'premium', 'pro'];
 const QUESTION_GENERATION_DELAY = 3000;
 
 export default function SyncAndEditModal({ games, subjectLabel, ageGroup, subject, onClose, onSaved }) {
-  const [tab, setTab] = useState('sync');
   const [selected, setSelected] = useState(new Set(games.map(g => g.id)));
   const [updates, setUpdates] = useState({ difficulty: '', tier: '', isPublished: '' });
   const [targetQuestions, setTargetQuestions] = useState('');
@@ -30,23 +29,6 @@ export default function SyncAndEditModal({ games, subjectLabel, ageGroup, subjec
       setSelected(new Set());
     } else {
       setSelected(new Set(games.map(g => g.id)));
-    }
-  };
-
-  const handleSync = async () => {
-    setSaving(true);
-    setError(null);
-    try {
-      setProgress('⏳ Syncing to DB...');
-      await base44.functions.invoke('importGamesToDB', { games });
-      setProgress('✅ Sync complete!');
-      onSaved();
-      setTimeout(onClose, 1000);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setSaving(false);
-      setProgress(null);
     }
   };
 
@@ -121,53 +103,19 @@ export default function SyncAndEditModal({ games, subjectLabel, ageGroup, subjec
         className="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <div>
-            <h2 className="font-black text-gray-900 text-lg">🔄 Sync & Edit Pukal</h2>
-            <p className="text-xs text-gray-400">{subjectLabel}</p>
-          </div>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl">
-            <X className="w-5 h-5 text-gray-500" />
-          </button>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex border-b border-gray-100">
-          <button
-            onClick={() => { setTab('sync'); setError(null); setProgress(null); }}
-            className={`flex-1 px-4 py-3 font-bold text-sm transition-all ${
-              tab === 'sync'
-                ? 'border-b-2 border-indigo-500 text-indigo-600'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            📤 Sync to DB
-          </button>
-          <button
-            onClick={() => { setTab('edit'); setError(null); setProgress(null); }}
-            className={`flex-1 px-4 py-3 font-bold text-sm transition-all ${
-              tab === 'edit'
-                ? 'border-b-2 border-indigo-500 text-indigo-600'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            ✏️ Bulk Edit
-          </button>
-        </div>
+         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+           <div>
+             <h2 className="font-black text-gray-900 text-lg">✏️ Bulk Edit Games</h2>
+             <p className="text-xs text-gray-400">{subjectLabel} · {selected.size}/{games.length} dipilih</p>
+           </div>
+           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl">
+             <X className="w-5 h-5 text-gray-500" />
+           </button>
+         </div>
 
         {/* Content */}
         <div className="overflow-y-auto flex-1 px-6 py-5">
-          {tab === 'sync' ? (
-            <div className="space-y-4">
-              <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                <p className="text-sm font-bold text-blue-900 mb-2">📤 Sync to Database</p>
-                <p className="text-xs text-blue-700">{games.length} games akan di-import ke database</p>
-              </div>
-              {error && <p className="text-xs text-red-500 font-semibold">{error}</p>}
-              {progress && <p className="text-xs text-indigo-600 font-bold text-center">{progress}</p>}
-            </div>
-          ) : (
-            <div className="space-y-5">
+          <div className="space-y-5">
               {/* Update Fields */}
               <div>
                 <h3 className="font-black text-gray-700 text-sm mb-3">🔧 Ubah Metadata</h3>
@@ -239,20 +187,19 @@ export default function SyncAndEditModal({ games, subjectLabel, ageGroup, subjec
 
               {progress && <p className="text-xs text-indigo-600 font-bold text-center bg-indigo-50 rounded-xl py-2">{progress}</p>}
               {error && <p className="text-xs text-red-500 font-semibold text-center">{error}</p>}
-            </div>
-          )}
-        </div>
+              </div>
+              </div>
 
         {/* Footer */}
         <div className="px-6 py-4 border-t border-gray-100 flex gap-3">
           <button onClick={onClose} className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm">Batal</button>
           <button
-            onClick={tab === 'sync' ? handleSync : handleBulkEdit}
-            disabled={saving || (tab === 'edit' && selected.size === 0)}
+            onClick={handleBulkEdit}
+            disabled={saving || selected.size === 0}
             className="flex-1 py-2.5 bg-indigo-500 text-white rounded-xl font-bold text-sm hover:bg-indigo-600 disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-            {saving ? (progress || 'Processing...') : tab === 'sync' ? '📤 Sync' : `✏️ Apply ke ${selected.size}`}
+            {saving ? (progress || 'Processing...') : `✏️ Apply ke ${selected.size}`}
           </button>
         </div>
       </motion.div>
