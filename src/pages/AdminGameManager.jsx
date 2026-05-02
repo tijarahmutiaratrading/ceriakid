@@ -400,27 +400,25 @@ export default function AdminGameManager() {
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 md:mb-6 gap-3">
           <div>
             <h1 className="text-xl md:text-2xl font-black text-gray-900">🎮 Game Manager</h1>
-            <p className="text-gray-600 text-xs md:text-sm font-semibold">Database semua games & soalan</p>
+            <p className="text-gray-600 text-xs md:text-sm font-semibold">{totalGames} games · {totalFull} soalan penuh</p>
           </div>
-          <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={handleSyncToDB}
               disabled={!!actionLoading}
-              title="Export games baru ke Database (skip yang sedia ada)"
-              className="flex items-center gap-1 px-2 md:px-3 py-1.5 md:py-2 bg-gradient-to-r from-game-purple to-game-blue text-white rounded-lg md:rounded-xl shadow text-xs font-bold transition-all disabled:opacity-50 hover:shadow-lg"
+              className="flex items-center gap-2 px-3 py-2 bg-game-purple text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
             >
-              {actionLoading === 'import' ? <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" /> : <Database className="w-3 h-3 md:w-4 md:h-4" />}
-              <span className="hidden sm:inline">Export to DB</span>
-              <span className="sm:hidden">Export</span>
+              {actionLoading === 'import' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
+              Export to DB
             </button>
             <button
               onClick={async () => {
-                if (!window.confirm('Buang semua soalan kosong dari database?')) return;
+                if (!window.confirm('Buang semua soalan kosong?')) return;
                 setActionLoading('clean');
-                showToast('⏳ Membersihkan soalan kosong...', true);
+                showToast('⏳ Membersihkan...', true);
                 try {
                   const res = await base44.functions.invoke('cleanEmptyQuestions', {});
-                  showToast(`✅ ${res.data.totalRemoved} soalan kosong dibuang dari ${res.data.cleaned} games!`);
+                  showToast(`✅ ${res.data.totalRemoved} soalan kosong dibuang!`);
                   await fetchStats();
                 } catch (err) {
                   showToast('❌ ' + err.message, false);
@@ -429,15 +427,13 @@ export default function AdminGameManager() {
                 }
               }}
               disabled={!!actionLoading}
-              title="Buang soalan kosong"
-              className="flex items-center gap-1 px-2 md:px-3 py-1.5 md:py-2 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-lg md:rounded-xl shadow text-xs font-bold transition-all disabled:opacity-50 hover:shadow-lg"
+              className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
             >
-              {actionLoading === 'clean' ? <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" /> : <Trash2 className="w-3 h-3 md:w-4 md:h-4" />}
-              <span className="hidden sm:inline">Clean Empty Q</span>
-              <span className="sm:hidden">C</span>
+              {actionLoading === 'clean' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+              Clean
             </button>
-            <button onClick={fetchStats} disabled={loading} className="p-1.5 md:p-2.5 bg-white/40 backdrop-blur-xl rounded-lg md:rounded-xl shadow border-2 border-white/30 hover:bg-white/60 transition-all">
-              <RefreshCw className={`w-4 h-4 md:w-5 md:h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
+            <button onClick={fetchStats} disabled={loading} title="Refresh" className="p-2 bg-white/40 backdrop-blur-xl rounded-xl border-2 border-white/30 hover:bg-white/60 transition-all">
+              <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
             </button>
           </div>
         </motion.div>
