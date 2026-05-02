@@ -8,7 +8,7 @@ import EditGameModal from '@/components/admin/EditGameModal';
 import SyncAndEditModal from '@/components/admin/SyncAndEditModal';
 import SubjectCard from '@/components/admin/SubjectCard';
 
-const QUESTION_THRESHOLD = 20;
+const QUESTION_THRESHOLD = 20; // Matches SubjectCard threshold
 const QUESTION_GENERATION_DELAY = 3000; // 3 seconds between games to avoid rate limiting
 
 const SUBJECT_CONFIG = [
@@ -164,11 +164,12 @@ export default function AdminGameManager() {
           });
           if (result.data.validation.summary.invalid_count > 0) {
             flagged++;
-            console.warn(`Game "${game.title}" flagged:`, result.data.validation.summary);
+            console.warn(`Game "${game.title}" flagged - issues:`, result.data.validation.summary.invalid_count);
           } else {
             verified++;
           }
         } catch (e) {
+          flagged++;
           console.error(`Skip game ${game.id}:`, e.message);
         }
       }

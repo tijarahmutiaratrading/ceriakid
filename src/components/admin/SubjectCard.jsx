@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, ChevronDown, ChevronRight, Users, Edit3, CheckCircle2 } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
 
 const QUESTION_THRESHOLD = 20;
 
@@ -18,9 +17,12 @@ export default function SubjectCard({
   onEditGame,
   idx,
 }) {
-  const shortLabel = subject.label.replace('Prasekolah - ', '').replace('Sekolah Rendah - ', '');
-  const avgQ = subject.games.length > 0 ? Math.round(subject.games.reduce((a, g) => a + g.questionCount, 0) / subject.games.length) : 0;
-  const totalPlayers = subject.games.reduce((a, g) => a + g.players, 0);
+  const { shortLabel, avgQ, totalPlayers } = useMemo(() => {
+    const short = subject.label.replace('Prasekolah - ', '').replace('Sekolah Rendah - ', '');
+    const avg = subject.games.length > 0 ? Math.round(subject.games.reduce((a, g) => a + g.questionCount, 0) / subject.games.length) : 0;
+    const players = subject.games.reduce((a, g) => a + g.players, 0);
+    return { shortLabel: short, avgQ: avg, totalPlayers: players };
+  }, [subject]);
 
   return (
     <motion.div
@@ -42,17 +44,18 @@ export default function SubjectCard({
           </div>
         </button>
 
-        <div className="flex items-center gap-0.5 md:gap-2 flex-shrink-0">
-          <span className={`text-xs font-bold px-2 md:px-2.5 py-0.5 md:py-1 rounded-lg md:rounded-full text-xs md:text-xs ${subject.color.badge}`}>{subject.totalGames}</span>
+        <div className="flex items-center gap-0.5 md:gap-2 flex-shrink-0 flex-wrap justify-end">
+          <span className={`text-xs font-bold px-2 md:px-2.5 py-0.5 md:py-1 rounded-lg md:rounded-full ${subject.color.badge}`}>{subject.totalGames}</span>
           {totalPlayers > 0 && (
             <span className="hidden sm:inline text-xs font-bold px-2.5 py-1 rounded-full bg-pink-100 text-pink-600 flex items-center gap-1">
-              <Users className="w-3 h-3" />{totalPlayers}
+              <Users className="w-3 h-3" aria-label="Players" />{totalPlayers}
             </span>
           )}
           <button
             onClick={() => onSync(subject.file, subject.label, subject.totalGames, avgQ, subject.ageGroup, subject.subject)}
             disabled={!!actionLoading}
-            className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all text-xs font-bold"
+            aria-label="Sync subject"
+            className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all text-xs font-bold disabled:opacity-50"
           >
             {actionLoading === subject.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
             <span className="hidden sm:inline">Sync</span>
@@ -68,7 +71,8 @@ export default function SubjectCard({
               onBulkEdit(games, subject.label, subject.ageGroup, subject.subject);
             }}
             disabled={!!actionLoading}
-            className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all text-xs font-bold"
+            aria-label="Bulk edit games"
+            className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all text-xs font-bold disabled:opacity-50"
           >
             {actionLoading === subject.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
             <span className="hidden sm:inline">Bulk Edit</span>
@@ -77,13 +81,14 @@ export default function SubjectCard({
           <button
             onClick={() => onVerify(subject.file, subject.label, subject.ageGroup, subject.subject, dbGamesCache)}
             disabled={!!actionLoading}
-            className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg border border-blue-200 transition-all text-xs font-bold"
+            aria-label="Verify and count questions"
+            className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg border border-blue-200 transition-all text-xs font-bold disabled:opacity-50"
           >
             {actionLoading === `verify-${subject.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
             <span className="hidden sm:inline">Kira & Semak</span>
           </button>
 
-          <button onClick={() => onExpandToggle(subject.file)} className="p-0.5 md:p-1">
+          <button onClick={() => onExpandToggle(subject.file)} aria-label={isExpanded ? "Collapse" : "Expand"} className="p-0.5 md:p-1">
             {isExpanded ? <ChevronDown className="w-3 h-3 md:w-4 md:h-4 text-gray-400" /> : <ChevronRight className="w-3 h-3 md:w-4 md:h-4 text-gray-400" />}
           </button>
         </div>
