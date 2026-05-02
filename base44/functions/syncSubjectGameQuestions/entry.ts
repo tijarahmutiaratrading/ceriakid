@@ -77,6 +77,23 @@ function isRealQuestion(q) {
   return !/^Soalan \d+$/.test(problem.trim());
 }
 
+function deduplicateEmojis(questions) {
+  const usedEmojis = new Set();
+  const emojiPool = ['📚', '📖', '✏️', '🖍️', '🔤', '💬', '🗣️', '📄', '🎓', '🌍', '🌟', '✍️', '🇬🇧', '📖', '🎤', '💭', '🏆', '🔢', '➕', '➖', '✖️', '➗', '📐', '📏', '🧮', '🔺', '💯', '🔬', '🧬', '🧪', '🌱', '🦋', '🔭', '⚗️', '🧫', '🌎', '🐦', '🦅', '🐠', '🐟', '🏠', '🏡', '🚗', '🚕', '🧹', '🧻'];
+
+  return questions.map((q) => {
+    let emoji = q.emoji || '';
+    
+    // If emoji already used, find replacement from pool
+    if (usedEmojis.has(emoji) || !emoji) {
+      emoji = emojiPool.find(e => !usedEmojis.has(e)) || '🎯';
+    }
+    
+    usedEmojis.add(emoji);
+    return { ...q, emoji };
+  });
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -125,10 +142,10 @@ Deno.serve(async (req) => {
         if (targetCount > currentCount) {
           const needed = targetCount - currentCount;
           const generated = await generateQuestionsForGame(base44, game, needed, realQuestions);
-          newQuestions = [...realQuestions, ...generated.slice(0, needed)];
+          newQuestions = deduplicateEmojis([...realQuestions, ...generated.slice(0, needed)]);
           expanded++;
         } else {
-          newQuestions = realQuestions.slice(0, targetCount);
+          newQuestions = deduplicateEmojis(realQuestions.slice(0, targetCount));
           reduced++;
         }
 
