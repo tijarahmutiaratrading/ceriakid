@@ -157,6 +157,15 @@ export default function AdminGameManager() {
   };
 
   const handleImportToDB = async () => {
+    // Check if any subject already has DB games
+    const hasExistingData = Object.values(dbGamesCache).some(arr => arr.length > 0);
+    if (hasExistingData) {
+      const confirmed = window.confirm(
+        '⚠️ AMARAN: Import akan OVERWRITE semua soalan AI yang dah dijana!\n\nAdakah anda pasti? Ini akan gantikan data database dengan data asal dari library.'
+      );
+      if (!confirmed) return;
+    }
+
     setActionLoading('import');
     showToast('⏳ Mengimport games ke database...', true);
     try {
