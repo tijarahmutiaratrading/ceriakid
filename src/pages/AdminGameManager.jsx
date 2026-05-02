@@ -499,6 +499,35 @@ export default function AdminGameManager() {
 
             <button
               onClick={async () => {
+                if (!window.confirm('Generate manual questions untuk ALL games? (Guaranteed emoji-answer match)')) return;
+                setActionLoading('manual-gen');
+                showToast('🎯 Generating manual questions untuk semua games...', true);
+                try {
+                  for (const subject of SUBJECT_CONFIG) {
+                    await base44.functions.invoke('generateQuestionsManual', {
+                      ageGroup: subject.ageGroup,
+                      category: subject.subject,
+                      targetCount: 10
+                    });
+                    showToast(`✅ ${subject.label} done!`, true);
+                  }
+                  showToast('✅ All games updated dengan manual questions!');
+                  await fetchStats();
+                } catch (err) {
+                  showToast('❌ ' + err.message, false);
+                } finally {
+                  setActionLoading(null);
+                }
+              }}
+              disabled={!!actionLoading}
+              className="flex items-center gap-2 px-3 py-2 bg-green-700 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all">
+              
+              {actionLoading === 'manual-gen' ? <Loader2 className="w-4 h-4 animate-spin" /> : '🎯'}
+              Manual Gen All
+            </button>
+
+            <button
+              onClick={async () => {
                 if (!window.confirm('Buang semua soalan kosong?')) return;
                 setActionLoading('clean');
                 showToast('⏳ Membersihkan...', true);
