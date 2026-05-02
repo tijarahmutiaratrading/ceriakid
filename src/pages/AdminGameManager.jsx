@@ -53,6 +53,7 @@ export default function AdminGameManager() {
   const [collapsedSections, setCollapsedSections] = useState({ prasekolah: false, sekolah_rendah: false });
   const [regenerationTasks, setRegenerationTasks] = useState(null);
   const [taskProgress, setTaskProgress] = useState([]);
+  const [isPaused, setIsPaused] = useState(false);
   const [generateModal, setGenerateModal] = useState(null);
   const [selectedSubjects, setSelectedSubjects] = useState(new Set()); // track selected subjects
   const [bulkGenerateConfig, setBulkGenerateConfig] = useState(null); // config for bulk generation
@@ -611,21 +612,31 @@ export default function AdminGameManager() {
               className="bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-4 md:p-5 shadow-xl border-2 border-orange-300 mb-4 md:mb-6"
             >
               <div className="flex items-center justify-between gap-4 mb-3">
-                <div>
-                  <p className="font-black text-white text-sm md:text-base">🔥 Generating Games...</p>
+                <div className="flex-1">
+                  <p className="font-black text-white text-sm md:text-base">{isPaused ? '⏸️ Paused' : '🔥 Generating Games...'}</p>
                   <p className="text-white/80 text-xs font-semibold">{taskProgress.length}/{regenerationTasks.length} tasks completed</p>
                 </div>
-                <motion.div
-                  className="text-4xl flex-shrink-0"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                >
-                  🔋
-                </motion.div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <button
+                    onClick={() => setIsPaused(!isPaused)}
+                    className={`px-3 py-1.5 rounded-lg font-bold text-xs text-white transition-all ${
+                      isPaused ? 'bg-green-600 hover:bg-green-700' : 'bg-white/20 hover:bg-white/30'
+                    }`}
+                  >
+                    {isPaused ? '▶️ Resume' : '⏸️ Pause'}
+                  </button>
+                  <motion.div
+                    className="text-3xl"
+                    animate={isPaused ? {} : { rotate: 360 }}
+                    transition={isPaused ? {} : { duration: 2, repeat: Infinity, ease: 'linear' }}
+                  >
+                    🔋
+                  </motion.div>
+                </div>
               </div>
               <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/50">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 rounded-full"
+                  className={`h-full rounded-full ${isPaused ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500'}`}
                   initial={{ width: 0 }}
                   animate={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -1067,12 +1078,18 @@ export default function AdminGameManager() {
                   <button
                   onClick={async () => {
                     setActionLoading('execute-all');
+                    setIsPaused(false);
                     let updatedProgress = [...taskProgress];
 
                     // Execute all remaining tasks
                     for (const task of regenerationTasks) {
                       const alreadyDone = updatedProgress.find((p) => p.taskId === task.taskId);
                       if (alreadyDone) continue;
+
+                      // Wait if paused
+                      while (isPaused) {
+                        await new Promise((r) => setTimeout(r, 500));
+                      }
 
                       // Mark as running
                       updatedProgress = [...updatedProgress, { taskId: task.taskId, status: 'running', message: 'Running...' }];
@@ -1118,6 +1135,7 @@ export default function AdminGameManager() {
                     setActionLoading(null);
                     setRegenerationTasks(null);
                     setTaskProgress([]);
+                    setIsPaused(false);
                   }}
                   disabled={actionLoading === 'execute-all'}
                   className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg disabled:opacity-50">
