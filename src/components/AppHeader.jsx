@@ -23,7 +23,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
 
   const otherItems = [
-    { path: '/games-hub', emoji: '🎮', label: 'Game Hub' },
     { path: '/children-profiles', emoji: '👨‍👩‍👧‍👦', label: 'Profil Anak' },
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
     { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi Anak' },
@@ -51,6 +50,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
       dashboardItems = [
         { path: '/dashboard', emoji: '📊', label: 'Dashboard Pengguna' },
         { path: '/settings', emoji: '⚙️', label: 'Tetapan' },
+        { path: '/games/bahasa_melayu', emoji: '🎮', label: 'Permainan' },
       ];
     }
     
