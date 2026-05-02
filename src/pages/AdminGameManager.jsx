@@ -907,76 +907,70 @@ export default function AdminGameManager() {
                   </button>
                   <button
                   onClick={async () => {
-                    const pendingTask = regenerationTasks.find((t) => !taskProgress.find((p) => p.taskId === t.taskId));
-                    if (!pendingTask) {
-                      showToast('✅ All tasks completed!');
-                      await fetchStats();
-                      setRegenerationTasks(null);
-                      setTaskProgress([]);
-                      return;
-                    }
+                    setActionLoading('execute-all');
+                    let updatedProgress = [...taskProgress];
 
-                    // Execute next pending task
-                    const newProgress = [...taskProgress, { taskId: pendingTask.taskId, status: 'running', message: 'Running...' }];
-                    setTaskProgress(newProgress);
-                    showToast(`⏳ Executing Task ${pendingTask.taskId}/${regenerationTasks.length}...`, true);
+                    // Execute all remaining tasks
+                    for (const task of regenerationTasks) {
+                      const alreadyDone = updatedProgress.find((p) => p.taskId === task.taskId);
+                      if (alreadyDone) continue;
 
-                    try {
-                      const res = await base44.functions.invoke('regenerateGamesTask', {
-                        taskId: pendingTask.taskId,
-                        taskName: pendingTask.taskName,
-                        ageGroup: pendingTask.ageGroup,
-                        subject: pendingTask.subject,
-                        gamesCount: pendingTask.gamesCount,
-                        questionsPerGame: pendingTask.questionsPerGame
-                      });
-
-                      // Mark task as completed
-                      const updatedProgress = taskProgress.map((p) =>
-                      p.taskId === pendingTask.taskId ?
-                      { ...p, status: 'completed', message: res.data.message } :
-                      p
-                      );
+                      // Mark as running
+                      updatedProgress = [...updatedProgress, { taskId: task.taskId, status: 'running', message: 'Running...' }];
                       setTaskProgress(updatedProgress);
-                      showToast(`✅ Task ${pendingTask.taskId} completed: ${res.data.createdGames} games created`);
+                      showToast(`⏳ Executing ${task.taskName}...`, true);
 
-                      // Auto-run next task after 2 seconds
-                      await new Promise((r) => setTimeout(r, 2000));
-
-                      // Check if there are more tasks
-                      const nextTask = regenerationTasks.find((t) => !updatedProgress.find((p) => p.taskId === t.taskId));
-                      if (nextTask) {
-                        // Recursively call to execute next task
-                        const nextRes = await base44.functions.invoke('regenerateGamesTask', {
-                          taskId: nextTask.taskId,
-                          taskName: nextTask.taskName,
-                          ageGroup: nextTask.ageGroup,
-                          subject: nextTask.subject,
-                          gamesCount: nextTask.gamesCount,
-                          questionsPerGame: nextTask.questionsPerGame
+                      try {
+                        const res = await base44.functions.invoke('regenerateGamesTask', {
+                          taskId: task.taskId,
+                          taskName: task.taskName,
+                          ageGroup: task.ageGroup,
+                          subject: task.subject,
+                          gamesCount: task.gamesCount,
+                          questionsPerGame: task.questionsPerGame
                         });
 
-                        const finalProgress = updatedProgress.map((p) =>
-                        p.taskId === nextTask.taskId ?
-                        { ...p, status: 'completed', message: nextRes.data.message } :
-                        p
+                        // Mark as completed
+                        updatedProgress = updatedProgress.map((p) =>
+                          p.taskId === task.taskId ?
+                          { ...p, status: 'completed', message: `✅ ${res.data.createdGames} games created` } :
+                          p
                         );
-                        finalProgress.push({ taskId: nextTask.taskId, status: 'completed', message: nextRes.data.message });
-                        setTaskProgress(finalProgress);
+                        setTaskProgress(updatedProgress);
+                        showToast(`✅ ${task.taskName} done!`);
+                      } catch (err) {
+                        // Mark as failed
+                        updatedProgress = updatedProgress.map((p) =>
+                          p.taskId === task.taskId ?
+                          { ...p, status: 'failed', message: err.message } :
+                          p
+                        );
+                        setTaskProgress(updatedProgress);
+                        showToast(`❌ ${task.taskName} failed`, false);
                       }
-                    } catch (err) {
-                      showToast(`❌ Task ${pendingTask.taskId} failed: ${err.message}`, false);
-                      const failedProgress = taskProgress.map((p) =>
-                      p.taskId === pendingTask.taskId ?
-                      { ...p, status: 'failed', message: err.message } :
-                      p
-                      );
-                      setTaskProgress(failedProgress);
+
+                      // Delay before next task
+                      await new Promise((r) => setTimeout(r, 2000));
                     }
+
+                    // All done—refresh & close
+                    showToast('✅ Semua tasks selesai!');
+                    await fetchStats();
+                    setActionLoading(null);
+                    setRegenerationTasks(null);
+                    setTaskProgress([]);
                   }}
-                  className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg">
-                  
-                    {taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute Task ${taskProgress.length + 1}`}
+                  disabled={actionLoading === 'execute-all'}
+                  className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg disabled:opacity-50">
+
+                    {actionLoading === 'execute-all' ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin inline mr-2" />
+                        Executing...
+                      </>
+                    ) : (
+                      taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute All ${regenerationTasks.length} Tasks`
+                    )}
                     </button>
                     </div>
                     </div>
