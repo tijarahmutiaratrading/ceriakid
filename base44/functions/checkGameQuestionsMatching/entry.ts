@@ -125,7 +125,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    // If autoFix enabled, fix all games with issues
+    // If autoFix enabled, fix all games with issues locally
     if (autoFix && issues.length > 0) {
       const gameIssueMap = {};
       for (const issue of issues) {
@@ -136,28 +136,47 @@ Deno.serve(async (req) => {
       for (const game of games) {
         if (gameIssueMap[game.title] && gameIssueMap[game.title].length > 0) {
           try {
-            const gameQuestions = game.gameData?.questions || [];
-            const result = await base44.asServiceRole.functions.invoke('validateGameQuestionsQuality', {
-              gameId: game.id,
-              ageGroup: game.ageGroup,
-              category: game.category,
-              questions: gameQuestions,
-            });
+            const gameQuestions = (game.gameData?.questions || []).slice();
+            let fixed = 0;
             
-            if (result.data.validation.summary.failed > 0) {
-              const fixRes = await base44.asServiceRole.functions.invoke('autoFixGameQuestions', {
-                gameId: game.id,
-                validationResult: result.data.validation,
+            // Auto-fix issues locally
+            for (const issue of gameIssueMap[game.title]) {
+              const qIdx = issue.questionNum - 1;
+              const q = gameQuestions[qIdx];
+              if (!q) continue;
+              
+              if (issue.problem === 'INSUFFICIENT OPTIONS') {
+                // Add missing option
+                const opts = [...(q.options || [])];
+                while (opts.length < 4) {
+                  opts.push(`Option ${opts.length + 1}`);
+                }
+                q.options = opts;
+                fixed++;
+              } else if (issue.problem === 'INVALID ANSWER INDEX') {
+                // Reset to valid index (0)
+                q.answer = 0;
+                fixed++;
+              } else if (issue.problem === 'EMPTY QUESTION') {
+                // Remove empty question
+                gameQuestions.splice(qIdx, 1);
+                fixed++;
+              }
+            }
+            
+            if (fixed > 0) {
+              await base44.asServiceRole.entities.Game.update(game.id, {
+                gameData: { ...game.gameData, questions: gameQuestions },
+                totalQuestions: gameQuestions.length,
               });
               autoFixedGames++;
-              autoFixedQuestions += fixRes.data.fixed || gameIssueMap[game.title].length;
+              autoFixedQuestions += fixed;
             }
           } catch (err) {
             console.error(`Auto-fix failed for game ${game.title}:`, err.message);
           }
           
-          // Delay between games
-          await new Promise(r => setTimeout(r, 500));
+          await new Promise(r => setTimeout(r, 300));
         }
       }
     }
