@@ -489,14 +489,6 @@ export default function AdminGameManager() {
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <button
-              onClick={handleSyncToDB}
-              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-game-purple text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all hidden">
-              
-              
-              {actionLoading === 'import' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
-              Export to DB
-            </button>
-            <button
               onClick={async () => {
                 if (!window.confirm('🚨 DELETE semua games? Ini tidak boleh di-undo!')) return;
                 setActionLoading('delete-all');
