@@ -142,10 +142,10 @@ export default function AdminGameManager() {
 
   const executeBulkGeneration = async () => {
     if (!bulkGenerateConfig) return;
-    
+
     const tasks = Array.from(selectedSubjects).map((subjectKey) => {
       const [ageGroup, subject] = subjectKey.split('-');
-      const subjectConfig = SUBJECT_CONFIG.find(sc => sc.ageGroup === ageGroup && sc.subject === subject);
+      const subjectConfig = SUBJECT_CONFIG.find((sc) => sc.ageGroup === ageGroup && sc.subject === subject);
       return {
         taskId: Math.random().toString(36).slice(2, 9),
         taskName: subjectConfig?.label || subjectKey,
@@ -457,22 +457,22 @@ export default function AdminGameManager() {
             <p className="text-gray-600 text-xs md:text-sm font-semibold">{totalGames} games · {totalFull} soalan penuh</p>
             {selectedSubjects.size > 0 && <p className="text-xs text-orange-600 font-bold mt-1">✅ {selectedSubjects.size} subjects selected</p>}
             
-            {regenerationTasks && (
-              <div className="mt-3 space-y-1.5">
+            {regenerationTasks &&
+            <div className="mt-3 space-y-1.5">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-xs font-bold text-orange-600">🚀 Generating: {taskProgress.length}/{regenerationTasks.length}</p>
                   <p className="text-xs font-bold text-orange-600">{Math.round(taskProgress.length / regenerationTasks.length * 100)}%</p>
                 </div>
                 <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden border border-orange-200">
                   <motion.div
-                    className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }}
-                    transition={{ duration: 0.4, ease: 'easeOut' }}
-                  />
+                  className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }} />
+                
                 </div>
               </div>
-            )}
+            }
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <button
@@ -499,35 +499,6 @@ export default function AdminGameManager() {
 
             <button
               onClick={async () => {
-                if (!window.confirm('Generate manual questions untuk ALL games? (Guaranteed emoji-answer match)')) return;
-                setActionLoading('manual-gen');
-                showToast('🎯 Generating manual questions untuk semua games...', true);
-                try {
-                  for (const subject of SUBJECT_CONFIG) {
-                    await base44.functions.invoke('generateQuestionsManual', {
-                      ageGroup: subject.ageGroup,
-                      category: subject.subject,
-                      targetCount: 10
-                    });
-                    showToast(`✅ ${subject.label} done!`, true);
-                  }
-                  showToast('✅ All games updated dengan manual questions!');
-                  await fetchStats();
-                } catch (err) {
-                  showToast('❌ ' + err.message, false);
-                } finally {
-                  setActionLoading(null);
-                }
-              }}
-              disabled={!!actionLoading}
-              className="flex items-center gap-2 px-3 py-2 bg-green-700 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all">
-              
-              {actionLoading === 'manual-gen' ? <Loader2 className="w-4 h-4 animate-spin" /> : '🎯'}
-              Manual Gen All
-            </button>
-
-            <button
-              onClick={async () => {
                 if (!window.confirm('Buang semua soalan kosong?')) return;
                 setActionLoading('clean');
                 showToast('⏳ Membersihkan...', true);
@@ -541,7 +512,7 @@ export default function AdminGameManager() {
                   setActionLoading(null);
                 }
               }}
-              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all hidden">
+              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-green-700 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all hidden">
               
               
               {actionLoading === 'clean' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
@@ -549,15 +520,14 @@ export default function AdminGameManager() {
             </button>
             <button
               onClick={async () => {
-                setActionLoading('emoji-audit');
-                showToast('🎨 Auditing emoji-answer matching...', true);
+                setActionLoading('audit-all');
+                showToast('📋 Auditing semua games...', true);
                 try {
-                  const res = await base44.functions.invoke('quickEmojiAudit', {});
-                  console.log('Emoji Audit Results:', res.data);
-                  showToast(`✅ Audit done: ${res.data.summary.passed}/${res.data.summary.totalGames} games PASS (${res.data.summary.passRate})`, true);
-                  if (res.data.failedGamesCount > 0) {
-                    showToast(`⚠️ ${res.data.failedGamesCount} games ada emoji mismatch - ${res.data.summary.totalIssuesFound} issues found`, false);
-                    console.log('Failed games:', res.data.failedGames);
+                  const res = await base44.functions.invoke('auditAllGames', {});
+                  console.log('Audit Results:', res.data);
+                  showToast(`📊 Audit selesai: ${res.data.summary.passed}/${res.data.summary.totalGames} games OKEY (${res.data.summary.passRate})`, true);
+                  if (res.data.failedGames.length > 0) {
+                    showToast(`⚠️ ${res.data.failedGames.length} games ada issues - check console details`, false);
                   }
                 } catch (err) {
                   showToast('❌ ' + err.message, false);
@@ -565,12 +535,12 @@ export default function AdminGameManager() {
                   setActionLoading(null);
                 }
               }}
-              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-violet-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
+              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-indigo-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all hidden"
 
-              title="Audit emoji vs answer matching">
+              title="Audit all games questions quality">
               
-              {actionLoading === 'emoji-audit' ? <Loader2 className="w-4 h-4 animate-spin" /> : '🎨'}
-              Audit Emoji
+              {actionLoading === 'audit-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : '📋'}
+              Audit All
             </button>
             <button
               onClick={async () => {
@@ -605,15 +575,15 @@ export default function AdminGameManager() {
               <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
             </button>
             
-            {selectedSubjects.size > 0 && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                onClick={handleBulkGenerateStart}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg transition-all">
+            {selectedSubjects.size > 0 &&
+            <motion.button
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              onClick={handleBulkGenerateStart}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg transition-all">
                 🚀 Bulk Generate {selectedSubjects.size}
               </motion.button>
-            )}
+            }
           </div>
         </motion.div>
 
@@ -634,50 +604,50 @@ export default function AdminGameManager() {
 
         {/* Generation Progress Bar */}
         <AnimatePresence>
-          {taskProgress.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-4 md:p-5 shadow-xl border-2 border-orange-300 mb-4 md:mb-6"
-            >
+          {taskProgress.length > 0 && regenerationTasks &&
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-4 md:p-5 shadow-xl border-2 border-orange-300 mb-4 md:mb-6">
+            
               <div className="flex items-center justify-between gap-4 mb-3">
                 <div className="flex-1">
                   <p className="font-black text-white text-sm md:text-base">{isPaused ? '⏸️ Paused' : '🔥 Generating Games...'}</p>
-                  <p className="text-white/80 text-xs font-semibold">{taskProgress.length} tasks completed</p>
+                  <p className="text-white/80 text-xs font-semibold">{taskProgress.length}/{regenerationTasks.length} tasks completed</p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <button
-                    onClick={() => setIsPaused(!isPaused)}
-                    className={`px-3 py-1.5 rounded-lg font-bold text-xs text-white transition-all ${
-                      isPaused ? 'bg-green-600 hover:bg-green-700' : 'bg-white/20 hover:bg-white/30'
-                    }`}
-                  >
+                  onClick={() => setIsPaused(!isPaused)}
+                  className={`px-3 py-1.5 rounded-lg font-bold text-xs text-white transition-all ${
+                  isPaused ? 'bg-green-600 hover:bg-green-700' : 'bg-white/20 hover:bg-white/30'}`
+                  }>
+                  
                     {isPaused ? '▶️ Resume' : '⏸️ Pause'}
                   </button>
                   <motion.div
-                    className="text-3xl"
-                    animate={isPaused ? {} : { rotate: 360 }}
-                    transition={isPaused ? {} : { duration: 2, repeat: Infinity, ease: 'linear' }}
-                  >
+                  className="text-3xl"
+                  animate={isPaused ? {} : { rotate: 360 }}
+                  transition={isPaused ? {} : { duration: 2, repeat: Infinity, ease: 'linear' }}>
+                  
                     🔋
                   </motion.div>
                 </div>
               </div>
               <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/50">
                 <motion.div
-                  className={`h-full rounded-full ${isPaused ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500'}`}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${taskProgress.length > 0 ? Math.round(taskProgress.length * 100 / 50) : 0}%` }}
-                  transition={{ duration: 0.5, ease: 'easeOut' }}
-                  style={{
-                    boxShadow: '0 0 12px rgba(255, 165, 0, 0.9)'
-                  }}
-                />
+                className={`h-full rounded-full ${isPaused ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500'}`}
+                initial={{ width: 0 }}
+                animate={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                style={{
+                  boxShadow: '0 0 12px rgba(255, 165, 0, 0.9)'
+                }} />
+              
               </div>
-              <p className="text-white/70 text-xs mt-2.5 text-center font-semibold">{taskProgress.length > 0 ? Math.round(taskProgress.length * 100 / 50) : 0}% — processing tasks</p>
+              <p className="text-white/70 text-xs mt-2.5 text-center font-semibold">{Math.round(taskProgress.length / regenerationTasks.length * 100)}% — {Math.ceil((regenerationTasks.length - taskProgress.length) * 30 / 60)}m remaining</p>
             </motion.div>
-          )}
+          }
         </AnimatePresence>
 
         {loading ?
@@ -729,8 +699,8 @@ export default function AdminGameManager() {
                     onGenerateSubject={handleGenerateSubject}
                     idx={idx} />
                 </div>
-              </div>
-            );
+              </div>);
+
 
 
           })}
@@ -778,8 +748,8 @@ export default function AdminGameManager() {
                     onGenerateSubject={handleGenerateSubject}
                     idx={idx} />
                 </div>
-              </div>
-            );
+              </div>);
+
 
 
           })}
@@ -942,13 +912,13 @@ export default function AdminGameManager() {
                 </div>
 
                 {(() => {
-                  const diff = generateModal.games - generateModal.currentCount;
-                  const action = diff > 0 ? `+ ${diff} games baru` : diff < 0 ? `- ${Math.abs(diff)} games dihapus` : 'Sama je';
-                  const color = diff > 0 ? 'text-blue-600 bg-blue-50' : diff < 0 ? 'text-orange-600 bg-orange-50' : 'text-gray-600 bg-gray-50';
-                  return <p className={`text-xs font-semibold text-center py-2 rounded-xl ${color}`}>
+                const diff = generateModal.games - generateModal.currentCount;
+                const action = diff > 0 ? `+ ${diff} games baru` : diff < 0 ? `- ${Math.abs(diff)} games dihapus` : 'Sama je';
+                const color = diff > 0 ? 'text-blue-600 bg-blue-50' : diff < 0 ? 'text-orange-600 bg-orange-50' : 'text-gray-600 bg-gray-50';
+                return <p className={`text-xs font-semibold text-center py-2 rounded-xl ${color}`}>
                     Target: {generateModal.games} games | Aksi: {action}
                   </p>;
-                })()}
+              })()}
               </div>
 
               <div className="px-6 pb-6 flex gap-3">
@@ -973,7 +943,7 @@ export default function AdminGameManager() {
                       category: generateModal.subject
                     });
                     showToast(`✅ Synced to ${generateModal.games} games`);
-                    
+
                     // If need to expand questions
                     const dbGames = await base44.entities.Game.filter({ ageGroup: generateModal.ageGroup, category: generateModal.subject, isPublished: true });
                     const needsExpand = dbGames.filter((g) => (g.gameData?.questions?.length || 0) < generateModal.questions);
@@ -986,10 +956,10 @@ export default function AdminGameManager() {
                           category: generateModal.subject,
                           gameId: needsExpand[i].id
                         });
-                        if (i < needsExpand.length - 1) await new Promise(r => setTimeout(r, 3000));
+                        if (i < needsExpand.length - 1) await new Promise((r) => setTimeout(r, 3000));
                       }
                     }
-                    
+
                     showToast(`✅ Done! ${generateModal.games} games × ${generateModal.questions} soalan`);
                     await fetchStats();
                   } catch (err) {
@@ -1100,7 +1070,7 @@ export default function AdminGameManager() {
                 <p className="text-xs text-gray-400 mb-3 text-center">💡 Backend jalan di server—boleh close browser, tasks akan terus jalan background (~30-60 minit)</p>
                 <div className="flex gap-3">
                   <button
-                  onClick={() => setRegenerationTasks(null)}
+                  onClick={() => {setRegenerationTasks(null);setTaskProgress([]);}}
                   className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm">
                   
                     Close
@@ -1138,18 +1108,18 @@ export default function AdminGameManager() {
 
                         // Mark as completed
                         updatedProgress = updatedProgress.map((p) =>
-                          p.taskId === task.taskId ?
-                          { ...p, status: 'completed', message: `✅ ${res.data.createdGames} games created` } :
-                          p
+                        p.taskId === task.taskId ?
+                        { ...p, status: 'completed', message: `✅ ${res.data.createdGames} games created` } :
+                        p
                         );
                         setTaskProgress(updatedProgress);
                         showToast(`✅ ${task.taskName} done!`);
                       } catch (err) {
                         // Mark as failed
                         updatedProgress = updatedProgress.map((p) =>
-                          p.taskId === task.taskId ?
-                          { ...p, status: 'failed', message: err.message } :
-                          p
+                        p.taskId === task.taskId ?
+                        { ...p, status: 'failed', message: err.message } :
+                        p
                         );
                         setTaskProgress(updatedProgress);
                         showToast(`❌ ${task.taskName} failed`, false);
@@ -1170,14 +1140,14 @@ export default function AdminGameManager() {
                   disabled={actionLoading === 'execute-all'}
                   className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg disabled:opacity-50">
 
-                    {actionLoading === 'execute-all' ? (
-                      <>
+                    {actionLoading === 'execute-all' ?
+                  <>
                         <Loader2 className="w-4 h-4 animate-spin inline mr-2" />
                         Executing...
-                      </>
-                    ) : (
-                      taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute All ${regenerationTasks.length} Tasks`
-                    )}
+                      </> :
+
+                  taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute All ${regenerationTasks.length} Tasks`
+                  }
                     </button>
                     </div>
                     </div>
