@@ -22,6 +22,13 @@ const gamesByLevel = {
   ],
 };
 
+const tips = [
+  { emoji: '🏆', title: 'Dapatkan Bintang', desc: 'Setiap permainan memberi bintang berdasarkan prestasi!' },
+  { emoji: '⚡', title: 'Cepat & Tepat', desc: 'Semakin cepat & tepat, semakin banyak poin!' },
+  { emoji: '🎯', title: 'Ulang Permainan', desc: 'Boleh ulang banyak kali untuk tingkatkan skor!' },
+  { emoji: '📊', title: 'Pantau Kemajuan', desc: 'Dashboard ibu bapa boleh lihat semua pencapaian!' },
+];
+
 export default function GamesHub() {
   const GameCard = ({ game, idx }) => (
     <motion.div
