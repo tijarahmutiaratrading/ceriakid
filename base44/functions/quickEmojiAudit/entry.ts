@@ -1,46 +1,46 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 function checkEmojiRelevance(emoji, problem, answer) {
-  // Simple pattern-based matching to flag obvious mismatches
+  // Pattern-based matching to flag obvious mismatches
   const problem_lower = (problem || '').toLowerCase();
   const answer_lower = (answer || '').toLowerCase();
   const combined = `${problem_lower} ${answer_lower}`.toLowerCase();
 
-  // Obvious non-matches
-  const leafEmojis = ['🍃', '🌿', '🌱', '🌲', '🌳', '🌴'];
-  const leafKeywords = ['burung', 'haiwan', 'api', 'kebakaran', 'air', 'laut', 'ikan', 'ekor'];
-  
-  if (leafEmojis.includes(emoji) && leafKeywords.some(kw => combined.includes(kw))) {
-    return false; // Leaf emoji tidak cocok dengan soalan tentang haiwan/api/air
+  // Mandatory emoji-answer mappings (if answer contains these, MUST use specific emojis)
+  const mandatoryMappings = {
+    'pensil': ['✏️', '🖍️', '📝'],
+    'penghapus': ['🧹', '🧻'],
+    'buku': ['📚', '📖', '📕', '📗'],
+    'guli': ['⭕', '🔵', '🟠'],
+    'dengar': ['👂', '🎧', '🔊'],
+    'burung': ['🐦', '🦅', '🦜'],
+    'ikan': ['🐠', '🐟', '🦈'],
+    'rumah': ['🏠', '🏡', '🏘️'],
+    'kereta': ['🚗', '🚕', '🚙'],
+    'buku': ['📚', '📖'],
+    'sepeda': ['🚴', '🛴'],
+    'kasut': ['👞', '👟', '👠'],
+    'topi': ['👒', '🎩'],
+  };
+
+  // If answer is a mandatory keyword, check if emoji is allowed
+  for (const [keyword, allowedEmojis] of Object.entries(mandatoryMappings)) {
+    if (answer_lower.includes(keyword)) {
+      return allowedEmojis.includes(emoji);
+    }
   }
 
   // Generic mismatches
   if (emoji === '❓' || emoji === '❌' || emoji === '✅') {
-    return false; // Generic symbols
+    return false;
   }
 
-  // If answer contains specific keywords, check emoji
-  const emojiKeywords = {
-    '🐦': ['burung', 'terbang'],
-    '🐠': ['ikan', 'air', 'laut'],
-    '🔢': ['nombor', 'hitung', 'berapa', 'bilangan'],
-    '🌤️': ['langit', 'cuaca', 'hujan', 'mendung'],
-    '🐘': ['gajah', 'besar', 'haiwan besar'],
-    '🍎': ['epal', 'buah', 'merah'],
-    '📚': ['buku', 'bacaan', 'cerita'],
-    '🎨': ['lukis', 'seni', 'warna'],
-    '🚗': ['kereta', 'kenderaan', 'jalan'],
-    '🏠': ['rumah', 'bangunan', 'tempat tinggal'],
-  };
-
-  // Check if emoji matches expected keywords
-  for (const [emj, keywords] of Object.entries(emojiKeywords)) {
-    if (emoji === emj) {
-      return keywords.some(kw => combined.includes(kw));
-    }
+  // Check for obvious animal emoji mismatch
+  const animalEmojis = ['🐦', '🦅', '🦜', '🦆', '🐠', '🐟', '🐘', '🐵', '🦁', '🐯', '🦊', '🐻', '🐼'];
+  if (animalEmojis.includes(emoji) && !combined.includes('haiwan') && !combined.includes('burung') && !combined.includes('ikan')) {
+    return false;
   }
 
-  // Default: assume OK if no specific mismatch found
   return true;
 }
 
