@@ -9,8 +9,8 @@ export default function SubjectCard({
   isExpanded,
   onExpandToggle,
   actionLoading,
-  onSync,
   onBulkEdit,
+  onEditSubjectConfig,
   showToast,
   dbGamesCache,
   onVerify,
@@ -54,6 +54,16 @@ export default function SubjectCard({
           
           <div className="hidden md:flex items-center gap-1">
             <button
+              onClick={() => onEditSubjectConfig(subject.file, subject.label, subject.totalGames, avgQ, subject.ageGroup, subject.subject)}
+              disabled={!!actionLoading}
+              title="Edit games & questions count"
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-lg border border-amber-200 text-xs font-bold disabled:opacity-50 transition-all"
+            >
+              {actionLoading === `config-${subject.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
+              Config
+            </button>
+
+            <button
               onClick={() => {
                 const games = dbGamesCache[`${subject.ageGroup}-${subject.subject}`] || [];
                 if (games.length === 0) {
@@ -63,7 +73,7 @@ export default function SubjectCard({
                 onBulkEdit(games, subject.label, subject.ageGroup, subject.subject);
               }}
               disabled={!!actionLoading}
-              title="Sync & edit games"
+              title="Bulk edit all games"
               className="flex items-center gap-1 px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 text-xs font-bold disabled:opacity-50 transition-all"
             >
               {actionLoading === subject.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}

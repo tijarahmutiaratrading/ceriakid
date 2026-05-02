@@ -123,6 +123,11 @@ export default function AdminGameManager() {
     setSyncAndEdit({ games, label, ageGroup, subject });
   };
 
+  const openSubjectConfigModal = (file, label, currentGames, currentAvgQ, ageGroup, subject) => {
+    setActionLoading(`config-${file}`);
+    setModal({ file, label, ageGroup, subject, gamesValue: String(currentGames), questionsValue: String(currentAvgQ || '') });
+  };
+
   const handleVerifySubject = async (file, label, ageGroup, subject, cache) => {
     const verifyKey = `verify-${file}`;
     setActionLoading(verifyKey);
@@ -476,6 +481,7 @@ export default function AdminGameManager() {
                   onExpandToggle={setExpandedFile}
                   actionLoading={actionLoading}
                   onBulkEdit={openSyncAndEditModal}
+                  onEditSubjectConfig={openSubjectConfigModal}
                   showToast={showToast}
                   dbGamesCache={dbGamesCache}
                   onVerify={handleVerifySubject}
@@ -506,6 +512,7 @@ export default function AdminGameManager() {
                   onExpandToggle={setExpandedFile}
                   actionLoading={actionLoading}
                   onBulkEdit={openSyncAndEditModal}
+                  onEditSubjectConfig={openSubjectConfigModal}
                   showToast={showToast}
                   dbGamesCache={dbGamesCache}
                   onVerify={handleVerifySubject}
