@@ -46,6 +46,7 @@ export default function AdminGameManager() {
   const [editGame, setEditGame] = useState(null); // single game edit
   const [bulkEdit, setBulkEdit] = useState(null); // { games, label, ageGroup, subject }
   const [dbGamesCache, setDbGamesCache] = useState({}); // cache DB games by subject key
+  const [collapsedSections, setCollapsedSections] = useState({ prasekolah: false, sekolah_rendah: false });
 
   const showToast = (msg, ok = true) => {
     setToast({ msg, ok });
@@ -401,10 +402,16 @@ export default function AdminGameManager() {
           <>
             {/* Prasekolah */}
             <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3 mt-4 md:mt-0">
+              <button
+                onClick={() => setCollapsedSections(prev => ({ ...prev, prasekolah: !prev.prasekolah }))}
+                className="p-1.5 hover:bg-white/40 rounded-lg transition-all"
+              >
+                {collapsedSections.prasekolah ? <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-gray-500" /> : <ChevronDown className="w-4 h-4 md:w-5 md:h-5 text-gray-500" />}
+              </button>
               <div className="text-base md:text-lg font-black text-gray-700">🧒 Prasekolah</div>
               <div className="flex-1 h-px bg-gradient-to-r from-amber-300/60 to-transparent" />
             </div>
-            {subjects.filter(s => s.ageGroup === 'prasekolah').map((s, idx) => {
+            {!collapsedSections.prasekolah && subjects.filter(s => s.ageGroup === 'prasekolah').map((s, idx) => {
                // strip prefix from label for cleaner display
                const shortLabel = s.label.replace('Prasekolah - ', '');
                const isExpanded = expandedFile === s.file;
@@ -585,10 +592,16 @@ export default function AdminGameManager() {
 
             {/* Sekolah Rendah */}
             <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3 mt-6">
+              <button
+                onClick={() => setCollapsedSections(prev => ({ ...prev, sekolah_rendah: !prev.sekolah_rendah }))}
+                className="p-1.5 hover:bg-white/40 rounded-lg transition-all"
+              >
+                {collapsedSections.sekolah_rendah ? <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-gray-500" /> : <ChevronDown className="w-4 h-4 md:w-5 md:h-5 text-gray-500" />}
+              </button>
               <div className="text-base md:text-lg font-black text-gray-700">🎒 Sekolah Rendah</div>
               <div className="flex-1 h-px bg-gradient-to-r from-amber-300/60 to-transparent" />
             </div>
-            {subjects.filter(s => s.ageGroup === 'sekolah_rendah').map((s, idx) => {
+            {!collapsedSections.sekolah_rendah && subjects.filter(s => s.ageGroup === 'sekolah_rendah').map((s, idx) => {
               const isExpanded = expandedFile === s.file;
               const avgQ = s.games.length > 0 ? Math.round(s.games.reduce((a, g) => a + g.questionCount, 0) / s.games.length) : 0;
               return (
