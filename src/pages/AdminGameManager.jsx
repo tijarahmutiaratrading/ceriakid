@@ -466,12 +466,14 @@ export default function AdminGameManager() {
                        </button>
                        <button
                          onClick={async () => {
-                           const syncKey = `sync-${s.file}`;
-                           setActionLoading(syncKey);
-                           showToast(`⏳ Sync ${s.label}...`, true);
+                           const verifyKey = `verify-${s.file}`;
+                           setActionLoading(verifyKey);
+                           showToast(`⏳ Kira & Semak ${s.label}...`, true);
                            try {
                              const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
-                             if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); setActionLoading(null); return; }
+                             if (dbGames.length === 0) { showToast('Tiada data untuk di-proses', false); setActionLoading(null); return; }
+
+                             // Step 1: Sync question counts
                              let fixed = 0;
                              for (const g of dbGames) {
                                const actualCount = g.gameData?.questions?.length || 0;
@@ -480,44 +482,22 @@ export default function AdminGameManager() {
                                  fixed++;
                                }
                              }
-                             showToast(`✅ Sync selesai! ${fixed} games dikemas kini.`);
-                             await fetchStats();
-                           } catch (err) {
-                             showToast('❌ ' + err.message, false);
-                           } finally {
-                             setActionLoading(null);
-                           }
-                         }}
-                         disabled={!!actionLoading}
-                         className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all text-xs font-bold"
-                       >
-                         {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3 h-3 md:w-3.5 md:h-3.5" />}
-                         <span className="hidden sm:inline">Count</span>
-                       </button>
-                       <button
-                         onClick={async () => {
-                           const verifyKey = `verify-${s.file}`;
-                           setActionLoading(verifyKey);
-                           showToast(`⏳ Verify QA ${s.label}...`, true);
-                           try {
-                             const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
-                             if (dbGames.length === 0) { showToast('Tiada data untuk di-verify', false); setActionLoading(null); return; }
+
+                             // Step 2: Verify quality
                              let verified = 0;
                              let flagged = 0;
                              const total = dbGames.length;
-
                              for (let i = 0; i < dbGames.length; i++) {
                                const game = dbGames[i];
                                if (!game.gameData?.questions?.length) continue;
                                try {
-                                 showToast(`⏳ Verify ${s.label}... ${i + 1}/${total} (${game.title?.slice(0, 20)}...)`, true);
+                                 showToast(`⏳ Verifying ${s.label}... ${i + 1}/${total}`, true);
                                  const result = await base44.functions.invoke('validateGameQuestionsQuality', {
                                    gameId: game.id,
                                    ageGroup: game.ageGroup,
                                    category: game.category,
                                    questions: game.gameData.questions,
                                  });
-
                                  if (result.data.validation.summary.invalid_count > 0) {
                                    flagged++;
                                    console.warn(`Game "${game.title}" flagged:`, result.data.validation.summary);
@@ -528,7 +508,8 @@ export default function AdminGameManager() {
                                  console.error(`Skip game ${game.id}:`, e.message);
                                }
                              }
-                             showToast(`✅ ${s.label}: ${verified} clean, ${flagged} flagged`);
+                             showToast(`✅ Kira: ${fixed} updated · Semak: ${verified} clean, ${flagged} flagged`);
+                             await fetchStats();
                            } catch (err) {
                              showToast('❌ ' + err.message, false);
                            } finally {
@@ -536,10 +517,10 @@ export default function AdminGameManager() {
                            }
                          }}
                          disabled={!!actionLoading}
-                         className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-cyan-50 hover:bg-cyan-100 text-cyan-600 rounded-lg border border-cyan-200 transition-all text-xs font-bold"
+                         className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg border border-blue-200 transition-all text-xs font-bold"
                        >
                          {actionLoading === `verify-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
-                         <span className="hidden sm:inline">Verify</span>
+                         <span className="hidden sm:inline">Kira & Semak</span>
                        </button>
                        <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-0.5 md:p-1">
                          {isExpanded ? <ChevronDown className="w-3 h-3 md:w-4 md:h-4 text-gray-400" /> : <ChevronRight className="w-3 h-3 md:w-4 md:h-4 text-gray-400" />}
@@ -682,34 +663,40 @@ export default function AdminGameManager() {
                         <Layers className="w-3 h-3 md:w-3.5 md:h-3.5" />
                         <span className="hidden sm:inline">Bulk</span>
                       </button>
-                      <button onClick={async () => { const syncKey = `sync-${s.file}`; setActionLoading(syncKey); showToast(`⏳ Sync ${s.label}...`, true); try { const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); setActionLoading(null); return; } let fixed = 0; for (const g of dbGames) { const actualCount = g.gameData?.questions?.length || 0; if (g.totalQuestions !== actualCount) { await base44.entities.Game.update(g.id, { totalQuestions: actualCount }); fixed++; } } showToast(`✅ Sync selesai! ${fixed} games dikemas kini.`); await fetchStats(); } catch (err) { showToast('❌ ' + err.message, false); } finally { setActionLoading(null); } }} disabled={!!actionLoading} className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all text-xs font-bold">
-                        {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3 h-3 md:w-3.5 md:h-3.5" />}
-                        <span className="hidden sm:inline">Count</span>
-                      </button>
                       <button
                         onClick={async () => {
                           const verifyKey = `verify-${s.file}`;
                           setActionLoading(verifyKey);
-                          showToast(`⏳ Verify QA ${s.label}...`, true);
+                          showToast(`⏳ Kira & Semak ${s.label}...`, true);
                           try {
                             const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
-                            if (dbGames.length === 0) { showToast('Tiada data untuk di-verify', false); setActionLoading(null); return; }
+                            if (dbGames.length === 0) { showToast('Tiada data untuk di-proses', false); setActionLoading(null); return; }
+
+                            // Step 1: Sync question counts
+                            let fixed = 0;
+                            for (const g of dbGames) {
+                              const actualCount = g.gameData?.questions?.length || 0;
+                              if (g.totalQuestions !== actualCount) {
+                                await base44.entities.Game.update(g.id, { totalQuestions: actualCount });
+                                fixed++;
+                              }
+                            }
+
+                            // Step 2: Verify quality
                             let verified = 0;
                             let flagged = 0;
                             const total = dbGames.length;
-
                             for (let i = 0; i < dbGames.length; i++) {
                               const game = dbGames[i];
                               if (!game.gameData?.questions?.length) continue;
                               try {
-                                showToast(`⏳ Verify ${s.label}... ${i + 1}/${total} (${game.title?.slice(0, 20)}...)`, true);
+                                showToast(`⏳ Verifying ${s.label}... ${i + 1}/${total}`, true);
                                 const result = await base44.functions.invoke('validateGameQuestionsQuality', {
                                   gameId: game.id,
                                   ageGroup: game.ageGroup,
                                   category: game.category,
                                   questions: game.gameData.questions,
                                 });
-
                                 if (result.data.validation.summary.invalid_count > 0) {
                                   flagged++;
                                   console.warn(`Game "${game.title}" flagged:`, result.data.validation.summary);
@@ -720,7 +707,8 @@ export default function AdminGameManager() {
                                 console.error(`Skip game ${game.id}:`, e.message);
                               }
                             }
-                            showToast(`✅ ${s.label}: ${verified} clean, ${flagged} flagged`);
+                            showToast(`✅ Kira: ${fixed} updated · Semak: ${verified} clean, ${flagged} flagged`);
+                            await fetchStats();
                           } catch (err) {
                             showToast('❌ ' + err.message, false);
                           } finally {
@@ -728,10 +716,10 @@ export default function AdminGameManager() {
                           }
                         }}
                         disabled={!!actionLoading}
-                        className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-cyan-50 hover:bg-cyan-100 text-cyan-600 rounded-lg border border-cyan-200 transition-all text-xs font-bold"
+                        className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg border border-blue-200 transition-all text-xs font-bold"
                       >
                         {actionLoading === `verify-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
-                        <span className="hidden sm:inline">Verify</span>
+                        <span className="hidden sm:inline">Kira & Semak</span>
                       </button>
                       <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-0.5 md:p-1">
                         {isExpanded ? <ChevronDown className="w-3 h-3 md:w-4 md:h-4 text-gray-400" /> : <ChevronRight className="w-3 h-3 md:w-4 md:h-4 text-gray-400" />}
