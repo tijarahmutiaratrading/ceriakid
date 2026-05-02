@@ -136,6 +136,10 @@ export default function AdminGameManager() {
             category: subject,
             gameId: g.id,
           });
+          // Delay 3s between games to avoid rate limit
+          if (i < dbGames.length - 1) {
+            await new Promise(r => setTimeout(r, 3000));
+          }
         }
       }
 
