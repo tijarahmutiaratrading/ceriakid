@@ -75,27 +75,32 @@ PILIHAN JAWAPAN:
 - Jawapan mesti wujud EXACT dalam pilihan
 
 ────────────────────────
-PERATURAN EMOJI (SANGAT KETAT - ZERO ERROR):
-- Emoji HANYA dibenarkan dalam field "emoji" sahaja—JANGAN dalam soalan atau pilihan
-- TIADA emoji di awal soalan, TIADA emoji di akhir soalan, TIADA emoji di dalam pilihan
-- Emoji wujud HANYA dalam field terpisah "emoji"
+PERATURAN EMOJI (SANGAT KETAT - ZERO ERROR TOLERANCE):
+🚨 CRITICAL: Emoji HANYA boleh dalam field "emoji" SAHAJA! 🚨
+- TIADA emoji kat mana-mana bahagian soalan atau pilihan
+- TIADA emoji di awal soalan "🇲🇾 Apakah..."
+- TIADA emoji di tengah soalan "Apakah 🇲🇾 warna..."
+- TIADA emoji di akhir soalan "Apakah warna bendera? 🇲🇾"
+- TIADA emoji dalam pilihan jawapan
+- Emoji HANYA dalam field terpisah "emoji": "🇲🇾"
 - Setiap soalan hanya boleh ada SATU emoji sahaja
 - Emoji mesti MATCH EXACT dengan jawapan (bukan simbolik)
 - Setiap emoji mesti BERBEZA (tiada ulangan langsung)
-- Jika tiada emoji yang tepat → JANGAN jana soalan itu
+- Jika tidak pasti emoji mana yang tepat → JANGAN jana soalan itu (reject)
 
 Contoh BETUL:
 {
-  "soalan": "Apakah haiwan yang memberi telur?",
-  "pilihan": ["Ayam", "Ular", "Kucing", "Anjing"],
-  "jawapan": "Ayam",
-  "emoji": "🐔"  ← EMOJI LETAK SINI SAHAJA, BUKAN DALAM SOALAN
+  "soalan": "Apakah warna bendera Malaysia?",
+  "pilihan": ["Merah dan Putih", "Biru dan Putih", "Hijau dan Kuning", "Merah dan Kuning"],
+  "jawapan": "Merah dan Putih",
+  "emoji": "🇲🇾"
 }
 
-Contoh SALAH:
-❌ "🐔 Apakah haiwan yang memberi telur?" (emoji di awal)
-❌ "Apakah haiwan yang memberi telur? 🐔" (emoji di akhir soalan)
-❌ "Apakah 🐔 yang memberi telur?" (emoji dalam teks soalan)
+Contoh SALAH (akan REJECT):
+❌ {"soalan": "🇲🇾 Apakah warna bendera Malaysia?", ...}
+❌ {"soalan": "Apakah warna bendera 🇲🇾 Malaysia?", ...}
+❌ {"soalan": "Apakah warna bendera Malaysia? 🇲🇾", ...}
+❌ {"pilihan": ["Merah 🇲🇾", "Biru", "Hijau", "Kuning"], ...}
 
 ────────────────────────
 TAHAP KESUKARAN:
@@ -121,8 +126,10 @@ VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
 - Tiada subtopik berulang
 - Jawapan tepat dan tidak bercanggah
 - Jawapan wujud dalam pilihan
-- TIADA emoji dalam "soalan" dan "pilihan"
-- Semua emoji unik (tiada pengulangan)`;
+- TIADA emoji SAMA SEKALI dalam "soalan" field
+- TIADA emoji SAMA SEKALI dalam "pilihan" array
+- Semua emoji unik (tiada pengulangan)
+- REJECT soalan jika ada emoji di soalan/pilihan`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
