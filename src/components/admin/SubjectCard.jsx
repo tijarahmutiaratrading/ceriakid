@@ -88,7 +88,7 @@ export default function SubjectCard({
             <span className="hidden sm:inline">Kira & Semak</span>
           </button>
 
-          <button onClick={() => onExpandToggle(subject.file)} aria-label={isExpanded ? "Collapse" : "Expand"} className="p-0.5 md:p-1">
+          <button onClick={() => onExpandToggle(isExpanded ? null : subject.file)} aria-label={isExpanded ? "Collapse" : "Expand"} className="p-0.5 md:p-1">
             {isExpanded ? <ChevronDown className="w-3 h-3 md:w-4 md:h-4 text-gray-400" /> : <ChevronRight className="w-3 h-3 md:w-4 md:h-4 text-gray-400" />}
           </button>
         </div>
