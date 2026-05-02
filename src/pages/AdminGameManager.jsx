@@ -332,21 +332,22 @@ export default function AdminGameManager() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-4xl mx-auto px-4 pt-24">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-6">
+      <div className="max-w-4xl mx-auto px-3 md:px-4 pt-20 md:pt-24">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 md:mb-6 gap-3">
           <div>
-            <h1 className="text-2xl font-black text-gray-900">🎮 Game Manager</h1>
-            <p className="text-gray-600 text-sm font-semibold">Database semua games & soalan</p>
+            <h1 className="text-xl md:text-2xl font-black text-gray-900">🎮 Game Manager</h1>
+            <p className="text-gray-600 text-xs md:text-sm font-semibold">Database semua games & soalan</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
             <button
               onClick={handleSyncToDB}
               disabled={!!actionLoading}
               title="Sync games baru ke Database (skip yang sedia ada)"
-              className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-game-purple to-game-blue text-white rounded-xl shadow text-xs font-bold transition-all disabled:opacity-50 hover:shadow-lg"
+              className="flex items-center gap-1 px-2 md:px-3 py-1.5 md:py-2 bg-gradient-to-r from-game-purple to-game-blue text-white rounded-lg md:rounded-xl shadow text-xs font-bold transition-all disabled:opacity-50 hover:shadow-lg"
             >
-              {actionLoading === 'import' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
-              Sync DB
+              {actionLoading === 'import' ? <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" /> : <Database className="w-3 h-3 md:w-4 md:h-4" />}
+              <span className="hidden sm:inline">Sync DB</span>
+              <span className="sm:hidden">Sync</span>
             </button>
             <button
               onClick={async () => {
@@ -365,27 +366,28 @@ export default function AdminGameManager() {
               }}
               disabled={!!actionLoading}
               title="Buang soalan kosong"
-              className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-xl shadow text-xs font-bold transition-all disabled:opacity-50 hover:shadow-lg"
+              className="flex items-center gap-1 px-2 md:px-3 py-1.5 md:py-2 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-lg md:rounded-xl shadow text-xs font-bold transition-all disabled:opacity-50 hover:shadow-lg"
             >
-              {actionLoading === 'clean' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-              Clean
+              {actionLoading === 'clean' ? <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" /> : <Trash2 className="w-3 h-3 md:w-4 md:h-4" />}
+              <span className="hidden sm:inline">Clean</span>
+              <span className="sm:hidden">C</span>
             </button>
-            <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white/40 backdrop-blur-xl rounded-xl shadow border-2 border-white/30 hover:bg-white/60 transition-all">
-              <RefreshCw className={`w-5 h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
+            <button onClick={fetchStats} disabled={loading} className="p-1.5 md:p-2.5 bg-white/40 backdrop-blur-xl rounded-lg md:rounded-xl shadow border-2 border-white/30 hover:bg-white/60 transition-all">
+              <RefreshCw className={`w-4 h-4 md:w-5 md:h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
             </button>
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-3 gap-2 md:gap-3 mb-4 md:mb-6">
           {[
             { value: totalGames, label: 'Total Games', color: 'text-game-purple' },
             { value: totalFull, label: 'Soalan Penuh', color: 'text-green-600' },
             { value: totalPlayers, label: 'Total Players', color: 'text-game-pink' },
           ].map(({ value, label, color }, i) => (
             <motion.div key={label} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.08 }}
-              whileHover={{ y: -4, scale: 1.02 }}
-              className="bg-white/40 backdrop-blur-xl rounded-2xl p-3 shadow-xl border-2 border-white/30 text-center">
-              <p className={`text-2xl font-black ${color}`}>{value}</p>
+              whileHover={{ y: -2, scale: 1.02 }}
+              className="bg-white/40 backdrop-blur-xl rounded-2xl p-2 md:p-3 shadow-xl border-2 border-white/30 text-center">
+              <p className={`text-lg md:text-2xl font-black ${color}`}>{value}</p>
               <p className="text-xs text-gray-600 font-semibold">{label}</p>
             </motion.div>
           ))}
@@ -398,97 +400,97 @@ export default function AdminGameManager() {
         ) : (
           <>
             {/* Prasekolah */}
-            <div className="flex items-center gap-3 mb-3">
-              <div className="text-lg font-black text-gray-700">🧒 Prasekolah</div>
+            <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3 mt-4 md:mt-0">
+              <div className="text-base md:text-lg font-black text-gray-700">🧒 Prasekolah</div>
               <div className="flex-1 h-px bg-gradient-to-r from-amber-300/60 to-transparent" />
             </div>
             {subjects.filter(s => s.ageGroup === 'prasekolah').map((s, idx) => {
-              // strip prefix from label for cleaner display
-              const shortLabel = s.label.replace('Prasekolah - ', '');
-              const isExpanded = expandedFile === s.file;
-              const avgQ = s.games.length > 0 ? Math.round(s.games.reduce((a, g) => a + g.questionCount, 0) / s.games.length) : 0;
+               // strip prefix from label for cleaner display
+               const shortLabel = s.label.replace('Prasekolah - ', '');
+               const isExpanded = expandedFile === s.file;
+               const avgQ = s.games.length > 0 ? Math.round(s.games.reduce((a, g) => a + g.questionCount, 0) / s.games.length) : 0;
 
-              return (
-                <motion.div
-                  key={s.file}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.04 }}
-                  className={`bg-white/40 backdrop-blur-xl rounded-2xl shadow-xl border-2 border-white/30 border-l-4 ${s.color.border} mb-3 overflow-hidden`}
-                >
-                  <div className="flex items-center justify-between px-4 py-3">
-                    <button
-                      onClick={() => setExpandedFile(isExpanded ? null : s.file)}
-                      className="flex items-center gap-3 flex-1 text-left"
-                    >
-                      <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${s.color.dot}`} />
-                      <div>
-                        <p className="font-black text-gray-900 text-sm">{shortLabel}</p>
-                        <p className="text-xs text-gray-500">{s.totalGames} games · avg {avgQ} soalan</p>
-                      </div>
-                    </button>
+               return (
+                 <motion.div
+                   key={s.file}
+                   initial={{ opacity: 0, y: 8 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   transition={{ delay: idx * 0.04 }}
+                   className={`bg-white/40 backdrop-blur-xl rounded-2xl shadow-xl border-2 border-white/30 border-l-4 ${s.color.border} mb-2 md:mb-3 overflow-hidden`}
+                 >
+                   <div className="flex items-center justify-between px-3 md:px-4 py-2.5 md:py-3 gap-2">
+                     <button
+                       onClick={() => setExpandedFile(isExpanded ? null : s.file)}
+                       className="flex items-center gap-2 md:gap-3 flex-1 text-left min-w-0"
+                     >
+                       <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${s.color.dot}`} />
+                       <div className="min-w-0">
+                         <p className="font-black text-gray-900 text-xs md:text-sm truncate">{shortLabel}</p>
+                         <p className="text-xs text-gray-500 truncate">{s.totalGames} games · {avgQ}q</p>
+                       </div>
+                     </button>
 
-                    <div className="flex items-center gap-2">
-                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${s.color.badge}`}>{s.totalGames}</span>
-                      {s.games.reduce((a, g) => a + g.players, 0) > 0 && (
-                        <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-pink-100 text-pink-600 flex items-center gap-1">
-                          <Users className="w-3 h-3" />{s.games.reduce((a, g) => a + g.players, 0)}
-                        </span>
-                      )}
-                      <button
-                        onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)}
-                        disabled={!!actionLoading}
-                        className="p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all"
-                        title="Sync games & soalan"
-                      >
-                        {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
-                      </button>
-                      <button
-                        onClick={() => {
-                          const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
-                          if (dbGames.length === 0) { showToast('Import ke DB dulu sebelum bulk edit', false); return; }
-                          setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject });
-                        }}
-                        disabled={!!actionLoading}
-                        className="p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all"
-                        title="Bulk Edit games"
-                      >
-                        <Layers className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={async () => {
-                          const syncKey = `sync-${s.file}`;
-                          setActionLoading(syncKey);
-                          showToast(`⏳ Sync ${s.label}...`, true);
-                          try {
-                            const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
-                            if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); return; }
-                            let fixed = 0;
-                            for (const g of dbGames) {
-                              const actualCount = g.gameData?.questions?.length || 0;
-                              if (g.totalQuestions !== actualCount) {
-                                await base44.entities.Game.update(g.id, { totalQuestions: actualCount });
-                                fixed++;
-                              }
-                            }
-                            showToast(`✅ Sync selesai! ${fixed} games dikemas kini.`);
-                            await fetchStats();
-                          } catch (err) {
-                            showToast('❌ ' + err.message, false);
-                          } finally {
-                            setActionLoading(null);
-                          }
-                        }}
-                        disabled={!!actionLoading}
-                        className="p-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all"
-                        title="Sync totalQuestions ke frontend"
-                      >
-                        {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />}
-                      </button>
-                      <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-1">
-                        {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
-                      </button>
-                    </div>
+                     <div className="flex items-center gap-0.5 md:gap-2 flex-shrink-0">
+                       <span className={`text-xs font-bold px-2 md:px-2.5 py-0.5 md:py-1 rounded-lg md:rounded-full text-xs md:text-xs ${s.color.badge}`}>{s.totalGames}</span>
+                       {s.games.reduce((a, g) => a + g.players, 0) > 0 && (
+                         <span className="hidden sm:inline text-xs font-bold px-2.5 py-1 rounded-full bg-pink-100 text-pink-600 flex items-center gap-1">
+                           <Users className="w-3 h-3" />{s.games.reduce((a, g) => a + g.players, 0)}
+                         </span>
+                       )}
+                       <button
+                         onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)}
+                         disabled={!!actionLoading}
+                         className="p-1 md:p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all hidden md:block"
+                         title="Sync games & soalan"
+                       >
+                         {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
+                       </button>
+                       <button
+                         onClick={() => {
+                           const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
+                           if (dbGames.length === 0) { showToast('Import ke DB dulu sebelum bulk edit', false); return; }
+                           setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject });
+                         }}
+                         disabled={!!actionLoading}
+                         className="p-1 md:p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all hidden md:block"
+                         title="Bulk Edit games"
+                       >
+                         <Layers className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                       </button>
+                       <button
+                         onClick={async () => {
+                           const syncKey = `sync-${s.file}`;
+                           setActionLoading(syncKey);
+                           showToast(`⏳ Sync ${s.label}...`, true);
+                           try {
+                             const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
+                             if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); return; }
+                             let fixed = 0;
+                             for (const g of dbGames) {
+                               const actualCount = g.gameData?.questions?.length || 0;
+                               if (g.totalQuestions !== actualCount) {
+                                 await base44.entities.Game.update(g.id, { totalQuestions: actualCount });
+                                 fixed++;
+                               }
+                             }
+                             showToast(`✅ Sync selesai! ${fixed} games dikemas kini.`);
+                             await fetchStats();
+                           } catch (err) {
+                             showToast('❌ ' + err.message, false);
+                           } finally {
+                             setActionLoading(null);
+                           }
+                         }}
+                         disabled={!!actionLoading}
+                         className="p-1 md:p-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all hidden md:block"
+                         title="Sync totalQuestions ke frontend"
+                       >
+                         {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3 h-3 md:w-3.5 md:h-3.5" />}
+                       </button>
+                       <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-0.5 md:p-1">
+                         {isExpanded ? <ChevronDown className="w-3 h-3 md:w-4 md:h-4 text-gray-400" /> : <ChevronRight className="w-3 h-3 md:w-4 md:h-4 text-gray-400" />}
+                       </button>
+                     </div>
                   </div>
 
                   <AnimatePresence>
@@ -499,7 +501,7 @@ export default function AdminGameManager() {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden border-t border-white/30"
                       >
-                        <div className="grid grid-cols-12 gap-1 px-4 py-2 bg-amber-50/50 text-xs font-bold text-gray-400 uppercase tracking-wide">
+                        <div className="hidden md:grid grid-cols-12 gap-1 px-4 py-2 bg-amber-50/50 text-xs font-bold text-gray-400 uppercase tracking-wide">
                           <span className="col-span-1">#</span>
                           <span className="col-span-4">Nama Game</span>
                           <span className="col-span-2">Type</span>
@@ -507,9 +509,9 @@ export default function AdminGameManager() {
                           <span className="col-span-2 text-center">Players</span>
                           <span className="col-span-1"></span>
                         </div>
-                        <div className="max-h-64 overflow-y-auto divide-y divide-amber-100/50">
+                        <div className="max-h-52 md:max-h-64 overflow-y-auto">
                           {s.games.map((g) => (
-                            <div key={g.index} className="grid grid-cols-12 gap-1 items-center px-4 py-2.5 hover:bg-white/30 transition-all">
+                            <div key={g.index} className="hidden md:grid grid-cols-12 gap-1 items-center px-4 py-2.5 border-b border-amber-100/50 hover:bg-white/30 transition-all">
                               <span className="col-span-1 text-xs font-bold text-gray-300">{g.index + 1}</span>
                               <span className="col-span-4 text-xs font-semibold text-gray-800 truncate">{g.title}</span>
                               <span className="col-span-2 text-xs text-gray-400 truncate">{g.type}</span>
@@ -540,6 +542,39 @@ export default function AdminGameManager() {
                               </div>
                             </div>
                           ))}
+                          <div className="md:hidden space-y-2 p-3">
+                            {s.games.map((g) => (
+                              <div key={g.index} className="bg-white/40 rounded-lg p-2.5 border border-amber-100/50">
+                                <div className="flex items-start justify-between gap-2 mb-1">
+                                  <div className="flex-1">
+                                    <p className="text-xs font-bold text-gray-800">{g.index + 1}. {g.title}</p>
+                                    <p className="text-xs text-gray-500 mt-0.5">{g.type}</p>
+                                  </div>
+                                  {g._raw && (
+                                    <button
+                                      onClick={() => setEditGame(g._raw)}
+                                      className="p-1 text-indigo-400 hover:bg-indigo-50 rounded-lg transition-all"
+                                      title="Edit game ini"
+                                    >
+                                      <Edit3 className="w-3 h-3" />
+                                    </button>
+                                  )}
+                                </div>
+                                <div className="flex gap-2">
+                                  <span className={`text-xs font-black px-1.5 py-0.5 rounded-full text-xs ${
+                                    g.questionCount >= 20 ? 'bg-green-100 text-green-700' :
+                                    g.questionCount >= 10 ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-red-100 text-red-600'
+                                  }`}>{g.questionCount}Q</span>
+                                  {g.players > 0 && (
+                                    <span className="text-xs font-bold text-pink-500 flex items-center gap-0.5">
+                                      <Users className="w-3 h-3" />{g.players}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </motion.div>
                     )}
@@ -549,8 +584,8 @@ export default function AdminGameManager() {
             })}
 
             {/* Sekolah Rendah */}
-            <div className="flex items-center gap-3 mb-3 mt-6">
-              <div className="text-lg font-black text-gray-700">🎒 Sekolah Rendah</div>
+            <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3 mt-6">
+              <div className="text-base md:text-lg font-black text-gray-700">🎒 Sekolah Rendah</div>
               <div className="flex-1 h-px bg-gradient-to-r from-amber-300/60 to-transparent" />
             </div>
             {subjects.filter(s => s.ageGroup === 'sekolah_rendah').map((s, idx) => {
@@ -625,18 +660,18 @@ export default function AdminGameManager() {
             })}
 
             {/* Game Hub */}
-            <div className="flex items-center gap-3 mb-3 mt-6">
-              <div className="text-lg font-black text-gray-700">🎪 Mini-Games</div>
+            <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3 mt-6">
+              <div className="text-base md:text-lg font-black text-gray-700">🎪 Mini-Games</div>
               <div className="flex-1 h-px bg-gradient-to-r from-amber-300/60 to-transparent" />
             </div>
-            <div className="bg-white/40 backdrop-blur-xl rounded-2xl shadow-xl border-2 border-white/30 border-l-4 border-l-orange-400 p-4 mt-3">
-              <div className="flex items-center justify-between mb-3">
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700">{GAME_HUB.length} games aktif</span>
+            <div className="bg-white/40 backdrop-blur-xl rounded-2xl shadow-xl border-2 border-white/30 border-l-4 border-l-orange-400 p-3 md:p-4 mt-3">
+              <div className="flex items-center justify-between mb-2 md:mb-3">
+                <span className="px-2 md:px-3 py-0.5 md:py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700">{GAME_HUB.length} games aktif</span>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 md:gap-2">
                 {GAME_HUB.map(g => (
-                  <div key={g.id} className="bg-orange-50/80 border border-orange-200 rounded-xl px-3 py-2 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-orange-400 flex-shrink-0" />
+                  <div key={g.id} className="bg-orange-50/80 border border-orange-200 rounded-lg md:rounded-xl px-2 md:px-3 py-1.5 md:py-2 flex items-center gap-1 md:gap-2">
+                    <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-orange-400 flex-shrink-0" />
                     <span className="text-xs font-semibold text-orange-800 truncate">{g.title}</span>
                   </div>
                 ))}
