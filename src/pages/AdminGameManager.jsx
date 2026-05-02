@@ -109,23 +109,36 @@ export default function AdminGameManager() {
     const questions = parseInt(modal.questionsValue);
     setModal(null);
     setActionLoading(file);
+
     try {
-      const tasks = [];
+      // Step 1: Sync game count first (fast)
       if (games && games > 0) {
-        tasks.push(base44.functions.invoke('syncSubjectGames', {
+        showToast('⏳ Mengemas kini bilangan games...', true);
+        await base44.functions.invoke('syncSubjectGames', {
           targetCount: games,
           ageGroup,
           category: subject,
-        }));
+        });
       }
+
+      // Step 2: Sync questions — process game by game to avoid timeout
       if (questions && questions > 0) {
-        tasks.push(base44.functions.invoke('syncSubjectGameQuestions', {
-          targetCount: questions,
-          ageGroup,
-          category: subject,
-        }));
+        // Get current games list
+        const dbGames = await base44.entities.Game.filter({ ageGroup, category: subject, isPublished: true });
+        const total = dbGames.length;
+
+        for (let i = 0; i < dbGames.length; i++) {
+          const g = dbGames[i];
+          showToast(`⏳ AI menjana soalan... game ${i + 1}/${total}`, true);
+          await base44.functions.invoke('syncSubjectGameQuestions', {
+            targetCount: questions,
+            ageGroup,
+            category: subject,
+            gameId: g.id,
+          });
+        }
       }
-      await Promise.all(tasks);
+
       showToast('✅ Berjaya dikemas kini!');
       await fetchStats();
     } catch (err) {

@@ -15,11 +15,11 @@ const AGE_DESC = {
 async function generateQuestionsForGame(base44, game, needed, existingQuestions) {
   const subject = CATEGORY_LANG[game.category] || game.category;
   const ageDesc = AGE_DESC[game.ageGroup] || game.ageGroup;
-  const existingSample = existingQuestions.slice(0, 3).map(q => q.problem || q.question || '').join('; ');
+  const existingSample = existingQuestions.slice(0, 3).map(q => q.problem || q.question || '').filter(Boolean).join('; ');
 
   const prompt = `Kamu adalah pembuat soalan pendidikan kanak-kanak Malaysia.
 
-Buat ${needed} soalan BARU dan UNIK untuk game bertajuk: "${game.title}"
+Buat tepat ${needed} soalan BARU dan UNIK untuk game bertajuk: "${game.title}"
 Subjek: ${subject}
 Peringkat: ${ageDesc}
 Jenis game: ${game.type || 'multiple_choice'}
@@ -27,18 +27,14 @@ Jenis game: ${game.type || 'multiple_choice'}
 ${existingSample ? `Contoh soalan sedia ada (JANGAN ulang): ${existingSample}` : ''}
 
 Keperluan:
-- Setiap soalan mesti berkaitan dengan topik game
-- 3-4 pilihan jawapan (options)
-- Satu jawapan betul (answer = index 0,1,2 atau 3)
-- Bahasa yang sesuai dengan umur kanak-kanak
-- Soalan mesti BERBEZA antara satu sama lain
-- Kalau bahasa_melayu: soalan dalam BM; kalau english: soalan dalam English; lain-lain ikut subjek
+- Setiap soalan mesti berkaitan dengan tajuk game
+- Tepat 4 pilihan jawapan (options)
+- Satu jawapan betul (answer = index 0, 1, 2 atau 3)
+- Bahasa sesuai untuk kanak-kanak
+- Soalan BERBEZA antara satu sama lain
+- Kalau bahasa_melayu atau sains/matematik: guna BM; kalau english: guna English
 
-Balas dalam JSON array sahaja, format:
-[
-  {"problem": "Soalan...", "options": ["A","B","C","D"], "answer": 1},
-  ...
-]`;
+Balas dalam JSON SAHAJA tanpa teks lain.`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
@@ -65,7 +61,6 @@ Balas dalam JSON array sahaja, format:
   return result.questions || [];
 }
 
-// Filter out dummy questions
 function isRealQuestion(q) {
   const problem = q.problem || q.question || '';
   return !/^Soalan \d+$/.test(problem.trim());
@@ -80,7 +75,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const { targetCount, ageGroup, category } = await req.json();
+    const { targetCount, ageGroup, category, gameId } = await req.json();
 
     if (!targetCount || targetCount < 1) {
       return Response.json({ error: 'targetCount required' }, { status: 400 });
@@ -89,7 +84,14 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'ageGroup and category required' }, { status: 400 });
     }
 
-    const games = await base44.asServiceRole.entities.Game.filter({ ageGroup, category });
+    // If gameId provided, only process that one game
+    let games;
+    if (gameId) {
+      const g = await base44.asServiceRole.entities.Game.filter({ id: gameId });
+      games = g.length > 0 ? [g[0]] : [];
+    } else {
+      games = await base44.asServiceRole.entities.Game.filter({ ageGroup, category });
+    }
 
     let expanded = 0;
     let reduced = 0;
@@ -98,7 +100,6 @@ Deno.serve(async (req) => {
 
     for (const game of games) {
       try {
-        // Only keep real questions, strip dummies
         const allQuestions = game.gameData?.questions || [];
         const realQuestions = allQuestions.filter(isRealQuestion);
         const currentCount = realQuestions.length;
@@ -112,9 +113,7 @@ Deno.serve(async (req) => {
 
         if (targetCount > currentCount) {
           const needed = targetCount - currentCount;
-          // Generate real AI questions for the gap
           const generated = await generateQuestionsForGame(base44, game, needed, realQuestions);
-          // Take only what we need
           newQuestions = [...realQuestions, ...generated.slice(0, needed)];
           expanded++;
         } else {
@@ -127,7 +126,7 @@ Deno.serve(async (req) => {
           gameData: { ...game.gameData, questions: newQuestions },
         });
       } catch (err) {
-        console.error(`Error processing game ${game.id}: ${err.message}`);
+        console.error(`Error game ${game.id}: ${err.message}`);
         errors++;
       }
     }
@@ -142,7 +141,7 @@ Deno.serve(async (req) => {
       reduced,
       unchanged,
       errors,
-      message: `${expanded} games expanded with AI questions, ${reduced} reduced, ${unchanged} unchanged, ${errors} errors`,
+      message: `${expanded} games expanded with AI questions, ${reduced} reduced, ${unchanged} unchanged`,
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
