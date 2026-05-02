@@ -123,6 +123,12 @@ Deno.serve(async (req) => {
           questionsPerGame
         );
 
+        // Skip if no questions generated
+        if (!questions || questions.length === 0) {
+          console.error(`Task ${taskId}: No questions generated for ${gameTitle}, skipping...`);
+          continue;
+        }
+
         // Create game in database
         const gameData = {
           title: gameTitle,
@@ -132,7 +138,7 @@ Deno.serve(async (req) => {
           difficulty: i % 3 === 0 ? 'easy' : i % 3 === 1 ? 'medium' : 'hard',
           tier: 'free',
           emoji: questions[0]?.emoji || '🎮',
-          totalQuestions: questionsPerGame,
+          totalQuestions: questions.length,
           gameData: { questions },
           isPublished: true,
           status: 'ready',
@@ -143,7 +149,7 @@ Deno.serve(async (req) => {
         createdGames++;
         createdGamesList.push(gameTitle);
 
-        console.log(`Task ${taskId}: Created ${createdGames}/${gamesCount} games`);
+        console.log(`Task ${taskId}: Created ${createdGames}/${gamesCount} games with ${questions.length} questions`);
 
         // Delay between games to avoid rate limits
         if (i < gamesCount - 1) {
