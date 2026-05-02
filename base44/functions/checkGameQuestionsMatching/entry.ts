@@ -127,14 +127,16 @@ Deno.serve(async (req) => {
 
     // If autoFix enabled, fix all games with issues
     if (autoFix && issues.length > 0) {
+      const gameIssueMap = {};
+      for (const issue of issues) {
+        if (!gameIssueMap[issue.gameTitle]) gameIssueMap[issue.gameTitle] = [];
+        gameIssueMap[issue.gameTitle].push(issue);
+      }
+      
       for (const game of games) {
-        const gameQuestions = game.gameData?.questions || [];
-        let hasIssues = false;
-        
-        // Check if this game has any issues
-        const gameIssues = issues.filter(iss => iss.gameTitle === game.title);
-        if (gameIssues.length > 0) {
+        if (gameIssueMap[game.title] && gameIssueMap[game.title].length > 0) {
           try {
+            const gameQuestions = game.gameData?.questions || [];
             const result = await base44.asServiceRole.functions.invoke('validateGameQuestionsQuality', {
               gameId: game.id,
               ageGroup: game.ageGroup,
@@ -143,16 +145,19 @@ Deno.serve(async (req) => {
             });
             
             if (result.data.validation.summary.failed > 0) {
-              await base44.asServiceRole.functions.invoke('autoFixGameQuestions', {
+              const fixRes = await base44.asServiceRole.functions.invoke('autoFixGameQuestions', {
                 gameId: game.id,
                 validationResult: result.data.validation,
               });
               autoFixedGames++;
-              autoFixedQuestions += gameIssues.length;
+              autoFixedQuestions += fixRes.data.fixed || gameIssueMap[game.title].length;
             }
           } catch (err) {
-            console.error(`Auto-fix failed for game ${game.id}:`, err.message);
+            console.error(`Auto-fix failed for game ${game.title}:`, err.message);
           }
+          
+          // Delay between games
+          await new Promise(r => setTimeout(r, 500));
         }
       }
     }
