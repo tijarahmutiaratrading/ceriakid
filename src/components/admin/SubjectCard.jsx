@@ -69,6 +69,16 @@ export default function SubjectCard({
           </button>
 
           <button
+          onClick={() => onBulkEdit(subject.games, subject.label, subject.ageGroup, subject.subject)}
+          disabled={!!actionLoading || subject.games.length === 0}
+          title="Edit/add/delete games & questions"
+          className="flex items-center gap-1 px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 text-xs font-bold disabled:opacity-50 transition-all">
+
+          {actionLoading?.startsWith('bulk-') ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
+          Manage
+          </button>
+
+          <button
           onClick={() => onVerify(subject.file, subject.label, subject.ageGroup, subject.subject, dbGamesCache)}
           disabled={!!actionLoading}
           title="Verify questions" className="flex items-center gap-1 px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg border border-blue-200 text-xs font-bold disabled:opacity-50 transition-all hidden">
