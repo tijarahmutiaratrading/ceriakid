@@ -257,59 +257,74 @@ export default function AdminGameManager() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setModal(null)}
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
           >
             <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
+              initial={{ scale: 0.92, y: 40 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.92, y: 40 }}
+              transition={{ type: 'spring', damping: 22, stiffness: 300 }}
               onClick={e => e.stopPropagation()}
-              className="bg-white/40 backdrop-blur-xl rounded-3xl p-6 max-w-sm w-full shadow-2xl border-2 border-white/30"
+              className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden"
             >
-              <div className="flex items-center justify-between mb-1">
-                <h3 className="font-black text-gray-900">✏️ Edit Database</h3>
-                <button onClick={() => setModal(null)} className="p-1 hover:bg-gray-100 rounded-lg">
-                  <X className="w-5 h-5 text-gray-500" />
+              {/* Gradient Header */}
+              <div className="bg-gradient-to-r from-game-purple to-game-pink px-6 py-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-black text-white text-lg">✏️ Edit Database</h3>
+                    <p className="text-white/70 text-xs mt-0.5 font-semibold">{modal.label}</p>
+                  </div>
+                  <button onClick={() => setModal(null)} className="p-1.5 bg-white/20 hover:bg-white/30 rounded-xl transition-all">
+                    <X className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Body */}
+              <div className="px-6 py-5 space-y-4">
+                <div>
+                  <label className="block text-xs font-black text-gray-500 uppercase tracking-wide mb-2">🎮 Bilangan Games</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="1"
+                      autoFocus
+                      value={modal.gamesValue}
+                      onChange={e => setModal(m => ({ ...m, gamesValue: e.target.value }))}
+                      placeholder="e.g. 25"
+                      className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-game-purple focus:outline-none text-2xl font-black text-center bg-gray-50 transition-all"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-semibold">semasa: {modal.gamesValue}</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-black text-gray-500 uppercase tracking-wide mb-2">📝 Soalan per Game</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="1"
+                      value={modal.questionsValue}
+                      onChange={e => setModal(m => ({ ...m, questionsValue: e.target.value }))}
+                      placeholder="e.g. 20"
+                      className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-game-purple focus:outline-none text-2xl font-black text-center bg-gray-50 transition-all"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-semibold">semasa: {modal.questionsValue || '—'}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-400 text-center">Kosongkan field untuk tidak ubah</p>
+              </div>
+
+              {/* Footer */}
+              <div className="px-6 pb-6 flex gap-3">
+                <button onClick={() => setModal(null)} className="flex-1 py-3 rounded-2xl border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-all">
+                  Batal
                 </button>
-              </div>
-              <p className="text-sm text-gray-600 mb-5">{modal.label}</p>
-
-              <div className="space-y-4 mb-5">
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 mb-1.5">🎮 Bilangan Games (semasa: {modal.gamesValue})</label>
-                  <input
-                    type="number"
-                    min="1"
-                    autoFocus
-                    value={modal.gamesValue}
-                    onChange={e => setModal(m => ({ ...m, gamesValue: e.target.value }))}
-                    placeholder="e.g. 25"
-                    className="w-full p-3 border-2 border-amber-200 rounded-xl focus:border-game-purple focus:outline-none text-lg font-black text-center bg-white/60"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 mb-1.5">📝 Soalan per Game (semasa: {modal.questionsValue || '—'})</label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={modal.questionsValue}
-                    onChange={e => setModal(m => ({ ...m, questionsValue: e.target.value }))}
-                    placeholder="e.g. 20"
-                    className="w-full p-3 border-2 border-amber-200 rounded-xl focus:border-game-purple focus:outline-none text-lg font-black text-center bg-white/60"
-                  />
-                </div>
-              </div>
-
-              <p className="text-xs text-gray-400 mb-4 text-center">Kosongkan mana-mana field untuk tidak ubah</p>
-
-              <div className="flex gap-3">
-                <button onClick={() => setModal(null)} className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50">Batal</button>
                 <button
                   onClick={handleModalConfirm}
                   disabled={(!modal.gamesValue || parseInt(modal.gamesValue) < 1) && (!modal.questionsValue || parseInt(modal.questionsValue) < 1)}
-                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-game-purple to-game-pink text-white font-bold text-sm disabled:opacity-40"
+                  className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-game-purple to-game-pink text-white font-bold text-sm disabled:opacity-40 shadow-lg shadow-purple-200 transition-all hover:shadow-xl"
                 >
-                  Apply
+                  ✅ Apply
                 </button>
               </div>
             </motion.div>
