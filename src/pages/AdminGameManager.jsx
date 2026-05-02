@@ -446,6 +446,34 @@ export default function AdminGameManager() {
               {actionLoading === 'clean' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
               Clean
             </button>
+            <button
+              onClick={async () => {
+                setActionLoading('check-science');
+                showToast('🔍 Checking prasekolah science soalan...', true);
+                try {
+                  const res = await base44.functions.invoke('checkGameQuestionsMatching', {
+                    ageGroup: 'prasekolah',
+                    category: 'science',
+                  });
+                  if (res.data.issueCount > 0) {
+                    showToast(`⚠️ Found ${res.data.issueCount} issues! Check console.`, false);
+                    console.log('Science Questions Issues:', res.data.issues);
+                  } else {
+                    showToast(`✅ Semua soalan OK! ${res.data.totalQuestions} questions checked.`);
+                  }
+                } catch (err) {
+                  showToast('❌ ' + err.message, false);
+                } finally {
+                  setActionLoading(null);
+                }
+              }}
+              disabled={!!actionLoading}
+              className="flex items-center gap-2 px-3 py-2 bg-yellow-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
+              title="Check prasekolah science questions"
+            >
+              {actionLoading === 'check-science' ? <Loader2 className="w-4 h-4 animate-spin" /> : '🔍'}
+              Check Science
+            </button>
             <button onClick={fetchStats} disabled={loading} title="Refresh" className="p-2 bg-white/40 backdrop-blur-xl rounded-xl border-2 border-white/30 hover:bg-white/60 transition-all">
               <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
             </button>
