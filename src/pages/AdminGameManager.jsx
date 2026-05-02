@@ -27,18 +27,10 @@ const GAME_HUB = [
   { id: 'tracing', title: 'Tracing Game' },
 ];
 
-// Map ageGroup keys between config and gameLibrary
-const AGE_KEY = { prasekolah: 'prasekolah', sekolah_rendah: 'sekolah_rendah' };
-const SUBJECT_KEY = {
-  bahasa_melayu: 'bahasa_melayu',
-  english: 'english',
-  mathematics: 'mathematics',
-  science: 'science',
-};
 
 export default function AdminGameManager() {
   const [subjects, setSubjects] = useState([]);
-  const [playStats, setPlayStats] = useState({});
+  
   const [loading, setLoading] = useState(true);
   const [expandedFile, setExpandedFile] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
@@ -50,49 +42,55 @@ export default function AdminGameManager() {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const buildSubjectData = (stats) => {
-    return SUBJECT_CONFIG.map(({ file, label, ageGroup, subject, color }) => {
-      const ageKey = AGE_KEY[ageGroup];
-      const subKey = SUBJECT_KEY[subject];
-      const games = gameLibrary[ageKey]?.[subKey] || [];
-
-      return {
-        file, label, ageGroup, subject, color,
-        totalGames: games.length,
-        games: games.map((g, idx) => {
-          const key = `${ageGroup}-${subject}-${idx}`;
-          const stat = stats[key] || { players: 0, timesPlayed: 0, avgScore: null };
-          return {
-            index: idx,
-            title: g.title || `Game ${idx + 1}`,
-            type: g.type || '-',
-            questionCount: g.gameData?.questions?.length || 0,
-            players: stat.players,
-            timesPlayed: stat.timesPlayed,
-            avgScore: stat.avgScore,
-          };
-        }),
-      };
-    });
-  };
-
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const res = await base44.functions.invoke('getGameDatabase', {});
+      // Fetch play stats AND actual DB games in parallel
+      const [statsRes, ...dbGameGroups] = await Promise.all([
+        base44.functions.invoke('getGameDatabase', {}),
+        ...SUBJECT_CONFIG.map(sc =>
+          base44.entities.Game.filter({ ageGroup: sc.ageGroup, category: sc.subject, isPublished: true })
+        ),
+      ]);
+
       // Build play stats map from backend
       const stats = {};
-      for (const sub of res.data.subjects) {
+      for (const sub of statsRes.data.subjects) {
         for (const g of sub.games) {
           const key = `${sub.ageGroup}-${sub.subject}-${g.index}`;
           stats[key] = { players: g.players, timesPlayed: g.timesPlayed, avgScore: g.avgScore };
         }
       }
-      setPlayStats(stats);
-      setSubjects(buildSubjectData(stats));
+
+      // Build subject data from DB games (not hardcoded library)
+      const builtSubjects = SUBJECT_CONFIG.map(({ file, label, ageGroup, subject, color }, i) => {
+        const dbGames = (dbGameGroups[i] || []).sort((a, b) => (a.order || 0) - (b.order || 0));
+        // Fallback to gameLibrary if DB empty
+        const libGames = gameLibrary[ageGroup]?.[subject] || [];
+        const source = dbGames.length > 0 ? dbGames : libGames;
+
+        return {
+          file, label, ageGroup, subject, color,
+          totalGames: source.length,
+          games: source.map((g, idx) => {
+            const key = `${ageGroup}-${subject}-${idx}`;
+            const stat = stats[key] || { players: 0, timesPlayed: 0, avgScore: null };
+            return {
+              index: idx,
+              title: g.title || `Game ${idx + 1}`,
+              type: g.type || '-',
+              // Use DB totalQuestions if from DB, else count from gameData
+              questionCount: dbGames.length > 0 ? (g.totalQuestions || g.gameData?.questions?.length || 0) : (g.gameData?.questions?.length || 0),
+              players: stat.players,
+              timesPlayed: stat.timesPlayed,
+              avgScore: stat.avgScore,
+            };
+          }),
+        };
+      });
+
+      setSubjects(builtSubjects);
     } catch (err) {
-      // Still show games even if stats fail
-      setSubjects(buildSubjectData({}));
       showToast('Stats tidak dapat diload', false);
     } finally {
       setLoading(false);
