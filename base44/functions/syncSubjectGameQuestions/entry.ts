@@ -109,6 +109,16 @@ VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
 - Jumlah pilihan SESUAI dengan jenis permainan (boleh 2, 3, 4, atau lebih)
 - Tidak semua soalan harus 4 pilihan—VARIASIKAN mengikut jenis permainan`;
 
+  // Determine min/max items based on game type
+  const getItemLimits = (type) => {
+    if (['true_false', 'yes_no'].includes(type)) return { min: 2, max: 2 };
+    if (['matching', 'word_builder', 'spelling', 'phonics'].includes(type)) return { min: 2, max: 10 };
+    if (['drag_drop', 'shape_sort', 'color_match'].includes(type)) return { min: 3, max: 10 };
+    return { min: 4, max: 4 }; // Default: multiple_choice, letter_match, counting, math_puzzle
+  };
+
+  const { min, max } = getItemLimits(game.type);
+
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
     model: 'claude_sonnet_4_6',
@@ -118,7 +128,7 @@ VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
         type: 'object',
         properties: {
           soalan: { type: 'string', description: 'Teks soalan' },
-          pilihan: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4, description: 'Empat pilihan jawapan' },
+          pilihan: { type: 'array', items: { type: 'string' }, minItems: min, maxItems: max, description: 'Pilihan jawapan' },
           jawapan: { type: 'string', description: 'Jawapan yang tepat (mesti wujud dalam pilihan)' },
         },
         required: ['soalan', 'pilihan', 'jawapan'],
@@ -130,7 +140,7 @@ VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
 
   // Transform format
   return (result || [])
-    .filter(q => q.soalan && q.pilihan?.length === 4 && q.jawapan)
+    .filter(q => q.soalan && q.pilihan?.length >= min && q.pilihan?.length <= max && q.jawapan && q.pilihan.includes(q.jawapan))
     .map((q) => {
       // Transform to internal format: problem, options, answer (index)
       const answerIndex = q.pilihan.indexOf(q.jawapan);
