@@ -414,7 +414,10 @@ export default function GamePlayer() {
           animate={{ opacity: 1, x: 0 }}
           className="clay rounded-3xl p-6 text-center mb-6 bg-gradient-to-br from-sky-50 to-blue-100"
         >
-
+          {/* Show game emoji only if no question-specific image/letter */}
+          {!currentQuestion.image && !currentQuestion.letter && (
+            <div className="text-5xl mb-3">{game.emoji}</div>
+          )}
 
           {/* Picture Quiz — image only */}
           {currentQuestion.image && (
