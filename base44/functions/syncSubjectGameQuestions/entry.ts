@@ -15,124 +15,70 @@ const AGE_DESC = {
 async function generateQuestionsForGame(base44, game, needed, existingQuestions) {
   const subject = CATEGORY_LANG[game.category] || game.category;
   const ageDesc = AGE_DESC[game.ageGroup] || game.ageGroup;
-  const existingSample = existingQuestions.slice(0, 3).map(q => q.problem || q.question || '').filter(Boolean).join('; ');
+  const existingSample = existingQuestions.slice(0, 2).map(q => q.problem || q.question || '').filter(Boolean).join('; ');
 
-  const prompt = `Anda adalah pakar pembina kandungan pendidikan Malaysia (KSSR/KSSM) DAN pereka mini-games pembelajaran interaktif kanak-kanak.
+  const prompt = `Anda ialah pakar pembina soalan pendidikan Malaysia (KSSR) dan pereka permainan pembelajaran interaktif untuk kanak-kanak.
 
-Tugas:
-Jana TEPAT ${needed} item permainan pendidikan yang MENARIK, INTERAKTIF dan BERBEZA untuk:
+TUGAS: Jana TEPAT ${needed} soalan pendidikan yang BERLAINAN JENIS dan MENARIK untuk:
 
-Topik: "${game.title}"
+Tajuk: "${game.title}"
 Subjek: ${subject}
-Peringkat: ${ageDesc}
+Tahap: ${ageDesc}
 
-${existingSample ? `JANGAN ULANG: ${existingSample}` : ''}
+${existingSample ? `Jangan ulang soalan ini: ${existingSample}` : ''}
 
-────────────────────────
-🎮 OBJEKTIF:
-- Hasilkan MINI GAMES, bukan sekadar soalan
-- Variasikan gameplay supaya tidak membosankan
-- Sesuai untuk kanak-kanak (engaging & mudah faham)
+────────────────────
+JENIS SOALAN (pilih pelbagai):
+1. multiple_choice - 4 pilihan jawapan
+2. true_false - Betul atau Salah
+3. short_answer - Jawapan pendek/satu perkataan
+4. matching - Padankan pasangan
+5. ordering - Susun urutan
+6. fill_blank - Isi tempat kosong
+7. yes_no - Ya atau Tidak
+8. odd_one_out - Cari yang berlainan
 
-────────────────────────
-🎯 10 JENIS GAME:
+────────────────────
+PERATURAN:
+- Semua soalan berdasarkan KSSR/KSSM
+- Setiap soalan = 1 konsep sahaja
+- Bahasa mudah difahami untuk ${ageDesc}
+- Distractor mesti munasabah tapi jelas salah
+- Gunakan nama tempatan (Ali, Siti, Karim, dll)
+- Soalan pendek dan jelas
 
-1. multiple_choice (4 pilihan)
-2. true_false (Betul/Salah)
-3. matching (pasangan kiri-kanan)
-4. fill_blank (isi tempat kosong)
-5. ordering (susun urutan)
-6. odd_one_out (cari yang berlainan)
-7. short_answer (jawapan ringkas)
-8. image_choice (pilih gambar - jika topik memerlukan)
-9. categorization (mengkategori items)
-10. yes_no (Ya/Tidak)
-
-AGIHAN:
-- Gunakan sekurang-kurangnya 4 jenis berbeda
-- Elakkan semua jenis sama
-
-────────────────────────
-📚 PERATURAN AKADEMIK:
-- Berdasarkan silibus KSSR/KSSM
-- 1 item = 1 konsep sahaja
-- Tiada jawapan berganda
-- Tidak subjektif
-- Bahasa sesuai tahap ${ageDesc}
-- Variasikan gaya ayat
-
-────────────────────────
-🧠 KUALITI:
-- Elakkan soalan terlalu obvious
-- Semua pilihan mesti munasabah
-- Distractor mesti nampak hampir betul
-- Elakkan format berulang
-
-────────────────────────
-🔊 SOUND EFFECT (WAJIB):
-
-Setiap item MESTI ada 2 sound:
-- Correct: "correct_pop" / "correct_ding" / "success_chime"
-- Wrong: "wrong_buzz" / "error_tone" / "fail_beep"
-
-Pilih secara rawak untuk variasi.
-
-────────────────────────
-🎯 ENGAGEMENT:
-- Sekurang-kurangnya 20% dalam bentuk situasi harian
-- Gunakan nama tempatan (Ali, Siti, dll)
-- Soalan pendek & jelas
-
-────────────────────────
-⚙️ FORMAT SETIAP GAME:
-
-multiple_choice: { "type": "multiple_choice", "soalan": "", "pilihan": ["", "", "", ""], "jawapan": "", "sound_correct": "", "sound_wrong": "" }
-
-true_false: { "type": "true_false", "soalan": "", "pilihan": ["Betul", "Salah"], "jawapan": "", "sound_correct": "", "sound_wrong": "" }
-
-matching: { "type": "matching", "soalan": "", "pairs": [{"kiri": "", "kanan": ""}], "jawapan": "", "sound_correct": "", "sound_wrong": "" }
-
-fill_blank: { "type": "fill_blank", "soalan": "", "jawapan": "", "sound_correct": "", "sound_wrong": "" }
-
-ordering: { "type": "ordering", "soalan": "", "items": [], "jawapan": [], "sound_correct": "", "sound_wrong": "" }
-
-odd_one_out: { "type": "odd_one_out", "soalan": "", "pilihan": ["", "", "", ""], "jawapan": "", "sound_correct": "", "sound_wrong": "" }
-
-short_answer: { "type": "short_answer", "soalan": "", "jawapan": "", "sound_correct": "", "sound_wrong": "" }
-
-categorization: { "type": "categorization", "soalan": "", "kategori": ["", ""], "items": [{"item": "", "jawapan": ""}], "sound_correct": "", "sound_wrong": "" }
-
-yes_no: { "type": "yes_no", "soalan": "", "pilihan": ["Ya", "Tidak"], "jawapan": "", "sound_correct": "", "sound_wrong": "" }
-
-────────────────────────
-📦 FORMAT OUTPUT (WAJIB JSON SAHAJA):
+────────────────────
+FORMAT JSON:
 
 {
   "games": [
     {
-      "type": "",
-      "soalan": "",
-      "pilihan": [],
-      "jawapan": "",
-      "sound_correct": "",
-      "sound_wrong": ""
+      "type": "multiple_choice",
+      "soalan": "Apa warna rumit yang dibuat dari biru dan merah?",
+      "pilihan": ["Ungu", "Hijau", "Jingga", "Hitam"],
+      "jawapan": "Ungu"
+    },
+    {
+      "type": "true_false",
+      "soalan": "Siang hari terang kerana matahari.",
+      "pilihan": ["Betul", "Salah"],
+      "jawapan": "Betul"
+    },
+    {
+      "type": "short_answer",
+      "soalan": "Berapa jumlah hari dalam seminggu?",
+      "jawapan": "Tujuh"
     }
   ]
 }
 
-────────────────────────
-🔍 VALIDASI AKHIR:
-- Bilangan item = ${needed}
-- Minimum 4 jenis game berbeda digunakan
-- Tiada duplicate
-- Jawapan tepat
-- Struktur JSON valid
-- Semua item ada sound_correct & sound_wrong
-- Tiada format berulang`;
-
-  // Don't constrain based on old game.type - LLM will vary game types per question
-  const min = 2;
-  const max = 10;
+────────────────────
+SEMAK:
+✓ Bilangan soalan = ${needed}
+✓ Minimum 4 jenis berbeza
+✓ Tiada duplicate
+✓ Jawapan tepat
+✓ JSON valid`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
@@ -148,13 +94,9 @@ yes_no: { "type": "yes_no", "soalan": "", "pilihan": ["Ya", "Tidak"], "jawapan":
               type: { type: 'string' },
               soalan: { type: 'string' },
               pilihan: { type: 'array', items: { type: 'string' } },
-              pairs: { type: 'array', items: { type: 'object' } },
-              items: { type: 'array', items: { type: 'string' } },
-              kategori: { type: 'array', items: { type: 'string' } },
               jawapan: { type: 'string' },
-              sound_correct: { type: 'string' },
-              sound_wrong: { type: 'string' },
             },
+            required: ['type', 'soalan', 'jawapan'],
           },
         },
       },
@@ -162,35 +104,26 @@ yes_no: { "type": "yes_no", "soalan": "", "pilihan": ["Ya", "Tidak"], "jawapan":
     },
   });
 
-  // Transform format
   const questions = result?.games || [];
   return questions
     .filter(q => {
-      // Validate based on game type
-      if (!q.soalan || !q.jawapan || !q.type || !q.sound_correct || !q.sound_wrong) return false;
+      if (!q.soalan || !q.jawapan || !q.type) return false;
       
-      if (q.type === 'matching' && q.pairs?.length >= 2) return true;
-      if (q.type === 'ordering' && q.items?.length >= 2) return true;
-      if (q.type === 'categorization' && q.kategori?.length >= 2) return true;
+      if (q.type === 'matching') return q.pairs?.length >= 2;
+      if (q.type === 'ordering') return q.items?.length >= 2;
       if (q.type === 'fill_blank' || q.type === 'short_answer') return true;
-      if ((q.type === 'true_false' || q.type === 'yes_no') && q.pilihan?.length === 2 && q.pilihan.includes(q.jawapan)) return true;
-      if (q.pilihan?.length >= min && q.pilihan?.length <= max && q.pilihan.includes(q.jawapan)) return true;
+      if (q.type === 'true_false' || q.type === 'yes_no') return q.pilihan?.length === 2;
+      if (q.pilihan?.length >= 2 && q.pilihan?.length <= 5 && q.pilihan.includes(q.jawapan)) return true;
       
       return false;
     })
     .map((q) => {
-      // Keep original structure but add game type and sounds
       const answerIndex = q.pilihan ? q.pilihan.indexOf(q.jawapan) : -1;
       return {
         type: q.type,
         problem: q.soalan,
         options: q.pilihan || [],
         answer: answerIndex >= 0 ? answerIndex : 0,
-        pairs: q.pairs,
-        items: q.items,
-        kategori: q.kategori,
-        sound_correct: q.sound_correct,
-        sound_wrong: q.sound_wrong,
       };
     });
 }
