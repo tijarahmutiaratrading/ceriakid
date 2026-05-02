@@ -137,24 +137,39 @@ export default function AdminGameManager() {
 
       if (questions && questions > 0) {
         const dbGames = await base44.entities.Game.filter({ ageGroup, category: subject, isPublished: true });
-        const total = dbGames.length;
+        // Only process games that need more questions (skip yang dah cukup)
+        const needsUpdate = dbGames.filter(g => (g.gameData?.questions?.length || 0) < questions);
+        const total = needsUpdate.length;
 
-        for (let i = 0; i < dbGames.length; i++) {
-          const g = dbGames[i];
-          showToast(`⏳ AI menjana soalan... game ${i + 1}/${total}`, true);
-          await base44.functions.invoke('syncSubjectGameQuestions', {
-            targetCount: questions,
-            ageGroup,
-            category: subject,
-            gameId: g.id,
-          });
-          if (i < dbGames.length - 1) {
-            await new Promise(r => setTimeout(r, 3000));
+        if (total === 0) {
+          showToast('✅ Semua games dah ada cukup soalan!');
+        } else {
+          let done = 0;
+          let failed = 0;
+          for (let i = 0; i < needsUpdate.length; i++) {
+            const g = needsUpdate[i];
+            showToast(`⏳ AI menjana soalan... ${i + 1}/${total} (${g.title?.slice(0, 20)}...)`, true);
+            try {
+              await base44.functions.invoke('syncSubjectGameQuestions', {
+                targetCount: questions,
+                ageGroup,
+                category: subject,
+                gameId: g.id,
+              });
+              done++;
+            } catch (err) {
+              failed++;
+              console.error(`Skip game ${g.id}: ${err.message}`);
+            }
+            // Delay antara games untuk elak rate limit
+            if (i < needsUpdate.length - 1) {
+              await new Promise(r => setTimeout(r, 5000));
+            }
           }
+          showToast(`✅ Selesai! ${done} games berjaya, ${failed} gagal (skip).`);
         }
       }
 
-      showToast('✅ Berjaya dikemas kini!');
       await fetchStats();
     } catch (err) {
       showToast('❌ ' + err.message, false);
