@@ -47,7 +47,7 @@ async function generateQuestionsForGame(base44, game, needed, existingQuestions)
   const ageDesc = AGE_DESC[game.ageGroup] || game.ageGroup;
   const existingSample = existingQuestions.slice(0, 3).map(q => q.problem || q.question || '').filter(Boolean).join('; ');
 
-  const prompt = `Anda adalah pakar pembina soalan pendidikan Malaysia (KSSR/KSSM), sangat teliti dan ketat.
+  const prompt = `Anda adalah pakar pembina soalan pendidikan Malaysia (KSSR/KSSM), sangat teliti, bijak dan ketat dalam memastikan kualiti.
 
 Tugas: Jana TEPAT ${needed} soalan BARU, UNIK & BERKUALITI untuk:
 Topik: "${game.title}"
@@ -55,71 +55,105 @@ Subjek: ${subject}
 Peringkat: ${ageDesc}
 Jenis: ${game.type || 'multiple_choice'}
 
-${existingSample ? `JANGAN ULANG: ${existingSample}` : ''}
+${existingSample ? `JANGAN ULANG SOALAN INI: ${existingSample}` : ''}
 
+────────────────────────
 PERATURAN SOALAN:
-- Berdasarkan silibus Malaysia (nyatakan konsep jelas)
-- 1 soalan = 1 konsep sahaja
-- Tidak subjektif / tiada jawapan berganda
-- Semua soalan berbeza subtopik
+- Berdasarkan silibus Malaysia (KSSR/KSSM)
+- Setiap soalan mesti fokus kepada SATU konsep sahaja
+- Tidak subjektif dan tiada jawapan berganda
+- Setiap soalan mesti berbeza subtopik (tiada pengulangan idea)
+- Gunakan bahasa yang sesuai dengan ${ageDesc}
+- Variasikan gaya ayat (jangan semua bermula dengan "Apakah")
 
+────────────────────────
 PILIHAN JAWAPAN:
-- 4 pilihan sahaja
-- Semua dalam kategori sama
-- Panjang hampir sama
-- Susunan rawak
+- Mesti ada 4 pilihan sahaja
+- Semua pilihan mesti dalam kategori yang sama
+- Panjang ayat pilihan mesti hampir sama (elak obvious answer)
+- Susunan jawapan mesti rawak (jawapan tidak sentiasa di tempat sama)
+- Jawapan mesti wujud EXACT dalam pilihan
 
-EMOJI (WAJIB & KETAT):
-- Emoji mesti MATCH EXACT dengan jawapan
-- Tidak boleh simbolik atau generic
-- Setiap soalan emoji berbeza (no repetition)
-- Jika tiada emoji tepat → skip soalan itu
+────────────────────────
+PERATURAN EMOJI (SANGAT KETAT - ZERO ERROR):
+- Emoji HANYA dibenarkan dalam field "emoji" sahaja
+- DILARANG sama sekali letak emoji dalam:
+  • teks soalan
+  • pilihan jawapan
+- Setiap soalan hanya boleh ada SATU emoji sahaja
+- Emoji mesti MATCH EXACT dengan jawapan (bukan simbolik)
+- Setiap emoji mesti BERBEZA (tiada ulangan langsung)
+- Jika tiada emoji yang tepat → JANGAN jana soalan itu
 
-TAHAP:
-- 30% mudah
-- 50% sederhana
-- 20% mencabar
+Contoh:
+Jawapan "Burung" → 🐦 atau 🦅 sahaja
+Jawapan "Malaysia" → 🇲🇾 sahaja
 
-VALIDASI AKHIR:
-- Jawapan mesti wujud dalam pilihan
-- Tiada emoji berulang
-- Tiada soalan duplicate`;
+────────────────────────
+TAHAP KESUKARAN:
+- 30% mudah (ingat fakta)
+- 50% sederhana (faham konsep)
+- 20% mencabar (aplikasi mudah)
+
+────────────────────────
+FORMAT OUTPUT (WAJIB - JSON SAHAJA, TANPA TEKS TAMBAHAN):
+
+[
+  {
+    "soalan": "",
+    "pilihan": ["", "", "", ""],
+    "jawapan": "",
+    "emoji": ""
+  }
+]
+
+────────────────────────
+VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
+- Tiada soalan duplicate
+- Tiada subtopik berulang
+- Jawapan tepat dan tidak bercanggah
+- Jawapan wujud dalam pilihan
+- TIADA emoji dalam "soalan" dan "pilihan"
+- Semua emoji unik (tiada pengulangan)`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
     model: 'claude_sonnet_4_6',
     response_json_schema: {
-      type: 'object',
-      properties: {
-        questions: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              problem: { type: 'string', description: 'Soalan jelas' },
-              options: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4 },
-              answer: { type: 'number', minimum: 0, maximum: 3 },
-              emoji: { type: 'string', description: 'Emoji yang MATCH jawapan betul' },
-            },
-            required: ['problem', 'options', 'answer', 'emoji'],
-          },
-          minItems: needed,
-          maxItems: needed,
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          soalan: { type: 'string', description: 'Teks soalan tanpa emoji' },
+          pilihan: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4, description: 'Empat pilihan jawapan tanpa emoji' },
+          jawapan: { type: 'string', description: 'Jawapan yang tepat (mesti wujud dalam pilihan)' },
+          emoji: { type: 'string', description: 'Emoji yang MATCH EXACT dengan jawapan' },
         },
+        required: ['soalan', 'pilihan', 'jawapan', 'emoji'],
       },
-      required: ['questions'],
+      minItems: needed,
+      maxItems: needed,
     },
   });
 
-  // Validate emoji matches—if mismatch, try to fix with fallback
-  return (result.questions || []).map((q) => {
-    const correctAnswer = q.options?.[q.answer] || '';
-    if (!validateEmojiMatch(correctAnswer, q.emoji)) {
-      // Fallback: use first valid emoji or generic match
-      q.emoji = '🎯'; // Safe fallback for deduplication to fix
-    }
-    return q;
-  });
+  // Validate emoji matches and transform format
+  return (result || [])
+    .filter(q => q.soalan && q.pilihan?.length === 4 && q.jawapan && q.emoji)
+    .map((q) => {
+      if (!validateEmojiMatch(q.jawapan, q.emoji)) {
+        // Skip if emoji doesn't match answer
+        return null;
+      }
+      // Transform to internal format: problem, options, answer (index), emoji
+      const answerIndex = q.pilihan.indexOf(q.jawapan);
+      return {
+        problem: q.soalan,
+        options: q.pilihan,
+        answer: answerIndex >= 0 ? answerIndex : 0,
+        emoji: q.emoji,
+      };
+    })
+    .filter(Boolean);
 }
 
 function isRealQuestion(q) {
