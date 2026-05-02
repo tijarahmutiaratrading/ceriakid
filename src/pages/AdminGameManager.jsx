@@ -54,6 +54,8 @@ export default function AdminGameManager() {
   const [regenerationTasks, setRegenerationTasks] = useState(null);
   const [taskProgress, setTaskProgress] = useState([]);
   const [generateModal, setGenerateModal] = useState(null);
+  const [selectedSubjects, setSelectedSubjects] = useState(new Set()); // track selected subjects
+  const [bulkGenerateConfig, setBulkGenerateConfig] = useState(null); // config for bulk generation
 
   const showToast = (msg, ok = true) => {
     setToast({ msg, ok });
@@ -127,6 +129,35 @@ export default function AdminGameManager() {
 
   const handleGenerateSubject = (label, ageGroup, subject) => {
     setGenerateModal({ games: 5, questions: 10, ageGroup, subject, label });
+  };
+
+  const handleBulkGenerateStart = () => {
+    if (selectedSubjects.size === 0) {
+      showToast('Pilih sekurang-kurangnya satu subjek', false);
+      return;
+    }
+    setBulkGenerateConfig({ games: 5, questions: 10, selectedCount: selectedSubjects.size });
+  };
+
+  const executeBulkGeneration = async () => {
+    if (!bulkGenerateConfig) return;
+    
+    const tasks = Array.from(selectedSubjects).map((subjectKey) => {
+      const [ageGroup, subject] = subjectKey.split('-');
+      const subjectConfig = SUBJECT_CONFIG.find(sc => sc.ageGroup === ageGroup && sc.subject === subject);
+      return {
+        taskId: Math.random().toString(36).slice(2, 9),
+        taskName: subjectConfig?.label || subjectKey,
+        ageGroup,
+        subject,
+        gamesCount: bulkGenerateConfig.games,
+        questionsPerGame: bulkGenerateConfig.questions
+      };
+    });
+
+    setRegenerationTasks(tasks);
+    setBulkGenerateConfig(null);
+    setSelectedSubjects(new Set());
   };
 
   const openSubjectConfigModal = (file, label, currentGames, currentAvgQ, ageGroup, subject) => {
@@ -486,6 +517,7 @@ export default function AdminGameManager() {
           <div>
             <h1 className="text-xl md:text-2xl font-black text-gray-900">🎮 Game Manager</h1>
             <p className="text-gray-600 text-xs md:text-sm font-semibold">{totalGames} games · {totalFull} soalan penuh</p>
+            {selectedSubjects.size > 0 && <p className="text-xs text-orange-600 font-bold mt-1">✅ {selectedSubjects.size} subjects selected</p>}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <button
@@ -587,6 +619,16 @@ export default function AdminGameManager() {
             <button onClick={fetchStats} disabled={loading} title="Refresh" className="p-2 bg-white/40 backdrop-blur-xl rounded-xl border-2 border-white/30 hover:bg-white/60 transition-all">
               <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
             </button>
+            
+            {selectedSubjects.size > 0 && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                onClick={handleBulkGenerateStart}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg transition-all">
+                🚀 Bulk Generate {selectedSubjects.size}
+              </motion.button>
+            )}
           </div>
         </motion.div>
 
@@ -624,21 +666,38 @@ export default function AdminGameManager() {
             </div>
             {!collapsedSections.prasekolah && subjects.filter((s) => s.ageGroup === 'prasekolah').map((s, idx) => {
             const isExpanded = expandedFile === s.file;
+            const subjectKey = `${s.ageGroup}-${s.subject}`;
+            const isSelected = selectedSubjects.has(subjectKey);
             return (
-              <SubjectCard
-                key={s.file}
-                subject={s}
-                isExpanded={isExpanded}
-                onExpandToggle={setExpandedFile}
-                actionLoading={actionLoading}
-                onBulkEdit={openSyncAndEditModal}
-                onEditSubjectConfig={openSubjectConfigModal}
-                showToast={showToast}
-                dbGamesCache={dbGamesCache}
-                onVerify={handleVerifySubject}
-                onEditGame={setEditGame}
-                onGenerateSubject={handleGenerateSubject}
-                idx={idx} />);
+              <div key={s.file} className="flex items-start gap-2">
+                <button
+                  onClick={() => {
+                    const next = new Set(selectedSubjects);
+                    next.has(subjectKey) ? next.delete(subjectKey) : next.add(subjectKey);
+                    setSelectedSubjects(next);
+                  }}
+                  className={`mt-3 p-2 rounded-lg transition-all ${isSelected ? 'bg-orange-200' : 'bg-white/20'}`}>
+                  <div className={`w-4 h-4 border-2 rounded flex items-center justify-center ${isSelected ? 'bg-orange-500 border-orange-500' : 'border-gray-300'}`}>
+                    {isSelected && <span className="text-white text-xs">✓</span>}
+                  </div>
+                </button>
+                <div className="flex-1">
+                  <SubjectCard
+                    subject={s}
+                    isExpanded={isExpanded}
+                    onExpandToggle={setExpandedFile}
+                    actionLoading={actionLoading}
+                    onBulkEdit={openSyncAndEditModal}
+                    onEditSubjectConfig={openSubjectConfigModal}
+                    showToast={showToast}
+                    dbGamesCache={dbGamesCache}
+                    onVerify={handleVerifySubject}
+                    onEditGame={setEditGame}
+                    onGenerateSubject={handleGenerateSubject}
+                    idx={idx} />
+                </div>
+              </div>
+            );
 
 
           })}
@@ -656,21 +715,38 @@ export default function AdminGameManager() {
             </div>
             {!collapsedSections.sekolah_rendah && subjects.filter((s) => s.ageGroup === 'sekolah_rendah').map((s, idx) => {
             const isExpanded = expandedFile === s.file;
+            const subjectKey = `${s.ageGroup}-${s.subject}`;
+            const isSelected = selectedSubjects.has(subjectKey);
             return (
-              <SubjectCard
-                key={s.file}
-                subject={s}
-                isExpanded={isExpanded}
-                onExpandToggle={setExpandedFile}
-                actionLoading={actionLoading}
-                onBulkEdit={openSyncAndEditModal}
-                onEditSubjectConfig={openSubjectConfigModal}
-                showToast={showToast}
-                dbGamesCache={dbGamesCache}
-                onVerify={handleVerifySubject}
-                onEditGame={setEditGame}
-                onGenerateSubject={handleGenerateSubject}
-                idx={idx} />);
+              <div key={s.file} className="flex items-start gap-2">
+                <button
+                  onClick={() => {
+                    const next = new Set(selectedSubjects);
+                    next.has(subjectKey) ? next.delete(subjectKey) : next.add(subjectKey);
+                    setSelectedSubjects(next);
+                  }}
+                  className={`mt-3 p-2 rounded-lg transition-all ${isSelected ? 'bg-orange-200' : 'bg-white/20'}`}>
+                  <div className={`w-4 h-4 border-2 rounded flex items-center justify-center ${isSelected ? 'bg-orange-500 border-orange-500' : 'border-gray-300'}`}>
+                    {isSelected && <span className="text-white text-xs">✓</span>}
+                  </div>
+                </button>
+                <div className="flex-1">
+                  <SubjectCard
+                    subject={s}
+                    isExpanded={isExpanded}
+                    onExpandToggle={setExpandedFile}
+                    actionLoading={actionLoading}
+                    onBulkEdit={openSyncAndEditModal}
+                    onEditSubjectConfig={openSubjectConfigModal}
+                    showToast={showToast}
+                    dbGamesCache={dbGamesCache}
+                    onVerify={handleVerifySubject}
+                    onEditGame={setEditGame}
+                    onGenerateSubject={handleGenerateSubject}
+                    idx={idx} />
+                </div>
+              </div>
+            );
 
 
           })}
@@ -705,6 +781,80 @@ export default function AdminGameManager() {
           onClose={() => setEditGame(null)}
           onSaved={() => {showToast('✅ Game berjaya disimpan!');fetchStats();}} />
 
+        }
+      </AnimatePresence>
+
+      {/* Bulk Generate Config Modal */}
+      <AnimatePresence>
+        {bulkGenerateConfig &&
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setBulkGenerateConfig(null)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          
+            <motion.div
+            initial={{ scale: 0.92, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.92, y: 20 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden">
+            
+              <div className="bg-gradient-to-r from-orange-600 to-red-600 px-6 py-5">
+                <h3 className="font-black text-white text-lg">🚀 Bulk Generate Games</h3>
+                <p className="text-white/70 text-xs mt-0.5">{bulkGenerateConfig.selectedCount} subjects selected</p>
+              </div>
+
+              <div className="px-6 py-5 space-y-4">
+                <div>
+                  <label className="text-xs font-black text-gray-500 uppercase mb-2 block">Bilangan Games</label>
+                  <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={bulkGenerateConfig.games}
+                  onChange={(e) => setBulkGenerateConfig((c) => ({ ...c, games: parseInt(e.target.value) || 1 }))}
+                  className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-orange-400 focus:outline-none text-2xl font-black text-center bg-gray-50" />
+                
+                  <p className="text-xs text-gray-400 mt-1">Same untuk semua subjects</p>
+                </div>
+
+                <div>
+                  <label className="text-xs font-black text-gray-500 uppercase mb-2 block">Soalan per Game</label>
+                  <input
+                  type="number"
+                  min="1"
+                  max="50"
+                  value={bulkGenerateConfig.questions}
+                  onChange={(e) => setBulkGenerateConfig((c) => ({ ...c, questions: parseInt(e.target.value) || 1 }))}
+                  className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-orange-400 focus:outline-none text-2xl font-black text-center bg-gray-50" />
+                
+                  <p className="text-xs text-gray-400 mt-1">Same untuk semua subjects</p>
+                </div>
+
+                <p className="text-xs text-orange-600 font-semibold text-center py-2 bg-orange-50 rounded-xl">
+                  Total: {bulkGenerateConfig.games} games × {bulkGenerateConfig.questions} soalan × {bulkGenerateConfig.selectedCount} subjects
+                </p>
+                <p className="text-xs text-gray-500 text-center">✅ Boleh close browser—tasks akan jalan background</p>
+              </div>
+
+              <div className="px-6 pb-6 flex gap-3">
+                <button
+                onClick={() => setBulkGenerateConfig(null)}
+                className="flex-1 py-3 rounded-2xl border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50">
+                
+                  Batal
+                </button>
+                <button
+                onClick={executeBulkGeneration}
+                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold text-sm hover:shadow-lg">
+                
+                  ✅ Start Generation
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         }
       </AnimatePresence>
 
