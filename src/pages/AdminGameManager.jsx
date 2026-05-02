@@ -514,10 +514,27 @@ export default function AdminGameManager() {
 
       <div className="max-w-4xl mx-auto px-3 md:px-4 pt-20 md:pt-24">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 md:mb-6 gap-3">
-          <div>
+          <div className="flex-1">
             <h1 className="text-xl md:text-2xl font-black text-gray-900">🎮 Game Manager</h1>
             <p className="text-gray-600 text-xs md:text-sm font-semibold">{totalGames} games · {totalFull} soalan penuh</p>
             {selectedSubjects.size > 0 && <p className="text-xs text-orange-600 font-bold mt-1">✅ {selectedSubjects.size} subjects selected</p>}
+            
+            {regenerationTasks && (
+              <div className="mt-3 space-y-1.5">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs font-bold text-orange-600">🚀 Generating: {taskProgress.length}/{regenerationTasks.length}</p>
+                  <p className="text-xs font-bold text-orange-600">{Math.round(taskProgress.length / regenerationTasks.length * 100)}%</p>
+                </div>
+                <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden border border-orange-200">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }}
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <button
