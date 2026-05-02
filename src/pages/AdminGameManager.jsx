@@ -520,14 +520,15 @@ export default function AdminGameManager() {
             </button>
             <button
               onClick={async () => {
-                setActionLoading('audit-all');
-                showToast('📋 Auditing semua games...', true);
+                setActionLoading('emoji-audit');
+                showToast('🎨 Auditing emoji-answer matching...', true);
                 try {
-                  const res = await base44.functions.invoke('auditAllGames', {});
-                  console.log('Audit Results:', res.data);
-                  showToast(`📊 Audit selesai: ${res.data.summary.passed}/${res.data.summary.totalGames} games OKEY (${res.data.summary.passRate})`, true);
-                  if (res.data.failedGames.length > 0) {
-                    showToast(`⚠️ ${res.data.failedGames.length} games ada issues - check console details`, false);
+                  const res = await base44.functions.invoke('quickEmojiAudit', {});
+                  console.log('Emoji Audit Results:', res.data);
+                  showToast(`✅ Audit done: ${res.data.summary.passed}/${res.data.summary.totalGames} games PASS (${res.data.summary.passRate})`, true);
+                  if (res.data.failedGamesCount > 0) {
+                    showToast(`⚠️ ${res.data.failedGamesCount} games ada emoji mismatch - ${res.data.summary.totalIssuesFound} issues found`, false);
+                    console.log('Failed games:', res.data.failedGames);
                   }
                 } catch (err) {
                   showToast('❌ ' + err.message, false);
@@ -535,12 +536,12 @@ export default function AdminGameManager() {
                   setActionLoading(null);
                 }
               }}
-              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-indigo-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all hidden"
+              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-violet-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
 
-              title="Audit all games questions quality">
+              title="Audit emoji vs answer matching">
               
-              {actionLoading === 'audit-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : '📋'}
-              Audit All
+              {actionLoading === 'emoji-audit' ? <Loader2 className="w-4 h-4 animate-spin" /> : '🎨'}
+              Audit Emoji
             </button>
             <button
               onClick={async () => {
