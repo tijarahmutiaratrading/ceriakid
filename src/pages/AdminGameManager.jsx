@@ -448,6 +448,7 @@ export default function AdminGameManager() {
                          onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)}
                          disabled={!!actionLoading}
                          className="p-1 md:p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all"
+                         title="Sync"
                        >
                          {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
                        </button>
@@ -459,6 +460,7 @@ export default function AdminGameManager() {
                          }}
                          disabled={!!actionLoading}
                          className="p-1 md:p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all"
+                         title="Bulk"
                        >
                          <Layers className="w-3 h-3 md:w-3.5 md:h-3.5" />
                        </button>
@@ -488,6 +490,7 @@ export default function AdminGameManager() {
                          }}
                          disabled={!!actionLoading}
                          className="p-1 md:p-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all"
+                         title="Count"
                          >
                          {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3 h-3 md:w-3.5 md:h-3.5" />}
                        </button>
@@ -534,6 +537,7 @@ export default function AdminGameManager() {
                          }}
                          disabled={!!actionLoading}
                          className="p-1 md:p-1.5 bg-cyan-50 hover:bg-cyan-100 text-cyan-600 rounded-lg border border-cyan-200 transition-all"
+                         title="Verify"
                          >
                          {actionLoading === `verify-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
                        </button>
