@@ -46,60 +46,75 @@ Deno.serve(async (req) => {
     const darjahLabel = game.darjah ? darjahMap[game.darjah] : darjahMap[ageGroup];
     const categoryLabel = categoryMap[category] || category;
 
-    // AI validation prompt
+    // Detailed validation prompt checking soalan, jawapan, emoji/icon, images
     const questionsText = questions
-      .map((q, i) => `Q${i + 1}: ${q.problem || q.question}\nOptions: ${(q.options || []).join(', ')}\nAnswer: ${q.options?.[q.answer] || 'N/A'}`)
+      .map((q, i) => {
+        const hasImage = q.image ? `[IMAGE: ${q.image}]` : '[NO IMAGE]';
+        const hasEmoji = q.emoji ? `[EMOJI: ${q.emoji}]` : '[NO EMOJI/ICON]';
+        const answerText = q.options?.[q.answer];
+        const allOptions = (q.options || []).map((opt, idx) => `${idx === q.answer ? '✓' : '✗'} ${opt}`).join(' | ');
+        return `Q${i + 1}: ${q.problem || q.question}\n${hasImage} ${hasEmoji}\nOptions: ${allOptions}\nCorrect Answer: ${answerText || 'MISSING'}`;
+      })
       .join('\n\n');
 
     const validationResult = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are a curriculum expert. Validate these ${questions.length} questions for a "${game.title}" game.
+      prompt: `You are a STRICT Malaysian curriculum expert. Validate these ${questions.length} questions for "${game.title}".
 
 Game Context:
 - Subject: ${categoryLabel}
 - Level: ${darjahLabel}
-- Game Title: ${game.title}
+- Game Type: ${game.type}
 
-Your task:
-1. Check if each question is relevant to ${categoryLabel} at ${darjahLabel} level
-2. Check for duplicate or very similar questions
-3. Verify questions are age-appropriate and match the curriculum
-4. Flag any questions that deviate from the topic
+CRITICAL VALIDATION RULES:
+1. SOALAN CHECK: Is the question accurate, clear, age-appropriate for ${darjahLabel}?
+2. JAWAPAN CHECK: Is the marked correct answer (✓) actually correct? Are all options sensible?
+3. EMOJI/ICON CHECK: Is emoji present? Is it appropriate and relevant to the question?
+4. IMAGE CHECK: Is image URL valid/present if needed? (URL format check)
+5. DUPLICATE CHECK: Are any questions repeated or too similar?
+6. CURRICULUM FIT: Does question align with ${categoryLabel} curriculum?
 
 Questions to validate:
 ${questionsText}
 
-For EACH question, respond with:
-- Q[number]: [VALID/IRRELEVANT/DUPLICATE/OFFTOPIC]
-- Reason: [brief explanation]
+For EACH question, check these aspects:
+- Q[number]_SOALAN: [VALID/UNCLEAR/WRONG/OFFTOPIC] - Is the question correct and clear?
+- Q[number]_JAWAPAN: [CORRECT/WRONG/AMBIGUOUS] - Is the answer truly correct?
+- Q[number]_EMOJI: [PRESENT/MISSING] - Is emoji/icon there and appropriate?
+- Q[number]_IMAGE: [VALID/MISSING/BROKEN_URL] - Check image URL validity
+- Q[number]_OVERALL: [PASS/FAIL] - Overall quality
 
-Then provide:
-- Summary: [X valid, Y invalid, Z duplicates]
-- Recommendations: [specific actions needed]
-
-Be strict - only mark as VALID if it truly fits the subject, level, and topic.`,
+Respond in JSON with DETAILED feedback for each question and final recommendations.
+BE EXTREMELY STRICT - Flag everything that's not perfect.`,
       response_json_schema: {
         type: 'object',
         properties: {
-          validations: {
+          questions_validated: {
             type: 'array',
             items: {
               type: 'object',
               properties: {
                 question_number: { type: 'number' },
-                status: { type: 'string' },
-                reason: { type: 'string' },
+                soalan_status: { type: 'string', description: 'VALID/UNCLEAR/WRONG/OFFTOPIC' },
+                jawapan_status: { type: 'string', description: 'CORRECT/WRONG/AMBIGUOUS' },
+                emoji_status: { type: 'string', description: 'PRESENT/MISSING/INAPPROPRIATE' },
+                image_status: { type: 'string', description: 'VALID/MISSING/BROKEN_URL' },
+                overall: { type: 'string', description: 'PASS/FAIL' },
+                issues: { type: 'string', description: 'Specific problems found' },
+                recommendation: { type: 'string', description: 'How to fix it' },
               },
+              required: ['question_number', 'soalan_status', 'jawapan_status', 'emoji_status', 'image_status', 'overall'],
             },
           },
           summary: {
             type: 'object',
             properties: {
-              valid_count: { type: 'number' },
-              invalid_count: { type: 'number' },
-              total_checked: { type: 'number' },
+              total_questions: { type: 'number' },
+              passed: { type: 'number' },
+              failed: { type: 'number' },
+              critical_issues: { type: 'array', items: { type: 'string' } },
             },
           },
-          recommendations: { type: 'string' },
+          action_required: { type: 'string', description: 'What must be fixed before publishing' },
         },
       },
     });
