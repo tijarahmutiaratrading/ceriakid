@@ -119,10 +119,6 @@ export default function AdminGameManager() {
 
   useEffect(() => { fetchStats(); }, []);
 
-  const openModal = (file, label, currentGames, currentAvgQ, ageGroup, subject) => {
-    setModal({ file, label, ageGroup, subject, gamesValue: String(currentGames), questionsValue: String(currentAvgQ || '') });
-  };
-
   const openSyncAndEditModal = (games, label, ageGroup, subject) => {
     setSyncAndEdit({ games, label, ageGroup, subject });
   };
@@ -479,7 +475,6 @@ export default function AdminGameManager() {
                   isExpanded={isExpanded}
                   onExpandToggle={setExpandedFile}
                   actionLoading={actionLoading}
-                  onSync={openModal}
                   onBulkEdit={openSyncAndEditModal}
                   showToast={showToast}
                   dbGamesCache={dbGamesCache}
@@ -510,7 +505,6 @@ export default function AdminGameManager() {
                   isExpanded={isExpanded}
                   onExpandToggle={setExpandedFile}
                   actionLoading={actionLoading}
-                  onSync={openModal}
                   onBulkEdit={openSyncAndEditModal}
                   showToast={showToast}
                   dbGamesCache={dbGamesCache}
