@@ -774,8 +774,22 @@ export default function AdminGameManager() {
             >
               {/* Header */}
               <div className="bg-gradient-to-r from-red-600 to-orange-600 px-6 py-4">
-                <h3 className="font-black text-white text-lg">🚀 Regeneration Executor</h3>
-                <p className="text-white/80 text-xs mt-1">Execute tasks sequentially. Wait for each to complete.</p>
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h3 className="font-black text-white text-lg">🚀 Regeneration Executor</h3>
+                    <p className="text-white/80 text-xs mt-1">Execute tasks sequentially. Wait for each to complete.</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-white font-bold text-sm">{taskProgress.length}/{regenerationTasks.length}</p>
+                    <p className="text-white/70 text-xs">{Math.round((taskProgress.length / regenerationTasks.length) * 100)}%</p>
+                  </div>
+                </div>
+                <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-white transition-all duration-300"
+                    style={{ width: `${(taskProgress.length / regenerationTasks.length) * 100}%` }}
+                  />
+                </div>
               </div>
 
               {/* Task List */}
