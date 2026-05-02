@@ -151,6 +151,7 @@ export default function AdminGameManager() {
 
       let verified = 0;
       let flagged = 0;
+      let autoFixed = 0;
       const total = dbGames.length;
       for (let i = 0; i < dbGames.length; i++) {
         const game = dbGames[i];
@@ -163,9 +164,21 @@ export default function AdminGameManager() {
             category: game.category,
             questions: game.gameData.questions,
           });
+
+          // If has issues, auto-fix
           if (result.data.validation.summary.invalid_count > 0) {
-            flagged++;
-            console.warn(`Game "${game.title}" flagged - issues:`, result.data.validation.summary.invalid_count);
+            showToast(`⚙️ Auto-fixing "${game.title}"...`, true);
+            try {
+              const fixResult = await base44.functions.invoke('autoFixGameQuestions', {
+                gameId: game.id,
+                validationResult: result.data.validation,
+              });
+              autoFixed += fixResult.data.fixed;
+              verified++;
+            } catch (fixErr) {
+              flagged++;
+              console.error(`Auto-fix failed for ${game.id}:`, fixErr.message);
+            }
           } else {
             verified++;
           }
@@ -174,7 +187,7 @@ export default function AdminGameManager() {
           console.error(`Skip game ${game.id}:`, e.message);
         }
       }
-      showToast(`✅ Kira: ${fixed} updated · Semak: ${verified} clean, ${flagged} flagged`);
+      showToast(`✅ Kira: ${fixed} updated · Semak: ${verified} verified, ${autoFixed} auto-fixed, ${flagged} failed`);
       await fetchStats();
     } catch (err) {
       showToast('❌ ' + err.message, false);
