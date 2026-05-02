@@ -48,11 +48,18 @@ async function generateGameQuestions(base44, gameTitle, subject, ageGroup, gameT
   const prompt = `Buat TEPAT ${questionsCount} soalan berkualiti untuk:
 "${gameTitle}" - ${CATEGORY_LABELS[subject]} (${AGE_LABELS[ageGroup]})
 
+PENTING: Setiap emoji MESTI SYNC dengan soalan content, bukan generic!
+
 Output MESTI JSON dengan array "questions". Setiap soalan:
-- problem: string (soalan yang jelas)
-- options: array 4 string (pilihan A, B, C, D yang berbeza)
+- problem: string (soalan yang jelas dalam Bahasa Melayu)
+- options: array 4 string (pilihan A, B, C, D yang berbeza dan relevan)
 - answer: number (0-3, indeks jawapan betul)
-- emoji: string (1 emoji relevan)`;
+- emoji: string (1 emoji yang LANGSUNG berkaitan dengan subjek soalan, BUKAN generic 🎮 atau 📝)
+
+Contoh BETUL:
+- "Apakah warna langit?" → emoji '☀️' atau '🌤️' (bukan '📝')
+- "Haiwan apa terbang?" → emoji '🐦' atau '🦅' (bukan '🎮')
+- "Berapa 2+2?" → emoji '🔢' atau '✏️' (bukan '🎮')`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
