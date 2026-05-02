@@ -71,6 +71,7 @@ Deno.serve(async (req) => {
     for (const game of allGames) {
       const questions = game.gameData?.questions || [];
       const issues = [];
+      const emojiCounts = {}; // Track emoji usage
 
       for (let i = 0; i < questions.length; i++) {
         const q = questions[i];
@@ -84,6 +85,19 @@ Deno.serve(async (req) => {
           issues.push(`Q${i + 1}: Missing emoji`);
         } else if (!checkEmojiRelevance(emoji, problem, answer)) {
           issues.push(`Q${i + 1}: Emoji "${emoji}" doesn't match - "${problem.slice(0, 40)}..." (Answer: "${answer}")`);
+        }
+
+        // Track emoji usage for duplicate detection
+        if (emoji) {
+          if (!emojiCounts[emoji]) emojiCounts[emoji] = [];
+          emojiCounts[emoji].push(i + 1);
+        }
+      }
+
+      // Check for duplicate emojis within same game
+      for (const [emoji, questionIndices] of Object.entries(emojiCounts)) {
+        if (questionIndices.length > 1) {
+          issues.push(`Duplicate emoji "${emoji}" in Q${questionIndices.join(', Q')}`);
         }
       }
 
