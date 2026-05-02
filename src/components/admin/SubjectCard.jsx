@@ -64,22 +64,7 @@ export default function SubjectCard({
           Config
           </button>
 
-          <button
-          onClick={() => {
-            const games = dbGamesCache[`${subject.ageGroup}-${subject.subject}`] || [];
-            if (games.length === 0) {
-              showToast('Import ke DB dulu', false);
-              return;
-            }
-            onBulkEdit(games, subject.label, subject.ageGroup, subject.subject);
-          }}
-          disabled={!!actionLoading}
-          title="Bulk edit all games"
-          className="flex items-center gap-1 px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 text-xs font-bold disabled:opacity-50 transition-all">
 
-          {actionLoading === subject.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
-          Manage
-          </button>
 
           <button
           onClick={() => onGenerateSubject?.(subject.label, subject.ageGroup, subject.subject)}
