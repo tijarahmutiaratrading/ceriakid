@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, BookOpen, Edit3, X, Check } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { gameLibrary } from '@/lib/gameLibrary';
 
@@ -101,20 +101,22 @@ export default function AdminGameManager() {
 
   useEffect(() => { fetchStats(); }, []);
 
-  const openModal = (type, file, label, current) => {
-    setModal({ type, file, label, current, value: String(current) });
+  const openModal = (file, label, currentGames, currentAvgQ) => {
+    setModal({ file, label, gamesValue: String(currentGames), questionsValue: String(currentAvgQ || '') });
   };
 
   const handleModalConfirm = async () => {
-    const count = parseInt(modal.value);
-    if (!count || count < 1) return;
-    const { type, file } = modal;
+    const { file } = modal;
+    const games = parseInt(modal.gamesValue);
+    const questions = parseInt(modal.questionsValue);
     setModal(null);
-    setActionLoading(`${type}-${file}`);
+    setActionLoading(file);
     try {
-      const fnName = type === 'questions' ? 'syncSubjectGameQuestions' : 'syncSubjectGames';
-      const res = await base44.functions.invoke(fnName, { targetCount: count });
-      showToast('✅ ' + (res.data?.message || 'Berjaya!'));
+      const tasks = [];
+      if (games && games > 0) tasks.push(base44.functions.invoke('syncSubjectGames', { targetCount: games, files: [file] }));
+      if (questions && questions > 0) tasks.push(base44.functions.invoke('syncSubjectGameQuestions', { targetCount: questions, files: [file] }));
+      await Promise.all(tasks);
+      showToast('✅ Berjaya dikemas kini!');
       await fetchStats();
     } catch (err) {
       showToast('❌ ' + err.message, false);
@@ -160,32 +162,53 @@ export default function AdminGameManager() {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               onClick={e => e.stopPropagation()}
-              className="bg-white rounded-3xl p-6 max-w-xs w-full shadow-2xl"
+              className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl"
             >
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-black text-gray-900">
-                  {modal.type === 'questions' ? '📝 Set Soalan' : '🎮 Set Games'}
-                </h3>
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="font-black text-gray-900">✏️ Edit Database</h3>
                 <button onClick={() => setModal(null)} className="p-1 hover:bg-gray-100 rounded-lg">
                   <X className="w-5 h-5 text-gray-500" />
                 </button>
               </div>
-              <p className="text-sm text-gray-500 mb-1">{modal.label}</p>
-              <p className="text-xs text-gray-400 mb-4">
-                {modal.type === 'questions' ? `Semasa: ${modal.current} soalan` : `Semasa: ${modal.current} games`}
-              </p>
-              <input
-                type="number"
-                min="1"
-                autoFocus
-                value={modal.value}
-                onChange={e => setModal(m => ({ ...m, value: e.target.value }))}
-                onKeyDown={e => e.key === 'Enter' && handleModalConfirm()}
-                className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none text-xl font-black text-center mb-4"
-              />
+              <p className="text-sm text-gray-500 mb-5">{modal.label}</p>
+
+              <div className="space-y-4 mb-5">
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 mb-1.5">🎮 Bilangan Games (semasa: {modal.gamesValue})</label>
+                  <input
+                    type="number"
+                    min="1"
+                    autoFocus
+                    value={modal.gamesValue}
+                    onChange={e => setModal(m => ({ ...m, gamesValue: e.target.value }))}
+                    placeholder="e.g. 25"
+                    className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none text-lg font-black text-center"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 mb-1.5">📝 Soalan per Game (semasa: {modal.questionsValue || '—'})</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={modal.questionsValue}
+                    onChange={e => setModal(m => ({ ...m, questionsValue: e.target.value }))}
+                    placeholder="e.g. 20"
+                    className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none text-lg font-black text-center"
+                  />
+                </div>
+              </div>
+
+              <p className="text-xs text-gray-400 mb-4 text-center">Kosongkan mana-mana field untuk tidak ubah</p>
+
               <div className="flex gap-3">
                 <button onClick={() => setModal(null)} className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-gray-600 font-bold text-sm">Batal</button>
-                <button onClick={handleModalConfirm} disabled={!modal.value || parseInt(modal.value) < 1} className="flex-1 py-2.5 rounded-xl bg-indigo-500 text-white font-bold text-sm disabled:opacity-40">Apply</button>
+                <button
+                  onClick={handleModalConfirm}
+                  disabled={(!modal.gamesValue || parseInt(modal.gamesValue) < 1) && (!modal.questionsValue || parseInt(modal.questionsValue) < 1)}
+                  className="flex-1 py-2.5 rounded-xl bg-indigo-500 text-white font-bold text-sm disabled:opacity-40"
+                >
+                  Apply
+                </button>
               </div>
             </motion.div>
           </motion.div>
@@ -259,22 +282,14 @@ export default function AdminGameManager() {
                         </span>
                       )}
 
-                      {/* Action buttons */}
+                      {/* Action button */}
                       <button
-                        onClick={() => openModal('questions', s.file, s.label, avgQ)}
+                        onClick={() => openModal(s.file, s.label, s.totalGames, avgQ)}
                         disabled={!!actionLoading}
-                        className="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg border border-blue-200 transition-all"
-                        title="Set soalan"
+                        className="p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all"
+                        title="Edit games & soalan"
                       >
-                        <BookOpen className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={() => openModal('games', s.file, s.label, s.totalGames)}
-                        disabled={!!actionLoading}
-                        className="p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all"
-                        title="Set games"
-                      >
-                        <Edit3 className="w-3.5 h-3.5" />
+                        {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
                       </button>
 
                       <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-1">
