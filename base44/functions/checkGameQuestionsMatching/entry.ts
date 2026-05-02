@@ -159,7 +159,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    // If autoFix enabled, fix all games with issues locally
+    // If autoFix enabled, fix all games with issues
     if (autoFix && issues.length > 0) {
       const gameIssueMap = {};
       for (const issue of issues) {
@@ -171,16 +171,17 @@ Deno.serve(async (req) => {
         if (gameIssueMap[game.title] && gameIssueMap[game.title].length > 0) {
           try {
             const gameQuestions = (game.gameData?.questions || []).slice();
+            const gameIssues = gameIssueMap[game.title];
             let fixed = 0;
+            let needsAiFix = false;
             
-            // Auto-fix issues locally
-            for (const issue of gameIssueMap[game.title]) {
+            // First pass: fix structural issues locally
+            for (const issue of gameIssues) {
               const qIdx = issue.questionNum - 1;
               const q = gameQuestions[qIdx];
               if (!q) continue;
               
               if (issue.problem === 'INSUFFICIENT OPTIONS') {
-                // Add missing option
                 const opts = [...(q.options || [])];
                 while (opts.length < 4) {
                   opts.push(`Option ${opts.length + 1}`);
@@ -188,27 +189,18 @@ Deno.serve(async (req) => {
                 q.options = opts;
                 fixed++;
               } else if (issue.problem === 'INVALID ANSWER INDEX') {
-                // Reset to valid index (0)
                 q.answer = 0;
                 fixed++;
               } else if (issue.problem === 'EMPTY QUESTION') {
-                // Remove empty question
                 gameQuestions.splice(qIdx, 1);
                 fixed++;
               } else if (issue.problem === 'EMOJI_MISMATCH') {
-                // Auto-fix: set answer to first matching option or reset to 0
-                const q = gameQuestions[qIdx];
-                if (q && q.options && q.options.length > 0) {
-                  // Try to find matching option (simple heuristic)
-                  const answerIdx = q.options.findIndex(opt => 
-                    opt && opt.toLowerCase().includes(issue.expectedKeywords.split(', ')[0])
-                  );
-                  q.answer = answerIdx >= 0 ? answerIdx : 0;
-                  fixed++;
-                }
+                // Mark for AI fix
+                needsAiFix = true;
               }
             }
             
+            // Save structural fixes
             if (fixed > 0) {
               await base44.asServiceRole.entities.Game.update(game.id, {
                 gameData: { ...game.gameData, questions: gameQuestions },
@@ -217,11 +209,33 @@ Deno.serve(async (req) => {
               autoFixedGames++;
               autoFixedQuestions += fixed;
             }
+            
+            // Second pass: use AI for semantic fixes (emoji mismatches, etc)
+            if (needsAiFix) {
+              try {
+                const validRes = await base44.asServiceRole.functions.invoke('validateGameQuestionsQuality', {
+                  gameId: game.id,
+                  ageGroup: game.ageGroup,
+                  category: game.category,
+                  questions: gameQuestions,
+                });
+                
+                if (validRes.data.validation.summary.failed > 0) {
+                  const fixRes = await base44.asServiceRole.functions.invoke('autoFixGameQuestions', {
+                    gameId: game.id,
+                    validationResult: validRes.data.validation,
+                  });
+                  autoFixedQuestions += fixRes.data.fixed || 1;
+                }
+              } catch (aiErr) {
+                console.error(`AI fix skipped for ${game.title}:`, aiErr.message);
+              }
+            }
           } catch (err) {
             console.error(`Auto-fix failed for game ${game.title}:`, err.message);
           }
           
-          await new Promise(r => setTimeout(r, 300));
+          await new Promise(r => setTimeout(r, 500));
         }
       }
     }
