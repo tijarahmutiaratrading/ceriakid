@@ -448,6 +448,30 @@ export default function AdminGameManager() {
             </button>
             <button
               onClick={async () => {
+                setActionLoading('audit-all');
+                showToast('📋 Auditing semua games...', true);
+                try {
+                  const res = await base44.functions.invoke('auditAllGames', {});
+                  console.log('Audit Results:', res.data);
+                  showToast(`📊 Audit selesai: ${res.data.summary.passed}/${res.data.summary.totalGames} games OKEY (${res.data.summary.passRate})`, true);
+                  if (res.data.failedGames.length > 0) {
+                    showToast(`⚠️ ${res.data.failedGames.length} games ada issues - check console details`, false);
+                  }
+                } catch (err) {
+                  showToast('❌ ' + err.message, false);
+                } finally {
+                  setActionLoading(null);
+                }
+              }}
+              disabled={!!actionLoading}
+              className="flex items-center gap-2 px-3 py-2 bg-indigo-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
+              title="Audit all games questions quality"
+            >
+              {actionLoading === 'audit-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : '📋'}
+              Audit All
+            </button>
+            <button
+              onClick={async () => {
                 if (!window.confirm('Auto-fix semua games dengan issues? (validate + fix soalan)')) return;
                 setActionLoading('check-all');
                 showToast('🤖 Checking & auto-fixing semua games...', true);
