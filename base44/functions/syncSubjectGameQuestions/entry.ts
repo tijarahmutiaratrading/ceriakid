@@ -17,27 +17,29 @@ async function generateQuestionsForGame(base44, game, needed, existingQuestions)
   const ageDesc = AGE_DESC[game.ageGroup] || game.ageGroup;
   const existingSample = existingQuestions.slice(0, 3).map(q => q.problem || q.question || '').filter(Boolean).join('; ');
 
-  const prompt = `Kamu adalah pembuat soalan pendidikan kanak-kanak Malaysia.
+  const prompt = `Kamu adalah expert pembuat soalan pendidikan Malaysia yang SANGAT BIJAK dan TELITI.
 
-Buat tepat ${needed} soalan BARU dan UNIK untuk game bertajuk: "${game.title}"
+Buat TEPAT ${needed} soalan BARU, UNIK dan BERKUALITI untuk: "${game.title}"
 Subjek: ${subject}
 Peringkat: ${ageDesc}
-Jenis game: ${game.type || 'multiple_choice'}
+Jenis: ${game.type || 'multiple_choice'}
 
-${existingSample ? `Contoh soalan sedia ada (JANGAN ulang): ${existingSample}` : ''}
+${existingSample ? `Contoh sedia ada (JANGAN ULANG): ${existingSample}` : ''}
 
-Keperluan:
-- Setiap soalan mesti berkaitan dengan tajuk game
-- Tepat 4 pilihan jawapan (options)
-- Satu jawapan betul (answer = index 0, 1, 2 atau 3)
-- Bahasa sesuai untuk kanak-kanak
-- Soalan BERBEZA antara satu sama lain
-- Kalau bahasa_melayu atau sains/matematik: guna BM; kalau english: guna English
+KRITERIA WAJIB TUNAIKAN:
+1. Soalan JELAS, TEPAT, BERKAITAN dengan tajuk dan kurikulum Malaysia
+2. Tepat 4 pilihan yang BERBEZA dan MASUK AKAL
+3. Jawapan betul PASTI betul (jangan samar atau debatable)
+4. Emoji RELEVAN dengan soalan & MATCH dengan jawapan betul (contoh: 🐘 haruslah match dengan jawapan tentang gajah)
+5. Bahasa sesuai kanak-kanak, menarik, tidak terlalu mudah atau sukar
+6. JANGAN ULANG soalan yang sedia ada
+7. Setiap soalan MESTI ada emoji dalam problem field
 
-Balas dalam JSON SAHAJA tanpa teks lain.`;
+Balas JSON dengan TEPAT ${needed} soalan:`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
+    model: 'claude_sonnet_4_6',
     response_json_schema: {
       type: 'object',
       properties: {
@@ -46,12 +48,15 @@ Balas dalam JSON SAHAJA tanpa teks lain.`;
           items: {
             type: 'object',
             properties: {
-              problem: { type: 'string' },
-              options: { type: 'array', items: { type: 'string' } },
-              answer: { type: 'number' },
+              problem: { type: 'string', description: 'Soalan dengan emoji relevant di dalamnya' },
+              options: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4 },
+              answer: { type: 'number', minimum: 0, maximum: 3 },
+              emoji: { type: 'string', description: 'Emoji yang match dengan jawapan betul' },
             },
-            required: ['problem', 'options', 'answer'],
+            required: ['problem', 'options', 'answer', 'emoji'],
           },
+          minItems: needed,
+          maxItems: needed,
         },
       },
       required: ['questions'],
