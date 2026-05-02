@@ -59,13 +59,13 @@ export default function AdminGameManager() {
       const [statsRes, ...dbGameGroups] = await Promise.all([
         base44.functions.invoke('getGameDatabase', {}),
         ...SUBJECT_CONFIG.map(sc =>
-          base44.entities.Game.filter({ ageGroup: sc.ageGroup, category: sc.subject, isPublished: true })
+          base44.entities.Game.filter({ ageGroup: sc.ageGroup, category: sc.subject, isPublished: true }).catch(() => [])
         ),
       ]);
 
       const stats = {};
-      for (const sub of statsRes.data.subjects) {
-        for (const g of sub.games) {
+      for (const sub of statsRes.subjects || []) {
+        for (const g of sub.games || []) {
           const key = `${sub.ageGroup}-${sub.subject}-${g.index}`;
           stats[key] = { players: g.players, timesPlayed: g.timesPlayed, avgScore: g.avgScore };
         }
@@ -97,7 +97,6 @@ export default function AdminGameManager() {
               players: stat.players,
               timesPlayed: stat.timesPlayed,
               avgScore: stat.avgScore,
-              // full DB game object for editing
               _raw: dbGames.length > 0 ? g : null,
             };
           }),
@@ -107,6 +106,7 @@ export default function AdminGameManager() {
       setDbGamesCache(newDbGamesCache);
       setSubjects(builtSubjects);
     } catch (err) {
+      console.error('Fetch stats error:', err);
       showToast('Stats tidak dapat diload', false);
     } finally {
       setLoading(false);
