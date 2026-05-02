@@ -302,7 +302,7 @@ export default function GamesList() {
             </Link>
           </motion.div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-5">
             {games.map((game, i) => {
               const globalIdx = allGames.findIndex((g) => g === game);
               const gameKey = `${ageGroup}-${category}-${globalIdx}`;
