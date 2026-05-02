@@ -317,26 +317,71 @@ export default function AdminGameManager() {
 
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
-      {/* Floating Progress Bar - Always Visible */}
+      {/* Floating Progress Bar - Battery Charge Animation */}
       <AnimatePresence>
         {taskProgress.length > 0 && regenerationTasks && (
           <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            className="fixed bottom-20 left-4 right-4 max-w-sm mx-auto z-40 bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl shadow-lg p-4"
+            initial={{ y: 100, opacity: 0, scale: 0.8 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 100, opacity: 0, scale: 0.8 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+            className="fixed bottom-20 left-4 right-4 max-w-sm mx-auto z-40 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 rounded-2xl shadow-2xl p-5 border-2 border-white/40"
+            style={{
+              boxShadow: '0 0 30px rgba(255, 107, 53, 0.6)',
+            }}
           >
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-white font-bold text-sm">🚀 Tasks Running...</p>
-              <p className="text-white text-xs font-bold">{taskProgress.length}/{regenerationTasks.length}</p>
+            {/* Pulsing Background */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 opacity-50"
+              animate={{ opacity: [0.5, 0.2, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-white font-black text-base">⚡ Generating Games</p>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                  className="text-2xl"
+                >
+                  🔋
+                </motion.div>
+              </div>
+
+              {/* Battery-style progress */}
+              <div className="flex items-center gap-2">
+                <div className="flex-1 h-4 bg-white/20 rounded-full overflow-hidden border-2 border-white/40">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 rounded-full"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(taskProgress.length / regenerationTasks.length) * 100}%` }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    style={{
+                      boxShadow: '0 0 15px rgba(255, 165, 0, 0.8)',
+                    }}
+                  />
+                </div>
+                <motion.p
+                  className="text-white font-black text-sm min-w-10 text-center"
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 0.6, repeat: Infinity }}
+                >
+                  {Math.round((taskProgress.length / regenerationTasks.length) * 100)}%
+                </motion.p>
+              </div>
+
+              <div className="mt-2 flex items-center gap-2">
+                <span className="text-white/90 text-xs font-bold">{taskProgress.length}/{regenerationTasks.length} tasks</span>
+                <motion.span
+                  animate={{ opacity: [1, 0.5, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className="text-white text-xs"
+                >
+                  ⏳ Jangan close browser
+                </motion.span>
+              </div>
             </div>
-            <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-white transition-all duration-300"
-                style={{ width: `${(taskProgress.length / regenerationTasks.length) * 100}%` }}
-              />
-            </div>
-            <p className="text-white/70 text-xs mt-2">Boleh close page—tasks jalan background</p>
           </motion.div>
         )}
       </AnimatePresence>
