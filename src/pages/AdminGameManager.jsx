@@ -317,6 +317,30 @@ export default function AdminGameManager() {
 
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
+      {/* Floating Progress Bar - Always Visible */}
+      <AnimatePresence>
+        {taskProgress.length > 0 && regenerationTasks && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-20 left-4 right-4 max-w-sm mx-auto z-40 bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl shadow-lg p-4"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-white font-bold text-sm">🚀 Tasks Running...</p>
+              <p className="text-white text-xs font-bold">{taskProgress.length}/{regenerationTasks.length}</p>
+            </div>
+            <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-white transition-all duration-300"
+                style={{ width: `${(taskProgress.length / regenerationTasks.length) * 100}%` }}
+              />
+            </div>
+            <p className="text-white/70 text-xs mt-2">Boleh close page—tasks jalan background</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {toast && (
           <motion.div
