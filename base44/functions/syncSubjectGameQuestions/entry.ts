@@ -23,7 +23,7 @@ Tugas: Jana TEPAT ${needed} soalan BARU, UNIK & BERKUALITI untuk:
 Topik: "${game.title}"
 Subjek: ${subject}
 Peringkat: ${ageDesc}
-Jenis: ${game.type || 'multiple_choice'}
+Jenis: ${game.type}
 
 JENIS PERMAINAN: ${game.type}
 
