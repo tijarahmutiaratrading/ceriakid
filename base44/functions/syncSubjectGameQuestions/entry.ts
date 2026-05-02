@@ -55,6 +55,8 @@ Subjek: ${subject}
 Peringkat: ${ageDesc}
 Jenis: ${game.type || 'multiple_choice'}
 
+NOTA: Jenis soalan boleh divariasikan—tidak semestinya multiple_choice. Boleh buat soalan terbuka, matching, fill-in-the-blank, true/false, dsb mengikut topik. Jangan terpaksa gunakan 4 pilihan jika jenis lain lebih sesuai.
+
 ${existingSample ? `JANGAN ULANG SOALAN INI: ${existingSample}` : ''}
 
 ────────────────────────
@@ -73,34 +75,6 @@ PILIHAN JAWAPAN:
 - Panjang ayat pilihan mesti hampir sama (elak obvious answer)
 - Susunan jawapan mesti rawak (jawapan tidak sentiasa di tempat sama)
 - Jawapan mesti wujud EXACT dalam pilihan
-
-────────────────────────
-PERATURAN EMOJI (SANGAT KETAT - ZERO ERROR TOLERANCE):
-🚨 CRITICAL: Emoji HANYA boleh dalam field "emoji" SAHAJA! 🚨
-- TIADA emoji kat mana-mana bahagian soalan atau pilihan
-- TIADA emoji di awal soalan "🇲🇾 Apakah..."
-- TIADA emoji di tengah soalan "Apakah 🇲🇾 warna..."
-- TIADA emoji di akhir soalan "Apakah warna bendera? 🇲🇾"
-- TIADA emoji dalam pilihan jawapan
-- Emoji HANYA dalam field terpisah "emoji": "🇲🇾"
-- Setiap soalan hanya boleh ada SATU emoji sahaja
-- Emoji mesti MATCH EXACT dengan jawapan (bukan simbolik)
-- Setiap emoji mesti BERBEZA (tiada ulangan langsung)
-- Jika tidak pasti emoji mana yang tepat → JANGAN jana soalan itu (reject)
-
-Contoh BETUL:
-{
-  "soalan": "Apakah warna bendera Malaysia?",
-  "pilihan": ["Merah dan Putih", "Biru dan Putih", "Hijau dan Kuning", "Merah dan Kuning"],
-  "jawapan": "Merah dan Putih",
-  "emoji": "🇲🇾"
-}
-
-Contoh SALAH (akan REJECT):
-❌ {"soalan": "🇲🇾 Apakah warna bendera Malaysia?", ...}
-❌ {"soalan": "Apakah warna bendera 🇲🇾 Malaysia?", ...}
-❌ {"soalan": "Apakah warna bendera Malaysia? 🇲🇾", ...}
-❌ {"pilihan": ["Merah 🇲🇾", "Biru", "Hijau", "Kuning"], ...}
 
 ────────────────────────
 TAHAP KESUKARAN:
