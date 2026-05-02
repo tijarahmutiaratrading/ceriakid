@@ -56,7 +56,6 @@ Output MESTI JSON dengan array "questions". Setiap soalan:
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
-    model: 'claude_sonnet_4_6',
     response_json_schema: {
       type: 'object',
       properties: {
@@ -66,8 +65,13 @@ Output MESTI JSON dengan array "questions". Setiap soalan:
             type: 'object',
             properties: {
               problem: { type: 'string' },
-              options: { type: 'array', items: { type: 'string' } },
-              answer: { type: 'number' },
+              options: {
+                type: 'array',
+                items: { type: 'string' },
+                minItems: 4,
+                maxItems: 4,
+              },
+              answer: { type: 'number', minimum: 0, maximum: 3 },
               emoji: { type: 'string' },
             },
             required: ['problem', 'options', 'answer', 'emoji'],
@@ -78,12 +82,23 @@ Output MESTI JSON dengan array "questions". Setiap soalan:
     },
   });
 
-  // Gunakan soalan LLM langsung tanpa strict validation (LLM dah format betul)
+  // Validate & filter valid questions
   const questions = (result.questions || [])
-    .filter(q => q && q.problem && q.options?.length === 4 && q.answer !== undefined && q.emoji)
-    .slice(0, questionsCount);
+    .filter(q => {
+      if (!q || !q.problem || !q.options || !q.emoji) return false;
+      if (q.options.length !== 4) return false;
+      if (typeof q.answer !== 'number' || q.answer < 0 || q.answer > 3) return false;
+      if (!q.options[q.answer] || q.options[q.answer].trim().length === 0) return false;
+      return true;
+    })
+    .map(q => ({
+      problem: q.problem.trim(),
+      options: q.options.map(o => (o || '').trim()),
+      answer: q.answer,
+      emoji: q.emoji.trim() || '🎮',
+    }));
   
-  console.log(`Generated ${questions.length}/${questionsCount} questions for ${gameTitle}`);
+  console.log(`Generated ${questions.length}/${questionsCount} valid questions for ${gameTitle}`);
   
   return questions;
 }
