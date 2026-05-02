@@ -25,7 +25,7 @@ Subjek: ${subject}
 Peringkat: ${ageDesc}
 Jenis: ${game.type || 'multiple_choice'}
 
-NOTA: Jenis soalan boleh divariasikan—tidak semestinya multiple_choice. Boleh buat soalan terbuka, matching, fill-in-the-blank, true/false, dsb mengikut topik. Jangan terpaksa gunakan 4 pilihan jika jenis lain lebih sesuai.
+JENIS PERMAINAN: ${game.type}
 
 ${existingSample ? `JANGAN ULANG SOALAN INI: ${existingSample}` : ''}
 
@@ -39,12 +39,30 @@ PERATURAN SOALAN:
 - Variasikan gaya ayat (jangan semua bermula dengan "Apakah")
 
 ────────────────────────
-PILIHAN JAWAPAN:
-- Mesti ada 4 pilihan sahaja
+STRUKTUR BERDASARKAN JENIS PERMAINAN:
+
+JIKA multiple_choice, letter_match, number_match, picture_quiz, counting, math_puzzle:
+- WAJIB ada 4 pilihan jawapan (A, B, C, D)
 - Semua pilihan mesti dalam kategori yang sama
 - Panjang ayat pilihan mesti hampir sama (elak obvious answer)
 - Susunan jawapan mesti rawak (jawapan tidak sentiasa di tempat sama)
 - Jawapan mesti wujud EXACT dalam pilihan
+
+JIKA matching, word_builder, spelling, phonics:
+- Soalan boleh ada pasangan (matching pairs)
+- Atau boleh ada blank yang perlu diisi
+- Minimal 2-3 pilihan/pasangan untuk setiap soalan
+- Bukan semestinya 4 pilihan tepat
+
+JIKA true/false, yes/no:
+- Soalan jelas dan unambiguous
+- Jawapan WAJIB "Ya" atau "Tidak" / "Betul" atau "Salah"
+- Hanya ada 2 pilihan
+
+JIKA drag_drop, shape_sort, color_match:
+- Soalan boleh lebih deskriptif dengan instruksi visual
+- Jawapan boleh berupa kategori atau matching items
+- Fleksibel dengan jumlah pilihan (minimum 3)
 
 ────────────────────────
 TAHAP KESUKARAN:
@@ -55,10 +73,29 @@ TAHAP KESUKARAN:
 ────────────────────────
 FORMAT OUTPUT (WAJIB - JSON SAHAJA, TANPA TEKS TAMBAHAN):
 
+Jika multiple_choice/letter_match/number_match/counting/math_puzzle (4 pilihan):
 [
   {
     "soalan": "",
     "pilihan": ["", "", "", ""],
+    "jawapan": ""
+  }
+]
+
+Jika true/false atau yes/no (2 pilihan):
+[
+  {
+    "soalan": "",
+    "pilihan": ["Ya", "Tidak"],
+    "jawapan": ""
+  }
+]
+
+Jika matching/word_builder/fill_blank (fleksibel pilihan):
+[
+  {
+    "soalan": "",
+    "pilihan": ["", "", ""],
     "jawapan": ""
   }
 ]
@@ -68,7 +105,9 @@ VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
 - Tiada soalan duplicate
 - Tiada subtopik berulang
 - Jawapan tepat dan tidak bercanggah
-- Jawapan wujud dalam pilihan`;
+- Jawapan MESTI wujud dalam pilihan array
+- Jumlah pilihan SESUAI dengan jenis permainan (boleh 2, 3, 4, atau lebih)
+- Tidak semua soalan harus 4 pilihan—VARIASIKAN mengikut jenis permainan`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
