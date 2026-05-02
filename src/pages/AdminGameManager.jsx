@@ -901,10 +901,11 @@ export default function AdminGameManager() {
                   </button>
                 </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    );
-  }
-}
+              </motion.div>
+              </motion.div>
+              )}
+              </AnimatePresence>
+              </div>
+              );
+              }
+              }
