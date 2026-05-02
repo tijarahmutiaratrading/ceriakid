@@ -5,6 +5,7 @@ import { base44 } from '@/api/base44Client';
 
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
 const TIERS = ['free', 'premium', 'pro'];
+const QUESTION_GENERATION_DELAY = 3000;
 
 export default function SyncAndEditModal({ games, subjectLabel, ageGroup, subject, onClose, onSaved }) {
   const [tab, setTab] = useState('sync');
@@ -61,14 +62,20 @@ export default function SyncAndEditModal({ games, subjectLabel, ageGroup, subjec
     if (updates.isPublished !== '') cleanUpdates.isPublished = updates.isPublished === 'true';
 
     try {
-      if (Object.keys(cleanUpdates).length > 0 || targetQuestions) {
-        setProgress(`⏳ Updating ${gameIds.length} games...`);
-        await base44.functions.invoke('bulkUpdateGamesInDB', {
-          gameIds,
-          updates: cleanUpdates,
-          targetCount: targetQuestions ? parseInt(targetQuestions) : undefined,
-        });
-      }
+       if (Object.keys(cleanUpdates).length === 0 && !targetQuestions && !aiExpand) {
+         setError('Pilih sekurang-kurangnya satu perubahan');
+         setSaving(false);
+         return;
+       }
+
+       if (Object.keys(cleanUpdates).length > 0 || targetQuestions) {
+         setProgress(`⏳ Updating ${gameIds.length} games...`);
+         await base44.functions.invoke('bulkUpdateGamesInDB', {
+           gameIds,
+           updates: cleanUpdates,
+           targetCount: targetQuestions ? parseInt(targetQuestions) : undefined,
+         });
+       }
 
       if (aiExpand && targetQuestions) {
         const count = parseInt(targetQuestions);
@@ -83,7 +90,7 @@ export default function SyncAndEditModal({ games, subjectLabel, ageGroup, subjec
             gameId: g.id,
           });
           if (i < selectedGames.length - 1) {
-            await new Promise(r => setTimeout(r, 3000));
+           await new Promise(r => setTimeout(r, QUESTION_GENERATION_DELAY));
           }
         }
       }
@@ -127,7 +134,7 @@ export default function SyncAndEditModal({ games, subjectLabel, ageGroup, subjec
         {/* Tabs */}
         <div className="flex border-b border-gray-100">
           <button
-            onClick={() => setTab('sync')}
+            onClick={() => { setTab('sync'); setError(null); setProgress(null); }}
             className={`flex-1 px-4 py-3 font-bold text-sm transition-all ${
               tab === 'sync'
                 ? 'border-b-2 border-indigo-500 text-indigo-600'
@@ -137,7 +144,7 @@ export default function SyncAndEditModal({ games, subjectLabel, ageGroup, subjec
             📤 Sync to DB
           </button>
           <button
-            onClick={() => setTab('edit')}
+            onClick={() => { setTab('edit'); setError(null); setProgress(null); }}
             className={`flex-1 px-4 py-3 font-bold text-sm transition-all ${
               tab === 'edit'
                 ? 'border-b-2 border-indigo-500 text-indigo-600'

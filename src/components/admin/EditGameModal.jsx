@@ -6,6 +6,7 @@ import { base44 } from '@/api/base44Client';
 const GAME_TYPES = ['multiple_choice', 'letter_match', 'number_match', 'picture_quiz', 'drag_drop', 'counting', 'word_builder', 'math_puzzle', 'science_quiz', 'spelling', 'reading', 'phonics'];
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
 const TIERS = ['free', 'premium', 'pro'];
+const QUESTION_GENERATION_DELAY = 3000;
 
 export default function EditGameModal({ game, onClose, onSaved }) {
   const [form, setForm] = useState({
@@ -100,7 +101,8 @@ export default function EditGameModal({ game, onClose, onSaved }) {
               <label className="text-xs font-bold text-gray-500 mb-1 block">Tajuk Game</label>
               <input
                 value={form.title}
-                onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                maxLength="100"
+                onChange={e => setForm(f => ({ ...f, title: e.target.value.slice(0, 100) }))}
                 className="w-full border-2 border-gray-200 rounded-xl p-2.5 text-sm font-semibold focus:border-indigo-400 focus:outline-none"
               />
             </div>
@@ -108,7 +110,8 @@ export default function EditGameModal({ game, onClose, onSaved }) {
               <label className="text-xs font-bold text-gray-500 mb-1 block">Emoji</label>
               <input
                 value={form.emoji}
-                onChange={e => setForm(f => ({ ...f, emoji: e.target.value }))}
+                maxLength="2"
+                onChange={e => setForm(f => ({ ...f, emoji: e.target.value.slice(0, 2) }))}
                 className="w-full border-2 border-gray-200 rounded-xl p-2.5 text-sm text-center text-2xl focus:border-indigo-400 focus:outline-none"
               />
             </div>
@@ -176,8 +179,9 @@ export default function EditGameModal({ game, onClose, onSaved }) {
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <span className="text-xs text-gray-400">{q.options?.length || 0} pilihan</span>
                       <button
-                        onClick={e => { e.stopPropagation(); deleteQuestion(idx); }}
+                        onClick={e => { e.stopPropagation(); if (window.confirm(`Buang soalan "${q.problem?.slice(0, 20) || '(kosong)'}"`)) deleteQuestion(idx); }}
                         className="p-1 text-red-400 hover:bg-red-50 rounded-lg"
+                        title="Delete question"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
