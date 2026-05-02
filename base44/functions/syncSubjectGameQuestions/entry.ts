@@ -32,10 +32,16 @@ KRITERIA WAJIB TUNAIKAN:
 3. Jawapan betul PASTI betul (jangan samar atau debatable)
 4. Emoji RELEVAN dengan soalan & MATCH dengan jawapan betul (contoh: 🐘 haruslah match dengan jawapan tentang gajah)
 5. Bahasa sesuai kanak-kanak, menarik, tidak terlalu mudah atau sukar
-6. JANGAN ULANG soalan yang sedia ada
+6. JANGAN ULANG soalan yang sedia ada—setiap soalan MESTILAH BERBEZA topic/subtopic
 7. Setiap soalan MESTI ada emoji dalam problem field
+8. EMOJI MESTI BERBEZA untuk setiap soalan—jangan ulang emoji yang sama
+9. Emoji pilihan untuk ${subject}:
+   - Bahasa Melayu: 📚 📖 ✏️ 🔤 💬 🗣️ 📝 📄 🎓 🌍 (JANGAN 🍃 🌿 🌱 sahaja!)
+   - English: 🌟 📚 ✍️ 🔤 💬 🇬🇧 📖 🎤 💭 🏆
+   - Matematik: 🔢 ➕ ➖ ✖️ ➗ 📐 📏 🧮 🔺 💯
+   - Sains: 🔬 🧬 🧪 🌍 🌱 🦋 🔭 ⚗️ 🧫 🌎
 
-Balas JSON dengan TEPAT ${needed} soalan:`;
+Balas JSON dengan TEPAT ${needed} soalan yang BERBEZA emoji setiap satu:`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,

@@ -49,25 +49,45 @@ async function validateQuestionQuality(question) {
 }
 
 async function generateGameQuestions(base44, gameTitle, subject, ageGroup, gameType, questionsCount) {
-  const prompt = `Buat TEPAT ${questionsCount} soalan berkualiti untuk:
+  const emojiOptions = {
+    bahasa_melayu: '📚 📖 ✏️ 🔤 💬 🗣️ 📝 📄 🎓 🌍 🐛 🌳 🐠 🎪 🏠 🚗 🍎 🎨',
+    english: '🌟 📚 ✍️ 🔤 💬 🇬🇧 📖 🎤 💭 🏆 🦁 🌸 🎸 ⚽ 🎭 🚀 👑 🎯',
+    mathematics: '🔢 ➕ ➖ ✖️ ➗ 📐 📏 🧮 🔺 💯 ⭐ 🎲 📊 🔔 🧩 🎪 📍 💎',
+    science: '🔬 🧬 🧪 🌍 🌱 🦋 🔭 ⚗️ 🧫 🌎 🧊 🔥 💧 🌙 ⚡ 🦠 🌤️ 🌌',
+    default: '🎮 🎯 🎪 🎨 🎭 🎬 🎤 🎸 🎺 🎻 🎲 🎰 🎮 🧩 🎯 ✨ 🌟 💫'
+  };
+  const availableEmoji = (emojiOptions[subject] || emojiOptions.default).split(' ');
+  
+  const prompt = `Buat TEPAT ${questionsCount} soalan berkualiti UNIK dan BERBEZA untuk:
 "${gameTitle}" - ${CATEGORY_LABELS[subject]} (${AGE_LABELS[ageGroup]})
 
 RULES KETAT—MESTI DIIKUTI SEMPURNA:
-1. Soalan MESTI jelas, mudah difahami untuk umur target
-2. 4 pilihan jawapan MESTI berbeza, relevan & menarik
-3. Jawapan betul MESTI 100% betul (check 3x sebelum output)
-4. Emoji MESTI 1 emoji SAHAJA yang SYNC dengan jawapan/subjek, BUKAN generic!
-   LARANGAN: 🎮 📝 ❓ 📚 🎓 (generic)
-   CONTOH BETUL: 
-   - Q: "Apakah warna langit?" Ans: "Biru" → emoji ☀️ atau 🌤️ (SKI dengan biru/langit)
-   - Q: "Haiwan apa punya sayap?" Ans: "Burung" → emoji 🐦 atau 🦅 (SKI dengan burung)
-   - Q: "Berapa 2+2?" Ans: "4" → emoji 🔢 atau ✖️ (SKI dengan math)
+1. Setiap soalan MESTI BERBEZA topic/subtopic—JANGAN soalan SIMILAR!
+   SALAH: "Apakah warna langit?" dan "Warna apa langit itu?" (sama!)
+   BETUL: Q1 tentang warna langit, Q2 tentang haiwan, Q3 tentang nombor, dsb.
+
+2. Soalan MESTI jelas, mudah difahami untuk umur target, MENARIK untuk kanak-kanak
+
+3. 4 pilihan jawapan MESTI berbeza, relevan, masuk akal & TIDAK confusing
+
+4. Jawapan betul MESTI 100% TEPAT (verify 3x sebelum output)
+
+5. Emoji MESTI BERBEZA untuk SETIAP soalan—JANGAN ulang emoji yang sama!
+   Emoji pilihan untuk ${CATEGORY_LABELS[subject]}: ${availableEmoji.join(' ')}
+   Penting: Setiap soalan pakai emoji berbeza dari soalan lain
+
+6. Emoji MESTI relevan dengan topik soalan ATAU jawapan betul, BUKAN generic!
+   LARANGAN generic: 🎮 ❓ 📝 (terlalu generic)
+   CONTOH BETUL:
+   - Q: "Haiwan apa punya sayap?" Ans: "Burung" → 🐦 atau 🦅 (langsung match)
+   - Q: "Berapa 2+2?" Ans: "4" → 🔢 atau ✖️ (match dengan math)
+   - Q: "Warna bendera Malaysia?" Ans: "Merah & Biru" → 🇲🇾 (langsung match)
 
 Output MESTI valid JSON dengan array "questions". Setiap soalan:
-- problem: string (soalan yang jelas, 15-30 perkataan)
-- options: array 4 string (pilihan A, B, C, D masing-masing 3-15 perkataan)
-- answer: number (0-3, indeks jawapan betul)
-- emoji: string (1 emoji tunggal yang LANGSUNG berkaitan dengan jawapan betul/topik)`;
+- problem: string (soalan yang jelas, 15-30 perkataan, WITH emoji relevant)
+- options: array 4 string (pilihan A, B, C, D masing-masing 3-15 perkataan, SEMUA berbeza)
+- answer: number (0-3, indeks jawapan betul sahaja)
+- emoji: string (1 emoji SAHAJA yang berbeza dari soalan lain, relevan dengan topik/jawapan)`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
