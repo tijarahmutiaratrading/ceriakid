@@ -899,13 +899,13 @@ export default function AdminGameManager() {
                   >
                     {taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute Task ${taskProgress.length + 1}`}
                   </button>
-                </div>
-              </div>
-              </motion.div>
-              </motion.div>
-              )}
-              </AnimatePresence>
-              </div>
-              );
-              }
-              }
+                  </div>
+                  </div>
+                  </motion.div>
+                  </motion.div>
+                  )}
+                  </AnimatePresence>
+                  </div>
+                  );
+                  }
+                  }
