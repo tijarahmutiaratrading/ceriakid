@@ -504,10 +504,13 @@ export default function AdminGameManager() {
                              if (dbGames.length === 0) { showToast('Tiada data untuk di-verify', false); setActionLoading(null); return; }
                              let verified = 0;
                              let flagged = 0;
+                             const total = dbGames.length;
 
-                             for (const game of dbGames) {
+                             for (let i = 0; i < dbGames.length; i++) {
+                               const game = dbGames[i];
                                if (!game.gameData?.questions?.length) continue;
                                try {
+                                 showToast(`⏳ Verify ${s.label}... ${i + 1}/${total} (${game.title?.slice(0, 20)}...)`, true);
                                  const result = await base44.functions.invoke('validateGameQuestionsQuality', {
                                    gameId: game.id,
                                    ageGroup: game.ageGroup,
@@ -687,20 +690,23 @@ export default function AdminGameManager() {
                           showToast(`⏳ Verify QA ${s.label}...`, true);
                           try {
                             const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
-                            if (dbGames.length === 0) { showToast('Tiada data untuk di-verify', false); return; }
+                            if (dbGames.length === 0) { showToast('Tiada data untuk di-verify', false); setActionLoading(null); return; }
                             let verified = 0;
                             let flagged = 0;
-                            
-                            for (const game of dbGames) {
+                            const total = dbGames.length;
+
+                            for (let i = 0; i < dbGames.length; i++) {
+                              const game = dbGames[i];
                               if (!game.gameData?.questions?.length) continue;
                               try {
+                                showToast(`⏳ Verify ${s.label}... ${i + 1}/${total} (${game.title?.slice(0, 20)}...)`, true);
                                 const result = await base44.functions.invoke('validateGameQuestionsQuality', {
                                   gameId: game.id,
                                   ageGroup: game.ageGroup,
                                   category: game.category,
                                   questions: game.gameData.questions,
                                 });
-                                
+
                                 if (result.data.validation.summary.invalid_count > 0) {
                                   flagged++;
                                   console.warn(`Game "${game.title}" flagged:`, result.data.validation.summary);
