@@ -31,17 +31,22 @@ Deno.serve(async (req) => {
     }
 
     let created = 0;
-    let updated = 0;
+    let skipped = 0;
     let errors = 0;
 
     for (const g of games) {
       try {
-        // Check if game already exists in DB
+        // Check if game already exists in DB — if yes, SKIP (preserve AI-generated questions)
         const existing = await base44.asServiceRole.entities.Game.filter({
           ageGroup: g.ageGroup,
           category: g.category,
           order: g.index,
         });
+
+        if (existing.length > 0) {
+          skipped++;
+          continue;
+        }
 
         const gameRecord = {
           title: g.title,
@@ -57,13 +62,8 @@ Deno.serve(async (req) => {
           order: g.index,
         };
 
-        if (existing.length > 0) {
-          await base44.asServiceRole.entities.Game.update(existing[0].id, gameRecord);
-          updated++;
-        } else {
-          await base44.asServiceRole.entities.Game.create(gameRecord);
-          created++;
-        }
+        await base44.asServiceRole.entities.Game.create(gameRecord);
+        created++;
       } catch (err) {
         errors++;
       }
@@ -72,7 +72,7 @@ Deno.serve(async (req) => {
     return Response.json({
       success: true,
       created,
-      updated,
+      skipped,
       errors,
       total: games.length,
     });
