@@ -12,14 +12,24 @@ const AGE_DESC = {
   sekolah_rendah: 'sekolah rendah (umur 7-12 tahun)',
 };
 
+const GAME_TYPES_BY_SUBJECT = {
+  bahasa_melayu: ['word_builder', 'matching', 'multiple_choice', 'spelling', 'true_false'],
+  english: ['word_builder', 'matching', 'multiple_choice', 'spelling', 'true_false'],
+  mathematics: ['multiple_choice', 'true_false', 'ordering', 'short_answer', 'matching'],
+  science: ['matching', 'multiple_choice', 'true_false', 'short_answer', 'ordering'],
+};
+
 async function generateQuestionsForGame(base44, game, needed, existingQuestions) {
   const subject = CATEGORY_LANG[game.category] || game.category;
   const ageDesc = AGE_DESC[game.ageGroup] || game.ageGroup;
   const existingSample = existingQuestions.slice(0, 2).map(q => q.problem || q.question || '').filter(Boolean).join('; ');
 
+  const gameTypesForSubject = GAME_TYPES_BY_SUBJECT[game.category] || ['multiple_choice', 'true_false', 'matching'];
+  const typesList = gameTypesForSubject.join(', ');
+  
   const prompt = `Anda ialah pakar pembina soalan pendidikan Malaysia (KSSR) dan pereka permainan pembelajaran interaktif untuk kanak-kanak.
 
-TUGAS: Jana TEPAT ${needed} soalan pendidikan yang BERLAINAN JENIS dan MENARIK untuk:
+TUGAS: Jana TEPAT ${needed} soalan pendidikan yang PELBAGAI JENIS dan MENARIK untuk:
 
 Tajuk: "${game.title}"
 Subjek: ${subject}
@@ -28,15 +38,8 @@ Tahap: ${ageDesc}
 ${existingSample ? `Jangan ulang soalan ini: ${existingSample}` : ''}
 
 ────────────────────
-JENIS SOALAN (pilih pelbagai):
-1. multiple_choice - 4 pilihan jawapan
-2. true_false - Betul atau Salah
-3. short_answer - Jawapan pendek/satu perkataan
-4. matching - Padankan pasangan
-5. ordering - Susun urutan
-6. fill_blank - Isi tempat kosong
-7. yes_no - Ya atau Tidak
-8. odd_one_out - Cari yang berlainan
+JENIS SOALAN (WAJIB campur dari sini sahaja):
+${gameTypesForSubject.map((t, i) => `${i + 1}. ${t}`).join('\n')}
 
 ────────────────────
 PERATURAN:
@@ -46,6 +49,7 @@ PERATURAN:
 - Distractor mesti munasabah tapi jelas salah
 - Gunakan nama tempatan (Ali, Siti, Karim, dll)
 - Soalan pendek dan jelas
+- WAJIB: Gunakan pelbagai type dari senarai atas, JANGAN semua sama
 
 ────────────────────
 FORMAT JSON:
@@ -65,6 +69,15 @@ FORMAT JSON:
       "jawapan": "Betul"
     },
     {
+      "type": "matching",
+      "soalan": "Padankan dengan pasangan yang betul",
+      "pairs": [
+        {"left": "Bulan", "right": "Malam"},
+        {"left": "Matahari", "right": "Siang"}
+      ],
+      "jawapan": "correct_matches"
+    },
+    {
       "type": "short_answer",
       "soalan": "Berapa jumlah hari dalam seminggu?",
       "jawapan": "Tujuh"
@@ -75,7 +88,7 @@ FORMAT JSON:
 ────────────────────
 SEMAK:
 ✓ Bilangan soalan = ${needed}
-✓ Minimum 4 jenis berbeza
+✓ Minimum 3 jenis BERBEZA dari senarai atas
 ✓ Tiada duplicate
 ✓ Jawapan tepat
 ✓ JSON valid`;
