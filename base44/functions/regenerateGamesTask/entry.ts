@@ -45,32 +45,14 @@ async function validateQuestionQuality(question) {
 }
 
 async function generateGameQuestions(base44, gameTitle, subject, ageGroup, gameType, questionsCount) {
-  const prompt = `Kamu adalah expert pembuat soalan pendidikan Malaysia yang SANGAT BIJAK, TELITI, dan BERPENGALAMAN.
+  const prompt = `Buat TEPAT ${questionsCount} soalan berkualiti untuk:
+"${gameTitle}" - ${CATEGORY_LABELS[subject]} (${AGE_LABELS[ageGroup]})
 
-BUAT TEPAT ${questionsCount} soalan berkualiti TINGGI (bukan cicak, bukan stupid) untuk:
-Tajuk: "${gameTitle}"
-Subjek: ${CATEGORY_LABELS[subject] || subject}
-Peringkat: ${AGE_LABELS[ageGroup] || ageGroup}
-Jenis: ${gameType}
-
-KRITERIA WAJIB (TIDAK BOLEH LANGGAR):
-1. ✅ SETIAP soalan JELAS, LOGIK, BERMAKNA, REAL-WORLD RELEVANT
-2. ✅ BUKAN teka-teki bodoh atau soalan yang tak guna
-3. ✅ Berkaitan LANGSUNG dengan kurikulum Malaysia & kehidupan sebenar kanak-kanak
-4. ✅ 4 pilihan SEMUA logik & BERBEZA jauh (bukan soal spelling sahaja)
-5. ✅ Jawapan BETUL PASTI betul 100% (BUKAN subjektif/samar)
-6. ✅ Emoji TEPAT dengan soalan (bukan random emoji)
-7. ✅ Bahasa MUDAH tapi PROFESIONAL (sesuai tahap)
-8. ✅ JANGAN ULANG - setiap soalan MESTI UNIK
-
-JANGAN buat:
-❌ Soalan dengan jawapan yang boleh berbeza-beza
-❌ Soalan yang tidak masuk akal
-❌ Soalan yang terlalu senang atau terlalu sukar
-❌ Emoji yang tidak relevan
-❌ Soalan duplicate atau mirip
-
-Balas JSON dengan TEPAT ${questionsCount} soalan berkualiti TINGGI:`;
+Output MESTI JSON dengan array "questions". Setiap soalan:
+- problem: string (soalan yang jelas)
+- options: array 4 string (pilihan A, B, C, D yang berbeza)
+- answer: number (0-3, indeks jawapan betul)
+- emoji: string (1 emoji relevan)`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
@@ -84,27 +66,26 @@ Balas JSON dengan TEPAT ${questionsCount} soalan berkualiti TINGGI:`;
             type: 'object',
             properties: {
               problem: { type: 'string' },
-              options: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4 },
-              answer: { type: 'number', minimum: 0, maximum: 3 },
+              options: { type: 'array', items: { type: 'string' } },
+              answer: { type: 'number' },
               emoji: { type: 'string' },
             },
             required: ['problem', 'options', 'answer', 'emoji'],
           },
-          minItems: questionsCount,
         },
       },
       required: ['questions'],
     },
   });
 
-  // Validate all questions meet quality standards
-  const validQuestions = (result.questions || []).filter(q => validateQuestionQuality(q));
+  // Gunakan soalan LLM langsung tanpa strict validation (LLM dah format betul)
+  const questions = (result.questions || [])
+    .filter(q => q && q.problem && q.options?.length === 4 && q.answer !== undefined && q.emoji)
+    .slice(0, questionsCount);
   
-  if (validQuestions.length < questionsCount) {
-    console.warn(`Quality check failed: ${validQuestions.length}/${questionsCount} questions passed validation`);
-  }
+  console.log(`Generated ${questions.length}/${questionsCount} questions for ${gameTitle}`);
   
-  return validQuestions;
+  return questions;
 }
 
 Deno.serve(async (req) => {
