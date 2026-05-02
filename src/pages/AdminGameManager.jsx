@@ -898,14 +898,13 @@ export default function AdminGameManager() {
                     className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg"
                   >
                     {taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute Task ${taskProgress.length + 1}`}
-                  </button>
-                  </div>
-                  </div>
-                  </motion.div>
-                  </motion.div>
-                  )}
-                  </AnimatePresence>
-                  </div>
-                  );
-                  }
-                  }
+                    </button>
+                    </div>
+                    </div>
+                    </motion.div>
+                    </motion.div>
+                    )}
+                    </AnimatePresence>
+                    </div>
+                    );
+                    }
