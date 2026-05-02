@@ -213,7 +213,7 @@ export default function AdminGameManager() {
           const BATCH = 10;
           for (let i = 0; i < newGames.length; i += BATCH) {
             const batch = newGames.slice(i, i + BATCH);
-            await base44.functions.invoke('importGamesToDB', { games: batch });
+            await base44.asServiceRole.functions.invoke('importGamesToDB', { games: batch });
             showToast(`⏳ Sync ${sc.label}... ${Math.min(i + BATCH, newGames.length)}/${newGames.length}`, true);
           }
           added += newGames.length;
