@@ -817,88 +817,98 @@ export default function AdminGameManager() {
               </div>
 
               {/* Footer */}
-              <div className="px-6 py-4 border-t border-gray-200 flex gap-3">
-                <button
-                  onClick={() => { setRegenerationTasks(null); setTaskProgress([]); }}
-                  className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={async () => {
-                    const pendingTask = regenerationTasks.find(t => !taskProgress.find(p => p.taskId === t.taskId));
-                    if (!pendingTask) {
-                      showToast('✅ All tasks completed!');
-                      await fetchStats();
-                      setRegenerationTasks(null);
-                      setTaskProgress([]);
-                      return;
-                    }
+              <div className="px-6 py-4 border-t border-gray-200">
+                <p className="text-xs text-gray-400 mb-3 text-center">💡 Backend jalan di server—boleh close browser, tasks akan terus jalan background (~30-60 minit)</p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => { setRegenerationTasks(null); setTaskProgress([]); }}
+                    className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={async () => {
+                      const pendingTask = regenerationTasks.find(t => !taskProgress.find(p => p.taskId === t.taskId));
+                      if (!pendingTask) {
+                        showToast('✅ All tasks completed!');
+                        await fetchStats();
+                        setRegenerationTasks(null);
+                        setTaskProgress([]);
+                        return;
+                      }
 
-                    // Execute next pending task
-                    const newProgress = [...taskProgress, { taskId: pendingTask.taskId, status: 'running', message: 'Running...' }];
-                    setTaskProgress(newProgress);
-                    showToast(`⏳ Executing Task ${pendingTask.taskId}/${regenerationTasks.length}...`, true);
+                      // Execute next pending task
+                      const newProgress = [...taskProgress, { taskId: pendingTask.taskId, status: 'running', message: 'Running...' }];
+                      setTaskProgress(newProgress);
+                      showToast(`⏳ Executing Task ${pendingTask.taskId}/${regenerationTasks.length}...`, true);
 
-                    try {
-                      const res = await base44.functions.invoke('regenerateGamesTask', {
-                        taskId: pendingTask.taskId,
-                        taskName: pendingTask.taskName,
-                        ageGroup: pendingTask.ageGroup,
-                        subject: pendingTask.subject,
-                        gamesCount: pendingTask.gamesCount,
-                        questionsPerGame: pendingTask.questionsPerGame,
-                      });
-
-                      // Mark task as completed
-                      const updatedProgress = taskProgress.map(p =>
-                        p.taskId === pendingTask.taskId
-                          ? { ...p, status: 'completed', message: res.data.message }
-                          : p
-                      );
-                      setTaskProgress(updatedProgress);
-                      showToast(`✅ Task ${pendingTask.taskId} completed: ${res.data.createdGames} games created`);
-
-                      // Auto-run next task after 2 seconds
-                      await new Promise(r => setTimeout(r, 2000));
-                      
-                      // Check if there are more tasks
-                      const nextTask = regenerationTasks.find(t => !updatedProgress.find(p => p.taskId === t.taskId));
-                      if (nextTask) {
-                        // Recursively call to execute next task
-                        const nextRes = await base44.functions.invoke('regenerateGamesTask', {
-                          taskId: nextTask.taskId,
-                          taskName: nextTask.taskName,
-                          ageGroup: nextTask.ageGroup,
-                          subject: nextTask.subject,
-                          gamesCount: nextTask.gamesCount,
-                          questionsPerGame: nextTask.questionsPerGame,
+                      try {
+                        const res = await base44.functions.invoke('regenerateGamesTask', {
+                          taskId: pendingTask.taskId,
+                          taskName: pendingTask.taskName,
+                          ageGroup: pendingTask.ageGroup,
+                          subject: pendingTask.subject,
+                          gamesCount: pendingTask.gamesCount,
+                          questionsPerGame: pendingTask.questionsPerGame,
                         });
-                        
-                        const finalProgress = updatedProgress.map(p =>
-                          p.taskId === nextTask.taskId
-                            ? { ...p, status: 'completed', message: nextRes.data.message }
+
+                        // Mark task as completed
+                        const updatedProgress = taskProgress.map(p =>
+                          p.taskId === pendingTask.taskId
+                            ? { ...p, status: 'completed', message: res.data.message }
                             : p
                         );
-                        finalProgress.push({ taskId: nextTask.taskId, status: 'completed', message: nextRes.data.message });
-                        setTaskProgress(finalProgress);
+                        setTaskProgress(updatedProgress);
+                        showToast(`✅ Task ${pendingTask.taskId} completed: ${res.data.createdGames} games created`);
+
+                        // Auto-run next task after 2 seconds
+                        await new Promise(r => setTimeout(r, 2000));
+                        
+                        // Check if there are more tasks
+                        const nextTask = regenerationTasks.find(t => !updatedProgress.find(p => p.taskId === t.taskId));
+                        if (nextTask) {
+                          // Recursively call to execute next task
+                          const nextRes = await base44.functions.invoke('regenerateGamesTask', {
+                            taskId: nextTask.taskId,
+                            taskName: nextTask.taskName,
+                            ageGroup: nextTask.ageGroup,
+                            subject: nextTask.subject,
+                            gamesCount: nextTask.gamesCount,
+                            questionsPerGame: nextTask.questionsPerGame,
+                          });
+                          
+                          const finalProgress = updatedProgress.map(p =>
+                            p.taskId === nextTask.taskId
+                              ? { ...p, status: 'completed', message: nextRes.data.message }
+                              : p
+                          );
+                          finalProgress.push({ taskId: nextTask.taskId, status: 'completed', message: nextRes.data.message });
+                          setTaskProgress(finalProgress);
+                        }
+                      } catch (err) {
+                        showToast(`❌ Task ${pendingTask.taskId} failed: ${err.message}`, false);
+                        const failedProgress = taskProgress.map(p =>
+                          p.taskId === pendingTask.taskId
+                            ? { ...p, status: 'failed', message: err.message }
+                            : p
+                        );
+                        setTaskProgress(failedProgress);
                       }
-                    } catch (err) {
-                      showToast(`❌ Task ${pendingTask.taskId} failed: ${err.message}`, false);
-                      const failedProgress = taskProgress.map(p =>
-                        p.taskId === pendingTask.taskId
-                          ? { ...p, status: 'failed', message: err.message }
-                          : p
-                      );
-                      setTaskProgress(failedProgress);
-                    }
-                  }}
-                  className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg"
-                >
-                  {taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute Task ${taskProgress.length + 1}`}
-                </button>
+                    }}
+                    className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg"
+                  >
+                    {taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute Task ${taskProgress.length + 1}`}
+                  </button>
+                </div>
               </div>
             </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
+}
           </motion.div>
         )}
       </AnimatePresence>
