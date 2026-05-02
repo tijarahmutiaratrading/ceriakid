@@ -53,6 +53,7 @@ export default function AdminGameManager() {
   const [collapsedSections, setCollapsedSections] = useState({ prasekolah: false, sekolah_rendah: false });
   const [regenerationTasks, setRegenerationTasks] = useState(null);
   const [taskProgress, setTaskProgress] = useState([]);
+  const [generateModal, setGenerateModal] = useState(null);
 
   const showToast = (msg, ok = true) => {
     setToast({ msg, ok });
@@ -429,20 +430,13 @@ export default function AdminGameManager() {
             </button>
             <button
               onClick={async () => {
-                if (!window.confirm('🚨 DELETE semua games dan REGENERATE 30 games x 20 soalan per subject?\n\nIni operasi BESAR - akan ambil ~30-60 minit!')) return;
-                setActionLoading('regen');
-                showToast('⏳ Preparing regeneration tasks...', true);
+                if (!window.confirm('🚨 DELETE semua games? Ini tidak boleh di-undo!')) return;
+                setActionLoading('delete-all');
+                showToast('🗑️ Deleting all games...', true);
                 try {
-                  // Step 1: Delete all games
-                  showToast('🗑️ Deleting all existing games...', true);
                   const deleteRes = await base44.functions.invoke('deleteAllGames', {});
-                  showToast(`Deleted ${deleteRes.data.deletedCount} games`, true);
-
-                  // Step 2: Generate task list
-                  const tasksRes = await base44.functions.invoke('generateGamesRegenerationTasks', {});
-                  setRegenerationTasks(tasksRes.data.tasks);
-                  setTaskProgress([]);
-                  showToast(`📋 Generated ${tasksRes.data.totalTasks} tasks (${tasksRes.data.totalGames} games, ${tasksRes.data.totalQuestions} soalan total)`, true);
+                  showToast(`✅ Deleted ${deleteRes.data.deletedCount} games`);
+                  await fetchStats();
                 } catch (err) {
                   showToast('❌ ' + err.message, false);
                 } finally {
@@ -450,10 +444,18 @@ export default function AdminGameManager() {
                 }
               }}
               disabled={!!actionLoading}
-              className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
+              className="flex items-center gap-2 px-3 py-2 bg-red-700 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
             >
-              {actionLoading === 'regen' ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-              Regenerate All
+              {actionLoading === 'delete-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+              Delete All Games
+            </button>
+            <button
+              onClick={() => setGenerateModal({ games: 30, questions: 20 })}
+              disabled={!!actionLoading}
+              className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
+            >
+              {actionLoading === 'generate' ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+              Generate Games
             </button>
             <button
               onClick={async () => {
@@ -648,6 +650,97 @@ export default function AdminGameManager() {
             onClose={() => setEditGame(null)}
             onSaved={() => { showToast('✅ Game berjaya disimpan!'); fetchStats(); }}
           />
+        )}
+      </AnimatePresence>
+
+      {/* Generate Modal */}
+      <AnimatePresence>
+        {generateModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setGenerateModal(null)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.92, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.92, y: 20 }}
+              onClick={e => e.stopPropagation()}
+              className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden"
+            >
+              <div className="bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-5">
+                <h3 className="font-black text-white text-lg">🎮 Generate Games</h3>
+                <p className="text-white/70 text-xs mt-0.5">Set bilangan untuk semua subject</p>
+              </div>
+
+              <div className="px-6 py-5 space-y-4">
+                <div>
+                  <label className="text-xs font-black text-gray-500 uppercase mb-2 block">Bilangan Games per Subject</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={generateModal.games}
+                    onChange={e => setGenerateModal(m => ({ ...m, games: parseInt(e.target.value) || 1 }))}
+                    className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-blue-400 focus:outline-none text-2xl font-black text-center bg-gray-50"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">Default: 30</p>
+                </div>
+
+                <div>
+                  <label className="text-xs font-black text-gray-500 uppercase mb-2 block">Soalan per Game</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="50"
+                    value={generateModal.questions}
+                    onChange={e => setGenerateModal(m => ({ ...m, questions: parseInt(e.target.value) || 1 }))}
+                    className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-blue-400 focus:outline-none text-2xl font-black text-center bg-gray-50"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">Default: 20</p>
+                </div>
+
+                <p className="text-xs text-blue-600 font-semibold text-center py-2 bg-blue-50 rounded-xl">
+                  Total: {generateModal.games * 13} games × {generateModal.questions} soalan = {generateModal.games * 13 * generateModal.questions} soalan
+                </p>
+              </div>
+
+              <div className="px-6 pb-6 flex gap-3">
+                <button
+                  onClick={() => setGenerateModal(null)}
+                  className="flex-1 py-3 rounded-2xl border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!window.confirm(`Mula generate ${generateModal.games} games × ${generateModal.questions} soalan per subject (13 subject)?\n\nWaktu: ~30-60 minit`)) return;
+                    setGenerateModal(null);
+                    setActionLoading('generate');
+                    showToast('⏳ Preparing regeneration tasks...', true);
+                    try {
+                      const tasksRes = await base44.functions.invoke('generateGamesRegenerationTasks', {
+                        gamesCount: generateModal.games,
+                        questionsPerGame: generateModal.questions,
+                      });
+                      setRegenerationTasks(tasksRes.data.tasks);
+                      setTaskProgress([]);
+                      showToast(`📋 Generated ${tasksRes.data.totalTasks} tasks (${tasksRes.data.totalGames} games)`, true);
+                    } catch (err) {
+                      showToast('❌ ' + err.message, false);
+                    } finally {
+                      setActionLoading(null);
+                    }
+                  }}
+                  className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold text-sm hover:shadow-lg"
+                >
+                  ✅ Start Generate
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 
