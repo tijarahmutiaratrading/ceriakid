@@ -674,14 +674,17 @@ export default function AdminGameManager() {
                           <Users className="w-3 h-3" />{s.games.reduce((a, g) => a + g.players, 0)}
                         </span>
                       )}
-                      <button onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)} disabled={!!actionLoading} className="p-1 md:p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all" title="Sync games & soalan">
+                      <button onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)} disabled={!!actionLoading} className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all text-xs font-bold">
                         {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
+                        <span className="hidden sm:inline">Sync</span>
                       </button>
-                      <button onClick={() => { const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (dbGames.length === 0) { showToast('Import ke DB dulu sebelum bulk edit', false); return; } setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject }); }} disabled={!!actionLoading} className="p-1 md:p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all" title="Bulk Edit games">
+                      <button onClick={() => { const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (dbGames.length === 0) { showToast('Import ke DB dulu sebelum bulk edit', false); return; } setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject }); }} disabled={!!actionLoading} className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all text-xs font-bold">
                         <Layers className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                        <span className="hidden sm:inline">Bulk</span>
                       </button>
-                      <button onClick={async () => { const syncKey = `sync-${s.file}`; setActionLoading(syncKey); showToast(`⏳ Sync ${s.label}...`, true); try { const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); return; } let fixed = 0; for (const g of dbGames) { const actualCount = g.gameData?.questions?.length || 0; if (g.totalQuestions !== actualCount) { await base44.entities.Game.update(g.id, { totalQuestions: actualCount }); fixed++; } } showToast(`✅ Sync selesai! ${fixed} games dikemas kini.`); await fetchStats(); } catch (err) { showToast('❌ ' + err.message, false); } finally { setActionLoading(null); } }} disabled={!!actionLoading} className="p-1 md:p-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all" title="Sync totalQuestions ke frontend">
+                      <button onClick={async () => { const syncKey = `sync-${s.file}`; setActionLoading(syncKey); showToast(`⏳ Sync ${s.label}...`, true); try { const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); setActionLoading(null); return; } let fixed = 0; for (const g of dbGames) { const actualCount = g.gameData?.questions?.length || 0; if (g.totalQuestions !== actualCount) { await base44.entities.Game.update(g.id, { totalQuestions: actualCount }); fixed++; } } showToast(`✅ Sync selesai! ${fixed} games dikemas kini.`); await fetchStats(); } catch (err) { showToast('❌ ' + err.message, false); } finally { setActionLoading(null); } }} disabled={!!actionLoading} className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all text-xs font-bold">
                         {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3 h-3 md:w-3.5 md:h-3.5" />}
+                        <span className="hidden sm:inline">Count</span>
                       </button>
                       <button
                         onClick={async () => {
@@ -725,10 +728,10 @@ export default function AdminGameManager() {
                           }
                         }}
                         disabled={!!actionLoading}
-                        className="p-1 md:p-1.5 bg-cyan-50 hover:bg-cyan-100 text-cyan-600 rounded-lg border border-cyan-200 transition-all"
-                        title="Verify soalan quality (unique, on-topic)"
+                        className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-cyan-50 hover:bg-cyan-100 text-cyan-600 rounded-lg border border-cyan-200 transition-all text-xs font-bold"
                       >
                         {actionLoading === `verify-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
+                        <span className="hidden sm:inline">Verify</span>
                       </button>
                       <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-0.5 md:p-1">
                         {isExpanded ? <ChevronDown className="w-3 h-3 md:w-4 md:h-4 text-gray-400" /> : <ChevronRight className="w-3 h-3 md:w-4 md:h-4 text-gray-400" />}
