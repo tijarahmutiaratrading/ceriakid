@@ -145,8 +145,16 @@ VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
   });
 
   // Validate emoji matches and transform format
+  const emojiRegex = /[\p{Emoji}]/gu;
+  
   return (result || [])
     .filter(q => q.soalan && q.pilihan?.length === 4 && q.jawapan && q.emoji)
+    .filter(q => {
+      // REJECT if emoji found in soalan or pilihan text
+      const hasEmojiInSoalan = emojiRegex.test(q.soalan);
+      const hasEmojiInPilihan = q.pilihan.some(p => emojiRegex.test(p));
+      return !hasEmojiInSoalan && !hasEmojiInPilihan;
+    })
     .map((q) => {
       if (!validateEmojiMatch(q.jawapan, q.emoji)) {
         // Skip if emoji doesn't match answer
