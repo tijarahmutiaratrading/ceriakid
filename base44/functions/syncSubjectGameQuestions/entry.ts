@@ -47,38 +47,43 @@ async function generateQuestionsForGame(base44, game, needed, existingQuestions)
   const ageDesc = AGE_DESC[game.ageGroup] || game.ageGroup;
   const existingSample = existingQuestions.slice(0, 3).map(q => q.problem || q.question || '').filter(Boolean).join('; ');
 
-  const prompt = `Kamu adalah expert pembuat soalan pendidikan Malaysia SANGAT BIJAK, TELITI & KETAT.
+  const prompt = `Anda adalah pakar pembina soalan pendidikan Malaysia (KSSR/KSSM), sangat teliti dan ketat.
 
-Buat TEPAT ${needed} soalan BARU, UNIK & BERKUALITI untuk: "${game.title}"
+Tugas: Jana TEPAT ${needed} soalan BARU, UNIK & BERKUALITI untuk:
+Topik: "${game.title}"
 Subjek: ${subject}
 Peringkat: ${ageDesc}
 Jenis: ${game.type || 'multiple_choice'}
 
-${existingSample ? `Contoh sedia ada (JANGAN ULANG): ${existingSample}` : ''}
+${existingSample ? `JANGAN ULANG: ${existingSample}` : ''}
 
-EMOJI RULES (SANGAT PENTING—ZERO COMPROMISE):
-🔴 HARUS LANGSUNG MATCH DENGAN JAWAPAN BETUL (bukan soalan)
-- Jika jawapan = "Burung" → Emoji MESTI 🐦 atau 🦅 SAHAJA
-- Jika jawapan = "Pensil" → Emoji MESTI ✏️ atau 🖍️ SAHAJA
-- Jika jawapan = "Malaysia" → Emoji MESTI 🇲🇾 SAHAJA
-- JANGAN buat emoji yang salah match (contoh: 🇲🇾 untuk pertanyaan burung = SALAH!)
-- SETIAP soalan emoji MESTI BERLAINAN—ZERO repetition
-- JANGAN gunakan emoji generic: ❓ ❌ ✅ 🎮 📝
+PERATURAN SOALAN:
+- Berdasarkan silibus Malaysia (nyatakan konsep jelas)
+- 1 soalan = 1 konsep sahaja
+- Tidak subjektif / tiada jawapan berganda
+- Semua soalan berbeza subtopik
 
-KONTEN SOALAN:
-1. JELAS, TEPAT, kurikulum Malaysia sesuai
-2. 4 pilihan BERBEZA, masuk akal, TIDAK confusing
-3. Jawapan PASTI betul (tidak samar)
-4. Tidak ulang topik—BERBEZA subtopic setiap satu
-5. Bahasa sesuai ${ageDesc}, menarik
+PILIHAN JAWAPAN:
+- 4 pilihan sahaja
+- Semua dalam kategori sama
+- Panjang hampir sama
+- Susunan rawak
 
-EMOJI AVAILABLE (choose based on answer):
-- Bahasa Melayu: ✏️ 🖍️ 📚 📖 🔤 💬 🗣️ 📄 🎓 🌍
-- English: 🌟 📚 ✍️ 🔤 💬 🇬🇧 📖 🎤 💭 🏆
-- Matematik: 🔢 ➕ ➖ ✖️ ➗ 📐 📏 🧮 🔺 💯
-- Sains: 🔬 🧬 🧪 🌍 🌱 🦋 🔭 ⚗️ 🐦 🦅 🐠 🐟
+EMOJI (WAJIB & KETAT):
+- Emoji mesti MATCH EXACT dengan jawapan
+- Tidak boleh simbolik atau generic
+- Setiap soalan emoji berbeza (no repetition)
+- Jika tiada emoji tepat → skip soalan itu
 
-Balas JSON dengan TEPAT ${needed} soalan—SETIAP emoji BERLAINAN & MATCH JAWAPAN BETUL:`;
+TAHAP:
+- 30% mudah
+- 50% sederhana
+- 20% mencabar
+
+VALIDASI AKHIR:
+- Jawapan mesti wujud dalam pilihan
+- Tiada emoji berulang
+- Tiada soalan duplicate`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
