@@ -12,36 +12,6 @@ const AGE_DESC = {
   sekolah_rendah: 'sekolah rendah (umur 7-12 tahun)',
 };
 
-// Map answer keywords to valid emojis
-const EMOJI_MAPPING = {
-  'pensil': ['✏️', '🖍️'],
-  'penghapus': ['🧹', '🧻'],
-  'buku': ['📚', '📖'],
-  'burung': ['🐦', '🦅'],
-  'ikan': ['🐠', '🐟'],
-  'rumah': ['🏠', '🏡'],
-  'kereta': ['🚗', '🚕'],
-  'malaysia': ['🇲🇾'],
-  'merah': ['🔴'],
-  'biru': ['🔵'],
-};
-
-function validateEmojiMatch(answer, emoji) {
-  // Extract first word from answer
-  const answerLower = (answer || '').toLowerCase().split(' ')[0];
-  
-  // Check if answer matches any mandatory mapping
-  for (const [keyword, validEmojis] of Object.entries(EMOJI_MAPPING)) {
-    if (answerLower.includes(keyword)) {
-      return validEmojis.includes(emoji);
-    }
-  }
-  
-  // If no mapping, emoji should not be generic
-  const genericEmojis = ['❓', '❌', '✅', '🎮', '📝'];
-  return !genericEmojis.includes(emoji) && emoji.length > 0;
-}
-
 async function generateQuestionsForGame(base44, game, needed, existingQuestions) {
   const subject = CATEGORY_LANG[game.category] || game.category;
   const ageDesc = AGE_DESC[game.ageGroup] || game.ageGroup;
@@ -89,8 +59,7 @@ FORMAT OUTPUT (WAJIB - JSON SAHAJA, TANPA TEKS TAMBAHAN):
   {
     "soalan": "",
     "pilihan": ["", "", "", ""],
-    "jawapan": "",
-    "emoji": ""
+    "jawapan": ""
   }
 ]
 
@@ -99,11 +68,7 @@ VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
 - Tiada soalan duplicate
 - Tiada subtopik berulang
 - Jawapan tepat dan tidak bercanggah
-- Jawapan wujud dalam pilihan
-- TIADA emoji SAMA SEKALI dalam "soalan" field
-- TIADA emoji SAMA SEKALI dalam "pilihan" array
-- Semua emoji unik (tiada pengulangan)
-- REJECT soalan jika ada emoji di soalan/pilihan`;
+- Jawapan wujud dalam pilihan`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
@@ -113,44 +78,29 @@ VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
       items: {
         type: 'object',
         properties: {
-          soalan: { type: 'string', description: 'Teks soalan tanpa emoji' },
-          pilihan: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4, description: 'Empat pilihan jawapan tanpa emoji' },
+          soalan: { type: 'string', description: 'Teks soalan' },
+          pilihan: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4, description: 'Empat pilihan jawapan' },
           jawapan: { type: 'string', description: 'Jawapan yang tepat (mesti wujud dalam pilihan)' },
-          emoji: { type: 'string', description: 'Emoji yang MATCH EXACT dengan jawapan' },
         },
-        required: ['soalan', 'pilihan', 'jawapan', 'emoji'],
+        required: ['soalan', 'pilihan', 'jawapan'],
       },
       minItems: needed,
       maxItems: needed,
     },
   });
 
-  // Validate emoji matches and transform format
-  const emojiRegex = /[\p{Emoji}]/gu;
-  
+  // Transform format
   return (result || [])
-    .filter(q => q.soalan && q.pilihan?.length === 4 && q.jawapan && q.emoji)
-    .filter(q => {
-      // REJECT if emoji found in soalan or pilihan text
-      const hasEmojiInSoalan = emojiRegex.test(q.soalan);
-      const hasEmojiInPilihan = q.pilihan.some(p => emojiRegex.test(p));
-      return !hasEmojiInSoalan && !hasEmojiInPilihan;
-    })
+    .filter(q => q.soalan && q.pilihan?.length === 4 && q.jawapan)
     .map((q) => {
-      if (!validateEmojiMatch(q.jawapan, q.emoji)) {
-        // Skip if emoji doesn't match answer
-        return null;
-      }
-      // Transform to internal format: problem, options, answer (index), emoji
+      // Transform to internal format: problem, options, answer (index)
       const answerIndex = q.pilihan.indexOf(q.jawapan);
       return {
         problem: q.soalan,
         options: q.pilihan,
         answer: answerIndex >= 0 ? answerIndex : 0,
-        emoji: q.emoji,
       };
-    })
-    .filter(Boolean);
+    });
 }
 
 function isRealQuestion(q) {
@@ -158,22 +108,7 @@ function isRealQuestion(q) {
   return !/^Soalan \d+$/.test(problem.trim());
 }
 
-function deduplicateEmojis(questions) {
-  const usedEmojis = new Set();
-  const emojiPool = ['📚', '📖', '✏️', '🖍️', '🔤', '💬', '🗣️', '📄', '🎓', '🌍', '🌟', '✍️', '🇬🇧', '📖', '🎤', '💭', '🏆', '🔢', '➕', '➖', '✖️', '➗', '📐', '📏', '🧮', '🔺', '💯', '🔬', '🧬', '🧪', '🌱', '🦋', '🔭', '⚗️', '🧫', '🌎', '🐦', '🦅', '🐠', '🐟', '🏠', '🏡', '🚗', '🚕', '🧹', '🧻', '🔴', '🔵'];
 
-  return questions.map((q) => {
-    let emoji = q.emoji || '';
-    
-    // If emoji already used, find replacement from pool
-    if (usedEmojis.has(emoji) || !emoji) {
-      emoji = emojiPool.find(e => !usedEmojis.has(e)) || '🎯';
-    }
-    
-    usedEmojis.add(emoji);
-    return { ...q, emoji };
-  });
-}
 
 Deno.serve(async (req) => {
   try {
@@ -223,10 +158,10 @@ Deno.serve(async (req) => {
         if (targetCount > currentCount) {
           const needed = targetCount - currentCount;
           const generated = await generateQuestionsForGame(base44, game, needed, realQuestions);
-          newQuestions = deduplicateEmojis([...realQuestions, ...generated.slice(0, needed)]);
+          newQuestions = [...realQuestions, ...generated.slice(0, needed)];
           expanded++;
         } else {
-          newQuestions = deduplicateEmojis(realQuestions.slice(0, targetCount));
+          newQuestions = realQuestions.slice(0, targetCount);
           reduced++;
         }
 
