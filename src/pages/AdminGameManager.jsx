@@ -1070,7 +1070,7 @@ export default function AdminGameManager() {
                 <p className="text-xs text-gray-400 mb-3 text-center">💡 Backend jalan di server—boleh close browser, tasks akan terus jalan background (~30-60 minit)</p>
                 <div className="flex gap-3">
                   <button
-                  onClick={() => {setRegenerationTasks(null);setTaskProgress([]);}}
+                  onClick={() => setRegenerationTasks(null)}
                   className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm">
                   
                     Close
