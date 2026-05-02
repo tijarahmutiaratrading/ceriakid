@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X, Database, Layers, Trash2, RotateCcw } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X, Database, Layers, Trash2, RotateCcw, CheckCircle2 } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { gameLibrary } from '@/lib/gameLibrary';
 import EditGameModal from '@/components/admin/EditGameModal';
@@ -372,6 +372,51 @@ export default function AdminGameManager() {
               {actionLoading === 'clean' ? <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" /> : <Trash2 className="w-3 h-3 md:w-4 md:h-4" />}
               <span className="hidden sm:inline">Clean</span>
               <span className="sm:hidden">C</span>
+            </button>
+            <button
+              onClick={async () => {
+                if (!window.confirm('Verify soalan quality untuk SEMUA games (mungkin ambil masa)?')) return;
+                setActionLoading('verify');
+                showToast('⏳ AI sedang verify soalan...', true);
+                try {
+                  const allGames = await base44.entities.Game.filter({ isPublished: true });
+                  let verified = 0;
+                  let flagged = 0;
+                  
+                  for (const game of allGames) {
+                    if (!game.gameData?.questions?.length) continue;
+                    try {
+                      const result = await base44.functions.invoke('validateGameQuestionsQuality', {
+                        gameId: game.id,
+                        ageGroup: game.ageGroup,
+                        category: game.category,
+                        questions: game.gameData.questions,
+                      });
+                      
+                      if (result.data.validation.summary.invalid_count > 0) {
+                        flagged++;
+                        console.warn(`Game "${game.title}" flagged:`, result.data.validation.summary);
+                      } else {
+                        verified++;
+                      }
+                    } catch (e) {
+                      console.error(`Skip game ${game.id}:`, e.message);
+                    }
+                  }
+                  showToast(`✅ QA selesai! ${verified} clean, ${flagged} flagged untuk review.`);
+                } catch (err) {
+                  showToast('❌ ' + err.message, false);
+                } finally {
+                  setActionLoading(null);
+                }
+              }}
+              disabled={!!actionLoading}
+              title="AI Verify soalan quality (unique, on-topic, curriculum-aligned)"
+              className="flex items-center gap-1 px-2 md:px-3 py-1.5 md:py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg md:rounded-xl shadow text-xs font-bold transition-all disabled:opacity-50 hover:shadow-lg"
+            >
+              {actionLoading === 'verify' ? <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" /> : <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4" />}
+              <span className="hidden sm:inline">Verify QA</span>
+              <span className="sm:hidden">QA</span>
             </button>
             <button onClick={fetchStats} disabled={loading} className="p-1.5 md:p-2.5 bg-white/40 backdrop-blur-xl rounded-lg md:rounded-xl shadow border-2 border-white/30 hover:bg-white/60 transition-all">
               <RefreshCw className={`w-4 h-4 md:w-5 md:h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
