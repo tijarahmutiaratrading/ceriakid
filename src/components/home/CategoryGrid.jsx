@@ -25,22 +25,17 @@ export default function CategoryGrid() {
       setLoading(true);
       const dbGames = await base44.entities.Game.filter({ ageGroup, isPublished: true });
       
-      if (dbGames.length > 0) {
-        // Group by category
-        const grouped = {};
-        Object.keys(CATEGORY_MAP).forEach(cat => { grouped[cat] = []; });
-        
-        dbGames.forEach(g => {
-          if (grouped[g.category]) {
-            grouped[g.category].push(g);
-          }
-        });
-        
-        setGames(grouped);
-      } else {
-        // Fallback to static library
-        setGames(getGamesByAge(ageGroup));
-      }
+      // Group by category
+      const grouped = {};
+      Object.keys(CATEGORY_MAP).forEach(cat => { grouped[cat] = []; });
+      
+      dbGames.forEach(g => {
+        if (grouped[g.category]) {
+          grouped[g.category].push(g);
+        }
+      });
+      
+      setGames(grouped);
     } catch (err) {
       console.error('Failed to load games from DB:', err);
       setGames(getGamesByAge(ageGroup));
