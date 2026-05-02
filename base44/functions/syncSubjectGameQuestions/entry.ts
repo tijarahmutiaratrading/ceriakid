@@ -107,16 +107,18 @@ yes_no: { "type": "yes_no", "soalan": "", "pilihan": ["Ya", "Tidak"], "jawapan":
 ────────────────────────
 📦 FORMAT OUTPUT (WAJIB JSON SAHAJA):
 
-[
-  {
-    "type": "",
-    "soalan": "",
-    "pilihan": [],
-    "jawapan": "",
-    "sound_correct": "",
-    "sound_wrong": ""
-  }
-]
+{
+  "games": [
+    {
+      "type": "",
+      "soalan": "",
+      "pilihan": [],
+      "jawapan": "",
+      "sound_correct": "",
+      "sound_wrong": ""
+    }
+  ]
+}
 
 ────────────────────────
 🔍 VALIDASI AKHIR:
@@ -128,16 +130,9 @@ yes_no: { "type": "yes_no", "soalan": "", "pilihan": ["Ya", "Tidak"], "jawapan":
 - Semua item ada sound_correct & sound_wrong
 - Tiada format berulang`;
 
-  // Determine min/max items based on game type
-  const getItemLimits = (type) => {
-    if (['true_false', 'yes_no'].includes(type)) return { min: 2, max: 2 };
-    if (['matching', 'word_builder', 'spelling', 'phonics'].includes(type)) return { min: 2, max: 10 };
-    if (['drag_drop', 'shape_sort', 'color_match'].includes(type)) return { min: 3, max: 10 };
-    if (['multiple_choice', 'letter_match', 'number_match', 'picture_quiz', 'counting', 'math_puzzle'].includes(type)) return { min: 4, max: 4 };
-    return { min: 2, max: 10 }; // Default flexible for any new types
-  };
-
-  const { min, max } = getItemLimits(game.type);
+  // Don't constrain based on old game.type - LLM will vary game types per question
+  const min = 2;
+  const max = 10;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
@@ -145,33 +140,30 @@ yes_no: { "type": "yes_no", "soalan": "", "pilihan": ["Ya", "Tidak"], "jawapan":
     response_json_schema: {
       type: 'object',
       properties: {
-        questions: {
+        games: {
           type: 'array',
           items: {
             type: 'object',
             properties: {
-              type: { type: 'string', description: 'Game type (multiple_choice, true_false, matching, fill_blank, ordering, odd_one_out, short_answer, categorization, yes_no)' },
-              soalan: { type: 'string', description: 'Teks soalan' },
-              pilihan: { type: 'array', items: { type: 'string' }, description: 'Pilihan jawapan (fleksibel bilangan)' },
-              pairs: { type: 'array', items: { type: 'object' }, description: 'Untuk matching type' },
-              items: { type: 'array', items: { type: 'string' }, description: 'Untuk ordering type' },
-              kategori: { type: 'array', items: { type: 'string' }, description: 'Untuk categorization type' },
-              jawapan: { type: 'string', description: 'Jawapan yang tepat' },
-              sound_correct: { type: 'string', description: 'Correct sound effect (correct_pop, correct_ding, success_chime)' },
-              sound_wrong: { type: 'string', description: 'Wrong sound effect (wrong_buzz, error_tone, fail_beep)' },
+              type: { type: 'string' },
+              soalan: { type: 'string' },
+              pilihan: { type: 'array', items: { type: 'string' } },
+              pairs: { type: 'array', items: { type: 'object' } },
+              items: { type: 'array', items: { type: 'string' } },
+              kategori: { type: 'array', items: { type: 'string' } },
+              jawapan: { type: 'string' },
+              sound_correct: { type: 'string' },
+              sound_wrong: { type: 'string' },
             },
-            required: ['type', 'soalan', 'jawapan', 'sound_correct', 'sound_wrong'],
           },
-          minItems: needed,
-          maxItems: needed,
         },
       },
-      required: ['questions'],
+      required: ['games'],
     },
   });
 
   // Transform format
-  const questions = result?.questions || [];
+  const questions = result?.games || [];
   return questions
     .filter(q => {
       // Validate based on game type
