@@ -375,35 +375,47 @@ export default function AdminGameManager() {
             </button>
             <button
               onClick={async () => {
-                if (!window.confirm('Verify soalan quality untuk SEMUA games (mungkin ambil masa)?')) return;
+                if (!window.confirm('Verify soalan quality by subjek?')) return;
                 setActionLoading('verify');
-                showToast('⏳ AI sedang verify soalan...', true);
+                let totalVerified = 0;
+                let totalFlagged = 0;
+                
                 try {
-                  const allGames = await base44.entities.Game.filter({ isPublished: true });
-                  let verified = 0;
-                  let flagged = 0;
-                  
-                  for (const game of allGames) {
-                    if (!game.gameData?.questions?.length) continue;
-                    try {
-                      const result = await base44.functions.invoke('validateGameQuestionsQuality', {
-                        gameId: game.id,
-                        ageGroup: game.ageGroup,
-                        category: game.category,
-                        questions: game.gameData.questions,
-                      });
-                      
-                      if (result.data.validation.summary.invalid_count > 0) {
-                        flagged++;
-                        console.warn(`Game "${game.title}" flagged:`, result.data.validation.summary);
-                      } else {
-                        verified++;
+                  for (const sc of SUBJECT_CONFIG) {
+                    const dbGames = await base44.entities.Game.filter({ ageGroup: sc.ageGroup, category: sc.subject, isPublished: true });
+                    if (dbGames.length === 0) continue;
+                    
+                    showToast(`⏳ Verify ${sc.label}... (${dbGames.length} games)`, true);
+                    let verified = 0;
+                    let flagged = 0;
+                    
+                    for (const game of dbGames) {
+                      if (!game.gameData?.questions?.length) continue;
+                      try {
+                        const result = await base44.functions.invoke('validateGameQuestionsQuality', {
+                          gameId: game.id,
+                          ageGroup: game.ageGroup,
+                          category: game.category,
+                          questions: game.gameData.questions,
+                        });
+                        
+                        if (result.data.validation.summary.invalid_count > 0) {
+                          flagged++;
+                          console.warn(`Game "${game.title}" flagged:`, result.data.validation.summary);
+                        } else {
+                          verified++;
+                        }
+                      } catch (e) {
+                        console.error(`Skip game ${game.id}:`, e.message);
                       }
-                    } catch (e) {
-                      console.error(`Skip game ${game.id}:`, e.message);
                     }
+                    
+                    totalVerified += verified;
+                    totalFlagged += flagged;
+                    showToast(`✅ ${sc.label}: ${verified} clean, ${flagged} flagged`, true);
                   }
-                  showToast(`✅ QA selesai! ${verified} clean, ${flagged} flagged untuk review.`);
+                  
+                  showToast(`✅ QA SELESAI! Total: ${totalVerified} clean, ${totalFlagged} flagged`, true);
                 } catch (err) {
                   showToast('❌ ' + err.message, false);
                 } finally {
