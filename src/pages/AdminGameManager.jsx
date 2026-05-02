@@ -440,7 +440,7 @@ export default function AdminGameManager() {
                        <button
                          onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)}
                          disabled={!!actionLoading}
-                         className="p-1 md:p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all hidden md:block"
+                         className="p-1 md:p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all"
                          title="Sync games & soalan"
                        >
                          {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
@@ -452,7 +452,7 @@ export default function AdminGameManager() {
                            setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject });
                          }}
                          disabled={!!actionLoading}
-                         className="p-1 md:p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all hidden md:block"
+                         className="p-1 md:p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all"
                          title="Bulk Edit games"
                        >
                          <Layers className="w-3 h-3 md:w-3.5 md:h-3.5" />
@@ -482,7 +482,7 @@ export default function AdminGameManager() {
                            }
                          }}
                          disabled={!!actionLoading}
-                         className="p-1 md:p-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all hidden md:block"
+                         className="p-1 md:p-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all"
                          title="Sync totalQuestions ke frontend"
                        >
                          {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3 h-3 md:w-3.5 md:h-3.5" />}
@@ -599,44 +599,44 @@ export default function AdminGameManager() {
                   transition={{ delay: idx * 0.04 }}
                   className={`bg-white/40 backdrop-blur-xl rounded-2xl shadow-xl border-2 border-white/30 border-l-4 ${s.color.border} mb-3 overflow-hidden`}
                 >
-                  <div className="flex items-center justify-between px-4 py-3">
-                    <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="flex items-center gap-3 flex-1 text-left">
+                  <div className="flex items-center justify-between px-3 md:px-4 py-2.5 md:py-3 gap-2">
+                    <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="flex items-center gap-2 md:gap-3 flex-1 text-left min-w-0">
                       <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${s.color.dot}`} />
-                      <div>
-                        <p className="font-black text-gray-900 text-sm">{s.label.replace('Sekolah Rendah - ', '')}</p>
-                        <p className="text-xs text-gray-500">{s.totalGames} games · avg {avgQ} soalan</p>
+                      <div className="min-w-0">
+                        <p className="font-black text-gray-900 text-xs md:text-sm truncate">{s.label.replace('Sekolah Rendah - ', '')}</p>
+                        <p className="text-xs text-gray-500 truncate">{s.totalGames} games · {avgQ}q</p>
                       </div>
                     </button>
-                    <div className="flex items-center gap-2">
-                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${s.color.badge}`}>{s.totalGames}</span>
+                    <div className="flex items-center gap-0.5 md:gap-2 flex-shrink-0">
+                      <span className={`text-xs font-bold px-2 md:px-2.5 py-0.5 md:py-1 rounded-lg md:rounded-full text-xs md:text-xs ${s.color.badge}`}>{s.totalGames}</span>
                       {s.games.reduce((a, g) => a + g.players, 0) > 0 && (
-                        <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-pink-100 text-pink-600 flex items-center gap-1">
+                        <span className="hidden sm:inline text-xs font-bold px-2.5 py-1 rounded-full bg-pink-100 text-pink-600 flex items-center gap-1">
                           <Users className="w-3 h-3" />{s.games.reduce((a, g) => a + g.players, 0)}
                         </span>
                       )}
-                      <button onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)} disabled={!!actionLoading} className="p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all" title="Sync games & soalan">
-                        {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
+                      <button onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)} disabled={!!actionLoading} className="p-1 md:p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all hidden md:block" title="Sync games & soalan">
+                        {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
                       </button>
-                      <button onClick={() => { const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (dbGames.length === 0) { showToast('Import ke DB dulu sebelum bulk edit', false); return; } setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject }); }} disabled={!!actionLoading} className="p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all" title="Bulk Edit games">
-                        <Layers className="w-3.5 h-3.5" />
+                      <button onClick={() => { const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (dbGames.length === 0) { showToast('Import ke DB dulu sebelum bulk edit', false); return; } setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject }); }} disabled={!!actionLoading} className="p-1 md:p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all hidden md:block" title="Bulk Edit games">
+                        <Layers className="w-3 h-3 md:w-3.5 md:h-3.5" />
                       </button>
-                      <button onClick={async () => { const syncKey = `sync-${s.file}`; setActionLoading(syncKey); showToast(`⏳ Sync ${s.label}...`, true); try { const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); return; } let fixed = 0; for (const g of dbGames) { const actualCount = g.gameData?.questions?.length || 0; if (g.totalQuestions !== actualCount) { await base44.entities.Game.update(g.id, { totalQuestions: actualCount }); fixed++; } } showToast(`✅ Sync selesai! ${fixed} games dikemas kini.`); await fetchStats(); } catch (err) { showToast('❌ ' + err.message, false); } finally { setActionLoading(null); } }} disabled={!!actionLoading} className="p-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all" title="Sync totalQuestions ke frontend">
-                        {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />}
+                      <button onClick={async () => { const syncKey = `sync-${s.file}`; setActionLoading(syncKey); showToast(`⏳ Sync ${s.label}...`, true); try { const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); return; } let fixed = 0; for (const g of dbGames) { const actualCount = g.gameData?.questions?.length || 0; if (g.totalQuestions !== actualCount) { await base44.entities.Game.update(g.id, { totalQuestions: actualCount }); fixed++; } } showToast(`✅ Sync selesai! ${fixed} games dikemas kini.`); await fetchStats(); } catch (err) { showToast('❌ ' + err.message, false); } finally { setActionLoading(null); } }} disabled={!!actionLoading} className="p-1 md:p-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all hidden md:block" title="Sync totalQuestions ke frontend">
+                        {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3 h-3 md:w-3.5 md:h-3.5" />}
                       </button>
-                      <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-1">
-                        {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
+                      <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-0.5 md:p-1">
+                        {isExpanded ? <ChevronDown className="w-3 h-3 md:w-4 md:h-4 text-gray-400" /> : <ChevronRight className="w-3 h-3 md:w-4 md:h-4 text-gray-400" />}
                       </button>
                     </div>
                   </div>
                   <AnimatePresence>
                     {isExpanded && (
                       <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t border-white/30">
-                        <div className="grid grid-cols-12 gap-1 px-4 py-2 bg-amber-50/50 text-xs font-bold text-gray-400 uppercase tracking-wide">
+                        <div className="hidden md:grid grid-cols-12 gap-1 px-4 py-2 bg-amber-50/50 text-xs font-bold text-gray-400 uppercase tracking-wide">
                           <span className="col-span-1">#</span><span className="col-span-4">Nama Game</span><span className="col-span-2">Type</span><span className="col-span-2 text-center">Soalan</span><span className="col-span-2 text-center">Players</span><span className="col-span-1"></span>
                         </div>
-                        <div className="max-h-64 overflow-y-auto divide-y divide-amber-100/50">
+                        <div className="max-h-52 md:max-h-64 overflow-y-auto">
                           {s.games.map((g) => (
-                            <div key={g.index} className="grid grid-cols-12 gap-1 items-center px-4 py-2.5 hover:bg-white/30 transition-all">
+                            <div key={g.index} className="hidden md:grid grid-cols-12 gap-1 items-center px-4 py-2.5 border-b border-amber-100/50 hover:bg-white/30 transition-all">
                               <span className="col-span-1 text-xs font-bold text-gray-300">{g.index + 1}</span>
                               <span className="col-span-4 text-xs font-semibold text-gray-800 truncate">{g.title}</span>
                               <span className="col-span-2 text-xs text-gray-400 truncate">{g.type}</span>
@@ -651,6 +651,39 @@ export default function AdminGameManager() {
                               </div>
                             </div>
                           ))}
+                          <div className="md:hidden space-y-2 p-3">
+                            {s.games.map((g) => (
+                              <div key={g.index} className="bg-white/40 rounded-lg p-2.5 border border-amber-100/50">
+                                <div className="flex items-start justify-between gap-2 mb-1">
+                                  <div className="flex-1">
+                                    <p className="text-xs font-bold text-gray-800">{g.index + 1}. {g.title}</p>
+                                    <p className="text-xs text-gray-500 mt-0.5">{g.type}</p>
+                                  </div>
+                                  {g._raw && (
+                                    <button
+                                      onClick={() => setEditGame(g._raw)}
+                                      className="p-1 text-indigo-400 hover:bg-indigo-50 rounded-lg transition-all"
+                                      title="Edit game ini"
+                                    >
+                                      <Edit3 className="w-3 h-3" />
+                                    </button>
+                                  )}
+                                </div>
+                                <div className="flex gap-2">
+                                  <span className={`text-xs font-black px-1.5 py-0.5 rounded-full text-xs ${
+                                    g.questionCount >= 20 ? 'bg-green-100 text-green-700' :
+                                    g.questionCount >= 10 ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-red-100 text-red-600'
+                                  }`}>{g.questionCount}Q</span>
+                                  {g.players > 0 && (
+                                    <span className="text-xs font-bold text-pink-500 flex items-center gap-0.5">
+                                      <Users className="w-3 h-3" />{g.players}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </motion.div>
                     )}
