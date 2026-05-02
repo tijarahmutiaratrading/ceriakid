@@ -110,17 +110,51 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        // Check 6: Answer doesn't match question theme (basic check)
-        // For science, check if answer makes sense contextually
-        const scienceKeywords = ['haiwan', 'animal', 'bunga', 'flower', 'tumbuhan', 'plant', 'bumi', 'earth', 'air', 'water', 'api', 'fire', 'udara', 'oxygen'];
-        const questionLower = problemText.toLowerCase();
-        const answerLower = answerText.toLowerCase();
+        // Check 6: Emoji doesn't match any answer (semantic mismatch)
+        const questionEmoji = problemText;
+        const emojiToAnimalMap = {
+          '🦁': ['singa', 'lion'],
+          '🐘': ['gajah', 'elephant'],
+          '🦒': ['jerapah', 'giraffe'],
+          '🐘': ['gajah', 'elephant'],
+          '🦓': ['zebra'],
+          '🐒': ['monyet', 'monkey'],
+          '🐅': ['harimau', 'tiger'],
+          '🦊': ['rubah', 'fox'],
+          '🐻': ['beruang', 'bear'],
+          '🦘': ['kangaroo'],
+          '🦁': ['singa', 'leo'],
+          '🦅': ['elang', 'eagle'],
+          '🦜': ['burung', 'parrot'],
+          '🐠': ['ikan', 'fish'],
+          '🐢': ['penyu', 'turtle'],
+          '🦆': ['itik', 'duck'],
+          '🐔': ['ayam', 'chicken'],
+          '🐕': ['anjing', 'dog'],
+          '🐈': ['kucing', 'cat'],
+          '🐇': ['arnab', 'rabbit'],
+          '🐿️': ['tupai', 'squirrel'],
+        };
         
-        // Simple check: if question has science keyword, answer should too or be contextually related
-        const hasKeyword = scienceKeywords.some(kw => questionLower.includes(kw));
-        if (hasKeyword && !answerLower.includes('bukan') && !answerLower.includes('tidak') && !answerLower.includes('no')) {
-          // This is just a basic heuristic check
-          // Real validation would need more context
+        const emojiMatch = Object.keys(emojiToAnimalMap).find(emoji => problemText.includes(emoji));
+        if (emojiMatch) {
+          const relatedKeywords = emojiToAnimalMap[emojiMatch];
+          const answerLower = answerText.toLowerCase();
+          const matchFound = relatedKeywords.some(kw => answerLower.includes(kw));
+          
+          if (!matchFound) {
+            problemQuestions++;
+            issues.push({
+              gameTitle: game.title,
+              questionNum: i + 1,
+              problem: 'EMOJI_MISMATCH',
+              question: problemText,
+              emoji: emojiMatch,
+              answer: answerText,
+              expectedKeywords: relatedKeywords.join(', '),
+              details: `Emoji ${emojiMatch} tidak match dengan jawapan "${answerText}"`,
+            });
+          }
         }
       }
     }
@@ -161,6 +195,17 @@ Deno.serve(async (req) => {
                 // Remove empty question
                 gameQuestions.splice(qIdx, 1);
                 fixed++;
+              } else if (issue.problem === 'EMOJI_MISMATCH') {
+                // Auto-fix: set answer to first matching option or reset to 0
+                const q = gameQuestions[qIdx];
+                if (q && q.options && q.options.length > 0) {
+                  // Try to find matching option (simple heuristic)
+                  const answerIdx = q.options.findIndex(opt => 
+                    opt && opt.toLowerCase().includes(issue.expectedKeywords.split(', ')[0])
+                  );
+                  q.answer = answerIdx >= 0 ? answerIdx : 0;
+                  fixed++;
+                }
               }
             }
             
