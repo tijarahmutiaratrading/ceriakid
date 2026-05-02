@@ -76,7 +76,13 @@ export default function GamePlayer() {
 
   const questions = useMemo(() => {
     if (!game?.gameData?.questions) return [];
-    const baseQuestions = game.gameData.questions.slice(0, game.totalQuestions || 20);
+    // Filter out dummy/placeholder questions added by syncSubjectGameQuestions
+    const realQuestions = game.gameData.questions.filter(q => {
+      const problem = q.problem || q.question || '';
+      const isDummy = /^Soalan \d+$/.test(problem.trim());
+      return !isDummy;
+    });
+    const baseQuestions = realQuestions.slice(0, game.totalQuestions || 20);
     
     // Shuffle answer options while tracking correct answer
     return baseQuestions.map(q => {
