@@ -604,7 +604,7 @@ export default function AdminGameManager() {
 
         {/* Generation Progress Bar */}
         <AnimatePresence>
-          {taskProgress.length > 0 && regenerationTasks && (
+          {taskProgress.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -614,7 +614,7 @@ export default function AdminGameManager() {
               <div className="flex items-center justify-between gap-4 mb-3">
                 <div className="flex-1">
                   <p className="font-black text-white text-sm md:text-base">{isPaused ? '⏸️ Paused' : '🔥 Generating Games...'}</p>
-                  <p className="text-white/80 text-xs font-semibold">{taskProgress.length}/{regenerationTasks.length} tasks completed</p>
+                  <p className="text-white/80 text-xs font-semibold">{taskProgress.length} tasks completed</p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <button
@@ -638,14 +638,14 @@ export default function AdminGameManager() {
                 <motion.div
                   className={`h-full rounded-full ${isPaused ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500'}`}
                   initial={{ width: 0 }}
-                  animate={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }}
+                  animate={{ width: `${taskProgress.length > 0 ? Math.round(taskProgress.length * 100 / 50) : 0}%` }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                   style={{
                     boxShadow: '0 0 12px rgba(255, 165, 0, 0.9)'
                   }}
                 />
               </div>
-              <p className="text-white/70 text-xs mt-2.5 text-center font-semibold">{Math.round(taskProgress.length / regenerationTasks.length * 100)}% — {Math.ceil((regenerationTasks.length - taskProgress.length) * 30 / 60)}m remaining</p>
+              <p className="text-white/70 text-xs mt-2.5 text-center font-semibold">{taskProgress.length > 0 ? Math.round(taskProgress.length * 100 / 50) : 0}% — processing tasks</p>
             </motion.div>
           )}
         </AnimatePresence>
