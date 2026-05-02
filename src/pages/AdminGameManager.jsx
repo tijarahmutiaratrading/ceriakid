@@ -458,6 +458,15 @@ export default function AdminGameManager() {
                        </button>
 
                        <button
+                         onClick={() => { const games = dbGamesCache[`${s.ageGroup}-${s.subject}`] || []; if (games.length === 0) { showToast('Import ke DB dulu', false); return; } openSyncAndEditModal(games, s.label, s.ageGroup, s.subject); }}
+                         disabled={!!actionLoading}
+                         className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 md:py-2 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all text-xs font-bold"
+                       >
+                         {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5" />}
+                         <span className="hidden sm:inline">Bulk Edit</span>
+                       </button>
+
+                       <button
                          onClick={async () => {
                            const verifyKey = `verify-${s.file}`;
                            setActionLoading(verifyKey);
