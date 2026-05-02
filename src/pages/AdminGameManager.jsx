@@ -82,14 +82,13 @@ export default function AdminGameManager() {
       const builtSubjects = SUBJECT_CONFIG.map(({ file, label, ageGroup, subject, color }, i) => {
         const dbGames = (dbGameGroups[i] || []).sort((a, b) => (a.order || 0) - (b.order || 0));
         const libGames = gameLibrary[ageGroup]?.[subject] || [];
-        const source = dbGames.length > 0 ? dbGames : libGames;
         const cacheKey = `${ageGroup}-${subject}`;
         newDbGamesCache[cacheKey] = dbGames;
 
         return {
           file, label, ageGroup, subject, color,
-          totalGames: source.length,
-          games: source.map((g, idx) => {
+          totalGames: dbGames.length,
+          games: dbGames.map((g, idx) => {
             const key = `${ageGroup}-${subject}-${idx}`;
             const stat = stats[key] || { players: 0, timesPlayed: 0, avgScore: null };
             return {
