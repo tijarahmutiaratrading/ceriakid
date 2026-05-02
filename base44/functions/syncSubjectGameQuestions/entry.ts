@@ -76,18 +76,26 @@ PILIHAN JAWAPAN:
 
 ────────────────────────
 PERATURAN EMOJI (SANGAT KETAT - ZERO ERROR):
-- Emoji HANYA dibenarkan dalam field "emoji" sahaja
-- DILARANG sama sekali letak emoji dalam:
-  • teks soalan
-  • pilihan jawapan
+- Emoji HANYA dibenarkan dalam field "emoji" sahaja—JANGAN dalam soalan atau pilihan
+- TIADA emoji di awal soalan, TIADA emoji di akhir soalan, TIADA emoji di dalam pilihan
+- Emoji wujud HANYA dalam field terpisah "emoji"
 - Setiap soalan hanya boleh ada SATU emoji sahaja
 - Emoji mesti MATCH EXACT dengan jawapan (bukan simbolik)
 - Setiap emoji mesti BERBEZA (tiada ulangan langsung)
 - Jika tiada emoji yang tepat → JANGAN jana soalan itu
 
-Contoh:
-Jawapan "Burung" → 🐦 atau 🦅 sahaja
-Jawapan "Malaysia" → 🇲🇾 sahaja
+Contoh BETUL:
+{
+  "soalan": "Apakah haiwan yang memberi telur?",
+  "pilihan": ["Ayam", "Ular", "Kucing", "Anjing"],
+  "jawapan": "Ayam",
+  "emoji": "🐔"  ← EMOJI LETAK SINI SAHAJA, BUKAN DALAM SOALAN
+}
+
+Contoh SALAH:
+❌ "🐔 Apakah haiwan yang memberi telur?" (emoji di awal)
+❌ "Apakah haiwan yang memberi telur? 🐔" (emoji di akhir soalan)
+❌ "Apakah 🐔 yang memberi telur?" (emoji dalam teks soalan)
 
 ────────────────────────
 TAHAP KESUKARAN:
