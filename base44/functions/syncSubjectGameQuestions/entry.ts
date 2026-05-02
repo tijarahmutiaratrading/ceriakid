@@ -114,7 +114,8 @@ VALIDASI AKHIR (WAJIB SEMAK SEBELUM OUTPUT):
     if (['true_false', 'yes_no'].includes(type)) return { min: 2, max: 2 };
     if (['matching', 'word_builder', 'spelling', 'phonics'].includes(type)) return { min: 2, max: 10 };
     if (['drag_drop', 'shape_sort', 'color_match'].includes(type)) return { min: 3, max: 10 };
-    return { min: 4, max: 4 }; // Default: multiple_choice, letter_match, counting, math_puzzle
+    if (['multiple_choice', 'letter_match', 'number_match', 'picture_quiz', 'counting', 'math_puzzle'].includes(type)) return { min: 4, max: 4 };
+    return { min: 2, max: 10 }; // Default flexible for any new types
   };
 
   const { min, max } = getItemLimits(game.type);
