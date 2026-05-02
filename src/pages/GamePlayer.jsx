@@ -17,6 +17,7 @@ import GameTutorial from '@/components/game/GameTutorial';
 import AudioPlayer from '@/components/audio/AudioPlayer';
 import ProgressBar from '@/components/game/ProgressBar';
 import AchievementBadges from '@/components/game/AchievementBadges';
+import QuestionRenderer from '@/components/game/QuestionRenderer';
 import { playSound } from '@/lib/soundManager';
 import { checkAchievements, calculateStreak } from '@/lib/achievementManager';
 import { queueGameProgress, syncOfflineProgress } from '@/lib/offlineSyncManager';
@@ -93,11 +94,26 @@ export default function GamePlayer() {
     });
   }, [game]);
 
-  const handleAnswer = useCallback((selectedIndex) => {
+  const handleAnswer = useCallback((answer) => {
     if (state.showFeedback || !questions[state.currentQ]) return;
 
     const currentQuestion = questions[state.currentQ];
-    const correct = selectedIndex === currentQuestion.answer;
+    let correct = false;
+
+    // Check answer based on question type
+    if (['multiple_choice', 'true_false', 'yes_no'].includes(currentQuestion.type)) {
+      correct = answer === currentQuestion.answer;
+    } else if (['short_answer', 'fill_blank'].includes(currentQuestion.type)) {
+      const answerText = String(answer).toLowerCase().trim();
+      const correctText = String(currentQuestion.answer).toLowerCase().trim();
+      correct = answerText === correctText || answerText.includes(correctText) || correctText.includes(answerText);
+    } else if (currentQuestion.type === 'matching') {
+      correct = JSON.stringify(answer) === JSON.stringify(currentQuestion.pairs?.reduce((acc, p, i) => ({ ...acc, [i]: p.right }), {}));
+    } else if (currentQuestion.type === 'ordering') {
+      correct = JSON.stringify(answer) === JSON.stringify(currentQuestion.correctOrder || currentQuestion.items);
+    } else if (currentQuestion.type === 'word_builder') {
+      correct = String(answer).toLowerCase() === String(currentQuestion.answer).toLowerCase();
+    }
 
     if (correct) {
       playSound('correct');
@@ -116,7 +132,7 @@ export default function GamePlayer() {
       isCorrect: correct,
       feedbackMsg: correct ? '✨ Jawapan Betul!' : '💪 Cuba Lagi!',
       score: correct ? prev.score + 1 : prev.score,
-      selectedIdx: selectedIndex,
+      selectedIdx: answer,
     }));
   }, [state.showFeedback, state.currentQ, questions]);
 
@@ -459,30 +475,15 @@ export default function GamePlayer() {
            )}
           </motion.div>
 
-        {/* Options Grid */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-3">
-          {currentQuestion.options?.map((option, i) => (
-            <motion.button
-              key={`${state.currentQ}-${i}`}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.05 }}
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.05 }}
-              onClick={() => handleAnswer(i)}
-              disabled={state.showFeedback}
-              className={`clay-button rounded-2xl py-4 px-3 font-bold text-center transition-all ${
-                state.showFeedback && state.selectedIdx === i
-                  ? state.isCorrect
-                    ? 'bg-green-200 ring-2 ring-green-500'
-                    : 'bg-red-200 ring-2 ring-red-500'
-                  : ''
-              }`}
-            >
-              {typeof option === 'string' ? option : option.label || option}
-            </motion.button>
-          ))}
-        </div>
+        {/* Dynamic Question Renderer */}
+        <QuestionRenderer
+          question={currentQuestion}
+          onAnswer={handleAnswer}
+          disabled={state.showFeedback}
+          selectedIdx={state.selectedIdx}
+          isCorrect={state.isCorrect}
+          showFeedback={state.showFeedback}
+        />
       </div>
 
       <FeedbackOverlay

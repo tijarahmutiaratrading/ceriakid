@@ -1,0 +1,217 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+
+export default function QuestionRenderer({ question, onAnswer, disabled, selectedIdx, isCorrect, showFeedback }) {
+  // Initialize all state at top level (required by React Hooks rules)
+  const [textInput, setTextInput] = useState('');
+  const [matchingAnswers, setMatchingAnswers] = useState({});
+  const [selectedOrder, setSelectedOrder] = useState([]);
+  const [arranged, setArranged] = useState([]);
+
+  const handleTextSubmit = () => {
+    if (textInput.trim()) {
+      onAnswer(textInput);
+      setTextInput('');
+    }
+  };
+
+  // Multiple Choice & True/False
+  if (['multiple_choice', 'true_false', 'yes_no'].includes(question.type)) {
+    return (
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
+        {question.options?.map((option, i) => (
+          <motion.button
+            key={`${i}`}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: i * 0.05 }}
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => onAnswer(i)}
+            disabled={disabled}
+            className={`clay-button rounded-2xl py-4 px-3 font-bold text-center transition-all ${
+              showFeedback && selectedIdx === i
+                ? isCorrect
+                  ? 'bg-green-200 ring-2 ring-green-500'
+                  : 'bg-red-200 ring-2 ring-red-500'
+                : ''
+            }`}
+          >
+            {typeof option === 'string' ? option : option.label || option}
+          </motion.button>
+        ))}
+      </div>
+    );
+  }
+
+  // Short Answer
+  if (['short_answer', 'fill_blank'].includes(question.type)) {
+    return (
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={textInput}
+          onChange={(e) => setTextInput(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleTextSubmit()}
+          placeholder="Taip jawapan..."
+          disabled={disabled}
+          className="flex-1 px-4 py-3 rounded-2xl border-2 border-gray-300 focus:border-game-purple outline-none text-center font-bold"
+        />
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleTextSubmit}
+          disabled={disabled || !textInput.trim()}
+          className="px-6 py-3 bg-game-purple text-white rounded-2xl font-bold hover:shadow-lg disabled:opacity-50"
+        >
+          ✓
+        </motion.button>
+      </div>
+    );
+  }
+
+  // Matching
+  if (question.type === 'matching') {
+    const pairs = question.pairs || [];
+    return (
+      <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            {pairs.map((pair, i) => (
+              <div key={i} className="p-3 bg-blue-100 rounded-xl font-bold text-sm text-center">
+                {pair.left}
+              </div>
+            ))}
+          </div>
+          <div className="space-y-2">
+            {pairs.map((pair, i) => (
+              <motion.button
+                key={i}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  const newAnswers = { ...matchingAnswers };
+                  newAnswers[i] = matchingAnswers[i] === pair.right ? null : pair.right;
+                  setMatchingAnswers(newAnswers);
+                }}
+                className={`w-full p-3 rounded-xl font-bold text-sm transition-all ${
+                  matchingAnswers[i] === pair.right ? 'bg-green-200' : 'bg-gray-200'
+                }`}
+              >
+                {pair.right}
+              </motion.button>
+            ))}
+          </div>
+        </div>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => onAnswer(matchingAnswers)}
+          disabled={disabled}
+          className="w-full py-3 bg-game-purple text-white rounded-2xl font-bold hover:shadow-lg"
+        >
+          Hantar
+        </motion.button>
+      </div>
+    );
+  }
+
+  // Ordering
+  if (question.type === 'ordering') {
+    const items = question.items || [];
+
+    const handleOrderClick = (item) => {
+      const newOrder = selectedOrder.includes(item)
+        ? selectedOrder.filter((i) => i !== item)
+        : [...selectedOrder, item];
+      setSelectedOrder(newOrder);
+    };
+
+    return (
+      <div className="space-y-3">
+        <p className="text-sm text-gray-600 text-center">Klik untuk susun urutan</p>
+        <div className="space-y-2">
+          {items.map((item, i) => (
+            <motion.button
+              key={i}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleOrderClick(item)}
+              className={`w-full p-3 rounded-xl font-bold text-sm transition-all ${
+                selectedOrder.includes(item)
+                  ? 'bg-game-purple text-white'
+                  : 'bg-gray-200 text-gray-800'
+              }`}
+            >
+              {selectedOrder.indexOf(item) >= 0 ? `${selectedOrder.indexOf(item) + 1}. ` : ''} {item}
+            </motion.button>
+          ))}
+        </div>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => onAnswer(selectedOrder)}
+          disabled={disabled || selectedOrder.length === 0}
+          className="w-full py-3 bg-game-purple text-white rounded-2xl font-bold hover:shadow-lg disabled:opacity-50"
+        >
+          Hantar Urutan
+        </motion.button>
+      </div>
+    );
+  }
+
+  // Word Builder (letters to arrange)
+  if (question.type === 'word_builder') {
+    const letters = question.letters || [];
+    const remaining = letters.filter((l) => !arranged.includes(l));
+
+    return (
+      <div className="space-y-4">
+        <div className="p-4 bg-game-purple/10 rounded-2xl min-h-12 flex flex-wrap gap-2 items-center justify-center">
+          {arranged.length > 0 ? (
+            arranged.map((l, i) => (
+              <motion.button
+                key={i}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setArranged(arranged.filter((_, idx) => idx !== i))}
+                className="px-4 py-2 bg-game-purple text-white rounded-lg font-bold text-lg"
+              >
+                {l}
+              </motion.button>
+            ))
+          ) : (
+            <p className="text-gray-400">Susun di sini</p>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2 justify-center">
+          {remaining.map((l, i) => (
+            <motion.button
+              key={i}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setArranged([...arranged, l])}
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg font-bold text-lg hover:bg-gray-300"
+            >
+              {l}
+            </motion.button>
+          ))}
+        </div>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => onAnswer(arranged.join(''))}
+          disabled={disabled || arranged.length === 0}
+          className="w-full py-3 bg-game-purple text-white rounded-2xl font-bold hover:shadow-lg disabled:opacity-50"
+        >
+          Hantar
+        </motion.button>
+      </div>
+    );
+  }
+
+  // Fallback
+  return (
+    <div className="text-center text-gray-500">
+      Jenis soalan tidak disokong: {question.type}
+    </div>
+  );
+}
