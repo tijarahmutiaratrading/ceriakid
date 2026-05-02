@@ -58,7 +58,7 @@ export default function SubjectCard({
 
 
           <button
-          onClick={() => onGenerateSubject?.(subject.label, subject.ageGroup, subject.subject)}
+          onClick={() => onGenerateSubject?.(subject.label, subject.ageGroup, subject.subject, subject.totalGames)}
           disabled={!!actionLoading}
           title="Generate games for this subject"
           className="flex items-center gap-1 px-2.5 py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 text-xs font-bold disabled:opacity-50 transition-all">

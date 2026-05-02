@@ -127,8 +127,8 @@ export default function AdminGameManager() {
     setSyncAndEdit({ games, label, ageGroup, subject });
   };
 
-  const handleGenerateSubject = (label, ageGroup, subject) => {
-    setGenerateModal({ games: 5, questions: 10, ageGroup, subject, label });
+  const handleGenerateSubject = (label, ageGroup, subject, currentCount = 0) => {
+    setGenerateModal({ games: 5, questions: 10, ageGroup, subject, label, currentCount });
   };
 
   const handleBulkGenerateStart = () => {
@@ -895,11 +895,12 @@ export default function AdminGameManager() {
               <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-5">
                 <h3 className="font-black text-white text-lg">🎮 Generate Games</h3>
                 <p className="text-white/70 text-xs mt-0.5">{generateModal.label || 'Selected Subject'}</p>
+                {generateModal.currentCount > 0 && <p className="text-white/60 text-xs mt-1">📊 Ada {generateModal.currentCount} games sekarang</p>}
               </div>
 
               <div className="px-6 py-5 space-y-4">
                 <div>
-                  <label className="text-xs font-black text-gray-500 uppercase mb-2 block">Bilangan Games</label>
+                  <label className="text-xs font-black text-gray-500 uppercase mb-2 block">Target Bilangan Games</label>
                   <input
                   type="number"
                   min="1"
@@ -908,7 +909,7 @@ export default function AdminGameManager() {
                   onChange={(e) => setGenerateModal((m) => ({ ...m, games: parseInt(e.target.value) || 1 }))}
                   className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-green-400 focus:outline-none text-2xl font-black text-center bg-gray-50" />
                 
-                  <p className="text-xs text-gray-400 mt-1">Default: 5</p>
+                  <p className="text-xs text-gray-400 mt-1">Target total games yg dinak</p>
                 </div>
 
                 <div>
@@ -924,9 +925,14 @@ export default function AdminGameManager() {
                   <p className="text-xs text-gray-400 mt-1">Default: 10</p>
                 </div>
 
-                <p className="text-xs text-green-600 font-semibold text-center py-2 bg-green-50 rounded-xl">
-                  Total: {generateModal.games} games × {generateModal.questions} soalan = {generateModal.games * generateModal.questions} soalan
-                </p>
+                {(() => {
+                  const diff = generateModal.games - generateModal.currentCount;
+                  const action = diff > 0 ? `+ ${diff} games baru` : diff < 0 ? `- ${Math.abs(diff)} games dihapus` : 'Sama je';
+                  const color = diff > 0 ? 'text-blue-600 bg-blue-50' : diff < 0 ? 'text-orange-600 bg-orange-50' : 'text-gray-600 bg-gray-50';
+                  return <p className={`text-xs font-semibold text-center py-2 rounded-xl ${color}`}>
+                    Target: {generateModal.games} games | Aksi: {action}
+                  </p>;
+                })()}
               </div>
 
               <div className="px-6 pb-6 flex gap-3">
@@ -938,20 +944,37 @@ export default function AdminGameManager() {
                 </button>
                 <button
                 onClick={async () => {
-                  if (!window.confirm(`Generate ${generateModal.games} games × ${generateModal.questions} soalan untuk ${generateModal.label}?`)) return;
+                  const diff = generateModal.games - generateModal.currentCount;
+                  const action = diff > 0 ? `tambah ${diff}` : diff < 0 ? `buang ${Math.abs(diff)}` : 'keep';
+                  if (!window.confirm(`${action} games untuk ${generateModal.label}?\nTarget: ${generateModal.games} games × ${generateModal.questions} soalan`)) return;
                   setGenerateModal(null);
                   setActionLoading(`gen-${generateModal.ageGroup}-${generateModal.subject}`);
-                  showToast(`⏳ Generating for ${generateModal.label}...`, true);
+                  showToast(`⏳ Syncing ${generateModal.label}...`, true);
                   try {
-                    const res = await base44.functions.invoke('regenerateGamesTask', {
-                      taskId: 1,
-                      taskName: generateModal.label,
+                    const res = await base44.functions.invoke('syncSubjectGames', {
+                      targetCount: generateModal.games,
                       ageGroup: generateModal.ageGroup,
-                      subject: generateModal.subject,
-                      gamesCount: generateModal.games,
-                      questionsPerGame: generateModal.questions
+                      category: generateModal.subject
                     });
-                    showToast(`✅ Created ${res.data.createdGames} games dengan ${res.data.totalQuestions} soalan`);
+                    showToast(`✅ Synced to ${generateModal.games} games`);
+                    
+                    // If need to expand questions
+                    const dbGames = await base44.entities.Game.filter({ ageGroup: generateModal.ageGroup, category: generateModal.subject, isPublished: true });
+                    const needsExpand = dbGames.filter((g) => (g.gameData?.questions?.length || 0) < generateModal.questions);
+                    if (needsExpand.length > 0) {
+                      showToast(`⏳ Expanding questions for ${needsExpand.length} games...`, true);
+                      for (let i = 0; i < needsExpand.length; i++) {
+                        await base44.functions.invoke('syncSubjectGameQuestions', {
+                          targetCount: generateModal.questions,
+                          ageGroup: generateModal.ageGroup,
+                          category: generateModal.subject,
+                          gameId: needsExpand[i].id
+                        });
+                        if (i < needsExpand.length - 1) await new Promise(r => setTimeout(r, 3000));
+                      }
+                    }
+                    
+                    showToast(`✅ Done! ${generateModal.games} games × ${generateModal.questions} soalan`);
                     await fetchStats();
                   } catch (err) {
                     showToast('❌ ' + err.message, false);
@@ -961,7 +984,7 @@ export default function AdminGameManager() {
                 }}
                 className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold text-sm hover:shadow-lg">
                 
-                  ✅ Generate Now
+                  ✅ Sync Now
                 </button>
               </div>
             </motion.div>
