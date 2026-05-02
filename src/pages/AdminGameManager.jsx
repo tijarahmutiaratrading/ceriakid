@@ -447,7 +447,7 @@ export default function AdminGameManager() {
                        <button
                          onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)}
                          disabled={!!actionLoading}
-                         className="flex items-center gap-1 px-2 md:px-2.5 py-1 md:py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all text-xs font-bold"
+                         className="flex items-center gap-1 px-2 md:px-2.5 py-1 md:py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all text-xs font-bold pointer-events-auto"
                          title="Sync games & soalan"
                        >
                          {actionLoading === s.file ? <Loader2 className="w-3.5 h-3.5 animate-spin flex-shrink-0" /> : <Edit3 className="w-3 h-3 md:w-3.5 md:h-3.5 flex-shrink-0" />}
@@ -460,7 +460,7 @@ export default function AdminGameManager() {
                            setBulkEdit({ games: dbGames, label: s.label, ageGroup: s.ageGroup, subject: s.subject });
                          }}
                          disabled={!!actionLoading}
-                         className="flex items-center gap-1 px-2 md:px-2.5 py-1 md:py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all text-xs font-bold"
+                         className="flex items-center gap-1 px-2 md:px-2.5 py-1 md:py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg border border-purple-200 transition-all text-xs font-bold pointer-events-auto"
                          title="Bulk Edit games"
                        >
                          <Layers className="w-3 h-3 md:w-3.5 md:h-3.5 flex-shrink-0" />
@@ -491,7 +491,7 @@ export default function AdminGameManager() {
                            }
                          }}
                          disabled={!!actionLoading}
-                         className="flex items-center gap-1 px-2 md:px-2.5 py-1 md:py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all text-xs font-bold"
+                         className="flex items-center gap-1 px-2 md:px-2.5 py-1 md:py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all text-xs font-bold pointer-events-auto"
                          title="Sync totalQuestions ke frontend"
                        >
                          {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin flex-shrink-0" /> : <RotateCcw className="w-3 h-3 md:w-3.5 md:h-3.5 flex-shrink-0" />}
@@ -536,7 +536,7 @@ export default function AdminGameManager() {
                            }
                          }}
                          disabled={!!actionLoading}
-                         className="flex items-center gap-1 px-2 md:px-2.5 py-1 md:py-1.5 bg-cyan-50 hover:bg-cyan-100 text-cyan-600 rounded-lg border border-cyan-200 transition-all text-xs font-bold"
+                         className="flex items-center gap-1 px-2 md:px-2.5 py-1 md:py-1.5 bg-cyan-50 hover:bg-cyan-100 text-cyan-600 rounded-lg border border-cyan-200 transition-all text-xs font-bold pointer-events-auto"
                          title="Verify soalan quality (unique, on-topic)"
                        >
                          {actionLoading === `verify-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin flex-shrink-0" /> : <CheckCircle2 className="w-3 h-3 md:w-3.5 md:h-3.5 flex-shrink-0" />}
