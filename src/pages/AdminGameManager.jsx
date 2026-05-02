@@ -51,6 +51,8 @@ export default function AdminGameManager() {
   const [syncAndEdit, setSyncAndEdit] = useState(null); // { games, label, ageGroup, subject }
   const [dbGamesCache, setDbGamesCache] = useState({}); // cache DB games by subject key
   const [collapsedSections, setCollapsedSections] = useState({ prasekolah: false, sekolah_rendah: false });
+  const [regenerationTasks, setRegenerationTasks] = useState(null);
+  const [taskProgress, setTaskProgress] = useState([]);
 
   const showToast = (msg, ok = true) => {
     setToast({ msg, ok });
@@ -427,6 +429,34 @@ export default function AdminGameManager() {
             </button>
             <button
               onClick={async () => {
+                if (!window.confirm('🚨 DELETE semua games dan REGENERATE 30 games x 20 soalan per subject?\n\nIni operasi BESAR - akan ambil ~30-60 minit!')) return;
+                setActionLoading('regen');
+                showToast('⏳ Preparing regeneration tasks...', true);
+                try {
+                  // Step 1: Delete all games
+                  showToast('🗑️ Deleting all existing games...', true);
+                  const deleteRes = await base44.functions.invoke('deleteAllGames', {});
+                  showToast(`Deleted ${deleteRes.data.deletedCount} games`, true);
+
+                  // Step 2: Generate task list
+                  const tasksRes = await base44.functions.invoke('generateGamesRegenerationTasks', {});
+                  setRegenerationTasks(tasksRes.data.tasks);
+                  setTaskProgress([]);
+                  showToast(`📋 Generated ${tasksRes.data.totalTasks} tasks (${tasksRes.data.totalGames} games, ${tasksRes.data.totalQuestions} soalan total)`, true);
+                } catch (err) {
+                  showToast('❌ ' + err.message, false);
+                } finally {
+                  setActionLoading(null);
+                }
+              }}
+              disabled={!!actionLoading}
+              className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
+            >
+              {actionLoading === 'regen' ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+              Regenerate All
+            </button>
+            <button
+              onClick={async () => {
                 if (!window.confirm('Buang semua soalan kosong?')) return;
                 setActionLoading('clean');
                 showToast('⏳ Membersihkan...', true);
@@ -632,6 +662,152 @@ export default function AdminGameManager() {
             onClose={() => setSyncAndEdit(null)}
             onSaved={() => { showToast('✅ Proses selesai!'); fetchStats(); }}
           />
+        )}
+      </AnimatePresence>
+
+      {/* Regeneration Task Executor */}
+      <AnimatePresence>
+        {regenerationTasks && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.92, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.92, y: 20 }}
+              className="bg-white rounded-3xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-r from-red-600 to-orange-600 px-6 py-4">
+                <h3 className="font-black text-white text-lg">🚀 Regeneration Executor</h3>
+                <p className="text-white/80 text-xs mt-1">Execute tasks sequentially. Wait for each to complete.</p>
+              </div>
+
+              {/* Task List */}
+              <div className="flex-1 overflow-y-auto px-6 py-4">
+                <div className="space-y-2">
+                  {regenerationTasks.map((task, idx) => {
+                    const progress = taskProgress.find(p => p.taskId === task.taskId);
+                    const isCompleted = progress?.status === 'completed';
+                    const isRunning = progress?.status === 'running';
+                    
+                    return (
+                      <div key={task.taskId} className={`p-3 rounded-2xl border-2 transition-all ${
+                        isCompleted ? 'bg-green-50 border-green-300' :
+                        isRunning ? 'bg-blue-50 border-blue-300' :
+                        'bg-gray-50 border-gray-200'
+                      }`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <p className="text-sm font-bold text-gray-800">{task.taskName}</p>
+                            <p className="text-xs text-gray-500">{task.gamesCount} games × {task.questionsPerGame} soalan</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {isCompleted ? (
+                              <span className="text-xs font-bold text-green-600">✅ Done</span>
+                            ) : isRunning ? (
+                              <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                            ) : (
+                              <span className="text-xs font-bold text-gray-400">Pending</span>
+                            )}
+                          </div>
+                        </div>
+                        {progress?.message && (
+                          <p className="text-xs text-gray-600 mt-2">{progress.message}</p>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="px-6 py-4 border-t border-gray-200 flex gap-3">
+                <button
+                  onClick={() => { setRegenerationTasks(null); setTaskProgress([]); }}
+                  className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={async () => {
+                    const pendingTask = regenerationTasks.find(t => !taskProgress.find(p => p.taskId === t.taskId));
+                    if (!pendingTask) {
+                      showToast('✅ All tasks completed!');
+                      await fetchStats();
+                      setRegenerationTasks(null);
+                      setTaskProgress([]);
+                      return;
+                    }
+
+                    // Execute next pending task
+                    const newProgress = [...taskProgress, { taskId: pendingTask.taskId, status: 'running', message: 'Running...' }];
+                    setTaskProgress(newProgress);
+                    showToast(`⏳ Executing Task ${pendingTask.taskId}/${regenerationTasks.length}...`, true);
+
+                    try {
+                      const res = await base44.functions.invoke('regenerateGamesTask', {
+                        taskId: pendingTask.taskId,
+                        taskName: pendingTask.taskName,
+                        ageGroup: pendingTask.ageGroup,
+                        subject: pendingTask.subject,
+                        gamesCount: pendingTask.gamesCount,
+                        questionsPerGame: pendingTask.questionsPerGame,
+                      });
+
+                      // Mark task as completed
+                      const updatedProgress = taskProgress.map(p =>
+                        p.taskId === pendingTask.taskId
+                          ? { ...p, status: 'completed', message: res.data.message }
+                          : p
+                      );
+                      setTaskProgress(updatedProgress);
+                      showToast(`✅ Task ${pendingTask.taskId} completed: ${res.data.createdGames} games created`);
+
+                      // Auto-run next task after 2 seconds
+                      await new Promise(r => setTimeout(r, 2000));
+                      
+                      // Check if there are more tasks
+                      const nextTask = regenerationTasks.find(t => !updatedProgress.find(p => p.taskId === t.taskId));
+                      if (nextTask) {
+                        // Recursively call to execute next task
+                        const nextRes = await base44.functions.invoke('regenerateGamesTask', {
+                          taskId: nextTask.taskId,
+                          taskName: nextTask.taskName,
+                          ageGroup: nextTask.ageGroup,
+                          subject: nextTask.subject,
+                          gamesCount: nextTask.gamesCount,
+                          questionsPerGame: nextTask.questionsPerGame,
+                        });
+                        
+                        const finalProgress = updatedProgress.map(p =>
+                          p.taskId === nextTask.taskId
+                            ? { ...p, status: 'completed', message: nextRes.data.message }
+                            : p
+                        );
+                        finalProgress.push({ taskId: nextTask.taskId, status: 'completed', message: nextRes.data.message });
+                        setTaskProgress(finalProgress);
+                      }
+                    } catch (err) {
+                      showToast(`❌ Task ${pendingTask.taskId} failed: ${err.message}`, false);
+                      const failedProgress = taskProgress.map(p =>
+                        p.taskId === pendingTask.taskId
+                          ? { ...p, status: 'failed', message: err.message }
+                          : p
+                      );
+                      setTaskProgress(failedProgress);
+                    }
+                  }}
+                  className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg"
+                >
+                  {taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute Task ${taskProgress.length + 1}`}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
