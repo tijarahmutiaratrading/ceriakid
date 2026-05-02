@@ -46,7 +46,6 @@ export default function SubjectCard({
         </button>
 
         <div className="flex items-center gap-1 md:gap-2 flex-shrink-0 flex-wrap justify-end">
-          <span className={`text-xs font-bold px-2 md:px-2.5 py-0.5 md:py-1 rounded-lg md:rounded-full ${subject.color.badge}`}>{subject.totalGames}</span>
           {totalPlayers > 0 &&
           <span className="hidden sm:inline text-xs font-bold px-2.5 py-1 rounded-full bg-pink-100 text-pink-600 flex items-center gap-1">
               <Users className="w-3 h-3" aria-label="Players" />{totalPlayers}
