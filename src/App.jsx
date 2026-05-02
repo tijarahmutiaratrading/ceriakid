@@ -45,7 +45,8 @@ import Footer from '@/components/Footer';
 import OfflineBanner from '@/components/OfflineBanner';
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const authContext = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = authContext || {};
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
@@ -62,7 +63,7 @@ const AuthenticatedApp = () => {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      navigateToLogin();
+      navigateToLogin?.();
       return null;
     }
   }
@@ -130,7 +131,7 @@ function App() {
         </AuthProvider>
       </Router>
     </QueryClientProvider>
-  )
+  );
 }
 
 export default App
