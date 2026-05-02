@@ -86,13 +86,16 @@ export default function GamesList() {
   const [progress, setProgress] = useState({});
   const [selectedDarjah, setSelectedDarjah] = useState(null);
   const [userTier, setUserTier] = useState('free');
+  const [allGames, setAllGames] = useState([]);
 
   useEffect(() => {
     if (user) {
       loadUserTier();
     }
-    setLoading(false);
-  }, [user]);
+    if (ageGroup && category) {
+      loadGamesData();
+    }
+  }, [user, ageGroup, category]);
 
   const loadUserTier = async () => {
     try {
@@ -108,6 +111,22 @@ export default function GamesList() {
       }
     } catch (e) {
       // default free
+    }
+  };
+
+  const loadGamesData = async () => {
+    try {
+      const dbGames = await base44.entities.Game.filter({ ageGroup, category, isPublished: true });
+      if (dbGames.length > 0) {
+        setAllGames(dbGames.sort((a, b) => (a.order || 0) - (b.order || 0)));
+      } else {
+        setAllGames(getGamesByAgeAndCategory(ageGroup, category));
+      }
+    } catch (err) {
+      console.error('Failed to load games from DB:', err);
+      setAllGames(getGamesByAgeAndCategory(ageGroup, category));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -140,7 +159,11 @@ export default function GamesList() {
     return globalIdx >= 5; // free
   }, [isAuthenticated, userTier, ageGroup]);
 
-  const allGames = getGamesByAgeAndCategory(ageGroup, category);
+  // Poll for game updates every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(loadGamesData, 10000);
+    return () => clearInterval(interval);
+  }, [ageGroup, category]);
 
   // Check if games have darjah field (sekolah rendah)
   const hasDarjah = ageGroup === 'sekolah_rendah' && allGames.some(g => g.darjah);
