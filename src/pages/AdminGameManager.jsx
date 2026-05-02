@@ -448,16 +448,20 @@ export default function AdminGameManager() {
             </button>
             <button
               onClick={async () => {
+                if (!window.confirm('Auto-fix semua games dengan issues? (validate + fix soalan)')) return;
                 setActionLoading('check-all');
-                showToast('🔍 Checking semua games semua soalan...', true);
+                showToast('🤖 Checking & auto-fixing semua games...', true);
                 try {
-                  const res = await base44.functions.invoke('checkGameQuestionsMatching', {});
-                  if (res.data.issueCount > 0) {
-                    showToast(`⚠️ Found ${res.data.issueCount} issues dalam ${res.data.totalQuestions} soalan!`, false);
-                    console.log('All Games Issues:', res.data.issues);
+                  const res = await base44.functions.invoke('checkGameQuestionsMatching', { autoFix: true });
+                  if (res.data.autoFixedGames > 0) {
+                    showToast(`✅ Fixed ${res.data.autoFixedGames} games (${res.data.autoFixedQuestions} soalan)!`);
+                  } else if (res.data.issueCount > 0) {
+                    showToast(`⚠️ Found ${res.data.issueCount} issues - check console`, false);
+                    console.log('Issues:', res.data.issues);
                   } else {
-                    showToast(`✅ Semua OK! ${res.data.totalQuestions} soalan checked across ${res.data.totalGames} games.`);
+                    showToast(`✅ Semua OK! ${res.data.totalQuestions} soalan across ${res.data.totalGames} games.`);
                   }
+                  await fetchStats();
                 } catch (err) {
                   showToast('❌ ' + err.message, false);
                 } finally {
@@ -466,10 +470,10 @@ export default function AdminGameManager() {
               }}
               disabled={!!actionLoading}
               className="flex items-center gap-2 px-3 py-2 bg-yellow-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
-              title="Check all games all subjects all questions"
+              title="Check and auto-fix all games all subjects"
             >
-              {actionLoading === 'check-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : '🔍'}
-              Check All
+              {actionLoading === 'check-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : '🤖'}
+              Check & Fix All
             </button>
             <button onClick={fetchStats} disabled={loading} title="Refresh" className="p-2 bg-white/40 backdrop-blur-xl rounded-xl border-2 border-white/30 hover:bg-white/60 transition-all">
               <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />

@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const { ageGroup, category } = await req.json();
+    const { ageGroup, category, autoFix } = await req.json();
 
     // Get all games (no filter = all games)
     const filter = {};
@@ -22,6 +22,8 @@ Deno.serve(async (req) => {
     const issues = [];
     let totalQuestions = 0;
     let problemQuestions = 0;
+    let autoFixedGames = 0;
+    let autoFixedQuestions = 0;
 
     for (const game of games) {
       const questions = game.gameData?.questions || [];
@@ -123,6 +125,38 @@ Deno.serve(async (req) => {
       }
     }
 
+    // If autoFix enabled, fix all games with issues
+    if (autoFix && issues.length > 0) {
+      for (const game of games) {
+        const gameQuestions = game.gameData?.questions || [];
+        let hasIssues = false;
+        
+        // Check if this game has any issues
+        const gameIssues = issues.filter(iss => iss.gameTitle === game.title);
+        if (gameIssues.length > 0) {
+          try {
+            const result = await base44.asServiceRole.functions.invoke('validateGameQuestionsQuality', {
+              gameId: game.id,
+              ageGroup: game.ageGroup,
+              category: game.category,
+              questions: gameQuestions,
+            });
+            
+            if (result.data.validation.summary.failed > 0) {
+              await base44.asServiceRole.functions.invoke('autoFixGameQuestions', {
+                gameId: game.id,
+                validationResult: result.data.validation,
+              });
+              autoFixedGames++;
+              autoFixedQuestions += gameIssues.length;
+            }
+          } catch (err) {
+            console.error(`Auto-fix failed for game ${game.id}:`, err.message);
+          }
+        }
+      }
+    }
+
     return Response.json({
       success: true,
       ageGroup,
@@ -131,8 +165,11 @@ Deno.serve(async (req) => {
       totalQuestions,
       problemQuestions,
       issueCount: issues.length,
+      autoFix: autoFix || false,
+      autoFixedGames,
+      autoFixedQuestions,
       issues: issues.slice(0, 50), // Return first 50 issues
-      summary: `Found ${issues.length} issues in ${totalQuestions} questions across ${games.length} games`,
+      summary: autoFix ? `✅ Auto-fixed ${autoFixedGames} games (${autoFixedQuestions} questions)` : `Found ${issues.length} issues in ${totalQuestions} questions across ${games.length} games`,
     });
   } catch (error) {
     console.error('Check error:', error);
