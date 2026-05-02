@@ -163,50 +163,51 @@ export default function AdminGameManager() {
     }
   };
 
-  const handleImportToDB = async () => {
-    // Check if any subject already has DB games
-    const hasExistingData = Object.values(dbGamesCache).some(arr => arr.length > 0);
-    if (hasExistingData) {
-      const confirmed = window.confirm(
-        '⚠️ AMARAN: Import akan OVERWRITE semua soalan AI yang dah dijana!\n\nAdakah anda pasti? Ini akan gantikan data database dengan data asal dari library.'
-      );
-      if (!confirmed) return;
-    }
-
+  const handleSyncToDB = async () => {
     setActionLoading('import');
-    showToast('⏳ Mengimport games ke database...', true);
+    showToast('⏳ Sync games ke database...', true);
     try {
-      const allGames = [];
+      let added = 0;
+      let skipped = 0;
+
       for (const sc of SUBJECT_CONFIG) {
-        const games = gameLibrary[sc.ageGroup]?.[sc.subject] || [];
-        games.forEach((g, idx) => {
-          allGames.push({ ...g, ageGroup: sc.ageGroup, category: sc.subject, index: idx });
-        });
+        const libGames = gameLibrary[sc.ageGroup]?.[sc.subject] || [];
+        const dbGames = dbGamesCache[`${sc.ageGroup}-${sc.subject}`] || [];
+        const dbTitles = new Set(dbGames.map(g => g.title));
+
+        const newGames = libGames
+          .filter(g => !dbTitles.has(g.title))
+          .map((g, idx) => ({
+            title: g.title,
+            type: g.type,
+            emoji: g.emoji,
+            difficulty: g.difficulty,
+            tier: g.tier,
+            ageGroup: sc.ageGroup,
+            category: sc.subject,
+            order: dbGames.length + idx,
+            totalQuestions: g.gameData?.questions?.length || 8,
+            gameData: { questions: (g.gameData?.questions || []).slice(0, 20) },
+            isPublished: true,
+          }));
+
+        skipped += libGames.length - newGames.length;
+
+        if (newGames.length > 0) {
+          const BATCH = 10;
+          for (let i = 0; i < newGames.length; i += BATCH) {
+            const batch = newGames.slice(i, i + BATCH);
+            await base44.functions.invoke('importGamesToDB', { games: batch });
+            showToast(`⏳ Sync ${sc.label}... ${Math.min(i + BATCH, newGames.length)}/${newGames.length}`, true);
+          }
+          added += newGames.length;
+        }
       }
 
-      const lightGames = allGames.map(g => ({
-        title: g.title,
-        type: g.type,
-        emoji: g.emoji,
-        difficulty: g.difficulty,
-        tier: g.tier,
-        ageGroup: g.ageGroup,
-        category: g.category,
-        index: g.index,
-        totalQuestions: g.gameData?.questions?.length || 8,
-        gameData: { questions: (g.gameData?.questions || []).slice(0, 20) },
-      }));
-
-      const BATCH = 10;
-      for (let i = 0; i < lightGames.length; i += BATCH) {
-        const batch = lightGames.slice(i, i + BATCH);
-        await base44.functions.invoke('importGamesToDB', { games: batch });
-        showToast(`⏳ Mengimport... ${Math.min(i + BATCH, lightGames.length)}/${lightGames.length}`, true);
-      }
-      showToast(`✅ ${allGames.length} games berjaya diimport!`);
+      showToast(`✅ Sync selesai! ${added} games baru ditambah, ${skipped} games sedia ada dikekalkan.`);
       await fetchStats();
     } catch (err) {
-      showToast('❌ Import gagal: ' + err.message, false);
+      showToast('❌ Sync gagal: ' + err.message, false);
     } finally {
       setActionLoading(null);
     }
@@ -308,13 +309,13 @@ export default function AdminGameManager() {
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={handleImportToDB}
+              onClick={handleSyncToDB}
               disabled={!!actionLoading}
-              title="Import semua games ke Database"
+              title="Sync games baru ke Database (skip yang sedia ada)"
               className="flex items-center gap-1.5 px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl shadow text-xs font-bold transition-all disabled:opacity-50"
             >
               {actionLoading === 'import' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
-              Import DB
+              Sync DB
             </button>
             <button
               onClick={async () => {
