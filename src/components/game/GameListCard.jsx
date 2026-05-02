@@ -57,7 +57,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
         transition={{ delay: Math.min(idx * 0.03, 0.5) }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
-        className="rounded-2xl p-4 flex items-center gap-4 cursor-pointer group"
+        className="rounded-2xl p-4 flex items-center gap-4 cursor-pointer group mb-3"
         style={cardStyle}
       >
         {/* Emoji */}
