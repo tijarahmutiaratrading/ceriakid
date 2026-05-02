@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Clock, Zap } from 'lucide-react';
@@ -26,9 +26,33 @@ export default function GamePlayer() {
   const { ageGroup } = useAgeGroup();
   const { user } = useAuth();
   const { selectedChild } = useSelectedChild();
-  const games = getGamesByAgeAndCategory(ageGroup, category);
   const gameIndex = parseInt(index);
-  const game = games && gameIndex >= 0 && gameIndex < games.length ? games[gameIndex] : null;
+
+  const [game, setGame] = useState(null);
+  const [gameLoaded, setGameLoaded] = useState(false);
+
+  // Load game: try DB first, fallback to gameLibrary
+  useEffect(() => {
+    const loadGame = async () => {
+      try {
+        const dbGames = await base44.entities.Game.filter({ ageGroup, category, isPublished: true });
+        dbGames.sort((a, b) => (a.order || 0) - (b.order || 0));
+        if (dbGames.length > gameIndex && dbGames[gameIndex]) {
+          setGame(dbGames[gameIndex]);
+          setGameLoaded(true);
+          return;
+        }
+      } catch (e) {
+        // fallback
+      }
+      // Fallback to hardcoded library
+      const libGames = getGamesByAgeAndCategory(ageGroup, category);
+      const libGame = libGames && gameIndex >= 0 && gameIndex < libGames.length ? libGames[gameIndex] : null;
+      setGame(libGame);
+      setGameLoaded(true);
+    };
+    loadGame();
+  }, [ageGroup, category, gameIndex]);
 
   const [state, setState] = useState({
     currentQ: 0,
@@ -257,6 +281,17 @@ export default function GamePlayer() {
       }
     }
   };
+
+  if (!gameLoaded) {
+    return (
+      <div className="min-h-screen bg-pattern flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-5xl animate-bounce mb-4">🎮</div>
+          <div className="w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full animate-spin mx-auto" />
+        </div>
+      </div>
+    );
+  }
 
   if (!game) {
     return (

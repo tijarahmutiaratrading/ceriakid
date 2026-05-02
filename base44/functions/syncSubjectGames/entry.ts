@@ -1,67 +1,86 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
+// Syncs the number of games for a subject by cloning/removing from DB Game entity
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-    
+
     if (user?.role !== 'admin') {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const { targetCount } = await req.json();
+    const { targetCount, ageGroup, subject, category } = await req.json();
 
-    // Subject game files only
-    const gameFiles = [
-      'gameData_prasekolah_bm', 'gameData_prasekolah_en', 'gameData_prasekolah_math', 'gameData_prasekolah_science',
-      'gameData_sr_bm', 'gameData_sr_english', 'gameData_sr_math', 'gameData_sr_science',
-    ];
+    if (!targetCount || targetCount < 1) {
+      return Response.json({ error: 'targetCount required' }, { status: 400 });
+    }
+    if (!ageGroup || !category) {
+      return Response.json({ error: 'ageGroup and category required' }, { status: 400 });
+    }
 
-    let totalGamesAdded = 0;
-    let totalGamesRemoved = 0;
-    let filesProcessed = 0;
+    // Get all games for this subject from DB
+    const existing = await base44.asServiceRole.entities.Game.filter({
+      ageGroup,
+      category,
+    });
 
-    for (const fileName of gameFiles) {
-      try {
-        const module = await import(`../lib/${fileName}.js`);
-        const games = module[Object.keys(module)[0]];
+    // Sort by order
+    existing.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-        if (!games || games.length === 0) continue;
+    const currentCount = existing.length;
+    let added = 0;
+    let removed = 0;
 
-        const currentCount = games.length;
+    if (targetCount > currentCount) {
+      // Add games by cloning the last one
+      const template = existing[existing.length - 1] || {
+        title: 'Game Baru',
+        type: 'multiple_choice',
+        category,
+        ageGroup,
+        difficulty: 'easy',
+        tier: 'free',
+        emoji: '🎮',
+        totalQuestions: 8,
+        gameData: { questions: [] },
+        isPublished: true,
+      };
 
-        if (targetCount > currentCount) {
-          const lastGame = games[games.length - 1];
-          const difference = targetCount - currentCount;
-          
-          for (let i = 0; i < difference; i++) {
-            const clonedGame = JSON.parse(JSON.stringify(lastGame));
-            clonedGame.title = `${lastGame.title} - Copy ${i + 1}`;
-            games.push(clonedGame);
-            totalGamesAdded++;
-          }
-        } else if (targetCount < currentCount) {
-          const difference = currentCount - targetCount;
-          totalGamesRemoved += games.splice(games.length - difference, difference).length;
-        }
-
-        filesProcessed++;
-      } catch (err) {
-        // File doesn't exist, skip
+      for (let i = currentCount; i < targetCount; i++) {
+        await base44.asServiceRole.entities.Game.create({
+          title: `${template.title} - ${i + 1}`,
+          type: template.type,
+          category,
+          ageGroup,
+          difficulty: template.difficulty || 'easy',
+          tier: template.tier || 'free',
+          emoji: template.emoji || '🎮',
+          totalQuestions: template.totalQuestions || 8,
+          gameData: JSON.parse(JSON.stringify(template.gameData || {})),
+          isPublished: true,
+          order: i,
+        });
+        added++;
+      }
+    } else if (targetCount < currentCount) {
+      // Remove excess games from the end
+      const toRemove = existing.slice(targetCount);
+      for (const g of toRemove) {
+        await base44.asServiceRole.entities.Game.delete(g.id);
+        removed++;
       }
     }
 
-    const message = [];
-    if (totalGamesAdded > 0) message.push(`${totalGamesAdded} games added`);
-    if (totalGamesRemoved > 0) message.push(`${totalGamesRemoved} games removed`);
-
     return Response.json({
       success: true,
+      ageGroup,
+      category,
+      previousCount: currentCount,
       targetCount,
-      filesProcessed,
-      totalGamesAdded,
-      totalGamesRemoved,
-      message: message.length > 0 ? message.join(', ') : 'Semua files sudah pada target',
+      added,
+      removed,
+      message: added > 0 ? `${added} games ditambah` : removed > 0 ? `${removed} games dibuang` : 'Sudah pada target',
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

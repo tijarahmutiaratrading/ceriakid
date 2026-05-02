@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X, Database } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { gameLibrary } from '@/lib/gameLibrary';
 
@@ -101,25 +101,67 @@ export default function AdminGameManager() {
 
   useEffect(() => { fetchStats(); }, []);
 
-  const openModal = (file, label, currentGames, currentAvgQ) => {
-    setModal({ file, label, gamesValue: String(currentGames), questionsValue: String(currentAvgQ || '') });
+  const openModal = (file, label, currentGames, currentAvgQ, ageGroup, subject) => {
+    setModal({ file, label, ageGroup, subject, gamesValue: String(currentGames), questionsValue: String(currentAvgQ || '') });
   };
 
   const handleModalConfirm = async () => {
-    const { file } = modal;
+    const { file, ageGroup, subject } = modal;
     const games = parseInt(modal.gamesValue);
     const questions = parseInt(modal.questionsValue);
     setModal(null);
     setActionLoading(file);
     try {
       const tasks = [];
-      if (games && games > 0) tasks.push(base44.functions.invoke('syncSubjectGames', { targetCount: games, files: [file] }));
-      if (questions && questions > 0) tasks.push(base44.functions.invoke('syncSubjectGameQuestions', { targetCount: questions, files: [file] }));
+      if (games && games > 0) {
+        tasks.push(base44.functions.invoke('syncSubjectGames', {
+          targetCount: games,
+          ageGroup,
+          category: subject,
+        }));
+      }
+      if (questions && questions > 0) {
+        tasks.push(base44.functions.invoke('syncSubjectGameQuestions', {
+          targetCount: questions,
+          ageGroup,
+          category: subject,
+        }));
+      }
       await Promise.all(tasks);
       showToast('✅ Berjaya dikemas kini!');
       await fetchStats();
     } catch (err) {
       showToast('❌ ' + err.message, false);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleImportToDB = async () => {
+    setActionLoading('import');
+    showToast('⏳ Mengimport games ke database...', true);
+    try {
+      // Collect all games from gameLibrary and send to importGamesToDB
+      const allGames = [];
+      for (const sc of SUBJECT_CONFIG) {
+        const ageKey = sc.ageGroup;
+        const subKey = sc.subject;
+        const games = gameLibrary[ageKey]?.[subKey] || [];
+        games.forEach((g, idx) => {
+          allGames.push({ ...g, ageGroup: sc.ageGroup, category: sc.subject, index: idx });
+        });
+      }
+
+      // Batch in groups of 50 to avoid timeout
+      const BATCH = 50;
+      for (let i = 0; i < allGames.length; i += BATCH) {
+        const batch = allGames.slice(i, i + BATCH);
+        await base44.functions.invoke('importGamesToDB', { games: batch });
+      }
+      showToast(`✅ ${allGames.length} games berjaya diimport!`);
+      await fetchStats();
+    } catch (err) {
+      showToast('❌ Import gagal: ' + err.message, false);
     } finally {
       setActionLoading(null);
     }
@@ -222,9 +264,20 @@ export default function AdminGameManager() {
             <h1 className="text-2xl font-black text-gray-900">🎮 Game Manager</h1>
             <p className="text-gray-400 text-sm">Database semua games & soalan</p>
           </div>
-          <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white rounded-xl shadow border border-gray-100 hover:bg-gray-50 transition-all">
-            <RefreshCw className={`w-5 h-5 text-gray-500 ${loading ? 'animate-spin' : ''}`} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleImportToDB}
+              disabled={!!actionLoading}
+              title="Import semua games ke Database"
+              className="flex items-center gap-1.5 px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl shadow text-xs font-bold transition-all disabled:opacity-50"
+            >
+              {actionLoading === 'import' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
+              Import DB
+            </button>
+            <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white rounded-xl shadow border border-gray-100 hover:bg-gray-50 transition-all">
+              <RefreshCw className={`w-5 h-5 text-gray-500 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
         </div>
 
         {/* Summary */}
@@ -284,7 +337,7 @@ export default function AdminGameManager() {
 
                       {/* Action button */}
                       <button
-                        onClick={() => openModal(s.file, s.label, s.totalGames, avgQ)}
+                        onClick={() => openModal(s.file, s.label, s.totalGames, avgQ, s.ageGroup, s.subject)}
                         disabled={!!actionLoading}
                         className="p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 transition-all"
                         title="Edit games & soalan"
