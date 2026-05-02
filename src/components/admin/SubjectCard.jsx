@@ -15,6 +15,7 @@ export default function SubjectCard({
   dbGamesCache,
   onVerify,
   onEditGame,
+  onGenerateSubject,
   idx
 }) {
   const { shortLabel, avgQ, totalPlayers } = useMemo(() => {
@@ -53,42 +54,53 @@ export default function SubjectCard({
           }
           
           <div className="hidden md:flex items-center gap-1">
-            <button
-              onClick={() => onEditSubjectConfig?.(subject.file, subject.label, subject.totalGames, avgQ, subject.ageGroup, subject.subject)}
-              disabled={!!actionLoading || !onEditSubjectConfig}
-              title="Edit games & questions count"
-              className="flex items-center gap-1 px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-lg border border-amber-200 text-xs font-bold disabled:opacity-50 transition-all">
-              
-              {actionLoading === `config-${subject.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
-              Config
-            </button>
+          <button
+          onClick={() => onEditSubjectConfig?.(subject.file, subject.label, subject.totalGames, avgQ, subject.ageGroup, subject.subject)}
+          disabled={!!actionLoading || !onEditSubjectConfig}
+          title="Edit games & questions count"
+          className="flex items-center gap-1 px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-lg border border-amber-200 text-xs font-bold disabled:opacity-50 transition-all">
 
-            <button
-              onClick={() => {
-                const games = dbGamesCache[`${subject.ageGroup}-${subject.subject}`] || [];
-                if (games.length === 0) {
-                  showToast('Import ke DB dulu', false);
-                  return;
-                }
-                onBulkEdit(games, subject.label, subject.ageGroup, subject.subject);
-              }}
-              disabled={!!actionLoading}
-              title="Bulk edit all games"
-              className="flex items-center gap-1 px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 text-xs font-bold disabled:opacity-50 transition-all">
-              
-              {actionLoading === subject.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
-              Manage
-            </button>
+          {actionLoading === `config-${subject.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
+          Config
+          </button>
 
-            <button
-              onClick={() => onVerify(subject.file, subject.label, subject.ageGroup, subject.subject, dbGamesCache)}
-              disabled={!!actionLoading}
-              title="Verify questions" className="flex items-center gap-1 px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg border border-blue-200 text-xs font-bold disabled:opacity-50 transition-all hidden">
+          <button
+          onClick={() => {
+            const games = dbGamesCache[`${subject.ageGroup}-${subject.subject}`] || [];
+            if (games.length === 0) {
+              showToast('Import ke DB dulu', false);
+              return;
+            }
+            onBulkEdit(games, subject.label, subject.ageGroup, subject.subject);
+          }}
+          disabled={!!actionLoading}
+          title="Bulk edit all games"
+          className="flex items-center gap-1 px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-200 text-xs font-bold disabled:opacity-50 transition-all">
 
-              
-              {actionLoading === `verify-${subject.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
-              Check
-            </button>
+          {actionLoading === subject.file ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Edit3 className="w-3.5 h-3.5" />}
+          Manage
+          </button>
+
+          <button
+          onClick={() => onGenerateSubject?.(subject.label, subject.ageGroup, subject.subject)}
+          disabled={!!actionLoading}
+          title="Generate games for this subject"
+          className="flex items-center gap-1 px-2.5 py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 text-xs font-bold disabled:opacity-50 transition-all">
+
+
+          {actionLoading === `gen-${subject.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : '🎮'}
+          Generate
+          </button>
+
+          <button
+          onClick={() => onVerify(subject.file, subject.label, subject.ageGroup, subject.subject, dbGamesCache)}
+          disabled={!!actionLoading}
+          title="Verify questions" className="flex items-center gap-1 px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg border border-blue-200 text-xs font-bold disabled:opacity-50 transition-all hidden">
+
+
+          {actionLoading === `verify-${subject.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+          Check
+          </button>
           </div>
 
           <button onClick={() => onExpandToggle(isExpanded ? null : subject.file)} className="p-0.5 md:p-1 hover:bg-gray-100 rounded-lg transition-all">
