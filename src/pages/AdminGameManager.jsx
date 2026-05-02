@@ -352,70 +352,7 @@ export default function AdminGameManager() {
 
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
-      {/* Battery Progress Animation - On Generate Button Area */}
-      <AnimatePresence>
-        {taskProgress.length > 0 && regenerationTasks &&
-        <motion.div
-          initial={{ y: -20, opacity: 0, scale: 0.9 }}
-          animate={{ y: 0, opacity: 1, scale: 1 }}
-          exit={{ y: -20, opacity: 0, scale: 0.9 }}
-          transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-          className="fixed top-24 left-1/2 -translate-x-1/2 z-40 max-w-xs">
-          
-            <motion.div
-            className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 rounded-full shadow-2xl p-4 border-2 border-white/40 backdrop-blur-xl"
-            style={{
-              boxShadow: '0 0 40px rgba(255, 107, 53, 0.7)'
-            }}>
-            
-              {/* Pulsing Glow */}
-              <motion.div
-              className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 opacity-30"
-              animate={{ scale: [1, 1.15, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }} />
-            
 
-              <div className="relative z-10 flex items-center gap-4">
-                <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                className="text-3xl flex-shrink-0">
-                
-                  🔋
-                </motion.div>
-
-                <div className="flex-1">
-                  <p className="text-white font-black text-sm">Generating Games...</p>
-                  
-                  {/* Battery-style bar */}
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className="flex-1 h-3 bg-white/25 rounded-full overflow-hidden border border-white/50">
-                      <motion.div
-                      className="h-full bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }}
-                      transition={{ duration: 0.5, ease: 'easeOut' }}
-                      style={{
-                        boxShadow: '0 0 12px rgba(255, 165, 0, 0.9)'
-                      }} />
-                    
-                    </div>
-                    <motion.span
-                    className="text-white font-black text-xs min-w-9 text-center"
-                    animate={{ scale: [1, 1.15, 1] }}
-                    transition={{ duration: 0.6, repeat: Infinity }}>
-                    
-                      {Math.round(taskProgress.length / regenerationTasks.length * 100)}%
-                    </motion.span>
-                  </div>
-
-                  <p className="text-white/80 text-xs mt-1.5 font-semibold">{taskProgress.length}/{regenerationTasks.length} tasks</p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        }
-      </AnimatePresence>
 
       <AnimatePresence>
         {toast &&
@@ -663,6 +600,44 @@ export default function AdminGameManager() {
             </motion.div>
           )}
         </div>
+
+        {/* Generation Progress Bar */}
+        <AnimatePresence>
+          {taskProgress.length > 0 && regenerationTasks && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-4 md:p-5 shadow-xl border-2 border-orange-300 mb-4 md:mb-6"
+            >
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <div>
+                  <p className="font-black text-white text-sm md:text-base">🔥 Generating Games...</p>
+                  <p className="text-white/80 text-xs font-semibold">{taskProgress.length}/{regenerationTasks.length} tasks completed</p>
+                </div>
+                <motion.div
+                  className="text-4xl flex-shrink-0"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                >
+                  🔋
+                </motion.div>
+              </div>
+              <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/50">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  style={{
+                    boxShadow: '0 0 12px rgba(255, 165, 0, 0.9)'
+                  }}
+                />
+              </div>
+              <p className="text-white/70 text-xs mt-2.5 text-center font-semibold">{Math.round(taskProgress.length / regenerationTasks.length * 100)}% — {Math.ceil((regenerationTasks.length - taskProgress.length) * 30 / 60)}m remaining</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {loading ?
         <div className="flex items-center justify-center py-20">
