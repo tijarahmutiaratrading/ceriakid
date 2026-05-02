@@ -12,26 +12,33 @@ async function generateFixedQuestion(base44, game, question, issues) {
   const categoryEmojis = EMOJI_MAP[game.category] || ['🎮'];
   const randomEmoji = categoryEmojis[Math.floor(Math.random() * categoryEmojis.length)];
 
-  const fixPrompt = `Fix this question for "${game.title}" (${game.category}, ${game.ageGroup}):
+  const fixPrompt = `You are an expert in creating educational questions for Malaysian ${game.ageGroup} ${game.category}.
 
-Original Question: ${question.problem || question.question}
+Fix this question for "${game.title}":
+Original: ${question.problem || question.question}
 Current Options: ${(question.options || []).join(' | ')}
 Current Answer Index: ${question.answer}
 
-Issues found:
+Issues to fix:
 ${issues.join('\n')}
 
-Provide FIXED question in JSON ONLY with:
-- problem: [Clear, age-appropriate question in proper language]
-- options: [4 valid, distinct answer options - make sure correct one is actually correct]
-- answer: [Index 0-3 of correct answer - MUST be correct]
-- emoji: [Relevant emoji from this list: ${categoryEmojis.join(', ')}]
-- image: [null or valid image URL if applicable]
+CRITICAL: If there's an emoji-answer mismatch (e.g., 🦁 with non-lion answer):
+- Keep the emoji semantically matched to the correct answer
+- If emoji is 🦁, correct answer MUST be about lions (singa, lion, etc)
+- Regenerate options so the emoji makes sense
 
-Make sure the correct answer at options[answer] is truly the right one!`;
+Provide FIXED question with:
+- problem: [Clear question + appropriate emoji from list: ${categoryEmojis.join(', ')}]
+- options: [4 DISTINCT, sensible answers where options[answer] is CORRECT]
+- answer: [0-3 index of correct answer]
+- emoji: [Emoji that MATCHES the correct answer semantically]
+- image: [null or valid URL]
+
+ENSURE emoji and correct answer are semantically aligned!`;
 
   const fixedData = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt: fixPrompt,
+    model: 'claude_sonnet_4_6',
     response_json_schema: {
       type: 'object',
       properties: {
@@ -87,18 +94,21 @@ Deno.serve(async (req) => {
       const issues = [];
 
       // Collect all issues
-      if (validation.soalan_status !== 'VALID') {
-        issues.push(`Soalan issue: ${validation.soalan_status} - ${validation.issues}`);
-      }
-      if (validation.jawapan_status !== 'CORRECT') {
-        issues.push(`Jawapan issue: ${validation.jawapan_status}`);
-      }
-      if (validation.emoji_status === 'MISSING' || validation.emoji_status === 'INAPPROPRIATE') {
-        issues.push(`Emoji issue: ${validation.emoji_status}`);
-      }
-      if (validation.image_status === 'BROKEN_URL' || validation.image_status === 'MISSING') {
-        issues.push(`Image issue: ${validation.image_status}`);
-      }
+       if (validation.soalan_status !== 'VALID') {
+         issues.push(`Soalan issue: ${validation.soalan_status} - ${validation.issues}`);
+       }
+       if (validation.jawapan_status !== 'CORRECT') {
+         issues.push(`Jawapan issue: ${validation.jawapan_status}`);
+       }
+       if (validation.emoji_status === 'MISSING' || validation.emoji_status === 'MISMATCH') {
+         issues.push(`Emoji issue: ${validation.emoji_status}`);
+       }
+       if (validation.emoji_answer_match === 'MISMATCH') {
+         issues.push(`CRITICAL: Emoji does not match correct answer - emoji and answer must be semantically aligned`);
+       }
+       if (validation.image_status === 'BROKEN_URL' || validation.image_status === 'MISSING') {
+         issues.push(`Image issue: ${validation.image_status}`);
+       }
 
       // If PASS, skip
       if (validation.overall === 'PASS' && issues.length === 0) {

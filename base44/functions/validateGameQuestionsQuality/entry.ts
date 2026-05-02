@@ -68,10 +68,11 @@ Game Context:
 CRITICAL VALIDATION RULES:
 1. SOALAN CHECK: Is the question accurate, clear, age-appropriate for ${darjahLabel}?
 2. JAWAPAN CHECK: Is the marked correct answer (✓) actually correct? Are all options sensible?
-3. EMOJI/ICON CHECK: Is emoji present? Is it appropriate and relevant to the question?
-4. IMAGE CHECK: Is image URL valid/present if needed? (URL format check)
-5. DUPLICATE CHECK: Are any questions repeated or too similar?
-6. CURRICULUM FIT: Does question align with ${categoryLabel} curriculum?
+3. EMOJI/ICON CHECK: Is emoji present AND MATCHES the question content/answer? (e.g., 🦁 must relate to lion/singa)
+4. EMOJI-ANSWER SEMANTIC MATCH: If emoji is 🦁 (lion), the correct answer MUST be about lions (singa/lion/etc). REJECT mismatches like 🦁 with bird answers.
+5. IMAGE CHECK: Is image URL valid/present if needed? (URL format check)
+6. DUPLICATE CHECK: Are any questions repeated or too similar?
+7. CURRICULUM FIT: Does question align with ${categoryLabel} curriculum?
 
 Questions to validate:
 ${questionsText}
@@ -79,12 +80,13 @@ ${questionsText}
 For EACH question, check these aspects:
 - Q[number]_SOALAN: [VALID/UNCLEAR/WRONG/OFFTOPIC] - Is the question correct and clear?
 - Q[number]_JAWAPAN: [CORRECT/WRONG/AMBIGUOUS] - Is the answer truly correct?
-- Q[number]_EMOJI: [PRESENT/MISSING] - Is emoji/icon there and appropriate?
+- Q[number]_EMOJI: [PRESENT/MISSING/MISMATCH] - Is emoji there AND semantically matches the answer?
+- Q[number]_EMOJI_ANSWER_MATCH: [MATCH/MISMATCH] - Does emoji content match correct answer? (Critical!)
 - Q[number]_IMAGE: [VALID/MISSING/BROKEN_URL] - Check image URL validity
 - Q[number]_OVERALL: [PASS/FAIL] - Overall quality
 
-Respond in JSON with DETAILED feedback for each question and final recommendations.
-BE EXTREMELY STRICT - Flag everything that's not perfect.`,
+Respond in JSON with DETAILED feedback for each question. REJECT any emoji-answer mismatches.`,
+      model: 'claude_sonnet_4_6',
       response_json_schema: {
         type: 'object',
         properties: {
@@ -96,13 +98,14 @@ BE EXTREMELY STRICT - Flag everything that's not perfect.`,
                 question_number: { type: 'number' },
                 soalan_status: { type: 'string', description: 'VALID/UNCLEAR/WRONG/OFFTOPIC' },
                 jawapan_status: { type: 'string', description: 'CORRECT/WRONG/AMBIGUOUS' },
-                emoji_status: { type: 'string', description: 'PRESENT/MISSING/INAPPROPRIATE' },
+                emoji_status: { type: 'string', description: 'PRESENT/MISSING/MISMATCH' },
+                emoji_answer_match: { type: 'string', description: 'MATCH/MISMATCH' },
                 image_status: { type: 'string', description: 'VALID/MISSING/BROKEN_URL' },
                 overall: { type: 'string', description: 'PASS/FAIL' },
                 issues: { type: 'string', description: 'Specific problems found' },
                 recommendation: { type: 'string', description: 'How to fix it' },
               },
-              required: ['question_number', 'soalan_status', 'jawapan_status', 'emoji_status', 'image_status', 'overall'],
+              required: ['question_number', 'soalan_status', 'jawapan_status', 'emoji_status', 'emoji_answer_match', 'overall'],
             },
           },
           summary: {
