@@ -1,59 +1,22 @@
-import { prasekolah_bahasa_melayu } from './gameData_prasekolah_bm.js';
-import { prasekolah_bahasa_melayu_expansion } from './gameData_prasekolah_bm_expansion.js';
-import { prasekolah_bahasa_melayu_expansion_full } from './gameData_prasekolah_bm_expansion_full.js';
-import { prasekolah_english } from './gameData_prasekolah_en.js';
-import { prasekolah_english_expansion } from './gameData_prasekolah_en_expansion.js';
-import { prasekolah_english_expansion_full } from './gameData_prasekolah_en_expansion_full.js';
-import { prasekolah_mathematics } from './gameData_prasekolah_math.js';
-import { prasekolah_mathematics_expansion } from './gameData_prasekolah_math_expansion.js';
-import { prasekolah_science } from './gameData_prasekolah_science.js';
-import { prasekolah_science_expansion } from './gameData_prasekolah_science_expansion.js';
-import { prasekolah_worksheet } from './gameData_prasekolah_worksheet.js';
-import { prasekolah_bahasa_tamil } from './gameData_prasekolah_tamil.js';
-import { prasekolah_bahasa_tamil_expansion } from './gameData_prasekolah_tamil_expansion.js';
-import { prasekolah_bahasa_mandarin } from './gameData_prasekolah_mandarin.js';
-import { prasekolah_bahasa_mandarin_expansion } from './gameData_prasekolah_mandarin_expansion.js';
-import { sekolah_bahasa_melayu } from './gameData_sr_bm.js';
-import { sekolah_bahasa_melayu_expansion } from './gameData_sr_bm_expansion.js';
-import { sekolah_bahasa_melayu_expansion_full } from './gameData_sr_bm_expansion_full.js';
-import { sekolah_bahasa_melayu_expansion_full_part2 } from './gameData_sr_bm_expansion_full_part2.js';
-import { sekolah_jawi } from './gameData_sr_jawi.js';
-import { sekolah_jawi_expansion } from './gameData_sr_jawi_expansion.js';
-import { sekolah_jawi_expansion_full } from './gameData_sr_jawi_expansion_full.js';
-import { sekolah_english } from './gameData_sr_english.js';
-import { sekolah_english_expansion } from './gameData_sr_english_expansion.js';
-import { sekolah_english_expansion_full } from './gameData_sr_english_expansion_full.js';
-import { sekolah_mathematics } from './gameData_sr_math.js';
-import { sekolah_mathematics_expansion } from './gameData_sr_math_expansion.js';
-import { sekolah_math_expansion_full } from './gameData_sr_math_expansion_full.js';
-import { sekolah_science } from './gameData_sr_science.js';
-import { sekolah_science_expansion } from './gameData_sr_science_expansion.js';
-import { sekolah_science_expansion_full } from './gameData_sr_science_expansion_full.js';
-import { sekolah_bahasa_tamil } from './gameData_sr_tamil.js';
-import { sekolah_bahasa_tamil_expansion } from './gameData_sr_tamil_expansion.js';
-import { sekolah_bahasa_tamil_expansion_full } from './gameData_sr_tamil_expansion_full.js';
-import { sekolah_bahasa_mandarin } from './gameData_sr_mandarin.js';
-import { sekolah_bahasa_mandarin_expansion } from './gameData_sr_mandarin_expansion.js';
-import { sekolah_bahasa_mandarin_expansion_full } from './gameData_sr_mandarin_expansion_full.js';
-
+// Empty game library - all games now come from database only
 export const gameLibrary = {
   prasekolah: {
-    bahasa_melayu: [...prasekolah_bahasa_melayu, ...prasekolah_bahasa_melayu_expansion, ...prasekolah_bahasa_melayu_expansion_full],
-    english: [...prasekolah_english, ...prasekolah_english_expansion, ...prasekolah_english_expansion_full],
-    mathematics: [...prasekolah_mathematics, ...prasekolah_mathematics_expansion],
-    science: [...prasekolah_science, ...prasekolah_science_expansion],
-    worksheet: prasekolah_worksheet,
-    bahasa_tamil: [...prasekolah_bahasa_tamil, ...prasekolah_bahasa_tamil_expansion],
-    bahasa_mandarin: [...prasekolah_bahasa_mandarin, ...prasekolah_bahasa_mandarin_expansion],
+    bahasa_melayu: [],
+    english: [],
+    mathematics: [],
+    science: [],
+    worksheet: [],
+    bahasa_tamil: [],
+    bahasa_mandarin: [],
   },
   sekolah_rendah: {
-    bahasa_melayu: [...sekolah_bahasa_melayu, ...sekolah_bahasa_melayu_expansion, ...sekolah_bahasa_melayu_expansion_full, ...sekolah_bahasa_melayu_expansion_full_part2],
-    jawi: [...sekolah_jawi, ...sekolah_jawi_expansion, ...sekolah_jawi_expansion_full],
-    english: [...sekolah_english, ...sekolah_english_expansion, ...sekolah_english_expansion_full],
-    mathematics: [...sekolah_mathematics, ...sekolah_mathematics_expansion, ...sekolah_math_expansion_full],
-    science: [...sekolah_science, ...sekolah_science_expansion, ...sekolah_science_expansion_full],
-    bahasa_tamil: [...sekolah_bahasa_tamil, ...sekolah_bahasa_tamil_expansion, ...sekolah_bahasa_tamil_expansion_full],
-    bahasa_mandarin: [...sekolah_bahasa_mandarin, ...sekolah_bahasa_mandarin_expansion, ...sekolah_bahasa_mandarin_expansion_full],
+    bahasa_melayu: [],
+    jawi: [],
+    english: [],
+    mathematics: [],
+    science: [],
+    bahasa_tamil: [],
+    bahasa_mandarin: [],
   },
 };
 
