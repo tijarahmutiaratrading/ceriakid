@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X, Database, Layers, Trash2 } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronRight, RefreshCw, Users, Edit3, X, Database, Layers, Trash2, RotateCcw } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { gameLibrary } from '@/lib/gameLibrary';
 import EditGameModal from '@/components/admin/EditGameModal';
@@ -408,6 +408,37 @@ export default function AdminGameManager() {
                         title="Bulk Edit games"
                       >
                         <Layers className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={async () => {
+                          const syncKey = `sync-${s.file}`;
+                          setActionLoading(syncKey);
+                          showToast(`⏳ Sync ${s.label}...`, true);
+                          try {
+                            const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
+                            if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); return; }
+                            // Fix totalQuestions for each game based on actual question count
+                            let fixed = 0;
+                            for (const g of dbGames) {
+                              const actualCount = g.gameData?.questions?.length || 0;
+                              if (g.totalQuestions !== actualCount) {
+                                await base44.entities.Game.update(g.id, { totalQuestions: actualCount });
+                                fixed++;
+                              }
+                            }
+                            showToast(`✅ Sync selesai! ${fixed} games dikemas kini.`);
+                            await fetchStats();
+                          } catch (err) {
+                            showToast('❌ ' + err.message, false);
+                          } finally {
+                            setActionLoading(null);
+                          }
+                        }}
+                        disabled={!!actionLoading}
+                        className="p-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg border border-green-200 transition-all"
+                        title="Sync totalQuestions ke frontend"
+                      >
+                        {actionLoading === `sync-${s.file}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />}
                       </button>
                       <button onClick={() => setExpandedFile(isExpanded ? null : s.file)} className="p-1">
                         {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
