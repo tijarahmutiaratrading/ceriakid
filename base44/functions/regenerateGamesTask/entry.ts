@@ -26,25 +26,51 @@ const GAME_TYPES = [
   'reading',
 ];
 
-async function generateGameQuestions(base44, gameTitle, subject, ageGroup, gameType, questionsCount) {
-  const prompt = `Kamu adalah expert pembuat soalan pendidikan Malaysia yang SANGAT BIJAK dan TELITI.
+async function validateQuestionQuality(question) {
+  // Validate question meets minimum standards
+  if (!question.problem || question.problem.trim().length < 10) return false;
+  if (!question.options || question.options.length !== 4) return false;
+  if (typeof question.answer !== 'number' || question.answer < 0 || question.answer > 3) return false;
+  if (!question.emoji || question.emoji.trim().length === 0) return false;
+  
+  // Check all options are different and not empty
+  const options = question.options.map(o => o?.trim?.() || '');
+  if (options.some(o => !o || o.length < 2)) return false;
+  if (new Set(options).size !== 4) return false; // Must be unique
+  
+  // Check answer option is not empty
+  if (!options[question.answer] || options[question.answer].length < 2) return false;
+  
+  return true;
+}
 
-Buat TEPAT ${questionsCount} soalan berkualiti tinggi untuk game:
+async function generateGameQuestions(base44, gameTitle, subject, ageGroup, gameType, questionsCount) {
+  const prompt = `Kamu adalah expert pembuat soalan pendidikan Malaysia yang SANGAT BIJAK, TELITI, dan BERPENGALAMAN.
+
+BUAT TEPAT ${questionsCount} soalan berkualiti TINGGI (bukan cicak, bukan stupid) untuk:
 Tajuk: "${gameTitle}"
 Subjek: ${CATEGORY_LABELS[subject] || subject}
 Peringkat: ${AGE_LABELS[ageGroup] || ageGroup}
 Jenis: ${gameType}
 
-KRITERIA WAJIB TUNAIKAN:
-1. Soalan JELAS, TEPAT, BERKAITAN dengan tajuk dan kurikulum Malaysia
-2. Tepat 4 pilihan jawapan yang BERBEZA dan MASUK AKAL
-3. Jawapan betul PASTI betul (jangan samar atau debatable)
-4. Emoji RELEVAN dengan soalan & MATCH dengan jawapan betul
-5. Bahasa sesuai kanak-kanak, menarik, tidak terlalu mudah atau sukar
-6. Setiap soalan MESTI UNIK (JANGAN ULANG)
-7. Setiap soalan MESTI ada emoji dalam problem field
+KRITERIA WAJIB (TIDAK BOLEH LANGGAR):
+1. ✅ SETIAP soalan JELAS, LOGIK, BERMAKNA, REAL-WORLD RELEVANT
+2. ✅ BUKAN teka-teki bodoh atau soalan yang tak guna
+3. ✅ Berkaitan LANGSUNG dengan kurikulum Malaysia & kehidupan sebenar kanak-kanak
+4. ✅ 4 pilihan SEMUA logik & BERBEZA jauh (bukan soal spelling sahaja)
+5. ✅ Jawapan BETUL PASTI betul 100% (BUKAN subjektif/samar)
+6. ✅ Emoji TEPAT dengan soalan (bukan random emoji)
+7. ✅ Bahasa MUDAH tapi PROFESIONAL (sesuai tahap)
+8. ✅ JANGAN ULANG - setiap soalan MESTI UNIK
 
-Balas JSON dengan TEPAT ${questionsCount} soalan:`;
+JANGAN buat:
+❌ Soalan dengan jawapan yang boleh berbeza-beza
+❌ Soalan yang tidak masuk akal
+❌ Soalan yang terlalu senang atau terlalu sukar
+❌ Emoji yang tidak relevan
+❌ Soalan duplicate atau mirip
+
+Balas JSON dengan TEPAT ${questionsCount} soalan berkualiti TINGGI:`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
@@ -71,7 +97,14 @@ Balas JSON dengan TEPAT ${questionsCount} soalan:`;
     },
   });
 
-  return result.questions || [];
+  // Validate all questions meet quality standards
+  const validQuestions = (result.questions || []).filter(q => validateQuestionQuality(q));
+  
+  if (validQuestions.length < questionsCount) {
+    console.warn(`Quality check failed: ${validQuestions.length}/${questionsCount} questions passed validation`);
+  }
+  
+  return validQuestions;
 }
 
 Deno.serve(async (req) => {
