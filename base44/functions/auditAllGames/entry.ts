@@ -37,37 +37,45 @@ async function validateGameQuestions(base44, game) {
 
   try {
     const validationResult = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      prompt: `Kamu adalah STRICT Malaysian curriculum expert. Audit soalan-soalan ini untuk game: "${game.title}"
+      prompt: `Kamu adalah VERY STRICT Malaysian curriculum expert. Audit soalan-soalan ini untuk game: "${game.title}"
 
 Subjek: ${CATEGORY_LABELS[game.category] || game.category}
 Peringkat: ${AGE_LABELS[game.ageGroup] || game.ageGroup}
 Total Soalan: ${questions.length}
 
-AUDIT CHECKLIST:
-1. Soalan jelas, tepat, sesuai kurikulum Malaysia?
-2. Jawapan betul PASTI betul?
-3. Emoji (jika ada) match dengan jawapan betul?
-4. Semua 4 pilihan valid dan berbeza?
-5. Soalan tidak kosong, tidak duplicate?
+AUDIT CHECKLIST (KETAT):
+1. ✅ Soalan JELAS, TEPAT, SESUAI kurikulum Malaysia untuk peringkat ini?
+2. ✅ Jawapan betul PASTI 100% BETUL? (bukan ambiguous)
+3. ✅ Emoji (jika ada) LANGSUNG match dengan jawapan/subjek soalan? (bukan generic)
+4. ✅ Semua 4 pilihan VALID, BERBEZA, RELEVAN, bukan duplicate?
+5. ✅ Soalan tidak kosong, tidak duplikat antara soalan lain?
+6. ✅ Bahasa Melayu betul, grammar OK? (jika BM)
 
 Soalan untuk di-audit:
 ${questionsText}
 
-Respond JSON dengan status PASS atau FAIL dan list issues. Be VERY STRICT.`,
+Respond JSON:
+- status: PASS (semua checklist OK) atau FAIL (ada issue)
+- passed_questions: berapa soalan OK
+- failed_questions: berapa soalan ada issue
+- issues: list EXACT issues found (Qn: description)
+- recommendations: fix yang perlu
+
+Be VERY STRICT - hanya PASS jika 90%+ soalan perfect.`,
       model: 'claude_sonnet_4_6',
       response_json_schema: {
         type: 'object',
         properties: {
           status: { type: 'string', enum: ['PASS', 'FAIL'] },
-          passed_questions: { type: 'number' },
-          failed_questions: { type: 'number' },
+          passed_questions: { type: 'number', minimum: 0 },
+          failed_questions: { type: 'number', minimum: 0 },
           issues: {
             type: 'array',
             items: { type: 'string' },
           },
           recommendations: { type: 'string' },
         },
-        required: ['status', 'issues'],
+        required: ['status', 'passed_questions', 'failed_questions', 'issues'],
       },
     });
 
@@ -152,10 +160,11 @@ Deno.serve(async (req) => {
     const byCategory = {};
     auditResults.forEach(result => {
       const cat = result.category || 'unknown';
-      if (!byCategory[cat]) byCategory[cat] = { pass: 0, fail: 0, total: 0 };
+      if (!byCategory[cat]) byCategory[cat] = { pass: 0, fail: 0, error: 0, total: 0 };
       byCategory[cat].total++;
       if (result.status === 'PASS') byCategory[cat].pass++;
-      else byCategory[cat].fail++;
+      else if (result.status === 'FAIL') byCategory[cat].fail++;
+      else if (result.status === 'ERROR') byCategory[cat].error++;
     });
 
     return Response.json({

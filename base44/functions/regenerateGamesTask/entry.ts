@@ -34,12 +34,16 @@ async function validateQuestionQuality(question) {
   if (!question.emoji || question.emoji.trim().length === 0) return false;
   
   // Check all options are different and not empty
-  const options = question.options.map(o => o?.trim?.() || '');
-  if (options.some(o => !o || o.length < 2)) return false;
+  const options = question.options.map(o => (o || '').trim());
+  if (options.some(o => !o || o.length < 3)) return false; // Min 3 chars per option
   if (new Set(options).size !== 4) return false; // Must be unique
   
-  // Check answer option is not empty
-  if (!options[question.answer] || options[question.answer].length < 2) return false;
+  // Check answer option is not empty & valid
+  if (!options[question.answer] || options[question.answer].length < 3) return false;
+  
+  // Validate emoji is actual emoji (not text like "emoji")
+  const emojiRegex = /^[\p{Emoji}]{1,2}$/gu;
+  if (!emojiRegex.test(question.emoji)) return false;
   
   return true;
 }
@@ -48,18 +52,22 @@ async function generateGameQuestions(base44, gameTitle, subject, ageGroup, gameT
   const prompt = `Buat TEPAT ${questionsCount} soalan berkualiti untuk:
 "${gameTitle}" - ${CATEGORY_LABELS[subject]} (${AGE_LABELS[ageGroup]})
 
-PENTING: Setiap emoji MESTI SYNC dengan soalan content, bukan generic!
+RULES KETAT—MESTI DIIKUTI SEMPURNA:
+1. Soalan MESTI jelas, mudah difahami untuk umur target
+2. 4 pilihan jawapan MESTI berbeza, relevan & menarik
+3. Jawapan betul MESTI 100% betul (check 3x sebelum output)
+4. Emoji MESTI 1 emoji SAHAJA yang SYNC dengan jawapan/subjek, BUKAN generic!
+   LARANGAN: 🎮 📝 ❓ 📚 🎓 (generic)
+   CONTOH BETUL: 
+   - Q: "Apakah warna langit?" Ans: "Biru" → emoji ☀️ atau 🌤️ (SKI dengan biru/langit)
+   - Q: "Haiwan apa punya sayap?" Ans: "Burung" → emoji 🐦 atau 🦅 (SKI dengan burung)
+   - Q: "Berapa 2+2?" Ans: "4" → emoji 🔢 atau ✖️ (SKI dengan math)
 
-Output MESTI JSON dengan array "questions". Setiap soalan:
-- problem: string (soalan yang jelas dalam Bahasa Melayu)
-- options: array 4 string (pilihan A, B, C, D yang berbeza dan relevan)
+Output MESTI valid JSON dengan array "questions". Setiap soalan:
+- problem: string (soalan yang jelas, 15-30 perkataan)
+- options: array 4 string (pilihan A, B, C, D masing-masing 3-15 perkataan)
 - answer: number (0-3, indeks jawapan betul)
-- emoji: string (1 emoji yang LANGSUNG berkaitan dengan subjek soalan, BUKAN generic 🎮 atau 📝)
-
-Contoh BETUL:
-- "Apakah warna langit?" → emoji '☀️' atau '🌤️' (bukan '📝')
-- "Haiwan apa terbang?" → emoji '🐦' atau '🦅' (bukan '🎮')
-- "Berapa 2+2?" → emoji '🔢' atau '✏️' (bukan '🎮')`;
+- emoji: string (1 emoji tunggal yang LANGSUNG berkaitan dengan jawapan betul/topik)`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
