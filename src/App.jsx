@@ -14,6 +14,7 @@ import Home from '@/pages/Home';
 import AdminDashboard from '@/pages/AdminDashboard';
 import AdminGameManager from '@/pages/AdminGameManager';
 import GameAnalytics from '@/pages/GameAnalytics';
+import GameDatabase from '@/pages/GameDatabase';
 import ClientDashboard from '@/pages/ClientDashboard';
 import GamesList from '@/pages/GamesList';
 
@@ -76,6 +77,7 @@ const AuthenticatedApp = () => {
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-game-manager" element={<AdminGameManager />} />
           <Route path="/game-analytics" element={<GameAnalytics />} />
+          <Route path="/game-database" element={<GameDatabase />} />
 
           <Route path="/settings" element={<ClientDashboard />} />
           <Route path="/games-hub" element={<GamesHub />} />
