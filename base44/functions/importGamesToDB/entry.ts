@@ -1,18 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-// This function imports ALL games from gameLibrary into the Game entity (DB)
-// Run once to seed the database
-
-const SUBJECT_MAP = [
-  { ageGroup: 'prasekolah', subject: 'bahasa_melayu', category: 'bahasa_melayu' },
-  { ageGroup: 'prasekolah', subject: 'english', category: 'english' },
-  { ageGroup: 'prasekolah', subject: 'mathematics', category: 'mathematics' },
-  { ageGroup: 'prasekolah', subject: 'science', category: 'science' },
-  { ageGroup: 'sekolah_rendah', subject: 'bahasa_melayu', category: 'bahasa_melayu' },
-  { ageGroup: 'sekolah_rendah', subject: 'english', category: 'english' },
-  { ageGroup: 'sekolah_rendah', subject: 'mathematics', category: 'mathematics' },
-  { ageGroup: 'sekolah_rendah', subject: 'science', category: 'science' },
-];
+// Imports games into DB — skips existing ones (matched by title + ageGroup + category)
+// Safe to run multiple times — will never overwrite AI-generated data
 
 Deno.serve(async (req) => {
   try {
@@ -24,7 +13,7 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json().catch(() => ({}));
-    const games = body.games; // array of game objects with ageGroup, subject, index, data
+    const games = body.games;
 
     if (!games || !Array.isArray(games)) {
       return Response.json({ error: 'games array required in body' }, { status: 400 });
@@ -36,11 +25,11 @@ Deno.serve(async (req) => {
 
     for (const g of games) {
       try {
-        // Check if game already exists in DB — if yes, SKIP (preserve AI-generated questions)
+        // Check duplicate by title + ageGroup + category (safer than order index)
         const existing = await base44.asServiceRole.entities.Game.filter({
           ageGroup: g.ageGroup,
           category: g.category,
-          order: g.index,
+          title: g.title,
         });
 
         if (existing.length > 0) {
@@ -48,7 +37,7 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        const gameRecord = {
+        await base44.asServiceRole.entities.Game.create({
           title: g.title,
           type: g.type || 'multiple_choice',
           category: g.category,
@@ -59,23 +48,15 @@ Deno.serve(async (req) => {
           totalQuestions: g.gameData?.questions?.length || 8,
           gameData: g.gameData || {},
           isPublished: true,
-          order: g.index,
-        };
-
-        await base44.asServiceRole.entities.Game.create(gameRecord);
+          order: g.order ?? 0,
+        });
         created++;
       } catch (err) {
         errors++;
       }
     }
 
-    return Response.json({
-      success: true,
-      created,
-      skipped,
-      errors,
-      total: games.length,
-    });
+    return Response.json({ success: true, created, skipped, errors, total: games.length });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
