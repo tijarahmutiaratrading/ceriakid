@@ -12,33 +12,33 @@ const QUESTION_THRESHOLD = 20; // Matches SubjectCard threshold
 const QUESTION_GENERATION_DELAY = 3000; // 3 seconds between games to avoid rate limiting
 
 const SUBJECT_CONFIG = [
-  // Prasekolah
-  { file: 'gameData_prasekolah_bm', label: 'Prasekolah - BM', ageGroup: 'prasekolah', subject: 'bahasa_melayu', color: { border: 'border-l-blue-500', badge: 'bg-blue-100 text-blue-700', dot: 'bg-blue-500' } },
-  { file: 'gameData_prasekolah_en', label: 'Prasekolah - English', ageGroup: 'prasekolah', subject: 'english', color: { border: 'border-l-green-500', badge: 'bg-green-100 text-green-700', dot: 'bg-green-500' } },
-  { file: 'gameData_prasekolah_math', label: 'Prasekolah - Math', ageGroup: 'prasekolah', subject: 'mathematics', color: { border: 'border-l-purple-500', badge: 'bg-purple-100 text-purple-700', dot: 'bg-purple-500' } },
-  { file: 'gameData_prasekolah_science', label: 'Prasekolah - Science', ageGroup: 'prasekolah', subject: 'science', color: { border: 'border-l-orange-500', badge: 'bg-orange-100 text-orange-700', dot: 'bg-orange-500' } },
-  { file: 'gameData_prasekolah_tamil', label: 'Prasekolah - Tamil', ageGroup: 'prasekolah', subject: 'bahasa_tamil', color: { border: 'border-l-red-500', badge: 'bg-red-100 text-red-700', dot: 'bg-red-500' } },
-  { file: 'gameData_prasekolah_mandarin', label: 'Prasekolah - Mandarin', ageGroup: 'prasekolah', subject: 'bahasa_mandarin', color: { border: 'border-l-yellow-500', badge: 'bg-yellow-100 text-yellow-700', dot: 'bg-yellow-500' } },
-  // Sekolah Rendah
-  { file: 'gameData_sr_bm', label: 'Sekolah Rendah - BM', ageGroup: 'sekolah_rendah', subject: 'bahasa_melayu', color: { border: 'border-l-blue-500', badge: 'bg-blue-100 text-blue-700', dot: 'bg-blue-500' } },
-  { file: 'gameData_sr_jawi', label: 'Sekolah Rendah - Jawi', ageGroup: 'sekolah_rendah', subject: 'jawi', color: { border: 'border-l-teal-500', badge: 'bg-teal-100 text-teal-700', dot: 'bg-teal-500' } },
-  { file: 'gameData_sr_english', label: 'Sekolah Rendah - English', ageGroup: 'sekolah_rendah', subject: 'english', color: { border: 'border-l-green-500', badge: 'bg-green-100 text-green-700', dot: 'bg-green-500' } },
-  { file: 'gameData_sr_math', label: 'Sekolah Rendah - Math', ageGroup: 'sekolah_rendah', subject: 'mathematics', color: { border: 'border-l-purple-500', badge: 'bg-purple-100 text-purple-700', dot: 'bg-purple-500' } },
-  { file: 'gameData_sr_science', label: 'Sekolah Rendah - Science', ageGroup: 'sekolah_rendah', subject: 'science', color: { border: 'border-l-orange-500', badge: 'bg-orange-100 text-orange-700', dot: 'bg-orange-500' } },
-  { file: 'gameData_sr_tamil', label: 'Sekolah Rendah - Tamil', ageGroup: 'sekolah_rendah', subject: 'bahasa_tamil', color: { border: 'border-l-red-500', badge: 'bg-red-100 text-red-700', dot: 'bg-red-500' } },
-  { file: 'gameData_sr_mandarin', label: 'Sekolah Rendah - Mandarin', ageGroup: 'sekolah_rendah', subject: 'bahasa_mandarin', color: { border: 'border-l-yellow-500', badge: 'bg-yellow-100 text-yellow-700', dot: 'bg-yellow-500' } },
-];
+// Prasekolah
+{ file: 'gameData_prasekolah_bm', label: 'Prasekolah - BM', ageGroup: 'prasekolah', subject: 'bahasa_melayu', color: { border: 'border-l-blue-500', badge: 'bg-blue-100 text-blue-700', dot: 'bg-blue-500' } },
+{ file: 'gameData_prasekolah_en', label: 'Prasekolah - English', ageGroup: 'prasekolah', subject: 'english', color: { border: 'border-l-green-500', badge: 'bg-green-100 text-green-700', dot: 'bg-green-500' } },
+{ file: 'gameData_prasekolah_math', label: 'Prasekolah - Math', ageGroup: 'prasekolah', subject: 'mathematics', color: { border: 'border-l-purple-500', badge: 'bg-purple-100 text-purple-700', dot: 'bg-purple-500' } },
+{ file: 'gameData_prasekolah_science', label: 'Prasekolah - Science', ageGroup: 'prasekolah', subject: 'science', color: { border: 'border-l-orange-500', badge: 'bg-orange-100 text-orange-700', dot: 'bg-orange-500' } },
+{ file: 'gameData_prasekolah_tamil', label: 'Prasekolah - Tamil', ageGroup: 'prasekolah', subject: 'bahasa_tamil', color: { border: 'border-l-red-500', badge: 'bg-red-100 text-red-700', dot: 'bg-red-500' } },
+{ file: 'gameData_prasekolah_mandarin', label: 'Prasekolah - Mandarin', ageGroup: 'prasekolah', subject: 'bahasa_mandarin', color: { border: 'border-l-yellow-500', badge: 'bg-yellow-100 text-yellow-700', dot: 'bg-yellow-500' } },
+// Sekolah Rendah
+{ file: 'gameData_sr_bm', label: 'Sekolah Rendah - BM', ageGroup: 'sekolah_rendah', subject: 'bahasa_melayu', color: { border: 'border-l-blue-500', badge: 'bg-blue-100 text-blue-700', dot: 'bg-blue-500' } },
+{ file: 'gameData_sr_jawi', label: 'Sekolah Rendah - Jawi', ageGroup: 'sekolah_rendah', subject: 'jawi', color: { border: 'border-l-teal-500', badge: 'bg-teal-100 text-teal-700', dot: 'bg-teal-500' } },
+{ file: 'gameData_sr_english', label: 'Sekolah Rendah - English', ageGroup: 'sekolah_rendah', subject: 'english', color: { border: 'border-l-green-500', badge: 'bg-green-100 text-green-700', dot: 'bg-green-500' } },
+{ file: 'gameData_sr_math', label: 'Sekolah Rendah - Math', ageGroup: 'sekolah_rendah', subject: 'mathematics', color: { border: 'border-l-purple-500', badge: 'bg-purple-100 text-purple-700', dot: 'bg-purple-500' } },
+{ file: 'gameData_sr_science', label: 'Sekolah Rendah - Science', ageGroup: 'sekolah_rendah', subject: 'science', color: { border: 'border-l-orange-500', badge: 'bg-orange-100 text-orange-700', dot: 'bg-orange-500' } },
+{ file: 'gameData_sr_tamil', label: 'Sekolah Rendah - Tamil', ageGroup: 'sekolah_rendah', subject: 'bahasa_tamil', color: { border: 'border-l-red-500', badge: 'bg-red-100 text-red-700', dot: 'bg-red-500' } },
+{ file: 'gameData_sr_mandarin', label: 'Sekolah Rendah - Mandarin', ageGroup: 'sekolah_rendah', subject: 'bahasa_mandarin', color: { border: 'border-l-yellow-500', badge: 'bg-yellow-100 text-yellow-700', dot: 'bg-yellow-500' } }];
+
 
 const GAME_HUB = [
-  { id: 'memory', title: 'Memory Game' },
-  { id: 'dragdrop', title: 'Drag & Drop' },
-  { id: 'wordbuilder', title: 'Word Builder' },
-  { id: 'sorting', title: 'Sorting Game' },
-  { id: 'tilematch', title: 'Tile Match' },
-  { id: 'story', title: 'Story Adventure' },
-  { id: 'physics', title: 'Physics Game' },
-  { id: 'tracing', title: 'Tracing Game' },
-];
+{ id: 'memory', title: 'Memory Game' },
+{ id: 'dragdrop', title: 'Drag & Drop' },
+{ id: 'wordbuilder', title: 'Word Builder' },
+{ id: 'sorting', title: 'Sorting Game' },
+{ id: 'tilematch', title: 'Tile Match' },
+{ id: 'story', title: 'Story Adventure' },
+{ id: 'physics', title: 'Physics Game' },
+{ id: 'tracing', title: 'Tracing Game' }];
+
 
 export default function AdminGameManager() {
   const [subjects, setSubjects] = useState([]);
@@ -64,11 +64,11 @@ export default function AdminGameManager() {
     setLoading(true);
     try {
       const [statsRes, ...dbGameGroups] = await Promise.all([
-        base44.functions.invoke('getGameDatabase', {}),
-        ...SUBJECT_CONFIG.map(sc =>
-          base44.entities.Game.filter({ ageGroup: sc.ageGroup, category: sc.subject, isPublished: true })
-        ),
-      ]);
+      base44.functions.invoke('getGameDatabase', {}),
+      ...SUBJECT_CONFIG.map((sc) =>
+      base44.entities.Game.filter({ ageGroup: sc.ageGroup, category: sc.subject, isPublished: true })
+      )]
+      );
 
       const stats = {};
       for (const sub of statsRes.data.subjects) {
@@ -98,15 +98,15 @@ export default function AdminGameManager() {
               type: g.type || '-',
               ageGroup,
               category: subject,
-              questionCount: dbGames.length > 0 ? (g.totalQuestions || g.gameData?.questions?.length || 0) : (g.gameData?.questions?.length || 0),
+              questionCount: dbGames.length > 0 ? g.totalQuestions || g.gameData?.questions?.length || 0 : g.gameData?.questions?.length || 0,
               totalQuestions: g.totalQuestions || g.gameData?.questions?.length || 0,
               players: stat.players,
               timesPlayed: stat.timesPlayed,
               avgScore: stat.avgScore,
               // full DB game object for editing
-              _raw: dbGames.length > 0 ? g : null,
+              _raw: dbGames.length > 0 ? g : null
             };
-          }),
+          })
         };
       });
 
@@ -119,7 +119,7 @@ export default function AdminGameManager() {
     }
   };
 
-  useEffect(() => { fetchStats(); }, []);
+  useEffect(() => {fetchStats();}, []);
 
   const openSyncAndEditModal = (games, label, ageGroup, subject) => {
     setSyncAndEdit({ games, label, ageGroup, subject });
@@ -164,7 +164,7 @@ export default function AdminGameManager() {
             gameId: game.id,
             ageGroup: game.ageGroup,
             category: game.category,
-            questions: game.gameData.questions,
+            questions: game.gameData.questions
           });
 
           // If has issues, auto-fix
@@ -173,7 +173,7 @@ export default function AdminGameManager() {
             try {
               const fixResult = await base44.functions.invoke('autoFixGameQuestions', {
                 gameId: game.id,
-                validationResult: result.data.validation,
+                validationResult: result.data.validation
               });
               autoFixed += fixResult.data.fixed;
               verified++;
@@ -211,14 +211,14 @@ export default function AdminGameManager() {
         await base44.functions.invoke('syncSubjectGames', {
           targetCount: games,
           ageGroup,
-          category: subject,
+          category: subject
         });
       }
 
       if (questions && questions > 0) {
         const dbGames = await base44.entities.Game.filter({ ageGroup, category: subject, isPublished: true });
         // Only process games that need more questions (skip yang dah cukup)
-        const needsUpdate = dbGames.filter(g => (g.gameData?.questions?.length || 0) < questions);
+        const needsUpdate = dbGames.filter((g) => (g.gameData?.questions?.length || 0) < questions);
         const total = needsUpdate.length;
 
         if (total === 0) {
@@ -234,7 +234,7 @@ export default function AdminGameManager() {
                 targetCount: questions,
                 ageGroup,
                 category: subject,
-                gameId: g.id,
+                gameId: g.id
               });
               done++;
             } catch (err) {
@@ -243,7 +243,7 @@ export default function AdminGameManager() {
             }
             // Delay antara games untuk elak rate limit
             if (i < needsUpdate.length - 1) {
-              await new Promise(r => setTimeout(r, QUESTION_GENERATION_DELAY));
+              await new Promise((r) => setTimeout(r, QUESTION_GENERATION_DELAY));
             }
           }
           showToast(`✅ Selesai! ${done} games berjaya, ${failed} gagal (skip).`);
@@ -268,23 +268,23 @@ export default function AdminGameManager() {
       for (const sc of SUBJECT_CONFIG) {
         const libGames = gameLibrary[sc.ageGroup]?.[sc.subject] || [];
         const dbGames = dbGamesCache[`${sc.ageGroup}-${sc.subject}`] || [];
-        const dbTitles = new Set(dbGames.map(g => g.title));
+        const dbTitles = new Set(dbGames.map((g) => g.title));
 
-        const newGames = libGames
-          .filter(g => !dbTitles.has(g.title))
-          .map((g, idx) => ({
-            title: g.title,
-            type: g.type,
-            emoji: g.emoji,
-            difficulty: g.difficulty,
-            tier: g.tier,
-            ageGroup: sc.ageGroup,
-            category: sc.subject,
-            order: dbGames.length + idx,
-            totalQuestions: g.gameData?.questions?.length || 8,
-            gameData: { questions: (g.gameData?.questions || []).slice(0, 20) },
-            isPublished: true,
-          }));
+        const newGames = libGames.
+        filter((g) => !dbTitles.has(g.title)).
+        map((g, idx) => ({
+          title: g.title,
+          type: g.type,
+          emoji: g.emoji,
+          difficulty: g.difficulty,
+          tier: g.tier,
+          ageGroup: sc.ageGroup,
+          category: sc.subject,
+          order: dbGames.length + idx,
+          totalQuestions: g.gameData?.questions?.length || 8,
+          gameData: { questions: (g.gameData?.questions || []).slice(0, 20) },
+          isPublished: true
+        }));
 
         skipped += libGames.length - newGames.length;
 
@@ -310,7 +310,7 @@ export default function AdminGameManager() {
 
   const totalGames = subjects.reduce((a, s) => a + s.totalGames, 0);
   const totalPlayers = subjects.reduce((a, s) => a + s.games.reduce((b, g) => b + g.players, 0), 0);
-  const totalFull = subjects.reduce((a, s) => a + s.games.filter(g => g.questionCount >= QUESTION_THRESHOLD).length, 0);
+  const totalFull = subjects.reduce((a, s) => a + s.games.filter((g) => g.questionCount >= QUESTION_THRESHOLD).length, 0);
 
   return (
     <div className="min-h-screen pb-32 bg-pattern relative overflow-hidden">
@@ -319,33 +319,33 @@ export default function AdminGameManager() {
 
       {/* Battery Progress Animation - On Generate Button Area */}
       <AnimatePresence>
-        {taskProgress.length > 0 && regenerationTasks && (
-          <motion.div
-            initial={{ y: -20, opacity: 0, scale: 0.9 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -20, opacity: 0, scale: 0.9 }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="fixed top-24 left-1/2 -translate-x-1/2 z-40 max-w-xs"
-          >
+        {taskProgress.length > 0 && regenerationTasks &&
+        <motion.div
+          initial={{ y: -20, opacity: 0, scale: 0.9 }}
+          animate={{ y: 0, opacity: 1, scale: 1 }}
+          exit={{ y: -20, opacity: 0, scale: 0.9 }}
+          transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+          className="fixed top-24 left-1/2 -translate-x-1/2 z-40 max-w-xs">
+          
             <motion.div
-              className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 rounded-full shadow-2xl p-4 border-2 border-white/40 backdrop-blur-xl"
-              style={{
-                boxShadow: '0 0 40px rgba(255, 107, 53, 0.7)',
-              }}
-            >
+            className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 rounded-full shadow-2xl p-4 border-2 border-white/40 backdrop-blur-xl"
+            style={{
+              boxShadow: '0 0 40px rgba(255, 107, 53, 0.7)'
+            }}>
+            
               {/* Pulsing Glow */}
               <motion.div
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 opacity-30"
-                animate={{ scale: [1, 1.15, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              />
+              className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 opacity-30"
+              animate={{ scale: [1, 1.15, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }} />
+            
 
               <div className="relative z-10 flex items-center gap-4">
                 <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                  className="text-3xl flex-shrink-0"
-                >
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                className="text-3xl flex-shrink-0">
+                
                   🔋
                 </motion.div>
 
@@ -356,21 +356,21 @@ export default function AdminGameManager() {
                   <div className="flex items-center gap-2 mt-2">
                     <div className="flex-1 h-3 bg-white/25 rounded-full overflow-hidden border border-white/50">
                       <motion.div
-                        className="h-full bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 rounded-full"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(taskProgress.length / regenerationTasks.length) * 100}%` }}
-                        transition={{ duration: 0.5, ease: 'easeOut' }}
-                        style={{
-                          boxShadow: '0 0 12px rgba(255, 165, 0, 0.9)',
-                        }}
-                      />
+                      className="h-full bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 rounded-full"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }}
+                      transition={{ duration: 0.5, ease: 'easeOut' }}
+                      style={{
+                        boxShadow: '0 0 12px rgba(255, 165, 0, 0.9)'
+                      }} />
+                    
                     </div>
                     <motion.span
-                      className="text-white font-black text-xs min-w-9 text-center"
-                      animate={{ scale: [1, 1.15, 1] }}
-                      transition={{ duration: 0.6, repeat: Infinity }}
-                    >
-                      {Math.round((taskProgress.length / regenerationTasks.length) * 100)}%
+                    className="text-white font-black text-xs min-w-9 text-center"
+                    animate={{ scale: [1, 1.15, 1] }}
+                    transition={{ duration: 0.6, repeat: Infinity }}>
+                    
+                      {Math.round(taskProgress.length / regenerationTasks.length * 100)}%
                     </motion.span>
                   </div>
 
@@ -379,39 +379,39 @@ export default function AdminGameManager() {
               </div>
             </motion.div>
           </motion.div>
-        )}
+        }
       </AnimatePresence>
 
       <AnimatePresence>
-        {toast && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className={`fixed top-5 left-1/2 -translate-x-1/2 z-[60] px-5 py-3 rounded-2xl shadow-xl font-bold text-white text-sm ${toast.ok ? 'bg-green-500' : 'bg-red-500'}`}
-          >
+        {toast &&
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className={`fixed top-5 left-1/2 -translate-x-1/2 z-[60] px-5 py-3 rounded-2xl shadow-xl font-bold text-white text-sm ${toast.ok ? 'bg-green-500' : 'bg-red-500'}`}>
+          
             {toast.msg}
           </motion.div>
-        )}
+        }
       </AnimatePresence>
 
       <AnimatePresence>
-        {modal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setModal(null)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
-          >
+        {modal &&
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setModal(null)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4">
+          
             <motion.div
-              initial={{ scale: 0.92, y: 40 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.92, y: 40 }}
-              transition={{ type: 'spring', damping: 22, stiffness: 300 }}
-              onClick={e => e.stopPropagation()}
-              className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden"
-            >
+            initial={{ scale: 0.92, y: 40 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.92, y: 40 }}
+            transition={{ type: 'spring', damping: 22, stiffness: 300 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden">
+            
               {/* Gradient Header */}
               <div className="bg-gradient-to-r from-game-purple to-game-pink px-6 py-5">
                 <div className="flex items-center justify-between">
@@ -431,14 +431,14 @@ export default function AdminGameManager() {
                   <label className="block text-xs font-black text-gray-500 uppercase tracking-wide mb-2">🎮 Bilangan Games</label>
                   <div className="relative">
                     <input
-                      type="number"
-                      min="1"
-                      autoFocus
-                      value={modal.gamesValue}
-                      onChange={e => setModal(m => ({ ...m, gamesValue: e.target.value }))}
-                      placeholder="e.g. 25"
-                      className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-game-purple focus:outline-none text-2xl font-black text-center bg-gray-50 transition-all"
-                    />
+                    type="number"
+                    min="1"
+                    autoFocus
+                    value={modal.gamesValue}
+                    onChange={(e) => setModal((m) => ({ ...m, gamesValue: e.target.value }))}
+                    placeholder="e.g. 25"
+                    className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-game-purple focus:outline-none text-2xl font-black text-center bg-gray-50 transition-all" />
+                  
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-semibold">semasa: {modal.gamesValue}</span>
                   </div>
                 </div>
@@ -446,13 +446,13 @@ export default function AdminGameManager() {
                   <label className="block text-xs font-black text-gray-500 uppercase tracking-wide mb-2">📝 Soalan per Game</label>
                   <div className="relative">
                     <input
-                      type="number"
-                      min="1"
-                      value={modal.questionsValue}
-                      onChange={e => setModal(m => ({ ...m, questionsValue: e.target.value }))}
-                      placeholder="e.g. 20"
-                      className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-game-purple focus:outline-none text-2xl font-black text-center bg-gray-50 transition-all"
-                    />
+                    type="number"
+                    min="1"
+                    value={modal.questionsValue}
+                    onChange={(e) => setModal((m) => ({ ...m, questionsValue: e.target.value }))}
+                    placeholder="e.g. 20"
+                    className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-game-purple focus:outline-none text-2xl font-black text-center bg-gray-50 transition-all" />
+                  
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-semibold">semasa: {modal.questionsValue || '—'}</span>
                   </div>
                 </div>
@@ -465,16 +465,16 @@ export default function AdminGameManager() {
                   Batal
                 </button>
                 <button
-                  onClick={handleModalConfirm}
-                  disabled={(!modal.gamesValue || parseInt(modal.gamesValue) < 1) && (!modal.questionsValue || parseInt(modal.questionsValue) < 1)}
-                  className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-game-purple to-game-pink text-white font-bold text-sm disabled:opacity-40 shadow-lg shadow-purple-200 transition-all hover:shadow-xl"
-                >
+                onClick={handleModalConfirm}
+                disabled={(!modal.gamesValue || parseInt(modal.gamesValue) < 1) && (!modal.questionsValue || parseInt(modal.questionsValue) < 1)}
+                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-game-purple to-game-pink text-white font-bold text-sm disabled:opacity-40 shadow-lg shadow-purple-200 transition-all hover:shadow-xl">
+                
                   ✅ Apply
                 </button>
               </div>
             </motion.div>
           </motion.div>
-        )}
+        }
       </AnimatePresence>
 
       <div className="max-w-4xl mx-auto px-3 md:px-4 pt-20 md:pt-24">
@@ -486,9 +486,9 @@ export default function AdminGameManager() {
           <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={handleSyncToDB}
-              disabled={!!actionLoading}
-              className="flex items-center gap-2 px-3 py-2 bg-game-purple text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
-            >
+              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-game-purple text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all hidden">
+              
+              
               {actionLoading === 'import' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
               Export to DB
             </button>
@@ -508,16 +508,16 @@ export default function AdminGameManager() {
                 }
               }}
               disabled={!!actionLoading}
-              className="flex items-center gap-2 px-3 py-2 bg-red-700 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
-            >
+              className="flex items-center gap-2 px-3 py-2 bg-red-700 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all">
+              
               {actionLoading === 'delete-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
               Delete All Games
             </button>
             <button
               onClick={() => setGenerateModal({ games: 30, questions: 20 })}
               disabled={!!actionLoading}
-              className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
-            >
+              className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all">
+              
               {actionLoading === 'generate' ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
               Generate Games
             </button>
@@ -536,9 +536,9 @@ export default function AdminGameManager() {
                   setActionLoading(null);
                 }
               }}
-              disabled={!!actionLoading}
-              className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
-            >
+              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all hidden">
+              
+              
               {actionLoading === 'clean' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
               Clean
             </button>
@@ -559,10 +559,10 @@ export default function AdminGameManager() {
                   setActionLoading(null);
                 }
               }}
-              disabled={!!actionLoading}
-              className="flex items-center gap-2 px-3 py-2 bg-indigo-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
-              title="Audit all games questions quality"
-            >
+              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-indigo-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all hidden"
+
+              title="Audit all games questions quality">
+              
               {actionLoading === 'audit-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : '📋'}
               Audit All
             </button>
@@ -588,10 +588,10 @@ export default function AdminGameManager() {
                   setActionLoading(null);
                 }
               }}
-              disabled={!!actionLoading}
-              className="flex items-center gap-2 px-3 py-2 bg-yellow-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all"
-              title="Check and auto-fix all games all subjects"
-            >
+              disabled={!!actionLoading} className="flex items-center gap-2 px-3 py-2 bg-yellow-500 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all hidden"
+
+              title="Check and auto-fix all games all subjects">
+              
               {actionLoading === 'check-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : '🤖'}
               Check & Fix All
             </button>
@@ -603,86 +603,86 @@ export default function AdminGameManager() {
 
         <div className="grid grid-cols-3 gap-2 md:gap-3 mb-4 md:mb-6">
           {[
-            { value: totalGames, label: 'Total Games', color: 'text-game-purple' },
-            { value: totalFull, label: 'Soalan Penuh', color: 'text-green-600' },
-            { value: totalPlayers, label: 'Total Players', color: 'text-game-pink' },
-          ].map(({ value, label, color }, i) => (
-            <motion.div key={label} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.08 }}
-              whileHover={{ y: -2, scale: 1.02 }}
-              className="bg-white/40 backdrop-blur-xl rounded-2xl p-2 md:p-3 shadow-xl border-2 border-white/30 text-center">
+          { value: totalGames, label: 'Total Games', color: 'text-game-purple' },
+          { value: totalFull, label: 'Soalan Penuh', color: 'text-green-600' },
+          { value: totalPlayers, label: 'Total Players', color: 'text-game-pink' }].
+          map(({ value, label, color }, i) =>
+          <motion.div key={label} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.08 }}
+          whileHover={{ y: -2, scale: 1.02 }}
+          className="bg-white/40 backdrop-blur-xl rounded-2xl p-2 md:p-3 shadow-xl border-2 border-white/30 text-center">
               <p className={`text-lg md:text-2xl font-black ${color}`}>{value}</p>
               <p className="text-xs text-gray-600 font-semibold">{label}</p>
             </motion.div>
-          ))}
+          )}
         </div>
 
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
+        {loading ?
+        <div className="flex items-center justify-center py-20">
             <Loader2 className="w-10 h-10 animate-spin text-game-purple" />
-          </div>
-        ) : (
-          <>
+          </div> :
+
+        <>
             {/* Prasekolah */}
             <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3 mt-4 md:mt-0">
               <button
-                onClick={() => setCollapsedSections(prev => ({ ...prev, prasekolah: !prev.prasekolah }))}
-                className="p-1.5 hover:bg-white/40 rounded-lg transition-all"
-              >
+              onClick={() => setCollapsedSections((prev) => ({ ...prev, prasekolah: !prev.prasekolah }))}
+              className="p-1.5 hover:bg-white/40 rounded-lg transition-all">
+              
                 {collapsedSections.prasekolah ? <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-gray-500" /> : <ChevronDown className="w-4 h-4 md:w-5 md:h-5 text-gray-500" />}
               </button>
               <div className="text-base md:text-lg font-black text-gray-700">🧒 Prasekolah</div>
               <div className="flex-1 h-px bg-gradient-to-r from-amber-300/60 to-transparent" />
             </div>
-            {!collapsedSections.prasekolah && subjects.filter(s => s.ageGroup === 'prasekolah').map((s, idx) => {
-              const isExpanded = expandedFile === s.file;
-              return (
-                <SubjectCard
-                  key={s.file}
-                  subject={s}
-                  isExpanded={isExpanded}
-                  onExpandToggle={setExpandedFile}
-                  actionLoading={actionLoading}
-                  onBulkEdit={openSyncAndEditModal}
-                  onEditSubjectConfig={openSubjectConfigModal}
-                  showToast={showToast}
-                  dbGamesCache={dbGamesCache}
-                  onVerify={handleVerifySubject}
-                  onEditGame={setEditGame}
-                  idx={idx}
-                />
-              );
-            })}
+            {!collapsedSections.prasekolah && subjects.filter((s) => s.ageGroup === 'prasekolah').map((s, idx) => {
+            const isExpanded = expandedFile === s.file;
+            return (
+              <SubjectCard
+                key={s.file}
+                subject={s}
+                isExpanded={isExpanded}
+                onExpandToggle={setExpandedFile}
+                actionLoading={actionLoading}
+                onBulkEdit={openSyncAndEditModal}
+                onEditSubjectConfig={openSubjectConfigModal}
+                showToast={showToast}
+                dbGamesCache={dbGamesCache}
+                onVerify={handleVerifySubject}
+                onEditGame={setEditGame}
+                idx={idx} />);
+
+
+          })}
 
             {/* Sekolah Rendah */}
             <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3 mt-6">
               <button
-                onClick={() => setCollapsedSections(prev => ({ ...prev, sekolah_rendah: !prev.sekolah_rendah }))}
-                className="p-1.5 hover:bg-white/40 rounded-lg transition-all"
-              >
+              onClick={() => setCollapsedSections((prev) => ({ ...prev, sekolah_rendah: !prev.sekolah_rendah }))}
+              className="p-1.5 hover:bg-white/40 rounded-lg transition-all">
+              
                 {collapsedSections.sekolah_rendah ? <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-gray-500" /> : <ChevronDown className="w-4 h-4 md:w-5 md:h-5 text-gray-500" />}
               </button>
               <div className="text-base md:text-lg font-black text-gray-700">🎒 Sekolah Rendah</div>
               <div className="flex-1 h-px bg-gradient-to-r from-amber-300/60 to-transparent" />
             </div>
-            {!collapsedSections.sekolah_rendah && subjects.filter(s => s.ageGroup === 'sekolah_rendah').map((s, idx) => {
-              const isExpanded = expandedFile === s.file;
-              return (
-                <SubjectCard
-                  key={s.file}
-                  subject={s}
-                  isExpanded={isExpanded}
-                  onExpandToggle={setExpandedFile}
-                  actionLoading={actionLoading}
-                  onBulkEdit={openSyncAndEditModal}
-                  onEditSubjectConfig={openSubjectConfigModal}
-                  showToast={showToast}
-                  dbGamesCache={dbGamesCache}
-                  onVerify={handleVerifySubject}
-                  onEditGame={setEditGame}
-                  idx={idx}
-                />
-              );
-            })}
+            {!collapsedSections.sekolah_rendah && subjects.filter((s) => s.ageGroup === 'sekolah_rendah').map((s, idx) => {
+            const isExpanded = expandedFile === s.file;
+            return (
+              <SubjectCard
+                key={s.file}
+                subject={s}
+                isExpanded={isExpanded}
+                onExpandToggle={setExpandedFile}
+                actionLoading={actionLoading}
+                onBulkEdit={openSyncAndEditModal}
+                onEditSubjectConfig={openSubjectConfigModal}
+                showToast={showToast}
+                dbGamesCache={dbGamesCache}
+                onVerify={handleVerifySubject}
+                onEditGame={setEditGame}
+                idx={idx} />);
+
+
+          })}
 
             {/* Game Hub */}
             <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3 mt-6">
@@ -694,46 +694,46 @@ export default function AdminGameManager() {
                 <span className="px-2 md:px-3 py-0.5 md:py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700">{GAME_HUB.length} games aktif</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 md:gap-2">
-                {GAME_HUB.map(g => (
-                  <div key={g.id} className="bg-orange-50/80 border border-orange-200 rounded-lg md:rounded-xl px-2 md:px-3 py-1.5 md:py-2 flex items-center gap-1 md:gap-2">
+                {GAME_HUB.map((g) =>
+              <div key={g.id} className="bg-orange-50/80 border border-orange-200 rounded-lg md:rounded-xl px-2 md:px-3 py-1.5 md:py-2 flex items-center gap-1 md:gap-2">
                     <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-orange-400 flex-shrink-0" />
                     <span className="text-xs font-semibold text-orange-800 truncate">{g.title}</span>
                   </div>
-                ))}
+              )}
               </div>
             </div>
           </>
-        )}
+        }
       </div>
 
       {/* Single Game Edit Modal */}
       <AnimatePresence>
-        {editGame && (
-          <EditGameModal
-            game={editGame}
-            onClose={() => setEditGame(null)}
-            onSaved={() => { showToast('✅ Game berjaya disimpan!'); fetchStats(); }}
-          />
-        )}
+        {editGame &&
+        <EditGameModal
+          game={editGame}
+          onClose={() => setEditGame(null)}
+          onSaved={() => {showToast('✅ Game berjaya disimpan!');fetchStats();}} />
+
+        }
       </AnimatePresence>
 
       {/* Generate Modal */}
       <AnimatePresence>
-        {generateModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setGenerateModal(null)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          >
+        {generateModal &&
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setGenerateModal(null)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          
             <motion.div
-              initial={{ scale: 0.92, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.92, y: 20 }}
-              onClick={e => e.stopPropagation()}
-              className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden"
-            >
+            initial={{ scale: 0.92, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.92, y: 20 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden">
+            
               <div className="bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-5">
                 <h3 className="font-black text-white text-lg">🎮 Generate Games</h3>
                 <p className="text-white/70 text-xs mt-0.5">Set bilangan untuk semua subject</p>
@@ -743,26 +743,26 @@ export default function AdminGameManager() {
                 <div>
                   <label className="text-xs font-black text-gray-500 uppercase mb-2 block">Bilangan Games per Subject</label>
                   <input
-                    type="number"
-                    min="1"
-                    max="100"
-                    value={generateModal.games}
-                    onChange={e => setGenerateModal(m => ({ ...m, games: parseInt(e.target.value) || 1 }))}
-                    className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-blue-400 focus:outline-none text-2xl font-black text-center bg-gray-50"
-                  />
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={generateModal.games}
+                  onChange={(e) => setGenerateModal((m) => ({ ...m, games: parseInt(e.target.value) || 1 }))}
+                  className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-blue-400 focus:outline-none text-2xl font-black text-center bg-gray-50" />
+                
                   <p className="text-xs text-gray-400 mt-1">Default: 30</p>
                 </div>
 
                 <div>
                   <label className="text-xs font-black text-gray-500 uppercase mb-2 block">Soalan per Game</label>
                   <input
-                    type="number"
-                    min="1"
-                    max="50"
-                    value={generateModal.questions}
-                    onChange={e => setGenerateModal(m => ({ ...m, questions: parseInt(e.target.value) || 1 }))}
-                    className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-blue-400 focus:outline-none text-2xl font-black text-center bg-gray-50"
-                  />
+                  type="number"
+                  min="1"
+                  max="50"
+                  value={generateModal.questions}
+                  onChange={(e) => setGenerateModal((m) => ({ ...m, questions: parseInt(e.target.value) || 1 }))}
+                  className="w-full p-3.5 border-2 border-gray-200 rounded-2xl focus:border-blue-400 focus:outline-none text-2xl font-black text-center bg-gray-50" />
+                
                   <p className="text-xs text-gray-400 mt-1">Default: 20</p>
                 </div>
 
@@ -773,70 +773,70 @@ export default function AdminGameManager() {
 
               <div className="px-6 pb-6 flex gap-3">
                 <button
-                  onClick={() => setGenerateModal(null)}
-                  className="flex-1 py-3 rounded-2xl border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50"
-                >
+                onClick={() => setGenerateModal(null)}
+                className="flex-1 py-3 rounded-2xl border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50">
+                
                   Batal
                 </button>
                 <button
-                  onClick={async () => {
-                    if (!window.confirm(`Mula generate ${generateModal.games} games × ${generateModal.questions} soalan per subject (13 subject)?\n\nWaktu: ~30-60 minit`)) return;
-                    setGenerateModal(null);
-                    setActionLoading('generate');
-                    showToast('⏳ Preparing regeneration tasks...', true);
-                    try {
-                      const tasksRes = await base44.functions.invoke('generateGamesRegenerationTasks', {
-                        gamesCount: generateModal.games,
-                        questionsPerGame: generateModal.questions,
-                      });
-                      setRegenerationTasks(tasksRes.data.tasks);
-                      setTaskProgress([]);
-                      showToast(`📋 Generated ${tasksRes.data.totalTasks} tasks (${tasksRes.data.totalGames} games)`, true);
-                    } catch (err) {
-                      showToast('❌ ' + err.message, false);
-                    } finally {
-                      setActionLoading(null);
-                    }
-                  }}
-                  className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold text-sm hover:shadow-lg"
-                >
+                onClick={async () => {
+                  if (!window.confirm(`Mula generate ${generateModal.games} games × ${generateModal.questions} soalan per subject (13 subject)?\n\nWaktu: ~30-60 minit`)) return;
+                  setGenerateModal(null);
+                  setActionLoading('generate');
+                  showToast('⏳ Preparing regeneration tasks...', true);
+                  try {
+                    const tasksRes = await base44.functions.invoke('generateGamesRegenerationTasks', {
+                      gamesCount: generateModal.games,
+                      questionsPerGame: generateModal.questions
+                    });
+                    setRegenerationTasks(tasksRes.data.tasks);
+                    setTaskProgress([]);
+                    showToast(`📋 Generated ${tasksRes.data.totalTasks} tasks (${tasksRes.data.totalGames} games)`, true);
+                  } catch (err) {
+                    showToast('❌ ' + err.message, false);
+                  } finally {
+                    setActionLoading(null);
+                  }
+                }}
+                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold text-sm hover:shadow-lg">
+                
                   ✅ Start Generate
                 </button>
               </div>
             </motion.div>
           </motion.div>
-        )}
+        }
       </AnimatePresence>
 
       {/* Sync & Edit Modal */}
       <AnimatePresence>
-        {syncAndEdit && (
-          <SyncAndEditModal
-            games={syncAndEdit.games}
-            subjectLabel={syncAndEdit.label}
-            ageGroup={syncAndEdit.ageGroup}
-            subject={syncAndEdit.subject}
-            onClose={() => setSyncAndEdit(null)}
-            onSaved={() => { showToast('✅ Proses selesai!'); fetchStats(); }}
-          />
-        )}
+        {syncAndEdit &&
+        <SyncAndEditModal
+          games={syncAndEdit.games}
+          subjectLabel={syncAndEdit.label}
+          ageGroup={syncAndEdit.ageGroup}
+          subject={syncAndEdit.subject}
+          onClose={() => setSyncAndEdit(null)}
+          onSaved={() => {showToast('✅ Proses selesai!');fetchStats();}} />
+
+        }
       </AnimatePresence>
 
       {/* Regeneration Task Executor */}
       <AnimatePresence>
-        {regenerationTasks && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          >
+        {regenerationTasks &&
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          
             <motion.div
-              initial={{ scale: 0.92, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.92, y: 20 }}
-              className="bg-white rounded-3xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
-            >
+            initial={{ scale: 0.92, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.92, y: 20 }}
+            className="bg-white rounded-3xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            
               {/* Header */}
               <div className="bg-gradient-to-r from-red-600 to-orange-600 px-6 py-4">
                 <div className="flex items-center justify-between mb-3">
@@ -846,14 +846,14 @@ export default function AdminGameManager() {
                   </div>
                   <div className="text-right">
                     <p className="text-white font-bold text-sm">{taskProgress.length}/{regenerationTasks.length}</p>
-                    <p className="text-white/70 text-xs">{Math.round((taskProgress.length / regenerationTasks.length) * 100)}%</p>
+                    <p className="text-white/70 text-xs">{Math.round(taskProgress.length / regenerationTasks.length * 100)}%</p>
                   </div>
                 </div>
                 <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-white transition-all duration-300"
-                    style={{ width: `${(taskProgress.length / regenerationTasks.length) * 100}%` }}
-                  />
+                  className="h-full bg-white transition-all duration-300"
+                  style={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }} />
+                
                 </div>
               </div>
 
@@ -861,37 +861,37 @@ export default function AdminGameManager() {
               <div className="flex-1 overflow-y-auto px-6 py-4">
                 <div className="space-y-2">
                   {regenerationTasks.map((task, idx) => {
-                    const progress = taskProgress.find(p => p.taskId === task.taskId);
-                    const isCompleted = progress?.status === 'completed';
-                    const isRunning = progress?.status === 'running';
-                    
-                    return (
-                      <div key={task.taskId} className={`p-3 rounded-2xl border-2 transition-all ${
-                        isCompleted ? 'bg-green-50 border-green-300' :
-                        isRunning ? 'bg-blue-50 border-blue-300' :
-                        'bg-gray-50 border-gray-200'
-                      }`}>
+                  const progress = taskProgress.find((p) => p.taskId === task.taskId);
+                  const isCompleted = progress?.status === 'completed';
+                  const isRunning = progress?.status === 'running';
+
+                  return (
+                    <div key={task.taskId} className={`p-3 rounded-2xl border-2 transition-all ${
+                    isCompleted ? 'bg-green-50 border-green-300' :
+                    isRunning ? 'bg-blue-50 border-blue-300' :
+                    'bg-gray-50 border-gray-200'}`
+                    }>
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
                             <p className="text-sm font-bold text-gray-800">{task.taskName}</p>
                             <p className="text-xs text-gray-500">{task.gamesCount} games × {task.questionsPerGame} soalan</p>
                           </div>
                           <div className="flex items-center gap-2">
-                            {isCompleted ? (
-                              <span className="text-xs font-bold text-green-600">✅ Done</span>
-                            ) : isRunning ? (
-                              <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
-                            ) : (
-                              <span className="text-xs font-bold text-gray-400">Pending</span>
-                            )}
+                            {isCompleted ?
+                          <span className="text-xs font-bold text-green-600">✅ Done</span> :
+                          isRunning ?
+                          <Loader2 className="w-4 h-4 animate-spin text-blue-600" /> :
+
+                          <span className="text-xs font-bold text-gray-400">Pending</span>
+                          }
                           </div>
                         </div>
-                        {progress?.message && (
-                          <p className="text-xs text-gray-600 mt-2">{progress.message}</p>
-                        )}
-                      </div>
-                    );
-                  })}
+                        {progress?.message &&
+                      <p className="text-xs text-gray-600 mt-2">{progress.message}</p>
+                      }
+                      </div>);
+
+                })}
                 </div>
               </div>
 
@@ -900,90 +900,90 @@ export default function AdminGameManager() {
                 <p className="text-xs text-gray-400 mb-3 text-center">💡 Backend jalan di server—boleh close browser, tasks akan terus jalan background (~30-60 minit)</p>
                 <div className="flex gap-3">
                   <button
-                    onClick={() => { setRegenerationTasks(null); setTaskProgress([]); }}
-                    className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm"
-                  >
+                  onClick={() => {setRegenerationTasks(null);setTaskProgress([]);}}
+                  className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm">
+                  
                     Close
                   </button>
                   <button
-                    onClick={async () => {
-                      const pendingTask = regenerationTasks.find(t => !taskProgress.find(p => p.taskId === t.taskId));
-                      if (!pendingTask) {
-                        showToast('✅ All tasks completed!');
-                        await fetchStats();
-                        setRegenerationTasks(null);
-                        setTaskProgress([]);
-                        return;
-                      }
+                  onClick={async () => {
+                    const pendingTask = regenerationTasks.find((t) => !taskProgress.find((p) => p.taskId === t.taskId));
+                    if (!pendingTask) {
+                      showToast('✅ All tasks completed!');
+                      await fetchStats();
+                      setRegenerationTasks(null);
+                      setTaskProgress([]);
+                      return;
+                    }
 
-                      // Execute next pending task
-                      const newProgress = [...taskProgress, { taskId: pendingTask.taskId, status: 'running', message: 'Running...' }];
-                      setTaskProgress(newProgress);
-                      showToast(`⏳ Executing Task ${pendingTask.taskId}/${regenerationTasks.length}...`, true);
+                    // Execute next pending task
+                    const newProgress = [...taskProgress, { taskId: pendingTask.taskId, status: 'running', message: 'Running...' }];
+                    setTaskProgress(newProgress);
+                    showToast(`⏳ Executing Task ${pendingTask.taskId}/${regenerationTasks.length}...`, true);
 
-                      try {
-                        const res = await base44.functions.invoke('regenerateGamesTask', {
-                          taskId: pendingTask.taskId,
-                          taskName: pendingTask.taskName,
-                          ageGroup: pendingTask.ageGroup,
-                          subject: pendingTask.subject,
-                          gamesCount: pendingTask.gamesCount,
-                          questionsPerGame: pendingTask.questionsPerGame,
+                    try {
+                      const res = await base44.functions.invoke('regenerateGamesTask', {
+                        taskId: pendingTask.taskId,
+                        taskName: pendingTask.taskName,
+                        ageGroup: pendingTask.ageGroup,
+                        subject: pendingTask.subject,
+                        gamesCount: pendingTask.gamesCount,
+                        questionsPerGame: pendingTask.questionsPerGame
+                      });
+
+                      // Mark task as completed
+                      const updatedProgress = taskProgress.map((p) =>
+                      p.taskId === pendingTask.taskId ?
+                      { ...p, status: 'completed', message: res.data.message } :
+                      p
+                      );
+                      setTaskProgress(updatedProgress);
+                      showToast(`✅ Task ${pendingTask.taskId} completed: ${res.data.createdGames} games created`);
+
+                      // Auto-run next task after 2 seconds
+                      await new Promise((r) => setTimeout(r, 2000));
+
+                      // Check if there are more tasks
+                      const nextTask = regenerationTasks.find((t) => !updatedProgress.find((p) => p.taskId === t.taskId));
+                      if (nextTask) {
+                        // Recursively call to execute next task
+                        const nextRes = await base44.functions.invoke('regenerateGamesTask', {
+                          taskId: nextTask.taskId,
+                          taskName: nextTask.taskName,
+                          ageGroup: nextTask.ageGroup,
+                          subject: nextTask.subject,
+                          gamesCount: nextTask.gamesCount,
+                          questionsPerGame: nextTask.questionsPerGame
                         });
 
-                        // Mark task as completed
-                        const updatedProgress = taskProgress.map(p =>
-                          p.taskId === pendingTask.taskId
-                            ? { ...p, status: 'completed', message: res.data.message }
-                            : p
+                        const finalProgress = updatedProgress.map((p) =>
+                        p.taskId === nextTask.taskId ?
+                        { ...p, status: 'completed', message: nextRes.data.message } :
+                        p
                         );
-                        setTaskProgress(updatedProgress);
-                        showToast(`✅ Task ${pendingTask.taskId} completed: ${res.data.createdGames} games created`);
-
-                        // Auto-run next task after 2 seconds
-                        await new Promise(r => setTimeout(r, 2000));
-                        
-                        // Check if there are more tasks
-                        const nextTask = regenerationTasks.find(t => !updatedProgress.find(p => p.taskId === t.taskId));
-                        if (nextTask) {
-                          // Recursively call to execute next task
-                          const nextRes = await base44.functions.invoke('regenerateGamesTask', {
-                            taskId: nextTask.taskId,
-                            taskName: nextTask.taskName,
-                            ageGroup: nextTask.ageGroup,
-                            subject: nextTask.subject,
-                            gamesCount: nextTask.gamesCount,
-                            questionsPerGame: nextTask.questionsPerGame,
-                          });
-                          
-                          const finalProgress = updatedProgress.map(p =>
-                            p.taskId === nextTask.taskId
-                              ? { ...p, status: 'completed', message: nextRes.data.message }
-                              : p
-                          );
-                          finalProgress.push({ taskId: nextTask.taskId, status: 'completed', message: nextRes.data.message });
-                          setTaskProgress(finalProgress);
-                        }
-                      } catch (err) {
-                        showToast(`❌ Task ${pendingTask.taskId} failed: ${err.message}`, false);
-                        const failedProgress = taskProgress.map(p =>
-                          p.taskId === pendingTask.taskId
-                            ? { ...p, status: 'failed', message: err.message }
-                            : p
-                        );
-                        setTaskProgress(failedProgress);
+                        finalProgress.push({ taskId: nextTask.taskId, status: 'completed', message: nextRes.data.message });
+                        setTaskProgress(finalProgress);
                       }
-                    }}
-                    className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg"
-                  >
+                    } catch (err) {
+                      showToast(`❌ Task ${pendingTask.taskId} failed: ${err.message}`, false);
+                      const failedProgress = taskProgress.map((p) =>
+                      p.taskId === pendingTask.taskId ?
+                      { ...p, status: 'failed', message: err.message } :
+                      p
+                      );
+                      setTaskProgress(failedProgress);
+                    }
+                  }}
+                  className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg">
+                  
                     {taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute Task ${taskProgress.length + 1}`}
                     </button>
                     </div>
                     </div>
                     </motion.div>
                     </motion.div>
-                    )}
+        }
                     </AnimatePresence>
-                    </div>
-                    );
-                    }
+                    </div>);
+
+}
