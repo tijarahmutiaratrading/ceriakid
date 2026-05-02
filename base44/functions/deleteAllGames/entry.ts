@@ -9,8 +9,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
-    // Get all published games
-    const allGames = await base44.asServiceRole.entities.Game.filter({ isPublished: true });
+    // Get ALL games (no filter)
+    const allGames = await base44.asServiceRole.entities.Game.filter({});
 
     console.log(`Deleting ${allGames.length} games...`);
 
