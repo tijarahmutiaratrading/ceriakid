@@ -12,36 +12,73 @@ const AGE_DESC = {
   sekolah_rendah: 'sekolah rendah (umur 7-12 tahun)',
 };
 
+// Map answer keywords to valid emojis
+const EMOJI_MAPPING = {
+  'pensil': ['✏️', '🖍️'],
+  'penghapus': ['🧹', '🧻'],
+  'buku': ['📚', '📖'],
+  'burung': ['🐦', '🦅'],
+  'ikan': ['🐠', '🐟'],
+  'rumah': ['🏠', '🏡'],
+  'kereta': ['🚗', '🚕'],
+  'malaysia': ['🇲🇾'],
+  'merah': ['🔴'],
+  'biru': ['🔵'],
+};
+
+function validateEmojiMatch(answer, emoji) {
+  // Extract first word from answer
+  const answerLower = (answer || '').toLowerCase().split(' ')[0];
+  
+  // Check if answer matches any mandatory mapping
+  for (const [keyword, validEmojis] of Object.entries(EMOJI_MAPPING)) {
+    if (answerLower.includes(keyword)) {
+      return validEmojis.includes(emoji);
+    }
+  }
+  
+  // If no mapping, emoji should not be generic
+  const genericEmojis = ['❓', '❌', '✅', '🎮', '📝'];
+  return !genericEmojis.includes(emoji) && emoji.length > 0;
+}
+
 async function generateQuestionsForGame(base44, game, needed, existingQuestions) {
   const subject = CATEGORY_LANG[game.category] || game.category;
   const ageDesc = AGE_DESC[game.ageGroup] || game.ageGroup;
   const existingSample = existingQuestions.slice(0, 3).map(q => q.problem || q.question || '').filter(Boolean).join('; ');
 
-  const prompt = `Kamu adalah expert pembuat soalan pendidikan Malaysia yang SANGAT BIJAK dan TELITI.
+  const prompt = `Kamu adalah expert pembuat soalan pendidikan Malaysia SANGAT BIJAK, TELITI & KETAT.
 
-Buat TEPAT ${needed} soalan BARU, UNIK dan BERKUALITI untuk: "${game.title}"
+Buat TEPAT ${needed} soalan BARU, UNIK & BERKUALITI untuk: "${game.title}"
 Subjek: ${subject}
 Peringkat: ${ageDesc}
 Jenis: ${game.type || 'multiple_choice'}
 
 ${existingSample ? `Contoh sedia ada (JANGAN ULANG): ${existingSample}` : ''}
 
-KRITERIA WAJIB TUNAIKAN:
-1. Soalan JELAS, TEPAT, BERKAITAN dengan tajuk dan kurikulum Malaysia
-2. Tepat 4 pilihan yang BERBEZA dan MASUK AKAL
-3. Jawapan betul PASTI betul (jangan samar atau debatable)
-4. Emoji RELEVAN dengan soalan & MATCH dengan jawapan betul (contoh: 🐘 haruslah match dengan jawapan tentang gajah)
-5. Bahasa sesuai kanak-kanak, menarik, tidak terlalu mudah atau sukar
-6. JANGAN ULANG soalan yang sedia ada—setiap soalan MESTILAH BERBEZA topic/subtopic
-7. Setiap soalan MESTI ada emoji dalam problem field
-8. EMOJI MESTI BERBEZA untuk setiap soalan—jangan ulang emoji yang sama
-9. Emoji pilihan untuk ${subject}:
-   - Bahasa Melayu: 📚 📖 ✏️ 🔤 💬 🗣️ 📝 📄 🎓 🌍 (JANGAN 🍃 🌿 🌱 sahaja!)
-   - English: 🌟 📚 ✍️ 🔤 💬 🇬🇧 📖 🎤 💭 🏆
-   - Matematik: 🔢 ➕ ➖ ✖️ ➗ 📐 📏 🧮 🔺 💯
-   - Sains: 🔬 🧬 🧪 🌍 🌱 🦋 🔭 ⚗️ 🧫 🌎
+EMOJI RULES (SANGAT PENTING—ZERO COMPROMISE):
+🔴 HARUS LANGSUNG MATCH DENGAN JAWAPAN BETUL (bukan soalan)
+- Jika jawapan = "Burung" → Emoji MESTI 🐦 atau 🦅 SAHAJA
+- Jika jawapan = "Pensil" → Emoji MESTI ✏️ atau 🖍️ SAHAJA
+- Jika jawapan = "Malaysia" → Emoji MESTI 🇲🇾 SAHAJA
+- JANGAN buat emoji yang salah match (contoh: 🇲🇾 untuk pertanyaan burung = SALAH!)
+- SETIAP soalan emoji MESTI BERLAINAN—ZERO repetition
+- JANGAN gunakan emoji generic: ❓ ❌ ✅ 🎮 📝
 
-Balas JSON dengan TEPAT ${needed} soalan yang BERBEZA emoji setiap satu:`;
+KONTEN SOALAN:
+1. JELAS, TEPAT, kurikulum Malaysia sesuai
+2. 4 pilihan BERBEZA, masuk akal, TIDAK confusing
+3. Jawapan PASTI betul (tidak samar)
+4. Tidak ulang topik—BERBEZA subtopic setiap satu
+5. Bahasa sesuai ${ageDesc}, menarik
+
+EMOJI AVAILABLE (choose based on answer):
+- Bahasa Melayu: ✏️ 🖍️ 📚 📖 🔤 💬 🗣️ 📄 🎓 🌍
+- English: 🌟 📚 ✍️ 🔤 💬 🇬🇧 📖 🎤 💭 🏆
+- Matematik: 🔢 ➕ ➖ ✖️ ➗ 📐 📏 🧮 🔺 💯
+- Sains: 🔬 🧬 🧪 🌍 🌱 🦋 🔭 ⚗️ 🐦 🦅 🐠 🐟
+
+Balas JSON dengan TEPAT ${needed} soalan—SETIAP emoji BERLAINAN & MATCH JAWAPAN BETUL:`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
@@ -54,10 +91,10 @@ Balas JSON dengan TEPAT ${needed} soalan yang BERBEZA emoji setiap satu:`;
           items: {
             type: 'object',
             properties: {
-              problem: { type: 'string', description: 'Soalan dengan emoji relevant di dalamnya' },
+              problem: { type: 'string', description: 'Soalan jelas' },
               options: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4 },
               answer: { type: 'number', minimum: 0, maximum: 3 },
-              emoji: { type: 'string', description: 'Emoji yang match dengan jawapan betul' },
+              emoji: { type: 'string', description: 'Emoji yang MATCH jawapan betul' },
             },
             required: ['problem', 'options', 'answer', 'emoji'],
           },
@@ -69,7 +106,15 @@ Balas JSON dengan TEPAT ${needed} soalan yang BERBEZA emoji setiap satu:`;
     },
   });
 
-  return result.questions || [];
+  // Validate emoji matches—if mismatch, try to fix with fallback
+  return (result.questions || []).map((q) => {
+    const correctAnswer = q.options?.[q.answer] || '';
+    if (!validateEmojiMatch(correctAnswer, q.emoji)) {
+      // Fallback: use first valid emoji or generic match
+      q.emoji = '🎯'; // Safe fallback for deduplication to fix
+    }
+    return q;
+  });
 }
 
 function isRealQuestion(q) {
@@ -79,7 +124,7 @@ function isRealQuestion(q) {
 
 function deduplicateEmojis(questions) {
   const usedEmojis = new Set();
-  const emojiPool = ['📚', '📖', '✏️', '🖍️', '🔤', '💬', '🗣️', '📄', '🎓', '🌍', '🌟', '✍️', '🇬🇧', '📖', '🎤', '💭', '🏆', '🔢', '➕', '➖', '✖️', '➗', '📐', '📏', '🧮', '🔺', '💯', '🔬', '🧬', '🧪', '🌱', '🦋', '🔭', '⚗️', '🧫', '🌎', '🐦', '🦅', '🐠', '🐟', '🏠', '🏡', '🚗', '🚕', '🧹', '🧻'];
+  const emojiPool = ['📚', '📖', '✏️', '🖍️', '🔤', '💬', '🗣️', '📄', '🎓', '🌍', '🌟', '✍️', '🇬🇧', '📖', '🎤', '💭', '🏆', '🔢', '➕', '➖', '✖️', '➗', '📐', '📏', '🧮', '🔺', '💯', '🔬', '🧬', '🧪', '🌱', '🦋', '🔭', '⚗️', '🧫', '🌎', '🐦', '🦅', '🐠', '🐟', '🏠', '🏡', '🚗', '🚕', '🧹', '🧻', '🔴', '🔵'];
 
   return questions.map((q) => {
     let emoji = q.emoji || '';
