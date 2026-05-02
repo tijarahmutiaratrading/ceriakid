@@ -471,7 +471,7 @@ export default function AdminGameManager() {
                            showToast(`⏳ Sync ${s.label}...`, true);
                            try {
                              const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
-                             if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); return; }
+                             if (dbGames.length === 0) { showToast('Tiada data DB untuk di-sync', false); setActionLoading(null); return; }
                              let fixed = 0;
                              for (const g of dbGames) {
                                const actualCount = g.gameData?.questions?.length || 0;
@@ -501,7 +501,7 @@ export default function AdminGameManager() {
                            showToast(`⏳ Verify QA ${s.label}...`, true);
                            try {
                              const dbGames = dbGamesCache[`${s.ageGroup}-${s.subject}`] || [];
-                             if (dbGames.length === 0) { showToast('Tiada data untuk di-verify', false); return; }
+                             if (dbGames.length === 0) { showToast('Tiada data untuk di-verify', false); setActionLoading(null); return; }
                              let verified = 0;
                              let flagged = 0;
 
