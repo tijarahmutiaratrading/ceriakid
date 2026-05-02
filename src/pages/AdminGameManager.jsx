@@ -772,82 +772,89 @@ export default function AdminGameManager() {
               exit={{ scale: 0.92, y: 20 }}
               className="bg-white rounded-3xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
             >
-              {/* Header */}
-              <div className="bg-gradient-to-r from-red-600 to-orange-600 px-6 py-4">
-                <h3 className="font-black text-white text-lg">🚀 Regeneration Executor</h3>
-                <p className="text-white/80 text-xs mt-1">Execute tasks sequentially. Wait for each to complete.</p>
-              </div>
-
-              {/* Overall Progress Bar */}
-              <div className="px-6 pt-4">
-                <div className="bg-gray-100 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs font-bold text-gray-600">Overall Progress</p>
-                    <p className="text-xs font-bold text-gray-700">{taskProgress.length}/{regenerationTasks.length}</p>
-                  </div>
-                  <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-300"
-                      style={{ width: `${regenerationTasks.length > 0 ? (taskProgress.length / regenerationTasks.length) * 100 : 0}%` }}
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    {taskProgress.length === regenerationTasks.length
-                      ? '✅ All tasks completed!'
-                      : `⏳ ${regenerationTasks.length - taskProgress.length} tasks pending`}
-                  </p>
+              <AnimatePresence>
+                <motion.div
+                  initial={{ scale: 0.92, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.92, y: 20 }}
+                  className="bg-white rounded-3xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
+                >
+                  {/* Header */}
+                  <div className="bg-gradient-to-r from-red-600 to-orange-600 px-6 py-4">
+                  <h3 className="font-black text-white text-lg">🚀 Regeneration Executor</h3>
+                  <p className="text-white/80 text-xs mt-1">Execute tasks sequentially. Wait for each to complete.</p>
                 </div>
-              </div>
 
-              {/* Task List */}
-              <div className="flex-1 overflow-y-auto px-6 py-4">
-                <div className="space-y-2">
-                  {regenerationTasks.map((task, idx) => {
-                    const progress = taskProgress.find(p => p.taskId === task.taskId);
-                    const isCompleted = progress?.status === 'completed';
-                    const isRunning = progress?.status === 'running';
-                    
-                    return (
-                      <div key={task.taskId} className={`p-3 rounded-2xl border-2 transition-all ${
-                        isCompleted ? 'bg-green-50 border-green-300' :
-                        isRunning ? 'bg-blue-50 border-blue-300' :
-                        'bg-gray-50 border-gray-200'
-                      }`}>
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <p className="text-sm font-bold text-gray-800">{task.taskName}</p>
-                            <p className="text-xs text-gray-500">{task.gamesCount} games × {task.questionsPerGame} soalan</p>
+                {/* Overall Progress Bar */}
+                <div className="px-6 pt-4">
+                  <div className="bg-gray-100 rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-bold text-gray-600">Overall Progress</p>
+                      <p className="text-xs font-bold text-gray-700">{taskProgress.length}/{regenerationTasks.length}</p>
+                    </div>
+                    <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-300"
+                        style={{ width: `${regenerationTasks.length > 0 ? (taskProgress.length / regenerationTasks.length) * 100 : 0}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">
+                      {taskProgress.length === regenerationTasks.length
+                        ? '✅ All tasks completed!'
+                        : `⏳ ${regenerationTasks.length - taskProgress.length} tasks pending`}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Task List */}
+                <div className="flex-1 overflow-y-auto px-6 py-4">
+                  <div className="space-y-2">
+                    {regenerationTasks.map((task, idx) => {
+                      const progress = taskProgress.find(p => p.taskId === task.taskId);
+                      const isCompleted = progress?.status === 'completed';
+                      const isRunning = progress?.status === 'running';
+                      
+                      return (
+                        <div key={task.taskId} className={`p-3 rounded-2xl border-2 transition-all ${
+                          isCompleted ? 'bg-green-50 border-green-300' :
+                          isRunning ? 'bg-blue-50 border-blue-300' :
+                          'bg-gray-50 border-gray-200'
+                        }`}>
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <p className="text-sm font-bold text-gray-800">{task.taskName}</p>
+                              <p className="text-xs text-gray-500">{task.gamesCount} games × {task.questionsPerGame} soalan</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {isCompleted ? (
+                                <span className="text-xs font-bold text-green-600">✅ Done</span>
+                              ) : isRunning ? (
+                                <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                              ) : (
+                                <span className="text-xs font-bold text-gray-400">Pending</span>
+                              )}
+                            </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            {isCompleted ? (
-                              <span className="text-xs font-bold text-green-600">✅ Done</span>
-                            ) : isRunning ? (
-                              <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
-                            ) : (
-                              <span className="text-xs font-bold text-gray-400">Pending</span>
-                            )}
-                          </div>
+                          {progress?.message && (
+                            <p className="text-xs text-gray-600 mt-2">{progress.message}</p>
+                          )}
                         </div>
-                        {progress?.message && (
-                          <p className="text-xs text-gray-600 mt-2">{progress.message}</p>
-                        )}
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
 
-              {/* Footer */}
-              <div className="px-6 py-4 border-t border-gray-200">
-                <p className="text-xs text-gray-400 mb-3 text-center">💡 Backend jalan di server—boleh close browser, tasks akan terus jalan background (~30-60 minit)</p>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => { setRegenerationTasks(null); setTaskProgress([]); }}
-                    className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm"
-                  >
-                    Close
-                  </button>
-                  <button
+                {/* Footer */}
+                <div className="px-6 py-4 border-t border-gray-200">
+                  <p className="text-xs text-gray-400 mb-3 text-center">💡 Backend jalan di server—boleh close browser, tasks akan terus jalan background (~30-60 minit)</p>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => { setRegenerationTasks(null); setTaskProgress([]); }}
+                      className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm"
+                    >
+                      Close
+                    </button>
+                    <button
                     onClick={async () => {
                       const pendingTask = regenerationTasks.find(t => !taskProgress.find(p => p.taskId === t.taskId));
                       if (!pendingTask) {
@@ -884,7 +891,7 @@ export default function AdminGameManager() {
 
                         // Auto-run next task after 2 seconds
                         await new Promise(r => setTimeout(r, 2000));
-                        
+
                         // Check if there are more tasks
                         const nextTask = regenerationTasks.find(t => !updatedProgress.find(p => p.taskId === t.taskId));
                         if (nextTask) {
@@ -897,7 +904,7 @@ export default function AdminGameManager() {
                             gamesCount: nextTask.gamesCount,
                             questionsPerGame: nextTask.questionsPerGame,
                           });
-                          
+
                           const finalProgress = updatedProgress.map(p =>
                             p.taskId === nextTask.taskId
                               ? { ...p, status: 'completed', message: nextRes.data.message }
@@ -917,16 +924,14 @@ export default function AdminGameManager() {
                       }
                     }}
                     className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg"
-                  >
+                    >
                     {taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute Task ${taskProgress.length + 1}`}
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    );
-  }
-}
+                    </button>
+                    </div>
+                    </div>
+                    </motion.div>
+                    </AnimatePresence>
+                    </div>
+                );
+                }
+                }
