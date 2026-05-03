@@ -173,7 +173,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
         {loading ? 'Memproses...' : '🏦 Bayar via FPX Sekarang'}
       </motion.button>
 
-      <p className="text-xs text-gray-600 text-center">
+      <p className="text-xs text-white/60 text-center">
         🔒 Pembayaran selamat via Chip • FPX Internet Banking Malaysia
       </p>
 
