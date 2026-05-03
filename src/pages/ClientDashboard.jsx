@@ -79,7 +79,7 @@ export default function ClientDashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-5 rounded-3xl overflow-hidden shadow-2xl"
+          className="mb-6 rounded-3xl overflow-hidden shadow-2xl"
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.4)' }}
         >
           {/* Tier badge */}
