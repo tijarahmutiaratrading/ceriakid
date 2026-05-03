@@ -35,6 +35,7 @@ const TYPE_COLORS = {
 
 export default function BBMCard({ resource, locked, onDownload, idx }) {
   const typeColor = TYPE_COLORS[resource.type] || 'bg-gray-400/80';
+  const hasFile = !!(resource.fileUrl || resource.htmlContent);
 
   return (
     <motion.div
@@ -77,7 +78,7 @@ export default function BBMCard({ resource, locked, onDownload, idx }) {
               <span className="text-xs text-yellow-300 font-black">Premium</span>
             </div>
           </Link>
-        ) : (
+        ) : hasFile ? (
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -86,6 +87,10 @@ export default function BBMCard({ resource, locked, onDownload, idx }) {
           >
             <Download className="w-4 h-4 text-purple-600" />
           </motion.button>
+        ) : (
+          <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center" title="Fail belum tersedia">
+            <span className="text-sm">⏳</span>
+          </div>
         )}
       </div>
     </motion.div>

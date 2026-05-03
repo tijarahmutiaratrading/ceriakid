@@ -206,7 +206,7 @@ ${(data.questions || []).map(q => `
 </body></html>`;
   }
 
-  // Save to BBMResource entity
+  // Save to BBMResource entity — store htmlContent so download works
   const saved = await base44.asServiceRole.entities.BBMResource.create({
     title: result.title || `${type} - ${subjectLabel} ${levelLabel}`,
     description: `Jana secara AI | Topik: ${topic || 'Umum'}`,
@@ -216,10 +216,9 @@ ${(data.questions || []).map(q => `
     emoji: type === 'kuiz' ? '🧩' : type === 'rancangan_pengajaran' ? '📝' : '📄',
     tier: 'free',
     downloadCount: 0,
-    isPublished: false, // admin review before publish
+    isPublished: false,
     tags: [subjectLabel, levelLabel, topic || 'AI Generated'],
-    // Store HTML in description since no file upload here
-    previewImageUrl: '',
+    htmlContent,
   });
 
   return Response.json({

@@ -63,6 +63,10 @@
       "type": "string",
       "description": "URL fail (PDF, PPT, etc.)"
     },
+    "htmlContent": {
+      "type": "string",
+      "description": "HTML content untuk BBM yang dijana AI (boleh print/save sebagai PDF)"
+    },
     "previewImageUrl": {
       "type": "string",
       "description": "Gambar preview BBM"

@@ -71,6 +71,14 @@ export default function BBMHub() {
     if (resource.tier === 'premium' && !isPremiumUser) return;
     if (resource.fileUrl) {
       window.open(resource.fileUrl, '_blank');
+    } else if (resource.htmlContent) {
+      // AI-generated BBM — open HTML in new tab for print/save
+      const win = window.open('', '_blank');
+      win.document.write(resource.htmlContent);
+      win.document.close();
+    } else {
+      alert('Fail belum tersedia. Sila semak semula kemudian.');
+      return;
     }
     // Increment download count silently
     try {
