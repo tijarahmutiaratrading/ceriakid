@@ -26,7 +26,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: Math.min(idx * 0.03, 0.5) }}
-          className="rounded-2xl p-4 flex items-center gap-4 opacity-60 cursor-pointer"
+          className="rounded-2xl p-4 flex items-center gap-4 opacity-60 cursor-pointer mb-3"
           style={cardStyle}
         >
           <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl grayscale flex-shrink-0">
