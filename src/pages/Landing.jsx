@@ -466,14 +466,14 @@ export default function Landing() {
       </div>
 
       {/* ── PRICING ── */}
-      <div id="pricing" className="py-12 md:py-16 px-6" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fffaf5 100%)' }}>
+      <div id="pricing" className="py-12 md:py-16 px-6 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
-            <span className="inline-block bg-red-100 text-red-500 font-black px-4 py-1.5 rounded-full text-sm mb-4">
+            <span className="inline-block bg-red-500/30 text-red-200 font-black px-4 py-1.5 rounded-full text-sm mb-4 border border-red-400/30">
               ⏱️ Tawaran Tamat Dalam: {String(countdown.m).padStart(2, '0')}:{String(countdown.s).padStart(2, '0')}
             </span>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">Pilih Pelan Anda</h2>
-            <p className="text-gray-500">Pilih pelan yang sesuai. Cancel bila-bila masa. Jaminan 30 hari.</p>
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Pilih Pelan Anda</h2>
+            <p className="text-white/60">Pilih pelan yang sesuai. Cancel bila-bila masa. Jaminan 30 hari.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
@@ -485,24 +485,28 @@ export default function Landing() {
               transition={{ delay: i * 0.1 }}
               className={`rounded-3xl p-6 relative border-2 transition-all ${
               tier.highlighted ?
-              'bg-orange-500 border-orange-400 shadow-2xl md:scale-105' :
-              'bg-white border-gray-200 shadow-md hover:border-orange-300'}`
-              }>
+              'border-white/40 shadow-2xl md:scale-105' :
+              'border-white/20 shadow-md hover:border-white/40'}`}
+              style={tier.highlighted ? 
+                { background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)' } :
+                { background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }
+              }
+              >
               
                 {tier.savings &&
-              <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-white/20 text-white' : 'bg-orange-100 text-orange-600'}`}>
-                    💰 {tier.savings}
-                  </div>
-              }
+                <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-yellow-400/20 text-yellow-200' : 'bg-white/10 text-white/70'}`}>
+                   💰 {tier.savings}
+                 </div>
+                }
 
-                <h3 className={`text-2xl font-black mb-2 ${tier.highlighted ? 'text-white' : 'text-gray-900'}`}>{tier.nameMY}</h3>
+                <h3 className="text-2xl font-black mb-2 text-white">{tier.nameMY}</h3>
 
                 <div className="flex items-baseline gap-1 mb-0.5">
-                  <span className={`text-3xl font-black ${tier.highlighted ? 'text-white' : 'text-orange-500'}`}>RM{tier.priceMYR}</span>
-                  <span className={`text-sm font-bold ${tier.highlighted ? 'text-white/80' : 'text-gray-400'}`}>{tier.period}</span>
+                 <span className="text-3xl font-black text-yellow-300">RM{tier.priceMYR}</span>
+                 <span className="text-sm font-bold text-white/60">{tier.period}</span>
                 </div>
-                <p className={`text-xs font-bold mb-6 ${tier.highlighted ? 'text-yellow-200' : 'text-gray-400'}`}>
-                  ≈ RM{tier.perMonth}/bulan
+                <p className="text-xs font-bold mb-6 text-white/50">
+                 ≈ RM{tier.perMonth}/bulan
                 </p>
 
                 <motion.button
@@ -510,20 +514,20 @@ export default function Landing() {
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleTierSelect(tier.name)}
                 className={`w-full py-3.5 rounded-2xl font-black text-base mb-6 shadow-md transition-all ${
-                tier.highlighted ? 'bg-white text-orange-500 hover:bg-yellow-50' : 'bg-orange-500 text-white hover:bg-orange-600'} ${
-                selectedTierForCheckout === tier.name ? 'ring-4 ring-yellow-400' : ''}`}>
+                tier.highlighted ? 'bg-white text-purple-700 hover:bg-white/90' : 'bg-orange-500 text-white hover:bg-orange-600'} ${
+                selectedTierForCheckout === tier.name ? 'ring-4 ring-yellow-300' : ''}`}>
                 
                   {tier.cta}
                 </motion.button>
 
                 <div className="space-y-2.5">
                   {tier.features.map((f, j) =>
-                <div key={j} className={`flex items-center gap-2 text-sm font-semibold ${tier.highlighted ? 'text-white' : 'text-gray-700'}`}>
+                <div key={j} className="flex items-center gap-2 text-sm font-semibold text-white">
                       <Check className="w-4 h-4 text-green-400 flex-shrink-0" /> {f}
                     </div>
                 )}
                   {tier.noFeatures.map((f, j) =>
-                <div key={j} className={`flex items-center gap-2 text-sm font-semibold opacity-40 ${tier.highlighted ? 'text-white' : 'text-gray-500'}`}>
+                <div key={j} className="flex items-center gap-2 text-sm font-semibold opacity-40 text-white">
                       <span className="w-4 flex-shrink-0">✕</span> {f}
                     </div>
                 )}
@@ -537,20 +541,21 @@ export default function Landing() {
             id="checkout-form"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="mt-10 bg-white border-2 border-orange-200 rounded-3xl p-6 md:p-10 max-w-lg mx-auto shadow-xl">
+            className="mt-10 border-2 border-white/30 rounded-3xl p-6 md:p-10 max-w-lg mx-auto shadow-xl"
+            style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}>
             
             <div className="mb-6">
-              <h3 className="text-2xl font-black text-gray-900">Daftar & Bayar 🔒</h3>
-              <p className="text-sm text-gray-400 mt-1">Pilih pakej di bawah dan isi maklumat untuk checkout</p>
+              <h3 className="text-2xl font-black text-white">Daftar & Bayar 🔒</h3>
+              <p className="text-sm text-white/60 mt-1">Pilih pakej di bawah dan isi maklumat untuk checkout</p>
             </div>
             <PricingCheckout selectedTier={selectedTierForCheckout} onTierChange={setSelectedTierForCheckout} />
           </motion.div>
 
           {/* Money Back */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-10 bg-white border border-green-200 rounded-2xl p-6 text-center max-w-xl mx-auto shadow-sm">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-10 border border-green-400/30 rounded-2xl p-6 text-center max-w-xl mx-auto shadow-sm" style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}>
             <div className="text-4xl mb-3">🛡️</div>
-            <h3 className="text-xl font-black text-gray-900 mb-2">Jaminan Wang Balik 30 Hari</h3>
-            <p className="text-gray-500 text-sm">Tidak berpuas hati dalam 30 hari? Kami pulangkan wang anda sepenuhnya — tanpa soal tanya. Kami yakin dengan produk kami. 💪</p>
+            <h3 className="text-xl font-black text-white mb-2">Jaminan Wang Balik 30 Hari</h3>
+            <p className="text-white/60 text-sm">Tidak berpuas hati dalam 30 hari? Kami pulangkan wang anda sepenuhnya — tanpa soal tanya. Kami yakin dengan produk kami. 💪</p>
           </motion.div>
         </div>
       </div>
