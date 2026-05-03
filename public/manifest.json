@@ -1,23 +1,22 @@
 {
-  "name": "Jom Belajar! 🎓",
-  "short_name": "Jom Belajar",
-  "description": "200+ Permainan Pembelajaran untuk Anak Prasekolah & Sekolah Rendah",
+  "name": "CeriaKid - Pembelajaran Interaktif",
+  "short_name": "CeriaKid",
+  "description": "200+ permainan edukatif untuk anak prasekolah & sekolah rendah",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fefce8",
-  "theme_color": "#8b5cf6",
-  "orientation": "portrait-primary",
-  "scope": "/",
-  "lang": "ms",
-  "categories": ["education", "kids"],
+  "background_color": "#fff8f0",
+  "theme_color": "#f97316",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "https://base44.com/logo_v2.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-  ],
-  "screenshots": [],
-  "prefer_related_applications": false
+  ]
 }

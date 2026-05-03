@@ -18,13 +18,14 @@ export default function FreeTrialButton({ onTrialStarted }) {
     setLoading(true);
 
     try {
-      // Create or update trial subscription
-      await base44.entities.UserSubscription.bulkCreate([{
-        email: user.email,
-        tier: 'free',
-        status: 'active',
-        selectedAgeGroup: 'prasekolah',
-      }]);
+      // Upsert trial subscription (avoid duplicates)
+      const existing = await base44.entities.UserSubscription.filter({ email: user.email });
+      const subData = { email: user.email, tier: 'free', status: 'active', selectedAgeGroup: 'prasekolah' };
+      if (existing.length > 0) {
+        await base44.entities.UserSubscription.update(existing[0].id, subData);
+      } else {
+        await base44.entities.UserSubscription.create(subData);
+      }
 
       // Save trial start date to user metadata
       await base44.auth.updateMe({
