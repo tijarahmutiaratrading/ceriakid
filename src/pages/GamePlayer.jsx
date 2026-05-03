@@ -122,8 +122,9 @@ export default function GamePlayer() {
     let correct = false;
 
     // Check answer based on question type
-    if (['multiple_choice', 'true_false', 'yes_no'].includes(currentQuestion.type)) {
+    if (['multiple_choice', 'true_false', 'yes_no'].includes(currentQuestion.type) || !currentQuestion.type) {
       correct = answer === currentQuestion.answer;
+      console.log(`[Answer Check] Selected: ${answer} (${currentQuestion.options?.[answer]}), Correct: ${currentQuestion.answer} (${currentQuestion.options?.[currentQuestion.answer]}), Match: ${correct}`);
     } else if (['short_answer', 'fill_blank'].includes(currentQuestion.type)) {
       const answerText = String(answer).toLowerCase().trim();
       const correctText = String(currentQuestion.answer).toLowerCase().trim();
