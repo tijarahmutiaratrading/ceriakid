@@ -149,7 +149,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="grid grid-cols-2 gap-3"
+          className="grid grid-cols-2 gap-3 mb-5"
         >
           <Link to="/games-hub" className="block">
             <motion.div
