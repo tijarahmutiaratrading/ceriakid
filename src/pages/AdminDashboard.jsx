@@ -161,16 +161,16 @@ export default function AdminDashboard() {
       <AppHeader showBack={true} backTo="/admin-dashboard" />
       <div className="relative max-w-5xl mx-auto px-3 md:px-4 py-6 md:py-8">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-5 rounded-3xl" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-          <div className="flex items-center gap-3 mb-1">
-            <div className="text-3xl">🎛️</div>
-            <h1 className="text-2xl md:text-4xl font-black text-white">Admin Dashboard</h1>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 p-3 rounded-2xl" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+          <div className="flex items-center gap-2 mb-1">
+            <div className="text-2xl">🎛️</div>
+            <h1 className="text-lg md:text-2xl font-black text-white">Admin Dashboard</h1>
           </div>
-          <p className="text-white/60 text-sm font-semibold ml-10">Analytics, Settings & Configurations</p>
+          <p className="text-white/60 text-xs font-semibold ml-8">Analytics, Settings & Configurations</p>
         </motion.div>
 
         {/* Main Tabs */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-3 mb-10 p-1 rounded-2xl overflow-x-auto" style={{ background: 'rgba(255,255,255,0.1)' }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-2 mb-6 p-1 rounded-xl overflow-x-auto" style={{ background: 'rgba(255,255,255,0.1)' }}>
            {tabs.map(tab => (
              <button
                key={tab.key}
@@ -189,7 +189,7 @@ export default function AdminDashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-12"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8"
             >
               {[
                 { label: 'Total Pembeli', value: subscriptions.length, icon: '👥' },
@@ -201,21 +201,21 @@ export default function AdminDashboard() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="rounded-2xl p-6 text-white shadow-xl"
+                  whileHover={{ y: -4, scale: 1.02 }}
+                  className="rounded-xl p-4 text-white shadow-lg"
                   style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
                 >
-                  <p className="text-4xl mb-3">{stat.icon}</p>
-                  <p className="text-4xl font-black mb-2 text-white">{stat.value}</p>
-                  <p className="text-sm font-bold text-white/70">{stat.label}</p>
+                  <p className="text-3xl mb-2">{stat.icon}</p>
+                  <p className="text-3xl font-black mb-1 text-white">{stat.value}</p>
+                  <p className="text-xs font-bold text-white/70">{stat.label}</p>
                 </motion.div>
               ))}
             </motion.div>
 
             {/* Sales Breakdown */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-12">
-              <h2 className="text-2xl font-black text-white mb-6">💳 Jualan Mengikut Pelan</h2>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8">
+              <h2 className="text-lg font-black text-white mb-3">💳 Jualan Mengikut Pelan</h2>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
                 {[
                    { label: 'Percuma', value: tierBreakdown.free, icon: '🆓' },
                    { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱' },
@@ -227,13 +227,13 @@ export default function AdminDashboard() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
-                    whileHover={{ scale: 1.05, y: -4 }}
-                    className="rounded-2xl p-6 text-white text-center shadow-xl"
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    className="rounded-xl p-4 text-white text-center shadow-lg"
                     style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
                   >
-                    <p className="text-4xl mb-3">{item.icon}</p>
-                    <p className="text-sm font-bold mb-2 text-white/70">{item.label}</p>
-                    <p className="text-4xl font-black text-white">{item.value}</p>
+                    <p className="text-2xl mb-2">{item.icon}</p>
+                    <p className="text-xs font-bold mb-1 text-white/70">{item.label}</p>
+                    <p className="text-2xl font-black text-white">{item.value}</p>
                   </motion.div>
                 ))}
               </div>
@@ -241,10 +241,10 @@ export default function AdminDashboard() {
 
             {/* Customer Database */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-              <h2 className="text-2xl font-black text-white mb-6">📋 Database Pelanggan</h2>
+              <h2 className="text-lg font-black text-white mb-3">📋 Database Pelanggan</h2>
               <motion.div
-               whileHover={{ y: -4 }}
-               className="rounded-2xl p-6 shadow-xl overflow-x-auto"
+               whileHover={{ y: -2 }}
+               className="rounded-xl p-4 shadow-lg overflow-x-auto"
                style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
               >
                 <table className="w-full text-sm">
@@ -300,7 +300,7 @@ export default function AdminDashboard() {
         {activeTab === 'settings' && (
           <>
             {/* Settings Sub-tabs */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 mb-8 p-1 rounded-2xl overflow-x-auto" style={{ background: 'rgba(255,255,255,0.1)' }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 mb-6 p-1 rounded-xl overflow-x-auto" style={{ background: 'rgba(255,255,255,0.1)' }}>
               {settingsTabs.map(tab => (
                 <button
                   key={tab.key}
