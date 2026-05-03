@@ -109,7 +109,6 @@ export default function ClientDashboard() {
                  </label>
                </div>
                <div className="flex-1 pb-1">
-                 <p className="text-gray-900 font-black text-3xl leading-tight">{user?.full_name || 'Pengguna'}</p>
                  <p className="text-gray-500 text-sm font-medium mt-1">{user?.email}</p>
                </div>
              </div>
