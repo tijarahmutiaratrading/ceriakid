@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 
-// All mini-games with age-group filtering
-const ALL_GAMES = [
-  { id: 'memory',     emoji: '🧠', title: 'Permainan Ingatan',   description: 'Cari pasangan kad yang sama!',           path: '/games/memory',     color: 'from-purple-500 to-pink-500',    level: 'Mudah',     ageGroups: ['prasekolah', 'sekolah_rendah'], subject: 'Umum', skills: ['Ingatan', 'Fokus'] },
-  { id: 'dragdrop',   emoji: '🎯', title: 'Padankan Huruf',      description: 'Seret huruf ke gambar yang betul.',       path: '/games/dragdrop',   color: 'from-blue-500 to-cyan-400',      level: 'Mudah',     ageGroups: ['prasekolah', 'sekolah_rendah'], subject: 'BM/BI', skills: ['Huruf', 'Perbendaharaan kata'] },
-  { id: 'wordbuilder',emoji: '📝', title: 'Bentuk Perkataan',    description: 'Susun huruf untuk bina perkataan!',       path: '/games/wordbuilder',color: 'from-green-500 to-emerald-400',  level: 'Sederhana', ageGroups: ['prasekolah', 'sekolah_rendah'], subject: 'BM',    skills: ['Ejaan', 'Kosa kata'] },
-  { id: 'sorting',    emoji: '🗂️', title: 'Isih Kategori',       description: 'Seret item ke kategori yang betul.',      path: '/games/sorting',    color: 'from-orange-500 to-yellow-400',  level: 'Sederhana', ageGroups: ['prasekolah', 'sekolah_rendah'], subject: 'Sains', skills: ['Klasifikasi', 'Alam sekitar'] },
-  { id: 'tracing',    emoji: '✏️', title: 'Seni Menulis',        description: 'Lukis huruf dengan garis panduan!',       path: '/games/tracing',    color: 'from-violet-500 to-purple-500',  level: 'Sederhana', ageGroups: ['prasekolah'],                  subject: 'BM',    skills: ['Menulis', 'Motor halus'] },
-  { id: 'story',      emoji: '📖', title: 'Petualangan Cerita',  description: 'Pilih jalan cerita yang tepat!',          path: '/games/story',      color: 'from-amber-500 to-orange-400',   level: 'Mudah',     ageGroups: ['prasekolah', 'sekolah_rendah'], subject: 'BM/BI', skills: ['Kefahaman', 'Keputusan'] },
-  { id: 'tilematch',  emoji: '🔢', title: 'Padankan 3 Sama',     description: 'Pilih 3 petak dengan nilai sama!',        path: '/games/tilematch',  color: 'from-pink-500 to-purple-500',    level: 'Sukar',     ageGroups: ['sekolah_rendah'],              subject: 'Math',  skills: ['Matematik', 'Tambah'] },
-  { id: 'physics',    emoji: '🚀', title: 'Lontarkan Bola',      description: 'Atur kuasa & sudut untuk kena sasaran!',  path: '/games/physics',    color: 'from-sky-500 to-blue-500',       level: 'Sukar',     ageGroups: ['sekolah_rendah'],              subject: 'Sains', skills: ['Fizik', 'Penaakulan'] },
-];
+// Mini game type metadata
+const MINI_GAME_META = {
+  memory: { emoji: '🧠', title: 'Permainan Ingatan', description: 'Cari pasangan kad yang sama!', path: '/games/memory', color: 'from-purple-500 to-pink-500', level: 'Mudah', skills: ['Ingatan', 'Fokus'] },
+  dragdrop: { emoji: '🎯', title: 'Padankan Huruf', description: 'Seret huruf ke gambar yang betul.', path: '/games/dragdrop', color: 'from-blue-500 to-cyan-400', level: 'Mudah', skills: ['Huruf', 'Perbendaharaan kata'] },
+  wordbuilder: { emoji: '📝', title: 'Bentuk Perkataan', description: 'Susun huruf untuk bina perkataan!', path: '/games/wordbuilder', color: 'from-green-500 to-emerald-400', level: 'Sederhana', skills: ['Ejaan', 'Kosa kata'] },
+  sorting: { emoji: '🗂️', title: 'Isih Kategori', description: 'Seret item ke kategori yang betul.', path: '/games/sorting', color: 'from-orange-500 to-yellow-400', level: 'Sederhana', skills: ['Klasifikasi', 'Alam sekitar'] },
+  tracing: { emoji: '✏️', title: 'Seni Menulis', description: 'Lukis huruf dengan garis panduan!', path: '/games/tracing', color: 'from-violet-500 to-purple-500', level: 'Sederhana', skills: ['Menulis', 'Motor halus'] },
+  story: { emoji: '📖', title: 'Petualangan Cerita', description: 'Pilih jalan cerita yang tepat!', path: '/games/story', color: 'from-amber-500 to-orange-400', level: 'Mudah', skills: ['Kefahaman', 'Keputusan'] },
+  tilematch: { emoji: '🔢', title: 'Padankan 3 Sama', description: 'Pilih 3 petak dengan nilai sama!', path: '/games/tilematch', color: 'from-pink-500 to-purple-500', level: 'Sukar', skills: ['Matematik', 'Tambah'] },
+  physics: { emoji: '🚀', title: 'Lontarkan Bola', description: 'Atur kuasa & sudut untuk kena sasaran!', path: '/games/physics', color: 'from-sky-500 to-blue-500', level: 'Sukar', skills: ['Fizik', 'Penaakulan'] },
+};
 
 const levelColors = {
   Mudah: 'bg-green-400/80 text-white',
@@ -24,7 +26,51 @@ const levelColors = {
 
 export default function GamesHub() {
   const { ageGroup } = useAgeGroup() || { ageGroup: 'prasekolah' };
-  const filteredGames = ALL_GAMES.filter(g => g.ageGroups.includes(ageGroup));
+  const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadGames = async () => {
+      try {
+        const gameIds = Object.keys(MINI_GAME_META);
+        const results = await Promise.all(
+          gameIds.map(id => base44.entities.Game.filter({ category: id, isPublished: true }))
+        );
+        
+        const loadedGames = [];
+        gameIds.forEach((id, i) => {
+          const dbGames = results[i] || [];
+          if (dbGames.length > 0) {
+            const meta = MINI_GAME_META[id];
+            dbGames.forEach(g => {
+              loadedGames.push({
+                id: g.id,
+                typeId: id,
+                emoji: meta.emoji,
+                title: meta.title,
+                description: meta.description,
+                path: meta.path,
+                color: meta.color,
+                level: meta.level,
+                skills: meta.skills,
+                ageGroup: g.ageGroup,
+              });
+            });
+          }
+        });
+        
+        setGames(loadedGames);
+      } catch (err) {
+        console.error('Failed to load mini games:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadGames();
+  }, []);
+
+  const filteredGames = games.filter(g => g.ageGroup === ageGroup);
 
   const GameCard = ({ game, idx }) => (
     <motion.div
@@ -95,11 +141,21 @@ export default function GamesHub() {
         </motion.div>
 
         {/* Games Grid */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          {filteredGames.map((game, idx) => (
-            <GameCard key={game.id} game={game} idx={idx} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center py-16">
+            <Loader2 className="w-8 h-8 animate-spin text-white" />
+          </div>
+        ) : filteredGames.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-white/70 text-lg font-semibold">Tiada mini games dijana lagi untuk peringkat ini</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            {filteredGames.map((game, idx) => (
+              <GameCard key={game.id} game={game} idx={idx} />
+            ))}
+          </div>
+        )}
 
         {/* Info card */}
         <motion.div
