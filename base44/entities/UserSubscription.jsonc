@@ -10,6 +10,9 @@
       "type": "string",
       "enum": [
         "free",
+        "asas",
+        "standard",
+        "keluarga",
         "premium",
         "pro"
       ],
@@ -17,7 +20,7 @@
     },
     "stripeCustomerId": {
       "type": "string",
-      "description": "Stripe customer ID"
+      "description": "Stripe/Chip customer or purchase ID"
     },
     "stripeSubscriptionId": {
       "type": "string",
@@ -50,6 +53,27 @@
       ],
       "default": "prasekolah",
       "description": "Currently selected age group"
+    },
+    "children": {
+      "type": "array",
+      "description": "List of children profiles",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "ageGroup": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "required": [

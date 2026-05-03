@@ -4,6 +4,7 @@ import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import AppHeader from '@/components/AppHeader';
 import { base44 } from '@/api/base44Client';
+import { Link } from 'react-router-dom';
 
 const AGE_OPTIONS = [
   { value: 'prasekolah', label: 'Prasekolah', sub: '3–5 tahun', emoji: '🎨' },
@@ -17,19 +18,26 @@ export default function ChildrenProfiles() {
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
+  const [userTier, setUserTier] = useState('free');
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ name: '', ageGroup: 'prasekolah' });
   const [error, setError] = useState('');
 
-  const MAX_CHILDREN = 4;
+  // Max children based on tier: free/asas/standard = 1, keluarga = 4
+  const MAX_CHILDREN = ['keluarga', 'pro'].includes(userTier) ? 4 : 1;
 
   useEffect(() => {
-    if (user) loadChildren();
+    if (user) {
+      loadChildren();
+      base44.entities.UserSubscription.filter({ email: user.email }).then(subs => {
+        if (subs?.[0]) setUserTier(subs[0].tier || 'free');
+      });
+    }
   }, [user]);
 
   const loadChildren = async () => {
     try {
-      const subscriptions = await base44.asServiceRole.entities.UserSubscription.filter({ email: user.email });
+      const subscriptions = await base44.entities.UserSubscription.filter({ email: user.email });
       setChildren(subscriptions[0]?.children || []);
     } catch (err) {
       setChildren([]);
@@ -39,9 +47,12 @@ export default function ChildrenProfiles() {
   };
 
   const saveChildren = async (updatedChildren) => {
-    const subscriptions = await base44.asServiceRole.entities.UserSubscription.filter({ email: user.email });
+    const subscriptions = await base44.entities.UserSubscription.filter({ email: user.email });
     if (subscriptions[0]) {
-      await base44.asServiceRole.entities.UserSubscription.update(subscriptions[0].id, { children: updatedChildren });
+      await base44.entities.UserSubscription.update(subscriptions[0].id, { children: updatedChildren });
+    } else {
+      // Create subscription record if doesn't exist
+      await base44.entities.UserSubscription.create({ email: user.email, tier: 'free', status: 'active', children: updatedChildren });
     }
   };
 
@@ -125,7 +136,7 @@ export default function ChildrenProfiles() {
               <p className="text-white/70 text-xs font-semibold">{children.length}/{MAX_CHILDREN} anak terdaftar</p>
             </div>
           </div>
-          {children.length < MAX_CHILDREN && !showForm && (
+          {children.length < MAX_CHILDREN && !showForm ? (
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah' }); }}
@@ -133,7 +144,13 @@ export default function ChildrenProfiles() {
             >
               <Plus className="w-4 h-4" /> Tambah
             </motion.button>
-          )}
+          ) : children.length >= MAX_CHILDREN && !['keluarga', 'pro'].includes(userTier) ? (
+            <Link to="/">
+              <motion.button whileTap={{ scale: 0.95 }} className="flex items-center gap-2 bg-yellow-400 text-yellow-900 rounded-2xl px-3 py-2 font-black text-xs shadow-lg">
+                👑 Naik Taraf
+              </motion.button>
+            </Link>
+          ) : null}
         </motion.div>
 
         {/* Error */}

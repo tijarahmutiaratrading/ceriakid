@@ -33,7 +33,9 @@ export default function Home() {
   React.useEffect(() => {
     if (!isAuthenticated || !user?.email) return;
     base44.entities.UserSubscription.filter({ email: user.email }).then(async (subs) => {
-      const tier = subs?.[0]?.tier || 'free';
+      const sub = subs?.[0];
+      const isExpired = sub?.currentPeriodEnd && new Date(sub.currentPeriodEnd) < new Date();
+      const tier = (sub && !isExpired) ? (sub.tier || 'free') : 'free';
       const result = await checkAndRegisterDevice(user.email, tier);
       setDeviceCheck({ status: result.allowed ? 'allowed' : 'blocked', devices: result.devices, tier });
     });

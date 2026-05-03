@@ -9,6 +9,7 @@ import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
 import GameListCard from '@/components/game/GameListCard';
 import AppHeader from '@/components/AppHeader';
+import { useSelectedChild } from '@/lib/SelectedChildContext';
 
 const getCategoryLabel = (category, lang) => {
   const labels = {
@@ -82,6 +83,7 @@ export default function GamesList() {
   const { user, isAuthenticated } = useAuth();
   const { ageGroup } = useAgeGroup();
   const { lang } = useLang();
+  const { selectedChild } = useSelectedChild();
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState({});
   const [selectedDarjah, setSelectedDarjah] = useState(null);
@@ -100,14 +102,16 @@ export default function GamesList() {
   const loadUserTier = async () => {
     try {
       const subs = await base44.entities.UserSubscription.filter({ email: user.email });
-      if (subs.length > 0 && subs[0].status === 'active') {
-        setUserTier(subs[0].tier || 'free');
-      }
-      
-      // Check if user is in active free trial
-      const userProfile = await base44.auth.me();
-      if (userProfile?.trialActive) {
-        setUserTier('trial');
+      if (subs.length > 0) {
+        const sub = subs[0];
+        const isExpired = sub.currentPeriodEnd && new Date(sub.currentPeriodEnd) < new Date();
+        if ((sub.status === 'active' || sub.status === 'trial') && !isExpired) {
+          setUserTier(sub.tier || 'free');
+        }
+        // If trial expired, keep as free
+        if (sub.status === 'trial' && isExpired) {
+          setUserTier('free');
+        }
       }
     } catch (e) {
       // default free
@@ -191,13 +195,14 @@ export default function GamesList() {
     if (user && category) {
       loadProgress();
     }
-  }, [user, category]);
+  }, [user, category, selectedChild]);
 
   const loadProgress = async () => {
     try {
+      const childName = selectedChild?.name || user.full_name || 'Default';
       const progressData = await base44.entities.ChildGameProgress.filter({
         userEmail: user.email,
-        childName: user.full_name || 'Default',
+        childName,
       });
       const progressMap = {};
       progressData.forEach(p => {
@@ -277,6 +282,28 @@ export default function GamesList() {
                 </motion.button>
               ))}
             </div>
+          </motion.div>
+        )}
+
+        {/* Tier restriction banner */}
+        {((userTier === 'standard' && ageGroup === 'prasekolah') || (userTier === 'asas' && ageGroup === 'sekolah_rendah')) && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 p-4 rounded-2xl"
+            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,200,0,0.4)' }}
+          >
+            <p className="text-white font-black text-sm mb-1">🔒 Pelan Anda Tidak Merangkumi Ini</p>
+            <p className="text-white/80 text-xs mb-3">
+              {userTier === 'standard'
+                ? 'Pelan Standard hanya untuk Sekolah Rendah. Naik taraf ke Keluarga untuk akses Prasekolah juga!'
+                : 'Pelan Asas hanya untuk Prasekolah. Naik taraf ke Keluarga untuk akses Sekolah Rendah juga!'}
+            </p>
+            <Link to="/">
+              <motion.button whileTap={{ scale: 0.95 }} className="px-4 py-2 bg-white text-purple-600 rounded-full font-black text-xs shadow-lg">
+                👑 Naik Taraf ke Keluarga →
+              </motion.button>
+            </Link>
           </motion.div>
         )}
 

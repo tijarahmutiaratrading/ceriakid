@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 // Device limits per subscription tier
 export const DEVICE_LIMITS = {
   free: 1,
+  trial: 1,
   asas: 1,
   standard: 2,
   premium: 2,

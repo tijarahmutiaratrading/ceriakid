@@ -18,9 +18,24 @@ export default function FreeTrialButton({ onTrialStarted }) {
     setLoading(true);
 
     try {
+      // Check if already had trial before
+      const userProfile = await base44.auth.me();
+      if (userProfile?.trialStartDate) {
+        const trialStart = new Date(userProfile.trialStartDate);
+        const now = new Date();
+        const daysSinceTrial = (now - trialStart) / (1000 * 60 * 60 * 24);
+        if (daysSinceTrial > 7) {
+          setError('Trial percuma anda telah tamat. Sila pilih pelan untuk teruskan.');
+          setLoading(false);
+          return;
+        }
+      }
+
       // Upsert trial subscription (avoid duplicates)
+      const trialEnd = new Date();
+      trialEnd.setDate(trialEnd.getDate() + 7);
       const existing = await base44.entities.UserSubscription.filter({ email: user.email });
-      const subData = { email: user.email, tier: 'free', status: 'active', selectedAgeGroup: 'prasekolah' };
+      const subData = { email: user.email, tier: 'free', status: 'trial', selectedAgeGroup: 'prasekolah', currentPeriodEnd: trialEnd.toISOString() };
       if (existing.length > 0) {
         await base44.entities.UserSubscription.update(existing[0].id, subData);
       } else {
@@ -28,10 +43,12 @@ export default function FreeTrialButton({ onTrialStarted }) {
       }
 
       // Save trial start date to user metadata
-      await base44.auth.updateMe({
-        trialStartDate: new Date().toISOString(),
-        trialActive: true,
-      });
+      if (!userProfile?.trialStartDate) {
+        await base44.auth.updateMe({
+          trialStartDate: new Date().toISOString(),
+          trialActive: true,
+        });
+      }
 
       onTrialStarted?.();
       window.location.href = '/dashboard';

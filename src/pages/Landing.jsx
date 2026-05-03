@@ -242,11 +242,12 @@ export default function Landing() {
                 
                 🎮 Bayar Sekarang <ArrowRight className="w-4 h-4" />
               </motion.button>
-              <Link to="/dashboard">
-                <button className="bg-transparent text-[hsl(var(--card-foreground))] px-6 py-3 text-base font-bold rounded-full border-2 border-orange-500 hover:border-orange-600 hover:bg-orange-50 transition-colors w-full sm:w-auto">
-                  🎁 Cuba Percuma 7 Hari
-                </button>
-              </Link>
+              <button
+                onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
+                className="bg-transparent text-gray-700 px-6 py-3 text-base font-bold rounded-full border-2 border-orange-500 hover:border-orange-600 hover:bg-orange-50 transition-colors w-full sm:w-auto"
+              >
+                🎁 Cuba Percuma 7 Hari
+              </button>
             </motion.div>
 
             {/* Trust badges */}

@@ -68,7 +68,13 @@ export default function SubscriptionWidget({ userEmail }) {
         <div>
           <h3 className="font-black text-lg">{tierLabels[subscription?.tier || 'free']}</h3>
           <p className="text-xs opacity-90 mt-1">
-            {isExpired ? '⚠️ Langganan Tamat' : subscription?.status === 'active' ? '✅ Aktif' : '❌ Tidak Aktif'}
+            {isExpired
+              ? '⚠️ Langganan Tamat'
+              : subscription?.status === 'active'
+              ? '✅ Aktif'
+              : subscription?.status === 'incomplete'
+              ? '⏳ Menunggu Pengesahan Bayaran'
+              : '❌ Tidak Aktif'}
           </p>
         </div>
         {subscription?.tier !== 'free' && (

@@ -45,6 +45,7 @@ import TracingGameGamified from '@/pages/games/TracingGameGamified';
 
 import Footer from '@/components/Footer';
 import OfflineBanner from '@/components/OfflineBanner';
+import AdminGuard from '@/components/AdminGuard';
 
 const AuthenticatedApp = () => {
   const authContext = useAuth();
@@ -77,16 +78,16 @@ const AuthenticatedApp = () => {
           {/* Public pages - check if not authenticated */}
           <Route path="/" element={<Landing />} />
           <Route path="/dashboard" element={<Home />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/admin-game-manager" element={<AdminGameManager />} />
-          <Route path="/game-analytics" element={<GameAnalytics />} />
-          <Route path="/game-database" element={<GameDatabase />} />
+          <Route path="/admin-dashboard" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
+          <Route path="/admin-game-manager" element={<AdminGuard><AdminGameManager /></AdminGuard>} />
+          <Route path="/game-analytics" element={<AdminGuard><GameAnalytics /></AdminGuard>} />
+          <Route path="/game-database" element={<AdminGuard><GameDatabase /></AdminGuard>} />
 
           <Route path="/settings" element={<ClientDashboard />} />
           <Route path="/children-profiles" element={<ChildrenProfiles />} />
           <Route path="/games-hub" element={<GamesHub />} />
           <Route path="/bbm" element={<BBMHub />} />
-          <Route path="/admin-bbm-generator" element={<AdminBBMGenerator />} />
+          <Route path="/admin-bbm-generator" element={<AdminGuard><AdminBBMGenerator /></AdminGuard>} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
           <Route path="/parent-dashboard" element={<ParentDashboard />} />
