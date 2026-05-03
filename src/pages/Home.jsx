@@ -97,7 +97,7 @@ export default function Home() {
           >
             <div className="flex items-center gap-3">
               <span className="text-3xl">🎓</span>
-              <p className="text-white font-black text-lg">Jom Belajar!</p>
+              <p className="text-white font-black text-lg">CeriaKid!</p>
             </div>
             <motion.button
               whileTap={{ scale: 0.95 }}
