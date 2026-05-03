@@ -570,10 +570,13 @@ export default function AdminGameManager() {
           {tab === 'minigames' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Status Section */}
-            <div className="p-6 rounded-3xl mb-5" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="font-black text-white">📊 Mini Games Status</h2>
-                <button onClick={loadMiniGamesData} disabled={loadingMiniGames} className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all">
+            <div className="p-6 rounded-3xl mb-5" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <h2 className="font-black text-white text-lg">🎮 Mini Games Status</h2>
+                  <p className="text-white/50 text-xs mt-0.5">Lihat bilangan games untuk setiap mini game</p>
+                </div>
+                <button onClick={loadMiniGamesData} disabled={loadingMiniGames} className="p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all">
                   <RefreshCw className={`w-4 h-4 text-white/70 ${loadingMiniGames ? 'animate-spin' : ''}`} />
                 </button>
               </div>
@@ -583,29 +586,31 @@ export default function AdminGameManager() {
               ) : (
                 <>
                   {/* Mobile carousel */}
-                  <div className="sm:hidden flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
+                  <div className="sm:hidden flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
                     {['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'].map(gameId => {
                       const data = miniGamesData[gameId] || { count: 0, totalQuestions: 0 };
                       const shortNames = { memory: '🧠', dragdrop: '🎯', wordbuilder: '📝', sorting: '🔄', tilematch: '🎮', story: '📖', physics: '⚡', tracing: '✏️' };
+                      const colors = { memory: 'from-purple-400 to-purple-500', dragdrop: 'from-blue-400 to-blue-500', wordbuilder: 'from-pink-400 to-pink-500', sorting: 'from-green-400 to-green-500', tilematch: 'from-yellow-400 to-yellow-500', story: 'from-red-400 to-red-500', physics: 'from-indigo-400 to-indigo-500', tracing: 'from-cyan-400 to-cyan-500' };
                       return (
-                        <div key={gameId} className="bg-white/10 rounded-xl p-2 text-center border border-white/20 flex-shrink-0 w-20">
-                          <p className="text-white font-bold text-sm mb-1">{shortNames[gameId]}</p>
-                          <p className="text-white/70 text-base font-bold">{data.count}</p>
-                          <p className="text-white/50 text-xs">games</p>
+                        <div key={gameId} className={`bg-gradient-to-br ${colors[gameId]} rounded-2xl p-3 text-center flex-shrink-0 w-24 shadow-lg`}>
+                          <p className="text-white font-black text-xl mb-1">{shortNames[gameId]}</p>
+                          <p className="text-white text-lg font-black">{data.count}</p>
+                          <p className="text-white/80 text-xs font-semibold">games</p>
                         </div>
                       );
                     })}
                   </div>
                   {/* Desktop grid */}
-                  <div className="hidden sm:grid sm:grid-cols-4 gap-2">
+                  <div className="hidden sm:grid sm:grid-cols-4 gap-3">
                     {['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'].map(gameId => {
                       const data = miniGamesData[gameId] || { count: 0, totalQuestions: 0 };
                       const gameNames = { memory: '🧠 Memory', dragdrop: '🎯 Drag&Drop', wordbuilder: '📝 Word', sorting: '🔄 Sort', tilematch: '🎮 Tile', story: '📖 Story', physics: '⚡ Physics', tracing: '✏️ Tracing' };
+                      const colors = { memory: 'from-purple-400 to-purple-500', dragdrop: 'from-blue-400 to-blue-500', wordbuilder: 'from-pink-400 to-pink-500', sorting: 'from-green-400 to-green-500', tilematch: 'from-yellow-400 to-yellow-500', story: 'from-red-400 to-red-500', physics: 'from-indigo-400 to-indigo-500', tracing: 'from-cyan-400 to-cyan-500' };
                       return (
-                        <div key={gameId} className="bg-white/10 rounded-xl p-2 sm:p-3 text-center border border-white/20">
-                          <p className="text-white font-bold text-xs sm:text-sm mb-1">{gameNames[gameId]}</p>
-                          <p className="text-white/70 text-sm sm:text-base font-bold">{data.count}</p>
-                          <p className="text-white/50 text-xs">games</p>
+                        <div key={gameId} className={`bg-gradient-to-br ${colors[gameId]} rounded-2xl p-4 text-center shadow-lg hover:shadow-xl transition-all`}>
+                          <p className="text-white font-black text-sm mb-2">{gameNames[gameId]}</p>
+                          <p className="text-white text-2xl font-black">{data.count}</p>
+                          <p className="text-white/80 text-xs font-semibold">games</p>
                         </div>
                       );
                     })}
