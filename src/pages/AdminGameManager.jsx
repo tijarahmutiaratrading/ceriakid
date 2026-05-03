@@ -371,7 +371,7 @@ export default function AdminGameManager() {
             {/* Config */}
             <div className="p-6 rounded-3xl mb-5" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <h2 className="font-black text-white mb-4">⚙️ Konfigurasi Generation</h2>
-              <div className="grid grid-cols-2 gap-4 mb-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                 <div>
                   <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">🎮 Bilangan Games</label>
                   <input type="number" min="1" max="100" value={genConfig.games}
