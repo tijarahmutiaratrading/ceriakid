@@ -49,7 +49,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
       dashboardItems = [
         { path: '/dashboard', emoji: '📊', label: 'Dashboard Pengguna' },
         { path: '/settings', emoji: '⚙️', label: 'Tetapan' },
-        { path: '/games/bahasa_melayu', emoji: '🎮', label: 'Permainan' },
       ];
     }
     
@@ -177,7 +176,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 )
               )}
 
-              {/* Dashboard section */}
+              {/* Dashboard section - without games link */}
               {dashboardItems.length > 0 && (
                 <>
                   <p className="text-xs font-black text-white/50 uppercase tracking-wider px-3 pt-4 pb-1">Dashboard</p>
