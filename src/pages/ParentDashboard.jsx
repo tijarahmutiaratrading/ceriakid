@@ -97,7 +97,7 @@ export default function ParentDashboard() {
   };
 
   const shareToWhatsApp = (childName, stats) => {
-    const message = `🎓 Prestasi ${childName} di Jom Belajar!\n\n📊 ${stats.totalGames} permainan diselesaikan\n⭐ ${stats.avgStars} bintang rata-rata\n\nCubit terus! 💪`;
+    const message = `🎓 Prestasi ${childName} di CeriaKid!\n\n📊 ${stats.totalGames} permainan diselesaikan\n⭐ ${stats.avgStars} bintang rata-rata\n\nCubit terus! 💪`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -109,13 +109,13 @@ export default function ParentDashboard() {
   };
 
   const shareToTwitter = (childName, stats) => {
-    const message = `🎓 Prestasi ${childName} di @JomBelajarMY:\n${stats.totalGames} permainan, ${stats.avgStars}⭐ rata-rata!\n\n#Pendidikan #Pembelajaran #JomBelajar`;
+    const message = `🎓 Prestasi ${childName} di @CeriaKidMY:\n${stats.totalGames} permainan, ${stats.avgStars}⭐ rata-rata!\n\n#Pendidikan #Pembelajaran #CeriaKid`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
     window.open(twitterUrl, '_blank');
   };
 
   const exportAsText = (childName, stats) => {
-    const text = `LAPORAN PRESTASI ${childName.toUpperCase()}\n${'='.repeat(40)}\n\nTanggal: ${new Date().toLocaleDateString('ms-MY')}\n\nRINGKASAN PRESTASI:\n- Total Permainan: ${stats.totalGames}\n- Rata-rata Bintang: ${stats.avgStars}/3\n- Status: ${stats.avgStars >= 2.5 ? 'Cemerlang! 🔥' : 'Terus Berkembang ✨'}\n\nUntuk laporan detail, masuk ke aplikasi Jom Belajar.\n\n🎓 Jom Belajar - Platform Pembelajaran Anak`;
+    const text = `LAPORAN PRESTASI ${childName.toUpperCase()}\n${'='.repeat(40)}\n\nTanggal: ${new Date().toLocaleDateString('ms-MY')}\n\nRINGKASAN PRESTASI:\n- Total Permainan: ${stats.totalGames}\n- Rata-rata Bintang: ${stats.avgStars}/3\n- Status: ${stats.avgStars >= 2.5 ? 'Cemerlang! 🔥' : 'Terus Berkembang ✨'}\n\nUntuk laporan detail, masuk ke aplikasi CeriaKid.\n\n🎓 CeriaKid - Platform Pembelajaran Anak`;
     const element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', `prestasi-${childName}-${new Date().getTime()}.txt`);

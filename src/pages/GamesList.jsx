@@ -159,9 +159,9 @@ export default function GamesList() {
     return globalIdx >= 5; // free
   }, [isAuthenticated, userTier, ageGroup]);
 
-  // Poll for game updates every 10 seconds
+  // Poll for game updates every 60 seconds (reduced from 10s)
   useEffect(() => {
-    const interval = setInterval(loadGamesData, 10000);
+    const interval = setInterval(loadGamesData, 60000);
     return () => clearInterval(interval);
   }, [ageGroup, category]);
 

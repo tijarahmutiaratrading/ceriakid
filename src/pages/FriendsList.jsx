@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Share2, Trash2, Users, Copy, Check } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
@@ -10,7 +10,16 @@ export default function FriendsList() {
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
-  const [inviteCode] = useState(() => Math.random().toString(36).substring(2, 8).toUpperCase());
+  // Stable invite code tied to user email so it doesn't change on re-render
+  const inviteCode = useMemo(() => {
+    if (!user?.email) return '------';
+    // Generate deterministic code from email
+    let hash = 0;
+    for (let i = 0; i < user.email.length; i++) {
+      hash = (hash * 31 + user.email.charCodeAt(i)) & 0xffffffff;
+    }
+    return Math.abs(hash).toString(36).substring(0, 6).toUpperCase();
+  }, [user?.email]);
 
   useEffect(() => {
     if (!isAuthenticated) {
