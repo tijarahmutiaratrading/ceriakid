@@ -1,0 +1,53 @@
+{
+  "name": "GameTask",
+  "type": "object",
+  "properties": {
+    "taskName": {
+      "type": "string"
+    },
+    "ageGroup": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "gamesCount": {
+      "type": "number"
+    },
+    "questionsPerGame": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "default": "pending"
+    },
+    "createdGames": {
+      "type": "number",
+      "default": 0
+    },
+    "errorMessage": {
+      "type": "string"
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "taskName",
+    "ageGroup",
+    "subject",
+    "gamesCount",
+    "questionsPerGame"
+  ]
+}

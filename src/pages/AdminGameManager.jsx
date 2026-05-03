@@ -1089,38 +1089,28 @@ export default function AdminGameManager() {
                   <button
                   onClick={async () => {
                     setActionLoading('execute-all');
+                    showToast('⏳ Menghantar tasks ke queue...', true);
 
-                    // Mark all as "running" immediately for UI feedback
-                    setTaskProgress(regenerationTasks.map(t => ({ taskId: t.taskId, status: 'running', message: 'Dihantar ke server...' })));
-                    showToast('🚀 Tasks dihantar ke server — boleh tutup browser!', true);
-
-                    // Fire-and-forget: single backend call processes all tasks server-side
-                    // Browser can close — server will finish on its own
-                    base44.functions.invoke('processGameTasksBackground', {
-                      tasks: regenerationTasks
-                    }).then(async (res) => {
-                      const results = res.data?.results || [];
-                      setTaskProgress(results.map(r => ({
-                        taskId: r.taskId,
-                        status: 'completed',
-                        message: `✅ ${r.createdGames}/${r.totalGames} games created`
-                      })));
-                      showToast(`✅ Selesai! ${res.data?.totalCreated || 0} games dicipta.`);
-                      await fetchStats();
-                      setActionLoading(null);
+                    try {
+                      // Queue all tasks into DB — automation will process them
+                      for (const task of regenerationTasks) {
+                        await base44.entities.GameTask.create({
+                          taskName: task.taskName,
+                          ageGroup: task.ageGroup,
+                          subject: task.subject,
+                          gamesCount: task.gamesCount,
+                          questionsPerGame: task.questionsPerGame,
+                          status: 'pending',
+                        });
+                      }
+                      showToast(`✅ ${regenerationTasks.length} tasks dalam queue! Automation akan proses setiap 5 minit. Boleh tutup browser.`);
                       setRegenerationTasks(null);
                       setTaskProgress([]);
-                    }).catch(err => {
+                    } catch (err) {
                       showToast('❌ Error: ' + err.message, false);
+                    } finally {
                       setActionLoading(null);
-                    });
-
-                    // Close modal immediately — backend runs independently
-                    setTimeout(() => {
-                      setRegenerationTasks(null);
-                      setTaskProgress([]);
-                      setActionLoading(null);
-                    }, 3000);
+                    }
                   }}
                   disabled={actionLoading === 'execute-all'}
                   className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg disabled:opacity-50">
