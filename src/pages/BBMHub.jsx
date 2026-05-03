@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Lock, Search, BookOpen, FileText, Star } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 import { Link } from 'react-router-dom';
 import AppHeader from '@/components/AppHeader';
 import { base44 } from '@/api/base44Client';
@@ -72,43 +73,120 @@ export default function BBMHub() {
 
   const isPremiumUser = ['premium', 'pro', 'keluarga', 'standard', 'asas'].includes(userTier);
 
-  const generateSimpleHTML = (resource) => {
-    return `<!DOCTYPE html><html><head><title>${resource.title}</title>
-<style>body{font-family:Arial,sans-serif;padding:30px;max-width:800px;margin:0 auto}
-h1{color:#6d28d9;text-align:center;margin-bottom:5px}
-.meta{text-align:center;color:#7c3aed;margin-bottom:20px;font-size:14px}
-.content{border:2px solid #7c3aed;border-radius:12px;padding:20px;min-height:400px}
-.placeholder{text-align:center;color:#9ca3af;padding:40px;font-size:16px}
-.footer{text-align:center;margin-top:20px;color:#6d28d9;font-size:12px}
-@media print{button{display:none}}</style></head>
-<body>
-<h1>${resource.emoji || '📄'} ${resource.title}</h1>
-<div class="meta">${resource.description || ''} | ${resource.level} | ${resource.subject}</div>
-<div class="content">
-<div class="placeholder">
-<p style="font-size:48px">${resource.emoji || '📄'}</p>
-<p><b>${resource.title}</b></p>
-<p style="margin-top:10px">${resource.description || 'Bahan bantu mengajar'}</p>
-<p style="margin-top:20px;color:#6d28d9">Tekan Ctrl+P / Cmd+P untuk print atau save sebagai PDF</p>
-</div>
-</div>
-<div class="footer">CeriaKid Educational Platform | Malaysia</div>
-</body></html>`;
+  const generatePDF = (resource) => {
+    const doc = new jsPDF();
+    const pageW = doc.internal.pageSize.getWidth();
+
+    // Header background
+    doc.setFillColor(109, 40, 217);
+    doc.rect(0, 0, pageW, 40, 'F');
+
+    // Title
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    const title = `${resource.title}`;
+    doc.text(title, pageW / 2, 20, { align: 'center', maxWidth: pageW - 20 });
+
+    // Subtitle
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('CeriaKid Educational Platform | Malaysia', pageW / 2, 32, { align: 'center' });
+
+    // Meta info
+    doc.setTextColor(80, 80, 80);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Maklumat BBM', 14, 55);
+
+    doc.setDrawColor(109, 40, 217);
+    doc.line(14, 57, pageW - 14, 57);
+
+    const levelMap = { prasekolah: 'Prasekolah', darjah_1: 'Darjah 1', darjah_2: 'Darjah 2', darjah_3: 'Darjah 3', darjah_4: 'Darjah 4', darjah_5: 'Darjah 5', darjah_6: 'Darjah 6' };
+    const subjectMap = { bahasa_melayu: 'Bahasa Melayu', english: 'English', mathematics: 'Matematik', science: 'Sains', jawi: 'Jawi', bahasa_tamil: 'Bahasa Tamil', bahasa_mandarin: 'Bahasa Mandarin' };
+    const typeMap = { lembaran_kerja: 'Lembaran Kerja', kad_imbasan: 'Kad Imbasan', carta: 'Carta', slaid_powerpoint: 'Slaid PowerPoint', rancangan_pengajaran: 'Rancangan Pengajaran', modul: 'Modul', kuiz: 'Kuiz', aktiviti: 'Aktiviti', permainan_bilik_darjah: 'Permainan Bilik Darjah' };
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(60, 60, 60);
+    const meta = [
+      ['Tahap', levelMap[resource.level] || resource.level || '-'],
+      ['Subjek', subjectMap[resource.subject] || resource.subject || '-'],
+      ['Jenis BBM', typeMap[resource.type] || resource.type || '-'],
+      ['Tier', resource.tier === 'premium' ? 'Premium' : 'Percuma'],
+    ];
+    meta.forEach(([label, value], i) => {
+      const y = 66 + i * 9;
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${label}:`, 14, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(value, 55, y);
+    });
+
+    // Description
+    if (resource.description) {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(80, 80, 80);
+      doc.text('Penerangan', 14, 108);
+      doc.line(14, 110, pageW - 14, 110);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(60, 60, 60);
+      const descLines = doc.splitTextToSize(resource.description, pageW - 28);
+      doc.text(descLines, 14, 118);
+    }
+
+    // Content area placeholder
+    const contentY = resource.description ? 140 : 108;
+    doc.setFillColor(245, 240, 255);
+    doc.roundedRect(14, contentY, pageW - 28, 100, 5, 5, 'F');
+    doc.setDrawColor(109, 40, 217);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(14, contentY, pageW - 28, 100, 5, 5, 'S');
+
+    doc.setTextColor(109, 40, 217);
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Ruang Aktiviti / Latihan', pageW / 2, contentY + 20, { align: 'center' });
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(150, 120, 200);
+    doc.text('Bahan ini dijana oleh CeriaKid. Boleh diedit dan digunakan untuk pengajaran.', pageW / 2, contentY + 32, { align: 'center' });
+
+    // Lines for writing space
+    doc.setDrawColor(200, 180, 240);
+    doc.setLineWidth(0.3);
+    for (let i = 0; i < 6; i++) {
+      const ly = contentY + 45 + i * 12;
+      doc.line(25, ly, pageW - 25, ly);
+    }
+
+    // Footer
+    doc.setFillColor(109, 40, 217);
+    doc.rect(0, 282, pageW, 15, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(8);
+    doc.text('© CeriaKid | ceriakid.com | Bahan Bantu Mengajar Malaysia', pageW / 2, 291, { align: 'center' });
+
+    doc.save(`${resource.title}.pdf`);
   };
 
   const handleDownload = async (resource) => {
     if (resource.tier === 'premium' && !isPremiumUser) return;
+
     if (resource.fileUrl) {
-      window.open(resource.fileUrl, '_blank');
+      // Direct file download
+      const a = document.createElement('a');
+      a.href = resource.fileUrl;
+      a.download = `${resource.title}.pdf`;
+      a.target = '_blank';
+      a.click();
     } else {
-      // Open HTML content or generate simple placeholder
-      const html = resource.htmlContent || generateSimpleHTML(resource);
-      const win = window.open('', '_blank');
-      if (win) {
-        win.document.write(html);
-        win.document.close();
-      }
+      // Generate PDF
+      generatePDF(resource);
     }
+
     // Increment download count silently
     try {
       if (resource.id && !resource.id.startsWith('s')) {
