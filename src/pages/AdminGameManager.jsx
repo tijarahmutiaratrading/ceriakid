@@ -158,6 +158,33 @@ export default function AdminGameManager() {
   const [managerSearch, setManagerSearch] = useState('');
   const [managerAgeFilter, setManagerAgeFilter] = useState('all');
 
+  // Mini Games Hub Data
+  const [miniGamesData, setMiniGamesData] = useState({});
+  const [loadingMiniGames, setLoadingMiniGames] = useState(false);
+
+  const loadMiniGamesData = async () => {
+    setLoadingMiniGames(true);
+    try {
+      const gameIds = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
+      const results = await Promise.all(
+        gameIds.map(id => base44.entities.Game.filter({ category: id, isPublished: true }))
+      );
+      const data = {};
+      gameIds.forEach((id, i) => {
+        const games = results[i] || [];
+        data[id] = { count: games.length, totalQuestions: games.reduce((sum, g) => sum + (g.gameData?.questions?.length || 0), 0) };
+      });
+      setMiniGamesData(data);
+    } catch (err) {
+      showToast('❌ Failed to load mini games data', false);
+    }
+    setLoadingMiniGames(false);
+  };
+
+  useEffect(() => {
+    if (tab === 'minigames') loadMiniGamesData();
+  }, [tab]);
+
 
 
   const fetchStats = async () => {
@@ -529,6 +556,34 @@ export default function AdminGameManager() {
             {/* ══════════════ MINI GAMES HUB TAB ══════════════ */}
           {tab === 'minigames' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            {/* Status Section */}
+            <div className="p-6 rounded-3xl mb-5" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-black text-white">📊 Mini Games Status</h2>
+                <button onClick={loadMiniGamesData} disabled={loadingMiniGames} className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all">
+                  <RefreshCw className={`w-4 h-4 text-white/70 ${loadingMiniGames ? 'animate-spin' : ''}`} />
+                </button>
+              </div>
+
+              {loadingMiniGames ? (
+                <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'].map(gameId => {
+                    const data = miniGamesData[gameId] || { count: 0, totalQuestions: 0 };
+                    const gameNames = { memory: '🧠 Memory', dragdrop: '🎯 Drag&Drop', wordbuilder: '📝 Word', sorting: '🔄 Sort', tilematch: '🎮 Tile', story: '📖 Story', physics: '⚡ Physics', tracing: '✏️ Tracing' };
+                    return (
+                      <div key={gameId} className="bg-white/10 rounded-2xl p-3 text-center border border-white/20">
+                        <p className="text-white font-bold text-sm mb-2">{gameNames[gameId]}</p>
+                        <p className="text-white/70 text-xs">{data.count} games</p>
+                        <p className="text-white/50 text-xs">{data.totalQuestions} soalan</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {/* Mini Games Sub-tabs */}
             <div className="flex gap-2 mb-6 p-1 rounded-2xl overflow-x-auto" style={{ background: 'rgba(255,255,255,0.1)' }}>
               {[
