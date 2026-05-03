@@ -113,17 +113,24 @@ export default function GamePlayer() {
     if (!game?.gameData?.questions) return [];
     const baseQuestions = game.gameData.questions.slice(0, game.totalQuestions || 20);
     
-    // Shuffle answer options while tracking correct answer
-    return baseQuestions.map(q => {
+    // Shuffle answer options with a stable seeded shuffle (no re-shuffle on re-render)
+    return baseQuestions.map((q, qIdx) => {
       if (!Array.isArray(q.options) || q.options.length <= 1) return q;
       
       const optionsWithIndex = q.options.map((opt, idx) => ({ opt, isCorrect: idx === q.answer }));
-      const shuffled = optionsWithIndex.sort(() => Math.random() - 0.5);
+      // Use Fisher-Yates with a deterministic seed based on question index to prevent re-shuffle
+      const arr = [...optionsWithIndex];
+      let seed = qIdx + 1;
+      const rand = () => { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; };
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rand() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
       
       return {
         ...q,
-        options: shuffled.map(x => x.opt),
-        answer: shuffled.findIndex(x => x.isCorrect),
+        options: arr.map(x => x.opt),
+        answer: arr.findIndex(x => x.isCorrect),
       };
     });
   }, [game]);
