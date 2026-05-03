@@ -81,7 +81,12 @@ export default function AdminGameManager() {
     setLoadingTasks(true);
     try {
       const data = await base44.entities.GameTask.list('-created_date', 50);
-      setTasks(data);
+      // Filter out mini game tasks (only show regular game generation tasks)
+      const regularTasks = data.filter(t => {
+        const miniGameSubjects = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
+        return !miniGameSubjects.includes(t.subject);
+      });
+      setTasks(regularTasks);
     } catch {}
     setLoadingTasks(false);
   };

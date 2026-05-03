@@ -17,11 +17,9 @@ export default function MiniGamesManager({ onToast }) {
   const loadTasks = async () => {
     setLoadingTasks(true);
     try {
-      const data = await base44.entities.GameTask.list('-created_date', 50);
-      const miniGameTasks = data.filter(t => {
-        const gameIds = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
-        return gameIds.includes(t.subject);
-      });
+      const miniGameSubjects = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
+      const data = await base44.entities.GameTask.list('-created_date', 100);
+      const miniGameTasks = data.filter(t => miniGameSubjects.includes(t.subject));
       setTasks(miniGameTasks);
     } catch {}
     setLoadingTasks(false);
