@@ -24,6 +24,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   const otherItems = [
     { path: '/children-profiles', emoji: '👨‍👩‍👧‍👦', label: 'Profil Anak' },
+    { path: '/bbm', emoji: '📚', label: 'Bahan Bantu Mengajar' },
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
     { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi Anak' },
     { path: '/friends', emoji: '👥', label: 'Kawan' },

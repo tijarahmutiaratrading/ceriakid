@@ -149,7 +149,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="grid grid-cols-2 gap-3 mb-5"
+          className="grid grid-cols-2 gap-3"
         >
           <Link to="/games-hub" className="block">
             <motion.div
@@ -176,6 +176,30 @@ export default function Home() {
               <p className="text-white font-black text-sm leading-tight">Studio Lukisan</p>
               <p className="text-white/70 text-xs mt-1">Lukis bebas & tracing</p>
               <div className="mt-2 text-white/60 text-xs">→</div>
+            </motion.div>
+          </Link>
+        </motion.div>
+
+        {/* BBM Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18 }}
+          className="mb-5"
+        >
+          <Link to="/bbm" className="block">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              className="p-4 rounded-2xl flex items-center gap-4"
+              style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.5), rgba(168,85,247,0.4))', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+            >
+              <div className="text-4xl">📚</div>
+              <div className="flex-1">
+                <p className="text-white font-black text-sm">Bahan Bantu Mengajar (BBM)</p>
+                <p className="text-white/70 text-xs mt-0.5">Lembaran kerja, RPH, kad imbasan & lebih</p>
+                <p className="text-yellow-300 text-xs font-black mt-1">✨ Untuk Cikgu & Ibu Bapa →</p>
+              </div>
             </motion.div>
           </Link>
         </motion.div>

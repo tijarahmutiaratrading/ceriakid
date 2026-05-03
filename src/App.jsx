@@ -20,6 +20,7 @@ import GamesList from '@/pages/GamesList';
 
 import GamePlayer from '@/pages/GamePlayer';
 import GamesHub from '@/pages/GamesHub';
+import BBMHub from '@/pages/BBMHub';
 import ParentDashboard from '@/pages/ParentDashboard';
 import FriendsList from '@/pages/FriendsList';
 import Challenges from '@/pages/Challenges';
@@ -83,6 +84,7 @@ const AuthenticatedApp = () => {
           <Route path="/settings" element={<ClientDashboard />} />
           <Route path="/children-profiles" element={<ChildrenProfiles />} />
           <Route path="/games-hub" element={<GamesHub />} />
+          <Route path="/bbm" element={<BBMHub />} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
           <Route path="/parent-dashboard" element={<ParentDashboard />} />

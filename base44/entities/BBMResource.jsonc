@@ -1,0 +1,110 @@
+{
+  "name": "BBMResource",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Tajuk BBM"
+    },
+    "description": {
+      "type": "string",
+      "description": "Penerangan ringkas BBM"
+    },
+    "subject": {
+      "type": "string",
+      "enum": [
+        "bahasa_melayu",
+        "english",
+        "mathematics",
+        "science",
+        "jawi",
+        "bahasa_tamil",
+        "bahasa_mandarin",
+        "pendidikan_islam",
+        "pendidikan_moral",
+        "sejarah",
+        "geografi",
+        "sivik",
+        "rbt",
+        "pjk",
+        "seni"
+      ],
+      "description": "Subjek"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "prasekolah",
+        "darjah_1",
+        "darjah_2",
+        "darjah_3",
+        "darjah_4",
+        "darjah_5",
+        "darjah_6"
+      ],
+      "description": "Tahap/Darjah"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "lembaran_kerja",
+        "kad_imbasan",
+        "carta",
+        "slaid_powerpoint",
+        "rancangan_pengajaran",
+        "modul",
+        "kuiz",
+        "aktiviti",
+        "permainan_bilik_darjah"
+      ],
+      "description": "Jenis BBM"
+    },
+    "fileUrl": {
+      "type": "string",
+      "description": "URL fail (PDF, PPT, etc.)"
+    },
+    "previewImageUrl": {
+      "type": "string",
+      "description": "Gambar preview BBM"
+    },
+    "emoji": {
+      "type": "string",
+      "description": "Emoji ikon"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tag kata kunci"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "free",
+        "premium"
+      ],
+      "default": "free",
+      "description": "Free atau premium"
+    },
+    "downloadCount": {
+      "type": "number",
+      "default": 0,
+      "description": "Bilangan muat turun"
+    },
+    "isPublished": {
+      "type": "boolean",
+      "default": true
+    },
+    "order": {
+      "type": "number",
+      "description": "Susunan paparan"
+    }
+  },
+  "required": [
+    "title",
+    "subject",
+    "level",
+    "type"
+  ]
+}
