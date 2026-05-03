@@ -51,6 +51,27 @@ export default function AdminGameManager() {
   const [tasks, setTasks] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [currentCounts, setCurrentCounts] = useState({}); // { 'prasekolah-bahasa_melayu': { games: 20, questions: 18 } }
+  const [loadingCounts, setLoadingCounts] = useState(false);
+
+  const loadCurrentCounts = async () => {
+    setLoadingCounts(true);
+    try {
+      const results = await Promise.all(
+        SUBJECT_CONFIG.map(sc => base44.entities.Game.filter({ ageGroup: sc.ageGroup, category: sc.subject, isPublished: true }))
+      );
+      const counts = {};
+      SUBJECT_CONFIG.forEach((sc, i) => {
+        const games = results[i] || [];
+        const avgQ = games.length > 0
+          ? Math.round(games.reduce((sum, g) => sum + (g.gameData?.questions?.length || g.totalQuestions || 0), 0) / games.length)
+          : 0;
+        counts[`${sc.ageGroup}-${sc.subject}`] = { games: games.length, avgQuestions: avgQ };
+      });
+      setCurrentCounts(counts);
+    } catch {}
+    setLoadingCounts(false);
+  };
 
   const loadTasks = async () => {
     setLoadingTasks(true);
@@ -61,7 +82,15 @@ export default function AdminGameManager() {
     setLoadingTasks(false);
   };
 
-  useEffect(() => { if (tab === 'generator') loadTasks(); }, [tab]);
+  useEffect(() => {
+    if (tab === 'generator') {
+      loadTasks();
+      loadCurrentCounts();
+    }
+  }, [tab]);
+
+  // Refresh counts button handler
+  const refreshGeneratorCounts = () => loadCurrentCounts();
 
   const toggleSubject = (key) => {
     const next = new Set(selectedSubjects);
@@ -311,51 +340,107 @@ export default function AdminGameManager() {
               {/* Subject selector */}
               <div className="flex items-center justify-between mb-3">
                 <p className="text-white/70 text-xs font-black uppercase tracking-wider">Pilih Subjek</p>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
+                  <button onClick={refreshGeneratorCounts} disabled={loadingCounts} className="p-1 rounded-lg bg-white/10 hover:bg-white/20 transition-all" title="Refresh counts">
+                    <RefreshCw className={`w-3 h-3 text-white/50 ${loadingCounts ? 'animate-spin' : ''}`} />
+                  </button>
                   <button onClick={selectAll} className="text-xs font-bold text-yellow-300 hover:underline">Semua</button>
                   <span className="text-white/30">|</span>
                   <button onClick={selectNone} className="text-xs font-bold text-white/50 hover:underline">Kosong</button>
                 </div>
               </div>
 
+              {loadingCounts && (
+                <div className="flex items-center gap-2 text-white/40 text-xs mb-3">
+                  <Loader2 className="w-3 h-3 animate-spin" /> Memuatkan data semasa...
+                </div>
+              )}
+
               <p className="text-white/50 text-xs font-black mb-2">🧒 Prasekolah</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
                 {SUBJECT_CONFIG.filter(s => s.ageGroup === 'prasekolah').map(sc => {
                   const key = `${sc.ageGroup}-${sc.subject}`;
                   const sel = selectedSubjects.has(key);
+                  const curr = currentCounts[key] || { games: 0, avgQuestions: 0 };
+                  const gameDiff = genConfig.games - curr.games;
+                  const qDiff = genConfig.questions - curr.avgQuestions;
                   return (
                     <button key={key} onClick={() => toggleSubject(key)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all text-left ${sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}>
-                      <div className={`w-4 h-4 rounded border-2 flex-shrink-0 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/30'}`}>
+                      className={`flex items-start gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}>
+                      <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/30'}`}>
                         {sel && <span className="text-white text-xs">✓</span>}
                       </div>
-                      {sc.label.replace('Prasekolah - ', '')}
+                      <div className="flex-1 min-w-0">
+                        <p className="truncate">{sc.label.replace('Prasekolah - ', '')}</p>
+                        <div className={`flex gap-2 mt-0.5 text-xs font-semibold ${sel ? 'text-indigo-400' : 'text-white/40'}`}>
+                          <span>{curr.games} games</span>
+                          <span>·</span>
+                          <span>{curr.avgQuestions}Q avg</span>
+                          {!loadingCounts && (
+                            <span className={`font-black ${gameDiff > 0 ? 'text-green-500' : gameDiff < 0 ? 'text-red-400' : sel ? 'text-indigo-400' : 'text-white/30'}`}>
+                              {gameDiff > 0 ? `+${gameDiff}` : gameDiff < 0 ? `${gameDiff}` : '✓'}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </button>
                   );
                 })}
               </div>
 
               <p className="text-white/50 text-xs font-black mb-2">🎒 Sekolah Rendah</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-5">
                 {SUBJECT_CONFIG.filter(s => s.ageGroup === 'sekolah_rendah').map(sc => {
                   const key = `${sc.ageGroup}-${sc.subject}`;
                   const sel = selectedSubjects.has(key);
+                  const curr = currentCounts[key] || { games: 0, avgQuestions: 0 };
+                  const gameDiff = genConfig.games - curr.games;
                   return (
                     <button key={key} onClick={() => toggleSubject(key)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all text-left ${sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}>
-                      <div className={`w-4 h-4 rounded border-2 flex-shrink-0 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/30'}`}>
+                      className={`flex items-start gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}>
+                      <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/30'}`}>
                         {sel && <span className="text-white text-xs">✓</span>}
                       </div>
-                      {sc.label.replace('Sekolah Rendah - ', '')}
+                      <div className="flex-1 min-w-0">
+                        <p className="truncate">{sc.label.replace('Sekolah Rendah - ', '')}</p>
+                        <div className={`flex gap-2 mt-0.5 text-xs font-semibold ${sel ? 'text-indigo-400' : 'text-white/40'}`}>
+                          <span>{curr.games} games</span>
+                          <span>·</span>
+                          <span>{curr.avgQuestions}Q avg</span>
+                          {!loadingCounts && (
+                            <span className={`font-black ${gameDiff > 0 ? 'text-green-500' : gameDiff < 0 ? 'text-red-400' : sel ? 'text-indigo-400' : 'text-white/30'}`}>
+                              {gameDiff > 0 ? `+${gameDiff}` : gameDiff < 0 ? `${gameDiff}` : '✓'}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </button>
                   );
                 })}
               </div>
 
               {selectedSubjects.size > 0 && (
-                <p className="text-xs text-yellow-300 font-semibold text-center mb-3 bg-white/10 py-2 rounded-xl">
-                  {selectedSubjects.size} subjek dipilih · {selectedSubjects.size * genConfig.games} games · {selectedSubjects.size * genConfig.games * genConfig.questions} soalan
-                </p>
+                <div className="mb-3 p-3 rounded-2xl bg-white/10 space-y-1">
+                  {Array.from(selectedSubjects).map(key => {
+                    const sc = SUBJECT_CONFIG.find(s => `${s.ageGroup}-${s.subject}` === key);
+                    const curr = currentCounts[key] || { games: 0, avgQuestions: 0 };
+                    const gameDiff = genConfig.games - curr.games;
+                    const qDiff = genConfig.questions - curr.avgQuestions;
+                    return (
+                      <div key={key} className="flex items-center justify-between text-xs">
+                        <span className="text-white/70 font-semibold truncate">{sc?.label}</span>
+                        <div className="flex gap-2 flex-shrink-0 ml-2">
+                          <span className={`font-black ${gameDiff > 0 ? 'text-green-300' : gameDiff < 0 ? 'text-red-300' : 'text-white/40'}`}>
+                            {gameDiff > 0 ? `+${gameDiff} games` : gameDiff < 0 ? `${gameDiff} games` : 'games ✓'}
+                          </span>
+                          <span className={`font-black ${qDiff > 0 ? 'text-blue-300' : qDiff < 0 ? 'text-orange-300' : 'text-white/40'}`}>
+                            {qDiff > 0 ? `+${qDiff}Q` : qDiff < 0 ? `${qDiff}Q` : 'Q ✓'}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               )}
 
               <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
