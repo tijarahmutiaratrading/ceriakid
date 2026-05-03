@@ -581,21 +581,38 @@ export default function AdminGameManager() {
               {loadingMiniGames ? (
                 <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>
               ) : (
-                <div className="grid grid-cols-2 gap-2">
-                  {['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'].map(gameId => {
-                    const data = miniGamesData[gameId] || { count: 0, totalQuestions: 0 };
-                    const gameNames = { memory: '🧠 Memory', dragdrop: '🎯 Drag&Drop', wordbuilder: '📝 Word', sorting: '🔄 Sort', tilematch: '🎮 Tile', story: '📖 Story', physics: '⚡ Physics', tracing: '✏️ Tracing' };
-                    const shortNames = { memory: '🧠', dragdrop: '🎯', wordbuilder: '📝', sorting: '🔄', tilematch: '🎮', story: '📖', physics: '⚡', tracing: '✏️' };
-                    return (
-                      <div key={gameId} className="bg-white/10 rounded-xl p-2 sm:p-3 text-center border border-white/20">
-                        <p className="text-white font-bold text-xs sm:text-sm mb-1"><span className="sm:hidden">{shortNames[gameId]}</span><span className="hidden sm:inline">{gameNames[gameId]}</span></p>
-                        <p className="text-white/70 text-sm sm:text-base font-bold">{data.count}</p>
-                        <p className="text-white/50 text-xs">games</p>
-                      </div>
-                    );
-                  })}
-                </div>
+                <>
+                  {/* Mobile carousel */}
+                  <div className="sm:hidden flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
+                    {['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'].map(gameId => {
+                      const data = miniGamesData[gameId] || { count: 0, totalQuestions: 0 };
+                      const shortNames = { memory: '🧠', dragdrop: '🎯', wordbuilder: '📝', sorting: '🔄', tilematch: '🎮', story: '📖', physics: '⚡', tracing: '✏️' };
+                      return (
+                        <div key={gameId} className="bg-white/10 rounded-xl p-2 text-center border border-white/20 flex-shrink-0 w-20">
+                          <p className="text-white font-bold text-sm mb-1">{shortNames[gameId]}</p>
+                          <p className="text-white/70 text-base font-bold">{data.count}</p>
+                          <p className="text-white/50 text-xs">games</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {/* Desktop grid */}
+                  <div className="hidden sm:grid sm:grid-cols-4 gap-2">
+                    {['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'].map(gameId => {
+                      const data = miniGamesData[gameId] || { count: 0, totalQuestions: 0 };
+                      const gameNames = { memory: '🧠 Memory', dragdrop: '🎯 Drag&Drop', wordbuilder: '📝 Word', sorting: '🔄 Sort', tilematch: '🎮 Tile', story: '📖 Story', physics: '⚡ Physics', tracing: '✏️ Tracing' };
+                      return (
+                        <div key={gameId} className="bg-white/10 rounded-xl p-2 sm:p-3 text-center border border-white/20">
+                          <p className="text-white font-bold text-xs sm:text-sm mb-1">{gameNames[gameId]}</p>
+                          <p className="text-white/70 text-sm sm:text-base font-bold">{data.count}</p>
+                          <p className="text-white/50 text-xs">games</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
               )}
+              )
             </div>
 
             {/* Mini Games Sub-tabs */}
