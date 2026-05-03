@@ -76,75 +76,72 @@ export default function ClientDashboard() {
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
 
         {/* Hero Profile Card */}
-         <motion.div
-           initial={{ opacity: 0, y: -20 }}
-           animate={{ opacity: 1, y: 0 }}
-           className="mb-6 rounded-3xl overflow-hidden"
-           style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.92) 100%)', boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.08)', border: '1px solid rgba(255,255,255,0.8)' }}
-         >
-           {/* Top gradient strip */}
-           <div className={`h-32 bg-gradient-to-r ${tier.color} relative overflow-hidden`}>
-             <div className="absolute inset-0 opacity-15" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, white 1.5px, transparent 1.5px)', backgroundSize: '25px 25px' }} />
-             {/* Decorative shapes */}
-             <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20" />
-             {/* Tier badge */}
-             <div className="absolute top-4 right-5 flex items-center gap-1.5 bg-white/30 backdrop-blur-md rounded-full px-4 py-2 border border-white/50">
-               <span className="text-lg">{tier.emoji}</span>
-               <span className="text-white font-black text-xs">{tier.label}</span>
-             </div>
-           </div>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-5 rounded-3xl overflow-hidden shadow-2xl"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.4)' }}
+        >
+          {/* Top gradient strip */}
+          <div className={`h-24 bg-gradient-to-r ${tier.color} relative`}>
+            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, white 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+            {/* Tier badge */}
+            <div className="absolute top-3 right-4 flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1.5">
+              <span className="text-lg">{tier.emoji}</span>
+              <span className="text-white font-black text-xs">{tier.label}</span>
+            </div>
+          </div>
 
-           {/* Avatar overlapping strip */}
-           <div className="px-8 pb-8">
-             <div className="flex items-end gap-5 -mt-14 mb-6">
-               <div className="relative flex-shrink-0">
-                 {avatarUrl && avatarUrl.includes('http') ? (
-                   <img src={avatarUrl} alt="Avatar" className="w-28 h-28 rounded-3xl object-cover border-4 border-white shadow-2xl" />
-                 ) : (
-                   <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-purple-300 to-pink-300 border-4 border-white shadow-2xl flex items-center justify-center text-6xl">🐱</div>
-                 )}
-                 <label className="absolute -bottom-1 -right-1 w-9 h-9 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full flex items-center justify-center cursor-pointer shadow-xl hover:shadow-2xl transition-all hover:scale-110">
-                   <input type="file" accept="image/*" onChange={handleAvatarUpload} disabled={saving} className="hidden" />
-                   {saving ? <Loader className="w-4 h-4 text-white animate-spin" /> : <Upload className="w-4 h-4 text-white" />}
-                 </label>
-               </div>
-               <div className="flex-1 pb-1">
-                 <p className="text-gray-500 text-sm font-medium mt-1">{user?.email}</p>
-               </div>
-             </div>
+          {/* Avatar overlapping strip */}
+          <div className="px-6 pb-6">
+            <div className="flex items-end gap-4 -mt-10 mb-4">
+              <div className="relative">
+                {avatarUrl && avatarUrl.includes('http') ? (
+                  <img src={avatarUrl} alt="Avatar" className="w-20 h-20 rounded-2xl object-cover border-4 border-white shadow-xl" />
+                ) : (
+                  <div className="w-20 h-20 rounded-2xl bg-white/40 border-4 border-white shadow-xl flex items-center justify-center text-4xl">🐱</div>
+                )}
+                <label className="absolute -bottom-2 -right-2 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-orange-600 transition-colors">
+                  <input type="file" accept="image/*" onChange={handleAvatarUpload} disabled={saving} className="hidden" />
+                  {saving ? <Loader className="w-3.5 h-3.5 text-white animate-spin" /> : <Upload className="w-3.5 h-3.5 text-white" />}
+                </label>
+              </div>
+              <div className="mb-1">
+                <p className="text-white font-black text-xl leading-tight">{user?.full_name || 'Pengguna'}</p>
+                <p className="text-white/70 text-xs font-semibold">{user?.email}</p>
+              </div>
+            </div>
 
             {/* Account info row */}
-            <div className="grid grid-cols-2 gap-3.5">
-               {[
-                 { icon: Mail, label: 'E-mel', value: user?.email },
-                 { icon: Calendar, label: 'Ahli Sejak', value: user?.created_date ? new Date(user.created_date).toLocaleDateString('ms-MY') : '-' },
-               ].map((item, i) => {
-                 const Icon = item.icon;
-                 return (
-                   <div key={i} className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-2xl p-4 border border-indigo-100/50 hover:border-indigo-200/70 transition-colors">
-                     <div className="flex items-center gap-2 mb-2">
-                       <div className="w-6 h-6 rounded-lg bg-gradient-to-r from-game-purple to-game-pink flex items-center justify-center">
-                         <Icon className="w-3.5 h-3.5 text-white" />
-                       </div>
-                       <p className="text-gray-600 text-xs font-bold uppercase tracking-wider">{item.label}</p>
-                     </div>
-                     <p className="text-gray-900 font-black text-sm truncate ml-8">{item.value}</p>
-                   </div>
-                 );
-               })}
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { icon: Mail, label: 'E-mel', value: user?.email },
+                { icon: Calendar, label: 'Ahli Sejak', value: user?.created_date ? new Date(user.created_date).toLocaleDateString('ms-MY') : '-' },
+              ].map((item, i) => {
+                const Icon = item.icon;
+                return (
+                  <div key={i} className="bg-white/20 rounded-2xl p-3">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Icon className="w-3.5 h-3.5 text-white/70" />
+                      <p className="text-white/70 text-xs font-bold">{item.label}</p>
+                    </div>
+                    <p className="text-white font-black text-xs truncate">{item.value}</p>
+                  </div>
+                );
+              })}
             </div>
-           </div>
-         </motion.div>
+          </div>
+        </motion.div>
 
         {/* Gender Picker */}
-         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ delay: 0.1 }}
-           className="mb-6 rounded-3xl p-6"
-           style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0,0,0,0.08)' }}
-         >
-           <p className="text-gray-700 text-xs font-black uppercase tracking-wider mb-4">👤 Jantina</p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-4 rounded-3xl p-5"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+        >
+          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">👤 Jantina</p>
           <div className="grid grid-cols-2 gap-3">
             {[
               { value: 'male', label: 'Lelaki', emoji: '👨' },
@@ -154,10 +151,10 @@ export default function ClientDashboard() {
                 key={option.value}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setGender(option.value)}
-                className={`py-4 rounded-2xl font-bold transition-all text-sm flex flex-col items-center gap-2 ${
+                className={`py-4 rounded-2xl font-bold transition-all text-sm flex flex-col items-center gap-1 ${
                   gender === option.value
-                    ? 'bg-gradient-to-r from-game-purple to-game-pink text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200'
+                    ? 'bg-white text-purple-600 shadow-xl'
+                    : 'bg-white/20 text-white border border-white/30'
                 }`}
               >
                 <span className="text-2xl">{option.emoji}</span>
@@ -172,9 +169,9 @@ export default function ClientDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="mb-6"
+          className="mb-4"
         >
-          <p className="text-gray-700 text-xs font-black uppercase tracking-wider mb-4 px-1">💎 Langganan Saya</p>
+          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3 px-1">💎 Langganan Saya</p>
           <SubscriptionWidget userEmail={user?.email} />
         </motion.div>
 
@@ -183,10 +180,10 @@ export default function ClientDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mb-6"
+          className="mb-5"
         >
-          <p className="text-gray-700 text-xs font-black uppercase tracking-wider mb-4 px-1">📱 Device Berdaftar</p>
-          <div className="rounded-3xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0,0,0,0.08)' }}>
+          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3 px-1">📱 Device Berdaftar</p>
+          <div className="rounded-3xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}>
             <div className="p-4">
               <ManageDevices userEmail={user?.email} tier={userTier} />
             </div>
@@ -202,8 +199,8 @@ export default function ClientDashboard() {
             disabled={saving}
             className={`w-full py-4 rounded-2xl font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all ${
               saved
-                ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
-                : 'bg-gradient-to-r from-game-purple to-game-pink text-white hover:shadow-2xl'
+                ? 'bg-green-500 text-white'
+                : 'bg-white text-purple-600 hover:bg-white/90'
             } disabled:opacity-60`}
           >
             {saving ? (
