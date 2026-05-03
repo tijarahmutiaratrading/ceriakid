@@ -84,7 +84,7 @@ export default function FreeTrialButton({ onTrialStarted }) {
       >
         {loading ? '⏳ Sedang Memproses...' : '🎁 Cuba Percuma 7 Hari'}
       </motion.button>
-      <p className="text-xs text-gray-500 text-center">
+      <p className="text-xs text-white/60 text-center">
         ✅ Akses penuh • Tiada kad kredit diperlukan • Cancel bila-bila
       </p>
       {error && <p className="text-red-500 text-xs font-bold text-center">{error}</p>}
