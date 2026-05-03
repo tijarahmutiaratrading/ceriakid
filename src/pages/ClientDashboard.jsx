@@ -199,8 +199,8 @@ export default function ClientDashboard() {
             disabled={saving}
             className={`w-full py-4 rounded-2xl font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all ${
               saved
-                ? 'bg-green-500 text-white'
-                : 'bg-white text-purple-600 hover:bg-white/90'
+                ? 'bg-gradient-to-r from-green-400 to-green-600 text-white'
+                : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
             } disabled:opacity-60`}
           >
             {saving ? (
