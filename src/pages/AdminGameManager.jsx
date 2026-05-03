@@ -937,11 +937,22 @@ export default function AdminGameManager() {
                   setActionLoading(`gen-${generateModal.ageGroup}-${generateModal.subject}`);
                   showToast(`⏳ Syncing ${generateModal.label}...`, true);
                   try {
-                    const res = await base44.functions.invoke('syncSubjectGames', {
-                      targetCount: generateModal.games,
-                      ageGroup: generateModal.ageGroup,
-                      category: generateModal.subject
-                    });
+                    // Send in batches of 10 with delay to avoid rate limits
+                    const BATCH_SIZE = 10;
+                    let synced = 0;
+                    while (synced < generateModal.games) {
+                      const batchTarget = Math.min(synced + BATCH_SIZE, generateModal.games);
+                      await base44.functions.invoke('syncSubjectGames', {
+                        targetCount: batchTarget,
+                        ageGroup: generateModal.ageGroup,
+                        category: generateModal.subject
+                      });
+                      synced = batchTarget;
+                      if (synced < generateModal.games) {
+                        showToast(`⏳ Syncing... ${synced}/${generateModal.games} games`, true);
+                        await new Promise(r => setTimeout(r, 4000));
+                      }
+                    }
                     showToast(`✅ Synced to ${generateModal.games} games`);
 
                     // If need to expand questions

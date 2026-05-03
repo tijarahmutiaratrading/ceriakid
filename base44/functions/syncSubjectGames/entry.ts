@@ -10,7 +10,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const { targetCount, ageGroup, subject, category } = await req.json();
+    const { targetCount: rawTarget, ageGroup, subject, category } = await req.json();
+
+    // Cap max 20 games per call to avoid rate limits
+    const targetCount = Math.min(rawTarget || 0, 20);
 
     if (!targetCount || targetCount < 1) {
       return Response.json({ error: 'targetCount required' }, { status: 400 });
@@ -62,6 +65,10 @@ Deno.serve(async (req) => {
           order: i,
         });
         added++;
+        // Delay 500ms between creates to avoid rate limits
+        if (i < targetCount - 1) {
+          await new Promise(r => setTimeout(r, 500));
+        }
       }
     } else if (targetCount < currentCount) {
       // Remove excess games from the end
