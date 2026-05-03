@@ -40,6 +40,7 @@ const GAME_HUB = [
 
 export default function AdminGameManager() {
   const [tab, setTab] = useState('generator');
+  const [expandedSections, setExpandedSections] = useState({ prasekolah: true, sekolah_rendah: true });
 
   // Shared
   const [toast, setToast] = useState(null);
@@ -587,11 +588,23 @@ export default function AdminGameManager() {
                 {/* Prasekolah Section */}
                 {(managerAgeFilter === 'all' || managerAgeFilter === 'prasekolah') && (
                   <div>
-                    <h3 className="text-white/70 text-xs font-black uppercase tracking-wider mb-3 px-2">🧒 Prasekolah</h3>
-                    <div className="space-y-3">
-                      {subjects
-                        .filter(s => s.ageGroup === 'prasekolah')
-                        .map((s, idx) => {
+                    <button
+                      onClick={() => setExpandedSections(prev => ({ ...prev, prasekolah: !prev.prasekolah }))}
+                      className="w-full flex items-center gap-3 px-2 py-2.5 hover:bg-white/5 rounded-xl transition-all text-left mb-3"
+                    >
+                      <span className="text-xs font-black uppercase tracking-wider text-white/70">🧒 Prasekolah</span>
+                      <span className="ml-auto">
+                        {expandedSections.prasekolah
+                          ? <ChevronDown className="w-4 h-4 text-white/50" />
+                          : <ChevronRight className="w-4 h-4 text-white/50" />
+                        }
+                      </span>
+                    </button>
+                    {expandedSections.prasekolah && (
+                      <div className="space-y-3">
+                        {subjects
+                          .filter(s => s.ageGroup === 'prasekolah')
+                          .map((s, idx) => {
                     const filteredGames = s.games.filter(g =>
                       !managerSearch || g.title.toLowerCase().includes(managerSearch.toLowerCase())
                     );
@@ -660,18 +673,31 @@ export default function AdminGameManager() {
                       </motion.div>
                     );
                   })}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
                 {/* Sekolah Rendah Section */}
                 {(managerAgeFilter === 'all' || managerAgeFilter === 'sekolah_rendah') && (
                   <div>
-                    <h3 className="text-white/70 text-xs font-black uppercase tracking-wider mb-3 px-2">🎒 Sekolah Rendah</h3>
-                    <div className="space-y-3">
-                      {subjects
-                        .filter(s => s.ageGroup === 'sekolah_rendah')
-                        .map((s, idx) => {
+                    <button
+                      onClick={() => setExpandedSections(prev => ({ ...prev, sekolah_rendah: !prev.sekolah_rendah }))}
+                      className="w-full flex items-center gap-3 px-2 py-2.5 hover:bg-white/5 rounded-xl transition-all text-left mb-3"
+                    >
+                      <span className="text-xs font-black uppercase tracking-wider text-white/70">🎒 Sekolah Rendah</span>
+                      <span className="ml-auto">
+                        {expandedSections.sekolah_rendah
+                          ? <ChevronDown className="w-4 h-4 text-white/50" />
+                          : <ChevronRight className="w-4 h-4 text-white/50" />
+                        }
+                      </span>
+                    </button>
+                    {expandedSections.sekolah_rendah && (
+                      <div className="space-y-3">
+                        {subjects
+                          .filter(s => s.ageGroup === 'sekolah_rendah')
+                          .map((s, idx) => {
                     const filteredGames = s.games.filter(g =>
                       !managerSearch || g.title.toLowerCase().includes(managerSearch.toLowerCase())
                     );
@@ -740,7 +766,8 @@ export default function AdminGameManager() {
                       </motion.div>
                     );
                   })}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
