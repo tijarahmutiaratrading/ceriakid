@@ -15,11 +15,12 @@ const GAME_HUB = [
 ];
 
 export default function MiniGamesGenerator({ onToast }) {
-  const [miniGameConfig, setMiniGameConfig] = useState({ questions: 20 });
+  const [miniGameConfig, setMiniGameConfig] = useState({ games: 5 });
   const [selectedMiniGames, setSelectedMiniGames] = useState(new Set());
   const [miniGameSubmitting, setMiniGameSubmitting] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(false);
+  const [currentCounts, setCurrentCounts] = useState({});
 
   const toggleMiniGame = (id) => {
     const next = new Set(selectedMiniGames);
@@ -38,9 +39,24 @@ export default function MiniGamesGenerator({ onToast }) {
     setLoadingTasks(false);
   };
 
+  const loadCurrentCounts = async () => {
+    try {
+      const gameIds = GAME_HUB.map(g => g.id);
+      const results = await Promise.all(
+        gameIds.map(id => base44.entities.Game.filter({ category: id, isPublished: true }))
+      );
+      const counts = {};
+      gameIds.forEach((id, i) => {
+        counts[id] = (results[i] || []).length;
+      });
+      setCurrentCounts(counts);
+    } catch {}
+  };
+
   useEffect(() => {
     loadTasks();
-    const interval = setInterval(loadTasks, 30000);
+    loadCurrentCounts();
+    const interval = setInterval(() => { loadTasks(); loadCurrentCounts(); }, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -75,17 +91,23 @@ export default function MiniGamesGenerator({ onToast }) {
     try {
       for (const gameId of Array.from(selectedMiniGames)) {
         const gameData = GAME_HUB.find(g => g.id === gameId);
-        await base44.entities.GameTask.create({
-          taskName: `Mini Game: ${gameData?.title || gameId}`,
-          ageGroup: 'sekolah_rendah',
-          subject: gameId,
-          gamesCount: 1,
-          questionsPerGame: miniGameConfig.questions,
-          status: 'pending',
-        });
+        const curr = currentCounts[gameId] || 0;
+        const gamesToAdd = Math.max(0, miniGameConfig.games - curr);
+        
+        if (gamesToAdd > 0) {
+          await base44.entities.GameTask.create({
+            taskName: `Mini Game: ${gameData?.title || gameId}`,
+            ageGroup: 'sekolah_rendah',
+            subject: gameId,
+            gamesCount: gamesToAdd,
+            questionsPerGame: 0,
+            status: 'pending',
+          });
+        }
       }
-      onToast(`✅ ${selectedMiniGames.size} mini game tasks dihantar ke queue!`);
+      onToast(`✅ ${selectedMiniGames.size} mini game tasks dihantar ke queue (smart target)!`);
       setSelectedMiniGames(new Set());
+      loadCurrentCounts();
     } catch (err) {
       onToast('❌ ' + err.message, false);
     }
@@ -109,13 +131,13 @@ export default function MiniGamesGenerator({ onToast }) {
       <div className="p-6 rounded-3xl mb-5" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
         <h2 className="font-black text-white mb-4">⚙️ Mini Games Configuration</h2>
         <div className="mb-5">
-          <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">📝 Soalan per Game</label>
+          <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">🎮 Jumlah Games per Tipe</label>
           <input
             type="number"
             min="1"
-            max="50"
-            value={miniGameConfig.questions}
-            onChange={e => setMiniGameConfig(c => ({ ...c, questions: parseInt(e.target.value) || 1 }))}
+            max="20"
+            value={miniGameConfig.games}
+            onChange={e => setMiniGameConfig(c => ({ ...c, games: parseInt(e.target.value) || 1 }))}
             className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center"
           />
         </div>
@@ -136,6 +158,8 @@ export default function MiniGamesGenerator({ onToast }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-5">
           {GAME_HUB.map(game => {
             const sel = selectedMiniGames.has(game.id);
+            const curr = currentCounts[game.id] || 0;
+            const gameDiff = miniGameConfig.games - curr;
             return (
               <button
                 key={game.id}
@@ -147,7 +171,12 @@ export default function MiniGamesGenerator({ onToast }) {
                 <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/30'}`}>
                   {sel && <span className="text-white text-xs">✓</span>}
                 </div>
-                <p className="truncate">{game.title}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="truncate">{game.title}</p>
+                  <p className={`text-xs mt-0.5 ${sel ? 'text-indigo-500' : 'text-white/40'}`}>
+                    {curr} ada · {gameDiff > 0 ? `+${gameDiff} perlu` : gameDiff < 0 ? `${gameDiff}` : '✓'}
+                  </p>
+                </div>
               </button>
             );
           })}
@@ -217,7 +246,7 @@ export default function MiniGamesGenerator({ onToast }) {
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-bold text-white truncate">{task.taskName}</p>
                     <p className="text-xs text-white/40">
-                      {task.questionsPerGame} soalan
+                      {task.gamesCount} games perlu
                       {task.createdGames > 0 && <span className="text-green-300 font-bold"> · {task.createdGames} dibuat</span>}
                     </p>
                   </div>
