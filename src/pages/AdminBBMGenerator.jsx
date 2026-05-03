@@ -60,6 +60,8 @@ export default function AdminBBMGenerator() {
   const [filterSubject, setFilterSubject] = useState('all');
   const [toast, setToast] = useState(null);
   const [editItem, setEditItem] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [loadingTasks, setLoadingTasks] = useState(false);
 
   const showToast = (msg, ok = true) => {
     setToast({ msg, ok });
@@ -78,8 +80,23 @@ export default function AdminBBMGenerator() {
     }
   };
 
+  const loadTasks = async () => {
+    setLoadingTasks(true);
+    try {
+      const data = await base44.entities.GameTask.list('-created_date', 100);
+      setTasks(data);
+    } catch (e) {
+      console.error('Gagal load tasks:', e);
+    } finally {
+      setLoadingTasks(false);
+    }
+  };
+
   useEffect(() => {
-    if (tab === 'manager') loadResources();
+    if (tab === 'manager') {
+      loadResources();
+      loadTasks();
+    }
   }, [tab]);
 
   // Generator
@@ -425,11 +442,12 @@ export default function AdminBBMGenerator() {
             </div>
 
             {/* Stats row */}
-            <div className="grid grid-cols-3 gap-2 mb-4">
+            <div className="grid grid-cols-4 gap-2 mb-4">
               {[
-                { label: 'Jumlah', value: resources.length, color: 'text-yellow-300' },
+                { label: 'Jumlah BBM', value: resources.length, color: 'text-yellow-300' },
                 { label: 'Published', value: resources.filter(r => r.isPublished !== false).length, color: 'text-green-300' },
                 { label: 'Hidden', value: resources.filter(r => r.isPublished === false).length, color: 'text-red-300' },
+                { label: 'Task Queue', value: tasks.length, color: 'text-blue-300' },
               ].map(s => (
                 <div key={s.label} className="p-3 rounded-2xl text-center" style={{ background: 'rgba(255,255,255,0.08)' }}>
                   <p className={`font-black text-xl ${s.color}`}>{s.value}</p>
@@ -437,6 +455,34 @@ export default function AdminBBMGenerator() {
                 </div>
               ))}
             </div>
+
+            {/* Task Queue Section */}
+            {tasks.length > 0 && (
+              <div className="p-4 rounded-2xl mb-4" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-white font-bold">📋 Task Queue ({tasks.length})</h3>
+                  <button onClick={loadTasks} className="p-1 text-white/50 hover:text-white">
+                    <RefreshCw className={`w-3.5 h-3.5 ${loadingTasks ? 'animate-spin' : ''}`} />
+                  </button>
+                </div>
+                <div className="space-y-1 max-h-48 overflow-y-auto">
+                  {tasks.map(t => (
+                    <div key={t.id} className="flex items-center gap-2 p-2 rounded-xl text-xs" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                      <span className={`px-2 py-0.5 rounded font-bold ${
+                        t.status === 'pending' ? 'bg-yellow-500/20 text-yellow-300' :
+                        t.status === 'running' ? 'bg-blue-500/20 text-blue-300' :
+                        t.status === 'completed' ? 'bg-green-500/20 text-green-300' :
+                        'bg-red-500/20 text-red-300'
+                      }`}>
+                        {t.status}
+                      </span>
+                      <span className="text-white/70 flex-1 truncate">{t.taskName}</span>
+                      <span className="text-white/50 whitespace-nowrap">{t.gamesCount || 0} items</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {loadingResources ? (
               <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-white" /></div>
