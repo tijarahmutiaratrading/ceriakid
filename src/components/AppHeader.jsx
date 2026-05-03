@@ -169,7 +169,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
                         isActive(item.path) ? 'bg-game-purple/90 text-white shadow-sm' : 'text-gray-700 hover:bg-white/50'
                       }`}>
-                      <span className="w-8 h-8 rounded-lg bg-white/40 flex items-center justify-center text-lg flex-shrink-0">{item.emoji}</span>
                       <span>{item.label}</span>
                     </motion.div>
                   </Link>
@@ -186,7 +185,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
                           isActive(item.path) ? 'bg-blue-600/90 text-white shadow-sm' : 'text-gray-700 hover:bg-white/50'
                         }`}>
-                        <span className="w-8 h-8 rounded-lg bg-white/40 flex items-center justify-center text-lg flex-shrink-0">{item.emoji}</span>
                         <span>{item.label}</span>
                       </motion.div>
                     </Link>
@@ -204,7 +202,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
                           isActive(item.path) ? 'bg-game-purple/90 text-white shadow-sm' : 'text-gray-700 hover:bg-white/50'
                         }`}>
-                        <span className="w-8 h-8 rounded-lg bg-white/40 flex items-center justify-center text-lg flex-shrink-0">{item.emoji}</span>
                         <span>{item.label}</span>
                       </motion.div>
                     </Link>
