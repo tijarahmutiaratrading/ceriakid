@@ -334,7 +334,13 @@ export default function AdminBBMGenerator() {
               <button
                 onClick={async () => {
                   if (!window.confirm('🚨 Delete SEMUA BBM? (Tidak boleh undo)')) return;
-                  for (const r of resources) await base44.entities.BBMResource.delete(r.id);
+                  for (const r of resources) {
+                    try {
+                      await base44.entities.BBMResource.delete(r.id);
+                    } catch (e) {
+                      console.error(`Gagal delete ${r.id}:`, e);
+                    }
+                  }
                   setResources([]);
                   showToast('✅ Semua BBM dipadam');
                 }}
