@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Lock, Search, BookOpen, FileText, Star } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+
 import { Link } from 'react-router-dom';
 import AppHeader from '@/components/AppHeader';
 import { base44 } from '@/api/base44Client';
@@ -73,7 +73,8 @@ export default function BBMHub() {
 
   const isPremiumUser = ['premium', 'pro', 'keluarga', 'standard', 'asas'].includes(userTier);
 
-  const generatePDF = (resource) => {
+  const generatePDF = async (resource) => {
+    const { jsPDF } = await import('jspdf');
     const doc = new jsPDF();
     const pageW = doc.internal.pageSize.getWidth();
 
@@ -184,7 +185,7 @@ export default function BBMHub() {
       a.click();
     } else {
       // Generate PDF
-      generatePDF(resource);
+      await generatePDF(resource);
     }
 
     // Increment download count silently
