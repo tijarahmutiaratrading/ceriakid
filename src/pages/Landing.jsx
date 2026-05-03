@@ -246,7 +246,6 @@ export default function Landing() {
                 whileTap={{ scale: 0.97 }}
                 onClick={scrollToPricing}
                 className="px-6 py-3 bg-orange-500 text-white rounded-full font-black text-base shadow-lg flex items-center gap-2 justify-center">
-                
                 🎮 Bayar Sekarang <ArrowRight className="w-4 h-4" />
               </motion.button>
               <button
