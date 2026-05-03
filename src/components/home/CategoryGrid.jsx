@@ -48,9 +48,9 @@ export default function CategoryGrid() {
     loadGames();
   }, [ageGroup]);
 
-  // Poll for changes every 10 seconds
+  // Poll for changes every 60 seconds
   useEffect(() => {
-    const interval = setInterval(loadGames, 10000);
+    const interval = setInterval(loadGames, 60000);
     return () => clearInterval(interval);
   }, [ageGroup]);
 

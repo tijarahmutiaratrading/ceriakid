@@ -97,11 +97,11 @@ export default function Home() {
           >
             <div className="flex items-center gap-3">
               <span className="text-3xl">🎓</span>
-              <p className="text-white font-black text-lg">CeriaKid!</p>
+              <p className="text-white font-black text-lg">Selamat datang ke CeriaKid!</p>
             </div>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => { import('@/api/base44Client').then(m => m.base44.auth.redirectToLogin(window.location.href)); }}
+              onClick={() => base44.auth.redirectToLogin(window.location.href)}
               className="px-4 py-2 bg-white text-purple-600 rounded-full text-sm font-black shadow-lg"
             >
               Log Masuk
@@ -248,13 +248,13 @@ export default function Home() {
             <p className="text-white/80 text-sm mb-5">
               {lang === 'bm' ? 'Daftar sekarang untuk akses 200+ permainan edukatif!' : 'Sign up now to access 200+ educational games!'}
             </p>
-            <Link to="/landing">
+            <Link to="/">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-3 bg-white text-purple-600 rounded-full font-black shadow-lg hover:shadow-xl transition-all"
               >
-                {lang === 'bm' ? 'Lihat Paket Sekarang' : 'View Packages'}
+                {lang === 'bm' ? 'Lihat Pelan Sekarang' : 'View Packages'}
               </motion.button>
             </Link>
           </motion.div>

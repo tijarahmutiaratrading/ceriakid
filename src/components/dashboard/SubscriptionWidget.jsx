@@ -30,12 +30,18 @@ export default function SubscriptionWidget({ userEmail }) {
 
   const tierColors = {
     free: 'from-gray-300 to-gray-400',
+    asas: 'from-green-400 to-emerald-500',
+    standard: 'from-blue-400 to-indigo-500',
+    keluarga: 'from-purple-500 to-pink-500',
     premium: 'from-blue-300 to-blue-500',
     pro: 'from-purple-300 to-purple-500',
   };
 
   const tierLabels = {
-    free: '🆓 Free',
+    free: '🆓 Percuma',
+    asas: '🌱 Asas',
+    standard: '⭐ Standard',
+    keluarga: '👑 Keluarga',
     premium: '⭐ Premium',
     pro: '👑 Pro',
   };
@@ -56,7 +62,7 @@ export default function SubscriptionWidget({ userEmail }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`rounded-3xl p-5 text-white shadow-lg mb-6 bg-gradient-to-br ${tierColors[subscription?.tier || 'free']}`}
+      className={`rounded-3xl p-5 text-white shadow-lg mb-6 bg-gradient-to-br ${tierColors[subscription?.tier || 'free'] || 'from-gray-300 to-gray-400'}`}
     >
       <div className="flex items-start justify-between mb-3">
         <div>
@@ -72,7 +78,7 @@ export default function SubscriptionWidget({ userEmail }) {
 
       {subscription?.currentPeriodEnd && !isExpired && (
         <div className="text-xs opacity-90 mb-3 space-y-1">
-          <p>📅 Renews: {new Date(subscription.currentPeriodEnd).toLocaleDateString('ms-MY')}</p>
+          <p>📅 Tamat: {new Date(subscription.currentPeriodEnd).toLocaleDateString('ms-MY')}</p>
           {daysRemaining !== null && (
             <p className={daysRemaining <= 7 ? 'font-bold text-yellow-200' : ''}>
               ⏳ {daysRemaining} hari lagi
@@ -82,27 +88,27 @@ export default function SubscriptionWidget({ userEmail }) {
       )}
 
       {subscription?.tier === 'free' && (
-        <Link to="/settings">
+        <Link to="/">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="w-full bg-white/30 hover:bg-white/50 text-white rounded-xl py-2 font-bold text-sm transition-all flex items-center justify-center gap-2 mt-3"
           >
             <Zap className="w-4 h-4" />
-            Upgrade Now
+            Naik Taraf Sekarang
           </motion.button>
         </Link>
       )}
 
       {isExpired && (
-        <Link to="/settings">
+        <Link to="/">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="w-full bg-white/30 hover:bg-white/50 text-white rounded-xl py-2 font-bold text-sm transition-all flex items-center justify-center gap-2 mt-3"
           >
             <CreditCard className="w-4 h-4" />
-            Renew Subscription
+            Perbaharui Langganan
           </motion.button>
         </Link>
       )}

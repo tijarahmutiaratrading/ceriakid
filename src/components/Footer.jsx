@@ -23,10 +23,10 @@ export default function Footer() {
       <div className="max-w-lg mx-auto px-4 py-6">
         <div className="flex items-center justify-center gap-2 mb-3">
           <span className="text-2xl">🎓</span>
-          <span className="text-lg font-black bg-gradient-to-r from-game-purple to-game-pink bg-clip-text text-transparent">Jom Belajar</span>
+          <span className="text-lg font-black bg-gradient-to-r from-game-purple to-game-pink bg-clip-text text-transparent">CeriaKid</span>
         </div>
         <p className="text-xs text-center text-gray-600 mb-3">
-          Belajar sambil bermain, berkembang setiap hari! 🌟
+          Ceria belajar, suka bermain, maju bersama! 🌟
         </p>
         <div className="flex justify-center gap-2 mb-3 text-xs">
           <span>✨ Pembelajaran Menyenangkan</span>
@@ -34,7 +34,7 @@ export default function Footer() {
           <span>📈 Progres Nyata</span>
         </div>
         <p className="text-xs text-center text-gray-500">
-          © 2026 Jom Belajar. Dibuat dengan ❤️ untuk anak-anak Malaysia
+          © 2026 CeriaKid. Dibuat dengan ❤️ untuk anak-anak Malaysia
         </p>
       </div>
     </motion.footer>
