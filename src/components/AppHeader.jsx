@@ -127,26 +127,27 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -320, opacity: 0 }}
             transition={{ type: 'spring', damping: 22, stiffness: 280 }}
-            className="fixed left-0 top-0 z-50 h-full w-72 flex flex-col bg-white shadow-2xl"
+            className="fixed left-3 top-3 bottom-3 z-50 w-72 flex flex-col rounded-3xl overflow-hidden shadow-2xl"
+            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.4)' }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-5 border-b border-gray-100">
+            <div className="flex items-center justify-between px-5 py-5 border-b border-white/30">
               <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9519ccb9a_ChatGPTImageApr302026at06_37_02PM.png" alt="CeriaKid" className="h-10 rounded-xl" />
-              <button type="button" onClick={() => setIsOpen(false)} className="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
+              <button type="button" onClick={() => setIsOpen(false)} className="p-2 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-white/50 transition-all">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* User info */}
             {isAuthenticated && user && (
-              <div className="px-5 py-4 bg-gradient-to-r from-purple-50 to-blue-50 border-b border-gray-100">
+              <div className="px-5 py-4 border-b border-white/20" style={{ background: 'rgba(255,255,255,0.15)' }}>
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-gradient-to-br from-game-purple to-game-pink flex items-center justify-center text-white font-black text-sm flex-shrink-0">
                     {user.full_name?.[0]?.toUpperCase() || '?'}
                   </div>
                   <div className="min-w-0">
                     <p className="font-black text-gray-800 text-sm truncate">{user.full_name}</p>
-                    <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                    <p className="text-xs text-gray-500 truncate">{user.email}</p>
                   </div>
                 </div>
               </div>
@@ -167,7 +168,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                     <motion.div whileTap={{ scale: 0.97 }}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                        isActive(item.path) ? 'bg-game-purple text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'
+                        isActive(item.path) ? 'bg-game-purple/90 text-white shadow-sm' : 'text-gray-700 hover:bg-white/50'
                       }`}>
                       <span className="text-xl w-7 text-center">{item.emoji}</span>
                       <span>{item.label}</span>
@@ -184,7 +185,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                          isActive(item.path) ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'
+                          isActive(item.path) ? 'bg-blue-600/90 text-white shadow-sm' : 'text-gray-700 hover:bg-white/50'
                         }`}>
                         <span className="text-xl w-7 text-center">{item.emoji}</span>
                         <span>{item.label}</span>
@@ -202,7 +203,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                          isActive(item.path) ? 'bg-game-purple text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'
+                          isActive(item.path) ? 'bg-game-purple/90 text-white shadow-sm' : 'text-gray-700 hover:bg-white/50'
                         }`}>
                         <span className="text-xl w-7 text-center">{item.emoji}</span>
                         <span>{item.label}</span>
@@ -216,12 +217,12 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {adminItems.length > 0 && (
                 <>
                   <p className="text-xs font-black text-gray-400 uppercase tracking-wider px-3 pt-4 pb-1">Admin</p>
-                  <div className="rounded-2xl overflow-hidden border border-red-100 bg-red-50/50">
+                  <div className="rounded-2xl overflow-hidden border border-red-200/40" style={{ background: 'rgba(254,242,242,0.4)' }}>
                     {adminItems.map((item) => (
                       <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                         <motion.div whileTap={{ scale: 0.97 }}
-                          className={`flex items-center gap-3 px-3 py-2.5 font-semibold text-sm transition-all border-b border-red-100 last:border-0 ${
-                            isActive(item.path) ? 'bg-red-600 text-white' : 'text-red-700 hover:bg-red-100'
+                          className={`flex items-center gap-3 px-3 py-2.5 font-semibold text-sm transition-all border-b border-red-200/30 last:border-0 ${
+                            isActive(item.path) ? 'bg-red-500/80 text-white' : 'text-red-700 hover:bg-white/50'
                           }`}>
                           <span className="text-xl w-7 text-center">{item.emoji}</span>
                           <span>{item.label}</span>
@@ -235,10 +236,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
             {/* Footer: Logout */}
             {isAuthenticated && (
-              <div className="px-3 py-4 border-t border-gray-100">
+              <div className="px-3 py-4 border-t border-white/30">
                 <motion.button type="button" whileTap={{ scale: 0.97 }}
                   onClick={() => { setIsOpen(false); logout?.(); }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all">
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm text-gray-600 hover:bg-red-100/50 hover:text-red-600 transition-all">
                   <LogOut className="w-5 h-5 flex-shrink-0" />
                   <span>Log Keluar</span>
                 </motion.button>
