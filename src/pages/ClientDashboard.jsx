@@ -82,18 +82,14 @@ export default function ClientDashboard() {
           className="mb-5 rounded-3xl overflow-hidden shadow-2xl"
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.4)' }}
         >
-          {/* Top gradient strip */}
-          <div className="relative">
-
-            {/* Tier badge */}
-            <div className="absolute top-3 right-4 flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1.5">
-              <span className="text-lg">{tier.emoji}</span>
-              <span className="text-white font-black text-xs">{tier.label}</span>
-            </div>
+          {/* Tier badge */}
+          <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1.5 z-10">
+            <span className="text-lg">{tier.emoji}</span>
+            <span className="text-white font-black text-xs">{tier.label}</span>
           </div>
 
           {/* Avatar overlapping strip */}
-          <div className="px-6 pb-6 pt-4">
+          <div className="px-6 pb-6 pt-6">
             <div className="flex items-end gap-4 -mt-10 mb-4">
               <div className="relative">
                 {avatarUrl && avatarUrl.includes('http') ? (
