@@ -352,13 +352,15 @@ export default function AdminGameManager() {
         {/* Tabs */}
         <div className="flex gap-2 mb-6 p-1 rounded-2xl overflow-x-auto" style={{ background: 'rgba(255,255,255,0.1)' }}>
           {[
-            { id: 'generator', label: '🤖 Generator' },
-            { id: 'manager', label: '📋 Manager' },
-            { id: 'minigames', label: '🎯 Mini Games Hub' },
+            { id: 'generator', label: '🤖 Gen', labelFull: '🤖 Generator' },
+            { id: 'manager', label: '📋 Mgr', labelFull: '📋 Manager' },
+            { id: 'minigames', label: '🎯 Mini', labelFull: '🎯 Mini Games Hub' },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${tab === t.id ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/70 hover:text-white'}`}>
-              {t.label}
+              className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/70 hover:text-white'}`}
+              title={t.labelFull}>
+              <span className="md:hidden">{t.label}</span>
+              <span className="hidden md:inline">{t.labelFull}</span>
             </button>
           ))}
         </div>
@@ -404,7 +406,7 @@ export default function AdminGameManager() {
               )}
 
               <p className="text-white/50 text-xs font-black mb-2">🧒 Prasekolah</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+              <div className="grid grid-cols-1 gap-2 mb-3">
                 {SUBJECT_CONFIG.filter(s => s.ageGroup === 'prasekolah').map(sc => {
                   const key = `${sc.ageGroup}-${sc.subject}`;
                   const sel = selectedSubjects.has(key);
@@ -436,7 +438,7 @@ export default function AdminGameManager() {
               </div>
 
               <p className="text-white/50 text-xs font-black mb-2">🎒 Sekolah Rendah</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-5">
+              <div className="grid grid-cols-1 gap-2 mb-5">
                 {SUBJECT_CONFIG.filter(s => s.ageGroup === 'sekolah_rendah').map(sc => {
                   const key = `${sc.ageGroup}-${sc.subject}`;
                   const sel = selectedSubjects.has(key);
@@ -579,7 +581,7 @@ export default function AdminGameManager() {
               {loadingMiniGames ? (
                 <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'].map(gameId => {
                     const data = miniGamesData[gameId] || { count: 0, totalQuestions: 0 };
                     const gameNames = { memory: '🧠 Memory', dragdrop: '🎯 Drag&Drop', wordbuilder: '📝 Word', sorting: '🔄 Sort', tilematch: '🎮 Tile', story: '📖 Story', physics: '⚡ Physics', tracing: '✏️ Tracing' };
@@ -617,7 +619,7 @@ export default function AdminGameManager() {
             {tab === 'manager' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Stats row */}
-            <div className="grid grid-cols-3 gap-2 mb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
               {[
                 { value: totalGames, label: 'Total Games', color: 'text-yellow-300' },
                 { value: totalFull, label: 'Soalan Penuh', color: 'text-green-300' },
@@ -637,41 +639,42 @@ export default function AdminGameManager() {
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">🔍</span>
                   <input
                     type="text"
-                    placeholder="Cari games..."
+                    placeholder="Cari..."
                     value={managerSearch}
                     onChange={e => setManagerSearch(e.target.value)}
                     className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50"
                   />
                 </div>
-                <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all">
+                <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0">
                   <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
                 </button>
               </div>
-              <div className="flex gap-2 flex-wrap">
-                {['all', 'prasekolah', 'sekolah_rendah'].map(ag => (
-                  <button key={ag} onClick={() => setManagerAgeFilter(ag)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${managerAgeFilter === ag ? 'bg-white text-indigo-700' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
-                    {ag === 'all' ? 'Semua' : ag === 'prasekolah' ? '🧒 Prasekolah' : '🎒 Sekolah Rendah'}
-                  </button>
-                ))}
-                <div className="ml-auto">
-                  <button
-                    onClick={async () => {
-                      if (!window.confirm('🚨 DELETE semua games?')) return;
-                      setActionLoading('delete-all');
-                      try {
-                        const res = await base44.functions.invoke('deleteAllGames', {});
-                        showToast(`✅ Deleted ${res.data.deletedCount} games`);
-                        await fetchStats();
-                      } catch (err) { showToast('❌ ' + err.message, false); }
-                      setActionLoading(null);
-                    }}
-                    disabled={!!actionLoading}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all">
-                    {actionLoading === 'delete-all' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
-                    Delete All
-                  </button>
+              <div className="flex gap-2 flex-wrap items-center justify-between">
+                <div className="flex gap-2 flex-wrap">
+                  {['all', 'prasekolah', 'sekolah_rendah'].map(ag => (
+                    <button key={ag} onClick={() => setManagerAgeFilter(ag)}
+                      className={`px-2 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${managerAgeFilter === ag ? 'bg-white text-indigo-700' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
+                      {ag === 'all' ? 'Semua' : ag === 'prasekolah' ? '🧒' : '🎒'}
+                      <span className="hidden sm:inline ml-1">{ag === 'all' ? 'Semua' : ag === 'prasekolah' ? 'Prasekolah' : 'SR'}</span>
+                    </button>
+                  ))}
                 </div>
+                <button
+                  onClick={async () => {
+                    if (!window.confirm('🚨 DELETE semua games?')) return;
+                    setActionLoading('delete-all');
+                    try {
+                      const res = await base44.functions.invoke('deleteAllGames', {});
+                      showToast(`✅ Deleted ${res.data.deletedCount} games`);
+                      await fetchStats();
+                    } catch (err) { showToast('❌ ' + err.message, false); }
+                    setActionLoading(null);
+                  }}
+                  disabled={!!actionLoading}
+                  className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all flex-shrink-0">
+                  {actionLoading === 'delete-all' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+                  <span className="hidden sm:inline">Delete All</span>
+                </button>
               </div>
             </div>
 
