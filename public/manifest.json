@@ -1,11 +1,11 @@
 {
-  "name": "CeriaKid - Pembelajaran Interaktif",
+  "name": "CeriaKid - Pembelajaran Anak",
   "short_name": "CeriaKid",
   "description": "200+ permainan edukatif untuk anak prasekolah & sekolah rendah",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fff8f0",
-  "theme_color": "#f97316",
+  "background_color": "#ffffff",
+  "theme_color": "#8b5cf6",
   "orientation": "portrait",
   "icons": [
     {
@@ -18,5 +18,7 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "categories": ["education", "kids"],
+  "lang": "ms"
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, Check, CheckCircle, XCircle } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import AppHeader from '@/components/AppHeader';
@@ -82,9 +82,26 @@ export default function Landing() {
   const countdown = useCountdown(15);
   const [selectedTierForCheckout, setSelectedTierForCheckout] = useState('standard');
   const [navVisible, setNavVisible] = useState(true);
+  const [paymentStatus, setPaymentStatus] = useState(null); // 'success' | 'failed' | null
   const lastScrollY = useRef(0);
 
-  React.useEffect(() => {
+  // Detect payment return from Chip
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get('payment');
+    if (payment === 'success') {
+      setPaymentStatus('success');
+      // Clean URL
+      window.history.replaceState({}, '', '/');
+      // Refresh auth to pick up new subscription
+      setTimeout(() => refreshAuth?.(), 1500);
+    } else if (payment === 'failed') {
+      setPaymentStatus('failed');
+      window.history.replaceState({}, '', '/');
+    }
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
       if (currentY < 50) {
@@ -113,6 +130,52 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen font-nunito" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fff3e6 40%, #fff9f0 100%)' }}>
+
+      {/* ── PAYMENT STATUS BANNER ── */}
+      <AnimatePresence>
+        {paymentStatus && (
+          <motion.div
+            initial={{ y: -80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -80, opacity: 0 }}
+            className={`fixed top-0 left-0 right-0 z-[100] px-6 py-4 flex items-center justify-between shadow-lg ${
+              paymentStatus === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              {paymentStatus === 'success' ? (
+                <CheckCircle className="w-6 h-6 flex-shrink-0" />
+              ) : (
+                <XCircle className="w-6 h-6 flex-shrink-0" />
+              )}
+              <div>
+                {paymentStatus === 'success' ? (
+                  <>
+                    <p className="font-black text-lg">🎉 Pembayaran Berjaya!</p>
+                    <p className="text-sm text-white/90">Langganan anda telah diaktifkan. Selamat belajar!</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="font-black text-lg">❌ Pembayaran Gagal</p>
+                    <p className="text-sm text-white/90">Sila cuba lagi atau hubungi kami untuk bantuan.</p>
+                  </>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-3 flex-shrink-0">
+              {paymentStatus === 'success' && (
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  className="px-4 py-2 bg-white text-green-600 rounded-full font-black text-sm shadow"
+                >
+                  Ke Dashboard →
+                </button>
+              )}
+              <button onClick={() => setPaymentStatus(null)} className="text-white/80 hover:text-white text-xl font-bold">✕</button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
 
 
