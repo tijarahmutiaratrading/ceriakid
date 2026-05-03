@@ -1089,64 +1089,38 @@ export default function AdminGameManager() {
                   <button
                   onClick={async () => {
                     setActionLoading('execute-all');
-                    setIsPaused(false);
-                    let updatedProgress = [...taskProgress];
 
-                    // Execute all remaining tasks
-                    for (const task of regenerationTasks) {
-                      const alreadyDone = updatedProgress.find((p) => p.taskId === task.taskId);
-                      if (alreadyDone) continue;
+                    // Mark all as "running" immediately for UI feedback
+                    setTaskProgress(regenerationTasks.map(t => ({ taskId: t.taskId, status: 'running', message: 'Dihantar ke server...' })));
+                    showToast('🚀 Tasks dihantar ke server — boleh tutup browser!', true);
 
-                      // Wait if paused
-                      while (isPaused) {
-                        await new Promise((r) => setTimeout(r, 500));
-                      }
+                    // Fire-and-forget: single backend call processes all tasks server-side
+                    // Browser can close — server will finish on its own
+                    base44.functions.invoke('processGameTasksBackground', {
+                      tasks: regenerationTasks
+                    }).then(async (res) => {
+                      const results = res.data?.results || [];
+                      setTaskProgress(results.map(r => ({
+                        taskId: r.taskId,
+                        status: 'completed',
+                        message: `✅ ${r.createdGames}/${r.totalGames} games created`
+                      })));
+                      showToast(`✅ Selesai! ${res.data?.totalCreated || 0} games dicipta.`);
+                      await fetchStats();
+                      setActionLoading(null);
+                      setRegenerationTasks(null);
+                      setTaskProgress([]);
+                    }).catch(err => {
+                      showToast('❌ Error: ' + err.message, false);
+                      setActionLoading(null);
+                    });
 
-                      // Mark as running
-                      updatedProgress = [...updatedProgress, { taskId: task.taskId, status: 'running', message: 'Running...' }];
-                      setTaskProgress(updatedProgress);
-                      showToast(`⏳ Executing ${task.taskName}...`, true);
-
-                      try {
-                        const res = await base44.functions.invoke('regenerateGamesTask', {
-                          taskId: task.taskId,
-                          taskName: task.taskName,
-                          ageGroup: task.ageGroup,
-                          subject: task.subject,
-                          gamesCount: task.gamesCount,
-                          questionsPerGame: task.questionsPerGame
-                        });
-
-                        // Mark as completed
-                        updatedProgress = updatedProgress.map((p) =>
-                        p.taskId === task.taskId ?
-                        { ...p, status: 'completed', message: `✅ ${res.data.createdGames} games created` } :
-                        p
-                        );
-                        setTaskProgress(updatedProgress);
-                        showToast(`✅ ${task.taskName} done!`);
-                      } catch (err) {
-                        // Mark as failed
-                        updatedProgress = updatedProgress.map((p) =>
-                        p.taskId === task.taskId ?
-                        { ...p, status: 'failed', message: err.message } :
-                        p
-                        );
-                        setTaskProgress(updatedProgress);
-                        showToast(`❌ ${task.taskName} failed`, false);
-                      }
-
-                      // Delay before next task
-                      await new Promise((r) => setTimeout(r, 2000));
-                    }
-
-                    // All done—refresh & close
-                    showToast('✅ Semua tasks selesai!');
-                    await fetchStats();
-                    setActionLoading(null);
-                    setRegenerationTasks(null);
-                    setTaskProgress([]);
-                    setIsPaused(false);
+                    // Close modal immediately — backend runs independently
+                    setTimeout(() => {
+                      setRegenerationTasks(null);
+                      setTaskProgress([]);
+                      setActionLoading(null);
+                    }, 3000);
                   }}
                   disabled={actionLoading === 'execute-all'}
                   className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg disabled:opacity-50">
