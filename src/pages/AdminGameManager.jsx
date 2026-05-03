@@ -589,8 +589,8 @@ export default function AdminGameManager() {
                     return (
                       <div key={gameId} className="bg-white/10 rounded-2xl p-3 text-center border border-white/20">
                         <p className="text-white font-bold text-sm mb-2"><span className="sm:hidden">{shortNames[gameId]}</span><span className="hidden sm:inline">{gameNames[gameId]}</span></p>
-                        <p className="text-white/70 text-xs">{data.count} games</p>
-                        <p className="text-white/50 text-xs">{data.totalQuestions} soalan</p>
+                        <p className="text-white/70 text-xs font-bold">{data.count}</p>
+                        <p className="text-white/50 text-xs">games</p>
                       </div>
                     );
                   })}
