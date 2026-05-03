@@ -587,9 +587,9 @@ export default function AdminGameManager() {
                     const gameNames = { memory: '🧠 Memory', dragdrop: '🎯 Drag&Drop', wordbuilder: '📝 Word', sorting: '🔄 Sort', tilematch: '🎮 Tile', story: '📖 Story', physics: '⚡ Physics', tracing: '✏️ Tracing' };
                     const shortNames = { memory: '🧠', dragdrop: '🎯', wordbuilder: '📝', sorting: '🔄', tilematch: '🎮', story: '📖', physics: '⚡', tracing: '✏️' };
                     return (
-                      <div key={gameId} className="bg-white/10 rounded-2xl p-3 text-center border border-white/20">
-                        <p className="text-white font-bold text-sm mb-2"><span className="sm:hidden">{shortNames[gameId]}</span><span className="hidden sm:inline">{gameNames[gameId]}</span></p>
-                        <p className="text-white/70 text-xs font-bold">{data.count}</p>
+                      <div key={gameId} className="bg-white/10 rounded-xl p-2 sm:p-3 text-center border border-white/20">
+                        <p className="text-white font-bold text-xs sm:text-sm mb-1"><span className="sm:hidden">{shortNames[gameId]}</span><span className="hidden sm:inline">{gameNames[gameId]}</span></p>
+                        <p className="text-white/70 text-sm sm:text-base font-bold">{data.count}</p>
                         <p className="text-white/50 text-xs">games</p>
                       </div>
                     );
