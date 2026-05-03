@@ -59,10 +59,29 @@ export default function TracingGameGamified() {
   };
 
   const stopDrawing = () => {
+    if (!isDrawing) return;
     setIsDrawing(false);
-    const acc = Math.floor(Math.random() * 35) + 65;
+
+    // Calculate real accuracy based on pixel coverage within the guide letter area
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    // Count purple (user stroke) pixels vs total possible
+    let purplePixels = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+      // Purple stroke: high R, low G, high B, opaque
+      if (a > 100 && r > 100 && g < 80 && b > 150) purplePixels++;
+    }
+
+    // Score based on coverage: 50+ pixels = 70%, scale up from there (cap 99%)
+    const raw = Math.min(Math.floor(50 + (purplePixels / 8)), 99);
+    const acc = Math.max(raw, 40); // minimum 40 for any attempt
     setAccuracy(acc);
-    setScore(s => s + acc);
+    setScore(s => s + Math.floor(acc / 5));
   };
 
   const clearCanvas = () => { setAccuracy(0); drawGuide(); };

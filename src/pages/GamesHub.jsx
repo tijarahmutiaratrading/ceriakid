@@ -2,79 +2,57 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import AppHeader from '@/components/AppHeader';
+import { useAgeGroup } from '@/lib/AgeGroupContext';
 
-const gamesByLevel = {
-  prasekolah: [
-    { id: 1, emoji: '🧠', title: 'Permainan Ingatan', description: 'Cari pasangan kad yang sama!', path: '/games/memory', color: 'from-purple-500 to-pink-500', level: 'Mudah' },
-    { id: 2, emoji: '🎯', title: 'Padankan Huruf', description: 'Seret huruf ke gambar yang betul.', path: '/games/dragdrop', color: 'from-blue-500 to-cyan-400', level: 'Mudah' },
-    { id: 3, emoji: '📝', title: 'Bentuk Perkataan', description: 'Susun huruf untuk bina perkataan!', path: '/games/wordbuilder', color: 'from-green-500 to-emerald-400', level: 'Sederhana' },
-    { id: 4, emoji: '🗂️', title: 'Isih Kategori', description: 'Seret item ke kategori yang betul.', path: '/games/sorting', color: 'from-orange-500 to-yellow-400', level: 'Sederhana' },
-    { id: 6, emoji: '📖', title: 'Petualangan Harta', description: 'Pilih jalan yang tepat untuk cari harta!', path: '/games/story', color: 'from-amber-500 to-orange-400', level: 'Mudah' },
-    { id: 8, emoji: '✏️', title: 'Seni Menulis', description: 'Lukis huruf dengan garis panduan!', path: '/games/tracing', color: 'from-violet-500 to-purple-500', level: 'Sederhana' },
-  ],
-  sekolah_rendah: [
-    { id: 2, emoji: '🎯', title: 'Padankan Huruf', description: 'Seret huruf ke gambar yang betul.', path: '/games/dragdrop', color: 'from-blue-500 to-cyan-400', level: 'Sederhana' },
-    { id: 3, emoji: '📝', title: 'Bentuk Perkataan', description: 'Susun huruf untuk bina perkataan!', path: '/games/wordbuilder', color: 'from-green-500 to-emerald-400', level: 'Sederhana' },
-    { id: 5, emoji: '🎨', title: 'Padankan 3 Sama', description: 'Pilih 3 petak dengan nilai sama!', path: '/games/tilematch', color: 'from-pink-500 to-purple-500', level: 'Sukar' },
-    { id: 7, emoji: '🚀', title: 'Lontarkan Bola', description: 'Atur kuasa & sudut untuk kena sasaran!', path: '/games/physics', color: 'from-sky-500 to-blue-500', level: 'Sukar' },
-    { id: 4, emoji: '🗂️', title: 'Isih Kategori', description: 'Seret item ke kategori yang betul.', path: '/games/sorting', color: 'from-orange-500 to-yellow-400', level: 'Sederhana' },
-    { id: 6, emoji: '📖', title: 'Petualangan Harta', description: 'Pilih jalan yang tepat untuk cari harta!', path: '/games/story', color: 'from-amber-500 to-orange-400', level: 'Mudah' },
-  ],
-};
-
-const tips = [
-  { emoji: '🏆', title: 'Dapatkan Bintang', desc: 'Setiap permainan memberi bintang berdasarkan prestasi!' },
-  { emoji: '⚡', title: 'Cepat & Tepat', desc: 'Semakin cepat & tepat, semakin banyak poin!' },
-  { emoji: '🎯', title: 'Ulang Permainan', desc: 'Boleh ulang banyak kali untuk tingkatkan skor!' },
-  { emoji: '📊', title: 'Pantau Kemajuan', desc: 'Dashboard ibu bapa boleh lihat semua pencapaian!' },
+// All mini-games with age-group filtering
+const ALL_GAMES = [
+  { id: 'memory',     emoji: '🧠', title: 'Permainan Ingatan',   description: 'Cari pasangan kad yang sama!',           path: '/games/memory',     color: 'from-purple-500 to-pink-500',    level: 'Mudah',     ageGroups: ['prasekolah', 'sekolah_rendah'], subject: 'Umum', skills: ['Ingatan', 'Fokus'] },
+  { id: 'dragdrop',   emoji: '🎯', title: 'Padankan Huruf',      description: 'Seret huruf ke gambar yang betul.',       path: '/games/dragdrop',   color: 'from-blue-500 to-cyan-400',      level: 'Mudah',     ageGroups: ['prasekolah', 'sekolah_rendah'], subject: 'BM/BI', skills: ['Huruf', 'Perbendaharaan kata'] },
+  { id: 'wordbuilder',emoji: '📝', title: 'Bentuk Perkataan',    description: 'Susun huruf untuk bina perkataan!',       path: '/games/wordbuilder',color: 'from-green-500 to-emerald-400',  level: 'Sederhana', ageGroups: ['prasekolah', 'sekolah_rendah'], subject: 'BM',    skills: ['Ejaan', 'Kosa kata'] },
+  { id: 'sorting',    emoji: '🗂️', title: 'Isih Kategori',       description: 'Seret item ke kategori yang betul.',      path: '/games/sorting',    color: 'from-orange-500 to-yellow-400',  level: 'Sederhana', ageGroups: ['prasekolah', 'sekolah_rendah'], subject: 'Sains', skills: ['Klasifikasi', 'Alam sekitar'] },
+  { id: 'tracing',    emoji: '✏️', title: 'Seni Menulis',        description: 'Lukis huruf dengan garis panduan!',       path: '/games/tracing',    color: 'from-violet-500 to-purple-500',  level: 'Sederhana', ageGroups: ['prasekolah'],                  subject: 'BM',    skills: ['Menulis', 'Motor halus'] },
+  { id: 'story',      emoji: '📖', title: 'Petualangan Cerita',  description: 'Pilih jalan cerita yang tepat!',          path: '/games/story',      color: 'from-amber-500 to-orange-400',   level: 'Mudah',     ageGroups: ['prasekolah', 'sekolah_rendah'], subject: 'BM/BI', skills: ['Kefahaman', 'Keputusan'] },
+  { id: 'tilematch',  emoji: '🔢', title: 'Padankan 3 Sama',     description: 'Pilih 3 petak dengan nilai sama!',        path: '/games/tilematch',  color: 'from-pink-500 to-purple-500',    level: 'Sukar',     ageGroups: ['sekolah_rendah'],              subject: 'Math',  skills: ['Matematik', 'Tambah'] },
+  { id: 'physics',    emoji: '🚀', title: 'Lontarkan Bola',      description: 'Atur kuasa & sudut untuk kena sasaran!',  path: '/games/physics',    color: 'from-sky-500 to-blue-500',       level: 'Sukar',     ageGroups: ['sekolah_rendah'],              subject: 'Sains', skills: ['Fizik', 'Penaakulan'] },
 ];
 
+const levelColors = {
+  Mudah: 'bg-green-400/80 text-white',
+  Sederhana: 'bg-yellow-400/80 text-white',
+  Sukar: 'bg-red-400/80 text-white',
+};
+
 export default function GamesHub() {
+  const { ageGroup } = useAgeGroup() || { ageGroup: 'prasekolah' };
+  const filteredGames = ALL_GAMES.filter(g => g.ageGroups.includes(ageGroup));
+
   const GameCard = ({ game, idx }) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: idx * 0.05 }}
-      whileHover={{ scale: 1.03 }}
+      transition={{ delay: idx * 0.06 }}
+      whileHover={{ scale: 1.03, y: -4 }}
       whileTap={{ scale: 0.97 }}
     >
       <Link to={game.path} className="block h-full">
-        <div
-          className={`bg-gradient-to-br ${game.color} rounded-3xl p-4 h-full flex flex-col justify-between shadow-lg`}
-          style={{ minHeight: '130px' }}
-        >
+        <div className={`bg-gradient-to-br ${game.color} rounded-3xl p-4 h-full flex flex-col justify-between shadow-lg`} style={{ minHeight: '155px' }}>
           <div>
-            <div className="text-3xl mb-2">{game.emoji}</div>
+            <div className="flex items-start justify-between mb-2">
+              <div className="text-3xl">{game.emoji}</div>
+              <div className={`text-xs px-2 py-0.5 rounded-full font-black ${levelColors[game.level]}`}>
+                {game.level}
+              </div>
+            </div>
             <h3 className="text-white font-black text-sm leading-tight mb-1">{game.title}</h3>
             <p className="text-white/80 text-xs font-semibold leading-snug">{game.description}</p>
           </div>
-          <div className="mt-3">
-            <div className="bg-white/20 rounded-full px-2.5 py-1 text-xs text-white font-black inline-block">
-              {game.level}
-            </div>
+          <div className="mt-3 flex gap-1 flex-wrap">
+            {game.skills.map(s => (
+              <span key={s} className="bg-white/20 rounded-full px-2 py-0.5 text-white text-xs font-bold">{s}</span>
+            ))}
           </div>
         </div>
       </Link>
-    </motion.div>
-  );
-
-  const renderSection = (title, emoji, games, delay) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
-      className="mb-8"
-    >
-      <div className="flex items-center gap-2 mb-4">
-        <div className="text-3xl">{emoji}</div>
-        <h2 className="text-2xl font-black text-white">{title}</h2>
-        <div className="flex-1 h-1 bg-gradient-to-r from-white/40 to-transparent rounded-full" />
-      </div>
-      <div className="grid grid-cols-2 gap-3">
-        {games.map((game, idx) => (
-          <GameCard key={game.id} game={game} idx={idx} />
-        ))}
-      </div>
     </motion.div>
   );
 
@@ -94,23 +72,46 @@ export default function GamesHub() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 p-5 rounded-3xl"
+          className="mb-6 p-5 rounded-3xl"
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
         >
           <div className="flex items-center gap-3">
             <div className="text-5xl">🎮</div>
-            <div>
+            <div className="flex-1">
               <h1 className="text-3xl font-black text-white leading-tight">Game Hub</h1>
-              <p className="text-white/70 text-sm font-semibold">Pilih kategori untuk bermain</p>
+              <p className="text-white/70 text-sm font-semibold">
+                {ageGroup === 'prasekolah' ? '🧒 Prasekolah' : '🎒 Sekolah Rendah'} · {filteredGames.length} permainan interaktif
+              </p>
             </div>
+          </div>
+
+          {/* Skill legend */}
+          <div className="flex gap-2 mt-4 flex-wrap">
+            {[{ label: 'Mudah', color: 'bg-green-400/80' }, { label: 'Sederhana', color: 'bg-yellow-400/80' }, { label: 'Sukar', color: 'bg-red-400/80' }].map(l => (
+              <span key={l.label} className={`${l.color} text-white text-xs px-2.5 py-1 rounded-full font-bold`}>{l.label}</span>
+            ))}
+            <span className="text-white/50 text-xs self-center ml-1">— Tahap kesukaran</span>
           </div>
         </motion.div>
 
-        {/* Prasekolah Section */}
-        {renderSection('🧒 Prasekolah (Umur 4-6)', '🟢', gamesByLevel.prasekolah, 0.1)}
+        {/* Games Grid */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          {filteredGames.map((game, idx) => (
+            <GameCard key={game.id} game={game} idx={idx} />
+          ))}
+        </div>
 
-        {/* Sekolah Rendah Section */}
-        {renderSection('🎒 Sekolah Rendah (Umur 7-12)', '🟡', gamesByLevel.sekolah_rendah, 0.2)}
+        {/* Info card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="p-5 rounded-3xl text-center"
+          style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+        >
+          <p className="text-white font-black text-base mb-1">💡 Tips Ibu Bapa</p>
+          <p className="text-white/70 text-sm">Semua permainan direka untuk merangsang perkembangan kognitif. Main bersama anak untuk pengalaman terbaik!</p>
+        </motion.div>
       </div>
     </div>
   );
