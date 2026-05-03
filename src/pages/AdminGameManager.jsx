@@ -475,27 +475,7 @@ export default function AdminGameManager() {
             }
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <button
-              onClick={async () => {
-                if (!window.confirm('🚨 DELETE semua games? Ini tidak boleh di-undo!')) return;
-                setActionLoading('delete-all');
-                showToast('🗑️ Deleting all games...', true);
-                try {
-                  const deleteRes = await base44.functions.invoke('deleteAllGames', {});
-                  showToast(`✅ Deleted ${deleteRes.data.deletedCount} games`);
-                  await fetchStats();
-                } catch (err) {
-                  showToast('❌ ' + err.message, false);
-                } finally {
-                  setActionLoading(null);
-                }
-              }}
-              disabled={!!actionLoading}
-              className="flex items-center gap-2 px-3 py-2 bg-red-700 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all">
-              
-              {actionLoading === 'delete-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-              Delete All Games
-            </button>
+
 
             
 
@@ -578,7 +558,6 @@ export default function AdminGameManager() {
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => {
-                // Select ALL subjects
                 const allKeys = SUBJECT_CONFIG.map(sc => `${sc.ageGroup}-${sc.subject}`);
                 setSelectedSubjects(new Set(allKeys));
                 setBulkGenerateConfig({ games: 5, questions: 10, selectedCount: allKeys.length });
@@ -586,6 +565,28 @@ export default function AdminGameManager() {
               disabled={!!actionLoading}
               className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all">
               🌍 Generate All
+            </motion.button>
+
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={async () => {
+                if (!window.confirm('🚨 DELETE semua games? Ini tidak boleh di-undo!')) return;
+                setActionLoading('delete-all');
+                showToast('🗑️ Deleting all games...', true);
+                try {
+                  const deleteRes = await base44.functions.invoke('deleteAllGames', {});
+                  showToast(`✅ Deleted ${deleteRes.data.deletedCount} games`);
+                  await fetchStats();
+                } catch (err) {
+                  showToast('❌ ' + err.message, false);
+                } finally {
+                  setActionLoading(null);
+                }
+              }}
+              disabled={!!actionLoading}
+              className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all">
+              {actionLoading === 'delete-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+              Delete All
             </motion.button>
             
             {selectedSubjects.size > 0 &&
