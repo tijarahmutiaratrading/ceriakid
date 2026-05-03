@@ -87,7 +87,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Tier Selection */}
       <div>
-        <label className="block text-sm font-bold mb-3">Pilih Pelan Tahunan</label>
+        <label className="block text-sm font-bold mb-3 text-white">Pilih Pelan Tahunan</label>
         <div className="space-y-3">
           {TIERS.map((tier) => {
             const isSelected = formData.selectedTier === tier.name;
@@ -127,7 +127,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
       {/* Email */}
       <div>
-        <label className="block text-sm font-bold mb-2">Email</label>
+        <label className="block text-sm font-bold mb-2 text-white">Email</label>
         <input
           type="email"
           placeholder="email@example.com"
@@ -139,7 +139,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
       {/* Name */}
       <div>
-        <label className="block text-sm font-bold mb-2">Nama Ibu Bapa</label>
+        <label className="block text-sm font-bold mb-2 text-white">Nama Ibu Bapa</label>
         <input
           type="text"
           placeholder="Nama anda"
@@ -151,7 +151,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
       {/* Phone */}
       <div>
-        <label className="block text-sm font-bold mb-2">Nombor Telefon</label>
+        <label className="block text-sm font-bold mb-2 text-white">Nombor Telefon</label>
         <input
           type="tel"
           placeholder="01234567890"
