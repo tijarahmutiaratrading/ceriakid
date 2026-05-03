@@ -139,14 +139,14 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
             {/* User info */}
             {isAuthenticated && user && (
-              <div className="px-5 py-4 border-b border-gray-100" style={{ background: 'rgba(280,60,55,0.04)' }}>
+              <div className="px-5 py-4" style={{ background: 'rgba(255,255,255,0.1)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-gradient-to-br from-game-purple to-game-pink flex items-center justify-center text-white font-black text-sm flex-shrink-0">
                     {user.full_name?.[0]?.toUpperCase() || '?'}
                   </div>
                   <div className="min-w-0">
-                    <p className="font-black text-gray-800 text-sm truncate">{user.full_name}</p>
-                    <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                    <p className="font-black text-white text-sm truncate">{user.full_name}</p>
+                    <p className="text-xs text-white/70 truncate">{user.email}</p>
                   </div>
                 </div>
               </div>
@@ -161,13 +161,13 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   <a key={item.path} href={item.path} onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-gray-100 transition-all text-sm">
                     <span>{item.label}</span>
-                  </a>
-                ) : (
-                  <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
-                    <motion.div whileTap={{ scale: 0.97 }}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                        isActive(item.path) ? 'bg-game-purple/90 text-white shadow-sm' : 'text-gray-700 hover:bg-white/50'
-                      }`}>
+                    </a>
+                    ) : (
+                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
+                     <motion.div whileTap={{ scale: 0.97 }}
+                       className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
+                         isActive(item.path) ? 'bg-game-purple/90 text-white shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/20'
+                       }`}>
                       <span>{item.label}</span>
                     </motion.div>
                   </Link>
@@ -177,12 +177,12 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Dashboard section - without games link */}
               {dashboardItems.length > 0 && (
                 <>
-                  <p className="text-xs font-black text-gray-400 uppercase tracking-wider px-4 pt-5 pb-2">Dashboard</p>
+                  <p className="text-xs font-black text-white/50 uppercase tracking-wider px-4 pt-5 pb-2">Dashboard</p>
                   {dashboardItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
                         className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${
-                          isActive(item.path) ? 'bg-blue-500 text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'
+                          isActive(item.path) ? 'bg-blue-500 text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/20'
                         }`}>
                         <span>{item.label}</span>
                       </motion.div>
@@ -194,12 +194,12 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Other features */}
               {isAuthenticated && otherItems.length > 0 && (
                 <>
-                  <p className="text-xs font-black text-gray-400 uppercase tracking-wider px-4 pt-5 pb-2">Lain-lain</p>
+                  <p className="text-xs font-black text-white/50 uppercase tracking-wider px-4 pt-5 pb-2">Lain-lain</p>
                   {otherItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
                         className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${
-                          isActive(item.path) ? 'bg-gradient-to-r from-game-purple to-game-pink text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'
+                          isActive(item.path) ? 'bg-gradient-to-r from-game-purple to-game-pink text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/20'
                         }`}>
                         <span>{item.label}</span>
                       </motion.div>
@@ -211,14 +211,15 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Admin section */}
               {adminItems.length > 0 && (
                 <>
-                  <p className="text-xs font-black text-gray-400 uppercase tracking-wider px-4 pt-5 pb-2">Admin</p>
-                  <div className="rounded-2xl overflow-hidden border border-indigo-200" style={{ background: 'rgba(224,231,255,0.6)' }}>
+                  <p className="text-xs font-black text-white/50 uppercase tracking-wider px-4 pt-5 pb-2">Admin</p>
+                  <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)' }}>
                     {adminItems.map((item) => (
                       <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                         <motion.div whileTap={{ scale: 0.97 }}
-                          className={`flex items-center gap-3 px-4 py-3 font-semibold text-sm transition-all border-b border-indigo-100 last:border-0 ${
-                            isActive(item.path) ? 'bg-indigo-600 text-white shadow-md' : 'text-indigo-700 hover:bg-indigo-50'
-                          }`}>
+                          className={`flex items-center gap-3 px-4 py-3 font-semibold text-sm transition-all border-b last:border-0 ${
+                            isActive(item.path) ? 'bg-indigo-600 text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/20'
+                          }`}
+                          style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
                           <span>{item.label}</span>
                         </motion.div>
                       </Link>
@@ -230,10 +231,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
             {/* Footer: Logout */}
             {isAuthenticated && (
-              <div className="px-3 py-4 border-t border-gray-100">
+              <div className="px-3 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.2)' }}>
                 <motion.button type="button" whileTap={{ scale: 0.97 }}
                   onClick={() => { setIsOpen(false); logout?.(); }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm text-gray-600 hover:bg-red-100 hover:text-red-600 transition-all">
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm text-white/80 hover:text-white hover:bg-red-500/20 transition-all">
                   <LogOut className="w-5 h-5 flex-shrink-0" />
                   <span>Log Keluar</span>
                 </motion.button>
