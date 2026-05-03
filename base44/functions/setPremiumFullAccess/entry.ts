@@ -21,15 +21,14 @@ Deno.serve(async (req) => {
     }
 
     await base44.asServiceRole.entities.UserSubscription.update(existing[0].id, {
-      tier: 'premium',
+      tier: 'keluarga',
       status: 'active',
-      maxChildren: 4,
-      unlockedSubjects: ['bahasa_melayu', 'english', 'mathematics', 'science'],
-      unlockedLevels: ['prasekolah', 'sekolah_rendah']
+      currentPeriodStart: new Date().toISOString(),
+      currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
     });
 
     return Response.json({ 
-      message: `${email} has full premium access: all subjects, all levels, 4 children`, 
+      message: `${email} has full keluarga access: all subjects, all levels, 4 children, 1 year`, 
       updated: true 
     });
   } catch (error) {

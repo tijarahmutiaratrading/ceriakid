@@ -115,7 +115,7 @@ export default function AdminDashboard() {
   }
 
   const totalRevenue = subscriptions
-    .filter(s => s.tier !== 'free')
+    .filter(s => s.status === 'active' && s.tier !== 'free')
     .reduce((sum, s) => {
       const price = s.tier === 'asas' ? 49 : s.tier === 'standard' ? 99 : s.tier === 'keluarga' ? 199 : 0;
       return sum + price;
@@ -268,9 +268,17 @@ export default function AdminDashboard() {
                         </td>
                         <td className="py-3 px-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                            sub.status === 'active' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'
+                            sub.status === 'active' ? 'bg-green-200 text-green-700' :
+                            sub.status === 'trial' ? 'bg-blue-200 text-blue-700' :
+                            sub.status === 'incomplete' ? 'bg-yellow-200 text-yellow-700' :
+                            sub.status === 'past_due' ? 'bg-orange-200 text-orange-700' :
+                            'bg-red-200 text-red-700'
                           }`}>
-                            {sub.status === 'active' ? '✓ Aktif' : '✕ Batal'}
+                            {sub.status === 'active' ? '✓ Aktif' :
+                             sub.status === 'trial' ? '⏳ Trial' :
+                             sub.status === 'incomplete' ? '⏸ Pending' :
+                             sub.status === 'past_due' ? '⚠ Lewat' :
+                             '✕ Batal'}
                           </span>
                         </td>
                         <td className="py-3 px-4 text-xs text-gray-600">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>

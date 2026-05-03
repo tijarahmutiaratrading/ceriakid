@@ -88,8 +88,9 @@ export async function checkAndRegisterDevice(userEmail, tier) {
   return { allowed: true, devices: updatedDevices, limitReached: false, deviceId };
 }
 
-export async function removeDevice(deviceId) {
-  await base44.entities.RegisteredDevice.delete(deviceId);
+// recordId = the entity record's id (from RegisteredDevice.id), NOT the deviceId fingerprint
+export async function removeDevice(recordId) {
+  await base44.entities.RegisteredDevice.delete(recordId);
 }
 
 export async function getUserDevices(userEmail) {

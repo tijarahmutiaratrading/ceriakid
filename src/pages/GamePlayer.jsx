@@ -25,16 +25,48 @@ import { queueGameProgress, syncOfflineProgress } from '@/lib/offlineSyncManager
 export default function GamePlayer() {
   const { category, index } = useParams();
   const { ageGroup } = useAgeGroup();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { selectedChild } = useSelectedChild();
   const gameIndex = parseInt(index);
 
   const [game, setGame] = useState(null);
   const [gameLoaded, setGameLoaded] = useState(false);
+  const [accessDenied, setAccessDenied] = useState(false);
 
-  // Load game: try DB first, fallback to gameLibrary
+  // Load game: try DB first, fallback to gameLibrary + check access
   useEffect(() => {
     const loadGame = async () => {
+      // Check subscription tier to enforce locks
+      let userTier = 'free';
+      if (isAuthenticated && user?.email) {
+        try {
+          const subs = await base44.entities.UserSubscription.filter({ email: user.email });
+          if (subs.length > 0) {
+            const sub = subs[0];
+            const notExpired = !sub.currentPeriodEnd || new Date(sub.currentPeriodEnd) > new Date();
+            if ((sub.status === 'active' || sub.status === 'trial') && notExpired) {
+              userTier = sub.tier || 'free';
+            }
+          }
+        } catch (_) {}
+      }
+
+      // Determine if this game index is locked for the user's tier
+      const isLocked = (() => {
+        if (!isAuthenticated) return gameIndex >= 5;
+        if (userTier === 'trial' || userTier === 'keluarga' || userTier === 'pro') return false;
+        if (userTier === 'standard') return ageGroup === 'prasekolah';
+        if (userTier === 'asas') return ageGroup === 'sekolah_rendah';
+        if (userTier === 'premium') return false;
+        return gameIndex >= 5; // free
+      })();
+
+      if (isLocked) {
+        setAccessDenied(true);
+        setGameLoaded(true);
+        return;
+      }
+
       try {
         const dbGames = await base44.entities.Game.filter({ ageGroup, category, isPublished: true });
         dbGames.sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -53,7 +85,7 @@ export default function GamePlayer() {
       setGameLoaded(true);
     };
     loadGame();
-  }, [ageGroup, category, gameIndex]);
+  }, [ageGroup, category, gameIndex, isAuthenticated, user?.email]);
 
   const [state, setState] = useState({
     currentQ: 0,
@@ -68,12 +100,14 @@ export default function GamePlayer() {
     unlockedBadges: [],
   });
 
-  // Save progress after game finishes
+  // Save progress after game finishes — only trigger on `finished` becoming true, not on selectedChild change
+  const savedRef = React.useRef(false);
   useEffect(() => {
-    if (state.finished && user && game && selectedChild) {
+    if (state.finished && user && game && !savedRef.current) {
+      savedRef.current = true;
       saveGameProgress();
     }
-  }, [state.finished, selectedChild]);
+  }, [state.finished]);
 
   const questions = useMemo(() => {
     if (!game?.gameData?.questions) return [];
@@ -247,9 +281,9 @@ export default function GamePlayer() {
         ageGroup: ageGroup,
       });
 
-      // Calculate total stars: if first time, use progressData.bestStars; if updating, add only new stars earned
+      // Calculate total stars: add newly earned stars above previous best for this specific game
       const oldTotalStars = leaderboardData[0]?.totalStars || 0;
-      const previousBestStars = leaderboardData[0]?.bestStars || 0;
+      const previousBestStars = existing[0]?.bestStars || 0; // use game-level best, not leaderboard
       const newStarsEarned = Math.max(stars - previousBestStars, 0);
       const totalStars = oldTotalStars + newStarsEarned;
 
@@ -305,6 +339,27 @@ export default function GamePlayer() {
           <div className="text-5xl animate-bounce mb-4">🎮</div>
           <div className="w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
+      </div>
+    );
+  }
+
+  if (accessDenied) {
+    return (
+      <div className="min-h-screen bg-pattern flex items-center justify-center p-4">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="clay rounded-3xl p-8 text-center max-w-sm"
+        >
+          <p className="text-5xl mb-4">🔒</p>
+          <p className="text-2xl font-black mb-2 text-gray-800">Permainan Terkunci</p>
+          <p className="text-gray-600 mb-6">Naik taraf langganan anda untuk akses permainan ini.</p>
+          <Link to="/">
+            <motion.button whileHover={{ scale: 1.05 }} className="px-6 py-3 bg-orange-500 text-white rounded-full font-bold">
+              Lihat Pelan →
+            </motion.button>
+          </Link>
+        </motion.div>
       </div>
     );
   }

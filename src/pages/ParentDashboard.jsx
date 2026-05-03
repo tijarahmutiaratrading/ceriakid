@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, TrendingDown, Zap, BookOpen, Share2, Award, Flame, Target, Sparkles, Download } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
+import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
 import SubjectBreakdown from '@/components/home/SubjectBreakdown';
@@ -19,18 +20,26 @@ const categoryLabels = {
 };
 
 export default function ParentDashboard() {
-  const { user, isAuthenticated, navigateToLogin } = useAuth();
+  const { user, isAuthenticated, isLoadingAuth, navigateToLogin } = useAuth();
   const { ageGroup } = useAgeGroup();
+  const { selectedChild: contextChild } = useSelectedChild();
   const [childrenData, setChildrenData] = useState({});
   const [loading, setLoading] = useState(true);
   const [selectedChild, setSelectedChild] = useState(null);
 
-  // Auth guard
+  // Auth guard — use isLoadingAuth from auth context, not local loading state
   useEffect(() => {
-    if (!isAuthenticated && !loading) {
+    if (!isLoadingAuth && !isAuthenticated) {
       navigateToLogin();
     }
-  }, [isAuthenticated, loading]);
+  }, [isLoadingAuth, isAuthenticated]);
+
+  // Sync with SelectedChildContext
+  useEffect(() => {
+    if (contextChild?.name) {
+      setSelectedChild(contextChild.name);
+    }
+  }, [contextChild]);
 
   useEffect(() => {
     if (user) {

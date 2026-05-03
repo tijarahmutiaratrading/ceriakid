@@ -31,10 +31,23 @@ export default function FreeTrialButton({ onTrialStarted }) {
         }
       }
 
-      // Upsert trial subscription (avoid duplicates)
+      // Check existing subscription — DO NOT overwrite active paid subscription
+      const existing = await base44.entities.UserSubscription.filter({ email: user.email });
+      if (existing.length > 0) {
+        const sub = existing[0];
+        const isPaid = ['asas', 'standard', 'keluarga'].includes(sub.tier);
+        const isActive = sub.status === 'active';
+        const notExpired = sub.currentPeriodEnd && new Date(sub.currentPeriodEnd) > new Date();
+        if (isPaid && isActive && notExpired) {
+          setError('Anda sudah mempunyai langganan aktif. Tiada perlu cuba trial.');
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Upsert trial subscription
       const trialEnd = new Date();
       trialEnd.setDate(trialEnd.getDate() + 7);
-      const existing = await base44.entities.UserSubscription.filter({ email: user.email });
       const subData = { email: user.email, tier: 'free', status: 'trial', selectedAgeGroup: 'prasekolah', currentPeriodEnd: trialEnd.toISOString() };
       if (existing.length > 0) {
         await base44.entities.UserSubscription.update(existing[0].id, subData);

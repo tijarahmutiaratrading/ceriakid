@@ -22,6 +22,7 @@ export default function ManageDevices({ userEmail, tier }) {
   };
 
   const handleRemove = async (device) => {
+    // removeDevice expects the entity record id (not deviceId fingerprint)
     await removeDevice(device.id);
     setDevices(prev => prev.filter(d => d.id !== device.id));
   };

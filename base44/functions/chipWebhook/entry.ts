@@ -8,9 +8,17 @@ Deno.serve(async (req) => {
 
   try {
     const base44 = createClientFromRequest(req);
-    const body = await req.json();
+    const bodyText = await req.text();
+    const body = JSON.parse(bodyText);
 
     console.log('Chip webhook received:', JSON.stringify(body));
+
+    // Verify this is from Chip by checking required fields exist
+    // Chip always sends id, status, reference on every event
+    if (!body.id || body.status === undefined) {
+      console.error('Invalid webhook payload — missing id or status');
+      return Response.json({ error: 'Invalid payload' }, { status: 400 });
+    }
 
     // Chip sends payment status in the payload
     const status = body.status;
@@ -44,13 +52,24 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Invalid tier' }, { status: 400 });
     }
 
+    // Security: verify purchaseId matches what we stored for this user
+    // This prevents reference spoofing — the purchase ID from Chip must match
+    const verifyExisting = await base44.asServiceRole.entities.UserSubscription.filter({ email: userEmail });
+    if (verifyExisting.length > 0) {
+      const storedPurchaseId = verifyExisting[0].stripeCustomerId; // we store Chip purchase ID here
+      if (storedPurchaseId && storedPurchaseId !== purchaseId) {
+        console.error(`Purchase ID mismatch for ${userEmail}: stored=${storedPurchaseId}, received=${purchaseId}`);
+        return Response.json({ error: 'Purchase ID mismatch' }, { status: 400 });
+      }
+    }
+
     // Calculate expiry — 1 year from now
     const now = new Date();
     const expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
-    // Find existing subscription
-    const existing = await base44.asServiceRole.entities.UserSubscription.filter({ email: userEmail });
+    // Find existing subscription (use already fetched)
+    const existing = verifyExisting;
 
     const subData = {
       email: userEmail,

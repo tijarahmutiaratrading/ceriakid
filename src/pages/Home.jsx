@@ -12,6 +12,7 @@ import DailyChallenge from '@/components/home/DailyChallenge';
 import ChildSelector from '@/components/ChildSelector';
 import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
 import { checkAndRegisterDevice } from '@/lib/deviceManager';
+import { syncOfflineProgress } from '@/lib/offlineSyncManager';
 import { base44 } from '@/api/base44Client';
 
 export default function Home() {
@@ -38,6 +39,10 @@ export default function Home() {
       const tier = (sub && !isExpired) ? (sub.tier || 'free') : 'free';
       const result = await checkAndRegisterDevice(user.email, tier);
       setDeviceCheck({ status: result.allowed ? 'allowed' : 'blocked', devices: result.devices, tier });
+      // Sync any offline-queued progress when back online
+      if (navigator.onLine) {
+        syncOfflineProgress(base44, user);
+      }
     });
   }, [isAuthenticated, user?.email]);
 

@@ -1,25 +1,29 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
-
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    const user = await base44.auth.me();
-    if (user?.role !== 'admin') {
+    const adminUser = await base44.auth.me();
+    if (adminUser?.role !== 'admin') {
       return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
-    // Get all users with subscriptions
-    const users = await base44.asServiceRole.entities.UserSubscription.list();
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+    if (!RESEND_API_KEY) {
+      return Response.json({ error: 'RESEND_API_KEY not configured' }, { status: 500 });
+    }
+
+    // Get all users with active subscriptions (not free)
+    const allSubs = await base44.asServiceRole.entities.UserSubscription.list();
+    const activeSubs = allSubs.filter(s => s.status === 'active' && s.tier !== 'free');
     
     const emailsToSend = [];
 
-    for (const user of users) {
+    for (const sub of activeSubs) {
       // Get child progress
       const progress = await base44.asServiceRole.entities.ChildGameProgress.filter({
-        userEmail: user.email,
+        userEmail: sub.email,
       });
 
       if (progress.length === 0) continue;
@@ -85,7 +89,7 @@ Deno.serve(async (req) => {
       `;
 
       emailsToSend.push({
-        to: user.email,
+        to: sub.email,
         subject: '📊 Laporan Mingguan Prestasi Anak - CeriaKid',
         html: emailHtml,
       });

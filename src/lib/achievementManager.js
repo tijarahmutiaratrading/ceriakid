@@ -64,6 +64,16 @@ export const checkAchievements = async (user, childName, progressData, base44) =
         badgeEmoji: ACHIEVEMENTS['100_stars'].emoji,
       });
     }
+
+    // Check 3-day streak
+    const streak = await calculateStreak(user, childName, base44);
+    if (streak >= 3 && !existingBadgeIds.includes('3_day_streak')) {
+      unlockedBadges.push({
+        badgeId: '3_day_streak',
+        badgeName: ACHIEVEMENTS['3_day_streak'].name,
+        badgeEmoji: ACHIEVEMENTS['3_day_streak'].emoji,
+      });
+    }
     
     // Check all subjects (at least 1 game in each)
     const subjects = new Set(allProgress.map(p => p.category));
