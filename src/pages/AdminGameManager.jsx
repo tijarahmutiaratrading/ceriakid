@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Loader2, ChevronDown, ChevronRight, RefreshCw, Edit3, X, Trash2, Wand2, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronRight, RefreshCw, Edit3, X, Trash2, Wand2, CheckCircle2, Clock, AlertCircle, Search } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { gameLibrary } from '@/lib/gameLibrary';
 import EditGameModal from '@/components/admin/EditGameModal';
@@ -122,6 +122,8 @@ export default function AdminGameManager() {
   const [dbGamesCache, setDbGamesCache] = useState({});
   const [collapsedSections, setCollapsedSections] = useState({ prasekolah: false, sekolah_rendah: false });
   const [generateModal, setGenerateModal] = useState(null);
+  const [managerSearch, setManagerSearch] = useState('');
+  const [managerAgeFilter, setManagerAgeFilter] = useState('all');
 
   const fetchStats = async () => {
     setLoading(true);
@@ -433,95 +435,142 @@ export default function AdminGameManager() {
         {/* ══════════════ MANAGER TAB ══════════════ */}
         {tab === 'manager' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-2 md:gap-3 mb-5">
+            {/* Stats row */}
+            <div className="grid grid-cols-3 gap-2 mb-4">
               {[
                 { value: totalGames, label: 'Total Games', color: 'text-yellow-300' },
                 { value: totalFull, label: 'Soalan Penuh', color: 'text-green-300' },
-                { value: totalPlayers, label: 'Total Players', color: 'text-pink-300' },
+                { value: totalPlayers, label: 'Players', color: 'text-pink-300' },
               ].map(({ value, label, color }) => (
-                <div key={label} className="rounded-2xl p-2 md:p-3 text-center" style={{ background: 'rgba(255,255,255,0.1)' }}>
-                  <p className={`text-lg md:text-2xl font-black ${color}`}>{value}</p>
-                  <p className="text-xs text-white/60 font-semibold">{label}</p>
+                <div key={label} className="rounded-2xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.1)' }}>
+                  <p className={`text-2xl font-black ${color}`}>{value}</p>
+                  <p className="text-xs text-white/50 font-semibold">{label}</p>
                 </div>
               ))}
             </div>
 
-            {/* Actions */}
-            <div className="flex gap-2 mb-4 flex-wrap">
-              <button onClick={fetchStats} disabled={loading} className="p-2 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all">
-                <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
-              </button>
-              <motion.button whileTap={{ scale: 0.97 }}
-                onClick={async () => {
-                  if (!window.confirm('🚨 DELETE semua games? Tidak boleh di-undo!')) return;
-                  setActionLoading('delete-all');
-                  try {
-                    const res = await base44.functions.invoke('deleteAllGames', {});
-                    showToast(`✅ Deleted ${res.data.deletedCount} games`);
-                    await fetchStats();
-                  } catch (err) { showToast('❌ ' + err.message, false); }
-                  setActionLoading(null);
-                }}
-                disabled={!!actionLoading}
-                className="flex items-center gap-2 px-3 py-2 bg-red-500/30 text-red-200 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/40 disabled:opacity-50 transition-all">
-                {actionLoading === 'delete-all' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                Delete All
-              </motion.button>
+            {/* Search + Filter bar */}
+            <div className="p-4 rounded-3xl mb-4" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <div className="flex gap-2 mb-3">
+                <div className="relative flex-1">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">🔍</span>
+                  <input
+                    type="text"
+                    placeholder="Cari games..."
+                    value={managerSearch}
+                    onChange={e => setManagerSearch(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50"
+                  />
+                </div>
+                <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all">
+                  <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
+                </button>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                {['all', 'prasekolah', 'sekolah_rendah'].map(ag => (
+                  <button key={ag} onClick={() => setManagerAgeFilter(ag)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${managerAgeFilter === ag ? 'bg-white text-indigo-700' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
+                    {ag === 'all' ? 'Semua' : ag === 'prasekolah' ? '🧒 Prasekolah' : '🎒 Sekolah Rendah'}
+                  </button>
+                ))}
+                <div className="ml-auto">
+                  <button
+                    onClick={async () => {
+                      if (!window.confirm('🚨 DELETE semua games?')) return;
+                      setActionLoading('delete-all');
+                      try {
+                        const res = await base44.functions.invoke('deleteAllGames', {});
+                        showToast(`✅ Deleted ${res.data.deletedCount} games`);
+                        await fetchStats();
+                      } catch (err) { showToast('❌ ' + err.message, false); }
+                      setActionLoading(null);
+                    }}
+                    disabled={!!actionLoading}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all">
+                    {actionLoading === 'delete-all' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+                    Delete All
+                  </button>
+                </div>
+              </div>
             </div>
 
+            {/* Games list grouped by subject */}
             {loading ? (
-              <div className="flex items-center justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-white" /></div>
+              <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-white" /></div>
             ) : (
-              <>
-                {/* Prasekolah */}
-                <div className="flex items-center gap-2 mb-2 mt-2">
-                  <button onClick={() => setCollapsedSections(p => ({ ...p, prasekolah: !p.prasekolah }))} className="p-1.5 hover:bg-white/10 rounded-lg transition-all">
-                    {collapsedSections.prasekolah ? <ChevronRight className="w-5 h-5 text-white/60" /> : <ChevronDown className="w-5 h-5 text-white/60" />}
-                  </button>
-                  <div className="text-lg font-black text-white">🧒 Prasekolah</div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-white/20 to-transparent" />
-                </div>
-                {!collapsedSections.prasekolah && subjects.filter(s => s.ageGroup === 'prasekolah').map((s, idx) => (
-                  <SubjectCard key={s.file} subject={s} isExpanded={expandedFile === s.file} onExpandToggle={setExpandedFile}
-                    actionLoading={actionLoading} onBulkEdit={(games, label, ag, sub) => setSyncAndEdit({ games, label, ageGroup: ag, subject: sub })}
-                    onEditSubjectConfig={(file, label, cg, cq, ag, sub) => { setActionLoading(`config-${file}`); setModal({ file, label, ageGroup: ag, subject: sub, gamesValue: String(cg), questionsValue: String(cq || '') }); }}
-                    showToast={showToast} dbGamesCache={dbGamesCache} onVerify={handleVerifySubject}
-                    onEditGame={setEditGame} onGenerateSubject={(label, ag, sub, cc) => setGenerateModal({ games: 5, questions: 10, ageGroup: ag, subject: sub, label, currentCount: cc })} idx={idx} />
-                ))}
+              <div className="space-y-3">
+                {subjects
+                  .filter(s => managerAgeFilter === 'all' || s.ageGroup === managerAgeFilter)
+                  .map(s => {
+                    const filteredGames = s.games.filter(g =>
+                      !managerSearch || g.title.toLowerCase().includes(managerSearch.toLowerCase())
+                    );
+                    if (filteredGames.length === 0 && managerSearch) return null;
+                    return (
+                      <div key={s.file} className="rounded-3xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                        {/* Subject header */}
+                        <button
+                          onClick={() => setExpandedFile(expandedFile === s.file ? null : s.file)}
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-left"
+                        >
+                          <div className={`w-2.5 h-2.5 rounded-full ${s.color.dot}`} />
+                          <span className="font-black text-white text-sm flex-1">{s.label}</span>
+                          <span className="text-white/40 text-xs font-semibold">{s.totalGames} games</span>
+                          {expandedFile === s.file
+                            ? <ChevronDown className="w-4 h-4 text-white/40" />
+                            : <ChevronRight className="w-4 h-4 text-white/40" />
+                          }
+                        </button>
 
-                {/* Sekolah Rendah */}
-                <div className="flex items-center gap-2 mb-2 mt-6">
-                  <button onClick={() => setCollapsedSections(p => ({ ...p, sekolah_rendah: !p.sekolah_rendah }))} className="p-1.5 hover:bg-white/10 rounded-lg transition-all">
-                    {collapsedSections.sekolah_rendah ? <ChevronRight className="w-5 h-5 text-white/60" /> : <ChevronDown className="w-5 h-5 text-white/60" />}
-                  </button>
-                  <div className="text-lg font-black text-white">🎒 Sekolah Rendah</div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-white/20 to-transparent" />
-                </div>
-                {!collapsedSections.sekolah_rendah && subjects.filter(s => s.ageGroup === 'sekolah_rendah').map((s, idx) => (
-                  <SubjectCard key={s.file} subject={s} isExpanded={expandedFile === s.file} onExpandToggle={setExpandedFile}
-                    actionLoading={actionLoading} onBulkEdit={(games, label, ag, sub) => setSyncAndEdit({ games, label, ageGroup: ag, subject: sub })}
-                    onEditSubjectConfig={(file, label, cg, cq, ag, sub) => { setActionLoading(`config-${file}`); setModal({ file, label, ageGroup: ag, subject: sub, gamesValue: String(cg), questionsValue: String(cq || '') }); }}
-                    showToast={showToast} dbGamesCache={dbGamesCache} onVerify={handleVerifySubject}
-                    onEditGame={setEditGame} onGenerateSubject={(label, ag, sub, cc) => setGenerateModal({ games: 5, questions: 10, ageGroup: ag, subject: sub, label, currentCount: cc })} idx={idx} />
-                ))}
-
-                {/* Mini Games */}
-                <div className="flex items-center gap-2 mb-2 mt-6">
-                  <div className="text-lg font-black text-white">🎪 Mini-Games</div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-white/20 to-transparent" />
-                </div>
-                <div className="rounded-2xl p-4 mt-3" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {GAME_HUB.map(g => (
-                      <div key={g.id} className="rounded-xl px-3 py-2 flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.1)' }}>
-                        <div className="w-2 h-2 rounded-full bg-orange-400 flex-shrink-0" />
-                        <span className="text-xs font-semibold text-white/80 truncate">{g.title}</span>
+                        {/* Games list */}
+                        {expandedFile === s.file && (
+                          <div className="border-t border-white/10">
+                            {filteredGames.length === 0 ? (
+                              <p className="text-white/30 text-xs text-center py-4">Tiada games lagi</p>
+                            ) : (
+                              filteredGames.map(g => (
+                                <div key={g.id} className="flex items-center gap-3 px-4 py-3 border-b border-white/5 last:border-0 hover:bg-white/5 transition-all">
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-white text-xs font-bold truncate">{g.title}</p>
+                                    <div className="flex gap-2 mt-0.5">
+                                      <span className="text-white/40 text-xs">{g.type}</span>
+                                      <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
+                                        {g.questionCount} soalan
+                                      </span>
+                                      {g.players > 0 && <span className="text-white/30 text-xs">{g.players} players</span>}
+                                    </div>
+                                  </div>
+                                  <button
+                                    onClick={() => setEditGame(g._raw)}
+                                    className="p-1.5 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-all"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              ))
+                            )}
+                            {/* Subject-level actions */}
+                            <div className="flex gap-2 px-4 py-3 border-t border-white/10">
+                              <button
+                                onClick={() => setGenerateModal({ games: s.totalGames || 5, questions: 20, ageGroup: s.ageGroup, subject: s.subject, label: s.label, currentCount: s.totalGames })}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-500/20 text-green-300 border border-green-400/20 text-xs font-bold hover:bg-green-500/30 transition-all"
+                              >
+                                <Wand2 className="w-3 h-3" /> Sync Games
+                              </button>
+                              <button
+                                onClick={() => handleVerifySubject(s.file, s.label, s.ageGroup, s.subject, dbGamesCache)}
+                                disabled={actionLoading === `verify-${s.file}`}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-yellow-500/20 text-yellow-300 border border-yellow-400/20 text-xs font-bold hover:bg-yellow-500/30 disabled:opacity-50 transition-all"
+                              >
+                                {actionLoading === `verify-${s.file}` ? <Loader2 className="w-3 h-3 animate-spin" /> : '✅'} Verify
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </>
+                    );
+                  })}
+              </div>
             )}
           </motion.div>
         )}
