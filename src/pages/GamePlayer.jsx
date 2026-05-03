@@ -204,6 +204,7 @@ export default function GamePlayer() {
   }, [state.currentQ]);
 
   const handlePlayAgain = () => {
+    savedRef.current = false; // allow saving again on replay
     setState({
       currentQ: 0,
       score: 0,
@@ -505,7 +506,14 @@ export default function GamePlayer() {
             </p>
           )}
 
-          {/* Text Question (math, multiple choice) */}
+          {/* Generic question text — covers all DB game formats */}
+           {currentQuestion.question && (
+             <p className={`font-bold text-gray-800 mb-2 ${currentQuestion.question.length > 60 ? 'text-base' : 'text-xl'}`}>
+               {currentQuestion.question}
+             </p>
+           )}
+
+           {/* Text Question (math, multiple choice) */}
            {currentQuestion.problem && (
              <div className={`font-black text-game-purple ${currentQuestion.problem.length > 20 ? 'text-2xl' : 'text-4xl'}`}>
                {currentQuestion.problem}
@@ -513,17 +521,17 @@ export default function GamePlayer() {
            )}
 
            {/* Question label based on game type */}
-           {currentQuestion.image && !currentQuestion.problem && (
+           {currentQuestion.image && !currentQuestion.problem && !currentQuestion.question && (
              <p className="text-lg font-bold text-gray-700 mt-2">
                {game.type === 'counting' ? 'Berapakah ini?' : 'Apakah ini?'}
              </p>
            )}
 
            {/* Audio button for pronunciations */}
-           {(currentQuestion.word || currentQuestion.letter || currentQuestion.problem) && (
+           {(currentQuestion.word || currentQuestion.letter || currentQuestion.problem || currentQuestion.question) && (
              <div className="mt-4">
                <AudioPlayer 
-                 text={currentQuestion.word || currentQuestion.letter || currentQuestion.problem}
+                 text={currentQuestion.word || currentQuestion.letter || currentQuestion.problem || currentQuestion.question}
                  language={category === 'english' ? 'en-US' : 'ms-MY'}
                />
              </div>
