@@ -138,7 +138,7 @@ export default function ClientDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mb-4 rounded-3xl p-5"
+          className="mb-4 mt-6 rounded-3xl p-5"
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
         >
           <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">👤 Jantina</p>
