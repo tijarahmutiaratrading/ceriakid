@@ -76,62 +76,66 @@ export default function ClientDashboard() {
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
 
         {/* Hero Profile Card */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6 rounded-3xl overflow-hidden shadow-2xl"
-          style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.6)' }}
-        >
-          {/* Top gradient strip */}
-          <div className={`h-28 bg-gradient-to-r ${tier.color} relative`}>
-            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, white 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-            {/* Tier badge */}
-            <div className="absolute top-3 right-4 flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1.5">
-              <span className="text-lg">{tier.emoji}</span>
-              <span className="text-white font-black text-xs">{tier.label}</span>
-            </div>
-          </div>
+         <motion.div
+           initial={{ opacity: 0, y: -20 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="mb-6 rounded-3xl overflow-hidden"
+           style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.92) 100%)', boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.08)', border: '1px solid rgba(255,255,255,0.8)' }}
+         >
+           {/* Top gradient strip */}
+           <div className={`h-32 bg-gradient-to-r ${tier.color} relative overflow-hidden`}>
+             <div className="absolute inset-0 opacity-15" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, white 1.5px, transparent 1.5px)', backgroundSize: '25px 25px' }} />
+             {/* Decorative shapes */}
+             <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20" />
+             {/* Tier badge */}
+             <div className="absolute top-4 right-5 flex items-center gap-1.5 bg-white/30 backdrop-blur-md rounded-full px-4 py-2 border border-white/50">
+               <span className="text-lg">{tier.emoji}</span>
+               <span className="text-white font-black text-xs">{tier.label}</span>
+             </div>
+           </div>
 
-          {/* Avatar overlapping strip */}
-          <div className="px-7 pb-7">
-            <div className="flex items-end gap-4 -mt-12 mb-5">
-              <div className="relative">
-                {avatarUrl && avatarUrl.includes('http') ? (
-                  <img src={avatarUrl} alt="Avatar" className="w-24 h-24 rounded-2xl object-cover border-4 border-white shadow-2xl" />
-                ) : (
-                  <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-purple-300 to-pink-300 border-4 border-white shadow-2xl flex items-center justify-center text-5xl">🐱</div>
-                )}
-                <label className="absolute -bottom-2 -right-2 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-orange-600 transition-colors">
-                  <input type="file" accept="image/*" onChange={handleAvatarUpload} disabled={saving} className="hidden" />
-                  {saving ? <Loader className="w-3.5 h-3.5 text-white animate-spin" /> : <Upload className="w-3.5 h-3.5 text-white" />}
-                </label>
-              </div>
-              <div className="mb-2">
-                <p className="text-gray-900 font-black text-2xl leading-tight">{user?.full_name || 'Pengguna'}</p>
-                <p className="text-gray-600 text-sm font-semibold">{user?.email}</p>
-              </div>
-            </div>
+           {/* Avatar overlapping strip */}
+           <div className="px-8 pb-8">
+             <div className="flex items-end gap-5 -mt-14 mb-6">
+               <div className="relative flex-shrink-0">
+                 {avatarUrl && avatarUrl.includes('http') ? (
+                   <img src={avatarUrl} alt="Avatar" className="w-28 h-28 rounded-3xl object-cover border-4 border-white shadow-2xl" />
+                 ) : (
+                   <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-purple-300 to-pink-300 border-4 border-white shadow-2xl flex items-center justify-center text-6xl">🐱</div>
+                 )}
+                 <label className="absolute -bottom-1 -right-1 w-9 h-9 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full flex items-center justify-center cursor-pointer shadow-xl hover:shadow-2xl transition-all hover:scale-110">
+                   <input type="file" accept="image/*" onChange={handleAvatarUpload} disabled={saving} className="hidden" />
+                   {saving ? <Loader className="w-4 h-4 text-white animate-spin" /> : <Upload className="w-4 h-4 text-white" />}
+                 </label>
+               </div>
+               <div className="flex-1 pb-1">
+                 <p className="text-gray-900 font-black text-3xl leading-tight">{user?.full_name || 'Pengguna'}</p>
+                 <p className="text-gray-500 text-sm font-medium mt-1">{user?.email}</p>
+               </div>
+             </div>
 
             {/* Account info row */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3.5">
                {[
                  { icon: Mail, label: 'E-mel', value: user?.email },
                  { icon: Calendar, label: 'Ahli Sejak', value: user?.created_date ? new Date(user.created_date).toLocaleDateString('ms-MY') : '-' },
                ].map((item, i) => {
                  const Icon = item.icon;
                  return (
-                   <div key={i} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 border border-gray-200">
-                     <div className="flex items-center gap-1.5 mb-1.5">
-                       <Icon className="w-4 h-4 text-gray-500" />
-                       <p className="text-gray-500 text-xs font-bold uppercase tracking-wide">{item.label}</p>
+                   <div key={i} className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-2xl p-4 border border-indigo-100/50 hover:border-indigo-200/70 transition-colors">
+                     <div className="flex items-center gap-2 mb-2">
+                       <div className="w-6 h-6 rounded-lg bg-gradient-to-r from-game-purple to-game-pink flex items-center justify-center">
+                         <Icon className="w-3.5 h-3.5 text-white" />
+                       </div>
+                       <p className="text-gray-600 text-xs font-bold uppercase tracking-wider">{item.label}</p>
                      </div>
-                     <p className="text-gray-900 font-black text-sm truncate">{item.value}</p>
+                     <p className="text-gray-900 font-black text-sm truncate ml-8">{item.value}</p>
                    </div>
                  );
                })}
             </div>
-          </div>
-        </motion.div>
+           </div>
+         </motion.div>
 
         {/* Gender Picker */}
          <motion.div
