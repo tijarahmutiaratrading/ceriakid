@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function QuestionRenderer({ question, onAnswer, disabled, selectedIdx, isCorrect, showFeedback }) {
+  // Default to multiple_choice if no type specified
+  question = { ...question, type: question.type || 'multiple_choice' };
   // Initialize all state at top level (required by React Hooks rules)
   const [textInput, setTextInput] = useState('');
   const [matchingAnswers, setMatchingAnswers] = useState({});
