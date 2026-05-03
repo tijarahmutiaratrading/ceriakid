@@ -23,15 +23,15 @@ export default function AdminHub() {
       title: '📊 Dashboards',
       items: [
         { name: 'Admin Dashboard', path: '/admin-dashboard', icon: BarChart3, desc: 'User & subscription overview' },
-        { name: 'Analytics +', path: '/admin-analytics-advanced', icon: TrendingUp, desc: 'Cohort, retention & LTV' },
-        { name: 'Basic Analytics', path: '/admin-analytics', icon: BarChart3, desc: 'Quick metrics' },
+        { name: 'Game Analytics', path: '/game-analytics', icon: TrendingUp, desc: 'Game content & question tracking' },
+        { name: 'Game Database', path: '/game-database', icon: BarChart3, desc: 'Lihat semua games & soalan dalam DB' },
       ]
     },
     {
       title: '⚙️ Management',
       items: [
-        { name: 'Settings', path: '/admin-settings', icon: Settings, desc: 'App configuration' },
-        { name: 'Games Manager', path: '/admin-games', icon: GamepadIcon, desc: 'Content management' },
+        { name: 'Settings', path: '/admin-dashboard', icon: Settings, desc: 'App configuration & analytics' },
+            { name: 'Games Manager', path: '/admin-game-manager', icon: GamepadIcon, desc: 'Content management' },
       ]
     },
     {
@@ -118,7 +118,7 @@ export default function AdminHub() {
         >
           <p className="font-bold mb-4">⚡ Quick Actions</p>
           <div className="flex flex-wrap gap-2">
-            <a href="mailto:support@jombelajar.app" className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm font-bold transition-all">
+            <a href="mailto:support@ceriakid.com" className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm font-bold transition-all">
               📧 Support
             </a>
             <a href="https://github.com" className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm font-bold transition-all">

@@ -9,23 +9,37 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
-    // Get ALL games (no filter)
-    const allGames = await base44.asServiceRole.entities.Game.filter({});
+    // Get ALL games in batches (list returns max 50 by default)
+    let allGames = [];
+    let skip = 0;
+    const PAGE_SIZE = 50;
+    while (true) {
+      const page = await base44.asServiceRole.entities.Game.list(undefined, PAGE_SIZE, skip);
+      if (!page || page.length === 0) break;
+      allGames = allGames.concat(page);
+      skip += page.length;
+      if (page.length < PAGE_SIZE) break;
+    }
 
     console.log(`Deleting ${allGames.length} games...`);
 
     let deletedCount = 0;
     const BATCH_SIZE = 5;
 
-    // Delete in batches to avoid overload
+    // Delete in batches to avoid overload, skip already-deleted
     for (let i = 0; i < allGames.length; i += BATCH_SIZE) {
       const batch = allGames.slice(i, i + BATCH_SIZE);
       for (const game of batch) {
-        await base44.asServiceRole.entities.Game.delete(game.id);
-        deletedCount++;
+        try {
+          await base44.asServiceRole.entities.Game.delete(game.id);
+          deletedCount++;
+        } catch (e) {
+          // Skip if already deleted
+          console.log(`Skip ${game.id}: ${e.message}`);
+        }
       }
       console.log(`Deleted ${deletedCount}/${allGames.length}`);
-      await new Promise(r => setTimeout(r, 500));
+      await new Promise(r => setTimeout(r, 300));
     }
 
     return Response.json({
