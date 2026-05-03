@@ -45,6 +45,9 @@ export default function AdminBBMGenerator() {
 
   // Generator state
   const [form, setForm] = useState({ subject: 'bahasa_melayu', level: 'darjah_1', type: 'lembaran_kerja', topic: '', count: 10 });
+  const [selectedSubjects, setSelectedSubjects] = useState(new Set(['bahasa_melayu']));
+  const [selectedLevels, setSelectedLevels] = useState(new Set(['darjah_1']));
+  const [selectedTypes, setSelectedTypes] = useState(new Set(['lembaran_kerja']));
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
@@ -84,9 +87,22 @@ export default function AdminBBMGenerator() {
     setLoading(true);
     setError('');
     setResult(null);
+    const total = selectedSubjects.size * selectedLevels.size * selectedTypes.size;
+    let count = 0;
     try {
-      const res = await base44.functions.invoke('generateBBM', form);
-      setResult(res.data);
+      for (const subject of selectedSubjects) {
+        for (const level of selectedLevels) {
+          for (const type of selectedTypes) {
+            count++;
+            await base44.functions.invoke('generateBBM', { 
+              subject, level, type, 
+              topic: form.topic, 
+              count: form.count 
+            });
+          }
+        }
+      }
+      setResult({ success: true, total, title: `${total} BBM berhasil dijana` });
     } catch (e) {
       setError(e.message || 'Gagal jana BBM');
     } finally {
@@ -197,43 +213,94 @@ export default function AdminBBMGenerator() {
             >
               {/* Type */}
               <div className="mb-5">
-                <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2">Jenis BBM</p>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-white/70 text-xs font-black uppercase tracking-wider">Jenis BBM</p>
+                  <div className="flex gap-1">
+                    <button onClick={() => setSelectedTypes(new Set(TYPES.map(t => t.value)))} className="text-xs text-yellow-300 hover:underline">Semua</button>
+                    <button onClick={() => setSelectedTypes(new Set())} className="text-xs text-white/50 hover:underline">Kosong</button>
+                  </div>
+                </div>
                 <div className="grid grid-cols-4 gap-2">
-                  {TYPES.map(t => (
-                    <button
-                      key={t.value}
-                      onClick={() => setForm(f => ({ ...f, type: t.value }))}
-                      className={`p-2 rounded-2xl text-xs font-bold transition-all text-center ${
-                        form.type === t.value ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'
-                      }`}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
+                  {TYPES.map(t => {
+                    const sel = selectedTypes.has(t.value);
+                    return (
+                      <button
+                        key={t.value}
+                        onClick={() => {
+                          const next = new Set(selectedTypes);
+                          sel ? next.delete(t.value) : next.add(t.value);
+                          setSelectedTypes(next);
+                        }}
+                        className={`p-2 rounded-2xl text-xs font-bold transition-all text-center ${
+                          sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                        }`}
+                      >
+                        {t.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Subject + Level */}
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div>
-                  <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2">Subjek</p>
-                  <select
-                    value={form.subject}
-                    onChange={e => setForm(f => ({ ...f, subject: e.target.value }))}
-                    className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-semibold text-sm"
-                  >
-                    {SUBJECTS.map(s => <option key={s.value} value={s.value} className="text-black">{s.label}</option>)}
-                  </select>
+              {/* Subject */}
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-white/70 text-xs font-black uppercase tracking-wider">Subjek</p>
+                  <div className="flex gap-1">
+                    <button onClick={() => setSelectedSubjects(new Set(SUBJECTS.map(s => s.value)))} className="text-xs text-yellow-300 hover:underline">Semua</button>
+                    <button onClick={() => setSelectedSubjects(new Set())} className="text-xs text-white/50 hover:underline">Kosong</button>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2">Tahap</p>
-                  <select
-                    value={form.level}
-                    onChange={e => setForm(f => ({ ...f, level: e.target.value }))}
-                    className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-semibold text-sm"
-                  >
-                    {LEVELS.map(l => <option key={l.value} value={l.value} className="text-black">{l.label}</option>)}
-                  </select>
+                <div className="grid grid-cols-2 gap-2">
+                  {SUBJECTS.map(s => {
+                    const sel = selectedSubjects.has(s.value);
+                    return (
+                      <button
+                        key={s.value}
+                        onClick={() => {
+                          const next = new Set(selectedSubjects);
+                          sel ? next.delete(s.value) : next.add(s.value);
+                          setSelectedSubjects(next);
+                        }}
+                        className={`p-2 rounded-2xl text-xs font-bold transition-all text-center ${
+                          sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                        }`}
+                      >
+                        {s.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Level */}
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-white/70 text-xs font-black uppercase tracking-wider">Tahap</p>
+                  <div className="flex gap-1">
+                    <button onClick={() => setSelectedLevels(new Set(LEVELS.map(l => l.value)))} className="text-xs text-yellow-300 hover:underline">Semua</button>
+                    <button onClick={() => setSelectedLevels(new Set())} className="text-xs text-white/50 hover:underline">Kosong</button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  {LEVELS.map(l => {
+                    const sel = selectedLevels.has(l.value);
+                    return (
+                      <button
+                        key={l.value}
+                        onClick={() => {
+                          const next = new Set(selectedLevels);
+                          sel ? next.delete(l.value) : next.add(l.value);
+                          setSelectedLevels(next);
+                        }}
+                        className={`p-2 rounded-2xl text-xs font-bold transition-all text-center ${
+                          sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                        }`}
+                      >
+                        {l.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -259,11 +326,17 @@ export default function AdminBBMGenerator() {
 
               <motion.button
                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                onClick={handleGenerate}
+                onClick={() => {
+                  if (selectedSubjects.size === 0 || selectedLevels.size === 0 || selectedTypes.size === 0) {
+                    setError('Pilih sekurang-kurangnya satu untuk setiap kategori');
+                    return;
+                  }
+                  handleGenerate();
+                }}
                 disabled={loading}
                 className="w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-xl disabled:opacity-50"
               >
-                {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Jana sedang dalam proses...</> : <><Wand2 className="w-5 h-5" /> Jana BBM Sekarang!</>}
+                {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Jana sedang dalam proses...</> : <><Wand2 className="w-5 h-5" /> Jana BBM ({selectedSubjects.size} × {selectedLevels.size} × {selectedTypes.size})!</>}
               </motion.button>
             </div>
 
