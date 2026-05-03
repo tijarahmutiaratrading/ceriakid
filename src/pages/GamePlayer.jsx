@@ -111,28 +111,8 @@ export default function GamePlayer() {
 
   const questions = useMemo(() => {
     if (!game?.gameData?.questions) return [];
-    const baseQuestions = game.gameData.questions.slice(0, game.totalQuestions || 20);
-    
-    // Shuffle answer options with a stable seeded shuffle (no re-shuffle on re-render)
-    return baseQuestions.map((q, qIdx) => {
-      if (!Array.isArray(q.options) || q.options.length <= 1) return q;
-      
-      const optionsWithIndex = q.options.map((opt, idx) => ({ opt, isCorrect: idx === q.answer }));
-      // Use Fisher-Yates with a deterministic seed based on question index to prevent re-shuffle
-      const arr = [...optionsWithIndex];
-      let seed = qIdx + 1;
-      const rand = () => { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; };
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(rand() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      
-      return {
-        ...q,
-        options: arr.map(x => x.opt),
-        answer: arr.findIndex(x => x.isCorrect),
-      };
-    });
+    // No shuffling — preserve original order so answer index stays correct
+    return game.gameData.questions.slice(0, game.totalQuestions || 20);
   }, [game]);
 
   const handleAnswer = useCallback((answer) => {
