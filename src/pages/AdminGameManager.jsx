@@ -574,6 +574,19 @@ export default function AdminGameManager() {
             <button onClick={fetchStats} disabled={loading} title="Refresh" className="p-2 bg-white/40 backdrop-blur-xl rounded-xl border-2 border-white/30 hover:bg-white/60 transition-all">
               <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
             </button>
+
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => {
+                // Select ALL subjects
+                const allKeys = SUBJECT_CONFIG.map(sc => `${sc.ageGroup}-${sc.subject}`);
+                setSelectedSubjects(new Set(allKeys));
+                setBulkGenerateConfig({ games: 5, questions: 10, selectedCount: allKeys.length });
+              }}
+              disabled={!!actionLoading}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl text-xs md:text-sm font-bold hover:shadow-lg disabled:opacity-50 transition-all">
+              🌍 Generate All
+            </motion.button>
             
             {selectedSubjects.size > 0 &&
             <motion.button
