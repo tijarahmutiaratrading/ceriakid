@@ -217,12 +217,12 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {adminItems.length > 0 && (
                 <>
                   <p className="text-xs font-black text-white/50 uppercase tracking-wider px-3 pt-4 pb-1">Admin</p>
-                  <div className="rounded-2xl overflow-hidden border border-red-200/40" style={{ background: 'rgba(254,242,242,0.4)' }}>
+                  <div className="rounded-2xl overflow-hidden border border-indigo-200/40" style={{ background: 'rgba(224,231,255,0.4)' }}>
                     {adminItems.map((item) => (
                       <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                         <motion.div whileTap={{ scale: 0.97 }}
-                          className={`flex items-center gap-3 px-3 py-2.5 font-semibold text-sm transition-all border-b border-red-200/30 last:border-0 ${
-                            isActive(item.path) ? 'bg-red-500/80 text-white' : 'text-red-700 hover:bg-white/50'
+                          className={`flex items-center gap-3 px-3 py-2.5 font-semibold text-sm transition-all border-b border-indigo-200/30 last:border-0 ${
+                            isActive(item.path) ? 'bg-indigo-600/80 text-white' : 'text-indigo-700 hover:bg-white/50'
                           }`}>
                           <span className="text-xl w-7 text-center">{item.emoji}</span>
                           <span>{item.label}</span>
