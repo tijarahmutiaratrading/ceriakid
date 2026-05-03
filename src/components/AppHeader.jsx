@@ -180,7 +180,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Dashboard section */}
               {dashboardItems.length > 0 && (
                 <>
-                  <p className="text-xs font-black text-gray-400 uppercase tracking-wider px-3 pt-4 pb-1">Dashboard</p>
+                  <p className="text-xs font-black text-white/50 uppercase tracking-wider px-3 pt-4 pb-1">Dashboard</p>
                   {dashboardItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
@@ -198,7 +198,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Other features */}
               {isAuthenticated && otherItems.length > 0 && (
                 <>
-                  <p className="text-xs font-black text-gray-400 uppercase tracking-wider px-3 pt-4 pb-1">Lain-lain</p>
+                  <p className="text-xs font-black text-white/50 uppercase tracking-wider px-3 pt-4 pb-1">Lain-lain</p>
                   {otherItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
@@ -216,7 +216,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Admin section */}
               {adminItems.length > 0 && (
                 <>
-                  <p className="text-xs font-black text-gray-400 uppercase tracking-wider px-3 pt-4 pb-1">Admin</p>
+                  <p className="text-xs font-black text-white/50 uppercase tracking-wider px-3 pt-4 pb-1">Admin</p>
                   <div className="rounded-2xl overflow-hidden border border-red-200/40" style={{ background: 'rgba(254,242,242,0.4)' }}>
                     {adminItems.map((item) => (
                       <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
