@@ -129,7 +129,14 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen font-nunito" style={{ background: 'linear-gradient(160deg, #fff8f0 0%, #fff3e6 40%, #fff9f0 100%)' }}>
+    <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
+      {/* Background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
+      <div className="relative">
 
       {/* ── PAYMENT STATUS BANNER ── */}
       <AnimatePresence>
@@ -180,18 +187,18 @@ export default function Landing() {
 
 
       {/* ── NAVBAR ── */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-white/95 backdrop-blur shadow-sm transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`} style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
         <div className="max-w-6xl mx-auto w-full flex items-center justify-between">
           <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
-          <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600">
-            <a href="#features" className="hover:text-orange-500 transition-colors">Ciri-ciri</a>
-            <a href="#testimonials" className="hover:text-orange-500 transition-colors">Testimoni</a>
-            <a href="#pricing" className="hover:text-orange-500 transition-colors">Harga</a>
-            <a href="#faq" className="hover:text-orange-500 transition-colors">Soalan Lazim</a>
+          <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-white/80">
+            <a href="#features" className="hover:text-white transition-colors">Ciri-ciri</a>
+            <a href="#testimonials" className="hover:text-white transition-colors">Testimoni</a>
+            <a href="#pricing" className="hover:text-white transition-colors">Harga</a>
+            <a href="#faq" className="hover:text-white transition-colors">Soalan Lazim</a>
           </div>
           <div className="flex items-center gap-3">
-             <motion.button whileTap={{ scale: 0.95 }} onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')} className="px-5 py-2.5 bg-orange-500 text-white rounded-full font-black text-sm shadow-md hover:bg-orange-600 transition-colors">
-               {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
+             <motion.button whileTap={{ scale: 0.95 }} onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')} className="px-5 py-2.5 bg-white text-purple-700 rounded-full font-black text-sm shadow-md hover:bg-white/90 transition-colors">
+                {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
              </motion.button>
            </div>
         </div>
@@ -215,22 +222,22 @@ export default function Landing() {
             </motion.div>
 
             {/* Headline */}
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl md:text-6xl font-black leading-tight text-gray-900 mb-4">
-              Anak Malas<br />Belajar?{' '}
-              <span className="relative inline-block">
-                <span className="relative z-10">Tukar Jadi</span>
-                <span className="absolute inset-0 bg-yellow-300 rounded-lg transform -rotate-1 z-0"></span>
-              </span>
-              {' '}Rajin! 🎉
-            </motion.h1>
+             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl md:text-6xl font-black leading-tight text-white mb-4">
+               Anak Malas<br />Belajar?{' '}
+               <span className="relative inline-block">
+                 <span className="relative z-10">Tukar Jadi</span>
+                 <span className="absolute inset-0 bg-yellow-300 rounded-lg transform -rotate-1 z-0"></span>
+               </span>
+               {' '}Rajin! 🎉
+             </motion.h1>
 
-            {/* Subtext */}
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="text-lg text-gray-600 mb-2 font-bold text-orange-500">
-              Belajar Sambil Main, Markah Pasti Naik
-            </motion.p>
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-base text-gray-600 mb-8 leading-relaxed">
-              200+ permainan interaktif ikut silibus <strong>KSSR</strong> — Bahasa Melayu, English, Matematik, Sains & Jawi. Anak seronok, markah naik, ibu bapa tenang. ✅
-            </motion.p>
+             {/* Subtext */}
+             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="text-lg text-yellow-300 mb-2 font-bold">
+               Belajar Sambil Main, Markah Pasti Naik
+             </motion.p>
+             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-base text-white/80 mb-8 leading-relaxed">
+               200+ permainan interaktif ikut silibus <strong>KSSR</strong> — Bahasa Melayu, English, Matematik, Sains & Jawi. Anak seronok, markah naik, ibu bapa tenang. ✅
+             </motion.p>
 
             {/* CTA */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="flex flex-col sm:flex-row gap-3 mb-6">
@@ -251,7 +258,7 @@ export default function Landing() {
             </motion.div>
 
             {/* Trust badges */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex flex-wrap gap-4 text-sm text-gray-600">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex flex-wrap gap-4 text-sm text-white/70">
               {['✅ Ikut silibus KSSR', '✅ Tiada iklan', '✅ Jaminan Wang Balik 30 Hari'].map((t, i) =>
               <span key={i} className="font-semibold">{t}</span>
               )}
@@ -259,8 +266,8 @@ export default function Landing() {
 
             {/* Star rating */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }} className="flex items-center gap-2 mt-5">
-              <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <span key={i} className="text-orange-400 text-xl">★</span>)}</div>
-              <span className="text-sm font-bold text-gray-600">4.9/5 — lebih <span className="text-orange-500 font-black">1,200</span> ibu bapa dah bagi review! 😍</span>
+              <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <span key={i} className="text-yellow-300 text-xl">★</span>)}</div>
+              <span className="text-sm font-bold text-white/70">4.9/5 — lebih <span className="text-yellow-300 font-black">1,200</span> ibu bapa dah bagi review! 😍</span>
             </motion.div>
           </div>
 
@@ -591,16 +598,17 @@ export default function Landing() {
       </div>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-[hsl(var(--popover-foreground))] text-white py-8 text-center md:py-10">
+      <footer className="text-white py-8 text-center md:py-10 relative" style={{ background: 'rgba(0,0,0,0.2)', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
         <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
-        <p className="text-orange-100 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
-        <div className="flex justify-center gap-6 text-xs text-orange-200">
+        <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
+        <div className="flex justify-center gap-6 text-xs text-white/60">
           <span className="cursor-pointer hover:text-white">Terma Penggunaan</span>
           <span className="cursor-pointer hover:text-white">Dasar Privasi</span>
           <span className="cursor-pointer hover:text-white">Hubungi Kami</span>
         </div>
       </footer>
 
+      </div>
     </div>);
 
 }
