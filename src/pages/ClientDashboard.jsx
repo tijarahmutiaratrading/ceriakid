@@ -73,7 +73,7 @@ export default function ClientDashboard() {
 
       <AppHeader />
 
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
+      <div className="relative max-w-sm mx-auto px-4 pb-32 pt-8">
 
         {/* Hero Profile Card */}
         <motion.div
