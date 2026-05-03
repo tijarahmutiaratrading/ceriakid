@@ -481,6 +481,7 @@ export default function AdminBBMGenerator() {
                     </div>
                   ))}
                 </div>
+                <p className="text-white/40 text-xs text-center mt-3 pt-3 border-t border-white/10">✅ Jalan background setiap 5 minit. Boleh tutup browser.</p>
               </div>
             )}
 
