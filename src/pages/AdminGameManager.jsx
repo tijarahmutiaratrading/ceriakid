@@ -142,23 +142,32 @@ export default function AdminGameManager() {
 
   const executeBulkGeneration = async () => {
     if (!bulkGenerateConfig) return;
-
-    const tasks = Array.from(selectedSubjects).map((subjectKey) => {
-      const [ageGroup, subject] = subjectKey.split('-');
-      const subjectConfig = SUBJECT_CONFIG.find((sc) => sc.ageGroup === ageGroup && sc.subject === subject);
-      return {
-        taskId: Math.random().toString(36).slice(2, 9),
-        taskName: subjectConfig?.label || subjectKey,
-        ageGroup,
-        subject,
-        gamesCount: bulkGenerateConfig.games,
-        questionsPerGame: bulkGenerateConfig.questions
-      };
-    });
-
-    setRegenerationTasks(tasks);
-    setBulkGenerateConfig(null);
-    setSelectedSubjects(new Set());
+    setActionLoading('execute-all');
+    showToast('⏳ Menghantar tasks ke queue...', true);
+    try {
+      const allKeys = Array.from(selectedSubjects.size > 0 ? selectedSubjects : new Set(SUBJECT_CONFIG.map(sc => `${sc.ageGroup}-${sc.subject}`)));
+      for (const subjectKey of allKeys) {
+        const parts = subjectKey.split('-');
+        const subject = parts.slice(1).join('-');
+        const ageGroup = parts[0];
+        const subjectConfig = SUBJECT_CONFIG.find((sc) => sc.ageGroup === ageGroup && sc.subject === subject);
+        await base44.entities.GameTask.create({
+          taskName: subjectConfig?.label || subjectKey,
+          ageGroup,
+          subject,
+          gamesCount: bulkGenerateConfig.games,
+          questionsPerGame: bulkGenerateConfig.questions,
+          status: 'pending',
+        });
+      }
+      showToast(`✅ ${allKeys.length} tasks dalam queue! Automation proses setiap 5 minit. Boleh tutup browser.`);
+      setBulkGenerateConfig(null);
+      setSelectedSubjects(new Set());
+    } catch (err) {
+      showToast('❌ Error: ' + err.message, false);
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   const openSubjectConfigModal = (file, label, currentGames, currentAvgQ, ageGroup, subject) => {
@@ -1017,133 +1026,7 @@ export default function AdminGameManager() {
         }
       </AnimatePresence>
 
-      {/* Regeneration Task Executor */}
-      <AnimatePresence>
-        {regenerationTasks &&
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          
-            <motion.div
-            initial={{ scale: 0.92, y: 20 }}
-            animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.92, y: 20 }}
-            className="bg-white rounded-3xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
-            
-              {/* Header */}
-              <div className="bg-gradient-to-r from-red-600 to-orange-600 px-6 py-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <h3 className="font-black text-white text-lg">🚀 Regeneration Executor</h3>
-                    <p className="text-white/80 text-xs mt-1">Execute tasks sequentially. Wait for each to complete.</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-white font-bold text-sm">{taskProgress.length}/{regenerationTasks.length}</p>
-                    <p className="text-white/70 text-xs">{Math.round(taskProgress.length / regenerationTasks.length * 100)}%</p>
-                  </div>
-                </div>
-                <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
-                  <div
-                  className="h-full bg-white transition-all duration-300"
-                  style={{ width: `${taskProgress.length / regenerationTasks.length * 100}%` }} />
-                
-                </div>
-              </div>
 
-              {/* Task List */}
-              <div className="flex-1 overflow-y-auto px-6 py-4">
-                <div className="space-y-2">
-                  {regenerationTasks.map((task, idx) => {
-                  const progress = taskProgress.find((p) => p.taskId === task.taskId);
-                  const isCompleted = progress?.status === 'completed';
-                  const isRunning = progress?.status === 'running';
-
-                  return (
-                    <div key={task.taskId} className={`p-3 rounded-2xl border-2 transition-all ${
-                    isCompleted ? 'bg-green-50 border-green-300' :
-                    isRunning ? 'bg-blue-50 border-blue-300' :
-                    'bg-gray-50 border-gray-200'}`
-                    }>
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <p className="text-sm font-bold text-gray-800">{task.taskName}</p>
-                            <p className="text-xs text-gray-500">{task.gamesCount} games × {task.questionsPerGame} soalan</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {isCompleted ?
-                          <span className="text-xs font-bold text-green-600">✅ Done</span> :
-                          isRunning ?
-                          <Loader2 className="w-4 h-4 animate-spin text-blue-600" /> :
-
-                          <span className="text-xs font-bold text-gray-400">Pending</span>
-                          }
-                          </div>
-                        </div>
-                        {progress?.message &&
-                      <p className="text-xs text-gray-600 mt-2">{progress.message}</p>
-                      }
-                      </div>);
-
-                })}
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="px-6 py-4 border-t border-gray-200">
-                <p className="text-xs text-gray-400 mb-3 text-center">💡 Backend jalan di server—boleh close browser, tasks akan terus jalan background (~30-60 minit)</p>
-                <div className="flex gap-3">
-                  <button
-                  onClick={() => {setRegenerationTasks(null);setTaskProgress([]);}}
-                  className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-bold text-gray-600 text-sm">
-                  
-                    Close
-                  </button>
-                  <button
-                  onClick={async () => {
-                    setActionLoading('execute-all');
-                    showToast('⏳ Menghantar tasks ke queue...', true);
-
-                    try {
-                      // Queue all tasks into DB — automation will process them
-                      for (const task of regenerationTasks) {
-                        await base44.entities.GameTask.create({
-                          taskName: task.taskName,
-                          ageGroup: task.ageGroup,
-                          subject: task.subject,
-                          gamesCount: task.gamesCount,
-                          questionsPerGame: task.questionsPerGame,
-                          status: 'pending',
-                        });
-                      }
-                      showToast(`✅ ${regenerationTasks.length} tasks dalam queue! Automation akan proses setiap 5 minit. Boleh tutup browser.`);
-                      setRegenerationTasks(null);
-                      setTaskProgress([]);
-                    } catch (err) {
-                      showToast('❌ Error: ' + err.message, false);
-                    } finally {
-                      setActionLoading(null);
-                    }
-                  }}
-                  disabled={actionLoading === 'execute-all'}
-                  className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl font-bold text-sm hover:shadow-lg disabled:opacity-50">
-
-                    {actionLoading === 'execute-all' ?
-                  <>
-                        <Loader2 className="w-4 h-4 animate-spin inline mr-2" />
-                        Executing...
-                      </> :
-
-                  taskProgress.length === regenerationTasks.length ? '✅ Done' : `▶️ Execute All ${regenerationTasks.length} Tasks`
-                  }
-                    </button>
-                    </div>
-                    </div>
-                    </motion.div>
-                    </motion.div>
-        }
-                    </AnimatePresence>
                     </div>);
 
 }
