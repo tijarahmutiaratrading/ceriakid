@@ -90,16 +90,16 @@ export default function ClientDashboard() {
 
           {/* Avatar overlapping strip */}
           <div className="px-6 pb-6 pt-6">
-            <div className="flex items-end gap-4 -mt-10 mb-4">
+            <div className="flex items-end gap-4 mb-4">
               <div className="relative">
                 {avatarUrl && avatarUrl.includes('http') ? (
-                  <img src={avatarUrl} alt="Avatar" className="w-20 h-20 rounded-2xl object-cover border-4 border-white shadow-xl" />
+                  <img src={avatarUrl} alt="Avatar" className="w-24 h-24 rounded-2xl object-cover border-4 border-white shadow-xl" />
                 ) : (
-                  <div className="w-20 h-20 rounded-2xl bg-white/40 border-4 border-white shadow-xl flex items-center justify-center text-4xl">🐱</div>
+                  <div className="w-24 h-24 rounded-2xl bg-white/40 border-4 border-white shadow-xl flex items-center justify-center text-5xl">🐱</div>
                 )}
-                <label className="absolute -bottom-2 -right-2 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-orange-600 transition-colors">
+                <label className="absolute -bottom-1 -right-1 w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-orange-600 transition-colors z-10">
                   <input type="file" accept="image/*" onChange={handleAvatarUpload} disabled={saving} className="hidden" />
-                  {saving ? <Loader className="w-3.5 h-3.5 text-white animate-spin" /> : <Upload className="w-3.5 h-3.5 text-white" />}
+                  {saving ? <Loader className="w-4 h-4 text-white animate-spin" /> : <Upload className="w-4 h-4 text-white" />}
                 </label>
               </div>
               <div className="mb-1">
