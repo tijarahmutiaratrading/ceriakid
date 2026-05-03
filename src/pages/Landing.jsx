@@ -225,7 +225,7 @@ export default function Landing() {
              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl md:text-6xl font-black leading-tight text-white mb-4">
                Anak Malas<br />Belajar?{' '}
                <span className="relative inline-block">
-                 <span className="relative z-10">Tukar Jadi</span>
+                 <span className="relative z-10 text-black">Tukar Jadi</span>
                  <span className="absolute inset-0 bg-yellow-300 rounded-lg transform -rotate-1 z-0"></span>
                </span>
                {' '}Rajin! 🎉
