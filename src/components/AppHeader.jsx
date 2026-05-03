@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { useState as useStateImport } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowLeft, ChevronDown, LogOut } from 'lucide-react';
+import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [expandedAgeGroup, setExpandedAgeGroup] = useState(null);
   const { isAuthenticated, user, logout } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
@@ -202,8 +200,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 </>
               )}
 
-              {/* Other Items */}
-              {otherItems.map((item) => (
+              {/* Other Items — authenticated only */}
+              {isAuthenticated && otherItems.map((item) => (
                <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="w-full">
                  <motion.button
                    type="button"
