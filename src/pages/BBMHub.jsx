@@ -48,8 +48,13 @@ export default function BBMHub() {
         }
       }
       // Load BBM from DB, fall back to sample
-      const dbResources = await base44.entities.BBMResource.filter({ isPublished: true });
-      setResources(dbResources.length > 0 ? dbResources : SAMPLE_BBM);
+      try {
+        const dbResources = await base44.entities.BBMResource.list('-created_date', 100);
+        const published = dbResources.filter(r => r.isPublished !== false);
+        setResources(published.length > 0 ? published : SAMPLE_BBM);
+      } catch {
+        setResources(SAMPLE_BBM);
+      }
     } catch {
       setResources(SAMPLE_BBM);
     } finally {
@@ -67,18 +72,42 @@ export default function BBMHub() {
 
   const isPremiumUser = ['premium', 'pro', 'keluarga', 'standard', 'asas'].includes(userTier);
 
+  const generateSimpleHTML = (resource) => {
+    return `<!DOCTYPE html><html><head><title>${resource.title}</title>
+<style>body{font-family:Arial,sans-serif;padding:30px;max-width:800px;margin:0 auto}
+h1{color:#6d28d9;text-align:center;margin-bottom:5px}
+.meta{text-align:center;color:#7c3aed;margin-bottom:20px;font-size:14px}
+.content{border:2px solid #7c3aed;border-radius:12px;padding:20px;min-height:400px}
+.placeholder{text-align:center;color:#9ca3af;padding:40px;font-size:16px}
+.footer{text-align:center;margin-top:20px;color:#6d28d9;font-size:12px}
+@media print{button{display:none}}</style></head>
+<body>
+<h1>${resource.emoji || '📄'} ${resource.title}</h1>
+<div class="meta">${resource.description || ''} | ${resource.level} | ${resource.subject}</div>
+<div class="content">
+<div class="placeholder">
+<p style="font-size:48px">${resource.emoji || '📄'}</p>
+<p><b>${resource.title}</b></p>
+<p style="margin-top:10px">${resource.description || 'Bahan bantu mengajar'}</p>
+<p style="margin-top:20px;color:#6d28d9">Tekan Ctrl+P / Cmd+P untuk print atau save sebagai PDF</p>
+</div>
+</div>
+<div class="footer">CeriaKid Educational Platform | Malaysia</div>
+</body></html>`;
+  };
+
   const handleDownload = async (resource) => {
     if (resource.tier === 'premium' && !isPremiumUser) return;
     if (resource.fileUrl) {
       window.open(resource.fileUrl, '_blank');
-    } else if (resource.htmlContent) {
-      // AI-generated BBM — open HTML in new tab for print/save
-      const win = window.open('', '_blank');
-      win.document.write(resource.htmlContent);
-      win.document.close();
     } else {
-      alert('Fail belum tersedia. Sila semak semula kemudian.');
-      return;
+      // Open HTML content or generate simple placeholder
+      const html = resource.htmlContent || generateSimpleHTML(resource);
+      const win = window.open('', '_blank');
+      if (win) {
+        win.document.write(html);
+        win.document.close();
+      }
     }
     // Increment download count silently
     try {

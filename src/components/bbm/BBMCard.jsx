@@ -35,7 +35,7 @@ const TYPE_COLORS = {
 
 export default function BBMCard({ resource, locked, onDownload, idx }) {
   const typeColor = TYPE_COLORS[resource.type] || 'bg-gray-400/80';
-  const hasFile = !!(resource.fileUrl || resource.htmlContent);
+  const hasFile = true; // always show download — BBMHub generates HTML on-the-fly if no file
 
   return (
     <motion.div
