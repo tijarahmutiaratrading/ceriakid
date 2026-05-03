@@ -118,16 +118,22 @@ export default function AdminGameManager() {
         const [ageGroup, ...rest] = subjectKey.split('-');
         const subject = rest.join('-');
         const sc = SUBJECT_CONFIG.find(s => s.ageGroup === ageGroup && s.subject === subject);
-        await base44.entities.GameTask.create({
-          taskName: sc?.label || subjectKey,
-          ageGroup,
-          subject,
-          gamesCount: genConfig.games,
-          questionsPerGame: genConfig.questions,
-          status: 'pending',
-        });
+        const curr = currentCounts[subjectKey] || { games: 0, avgQuestions: 0 };
+        const gamesToAdd = Math.max(0, genConfig.games - curr.games);
+        const questionsToAdd = Math.max(0, genConfig.questions - curr.avgQuestions);
+        
+        if (gamesToAdd > 0 || questionsToAdd > 0) {
+          await base44.entities.GameTask.create({
+            taskName: sc?.label || subjectKey,
+            ageGroup,
+            subject,
+            gamesCount: gamesToAdd > 0 ? gamesToAdd : 0,
+            questionsPerGame: questionsToAdd > 0 ? questionsToAdd : 0,
+            status: 'pending',
+          });
+        }
       }
-      showToast(`✅ ${selectedSubjects.size} tasks dihantar ke queue!`);
+      showToast(`✅ ${selectedSubjects.size} tasks dihantar ke queue (smart target)!`);
       setSelectedSubjects(new Set());
       loadTasks();
     } catch (err) {
