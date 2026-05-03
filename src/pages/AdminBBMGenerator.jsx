@@ -331,6 +331,18 @@ export default function AdminBBMGenerator() {
               <button onClick={loadResources} className="p-2.5 rounded-2xl bg-white/10 text-white border border-white/20 hover:bg-white/20">
                 <RefreshCw className={`w-4 h-4 ${loadingResources ? 'animate-spin' : ''}`} />
               </button>
+              <button
+                onClick={async () => {
+                  if (!window.confirm('🚨 Delete SEMUA BBM? (Tidak boleh undo)')) return;
+                  for (const r of resources) await base44.entities.BBMResource.delete(r.id);
+                  setResources([]);
+                  showToast('✅ Semua BBM dipadam');
+                }}
+                className="p-2.5 rounded-2xl bg-red-500/20 text-red-300 border border-red-400/30 hover:bg-red-500/30"
+                title="Delete all BBM"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
             </div>
 
             {/* Stats row */}
