@@ -84,7 +84,7 @@ export default function ClientDashboard() {
         >
           {/* Top gradient strip */}
           <div className={`h-24 bg-gradient-to-r ${tier.color} relative`}>
-            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, white 0.5px, transparent 0.5px)', backgroundSize: '8px 8px' }} />
+            <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, white 0.5px, transparent 0.5px)', backgroundSize: '8px 8px' }} />
             {/* Tier badge */}
             <div className="absolute top-3 right-4 flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1.5">
               <span className="text-lg">{tier.emoji}</span>
