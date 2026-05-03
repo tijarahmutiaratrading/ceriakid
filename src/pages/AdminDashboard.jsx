@@ -159,14 +159,14 @@ export default function AdminDashboard() {
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
-      <div className="relative max-w-5xl mx-auto px-3 md:px-4 py-6 md:py-8">
+      <div className="relative max-w-5xl mx-auto px-3 md:px-4 pt-6 pb-32">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 p-3 rounded-2xl" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-          <div className="flex items-center gap-2 mb-1">
-            <div className="text-2xl">🎛️</div>
-            <h1 className="text-lg md:text-2xl font-black text-white">Admin Dashboard</h1>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-5 p-4 rounded-3xl flex items-center gap-3" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+          <div className="text-3xl">🎛️</div>
+          <div>
+            <h1 className="text-xl font-black text-white">Admin Dashboard</h1>
+            <p className="text-white/60 text-xs">Analytics, Settings & Configurations</p>
           </div>
-          <p className="text-white/60 text-xs font-semibold ml-8">Analytics, Settings & Configurations</p>
         </motion.div>
 
         {/* Main Tabs */}
