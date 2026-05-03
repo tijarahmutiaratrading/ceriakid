@@ -72,16 +72,16 @@ Deno.serve(async (req) => {
           ` : ''}
 
           <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
-            <a href="https://jombelajar.app/parent-dashboard" style="display: inline-block; background: #8b5cf6; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">Lihat Laporan Lengkap</a>
+            <a href="https://ceriakid.com/parent-dashboard" style="display: inline-block; background: #8b5cf6; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">Lihat Laporan Lengkap</a>
           </div>
 
-          <p style="text-align: center; color: #999; font-size: 12px; margin-top: 20px;">Jom Belajar - Platform Pembelajaran Anak</p>
+          <p style="text-align: center; color: #999; font-size: 12px; margin-top: 20px;">CeriaKid - Platform Pembelajaran Anak</p>
         </div>
       `;
 
       emailsToSend.push({
         to: user.email,
-        subject: '📊 Laporan Mingguan Prestasi Anak - Jom Belajar',
+        subject: '📊 Laporan Mingguan Prestasi Anak - CeriaKid',
         html: emailHtml,
       });
     }
@@ -97,7 +97,7 @@ Deno.serve(async (req) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'noreply@jombelajar.app',
+            from: 'noreply@ceriakid.com',
             ...email,
           }),
         });

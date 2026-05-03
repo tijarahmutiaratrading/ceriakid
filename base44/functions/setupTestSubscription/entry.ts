@@ -10,36 +10,33 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
-    const { email } = await req.json();
+    const { email, tier: requestedTier } = await req.json();
 
     if (!email) {
       return Response.json({ error: 'Email is required' }, { status: 400 });
     }
 
+    const validTiers = ['free', 'asas', 'standard', 'keluarga', 'pro'];
+    const tier = validTiers.includes(requestedTier) ? requestedTier : 'keluarga';
+
     // Check if subscription exists
-    const existing = await base44.entities.UserSubscription.filter({ email });
+    const existing = await base44.asServiceRole.entities.UserSubscription.filter({ email });
+
+    const subData = {
+      email,
+      tier,
+      status: 'active',
+      stripeSubscriptionId: 'test_sub_' + Date.now(),
+      currentPeriodStart: new Date().toISOString(),
+      currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+    };
 
     if (existing.length > 0) {
-      // Update existing
-      await base44.asServiceRole.entities.UserSubscription.update(existing[0].id, {
-        tier: 'pro',
-        status: 'active',
-        stripeSubscriptionId: 'test_sub_' + Date.now(),
-        currentPeriodStart: new Date().toISOString(),
-        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-      });
-      return Response.json({ success: true, message: 'Subscription updated to pro', id: existing[0].id });
+      await base44.asServiceRole.entities.UserSubscription.update(existing[0].id, subData);
+      return Response.json({ success: true, message: `Subscription updated to ${tier}`, id: existing[0].id });
     } else {
-      // Create new
-      const result = await base44.asServiceRole.entities.UserSubscription.create({
-        email,
-        tier: 'pro',
-        status: 'active',
-        stripeSubscriptionId: 'test_sub_' + Date.now(),
-        currentPeriodStart: new Date().toISOString(),
-        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-      });
-      return Response.json({ success: true, message: 'Pro subscription created', id: result.id });
+      const result = await base44.asServiceRole.entities.UserSubscription.create(subData);
+      return Response.json({ success: true, message: `${tier} subscription created`, id: result.id });
     }
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

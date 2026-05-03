@@ -39,7 +39,7 @@ Deno.serve(async (req) => {
           <h2>Tahniah! 🎉</h2>
           <p>Anak anda ${childName} telah membuka badge baru: <strong>${data.badgeName}</strong> ${data.emoji}</p>
           <p>Terus semangat belajar!</p>
-          <a href="https://jombelajar.com/parent-dashboard" style="padding: 10px 20px; background: #8b5cf6; color: white; border-radius: 5px; text-decoration: none;">Lihat Prestasi</a>
+          <a href="https://ceriakid.com/parent-dashboard" style="padding: 10px 20px; background: #8b5cf6; color: white; border-radius: 5px; text-decoration: none;">Lihat Prestasi</a>
         `,
       },
       streak: {
@@ -51,7 +51,7 @@ Deno.serve(async (req) => {
         `,
       },
       weekly_report: {
-        subject: `📊 Laporan Mingguan ${childName} - Jom Belajar`,
+        subject: `📊 Laporan Mingguan ${childName} - CeriaKid`,
         body: `
           <h2>Laporan Mingguan ${childName}</h2>
           <ul>
@@ -75,7 +75,7 @@ Deno.serve(async (req) => {
         to: parentEmail,
         subject: template.subject,
         body: template.body,
-        from_name: 'Jom Belajar',
+        from_name: 'CeriaKid',
       });
 
       return Response.json({
