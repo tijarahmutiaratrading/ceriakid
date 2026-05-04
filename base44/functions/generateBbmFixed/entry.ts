@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
     const subjectLabel = SUBJECTS[subject];
     const levelLabel = LEVELS[level];
     const ai = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      prompt: `Jana ${typeLabel} lengkap untuk ${subjectLabel} ${levelLabel}. Topik ${topic || 'umum'}. Buat ${count} item. Sesuai KSSR Malaysia, siap print A4. Output JSON: title, description, instructions, items[{heading,content,answer}].`,
+      prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeLabel} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic || 'umum'}. Buat ${count} item. Wajib ada objektif pembelajaran jelas, arahan murid yang mudah, kandungan selari tahap umur, soalan pelbagai aras mudah-sederhana, contoh tempatan Malaysia, jawapan/skema ringkas, tiada placeholder dan tiada fakta meragukan. Output JSON sahaja: title, description, instructions, items[{heading,content,answer}].`,
       response_json_schema: { type: 'object', properties: { title: { type: 'string' }, description: { type: 'string' }, instructions: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { heading: { type: 'string' }, content: { type: 'string' }, answer: { type: 'string' } } } } } }
     });
 

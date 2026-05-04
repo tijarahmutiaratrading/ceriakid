@@ -40,22 +40,34 @@ async function generateQuestionsForGame(base44, gameTitle, topicName, subject, a
     ? `\nElakkan soalan yang SAMA dengan games sedia ada: ${existingTitles.slice(-5).join(', ')}`
     : '';
 
+  const languageRule = subject === 'english'
+    ? 'Gunakan English yang mudah, natural dan sesuai tahap murid Malaysia.'
+    : subject === 'bahasa_tamil' || subject === 'bahasa_mandarin'
+      ? 'Gunakan bahasa subjek yang betul, ringkas dan mesra kanak-kanak; arahan boleh dwibahasa BM ringkas jika perlu.'
+      : 'Gunakan Bahasa Malaysia baku yang betul, mudah dan mesra kanak-kanak.';
+
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
-    prompt: `Buat TEPAT ${questionsCount} soalan UNIK & BERBEZA untuk:
+    prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia dan pembina game pembelajaran kanak-kanak.
+
+Buat TEPAT ${questionsCount} soalan game yang HIGH QUALITY, UNIK & BERBEZA untuk:
 Tajuk: "${gameTitle}"
 Topik KHUSUS: "${topicName}"
-Subjek: ${CATEGORY_LABELS[subject] || subject} | Peringkat: ${AGE_LABELS[ageGroup] || ageGroup}
+Subjek: ${CATEGORY_LABELS[subject] || subject}
+Peringkat: ${AGE_LABELS[ageGroup] || ageGroup}
 ${alreadyMade}
 
-WAJIB ikut:
-1. Semua soalan MESTI tentang topik "${topicName}" sahaja — fokus dan konsisten
-2. Setiap soalan subtopik BERBEZA dalam topik yang sama
-3. 4 pilihan jawapan yang jelas dan berbeza antara satu sama lain
-4. Bahasa Malaysia yang betul dan mudah difahami kanak-kanak
-5. Emoji BERBEZA setiap soalan (pilih dari: ${emoji.slice(0, 12).join(' ')})
-6. Jawapan betul mesti 100% tepat secara fakta
+WAJIB ikut standard ini:
+1. Selari KSSR/DSKP Malaysia dan sesuai umur — prasekolah mesti sangat asas; sekolah rendah boleh sedikit mencabar tetapi masih jelas.
+2. Semua soalan MESTI fokus topik "${topicName}" sahaja, bukan campur topik lain.
+3. Setiap soalan uji konsep/subkemahiran berbeza: kenal pasti, faham, aplikasi mudah, banding beza, susun atau kira.
+4. ${languageRule}
+5. Soalan pendek, tidak mengelirukan, tiada fakta meragukan, tiada kandungan sensitif.
+6. 4 pilihan jawapan mesti munasabah, tidak duplicate, panjang hampir seimbang, hanya satu jawapan betul.
+7. Jawapan betul mesti 100% tepat dan index answer mesti sepadan dengan options.
+8. Emoji BERBEZA setiap soalan dan relevan dengan soalan (pilih dari: ${emoji.slice(0, 16).join(' ')}).
+9. Jangan guna placeholder seperti "Soalan 1", jangan ulang struktur ayat yang sama terlalu banyak.
 
-Output JSON "questions" dengan: problem, options[4], answer(0-3), emoji`,
+Output JSON sahaja: "questions" dengan problem, options[4], answer(0-3), emoji.`,
     response_json_schema: {
       type: 'object',
       properties: {
@@ -132,6 +144,20 @@ Deno.serve(async (req) => {
       tracing: { title: 'Tracing Game', type: 'tracing', emoji: '✏️' },
     };
 
+    const buildMiniGameData = (mode, index) => {
+      const sets = {
+        memory: { mode, pairs: [['A', 'Apple'], ['B', 'Ball'], ['C', 'Cat'], ['D', 'Dog']], theme: 'letters' },
+        dragdrop: { mode, items: ['Epal', 'Bola', 'Kucing', 'Ikan'], targets: ['Buah', 'Mainan', 'Haiwan', 'Haiwan'], instruction: 'Seret item ke kategori yang betul.' },
+        wordbuilder: { mode, words: ['makan', 'buku', 'bola', 'rumah'], letters: ['m','a','k','n','b','u','o','l','r','h'], instruction: 'Bina perkataan mudah.' },
+        sorting: { mode, items: [{ text: '2', group: 'Nombor' }, { text: 'A', group: 'Huruf' }, { text: '5', group: 'Nombor' }, { text: 'B', group: 'Huruf' }], groups: ['Nombor', 'Huruf'] },
+        tilematch: { mode, tiles: ['🐱', '🐱', '🐶', '🐶', '🍎', '🍎', '⭐', '⭐'], instruction: 'Padankan jubin yang sama.' },
+        story: { mode, scenes: [{ text: 'Ali jumpa anak kucing di taman.', choices: ['Bantu kucing', 'Tinggalkan'], answer: 0 }, { text: 'Ali beri air kepada kucing.', choices: ['Bagus', 'Tidak baik'], answer: 0 }] },
+        physics: { mode, challenges: [{ question: 'Objek berat jatuh ke bawah kerana apa?', options: ['Graviti', 'Angin', 'Cahaya', 'Bunyi'], answer: 0 }] },
+        tracing: { mode, letters: ['A', 'B', 'C', '1', '2', '3'], instruction: 'Surih huruf dan nombor dengan kemas.' },
+      };
+      return { ...(sets[mode] || { mode }), variant: index + 1 };
+    };
+
     const miniGame = miniGameMap[task.subject];
     if (miniGame) {
       const existingMini = await base44.asServiceRole.entities.Game.filter({ category: task.subject });
@@ -145,7 +171,7 @@ Deno.serve(async (req) => {
           tier: 'free',
           emoji: miniGame.emoji,
           totalQuestions: 1,
-          gameData: { mode: task.subject },
+          gameData: buildMiniGameData(task.subject, i),
           isPublished: true,
           status: 'ready',
           order: existingMini.length + i,

@@ -47,18 +47,32 @@ async function generateGameQuestions(base44, gameTitle, topicName, subject, ageG
     ? `\nELAK soalan sama dengan: ${existingTitles.slice(-4).join(', ')}`
     : '';
 
-  const prompt = `Buat TEPAT ${questionsCount} soalan UNIK untuk:
+  const languageRule = subject === 'english'
+    ? 'Use simple, natural English suitable for Malaysian pupils.'
+    : subject === 'bahasa_tamil' || subject === 'bahasa_mandarin'
+      ? 'Gunakan bahasa subjek yang betul dan mudah; arahan boleh dwibahasa BM ringkas jika perlu.'
+      : 'Gunakan Bahasa Malaysia baku yang betul, mudah dan mesra kanak-kanak.';
+
+  const prompt = `Anda ialah guru pakar KSSR/DSKP Malaysia dan pembina game pembelajaran kanak-kanak.
+
+Buat TEPAT ${questionsCount} soalan game HIGH QUALITY dan UNIK untuk:
 "${gameTitle}" — Topik KHUSUS: "${topicName}"
-Subjek: ${CATEGORY_LABELS[subject] || subject} (${AGE_LABELS[ageGroup] || ageGroup})
+Subjek: ${CATEGORY_LABELS[subject] || subject}
+Peringkat: ${AGE_LABELS[ageGroup] || ageGroup}
 ${alreadyMade}
 
 WAJIB:
-1. Semua soalan fokus topik "${topicName}" — subtopik berbeza setiap soalan
-2. 4 pilihan jawapan jelas berbeza & masuk akal
-3. Jawapan betul 100% tepat secara fakta
-4. Emoji BERBEZA setiap soalan dari: ${availableEmoji.join(' ')}
+1. Selari KSSR/DSKP Malaysia dan sesuai umur — prasekolah sangat asas, sekolah rendah lebih mencabar tetapi jelas.
+2. Semua soalan fokus topik "${topicName}" sahaja.
+3. Setiap soalan uji konsep/subkemahiran berbeza.
+4. ${languageRule}
+5. Soalan pendek, tidak mengelirukan, tiada fakta meragukan.
+6. 4 pilihan jawapan munasabah, tidak duplicate, hanya satu betul.
+7. Jawapan betul mesti 100% tepat dan answer index mesti sepadan.
+8. Emoji BERBEZA dan relevan dari: ${availableEmoji.join(' ')}.
+9. Jangan guna placeholder atau ulang ayat yang sama.
 
-Output JSON "questions": problem, options[4], answer(0-3), emoji`;
+Output JSON sahaja: "questions": problem, options[4], answer(0-3), emoji`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,

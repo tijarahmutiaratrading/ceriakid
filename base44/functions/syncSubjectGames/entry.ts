@@ -36,39 +36,23 @@ Deno.serve(async (req) => {
     let removed = 0;
 
     if (targetCount > currentCount) {
-      // Add games by cloning the last one
-      const template = existing[existing.length - 1] || {
-        title: 'Game Baru',
-        type: 'multiple_choice',
-        category,
+      const gamesToAdd = targetCount - currentCount;
+      const existingPending = await base44.asServiceRole.entities.GameTask.filter({
         ageGroup,
-        difficulty: 'easy',
-        tier: 'free',
-        emoji: '🎮',
-        totalQuestions: 8,
-        gameData: { questions: [] },
-        isPublished: true,
-      };
+        subject: category,
+        status: 'pending',
+      });
 
-      for (let i = currentCount; i < targetCount; i++) {
-        await base44.asServiceRole.entities.Game.create({
-          title: `${template.title} - ${i + 1}`,
-          type: template.type,
-          category,
+      if (existingPending.length === 0) {
+        await base44.asServiceRole.entities.GameTask.create({
+          taskName: `Sync Generate: ${ageGroup} - ${category}`,
           ageGroup,
-          difficulty: template.difficulty || 'easy',
-          tier: template.tier || 'free',
-          emoji: template.emoji || '🎮',
-          totalQuestions: template.totalQuestions || 8,
-          gameData: JSON.parse(JSON.stringify(template.gameData || {})),
-          isPublished: true,
-          order: i,
+          subject: category,
+          gamesCount: gamesToAdd,
+          questionsPerGame: 20,
+          status: 'pending',
         });
-        added++;
-        // Delay 500ms between creates to avoid rate limits
-        if (i < targetCount - 1) {
-          await new Promise(r => setTimeout(r, 500));
-        }
+        added = gamesToAdd;
       }
     } else if (targetCount < currentCount) {
       // Remove excess games from the end
