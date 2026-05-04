@@ -183,7 +183,7 @@ export default function AdminBBMGenerator() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-3xl mx-auto px-4 pt-8 pb-32">
+      <div className="max-w-3xl mx-auto px-4 pt-28 pb-32">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
