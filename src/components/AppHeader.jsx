@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
@@ -8,15 +8,33 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [navVisible, setNavVisible] = useState(true);
   const { isAuthenticated, user, logout } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useLocation();
   const isAdmin = user?.role === 'admin';
   const isLanding = location.pathname === '/' || location.pathname === '/landing';
   const isPlayingGame = location.pathname.startsWith('/play/');
+  const lastScrollY = React.useRef(0);
   
   // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      if (currentY < 50) {
+        setNavVisible(true);
+      } else if (currentY > lastScrollY.current) {
+        setNavVisible(false);
+      } else {
+        setNavVisible(true);
+      }
+      lastScrollY.current = currentY;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
 
 
@@ -74,7 +92,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   return (
     <>
       {/* Top Header - Landing Style */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 transition-transform duration-300" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)', transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
         <div className="max-w-lg mx-auto w-full flex items-center justify-between">
           <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
           <button
@@ -88,7 +106,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
       </nav>
 
       {/* Bottom Navigation Bar */}
-      <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4">
+      <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(120px)' }}>
         <div className={`w-full md:max-w-lg rounded-2xl h-16 flex items-center justify-around ${
           isPlayingGame
             ? 'bg-white shadow-lg border border-gray-200'
