@@ -5,15 +5,14 @@ import AppHeader from '@/components/AppHeader';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
-const WORD_SETS = [
-  // Set A — Benda sekeliling (prasekolah)
+const ALL_WORD_SETS = [
+  // Set A — Benda sekeliling
   [
     { word: 'RUMAH', hint: 'Tempat kita tinggal', emoji: '🏠' },
     { word: 'BUKU', hint: 'Kita baca ini', emoji: '📖' },
     { word: 'MEJA', hint: 'Kita letak benda di atasnya', emoji: '🪑' },
     { word: 'POKOK', hint: 'Tumbuhan besar di luar', emoji: '🌳' },
     { word: 'BUNGA', hint: 'Harum dan cantik', emoji: '🌸' },
-    { word: 'BOLA', hint: 'Bulat, boleh ditendang', emoji: '⚽' },
   ],
   // Set B — Haiwan
   [
@@ -21,7 +20,7 @@ const WORD_SETS = [
     { word: 'ANJING', hint: 'Sahabat manusia yang setia', emoji: '🐶' },
     { word: 'BURUNG', hint: 'Boleh terbang di langit', emoji: '🐦' },
     { word: 'KATAK', hint: 'Melompat dan suka air', emoji: '🐸' },
-    { word: 'IKAN', hint: 'Hidup di dalam air', emoji: '🐟' },
+    { word: 'GAJAH', hint: 'Haiwan besar dengan belalai', emoji: '🐘' },
   ],
   // Set C — Makanan
   [
@@ -31,7 +30,38 @@ const WORD_SETS = [
     { word: 'PISANG', hint: 'Buah yang disukai monyet', emoji: '🍌' },
     { word: 'SUSU', hint: 'Minuman putih dari lembu', emoji: '🥛' },
   ],
+  // Set D — Kenderaan
+  [
+    { word: 'KERETA', hint: 'Kenderaan beroda empat', emoji: '🚗' },
+    { word: 'KAPAL', hint: 'Belayar di atas laut', emoji: '🚢' },
+    { word: 'TREN', hint: 'Berjalan di atas landasan', emoji: '🚂' },
+    { word: 'BAS', hint: 'Kenderaan awam yang besar', emoji: '🚌' },
+    { word: 'BASIKAL', hint: 'Dua roda, kayuh sendiri', emoji: '🚲' },
+  ],
+  // Set E — Warna & Alam
+  [
+    { word: 'MERAH', hint: 'Warna api dan darah', emoji: '🔴' },
+    { word: 'BIRU', hint: 'Warna langit dan laut', emoji: '💙' },
+    { word: 'HIJAU', hint: 'Warna pokok dan rumput', emoji: '💚' },
+    { word: 'KUNING', hint: 'Warna matahari yang cerah', emoji: '⭐' },
+    { word: 'PUTIH', hint: 'Warna awan dan salji', emoji: '⬜' },
+  ],
+  // Set F — Sekolah
+  [
+    { word: 'PENSIL', hint: 'Alat tulis yang boleh dihapus', emoji: '✏️' },
+    { word: 'KELAS', hint: 'Tempat belajar di sekolah', emoji: '🏫' },
+    { word: 'CIKGU', hint: 'Orang yang mengajar', emoji: '👩‍🏫' },
+    { word: 'PAPAN', hint: 'Cikgu tulis di sini', emoji: '📋' },
+    { word: 'BEG', hint: 'Digunakan untuk bawa buku', emoji: '🎒' },
+  ],
 ];
+
+// Pick 3 random sets per session
+function getRandomSets() {
+  return [...ALL_WORD_SETS].sort(() => Math.random() - 0.5).slice(0, 3);
+}
+
+const WORD_SETS = getRandomSets();
 
 function shuffle(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
@@ -112,7 +142,9 @@ export default function WordBuilderGame() {
           <h2 className="text-2xl font-black text-white mb-2">Tahniah! Semua Selesai!</h2>
           <p className="text-yellow-300 text-3xl font-black mb-6">Skor: {score} ⭐</p>
           <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setSetIdx(0); setWordIdx(0); setUserWord([]); setScore(0); setMessage(''); setSetOver(false); setGameOver(false); setWrongAttempts(0); }}
-            className="px-6 py-3 bg-white text-purple-600 rounded-full font-black">Mula Semula</motion.button>
+            className="px-6 py-3 bg-white text-purple-600 rounded-full font-black"
+            onClick={() => { const s=getRandomSets(); WORD_SETS.length=0; s.forEach(x=>WORD_SETS.push(x)); setSetIdx(0); setWordIdx(0); setUserWord([]); setScore(0); setMessage(''); setSetOver(false); setGameOver(false); setWrongAttempts(0); }}>
+            Mula Semula</motion.button>
         </motion.div>
       </div>
     </div>

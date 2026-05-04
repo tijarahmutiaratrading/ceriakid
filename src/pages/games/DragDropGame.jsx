@@ -5,13 +5,22 @@ import AppHeader from '@/components/AppHeader';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
-const ROUNDS = [
+const ALL_ROUNDS = [
   [{ id: 1, letter: 'A', image: '🍎', label: 'Epal' }, { id: 2, letter: 'B', image: '🍌', label: 'Pisang' }, { id: 3, letter: 'K', image: '🐱', label: 'Kucing' }, { id: 4, letter: 'I', image: '🍦', label: 'Ais Krim' }],
   [{ id: 1, letter: 'R', image: '🌹', label: 'Ros' }, { id: 2, letter: 'M', image: '🌙', label: 'Bulan' }, { id: 3, letter: 'J', image: '🌟', label: 'Bintang' }, { id: 4, letter: 'H', image: '🏠', label: 'Rumah' }],
   [{ id: 1, letter: 'G', image: '🐘', label: 'Gajah' }, { id: 2, letter: 'S', image: '🦁', label: 'Singa' }, { id: 3, letter: 'N', image: '🐦', label: 'Burung' }, { id: 4, letter: 'D', image: '🐶', label: 'Anjing' }],
   [{ id: 1, letter: 'P', image: '🍑', label: 'Pic' }, { id: 2, letter: 'T', image: '🍅', label: 'Tomato' }, { id: 3, letter: 'L', image: '🍋', label: 'Lemon' }, { id: 4, letter: 'C', image: '🍒', label: 'Ceri' }],
-  [{ id: 1, letter: 'O', image: '🚗', label: 'Oto' }, { id: 2, letter: 'K', image: '🚂', label: 'Kereta Api' }, { id: 3, letter: 'B', image: '✈️', label: 'Bas Udara' }, { id: 4, letter: 'J', image: '🚢', label: 'Jambatan Laut' }],
+  [{ id: 1, letter: 'U', image: '🐛', label: 'Ulat' }, { id: 2, letter: 'W', image: '🌺', label: 'Warna' }, { id: 3, letter: 'Z', image: '🦓', label: 'Zebra' }, { id: 4, letter: 'F', image: '🐟', label: 'Ikan' }],
+  [{ id: 1, letter: 'E', image: '🦅', label: 'Elang' }, { id: 2, letter: 'Y', image: '🌊', label: 'Yelah' }, { id: 3, letter: 'Q', image: '🏆', label: 'Qadir' }, { id: 4, letter: 'V', image: '🌈', label: 'Violet' }],
+  [{ id: 1, letter: 'O', image: '🐙', label: 'Oktopus' }, { id: 2, letter: 'K', image: '🦘', label: 'Kanggaru' }, { id: 3, letter: 'B', image: '🦋', label: 'Belalang' }, { id: 4, letter: 'J', image: '🦒', label: 'Jerapah' }],
+  [{ id: 1, letter: 'N', image: '🍍', label: 'Nanas' }, { id: 2, letter: 'M', image: '🥭', label: 'Mangga' }, { id: 3, letter: 'P', image: '🍐', label: 'Pear' }, { id: 4, letter: 'S', image: '🍓', label: 'Strawberi' }],
 ];
+
+function getRandomRounds() {
+  return [...ALL_ROUNDS].sort(() => Math.random() - 0.5).slice(0, 5);
+}
+
+const ROUNDS = getRandomRounds();
 
 export default function DragDropGame() {
   const [round, setRound] = useState(0);
@@ -65,7 +74,7 @@ export default function DragDropGame() {
 
   const nextRound = () => {
     if (round + 1 >= ROUNDS.length) { setGameOver(true); }
-    else { setRound(r => r + 1); setMatches({}); setRoundOver(false); }
+    else { setRound(r => r + 1); setMatches({}); setRoundOver(false); setWrongTarget(null); setCorrectFlash(null); }
   };
 
   const unmatched = items.filter(item => !Object.values(matches).includes(item.id));
@@ -103,7 +112,7 @@ export default function DragDropGame() {
             <p className="text-5xl mb-3">🏆</p>
             <h2 className="text-2xl font-black text-white mb-4">Tahniah! Semua Pusingan!</h2>
             <p className="text-yellow-300 text-3xl font-black mb-6">Skor: {score} ⭐</p>
-            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setRound(0); setScore(0); setMatches({}); setRoundOver(false); setGameOver(false); }}
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { const newR = getRandomRounds(); ROUNDS.length=0; newR.forEach(r=>ROUNDS.push(r)); setRound(0); setScore(0); setMatches({}); setRoundOver(false); setGameOver(false); }}
               className="px-6 py-3 bg-white text-purple-600 rounded-full font-black">Mula Semula</motion.button>
           </motion.div>
         ) : !roundOver ? (

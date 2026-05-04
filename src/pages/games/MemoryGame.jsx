@@ -5,13 +5,26 @@ import AppHeader from '@/components/AppHeader';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
-const ROUNDS = [
+const ALL_ROUNDS = [
   [{ id: 1, emoji: '🐱' }, { id: 2, emoji: '🐶' }, { id: 3, emoji: '🐦' }, { id: 4, emoji: '🐟' }, { id: 5, emoji: '🐘' }, { id: 6, emoji: '🦁' }],
   [{ id: 1, emoji: '🍎' }, { id: 2, emoji: '🍌' }, { id: 3, emoji: '🍊' }, { id: 4, emoji: '🍇' }, { id: 5, emoji: '🍓' }, { id: 6, emoji: '🍉' }],
   [{ id: 1, emoji: '🚗' }, { id: 2, emoji: '✈️' }, { id: 3, emoji: '🚢' }, { id: 4, emoji: '🚂' }, { id: 5, emoji: '🚁' }, { id: 6, emoji: '🛸' }],
   [{ id: 1, emoji: '⚽' }, { id: 2, emoji: '🏀' }, { id: 3, emoji: '🎾' }, { id: 4, emoji: '🏐' }, { id: 5, emoji: '🎱' }, { id: 6, emoji: '🏓' }],
   [{ id: 1, emoji: '🌸' }, { id: 2, emoji: '🌻' }, { id: 3, emoji: '🌹' }, { id: 4, emoji: '🌺' }, { id: 5, emoji: '🌼' }, { id: 6, emoji: '🍀' }],
+  [{ id: 1, emoji: '🍕' }, { id: 2, emoji: '🍔' }, { id: 3, emoji: '🍜' }, { id: 4, emoji: '🍦' }, { id: 5, emoji: '🎂' }, { id: 6, emoji: '🍩' }],
+  [{ id: 1, emoji: '🌍' }, { id: 2, emoji: '🌙' }, { id: 3, emoji: '⭐' }, { id: 4, emoji: '🌈' }, { id: 5, emoji: '⚡' }, { id: 6, emoji: '🌊' }],
+  [{ id: 1, emoji: '🐸' }, { id: 2, emoji: '🦊' }, { id: 3, emoji: '🐼' }, { id: 4, emoji: '🦋' }, { id: 5, emoji: '🐢' }, { id: 6, emoji: '🦄' }],
+  [{ id: 1, emoji: '📚' }, { id: 2, emoji: '✏️' }, { id: 3, emoji: '🎨' }, { id: 4, emoji: '🎸' }, { id: 5, emoji: '🎭' }, { id: 6, emoji: '🎯' }],
+  [{ id: 1, emoji: '🏠' }, { id: 2, emoji: '🏫' }, { id: 3, emoji: '🏥' }, { id: 4, emoji: '🏪' }, { id: 5, emoji: '⛪' }, { id: 6, emoji: '🏗️' }],
 ];
+
+// Pick 5 random rounds each game session for variety
+function getRandomRounds() {
+  const shuffled = [...ALL_ROUNDS].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 5);
+}
+
+const ROUNDS = getRandomRounds();
 
 export default function MemoryGame() {
   const [round, setRound] = useState(0);
@@ -87,7 +100,13 @@ export default function MemoryGame() {
     if (round + 1 >= ROUNDS.length) { setGameOver(true); } else { setRound(r => r + 1); }
   };
 
-  const restartGame = () => { setRound(0); setScore(0); setGameOver(false); };
+  const restartGame = () => {
+    // Shuffle new rounds on restart for variety
+    const newRounds = getRandomRounds();
+    ROUNDS.length = 0;
+    newRounds.forEach(r => ROUNDS.push(r));
+    setRound(0); setScore(0); setGameOver(false);
+  };
 
   const stars = Math.max(3 - Math.floor(moves / 5), 1);
 

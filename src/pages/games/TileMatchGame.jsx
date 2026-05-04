@@ -14,13 +14,22 @@ const calcValue = (expr) => {
   return parseInt(expr);
 };
 
-const ROUNDS = [
+const ALL_ROUNDS = [
   [{ id:1,value:'3' },{ id:2,value:'1+2' },{ id:3,value:'2' },{ id:4,value:'1+1' },{ id:5,value:'1' },{ id:6,value:'0+1' }],
   [{ id:1,value:'4' },{ id:2,value:'2+2' },{ id:3,value:'5' },{ id:4,value:'3+2' },{ id:5,value:'6' },{ id:6,value:'3+3' }],
   [{ id:1,value:'7' },{ id:2,value:'4+3' },{ id:3,value:'8' },{ id:4,value:'5+3' },{ id:5,value:'9' },{ id:6,value:'4+5' }],
   [{ id:1,value:'10' },{ id:2,value:'5+5' },{ id:3,value:'12' },{ id:4,value:'6+6' },{ id:5,value:'15' },{ id:6,value:'8+7' }],
   [{ id:1,value:'20' },{ id:2,value:'10+10' },{ id:3,value:'25' },{ id:4,value:'20+5' },{ id:5,value:'30' },{ id:6,value:'15+15' }],
+  [{ id:1,value:'11' },{ id:2,value:'6+5' },{ id:3,value:'13' },{ id:4,value:'7+6' },{ id:5,value:'14' },{ id:6,value:'7+7' }],
+  [{ id:1,value:'16' },{ id:2,value:'8+8' },{ id:3,value:'18' },{ id:4,value:'9+9' },{ id:5,value:'17' },{ id:6,value:'9+8' }],
+  [{ id:1,value:'40' },{ id:2,value:'20+20' },{ id:3,value:'50' },{ id:4,value:'25+25' },{ id:5,value:'45' },{ id:6,value:'40+5' }],
 ];
+
+function getRandomRounds() {
+  return [...ALL_ROUNDS].sort(() => Math.random() - 0.5).slice(0, 5);
+}
+
+const ROUNDS = getRandomRounds();
 
 export default function TileMatchGame() {
   const [round, setRound] = useState(0);
@@ -129,7 +138,7 @@ export default function TileMatchGame() {
             <p className="text-5xl mb-3">🏆</p>
             <h2 className="text-2xl font-black text-white mb-4">Tahniah! Semua Pusingan!</h2>
             <p className="text-yellow-300 text-3xl font-black mb-6">Skor: {score} ⭐</p>
-            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setRound(0); setScore(0); setGameOver(false); }}
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { const nr=getRandomRounds(); ROUNDS.length=0; nr.forEach(r=>ROUNDS.push(r)); setRound(0); setScore(0); setGameOver(false); }}
               className="px-6 py-3 bg-white text-purple-600 rounded-full font-black">Mula Semula</motion.button>
           </motion.div>
         ) : !roundOver ? (

@@ -5,13 +5,22 @@ import AppHeader from '@/components/AppHeader';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
-const ROUNDS = [
+const ALL_ROUNDS = [
   { cats: [{ id: 'buah', label: 'Buah-Buahan', emoji: '🍎' }, { id: 'sayuran', label: 'Sayuran', emoji: '🥕' }], items: [{ id:1,emoji:'🍎',cat:'buah' },{ id:2,emoji:'🥕',cat:'sayuran' },{ id:3,emoji:'🍊',cat:'buah' },{ id:4,emoji:'🥬',cat:'sayuran' },{ id:5,emoji:'🍌',cat:'buah' },{ id:6,emoji:'🥦',cat:'sayuran' }] },
   { cats: [{ id: 'haiwan_air', label: 'Haiwan Air', emoji: '🐟' }, { id: 'haiwan_darat', label: 'Haiwan Darat', emoji: '🐘' }], items: [{ id:1,emoji:'🐟',cat:'haiwan_air' },{ id:2,emoji:'🐘',cat:'haiwan_darat' },{ id:3,emoji:'🐬',cat:'haiwan_air' },{ id:4,emoji:'🦁',cat:'haiwan_darat' },{ id:5,emoji:'🦈',cat:'haiwan_air' },{ id:6,emoji:'🐯',cat:'haiwan_darat' }] },
   { cats: [{ id: 'kenderaan_udara', label: 'Udara', emoji: '✈️' }, { id: 'kenderaan_darat', label: 'Darat', emoji: '🚗' }], items: [{ id:1,emoji:'✈️',cat:'kenderaan_udara' },{ id:2,emoji:'🚗',cat:'kenderaan_darat' },{ id:3,emoji:'🚁',cat:'kenderaan_udara' },{ id:4,emoji:'🚂',cat:'kenderaan_darat' },{ id:5,emoji:'🛸',cat:'kenderaan_udara' },{ id:6,emoji:'🚌',cat:'kenderaan_darat' }] },
   { cats: [{ id: 'pakaian', label: 'Pakaian', emoji: '👕' }, { id: 'makanan', label: 'Makanan', emoji: '🍔' }], items: [{ id:1,emoji:'👕',cat:'pakaian' },{ id:2,emoji:'🍔',cat:'makanan' },{ id:3,emoji:'👗',cat:'pakaian' },{ id:4,emoji:'🍕',cat:'makanan' },{ id:5,emoji:'👒',cat:'pakaian' },{ id:6,emoji:'🍜',cat:'makanan' }] },
   { cats: [{ id: 'alat_sekolah', label: 'Alat Sekolah', emoji: '📚' }, { id: 'sukan', label: 'Sukan', emoji: '⚽' }], items: [{ id:1,emoji:'📚',cat:'alat_sekolah' },{ id:2,emoji:'⚽',cat:'sukan' },{ id:3,emoji:'✏️',cat:'alat_sekolah' },{ id:4,emoji:'🏀',cat:'sukan' },{ id:5,emoji:'📐',cat:'alat_sekolah' },{ id:6,emoji:'🎾',cat:'sukan' }] },
+  { cats: [{ id: 'alam', label: 'Alam Semula Jadi', emoji: '🌳' }, { id: 'bangunan', label: 'Bangunan', emoji: '🏠' }], items: [{ id:1,emoji:'🌳',cat:'alam' },{ id:2,emoji:'🏠',cat:'bangunan' },{ id:3,emoji:'🌺',cat:'alam' },{ id:4,emoji:'🏫',cat:'bangunan' },{ id:5,emoji:'🌊',cat:'alam' },{ id:6,emoji:'🏥',cat:'bangunan' }] },
+  { cats: [{ id: 'siang', label: 'Siang Hari', emoji: '☀️' }, { id: 'malam', label: 'Malam Hari', emoji: '🌙' }], items: [{ id:1,emoji:'☀️',cat:'siang' },{ id:2,emoji:'🌙',cat:'malam' },{ id:3,emoji:'🌤️',cat:'siang' },{ id:4,emoji:'⭐',cat:'malam' },{ id:5,emoji:'🌈',cat:'siang' },{ id:6,emoji:'🦉',cat:'malam' }] },
+  { cats: [{ id: 'panas', label: 'Makanan Panas', emoji: '🍜' }, { id: 'sejuk', label: 'Makanan Sejuk', emoji: '🍦' }], items: [{ id:1,emoji:'🍜',cat:'panas' },{ id:2,emoji:'🍦',cat:'sejuk' },{ id:3,emoji:'🍲',cat:'panas' },{ id:4,emoji:'🧁',cat:'sejuk' },{ id:5,emoji:'☕',cat:'panas' },{ id:6,emoji:'🧃',cat:'sejuk' }] },
 ];
+
+function getRandomRounds() {
+  return [...ALL_ROUNDS].sort(() => Math.random() - 0.5).slice(0, 5);
+}
+
+const ROUNDS = getRandomRounds();
 
 export default function SortingGame() {
   const [round, setRound] = useState(0);
@@ -110,7 +119,7 @@ export default function SortingGame() {
             <p className="text-5xl mb-3">🏆</p>
             <h2 className="text-2xl font-black text-white mb-4">Tahniah! Semua Pusingan!</h2>
             <p className="text-yellow-300 text-3xl font-black mb-6">Skor: {score} ⭐</p>
-            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setRound(0); setItems([...ROUNDS[0].items].sort(() => Math.random() - 0.5)); setSorted({}); setScore(0); setRoundOver(false); setGameOver(false); setWrongCount(0); }}
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { const nr=getRandomRounds(); ROUNDS.length=0; nr.forEach(r=>ROUNDS.push(r)); setRound(0); setItems([...ROUNDS[0].items].sort(() => Math.random() - 0.5)); setSorted({}); setScore(0); setRoundOver(false); setGameOver(false); setWrongCount(0); }}
               className="px-6 py-3 bg-white text-purple-600 rounded-full font-black">Mula Semula</motion.button>
           </motion.div>
         ) : !roundOver ? (

@@ -19,11 +19,21 @@ const AGE_LABELS = {
 };
 
 const GAME_TYPES = [
-  'multiple_choice', 'picture_quiz', 'drag_drop', 'memory_game',
-  'word_builder', 'counting', 'spelling', 'reading',
+  'multiple_choice', 'picture_quiz', 'word_builder', 'counting', 'spelling', 'reading', 'science_quiz', 'math_puzzle',
 ];
 
-async function generateGameQuestions(base44, gameTitle, subject, ageGroup, questionsCount) {
+const TOPIC_POOLS = {
+  bahasa_melayu: ['Haiwan','Buah-buahan','Nombor','Warna','Hari & Bulan','Kata Nama Am','Kata Kerja','Kata Adjektif','Keluarga','Rumah','Sekolah','Makanan','Pakaian','Alam Sekitar','Peribahasa','Sajak','Cerita Pendek','Pantun','Tatabahasa','Sinonim'],
+  english: ['Animals','Fruits','Colours','Numbers','Family','School','Food','Clothes','Nature','Action Words','Opposite Words','Phonics A-E','Phonics F-J','Phonics K-O','Phonics P-T','Phonics U-Z','Greetings','Body Parts','Weather','Transport'],
+  mathematics: ['Tambah 1-10','Tolak 1-10','Tambah 11-20','Tolak 11-20','Pendaraban 2','Pendaraban 3','Pendaraban 4','Pendaraban 5','Pembahagian','Masa & Jam','Wang Ringgit','Pecahan Mudah','Bentuk 2D','Bentuk 3D','Ukuran Panjang','Berat','Isipadu','Susun Nombor','Nombor Genap Ganjil','Anggaran'],
+  science: ['Haiwan Vertebrata','Haiwan Invertebrata','Tumbuhan','Kitaran Air','Cuaca','Sumber Alam','Tubuh Badan','Deria Lima','Jenis Makanan','Jirim & Bahan','Magnet','Cahaya','Bunyi','Gaya','Mudarat Alam Sekitar','Sistem Suria','Bintang & Bulan','Proses Foto','Adaptasi Haiwan','Ekosistem'],
+  jawi: ['Huruf Alif-Ba','Huruf Ta-Tha','Huruf Jim-Kha','Huruf Dal-Zal','Huruf Ra-Zai','Huruf Sin-Shin','Ejaan Mudah','Perkataan Haiwan','Perkataan Makanan','Perkataan Warna'],
+  bahasa_tamil: ['எழுத்துகள்','எண்கள்','நிறங்கள்','விலங்குகள்','பழங்கள்','உணவுகள்','குடும்பம்','பள்ளி','தாவரங்கள்','உடல் உறுப்புகள்'],
+  bahasa_mandarin: ['拼音','数字','颜色','动物','水果','食物','家庭','学校','交通','身体'],
+  default: ['Topik A','Topik B','Topik C','Topik D','Topik E','Topik F','Topik G','Topik H','Topik I','Topik J'],
+};
+
+async function generateGameQuestions(base44, gameTitle, topicName, subject, ageGroup, questionsCount, existingTitles) {
   const emojiOptions = {
     bahasa_melayu: '📚 📖 ✏️ 🔤 💬 🗣️ 📝 🎓 🌍 🐛 🌳 🐠 🏠 🚗 🍎 🎨',
     english: '🌟 📚 ✍️ 🔤 💬 📖 🎤 💭 🏆 🦁 🌸 🎸 ⚽ 🚀 👑 🎯',
@@ -33,22 +43,22 @@ async function generateGameQuestions(base44, gameTitle, subject, ageGroup, quest
   };
   const availableEmoji = (emojiOptions[subject] || emojiOptions.default).split(' ');
 
-  const prompt = `Buat TEPAT ${questionsCount} soalan berkualiti UNIK dan BERBEZA untuk:
-"${gameTitle}" - ${CATEGORY_LABELS[subject] || subject} (${AGE_LABELS[ageGroup] || ageGroup})
+  const alreadyMade = existingTitles && existingTitles.length > 0
+    ? `\nELAK soalan sama dengan: ${existingTitles.slice(-4).join(', ')}`
+    : '';
 
-RULES KETAT:
-1. Setiap soalan MESTI berbeza topic/subtopic—JANGAN soalan similar!
-2. Soalan mesti jelas, menarik untuk kanak-kanak
-3. 4 pilihan jawapan mesti berbeza dan masuk akal
-4. Jawapan betul mesti 100% tepat
-5. Emoji MESTI berbeza untuk setiap soalan — pilih dari: ${availableEmoji.join(' ')}
-6. Emoji mesti relevan dengan topik soalan
+  const prompt = `Buat TEPAT ${questionsCount} soalan UNIK untuk:
+"${gameTitle}" — Topik KHUSUS: "${topicName}"
+Subjek: ${CATEGORY_LABELS[subject] || subject} (${AGE_LABELS[ageGroup] || ageGroup})
+${alreadyMade}
 
-Output JSON dengan array "questions". Setiap soalan:
-- problem: string (soalan jelas, 15-30 perkataan)
-- options: array 4 string (pilihan A, B, C, D, SEMUA berbeza)
-- answer: number (0-3, indeks jawapan betul)
-- emoji: string (1 emoji sahaja)`;
+WAJIB:
+1. Semua soalan fokus topik "${topicName}" — subtopik berbeza setiap soalan
+2. 4 pilihan jawapan jelas berbeza & masuk akal
+3. Jawapan betul 100% tepat secara fakta
+4. Emoji BERBEZA setiap soalan dari: ${availableEmoji.join(' ')}
+
+Output JSON "questions": problem, options[4], answer(0-3), emoji`;
 
   const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt,
@@ -109,12 +119,17 @@ Deno.serve(async (req) => {
 
       console.log(`Task [${taskId}] START: ${taskName} — ${gamesCount} games × ${questionsPerGame} soalan`);
 
+      const topics = TOPIC_POOLS[subject] || TOPIC_POOLS.default;
+      const existingGames = await base44.asServiceRole.entities.Game.filter({ ageGroup, category: subject });
+      const existingTitles = existingGames.map(g => g.title);
+
       for (let i = 0; i < gamesCount; i++) {
         const gameType = GAME_TYPES[i % GAME_TYPES.length];
-        const gameTitle = `${taskName} Game ${i + 1}`;
+        const topicName = topics[(existingTitles.length + i) % topics.length];
+        const gameTitle = `${CATEGORY_LABELS[subject] || taskName} — ${topicName}`;
 
         try {
-          const questions = await generateGameQuestions(base44, gameTitle, subject, ageGroup, questionsPerGame);
+          const questions = await generateGameQuestions(base44, gameTitle, topicName, subject, ageGroup, questionsPerGame, existingTitles);
 
           if (!questions || questions.length === 0) {
             console.error(`Task [${taskId}]: Tiada soalan untuk ${gameTitle}, skip`);
@@ -140,8 +155,9 @@ Deno.serve(async (req) => {
             order,
           });
 
+          existingTitles.push(gameTitle);
           createdGames++;
-          console.log(`Task [${taskId}]: Created ${createdGames}/${gamesCount} — ${gameTitle}`);
+          console.log(`Task [${taskId}]: Created ${createdGames}/${gamesCount} — ${gameTitle} [${topicName}]`);
 
           // Delay 3s between games to avoid AI rate limits
           if (i < gamesCount - 1) {
