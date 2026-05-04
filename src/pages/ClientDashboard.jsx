@@ -35,11 +35,15 @@ export default function ClientDashboard() {
   }, [user?.email]);
 
   useEffect(() => {
-    if (user?.gender) {
-      setAvatarUrl(getDefaultAvatar(user.full_name, user.gender));
-    } else {
-      setAvatarUrl(getDefaultAvatar(user?.full_name || 'User'));
-    }
+    // Only set default avatar if no custom one has been uploaded
+    setAvatarUrl(prev => {
+      if (prev && prev.includes('http')) return prev; // Keep custom avatar
+      if (user?.gender) {
+        return getDefaultAvatar(user.full_name, user.gender);
+      } else {
+        return getDefaultAvatar(user?.full_name || 'User');
+      }
+    });
     setGender(user?.gender || '');
   }, [user]);
 
