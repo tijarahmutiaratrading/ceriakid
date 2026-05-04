@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Trophy, Plus, X, Send } from 'lucide-react';
+import { Zap, Trophy, Plus, X, Send, Trash2 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
@@ -52,6 +52,15 @@ export default function Challenges() {
       console.error('Failed to load challenges:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const deleteChallenge = async (id) => {
+    try {
+      await base44.entities.FriendChallenge.delete(id);
+      setChallenges(prev => prev.filter(c => c.id !== id));
+    } catch (err) {
+      console.error('Failed to delete challenge:', err);
     }
   };
 
@@ -250,9 +259,20 @@ export default function Challenges() {
                           </p>
                         </div>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${status.bg} ${status.text}`}>
-                        {status.emoji} {status.label}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${status.bg} ${status.text}`}>
+                          {status.emoji} {status.label}
+                        </span>
+                        {isCreator && (
+                          <motion.button
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => deleteChallenge(challenge.id)}
+                            className="w-8 h-8 rounded-xl flex items-center justify-center bg-red-500/20 hover:bg-red-500/40 transition-all"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 text-red-300" />
+                          </motion.button>
+                        )}
+                      </div>
                     </div>
 
                     {/* Score Row (if completed or active) */}
