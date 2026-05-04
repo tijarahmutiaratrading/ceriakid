@@ -120,19 +120,12 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
              }}>
           {navItems.map((item) => {
-            const isActionButton = item.action && !item.path;
             const isBackButton = item.label === 'Back';
-            const isGames = item.label === 'Games';
-            
-            if (isBackButton || isGames) {
-              return (
-                <Link key={item.label} to={item.path || '#'} onClick={isBackButton ? (e) => { e.preventDefault(); item.action(); } : undefined} className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center text-white font-black text-sm hover:shadow-md transition-all">
-                  {item.emoji}
-                </Link>
-              );
-            }
-            
-            return item.path ? (
+            return isBackButton ? (
+              <button key={item.label} onClick={item.action} className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center text-white font-black text-sm hover:shadow-md transition-all">
+                ⬅️
+              </button>
+            ) : item.path ? (
               <Link key={item.label} to={item.path} className="flex flex-col items-center gap-1 text-center">
                 <span className="text-xl">{item.emoji}</span>
                 <span className="text-xs font-bold text-gray-700">{item.label}</span>
