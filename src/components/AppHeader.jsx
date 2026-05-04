@@ -73,9 +73,12 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   return (
     <>
-      {/* Top Header - Avatar */}
-      <div className="fixed top-0 left-0 right-0 z-40 pt-3 px-4">
-        <div className="max-w-lg mx-auto flex justify-end">
+      {/* Top Header */}
+      <div className="fixed top-0 left-0 right-0 z-40 bg-white shadow-md px-4 py-3">
+        <div className="max-w-lg mx-auto flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-8 rounded-lg" />
+          </Link>
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
