@@ -235,7 +235,7 @@ export default function GamesList() {
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28">
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
 
         {/* Header Card */}
         <motion.div
