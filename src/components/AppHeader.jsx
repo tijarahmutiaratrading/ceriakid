@@ -63,46 +63,58 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
 
+  const navItems = [
+    { emoji: '☰', label: 'Menu', action: () => setIsOpen(!isOpen) },
+    { emoji: '🎮', label: 'Games', path: '/games-hub' },
+    { emoji: '📊', label: 'Prestasi', path: '/parent-dashboard' },
+    { emoji: '📱', label: 'Dashboard', path: '/dashboard' },
+    { emoji: '🎨', label: 'Drawing', path: '/drawing' },
+  ];
+
   return (
     <>
-      {/* Header Bar */}
+      {/* Top Header - Avatar */}
+      <div className="fixed top-0 left-0 right-0 z-40 pt-3 px-4">
+        <div className="max-w-lg mx-auto flex justify-end">
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center text-white font-black text-sm hover:shadow-md transition-all"
+          >
+            {user?.full_name?.[0]?.toUpperCase() || '👤'}
+          </button>
+        </div>
+      </div>
+
+      {/* Bottom Navigation Bar */}
       <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4">
-        <div className={`w-full md:max-w-lg rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-center relative ${
-         isPlayingGame
-           ? 'bg-white shadow-lg border border-gray-200'
-           : ''
+        <div className={`w-full md:max-w-lg rounded-2xl h-16 flex items-center justify-around ${
+          isPlayingGame
+            ? 'bg-white shadow-lg border border-gray-200'
+            : ''
         }`}
-            style={isPlayingGame ? {
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-            } : {
-              background: 'rgba(255,255,255,0.18)',
-              backdropFilter: 'blur(24px)',
-              WebkitBackdropFilter: 'blur(24px)',
-              border: '1px solid rgba(255,255,255,0.35)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
-            }}>
-         {/* Left: Hamburger */}
-         <button
-           type="button"
-           onClick={() => setIsOpen(!isOpen)}
-           className="absolute left-3 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
-         >
-           <Menu className="w-5 h-5" />
-         </button>
-
-         {/* Center: Logo */}
-         <Link to="/" className="flex items-center gap-2 justify-center">
-           <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
-         </Link>
-
-         {/* Right: Avatar */}
-         <button
-           type="button"
-           onClick={() => setIsOpen(!isOpen)}
-           className="absolute right-3 w-8 h-8 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center text-white font-black text-xs hover:shadow-md transition-all"
-         >
-           {user?.full_name?.[0]?.toUpperCase() || '👤'}
-         </button>
+             style={isPlayingGame ? {
+               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+             } : {
+               background: 'rgba(255,255,255,0.18)',
+               backdropFilter: 'blur(24px)',
+               WebkitBackdropFilter: 'blur(24px)',
+               border: '1px solid rgba(255,255,255,0.35)',
+               boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
+             }}>
+          {navItems.map((item) => (
+            item.path ? (
+              <Link key={item.label} to={item.path} className="flex flex-col items-center gap-1 text-center">
+                <span className="text-xl">{item.emoji}</span>
+                <span className="text-xs font-bold text-gray-700">{item.label}</span>
+              </Link>
+            ) : (
+              <button key={item.label} onClick={item.action} className="flex flex-col items-center gap-1 text-center hover:opacity-70 transition-all">
+                <span className="text-xl">{item.emoji}</span>
+                <span className="text-xs font-bold text-gray-700">{item.label}</span>
+              </button>
+            )
+          ))}
         </div>
       </div>
 
