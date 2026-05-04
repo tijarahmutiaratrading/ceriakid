@@ -97,16 +97,16 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   return (
     <>
       {/* Top Header */}
-       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 transition-transform duration-300" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)', transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
-         <div className="max-w-6xl mx-auto w-full flex items-center justify-between">
-           <Link to="/">
-             <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg cursor-pointer" />
+       <nav className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
+         <div className="max-w-6xl mx-auto w-full flex items-center justify-between px-3 sm:px-4 py-2 rounded-3xl pro-glass">
+           <Link to="/" className="flex items-center gap-2 min-w-0">
+             <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-xl cursor-pointer shadow-lg ring-1 ring-white/40" />
            </Link>
            <motion.button
              type="button"
              onClick={() => setIsOpen(!isOpen)}
              whileTap={{ scale: 0.95 }}
-             className="px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-sm shadow-md hover:bg-white/90 transition-colors"
+             className="px-4 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-sm shadow-lg hover:bg-white/95 transition-colors"
            >
              {isOpen ? 'Tutup' : 'Menu'}
            </motion.button>
@@ -136,8 +136,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -320, opacity: 0 }}
             transition={{ type: 'spring', damping: 22, stiffness: 280 }}
-            className="fixed left-3 top-20 bottom-3 z-50 w-72 flex flex-col rounded-3xl overflow-hidden shadow-2xl"
-            style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
+            className="fixed left-3 right-3 sm:right-auto top-20 bottom-3 z-50 sm:w-80 flex flex-col rounded-3xl overflow-hidden shadow-2xl pro-glass"
           >
             {/* Header with User Profile */}
             {isAuthenticated && user ? (
@@ -169,14 +168,14 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {topItems.map((item) =>
                 item.external ? (
                   <a key={item.path} href={item.path} onClick={() => setIsOpen(false)}
-                    className="flex items-center px-4 py-2.5 rounded-2xl font-semibold text-gray-700 hover:bg-white transition-all text-sm">
+                    className="flex items-center px-4 py-3 rounded-2xl font-bold text-white hover:bg-white/20 transition-all text-sm">
                     <span>{item.label}</span>
                   </a>
                 ) : (
                   <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                     <motion.div whileTap={{ scale: 0.97 }}
-                      className={`flex items-center px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
-                        isActive(item.path) ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
+                      className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
+                        isActive(item.path) ? 'bg-white text-game-purple shadow-lg' : 'text-white/90 hover:bg-white/20 hover:text-white'
                       }`}>
                       <span>{item.label}</span>
                     </motion.div>
@@ -193,7 +192,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   {dashboardItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
-                        className={`flex items-center px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
+                        className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                           isActive(item.path) ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
                         }`}>
                         <span>{item.label}</span>
@@ -212,7 +211,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   {otherItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
-                        className={`flex items-center px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
+                        className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                           isActive(item.path) ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
                         }`}>
                         <span>{item.label}</span>
@@ -231,7 +230,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   {adminItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
-                        className={`flex items-center px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
+                        className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                           isActive(item.path) ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
                         }`}>
                         <span>{item.label}</span>
