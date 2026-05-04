@@ -17,6 +17,10 @@
         "female"
       ],
       "description": "User gender for personalized avatar"
+    },
+    "avatarUrl": {
+      "type": "string",
+      "description": "Uploaded profile avatar image URL"
     }
   }
 }

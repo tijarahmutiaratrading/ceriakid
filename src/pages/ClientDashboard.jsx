@@ -35,15 +35,13 @@ export default function ClientDashboard() {
   }, [user?.email]);
 
   useEffect(() => {
-    // Only set default avatar if no custom one has been uploaded
-    setAvatarUrl(prev => {
-      if (prev && prev.includes('http')) return prev; // Keep custom avatar
-      if (user?.gender) {
-        return getDefaultAvatar(user.full_name, user.gender);
-      } else {
-        return getDefaultAvatar(user?.full_name || 'User');
-      }
-    });
+    if (user?.avatarUrl) {
+      setAvatarUrl(user.avatarUrl);
+    } else if (user?.gender) {
+      setAvatarUrl(getDefaultAvatar(user.full_name, user.gender));
+    } else {
+      setAvatarUrl(getDefaultAvatar(user?.full_name || 'User'));
+    }
     setGender(user?.gender || '');
   }, [user]);
 
@@ -53,8 +51,12 @@ export default function ClientDashboard() {
     setSaving(true);
     try {
       const response = await base44.integrations.Core.UploadFile({ file });
-      if (response?.url) {
-        setAvatarUrl(response.url);
+      const uploadedUrl = response?.file_url || response?.url;
+      if (uploadedUrl) {
+        setAvatarUrl(uploadedUrl);
+        await base44.auth.updateMe({ avatarUrl: uploadedUrl });
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2500);
       }
     } catch (error) {
       console.error('Avatar upload failed:', error);
@@ -65,7 +67,7 @@ export default function ClientDashboard() {
 
   const handleSave = async () => {
     setSaving(true);
-    await base44.auth.updateMe({ gender });
+    await base44.auth.updateMe({ gender, avatarUrl });
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
