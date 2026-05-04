@@ -650,7 +650,7 @@ export default function AdminGameManager() {
               ].map(({ value, label, color }) => (
                 <div key={label} className="rounded-2xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.1)' }}>
                   <p className={`text-2xl font-black ${color}`}>{value}</p>
-                  <p className="text-xs text-white/50 font-semibold">{label}</p>
+                  <p className="text-xs text-white/80 font-semibold">{label}</p>
                 </div>
               ))}
             </div>
