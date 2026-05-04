@@ -33,8 +33,7 @@ export default function GamePlayer() {
   const [gameLoaded, setGameLoaded] = useState(false);
   const [accessDenied, setAccessDenied] = useState(false);
   const [userTier, setUserTier] = useState('free');
-  const [freshQuestions, setFreshQuestions] = useState(null);
-  const [generatingNew, setGeneratingNew] = useState(false);
+  const [questionSeed, setQuestionSeed] = useState(0);
 
   // Load game: try DB first, fallback to gameLibrary + check access
   useEffect(() => {
@@ -115,10 +114,14 @@ export default function GamePlayer() {
   }, [state.finished]);
 
   const questions = useMemo(() => {
-    if (freshQuestions) return freshQuestions;
     if (!game?.gameData?.questions) return [];
-    return game.gameData.questions.slice(0, game.totalQuestions || 20);
-  }, [game, freshQuestions]);
+    const all = game.gameData.questions;
+    const limit = game.totalQuestions || 20;
+    if (questionSeed === 0) return all.slice(0, limit);
+    // Shuffle with seed so each replay gives different order
+    const shuffled = [...all].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, Math.min(limit, shuffled.length));
+  }, [game, questionSeed]);
 
   const handleAnswer = useCallback((answer) => {
     if (state.showFeedback || !questions[state.currentQ]) return;
@@ -198,7 +201,6 @@ export default function GamePlayer() {
 
   const handlePlayAgain = () => {
     savedRef.current = false;
-    setFreshQuestions(null);
     setState({
       currentQ: 0,
       score: 0,
@@ -212,32 +214,20 @@ export default function GamePlayer() {
     });
   };
 
-  const handleGenerateNew = async () => {
-    setGeneratingNew(true);
-    try {
-      const res = await base44.functions.invoke('generateFreshQuestions', {
-        category,
-        ageGroup,
-        count: game?.totalQuestions || 20,
-        previousQuestions: questions,
-      });
-      if (res.data?.questions?.length > 0) {
-        setFreshQuestions(res.data.questions);
-        savedRef.current = false;
-        setState({
-          currentQ: 0,
-          score: 0,
-          showFeedback: false,
-          isCorrect: false,
-          feedbackMsg: '',
-          finished: false,
-          selectedIdx: null,
-          showTracing: false,
-          unlockedBadges: [],
-        });
-      }
-    } catch (_) {}
-    setGeneratingNew(false);
+  const handleGenerateNew = () => {
+    savedRef.current = false;
+    setQuestionSeed(s => s + 1); // triggers shuffle
+    setState({
+      currentQ: 0,
+      score: 0,
+      showFeedback: false,
+      isCorrect: false,
+      feedbackMsg: '',
+      finished: false,
+      selectedIdx: null,
+      showTracing: false,
+      unlockedBadges: [],
+    });
   };
 
 
@@ -423,7 +413,6 @@ export default function GamePlayer() {
         stars={calculateStars(state.score, questions.length)}
         onPlayAgain={handlePlayAgain}
         onGenerateNew={handleGenerateNew}
-        generatingNew={generatingNew}
         isPremium={isPremium}
       />
     );
@@ -460,7 +449,7 @@ export default function GamePlayer() {
         <div className="max-w-lg mx-auto px-4 py-4 md:py-6 pb-24 pt-20">
           <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} />
           {state.finished ? (
-            <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} onGenerateNew={handleGenerateNew} generatingNew={generatingNew} isPremium={isPremium} />
+            <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} onGenerateNew={handleGenerateNew} isPremium={isPremium} />
           ) : (
             <TracingCanvas
               targetShape={currentQuestion?.letter || currentQuestion?.tracingTarget || 'A'}

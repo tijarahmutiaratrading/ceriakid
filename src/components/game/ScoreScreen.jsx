@@ -5,7 +5,7 @@ import confetti from 'canvas-confetti';
 import { Star, RotateCcw, Home, Sparkles, Loader2 } from 'lucide-react';
 import { useLang } from '@/lib/LanguageContext';
 
-export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenerateNew, generatingNew, isPremium }) {
+export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenerateNew, isPremium }) {
   const { t } = useLang();
 
   useEffect(() => {
@@ -111,15 +111,10 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.02 }}
             onClick={onGenerateNew}
-            disabled={generatingNew}
-            className="w-full py-4 px-6 rounded-2xl font-extrabold text-base flex items-center justify-center gap-2 text-white disabled:opacity-70"
+            className="w-full py-4 px-6 rounded-2xl font-extrabold text-base flex items-center justify-center gap-2 text-white"
             style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)' }}
           >
-            {generatingNew ? (
-              <><Loader2 className="w-5 h-5 animate-spin" /> Jana Soalan Baru...</>
-            ) : (
-              <><Sparkles className="w-5 h-5" /> 🤖 Jana 20 Soalan Baru (AI)</>
-            )}
+            <Sparkles className="w-5 h-5" /> 🔀 Main Semula (Soalan Berbeza)
           </motion.button>
         ) : (
           <Link to="/#pricing">
