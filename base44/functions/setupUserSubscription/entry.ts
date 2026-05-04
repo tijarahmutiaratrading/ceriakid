@@ -22,7 +22,7 @@ Deno.serve(async (req) => {
         tier: tier,
         status: 'active',
         currentPeriodStart: new Date().toISOString(),
-        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
       });
       return Response.json({ message: `Updated ${email} to ${tier} tier`, updated: true });
     } else {
@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
         tier: tier,
         status: 'active',
         currentPeriodStart: new Date().toISOString(),
-        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
       });
       return Response.json({ message: `Created ${tier} subscription for ${email}`, created: true });
     }
