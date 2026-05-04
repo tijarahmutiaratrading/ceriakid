@@ -40,7 +40,10 @@
         "english",
         "mathematics",
         "science",
-        "general"
+        "general",
+        "jawi",
+        "bahasa_tamil",
+        "bahasa_mandarin"
       ],
       "description": "Subject category"
     },
@@ -102,6 +105,10 @@
     "order": {
       "type": "number",
       "description": "Display order"
+    },
+    "monthTag": {
+      "type": "string",
+      "description": "Month tag for rotation e.g. '2026-05'. Games older than 1 month are deleted on monthly refresh."
     }
   },
   "required": [

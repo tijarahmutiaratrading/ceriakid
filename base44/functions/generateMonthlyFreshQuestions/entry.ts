@@ -1,8 +1,9 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 // Scheduled automation: runs on 1st of every month
-// Queues fresh question generation tasks for ALL subjects
-// processNextGameTask (every 5 min) will handle the actual AI generation
+// 1. Queues fresh question generation tasks for ALL subjects (tagged with current monthTag)
+// 2. Deletes games tagged 2+ months ago (keeps current month + last month)
+// processNextGameTask (every 5 min) handles actual AI generation
 
 const SUBJECTS = [
   { ageGroup: 'prasekolah', subject: 'bahasa_melayu', label: 'Prasekolah - BM' },
@@ -20,63 +21,86 @@ const SUBJECTS = [
   { ageGroup: 'sekolah_rendah', subject: 'bahasa_mandarin', label: 'Sekolah Rendah - Mandarin' },
 ];
 
-// How many NEW games to add each month per subject
 const NEW_GAMES_PER_SUBJECT = 5;
-// Questions per new game
 const QUESTIONS_PER_GAME = 20;
+
+// Returns 'YYYY-MM' string, offset by monthsAgo (0 = current, -1 = last month, -2 = 2 months ago)
+function getMonthTag(date, offsetMonths = 0) {
+  const d = new Date(date.getFullYear(), date.getMonth() + offsetMonths, 1);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  return `${y}-${m}`;
+}
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
     const now = new Date();
+    const currentTag = getMonthTag(now, 0);        // e.g. '2026-05'
+    const lastMonthTag = getMonthTag(now, -1);      // e.g. '2026-04'
+    const oldTag = getMonthTag(now, -2);            // e.g. '2026-03' — DELETE these
+
     const monthLabel = now.toLocaleString('ms-MY', { month: 'long', year: 'numeric', timeZone: 'Asia/Kuala_Lumpur' });
+    console.log(`generateMonthlyFreshQuestions: ${monthLabel} | current=${currentTag} keep=${lastMonthTag} delete=${oldTag}`);
 
-    console.log(`generateMonthlyFreshQuestions: Starting for ${monthLabel}`);
+    // ── STEP 1: Delete games tagged 2+ months ago ──
+    let deleted = 0;
+    const allGames = await base44.asServiceRole.entities.Game.list();
+    const toDelete = allGames.filter(g => {
+      if (!g.monthTag) return false; // never delete untagged (manual/original games)
+      return g.monthTag <= oldTag;   // '2026-03' <= '2026-03' → delete
+    });
 
+    for (const g of toDelete) {
+      await base44.asServiceRole.entities.Game.delete(g.id);
+      deleted++;
+    }
+    console.log(`Deleted ${deleted} old games (tag <= ${oldTag})`);
+
+    // ── STEP 2: Queue new game generation for this month ──
     let queued = 0;
     let skipped = 0;
 
     for (const s of SUBJECTS) {
-      // Check if a task for this subject was already queued this month (avoid duplicates)
+      // Avoid duplicate tasks for this month
       const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
       const existing = await base44.asServiceRole.entities.GameTask.filter({
         ageGroup: s.ageGroup,
         subject: s.subject,
         status: 'pending',
       });
-
-      // Filter for tasks created this month
-      const thisMonthTasks = existing.filter(t => t.created_date >= thisMonthStart);
-      if (thisMonthTasks.length > 0) {
-        console.log(`Skip ${s.label} — already queued this month`);
+      const alreadyQueued = existing.filter(t => t.created_date >= thisMonthStart);
+      if (alreadyQueued.length > 0) {
         skipped++;
         continue;
       }
 
       await base44.asServiceRole.entities.GameTask.create({
-        taskName: `[${monthLabel}] ${s.label}`,
+        taskName: `[${currentTag}] ${s.label}`,
         ageGroup: s.ageGroup,
         subject: s.subject,
         gamesCount: NEW_GAMES_PER_SUBJECT,
         questionsPerGame: QUESTIONS_PER_GAME,
         status: 'pending',
+        // monthTag passed via taskName prefix; processNextGameTask will tag games via title
       });
 
       queued++;
-      console.log(`Queued: ${s.label}`);
     }
 
-    const message = `Monthly refresh queued: ${queued} subjects, ${skipped} skipped (already queued). Month: ${monthLabel}`;
-    console.log(message);
+    console.log(`Queued ${queued} subjects, skipped ${skipped}`);
 
     return Response.json({
       success: true,
       month: monthLabel,
+      currentTag,
+      keptTag: lastMonthTag,
+      deletedTag: oldTag,
+      deleted,
       queued,
       skipped,
-      totalSubjects: SUBJECTS.length,
-      message,
+      message: `Deleted ${deleted} old games. Queued ${queued} subjects for fresh content.`,
     });
 
   } catch (error) {

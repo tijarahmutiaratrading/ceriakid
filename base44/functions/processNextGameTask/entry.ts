@@ -147,6 +147,10 @@ Deno.serve(async (req) => {
         // Refetch latest order
         const latestExisting = await base44.asServiceRole.entities.Game.filter({ ageGroup: task.ageGroup, category: task.subject });
 
+        // Tag with current month for rotation (format: 'YYYY-MM')
+        const now = new Date();
+        const monthTag = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
         await base44.asServiceRole.entities.Game.create({
           title: gameTitle,
           type: gameType,
@@ -160,6 +164,7 @@ Deno.serve(async (req) => {
           isPublished: true,
           status: 'ready',
           order: latestExisting.length,
+          monthTag,
         });
 
         existingTitles.push(gameTitle); // track for next iteration
