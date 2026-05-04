@@ -181,6 +181,20 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               </div>
             )}
 
+            {/* Back Button */}
+            {!isLanding && (
+              <div className="px-3 py-2 border-b border-gray-200">
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => { navigate(-1); setIsOpen(false); }}
+                  className="w-full px-4 py-2.5 bg-gradient-to-r from-game-purple to-game-pink text-white rounded-2xl font-bold text-sm transition-all hover:shadow-lg"
+                >
+                  ← Kembali
+                </motion.button>
+              </div>
+            )}
+
             {/* Scrollable nav */}
             <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
 
