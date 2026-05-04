@@ -188,7 +188,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => { navigate(-1); setIsOpen(false); }}
-                  className="w-full px-4 py-2.5 bg-gradient-to-r from-game-purple to-game-pink text-white rounded-2xl font-bold text-sm transition-all hover:shadow-lg"
+                  className="w-full px-4 py-2.5 rounded-2xl font-bold text-sm transition-all text-game-purple clay"
                 >
                   ← Kembali
                 </motion.button>
