@@ -319,11 +319,12 @@ export default function AdminGameManager() {
 
 
   return (
-    <div className="min-h-screen pb-32 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
+    <div className="min-h-screen pb-32 relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-violet-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.12) 1px, transparent 0)', backgroundSize: '28px 28px' }} />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-80 h-80 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-violet-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
@@ -337,24 +338,28 @@ export default function AdminGameManager() {
         )}
       </AnimatePresence>
 
-      <div className="relative max-w-5xl mx-auto px-3 md:px-4 pt-28 pb-32">
+      <div className="relative max-w-6xl mx-auto px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-7">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-5 rounded-3xl flex items-center gap-3"
-          style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-          <div className="text-4xl">🎮</div>
-          <div>
-            <h1 className="text-xl font-black text-white">Game Manager</h1>
-            <p className="text-white/80 text-xs">Jana & urus semua permainan CeriaKid</p>
+          className="mb-7 p-5 md:p-7 rounded-[2rem] flex flex-col md:flex-row md:items-center md:justify-between gap-5 shadow-2xl shadow-fuchsia-950/30"
+          style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+          <div className="flex items-center gap-4 min-w-0">
+            <div className="w-14 h-14 md:w-16 md:h-16 flex-shrink-0 rounded-3xl bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 flex items-center justify-center text-2xl md:text-3xl shadow-xl shadow-purple-950/30 ring-1 ring-white/30 leading-none">🎮</div>
+            <div className="min-w-0">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/70 text-[11px] font-black uppercase tracking-wider mb-2">Premium Game Control</div>
+              <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight">Game Manager</h1>
+              <p className="text-white/75 text-sm">Jana, urus dan pantau semua permainan CeriaKid dengan lebih kemas.</p>
+            </div>
           </div>
-          <div className="ml-auto text-right">
-            <p className="text-white font-black text-lg">{totalGames}</p>
-            <p className="text-white/80 text-xs">total games</p>
+          <div className="grid grid-cols-3 gap-2 w-full md:w-auto md:min-w-80">
+            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{totalGames}</p><p className="text-white/60 text-[11px] font-bold">Games</p></div>
+            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{totalFull}</p><p className="text-white/60 text-[11px] font-bold">Penuh</p></div>
+            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{totalPlayers}</p><p className="text-white/60 text-[11px] font-bold">Players</p></div>
           </div>
         </motion.div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 p-1 rounded-2xl overflow-x-auto" style={{ background: 'rgba(255,255,255,0.1)' }}>
+        <div className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
           {[
             { id: 'generator', label: '🤖 Gen', labelFull: '🤖 Generator' },
             { id: 'manager', label: '📋 Mgr', labelFull: '📋 Manager' },
@@ -362,7 +367,7 @@ export default function AdminGameManager() {
             { id: 'monthly', label: '📅 Auto', labelFull: '📅 Auto Monthly' },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/90 hover:text-white hover:bg-white/10'}`}
+              className={`flex-1 py-3 px-3 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
               title={t.labelFull}>
               <span className="md:hidden">{t.label}</span>
               <span className="hidden md:inline">{t.labelFull}</span>
@@ -374,20 +379,23 @@ export default function AdminGameManager() {
         {tab === 'generator' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Config */}
-            <div className="p-6 rounded-3xl mb-5" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <h2 className="font-black text-white mb-4">⚙️ Konfigurasi Generation</h2>
+            <div className="p-5 md:p-7 rounded-[2rem] mb-6 shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
+              <div className="mb-5">
+                <h2 className="font-black text-white text-xl md:text-2xl">⚙️ Konfigurasi Generation</h2>
+                <p className="text-white/60 text-xs font-semibold mt-1">Tetapkan target game dan soalan sebelum masuk queue.</p>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                 <div>
                   <label className="text-white text-xs font-black uppercase tracking-wider block mb-2">🎮 Bilangan Games</label>
                   <input type="number" min="1" max="100" value={genConfig.games}
                     onChange={e => setGenConfig(c => ({ ...c, games: parseInt(e.target.value) || 1 }))}
-                    className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center" />
+                    className="w-full p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all" />
                 </div>
                 <div>
                   <label className="text-white text-xs font-black uppercase tracking-wider block mb-2">📝 Soalan per Game</label>
                   <input type="number" min="1" max="50" value={genConfig.questions}
                     onChange={e => setGenConfig(c => ({ ...c, questions: parseInt(e.target.value) || 1 }))}
-                    className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center" />
+                    className="w-full p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all" />
                 </div>
               </div>
 
@@ -420,7 +428,7 @@ export default function AdminGameManager() {
                   const qDiff = genConfig.questions - curr.avgQuestions;
                   return (
                     <button key={key} onClick={() => toggleSubject(key)}
-                      className={`flex items-start gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white hover:bg-white/20'}`}>
+                      className={`flex items-start gap-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all text-left border ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white hover:bg-white/20 border-white/10'}`}>
                       <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/50'}`}>
                          {sel && <span className="text-white text-xs">✓</span>}
                        </div>
@@ -451,7 +459,7 @@ export default function AdminGameManager() {
                   const gameDiff = genConfig.games - curr.games;
                   return (
                     <button key={key} onClick={() => toggleSubject(key)}
-                      className={`flex items-start gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white hover:bg-white/20'}`}>
+                      className={`flex items-start gap-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all text-left border ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white hover:bg-white/20 border-white/10'}`}>
                       <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/50'}`}>
                         {sel && <span className="text-white text-xs">✓</span>}
                       </div>
@@ -500,14 +508,14 @@ export default function AdminGameManager() {
               <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                 onClick={handleQueueGeneration}
                 disabled={submitting || selectedSubjects.size === 0}
-                className="w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-xl disabled:opacity-50">
+                className="w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 text-white shadow-2xl shadow-orange-950/30 disabled:opacity-50 disabled:shadow-none transition-all">
                 {submitting ? <><Loader2 className="w-5 h-5 animate-spin" /> Menghantar ke queue...</> : <><Wand2 className="w-5 h-5" /> Queue Generation ({selectedSubjects.size} subjek)</>}
               </motion.button>
               <p className="text-white/40 text-xs text-center mt-2">✅ Tasks diproses otomatik setiap 5 minit. Boleh tutup browser.</p>
             </div>
 
             {/* Task Queue */}
-            <div className="p-6 rounded-3xl" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+            <div className="p-5 md:p-7 rounded-[2rem] shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-black text-white">📋 Task Queue</h2>
                 <div className="flex gap-2 items-center">
@@ -528,7 +536,7 @@ export default function AdminGameManager() {
                   { label: 'Done', value: completedTasks.length, color: 'text-green-300' },
                   { label: 'Failed', value: failedTasks.length, color: 'text-red-300' },
                 ].map(s => (
-                  <div key={s.label} className="bg-white/10 rounded-xl p-2 text-center">
+                  <div key={s.label} className="bg-white/10 rounded-2xl p-3 text-center border border-white/10 shadow-lg shadow-black/10">
                     <p className={`font-black text-lg ${s.color}`}>{s.value}</p>
                     <p className="text-xs text-white/80 font-semibold">{s.label}</p>
                   </div>
@@ -547,7 +555,7 @@ export default function AdminGameManager() {
                   {tasks.map(task => {
                     const sc = statusConfig[task.status] || statusConfig.pending;
                     return (
-                      <div key={task.id} className="flex items-center gap-3 rounded-xl px-3 py-2.5" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                      <div key={task.id} className="flex items-center gap-3 rounded-2xl px-4 py-3 border border-white/10 shadow-lg shadow-black/10" style={{ background: 'rgba(255,255,255,0.08)' }}>
                         <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${sc.color}`}>
                           {sc.icon} {task.status}
                         </div>
@@ -575,7 +583,7 @@ export default function AdminGameManager() {
           {tab === 'minigames' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Status Section */}
-            <div className="p-6 rounded-3xl mb-5" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+            <div className="p-5 md:p-7 rounded-[2rem] mb-6 shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.22) 0%, rgba(236, 72, 153, 0.16) 100%)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.25)' }}>
               <div className="flex items-center justify-between mb-5">
                 <div>
                   <h2 className="font-black text-white text-lg">🎮 Mini Games Status</h2>
@@ -622,17 +630,16 @@ export default function AdminGameManager() {
                   </div>
                 </>
               )}
-              )
             </div>
 
             {/* Mini Games Sub-tabs */}
-            <div className="flex gap-2 mb-6 p-1 rounded-2xl overflow-x-auto" style={{ background: 'rgba(255,255,255,0.1)' }}>
+            <div className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
               {[
                 { id: 'generate', label: '🤖 Generate' },
                 { id: 'manage', label: '📋 Manage' },
               ].map(t => (
                 <button key={t.id} onClick={() => setMiniGamesTab(t.id)}
-                  className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${miniGamesTab === t.id ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/70 hover:text-white'}`}>
+                  className={`flex-1 py-3 rounded-2xl font-black text-sm transition-all ${miniGamesTab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
                   {t.label}
                 </button>
               ))}
@@ -654,13 +661,13 @@ export default function AdminGameManager() {
             {tab === 'manager' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Stats row */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-5">
               {[
                 { value: totalGames, label: 'Total Games', color: 'text-yellow-300' },
                 { value: totalFull, label: 'Soalan Penuh', color: 'text-green-300' },
                 { value: totalPlayers, label: 'Players', color: 'text-pink-300' },
               ].map(({ value, label, color }) => (
-                <div key={label} className="rounded-2xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.1)' }}>
+                <div key={label} className="rounded-3xl p-5 text-center shadow-xl shadow-black/10 border border-white/15" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)' }}>
                   <p className={`text-2xl font-black ${color}`}>{value}</p>
                   <p className="text-xs text-white/90 font-semibold">{label}</p>
                 </div>
@@ -668,7 +675,7 @@ export default function AdminGameManager() {
             </div>
 
             {/* Search + Filter bar */}
-            <div className="p-4 rounded-3xl mb-4" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+            <div className="p-4 md:p-5 rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <div className="flex gap-2 mb-3">
                 <div className="relative flex-1">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">🔍</span>
@@ -677,7 +684,7 @@ export default function AdminGameManager() {
                     placeholder="Cari..."
                     value={managerSearch}
                     onChange={e => setManagerSearch(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50"
+                    className="w-full pl-9 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50 focus:bg-white/15 shadow-inner shadow-black/10 transition-all"
                   />
                 </div>
                 <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0">
@@ -743,7 +750,7 @@ export default function AdminGameManager() {
                     );
                     if (filteredGames.length === 0 && managerSearch) return null;
                     return (
-                      <motion.div key={s.file} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} className="rounded-3xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                      <motion.div key={s.file} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} className="rounded-[1.75rem] overflow-hidden shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.18)' }}>
                         {/* Subject header */}
                         <button
                           onClick={() => setExpandedFile(expandedFile === s.file ? null : s.file)}
@@ -765,7 +772,7 @@ export default function AdminGameManager() {
                              <p className="text-white/50 text-xs text-center py-4">Tiada games lagi</p>
                            ) : (
                              filteredGames.map(g => (
-                               <div key={g.id} className="flex items-center gap-3 px-4 py-3 border-b border-white/5 last:border-0 hover:bg-white/5 transition-all">
+                               <div key={g.id} className="flex items-center gap-3 px-4 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/8 transition-all">
                                  <div className="flex-1 min-w-0">
                                    <p className="text-white text-xs font-bold truncate">{g.title}</p>
                                    <div className="flex gap-2 mt-0.5">
@@ -836,7 +843,7 @@ export default function AdminGameManager() {
                     );
                     if (filteredGames.length === 0 && managerSearch) return null;
                     return (
-                      <motion.div key={s.file} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} className="rounded-3xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                      <motion.div key={s.file} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} className="rounded-[1.75rem] overflow-hidden shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.18)' }}>
                         {/* Subject header */}
                         <button
                           onClick={() => setExpandedFile(expandedFile === s.file ? null : s.file)}
@@ -858,7 +865,7 @@ export default function AdminGameManager() {
                              <p className="text-white/50 text-xs text-center py-4">Tiada games lagi</p>
                            ) : (
                              filteredGames.map(g => (
-                               <div key={g.id} className="flex items-center gap-3 px-4 py-3 border-b border-white/5 last:border-0 hover:bg-white/5 transition-all">
+                               <div key={g.id} className="flex items-center gap-3 px-4 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/8 transition-all">
                                  <div className="flex-1 min-w-0">
                                    <p className="text-white text-xs font-bold truncate">{g.title}</p>
                                    <div className="flex gap-2 mt-0.5">
