@@ -85,7 +85,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
+            className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all flex-shrink-0"
           >
             <Menu className="w-5 h-5" />
           </button>
@@ -96,7 +96,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           </Link>
 
           {/* Right: Language Switcher or Back */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             {!isLanding && <LanguageSwitcher />}
             {shouldShowBack ? (
               <Link to={backTo}>
