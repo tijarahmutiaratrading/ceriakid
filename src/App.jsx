@@ -48,6 +48,14 @@ import Footer from '@/components/Footer';
 import OfflineBanner from '@/components/OfflineBanner';
 import AdminGuard from '@/components/AdminGuard';
 
+const AuthenticatedAppWithChild = () => {
+  return (
+    <SelectedChildProvider>
+      <AuthenticatedApp />
+    </SelectedChildProvider>
+  );
+};
+
 const AuthenticatedApp = () => {
   const authContext = useAuth();
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = authContext || {};
@@ -148,12 +156,10 @@ function App() {
     <Router>
       <QueryClientProvider client={queryClientInstance}>
         <AuthProvider>
-          <SelectedChildProvider>
-            <OfflineBanner />
-            <AuthenticatedApp />
-            <Footer />
-            <Toaster />
-          </SelectedChildProvider>
+          <OfflineBanner />
+          <AuthenticatedAppWithChild />
+          <Footer />
+          <Toaster />
         </AuthProvider>
       </QueryClientProvider>
     </Router>
