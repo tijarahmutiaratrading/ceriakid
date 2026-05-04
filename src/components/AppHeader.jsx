@@ -111,10 +111,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   <span className="text-xs font-bold">BBM</span>
                 </motion.button>
               </Link>
-              <button onClick={() => setIsOpen(!isOpen)} className="flex-1 flex flex-col items-center justify-center gap-1 text-gray-300 h-20">
-                <span className="text-2xl">☰</span>
-                <span className="text-xs font-bold">Menu</span>
-              </button>
             </>
           )}
         </div>
