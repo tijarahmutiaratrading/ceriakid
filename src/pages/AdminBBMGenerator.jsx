@@ -164,10 +164,12 @@ export default function AdminBBMGenerator() {
   });
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.12) 1px, transparent 0)', backgroundSize: '28px 28px' }} />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-80 h-80 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-violet-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
@@ -185,27 +187,31 @@ export default function AdminBBMGenerator() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-5xl mx-auto px-3 md:px-4 pt-28 pb-32">
+      <div className="relative max-w-6xl mx-auto px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-7">
         {/* Header */}
          <motion.div
            initial={{ opacity: 0, y: -20 }}
            animate={{ opacity: 1, y: 0 }}
-           className="mb-6 p-4 md:p-5 rounded-3xl flex flex-col md:flex-row md:items-center gap-4"
-           style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
+           className="mb-7 p-5 md:p-7 rounded-[2rem] flex flex-col md:flex-row md:items-center md:justify-between gap-5 shadow-2xl shadow-fuchsia-950/30"
+           style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.25)' }}
          >
-           <div className="text-4xl flex-shrink-0">📚</div>
-           <div className="flex-1 min-w-0">
-             <h1 className="text-lg md:text-xl font-black text-white">BBM Generator & Manager</h1>
-             <p className="text-white/80 text-xs">Jana & urus semua Bahan Bantu Mengajar</p>
+           <div className="flex items-center gap-4 min-w-0">
+             <div className="w-14 h-14 md:w-16 md:h-16 flex-shrink-0 rounded-3xl bg-gradient-to-br from-cyan-300 via-blue-400 to-fuchsia-500 flex items-center justify-center text-2xl md:text-3xl shadow-xl shadow-purple-950/30 ring-1 ring-white/30 leading-none">📚</div>
+             <div className="min-w-0">
+               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/70 text-[11px] font-black uppercase tracking-wider mb-2">Premium BBM Studio</div>
+               <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight">BBM Generator & Manager</h1>
+               <p className="text-white/75 text-sm">Jana dan urus Bahan Bantu Mengajar dengan lebih pantas, kemas dan profesional.</p>
+             </div>
            </div>
-           <div className="text-right flex-shrink-0">
-             <p className="text-white font-black text-lg">{resources.length}</p>
-             <p className="text-white/80 text-xs">total BBM</p>
+           <div className="grid grid-cols-3 gap-2 w-full md:w-auto md:min-w-80">
+             <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{resources.length}</p><p className="text-white/60 text-[11px] font-bold">Total</p></div>
+             <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{resources.filter(r => r.isPublished !== false).length}</p><p className="text-white/60 text-[11px] font-bold">Published</p></div>
+             <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{tasks.length}</p><p className="text-white/60 text-[11px] font-bold">Tasks</p></div>
            </div>
          </motion.div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 p-1 rounded-2xl" style={{ background: 'rgba(255,255,255,0.1)' }}>
+        <div className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
           {[
             { id: 'generator', label: '🤖 Generator', icon: Wand2 },
             { id: 'manager', label: '📋 Manager', icon: FileText },
@@ -213,8 +219,8 @@ export default function AdminBBMGenerator() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${
-                tab === t.id ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/90 hover:text-white'
+              className={`flex-1 py-3 px-3 rounded-2xl font-black text-sm transition-all whitespace-nowrap ${
+                tab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'
               }`}
             >
               {t.label}
@@ -226,8 +232,8 @@ export default function AdminBBMGenerator() {
         {tab === 'generator' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <div
-              className="p-4 md:p-6 rounded-3xl mb-6"
-              style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
+              className="p-5 md:p-7 rounded-[2rem] mb-6 shadow-2xl shadow-black/20"
+              style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}
             >
               {/* Type */}
               <div className="mb-5">
@@ -249,8 +255,8 @@ export default function AdminBBMGenerator() {
                           sel ? next.delete(t.value) : next.add(t.value);
                           setSelectedTypes(next);
                         }}
-                        className={`p-2 rounded-2xl text-xs font-bold transition-all text-center ${
-                          sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                        className={`p-3 rounded-2xl text-xs font-black transition-all text-center border ${
+                          sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white/75 hover:bg-white/20 border-white/10'
                         }`}
                       >
                         {t.label}
@@ -280,8 +286,8 @@ export default function AdminBBMGenerator() {
                           sel ? next.delete(s.value) : next.add(s.value);
                           setSelectedSubjects(next);
                         }}
-                        className={`p-2 rounded-2xl text-xs font-bold transition-all text-center ${
-                          sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                        className={`p-3 rounded-2xl text-xs font-black transition-all text-center border ${
+                          sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white/75 hover:bg-white/20 border-white/10'
                         }`}
                       >
                         {s.label}
@@ -311,8 +317,8 @@ export default function AdminBBMGenerator() {
                           sel ? next.delete(l.value) : next.add(l.value);
                           setSelectedLevels(next);
                         }}
-                        className={`p-2 rounded-2xl text-xs font-bold transition-all text-center ${
-                          sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                        className={`p-3 rounded-2xl text-xs font-black transition-all text-center border ${
+                          sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white/75 hover:bg-white/20 border-white/10'
                         }`}
                       >
                         {l.label}
@@ -330,7 +336,7 @@ export default function AdminBBMGenerator() {
                   value={form.topic}
                   onChange={e => setForm(f => ({ ...f, topic: e.target.value }))}
                   placeholder="cth: Kata Adjektif, Nombor Bulat, Sistem Suria..."
-                  className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 placeholder-white/30 font-semibold text-sm"
+                  className="w-full p-4 rounded-2xl bg-white/10 text-white border border-white/20 placeholder-white/30 font-semibold text-sm shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all"
                 />
               </div>
 
@@ -352,7 +358,7 @@ export default function AdminBBMGenerator() {
                   handleGenerate();
                 }}
                 disabled={loading}
-                className="w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-xl disabled:opacity-50"
+                className="w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 bg-gradient-to-r from-cyan-300 via-blue-400 to-fuchsia-500 text-white shadow-2xl shadow-blue-950/30 disabled:opacity-50 disabled:shadow-none transition-all"
               >
                 {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Jana sedang dalam proses...</> : <><Wand2 className="w-5 h-5" /> Jana BBM ({selectedSubjects.size} × {selectedLevels.size} × {selectedTypes.size})!</>}
               </motion.button>
@@ -364,8 +370,8 @@ export default function AdminBBMGenerator() {
               {result && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                  className="p-6 rounded-3xl"
-                  style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
+                  className="p-5 md:p-6 rounded-[2rem] shadow-2xl shadow-black/20"
+                  style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.18), rgba(255,255,255,0.08))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center"><Check className="w-5 h-5 text-white" /></div>
@@ -396,19 +402,19 @@ export default function AdminBBMGenerator() {
         {tab === 'manager' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Search + Filter */}
-             <div className="space-y-2 mb-4">
+             <div className="space-y-3 mb-5 p-4 md:p-5 rounded-[1.75rem] shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                 <input
                   type="text" placeholder="Cari BBM..."
                   value={search} onChange={e => setSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 md:py-2.5 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-xs md:text-sm font-semibold"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-xs md:text-sm font-semibold shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all"
                 />
               </div>
               <div className="flex gap-2">
                 <select
                   value={filterSubject} onChange={e => setFilterSubject(e.target.value)}
-                  className="flex-1 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl bg-white/10 text-white border border-white/20 font-semibold text-xs md:text-sm"
+                  className="flex-1 px-3 py-3 rounded-2xl bg-white/10 text-white border border-white/20 font-semibold text-xs md:text-sm shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all"
                 >
                   <option value="all" className="text-black">Semua Subjek</option>
                   {SUBJECTS.map(s => <option key={s.value} value={s.value} className="text-black">{s.label}</option>)}
@@ -438,14 +444,14 @@ export default function AdminBBMGenerator() {
              </div>
 
             {/* Stats row */}
-             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
               {[
                 { label: 'Jumlah BBM', value: resources.length, color: 'text-yellow-300' },
                 { label: 'Published', value: resources.filter(r => r.isPublished !== false).length, color: 'text-green-300' },
                 { label: 'Hidden', value: resources.filter(r => r.isPublished === false).length, color: 'text-red-300' },
                 { label: 'Task Queue', value: tasks.length, color: 'text-blue-300' },
               ].map(s => (
-                <div key={s.label} className="p-3 rounded-2xl text-center" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                <div key={s.label} className="p-4 rounded-3xl text-center shadow-xl shadow-black/10 border border-white/15" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)' }}>
                   <p className={`font-black text-xl ${s.color}`}>{s.value}</p>
                   <p className="text-white/80 text-xs">{s.label}</p>
                 </div>
@@ -454,7 +460,7 @@ export default function AdminBBMGenerator() {
 
             {/* Task Queue Section */}
             {tasks.length > 0 && (
-              <div className="p-4 rounded-2xl mb-4" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
+              <div className="p-4 md:p-5 rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.18)' }}>
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-white font-bold">📋 Task Queue ({tasks.length})</h3>
                   <button onClick={loadTasks} className="p-1 text-white/50 hover:text-white">
@@ -463,7 +469,7 @@ export default function AdminBBMGenerator() {
                 </div>
                 <div className="space-y-1 max-h-48 overflow-y-auto">
                   {tasks.map(t => (
-                    <div key={t.id} className="flex items-center gap-2 p-2 rounded-xl text-xs" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                    <div key={t.id} className="flex items-center gap-2 p-3 rounded-2xl text-xs border border-white/10" style={{ background: 'rgba(255,255,255,0.07)' }}>
                       <span className={`px-2 py-0.5 rounded font-bold ${
                         t.status === 'pending' ? 'bg-yellow-500/20 text-yellow-300' :
                         t.status === 'running' ? 'bg-blue-500/20 text-blue-300' :
@@ -489,12 +495,12 @@ export default function AdminBBMGenerator() {
                   <motion.div
                     key={r.id}
                     initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}
-                    className="p-3 md:p-4 rounded-2xl flex flex-col md:flex-row md:items-center gap-2 md:gap-3"
-                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
+                    className="p-4 md:p-5 rounded-[1.75rem] flex flex-col md:flex-row md:items-center gap-3 shadow-xl shadow-black/10 transition-all hover:-translate-y-0.5"
+                    style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.18)' }}
                   >
-                    <div className="text-2xl flex-shrink-0">{r.emoji || '📄'}</div>
+                    <div className="w-11 h-11 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-2xl flex-shrink-0 shadow-lg shadow-black/10">{r.emoji || '📄'}</div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-white font-bold text-xs md:text-sm truncate">{r.title}</p>
+                      <p className="text-white font-black text-sm md:text-base truncate">{r.title}</p>
                       <div className="flex gap-1.5 mt-1 flex-wrap">
                         <span className="text-xs bg-white/10 text-white/80 px-2 py-0.5 rounded-full">{SUBJECT_LABELS[r.subject] || r.subject}</span>
                         <span className="text-xs bg-white/10 text-white/80 px-2 py-0.5 rounded-full">{LEVEL_LABELS[r.level] || r.level}</span>
@@ -545,12 +551,12 @@ export default function AdminBBMGenerator() {
         {editItem && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
             onClick={() => setEditItem(null)}
           >
             <motion.div
               initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
-              className="bg-white rounded-3xl w-full max-w-md p-4 md:p-6"
+              className="bg-white rounded-[2rem] w-full max-w-md p-5 md:p-6 shadow-2xl overflow-hidden"
               onClick={e => e.stopPropagation()}
             >
               <h3 className="font-black text-gray-800 text-lg mb-4">✏️ Edit BBM</h3>
