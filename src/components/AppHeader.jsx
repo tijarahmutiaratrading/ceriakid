@@ -68,13 +68,13 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     <>
       {/* Header Bar - Sticky Bottom Nav */}
       <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-0">
-        <div className={`w-full md:max-w-lg rounded-t-2xl h-20 flex items-center justify-around border-t`}
+        <div className={`w-full md:max-w-lg rounded-t-3xl h-20 flex items-center justify-around border-t`}
              style={{
-               background: 'rgba(255,255,255,0.95)',
+               background: 'linear-gradient(135deg, #1a5f5f 0%, #0d3d3d 100%)',
                backdropFilter: 'blur(24px)',
                WebkitBackdropFilter: 'blur(24px)',
-               borderTop: '1px solid rgba(0,0,0,0.08)',
-               boxShadow: '0 -2px 8px rgba(0,0,0,0.08)'
+               borderTop: '1px solid rgba(255,255,255,0.1)',
+               boxShadow: '0 -4px 20px rgba(0,0,0,0.3)'
              }}>
           {isAuthenticated ? (
             navItems.map((item) => (
@@ -82,7 +82,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
-                    isActive(item.path) ? 'text-purple-600' : 'text-gray-600 hover:text-gray-800'
+                    isActive(item.path) ? 'text-white' : 'text-gray-300 hover:text-white'
                   }`}
                 >
                   <span className="text-2xl">{item.emoji}</span>
@@ -93,24 +93,24 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           ) : (
             <>
               <Link to="/" className="flex-1">
-                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-purple-600">
+                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-white">
                   <span className="text-2xl">🏠</span>
                   <span className="text-xs font-bold">Rumah</span>
                 </motion.button>
               </Link>
               <Link to="/games-hub" className="flex-1">
-                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-gray-600">
+                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-gray-300">
                   <span className="text-2xl">🎮</span>
                   <span className="text-xs font-bold">Games</span>
                 </motion.button>
               </Link>
               <Link to="/bbm" className="flex-1">
-                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-gray-600">
+                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-gray-300">
                   <span className="text-2xl">📚</span>
                   <span className="text-xs font-bold">BBM</span>
                 </motion.button>
               </Link>
-              <button onClick={() => setIsOpen(!isOpen)} className="flex-1 flex flex-col items-center justify-center gap-1 text-gray-600 h-20">
+              <button onClick={() => setIsOpen(!isOpen)} className="flex-1 flex flex-col items-center justify-center gap-1 text-gray-300 h-20">
                 <span className="text-2xl">☰</span>
                 <span className="text-xs font-bold">Menu</span>
               </button>
