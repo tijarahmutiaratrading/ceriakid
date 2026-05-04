@@ -120,21 +120,24 @@ export default function AdminGameManager() {
         const subject = rest.join('-');
         const sc = SUBJECT_CONFIG.find(s => s.ageGroup === ageGroup && s.subject === subject);
         const curr = currentCounts[subjectKey] || { games: 0, avgQuestions: 0 };
-        const gamesToAdd = Math.max(0, genConfig.games - curr.games);
-        const questionsToAdd = Math.max(0, genConfig.questions - curr.avgQuestions);
         
-        if (gamesToAdd > 0 || questionsToAdd > 0) {
+        // PRIORITY 1: Expand existing games that are underfilled (questions below target)
+        // PRIORITY 2: Create new games to reach target count
+        const questionsToAdd = Math.max(0, genConfig.questions - curr.avgQuestions);
+        const gamesToAdd = Math.max(0, genConfig.games - curr.games);
+        
+        if (questionsToAdd > 0 || gamesToAdd > 0) {
           await base44.entities.GameTask.create({
             taskName: sc?.label || subjectKey,
             ageGroup,
             subject,
-            gamesCount: gamesToAdd > 0 ? gamesToAdd : 0,
-            questionsPerGame: questionsToAdd > 0 ? questionsToAdd : 0,
+            gamesCount: gamesToAdd,
+            questionsPerGame: questionsToAdd, // This will expand existing FIRST
             status: 'pending',
           });
         }
       }
-      showToast(`✅ ${selectedSubjects.size} tasks dihantar ke queue (smart target)!`);
+      showToast(`✅ ${selectedSubjects.size} tasks dihantar ke queue (expand → create)!`);
       setSelectedSubjects(new Set());
       loadTasks();
     } catch (err) {
