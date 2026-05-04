@@ -245,13 +245,13 @@ export default function Landing() {
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={scrollToPricing}
-                className="px-6 py-3 bg-orange-500 text-white rounded-full font-black text-base shadow-lg flex items-center gap-2 justify-center">
+                className="px-4 py-2.5 bg-orange-500 text-white rounded-full font-black text-sm shadow-lg flex items-center gap-2 justify-center">
                 
                 🎮 Mulakan Sekarang <ArrowRight className="w-4 h-4" />
               </motion.button>
               <button
                 onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-                className="bg-white text-gray-700 px-6 py-3 text-base font-bold rounded-full border-2 border-white hover:bg-gray-50 transition-colors w-full sm:w-auto"
+                className="bg-white text-gray-700 px-4 py-2.5 text-sm font-bold rounded-full border-2 border-white hover:bg-gray-50 transition-colors w-full sm:w-auto"
               >
                 🎁 Cuba Percuma 7 Hari
               </button>
