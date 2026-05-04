@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -123,6 +124,26 @@ const AuthenticatedApp = () => {
 };
 
 function App() {
+  useEffect(() => {
+    // Clear stale cache data on app load
+    const clearStaleData = () => {
+      // Clear old localStorage keys yang outdated
+      const keysToPreserve = ['ck_auth_token', 'ck_user_preference', 'ck_offline_data'];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && !keysToPreserve.some(k => key.includes(k)) && key.startsWith('ck_')) {
+          localStorage.removeItem(key);
+        }
+      }
+      // Clear sessionStorage completely (session-specific data)
+      sessionStorage.clear();
+      // Invalidate all React Query cache
+      queryClientInstance.clear();
+    };
+    
+    clearStaleData();
+  }, []);
+
   return (
     <Router>
       <QueryClientProvider client={queryClientInstance}>
