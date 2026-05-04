@@ -119,20 +119,44 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
         </div>
       </div>
 
-      {/* Top Header Bar - Small header at top with menu toggle */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 py-3 bg-white/80 backdrop-blur-md border-b border-gray-200">
-        <div className="w-full md:max-w-lg flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-          <Link to="/">
-            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-8 rounded-lg" />
-          </Link>
-          <div className="w-9" />
+      {/* Top Header Bar - User Profile Section */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-0">
+        <div className="w-full md:max-w-lg bg-gradient-to-r from-slate-800 to-slate-700 text-white px-4 py-3 flex items-center justify-between border-b border-slate-600">
+          {isAuthenticated && user ? (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsOpen(!isOpen)}
+              className="flex items-center gap-2 flex-1"
+            >
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-black text-sm flex-shrink-0">
+                {user.full_name?.[0]?.toUpperCase() || '?'}
+              </div>
+              <div className="text-left min-w-0 flex-1">
+                <p className="text-sm font-black leading-tight">{user.full_name || 'User'}</p>
+              </div>
+            </motion.button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              className="flex items-center gap-2"
+            >
+              <Menu className="w-5 h-5" />
+              <span className="font-bold">Menu</span>
+            </button>
+          )}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="flex items-center gap-1 text-xs font-black px-2 py-1 bg-white/10 rounded-full">
+              <span>😊</span>
+              <span>0</span>
+            </div>
+            <button className="p-1.5 hover:bg-white/10 rounded-lg transition-all">
+              <span className="text-lg">🔔</span>
+            </button>
+            <button className="p-1.5 hover:bg-white/10 rounded-lg transition-all">
+              <span className="text-lg">🎁</span>
+            </button>
+          </div>
         </div>
       </div>
 
