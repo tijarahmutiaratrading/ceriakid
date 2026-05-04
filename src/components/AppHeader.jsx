@@ -137,7 +137,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-white/80">
-              <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9519ccb9a_ChatGPTImageApr302026at06_37_02PM.png" alt="CeriaKid" className="h-10 rounded-xl" />
+              <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-xl" />
               <button type="button" onClick={() => setIsOpen(false)} className="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
                 <X className="w-5 h-5" />
               </button>
