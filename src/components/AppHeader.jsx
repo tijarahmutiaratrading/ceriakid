@@ -85,7 +85,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all flex-shrink-0"
+            className="flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all flex-shrink-0"
           >
             <Menu className="w-5 h-5" />
           </button>
