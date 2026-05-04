@@ -14,10 +14,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const isAdmin = user?.role === 'admin';
   const isLanding = location.pathname === '/' || location.pathname === '/landing';
   const isPlayingGame = location.pathname.startsWith('/play/');
-  
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
-
-
 
   const otherItems = [
     { path: '/children-profiles', emoji: '👨‍👩‍👧‍👦', label: 'Profil Anak' },
