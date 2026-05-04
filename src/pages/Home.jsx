@@ -70,7 +70,7 @@ export default function Home() {
 
       <AppHeader />
 
-      <div className="relative max-w-lg mx-auto px-3 md:px-4 pb-32 pt-6 md:pt-8 space-y-4">
+      <div className="relative max-w-lg mx-auto px-3 md:px-4 pb-24 pt-6 md:pt-8 space-y-4">
 
         {/* Welcome Card */}
         {isAuthenticated && (

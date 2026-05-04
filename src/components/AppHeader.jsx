@@ -66,8 +66,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   return (
     <>
       {/* Header Bar */}
-      <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4">
-        <div className={`w-full md:max-w-lg rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-between ${
+      <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-4 pb-2 pt-1">
+        <div className={`w-full md:max-w-lg rounded-t-2xl px-3 sm:px-5 h-16 flex items-center justify-between ${
           isPlayingGame
             ? 'bg-white shadow-lg border border-gray-200'
             : ''
