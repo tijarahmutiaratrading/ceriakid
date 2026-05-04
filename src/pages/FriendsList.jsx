@@ -10,6 +10,9 @@ export default function FriendsList() {
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [inputCode, setInputCode] = useState('');
+  const [addingFriend, setAddingFriend] = useState(false);
+  const [addMessage, setAddMessage] = useState(null);
   // Stable invite code tied to user email so it doesn't change on re-render
   const inviteCode = useMemo(() => {
     if (!user?.email) return '------';
@@ -56,6 +59,72 @@ export default function FriendsList() {
     navigator.clipboard.writeText(inviteCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const addFriendByCode = async () => {
+    const code = inputCode.trim().toUpperCase();
+    if (!code || code.length < 4) return;
+    if (code === inviteCode) {
+      setAddMessage({ ok: false, text: 'Itu adalah kod anda sendiri!' });
+      return;
+    }
+    setAddingFriend(true);
+    setAddMessage(null);
+    try {
+      // Find user with this invite code by checking all Friend records or UserSubscription
+      // We search all users' generated codes by checking UserSubscription emails
+      const allSubs = await base44.entities.UserSubscription.list();
+      let friendEmail = null;
+      for (const sub of allSubs) {
+        if (!sub.email) continue;
+        let hash = 0;
+        for (let i = 0; i < sub.email.length; i++) {
+          hash = (hash * 31 + sub.email.charCodeAt(i)) & 0xffffffff;
+        }
+        const generatedCode = Math.abs(hash).toString(36).substring(0, 6).toUpperCase();
+        if (generatedCode === code) {
+          friendEmail = sub.email;
+          break;
+        }
+      }
+
+      if (!friendEmail) {
+        setAddMessage({ ok: false, text: 'Kod tidak dijumpai. Sila semak semula.' });
+        setAddingFriend(false);
+        return;
+      }
+
+      // Check if already friends
+      const existing = friends.find(f => f.friendEmail === friendEmail);
+      if (existing) {
+        setAddMessage({ ok: false, text: 'Anda sudah berkawan dengan pengguna ini!' });
+        setAddingFriend(false);
+        return;
+      }
+
+      // Create friendship (both sides)
+      await base44.entities.Friend.create({
+        userEmail: user.email,
+        friendEmail: friendEmail,
+        status: 'accepted',
+        inviteCode: code,
+        acceptedDate: new Date().toISOString(),
+      });
+      await base44.entities.Friend.create({
+        userEmail: friendEmail,
+        friendEmail: user.email,
+        status: 'accepted',
+        inviteCode: inviteCode,
+        acceptedDate: new Date().toISOString(),
+      });
+
+      setAddMessage({ ok: true, text: `✅ Berjaya! ${friendEmail} telah ditambah sebagai kawan.` });
+      setInputCode('');
+      loadFriends();
+    } catch (err) {
+      setAddMessage({ ok: false, text: 'Ralat berlaku. Cuba lagi.' });
+    }
+    setAddingFriend(false);
   };
 
   const shareInviteCode = () => {
@@ -141,6 +210,44 @@ export default function FriendsList() {
             <Share2 className="w-4 h-4" />
             Kongsi via WhatsApp
           </motion.button>
+        </motion.div>
+
+        {/* Add Friend by Code */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.12 }}
+          className="mb-5 rounded-3xl p-5"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+        >
+          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Masukkan kod kawan..."
+              value={inputCode}
+              onChange={e => setInputCode(e.target.value.toUpperCase())}
+              maxLength={6}
+              className="flex-1 rounded-2xl px-4 py-3 bg-white/20 text-white placeholder-white/40 font-black text-lg tracking-widest border border-white/30 outline-none focus:border-white/60 uppercase"
+            />
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={addFriendByCode}
+              disabled={addingFriend || inputCode.length < 4}
+              className="px-5 py-3 rounded-2xl bg-white text-purple-600 font-black shadow-lg disabled:opacity-50 transition-all"
+            >
+              {addingFriend ? '...' : 'Tambah'}
+            </motion.button>
+          </div>
+          {addMessage && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className={`mt-3 text-sm font-bold ${addMessage.ok ? 'text-green-300' : 'text-red-300'}`}
+            >
+              {addMessage.text}
+            </motion.p>
+          )}
         </motion.div>
 
         {/* Friends List */}
