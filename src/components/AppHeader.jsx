@@ -69,7 +69,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     <>
       {/* Header Bar - Sticky Bottom Nav */}
       <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-3 pb-3">
-        <div className={`w-full md:max-w-lg rounded-3xl h-20 flex items-center justify-between px-2 border-t`}
+        <div className={`w-full md:max-w-lg rounded-3xl h-24 flex items-center justify-between px-3 border-t`}
              style={{
                background: 'linear-gradient(135deg, #1a5f5f 0%, #0d3d3d 100%)',
                backdropFilter: 'blur(24px)',
@@ -81,11 +81,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           <Link to="/dashboard" className="flex-1">
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
+              className={`w-full h-24 flex flex-col items-center justify-center gap-1 transition-all ${
                 isActive('/dashboard') ? 'text-white' : 'text-gray-300 hover:text-white'
               }`}
             >
-              <span className="text-2xl">🏠</span>
+              <span className="text-3xl">🏠</span>
               <span className="text-xs font-bold">Home</span>
             </motion.button>
           </Link>
@@ -94,11 +94,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           <Link to="/games-hub" className="flex-1">
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
+              className={`w-full h-24 flex flex-col items-center justify-center gap-1 transition-all ${
                 isActive('/games-hub') ? 'text-white' : 'text-gray-300 hover:text-white'
               }`}
             >
-              <span className="text-2xl">🎮</span>
+              <span className="text-3xl">🎮</span>
               <span className="text-xs font-bold">Games</span>
             </motion.button>
           </Link>
@@ -107,11 +107,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           <Link to="/parent-dashboard" className="flex-1">
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
+              className={`w-full h-24 flex flex-col items-center justify-center gap-1 transition-all ${
                 isActive('/parent-dashboard') ? 'text-white' : 'text-gray-300 hover:text-white'
               }`}
             >
-              <span className="text-2xl">📊</span>
+              <span className="text-3xl">📊</span>
               <span className="text-xs font-bold">Prestasi</span>
             </motion.button>
           </Link>
@@ -120,11 +120,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           <Link to="/drawing" className="flex-1">
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
+              className={`w-full h-24 flex flex-col items-center justify-center gap-1 transition-all ${
                 isActive('/drawing') ? 'text-white' : 'text-gray-300 hover:text-white'
               }`}
             >
-              <span className="text-2xl">🎨</span>
+              <span className="text-3xl">🎨</span>
               <span className="text-xs font-bold">Drawing</span>
             </motion.button>
           </Link>
@@ -133,9 +133,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(!isOpen)}
-            className="flex-1 h-20 flex flex-col items-center justify-center gap-1 text-gray-300 hover:text-white transition-all"
+            className="flex-1 h-24 flex flex-col items-center justify-center gap-1 text-gray-300 hover:text-white transition-all"
           >
-            <span className="text-2xl">👤</span>
+            <span className="text-3xl">👤</span>
             <span className="text-xs font-bold">Profile</span>
           </motion.button>
         </div>
