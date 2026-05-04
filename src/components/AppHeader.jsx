@@ -171,17 +171,15 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {topItems.map((item) =>
                 item.external ? (
                   <a key={item.path} href={item.path} onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 rounded-2xl font-semibold text-gray-700 hover:bg-white transition-all text-sm">
-                    <span className="text-lg">{item.emoji}</span>
+                    className="flex items-center px-4 py-2.5 rounded-2xl font-semibold text-gray-700 hover:bg-white transition-all text-sm">
                     <span>{item.label}</span>
                   </a>
                 ) : (
                   <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                     <motion.div whileTap={{ scale: 0.97 }}
-                      className={`flex items-center gap-3 px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
+                      className={`flex items-center px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
                         isActive(item.path) ? 'bg-game-purple text-white shadow-sm' : 'text-gray-700 hover:bg-white'
                       }`}>
-                      <span className="text-lg">{item.emoji}</span>
                       <span>{item.label}</span>
                     </motion.div>
                   </Link>
@@ -197,10 +195,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   {dashboardItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
-                        className={`flex items-center gap-3 px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
+                        className={`flex items-center px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
                           isActive(item.path) ? 'bg-game-purple text-white shadow-sm' : 'text-gray-700 hover:bg-white'
                         }`}>
-                        <span className="text-lg">{item.emoji}</span>
                         <span>{item.label}</span>
                       </motion.div>
                     </Link>
@@ -217,10 +214,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   {otherItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
-                        className={`flex items-center gap-3 px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
+                        className={`flex items-center px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
                           isActive(item.path) ? 'bg-game-purple text-white shadow-sm' : 'text-gray-700 hover:bg-white'
                         }`}>
-                        <span className="text-lg">{item.emoji}</span>
                         <span>{item.label}</span>
                       </motion.div>
                     </Link>
@@ -237,10 +233,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   {adminItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
-                        className={`flex items-center gap-3 px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
+                        className={`flex items-center px-4 py-2.5 rounded-2xl font-semibold text-sm transition-all ${
                           isActive(item.path) ? 'bg-game-purple text-white shadow-sm' : 'text-gray-700 hover:bg-white'
                         }`}>
-                        <span className="text-lg">{item.emoji}</span>
                         <span>{item.label}</span>
                       </motion.div>
                     </Link>
