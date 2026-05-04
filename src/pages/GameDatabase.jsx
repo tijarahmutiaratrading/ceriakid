@@ -213,8 +213,8 @@ export default function GameDatabase() {
               >
                 <div>
                   {expandedFile === subjectData.file
-                    ? <ChevronDown className="w-5 h-5 text-gray-500" />
-                    : <ChevronRight className="w-5 h-5 text-gray-500" />}
+                    ? <ChevronDown className="w-5 h-5 text-white/60" />
+                    : <ChevronRight className="w-5 h-5 text-white/60" />}
                 </div>
                 <div>
                   <p className="font-black text-white">{subjectData.label}</p>
@@ -223,7 +223,7 @@ export default function GameDatabase() {
               </button>
 
               <div className="flex items-center gap-2">
-                <span className={`text-xs font-bold px-3 py-1 rounded-full border ${SUBJECT_COLORS[subjectData.subject] || 'bg-gray-100 text-gray-700 border-gray-300'}`}>
+                <span className={`text-xs font-bold px-3 py-1 rounded-full border ${subjectData.subject ? 'bg-white/15 text-white border-white/30' : 'bg-white/15 text-white border-white/30'}`}>
                   {subjectData.totalGames} games
                 </span>
 
@@ -232,7 +232,7 @@ export default function GameDatabase() {
                   <button
                     onClick={() => openModal('add-questions', subjectData.file, `Tambah Soalan - ${subjectData.label}`)}
                     disabled={!!actionLoading}
-                    className="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-all border border-blue-200"
+                    className="p-1.5 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded-lg transition-all border border-blue-400/30"
                     title="Tambah/Set soalan"
                   >
                     {actionLoading === `add-questions-${subjectData.file}` ? <Loader2 className="w-4 h-4 animate-spin" /> : <BookOpen className="w-4 h-4" />}
@@ -240,7 +240,7 @@ export default function GameDatabase() {
                   <button
                     onClick={() => openModal('add-games', subjectData.file, `Set Games - ${subjectData.label}`)}
                     disabled={!!actionLoading}
-                    className="p-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg transition-all border border-purple-200"
+                    className="p-1.5 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 rounded-lg transition-all border border-purple-400/30"
                     title="Tambah/Set jumlah games"
                   >
                     {actionLoading === `add-games-${subjectData.file}` ? <Loader2 className="w-4 h-4 animate-spin" /> : <Gamepad2 className="w-4 h-4" />}
@@ -252,13 +252,13 @@ export default function GameDatabase() {
             {/* Progress bar */}
             <div className="px-4 pb-3">
               <div className="flex items-center gap-2 mb-1">
-                <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full transition-all duration-700"
+                    className="h-full bg-gradient-to-r from-indigo-300 to-purple-400 rounded-full transition-all duration-700"
                     style={{ width: `${Math.round((subjectData.games.filter(g => g.questionCount >= 20).length / subjectData.totalGames) * 100)}%` }}
                   />
                 </div>
-                <span className="text-xs font-bold text-gray-500">
+                <span className="text-xs font-bold text-white/60">
                   {subjectData.games.filter(g => g.questionCount >= 20).length}/{subjectData.totalGames} full
                 </span>
               </div>
@@ -271,7 +271,7 @@ export default function GameDatabase() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="border-t border-gray-100 overflow-hidden"
+                  className="border-t border-white/10 overflow-hidden"
                 >
                   <div className="p-3 space-y-1 max-h-80 overflow-y-auto">
                     {subjectData.games.map((game) => (

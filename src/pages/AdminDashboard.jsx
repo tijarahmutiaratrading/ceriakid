@@ -95,10 +95,10 @@ export default function AdminDashboard() {
 
   if (user?.role !== 'admin') {
     return (
-      <div className="min-h-screen bg-pattern flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
         <div className="text-center">
           <p className="text-2xl font-black mb-4">🔒</p>
-          <p className="font-bold">Akses Ditolak</p>
+          <p className="font-bold text-white">Akses Ditolak</p>
         </div>
       </div>
     );
@@ -106,9 +106,9 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-pattern flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );

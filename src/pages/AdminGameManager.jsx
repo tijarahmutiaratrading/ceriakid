@@ -757,11 +757,11 @@ export default function AdminGameManager() {
                                   <div className="flex-1 min-w-0">
                                     <p className="text-white text-xs font-bold truncate">{g.title}</p>
                                     <div className="flex gap-2 mt-0.5">
-                                      <span className="text-white/40 text-xs">{g.type}</span>
+                                      <span className="text-white/60 text-xs">{g.type}</span>
                                       <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
                                         {g.questionCount} soalan
                                       </span>
-                                      {g.players > 0 && <span className="text-white/30 text-xs">{g.players} players</span>}
+                                      {g.players > 0 && <span className="text-white/60 text-xs">{g.players} players</span>}
                                     </div>
                                   </div>
                                   <button
@@ -854,7 +854,7 @@ export default function AdminGameManager() {
                                       <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
                                         {g.questionCount} soalan
                                       </span>
-                                      {g.players > 0 && <span className="text-white/30 text-xs">{g.players} players</span>}
+                                      {g.players > 0 && <span className="text-white/60 text-xs">{g.players} players</span>}
                                     </div>
                                   </div>
                                   <button
