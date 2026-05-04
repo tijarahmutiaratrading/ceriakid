@@ -187,22 +187,22 @@ export default function AdminBBMGenerator() {
 
       <div className="max-w-3xl mx-auto px-4 pt-28 pb-32">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-5 rounded-3xl flex items-center gap-3"
-          style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
-        >
-          <div className="text-4xl">📚</div>
-          <div>
-            <h1 className="text-xl font-black text-white">BBM Generator & Manager</h1>
-            <p className="text-white/80 text-xs">Jana & urus semua Bahan Bantu Mengajar</p>
-          </div>
-          <div className="ml-auto text-right">
-            <p className="text-white font-black text-lg">{resources.length}</p>
-            <p className="text-white/80 text-xs">total BBM</p>
-          </div>
-        </motion.div>
+         <motion.div
+           initial={{ opacity: 0, y: -20 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="mb-6 p-4 md:p-5 rounded-3xl flex flex-col md:flex-row md:items-center gap-3"
+           style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
+         >
+           <div className="text-3xl md:text-4xl flex-shrink-0">📚</div>
+           <div className="flex-1 min-w-0">
+             <h1 className="text-lg md:text-xl font-black text-white">BBM Generator & Manager</h1>
+             <p className="text-white/80 text-xs">Jana & urus semua Bahan Bantu Mengajar</p>
+           </div>
+           <div className="text-right flex-shrink-0">
+             <p className="text-white font-black text-lg">{resources.length}</p>
+             <p className="text-white/80 text-xs">total BBM</p>
+           </div>
+         </motion.div>
 
         {/* Tabs */}
         <div className="flex gap-2 mb-6 p-1 rounded-2xl" style={{ background: 'rgba(255,255,255,0.1)' }}>
@@ -226,7 +226,7 @@ export default function AdminBBMGenerator() {
         {tab === 'generator' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <div
-              className="p-6 rounded-3xl mb-6"
+              className="p-4 md:p-6 rounded-3xl mb-6"
               style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
             >
               {/* Type */}
@@ -238,8 +238,8 @@ export default function AdminBBMGenerator() {
                     <button onClick={() => setSelectedTypes(new Set())} className="text-xs text-white/50 hover:underline">Kosong</button>
                   </div>
                 </div>
-                <div className="grid grid-cols-4 gap-2">
-                  {TYPES.map(t => {
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                   {TYPES.map(t => {
                     const sel = selectedTypes.has(t.value);
                     return (
                       <button
@@ -300,8 +300,8 @@ export default function AdminBBMGenerator() {
                     <button onClick={() => setSelectedLevels(new Set())} className="text-xs text-white/50 hover:underline">Kosong</button>
                   </div>
                 </div>
-                <div className="grid grid-cols-4 gap-2">
-                  {LEVELS.map(l => {
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                   {LEVELS.map(l => {
                     const sel = selectedLevels.has(l.value);
                     return (
                       <button
@@ -396,47 +396,49 @@ export default function AdminBBMGenerator() {
         {tab === 'manager' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Search + Filter */}
-            <div className="flex gap-2 mb-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                <input
-                  type="text" placeholder="Cari BBM..."
-                  value={search} onChange={e => setSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold"
-                />
-              </div>
-              <select
-                value={filterSubject} onChange={e => setFilterSubject(e.target.value)}
-                className="px-3 py-2.5 rounded-2xl bg-white/10 text-white border border-white/20 font-semibold text-sm"
-              >
-                <option value="all" className="text-black">Semua Subjek</option>
-                {SUBJECTS.map(s => <option key={s.value} value={s.value} className="text-black">{s.label}</option>)}
-              </select>
-              <button onClick={loadResources} className="p-2.5 rounded-2xl bg-white/10 text-white border border-white/20 hover:bg-white/20">
-                <RefreshCw className={`w-4 h-4 ${loadingResources ? 'animate-spin' : ''}`} />
-              </button>
-              <button
-                onClick={async () => {
-                  if (!window.confirm('🚨 Delete SEMUA BBM? (Tidak boleh undo)')) return;
-                  for (const r of resources) {
-                    try {
-                      await base44.entities.BBMResource.delete(r.id);
-                    } catch (e) {
-                      console.error(`Gagal delete ${r.id}:`, e);
-                    }
-                  }
-                  setResources([]);
-                  showToast('✅ Semua BBM dipadam');
-                }}
-                className="p-2.5 rounded-2xl bg-red-500/20 text-red-300 border border-red-400/30 hover:bg-red-500/30"
-                title="Delete all BBM"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
+             <div className="flex flex-col gap-2 mb-4">
+               <div className="relative">
+                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                 <input
+                   type="text" placeholder="Cari BBM..."
+                   value={search} onChange={e => setSearch(e.target.value)}
+                   className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold"
+                 />
+               </div>
+               <div className="flex gap-2">
+                 <select
+                   value={filterSubject} onChange={e => setFilterSubject(e.target.value)}
+                   className="flex-1 px-3 py-2.5 rounded-2xl bg-white/10 text-white border border-white/20 font-semibold text-sm"
+                 >
+                   <option value="all" className="text-black">Semua Subjek</option>
+                   {SUBJECTS.map(s => <option key={s.value} value={s.value} className="text-black">{s.label}</option>)}
+                 </select>
+                 <button onClick={loadResources} className="p-2.5 rounded-2xl bg-white/10 text-white border border-white/20 hover:bg-white/20 flex-shrink-0">
+                   <RefreshCw className={`w-4 h-4 ${loadingResources ? 'animate-spin' : ''}`} />
+                 </button>
+                 <button
+                   onClick={async () => {
+                     if (!window.confirm('🚨 Delete SEMUA BBM? (Tidak boleh undo)')) return;
+                     for (const r of resources) {
+                       try {
+                         await base44.entities.BBMResource.delete(r.id);
+                       } catch (e) {
+                         console.error(`Gagal delete ${r.id}:`, e);
+                       }
+                     }
+                     setResources([]);
+                     showToast('✅ Semua BBM dipadam');
+                   }}
+                   className="p-2.5 rounded-2xl bg-red-500/20 text-red-300 border border-red-400/30 hover:bg-red-500/30 flex-shrink-0"
+                   title="Delete all BBM"
+                 >
+                   <Trash2 className="w-4 h-4" />
+                 </button>
+               </div>
+             </div>
 
             {/* Stats row */}
-            <div className="grid grid-cols-4 gap-2 mb-4">
+             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
               {[
                 { label: 'Jumlah BBM', value: resources.length, color: 'text-yellow-300' },
                 { label: 'Published', value: resources.filter(r => r.isPublished !== false).length, color: 'text-green-300' },
@@ -504,7 +506,7 @@ export default function AdminBBMGenerator() {
                       {/* Toggle publish */}
                       <button
                         onClick={() => handleTogglePublish(r)}
-                        className={`p-2 rounded-xl transition-all ${r.isPublished !== false ? 'bg-green-500/20 text-green-300 hover:bg-green-500/30' : 'bg-white/10 text-white/50 hover:bg-white/20'}`}
+                        className={`p-1.5 md:p-2 rounded-xl transition-all ${r.isPublished !== false ? 'bg-green-500/20 text-green-300 hover:bg-green-500/30' : 'bg-white/10 text-white/50 hover:bg-white/20'}`}
                         title={r.isPublished !== false ? 'Sembunyikan' : 'Publish'}
                       >
                         {r.isPublished !== false ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
@@ -512,14 +514,14 @@ export default function AdminBBMGenerator() {
                       {/* Edit */}
                       <button
                         onClick={() => setEditItem({ ...r })}
-                        className="p-2 rounded-xl bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-all"
+                        className="p-1.5 md:p-2 rounded-xl bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-all"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
                       {/* Delete */}
                       <button
                         onClick={() => handleDelete(r)}
-                        className="p-2 rounded-xl bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-all"
+                        className="p-1.5 md:p-2 rounded-xl bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-all"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
