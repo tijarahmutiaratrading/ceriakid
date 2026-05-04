@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
+import { useSafeLocation } from '@/hooks/useSafeLocation';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
@@ -11,7 +12,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const [navVisible, setNavVisible] = useState(true);
   const { isAuthenticated, user, logout } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
-  const location = useLocation();
+  const location = useSafeLocation();
   const isAdmin = user?.role === 'admin';
   const isLanding = location.pathname === '/' || location.pathname === '/landing';
   const isPlayingGame = location.pathname.startsWith('/play/');
