@@ -37,7 +37,7 @@ function SecretInput({ value, onChange, placeholder }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full border-2 border-white/20 rounded-xl px-4 py-3 pr-12 text-sm font-mono bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-all"
+        className="w-full border border-white/20 rounded-2xl px-4 py-3.5 pr-12 text-sm font-mono bg-white/10 text-white placeholder-white/40 shadow-inner shadow-black/10 focus:outline-none focus:border-white/50 focus:bg-white/15 transition-all"
       />
       <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70">
         {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -53,7 +53,7 @@ function TextInput({ value, onChange, placeholder }) {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full border-2 border-white/20 rounded-xl px-4 py-3 text-sm font-mono bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-all"
+      className="w-full border border-white/20 rounded-2xl px-4 py-3.5 text-sm font-mono bg-white/10 text-white placeholder-white/40 shadow-inner shadow-black/10 focus:outline-none focus:border-white/50 focus:bg-white/15 transition-all"
     />
   );
 }
@@ -152,32 +152,41 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen pb-32 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
+    <div className="min-h-screen pb-32 relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-violet-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.12) 1px, transparent 0)', backgroundSize: '28px 28px' }} />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-80 h-80 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-violet-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
-      <div className="relative max-w-5xl mx-auto px-3 md:px-6 pt-24 md:pt-28 pb-32 space-y-6">
+      <div className="relative max-w-6xl mx-auto px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-7">
         {/* Header */}
-         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 md:p-5 rounded-3xl flex items-center gap-4" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-          <div className="text-2xl md:text-3xl">🎛️</div>
-          <div className="min-w-0">
-            <h1 className="text-lg md:text-xl font-black text-white truncate">Admin Dashboard</h1>
-            <p className="text-white/80 text-xs">Analytics, Settings & Configurations</p>
+         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-7 p-5 md:p-7 rounded-[2rem] flex flex-col md:flex-row md:items-center md:justify-between gap-5 shadow-2xl shadow-fuchsia-950/30" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+          <div className="flex items-center gap-4 min-w-0">
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-3xl bg-gradient-to-br from-fuchsia-400 via-purple-500 to-indigo-500 flex items-center justify-center text-3xl shadow-xl shadow-purple-950/30">🎛️</div>
+            <div className="min-w-0">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/70 text-[11px] font-black uppercase tracking-wider mb-2">Premium Admin Control</div>
+              <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight truncate">Admin Dashboard</h1>
+              <p className="text-white/75 text-sm">Analytics, settings & configurations dalam satu panel profesional.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-2 w-full md:w-auto md:min-w-72">
+            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{subscriptions.length}</p><p className="text-white/60 text-[11px] font-bold">Pelanggan</p></div>
+            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">RM{totalRevenue.toFixed(0)}</p><p className="text-white/60 text-[11px] font-bold">Revenue</p></div>
+            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">Admin</p><p className="text-white/60 text-[11px] font-bold">Access</p></div>
           </div>
         </motion.div>
 
         {/* Main Tabs */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-2 mb-5 md:mb-6 p-1 rounded-xl overflow-x-auto" style={{ background: 'rgba(255,255,255,0.1)' }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
            {tabs.map(tab => (
              <button
                key={tab.key}
                onClick={() => setActiveTab(tab.key)}
-               className={`flex-1 py-2 md:py-2.5 rounded-xl font-bold text-xs md:text-sm transition-all whitespace-nowrap px-2 ${activeTab === tab.key ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/90 hover:text-white'}`}
-             >
-               {tab.label}
+               className={`flex-1 py-3 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap px-3 flex items-center justify-center gap-2 ${activeTab === tab.key ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
+               >
+               {tab.icon}<span>{tab.label}</span>
              </button>
            ))}
         </motion.div>
@@ -189,7 +198,7 @@ export default function AdminDashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 mb-6 md:mb-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"
             >
               {[
                 { label: 'Total Pembeli', value: subscriptions.length, icon: '👥' },
@@ -202,20 +211,26 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -4, scale: 1.02 }}
-                  className="rounded-xl p-3 md:p-4 text-white shadow-lg"
-                  style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
+                  className="rounded-[1.75rem] p-5 md:p-6 text-white shadow-2xl shadow-black/20 relative overflow-hidden"
+                  style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.08))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.22)' }}
                 >
-                  <p className="text-3xl mb-2">{stat.icon}</p>
-                  <p className="text-3xl font-black mb-1 text-white">{stat.value}</p>
-                  <p className="text-xs font-bold text-white/90">{stat.label}</p>
+                  <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-white/10" />
+                  <p className="text-4xl mb-4 relative">{stat.icon}</p>
+                  <p className="text-4xl font-black mb-1 text-white relative tracking-tight">{stat.value}</p>
+                  <p className="text-xs font-black uppercase tracking-wider text-white/70 relative">{stat.label}</p>
                 </motion.div>
               ))}
             </motion.div>
 
             {/* Sales Breakdown */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-6 md:mb-8">
-              <h2 className="text-base md:text-lg font-black text-white mb-3">💳 Jualan Mengikut Pelan</h2>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-1.5 sm:gap-2 md:gap-3">
+              <div className="flex items-end justify-between mb-4">
+                <div>
+                  <h2 className="text-xl md:text-2xl font-black text-white">💳 Jualan Mengikut Pelan</h2>
+                  <p className="text-white/60 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 {[
                    { label: 'Percuma', value: tierBreakdown.free, icon: '🆓' },
                    { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱' },
@@ -228,8 +243,8 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
                     whileHover={{ scale: 1.03, y: -2 }}
-                    className="rounded-xl p-2 md:p-4 text-white text-center shadow-lg"
-                    style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
+                    className="rounded-3xl p-4 md:p-5 text-white text-center shadow-xl shadow-black/10"
+                    style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.18)' }}
                   >
                     <p className="text-2xl mb-2">{item.icon}</p>
                     <p className="text-xs font-bold mb-1 text-white/90">{item.label}</p>
@@ -241,11 +256,16 @@ export default function AdminDashboard() {
 
             {/* Customer Database */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-              <h2 className="text-base md:text-lg font-black text-white mb-3">📋 Database Pelanggan</h2>
+              <div className="flex items-end justify-between mb-4">
+                <div>
+                  <h2 className="text-xl md:text-2xl font-black text-white">📋 Database Pelanggan</h2>
+                  <p className="text-white/60 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
+                </div>
+              </div>
               <motion.div
                whileHover={{ y: -2 }}
-               className="rounded-xl p-3 md:p-4 shadow-lg overflow-x-auto"
-               style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
+               className="rounded-[1.75rem] p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto"
+               style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}
               >
                 <table className="w-full text-sm">
                   <thead>
@@ -301,21 +321,21 @@ export default function AdminDashboard() {
         {activeTab === 'settings' && (
           <>
             {/* Settings Sub-tabs */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-1.5 md:gap-2 mb-5 md:mb-6 p-1 rounded-xl overflow-x-auto" style={{ background: 'rgba(255,255,255,0.1)' }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
               {settingsTabs.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setSettingsTab(tab.key)}
-                  className={`flex-1 py-2 md:py-2.5 px-1.5 md:px-2 rounded-xl font-bold text-xs transition-all whitespace-nowrap ${settingsTab === tab.key ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/90 hover:text-white'}`}
+                  className={`flex-1 py-3 px-3 rounded-2xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
                 >
-                  <span className="hidden sm:inline">{tab.label}</span><span className="sm:hidden">{tab.label.split(' ')[0]}</span>
+                  {tab.icon}<span className="hidden sm:inline">{tab.label}</span><span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                 </button>
               ))}
             </motion.div>
 
             {/* Facebook Pixel */}
             {settingsTab === 'pixel' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl p-3 md:p-6 lg:p-8 shadow-xl mb-6 md:mb-8" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] p-5 md:p-7 lg:p-8 shadow-2xl shadow-black/20 mb-8" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
                     <Facebook className="w-6 h-6 text-white" />
@@ -348,7 +368,7 @@ export default function AdminDashboard() {
 
             {/* Chip Payment */}
             {settingsTab === 'chip' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl p-3 md:p-6 lg:p-8 shadow-xl mb-6 md:mb-8" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] p-5 md:p-7 lg:p-8 shadow-2xl shadow-black/20 mb-8" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
                     <CreditCard className="w-6 h-6 text-white" />
@@ -401,7 +421,7 @@ export default function AdminDashboard() {
 
             {/* Webhook */}
             {settingsTab === 'webhook' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl p-3 md:p-6 lg:p-8 shadow-xl mb-6 md:mb-8" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] p-5 md:p-7 lg:p-8 shadow-2xl shadow-black/20 mb-8" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
                     <Webhook className="w-6 h-6 text-white" />
