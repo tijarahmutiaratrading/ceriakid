@@ -77,46 +77,67 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                borderTop: '1px solid rgba(255,255,255,0.1)',
                boxShadow: '0 -8px 32px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.4)'
              }}>
-          {isAuthenticated ? (
-            navItems.map((item) => (
-              <Link key={item.path} to={item.path} className="flex-1">
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
-                    isActive(item.path) ? 'text-white' : 'text-gray-300 hover:text-white'
-                  }`}
-                >
-                  <span className="text-2xl">{item.emoji}</span>
-                  <span className="text-xs font-bold">{item.label}</span>
-                </motion.button>
-              </Link>
-            ))
-          ) : (
-            <>
-              <Link to="/" className="flex-1">
-                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-white">
-                  <span className="text-2xl">🏠</span>
-                  <span className="text-xs font-bold">Rumah</span>
-                </motion.button>
-              </Link>
-              <Link to="/games-hub" className="flex-1">
-                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-gray-300">
-                  <span className="text-2xl">🎮</span>
-                  <span className="text-xs font-bold">Games</span>
-                </motion.button>
-              </Link>
-              <Link to="/bbm" className="flex-1">
-                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-gray-300">
-                  <span className="text-2xl">📚</span>
-                  <span className="text-xs font-bold">BBM</span>
-                </motion.button>
-              </Link>
-              <button onClick={() => setIsOpen(!isOpen)} className="flex-1 flex flex-col items-center justify-center gap-1 text-gray-300 h-20">
-                <span className="text-2xl">☰</span>
-                <span className="text-xs font-bold">Menu</span>
-              </button>
-            </>
-          )}
+          {/* Home */}
+          <Link to="/dashboard" className="flex-1">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
+                isActive('/dashboard') ? 'text-white' : 'text-gray-300 hover:text-white'
+              }`}
+            >
+              <span className="text-2xl">🏠</span>
+              <span className="text-xs font-bold">Home</span>
+            </motion.button>
+          </Link>
+
+          {/* Games */}
+          <Link to="/games-hub" className="flex-1">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
+                isActive('/games-hub') ? 'text-white' : 'text-gray-300 hover:text-white'
+              }`}
+            >
+              <span className="text-2xl">🎮</span>
+              <span className="text-xs font-bold">Games</span>
+            </motion.button>
+          </Link>
+
+          {/* Prestasi */}
+          <Link to="/parent-dashboard" className="flex-1">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
+                isActive('/parent-dashboard') ? 'text-white' : 'text-gray-300 hover:text-white'
+              }`}
+            >
+              <span className="text-2xl">📊</span>
+              <span className="text-xs font-bold">Prestasi</span>
+            </motion.button>
+          </Link>
+
+          {/* Drawing */}
+          <Link to="/drawing" className="flex-1">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
+                isActive('/drawing') ? 'text-white' : 'text-gray-300 hover:text-white'
+              }`}
+            >
+              <span className="text-2xl">🎨</span>
+              <span className="text-xs font-bold">Drawing</span>
+            </motion.button>
+          </Link>
+
+          {/* Profile - Opens Menu */}
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex-1 h-20 flex flex-col items-center justify-center gap-1 text-gray-300 hover:text-white transition-all"
+          >
+            <span className="text-2xl">👤</span>
+            <span className="text-xs font-bold">Profile</span>
+          </motion.button>
         </div>
       </div>
 
