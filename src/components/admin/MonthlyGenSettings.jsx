@@ -64,14 +64,29 @@ export default function MonthlyGenSettings({ onToast }) {
         </div>
 
         {/* Summary */}
-        <div className="p-4 rounded-2xl mb-5 text-center" style={{ background: 'rgba(255,255,255,0.08)' }}>
-          <p className="text-white/60 text-xs font-semibold mb-1">Anggaran setiap bulan</p>
-          <p className="text-white font-black text-lg">
-            13 subjek × {games} games × {questions} soalan
-          </p>
-          <p className="text-yellow-300 font-black text-xl mt-1">
-            = {(13 * games * questions).toLocaleString()} soalan total
-          </p>
+        <div className="p-4 rounded-2xl mb-4" style={{ background: 'rgba(255,255,255,0.08)' }}>
+          <p className="text-white/60 text-xs font-semibold mb-3 text-center">📊 Anggaran setiap bulan</p>
+
+          <div className="space-y-2 text-xs mb-3">
+            <div className="flex items-center justify-between px-2 py-1.5 rounded-xl" style={{ background: 'rgba(255,255,255,0.06)' }}>
+              <span className="text-white/60">🌱 Asas — Prasekolah sahaja</span>
+              <span className="text-green-300 font-black">6 subjek × {games} games</span>
+            </div>
+            <div className="flex items-center justify-between px-2 py-1.5 rounded-xl" style={{ background: 'rgba(255,255,255,0.06)' }}>
+              <span className="text-white/60">⭐ Standard — Sekolah Rendah sahaja</span>
+              <span className="text-blue-300 font-black">7 subjek × {games} games</span>
+            </div>
+            <div className="flex items-center justify-between px-2 py-1.5 rounded-xl" style={{ background: 'rgba(255,255,255,0.06)' }}>
+              <span className="text-white/60">👑 Keluarga — Semua peringkat</span>
+              <span className="text-yellow-300 font-black">Akses semua 13 subjek</span>
+            </div>
+          </div>
+
+          <div className="text-center border-t border-white/10 pt-3">
+            <p className="text-white font-black text-base">13 subjek × {games} games × {questions} soalan</p>
+            <p className="text-yellow-300 font-black text-xl mt-0.5">= {(13 * games * questions).toLocaleString()} soalan total</p>
+            <p className="text-white/30 text-xs mt-1">Games dikunci ikut pakej user — tapi digenerate untuk semua</p>
+          </div>
         </div>
 
         <div className="flex gap-3">
