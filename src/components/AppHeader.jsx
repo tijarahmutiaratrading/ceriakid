@@ -119,7 +119,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 z-40 bg-black/10"
+            className="fixed inset-0 z-40"
+            style={{ background: 'linear-gradient(135deg, rgba(255, 152, 0, 0.3), rgba(255, 87, 34, 0.3))' }}
           />
         )}
       </AnimatePresence>
