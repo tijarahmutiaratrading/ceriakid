@@ -113,14 +113,19 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
       <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(120px)' }}>
         <div className="w-full md:max-w-lg rounded-2xl h-16 flex items-center justify-around"
              style={{
-               background: 'rgba(255,255,255,0.18)',
-               backdropFilter: 'blur(24px)',
-               WebkitBackdropFilter: 'blur(24px)',
-               border: '1px solid rgba(255,255,255,0.35)',
-               boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
+                background: 'rgba(255,255,255,0.18)',
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
+                border: '1px solid rgba(255,255,255,0.35)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
              }}>
-          {navItems.map((item) => (
-            item.path ? (
+          {navItems.map((item) => {
+            const isBackButton = item.label === 'Back';
+            return isBackButton ? (
+              <button key={item.label} onClick={item.action} className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center text-white font-black text-sm hover:shadow-md transition-all">
+                ⬅️
+              </button>
+            ) : item.path ? (
               <Link key={item.label} to={item.path} className="flex flex-col items-center gap-1 text-center">
                 <span className="text-xl">{item.emoji}</span>
                 <span className="text-xs font-bold text-gray-700">{item.label}</span>
@@ -130,8 +135,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 <span className="text-xl">{item.emoji}</span>
                 <span className="text-xs font-bold text-gray-700">{item.label}</span>
               </button>
-            )
-          ))}
+            );
+          })}
         </div>
       </div>
 
