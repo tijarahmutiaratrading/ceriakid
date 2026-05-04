@@ -70,7 +70,7 @@ export default function Home() {
 
       <AppHeader />
 
-      <div className="relative max-w-lg mx-auto px-3 md:px-4 pb-32 pt-28 md:pt-32 space-y-4">
+      <div className="relative max-w-2xl mx-auto px-3 md:px-4 pb-32 pt-28 md:pt-32 space-y-5">
 
         {/* Welcome Card */}
         {isAuthenticated && (
@@ -126,7 +126,7 @@ export default function Home() {
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
         >
           <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
-          <div className="grid grid-cols-2 gap-2 md:gap-3">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
             {[
               { key: 'prasekolah', label: t('prasekolah', lang), emoji: '🎨', sub: '4–6 tahun' },
               { key: 'sekolah_rendah', label: t('sekolahRendah', lang), emoji: '📚', sub: '7–12 tahun' }
@@ -157,7 +157,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="grid grid-cols-2 gap-2 md:gap-3 mb-4 md:mb-5"
+          className="grid grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-5"
         >
           <Link to="/games-hub" className="block">
             <motion.div

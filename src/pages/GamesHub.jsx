@@ -113,7 +113,7 @@ export default function GamesHub() {
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative max-w-2xl mx-auto px-4 pb-32 pt-28 md:pt-32">
+      <div className="relative max-w-3xl mx-auto px-4 pb-32 pt-28 md:pt-32">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
