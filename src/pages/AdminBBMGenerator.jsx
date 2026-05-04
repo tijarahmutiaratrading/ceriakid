@@ -185,7 +185,7 @@ export default function AdminBBMGenerator() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-3xl mx-auto px-4 pt-28 pb-32">
+      <div className="max-w-3xl mx-auto px-3 md:px-4 pt-28 pb-32">
         {/* Header */}
          <motion.div
            initial={{ opacity: 0, y: -20 }}
@@ -489,12 +489,12 @@ export default function AdminBBMGenerator() {
                   <motion.div
                     key={r.id}
                     initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}
-                    className="p-4 rounded-2xl flex items-center gap-3"
+                    className="p-3 md:p-4 rounded-2xl flex flex-col md:flex-row md:items-center gap-2 md:gap-3"
                     style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
                   >
                     <div className="text-2xl flex-shrink-0">{r.emoji || '📄'}</div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-white font-bold text-sm truncate">{r.title}</p>
+                      <p className="text-white font-bold text-xs md:text-sm truncate">{r.title}</p>
                       <div className="flex gap-1.5 mt-1 flex-wrap">
                         <span className="text-xs bg-white/10 text-white/80 px-2 py-0.5 rounded-full">{SUBJECT_LABELS[r.subject] || r.subject}</span>
                         <span className="text-xs bg-white/10 text-white/80 px-2 py-0.5 rounded-full">{LEVEL_LABELS[r.level] || r.level}</span>
@@ -550,7 +550,7 @@ export default function AdminBBMGenerator() {
           >
             <motion.div
               initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
-              className="bg-white rounded-3xl w-full max-w-md p-6"
+              className="bg-white rounded-3xl w-full max-w-md p-4 md:p-6"
               onClick={e => e.stopPropagation()}
             >
               <h3 className="font-black text-gray-800 text-lg mb-4">✏️ Edit BBM</h3>
