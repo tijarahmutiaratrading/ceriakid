@@ -675,27 +675,27 @@ export default function AdminGameManager() {
             </div>
 
             {/* Search + Filter bar */}
-            <div className="p-3 sm:p-4 md:p-5 rounded-[1.5rem] sm:rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <div className="grid grid-cols-[1fr_auto] gap-2 mb-3 items-stretch">
-                <div className="relative min-w-0">
+            <div className="p-4 md:p-5 rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <div className="flex gap-2 mb-3">
+                <div className="relative flex-1">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">🔍</span>
                   <input
                     type="text"
                     placeholder="Cari..."
                     value={managerSearch}
                     onChange={e => setManagerSearch(e.target.value)}
-                    className="w-full min-h-[46px] pl-9 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50 focus:bg-white/15 shadow-inner shadow-black/10 transition-all"
+                    className="w-full pl-9 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50 focus:bg-white/15 shadow-inner shadow-black/10 transition-all"
                   />
                 </div>
-                <button onClick={fetchStats} disabled={loading} className="w-11 h-11 md:w-12 md:h-12 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex items-center justify-center flex-shrink-0">
+                <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0">
                   <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
                 </button>
               </div>
-              <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-                <div className="grid grid-cols-3 sm:flex gap-2 w-full sm:w-auto">
+              <div className="flex gap-2 flex-wrap items-center justify-between">
+                <div className="flex gap-2 flex-wrap">
                   {['all', 'prasekolah', 'sekolah_rendah'].map(ag => (
                     <button key={ag} onClick={() => setManagerAgeFilter(ag)}
-                      className={`min-h-[38px] px-2 sm:px-3 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap text-center ${managerAgeFilter === ag ? 'bg-white text-indigo-700' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
+                      className={`px-2 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${managerAgeFilter === ag ? 'bg-white text-indigo-700' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
                       {ag === 'all' ? 'Semua' : ag === 'prasekolah' ? '🧒' : '🎒'}
                       <span className="hidden sm:inline ml-1">{ag === 'all' ? 'Semua' : ag === 'prasekolah' ? 'Prasekolah' : 'SR'}</span>
                     </button>
@@ -713,7 +713,7 @@ export default function AdminGameManager() {
                     setActionLoading(null);
                   }}
                   disabled={!!actionLoading}
-                  className="w-full sm:w-auto min-h-[40px] flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all flex-shrink-0">
+                  className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all flex-shrink-0">
                   {actionLoading === 'delete-all' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
                   <span className="hidden sm:inline">Delete All</span>
                 </button>
