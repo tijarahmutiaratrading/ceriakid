@@ -167,14 +167,29 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         disabled={loading}
-        type="submit" className="bg-[hsl(var(--game-orange))] text-[hsl(var(--card))] py-3 font-bold rounded-2xl w-full transition-all hover:shadow-lg disabled:opacity-50">
-
-        
-        {loading ? 'Memproses...' : '🏦 Bayar via FPX Sekarang'}
+        type="submit" className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 font-bold rounded-2xl w-full transition-all hover:shadow-lg disabled:opacity-50 shadow-md">
+        {loading ? '🔄 Memproses...' : '💳 Bayar via FPX Sekarang'}
       </motion.button>
 
-      <p className="text-xs text-white/60 text-center">
-        🔒 Pembayaran selamat via Chip • FPX Internet Banking Malaysia
+      {/* Trust Badges */}
+      <div className="grid grid-cols-3 gap-2 mt-4 text-center text-xs text-white/80 font-semibold">
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-lg">🔒</span>
+          <span>Secure</span>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-lg">✅</span>
+          <span>Verified</span>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-lg">🛡️</span>
+          <span>Protected</span>
+        </div>
+      </div>
+
+      <p className="text-xs text-white/70 text-center mt-3">
+        🏦 Pembayaran selamat via Chip • FPX Internet Banking Malaysia<br/>
+        <span className="text-green-300 font-bold">✓ Jaminan Wang Balik 30 Hari</span>
       </p>
 
       {/* Divider */}
