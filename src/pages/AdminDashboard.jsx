@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
-import { ArrowLeft, Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, Cog } from 'lucide-react';
+import { Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, Users, Wallet, Crown, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import AppHeader from '@/components/AppHeader';
@@ -152,20 +152,23 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen pb-32 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
+    <div className="min-h-screen pb-32 relative overflow-hidden bg-slate-950 text-white">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-violet-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.22),transparent_35%),radial-gradient(circle_at_20%_20%,rgba(139,92,246,0.22),transparent_32%),radial-gradient(circle_at_bottom,rgba(236,72,153,0.16),transparent_35%)]" />
+        <div className="absolute -top-40 -right-40 w-[32rem] h-[32rem] bg-cyan-500/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/3 -left-32 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-fuchsia-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
-      <div className="relative max-w-5xl mx-auto px-3 md:px-6 pt-24 md:pt-28 pb-32 space-y-6">
+      <div className="relative max-w-6xl mx-auto px-3 md:px-6 pt-24 md:pt-28 pb-32 space-y-6">
         {/* Header */}
-         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 md:p-5 rounded-3xl flex items-center gap-4" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-          <div className="text-2xl md:text-3xl">🎛️</div>
-          <div className="min-w-0">
-            <h1 className="text-lg md:text-xl font-black text-white truncate">Admin Dashboard</h1>
-            <p className="text-white/80 text-xs">Analytics, Settings & Configurations</p>
+         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 p-5 md:p-6 flex items-center gap-4 shadow-2xl shadow-black/30 backdrop-blur-2xl">
+          <div className="absolute -right-20 -top-20 h-44 w-44 rounded-full bg-cyan-400/20 blur-3xl" />
+          <div className="relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-cyan-300 to-violet-500 text-2xl shadow-lg shadow-cyan-500/20">🎛️</div>
+          <div className="relative min-w-0">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-200">CeriaKid Admin</p>
+            <h1 className="text-2xl md:text-3xl font-black text-white truncate tracking-tight">Admin Dashboard</h1>
+            <p className="text-slate-300 text-xs md:text-sm">Analytics, Settings & Configurations</p>
           </div>
         </motion.div>
 
@@ -247,9 +250,9 @@ export default function AdminDashboard() {
                className="rounded-xl p-3 md:p-4 shadow-lg overflow-x-auto"
                style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
               >
-                <table className="w-full text-sm">
+                <table className="w-full text-sm min-w-[720px]">
                   <thead>
-                    <tr className="border-b-2 border-white/20">
+                    <tr className="border-b border-white/10 bg-slate-950/30">
                       <th className="text-left py-3 px-4 font-black text-white">Email</th>
                       <th className="text-left py-3 px-4 font-black text-white">Paket</th>
                       <th className="text-left py-3 px-4 font-black text-white">Status</th>
@@ -258,7 +261,7 @@ export default function AdminDashboard() {
                   </thead>
                   <tbody>
                     {subscriptions.slice(0, 10).map((sub) => (
-                      <tr key={sub.id} className="border-b border-white/10 hover:bg-white/5 transition-colors">
+                      <tr key={sub.id} className="border-b border-white/10 hover:bg-white/10 transition-colors">
                         <td className="py-3 px-4 text-xs text-white/90">{sub.email}</td>
                         <td className="py-3 px-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-bold ${
