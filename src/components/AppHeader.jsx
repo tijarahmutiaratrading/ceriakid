@@ -111,14 +111,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
       {/* Bottom Navigation Bar */}
       <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(120px)' }}>
-        <div className="w-full md:max-w-lg rounded-2xl h-16 flex items-center justify-around"
-             style={{
-               background: 'rgba(255,255,255,0.18)',
-               backdropFilter: 'blur(24px)',
-               WebkitBackdropFilter: 'blur(24px)',
-               border: '1px solid rgba(255,255,255,0.35)',
-               boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
-             }}>
+        <div className="w-full md:max-w-lg rounded-2xl h-16 flex items-center justify-around clay">
           {navItems.map((item) => (
             item.path ? (
               <Link key={item.label} to={item.path} className="flex flex-col items-center gap-1 text-center">
