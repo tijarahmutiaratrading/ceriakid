@@ -111,7 +111,14 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
       {/* Bottom Navigation Bar */}
       <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(120px)' }}>
-        <div className="w-full md:max-w-lg rounded-2xl h-16 flex items-center justify-around clay">
+        <div className="w-full md:max-w-lg rounded-2xl h-16 flex items-center justify-around"
+             style={{
+               background: 'rgba(255,255,255,0.18)',
+               backdropFilter: 'blur(24px)',
+               WebkitBackdropFilter: 'blur(24px)',
+               border: '1px solid rgba(255,255,255,0.35)',
+               boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
+             }}>
           {navItems.map((item) => (
             item.path ? (
               <Link key={item.label} to={item.path} className="flex flex-col items-center gap-1 text-center">
@@ -171,20 +178,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     <p className="text-xs text-gray-500 truncate">{user.email}</p>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {/* Back Button */}
-            {!isLanding && (
-              <div className="px-3 py-2 border-b border-gray-200">
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => { navigate(-1); setIsOpen(false); }}
-                  className="w-full px-4 py-2.5 rounded-2xl font-bold text-sm transition-all text-game-purple clay"
-                >
-                  ← Kembali
-                </motion.button>
               </div>
             )}
 
