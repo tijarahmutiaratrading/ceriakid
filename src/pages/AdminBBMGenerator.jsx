@@ -402,24 +402,24 @@ export default function AdminBBMGenerator() {
         {tab === 'manager' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Search + Filter */}
-             <div className="space-y-3 mb-5 p-4 md:p-5 rounded-[1.75rem] shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+             <div className="space-y-3 mb-5 p-3 sm:p-4 md:p-5 rounded-[1.5rem] sm:rounded-[1.75rem] shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                 <input
                   type="text" placeholder="Cari BBM..."
                   value={search} onChange={e => setSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-xs md:text-sm font-semibold shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all"
+                  className="w-full min-h-[46px] pl-10 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all"
                 />
               </div>
-              <div className="flex gap-2">
+              <div className="grid grid-cols-[1fr_auto_auto] gap-2 items-stretch">
                 <select
                   value={filterSubject} onChange={e => setFilterSubject(e.target.value)}
-                  className="flex-1 px-3 py-3 rounded-2xl bg-white/10 text-white border border-white/20 font-semibold text-xs md:text-sm shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all"
+                  className="min-w-0 flex-1 min-h-[46px] px-3 py-3 rounded-2xl bg-white/10 text-white border border-white/20 font-semibold text-sm shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all"
                 >
                   <option value="all" className="text-black">Semua Subjek</option>
                   {SUBJECTS.map(s => <option key={s.value} value={s.value} className="text-black">{s.label}</option>)}
                 </select>
-                <button onClick={loadResources} className="p-2 md:p-2.5 rounded-2xl bg-white/10 text-white border border-white/20 hover:bg-white/20 flex-shrink-0">
+                <button onClick={loadResources} className="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-white/10 text-white border border-white/20 hover:bg-white/20 flex items-center justify-center flex-shrink-0 transition-all">
                   <RefreshCw className={`w-4 h-4 ${loadingResources ? 'animate-spin' : ''}`} />
                 </button>
                 <button
@@ -435,7 +435,7 @@ export default function AdminBBMGenerator() {
                     setResources([]);
                     showToast('✅ Semua BBM dipadam');
                   }}
-                  className="p-2 md:p-2.5 rounded-2xl bg-red-500/20 text-red-300 border border-red-400/30 hover:bg-red-500/30 flex-shrink-0"
+                  className="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-red-500/20 text-red-300 border border-red-400/30 hover:bg-red-500/30 flex items-center justify-center flex-shrink-0 transition-all"
                   title="Delete all BBM"
                 >
                   <Trash2 className="w-4 h-4" />
