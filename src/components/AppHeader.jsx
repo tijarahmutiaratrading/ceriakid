@@ -12,6 +12,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const [isOpen, setIsOpen] = useState(false);
   const [navVisible, setNavVisible] = useState(true);
   const { isAuthenticated, user, logout } = useAuth() || {};
+  const [headerAvatarUrl, setHeaderAvatarUrl] = useState(user?.avatarUrl || '');
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useSafeLocation();
   const navigate = useNavigate();
@@ -22,6 +23,16 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   
   // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
+
+  React.useEffect(() => {
+    setHeaderAvatarUrl(user?.avatarUrl || '');
+  }, [user?.avatarUrl]);
+
+  React.useEffect(() => {
+    const handleAvatarUpdated = (event) => setHeaderAvatarUrl(event.detail?.avatarUrl || '');
+    window.addEventListener('avatar-updated', handleAvatarUpdated);
+    return () => window.removeEventListener('avatar-updated', handleAvatarUpdated);
+  }, []);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -142,7 +153,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             {isAuthenticated && user ? (
               <div className="px-4 py-4 border-b border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-white/40 border-2 border-white/60 flex items-center justify-center text-2xl flex-shrink-0">🐱</div>
+                  {headerAvatarUrl ? (
+                    <img src={headerAvatarUrl} alt="Avatar" className="w-12 h-12 rounded-full object-cover border-2 border-white/60 flex-shrink-0" />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-white/40 border-2 border-white/60 flex items-center justify-center text-2xl flex-shrink-0">🐱</div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <p className="text-white font-black text-sm truncate">{user.full_name || 'User'}</p>
                     <p className="text-white/70 text-xs truncate">{user.email}</p>

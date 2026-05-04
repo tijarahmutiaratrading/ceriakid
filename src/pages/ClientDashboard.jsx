@@ -54,6 +54,7 @@ export default function ClientDashboard() {
       const uploadedUrl = response?.file_url || response?.url;
       if (uploadedUrl) {
         setAvatarUrl(uploadedUrl);
+        window.dispatchEvent(new CustomEvent('avatar-updated', { detail: { avatarUrl: uploadedUrl } }));
         await base44.auth.updateMe({ avatarUrl: uploadedUrl });
         setSaved(true);
         setTimeout(() => setSaved(false), 2500);
