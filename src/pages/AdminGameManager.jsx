@@ -374,7 +374,7 @@ export default function AdminGameManager() {
         {tab === 'generator' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Config */}
-             <div className="p-4 md:p-6 rounded-3xl mb-5" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+            <div className="p-6 rounded-3xl mb-5" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <h2 className="font-black text-white mb-4">⚙️ Konfigurasi Generation</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                 <div>
@@ -507,7 +507,7 @@ export default function AdminGameManager() {
             </div>
 
             {/* Task Queue */}
-            <div className="p-4 md:p-6 rounded-3xl" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+            <div className="p-6 rounded-3xl" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-black text-white">📋 Task Queue</h2>
                 <div className="flex gap-2 items-center">
@@ -521,7 +521,7 @@ export default function AdminGameManager() {
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+              <div className="grid grid-cols-4 gap-2 mb-4">
                 {[
                   { label: 'Pending', value: pendingTasks.length, color: 'text-yellow-300' },
                   { label: 'Running', value: runningTasks.length, color: 'text-blue-300' },
@@ -575,7 +575,7 @@ export default function AdminGameManager() {
           {tab === 'minigames' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Status Section */}
-            <div className="p-4 md:p-6 rounded-3xl mb-5" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+            <div className="p-6 rounded-3xl mb-5" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.25)' }}>
               <div className="flex items-center justify-between mb-5">
                 <div>
                   <h2 className="font-black text-white text-lg">🎮 Mini Games Status</h2>
@@ -668,8 +668,8 @@ export default function AdminGameManager() {
             </div>
 
             {/* Search + Filter bar */}
-            <div className="p-3 md:p-4 rounded-3xl mb-4" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <div className="flex flex-col gap-2 mb-3">
+            <div className="p-4 rounded-3xl mb-4" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <div className="flex gap-2 mb-3">
                 <div className="relative flex-1">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">🔍</span>
                   <input
@@ -677,14 +677,13 @@ export default function AdminGameManager() {
                     placeholder="Cari..."
                     value={managerSearch}
                     onChange={e => setManagerSearch(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2 md:py-2.5 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-xs md:text-sm font-semibold outline-none focus:border-white/50"
+                    className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50"
                   />
                 </div>
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={fetchStats} disabled={loading} className="p-2 md:p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0">
-                    <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
-                  </button>
+                <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0">
+                  <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
+                </button>
+              </div>
               <div className="flex gap-2 flex-wrap items-center justify-between">
                 <div className="flex gap-2 flex-wrap">
                   {['all', 'prasekolah', 'sekolah_rendah'].map(ag => (
@@ -707,7 +706,7 @@ export default function AdminGameManager() {
                     setActionLoading(null);
                   }}
                   disabled={!!actionLoading}
-                  className="flex items-center gap-1 md:gap-1.5 px-2 sm:px-3 py-1.5 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all flex-shrink-0">
+                  className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all flex-shrink-0">
                   {actionLoading === 'delete-all' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
                   <span className="hidden sm:inline">Delete All</span>
                 </button>
@@ -748,11 +747,11 @@ export default function AdminGameManager() {
                         {/* Subject header */}
                         <button
                           onClick={() => setExpandedFile(expandedFile === s.file ? null : s.file)}
-                          className="w-full flex items-center gap-3 px-3 md:px-4 py-3 hover:bg-white/5 transition-all text-left"
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-left"
                         >
-                          <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${s.color.dot}`} />
-                          <span className="font-black text-white text-xs md:text-sm flex-1 truncate">{s.label}</span>
-                          <span className="text-white/70 text-xs font-semibold flex-shrink-0">{s.totalGames}G</span>
+                          <div className={`w-2.5 h-2.5 rounded-full ${s.color.dot}`} />
+                          <span className="font-black text-white text-sm flex-1">{s.label}</span>
+                          <span className="text-white/70 text-xs font-semibold">{s.totalGames} games</span>
                           {expandedFile === s.file
                            ? <ChevronDown className="w-4 h-4 text-white/60" />
                            : <ChevronRight className="w-4 h-4 text-white/60" />
@@ -766,26 +765,26 @@ export default function AdminGameManager() {
                              <p className="text-white/50 text-xs text-center py-4">Tiada games lagi</p>
                            ) : (
                              filteredGames.map(g => (
-                               <div key={g.id} className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-3 border-b border-white/5 last:border-0 hover:bg-white/5 transition-all">
+                               <div key={g.id} className="flex items-center gap-3 px-4 py-3 border-b border-white/5 last:border-0 hover:bg-white/5 transition-all">
                                  <div className="flex-1 min-w-0">
                                    <p className="text-white text-xs font-bold truncate">{g.title}</p>
-                                   <div className="flex gap-1 md:gap-2 mt-0.5 flex-wrap">
+                                   <div className="flex gap-2 mt-0.5">
                                      <span className="text-white/60 text-xs">{g.type}</span>
-                                      <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
-                                        {g.questionCount}Q
-                                      </span>
-                                      {g.players > 0 && <span className="text-white/60 text-xs hidden md:inline">{g.players}👥</span>}
-                                    </div>
-                                  </div>
-                                  <button
-                                    onClick={() => setEditGame(g._raw)}
-                                    className="p-1.5 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-all flex-shrink-0"
-                                  >
-                                    <Edit3 className="w-3.5 h-3.5" />
-                                  </button>
-                                </div>
-                              ))
-                            )}
+                                     <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
+                                       {g.questionCount} soalan
+                                     </span>
+                                     {g.players > 0 && <span className="text-white/60 text-xs">{g.players} players</span>}
+                                   </div>
+                                 </div>
+                                 <button
+                                   onClick={() => setEditGame(g._raw)}
+                                   className="p-1.5 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-all"
+                                 >
+                                   <Edit3 className="w-3.5 h-3.5" />
+                                 </button>
+                               </div>
+                             ))
+                           )}
                            {/* Subject-level actions */}
                            <div className="flex gap-2 px-4 py-3 border-t border-white/10">
                              <button
@@ -898,14 +897,19 @@ export default function AdminGameManager() {
                           </div>
                         )}
                       </motion.div>
-                      );
-                      })}
+                    );
+                  })}
                       </div>
-                      )}
-                      </div>
-                      )}
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </div>
 
-                      {/* Edit Subject Config Modal */}
+      {/* Edit Subject Config Modal */}
       <AnimatePresence>
         {modal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
