@@ -135,40 +135,39 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -320, opacity: 0 }}
             transition={{ type: 'spring', damping: 22, stiffness: 280 }}
-            className="fixed left-3 top-3 bottom-3 z-50 w-72 flex flex-col rounded-3xl overflow-hidden shadow-2xl bg-white"
+            className="fixed left-3 top-20 bottom-3 z-50 w-72 flex flex-col rounded-3xl overflow-hidden shadow-2xl bg-white"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-game-purple/20 bg-gradient-to-r from-game-purple/5 to-game-pink/5">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-game-purple/5 to-game-pink/5">
               <div className="flex items-center gap-2">
-                <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-xl shadow-sm" />
+                <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 rounded-lg shadow-sm" />
                 <div>
-                  <p className="font-black text-game-purple text-sm">CeriaKid</p>
-                  <p className="text-xs text-gray-500">Belajar Sambil Main</p>
+                  <p className="font-black text-gray-800 text-sm">CeriaKid</p>
+                  <p className="text-xs text-gray-400">Menu</p>
                 </div>
               </div>
-              <button type="button" onClick={() => setIsOpen(false)} className="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
-                <X className="w-5 h-5" />
+              <button type="button" onClick={() => setIsOpen(false)} className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* User info */}
             {isAuthenticated && user && (
-              <div className="px-5 py-4 bg-gradient-to-r from-game-purple/5 to-game-pink/5 border-b border-game-purple/20">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-game-purple to-game-pink flex items-center justify-center text-white font-black text-base flex-shrink-0 shadow-md">
+              <div className="px-5 py-3 bg-white border-b border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-game-purple to-game-pink flex items-center justify-center text-white font-black text-sm flex-shrink-0 shadow-md">
                     {user.full_name?.[0]?.toUpperCase() || '?'}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="font-black text-gray-800 text-sm truncate">{user.full_name}</p>
+                    <p className="font-bold text-gray-800 text-xs truncate">{user.full_name}</p>
                     <p className="text-xs text-gray-500 truncate">{user.email}</p>
-                    <p className="text-xs font-semibold text-game-purple mt-0.5">👑 Premium Member</p>
                   </div>
                 </div>
               </div>
             )}
 
             {/* Scrollable nav */}
-            <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
+            <nav className="flex-1 overflow-y-auto px-2 py-2 space-y-0.5">
 
               {/* Top / Landing items */}
               {topItems.map((item) =>
