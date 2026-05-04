@@ -83,7 +83,9 @@ export default function AdminBBMGenerator() {
     setLoadingTasks(true);
     try {
       const data = await base44.entities.GameTask.list('-created_date', 100);
-      setTasks(data);
+      // Filter only BBM-related tasks (taskName contains 'BBM' or 'Bahan Bantu')
+      const bbmTasks = data.filter(t => t.taskName?.toLowerCase().includes('bbm') || t.taskName?.toLowerCase().includes('bahan bantu'));
+      setTasks(bbmTasks);
     } catch (e) {
       console.error('Gagal load tasks:', e);
     } finally {
