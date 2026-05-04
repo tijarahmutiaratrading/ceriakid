@@ -93,12 +93,6 @@ export default function ClientDashboard() {
           className="mb-4 md:mb-6 rounded-3xl overflow-hidden shadow-2xl"
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.4)' }}
         >
-          {/* Tier badge */}
-          <div className="absolute top-20 right-4 flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1.5 z-10">
-            <span className="text-lg">{tier.emoji}</span>
-            <span className="text-white font-black text-xs">{tier.label}</span>
-          </div>
-
           {/* Avatar overlapping strip */}
           <div className="px-4 md:px-6 pb-4 md:pb-6 pt-4 md:pt-6">
             <div className="flex items-end gap-4 mb-6">
