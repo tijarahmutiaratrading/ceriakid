@@ -109,57 +109,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
         </div>
       </nav>
 
-      {/* Bottom Navigation Bar */}
-      <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(120px)' }}>
-        <div className="w-full md:max-w-lg rounded-2xl h-16 flex items-center justify-around"
-             style={{
-                background: 'rgba(255,255,255,0.18)',
-                backdropFilter: 'blur(24px)',
-                WebkitBackdropFilter: 'blur(24px)',
-                border: '1px solid rgba(255,255,255,0.35)',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
-             }}>
-          {navItems.map((item) => {
-            const isBackButton = item.label === 'Back';
-            return isBackButton ? (
-              <motion.button 
-                key={item.label} 
-                type="button" 
-                onClick={item.action} 
-                whileTap={{ scale: 0.9 }}
-                whileHover={{ scale: 1.05 }}
-                className="rounded-full w-12 h-12 flex items-center justify-center bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg hover:shadow-xl transition-all font-bold"
-                title={item.label}
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </motion.button>
-            ) : item.path ? (
-              <Link key={item.label} to={item.path} title={item.label}>
-                <motion.button 
-                  type="button"
-                  whileTap={{ scale: 0.9 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="rounded-full w-12 h-12 flex items-center justify-center bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg hover:shadow-xl transition-all font-bold"
-                >
-                  <span className="text-lg">{item.emoji}</span>
-                </motion.button>
-              </Link>
-            ) : (
-              <motion.button 
-                key={item.label} 
-                type="button"
-                onClick={item.action}
-                whileTap={{ scale: 0.9 }}
-                whileHover={{ scale: 1.05 }}
-                className="rounded-full w-12 h-12 flex items-center justify-center bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg hover:shadow-xl transition-all font-bold"
-                title={item.label}
-              >
-                <span className="text-lg">{item.emoji}</span>
-              </motion.button>
-            );
-          })}
-        </div>
-      </div>
+
 
       {/* Overlay */}
       <AnimatePresence>
