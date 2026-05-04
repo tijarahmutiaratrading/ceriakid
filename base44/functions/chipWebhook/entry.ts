@@ -38,13 +38,14 @@ Deno.serve(async (req) => {
 
     // Parse reference: "userEmail__tier__timestamp"
     const parts = reference.split('__');
-    if (parts.length < 2) {
-      console.error('Invalid reference format:', reference);
+    if (parts.length < 3) {
+      console.error('Invalid reference format (expected email__tier__timestamp):', reference);
       return Response.json({ error: 'Invalid reference' }, { status: 400 });
     }
 
     const userEmail = parts[0];
     const tier = parts[1];
+    const timestamp = parts[2];
 
     const validTiers = ['asas', 'standard', 'keluarga'];
     if (!validTiers.includes(tier)) {

@@ -36,26 +36,39 @@ export const syncOfflineProgress = async (base44, user) => {
     const queue = getSyncQueue();
     if (queue.length === 0) return true;
     
+    const failedItems = [];
     for (const item of queue) {
       const { queuedAt, ...progressData } = item;
       
-      // Check if already exists
-      const existing = await base44.entities.ChildGameProgress.filter({
-        userEmail: progressData.userEmail,
-        childName: progressData.childName,
-        gameType: progressData.gameType,
-      });
-      
-      if (existing.length > 0) {
-        await base44.entities.ChildGameProgress.update(existing[0].id, progressData);
-      } else {
-        await base44.entities.ChildGameProgress.create(progressData);
+      try {
+        // Check if already exists
+        const existing = await base44.entities.ChildGameProgress.filter({
+          userEmail: progressData.userEmail,
+          childName: progressData.childName,
+          gameType: progressData.gameType,
+        });
+        
+        if (existing.length > 0) {
+          await base44.entities.ChildGameProgress.update(existing[0].id, progressData);
+        } else {
+          await base44.entities.ChildGameProgress.create(progressData);
+        }
+      } catch (itemError) {
+        console.error(`Failed to sync progress for ${progressData.childName}:`, itemError);
+        failedItems.push(item);
       }
     }
     
-    clearSyncQueue();
+    // Keep only failed items in queue for retry
+    if (failedItems.length > 0) {
+      localStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(failedItems));
+      console.warn(`Sync complete but ${failedItems.length} items failed — will retry next time`);
+    } else {
+      clearSyncQueue();
+    }
+    
     localStorage.setItem(LAST_SYNC_KEY, new Date().toISOString());
-    return true;
+    return failedItems.length === 0;
   } catch (error) {
     console.error('Offline sync failed:', error);
     return false;
