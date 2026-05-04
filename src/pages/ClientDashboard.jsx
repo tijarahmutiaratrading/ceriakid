@@ -101,7 +101,7 @@ export default function ClientDashboard() {
 
           {/* Avatar overlapping strip */}
           <div className="px-4 md:px-6 pb-4 md:pb-6 pt-4 md:pt-6">
-            <div className="flex items-end gap-4 mb-4">
+            <div className="flex items-end gap-4 mb-6">
               <div className="relative">
                 {avatarUrl && avatarUrl.includes('http') ? (
                   <img src={avatarUrl} alt="Avatar" className="w-24 h-24 rounded-2xl object-cover border-4 border-white shadow-xl" />
