@@ -10,8 +10,8 @@ export default function Footer() {
 
   const isLanding = typeof window !== 'undefined' && window.location.pathname === '/';
 
-  // Don't render footer on Landing page (it has its own)
-  if (isLanding) {
+  // Only render footer on Landing page
+  if (!isLanding) {
     return null;
   }
 
