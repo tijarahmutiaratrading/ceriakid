@@ -67,7 +67,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     <>
       {/* Header Bar */}
       <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4">
-        <div className={`w-full md:max-w-lg rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-between ${
+        <div className={`w-full md:max-w-lg rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-center relative ${
           isPlayingGame
             ? 'bg-white shadow-lg border border-gray-200'
             : ''
@@ -85,18 +85,18 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all flex-shrink-0"
+            className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all absolute left-3"
           >
             <Menu className="w-5 h-5" />
           </button>
 
           {/* Center: Logo / Title */}
-          <Link to="/" className="flex items-center gap-2 flex-1 justify-center">
+          <Link to="/" className="flex items-center gap-2 justify-center">
             <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
           </Link>
 
           {/* Right: Language Switcher or Back */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2 absolute right-3">
             {!isLanding && <LanguageSwitcher />}
             {shouldShowBack ? (
               <Link to={backTo}>
