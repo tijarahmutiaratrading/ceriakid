@@ -62,6 +62,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     { path: '/games-hub', emoji: '🎮', label: 'Games' },
     { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
     { path: '/settings', emoji: '⚙️', label: 'Tetapan' },
+    { path: '/drawing', emoji: '🎨', label: 'Lukisan' },
   ];
 
   return (
@@ -77,29 +78,19 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                boxShadow: '0 -8px 32px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.4)'
              }}>
           {isAuthenticated ? (
-            <>
-              {navItems.map((item) => (
-                <Link key={item.path} to={item.path} className="flex-1">
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
-                      isActive(item.path) ? 'text-white' : 'text-gray-300 hover:text-white'
-                    }`}
-                  >
-                    <span className="text-2xl">{item.emoji}</span>
-                    <span className="text-xs font-bold">{item.label}</span>
-                  </motion.button>
-                </Link>
-              ))}
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex-1 h-20 flex flex-col items-center justify-center gap-1 text-gray-300 hover:text-white transition-all"
-              >
-                <span className="text-2xl">☰</span>
-                <span className="text-xs font-bold">Menu</span>
-              </motion.button>
-            </>
+            navItems.map((item) => (
+              <Link key={item.path} to={item.path} className="flex-1">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
+                    isActive(item.path) ? 'text-white' : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  <span className="text-2xl">{item.emoji}</span>
+                  <span className="text-xs font-bold">{item.label}</span>
+                </motion.button>
+              </Link>
+            ))
           ) : (
             <>
               <Link to="/" className="flex-1">
