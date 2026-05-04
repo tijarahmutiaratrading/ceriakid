@@ -29,7 +29,12 @@
         "sound_match",
         "spelling",
         "reading",
-        "phonics"
+        "phonics",
+        "sorting",
+        "tile_match",
+        "story_adventure",
+        "physics",
+        "tracing"
       ],
       "description": "Game mechanics type"
     },
@@ -43,7 +48,15 @@
         "general",
         "jawi",
         "bahasa_tamil",
-        "bahasa_mandarin"
+        "bahasa_mandarin",
+        "memory",
+        "dragdrop",
+        "wordbuilder",
+        "sorting",
+        "tilematch",
+        "story",
+        "physics",
+        "tracing"
       ],
       "description": "Subject category"
     },

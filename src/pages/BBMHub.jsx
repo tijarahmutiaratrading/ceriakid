@@ -176,15 +176,19 @@ export default function BBMHub() {
   const handleDownload = async (resource) => {
     if (resource.tier === 'premium' && !isPremiumUser) return;
 
-    if (resource.fileUrl) {
-      // Direct file download
+    if (resource.htmlContent) {
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(resource.htmlContent);
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => printWindow.print(), 500);
+    } else if (resource.fileUrl) {
       const a = document.createElement('a');
       a.href = resource.fileUrl;
       a.download = `${resource.title}.pdf`;
       a.target = '_blank';
       a.click();
     } else {
-      // Generate PDF
       await generatePDF(resource);
     }
 

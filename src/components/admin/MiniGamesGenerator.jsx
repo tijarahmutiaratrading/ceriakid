@@ -41,13 +41,10 @@ export default function MiniGamesGenerator({ onToast }) {
 
   const loadCurrentCounts = async () => {
     try {
-      const gameIds = GAME_HUB.map(g => g.id);
-      const results = await Promise.all(
-        gameIds.map(id => base44.entities.Game.filter({ category: id, isPublished: true }))
-      );
+      const res = await base44.functions.invoke('getGameManagerCounts', {});
       const counts = {};
-      gameIds.forEach((id, i) => {
-        counts[id] = (results[i] || []).length;
+      Object.entries(res.data?.miniCounts || {}).forEach(([id, value]) => {
+        counts[id] = value.count || 0;
       });
       setCurrentCounts(counts);
     } catch {}
@@ -100,7 +97,7 @@ export default function MiniGamesGenerator({ onToast }) {
             ageGroup: 'sekolah_rendah',
             subject: gameId,
             gamesCount: gamesToAdd,
-            questionsPerGame: 0,
+            questionsPerGame: 1,
             status: 'pending',
           });
         }

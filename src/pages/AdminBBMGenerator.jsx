@@ -100,6 +100,54 @@ export default function AdminBBMGenerator() {
     }
   }, [tab]);
 
+  const generateBbmDirect = async ({ subject, level, type, topic, count, autoPublish }) => {
+    const typeInfo = TYPES.find(t => t.value === type) || { label: type };
+    const subjectLabel = SUBJECT_LABELS[subject] || subject;
+    const levelLabel = LEVEL_LABELS[level] || level;
+
+    const data = await base44.integrations.Core.InvokeLLM({
+      prompt: `Jana ${typeInfo.label} lengkap untuk ${subjectLabel} ${levelLabel}. Topik: ${topic || 'umum'}. Bilangan item/soalan: ${count}. Sesuai KSSR Malaysia, kandungan penuh, bukan placeholder, siap print A4. Pulangkan JSON: title, description, instructions, items[{heading,content,answer}].`,
+      response_json_schema: {
+        type: 'object',
+        properties: {
+          title: { type: 'string' },
+          description: { type: 'string' },
+          instructions: { type: 'string' },
+          items: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                heading: { type: 'string' },
+                content: { type: 'string' },
+                answer: { type: 'string' },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const items = Array.isArray(data.items) ? data.items : [];
+    const htmlContent = `<!DOCTYPE html><html lang="ms"><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;max-width:820px;margin:auto;padding:24px;color:#1f2937;line-height:1.45}h1{text-align:center;color:#4f46e5}h2{text-align:center;color:#64748b;font-size:14px}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}.box,.item{border:1px solid #c7d2fe;border-radius:12px;padding:12px}.box{background:#eef2ff}.item{margin:14px 0;border-left:5px solid #6366f1;background:#fafafa;break-inside:avoid}.answer{color:#047857;font-weight:bold}footer{text-align:center;color:#64748b;font-size:11px;margin-top:28px;border-top:1px solid #eee;padding-top:12px}@media print{body{padding:12px}.item{page-break-inside:avoid}}</style></head><body><h1>${data.title || typeInfo.label}</h1><h2>${subjectLabel} | ${levelLabel} | ${typeInfo.label}</h2><div class="meta"><div class="box">Nama: ____________</div><div class="box">Kelas: ____________</div><div class="box">Tarikh: ____________</div></div><div class="box"><b>Arahan:</b> ${data.instructions || 'Gunakan bahan ini semasa pembelajaran.'}</div>${items.map((item, i) => `<section class="item"><h3>${i + 1}. ${item.heading || 'Item'}</h3><p>${item.content || ''}</p>${item.answer ? `<p class="answer">Jawapan/Nota: ${item.answer}</p>` : ''}</section>`).join('')}<footer>CeriaKid Educational Platform | Malaysia</footer></body></html>`;
+
+    const saved = await base44.entities.BBMResource.create({
+      title: data.title || `${typeInfo.label} - ${subjectLabel}`,
+      description: data.description || `Jana AI | ${topic || 'Umum'}`,
+      subject,
+      level,
+      type,
+      emoji: typeInfo.label?.split(' ')[0] || '📄',
+      tier: 'free',
+      downloadCount: 0,
+      isPublished: Boolean(autoPublish),
+      tags: [subjectLabel, levelLabel, typeInfo.label, topic || 'AI'],
+      htmlContent,
+    });
+
+    return { data: { success: true, bbmId: saved.id, title: saved.title } };
+  };
+
   // Generator
   const handleGenerate = async () => {
     setLoading(true);
@@ -111,7 +159,7 @@ export default function AdminBBMGenerator() {
       for (const subject of selectedSubjects) {
         for (const level of selectedLevels) {
           for (const type of selectedTypes) {
-            const res = await base44.functions.invoke('generateBBM', { 
+            const res = await generateBbmDirect({ 
               subject, level, type, 
               topic: form.topic, 
               count: form.count,

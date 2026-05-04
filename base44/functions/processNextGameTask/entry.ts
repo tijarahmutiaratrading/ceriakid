@@ -121,14 +121,81 @@ Deno.serve(async (req) => {
 
     let createdInBatch = 0;
 
+    const miniGameMap = {
+      memory: { title: 'Memory Game', type: 'memory_game', emoji: '🧠' },
+      dragdrop: { title: 'Drag & Drop Game', type: 'drag_drop', emoji: '🎯' },
+      wordbuilder: { title: 'Word Builder Game', type: 'word_builder', emoji: '📝' },
+      sorting: { title: 'Sorting Game', type: 'sorting', emoji: '🔄' },
+      tilematch: { title: 'Tile Match Game', type: 'tile_match', emoji: '🎮' },
+      story: { title: 'Story Adventure Game', type: 'story_adventure', emoji: '📖' },
+      physics: { title: 'Physics Game', type: 'physics', emoji: '⚡' },
+      tracing: { title: 'Tracing Game', type: 'tracing', emoji: '✏️' },
+    };
+
+    const miniGame = miniGameMap[task.subject];
+    if (miniGame) {
+      const existingMini = await base44.asServiceRole.entities.Game.filter({ category: task.subject });
+      for (let i = alreadyCreated; i < batchEnd; i++) {
+        await base44.asServiceRole.entities.Game.create({
+          title: `${miniGame.title} ${existingMini.length + i + 1}`,
+          type: miniGame.type,
+          category: task.subject,
+          ageGroup: task.ageGroup || 'sekolah_rendah',
+          difficulty: i % 3 === 0 ? 'easy' : i % 3 === 1 ? 'medium' : 'hard',
+          tier: 'free',
+          emoji: miniGame.emoji,
+          totalQuestions: 1,
+          gameData: { mode: task.subject },
+          isPublished: true,
+          status: 'ready',
+          order: existingMini.length + i,
+        });
+        createdInBatch++;
+      }
+
+      const newTotal = alreadyCreated + createdInBatch;
+      const isDone = newTotal >= totalNeeded;
+      await base44.asServiceRole.entities.GameTask.update(task.id, {
+        status: isDone ? 'completed' : 'pending',
+        createdGames: newTotal,
+        ...(isDone ? { completedAt: new Date().toISOString() } : {}),
+      });
+      return Response.json({ success: true, taskName: task.taskName, createdGames: newTotal, totalGames: totalNeeded, isDone });
+    }
+
+    const existingGames = await base44.asServiceRole.entities.Game.filter({ ageGroup: task.ageGroup, category: task.subject });
+    const underfilledGames = existingGames.filter(g => (g.gameData?.questions?.length || 0) < task.questionsPerGame);
+    const totalWork = underfilledGames.length + (task.gamesCount || 0);
+
+    const expandStart = Math.min(alreadyCreated, underfilledGames.length);
+    const expandBatch = underfilledGames.slice(expandStart, expandStart + 3);
+    if (expandBatch.length > 0) {
+      for (const game of expandBatch) {
+        const missing = task.questionsPerGame - (game.gameData?.questions?.length || 0);
+        const generated = await generateQuestionsForGame(base44, game.title, game.title, task.subject, task.ageGroup, missing, []);
+        const questions = [...(game.gameData?.questions || []), ...generated].slice(0, task.questionsPerGame);
+        await base44.asServiceRole.entities.Game.update(game.id, { totalQuestions: questions.length, gameData: { ...game.gameData, questions } });
+        createdInBatch++;
+      }
+
+      const newTotal = alreadyCreated + createdInBatch;
+      const isDone = newTotal >= totalWork;
+      await base44.asServiceRole.entities.GameTask.update(task.id, {
+        status: isDone ? 'completed' : 'pending',
+        createdGames: newTotal,
+        ...(isDone ? { completedAt: new Date().toISOString() } : {}),
+      });
+      return Response.json({ success: true, taskName: task.taskName, progress: newTotal, totalWork, isDone });
+    }
+
     // Get topics pool for this subject
     const topics = TOPIC_POOLS[task.subject] || TOPIC_POOLS.default;
+    const latestGamesAfterExpand = await base44.asServiceRole.entities.Game.filter({ ageGroup: task.ageGroup, category: task.subject });
+    const existingTitles = latestGamesAfterExpand.map(g => g.title);
+    const createStart = Math.max(0, alreadyCreated - underfilledGames.length);
+    const createEnd = Math.min(createStart + BATCH, task.gamesCount || 0);
 
-    // Get existing game titles to avoid duplication
-    const existingGames = await base44.asServiceRole.entities.Game.filter({ ageGroup: task.ageGroup, category: task.subject });
-    const existingTitles = existingGames.map(g => g.title);
-
-    for (let i = alreadyCreated; i < batchEnd; i++) {
+    for (let i = createStart; i < createEnd; i++) {
       const gameType = GAME_TYPES[i % GAME_TYPES.length];
       // Pick a unique topic by cycling through the pool
       const topicIdx = (alreadyCreated + createdInBatch) % topics.length;
@@ -182,7 +249,8 @@ Deno.serve(async (req) => {
     }
 
     const newTotal = alreadyCreated + createdInBatch;
-    const isDone = newTotal >= totalNeeded;
+    const finalTarget = typeof totalWork === 'number' ? totalWork : totalNeeded;
+    const isDone = newTotal >= finalTarget;
 
     await base44.asServiceRole.entities.GameTask.update(task.id, {
       status: isDone ? 'completed' : 'pending', // reset to pending for next batch
@@ -190,8 +258,8 @@ Deno.serve(async (req) => {
       ...(isDone ? { completedAt: new Date().toISOString() } : {}),
     });
 
-    console.log(`processNextGameTask: batch done. ${newTotal}/${totalNeeded}. ${isDone ? 'COMPLETED' : 'More batches remaining.'}`);
-    return Response.json({ success: true, taskName: task.taskName, createdGames: newTotal, totalGames: totalNeeded, isDone });
+    console.log(`processNextGameTask: batch done. ${newTotal}/${finalTarget}. ${isDone ? 'COMPLETED' : 'More batches remaining.'}`);
+    return Response.json({ success: true, taskName: task.taskName, createdGames: newTotal, totalGames: finalTarget, isDone });
 
   } catch (error) {
     console.error('processNextGameTask error:', error);

@@ -62,18 +62,8 @@ export default function AdminGameManager() {
   const loadCurrentCounts = async () => {
     setLoadingCounts(true);
     try {
-      const results = await Promise.all(
-        SUBJECT_CONFIG.map(sc => base44.entities.Game.filter({ ageGroup: sc.ageGroup, category: sc.subject, isPublished: true }))
-      );
-      const counts = {};
-      SUBJECT_CONFIG.forEach((sc, i) => {
-        const games = results[i] || [];
-        const avgQ = games.length > 0
-          ? Math.round(games.reduce((sum, g) => sum + (g.gameData?.questions?.length || g.totalQuestions || 0), 0) / games.length)
-          : 0;
-        counts[`${sc.ageGroup}-${sc.subject}`] = { games: games.length, avgQuestions: avgQ };
-      });
-      setCurrentCounts(counts);
+      const res = await base44.functions.invoke('getGameManagerCounts', {});
+      setCurrentCounts(res.data?.subjectCounts || {});
     } catch {}
     setLoadingCounts(false);
   };
@@ -132,7 +122,7 @@ export default function AdminGameManager() {
             ageGroup,
             subject,
             gamesCount: gamesToAdd,
-            questionsPerGame: questionsToAdd, // This will expand existing FIRST
+            questionsPerGame: genConfig.questions,
             status: 'pending',
           });
         }
@@ -180,16 +170,8 @@ export default function AdminGameManager() {
   const loadMiniGamesData = async () => {
     setLoadingMiniGames(true);
     try {
-      const gameIds = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
-      const results = await Promise.all(
-        gameIds.map(id => base44.entities.Game.filter({ category: id, isPublished: true }))
-      );
-      const data = {};
-      gameIds.forEach((id, i) => {
-        const games = results[i] || [];
-        data[id] = { count: games.length, totalQuestions: games.reduce((sum, g) => sum + (g.gameData?.questions?.length || 0), 0) };
-      });
-      setMiniGamesData(data);
+      const res = await base44.functions.invoke('getGameManagerCounts', {});
+      setMiniGamesData(res.data?.miniCounts || {});
     } catch (err) {
       showToast('❌ Failed to load mini games data', false);
     }
