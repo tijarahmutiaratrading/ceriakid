@@ -95,7 +95,7 @@ export default function AdminDashboard() {
 
   if (user?.role !== 'admin') {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
         <div className="text-center">
           <p className="text-2xl font-black mb-4">🔒</p>
           <p className="font-bold text-white">Akses Ditolak</p>
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
@@ -152,11 +152,11 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen pb-32 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+    <div className="min-h-screen pb-32 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-violet-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
       <div className="relative max-w-4xl mx-auto px-3 md:px-4 pt-8 pb-32">
@@ -165,7 +165,7 @@ export default function AdminDashboard() {
           <div className="text-3xl">🎛️</div>
           <div>
             <h1 className="text-xl font-black text-white">Admin Dashboard</h1>
-            <p className="text-white/60 text-xs">Analytics, Settings & Configurations</p>
+            <p className="text-white/80 text-xs">Analytics, Settings & Configurations</p>
           </div>
         </motion.div>
 
@@ -175,7 +175,7 @@ export default function AdminDashboard() {
              <button
                key={tab.key}
                onClick={() => setActiveTab(tab.key)}
-               className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${activeTab === tab.key ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/70 hover:text-white'}`}
+               className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${activeTab === tab.key ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/90 hover:text-white'}`}
              >
                {tab.label}
              </button>
@@ -207,7 +207,7 @@ export default function AdminDashboard() {
                 >
                   <p className="text-3xl mb-2">{stat.icon}</p>
                   <p className="text-3xl font-black mb-1 text-white">{stat.value}</p>
-                  <p className="text-xs font-bold text-white/70">{stat.label}</p>
+                  <p className="text-xs font-bold text-white/90">{stat.label}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -232,7 +232,7 @@ export default function AdminDashboard() {
                     style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
                   >
                     <p className="text-2xl mb-2">{item.icon}</p>
-                    <p className="text-xs font-bold mb-1 text-white/70">{item.label}</p>
+                    <p className="text-xs font-bold mb-1 text-white/90">{item.label}</p>
                     <p className="text-2xl font-black text-white">{item.value}</p>
                   </motion.div>
                 ))}
@@ -259,7 +259,7 @@ export default function AdminDashboard() {
                   <tbody>
                     {subscriptions.slice(0, 10).map((sub) => (
                       <tr key={sub.id} className="border-b border-white/10 hover:bg-white/5 transition-colors">
-                        <td className="py-3 px-4 text-xs text-white/70">{sub.email}</td>
+                        <td className="py-3 px-4 text-xs text-white/90">{sub.email}</td>
                         <td className="py-3 px-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                             sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
@@ -285,12 +285,12 @@ export default function AdminDashboard() {
                              '✕ Batal'}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-xs text-white/60">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
+                        <td className="py-3 px-4 text-xs text-white/80">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <p className="text-xs text-white/40 mt-4 text-center">Menunjukkan {Math.min(10, subscriptions.length)} daripada {subscriptions.length} pelanggan</p>
+                <p className="text-xs text-white/70 mt-4 text-center">Menunjukkan {Math.min(10, subscriptions.length)} daripada {subscriptions.length} pelanggan</p>
               </motion.div>
             </motion.div>
           </>
@@ -305,7 +305,7 @@ export default function AdminDashboard() {
                 <button
                   key={tab.key}
                   onClick={() => setSettingsTab(tab.key)}
-                  className={`flex-1 py-2.5 px-2 rounded-xl font-bold text-xs md:text-sm transition-all ${settingsTab === tab.key ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/70 hover:text-white'}`}
+                  className={`flex-1 py-2.5 px-2 rounded-xl font-bold text-xs md:text-sm transition-all ${settingsTab === tab.key ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/90 hover:text-white'}`}
                 >
                   <span className="hidden sm:inline">{tab.label}</span><span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                 </button>
@@ -321,7 +321,7 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <h2 className="font-black text-white text-lg">Meta / Facebook Pixel</h2>
-                    <p className="text-xs text-white/60">Untuk tracking FB Ads & conversion events</p>
+                    <p className="text-xs text-white/80">Untuk tracking FB Ads & conversion events</p>
                   </div>
                 </div>
 
@@ -354,7 +354,7 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <h2 className="font-black text-white text-lg">Chip Payment Gateway</h2>
-                    <p className="text-xs text-white/60">FPX, kad kredit & e-wallet Malaysia</p>
+                    <p className="text-xs text-white/80">FPX, kad kredit & e-wallet Malaysia</p>
                   </div>
                 </div>
 
@@ -407,7 +407,7 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <h2 className="font-black text-white text-lg">Webhook Settings</h2>
-                    <p className="text-xs text-white/60">Untuk receive payment callbacks dari Chip</p>
+                    <p className="text-xs text-white/80">Untuk receive payment callbacks dari Chip</p>
                   </div>
                 </div>
 
@@ -417,7 +417,7 @@ export default function AdminDashboard() {
 
                 <div className="mt-2 mb-5">
                   <label className="block text-sm font-black text-white mb-1">Webhook URL Anda</label>
-                  <p className="text-xs text-white/60 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
+                  <p className="text-xs text-white/80 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
                   <div className="flex gap-2">
                     <div className="flex-1 bg-white/10 border-2 border-dashed border-white/20 rounded-xl px-3 py-3 text-xs font-mono text-white/70 break-all overflow-x-auto">
                       {window.location.origin}/api/webhook/chip
@@ -469,7 +469,7 @@ export default function AdminDashboard() {
                   <><Save className="w-5 h-5" /> Simpan Tetapan</>
                 )}
               </motion.button>
-              <p className="text-center text-xs text-white/50 mt-4">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
+              <p className="text-center text-xs text-white/70 mt-4">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
             </motion.div>
           </>
         )}

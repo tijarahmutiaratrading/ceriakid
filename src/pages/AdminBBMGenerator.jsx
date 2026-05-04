@@ -167,7 +167,11 @@ export default function AdminBBMGenerator() {
   });
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+    <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+      </div>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
       {/* Toast */}
@@ -195,11 +199,11 @@ export default function AdminBBMGenerator() {
           <div className="text-4xl">📚</div>
           <div>
             <h1 className="text-xl font-black text-white">BBM Generator & Manager</h1>
-            <p className="text-white/60 text-xs">Jana & urus semua Bahan Bantu Mengajar</p>
+            <p className="text-white/80 text-xs">Jana & urus semua Bahan Bantu Mengajar</p>
           </div>
           <div className="ml-auto text-right">
             <p className="text-white font-black text-lg">{resources.length}</p>
-            <p className="text-white/50 text-xs">total BBM</p>
+            <p className="text-white/80 text-xs">total BBM</p>
           </div>
         </motion.div>
 
@@ -213,7 +217,7 @@ export default function AdminBBMGenerator() {
               key={t.id}
               onClick={() => setTab(t.id)}
               className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${
-                tab === t.id ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/70 hover:text-white'
+                tab === t.id ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/90 hover:text-white'
               }`}
             >
               {t.label}
@@ -231,7 +235,7 @@ export default function AdminBBMGenerator() {
               {/* Type */}
               <div className="mb-5">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-white/70 text-xs font-black uppercase tracking-wider">Jenis BBM</p>
+                  <p className="text-white text-xs font-black uppercase tracking-wider">Jenis BBM</p>
                   <div className="flex gap-1">
                     <button onClick={() => setSelectedTypes(new Set(TYPES.map(t => t.value)))} className="text-xs text-yellow-300 hover:underline">Semua</button>
                     <button onClick={() => setSelectedTypes(new Set())} className="text-xs text-white/50 hover:underline">Kosong</button>
@@ -262,7 +266,7 @@ export default function AdminBBMGenerator() {
               {/* Subject */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-white/70 text-xs font-black uppercase tracking-wider">Subjek</p>
+                  <p className="text-white text-xs font-black uppercase tracking-wider">Subjek</p>
                   <div className="flex gap-1">
                     <button onClick={() => setSelectedSubjects(new Set(SUBJECTS.map(s => s.value)))} className="text-xs text-yellow-300 hover:underline">Semua</button>
                     <button onClick={() => setSelectedSubjects(new Set())} className="text-xs text-white/50 hover:underline">Kosong</button>
@@ -293,7 +297,7 @@ export default function AdminBBMGenerator() {
               {/* Level */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-white/70 text-xs font-black uppercase tracking-wider">Tahap</p>
+                  <p className="text-white text-xs font-black uppercase tracking-wider">Tahap</p>
                   <div className="flex gap-1">
                     <button onClick={() => setSelectedLevels(new Set(LEVELS.map(l => l.value)))} className="text-xs text-yellow-300 hover:underline">Semua</button>
                     <button onClick={() => setSelectedLevels(new Set())} className="text-xs text-white/50 hover:underline">Kosong</button>
@@ -323,7 +327,7 @@ export default function AdminBBMGenerator() {
 
               {/* Topic */}
               <div className="mb-4">
-                <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2">Topik (opsional)</p>
+                <p className="text-white text-xs font-black uppercase tracking-wider mb-2">Topik (opsional)</p>
                 <input
                   type="text"
                   value={form.topic}
@@ -335,9 +339,9 @@ export default function AdminBBMGenerator() {
 
               {form.type !== 'rancangan_pengajaran' && (
                 <div className="mb-5">
-                  <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2">Bilangan Soalan: <span className="text-yellow-300">{form.count}</span></p>
+                  <p className="text-white text-xs font-black uppercase tracking-wider mb-2">Bilangan Soalan: <span className="text-yellow-300">{form.count}</span></p>
                   <input type="range" min="5" max="20" value={form.count} onChange={e => setForm(f => ({ ...f, count: parseInt(e.target.value) }))} className="w-full" />
-                  <div className="flex justify-between text-white/40 text-xs mt-1"><span>5</span><span>10</span><span>15</span><span>20</span></div>
+                  <div className="flex justify-between text-white/70 text-xs mt-1"><span>5</span><span>10</span><span>15</span><span>20</span></div>
                 </div>
               )}
 
@@ -370,7 +374,7 @@ export default function AdminBBMGenerator() {
                     <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center"><Check className="w-5 h-5 text-white" /></div>
                     <div>
                       <p className="text-white font-black">BBM Berjaya Dijana!</p>
-                      <p className="text-white/60 text-xs">{result.title}</p>
+                      <p className="text-white/80 text-xs">{result.title}</p>
                     </div>
                   </div>
                   <div className="flex gap-3">
@@ -451,7 +455,7 @@ export default function AdminBBMGenerator() {
               ].map(s => (
                 <div key={s.label} className="p-3 rounded-2xl text-center" style={{ background: 'rgba(255,255,255,0.08)' }}>
                   <p className={`font-black text-xl ${s.color}`}>{s.value}</p>
-                  <p className="text-white/50 text-xs">{s.label}</p>
+                  <p className="text-white/80 text-xs">{s.label}</p>
                 </div>
               ))}
             </div>
@@ -476,12 +480,12 @@ export default function AdminBBMGenerator() {
                       }`}>
                         {t.status}
                       </span>
-                      <span className="text-white/70 flex-1 truncate">{t.taskName}</span>
-                      <span className="text-white/50 whitespace-nowrap">{t.gamesCount || 0} items</span>
+                      <span className="text-white/90 flex-1 truncate">{t.taskName}</span>
+                      <span className="text-white/70 whitespace-nowrap">{t.gamesCount || 0} items</span>
                     </div>
                   ))}
                 </div>
-                <p className="text-white/40 text-xs text-center mt-3 pt-3 border-t border-white/10">✅ Jalan background setiap 5 minit. Boleh tutup browser.</p>
+                <p className="text-white/70 text-xs text-center mt-3 pt-3 border-t border-white/10">✅ Jalan background setiap 5 minit. Boleh tutup browser.</p>
               </div>
             )}
 
