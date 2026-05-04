@@ -69,7 +69,7 @@ export default function Home() {
 
       <AppHeader />
 
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
+      <div className="relative max-w-lg mx-auto px-3 md:px-4 pb-32 pt-6 md:pt-8 space-y-4">
 
         {/* Welcome Card */}
         {isAuthenticated && (
@@ -77,7 +77,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 rounded-3xl flex items-center gap-4 cursor-pointer hover:scale-[1.01] transition-transform"
+            className="mb-4 md:mb-6 p-3 md:p-4 rounded-3xl flex items-center gap-3 md:gap-4 cursor-pointer hover:scale-[1.01] transition-transform"
             style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
           >
             <div className="w-14 h-14 rounded-2xl bg-white/40 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">🐱</div>
@@ -121,11 +121,11 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mb-5 p-4 rounded-3xl"
+          className="mb-4 md:mb-5 p-3 md:p-4 rounded-3xl"
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
         >
           <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2 md:gap-3">
             {[
               { key: 'prasekolah', label: t('prasekolah', lang), emoji: '🎨', sub: '4–6 tahun' },
               { key: 'sekolah_rendah', label: t('sekolahRendah', lang), emoji: '📚', sub: '7–12 tahun' }
@@ -135,7 +135,7 @@ export default function Home() {
                 onClick={() => safeToggle(age.key)}
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ scale: 1.02 }}
-                className={`py-3 px-4 rounded-2xl font-black text-sm transition-all flex items-center gap-3 ${
+                className={`py-2 md:py-3 px-3 md:px-4 rounded-2xl font-black text-xs md:text-sm transition-all flex items-center gap-2 md:gap-3 ${
                   safeAgeGroup === age.key
                     ? 'bg-white text-purple-600 shadow-xl'
                     : 'bg-white/20 text-white border border-white/30'
@@ -156,7 +156,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="grid grid-cols-2 gap-3 mb-5"
+          className="grid grid-cols-2 gap-2 md:gap-3 mb-4 md:mb-5"
         >
           <Link to="/games-hub" className="block">
             <motion.div

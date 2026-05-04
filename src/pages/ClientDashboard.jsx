@@ -73,13 +73,13 @@ export default function ClientDashboard() {
 
       <AppHeader />
 
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
+      <div className="relative max-w-lg mx-auto px-3 md:px-4 pb-32 pt-6 md:pt-8 space-y-4">
 
         {/* Hero Profile Card */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 rounded-3xl overflow-hidden shadow-2xl"
+          className="mb-4 md:mb-6 rounded-3xl overflow-hidden shadow-2xl"
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.4)' }}
         >
           {/* Tier badge */}
@@ -89,7 +89,7 @@ export default function ClientDashboard() {
           </div>
 
           {/* Avatar overlapping strip */}
-          <div className="px-6 pb-6 pt-6">
+          <div className="px-4 md:px-6 pb-4 md:pb-6 pt-4 md:pt-6">
             <div className="flex items-end gap-4 mb-4">
               <div className="relative">
                 {avatarUrl && avatarUrl.includes('http') ? (
@@ -109,7 +109,7 @@ export default function ClientDashboard() {
             </div>
 
             {/* Account info row */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2 md:gap-3">
               {[
                 { icon: Mail, label: 'E-mel', value: user?.email },
                 { icon: Calendar, label: 'Ahli Sejak', value: user?.created_date ? new Date(user.created_date).toLocaleDateString('ms-MY') : '-' },
@@ -134,11 +134,11 @@ export default function ClientDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mb-4 mt-6 rounded-3xl p-5"
+          className="mb-4 mt-4 md:mt-6 rounded-3xl p-4 md:p-5"
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
         >
           <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">👤 Jantina</p>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2 md:gap-3">
             {[
               { value: 'male', label: 'Lelaki', emoji: '👨' },
               { value: 'female', label: 'Perempuan', emoji: '👩' },
@@ -147,7 +147,7 @@ export default function ClientDashboard() {
                 key={option.value}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setGender(option.value)}
-                className={`py-4 rounded-2xl font-bold transition-all text-sm flex flex-col items-center gap-1 ${
+                className={`py-3 md:py-4 rounded-2xl font-bold transition-all text-xs md:text-sm flex flex-col items-center gap-1 ${
                   gender === option.value
                     ? 'bg-white text-purple-600 shadow-xl'
                     : 'bg-white/20 text-white border border-white/30'
