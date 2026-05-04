@@ -16,7 +16,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="text-white py-8 text-center md:py-10 relative w-full" style={{ background: 'linear-gradient(135deg, #1e1b4b 0%, #581c87 50%, #6b21a8 100%)', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+    <footer className="text-white py-4 text-center md:py-5 relative w-full" style={{ background: 'linear-gradient(135deg, #1e1b4b 0%, #581c87 50%, #6b21a8 100%)', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
       <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
       <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
       <div className="flex justify-center gap-6 text-xs text-white/60">
