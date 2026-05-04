@@ -97,7 +97,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
           {/* Right: Language Switcher or Back */}
           <div className="flex items-center gap-2 absolute right-3">
-            {!isLanding && <LanguageSwitcher />}
             {shouldShowBack ? (
               <Link to={backTo}>
                 <button type="button" className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
