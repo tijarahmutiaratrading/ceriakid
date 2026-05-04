@@ -500,9 +500,9 @@ export default function AdminBBMGenerator() {
                     <div className="flex-1 min-w-0">
                       <p className="text-white font-bold text-sm truncate">{r.title}</p>
                       <div className="flex gap-1.5 mt-1 flex-wrap">
-                        <span className="text-xs bg-white/10 text-white/60 px-2 py-0.5 rounded-full">{SUBJECT_LABELS[r.subject] || r.subject}</span>
-                        <span className="text-xs bg-white/10 text-white/60 px-2 py-0.5 rounded-full">{LEVEL_LABELS[r.level] || r.level}</span>
-                        <span className="text-xs bg-white/10 text-white/60 px-2 py-0.5 rounded-full">{TYPE_LABELS[r.type] || r.type}</span>
+                        <span className="text-xs bg-white/10 text-white/80 px-2 py-0.5 rounded-full">{SUBJECT_LABELS[r.subject] || r.subject}</span>
+                        <span className="text-xs bg-white/10 text-white/80 px-2 py-0.5 rounded-full">{LEVEL_LABELS[r.level] || r.level}</span>
+                        <span className="text-xs bg-white/10 text-white/80 px-2 py-0.5 rounded-full">{TYPE_LABELS[r.type] || r.type}</span>
                         {r.tier === 'premium' && <span className="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full">⭐ Premium</span>}
                       </div>
                     </div>
@@ -510,7 +510,7 @@ export default function AdminBBMGenerator() {
                       {/* Toggle publish */}
                       <button
                         onClick={() => handleTogglePublish(r)}
-                        className={`p-2 rounded-xl transition-all ${r.isPublished !== false ? 'bg-green-500/20 text-green-300 hover:bg-green-500/30' : 'bg-gray-500/20 text-gray-400 hover:bg-gray-500/30'}`}
+                        className={`p-2 rounded-xl transition-all ${r.isPublished !== false ? 'bg-green-500/20 text-green-300 hover:bg-green-500/30' : 'bg-white/10 text-white/50 hover:bg-white/20'}`}
                         title={r.isPublished !== false ? 'Sembunyikan' : 'Publish'}
                       >
                         {r.isPublished !== false ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
