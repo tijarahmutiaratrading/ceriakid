@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Trash2, Download, Undo2 } from 'lucide-react';
+import { Trash2, Download, Undo2, Maximize2, Minimize2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import AppHeader from '@/components/AppHeader';
 
@@ -47,6 +47,7 @@ export default function DrawingStudio() {
   const [tracingDone, setTracingDone] = useState(false);
   const [userStrokes, setUserStrokes] = useState([]);
   const [currentStroke, setCurrentStroke] = useState([]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const getCanvas = () => canvasRef.current;
   const getCtx = () => canvasRef.current?.getContext('2d');
@@ -325,6 +326,13 @@ export default function DrawingStudio() {
           className="relative rounded-3xl overflow-hidden shadow-2xl mb-4"
           style={{ border: '2px solid rgba(255,255,255,0.4)' }}
         >
+          <button
+            onClick={() => setIsFullscreen(true)}
+            className="absolute top-3 right-3 z-10 p-2 rounded-xl bg-black/30 hover:bg-black/50 text-white transition-all"
+            title="Fullscreen"
+          >
+            <Maximize2 className="w-4 h-4" />
+          </button>
           <canvas
             ref={canvasRef}
             width={560}
@@ -340,6 +348,93 @@ export default function DrawingStudio() {
             style={{ backgroundColor: '#fff9f0' }}
           />
         </motion.div>
+
+        {/* Fullscreen Overlay */}
+        <AnimatePresence>
+          {isFullscreen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex flex-col"
+              style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}
+            >
+              {/* Fullscreen toolbar */}
+              <div className="flex items-center justify-between px-4 py-3 flex-shrink-0" style={{ background: 'rgba(0,0,0,0.2)' }}>
+                {/* Tools */}
+                {mode === 'draw' && (
+                  <div className="flex gap-2 overflow-x-auto">
+                    {TOOLS.map(t => (
+                      <button key={t.id} onClick={() => setTool(t)}
+                        className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-bold transition-all ${tool.id === t.id ? 'bg-white text-purple-600 shadow' : 'bg-white/20 text-white'}`}>
+                        <span>{t.emoji}</span>
+                        <span className="hidden sm:inline">{t.label}</span>
+                      </button>
+                    ))}
+                    {/* Colors inline */}
+                    {tool.id !== 'eraser' && (
+                      <div className="flex gap-1.5 items-center ml-2 pl-2 border-l border-white/30">
+                        {COLORS.map(c => (
+                          <button key={c} onClick={() => setColor(c)}
+                            className="w-7 h-7 rounded-full border-2 flex-shrink-0 transition-all"
+                            style={{ backgroundColor: c, borderColor: color === c ? '#fff' : 'transparent' }} />
+                        ))}
+                        <input type="color" value={color} onChange={e => setColor(e.target.value)}
+                          className="w-7 h-7 rounded-full cursor-pointer border-2 border-white/30 flex-shrink-0" />
+                      </div>
+                    )}
+                  </div>
+                )}
+                {mode === 'trace' && (
+                  <div className="flex gap-2 overflow-x-auto">
+                    {TRACING_SHAPES.map(s => (
+                      <button key={s.label} onClick={() => setSelectedShape(s)}
+                        className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedShape.label === s.label ? 'bg-white text-purple-600' : 'bg-white/20 text-white'}`}>
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {/* Action buttons */}
+                <div className="flex items-center gap-2 flex-shrink-0 ml-3">
+                  <button onClick={undo} disabled={history.length === 0}
+                    className="p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white disabled:opacity-40 transition-all">
+                    <Undo2 className="w-4 h-4" />
+                  </button>
+                  <button onClick={initCanvas}
+                    className="p-2 rounded-xl bg-red-500/40 hover:bg-red-500/60 text-white transition-all">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                  <button onClick={downloadCanvas}
+                    className="p-2 rounded-xl bg-white text-purple-600 hover:bg-white/90 transition-all shadow">
+                    <Download className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => setIsFullscreen(false)}
+                    className="p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white transition-all">
+                    <Minimize2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              {/* Fullscreen canvas */}
+              <div className="flex-1 relative overflow-hidden">
+                <canvas
+                  ref={canvasRef}
+                  width={560}
+                  height={480}
+                  onPointerDown={startDraw}
+                  onPointerMove={draw}
+                  onPointerUp={endDraw}
+                  onPointerLeave={endDraw}
+                  onTouchStart={startDraw}
+                  onTouchMove={draw}
+                  onTouchEnd={endDraw}
+                  className="w-full h-full touch-none cursor-crosshair block"
+                  style={{ backgroundColor: '#fff9f0', objectFit: 'contain' }}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Tools Row */}
         {mode === 'draw' && (
