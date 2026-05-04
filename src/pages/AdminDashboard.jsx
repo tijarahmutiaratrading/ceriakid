@@ -267,7 +267,7 @@ export default function AdminDashboard() {
                className="rounded-[1.75rem] p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto"
                style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}
               >
-                <table className="w-full text-sm">
+                <table className="w-full min-w-[720px] text-sm">
                   <thead>
                     <tr className="border-b-2 border-white/20">
                       <th className="text-left py-3 px-4 font-black text-white">Email</th>
@@ -280,8 +280,8 @@ export default function AdminDashboard() {
                     {subscriptions.slice(0, 10).map((sub) => (
                       <tr key={sub.id} className="border-b border-white/10 hover:bg-white/5 transition-colors">
                         <td className="py-3 px-4 text-xs text-white/90">{sub.email}</td>
-                        <td className="py-3 px-4">
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        <td className="py-3 px-4 whitespace-nowrap">
+                          <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
                             sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
                             sub.tier === 'asas' ? 'bg-green-200 text-green-700' :
                             sub.tier === 'standard' ? 'bg-blue-200 text-blue-700' :
@@ -291,8 +291,8 @@ export default function AdminDashboard() {
                             {sub.tier === 'free' ? 'Percuma' : sub.tier === 'asas' ? 'Asas' : sub.tier === 'standard' ? 'Standard' : sub.tier === 'pro' ? 'Pro' : 'Keluarga'}
                           </span>
                         </td>
-                        <td className="py-3 px-4">
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        <td className="py-3 px-4 whitespace-nowrap">
+                          <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
                             sub.status === 'active' ? 'bg-green-200 text-green-700' :
                             sub.status === 'trial' ? 'bg-blue-200 text-blue-700' :
                             sub.status === 'incomplete' ? 'bg-yellow-200 text-yellow-700' :
@@ -306,7 +306,7 @@ export default function AdminDashboard() {
                              '✕ Batal'}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-xs text-white/80">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
+                        <td className="py-3 px-4 text-xs text-white/80 whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
                       </tr>
                     ))}
                   </tbody>
