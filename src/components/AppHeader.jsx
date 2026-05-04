@@ -67,42 +67,42 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     <>
       {/* Header Bar */}
       <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4">
-        <div className={`w-full md:max-w-lg rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-between ${
-          isPlayingGame
-            ? 'bg-white shadow-lg border border-gray-200'
-            : ''
+        <div className={`w-full md:max-w-lg rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-center relative ${
+         isPlayingGame
+           ? 'bg-white shadow-lg border border-gray-200'
+           : ''
         }`}
-             style={isPlayingGame ? {
-               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-             } : {
-               background: 'rgba(255,255,255,0.18)',
-               backdropFilter: 'blur(24px)',
-               WebkitBackdropFilter: 'blur(24px)',
-               border: '1px solid rgba(255,255,255,0.35)',
-               boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
-             }}>
-          {/* Left: Hamburger */}
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all flex-shrink-0"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
+            style={isPlayingGame ? {
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+            } : {
+              background: 'rgba(255,255,255,0.18)',
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
+              border: '1px solid rgba(255,255,255,0.35)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
+            }}>
+         {/* Left: Hamburger */}
+         <button
+           type="button"
+           onClick={() => setIsOpen(!isOpen)}
+           className="absolute left-3 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
+         >
+           <Menu className="w-5 h-5" />
+         </button>
 
-          {/* Center: Logo */}
-          <Link to="/" className="flex items-center gap-2 justify-center flex-1">
-            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
-          </Link>
+         {/* Center: Logo */}
+         <Link to="/" className="flex items-center gap-2 justify-center">
+           <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
+         </Link>
 
-          {/* Right: Avatar */}
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center text-white font-black text-xs hover:shadow-md transition-all"
-          >
-            {user?.full_name?.[0]?.toUpperCase() || '👤'}
-          </button>
+         {/* Right: Avatar */}
+         <button
+           type="button"
+           onClick={() => setIsOpen(!isOpen)}
+           className="absolute right-3 w-8 h-8 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center text-white font-black text-xs hover:shadow-md transition-all"
+         >
+           {user?.full_name?.[0]?.toUpperCase() || '👤'}
+         </button>
         </div>
       </div>
 
