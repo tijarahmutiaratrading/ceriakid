@@ -61,7 +61,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     { path: '/dashboard', emoji: '🏠', label: 'Rumah' },
     { path: '/games-hub', emoji: '🎮', label: 'Games' },
     { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
-    { path: '/dashboard', emoji: '📱', label: 'Dashboard' },
+    { path: '/settings', emoji: '⚙️', label: 'Tetapan' },
   ];
 
   return (
