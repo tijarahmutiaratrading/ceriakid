@@ -9,6 +9,7 @@ import SyncAndEditModal from '@/components/admin/SyncAndEditModal';
 import SubjectCard from '@/components/admin/SubjectCard';
 import MiniGamesGenerator from '@/components/admin/MiniGamesGenerator';
 import MiniGamesManager from '@/components/admin/MiniGamesManager';
+import MonthlyGenSettings from '@/components/admin/MonthlyGenSettings';
 
 const QUESTION_THRESHOLD = 20;
 const QUESTION_GENERATION_DELAY = 3000;
@@ -355,6 +356,7 @@ export default function AdminGameManager() {
             { id: 'generator', label: '🤖 Gen', labelFull: '🤖 Generator' },
             { id: 'manager', label: '📋 Mgr', labelFull: '📋 Manager' },
             { id: 'minigames', label: '🎯 Mini', labelFull: '🎯 Mini Games Hub' },
+            { id: 'monthly', label: '📅 Auto', labelFull: '📅 Auto Monthly' },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
               className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/70 hover:text-white'}`}
@@ -637,6 +639,13 @@ export default function AdminGameManager() {
             {miniGamesTab === 'manage' && <MiniGamesManager onToast={showToast} />}
             </motion.div>
             )}
+
+        {/* ══════════════ MONTHLY AUTO TAB ══════════════ */}
+        {tab === 'monthly' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <MonthlyGenSettings onToast={showToast} />
+          </motion.div>
+        )}
 
             {/* ══════════════ MANAGER TAB ══════════════ */}
             {tab === 'manager' && (
