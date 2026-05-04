@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Trash2, Download, Undo2, Maximize2, Minimize2 } from 'lucide-react';
@@ -36,6 +37,7 @@ const MODES = [
 
 export default function DrawingStudio() {
   const canvasRef = useRef(null);
+  const fsCanvasRef = useRef(null);
   const [mode, setMode] = useState('draw');
   const [tool, setTool] = useState(TOOLS[0]);
   const [color, setColor] = useState('#1a1a1a');
@@ -49,8 +51,10 @@ export default function DrawingStudio() {
   const [currentStroke, setCurrentStroke] = useState([]);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const getCanvas = () => canvasRef.current;
-  const getCtx = () => canvasRef.current?.getContext('2d');
+  // Active canvas ref — points to whichever canvas is currently active
+  const activeCanvasRef = isFullscreen ? fsCanvasRef : canvasRef;
+  const getCanvas = () => activeCanvasRef.current;
+  const getCtx = () => activeCanvasRef.current?.getContext('2d');
 
   const canvasSize = () => {
     const el = getCanvas();
@@ -104,6 +108,28 @@ export default function DrawingStudio() {
   useEffect(() => {
     initCanvas();
   }, [mode, selectedShape]);
+
+  // When entering fullscreen: copy normal canvas → fs canvas
+  useEffect(() => {
+    if (isFullscreen) {
+      requestAnimationFrame(() => {
+        const src = canvasRef.current;
+        const dst = fsCanvasRef.current;
+        if (!src || !dst) return;
+        dst.width = src.width;
+        dst.height = src.height;
+        dst.getContext('2d').drawImage(src, 0, 0);
+      });
+    } else {
+      // When closing fullscreen: copy fs canvas → normal canvas
+      requestAnimationFrame(() => {
+        const src = fsCanvasRef.current;
+        const dst = canvasRef.current;
+        if (!src || !dst) return;
+        dst.getContext('2d').drawImage(src, 0, 0);
+      });
+    }
+  }, [isFullscreen]);
 
   const saveToHistory = () => {
     const ctx = getCtx();
@@ -318,20 +344,40 @@ export default function DrawingStudio() {
           )}
         </AnimatePresence>
 
-        {/* Canvas — always rendered, moved via CSS when fullscreen */}
+        {/* Normal Canvas */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className={`relative shadow-2xl mb-4 ${isFullscreen ? 'fixed inset-0 z-[100] rounded-none mb-0' : 'rounded-3xl overflow-hidden'}`}
-          style={isFullscreen
-            ? { background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)', display: 'flex', flexDirection: 'column' }
-            : { border: '2px solid rgba(255,255,255,0.4)' }
-          }
+          className="relative rounded-3xl overflow-hidden shadow-2xl mb-4"
+          style={{ border: '2px solid rgba(255,255,255,0.4)' }}
         >
-          {/* Fullscreen toolbar (only visible in fullscreen) */}
-          {isFullscreen && (
-            <div className="flex items-center justify-between px-4 py-3 flex-shrink-0 overflow-x-auto gap-2" style={{ background: 'rgba(0,0,0,0.2)' }}>
+          <button onClick={() => setIsFullscreen(true)}
+            className="absolute top-3 right-3 z-10 p-2 rounded-xl bg-black/30 hover:bg-black/50 text-white transition-all"
+            title="Fullscreen">
+            <Maximize2 className="w-4 h-4" />
+          </button>
+          <canvas
+            ref={canvasRef}
+            width={560}
+            height={480}
+            onPointerDown={startDraw}
+            onPointerMove={draw}
+            onPointerUp={endDraw}
+            onPointerLeave={endDraw}
+            onTouchStart={startDraw}
+            onTouchMove={draw}
+            onTouchEnd={endDraw}
+            className="w-full touch-none cursor-crosshair block"
+            style={{ backgroundColor: '#fff9f0' }}
+          />
+        </motion.div>
+
+        {/* Fullscreen Portal */}
+        {isFullscreen && createPortal(
+          <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)', display: 'flex', flexDirection: 'column' }}>
+            {/* Toolbar */}
+            <div className="flex items-center gap-2 px-4 py-3 flex-shrink-0 overflow-x-auto" style={{ background: 'rgba(0,0,0,0.25)' }}>
               <div className="flex gap-2 overflow-x-auto flex-1 min-w-0">
                 {mode === 'draw' && (
                   <>
@@ -377,33 +423,23 @@ export default function DrawingStudio() {
                 </button>
               </div>
             </div>
-          )}
-
-          {/* Maximize button (only in normal mode) */}
-          {!isFullscreen && (
-            <button onClick={() => setIsFullscreen(true)}
-              className="absolute top-3 right-3 z-10 p-2 rounded-xl bg-black/30 hover:bg-black/50 text-white transition-all"
-              title="Fullscreen">
-              <Maximize2 className="w-4 h-4" />
-            </button>
-          )}
-
-          {/* Single canvas */}
-          <canvas
-            ref={canvasRef}
-            width={560}
-            height={480}
-            onPointerDown={startDraw}
-            onPointerMove={draw}
-            onPointerUp={endDraw}
-            onPointerLeave={endDraw}
-            onTouchStart={startDraw}
-            onTouchMove={draw}
-            onTouchEnd={endDraw}
-            className={`touch-none cursor-crosshair block ${isFullscreen ? 'flex-1 w-full' : 'w-full'}`}
-            style={{ backgroundColor: '#fff9f0' }}
-          />
-        </motion.div>
+            {/* Fullscreen canvas */}
+            <canvas
+              ref={fsCanvasRef}
+              width={560}
+              height={480}
+              onPointerDown={startDraw}
+              onPointerMove={draw}
+              onPointerUp={endDraw}
+              onPointerLeave={endDraw}
+              onTouchStart={startDraw}
+              onTouchMove={draw}
+              onTouchEnd={endDraw}
+              style={{ flex: 1, width: '100%', touchAction: 'none', cursor: 'crosshair', display: 'block', backgroundColor: '#fff9f0' }}
+            />
+          </div>,
+          document.body
+        )}
 
         {/* Tools Row */}
         {mode === 'draw' && (
