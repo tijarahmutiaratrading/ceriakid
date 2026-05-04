@@ -68,9 +68,9 @@ export default function GamesHub() {
     };
     
     loadGames();
-  }, []);
+  }, [ageGroup]);
 
-  const filteredGames = games.filter(g => g.ageGroup === ageGroup);
+  const filteredGames = games.filter(g => !g.ageGroup || g.ageGroup === ageGroup);
 
   const GameCard = ({ game, idx }) => (
     <motion.div
