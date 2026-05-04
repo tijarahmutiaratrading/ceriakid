@@ -904,13 +904,8 @@ export default function AdminGameManager() {
                       )}
                       </div>
                       )}
-                      </div>
-                      )}
-                      </motion.div>
-                      )}
-                      </div>
 
-      {/* Edit Subject Config Modal */}
+                      {/* Edit Subject Config Modal */}
       <AnimatePresence>
         {modal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
