@@ -324,7 +324,7 @@ export default function BBMHub() {
           <p className="text-2xl mb-2">🎓</p>
           <p className="text-white font-black text-sm mb-1">Anda seorang Cikgu?</p>
           <p className="text-white/70 text-xs mb-3">Dapatkan akses penuh ke semua BBM premium — RPH, modul, kuiz & lebih lagi!</p>
-          <Link to="/landing">
+          <Link to="/">
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
