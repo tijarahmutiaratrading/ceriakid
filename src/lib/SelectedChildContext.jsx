@@ -13,16 +13,19 @@ export const useSelectedChild = () => {
 };
 
 export function SelectedChildProvider({ children }) {
-  const { user } = useAuth();
+  const authContext = useAuth();
+  const user = authContext?.user;
   const [selectedChild, setSelectedChild] = useState(null);
   const [childrenList, setChildrenList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
+    if (user?.email) {
       loadChildren();
+    } else {
+      setLoading(false);
     }
-  }, [user]);
+  }, [user?.email]);
 
   const loadChildren = async () => {
     try {
