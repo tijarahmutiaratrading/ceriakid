@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
@@ -13,6 +13,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const { isAuthenticated, user, logout } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useSafeLocation();
+  const navigate = useNavigate();
   const isAdmin = user?.role === 'admin';
   const isLanding = location.pathname === '/' || location.pathname === '/landing';
   const isPlayingGame = location.pathname.startsWith('/play/');
@@ -84,10 +85,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   const navItems = [
     { emoji: '☰', label: 'Menu', action: () => setIsOpen(!isOpen) },
-    { emoji: '🎮', label: 'Games', path: '/games-hub' },
+    { emoji: '🎮', label: 'Games', path: '/dashboard' },
     { emoji: '📊', label: 'Prestasi', path: '/parent-dashboard' },
-    { emoji: '📱', label: 'Dashboard', path: '/dashboard' },
     { emoji: '🎨', label: 'Drawing', path: '/drawing' },
+    { emoji: '⬅️', label: 'Back', action: () => navigate(-1) },
   ];
 
   return (
