@@ -46,26 +46,34 @@ async function generateQuestionsForGame(base44, gameTitle, topicName, subject, a
       ? 'Gunakan bahasa subjek yang betul, ringkas dan mesra kanak-kanak; arahan boleh dwibahasa BM ringkas jika perlu.'
       : 'Gunakan Bahasa Malaysia baku yang betul, mudah dan mesra kanak-kanak.';
 
-  const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
+  const bannedPattern = /(hewan|singh|bekam|lama|babi|soalan\s*\d+|placeholder|contoh jawapan)/i;
+  const cleanQuestions = (items) => (items || [])
+    .filter(q => q?.problem && q.options?.length === 4 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3)
+    .map(q => ({ problem: String(q.problem).trim(), options: q.options.map(o => String(o).trim()), answer: q.answer, emoji: String(q.emoji || '🎮').trim() }))
+    .filter(q => q.problem.length >= 8 && q.options.every(Boolean) && new Set(q.options.map(o => o.toLowerCase())).size === 4)
+    .filter(q => !bannedPattern.test([q.problem, ...q.options].join(' ')));
+
+  const askLLM = async (needed, extraInstruction = '') => base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia dan pembina game pembelajaran kanak-kanak.
 
-Buat TEPAT ${questionsCount} soalan game yang HIGH QUALITY, UNIK & BERBEZA untuk:
+Buat TEPAT ${needed} soalan game yang HIGH QUALITY, UNIK & BERBEZA untuk:
 Tajuk: "${gameTitle}"
 Topik KHUSUS: "${topicName}"
 Subjek: ${CATEGORY_LABELS[subject] || subject}
 Peringkat: ${AGE_LABELS[ageGroup] || ageGroup}
 ${alreadyMade}
+${extraInstruction}
 
-WAJIB ikut standard ini:
-1. Selari KSSR/DSKP Malaysia dan sesuai umur — prasekolah mesti sangat asas; sekolah rendah boleh sedikit mencabar tetapi masih jelas.
-2. Semua soalan MESTI fokus topik "${topicName}" sahaja, bukan campur topik lain.
-3. Setiap soalan uji konsep/subkemahiran berbeza: kenal pasti, faham, aplikasi mudah, banding beza, susun atau kira.
+WAJIB ikut standard mass production ini:
+1. Selari KSSR/DSKP Malaysia dan sesuai umur — prasekolah mesti sangat asas, jelas dan literal; sekolah rendah boleh sedikit mencabar tetapi masih tepat.
+2. Semua soalan MESTI fokus topik "${topicName}" sahaja.
+3. Gunakan konteks Malaysia yang biasa dilihat murid: rumah, sekolah, taman, pasar, keluarga, haiwan/benda harian.
 4. ${languageRule}
-5. Soalan pendek, tidak mengelirukan, tiada fakta meragukan, tiada kandungan sensitif.
-6. 4 pilihan jawapan mesti munasabah, tidak duplicate, panjang hampir seimbang, hanya satu jawapan betul.
-7. Jawapan betul mesti 100% tepat dan index answer mesti sepadan dengan options.
-8. Emoji BERBEZA setiap soalan dan relevan dengan soalan (pilih dari: ${emoji.slice(0, 16).join(' ')}).
-9. Jangan guna placeholder seperti "Soalan 1", jangan ulang struktur ayat yang sama terlalu banyak.
+5. Untuk Bahasa Melayu, WAJIB Bahasa Melayu Malaysia baku. DILARANG guna bahasa Indonesia/asing seperti "hewan", "Singh", "lama" untuk llama, atau ayat pelik.
+6. Soalan mesti pendek, natural, fakta tepat, tidak berbentuk teka-teki kabur, tidak mengelirukan, dan tiada pilihan jawapan sensitif.
+7. 4 pilihan jawapan mesti munasabah, unik, hanya satu jawapan betul, dan answer index mesti tepat.
+8. Emoji mesti relevan dengan topik umum sahaja; jangan jadikan emoji sebagai petunjuk jawapan jika boleh mengelirukan.
+9. Jangan guna placeholder seperti "Soalan 1", "Item", "Gambar di bawah", atau arahan yang perlukan gambar tetapi tiada gambar.
 
 Output JSON sahaja: "questions" dengan problem, options[4], answer(0-3), emoji.`,
     response_json_schema: {
@@ -89,9 +97,15 @@ Output JSON sahaja: "questions" dengan problem, options[4], answer(0-3), emoji.`
     },
   });
 
-  return (result.questions || [])
-    .filter(q => q?.problem && q.options?.length === 4 && typeof q.answer === 'number')
-    .map(q => ({ problem: q.problem.trim(), options: q.options.map(o => String(o).trim()), answer: q.answer, emoji: q.emoji?.trim() || '🎮' }));
+  const first = await askLLM(questionsCount);
+  let questions = cleanQuestions(first.questions);
+
+  if (questions.length < questionsCount) {
+    const topup = await askLLM(questionsCount - questions.length, `\nSoalan sebelumnya ada yang ditolak audit. Jana soalan tambahan yang lebih mudah, literal dan bebas kesilapan. Jangan ulang: ${questions.map(q => q.problem).join(' | ')}`);
+    questions = [...questions, ...cleanQuestions(topup.questions)];
+  }
+
+  return questions.slice(0, questionsCount);
 }
 
 Deno.serve(async (req) => {
