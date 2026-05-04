@@ -94,7 +94,7 @@ export default function ClientDashboard() {
           style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.4)' }}
         >
           {/* Tier badge */}
-          <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1.5 z-10">
+          <div className="absolute top-20 right-4 flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1.5 z-10">
             <span className="text-lg">{tier.emoji}</span>
             <span className="text-white font-black text-xs">{tier.label}</span>
           </div>
