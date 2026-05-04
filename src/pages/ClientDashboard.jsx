@@ -47,9 +47,16 @@ export default function ClientDashboard() {
     const file = e.target.files?.[0];
     if (!file) return;
     setSaving(true);
-    const { url } = await base44.integrations.Core.UploadFile({ file });
-    setAvatarUrl(url);
-    setSaving(false);
+    try {
+      const response = await base44.integrations.Core.UploadFile({ file });
+      if (response?.url) {
+        setAvatarUrl(response.url);
+      }
+    } catch (error) {
+      console.error('Avatar upload failed:', error);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleSave = async () => {
