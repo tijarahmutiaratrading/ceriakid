@@ -187,8 +187,8 @@ export default function Home() {
           </Link>
         </motion.div>
 
-        {/* New Games Coming Soon Banner — shows until 1 June 2026 */}
-        {new Date() < new Date('2026-06-01') && (
+        {/* New Games Coming Soon Banner — shows until 1 July 2026 */}
+        {new Date() < new Date('2026-07-01') && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -206,9 +206,9 @@ export default function Home() {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-0.5">
                   <p className="text-white font-black text-sm">Permainan Baru Akan Datang!</p>
-                  <span className="px-2 py-0.5 bg-yellow-400 text-yellow-900 text-xs font-black rounded-full">1 Jun</span>
+                  <span className="px-2 py-0.5 bg-yellow-400 text-yellow-900 text-xs font-black rounded-full">{new Date() < new Date('2026-06-01') ? '1 Jun' : '1 Jul'}</span>
                 </div>
-                <p className="text-white/80 text-xs">Games baru untuk semua subjek akan dilancarkan pada 1 Jun 2026 🚀</p>
+                <p className="text-white/80 text-xs">Games baru untuk semua subjek akan dilancarkan pada {new Date() < new Date('2026-06-01') ? '1 Jun' : '1 Jul'} 2026 🚀</p>
                 <p className="text-yellow-200 text-xs font-black mt-1">🌟 Coming Soon — Nantikan!</p>
               </div>
             </motion.div>
