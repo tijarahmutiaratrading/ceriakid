@@ -316,11 +316,11 @@ export default function AdminGameManager() {
 
 
   return (
-    <div className="min-h-screen pb-32 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+    <div className="min-h-screen pb-32 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-violet-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
@@ -342,11 +342,11 @@ export default function AdminGameManager() {
           <div className="text-4xl">🎮</div>
           <div>
             <h1 className="text-xl font-black text-white">Game Manager</h1>
-            <p className="text-white/60 text-xs">Jana & urus semua permainan CeriaKid</p>
+            <p className="text-white/80 text-xs">Jana & urus semua permainan CeriaKid</p>
           </div>
           <div className="ml-auto text-right">
             <p className="text-white font-black text-lg">{totalGames}</p>
-            <p className="text-white/50 text-xs">total games</p>
+            <p className="text-white/80 text-xs">total games</p>
           </div>
         </motion.div>
 
@@ -359,7 +359,7 @@ export default function AdminGameManager() {
             { id: 'monthly', label: '📅 Auto', labelFull: '📅 Auto Monthly' },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/70 hover:text-white'}`}
+              className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-700 shadow-lg' : 'text-white/90 hover:text-white hover:bg-white/10'}`}
               title={t.labelFull}>
               <span className="md:hidden">{t.label}</span>
               <span className="hidden md:inline">{t.labelFull}</span>
@@ -375,13 +375,13 @@ export default function AdminGameManager() {
               <h2 className="font-black text-white mb-4">⚙️ Konfigurasi Generation</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                 <div>
-                  <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">🎮 Bilangan Games</label>
+                  <label className="text-white text-xs font-black uppercase tracking-wider block mb-2">🎮 Bilangan Games</label>
                   <input type="number" min="1" max="100" value={genConfig.games}
                     onChange={e => setGenConfig(c => ({ ...c, games: parseInt(e.target.value) || 1 }))}
                     className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center" />
                 </div>
                 <div>
-                  <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">📝 Soalan per Game</label>
+                  <label className="text-white text-xs font-black uppercase tracking-wider block mb-2">📝 Soalan per Game</label>
                   <input type="number" min="1" max="50" value={genConfig.questions}
                     onChange={e => setGenConfig(c => ({ ...c, questions: parseInt(e.target.value) || 1 }))}
                     className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center" />
@@ -390,7 +390,7 @@ export default function AdminGameManager() {
 
               {/* Subject selector */}
               <div className="flex items-center justify-between mb-3">
-                <p className="text-white/70 text-xs font-black uppercase tracking-wider">Pilih Subjek</p>
+                <p className="text-white text-xs font-black uppercase tracking-wider">Pilih Subjek</p>
                 <div className="flex gap-2 items-center">
                   <button onClick={refreshGeneratorCounts} disabled={loadingCounts} className="p-1 rounded-lg bg-white/10 hover:bg-white/20 transition-all" title="Refresh counts">
                     <RefreshCw className={`w-3 h-3 text-white/50 ${loadingCounts ? 'animate-spin' : ''}`} />
@@ -407,7 +407,7 @@ export default function AdminGameManager() {
                 </div>
               )}
 
-              <p className="text-white/50 text-xs font-black mb-2">🧒 Prasekolah</p>
+              <p className="text-white/90 text-xs font-black mb-2">🧒 Prasekolah</p>
               <div className="grid grid-cols-1 gap-2 mb-3">
                 {SUBJECT_CONFIG.filter(s => s.ageGroup === 'prasekolah').map(sc => {
                   const key = `${sc.ageGroup}-${sc.subject}`;
@@ -417,13 +417,13 @@ export default function AdminGameManager() {
                   const qDiff = genConfig.questions - curr.avgQuestions;
                   return (
                     <button key={key} onClick={() => toggleSubject(key)}
-                      className={`flex items-start gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}>
-                      <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/30'}`}>
-                        {sel && <span className="text-white text-xs">✓</span>}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="truncate text-white">{sc.label.replace('Prasekolah - ', '')}</p>
-                        <div className={`flex gap-2 mt-0.5 text-xs font-semibold ${sel ? 'text-indigo-400' : 'text-white/40'}`}>
+                      className={`flex items-start gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white hover:bg-white/20'}`}>
+                      <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/50'}`}>
+                         {sel && <span className="text-white text-xs">✓</span>}
+                       </div>
+                       <div className="flex-1 min-w-0">
+                         <p className="truncate">{sc.label.replace('Prasekolah - ', '')}</p>
+                         <div className={`flex gap-2 mt-0.5 text-xs font-semibold ${sel ? 'text-indigo-400' : 'text-white/70'}`}>
                           <span>{curr.games} games</span>
                           <span>·</span>
                           <span>{curr.avgQuestions}Q avg</span>
@@ -439,7 +439,7 @@ export default function AdminGameManager() {
                 })}
               </div>
 
-              <p className="text-white/50 text-xs font-black mb-2">🎒 Sekolah Rendah</p>
+              <p className="text-white/90 text-xs font-black mb-2">🎒 Sekolah Rendah</p>
               <div className="grid grid-cols-1 gap-2 mb-5">
                 {SUBJECT_CONFIG.filter(s => s.ageGroup === 'sekolah_rendah').map(sc => {
                   const key = `${sc.ageGroup}-${sc.subject}`;
@@ -448,13 +448,13 @@ export default function AdminGameManager() {
                   const gameDiff = genConfig.games - curr.games;
                   return (
                     <button key={key} onClick={() => toggleSubject(key)}
-                      className={`flex items-start gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}>
-                      <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/30'}`}>
+                      className={`flex items-start gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${sel ? 'bg-white text-indigo-700 shadow-lg' : 'bg-white/10 text-white hover:bg-white/20'}`}>
+                      <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/50'}`}>
                         {sel && <span className="text-white text-xs">✓</span>}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="truncate text-white">{sc.label.replace('Sekolah Rendah - ', '')}</p>
-                        <div className={`flex gap-2 mt-0.5 text-xs font-semibold ${sel ? 'text-indigo-400' : 'text-white/40'}`}>
+                        <p className="truncate">{sc.label.replace('Sekolah Rendah - ', '')}</p>
+                        <div className={`flex gap-2 mt-0.5 text-xs font-semibold ${sel ? 'text-indigo-400' : 'text-white/70'}`}>
                           <span>{curr.games} games</span>
                           <span>·</span>
                           <span>{curr.avgQuestions}Q avg</span>
@@ -479,7 +479,7 @@ export default function AdminGameManager() {
                     const qDiff = genConfig.questions - curr.avgQuestions;
                     return (
                       <div key={key} className="flex items-center justify-between text-xs">
-                        <span className="text-white/70 font-semibold truncate">{sc?.label}</span>
+                        <span className="text-white font-semibold truncate">{sc?.label}</span>
                         <div className="flex gap-2 flex-shrink-0 ml-2">
                           <span className={`font-black ${gameDiff > 0 ? 'text-green-300' : gameDiff < 0 ? 'text-red-300' : 'text-white/40'}`}>
                             {gameDiff > 0 ? `+${gameDiff} games` : gameDiff < 0 ? `${gameDiff} games` : 'games ✓'}
@@ -527,7 +527,7 @@ export default function AdminGameManager() {
                 ].map(s => (
                   <div key={s.label} className="bg-white/10 rounded-xl p-2 text-center">
                     <p className={`font-black text-lg ${s.color}`}>{s.value}</p>
-                    <p className="text-xs text-white/50 font-semibold">{s.label}</p>
+                    <p className="text-xs text-white/80 font-semibold">{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -537,7 +537,7 @@ export default function AdminGameManager() {
               ) : tasks.length === 0 ? (
                 <div className="text-center py-8 text-white/40">
                   <p className="text-3xl mb-2">📭</p>
-                  <p className="text-sm font-semibold">Tiada tasks dalam queue</p>
+                  <p className="text-sm font-semibold text-white/80">Tiada tasks dalam queue</p>
                 </div>
               ) : (
                 <div className="space-y-2 max-h-80 overflow-y-auto">
@@ -550,7 +550,7 @@ export default function AdminGameManager() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-bold text-white truncate">{task.taskName}</p>
-                          <p className="text-xs text-white/40">{task.gamesCount} games · {task.questionsPerGame} soalan
+                          <p className="text-xs text-white/70">{task.gamesCount} games · {task.questionsPerGame} soalan
                             {task.createdGames > 0 && <span className="text-green-300 font-bold"> · {task.createdGames} dibuat</span>}
                           </p>
                         </div>
@@ -659,7 +659,7 @@ export default function AdminGameManager() {
               ].map(({ value, label, color }) => (
                 <div key={label} className="rounded-2xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.1)' }}>
                   <p className={`text-2xl font-black ${color}`}>{value}</p>
-                  <p className="text-xs text-white/80 font-semibold">{label}</p>
+                  <p className="text-xs text-white/90 font-semibold">{label}</p>
                 </div>
               ))}
             </div>

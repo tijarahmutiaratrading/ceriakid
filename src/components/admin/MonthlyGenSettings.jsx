@@ -46,7 +46,7 @@ export default function MonthlyGenSettings({ onToast }) {
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
-            <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">🎮 Games per Subjek</label>
+            <label className="text-white text-xs font-black uppercase tracking-wider block mb-2">🎮 Games per Subjek</label>
             <input
               type="number" min="1" max="50" value={games}
               onChange={e => setGames(parseInt(e.target.value) || 1)}
@@ -54,7 +54,7 @@ export default function MonthlyGenSettings({ onToast }) {
             />
           </div>
           <div>
-            <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">📝 Soalan per Game</label>
+            <label className="text-white text-xs font-black uppercase tracking-wider block mb-2">📝 Soalan per Game</label>
             <input
               type="number" min="5" max="50" value={questions}
               onChange={e => setQuestions(parseInt(e.target.value) || 5)}
@@ -65,7 +65,7 @@ export default function MonthlyGenSettings({ onToast }) {
 
         {/* Summary */}
         <div className="p-4 rounded-2xl mb-4" style={{ background: 'rgba(255,255,255,0.08)' }}>
-          <p className="text-white/60 text-xs font-semibold mb-3 text-center">📊 Anggaran setiap bulan</p>
+          <p className="text-white text-xs font-black mb-3 text-center">📊 Anggaran setiap bulan</p>
 
           <div className="space-y-2 text-xs mb-3">
             <div className="flex items-center justify-between px-2 py-1.5 rounded-xl" style={{ background: 'rgba(255,255,255,0.06)' }}>
