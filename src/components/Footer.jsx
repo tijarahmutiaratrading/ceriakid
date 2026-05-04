@@ -8,8 +8,15 @@ export default function Footer() {
     return null;
   }
 
+  const isLanding = typeof window !== 'undefined' && window.location.pathname === '/';
+
+  // Don't render footer on Landing page (it has its own)
+  if (isLanding) {
+    return null;
+  }
+
   return (
-    <footer className="text-white py-8 text-center md:py-10 relative" style={{ background: 'rgba(0,0,0,0.2)', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+    <footer className="text-white py-8 text-center md:py-10 relative w-full" style={{ background: 'rgba(0,0,0,0.2)', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
       <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
       <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
       <div className="flex justify-center gap-6 text-xs text-white/60">
