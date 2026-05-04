@@ -63,51 +63,65 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
 
+  const navItems = [
+    { path: '/dashboard', emoji: '🏠', label: 'Rumah' },
+    { path: '/games-hub', emoji: '🎮', label: 'Games' },
+    { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi' },
+    { path: '/settings', emoji: '⚙️', label: 'Tetapan' },
+  ];
+
   return (
     <>
-      {/* Header Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-4 pb-2 pt-1">
-        <div className={`w-full md:max-w-lg rounded-t-2xl px-3 sm:px-5 h-16 flex items-center justify-between ${
-          isPlayingGame
-            ? 'bg-white shadow-lg border border-gray-200'
-            : ''
-        }`}
-             style={isPlayingGame ? {
-               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-             } : {
-               background: 'rgba(255,255,255,0.18)',
+      {/* Header Bar - Sticky Bottom Nav */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-0">
+        <div className={`w-full md:max-w-lg rounded-t-2xl h-20 flex items-center justify-around border-t`}
+             style={{
+               background: 'rgba(255,255,255,0.95)',
                backdropFilter: 'blur(24px)',
                WebkitBackdropFilter: 'blur(24px)',
-               border: '1px solid rgba(255,255,255,0.35)',
-               boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
+               borderTop: '1px solid rgba(0,0,0,0.08)',
+               boxShadow: '0 -2px 8px rgba(0,0,0,0.08)'
              }}>
-          {/* Left: Hamburger */}
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-
-          {/* Center: Logo / Title */}
-          <Link to="/" className="flex items-center gap-2 flex-1 justify-center">
-            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
-          </Link>
-
-          {/* Right: Language Switcher or Back */}
-          <div className="flex items-center gap-2">
-            {!isLanding && <LanguageSwitcher />}
-            {shouldShowBack ? (
-              <Link to={backTo}>
-                <button type="button" className="p-2 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
-                  <ArrowLeft className="w-5 h-5" />
-                </button>
+          {isAuthenticated ? (
+            navItems.map((item) => (
+              <Link key={item.path} to={item.path} className="flex-1">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  className={`w-full h-20 flex flex-col items-center justify-center gap-1 transition-all ${
+                    isActive(item.path) ? 'text-purple-600' : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  <span className="text-2xl">{item.emoji}</span>
+                  <span className="text-xs font-bold">{item.label}</span>
+                </motion.button>
               </Link>
-            ) : (
-              <div className="w-10" />
-            )}
-          </div>
+            ))
+          ) : (
+            <>
+              <Link to="/" className="flex-1">
+                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-purple-600">
+                  <span className="text-2xl">🏠</span>
+                  <span className="text-xs font-bold">Rumah</span>
+                </motion.button>
+              </Link>
+              <Link to="/games-hub" className="flex-1">
+                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-gray-600">
+                  <span className="text-2xl">🎮</span>
+                  <span className="text-xs font-bold">Games</span>
+                </motion.button>
+              </Link>
+              <Link to="/bbm" className="flex-1">
+                <motion.button whileTap={{ scale: 0.95 }} className="w-full h-20 flex flex-col items-center justify-center gap-1 text-gray-600">
+                  <span className="text-2xl">📚</span>
+                  <span className="text-xs font-bold">BBM</span>
+                </motion.button>
+              </Link>
+              <button onClick={() => setIsOpen(!isOpen)} className="flex-1 flex flex-col items-center justify-center gap-1 text-gray-600 h-20">
+                <span className="text-2xl">☰</span>
+                <span className="text-xs font-bold">Menu</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
 
