@@ -16,15 +16,13 @@ export default function Footer() {
   }
 
   return (
-    <footer className="text-white py-3 md:py-4 relative w-full" style={{ background: 'linear-gradient(135deg, #1e1b4b 0%, #581c87 50%, #6b21a8 100%)', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-      <p className="font-black text-sm md:text-lg mb-0.5 md:mb-1">🎓 CeriaKid © 2026</p>
-      <p className="text-white/80 text-xs md:text-sm mb-3 md:mb-4">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
-      <div className="flex flex-wrap justify-center gap-3 md:gap-6 text-xs text-white/60 px-3 w-full">
-        <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white transition-colors">Terma Penggunaan</a>
-        <span className="text-white/40">•</span>
-        <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white transition-colors">Dasar Privasi</a>
-        <span className="text-white/40">•</span>
-        <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white transition-colors">Hubungi Kami</a>
+    <footer className="text-white py-4 text-center md:py-5 relative w-full" style={{ background: 'linear-gradient(135deg, #1e1b4b 0%, #581c87 50%, #6b21a8 100%)', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+      <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
+      <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
+      <div className="flex justify-center gap-6 text-xs text-white/60">
+        <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white">Terma Penggunaan</a>
+        <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white">Dasar Privasi</a>
+        <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white">Hubungi Kami</a>
       </div>
     </footer>
   );
