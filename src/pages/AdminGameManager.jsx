@@ -739,67 +739,67 @@ export default function AdminGameManager() {
                         >
                           <div className={`w-2.5 h-2.5 rounded-full ${s.color.dot}`} />
                           <span className="font-black text-white text-sm flex-1">{s.label}</span>
-                          <span className="text-white/40 text-xs font-semibold">{s.totalGames} games</span>
+                          <span className="text-white/70 text-xs font-semibold">{s.totalGames} games</span>
                           {expandedFile === s.file
-                            ? <ChevronDown className="w-4 h-4 text-white/40" />
-                            : <ChevronRight className="w-4 h-4 text-white/40" />
+                           ? <ChevronDown className="w-4 h-4 text-white/60" />
+                           : <ChevronRight className="w-4 h-4 text-white/60" />
                           }
-                        </button>
+                          </button>
 
-                        {/* Games list */}
-                        {expandedFile === s.file && (
+                          {/* Games list */}
+                          {expandedFile === s.file && (
                           <div className="border-t border-white/10">
-                            {filteredGames.length === 0 ? (
-                              <p className="text-white/30 text-xs text-center py-4">Tiada games lagi</p>
-                            ) : (
-                              filteredGames.map(g => (
-                                <div key={g.id} className="flex items-center gap-3 px-4 py-3 border-b border-white/5 last:border-0 hover:bg-white/5 transition-all">
-                                  <div className="flex-1 min-w-0">
-                                    <p className="text-white text-xs font-bold truncate">{g.title}</p>
-                                    <div className="flex gap-2 mt-0.5">
-                                      <span className="text-white/60 text-xs">{g.type}</span>
-                                      <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
-                                        {g.questionCount} soalan
-                                      </span>
-                                      {g.players > 0 && <span className="text-white/60 text-xs">{g.players} players</span>}
-                                    </div>
-                                  </div>
-                                  <button
-                                    onClick={() => setEditGame(g._raw)}
-                                    className="p-1.5 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-all"
-                                  >
-                                    <Edit3 className="w-3.5 h-3.5" />
-                                  </button>
-                                </div>
-                              ))
-                            )}
-                            {/* Subject-level actions */}
-                            <div className="flex gap-2 px-4 py-3 border-t border-white/10">
-                              <button
-                                onClick={() => setGenerateModal({ games: s.totalGames || 5, questions: 20, ageGroup: s.ageGroup, subject: s.subject, label: s.label, currentCount: s.totalGames })}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-500/20 text-green-300 border border-green-400/20 text-xs font-bold hover:bg-green-500/30 transition-all"
-                              >
-                                <Wand2 className="w-3 h-3" /> Sync Games
-                              </button>
-                              <button
-                                onClick={() => handleVerifySubject(s.file, s.label, s.ageGroup, s.subject, dbGamesCache)}
-                                disabled={actionLoading === `verify-${s.file}`}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-yellow-500/20 text-yellow-300 border border-yellow-400/20 text-xs font-bold hover:bg-yellow-500/30 disabled:opacity-50 transition-all"
-                              >
-                                {actionLoading === `verify-${s.file}` ? <Loader2 className="w-3 h-3 animate-spin" /> : '✅'} Verify
-                              </button>
-                            </div>
+                           {filteredGames.length === 0 ? (
+                             <p className="text-white/50 text-xs text-center py-4">Tiada games lagi</p>
+                           ) : (
+                             filteredGames.map(g => (
+                               <div key={g.id} className="flex items-center gap-3 px-4 py-3 border-b border-white/5 last:border-0 hover:bg-white/5 transition-all">
+                                 <div className="flex-1 min-w-0">
+                                   <p className="text-white text-xs font-bold truncate">{g.title}</p>
+                                   <div className="flex gap-2 mt-0.5">
+                                     <span className="text-white/60 text-xs">{g.type}</span>
+                                     <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
+                                       {g.questionCount} soalan
+                                     </span>
+                                     {g.players > 0 && <span className="text-white/60 text-xs">{g.players} players</span>}
+                                   </div>
+                                 </div>
+                                 <button
+                                   onClick={() => setEditGame(g._raw)}
+                                   className="p-1.5 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-all"
+                                 >
+                                   <Edit3 className="w-3.5 h-3.5" />
+                                 </button>
+                               </div>
+                             ))
+                           )}
+                           {/* Subject-level actions */}
+                           <div className="flex gap-2 px-4 py-3 border-t border-white/10">
+                             <button
+                               onClick={() => setGenerateModal({ games: s.totalGames || 5, questions: 20, ageGroup: s.ageGroup, subject: s.subject, label: s.label, currentCount: s.totalGames })}
+                               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-500/20 text-green-300 border border-green-400/20 text-xs font-bold hover:bg-green-500/30 transition-all"
+                             >
+                               <Wand2 className="w-3 h-3" /> Sync Games
+                             </button>
+                             <button
+                               onClick={() => handleVerifySubject(s.file, s.label, s.ageGroup, s.subject, dbGamesCache)}
+                               disabled={actionLoading === `verify-${s.file}`}
+                               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-yellow-500/20 text-yellow-300 border border-yellow-400/20 text-xs font-bold hover:bg-yellow-500/30 disabled:opacity-50 transition-all"
+                             >
+                               {actionLoading === `verify-${s.file}` ? <Loader2 className="w-3 h-3 animate-spin" /> : '✅'} Verify
+                             </button>
+                           </div>
                           </div>
-                        )}
-                      </motion.div>
-                    );
-                  })}
-                      </div>
-                    )}
-                  </div>
-                )}
+                          )}
+                          </motion.div>
+                          );
+                          })}
+                          </div>
+                          )}
+                          </div>
+                          )}
 
-                {/* Sekolah Rendah Section */}
+                          {/* Sekolah Rendah Section */}
                 {(managerAgeFilter === 'all' || managerAgeFilter === 'sekolah_rendah') && (
                   <div>
                     <button
@@ -832,25 +832,25 @@ export default function AdminGameManager() {
                         >
                           <div className={`w-2.5 h-2.5 rounded-full ${s.color.dot}`} />
                           <span className="font-black text-white text-sm flex-1">{s.label}</span>
-                          <span className="text-white/40 text-xs font-semibold">{s.totalGames} games</span>
+                          <span className="text-white/70 text-xs font-semibold">{s.totalGames} games</span>
                           {expandedFile === s.file
-                            ? <ChevronDown className="w-4 h-4 text-white/40" />
-                            : <ChevronRight className="w-4 h-4 text-white/40" />
+                           ? <ChevronDown className="w-4 h-4 text-white/60" />
+                           : <ChevronRight className="w-4 h-4 text-white/60" />
                           }
-                        </button>
+                          </button>
 
-                        {/* Games list */}
-                        {expandedFile === s.file && (
+                          {/* Games list */}
+                          {expandedFile === s.file && (
                           <div className="border-t border-white/10">
-                            {filteredGames.length === 0 ? (
-                              <p className="text-white/30 text-xs text-center py-4">Tiada games lagi</p>
-                            ) : (
-                              filteredGames.map(g => (
-                                <div key={g.id} className="flex items-center gap-3 px-4 py-3 border-b border-white/5 last:border-0 hover:bg-white/5 transition-all">
-                                  <div className="flex-1 min-w-0">
-                                    <p className="text-white text-xs font-bold truncate">{g.title}</p>
-                                    <div className="flex gap-2 mt-0.5">
-                                      <span className="text-white/40 text-xs">{g.type}</span>
+                           {filteredGames.length === 0 ? (
+                             <p className="text-white/50 text-xs text-center py-4">Tiada games lagi</p>
+                           ) : (
+                             filteredGames.map(g => (
+                               <div key={g.id} className="flex items-center gap-3 px-4 py-3 border-b border-white/5 last:border-0 hover:bg-white/5 transition-all">
+                                 <div className="flex-1 min-w-0">
+                                   <p className="text-white text-xs font-bold truncate">{g.title}</p>
+                                   <div className="flex gap-2 mt-0.5">
+                                     <span className="text-white/60 text-xs">{g.type}</span>
                                       <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
                                         {g.questionCount} soalan
                                       </span>
