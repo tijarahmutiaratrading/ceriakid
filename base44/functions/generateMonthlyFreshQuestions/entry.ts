@@ -21,7 +21,7 @@ const SUBJECTS = [
   { ageGroup: 'sekolah_rendah', subject: 'bahasa_mandarin', label: 'Sekolah Rendah - Mandarin' },
 ];
 
-const NEW_GAMES_PER_SUBJECT = 5;
+const NEW_GAMES_PER_SUBJECT = 20;
 const QUESTIONS_PER_GAME = 20;
 
 // Returns 'YYYY-MM' string, offset by monthsAgo (0 = current, -1 = last month, -2 = 2 months ago)
