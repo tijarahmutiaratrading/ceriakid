@@ -70,10 +70,16 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
         <div className={`w-full md:max-w-lg rounded-2xl px-3 sm:px-5 h-16 flex items-center justify-between ${
           isPlayingGame
             ? 'bg-white shadow-lg border border-gray-200'
-            : 'bg-white/30 backdrop-blur-xl shadow-xl border border-white/30'
+            : ''
         }`}
-             style={{
-               boxShadow: isPlayingGame ? '0 4px 12px rgba(0, 0, 0, 0.1)' : '0 10px 30px rgba(0, 0, 0, 0.1)'
+             style={isPlayingGame ? {
+               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+             } : {
+               background: 'rgba(255,255,255,0.18)',
+               backdropFilter: 'blur(24px)',
+               WebkitBackdropFilter: 'blur(24px)',
+               border: '1px solid rgba(255,255,255,0.35)',
+               boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
              }}>
           {/* Left: Hamburger */}
           <button
