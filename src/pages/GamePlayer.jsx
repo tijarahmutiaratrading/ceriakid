@@ -446,7 +446,7 @@ export default function GamePlayer() {
     return (
       <div className="min-h-screen bg-pattern">
         <AppHeader showBack={true} backTo={`/games/${category}`} />
-        <div className="max-w-lg mx-auto px-4 py-4 md:py-6 pb-40 pt-28 md:pt-32">
+        <div className="max-w-lg mx-auto px-3 md:px-4 py-4 md:py-6 pb-40 pt-28 md:pt-32">
           <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} />
           {state.finished ? (
             <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} onGenerateNew={handleGenerateNew} isPremium={isPremium} />
@@ -454,8 +454,8 @@ export default function GamePlayer() {
             <TracingCanvas
               targetShape={currentQuestion?.letter || currentQuestion?.tracingTarget || 'A'}
               emoji={game.emoji}
-              width={350}
-              height={350}
+              width={Math.min(350, window.innerWidth - 32)}
+              height={Math.min(350, window.innerWidth - 32)}
               onComplete={handleTracingComplete}
             />
           )}
@@ -470,18 +470,18 @@ export default function GamePlayer() {
       <AppHeader showBack={true} backTo={`/games/${category}`} />
       <div className="max-w-lg mx-auto px-3 md:px-4 py-4 md:py-6 pb-40 pt-28 md:pt-32">
 
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2 text-sm font-bold text-game-purple">
-            {game.difficulty === 'hard' && <Zap className="w-4 h-4" />}
-            <span className="capitalize px-3 py-1 bg-game-purple/10 rounded-full">
-              {game.difficulty === 'easy' ? '🟢 Senang' : game.difficulty === 'medium' ? '🟡 Sedang' : '🔴 Susah'}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-sm font-bold text-gray-600">
-            <Clock className="w-4 h-4" />
-            {game.totalQuestions || 20} soalan
-          </div>
-        </div>
+         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-game-purple">
+             {game.difficulty === 'hard' && <Zap className="w-3 h-3 sm:w-4 sm:h-4" />}
+             <span className="capitalize px-2.5 py-1 text-xs sm:text-sm bg-game-purple/10 rounded-full whitespace-nowrap">
+               {game.difficulty === 'easy' ? '🟢 Senang' : game.difficulty === 'medium' ? '🟡 Sedang' : '🔴 Susah'}
+             </span>
+           </div>
+           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-gray-600">
+             <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+             {game.totalQuestions || 20} soalan
+           </div>
+         </div>
 
         <GameHeader
           title={game.title}
@@ -500,46 +500,46 @@ export default function GamePlayer() {
            key={state.currentQ}
            initial={{ opacity: 0, x: 50 }}
            animate={{ opacity: 1, x: 0 }}
-           className="rounded-3xl p-6 text-center mb-6"
+           className="rounded-3xl p-4 md:p-6 text-center mb-6"
            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
          >
 
 
           {/* Picture Quiz — image only */}
           {currentQuestion.image && (
-            <div className="text-6xl mb-3">{currentQuestion.image}</div>
+            <div className="text-4xl sm:text-6xl mb-3">{currentQuestion.image}</div>
           )}
 
           {/* Letter/Number Display */}
           {currentQuestion.letter && (
-            <div className="text-6xl font-black text-game-purple mb-2">
+            <div className="text-4xl sm:text-6xl font-black text-game-purple mb-2">
               {currentQuestion.letter}
             </div>
           )}
 
           {currentQuestion.word && (
-            <p className="text-2xl font-bold text-gray-700">
+            <p className="text-lg sm:text-2xl font-bold text-gray-700">
               {currentQuestion.word}
             </p>
           )}
 
           {/* Generic question text — covers all DB game formats */}
            {currentQuestion.question && (
-             <p className={`font-bold text-gray-800 mb-2 ${currentQuestion.question.length > 60 ? 'text-base' : 'text-xl'}`}>
+             <p className={`font-bold text-gray-800 mb-2 ${currentQuestion.question.length > 60 ? 'text-xs sm:text-base' : 'text-sm sm:text-xl'}`}>
                {currentQuestion.question}
              </p>
            )}
 
            {/* Text Question (math, multiple choice) */}
            {currentQuestion.problem && (
-             <div className={`font-black text-game-purple ${currentQuestion.problem.length > 20 ? 'text-2xl' : 'text-4xl'}`}>
+             <div className={`font-black text-game-purple ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}>
                {currentQuestion.problem}
              </div>
            )}
 
            {/* Question label based on game type */}
            {currentQuestion.image && !currentQuestion.problem && !currentQuestion.question && (
-             <p className="text-lg font-bold text-gray-700 mt-2">
+             <p className="text-base sm:text-lg font-bold text-gray-700 mt-2">
                {game.type === 'counting' ? 'Berapakah ini?' : 'Apakah ini?'}
              </p>
            )}

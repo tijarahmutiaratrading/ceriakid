@@ -81,7 +81,7 @@ export default function Home() {
             className="mb-4 md:mb-6 p-3 md:p-4 rounded-3xl flex items-center gap-3 md:gap-4 cursor-pointer hover:scale-[1.01] transition-transform"
             style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
           >
-            <div className="w-14 h-14 rounded-2xl bg-white/40 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">🐱</div>
+            <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-white/40 flex items-center justify-center text-2xl md:text-3xl shadow-inner flex-shrink-0">🐱</div>
             <div className="flex-1 min-w-0">
               <p className="text-white/80 text-xs font-bold">
                 {lang === 'bm' ? 'Selamat datang kembali!' : 'Welcome back!'}
