@@ -16,7 +16,8 @@ import { syncOfflineProgress } from '@/lib/offlineSyncManager';
 import { base44 } from '@/api/base44Client';
 
 export default function Home() {
-  const { isAuthenticated, user, isLoadingAuth } = useAuth();
+  const authContext = useAuth();
+  const { isAuthenticated, user, isLoadingAuth } = authContext || {};
   const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
   const { lang } = useLang();
   const safeAgeGroup = ageGroup || 'prasekolah';
