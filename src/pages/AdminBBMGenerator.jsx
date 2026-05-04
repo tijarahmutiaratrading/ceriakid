@@ -396,45 +396,45 @@ export default function AdminBBMGenerator() {
         {tab === 'manager' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Search + Filter */}
-             <div className="flex flex-col gap-2 mb-4">
-               <div className="relative">
-                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                 <input
-                   type="text" placeholder="Cari BBM..."
-                   value={search} onChange={e => setSearch(e.target.value)}
-                   className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold"
-                 />
-               </div>
-               <div className="flex gap-2">
-                 <select
-                   value={filterSubject} onChange={e => setFilterSubject(e.target.value)}
-                   className="flex-1 px-3 py-2.5 rounded-2xl bg-white/10 text-white border border-white/20 font-semibold text-sm"
-                 >
-                   <option value="all" className="text-black">Semua Subjek</option>
-                   {SUBJECTS.map(s => <option key={s.value} value={s.value} className="text-black">{s.label}</option>)}
-                 </select>
-                 <button onClick={loadResources} className="p-2.5 rounded-2xl bg-white/10 text-white border border-white/20 hover:bg-white/20 flex-shrink-0">
-                   <RefreshCw className={`w-4 h-4 ${loadingResources ? 'animate-spin' : ''}`} />
-                 </button>
-                 <button
-                   onClick={async () => {
-                     if (!window.confirm('🚨 Delete SEMUA BBM? (Tidak boleh undo)')) return;
-                     for (const r of resources) {
-                       try {
-                         await base44.entities.BBMResource.delete(r.id);
-                       } catch (e) {
-                         console.error(`Gagal delete ${r.id}:`, e);
-                       }
-                     }
-                     setResources([]);
-                     showToast('✅ Semua BBM dipadam');
-                   }}
-                   className="p-2.5 rounded-2xl bg-red-500/20 text-red-300 border border-red-400/30 hover:bg-red-500/30 flex-shrink-0"
-                   title="Delete all BBM"
-                 >
-                   <Trash2 className="w-4 h-4" />
-                 </button>
-               </div>
+             <div className="space-y-2 mb-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <input
+                  type="text" placeholder="Cari BBM..."
+                  value={search} onChange={e => setSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 md:py-2.5 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-xs md:text-sm font-semibold"
+                />
+              </div>
+              <div className="flex gap-2">
+                <select
+                  value={filterSubject} onChange={e => setFilterSubject(e.target.value)}
+                  className="flex-1 px-2 md:px-3 py-2 md:py-2.5 rounded-2xl bg-white/10 text-white border border-white/20 font-semibold text-xs md:text-sm"
+                >
+                  <option value="all" className="text-black">Semua Subjek</option>
+                  {SUBJECTS.map(s => <option key={s.value} value={s.value} className="text-black">{s.label}</option>)}
+                </select>
+                <button onClick={loadResources} className="p-2 md:p-2.5 rounded-2xl bg-white/10 text-white border border-white/20 hover:bg-white/20 flex-shrink-0">
+                  <RefreshCw className={`w-4 h-4 ${loadingResources ? 'animate-spin' : ''}`} />
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!window.confirm('🚨 Delete SEMUA BBM? (Tidak boleh undo)')) return;
+                    for (const r of resources) {
+                      try {
+                        await base44.entities.BBMResource.delete(r.id);
+                      } catch (e) {
+                        console.error(`Gagal delete ${r.id}:`, e);
+                      }
+                    }
+                    setResources([]);
+                    showToast('✅ Semua BBM dipadam');
+                  }}
+                  className="p-2 md:p-2.5 rounded-2xl bg-red-500/20 text-red-300 border border-red-400/30 hover:bg-red-500/30 flex-shrink-0"
+                  title="Delete all BBM"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
              </div>
 
             {/* Stats row */}
