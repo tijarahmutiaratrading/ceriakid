@@ -187,6 +187,34 @@ export default function Home() {
           </Link>
         </motion.div>
 
+        {/* New Games Coming Soon Banner — shows until 1 June 2026 */}
+        {new Date() < new Date('2026-06-01') && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.16 }}
+            className="mb-5"
+          >
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className="p-4 rounded-2xl flex items-center gap-4 relative overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.4), rgba(249,115,22,0.45))', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}
+            >
+              {/* Sparkle decoration */}
+              <div className="absolute top-1 right-3 text-yellow-200 text-lg opacity-60 animate-pulse">✨</div>
+              <div className="text-4xl">🎉</div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <p className="text-white font-black text-sm">Permainan Baru Akan Datang!</p>
+                  <span className="px-2 py-0.5 bg-yellow-400 text-yellow-900 text-xs font-black rounded-full">1 Jun</span>
+                </div>
+                <p className="text-white/80 text-xs">Games baru untuk semua subjek akan dilancarkan pada 1 Jun 2026 🚀</p>
+                <p className="text-yellow-200 text-xs font-black mt-1">🌟 Coming Soon — Nantikan!</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
         {/* BBM Banner */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
