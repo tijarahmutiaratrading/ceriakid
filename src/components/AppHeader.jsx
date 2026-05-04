@@ -122,8 +122,15 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           {navItems.map((item) => {
             const isBackButton = item.label === 'Back';
             return isBackButton ? (
-              <motion.button key={item.label} type="button" onClick={item.action} whileTap={{ scale: 0.9 }} className="clay-button rounded-full w-12 h-12 flex items-center justify-center">
-                <ArrowLeft className="w-6 h-6" />
+              <motion.button 
+                key={item.label} 
+                type="button" 
+                onClick={item.action} 
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                className="rounded-full w-12 h-12 flex items-center justify-center bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg hover:shadow-xl transition-all font-bold"
+              >
+                <ArrowLeft className="w-5 h-5" />
               </motion.button>
             ) : item.path ? (
               <Link key={item.label} to={item.path} className="flex flex-col items-center gap-1 text-center">
