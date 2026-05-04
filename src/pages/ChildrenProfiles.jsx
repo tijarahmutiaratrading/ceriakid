@@ -7,8 +7,8 @@ import { base44 } from '@/api/base44Client';
 import { Link } from 'react-router-dom';
 
 const AGE_OPTIONS = [
-  { value: 'prasekolah', label: 'Prasekolah', sub: '3–5 tahun', emoji: '🎨' },
-  { value: 'sekolah_rendah', label: 'Sekolah Rendah', sub: '6–12 tahun', emoji: '📚' },
+  { value: 'prasekolah', label: 'Prasekolah', sub: '4–6 tahun', emoji: '🎨' },
+  { value: 'sekolah_rendah', label: 'Sekolah Rendah', sub: '7–12 tahun', emoji: '📚' },
 ];
 
 const AVATARS = ['🐱', '🐶', '🐸', '🦊', '🐼', '🐨', '🦁', '🐯'];
@@ -258,7 +258,7 @@ export default function ChildrenProfiles() {
                   <div className="flex items-center gap-1.5 mt-1">
                     <span className="text-sm">{child.ageGroup === 'prasekolah' ? '🎨' : '📚'}</span>
                     <span className="text-white/70 text-xs font-semibold">
-                      {child.ageGroup === 'prasekolah' ? 'Prasekolah · 3–5 thn' : 'Sekolah Rendah · 6–12 thn'}
+                      {child.ageGroup === 'prasekolah' ? 'Prasekolah · 4–6 thn' : 'Sekolah Rendah · 7–12 thn'}
                     </span>
                   </div>
                 </div>

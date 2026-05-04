@@ -247,7 +247,7 @@ export default function Landing() {
                 onClick={scrollToPricing}
                 className="px-6 py-3 bg-orange-500 text-white rounded-full font-black text-base shadow-lg flex items-center gap-2 justify-center">
                 
-                🎮 Bayar Sekarang <ArrowRight className="w-4 h-4" />
+                🎮 Mulakan Sekarang <ArrowRight className="w-4 h-4" />
               </motion.button>
               <button
                 onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
@@ -570,7 +570,7 @@ export default function Landing() {
             { q: 'Apakah peranti yang disokong?', a: 'Semua jenis smartphone, tablet, dan komputer. iOS, Android, dan browser. Boleh download untuk guna offline.' },
             { q: 'Boleh cancel bila-bila masa?', a: 'Ya! Cancel dari settings dalam 10 saat. Tiada penalti, tiada fee tersembunyi. Janji kami.' },
             { q: 'Adakah ikut silibus sekolah Malaysia?', a: 'Ya — kami ikut KSSR (Kurikulum Standard Sekolah Rendah) sepenuhnya. Sama persis dengan apa yang diajar di sekolah, Darjah 1-6.' },
-            { q: 'Berapa anak boleh guna?', a: 'Pelan Asas & Standard untuk 1 peringkat. Pelan Keluarga untuk Prasekolah & Sekolah Rendah dengan sehingga 4 profil anak — jimat lebih!' },
+            { q: 'Berapa anak boleh guna?', a: 'Pelan Asas untuk Prasekolah (1 anak), Standard untuk Sekolah Rendah (1 anak). Pelan Keluarga untuk kedua-dua peringkat dengan sehingga 4 profil anak — jimat lebih!' },
             { q: 'Macam mana nak mula?', a: 'Pilih pelan, isikan maklumat, bayar melalui FPX, dan anak terus boleh mula belajar dalam masa 2 minit!' }].
             map((faq, i) =>
             <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="bg-orange-50 rounded-2xl p-5 border border-orange-100 hover:border-orange-300 transition-colors">
@@ -607,9 +607,9 @@ export default function Landing() {
         <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
         <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
         <div className="flex justify-center gap-6 text-xs text-white/60">
-          <span className="cursor-pointer hover:text-white">Terma Penggunaan</span>
-          <span className="cursor-pointer hover:text-white">Dasar Privasi</span>
-          <span className="cursor-pointer hover:text-white">Hubungi Kami</span>
+          <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white">Terma Penggunaan</a>
+          <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white">Dasar Privasi</a>
+          <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white">Hubungi Kami</a>
         </div>
       </footer>
 

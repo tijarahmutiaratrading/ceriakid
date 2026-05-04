@@ -57,7 +57,7 @@ export default function GamePlayer() {
         if (userTier === 'trial' || userTier === 'keluarga' || userTier === 'pro') return false;
         if (userTier === 'standard') return ageGroup === 'prasekolah';
         if (userTier === 'asas') return ageGroup === 'sekolah_rendah';
-        if (userTier === 'premium') return false;
+        if (userTier === 'premium') return gameIndex >= 100;
         return gameIndex >= 5; // free
       })();
 
