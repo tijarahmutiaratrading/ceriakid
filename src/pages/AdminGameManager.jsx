@@ -420,7 +420,7 @@ export default function AdminGameManager() {
                         {sel && <span className="text-white text-xs">✓</span>}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="truncate">{sc.label.replace('Prasekolah - ', '')}</p>
+                        <p className="truncate text-white">{sc.label.replace('Prasekolah - ', '')}</p>
                         <div className={`flex gap-2 mt-0.5 text-xs font-semibold ${sel ? 'text-indigo-400' : 'text-white/40'}`}>
                           <span>{curr.games} games</span>
                           <span>·</span>
