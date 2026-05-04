@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Wand2, FileText, BookOpen, ClipboardList, Loader2, Eye, Check, RefreshCw, Trash2, ToggleLeft, ToggleRight, Search, Plus, Edit3 } from 'lucide-react';
+import { Wand2, FileText, Loader2, Check, RefreshCw, Trash2, ToggleLeft, ToggleRight, Search, Edit3 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
 
@@ -51,7 +51,6 @@ export default function AdminBBMGenerator() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
-  const [previewOpen, setPreviewOpen] = useState(false);
 
   // Manager state
   const [resources, setResources] = useState([]);
@@ -105,32 +104,28 @@ export default function AdminBBMGenerator() {
     setError('');
     setResult(null);
     const total = selectedSubjects.size * selectedLevels.size * selectedTypes.size;
-    let count = 0;
+    let createdCount = 0;
     try {
       for (const subject of selectedSubjects) {
         for (const level of selectedLevels) {
           for (const type of selectedTypes) {
-            count++;
-            await base44.functions.invoke('generateBBM', { 
+            const res = await base44.functions.invoke('generateBBM', { 
               subject, level, type, 
               topic: form.topic, 
-              count: form.count 
+              count: form.count,
+              autoPublish: true
             });
+            if (res.data?.success) createdCount++;
           }
         }
       }
-      setResult({ success: true, total, title: `${total} BBM berhasil dijana` });
+      setResult({ success: true, total, createdCount, title: `${createdCount}/${total} BBM berkualitas tinggi dijana & dipublish` });
+      loadResources();
     } catch (e) {
       setError(e.message || 'Gagal jana BBM');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handlePublish = async () => {
-    if (!result?.bbmId) return;
-    await base44.entities.BBMResource.update(result.bbmId, { isPublished: true });
-    setResult(prev => ({ ...prev, published: true }));
   };
 
   // Manager actions
@@ -378,20 +373,13 @@ export default function AdminBBMGenerator() {
                     </div>
                   </div>
                   <div className="flex gap-3">
-                    <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={() => setPreviewOpen(true)}
+                    <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={() => setTab('manager')}
                       className="flex-1 py-3 rounded-2xl bg-white/10 text-white font-bold flex items-center justify-center gap-2 border border-white/20">
-                      <Eye className="w-4 h-4" /> Preview
+                      <FileText className="w-4 h-4" /> Tengok di Manager
                     </motion.button>
-                    {!result.published ? (
-                      <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={handlePublish}
-                        className="flex-1 py-3 rounded-2xl bg-green-500 text-white font-bold flex items-center justify-center gap-2">
-                        <Check className="w-4 h-4" /> Publish ke BBM Hub
-                      </motion.button>
-                    ) : (
-                      <div className="flex-1 py-3 rounded-2xl bg-green-500/20 text-green-300 font-bold flex items-center justify-center gap-2 border border-green-400/30">
-                        <Check className="w-4 h-4" /> Dah Published!
-                      </div>
-                    )}
+                    <div className="flex-1 py-3 rounded-2xl bg-green-500/20 text-green-300 font-bold flex items-center justify-center gap-2 border border-green-400/30">
+                      <Check className="w-4 h-4" /> Auto Published!
+                    </div>
                   </div>
                   <button onClick={() => setResult(null)} className="w-full mt-3 py-2 text-white/50 text-sm flex items-center justify-center gap-2 hover:text-white/80">
                     <RefreshCw className="w-3 h-3" /> Jana Lagi
@@ -595,32 +583,7 @@ export default function AdminBBMGenerator() {
         )}
       </AnimatePresence>
 
-      {/* Preview Modal */}
-      <AnimatePresence>
-        {previewOpen && result?.htmlContent && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4"
-            onClick={() => setPreviewOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
-              className="bg-white rounded-3xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden"
-              onClick={e => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between p-4 border-b">
-                <h3 className="font-black text-gray-800">Preview BBM</h3>
-                <div className="flex gap-2">
-                  <button onClick={() => { const win = window.open('', '_blank'); win.document.write(result.htmlContent); win.document.close(); win.print(); }}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold text-sm">🖨️ Print / Save PDF</button>
-                  <button onClick={() => setPreviewOpen(false)} className="px-4 py-2 bg-gray-100 rounded-xl font-bold text-sm">Tutup</button>
-                </div>
-              </div>
-              <iframe srcDoc={result.htmlContent} className="flex-1 w-full" title="BBM Preview" />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
     </div>
   );
 }
