@@ -93,21 +93,38 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   return (
     <>
-      {/* Top Header - Landing Style */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 transition-transform duration-300" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)', transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
-        <div className="max-w-lg mx-auto w-full flex items-center justify-between">
-          <Link to="/">
-            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg cursor-pointer" />
-          </Link>
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center text-white font-black text-sm hover:shadow-md transition-all"
-          >
-            {user?.full_name?.[0]?.toUpperCase() || '👤'}
-          </button>
-        </div>
-      </nav>
+      {/* Top Header */}
+       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 transition-transform duration-300" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)', transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
+         <div className="max-w-lg mx-auto w-full flex items-center justify-between">
+           <Link to="/">
+             <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg cursor-pointer" />
+           </Link>
+           <div className="flex items-center gap-2">
+             <motion.button
+               type="button"
+               onClick={() => setIsOpen(!isOpen)}
+               whileTap={{ scale: 0.9 }}
+               whileHover={{ scale: 1.05 }}
+               className="w-10 h-10 rounded-full bg-gradient-to-br from-game-purple to-game-pink flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-all"
+               title="Menu"
+             >
+               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+             </motion.button>
+             {isAuthenticated && (
+               <motion.button
+                 type="button"
+                 onClick={() => { setIsOpen(false); logout?.(); }}
+                 whileTap={{ scale: 0.9 }}
+                 whileHover={{ scale: 1.05 }}
+                 className="w-10 h-10 rounded-full bg-gradient-to-br from-game-purple to-game-pink flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-all"
+                 title="Logout"
+               >
+                 <LogOut className="w-5 h-5" />
+               </motion.button>
+             )}
+           </div>
+         </div>
+       </nav>
 
 
 
