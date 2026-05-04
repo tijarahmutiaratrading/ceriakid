@@ -446,7 +446,7 @@ export default function GamePlayer() {
     return (
       <div className="min-h-screen bg-pattern">
         <AppHeader showBack={true} backTo={`/games/${category}`} />
-        <div className="max-w-lg mx-auto px-3 md:px-4 py-4 md:py-6 pb-40 pt-28 md:pt-32">
+        <div className="max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
           <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} />
           {state.finished ? (
             <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} onGenerateNew={handleGenerateNew} isPremium={isPremium} />
@@ -468,7 +468,7 @@ export default function GamePlayer() {
   return (
     <div className="min-h-screen bg-pattern">
       <AppHeader showBack={true} backTo={`/games/${category}`} />
-      <div className="max-w-lg mx-auto px-3 md:px-4 py-4 md:py-6 pb-40 pt-28 md:pt-32">
+      <div className="max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
 
          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-game-purple">
