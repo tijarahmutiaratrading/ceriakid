@@ -67,14 +67,14 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   return (
     <>
       {/* Header Bar - Sticky Bottom Nav */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-0">
-        <div className={`w-full md:max-w-lg rounded-t-3xl h-20 flex items-center justify-around border-t`}
+      <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-3 pb-3">
+        <div className={`w-full md:max-w-lg rounded-3xl h-20 flex items-center justify-around border-t`}
              style={{
                background: 'linear-gradient(135deg, #1a5f5f 0%, #0d3d3d 100%)',
                backdropFilter: 'blur(24px)',
                WebkitBackdropFilter: 'blur(24px)',
                borderTop: '1px solid rgba(255,255,255,0.1)',
-               boxShadow: '0 -4px 20px rgba(0,0,0,0.3)'
+               boxShadow: '0 -8px 32px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.4)'
              }}>
           {isAuthenticated ? (
             navItems.map((item) => (
