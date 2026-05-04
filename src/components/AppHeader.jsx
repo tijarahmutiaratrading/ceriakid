@@ -73,12 +73,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   return (
     <>
-      {/* Top Header */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-white shadow-md px-4 py-3">
-        <div className="max-w-lg mx-auto flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-8 rounded-lg" />
-          </Link>
+      {/* Top Header - Landing Style */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+        <div className="max-w-lg mx-auto w-full flex items-center justify-between">
+          <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-lg" />
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
@@ -87,7 +85,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             {user?.full_name?.[0]?.toUpperCase() || '👤'}
           </button>
         </div>
-      </div>
+      </nav>
 
       {/* Bottom Navigation Bar */}
       <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4">
