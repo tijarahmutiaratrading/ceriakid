@@ -129,19 +129,33 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 whileTap={{ scale: 0.9 }}
                 whileHover={{ scale: 1.05 }}
                 className="rounded-full w-12 h-12 flex items-center justify-center bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg hover:shadow-xl transition-all font-bold"
+                title={item.label}
               >
                 <ArrowLeft className="w-5 h-5" />
               </motion.button>
             ) : item.path ? (
-              <Link key={item.label} to={item.path} className="flex flex-col items-center gap-1 text-center">
-                <span className="text-xl">{item.emoji}</span>
-                <span className="text-xs font-bold text-gray-700">{item.label}</span>
+              <Link key={item.label} to={item.path} title={item.label}>
+                <motion.button 
+                  type="button"
+                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.05 }}
+                  className="rounded-full w-12 h-12 flex items-center justify-center bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg hover:shadow-xl transition-all font-bold"
+                >
+                  <span className="text-lg">{item.emoji}</span>
+                </motion.button>
               </Link>
             ) : (
-              <button key={item.label} onClick={item.action} className="flex flex-col items-center gap-1 text-center hover:opacity-70 transition-all">
-                <span className="text-xl">{item.emoji}</span>
-                <span className="text-xs font-bold text-gray-700">{item.label}</span>
-              </button>
+              <motion.button 
+                key={item.label} 
+                type="button"
+                onClick={item.action}
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                className="rounded-full w-12 h-12 flex items-center justify-center bg-gradient-to-br from-game-purple to-game-pink text-white shadow-lg hover:shadow-xl transition-all font-bold"
+                title={item.label}
+              >
+                <span className="text-lg">{item.emoji}</span>
+              </motion.button>
             );
           })}
         </div>
