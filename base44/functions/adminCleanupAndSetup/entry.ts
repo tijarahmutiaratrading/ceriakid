@@ -10,10 +10,24 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    // Get all users
-    const allUsers = await base44.asServiceRole.entities.User.list();
+    // Get all users and subscriptions
+    const allUsers = await base44.asServiceRole.entities.User.list('-created_date', 1000);
+    const allSubs = await base44.asServiceRole.entities.UserSubscription.list('-created_date', 1000);
     
-    // Delete all except target user
+    // Delete all subs except target user
+    let deletedSubCount = 0;
+    for (const sub of allSubs) {
+      if (sub.email !== 'tijarahmutiaratrading@gmail.com') {
+        try {
+          await base44.asServiceRole.entities.UserSubscription.delete(sub.id);
+          deletedSubCount++;
+        } catch (e) {
+          console.error(`Failed to delete sub ${sub.email}:`, e);
+        }
+      }
+    }
+    
+    // Delete all users except target user
     let deletedCount = 0;
     for (const u of allUsers) {
       if (u.email !== 'tijarahmutiaratrading@gmail.com') {
@@ -53,7 +67,7 @@ Deno.serve(async (req) => {
 
     return Response.json({
       success: true,
-      message: `✅ Semua user dipadam (${deletedCount}). ${user.email} jadi admin + Pro tier.`
+      message: `✅ Deleted ${deletedSubCount} subscriptions + ${deletedCount} users. ${user.email} = admin + Pro tier.`
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
