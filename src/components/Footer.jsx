@@ -1,42 +1,22 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 
 export default function Footer() {
   try {
     const location = useLocation();
   } catch {
-    // Not in Router context — return null
     return null;
   }
 
-  // Landing page has its own built-in footer — hide global footer everywhere
-  return null;
-
   return (
-    <motion.footer
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 }}
-      className="bg-gradient-to-r from-game-purple/10 via-game-pink/10 to-game-blue/10 border-t border-game-purple/20 mt-12"
-    >
-      <div className="max-w-lg mx-auto px-4 py-6">
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <span className="text-2xl">🎓</span>
-          <span className="text-lg font-black bg-gradient-to-r from-game-purple to-game-pink bg-clip-text text-transparent">CeriaKid</span>
-        </div>
-        <p className="text-xs text-center text-gray-600 mb-3">
-          Ceria belajar, suka bermain, maju bersama! 🌟
-        </p>
-        <div className="flex justify-center gap-2 mb-3 text-xs">
-          <span>✨ Pembelajaran Menyenangkan</span>
-          <span className="text-game-purple">•</span>
-          <span>📈 Progres Nyata</span>
-        </div>
-        <p className="text-xs text-center text-gray-500">
-          © 2026 CeriaKid. Dibuat dengan ❤️ untuk anak-anak Malaysia
-        </p>
+    <footer className="text-white py-8 text-center md:py-10 relative w-full" style={{ background: 'rgba(0,0,0,0.2)', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+      <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
+      <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
+      <div className="flex justify-center gap-6 text-xs text-white/60">
+        <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white">Terma Penggunaan</a>
+        <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white">Dasar Privasi</a>
+        <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white">Hubungi Kami</a>
       </div>
-    </motion.footer>
+    </footer>
   );
 }
