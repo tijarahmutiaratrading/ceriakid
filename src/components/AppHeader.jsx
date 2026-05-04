@@ -6,10 +6,19 @@ import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { base44 } from '@/api/base44Client';
+
+const TIER_CONFIG = {
+  free: { label: 'Percuma', emoji: '🆓', color: 'from-gray-400 to-gray-500' },
+  asas: { label: 'Asas', emoji: '🌱', color: 'from-green-400 to-emerald-500' },
+  standard: { label: 'Standard', emoji: '⭐', color: 'from-blue-400 to-indigo-500' },
+  keluarga: { label: 'Keluarga', emoji: '👑', color: 'from-purple-500 to-pink-500' },
+};
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
   const [navVisible, setNavVisible] = useState(true);
+  const [userTier, setUserTier] = useState('free');
   const { isAuthenticated, user, logout } = useAuth() || {};
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
   const location = useSafeLocation();
@@ -37,6 +46,14 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  React.useEffect(() => {
+    if (isAuthenticated && user?.email) {
+      base44.entities.UserSubscription.filter({ email: user.email }).then(subs => {
+        if (subs?.length > 0) setUserTier(subs[0].tier || 'free');
+      });
+    }
+  }, [isAuthenticated, user?.email]);
 
 
 
@@ -136,13 +153,34 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             className="fixed left-3 top-20 bottom-3 z-50 w-72 flex flex-col rounded-3xl overflow-hidden shadow-2xl"
             style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
-              <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-8 rounded-lg" />
-              <button type="button" onClick={() => setIsOpen(false)} className="p-1.5 text-gray-400 hover:text-gray-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+            {/* Header with User Profile */}
+            {isAuthenticated && user ? (
+              <div className="px-4 py-4 border-b border-white/10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-full bg-white/40 border-2 border-white/60 flex items-center justify-center text-2xl flex-shrink-0">🐱</div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-black text-sm truncate">{user.full_name || 'User'}</p>
+                    <p className="text-white/70 text-xs truncate">{user.email}</p>
+                  </div>
+                  <button type="button" onClick={() => setIsOpen(false)} className="p-1.5 text-white/70 hover:text-white flex-shrink-0">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className={`bg-gradient-to-r ${TIER_CONFIG[userTier]?.color || TIER_CONFIG.free.color} rounded-xl px-3 py-2 flex items-center gap-2`}>
+                  <span className="text-lg">{TIER_CONFIG[userTier]?.emoji || '🆓'}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-black text-xs">{TIER_CONFIG[userTier]?.label || 'Percuma'}</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
+                <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-8 rounded-lg" />
+                <button type="button" onClick={() => setIsOpen(false)} className="p-1.5 text-white/70 hover:text-white">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            )}
 
             {/* Scrollable nav */}
             <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
