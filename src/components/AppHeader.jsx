@@ -69,7 +69,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     <>
       {/* Header Bar - Sticky Bottom Nav */}
       <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-3 pb-3">
-        <div className={`w-full md:max-w-lg rounded-3xl h-20 flex items-center justify-around border-t`}
+        <div className={`w-full md:max-w-lg rounded-3xl h-20 flex items-center justify-between px-2 border-t`}
              style={{
                background: 'linear-gradient(135deg, #1a5f5f 0%, #0d3d3d 100%)',
                backdropFilter: 'blur(24px)',
