@@ -133,7 +133,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             exit={{ x: -320, opacity: 0 }}
             transition={{ type: 'spring', damping: 22, stiffness: 280 }}
             className="fixed left-3 top-3 bottom-3 z-50 w-72 flex flex-col rounded-3xl overflow-hidden shadow-2xl"
-            style={{ background: 'linear-gradient(135deg, rgba(255, 140, 0, 0.85), rgba(255, 69, 0, 0.85))', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 140, 0, 0.4)' }}
+            style={{ background: 'rgba(240, 242, 245, 0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(209, 213, 219, 0.5)' }}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-white/80">
