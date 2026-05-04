@@ -167,7 +167,7 @@ export default function AdminBBMGenerator() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+    <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
       {/* Toast */}
