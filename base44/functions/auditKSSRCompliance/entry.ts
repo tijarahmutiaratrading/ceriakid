@@ -9,9 +9,11 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
-    const validCategories = ['bahasa_melayu', 'english', 'mathematics', 'science', 'general', 'jawi', 'bahasa_tamil', 'bahasa_mandarin'];
+    const validCategories = ['bahasa_melayu', 'english', 'mathematics', 'science', 'general', 'jawi', 'bahasa_tamil', 'bahasa_mandarin', 'memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
+    const miniCategories = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
     const validAgeGroups = ['prasekolah', 'sekolah_rendah'];
     const validDifficulty = ['easy', 'medium', 'hard'];
+    const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
 
     // Fetch all games
     const allGames = await base44.entities.Game.list('-created_date', 1000);
@@ -64,12 +66,25 @@ Deno.serve(async (req) => {
         issues.noGameData.push(game.id);
       }
 
-      // Check questions in gameData
+      // Check questions/content in gameData
       const questions = game.gameData?.questions;
-      if (!questions || questions.length === 0) {
+      if (miniCategories.includes(game.category)) {
+        const hasMiniContent = Boolean(
+          game.gameData?.pairs?.length ||
+          game.gameData?.items?.length ||
+          game.gameData?.words?.length ||
+          game.gameData?.tiles?.length ||
+          game.gameData?.scenes?.length ||
+          game.gameData?.challenges?.length ||
+          game.gameData?.letters?.length
+        );
+        if (!hasMiniContent) issues.noGameData.push(game.id);
+      } else if (!questions || questions.length === 0) {
         issues.noQuestions.push(game.id);
-      } else if (questions.length < 8) {
-        issues.tooFewQuestions.push({ id: game.id, count: questions.length });
+      } else {
+        if (questions.length < 8) issues.tooFewQuestions.push({ id: game.id, count: questions.length });
+        const badQuestions = questions.filter(q => bannedPattern.test([q.problem || q.question || '', ...(q.options || [])].join(' ')));
+        if (badQuestions.length > 0) issues.wrongLanguageSubject.push({ id: game.id, title: game.title, sampleQuestion: badQuestions[0].problem || badQuestions[0].question });
       }
 
       // Check language matching (basic check)

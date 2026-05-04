@@ -106,7 +106,7 @@ export default function AdminBBMGenerator() {
     const levelLabel = LEVEL_LABELS[level] || level;
 
     const data = await base44.integrations.Core.InvokeLLM({
-      prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeInfo.label} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic || 'umum'}. Bilangan item/soalan: ${count}. Wajib ada objektif pembelajaran jelas, arahan murid yang mudah, kandungan selari tahap umur, soalan pelbagai aras mudah-sederhana, contoh tempatan Malaysia, jawapan/skema ringkas, tiada placeholder dan tiada fakta meragukan. Pulangkan JSON sahaja: title, description, instructions, items[{heading,content,answer}].`,
+      prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeInfo.label} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic || 'umum'}. Bilangan item/soalan: ${count}. Wajib ada objektif pembelajaran jelas, arahan murid yang mudah, kandungan selari tahap umur, soalan pelbagai aras mudah-sederhana, contoh tempatan Malaysia, jawapan/skema ringkas, tiada placeholder dan tiada fakta meragukan. DILARANG guna heading seperti "Soalan 1", "Item", "Gambar di bawah", atau arahan yang perlukan imej jika tiada imej sebenar. Setiap heading mesti menerangkan kemahiran khusus seperti "Kenal Pasti Kata Nama Am". Pulangkan JSON sahaja: title, description, instructions, items[{heading,content,answer}].`,
       response_json_schema: {
         type: 'object',
         properties: {

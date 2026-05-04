@@ -46,7 +46,7 @@ async function generateQuestionsForGame(base44, gameTitle, topicName, subject, a
       ? 'Gunakan bahasa subjek yang betul, ringkas dan mesra kanak-kanak; arahan boleh dwibahasa BM ringkas jika perlu.'
       : 'Gunakan Bahasa Malaysia baku yang betul, mudah dan mesra kanak-kanak.';
 
-  const bannedPattern = /(hewan|singh|bekam|lama|babi|soalan\s*\d+|placeholder|contoh jawapan)/i;
+  const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
   const cleanQuestions = (items) => (items || [])
     .filter(q => q?.problem && q.options?.length === 4 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3)
     .map(q => ({ problem: String(q.problem).trim(), options: q.options.map(o => String(o).trim()), answer: q.answer, emoji: String(q.emoji || '🎮').trim() }))
@@ -105,7 +105,48 @@ Output JSON sahaja: "questions" dengan problem, options[4], answer(0-3), emoji.`
     questions = [...questions, ...cleanQuestions(topup.questions)];
   }
 
-  return questions.slice(0, questionsCount);
+  const reviewed = await base44.asServiceRole.integrations.Core.InvokeLLM({
+    prompt: `Semak dan baiki senarai soalan ini untuk standard mass production CeriaKid.
+
+Konteks:
+- Subjek: ${CATEGORY_LABELS[subject] || subject}
+- Peringkat: ${AGE_LABELS[ageGroup] || ageGroup}
+- Topik: ${topicName}
+
+Tugas anda:
+1. Pulangkan TEPAT ${questionsCount} soalan terbaik.
+2. Betulkan semua jawapan salah, pilihan jawapan pelik, bahasa rojak, bahasa Indonesia/Inggeris yang tidak sesuai, dan fakta meragukan.
+3. Untuk Bahasa Melayu, guna BM Malaysia baku sahaja: contoh "arnab" bukan "kelinci", "kura-kura" bukan "turtle", "katak" bukan "kodok".
+4. Soalan mesti literal, mudah, natural, dan sesuai kanak-kanak; elakkan frasa pelik seperti "semangat ketua", "daki", "dua jenis rupa", "rongga hidung".
+5. Pastikan answer index sepadan dengan jawapan betul.
+
+Soalan asal JSON:
+${JSON.stringify(questions.slice(0, questionsCount))}
+
+Output JSON sahaja: questions[{problem, options[4], answer, emoji}]`,
+    response_json_schema: {
+      type: 'object',
+      properties: {
+        questions: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              problem: { type: 'string' },
+              options: { type: 'array', items: { type: 'string' }, minItems: 4, maxItems: 4 },
+              answer: { type: 'number', minimum: 0, maximum: 3 },
+              emoji: { type: 'string' },
+            },
+            required: ['problem', 'options', 'answer', 'emoji'],
+          },
+        },
+      },
+      required: ['questions'],
+    },
+  });
+
+  const finalQuestions = cleanQuestions(reviewed.questions);
+  return (finalQuestions.length >= questionsCount ? finalQuestions : questions).slice(0, questionsCount);
 }
 
 Deno.serve(async (req) => {
@@ -203,17 +244,26 @@ Deno.serve(async (req) => {
       return Response.json({ success: true, taskName: task.taskName, createdGames: newTotal, totalGames: totalNeeded, isDone });
     }
 
+    const sanitizeExistingQuestions = (questions = []) => {
+      const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
+      return questions
+        .filter(q => q?.problem && Array.isArray(q.options) && q.options.length === 4 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3)
+        .filter(q => new Set(q.options.map(o => String(o).trim().toLowerCase())).size === 4)
+        .filter(q => !bannedPattern.test([q.problem, ...q.options].join(' ')));
+    };
+
     const existingGames = await base44.asServiceRole.entities.Game.filter({ ageGroup: task.ageGroup, category: task.subject });
-    const underfilledGames = existingGames.filter(g => (g.gameData?.questions?.length || 0) < task.questionsPerGame);
+    const underfilledGames = existingGames.filter(g => sanitizeExistingQuestions(g.gameData?.questions || []).length < task.questionsPerGame);
     const totalWork = underfilledGames.length + (task.gamesCount || 0);
 
     const expandStart = Math.min(alreadyCreated, underfilledGames.length);
     const expandBatch = underfilledGames.slice(expandStart, expandStart + 3);
     if (expandBatch.length > 0) {
       for (const game of expandBatch) {
-        const missing = task.questionsPerGame - (game.gameData?.questions?.length || 0);
-        const generated = await generateQuestionsForGame(base44, game.title, game.title, task.subject, task.ageGroup, missing, []);
-        const questions = [...(game.gameData?.questions || []), ...generated].slice(0, task.questionsPerGame);
+        const existingClean = sanitizeExistingQuestions(game.gameData?.questions || []);
+        const missing = task.questionsPerGame - existingClean.length;
+        const generated = await generateQuestionsForGame(base44, game.title, game.title, task.subject, task.ageGroup, missing, existingClean.map(q => q.problem));
+        const questions = [...existingClean, ...generated].slice(0, task.questionsPerGame);
         await base44.asServiceRole.entities.Game.update(game.id, { totalQuestions: questions.length, gameData: { ...game.gameData, questions } });
         createdInBatch++;
       }
