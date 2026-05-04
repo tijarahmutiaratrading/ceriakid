@@ -88,17 +88,22 @@ export default function GameDatabase() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
         <div className="text-center">
-          <Loader2 className="w-12 h-12 animate-spin text-indigo-500 mx-auto mb-3" />
-          <p className="text-gray-600 font-semibold">Loading database...</p>
+          <div className="text-6xl animate-bounce mb-4">🗄️</div>
+          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 pb-32">
+    <div className="min-h-screen pb-32 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
       <AppHeader showBack={true} backTo="/admin-game-manager" />
 
       {/* Toast */}
@@ -155,38 +160,38 @@ export default function GameDatabase() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-4xl mx-auto px-4 pt-24">
+      <div className="relative max-w-4xl mx-auto px-4 pt-8 pb-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 p-5 rounded-3xl" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}>
           <div>
-            <h1 className="text-3xl font-black text-gray-900">🗄️ Game Database</h1>
-            <p className="text-gray-500 text-sm mt-1">Semua games & soalan dalam sistem</p>
+            <h1 className="text-xl font-black text-white">🗄️ Game Database</h1>
+            <p className="text-white/60 text-xs mt-1">Semua games & soalan dalam sistem</p>
           </div>
-          <button onClick={fetchData} className="p-2 bg-white rounded-xl shadow border border-gray-200 hover:bg-gray-50 transition-all">
-            <RefreshCw className="w-5 h-5 text-gray-600" />
+          <button onClick={fetchData} className="p-2 bg-white/20 rounded-xl border border-white/30 hover:bg-white/30 transition-all">
+            <RefreshCw className="w-5 h-5 text-white" />
           </button>
         </div>
 
         {/* Summary Bar */}
         {data && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-            <div className="bg-white rounded-2xl p-4 shadow border border-gray-100 text-center">
-              <p className="text-2xl font-black text-indigo-600">{data.subjects.length}</p>
-              <p className="text-xs text-gray-500 font-semibold">Subjek</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            <div className="rounded-2xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <p className="text-2xl font-black text-yellow-300">{data.subjects.length}</p>
+              <p className="text-xs text-white/70 font-semibold">Subjek</p>
             </div>
-            <div className="bg-white rounded-2xl p-4 shadow border border-gray-100 text-center">
-              <p className="text-2xl font-black text-blue-600">{data.subjects.reduce((a, s) => a + s.totalGames, 0)}</p>
-              <p className="text-xs text-gray-500 font-semibold">Total Games</p>
+            <div className="rounded-2xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <p className="text-2xl font-black text-blue-200">{data.subjects.reduce((a, s) => a + s.totalGames, 0)}</p>
+              <p className="text-xs text-white/70 font-semibold">Total Games</p>
             </div>
-            <div className="bg-white rounded-2xl p-4 shadow border border-gray-100 text-center">
-              <p className="text-2xl font-black text-green-600">
+            <div className="rounded-2xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <p className="text-2xl font-black text-green-300">
                 {data.subjects.reduce((a, s) => a + s.games.filter(g => g.questionCount >= 20).length, 0)}
               </p>
-              <p className="text-xs text-gray-500 font-semibold">Games 20+ Soalan</p>
+              <p className="text-xs text-white/70 font-semibold">Games 20+ Soalan</p>
             </div>
-            <div className="bg-white rounded-2xl p-4 shadow border border-gray-100 text-center">
-              <p className="text-2xl font-black text-orange-600">{data.gameHub.length}</p>
-              <p className="text-xs text-gray-500 font-semibold">Hub Mini-Games</p>
+            <div className="rounded-2xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <p className="text-2xl font-black text-orange-300">{data.gameHub.length}</p>
+              <p className="text-xs text-white/70 font-semibold">Hub Mini-Games</p>
             </div>
           </div>
         )}
@@ -198,7 +203,7 @@ export default function GameDatabase() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.04 }}
-            className={`bg-white rounded-2xl shadow border-l-4 ${SUBJECT_BORDER[subjectData.subject] || 'border-l-gray-400'} mb-4 overflow-hidden`}
+            className={`rounded-2xl mb-4 overflow-hidden border-l-4 ${SUBJECT_BORDER[subjectData.subject] || 'border-l-gray-400'}`} style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}
           >
             {/* File Header Row */}
             <div className="flex items-center justify-between p-4">
@@ -212,8 +217,8 @@ export default function GameDatabase() {
                     : <ChevronRight className="w-5 h-5 text-gray-500" />}
                 </div>
                 <div>
-                  <p className="font-black text-gray-900">{subjectData.label}</p>
-                  <p className="text-xs text-gray-500">{subjectData.file}.js</p>
+                  <p className="font-black text-white">{subjectData.label}</p>
+                  <p className="text-xs text-white/50">{subjectData.file}.js</p>
                 </div>
               </button>
 
@@ -269,28 +274,16 @@ export default function GameDatabase() {
                   className="border-t border-gray-100 overflow-hidden"
                 >
                   <div className="p-3 space-y-1 max-h-80 overflow-y-auto">
-                    {/* Table Header */}
-                    <div className="grid grid-cols-12 gap-2 px-3 py-1 text-xs font-bold text-gray-400 uppercase">
-                      <span className="col-span-1">#</span>
-                      <span className="col-span-5">Title</span>
-                      <span className="col-span-2">Type</span>
-                      <span className="col-span-2 text-center">Soalan</span>
-                      <span className="col-span-2 text-center">Status</span>
-                    </div>
-
                     {subjectData.games.map((game) => (
-                      <div key={game.index} className="grid grid-cols-12 gap-2 items-center px-3 py-2 rounded-xl hover:bg-gray-50 transition-all">
-                        <span className="col-span-1 text-xs text-gray-400 font-bold">{game.index + 1}</span>
-                        <span className="col-span-5 text-sm font-semibold text-gray-800 truncate">{game.title}</span>
-                        <span className="col-span-2 text-xs text-gray-500 truncate">{game.type}</span>
-                        <span className={`col-span-2 text-center text-sm font-black ${game.questionCount >= 20 ? 'text-green-600' : game.questionCount >= 10 ? 'text-orange-500' : 'text-red-500'}`}>
-                          {game.questionCount}
+                      <div key={game.index} className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/10 transition-all">
+                        <span className="text-xs text-white/40 font-bold w-5 flex-shrink-0">{game.index + 1}</span>
+                        <span className="flex-1 text-xs font-semibold text-white truncate">{game.title}</span>
+                        <span className={`text-xs font-black flex-shrink-0 ${game.questionCount >= 20 ? 'text-green-300' : game.questionCount >= 10 ? 'text-orange-300' : 'text-red-300'}`}>
+                          {game.questionCount}Q
                         </span>
-                        <div className="col-span-2 flex justify-center">
-                          {game.questionCount >= 20
-                            ? <CheckCircle2 className="w-4 h-4 text-green-500" />
-                            : <AlertCircle className="w-4 h-4 text-orange-400" />}
-                        </div>
+                        {game.questionCount >= 20
+                          ? <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                          : <AlertCircle className="w-4 h-4 text-orange-400 flex-shrink-0" />}
                       </div>
                     ))}
                   </div>
@@ -303,8 +296,8 @@ export default function GameDatabase() {
         {/* Game Hub Section */}
         {data?.gameHub && (
           <div className="mt-8">
-            <h2 className="text-xl font-black text-gray-800 mb-3">🎪 Game Hub Mini-Games</h2>
-            <div className="bg-white rounded-2xl shadow border-l-4 border-l-orange-500 p-4">
+            <h2 className="text-xl font-black text-white mb-3">🎪 Game Hub Mini-Games</h2>
+            <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {data.gameHub.map((game, idx) => (
                   <motion.div
@@ -312,10 +305,10 @@ export default function GameDatabase() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="bg-orange-50 border-2 border-orange-200 rounded-xl p-3 text-center"
+                    className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.15)' }}
                   >
-                    <p className="text-sm font-bold text-orange-800">{game.title}</p>
-                    <p className="text-xs text-orange-500 mt-1">✓ Active</p>
+                    <p className="text-sm font-bold text-white">{game.title}</p>
+                    <p className="text-xs text-green-300 mt-1">✓ Active</p>
                   </motion.div>
                 ))}
               </div>
