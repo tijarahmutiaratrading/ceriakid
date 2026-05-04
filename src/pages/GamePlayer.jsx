@@ -496,12 +496,13 @@ export default function GamePlayer() {
         <ProgressBar current={state.currentQ + 1} total={questions.length} score={state.score} />
 
         {/* Question Display - Adaptive based on game type */}
-        <motion.div
-          key={state.currentQ}
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="clay rounded-3xl p-6 text-center mb-6 bg-gradient-to-br from-sky-50 to-blue-100"
-        >
+         <motion.div
+           key={state.currentQ}
+           initial={{ opacity: 0, x: 50 }}
+           animate={{ opacity: 1, x: 0 }}
+           className="rounded-3xl p-6 text-center mb-6"
+           style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
+         >
 
 
           {/* Picture Quiz — image only */}
