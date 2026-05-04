@@ -32,12 +32,15 @@ export default function GamePlayer() {
   const [game, setGame] = useState(null);
   const [gameLoaded, setGameLoaded] = useState(false);
   const [accessDenied, setAccessDenied] = useState(false);
+  const [userTier, setUserTier] = useState('free');
+  const [freshQuestions, setFreshQuestions] = useState(null);
+  const [generatingNew, setGeneratingNew] = useState(false);
 
   // Load game: try DB first, fallback to gameLibrary + check access
   useEffect(() => {
     const loadGame = async () => {
       // Check subscription tier to enforce locks
-      let userTier = 'free';
+      let resolvedTier = 'free';
       if (isAuthenticated && user?.email) {
         try {
           const subs = await base44.entities.UserSubscription.filter({ email: user.email });
@@ -45,11 +48,13 @@ export default function GamePlayer() {
             const sub = subs[0];
             const notExpired = !sub.currentPeriodEnd || new Date(sub.currentPeriodEnd) > new Date();
             if ((sub.status === 'active' || sub.status === 'trial') && notExpired) {
-              userTier = sub.tier || 'free';
+              resolvedTier = sub.tier || 'free';
             }
           }
         } catch (_) {}
       }
+      setUserTier(resolvedTier);
+      const userTier = resolvedTier;
 
       // Determine if this game index is locked for the user's tier
       const isLocked = (() => {
@@ -110,10 +115,10 @@ export default function GamePlayer() {
   }, [state.finished]);
 
   const questions = useMemo(() => {
+    if (freshQuestions) return freshQuestions;
     if (!game?.gameData?.questions) return [];
-    // No shuffling — preserve original order so answer index stays correct
     return game.gameData.questions.slice(0, game.totalQuestions || 20);
-  }, [game]);
+  }, [game, freshQuestions]);
 
   const handleAnswer = useCallback((answer) => {
     if (state.showFeedback || !questions[state.currentQ]) return;
@@ -192,7 +197,8 @@ export default function GamePlayer() {
   }, [state.currentQ]);
 
   const handlePlayAgain = () => {
-    savedRef.current = false; // allow saving again on replay
+    savedRef.current = false;
+    setFreshQuestions(null);
     setState({
       currentQ: 0,
       score: 0,
@@ -204,6 +210,34 @@ export default function GamePlayer() {
       showTracing: false,
       unlockedBadges: [],
     });
+  };
+
+  const handleGenerateNew = async () => {
+    setGeneratingNew(true);
+    try {
+      const res = await base44.functions.invoke('generateFreshQuestions', {
+        category,
+        ageGroup,
+        count: game?.totalQuestions || 20,
+        previousQuestions: questions,
+      });
+      if (res.data?.questions?.length > 0) {
+        setFreshQuestions(res.data.questions);
+        savedRef.current = false;
+        setState({
+          currentQ: 0,
+          score: 0,
+          showFeedback: false,
+          isCorrect: false,
+          feedbackMsg: '',
+          finished: false,
+          selectedIdx: null,
+          showTracing: false,
+          unlockedBadges: [],
+        });
+      }
+    } catch (_) {}
+    setGeneratingNew(false);
   };
 
 
@@ -379,6 +413,8 @@ export default function GamePlayer() {
 
 
 
+  const isPremium = ['premium', 'pro', 'keluarga', 'standard', 'asas'].includes(userTier);
+
   if (state.finished) {
     return (
       <ScoreScreen
@@ -386,6 +422,9 @@ export default function GamePlayer() {
         total={questions.length}
         stars={calculateStars(state.score, questions.length)}
         onPlayAgain={handlePlayAgain}
+        onGenerateNew={handleGenerateNew}
+        generatingNew={generatingNew}
+        isPremium={isPremium}
       />
     );
   }
@@ -421,7 +460,7 @@ export default function GamePlayer() {
         <div className="max-w-lg mx-auto px-4 py-4 md:py-6 pb-24 pt-20">
           <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} />
           {state.finished ? (
-            <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} />
+            <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} onGenerateNew={handleGenerateNew} generatingNew={generatingNew} isPremium={isPremium} />
           ) : (
             <TracingCanvas
               targetShape={currentQuestion?.letter || currentQuestion?.tracingTarget || 'A'}

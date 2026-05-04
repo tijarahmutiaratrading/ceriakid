@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import confetti from 'canvas-confetti';
-import { Star, RotateCcw, Home } from 'lucide-react';
+import { Star, RotateCcw, Home, Sparkles, Loader2 } from 'lucide-react';
 import { useLang } from '@/lib/LanguageContext';
 
-export default function ScoreScreen({ score, total, stars, onPlayAgain }) {
+export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenerateNew, generatingNew, isPremium }) {
   const { t } = useLang();
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain }) {
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 mb-3">
           <motion.button
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.03 }}
@@ -104,6 +104,33 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain }) {
             </motion.button>
           </Link>
         </div>
+
+        {/* AI Generate New Questions Button */}
+        {isPremium ? (
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            onClick={onGenerateNew}
+            disabled={generatingNew}
+            className="w-full py-4 px-6 rounded-2xl font-extrabold text-base flex items-center justify-center gap-2 text-white disabled:opacity-70"
+            style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)' }}
+          >
+            {generatingNew ? (
+              <><Loader2 className="w-5 h-5 animate-spin" /> Jana Soalan Baru...</>
+            ) : (
+              <><Sparkles className="w-5 h-5" /> 🤖 Jana 20 Soalan Baru (AI)</>
+            )}
+          </motion.button>
+        ) : (
+          <Link to="/#pricing">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className="w-full py-3 px-6 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 text-gray-500 border-2 border-dashed border-gray-300"
+            >
+              <Sparkles className="w-4 h-4" /> 🔒 Jana Soalan Baru (Premium sahaja)
+            </motion.button>
+          </Link>
+        )}
       </motion.div>
     </div>
   );
