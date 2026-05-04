@@ -157,7 +157,7 @@ export default function ParentDashboard() {
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28">
 
         {/* Header Card */}
         <motion.div
