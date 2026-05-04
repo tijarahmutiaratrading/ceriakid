@@ -185,15 +185,15 @@ export default function AdminBBMGenerator() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-3xl mx-auto px-3 md:px-4 pt-28 pb-32">
+      <div className="max-w-5xl mx-auto px-3 md:px-4 pt-28 pb-32">
         {/* Header */}
          <motion.div
            initial={{ opacity: 0, y: -20 }}
            animate={{ opacity: 1, y: 0 }}
-           className="mb-6 p-4 md:p-5 rounded-3xl flex flex-col md:flex-row md:items-center gap-3"
+           className="mb-6 p-4 md:p-5 rounded-3xl flex flex-col md:flex-row md:items-center gap-4"
            style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}
          >
-           <div className="text-3xl md:text-4xl flex-shrink-0">📚</div>
+           <div className="text-4xl flex-shrink-0">📚</div>
            <div className="flex-1 min-w-0">
              <h1 className="text-lg md:text-xl font-black text-white">BBM Generator & Manager</h1>
              <p className="text-white/80 text-xs">Jana & urus semua Bahan Bantu Mengajar</p>

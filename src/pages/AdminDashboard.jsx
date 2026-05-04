@@ -159,9 +159,9 @@ export default function AdminDashboard() {
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-violet-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
-      <div className="relative max-w-4xl mx-auto px-3 md:px-6 pt-24 md:pt-28 pb-32 space-y-5">
+      <div className="relative max-w-5xl mx-auto px-3 md:px-6 pt-24 md:pt-28 pb-32 space-y-6">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 md:mb-5 p-3 md:p-4 rounded-3xl flex items-center gap-3" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 md:p-5 rounded-3xl flex items-center gap-4" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
           <div className="text-2xl md:text-3xl">🎛️</div>
           <div className="min-w-0">
             <h1 className="text-lg md:text-xl font-black text-white truncate">Admin Dashboard</h1>

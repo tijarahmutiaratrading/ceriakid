@@ -337,7 +337,7 @@ export default function AdminGameManager() {
         )}
       </AnimatePresence>
 
-      <div className="relative max-w-4xl mx-auto px-3 md:px-4 pt-28 pb-32">
+      <div className="relative max-w-5xl mx-auto px-3 md:px-4 pt-28 pb-32">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
           className="mb-6 p-5 rounded-3xl flex items-center gap-3"
