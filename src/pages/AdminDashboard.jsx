@@ -265,9 +265,10 @@ export default function AdminDashboard() {
                             sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
                             sub.tier === 'asas' ? 'bg-green-200 text-green-700' :
                             sub.tier === 'standard' ? 'bg-blue-200 text-blue-700' :
+                            sub.tier === 'pro' ? 'bg-red-200 text-red-700' :
                             'bg-purple-200 text-purple-700'
                           }`}>
-                            {sub.tier === 'free' ? 'Percuma' : sub.tier === 'asas' ? 'Asas' : sub.tier === 'standard' ? 'Standard' : 'Keluarga'}
+                            {sub.tier === 'free' ? 'Percuma' : sub.tier === 'asas' ? 'Asas' : sub.tier === 'standard' ? 'Standard' : sub.tier === 'pro' ? 'Pro' : 'Keluarga'}
                           </span>
                         </td>
                         <td className="py-3 px-4">
