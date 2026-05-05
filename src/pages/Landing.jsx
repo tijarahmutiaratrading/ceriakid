@@ -489,6 +489,41 @@ export default function Landing() {
         </div>
       </div>
 
+      {/* ── CONVERSION BOOSTER ── */}
+      <div className="py-12 md:py-16 px-6 relative">
+        <div className="max-w-6xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} className="rounded-3xl overflow-hidden border border-white/20 bg-white/10 backdrop-blur-xl shadow-2xl">
+            <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="p-6 md:p-8">
+                <span className="inline-block bg-orange-400 text-slate-950 font-black px-4 py-1.5 rounded-full text-xs mb-4">Untuk ibu bapa yang anak susah fokus belajar</span>
+                <h2 className="text-3xl md:text-4xl font-black text-white leading-tight mb-4">Kalau anak cepat bosan dengan buku, CeriaKid bantu jadikan latihan harian rasa macam bermain.</h2>
+                <p className="text-white/75 leading-relaxed mb-6">Bukan sekadar game — setiap aktiviti disusun supaya anak boleh ulang kaji subjek sekolah dengan lebih konsisten, sementara ibu bapa boleh pantau progress.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {['Setup 2 minit sahaja', 'Latihan pendek setiap hari', 'Pantau markah anak'].map((item) => (
+                    <div key={item} className="rounded-2xl bg-white/10 border border-white/15 p-3 text-white font-black text-sm">✅ {item}</div>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 p-6 md:p-8 text-slate-950 flex flex-col justify-center">
+                <p className="text-sm font-black uppercase tracking-wider mb-2">Kenapa parent pilih?</p>
+                <div className="space-y-3">
+                  {[
+                    ['Lebih mudah konsisten', 'Anak buat latihan pendek tanpa rasa terpaksa.'],
+                    ['Sesuai untuk Malaysia', 'Subjek utama, bahasa tempatan dan gaya pembelajaran anak Malaysia.'],
+                    ['Jelas untuk ibu bapa', 'Nampak apa anak main, skor dan perkembangan dari masa ke masa.']
+                  ].map(([title, desc]) => (
+                    <div key={title} className="rounded-2xl bg-white/45 border border-white/45 p-4 shadow-lg">
+                      <p className="font-black">{title}</p>
+                      <p className="text-sm font-bold text-slate-800/80 mt-1">{desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
       {/* ── PRICING ── */}
       <div id="pricing" className="py-12 md:py-16 px-6 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
         <div className="max-w-5xl mx-auto">
