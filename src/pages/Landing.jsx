@@ -566,8 +566,7 @@ export default function Landing() {
             id="checkout-form"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="mt-8 border-2 border-white/30 rounded-3xl p-4 md:p-6 max-w-lg mx-auto shadow-xl"
-            style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}>
+            className="mt-8 border-2 border-white/20 rounded-3xl p-4 md:p-6 max-w-lg mx-auto shadow-xl bg-indigo-950">
             
             <div className="mb-4">
               <h3 className="text-xl md:text-2xl font-black text-white">Daftar & Bayar 🔒</h3>
