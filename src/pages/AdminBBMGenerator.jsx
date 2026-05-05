@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Wand2, FileText, Loader2, Check, RefreshCw, Trash2, ToggleLeft, ToggleRight, Search, Edit3 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
+import BBMTaskQueue from '@/components/admin/BBMTaskQueue';
 
 const SUBJECTS = [
   { value: 'bahasa_melayu', label: '🇲🇾 Bahasa Melayu' },
@@ -94,9 +95,9 @@ export default function AdminBBMGenerator() {
   };
 
   useEffect(() => {
+    loadTasks();
     if (tab === 'manager') {
       loadResources();
-      loadTasks();
     }
   }, [tab]);
 
@@ -196,6 +197,20 @@ export default function AdminBBMGenerator() {
     await base44.entities.BBMResource.delete(item.id);
     setResources(prev => prev.filter(r => r.id !== item.id));
     showToast('BBM dipadam');
+  };
+
+  const handleDeleteTask = async (id) => {
+    await base44.entities.GameTask.delete(id);
+    setTasks(prev => prev.filter(t => t.id !== id));
+    showToast('✅ Task dipadam');
+  };
+
+  const handleDeletePendingTasks = async () => {
+    const pending = tasks.filter(t => t.status === 'pending');
+    if (!window.confirm(`Padam ${pending.length} pending BBM tasks?`)) return;
+    for (const t of pending) await base44.entities.GameTask.delete(t.id);
+    setTasks(prev => prev.filter(t => t.status !== 'pending'));
+    showToast(`✅ ${pending.length} pending tasks dipadam`);
   };
 
   const handleDeleteCompletedTasks = async () => {
@@ -432,7 +447,7 @@ export default function AdminBBMGenerator() {
               {result && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                  className="p-5 md:p-6 rounded-[2rem] shadow-2xl shadow-black/20"
+                  className="p-5 md:p-6 rounded-[2rem] shadow-2xl shadow-black/20 mb-6"
                   style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.18), rgba(255,255,255,0.08))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}
                 >
                   <div className="flex items-center gap-3 mb-4">
@@ -457,6 +472,15 @@ export default function AdminBBMGenerator() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            <BBMTaskQueue
+              tasks={tasks}
+              loadingTasks={loadingTasks}
+              onRefresh={loadTasks}
+              onDeleteTask={handleDeleteTask}
+              onClearCompleted={handleDeleteCompletedTasks}
+              onClearPending={handleDeletePendingTasks}
+            />
           </motion.div>
         )}
 
@@ -520,41 +544,16 @@ export default function AdminBBMGenerator() {
               ))}
             </div>
 
-            {/* Task Queue Section */}
-            {tasks.length > 0 && (
-              <div className="p-4 md:p-5 rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.18)' }}>
-                <div className="flex items-center justify-between gap-3 mb-3">
-                  <h3 className="text-white font-bold">📋 Task Queue ({tasks.length})</h3>
-                  <div className="flex items-center gap-2 flex-wrap justify-end">
-                    {tasks.filter(t => t.status === 'completed').length > 0 && (
-                      <button onClick={handleDeleteCompletedTasks} className="text-xs font-bold text-green-300 hover:underline whitespace-nowrap">
-                        Clear Completed
-                      </button>
-                    )}
-                    <button onClick={loadTasks} className="p-1 text-white/50 hover:text-white">
-                      <RefreshCw className={`w-3.5 h-3.5 ${loadingTasks ? 'animate-spin' : ''}`} />
-                    </button>
-                  </div>
-                </div>
-                <div className="space-y-1 max-h-48 overflow-y-auto">
-                  {tasks.map(t => (
-                    <div key={t.id} className="flex items-center gap-2 p-3 rounded-2xl text-xs border border-white/10" style={{ background: 'rgba(255,255,255,0.07)' }}>
-                      <span className={`px-2 py-0.5 rounded font-bold ${
-                        t.status === 'pending' ? 'bg-yellow-500/20 text-yellow-300' :
-                        t.status === 'running' ? 'bg-blue-500/20 text-blue-300' :
-                        t.status === 'completed' ? 'bg-green-500/20 text-green-300' :
-                        'bg-red-500/20 text-red-300'
-                      }`}>
-                        {t.status}
-                      </span>
-                      <span className="text-white/90 flex-1 truncate">{t.taskName}</span>
-                      <span className="text-white/70 whitespace-nowrap">{t.gamesCount || 0} items</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-white/70 text-xs text-center mt-3 pt-3 border-t border-white/10">✅ Jalan background setiap 5 minit. Boleh tutup browser.</p>
-              </div>
-            )}
+            <div className="mb-5">
+              <BBMTaskQueue
+                tasks={tasks}
+                loadingTasks={loadingTasks}
+                onRefresh={loadTasks}
+                onDeleteTask={handleDeleteTask}
+                onClearCompleted={handleDeleteCompletedTasks}
+                onClearPending={handleDeletePendingTasks}
+              />
+            </div>
 
             {loadingResources ? (
               <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-white" /></div>
