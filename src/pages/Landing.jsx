@@ -616,7 +616,7 @@ export default function Landing() {
       </div>
 
       {/* ── FAQ ── */}
-      <div id="faq" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-white via-yellow-50 to-orange-50 text-slate-900">
+      <div id="faq" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-amber-100 via-yellow-200 to-orange-300 text-slate-900">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-black text-slate-900 mb-3">Soalan Lazim 🤔</h2>
