@@ -8,14 +8,14 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 
 // Mini game type metadata
 const MINI_GAME_META = {
-  memory: { emoji: '🧠', title: 'Permainan Ingatan', description: 'Cari pasangan kad yang sama!', path: '/games/memory', color: 'from-purple-500 to-pink-500', level: 'Mudah', skills: ['Ingatan', 'Fokus'] },
-  dragdrop: { emoji: '🎯', title: 'Padankan Huruf', description: 'Seret huruf ke gambar yang betul.', path: '/games/dragdrop', color: 'from-blue-500 to-cyan-400', level: 'Mudah', skills: ['Huruf', 'Perbendaharaan kata'] },
-  wordbuilder: { emoji: '📝', title: 'Bentuk Perkataan', description: 'Susun huruf untuk bina perkataan!', path: '/games/wordbuilder', color: 'from-green-500 to-emerald-400', level: 'Sederhana', skills: ['Ejaan', 'Kosa kata'] },
-  sorting: { emoji: '🗂️', title: 'Isih Kategori', description: 'Seret item ke kategori yang betul.', path: '/games/sorting', color: 'from-orange-500 to-yellow-400', level: 'Sederhana', skills: ['Klasifikasi', 'Alam sekitar'] },
-  tracing: { emoji: '✏️', title: 'Seni Menulis', description: 'Lukis huruf dengan garis panduan!', path: '/games/tracing', color: 'from-violet-500 to-purple-500', level: 'Sederhana', skills: ['Menulis', 'Motor halus'] },
-  story: { emoji: '📖', title: 'Petualangan Cerita', description: 'Pilih jalan cerita yang tepat!', path: '/games/story', color: 'from-amber-500 to-orange-400', level: 'Mudah', skills: ['Kefahaman', 'Keputusan'] },
-  tilematch: { emoji: '🔢', title: 'Padankan 3 Sama', description: 'Pilih 3 petak dengan nilai sama!', path: '/games/tilematch', color: 'from-pink-500 to-purple-500', level: 'Sukar', skills: ['Matematik', 'Tambah'] },
-  physics: { emoji: '🚀', title: 'Lontarkan Bola', description: 'Atur kuasa & sudut untuk kena sasaran!', path: '/games/physics', color: 'from-sky-500 to-blue-500', level: 'Sukar', skills: ['Fizik', 'Penaakulan'] },
+  memory: { emoji: '🧠', title: 'Permainan Ingatan', description: 'Cari pasangan kad yang sama!', path: '/mini-games/memory', color: 'from-purple-500 to-pink-500', level: 'Mudah', skills: ['Ingatan', 'Fokus'] },
+  dragdrop: { emoji: '🎯', title: 'Padankan Huruf', description: 'Seret huruf ke gambar yang betul.', path: '/mini-games/dragdrop', color: 'from-blue-500 to-cyan-400', level: 'Mudah', skills: ['Huruf', 'Perbendaharaan kata'] },
+  wordbuilder: { emoji: '📝', title: 'Bentuk Perkataan', description: 'Susun huruf untuk bina perkataan!', path: '/mini-games/wordbuilder', color: 'from-green-500 to-emerald-400', level: 'Sederhana', skills: ['Ejaan', 'Kosa kata'] },
+  sorting: { emoji: '🗂️', title: 'Isih Kategori', description: 'Seret item ke kategori yang betul.', path: '/mini-games/sorting', color: 'from-orange-500 to-yellow-400', level: 'Sederhana', skills: ['Klasifikasi', 'Alam sekitar'] },
+  tracing: { emoji: '✏️', title: 'Seni Menulis', description: 'Lukis huruf dengan garis panduan!', path: '/mini-games/tracing', color: 'from-violet-500 to-purple-500', level: 'Sederhana', skills: ['Menulis', 'Motor halus'] },
+  story: { emoji: '📖', title: 'Petualangan Cerita', description: 'Pilih jalan cerita yang tepat!', path: '/mini-games/story', color: 'from-amber-500 to-orange-400', level: 'Mudah', skills: ['Kefahaman', 'Keputusan'] },
+  tilematch: { emoji: '🔢', title: 'Padankan 3 Sama', description: 'Pilih 3 petak dengan nilai sama!', path: '/mini-games/tilematch', color: 'from-pink-500 to-purple-500', level: 'Sukar', skills: ['Matematik', 'Tambah'] },
+  physics: { emoji: '🚀', title: 'Lontarkan Bola', description: 'Atur kuasa & sudut untuk kena sasaran!', path: '/mini-games/physics', color: 'from-sky-500 to-blue-500', level: 'Sukar', skills: ['Fizik', 'Penaakulan'] },
 };
 
 const levelColors = {

@@ -21,6 +21,7 @@ import GamesList from '@/pages/GamesList';
 
 import GamePlayer from '@/pages/GamePlayer';
 import GamesHub from '@/pages/GamesHub';
+import MiniGamesList from '@/pages/MiniGamesList';
 import BBMHub from '@/pages/BBMHub';
 import AdminBBMGenerator from '@/pages/AdminBBMGenerator';
 import ParentDashboard from '@/pages/ParentDashboard';
@@ -94,6 +95,7 @@ const AuthenticatedApp = () => {
           <Route path="/settings" element={<ClientDashboard />} />
           <Route path="/children-profiles" element={<ChildrenProfiles />} />
           <Route path="/games-hub" element={<GamesHub />} />
+          <Route path="/mini-games/:type" element={<MiniGamesList />} />
           <Route path="/bbm" element={<BBMHub />} />
           <Route path="/admin-bbm-generator" element={<AdminGuard><AdminBBMGenerator /></AdminGuard>} />
           <Route path="/games/:category" element={<GamesList />} />
