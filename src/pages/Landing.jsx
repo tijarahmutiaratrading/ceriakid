@@ -7,7 +7,6 @@ import { useAuth } from '@/lib/AuthContext';
 import AppHeader from '@/components/AppHeader';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
-import FreeTrialButton from '@/components/FreeTrialButton';
 
 // Countdown Timer Hook
 function useCountdown(minutes = 15) {
@@ -245,7 +244,7 @@ export default function Landing() {
                 onClick={scrollToPricing}
                 className="px-5 py-3 bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 text-white rounded-full font-black text-sm shadow-2xl shadow-orange-950/30 flex items-center gap-2 justify-center">
                 
-                🎁 Cuba Percuma Dulu <ArrowRight className="w-4 h-4" />
+                Lihat Pelan Harga <ArrowRight className="w-4 h-4" />
               </motion.button>
               <button
                 onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
@@ -495,7 +494,7 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
             <span className="inline-block bg-green-500/25 text-green-100 font-black px-4 py-1.5 rounded-full text-sm mb-4 border border-green-300/30">
-              🎁 Boleh cuba percuma sebelum melanggan
+              Pelan tahunan mesra bajet keluarga
             </span>
             <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Pilih Pelan Anda</h2>
             <p className="text-white/60">Pilih pelan yang sesuai untuk umur anak. Semua pelan tahunan dan mesra bajet keluarga.</p>
@@ -584,7 +583,7 @@ export default function Landing() {
           </motion.div>
 
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto text-center">
-            {['🔒 Pembayaran FPX selamat', '🎁 Ada percubaan percuma', '📊 Pantau progress anak'].map((item) => (
+            {['🔒 Pembayaran FPX selamat', '💳 Pelan tahunan jelas', '📊 Pantau progress anak'].map((item) => (
               <div key={item} className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3 text-white text-sm font-bold">
                 {item}
               </div>
