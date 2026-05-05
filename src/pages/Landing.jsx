@@ -521,7 +521,7 @@ export default function Landing() {
               >
               
                 {tier.savings &&
-                <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-white/25 text-white border border-white/30' : 'bg-white/10 text-white/70'}`}>
+                <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-white text-orange-700 border border-white' : 'bg-white/15 text-white border border-white/20'}`}>
                    💰 {tier.savings}
                  </div>
                 }
@@ -541,7 +541,7 @@ export default function Landing() {
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleTierSelect(tier.name)}
                 className={`w-full py-3.5 rounded-2xl font-black text-base mb-6 shadow-md transition-all ${
-                tier.highlighted ? 'bg-slate-950 text-yellow-300 hover:bg-slate-900' : 'bg-orange-500 text-white hover:bg-orange-600'} ${
+                tier.highlighted ? 'bg-slate-950 text-yellow-200 hover:bg-slate-900' : 'bg-orange-600 text-white hover:bg-orange-700'} ${
                 selectedTierForCheckout === tier.name ? 'ring-4 ring-yellow-300' : ''}`}>
                 
                   {tier.cta}
@@ -578,15 +578,15 @@ export default function Landing() {
           </motion.div>
 
           {/* Trust */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-5 border border-sky-300/30 rounded-2xl p-3 md:p-4 text-center max-w-xl mx-auto shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.18), rgba(99,102,241,0.16))', backdropFilter: 'blur(20px)' }}>
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-5 border border-orange-200/70 rounded-2xl p-3 md:p-4 text-center max-w-xl mx-auto shadow-lg shadow-orange-200/25 bg-white/85 backdrop-blur-xl">
             <div className="text-2xl mb-1">🛡️</div>
-            <h3 className="text-base font-black text-white mb-1">Direka Untuk Kanak-kanak Malaysia</h3>
-            <p className="text-white/65 text-xs md:text-sm leading-snug">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
+            <h3 className="text-base font-black text-slate-900 mb-1">Direka Untuk Kanak-kanak Malaysia</h3>
+            <p className="text-slate-600 text-xs md:text-sm leading-snug">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
           </motion.div>
 
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2 max-w-3xl mx-auto text-center">
             {['🔒 Pembayaran FPX selamat', '💳 Pelan tahunan jelas', '📊 Pantau progress anak'].map((item) => (
-              <div key={item} className="rounded-xl bg-white/10 border border-white/15 px-3 py-2 text-white text-xs md:text-sm font-bold">
+              <div key={item} className="rounded-xl bg-white/90 border border-orange-200/70 px-3 py-2 text-slate-800 text-xs md:text-sm font-bold shadow-sm">
                 {item}
               </div>
             ))}
