@@ -105,22 +105,55 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     { emoji: '⬅️', label: 'Back', action: () => navigate(-1) },
   ];
 
+  const pageTitles = {
+    '/': 'CeriaKid',
+    '/dashboard': 'Dashboard',
+    '/settings': 'Tetapan Akaun',
+    '/children-profiles': 'Profil Anak',
+    '/games-hub': 'Games Hub',
+    '/bbm': 'BBM Hub',
+    '/parent-dashboard': 'Prestasi Anak',
+    '/friends': 'Kawan',
+    '/challenges': 'Cabaran',
+    '/drawing': 'Studio Lukisan',
+    '/admin-dashboard': 'Admin Dashboard',
+    '/admin-game-manager': 'Game Manager',
+    '/admin-bbm-generator': 'BBM Generator',
+  };
+
+  const displayTitle = title || pageTitles[location.pathname] || (location.pathname.startsWith('/games/') ? 'Permainan' : 'CeriaKid');
+
   return (
     <>
       {/* Top Header */}
        <nav className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
-         <div className="max-w-6xl mx-auto w-full flex items-center justify-between px-3 sm:px-4 py-2 rounded-3xl pro-glass">
+         <div className="max-w-5xl mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] pro-glass ring-1 ring-white/20">
            <Link to="/" className="flex items-center gap-2 min-w-0">
-             <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-xl cursor-pointer shadow-lg ring-1 ring-white/40" />
+             <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-2xl cursor-pointer shadow-lg ring-1 ring-white/40" />
            </Link>
-           <motion.button
-             type="button"
-             onClick={() => setIsOpen(!isOpen)}
-             whileTap={{ scale: 0.95 }}
-             className="px-4 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-sm shadow-lg hover:bg-white/95 transition-colors"
-           >
-             {isOpen ? 'Tutup' : 'Menu'}
-           </motion.button>
+
+           <div className="min-w-0 text-center px-1">
+             <p className="text-white/55 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] leading-none">CeriaKid</p>
+             <p className="text-white font-black text-sm sm:text-base truncate leading-tight mt-1">{displayTitle}</p>
+           </div>
+
+           <div className="flex items-center gap-2 justify-end">
+             {isAuthenticated && (
+               headerAvatarUrl ? (
+                 <img src={headerAvatarUrl} alt="Avatar" className="hidden sm:block w-9 h-9 rounded-full object-cover border-2 border-white/60 shadow-lg" />
+               ) : (
+                 <div className="hidden sm:flex w-9 h-9 rounded-full bg-white/25 border-2 border-white/50 items-center justify-center text-lg shadow-lg">🐱</div>
+               )
+             )}
+             <motion.button
+               type="button"
+               onClick={() => setIsOpen(!isOpen)}
+               whileTap={{ scale: 0.95 }}
+               className="px-3.5 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-lg hover:bg-white/95 transition-colors"
+             >
+               {isOpen ? 'Tutup' : 'Menu'}
+             </motion.button>
+           </div>
          </div>
        </nav>
 
