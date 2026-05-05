@@ -96,14 +96,14 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {!isAuthenticated && (
-        <div className="rounded-2xl bg-yellow-300/20 border border-yellow-300/30 p-4 text-white text-sm font-bold">
+        <div className="rounded-2xl bg-yellow-100 border border-yellow-300/60 p-4 text-slate-800 text-sm font-bold">
           Log masuk dahulu supaya pembayaran dan langganan boleh diaktifkan pada akaun anda.
         </div>
       )}
 
       {/* Tier Selection */}
       <div>
-        <label className="block text-sm font-bold mb-3 text-white">Pilih Pelan Tahunan</label>
+        <label className="block text-sm font-bold mb-3 text-slate-800">Pilih Pelan Tahunan</label>
         <div className="space-y-2">
           {TIERS.map((tier) => {
             const isSelected = formData.selectedTier === tier.name;
@@ -143,7 +143,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
       {/* Email */}
       <div>
-        <label className="block text-sm font-bold mb-2 text-white">Email</label>
+        <label className="block text-sm font-bold mb-2 text-slate-800">Email</label>
         <input
           type="email"
           placeholder="email@example.com"
@@ -155,7 +155,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
       {/* Name */}
       <div>
-        <label className="block text-sm font-bold mb-2 text-white">Nama Ibu Bapa</label>
+        <label className="block text-sm font-bold mb-2 text-slate-800">Nama Ibu Bapa</label>
         <input
           type="text"
           placeholder="Nama anda"
@@ -167,7 +167,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
       {/* Phone */}
       <div>
-        <label className="block text-sm font-bold mb-2 text-white">Nombor Telefon</label>
+        <label className="block text-sm font-bold mb-2 text-slate-800">Nombor Telefon</label>
         <input
           type="tel"
           placeholder="01234567890"
@@ -188,7 +188,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
       </motion.button>
 
       {/* Trust Badges */}
-      <div className="grid grid-cols-3 gap-2 mt-4 text-center text-xs text-white/80 font-semibold">
+      <div className="grid grid-cols-3 gap-2 mt-4 text-center text-xs text-slate-600 font-semibold">
         <div className="flex flex-col items-center gap-1">
           <span className="text-lg">🔒</span>
           <span>Secure</span>
@@ -203,9 +203,9 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
         </div>
       </div>
 
-      <p className="text-xs text-white/70 text-center mt-3">
+      <p className="text-xs text-slate-600 text-center mt-3">
         🏦 Pembayaran selamat via Chip • FPX Internet Banking Malaysia<br/>
-        <span className="text-green-300 font-bold">✓ Sesuai untuk ibu bapa di Malaysia</span>
+        <span className="text-green-700 font-bold">✓ Sesuai untuk ibu bapa di Malaysia</span>
       </p>
 
     </form>);
