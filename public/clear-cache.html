@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ms">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Clear Cache CeriaKid</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, #0f172a, #312e81, #86198f);
+        color: white;
+        text-align: center;
+        padding: 24px;
+      }
+      .card {
+        max-width: 420px;
+        width: 100%;
+        border: 1px solid rgba(255,255,255,.25);
+        border-radius: 28px;
+        padding: 32px 24px;
+        background: rgba(255,255,255,.12);
+        box-shadow: 0 24px 80px rgba(0,0,0,.28);
+        backdrop-filter: blur(20px);
+      }
+      .spinner {
+        width: 42px;
+        height: 42px;
+        border: 4px solid rgba(255,255,255,.35);
+        border-top-color: #facc15;
+        border-radius: 999px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 18px;
+      }
+      button {
+        margin-top: 18px;
+        border: 0;
+        border-radius: 999px;
+        padding: 13px 22px;
+        font-weight: 900;
+        color: #312e81;
+        background: #facc15;
+        cursor: pointer;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="spinner"></div>
+      <h1>Membersihkan Cache...</h1>
+      <p>App sedang buang theme/build lama dan akan buka versi terbaru sebentar lagi.</p>
+      <button onclick="clearAndGo()">Clear Cache Sekarang</button>
+    </div>
+    <script>
+      async function clearAndGo() {
+        try {
+          if ('caches' in window) {
+            const names = await caches.keys();
+            await Promise.all(names.map((name) => caches.delete(name)));
+          }
+          if ('serviceWorker' in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(regs.map((reg) => reg.unregister()));
+          }
+          localStorage.setItem('ceriakid_cache_cleared_at', String(Date.now()));
+        } finally {
+          window.location.replace('/?fresh=' + Date.now());
+        }
+      }
+      clearAndGo();
+    </script>
+  </body>
+</html>
