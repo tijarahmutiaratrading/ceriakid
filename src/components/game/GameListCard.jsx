@@ -21,7 +21,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
 
   if (locked) {
     return (
-      <Link to="/">
+      <Link to="/" className="block">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,7 +50,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
   }
 
   return (
-    <Link to={`/play/${category}/${idx}`}>
+    <Link to={`/play/${category}/${idx}`} className="block">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
