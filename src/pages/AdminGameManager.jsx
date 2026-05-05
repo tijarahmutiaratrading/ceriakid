@@ -643,15 +643,15 @@ export default function AdminGameManager() {
             {tab === 'manager' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Stats row */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-5">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4">
               {[
                 { value: totalGames, label: 'Total Games', color: 'text-yellow-300' },
                 { value: totalFull, label: 'Soalan Penuh', color: 'text-green-300' },
                 { value: totalPlayers, label: 'Players', color: 'text-pink-300' },
               ].map(({ value, label, color }) => (
-                <div key={label} className="rounded-3xl p-5 text-center shadow-xl shadow-black/10 border border-white/15" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)' }}>
-                  <p className={`text-2xl font-black ${color}`}>{value}</p>
-                  <p className="text-xs text-white/90 font-semibold">{label}</p>
+                <div key={label} className="rounded-2xl p-3 sm:p-4 text-center shadow-lg shadow-black/10 border border-white/15" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)' }}>
+                  <p className={`text-lg sm:text-xl font-black ${color}`}>{value}</p>
+                  <p className="text-[10px] sm:text-xs text-white/90 font-semibold leading-tight">{label}</p>
                 </div>
               ))}
             </div>
