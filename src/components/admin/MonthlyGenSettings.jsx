@@ -89,11 +89,11 @@ export default function MonthlyGenSettings({ onToast }) {
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2 p-2 rounded-3xl bg-white/5">
           <motion.button
             whileTap={{ scale: 0.97 }} whileHover={{ scale: 1.02 }}
             onClick={handleSave}
-            className="flex-1 py-3 rounded-2xl font-black text-sm flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg"
+            className="flex-1 min-w-[140px] py-2.5 px-3 rounded-2xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg"
           >
             <Save className="w-4 h-4" /> Simpan Tetapan
           </motion.button>
@@ -102,7 +102,7 @@ export default function MonthlyGenSettings({ onToast }) {
             whileTap={{ scale: 0.97 }} whileHover={{ scale: 1.02 }}
             onClick={handleTestRun}
             disabled={testing}
-            className="flex-1 py-3 rounded-2xl font-black text-sm flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg disabled:opacity-50"
+            className="flex-1 min-w-[140px] py-2.5 px-3 rounded-2xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg disabled:opacity-50"
           >
             {testing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
             Run Sekarang
