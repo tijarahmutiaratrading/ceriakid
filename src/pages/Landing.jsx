@@ -526,7 +526,7 @@ export default function Landing() {
               'border-yellow-200/80 shadow-2xl shadow-yellow-950/30 md:scale-105' :
               'border-white/20 shadow-md hover:border-white/40'}`}
               style={tier.highlighted ? 
-                { background: 'linear-gradient(135deg, rgba(251,191,36,0.95), rgba(245,158,11,0.9), rgba(217,119,6,0.88))', backdropFilter: 'blur(20px)' } :
+                { background: 'linear-gradient(135deg, rgba(30,27,75,0.98), rgba(88,28,135,0.96), rgba(124,58,237,0.94))', backdropFilter: 'blur(20px)' } :
                 { background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }
               }
               >
@@ -552,7 +552,7 @@ export default function Landing() {
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleTierSelect(tier.name)}
                 className={`w-full py-3.5 rounded-2xl font-black text-base mb-6 shadow-md transition-all ${
-                tier.highlighted ? 'bg-slate-950 text-yellow-200 hover:bg-slate-900' : 'bg-orange-600 text-white hover:bg-orange-700'} ${
+                tier.highlighted ? 'bg-yellow-300 text-slate-950 hover:bg-yellow-200 shadow-yellow-500/30' : 'bg-orange-600 text-white hover:bg-orange-700'} ${
                 selectedTierForCheckout === tier.name ? 'ring-4 ring-yellow-300' : ''}`}>
                 
                   {tier.cta}
