@@ -246,12 +246,7 @@ export default function Landing() {
                 
                 Lihat Pelan Harga <ArrowRight className="w-4 h-4" />
               </motion.button>
-              <button
-                onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-                className="bg-white/12 text-white px-5 py-3 text-sm font-black rounded-full border border-white/25 hover:bg-white/20 transition-colors w-full sm:w-auto backdrop-blur-xl"
-              >
-                Lihat Harga & Pelan
-              </button>
+
             </motion.div>
 
             {/* Trust badges */}
