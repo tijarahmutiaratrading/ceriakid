@@ -577,15 +577,15 @@ export default function Landing() {
           </motion.div>
 
           {/* Trust */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-8 border border-sky-300/30 rounded-2xl p-4 md:p-5 text-center max-w-xl mx-auto shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.18), rgba(99,102,241,0.16))', backdropFilter: 'blur(20px)' }}>
-            <div className="text-3xl mb-2">🛡️</div>
-            <h3 className="text-lg font-black text-white mb-1.5">Direka Untuk Kanak-kanak Malaysia</h3>
-            <p className="text-white/65 text-sm">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-5 border border-sky-300/30 rounded-2xl p-3 md:p-4 text-center max-w-xl mx-auto shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.18), rgba(99,102,241,0.16))', backdropFilter: 'blur(20px)' }}>
+            <div className="text-2xl mb-1">🛡️</div>
+            <h3 className="text-base font-black text-white mb-1">Direka Untuk Kanak-kanak Malaysia</h3>
+            <p className="text-white/65 text-xs md:text-sm leading-snug">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
           </motion.div>
 
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto text-center">
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2 max-w-3xl mx-auto text-center">
             {['🔒 Pembayaran FPX selamat', '💳 Pelan tahunan jelas', '📊 Pantau progress anak'].map((item) => (
-              <div key={item} className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3 text-white text-sm font-bold">
+              <div key={item} className="rounded-xl bg-white/10 border border-white/15 px-3 py-2 text-white text-xs md:text-sm font-bold">
                 {item}
               </div>
             ))}
