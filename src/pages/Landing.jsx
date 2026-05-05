@@ -562,13 +562,23 @@ export default function Landing() {
               </motion.div>
             )}
           </div>
+        </div>
+      </div>
 
-          {/* Checkout Form - Always visible */}
+      {/* ── CHECKOUT FORM ── */}
+      <div className="py-12 md:py-16 px-6 bg-gradient-to-br from-orange-50 via-yellow-50 to-pink-50 border-y border-orange-100">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-8">
+            <span className="inline-block bg-orange-100 text-orange-700 border border-orange-300/70 font-black px-4 py-1.5 rounded-full text-sm mb-4">Langkah terakhir</span>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Daftar & Aktifkan Akaun</h2>
+            <p className="text-slate-600 max-w-xl mx-auto">Isi maklumat ringkas untuk teruskan pembayaran FPX yang selamat.</p>
+          </motion.div>
+
           <motion.div
             id="checkout-form"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="mt-8 border-2 border-orange-200/70 rounded-3xl p-4 md:p-6 max-w-lg mx-auto shadow-xl shadow-orange-200/30 bg-white/85 backdrop-blur-xl">
+            className="border-2 border-orange-200/70 rounded-3xl p-4 md:p-6 max-w-lg mx-auto shadow-xl shadow-orange-200/30 bg-white/90 backdrop-blur-xl">
             
             <div className="mb-4">
               <h3 className="text-xl md:text-2xl font-black text-slate-900">Daftar & Bayar 🔒</h3>
