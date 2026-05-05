@@ -5,6 +5,16 @@ const CATEGORY_LANG = {
   english: 'English',
   mathematics: 'Matematik',
   science: 'Sains',
+  jawi: 'Jawi',
+  bahasa_tamil: 'Bahasa Tamil',
+  bahasa_mandarin: 'Bahasa Mandarin',
+};
+
+const LANGUAGE_RULES = {
+  english: 'WAJIB guna English sahaja untuk semua soalan, pilihan jawapan dan jawapan. Jangan guna Bahasa Melayu.',
+  bahasa_tamil: 'WAJIB guna Bahasa Tamil sahaja untuk semua soalan, pilihan jawapan dan jawapan. Jangan guna Bahasa Melayu.',
+  bahasa_mandarin: 'WAJIB guna Bahasa Mandarin/Chinese sahaja untuk semua soalan, pilihan jawapan dan jawapan. Jangan guna Bahasa Melayu.',
+  bahasa_melayu: 'Gunakan Bahasa Melayu Malaysia baku sahaja.',
 };
 
 const AGE_DESC = {
@@ -22,6 +32,7 @@ const GAME_TYPES_BY_SUBJECT = {
 async function generateQuestionsForGame(base44, game, needed, existingQuestions) {
   const subject = CATEGORY_LANG[game.category] || game.category;
   const ageDesc = AGE_DESC[game.ageGroup] || game.ageGroup;
+  const languageRule = LANGUAGE_RULES[game.category] || 'Gunakan bahasa yang sesuai dengan subjek.';
   const existingSample = existingQuestions.slice(0, 2).map(q => q.problem || q.question || '').filter(Boolean).join('; ');
 
   const gameTypesForSubject = GAME_TYPES_BY_SUBJECT[game.category] || ['multiple_choice', 'true_false', 'matching'];
@@ -46,6 +57,7 @@ PERATURAN:
 - Semua soalan berdasarkan KSSR/KSSM
 - Setiap soalan = 1 konsep sahaja
 - Bahasa mudah difahami untuk ${ageDesc}
+- ${languageRule}
 - Distractor mesti munasabah tapi jelas salah
 - Gunakan nama tempatan (Ali, Siti, Karim, dll)
 - Soalan pendek dan jelas
@@ -58,15 +70,15 @@ FORMAT JSON:
   "games": [
     {
       "type": "multiple_choice",
-      "soalan": "Apa warna rumit yang dibuat dari biru dan merah?",
-      "pilihan": ["Ungu", "Hijau", "Jingga", "Hitam"],
-      "jawapan": "Ungu"
+      "soalan": "Question text in the subject language",
+      "pilihan": ["Option A", "Option B", "Option C", "Option D"],
+      "jawapan": "Option A"
     },
     {
       "type": "true_false",
-      "soalan": "Siang hari terang kerana matahari.",
-      "pilihan": ["Betul", "Salah"],
-      "jawapan": "Betul"
+      "soalan": "Statement in the subject language",
+      "pilihan": ["True", "False"],
+      "jawapan": "True"
     },
     {
       "type": "matching",

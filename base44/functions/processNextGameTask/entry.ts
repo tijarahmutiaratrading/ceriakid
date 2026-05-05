@@ -41,10 +41,12 @@ async function generateQuestionsForGame(base44, gameTitle, topicName, subject, a
     : '';
 
   const languageRule = subject === 'english'
-    ? 'Gunakan English yang mudah, natural dan sesuai tahap murid Malaysia.'
-    : subject === 'bahasa_tamil' || subject === 'bahasa_mandarin'
-      ? 'Gunakan bahasa subjek yang betul, ringkas dan mesra kanak-kanak; arahan boleh dwibahasa BM ringkas jika perlu.'
-      : 'Gunakan Bahasa Malaysia baku yang betul, mudah dan mesra kanak-kanak.';
+    ? 'WAJIB guna English sahaja untuk problem, options dan jawapan. Jangan guna Bahasa Melayu kecuali nama tempat/nama orang Malaysia.'
+    : subject === 'bahasa_tamil'
+      ? 'WAJIB guna Bahasa Tamil sahaja untuk problem, options dan jawapan. Jangan terjemah soalan ke Bahasa Melayu.'
+      : subject === 'bahasa_mandarin'
+        ? 'WAJIB guna Bahasa Mandarin/Chinese sahaja untuk problem, options dan jawapan. Jangan terjemah soalan ke Bahasa Melayu.'
+        : 'Gunakan Bahasa Malaysia baku yang betul, mudah dan mesra kanak-kanak.';
 
   const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
   const cleanQuestions = (items) => (items || [])
@@ -116,9 +118,12 @@ Konteks:
 Tugas anda:
 1. Pulangkan TEPAT ${questionsCount} soalan terbaik.
 2. Betulkan semua jawapan salah, pilihan jawapan pelik, bahasa rojak, bahasa Indonesia/Inggeris yang tidak sesuai, dan fakta meragukan.
-3. Untuk Bahasa Melayu, guna BM Malaysia baku sahaja: contoh "arnab" bukan "kelinci", "kura-kura" bukan "turtle", "katak" bukan "kodok".
-4. Soalan mesti literal, mudah, natural, dan sesuai kanak-kanak; elakkan frasa pelik seperti "semangat ketua", "daki", "dua jenis rupa", "rongga hidung".
-5. Pastikan answer index sepadan dengan jawapan betul.
+3. Untuk English, semua problem/options/jawapan mesti dalam English sahaja.
+4. Untuk Bahasa Tamil, semua problem/options/jawapan mesti dalam Tamil sahaja.
+5. Untuk Bahasa Mandarin, semua problem/options/jawapan mesti dalam Mandarin/Chinese sahaja.
+6. Untuk Bahasa Melayu, guna BM Malaysia baku sahaja: contoh "arnab" bukan "kelinci", "kura-kura" bukan "turtle", "katak" bukan "kodok".
+7. Soalan mesti literal, mudah, natural, dan sesuai kanak-kanak; elakkan frasa pelik seperti "semangat ketua", "daki", "dua jenis rupa", "rongga hidung".
+8. Pastikan answer index sepadan dengan jawapan betul.
 
 Soalan asal JSON:
 ${JSON.stringify(questions.slice(0, questionsCount))}
