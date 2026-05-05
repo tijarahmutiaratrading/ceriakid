@@ -382,29 +382,37 @@ export default function Landing() {
           </div>
 
           {/* Subjects */}
-          <div className="overflow-hidden -mx-1 px-1">
-            <motion.div className="flex gap-4 w-max" animate={{ x: ['0%', '-50%'] }} transition={{ duration: 18, ease: 'linear', repeat: Infinity }}>
+          <div className="overflow-hidden -mx-2 px-2">
+            <motion.div className="flex gap-4 w-max" animate={{ x: ['0%', '-50%'] }} transition={{ duration: 22, ease: 'linear', repeat: Infinity }}>
             {[
-            { icon: '🇲🇾', sub: 'Bahasa Melayu', count: 'KSSR', color: 'from-blue-500 via-sky-400 to-cyan-300' },
-            { icon: '🇬🇧', sub: 'English', count: 'KSSR', color: 'from-emerald-500 via-green-400 to-lime-300' },
-            { icon: '🔢', sub: 'Matematik', count: 'KSSR', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
-            { icon: '🧪', sub: 'Sains', count: 'KSSR', color: 'from-orange-500 via-amber-400 to-yellow-300' },
-            { icon: '🕌', sub: 'Jawi', count: 'KSSR', color: 'from-teal-500 via-cyan-400 to-blue-300' },
-            { icon: '🌺', sub: 'Tamil', count: 'KSSR', color: 'from-rose-500 via-pink-400 to-orange-300' },
-            { icon: '🏮', sub: 'Mandarin', count: 'KSSR', color: 'from-red-500 via-orange-400 to-yellow-300' },
-            { icon: '🇲🇾', sub: 'Bahasa Melayu', count: 'KSSR', color: 'from-blue-500 via-sky-400 to-cyan-300' },
-            { icon: '🇬🇧', sub: 'English', count: 'KSSR', color: 'from-emerald-500 via-green-400 to-lime-300' },
-            { icon: '🔢', sub: 'Matematik', count: 'KSSR', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
-            { icon: '🧪', sub: 'Sains', count: 'KSSR', color: 'from-orange-500 via-amber-400 to-yellow-300' },
-            { icon: '🕌', sub: 'Jawi', count: 'KSSR', color: 'from-teal-500 via-cyan-400 to-blue-300' },
-            { icon: '🌺', sub: 'Tamil', count: 'KSSR', color: 'from-rose-500 via-pink-400 to-orange-300' },
-            { icon: '🏮', sub: 'Mandarin', count: 'KSSR', color: 'from-red-500 via-orange-400 to-yellow-300' }].
+            { kid: '👧🏻', icon: '🇲🇾', sub: 'Bahasa Melayu', word: 'Baca • Eja • Faham', info: 'Latihan ayat mudah dan kosa kata harian.', color: 'from-blue-500 via-sky-400 to-cyan-300' },
+            { kid: '👦🏽', icon: '🇬🇧', sub: 'English', word: 'Read • Speak • Play', info: 'Belajar perkataan English dengan cara seronok.', color: 'from-emerald-500 via-green-400 to-lime-300' },
+            { kid: '👧🏽', icon: '🔢', sub: 'Matematik', word: 'Kira • Banding • Selesaikan', info: 'Nombor dan operasi asas dalam bentuk game.', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
+            { kid: '👦🏻', icon: '🧪', sub: 'Sains', word: 'Lihat • Tanya • Cuba', info: 'Kenal alam, haiwan dan eksperimen ringkas.', color: 'from-orange-500 via-amber-400 to-yellow-300' },
+            { kid: '👧🏾', icon: '🕌', sub: 'Jawi', word: 'Kenal • Sebut • Tulis', info: 'Huruf Jawi dan suku kata secara perlahan.', color: 'from-teal-500 via-cyan-400 to-blue-300' },
+            { kid: '👦🏾', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
+            { kid: '👧🏻', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' },
+            { kid: '👧🏻', icon: '🇲🇾', sub: 'Bahasa Melayu', word: 'Baca • Eja • Faham', info: 'Latihan ayat mudah dan kosa kata harian.', color: 'from-blue-500 via-sky-400 to-cyan-300' },
+            { kid: '👦🏽', icon: '🇬🇧', sub: 'English', word: 'Read • Speak • Play', info: 'Belajar perkataan English dengan cara seronok.', color: 'from-emerald-500 via-green-400 to-lime-300' },
+            { kid: '👧🏽', icon: '🔢', sub: 'Matematik', word: 'Kira • Banding • Selesaikan', info: 'Nombor dan operasi asas dalam bentuk game.', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
+            { kid: '👦🏻', icon: '🧪', sub: 'Sains', word: 'Lihat • Tanya • Cuba', info: 'Kenal alam, haiwan dan eksperimen ringkas.', color: 'from-orange-500 via-amber-400 to-yellow-300' },
+            { kid: '👧🏾', icon: '🕌', sub: 'Jawi', word: 'Kenal • Sebut • Tulis', info: 'Huruf Jawi dan suku kata secara perlahan.', color: 'from-teal-500 via-cyan-400 to-blue-300' },
+            { kid: '👦🏾', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
+            { kid: '👧🏻', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' }].
             map((s, i) =>
-            <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} whileHover={{ y: -4, scale: 1.03 }} transition={{ delay: i * 0.08 }} className={`relative overflow-hidden bg-gradient-to-br ${s.color} rounded-2xl p-5 text-center shadow-xl shadow-black/20 border border-white/30 min-h-[145px] w-[180px] sm:w-[210px] flex-shrink-0 snap-start flex flex-col items-center justify-center`}>
-                <div className="absolute inset-0 bg-white/10" />
-                <div className="relative text-4xl mb-2 drop-shadow-sm">{s.icon}</div>
-                <div className="relative font-black text-white text-sm leading-tight drop-shadow">{s.sub}</div>
-                <div className="relative mt-2 bg-white/25 text-white font-black text-[10px] px-2.5 py-1 rounded-full border border-white/25">{s.count}</div>
+            <motion.div key={i} initial={{ opacity: 0, scale: 0.94 }} whileInView={{ opacity: 1, scale: 1 }} whileHover={{ y: -4, scale: 1.03 }} transition={{ delay: (i % 7) * 0.06 }} className={`relative overflow-hidden bg-gradient-to-br ${s.color} rounded-2xl p-4 shadow-xl shadow-black/20 border border-white/30 min-h-[172px] w-[248px] sm:w-[286px] flex-shrink-0 snap-start`}>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.38),transparent_44%)]" />
+                <div className="relative flex items-start gap-3">
+                  <div className="w-16 h-16 rounded-2xl bg-white/28 border border-white/35 flex items-center justify-center text-4xl shadow-inner">{s.kid}</div>
+                  <div className="flex-1 min-w-0 text-left">
+                    <div className="inline-flex items-center gap-1.5 bg-white/25 text-white font-black text-[10px] px-2.5 py-1 rounded-full border border-white/25 mb-2">{s.icon} {s.sub}</div>
+                    <div className="font-black text-white text-lg leading-tight drop-shadow">{s.word}</div>
+                  </div>
+                </div>
+                <div className="relative mt-3 bg-white/90 text-slate-800 rounded-xl px-3 py-2 text-left shadow-lg">
+                  <p className="font-black text-xs text-slate-900">Info belajar</p>
+                  <p className="text-xs font-bold text-slate-600 leading-snug mt-0.5">{s.info}</p>
+                </div>
               </motion.div>
             )}
             </motion.div>
