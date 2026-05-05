@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
-import { ArrowLeft, Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, Cog } from 'lucide-react';
+import { ArrowLeft, Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, Cog, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import AppHeader from '@/components/AppHeader';
@@ -68,6 +68,7 @@ export default function AdminDashboard() {
   const [settings, setSettings] = useState(defaultSettings);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [clearingCache, setClearingCache] = useState(false);
 
   useEffect(() => {
     if (user?.role === 'admin') {
@@ -140,6 +141,21 @@ export default function AdminDashboard() {
     setTimeout(() => setSaved(false), 3000);
   };
 
+  const handleClearCache = async () => {
+    setClearingCache(true);
+    if ('caches' in window) {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName)));
+    }
+    if ('serviceWorker' in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map((registration) => registration.unregister()));
+    }
+    sessionStorage.clear();
+    toast({ title: '✅ Cache dibersihkan!', description: 'App akan reload dengan versi terbaru.' });
+    setTimeout(() => window.location.replace(`${window.location.pathname}?fresh=${Date.now()}`), 800);
+  };
+
   const tabs = [
     { key: 'analytics', label: '📊 Analytics', icon: <BarChart3 className="w-4 h-4" /> },
     { key: 'settings', label: '⚙️ Settings', icon: <Settings className="w-4 h-4" /> },
@@ -171,10 +187,21 @@ export default function AdminDashboard() {
               <p className="text-white/75 text-sm">Analytics, settings & configurations dalam satu panel profesional.</p>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-2 w-full md:w-auto md:min-w-72">
-            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{subscriptions.length}</p><p className="text-white/60 text-[11px] font-bold">Pelanggan</p></div>
-            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">RM{totalRevenue.toFixed(0)}</p><p className="text-white/60 text-[11px] font-bold">Revenue</p></div>
-            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">Admin</p><p className="text-white/60 text-[11px] font-bold">Access</p></div>
+          <div className="w-full md:w-auto md:min-w-72 space-y-2">
+            <div className="grid grid-cols-3 gap-2">
+              <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{subscriptions.length}</p><p className="text-white/60 text-[11px] font-bold">Pelanggan</p></div>
+              <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">RM{totalRevenue.toFixed(0)}</p><p className="text-white/60 text-[11px] font-bold">Revenue</p></div>
+              <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">Admin</p><p className="text-white/60 text-[11px] font-bold">Access</p></div>
+            </div>
+            <button
+              type="button"
+              onClick={handleClearCache}
+              disabled={clearingCache}
+              className="w-full rounded-2xl bg-white text-indigo-900 px-4 py-3 text-sm font-black shadow-lg hover:bg-yellow-300 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+            >
+              <RefreshCw className={`w-4 h-4 ${clearingCache ? 'animate-spin' : ''}`} />
+              {clearingCache ? 'Clearing Cache...' : 'Clear Cache & Reload'}
+            </button>
           </div>
         </motion.div>
 
