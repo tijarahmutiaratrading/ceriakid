@@ -24,12 +24,12 @@ function useCountdown(minutes = 15) {
 }
 
 const testimonials = [
-{ name: 'Nurul Ain', location: 'Shah Alam, Selangor', quote: 'Anak saya lebih mudah duduk buat latihan bila bentuknya macam game. Saya suka sebab topik dia tersusun dan tak terlalu berat.', stars: 5, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'anak lebih konsisten' },
-{ name: 'Ismail Hashim', location: 'Johor Bahru, Johor', quote: 'Dashboard ibu bapa sangat membantu. Saya boleh nampak subjek mana anak selalu cuba dan mana yang perlu ulang semula.', stars: 5, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'mudah pantau progress' },
-{ name: 'Rohani Bakar', location: 'Kota Bharu, Kelantan', quote: 'Pelan keluarga memang praktikal untuk rumah kami. Anak-anak boleh guna ikut peringkat masing-masing tanpa perlu banyak app berbeza.', stars: 5, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'sesuai untuk keluarga' },
-{ name: 'Faridah Mohamad', location: 'Penang', quote: 'Saya kerja shift, jadi latihan pendek macam ni memudahkan anak belajar sendiri sekejap setiap hari.', stars: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'latihan harian lebih mudah' },
-{ name: 'Ahmad Zulkifli', location: 'Kuching, Sarawak', quote: 'Saya suka interface dia ceria, mudah faham dan tidak terlalu serabut. Anak lebih selesa cuba soalan satu demi satu.', stars: 5, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'interface mesra anak' },
-{ name: 'Siti Hajar', location: 'Ipoh, Perak', quote: 'Cuba versi percuma dulu, kemudian upgrade sebab kandungan dan susunan subjeknya sesuai untuk latihan di rumah.', stars: 5, avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'boleh cuba dahulu' }];
+{ name: 'Nurul Ain', location: 'Shah Alam, Selangor', quote: 'Anak saya lebih mudah duduk buat latihan bila bentuknya macam game. Saya suka sebab topik dia tersusun dan tak terlalu berat.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/512f26c46_generated_image.png', highlight: 'anak lebih konsisten' },
+{ name: 'Ismail Hashim', location: 'Johor Bahru, Johor', quote: 'Dashboard ibu bapa sangat membantu. Saya boleh nampak subjek mana anak selalu cuba dan mana yang perlu ulang semula.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e997c6e39_generated_image.png', highlight: 'mudah pantau progress' },
+{ name: 'Rohani Bakar', location: 'Kota Bharu, Kelantan', quote: 'Pelan keluarga memang praktikal untuk rumah kami. Anak-anak boleh guna ikut peringkat masing-masing tanpa perlu banyak app berbeza.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png', highlight: 'sesuai untuk keluarga' },
+{ name: 'Faridah Mohamad', location: 'Penang', quote: 'Saya kerja shift, jadi latihan pendek macam ni memudahkan anak belajar sendiri sekejap setiap hari.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e1156a4f3_generated_image.png', highlight: 'latihan harian lebih mudah' },
+{ name: 'Ahmad Zulkifli', location: 'Kuching, Sarawak', quote: 'Saya suka interface dia ceria, mudah faham dan tidak terlalu serabut. Anak lebih selesa cuba soalan satu demi satu.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fa45e0b6a_generated_image.png', highlight: 'interface mesra anak' },
+{ name: 'Siti Hajar', location: 'Ipoh, Perak', quote: 'Cuba versi percuma dulu, kemudian upgrade sebab kandungan dan susunan subjeknya sesuai untuk latihan di rumah.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/845d3a3d9_generated_image.png', highlight: 'boleh cuba dahulu' }];
 
 
 const tiers = [
@@ -70,9 +70,9 @@ const tiers = [
 
 
 const avatars = [
-'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&h=120&q=80',
-'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80',
-'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=120&h=120&q=80'];
+'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/512f26c46_generated_image.png',
+'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e997c6e39_generated_image.png',
+'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png'];
 
 
 export default function Landing() {
@@ -202,24 +202,24 @@ export default function Landing() {
       </nav>
 
       {/* ── HERO ── */}
-      <div className="max-w-6xl mx-auto px-6 pt-32 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-12 sm:pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           
           {/* Left: Text */}
           <div>
             {/* Social proof pill */}
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 bg-white/12 border border-white/20 rounded-full px-4 py-2 mb-8 shadow-xl backdrop-blur-xl">
-              <div className="flex -space-x-2">
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap sm:inline-flex items-center gap-2 max-w-full bg-white/12 border border-white/20 rounded-3xl sm:rounded-full px-3 sm:px-4 py-2 mb-6 sm:mb-8 shadow-xl backdrop-blur-xl">
+              <div className="flex -space-x-2 flex-shrink-0">
                 {avatars.map((a, i) =>
-                <img key={i} src={a} className="w-7 h-7 rounded-full border-2 border-white object-cover" />
+                <img key={i} src={a} className="w-7 h-7 rounded-full border-2 border-white object-cover flex-shrink-0" />
                 )}
               </div>
-              <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <span key={i} className="text-orange-400 text-xs">★</span>)}</div>
-              <span className="text-xs font-black text-white/85">Dipercayai <span className="text-yellow-300">5,000+ keluarga</span> Malaysia • Dibina khas untuk <span className="text-yellow-300">anak Malaysia</span> 🇲🇾</span>
+              <div className="flex gap-0.5 flex-shrink-0">{[...Array(5)].map((_, i) => <span key={i} className="text-orange-400 text-xs">★</span>)}</div>
+              <span className="text-[11px] sm:text-xs font-black text-white/85 leading-snug min-w-0 flex-1 sm:flex-none">Dipercayai <span className="text-yellow-300">5,000+ keluarga</span> Malaysia • Dibina khas untuk <span className="text-yellow-300">anak Malaysia</span> 🇲🇾</span>
             </motion.div>
 
             {/* Headline */}
-             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl md:text-6xl font-black leading-tight text-white mb-4">
+             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-3xl sm:text-4xl md:text-6xl font-black leading-tight text-white mb-4">
                Anak Suka Main Game?<br />{' '}
                <span className="relative inline-block">
                  <span className="relative z-10 text-black">Jadikan Ia</span>
@@ -232,7 +232,7 @@ export default function Landing() {
              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="text-lg text-yellow-300 mb-2 font-bold">
                Game pembelajaran KSSR untuk Prasekolah & Sekolah Rendah
              </motion.p>
-             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-base text-white/80 mb-8 leading-relaxed">
+             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-sm sm:text-base text-white/80 mb-6 sm:mb-8 leading-relaxed">
                CeriaKid bantu anak belajar BM, English, Matematik, Sains, Jawi, Tamil & Mandarin melalui game pendek, soalan interaktif dan dashboard ibu bapa — sesuai untuk latihan harian di rumah. ✅
              </motion.p>
 
