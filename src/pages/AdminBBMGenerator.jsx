@@ -192,6 +192,14 @@ export default function AdminBBMGenerator() {
     showToast('BBM dipadam');
   };
 
+  const handleDeleteCompletedTasks = async () => {
+    const completed = tasks.filter(t => t.status === 'completed');
+    if (!window.confirm(`Padam ${completed.length} completed BBM tasks?`)) return;
+    for (const t of completed) await base44.entities.GameTask.delete(t.id);
+    setTasks(prev => prev.filter(t => t.status !== 'completed'));
+    showToast(`✅ ${completed.length} completed tasks dipadam`);
+  };
+
   const handleSaveEdit = async () => {
     if (!editItem) return;
     await base44.entities.BBMResource.update(editItem.id, {
@@ -509,11 +517,18 @@ export default function AdminBBMGenerator() {
             {/* Task Queue Section */}
             {tasks.length > 0 && (
               <div className="p-4 md:p-5 rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.18)' }}>
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between gap-3 mb-3">
                   <h3 className="text-white font-bold">📋 Task Queue ({tasks.length})</h3>
-                  <button onClick={loadTasks} className="p-1 text-white/50 hover:text-white">
-                    <RefreshCw className={`w-3.5 h-3.5 ${loadingTasks ? 'animate-spin' : ''}`} />
-                  </button>
+                  <div className="flex items-center gap-2 flex-wrap justify-end">
+                    {tasks.filter(t => t.status === 'completed').length > 0 && (
+                      <button onClick={handleDeleteCompletedTasks} className="text-xs font-bold text-green-300 hover:underline whitespace-nowrap">
+                        Clear Completed
+                      </button>
+                    )}
+                    <button onClick={loadTasks} className="p-1 text-white/50 hover:text-white">
+                      <RefreshCw className={`w-3.5 h-3.5 ${loadingTasks ? 'animate-spin' : ''}`} />
+                    </button>
+                  </div>
                 </div>
                 <div className="space-y-1 max-h-48 overflow-y-auto">
                   {tasks.map(t => (

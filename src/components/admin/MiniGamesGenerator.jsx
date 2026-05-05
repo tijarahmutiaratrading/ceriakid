@@ -79,6 +79,18 @@ export default function MiniGamesGenerator({ onToast }) {
     }
   };
 
+  const handleDeleteAllCompleted = async () => {
+    if (!window.confirm('Padam semua completed mini game tasks?')) return;
+    const completed = tasks.filter(t => t.status === 'completed');
+    try {
+      for (const t of completed) await base44.entities.GameTask.delete(t.id);
+      setTasks(prev => prev.filter(t => t.status !== 'completed'));
+      onToast(`✅ ${completed.length} completed tasks dipadam`);
+    } catch (err) {
+      onToast('❌ ' + err.message, false);
+    }
+  };
+
   const handleQueueMiniGames = async () => {
     if (selectedMiniGames.size === 0) {
       onToast('Pilih sekurang-kurangnya satu mini game', false);
@@ -258,11 +270,18 @@ export default function MiniGamesGenerator({ onToast }) {
           </div>
         )}
 
-        {pendingTasks.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-white/10">
-            <button onClick={handleDeleteAllPending} className="text-xs font-bold text-red-300 hover:underline">
-              Padam Semua Pending
-            </button>
+        {(completedTasks.length > 0 || pendingTasks.length > 0) && (
+          <div className="mt-4 pt-4 border-t border-white/10 flex gap-3 flex-wrap">
+            {completedTasks.length > 0 && (
+              <button onClick={handleDeleteAllCompleted} className="text-xs font-bold text-green-300 hover:underline">
+                Clear Completed
+              </button>
+            )}
+            {pendingTasks.length > 0 && (
+              <button onClick={handleDeleteAllPending} className="text-xs font-bold text-red-300 hover:underline">
+                Padam Semua Pending
+              </button>
+            )}
           </div>
         )}
       </div>
