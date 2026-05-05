@@ -362,7 +362,7 @@ export default function Landing() {
       </div>
 
       {/* ── SOLUTION / FEATURES ── */}
-      <div id="features" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-sky-50 via-cyan-50 to-emerald-50 text-slate-900">
+      <div id="features" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50 text-slate-900">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <span className="inline-block bg-green-100 text-green-700 font-black px-4 py-1.5 rounded-full text-sm mb-4">✅ SOLUSI SCREEN TIME BERFAEDAH</span>
@@ -376,7 +376,7 @@ export default function Landing() {
             { icon: '📊', title: 'Ibu Bapa Boleh Pantau', desc: 'Lihat markah, percubaan dan topik yang anak perlukan lebih latihan melalui dashboard.' },
             { icon: '📲', title: 'Sesuai Untuk Rutin Harian', desc: 'Gunakan 5–10 minit sehari di rumah, dalam kereta atau bila anak ada masa lapang.' }].
             map((f, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white rounded-3xl p-7 border border-sky-100 text-center mx-auto hover:bg-sky-50 transition-all shadow-xl shadow-sky-100/70">
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white rounded-3xl p-7 border border-orange-100 text-center mx-auto hover:bg-orange-50 transition-all shadow-xl shadow-orange-100/70">
                 <div className="text-5xl mb-4">{f.icon}</div>
                 <h3 className="font-black text-slate-900 text-lg mb-2">{f.title}</h3>
                 <p className="text-slate-600 text-sm leading-relaxed">{f.desc}</p>
@@ -395,7 +395,7 @@ export default function Landing() {
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' }].
             map((s, i) =>
-            <motion.div key={s.sub} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ delay: i * 0.06 }} className="overflow-hidden rounded-2xl bg-white border border-sky-100 shadow-xl shadow-sky-100/70">
+            <motion.div key={s.sub} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ delay: i * 0.06 }} className="overflow-hidden rounded-2xl bg-white border border-orange-100 shadow-xl shadow-orange-100/70">
                 <div className="relative h-36 overflow-hidden">
                   <img src={s.img} alt={`Budak belajar ${s.sub}`} className="w-full h-full object-cover" />
                   <div className={`absolute inset-0 bg-gradient-to-t ${s.color} opacity-55`} />
