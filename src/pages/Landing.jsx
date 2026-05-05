@@ -568,11 +568,11 @@ export default function Landing() {
             id="checkout-form"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="mt-8 border-2 border-white/20 rounded-3xl p-4 md:p-6 max-w-lg mx-auto shadow-xl bg-indigo-950">
+            className="mt-8 border-2 border-orange-200/70 rounded-3xl p-4 md:p-6 max-w-lg mx-auto shadow-xl shadow-orange-200/30 bg-white/85 backdrop-blur-xl">
             
             <div className="mb-4">
-              <h3 className="text-xl md:text-2xl font-black text-white">Daftar & Bayar 🔒</h3>
-              <p className="text-xs md:text-sm text-white/60 mt-1 leading-snug">Pilih pakej, isi maklumat dan teruskan ke pembayaran FPX yang selamat.</p>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900">Daftar & Bayar 🔒</h3>
+              <p className="text-xs md:text-sm text-slate-600 mt-1 leading-snug">Pilih pakej, isi maklumat dan teruskan ke pembayaran FPX yang selamat.</p>
             </div>
             <PricingCheckout selectedTier={selectedTierForCheckout} onTierChange={setSelectedTierForCheckout} />
           </motion.div>
