@@ -273,19 +273,19 @@ export default function Landing() {
           <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, type: 'spring', damping: 20 }}>
             <div className="relative">
               {/* Floating badge */}
-              <div className="absolute -top-4 -left-4 z-10 bg-white rounded-2xl shadow-lg px-4 py-2.5 flex items-center gap-2">
+              <div className="absolute -top-4 -left-4 z-10 bg-slate-950/75 border border-white/20 rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-2 backdrop-blur-xl">
                 <span className="text-2xl">🎮</span>
                 <div>
-                  <p className="text-xs text-white/65 font-semibold">200+ Permainan</p>
-                  <p className="text-xs font-black text-orange-500">Cuba sekarang!</p>
+                  <p className="text-xs text-white/75 font-semibold">200+ Permainan</p>
+                  <p className="text-xs font-black text-yellow-300">Cuba sekarang!</p>
                 </div>
               </div>
               <InteractiveGameDemo />
               {/* Rating badge */}
-              <div className="absolute -bottom-4 -right-4 z-10 bg-white rounded-2xl shadow-lg px-4 py-2.5 flex items-center gap-2">
-                <span className="text-yellow-400 text-xl">⭐</span>
+              <div className="absolute -bottom-4 -right-4 z-10 bg-slate-950/75 border border-white/20 rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-2 backdrop-blur-xl">
+                <span className="text-yellow-300 text-xl">⭐</span>
                 <div>
-                  <p className="text-xs text-white/65 font-semibold">Rating Ibu Bapa</p>
+                  <p className="text-xs text-white/75 font-semibold">Rating Ibu Bapa</p>
                   <p className="text-sm font-black text-white">4.9 / 5.0</p>
                 </div>
               </div>
