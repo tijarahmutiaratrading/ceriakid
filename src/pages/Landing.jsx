@@ -382,8 +382,16 @@ export default function Landing() {
           </div>
 
           {/* Subjects */}
-          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="overflow-hidden -mx-1 px-1">
+            <motion.div className="flex gap-4 w-max" animate={{ x: ['0%', '-50%'] }} transition={{ duration: 18, ease: 'linear', repeat: Infinity }}>
             {[
+            { icon: '🇲🇾', sub: 'Bahasa Melayu', count: 'KSSR', color: 'from-blue-500 via-sky-400 to-cyan-300' },
+            { icon: '🇬🇧', sub: 'English', count: 'KSSR', color: 'from-emerald-500 via-green-400 to-lime-300' },
+            { icon: '🔢', sub: 'Matematik', count: 'KSSR', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
+            { icon: '🧪', sub: 'Sains', count: 'KSSR', color: 'from-orange-500 via-amber-400 to-yellow-300' },
+            { icon: '🕌', sub: 'Jawi', count: 'KSSR', color: 'from-teal-500 via-cyan-400 to-blue-300' },
+            { icon: '🌺', sub: 'Tamil', count: 'KSSR', color: 'from-rose-500 via-pink-400 to-orange-300' },
+            { icon: '🏮', sub: 'Mandarin', count: 'KSSR', color: 'from-red-500 via-orange-400 to-yellow-300' },
             { icon: '🇲🇾', sub: 'Bahasa Melayu', count: 'KSSR', color: 'from-blue-500 via-sky-400 to-cyan-300' },
             { icon: '🇬🇧', sub: 'English', count: 'KSSR', color: 'from-emerald-500 via-green-400 to-lime-300' },
             { icon: '🔢', sub: 'Matematik', count: 'KSSR', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
@@ -392,13 +400,14 @@ export default function Landing() {
             { icon: '🌺', sub: 'Tamil', count: 'KSSR', color: 'from-rose-500 via-pink-400 to-orange-300' },
             { icon: '🏮', sub: 'Mandarin', count: 'KSSR', color: 'from-red-500 via-orange-400 to-yellow-300' }].
             map((s, i) =>
-            <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} whileHover={{ y: -4, scale: 1.03 }} transition={{ delay: i * 0.08 }} className={`relative overflow-hidden bg-gradient-to-br ${s.color} rounded-3xl p-4 text-center shadow-xl shadow-black/20 border border-white/30 min-h-[118px] w-[150px] sm:w-[170px] flex-shrink-0 snap-start flex flex-col items-center justify-center`}>
+            <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} whileHover={{ y: -4, scale: 1.03 }} transition={{ delay: i * 0.08 }} className={`relative overflow-hidden bg-gradient-to-br ${s.color} rounded-2xl p-5 text-center shadow-xl shadow-black/20 border border-white/30 min-h-[145px] w-[180px] sm:w-[210px] flex-shrink-0 snap-start flex flex-col items-center justify-center`}>
                 <div className="absolute inset-0 bg-white/10" />
                 <div className="relative text-4xl mb-2 drop-shadow-sm">{s.icon}</div>
                 <div className="relative font-black text-white text-sm leading-tight drop-shadow">{s.sub}</div>
                 <div className="relative mt-2 bg-white/25 text-white font-black text-[10px] px-2.5 py-1 rounded-full border border-white/25">{s.count}</div>
               </motion.div>
             )}
+            </motion.div>
           </div>
         </div>
       </div>
