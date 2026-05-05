@@ -345,9 +345,9 @@ export default function Landing() {
             { emoji: '😰', pain: '"Exam dah dekat, anak masih tak hafal"', desc: 'Pressure menjelang peperiksaan. Semua orang dalam rumah tegang.' },
             { emoji: '😪', pain: '"Kerja sampai malam, tak sempat nak ajar"', desc: 'Ibu bapa penat, anak perlukan bantuan. Tiada masa yang cukup.' }].
             map((p, i) =>
-            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="flex gap-4 bg-white/10 border border-white/15 rounded-2xl p-5 shadow-xl backdrop-blur-xl">
-                <span className="text-3xl">{p.emoji}</span>
-                <div>
+            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="flex items-start gap-3 sm:gap-4 bg-white/10 border border-white/15 rounded-2xl p-4 sm:p-5 shadow-xl backdrop-blur-xl text-left min-w-0">
+                <span className="text-3xl w-10 h-10 flex-shrink-0 flex items-center justify-center">{p.emoji}</span>
+                <div className="min-w-0 flex-1">
                   <p className="font-black text-white mb-1">{p.pain}</p>
                   <p className="text-white/65 text-sm">{p.desc}</p>
                 </div>
