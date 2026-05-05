@@ -418,7 +418,7 @@ export default function Landing() {
       <div className="py-12 md:py-16 px-6 bg-gradient-to-r from-yellow-100/95 via-orange-100/95 to-pink-100/95 text-slate-900 border-y border-yellow-200/30">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
-            <span className="inline-block bg-yellow-400/20 text-yellow-200 border border-yellow-300/30 font-black px-4 py-1.5 rounded-full text-sm mb-4">🚀 SEMUA DALAM SATU APP</span>
+            <span className="inline-block bg-orange-100 text-orange-700 border border-orange-300/70 font-black px-4 py-1.5 rounded-full text-sm mb-4">🚀 SEMUA DALAM SATU APP</span>
             <h2 className="text-3xl md:text-4xl font-black mb-3 text-slate-900">Lebih Mudah Untuk Anak Belajar, Lebih Senang Untuk Ibu Bapa Pantau</h2>
             <p className="text-slate-700 max-w-2xl mx-auto">CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSSR, bahan latihan dan progress tracking dalam satu pengalaman yang mudah digunakan.</p>
           </motion.div>
