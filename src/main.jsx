@@ -3,13 +3,17 @@ import ReactDOM from 'react-dom/client'
 import App from '@/App.jsx'
 import '@/index.css'
 
-// Register Service Worker for offline support
+// Force old offline/theme caches to clear so users always see the latest design
+if ('caches' in window) {
+  caches.keys().then((cacheNames) => {
+    cacheNames.forEach((cacheName) => caches.delete(cacheName));
+  });
+}
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').then((reg) => {
-      console.log('SW registered:', reg.scope);
-    }).catch((err) => {
-      console.log('SW registration failed:', err);
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach((registration) => registration.unregister());
     });
   });
 }
