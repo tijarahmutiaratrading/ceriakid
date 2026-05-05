@@ -370,7 +370,7 @@ export default function Landing() {
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">Permainan edukatif berasaskan topik sekolah Malaysia. Anak rasa macam main game, ibu bapa pula nampak perkembangan pembelajaran.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
             { icon: '🎮', title: 'Latihan Rasa Macam Game', desc: 'Soalan pendek, warna ceria dan feedback segera bantu anak kekal fokus tanpa rasa terbeban.' },
             { icon: '📊', title: 'Ibu Bapa Boleh Pantau', desc: 'Lihat markah, percubaan dan topik yang anak perlukan lebih latihan melalui dashboard.' },
@@ -384,7 +384,18 @@ export default function Landing() {
             )}
           </div>
 
-          {/* Subjects */}
+        </div>
+      </div>
+
+      {/* ── SUBJECTS ── */}
+      <div className="py-12 md:py-16 px-6 bg-gradient-to-br from-yellow-50 via-orange-50 to-pink-50 text-slate-900">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
+            <span className="inline-block bg-orange-100 text-orange-700 border border-orange-300/70 font-black px-4 py-1.5 rounded-full text-sm mb-4">📚 SUBJEK PEMBELAJARAN</span>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Subjek Yang Anak Boleh Belajar</h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">Pilih topik mengikut silibus dan tahap anak — semuanya dalam gaya permainan yang menyeronokkan.</p>
+          </motion.div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/866fc318d_generated_image.png', icon: '🇲🇾', sub: 'Bahasa Melayu', word: 'Baca • Eja • Faham', info: 'Latihan ayat mudah dan kosa kata harian.', color: 'from-blue-500 via-sky-400 to-cyan-300' },
