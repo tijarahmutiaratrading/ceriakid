@@ -34,7 +34,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
     email: '',
     name: '',
     phone: '',
-    selectedTier: initialTier || 'standard'
+    selectedTier: initialTier || 'keluarga'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
