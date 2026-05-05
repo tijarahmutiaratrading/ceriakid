@@ -131,8 +131,16 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
            className={`max-w-5xl mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] ring-1 ${isPlayingGame ? 'ring-white/25 shadow-2xl shadow-slate-950/25' : 'pro-glass ring-white/20'}`}
            style={isPlayingGame ? { background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.82))', backdropFilter: 'blur(22px)' } : undefined}
          >
-           <Link to="/" className="flex items-center gap-2 min-w-0">
-             <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-2xl cursor-pointer shadow-lg ring-1 ring-white/40" />
+           <Link to={isAuthenticated ? "/settings" : "/"} className="flex items-center gap-2 min-w-0" title={isAuthenticated ? 'Tetapan Profil' : 'CeriaKid'}>
+             {isAuthenticated ? (
+               headerAvatarUrl ? (
+                 <img src={headerAvatarUrl} alt="Avatar" className="w-10 h-10 rounded-full object-cover cursor-pointer shadow-lg ring-2 ring-white/60" />
+               ) : (
+                 <div className="w-10 h-10 rounded-full bg-white/25 border-2 border-white/50 flex items-center justify-center text-xl cursor-pointer shadow-lg">🐱</div>
+               )
+             ) : (
+               <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-2xl cursor-pointer shadow-lg ring-1 ring-white/40" />
+             )}
            </Link>
 
            <div className="min-w-0 text-center px-1">
