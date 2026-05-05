@@ -382,8 +382,8 @@ export default function Landing() {
           </div>
 
           {/* Subjects */}
-          <div className="overflow-hidden -mx-2 px-2">
-            <motion.div className="flex gap-4 w-max" animate={{ x: ['0%', '-50%'] }} transition={{ duration: 22, ease: 'linear', repeat: Infinity }}>
+          <div className="overflow-x-auto -mx-2 px-2 pb-4 snap-x snap-mandatory scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex gap-4 w-max">
             {[
             { kid: '👧🏻', icon: '🇲🇾', sub: 'Bahasa Melayu', word: 'Baca • Eja • Faham', info: 'Latihan ayat mudah dan kosa kata harian.', color: 'from-blue-500 via-sky-400 to-cyan-300' },
             { kid: '👦🏽', icon: '🇬🇧', sub: 'English', word: 'Read • Speak • Play', info: 'Belajar perkataan English dengan cara seronok.', color: 'from-emerald-500 via-green-400 to-lime-300' },
@@ -415,7 +415,7 @@ export default function Landing() {
                 </div>
               </motion.div>
             )}
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
