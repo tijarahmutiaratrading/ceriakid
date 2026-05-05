@@ -415,12 +415,12 @@ export default function Landing() {
       </div>
 
       {/* ── INVESTOR WOW ── */}
-      <div className="py-12 md:py-16 px-6 bg-slate-950 text-white">
+      <div className="py-12 md:py-16 px-6 bg-gradient-to-r from-yellow-100/95 via-orange-100/95 to-pink-100/95 text-slate-900 border-y border-yellow-200/30">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
             <span className="inline-block bg-yellow-400/20 text-yellow-200 border border-yellow-300/30 font-black px-4 py-1.5 rounded-full text-sm mb-4">🚀 SEMUA DALAM SATU APP</span>
-            <h2 className="text-3xl md:text-4xl font-black mb-3">Lebih Mudah Untuk Anak Belajar, Lebih Senang Untuk Ibu Bapa Pantau</h2>
-            <p className="text-white/60 max-w-2xl mx-auto">CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSSR, bahan latihan dan progress tracking dalam satu pengalaman yang mudah digunakan.</p>
+            <h2 className="text-3xl md:text-4xl font-black mb-3 text-slate-900">Lebih Mudah Untuk Anak Belajar, Lebih Senang Untuk Ibu Bapa Pantau</h2>
+            <p className="text-slate-700 max-w-2xl mx-auto">CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSSR, bahan latihan dan progress tracking dalam satu pengalaman yang mudah digunakan.</p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
@@ -429,10 +429,10 @@ export default function Landing() {
               { icon: '📚', title: 'BBM Library', desc: 'Bahan bantu mengajar untuk guru dan ibu bapa.' },
               { icon: '🔒', title: 'Pembelajaran Selamat', desc: 'Pengalaman tanpa iklan dan lebih terkawal untuk kanak-kanak.' }
             ].map((item, i) => (
-              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="rounded-3xl p-5 border border-white/10 bg-white/10 backdrop-blur-xl shadow-xl">
+              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="rounded-3xl p-5 border border-orange-200/70 bg-white/80 backdrop-blur-xl shadow-xl shadow-orange-200/30">
                 <div className="text-4xl mb-3">{item.icon}</div>
-                <h3 className="font-black text-lg mb-2">{item.title}</h3>
-                <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="font-black text-lg mb-2 text-slate-900">{item.title}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </div>
