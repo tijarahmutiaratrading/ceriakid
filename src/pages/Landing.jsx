@@ -510,16 +510,16 @@ export default function Landing() {
               transition={{ delay: i * 0.1 }}
               className={`rounded-3xl p-6 relative border-2 transition-all ${
               tier.highlighted ?
-              'border-white/40 shadow-2xl md:scale-105' :
+              'border-yellow-200/80 shadow-2xl shadow-yellow-950/30 md:scale-105' :
               'border-white/20 shadow-md hover:border-white/40'}`}
               style={tier.highlighted ? 
-                { background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)' } :
+                { background: 'linear-gradient(135deg, rgba(251,191,36,0.95), rgba(245,158,11,0.9), rgba(217,119,6,0.88))', backdropFilter: 'blur(20px)' } :
                 { background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }
               }
               >
               
                 {tier.savings &&
-                <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-yellow-400/20 text-yellow-200' : 'bg-white/10 text-white/70'}`}>
+                <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-white/25 text-white border border-white/30' : 'bg-white/10 text-white/70'}`}>
                    💰 {tier.savings}
                  </div>
                 }
@@ -539,7 +539,7 @@ export default function Landing() {
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleTierSelect(tier.name)}
                 className={`w-full py-3.5 rounded-2xl font-black text-base mb-6 shadow-md transition-all ${
-                tier.highlighted ? 'bg-white text-purple-700 hover:bg-white/90' : 'bg-orange-500 text-white hover:bg-orange-600'} ${
+                tier.highlighted ? 'bg-slate-950 text-yellow-300 hover:bg-slate-900' : 'bg-orange-500 text-white hover:bg-orange-600'} ${
                 selectedTierForCheckout === tier.name ? 'ring-4 ring-yellow-300' : ''}`}>
                 
                   {tier.cta}
