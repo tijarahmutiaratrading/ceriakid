@@ -38,7 +38,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
             whileHover={{ scale: disabled ? 1 : 1.05 }}
             onClick={() => !disabled && onAnswer(i)}
             disabled={disabled}
-            className={`min-h-14 rounded-2xl py-4 px-3 font-black text-center transition-all text-sm sm:text-base break-words bg-white text-slate-900 border-2 border-purple-100 shadow-lg shadow-purple-950/10 ${
+            className={`clay-button min-h-14 rounded-2xl py-4 px-3 font-bold text-center transition-all text-sm sm:text-base break-words ${
               showFeedback && selectedIdx === i
                 ? isCorrect
                   ? 'bg-green-200 ring-2 ring-green-500'
