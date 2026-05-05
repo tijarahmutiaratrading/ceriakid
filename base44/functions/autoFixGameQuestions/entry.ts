@@ -118,9 +118,14 @@ Deno.serve(async (req) => {
 
       // Fix the question
       try {
-        const fixed = await generateFixedQuestion(base44, game, currentQuestion, issues);
+        const fixedRaw = await generateFixedQuestion(base44, game, currentQuestion, issues);
+        const fixed = fixedRaw.response || fixedRaw;
         fixedQuestions[qIdx] = {
-          ...fixed,
+          problem: fixed.problem,
+          options: fixed.options,
+          answer: fixed.answer,
+          emoji: fixed.emoji,
+          ...(fixed.image ? { image: fixed.image } : {}),
           _fixed: true,
           _originalIssues: issues,
         };

@@ -24,8 +24,11 @@ Deno.serve(async (req) => {
     const [typeLabel, emoji] = types[type];
     const subjectLabel = subjects[subject];
     const levelLabel = levels[level];
+    const languageRule = subject === 'english'
+      ? 'WAJIB hasilkan semua title, description, instructions, content dan answer dalam English sahaja. Jangan guna Bahasa Melayu kecuali label metadata.'
+      : 'Gunakan Bahasa Melayu Malaysia baku untuk semua kandungan.';
     const data = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeLabel} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic || 'umum'}. Bilangan item/soalan: ${count}. Wajib ada objektif pembelajaran jelas, arahan murid yang mudah, kandungan selari tahap umur, soalan pelbagai aras mudah-sederhana, contoh tempatan Malaysia, jawapan/skema ringkas, tiada placeholder dan tiada fakta meragukan. DILARANG guna heading seperti "Soalan 1", "Item", "Gambar di bawah", atau arahan "lihat gambar" jika tiada imej sebenar. Setiap heading mesti menerangkan kemahiran khusus seperti "Kenal Pasti Kata Nama Am". Pulangkan JSON sahaja: title, description, instructions, items array dengan heading, content, answer.`,
+      prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeLabel} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic || 'umum'}. Bilangan item/soalan: ${count}. ${languageRule} Wajib ada objektif pembelajaran jelas, arahan murid yang mudah, kandungan selari tahap umur, soalan pelbagai aras mudah-sederhana, contoh tempatan Malaysia, jawapan/skema ringkas, tiada placeholder dan tiada fakta meragukan. DILARANG guna heading seperti "Soalan 1", "Item", "Gambar di bawah", atau arahan "lihat gambar" jika tiada imej sebenar. Setiap heading mesti menerangkan kemahiran khusus seperti "Kenal Pasti Kata Nama Am". Pulangkan JSON sahaja: title, description, instructions, items array dengan heading, content, answer.`,
       response_json_schema: { type: 'object', properties: { title: { type: 'string' }, description: { type: 'string' }, instructions: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { heading: { type: 'string' }, content: { type: 'string' }, answer: { type: 'string' } } } } } },
     });
 

@@ -48,7 +48,7 @@ async function generateQuestionsForGame(base44, gameTitle, topicName, subject, a
         ? 'WAJIB guna Bahasa Mandarin/Chinese sahaja untuk problem, options dan jawapan. Jangan terjemah soalan ke Bahasa Melayu.'
         : 'Gunakan Bahasa Malaysia baku yang betul, mudah dan mesra kanak-kanak.';
 
-  const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
+  const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
   const cleanQuestions = (items) => (items || [])
     .filter(q => q?.problem && q.options?.length === 4 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3)
     .map(q => ({ problem: String(q.problem).trim(), options: q.options.map(o => String(o).trim()), answer: q.answer, emoji: String(q.emoji || '🎮').trim() }))
@@ -122,7 +122,7 @@ Tugas anda:
 4. Untuk Bahasa Tamil, semua problem/options/jawapan mesti dalam Tamil sahaja.
 5. Untuk Bahasa Mandarin, semua problem/options/jawapan mesti dalam Mandarin/Chinese sahaja.
 6. Untuk Bahasa Melayu, guna BM Malaysia baku sahaja: contoh "arnab" bukan "kelinci", "kura-kura" bukan "turtle", "katak" bukan "kodok".
-7. Soalan mesti literal, mudah, natural, dan sesuai kanak-kanak; elakkan frasa pelik seperti "semangat ketua", "daki", "dua jenis rupa", "rongga hidung".
+7. Soalan mesti literal, mudah, natural, dan sesuai kanak-kanak; elakkan frasa pelik/panjang seperti "semangat ketua", "daki", "dua jenis rupa", "rongga hidung", "dua telinga panjang dan sangat comel", atau "badan kecil dan suka berlari-lari".
 8. Pastikan answer index sepadan dengan jawapan betul.
 
 Soalan asal JSON:
@@ -250,7 +250,7 @@ Deno.serve(async (req) => {
     }
 
     const sanitizeExistingQuestions = (questions = []) => {
-      const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
+      const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
       return questions
         .filter(q => q?.problem && Array.isArray(q.options) && q.options.length === 4 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3)
         .filter(q => new Set(q.options.map(o => String(o).trim().toLowerCase())).size === 4)

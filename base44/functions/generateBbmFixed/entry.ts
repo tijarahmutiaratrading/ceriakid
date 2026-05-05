@@ -28,8 +28,11 @@ Deno.serve(async (req) => {
     const [typeLabel, emoji] = TYPES[type];
     const subjectLabel = SUBJECTS[subject];
     const levelLabel = LEVELS[level];
+    const languageRule = subject === 'english'
+      ? 'WAJIB hasilkan semua title, description, instructions, content dan answer dalam English sahaja. Jangan guna Bahasa Melayu kecuali label metadata.'
+      : 'Gunakan Bahasa Melayu Malaysia baku untuk semua kandungan.';
     const ai = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeLabel} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic || 'umum'}. Buat ${count} item. Wajib ada objektif pembelajaran jelas, arahan murid yang mudah, kandungan selari tahap umur, soalan pelbagai aras mudah-sederhana, contoh tempatan Malaysia, jawapan/skema ringkas, tiada placeholder dan tiada fakta meragukan. DILARANG guna heading seperti "Soalan 1", "Item", "Gambar di bawah", atau arahan "lihat gambar" jika tiada imej sebenar. Setiap heading mesti menerangkan kemahiran khusus seperti "Kenal Pasti Kata Nama Am". Output JSON sahaja: title, description, instructions, items[{heading,content,answer}].`,
+      prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeLabel} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic || 'umum'}. Buat ${count} item. ${languageRule} Wajib ada objektif pembelajaran jelas, arahan murid yang mudah, kandungan selari tahap umur, soalan pelbagai aras mudah-sederhana, contoh tempatan Malaysia, jawapan/skema ringkas, tiada placeholder dan tiada fakta meragukan. DILARANG guna heading generik seperti "Soalan 1", "Soalan 2", "Item", "Latihan", "Gambar di bawah", atau arahan "lihat gambar" jika tiada imej sebenar. Setiap heading mesti terus menerangkan kemahiran khusus seperti "Kenal Pasti Kata Nama Am". Jangan letak nombor soalan dalam heading kerana sistem akan tambah nombor automatik. Output JSON sahaja: title, description, instructions, items[{heading,content,answer}].`,
       response_json_schema: { type: 'object', properties: { title: { type: 'string' }, description: { type: 'string' }, instructions: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { heading: { type: 'string' }, content: { type: 'string' }, answer: { type: 'string' } } } } } }
     });
 

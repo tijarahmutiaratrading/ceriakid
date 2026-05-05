@@ -13,7 +13,7 @@ Deno.serve(async (req) => {
     const miniCategories = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
     const validAgeGroups = ['prasekolah', 'sekolah_rendah'];
     const validDifficulty = ['easy', 'medium', 'hard'];
-    const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
+    const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
 
     // Fetch all games
     const allGames = await base44.entities.Game.list('-created_date', 1000);
@@ -26,6 +26,8 @@ Deno.serve(async (req) => {
       noQuestions: [],
       tooFewQuestions: [],
       wrongLanguageSubject: [], // e.g. Malay questions in English subject
+      weakQuestionQuality: [],
+      duplicateQuestions: [],
       missingTitle: [],
       missingType: [],
       total: allGames?.length || 0
@@ -83,8 +85,17 @@ Deno.serve(async (req) => {
         issues.noQuestions.push(game.id);
       } else {
         if (questions.length < 8) issues.tooFewQuestions.push({ id: game.id, count: questions.length });
+        const questionTexts = questions.map(q => String(q.problem || q.question || '').trim().toLowerCase().replace(/[^a-z0-9\u00C0-\u024F\u0600-\u06FF\u0B80-\u0BFF\u4E00-\u9FFF ]/gi, '')).filter(Boolean);
         const badQuestions = questions.filter(q => bannedPattern.test([q.problem || q.question || '', ...(q.options || [])].join(' ')));
+        const weakQuestions = questions.filter(q => {
+          const text = String(q.problem || q.question || '').trim();
+          const options = Array.isArray(q.options) ? q.options.map(o => String(o).trim().toLowerCase()) : [];
+          return text.length < 10 || options.length !== 4 || new Set(options).size !== 4 || !Number.isInteger(q.answer) || q.answer < 0 || q.answer > 3;
+        });
+        const duplicates = questionTexts.filter((q, i) => questionTexts.indexOf(q) !== i && q.length > 0);
         if (badQuestions.length > 0) issues.wrongLanguageSubject.push({ id: game.id, title: game.title, sampleQuestion: badQuestions[0].problem || badQuestions[0].question });
+        if (weakQuestions.length > 0) issues.weakQuestionQuality.push({ id: game.id, title: game.title, count: weakQuestions.length, sampleQuestion: weakQuestions[0].problem || weakQuestions[0].question });
+        if (duplicates.length > 0) issues.duplicateQuestions.push({ id: game.id, title: game.title, count: duplicates.length, sampleQuestion: duplicates[0] });
       }
 
       // Check language matching (basic check)
