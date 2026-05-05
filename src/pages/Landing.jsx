@@ -526,7 +526,7 @@ export default function Landing() {
               'border-yellow-200/80 shadow-2xl shadow-yellow-950/30 md:scale-105' :
               'border-white/20 shadow-md hover:border-white/40'}`}
               style={tier.highlighted ? 
-                { background: 'linear-gradient(135deg, rgba(30,27,75,0.98), rgba(88,28,135,0.96), rgba(124,58,237,0.94))', backdropFilter: 'blur(20px)' } :
+                { background: 'linear-gradient(135deg, rgba(251,191,36,0.98), rgba(245,158,11,0.96), rgba(217,119,6,0.94))', backdropFilter: 'blur(20px)' } :
                 { background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }
               }
               >
@@ -537,13 +537,13 @@ export default function Landing() {
                  </div>
                 }
 
-                <h3 className="text-2xl font-black mb-2 text-white">{tier.nameMY}</h3>
+                <h3 className={`text-2xl font-black mb-2 ${tier.highlighted ? 'text-slate-950' : 'text-white'}`}>{tier.nameMY}</h3>
 
                 <div className="flex items-baseline gap-1 mb-0.5">
-                 <span className="text-3xl font-black text-yellow-300">RM{tier.priceMYR}</span>
-                 <span className="text-sm font-bold text-white/60">{tier.period}</span>
+                 <span className={`text-3xl font-black ${tier.highlighted ? 'text-slate-950' : 'text-yellow-300'}`}>RM{tier.priceMYR}</span>
+                 <span className={`text-sm font-bold ${tier.highlighted ? 'text-slate-800' : 'text-white/60'}`}>{tier.period}</span>
                 </div>
-                <p className="text-xs font-bold mb-6 text-white/50">
+                <p className={`text-xs font-bold mb-6 ${tier.highlighted ? 'text-slate-800' : 'text-white/50'}`}>
                  ≈ RM{tier.perMonth}/bulan
                 </p>
 
@@ -552,7 +552,7 @@ export default function Landing() {
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleTierSelect(tier.name)}
                 className={`w-full py-3.5 rounded-2xl font-black text-base mb-6 shadow-md transition-all ${
-                tier.highlighted ? 'bg-yellow-300 text-slate-950 hover:bg-yellow-200 shadow-yellow-500/30' : 'bg-orange-600 text-white hover:bg-orange-700'} ${
+                tier.highlighted ? 'bg-slate-950 text-yellow-200 hover:bg-slate-900 shadow-slate-950/30' : 'bg-orange-600 text-white hover:bg-orange-700'} ${
                 selectedTierForCheckout === tier.name ? 'ring-4 ring-yellow-300' : ''}`}>
                 
                   {tier.cta}
@@ -560,12 +560,12 @@ export default function Landing() {
 
                 <div className="space-y-2.5">
                   {tier.features.map((f, j) =>
-                <div key={j} className="flex items-center gap-2 text-sm font-semibold text-white">
+                <div key={j} className={`flex items-center gap-2 text-sm font-semibold ${tier.highlighted ? 'text-slate-950' : 'text-white'}`}>
                       <Check className="w-4 h-4 text-green-400 flex-shrink-0" /> {f}
                     </div>
                 )}
                   {tier.noFeatures.map((f, j) =>
-                <div key={j} className="flex items-center gap-2 text-sm font-semibold opacity-40 text-white">
+                <div key={j} className={`flex items-center gap-2 text-sm font-semibold opacity-40 ${tier.highlighted ? 'text-slate-950' : 'text-white'}`}>
                       <span className="w-4 flex-shrink-0">✕</span> {f}
                     </div>
                 )}
