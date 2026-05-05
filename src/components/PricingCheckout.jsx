@@ -105,7 +105,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
       {/* Tier Selection */}
       <div>
         <label className="block text-sm font-bold mb-3 text-white">Pilih Pelan Tahunan</label>
-        <div className="space-y-3">
+        <div className="space-y-2">
           {TIERS.map((tier) => {
             const isSelected = formData.selectedTier === tier.name;
             return (
@@ -113,7 +113,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
                 key={tier.name}
                 whileHover={{ scale: 1.01 }}
                 onClick={() => {setFormData({ ...formData, selectedTier: tier.name });onTierChange?.(tier.name);}}
-                className={`relative flex flex-col sm:flex-row sm:items-center gap-3 p-4 border-2 rounded-2xl cursor-pointer transition-all ${
+                className={`relative flex items-center gap-2.5 px-3 py-2.5 border-2 rounded-2xl cursor-pointer transition-all ${
                 isSelected ? 'border-game-purple bg-purple-50' : 'border-gray-200 bg-white hover:border-gray-300'}`
                 }>
                 
@@ -125,16 +125,16 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
                 <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${isSelected ? 'border-game-purple' : 'border-gray-300'}`}>
                   {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-game-purple" />}
                 </div>
-                <div className="sm:ml-3 flex-1 min-w-0 text-center sm:text-left">
-                  <p className="font-black text-gray-900">{tier.nameMY}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{tier.description}</p>
+                <div className="flex-1 min-w-0 text-left">
+                  <p className="font-black text-gray-900 text-sm leading-tight">{tier.nameMY}</p>
+                  <p className="text-[11px] text-gray-500 mt-0.5 leading-tight">{tier.description}</p>
                 </div>
-                <div className="text-center sm:text-right sm:ml-3">
-                  <p className={`text-xl font-black ${isSelected ? 'text-game-purple' : 'text-gray-700'}`}>
+                <div className="text-right flex-shrink-0">
+                  <p className={`text-base font-black leading-tight ${isSelected ? 'text-game-purple' : 'text-gray-700'}`}>
                     RM{tier.priceMYR}
                   </p>
-                  <p className="text-xs text-gray-400">/tahun</p>
-                  <p className="text-xs text-green-600 font-bold">≈ RM{tier.perMonth}/bln</p>
+                  <p className="text-[10px] text-gray-400 leading-tight">/tahun</p>
+                  <p className="text-[10px] text-green-600 font-bold leading-tight">≈ RM{tier.perMonth}/bln</p>
                 </div>
               </motion.label>);
 
