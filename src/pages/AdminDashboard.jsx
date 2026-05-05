@@ -186,7 +186,7 @@ export default function AdminDashboard() {
                onClick={() => setActiveTab(tab.key)}
                className={`flex-1 py-3 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap px-3 flex items-center justify-center gap-2 ${activeTab === tab.key ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
                >
-               {tab.icon}<span>{tab.label}</span>
+               <span>{tab.label}</span>
              </button>
            ))}
         </motion.div>
