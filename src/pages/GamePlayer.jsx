@@ -500,8 +500,8 @@ export default function GamePlayer() {
            key={state.currentQ}
            initial={{ opacity: 0, x: 50 }}
            animate={{ opacity: 1, x: 0 }}
-           className="rounded-3xl p-4 md:p-6 text-center mb-6"
-           style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
+           className="rounded-3xl p-4 md:p-6 text-center mb-6 bg-white shadow-xl ring-1 ring-purple-100"
+           style={{ boxShadow: '0 12px 32px rgba(88, 28, 135, 0.16)' }}
          >
 
 
@@ -525,7 +525,7 @@ export default function GamePlayer() {
 
           {/* Generic question text — covers all DB game formats */}
            {currentQuestion.question && (
-             <p className={`font-bold text-gray-800 mb-2 ${currentQuestion.question.length > 60 ? 'text-xs sm:text-base' : 'text-sm sm:text-xl'}`}>
+             <p className={`font-black text-slate-900 leading-snug mb-2 ${currentQuestion.question.length > 60 ? 'text-sm sm:text-base' : 'text-base sm:text-xl'}`}>
                {currentQuestion.question}
              </p>
            )}
