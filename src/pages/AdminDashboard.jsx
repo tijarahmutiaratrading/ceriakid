@@ -152,8 +152,8 @@ export default function AdminDashboard() {
       await Promise.all(registrations.map((registration) => registration.unregister()));
     }
     sessionStorage.clear();
-    toast({ title: '✅ Cache dibersihkan!', description: 'App akan reload dengan versi terbaru.' });
-    setTimeout(() => window.location.replace(`${window.location.pathname}?fresh=${Date.now()}`), 800);
+    toast({ title: '✅ Cache dibersihkan!', description: 'Landing page akan dibuka semula dengan versi terbaru.' });
+    setTimeout(() => window.location.replace(`/clear-cache.html?fresh=${Date.now()}`), 800);
   };
 
   const tabs = [
