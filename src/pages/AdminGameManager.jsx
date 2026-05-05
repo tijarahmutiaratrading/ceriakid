@@ -149,6 +149,14 @@ export default function AdminGameManager() {
     showToast(`✅ ${pending.length} tasks dipadam`);
   };
 
+  const handleDeleteAllCompleted = async () => {
+    if (!window.confirm('Padam semua completed tasks?')) return;
+    const completed = tasks.filter(t => t.status === 'completed');
+    for (const t of completed) await base44.entities.GameTask.delete(t.id);
+    loadTasks();
+    showToast(`✅ ${completed.length} completed tasks dipadam`);
+  };
+
   // ── MANAGER TAB STATE ──
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -500,7 +508,10 @@ export default function AdminGameManager() {
             <div className="p-5 md:p-7 rounded-[2rem] shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-black text-white">📋 Task Queue</h2>
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-center flex-wrap justify-end">
+                  {completedTasks.length > 0 && (
+                    <button onClick={handleDeleteAllCompleted} className="text-xs font-bold text-green-300 hover:underline">Clear Completed</button>
+                  )}
                   {pendingTasks.length > 0 && (
                     <button onClick={handleDeleteAllPending} className="text-xs font-bold text-red-300 hover:underline">Padam Pending</button>
                   )}
