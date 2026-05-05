@@ -577,10 +577,10 @@ export default function Landing() {
           </motion.div>
 
           {/* Trust */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-10 border border-green-400/30 rounded-2xl p-6 text-center max-w-xl mx-auto shadow-sm" style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}>
-            <div className="text-4xl mb-3">🛡️</div>
-            <h3 className="text-xl font-black text-white mb-2">Direka Untuk Kanak-kanak Malaysia</h3>
-            <p className="text-white/60 text-sm">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-8 border border-sky-300/30 rounded-2xl p-4 md:p-5 text-center max-w-xl mx-auto shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.18), rgba(99,102,241,0.16))', backdropFilter: 'blur(20px)' }}>
+            <div className="text-3xl mb-2">🛡️</div>
+            <h3 className="text-lg font-black text-white mb-1.5">Direka Untuk Kanak-kanak Malaysia</h3>
+            <p className="text-white/65 text-sm">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
           </motion.div>
 
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto text-center">
