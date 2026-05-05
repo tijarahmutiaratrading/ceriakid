@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/AuthContext';
 import AppHeader from '@/components/AppHeader';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
+import TrustedMarquee from '@/components/landing/TrustedMarquee';
 
 // Countdown Timer Hook
 function useCountdown(minutes = 15) {
@@ -326,6 +327,8 @@ export default function Landing() {
           </div>
         </div>
       </div>
+
+      <TrustedMarquee />
 
       {/* ── PROBLEM SECTION ── */}
       <div className="py-12 md:py-16 px-6 relative">
