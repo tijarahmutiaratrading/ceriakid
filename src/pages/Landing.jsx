@@ -475,26 +475,26 @@ export default function Landing() {
       </div>
 
       {/* ── TESTIMONIALS ── */}
-      <div id="testimonials" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-violet-950 via-purple-950 to-slate-950">
+      <div id="testimonials" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-orange-50 via-rose-50 to-yellow-50 text-slate-900">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_, i) => <span key={i} className="text-2xl text-orange-400">★</span>)}</div>
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-2">Ini Kata Ibu Bapa<br />Yang Dah Cuba Sendiri</h2>
-            <p className="text-white/65">Bukan kami cakap — mereka yang cerita sendiri 👇</p>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">Ini Kata Ibu Bapa<br />Yang Dah Cuba Sendiri</h2>
+            <p className="text-slate-600">Bukan kami cakap — mereka yang cerita sendiri 👇</p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {testimonials.map((t, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-white/10 rounded-3xl p-6 border border-white/15 flex flex-col justify-between shadow-xl backdrop-blur-xl">
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-white rounded-3xl p-6 border border-orange-100 flex flex-col justify-between shadow-xl shadow-orange-100/70">
                 <div>
                   <div className="flex gap-1 mb-3">{[...Array(t.stars)].map((_, j) => <span key={j} className="text-orange-400">★</span>)}</div>
-                  <p className="text-white/80 mb-4 leading-relaxed text-sm">"{t.quote}"</p>
+                  <p className="text-slate-700 mb-4 leading-relaxed text-sm">"{t.quote}"</p>
                   <div className="inline-block bg-green-100 text-green-700 text-xs font-black px-3 py-1 rounded-full mb-4">✅ {t.highlight}</div>
                 </div>
-                <div className="flex items-center gap-3 pt-3 border-t border-white/10">
-                  <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-white/30" />
+                <div className="flex items-center gap-3 pt-3 border-t border-orange-100">
+                  <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-orange-200" />
                   <div>
-                    <p className="font-black text-white text-sm">{t.name}</p>
-                    <p className="text-xs text-gray-400">{t.location}</p>
+                    <p className="font-black text-slate-900 text-sm">{t.name}</p>
+                    <p className="text-xs text-slate-500">{t.location}</p>
                   </div>
                 </div>
               </motion.div>
