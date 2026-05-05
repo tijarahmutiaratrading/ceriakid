@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, Zap } from 'lucide-react';
+import { ArrowLeft, Clock, Zap } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useAuth } from '@/lib/AuthContext';
@@ -447,6 +447,10 @@ export default function GamePlayer() {
       <div className="min-h-screen bg-pattern">
         <AppHeader showBack={true} backTo={`/games/${category}`} />
         <div className="max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
+          <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
+            <ArrowLeft className="w-4 h-4" />
+            Kembali ke Subjek
+          </Link>
           <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} />
           {state.finished ? (
             <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} onGenerateNew={handleGenerateNew} isPremium={isPremium} />
@@ -469,6 +473,11 @@ export default function GamePlayer() {
     <div className="min-h-screen bg-pattern">
       <AppHeader showBack={true} backTo={`/games/${category}`} />
       <div className="max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
+
+         <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
+           <ArrowLeft className="w-4 h-4" />
+           Kembali ke Subjek
+         </Link>
 
          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-game-purple">
