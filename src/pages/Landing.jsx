@@ -560,7 +560,7 @@ export default function Landing() {
 
                 <div className="space-y-2.5">
                   {tier.features.map((f, j) =>
-                <div key={j} className={`flex items-center gap-2 text-sm font-semibold ${tier.highlighted ? 'text-slate-950' : 'text-white'}`}>
+                <div key={j} className="flex items-center gap-2 text-sm font-semibold text-white">
                       <Check className="w-4 h-4 text-green-400 flex-shrink-0" /> {f}
                     </div>
                 )}
