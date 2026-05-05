@@ -410,13 +410,13 @@ export default function AdminGameManager() {
                   const qDiff = genConfig.questions - curr.avgQuestions;
                   return (
                     <button key={key} onClick={() => toggleSubject(key)}
-                      className={`flex items-start gap-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all text-left border ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white hover:bg-white/20 border-white/10'}`}>
-                      <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/50'}`}>
+                      className={`flex items-start gap-2 sm:gap-3 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-bold transition-all text-left border ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white hover:bg-white/20 border-white/10'}`}>
+                      <div className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/50'}`}>
                          {sel && <span className="text-white text-xs">✓</span>}
                        </div>
                        <div className="flex-1 min-w-0">
                          <p className="truncate">{sc.label.replace('Prasekolah - ', '')}</p>
-                         <div className={`flex gap-2 mt-0.5 text-xs font-semibold ${sel ? 'text-indigo-400' : 'text-white/70'}`}>
+                         <div className={`flex gap-1.5 sm:gap-2 mt-0.5 text-[10px] sm:text-xs font-semibold ${sel ? 'text-indigo-400' : 'text-white/70'}`}>
                           <span>{curr.games} games</span>
                           <span>·</span>
                           <span>{curr.avgQuestions}Q avg</span>
@@ -441,8 +441,8 @@ export default function AdminGameManager() {
                   const gameDiff = genConfig.games - curr.games;
                   return (
                     <button key={key} onClick={() => toggleSubject(key)}
-                      className={`flex items-start gap-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all text-left border ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white hover:bg-white/20 border-white/10'}`}>
-                      <div className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/50'}`}>
+                      className={`flex items-start gap-2 sm:gap-3 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-bold transition-all text-left border ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white hover:bg-white/20 border-white/10'}`}>
+                      <div className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center ${sel ? 'bg-indigo-600 border-indigo-600' : 'border-white/50'}`}>
                         {sel && <span className="text-white text-xs">✓</span>}
                       </div>
                       <div className="flex-1 min-w-0">
