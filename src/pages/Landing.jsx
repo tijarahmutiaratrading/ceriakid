@@ -303,7 +303,7 @@ export default function Landing() {
       </div>
 
       {/* ── STATS STRIP ── */}
-      <div className="py-8 md:py-10 border-y border-orange-200/60 bg-white/95 shadow-inner">
+      <div className="py-5 md:py-10 border-y border-orange-200/60 bg-white/95 shadow-inner">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 text-center">
             {[
@@ -313,15 +313,15 @@ export default function Landing() {
             { num: '5-10', label: 'Minit Latihan Harian', icon: '🚀' }].
             map((stat, i) =>
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-            className={`px-6 py-4
-                  ${i % 2 !== 0 ? 'border-l border-white/40' : ''}
+            className={`px-3 py-3 md:px-6 md:py-4
+                  ${i % 2 !== 0 ? 'border-l border-orange-100' : ''}
                   ${i >= 2 ? 'border-t border-white/40' : ''}
                   md:${i % 4 !== 0 ? 'border-l' : 'border-l-0'}
                   md:border-t-0
                 `}>
-                <div className="text-2xl mb-1">{stat.icon}</div>
-                <div className="text-4xl md:text-5xl font-black text-purple-700">{stat.num}</div>
-                <div className="text-slate-600 text-sm font-semibold mt-2">{stat.label}</div>
+                <div className="text-xl md:text-2xl mb-1">{stat.icon}</div>
+                <div className="text-3xl md:text-5xl font-black text-purple-700">{stat.num}</div>
+                <div className="text-slate-600 text-xs md:text-sm font-semibold mt-1 md:mt-2">{stat.label}</div>
               </motion.div>
             )}
           </div>
