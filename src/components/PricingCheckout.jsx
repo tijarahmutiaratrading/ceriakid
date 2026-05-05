@@ -189,7 +189,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
       <p className="text-xs text-white/70 text-center mt-3">
         🏦 Pembayaran selamat via Chip • FPX Internet Banking Malaysia<br/>
-        <span className="text-green-300 font-bold">✓ Jaminan Wang Balik 30 Hari</span>
+        <span className="text-green-300 font-bold">✓ Sesuai untuk ibu bapa di Malaysia</span>
       </p>
 
       {/* Divider */}

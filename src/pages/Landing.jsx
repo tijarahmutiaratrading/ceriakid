@@ -25,12 +25,12 @@ function useCountdown(minutes = 15) {
 }
 
 const testimonials = [
-{ name: 'Nurul Ain', location: 'Shah Alam, Selangor', quote: 'Anak saya dulu taknak buka buku langsung. 2 minggu pakai CeriaKid, markah BM naik 20 markah! Betul-betul terkejut.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2b50ffa6a_generated_image.png', highlight: 'markah naik 20 markah' },
-{ name: 'Ismail Hashim', location: 'Johor Bahru, Johor', quote: 'Sebelum ni bayar tuisyen RM300 sebulan. Sekarang RM49 setahun je, anak lagi enjoy belajar. Dashboard tu best, boleh tengok progress real-time.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0120578d7_generated_image.png', highlight: 'jimat lebih RM250 setahun' },
-{ name: 'Rohani Bakar', location: 'Kota Bharu, Kelantan', quote: 'Tiga orang anak pakai satu akaun Keluarga. Berbaloi sangat! Anak yang paling kecil pun dah kenal huruf dan nombor dalam masa sebulan.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b20705224_generated_image.png', highlight: '3 anak, 1 akaun' },
-{ name: 'Faridah Mohamad', location: 'Penang', quote: 'Saya kerja shift, tak sempat nak duduk ajar anak. CeriaKid macam cikgu peribadi — anak boleh belajar sendiri, saya boleh pantau dari jauh.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2b50ffa6a_generated_image.png', highlight: 'belajar sendiri, pantau dari jauh' },
-{ name: 'Ahmad Zulkifli', location: 'Kuching, Sarawak', quote: 'Anak autisme saya sangat suka! Gameplay yang consistent dan tak ada terlalu banyak distraction. Cikgu dia pun recommend.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0120578d7_generated_image.png', highlight: 'cikgu pun recommend' },
-{ name: 'Siti Hajar', location: 'Ipoh, Perak', quote: 'Cuba dulu versi free, terus upgrade sebab content dia bagus gila. Ikut KSSR betul-betul, sama macam yang sekolah ajar.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b20705224_generated_image.png', highlight: 'ikut KSSR betul-betul' }];
+{ name: 'Nurul Ain', location: 'Shah Alam, Selangor', quote: 'Anak saya lebih mudah duduk buat latihan bila bentuknya macam game. Saya suka sebab topik dia tersusun dan tak terlalu berat.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2b50ffa6a_generated_image.png', highlight: 'anak lebih konsisten' },
+{ name: 'Ismail Hashim', location: 'Johor Bahru, Johor', quote: 'Dashboard ibu bapa sangat membantu. Saya boleh nampak subjek mana anak selalu cuba dan mana yang perlu ulang semula.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0120578d7_generated_image.png', highlight: 'mudah pantau progress' },
+{ name: 'Rohani Bakar', location: 'Kota Bharu, Kelantan', quote: 'Pelan keluarga memang praktikal untuk rumah kami. Anak-anak boleh guna ikut peringkat masing-masing tanpa perlu banyak app berbeza.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b20705224_generated_image.png', highlight: 'sesuai untuk keluarga' },
+{ name: 'Faridah Mohamad', location: 'Penang', quote: 'Saya kerja shift, jadi latihan pendek macam ni memudahkan anak belajar sendiri sekejap setiap hari.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2b50ffa6a_generated_image.png', highlight: 'latihan harian lebih mudah' },
+{ name: 'Ahmad Zulkifli', location: 'Kuching, Sarawak', quote: 'Saya suka interface dia ceria, mudah faham dan tidak terlalu serabut. Anak lebih selesa cuba soalan satu demi satu.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0120578d7_generated_image.png', highlight: 'interface mesra anak' },
+{ name: 'Siti Hajar', location: 'Ipoh, Perak', quote: 'Cuba versi percuma dulu, kemudian upgrade sebab kandungan dan susunan subjeknya sesuai untuk latihan di rumah.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b20705224_generated_image.png', highlight: 'boleh cuba dahulu' }];
 
 
 const tiers = [
@@ -218,25 +218,25 @@ export default function Landing() {
                 )}
               </div>
               <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <span key={i} className="text-orange-400 text-xs">★</span>)}</div>
-              <span className="text-xs font-black text-gray-700">Dah dipercayai <span className="text-orange-500">5,000+ keluarga</span> 🇲🇾</span>
+              <span className="text-xs font-black text-gray-700">Dibina khas untuk <span className="text-orange-500">anak Malaysia</span> 🇲🇾</span>
             </motion.div>
 
             {/* Headline */}
              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl md:text-6xl font-black leading-tight text-white mb-4">
-               Anak Malas<br />Belajar?{' '}
+               Anak Suka Main Game?<br />{' '}
                <span className="relative inline-block">
-                 <span className="relative z-10 text-black">Tukar Jadi</span>
+                 <span className="relative z-10 text-black">Jadikan Ia</span>
                  <span className="absolute inset-0 bg-yellow-300 rounded-lg transform -rotate-1 z-0"></span>
                </span>
-               {' '}Rajin! 🎉
+               {' '}Masa Belajar 🎉
              </motion.h1>
 
              {/* Subtext */}
              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="text-lg text-yellow-300 mb-2 font-bold">
-               Belajar Sambil Main, Markah Pasti Naik
+               Game pembelajaran KSSR untuk Prasekolah & Sekolah Rendah
              </motion.p>
              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-base text-white/80 mb-8 leading-relaxed">
-               Platform pembelajaran interaktif ikut silibus <strong>KSSR</strong> — BM, English, Matematik, Sains, Jawi, Tamil & Mandarin. Anak belajar melalui game, ibu bapa pantau progress dengan dashboard yang kemas. ✅
+               CeriaKid bantu anak belajar BM, English, Matematik, Sains, Jawi, Tamil & Mandarin melalui game pendek, soalan interaktif dan dashboard ibu bapa — sesuai untuk latihan harian di rumah. ✅
              </motion.p>
 
             {/* CTA */}
@@ -247,13 +247,13 @@ export default function Landing() {
                 onClick={scrollToPricing}
                 className="px-4 py-2.5 bg-orange-500 text-white rounded-full font-black text-sm shadow-lg flex items-center gap-2 justify-center">
                 
-                🎮 Mulakan Sekarang <ArrowRight className="w-4 h-4" />
+                🎁 Cuba Percuma Dulu <ArrowRight className="w-4 h-4" />
               </motion.button>
               <button
                 onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
                 className="bg-white text-gray-700 px-4 py-2.5 text-sm font-bold rounded-full border-2 border-white hover:bg-gray-50 transition-colors w-full sm:w-auto"
               >
-                🎁 Cuba Percuma 7 Hari
+                Lihat Harga & Pelan
               </button>
             </motion.div>
 
@@ -267,7 +267,7 @@ export default function Landing() {
             {/* Star rating */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }} className="flex items-center gap-2 mt-5">
               <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <span key={i} className="text-yellow-300 text-xl">★</span>)}</div>
-              <span className="text-sm font-bold text-white/70">4.9/5 — lebih <span className="text-yellow-300 font-black">1,200</span> ibu bapa dah bagi review! 😍</span>
+              <span className="text-sm font-bold text-white/70">Direka untuk bantu ibu bapa jadikan screen time lebih bermanfaat.</span>
             </motion.div>
           </div>
 
@@ -300,7 +300,7 @@ export default function Landing() {
               { icon: '🚫', text: 'Tiada Iklan' },
               { icon: '📲', text: 'Offline' },
               { icon: '🔒', text: '100% Selamat' },
-              { icon: '💰', text: 'Jaminan 30 Hari' }].
+              { icon: '🧒', text: 'Mesra Kanak-kanak' }].
               map((s, i) =>
               <span key={i} className="flex items-center gap-1 bg-white border border-orange-100 rounded-full px-2.5 py-1 text-xs font-semibold text-gray-600 shadow-sm">
                   {s.icon} {s.text}
@@ -318,10 +318,10 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 text-center">
             {[
-            { num: '13', label: 'Subjek & Modul', icon: '📚' },
+            { num: '7+', label: 'Subjek Utama', icon: '📚' },
             { num: '2', label: 'Peringkat Umur', icon: '🎯' },
             { num: 'KSSR', label: 'Silibus Malaysia', icon: '🇲🇾' },
-            { num: '24/7', label: 'Belajar Sendiri', icon: '🚀' }].
+            { num: '5-10', label: 'Minit Latihan Harian', icon: '🚀' }].
             map((stat, i) =>
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
             className={`px-6 py-4
@@ -374,16 +374,16 @@ export default function Landing() {
       <div id="features" className="py-12 md:py-16 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
-            <span className="inline-block bg-green-100 text-green-700 font-black px-4 py-1.5 rounded-full text-sm mb-4">✅ PENYELESAIAN TERBUKTI</span>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Perkenalkan — <span className="text-orange-500">CeriaKid</span><br />Cikgu Peribadi Yang Sentiasa Ada</h2>
-            <p className="text-lg text-gray-500 max-w-2xl mx-auto">Permainan edukatif yang direka bersama cikgu berpengalaman. Anak rasa macam main game, tapi sebenarnya belajar.</p>
+            <span className="inline-block bg-green-100 text-green-700 font-black px-4 py-1.5 rounded-full text-sm mb-4">✅ SOLUSI SCREEN TIME BERFAEDAH</span>
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Perkenalkan — <span className="text-orange-500">CeriaKid</span><br />Latihan Harian Yang Anak Tak Cepat Bosan</h2>
+            <p className="text-lg text-gray-500 max-w-2xl mx-auto">Permainan edukatif berasaskan topik sekolah Malaysia. Anak rasa macam main game, ibu bapa pula nampak perkembangan pembelajaran.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
             {[
-            { icon: '🎮', title: 'Belajar Sambil Main', desc: '200+ permainan interaktif. Anak tak sedar pun dia tengah belajar — tapi otak dia dah absorb semua.' },
-            { icon: '📊', title: 'Pantau Progress Anak', desc: 'Dashboard ibu bapa tunjuk apa yang anak dah belajar, markah, dan mana yang perlu lebih latihan.' },
-            { icon: '📲', title: 'Boleh Main Offline', desc: 'Dalam kereta, dalam flight, tiada wifi — tak kisah. App boleh dimuat turun ke telefon.' }].
+            { icon: '🎮', title: 'Latihan Rasa Macam Game', desc: 'Soalan pendek, warna ceria dan feedback segera bantu anak kekal fokus tanpa rasa terbeban.' },
+            { icon: '📊', title: 'Ibu Bapa Boleh Pantau', desc: 'Lihat markah, percubaan dan topik yang anak perlukan lebih latihan melalui dashboard.' },
+            { icon: '📲', title: 'Sesuai Untuk Rutin Harian', desc: 'Gunakan 5–10 minit sehari di rumah, dalam kereta atau bila anak ada masa lapang.' }].
             map((f, i) =>
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-orange-50 rounded-2xl p-7 border border-orange-100 text-center mx-auto hover:shadow-md transition-shadow">
                 <div className="text-5xl mb-4">{f.icon}</div>
@@ -418,16 +418,16 @@ export default function Landing() {
       <div className="py-12 md:py-16 px-6 bg-slate-950 text-white">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
-            <span className="inline-block bg-yellow-400/20 text-yellow-200 border border-yellow-300/30 font-black px-4 py-1.5 rounded-full text-sm mb-4">🚀 BUILT FOR SCALE</span>
-            <h2 className="text-3xl md:text-4xl font-black mb-3">Bukan Sekadar App — Ini Ekosistem Pembelajaran</h2>
-            <p className="text-white/60 max-w-2xl mx-auto">CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSSR, BBM guru, progress tracking dan sistem langganan dalam satu platform.</p>
+            <span className="inline-block bg-yellow-400/20 text-yellow-200 border border-yellow-300/30 font-black px-4 py-1.5 rounded-full text-sm mb-4">🚀 SEMUA DALAM SATU APP</span>
+            <h2 className="text-3xl md:text-4xl font-black mb-3">Lebih Mudah Untuk Anak Belajar, Lebih Senang Untuk Ibu Bapa Pantau</h2>
+            <p className="text-white/60 max-w-2xl mx-auto">CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSSR, bahan latihan dan progress tracking dalam satu pengalaman yang mudah digunakan.</p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
               { icon: '🎮', title: 'Game Engine', desc: 'Soalan interaktif pelbagai format untuk subjek utama.' },
               { icon: '📊', title: 'Parent Analytics', desc: 'Pantau skor, progress, streak dan prestasi anak.' },
               { icon: '📚', title: 'BBM Library', desc: 'Bahan bantu mengajar untuk guru dan ibu bapa.' },
-              { icon: '💳', title: 'Subscription Ready', desc: 'Pelan tahunan dengan checkout pembayaran tersedia.' }
+              { icon: '🔒', title: 'Pembelajaran Selamat', desc: 'Pengalaman tanpa iklan dan lebih terkawal untuk kanak-kanak.' }
             ].map((item, i) => (
               <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="rounded-3xl p-5 border border-white/10 bg-white/10 backdrop-blur-xl shadow-xl">
                 <div className="text-4xl mb-3">{item.icon}</div>
@@ -496,11 +496,11 @@ export default function Landing() {
       <div id="pricing" className="py-12 md:py-16 px-6 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
-            <span className="inline-block bg-red-500/30 text-red-200 font-black px-4 py-1.5 rounded-full text-sm mb-4 border border-red-400/30">
-              ⏱️ Tawaran Tamat Dalam: {String(countdown.m).padStart(2, '0')}:{String(countdown.s).padStart(2, '0')}
+            <span className="inline-block bg-green-500/25 text-green-100 font-black px-4 py-1.5 rounded-full text-sm mb-4 border border-green-300/30">
+              🎁 Boleh cuba percuma sebelum melanggan
             </span>
             <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Pilih Pelan Anda</h2>
-            <p className="text-white/60">Pilih pelan yang sesuai. Cancel bila-bila masa. Jaminan 30 hari.</p>
+            <p className="text-white/60">Pilih pelan yang sesuai untuk umur anak. Semua pelan tahunan dan mesra bajet keluarga.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
@@ -573,7 +573,7 @@ export default function Landing() {
             
             <div className="mb-6">
               <h3 className="text-2xl font-black text-white">Daftar & Bayar 🔒</h3>
-              <p className="text-sm text-white/60 mt-1">Pilih pakej di bawah dan isi maklumat untuk checkout</p>
+              <p className="text-sm text-white/60 mt-1">Pilih pakej, isi maklumat dan teruskan ke pembayaran FPX yang selamat.</p>
             </div>
             <PricingCheckout selectedTier={selectedTierForCheckout} onTierChange={setSelectedTierForCheckout} />
           </motion.div>
@@ -584,18 +584,29 @@ export default function Landing() {
             <h3 className="text-xl font-black text-white mb-2">Direka Untuk Kanak-kanak Malaysia</h3>
             <p className="text-white/60 text-sm">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
           </motion.div>
+
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto text-center">
+            {['🔒 Pembayaran FPX selamat', '🎁 Ada percubaan percuma', '📊 Pantau progress anak'].map((item) => (
+              <div key={item} className="rounded-2xl bg-white/10 border border-white/15 px-4 py-3 text-white text-sm font-bold">
+                {item}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* ── FAQ ── */}
       <div id="faq" className="py-12 md:py-16 px-6 bg-white">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-black text-center text-gray-900 mb-12">Soalan Lazim 🤔</h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-black text-gray-900 mb-3">Soalan Lazim 🤔</h2>
+            <p className="text-gray-500">Jawapan ringkas sebelum ibu bapa mula menggunakan CeriaKid.</p>
+          </div>
           <div className="space-y-4">
             {[
             { q: 'Adakah selamat untuk anak?', a: 'Ya, 100%! Tiada iklan, tiada pop-up, tiada chat dengan orang asing. App direka khas untuk keselamatan kanak-kanak.' },
             { q: 'Apakah peranti yang disokong?', a: 'Semua jenis smartphone, tablet, dan komputer. iOS, Android, dan browser. Boleh download untuk guna offline.' },
-            { q: 'Boleh cancel bila-bila masa?', a: 'Ya! Cancel dari settings dalam 10 saat. Tiada penalti, tiada fee tersembunyi. Janji kami.' },
+            { q: 'Bagaimana langganan berfungsi?', a: 'CeriaKid menggunakan pelan tahunan. Anda boleh semak status langganan dan maklumat akaun di bahagian tetapan selepas mendaftar.' },
             { q: 'Adakah ikut silibus sekolah Malaysia?', a: 'Ya — kami ikut KSSR (Kurikulum Standard Sekolah Rendah) sepenuhnya. Sama persis dengan apa yang diajar di sekolah, Darjah 1-6.' },
             { q: 'Berapa anak boleh guna?', a: 'Pelan Asas untuk Prasekolah (1 anak), Standard untuk Sekolah Rendah (1 anak). Pelan Keluarga untuk kedua-dua peringkat dengan sehingga 4 profil anak — jimat lebih!' },
             { q: 'Macam mana nak mula?', a: 'Pilih pelan, isikan maklumat, bayar melalui FPX, dan anak terus boleh mula belajar dalam masa 2 minit!' }].
@@ -615,7 +626,7 @@ export default function Landing() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
             <p className="text-5xl mb-5">🎓</p>
             <h2 className="text-3xl md:text-4xl font-black mb-4">Anak Anda Layak Dapat<br />Yang Terbaik</h2>
-            <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">Setiap hari yang berlalu tanpa belajar dengan cara yang betul ialah peluang yang terlepas. Mula hari ini.</p>
+            <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">Mulakan dengan latihan pendek yang anak boleh konsisten buat setiap hari — lebih mudah, lebih ceria, lebih teratur.</p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
