@@ -47,7 +47,7 @@ function FilterDropdown({ value, options, onChange, placeholder }) {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-3 py-2 bg-white/20 text-white rounded-xl text-xs font-bold border border-white/30 whitespace-nowrap"
+        className="flex min-h-11 items-center gap-1.5 px-3 py-2 bg-white/20 text-white rounded-xl text-xs font-bold border border-white/30 whitespace-nowrap"
       >
         <span>{selected?.label || placeholder}</span>
         <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
@@ -74,7 +74,7 @@ function FilterDropdown({ value, options, onChange, placeholder }) {
 
 export default function BBMFilterBar({ selectedLevel, setSelectedLevel, selectedSubject, setSelectedSubject, selectedType, setSelectedType }) {
   return (
-    <div className="flex gap-2 flex-wrap">
+    <div className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap">
       <FilterDropdown value={selectedLevel} options={LEVELS} onChange={setSelectedLevel} placeholder="Tahap" />
       <FilterDropdown value={selectedSubject} options={SUBJECTS} onChange={setSelectedSubject} placeholder="Subjek" />
       <FilterDropdown value={selectedType} options={TYPES} onChange={setSelectedType} placeholder="Jenis" />

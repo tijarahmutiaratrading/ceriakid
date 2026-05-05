@@ -96,7 +96,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
                 key={tier.name}
                 whileHover={{ scale: 1.01 }}
                 onClick={() => {setFormData({ ...formData, selectedTier: tier.name });onTierChange?.(tier.name);}}
-                className={`relative flex items-center p-4 border-2 rounded-2xl cursor-pointer transition-all ${
+                className={`relative flex flex-col sm:flex-row sm:items-center gap-3 p-4 border-2 rounded-2xl cursor-pointer transition-all ${
                 isSelected ? 'border-game-purple bg-purple-50' : 'border-gray-200 bg-white hover:border-gray-300'}`
                 }>
                 
@@ -108,11 +108,11 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
                 <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${isSelected ? 'border-game-purple' : 'border-gray-300'}`}>
                   {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-game-purple" />}
                 </div>
-                <div className="ml-3 flex-1">
+                <div className="sm:ml-3 flex-1 min-w-0 text-center sm:text-left">
                   <p className="font-black text-gray-900">{tier.nameMY}</p>
                   <p className="text-xs text-gray-500 mt-0.5">{tier.description}</p>
                 </div>
-                <div className="text-right ml-3">
+                <div className="text-center sm:text-right sm:ml-3">
                   <p className={`text-xl font-black ${isSelected ? 'text-game-purple' : 'text-gray-700'}`}>
                     RM{tier.priceMYR}
                   </p>
@@ -167,7 +167,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         disabled={loading}
-        type="submit" className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 font-bold rounded-2xl w-full transition-all hover:shadow-lg disabled:opacity-50 shadow-md">
+        type="submit" className="min-h-12 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 font-bold rounded-2xl w-full transition-all hover:shadow-lg disabled:opacity-50 shadow-md">
         {loading ? '🔄 Memproses...' : '💳 Bayar via FPX Sekarang'}
       </motion.button>
 

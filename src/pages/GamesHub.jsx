@@ -113,7 +113,7 @@ export default function GamesHub() {
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative max-w-3xl mx-auto px-4 pb-32 pt-28 md:pt-32">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -150,7 +150,7 @@ export default function GamesHub() {
             <p className="text-white/70 text-lg font-semibold">Tiada mini games dijana lagi untuk peringkat ini</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
             {filteredGames.map((game, idx) => (
               <GameCard key={game.id} game={game} idx={idx} />
             ))}

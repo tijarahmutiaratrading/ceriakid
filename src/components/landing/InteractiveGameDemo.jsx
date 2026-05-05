@@ -16,7 +16,7 @@ export default function InteractiveGameDemo() {
     },
     {
       emoji: '🐱',
-      question: 'Hewan apa ni?',
+      question: 'Haiwan apa ini?',
       options: ['Anjing', 'Kucing', 'Arnab'],
       correct: 1,
     },
@@ -86,14 +86,14 @@ export default function InteractiveGameDemo() {
             <p className="text-white text-xl font-black mb-5">
               {questions[currentQ].question}
             </p>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {questions[currentQ].options.map((option, idx) => (
                 <motion.button
                   key={idx}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleAnswer(idx)}
-                  className="py-3 bg-white text-gray-800 rounded-2xl font-bold text-sm shadow-lg"
+                  className="min-h-11 py-3 bg-white text-gray-800 rounded-2xl font-bold text-sm shadow-lg"
                 >
                   {option}
                 </motion.button>

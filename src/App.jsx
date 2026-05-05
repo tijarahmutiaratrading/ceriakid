@@ -44,7 +44,6 @@ import StoryAdventureGame from '@/pages/games/StoryAdventureGame';
 import PhysicsGame from '@/pages/games/PhysicsGame';
 import TracingGameGamified from '@/pages/games/TracingGameGamified';
 
-import Footer from '@/components/Footer';
 import OfflineBanner from '@/components/OfflineBanner';
 import AdminGuard from '@/components/AdminGuard';
 
@@ -158,7 +157,6 @@ function App() {
         <AuthProvider>
           <OfflineBanner />
           <AuthenticatedAppWithChild />
-          <Footer />
           <Toaster />
         </AuthProvider>
       </QueryClientProvider>

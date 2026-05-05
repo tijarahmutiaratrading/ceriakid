@@ -35,12 +35,12 @@ export default function CategoryCard({ category, gameCount, idx }) {
         <div className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-between">
           <div>
             <div className="text-4xl sm:text-5xl md:text-6xl mb-2 sm:mb-4">{config.emoji}</div>
-            <h3 className="font-black text-lg sm:text-xl md:text-2xl text-white drop-shadow-sm">{config.label}</h3>
+            <h3 className="font-black text-lg sm:text-xl md:text-2xl text-white drop-shadow-sm leading-tight break-words">{config.label}</h3>
           </div>
 
           <div className="flex items-end justify-between gap-2">
             <div className="bg-white/30 backdrop-blur-sm rounded-full px-2 sm:px-3 py-0.5 sm:py-1">
-              <p className="text-xs sm:text-sm font-bold text-white">{gameCount} Permainan</p>
+              <p className="text-xs sm:text-sm font-bold text-white whitespace-nowrap">{gameCount} Permainan</p>
             </div>
             <div className="text-2xl opacity-70">→</div>
           </div>

@@ -149,6 +149,13 @@
   .pro-card {
     @apply rounded-3xl border border-white/40 bg-white/90 shadow-xl shadow-purple-950/10;
   }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 
 ::-webkit-scrollbar {

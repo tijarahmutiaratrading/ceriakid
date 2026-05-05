@@ -42,7 +42,7 @@ export default function BBMCard({ resource, locked, onDownload, idx }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(idx * 0.04, 0.4) }}
-      className={`rounded-2xl p-4 flex items-center gap-4 ${locked ? 'opacity-70' : ''}`}
+      className={`rounded-2xl p-4 flex items-start sm:items-center gap-3 sm:gap-4 ${locked ? 'opacity-70' : ''}`}
       style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
     >
       {/* Emoji Icon */}
@@ -52,8 +52,8 @@ export default function BBMCard({ resource, locked, onDownload, idx }) {
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <h3 className="font-black text-sm text-white truncate">{resource.title}</h3>
-        <p className="text-white/60 text-xs mt-0.5 truncate">{resource.description}</p>
+        <h3 className="font-black text-sm text-white line-clamp-2 leading-tight">{resource.title}</h3>
+        <p className="text-white/60 text-xs mt-0.5 line-clamp-2">{resource.description}</p>
         <div className="flex items-center gap-2 mt-1.5 flex-wrap">
           <span className={`text-xs font-bold px-2 py-0.5 rounded-full text-white ${typeColor}`}>
             {TYPE_LABELS[resource.type] || resource.type}
@@ -70,7 +70,7 @@ export default function BBMCard({ resource, locked, onDownload, idx }) {
       {/* Action */}
       <div className="flex-shrink-0">
         {locked ? (
-          <Link to="/landing">
+          <Link to="/">
             <div className="flex flex-col items-center gap-1">
               <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
                 <Lock className="w-4 h-4 text-yellow-300" />

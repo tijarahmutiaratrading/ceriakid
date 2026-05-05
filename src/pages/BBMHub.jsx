@@ -218,7 +218,7 @@ export default function BBMHub() {
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
 
         {/* Header Card */}
         <motion.div
@@ -304,7 +304,7 @@ export default function BBMHub() {
         ) : filtered.length === 0 ? (
           <BBMEmptyState onReset={() => { setSearch(''); setSelectedLevel('all'); setSelectedSubject('all'); setSelectedType('all'); }} />
         ) : (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {filtered.map((resource, i) => (
               <BBMCard
                 key={resource.id || i}

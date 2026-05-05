@@ -27,7 +27,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
   // Multiple Choice & True/False
   if (['multiple_choice', 'true_false', 'yes_no'].includes(type)) {
     return (
-      <div className="grid grid-cols-2 gap-2 sm:gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
         {question.options?.map((option, i) => (
           <motion.button
             key={`opt-${i}`}
@@ -38,7 +38,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
             whileHover={{ scale: disabled ? 1 : 1.05 }}
             onClick={() => !disabled && onAnswer(i)}
             disabled={disabled}
-            className={`clay-button rounded-2xl py-4 px-3 font-bold text-center transition-all text-sm ${
+            className={`clay-button min-h-14 rounded-2xl py-4 px-3 font-bold text-center transition-all text-sm sm:text-base break-words ${
               showFeedback && selectedIdx === i
                 ? isCorrect
                   ? 'bg-green-200 ring-2 ring-green-500'
@@ -58,7 +58,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
   // Short Answer / Fill in the Blank
   if (['short_answer', 'fill_blank'].includes(type)) {
     return (
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <input
           type="text"
           value={textInput}

@@ -21,7 +21,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
 
   if (locked) {
     return (
-      <Link to="/landing">
+      <Link to="/">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}

@@ -37,7 +37,7 @@ export default function ManageDevices({ userEmail, tier }) {
 
   return (
     <div className="bg-white/40 backdrop-blur-xl rounded-2xl p-5 border-2 border-white/30 shadow-xl">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-purple-600" />
           <h3 className="font-black text-gray-900">Device Berdaftar</h3>
@@ -60,14 +60,14 @@ export default function ManageDevices({ userEmail, tier }) {
                 key={device.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`flex items-center justify-between rounded-xl p-3 border ${
+                className={`flex items-start gap-3 justify-between rounded-xl p-3 border ${
                   isCurrent ? 'bg-purple-50 border-purple-200' : 'bg-gray-50 border-gray-100'
                 }`}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-start gap-3 min-w-0">
                   <Smartphone className={`w-5 h-5 ${isCurrent ? 'text-purple-600' : 'text-gray-400'}`} />
-                  <div>
-                    <p className="font-bold text-gray-800 text-sm flex items-center gap-2">
+                  <div className="min-w-0">
+                    <p className="font-bold text-gray-800 text-sm flex flex-wrap items-center gap-2 break-words">
                       {device.deviceName}
                       {isCurrent && (
                         <span className="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-black">
