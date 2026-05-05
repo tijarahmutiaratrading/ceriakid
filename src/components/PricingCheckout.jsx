@@ -94,7 +94,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       {!isAuthenticated && (
         <div className="rounded-2xl bg-yellow-300/20 border border-yellow-300/30 p-4 text-white text-sm font-bold">
           Log masuk dahulu supaya pembayaran dan langganan boleh diaktifkan pada akaun anda.
