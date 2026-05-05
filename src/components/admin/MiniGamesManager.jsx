@@ -19,6 +19,7 @@ export default function MiniGamesManager({ onToast }) {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editGame, setEditGame] = useState(null);
+  const [selectedIds, setSelectedIds] = useState(new Set());
 
   const loadGames = async () => {
     setLoading(true);
@@ -33,6 +34,7 @@ export default function MiniGamesManager({ onToast }) {
     });
 
     setGames(allGames);
+    setSelectedIds(new Set());
     setLoading(false);
   };
 
@@ -53,6 +55,25 @@ export default function MiniGamesManager({ onToast }) {
     loadGames();
   };
 
+  const toggleSelect = (gameId) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      next.has(gameId) ? next.delete(gameId) : next.add(gameId);
+      return next;
+    });
+  };
+
+  const selectAll = () => setSelectedIds(new Set(games.map((game) => game.id)));
+  const clearSelection = () => setSelectedIds(new Set());
+
+  const deleteSelected = async () => {
+    if (selectedIds.size === 0) return;
+    if (!window.confirm(`Padam ${selectedIds.size} mini games yang dipilih?`)) return;
+    for (const gameId of selectedIds) await base44.entities.Game.delete(gameId);
+    onToast?.(`✅ ${selectedIds.size} mini games dipadam`);
+    loadGames();
+  };
+
   const getMeta = (category) => MINI_GAMES.find((game) => game.id === category) || { label: category, emoji: '🎮' };
 
   return (
@@ -63,9 +84,21 @@ export default function MiniGamesManager({ onToast }) {
             <h2 className="font-black text-white text-lg">🎮 Manage Mini Games</h2>
             <p className="text-white/60 text-xs mt-1">Edit, hide/show atau padam mini games yang sudah dijana.</p>
           </div>
-          <button onClick={loadGames} disabled={loading} className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all">
-            <RefreshCw className={`w-4 h-4 text-white ${loading ? 'animate-spin' : ''}`} />
-          </button>
+          <div className="flex items-center gap-2 flex-wrap justify-end">
+            {games.length > 0 && (
+              <>
+                <button onClick={selectedIds.size === games.length ? clearSelection : selectAll} className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-black transition-all">
+                  {selectedIds.size === games.length ? 'Clear' : 'Select All'}
+                </button>
+                <button onClick={deleteSelected} disabled={selectedIds.size === 0} className="px-3 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-100 text-xs font-black transition-all disabled:opacity-40">
+                  Delete ({selectedIds.size})
+                </button>
+              </>
+            )}
+            <button onClick={loadGames} disabled={loading} className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all">
+              <RefreshCw className={`w-4 h-4 text-white ${loading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -81,6 +114,9 @@ export default function MiniGamesManager({ onToast }) {
               const meta = getMeta(game.category);
               return (
                 <div key={game.id} className="flex items-center gap-3 p-3 rounded-2xl border border-white/10 bg-white/10">
+                  <button onClick={() => toggleSelect(game.id)} className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all ${selectedIds.has(game.id) ? 'bg-red-500 border-red-300 text-white' : 'border-white/40 text-transparent hover:border-white/70'}`}>
+                    ✓
+                  </button>
                   <div className="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center text-2xl flex-shrink-0">{meta.emoji}</div>
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-sm font-black truncate">{game.title || meta.label}</p>
