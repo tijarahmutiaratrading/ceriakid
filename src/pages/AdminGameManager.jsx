@@ -649,7 +649,7 @@ export default function AdminGameManager() {
                 { value: totalFull, label: 'Soalan Penuh', color: 'text-green-300' },
                 { value: totalPlayers, label: 'Players', color: 'text-pink-300' },
               ].map(({ value, label, color }) => (
-                <div key={label} className="rounded-3xl p-5 text-center shadow-xl shadow-black/10 border border-white/15" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)' }}>
+                <div key={label} className="rounded-[2rem] p-5 text-center shadow-2xl shadow-fuchsia-950/20 border border-white/20 transition-all hover:-translate-y-0.5" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)' }}>
                   <p className={`text-2xl font-black ${color}`}>{value}</p>
                   <p className="text-xs text-white/90 font-semibold">{label}</p>
                 </div>
@@ -657,19 +657,19 @@ export default function AdminGameManager() {
             </div>
 
             {/* Search + Filter bar */}
-            <div className="p-3 sm:p-4 md:p-5 rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+            <div className="p-3 sm:p-4 md:p-5 rounded-[2rem] mb-5 shadow-2xl shadow-fuchsia-950/25" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.08))', backdropFilter: 'blur(28px)', border: '1px solid rgba(255,255,255,0.24)' }}>
               <div className="flex gap-2 mb-3 items-stretch">
                 <div className="relative flex-1">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">🔍</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-cyan-200/80 text-sm">🔍</span>
                   <input
                     type="text"
                     placeholder="Cari..."
                     value={managerSearch}
                     onChange={e => setManagerSearch(e.target.value)}
-                    className="w-full min-h-11 pl-9 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50 focus:bg-white/15 shadow-inner shadow-black/10 transition-all"
+                    className="w-full min-h-11 pl-9 pr-4 py-3 rounded-[1.35rem] bg-white/12 text-white placeholder-white/35 border border-white/25 text-sm font-semibold outline-none focus:border-cyan-200/70 focus:bg-white/18 shadow-inner shadow-black/10 transition-all"
                   />
                 </div>
-                <button onClick={fetchStats} disabled={loading} className="w-11 min-h-11 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0 flex items-center justify-center">
+                <button onClick={fetchStats} disabled={loading} className="w-11 min-h-11 bg-gradient-to-br from-cyan-300/25 to-fuchsia-400/20 hover:from-cyan-300/35 hover:to-fuchsia-400/30 rounded-[1.35rem] border border-white/25 shadow-lg shadow-cyan-950/20 transition-all flex-shrink-0 flex items-center justify-center">
                   <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
                 </button>
               </div>
@@ -677,7 +677,7 @@ export default function AdminGameManager() {
                 <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap">
                   {['all', 'prasekolah', 'sekolah_rendah'].map(ag => (
                     <button key={ag} onClick={() => setManagerAgeFilter(ag)}
-                      className={`min-h-10 px-3 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex-shrink-0 ${managerAgeFilter === ag ? 'bg-white text-indigo-700' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
+                      className={`min-h-10 px-3.5 py-2 rounded-2xl text-xs font-black transition-all whitespace-nowrap flex-shrink-0 border ${managerAgeFilter === ag ? 'bg-gradient-to-r from-cyan-300 to-fuchsia-400 text-white border-white/40 shadow-lg shadow-fuchsia-950/20' : 'bg-white/10 text-white/70 border-white/15 hover:bg-white/20 hover:text-white'}`}>
                       {ag === 'all' ? 'Semua' : ag === 'prasekolah' ? '🧒' : '🎒'}
                       <span className="hidden sm:inline ml-1">{ag === 'all' ? 'Semua' : ag === 'prasekolah' ? 'Prasekolah' : 'SR'}</span>
                     </button>
@@ -695,7 +695,7 @@ export default function AdminGameManager() {
                     setActionLoading(null);
                   }}
                   disabled={!!actionLoading}
-                  className="min-h-10 w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all flex-shrink-0">
+                  className="min-h-10 w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 bg-gradient-to-r from-red-500/25 to-pink-500/20 text-red-100 border border-red-300/30 rounded-2xl text-xs font-black hover:from-red-500/35 hover:to-pink-500/30 shadow-lg shadow-red-950/20 transition-all flex-shrink-0">
                   {actionLoading === 'delete-all' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
                   <span>Delete All</span>
                 </button>
@@ -732,13 +732,13 @@ export default function AdminGameManager() {
                     );
                     if (filteredGames.length === 0 && managerSearch) return null;
                     return (
-                      <motion.div key={s.file} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} className="rounded-[1.75rem] overflow-hidden shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.18)' }}>
+                      <motion.div key={s.file} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} className="rounded-[2rem] overflow-hidden shadow-2xl shadow-indigo-950/20 border border-white/20 transition-all hover:-translate-y-0.5" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06))', backdropFilter: 'blur(24px)' }}>
                         {/* Subject header */}
                         <button
                           onClick={() => setExpandedFile(expandedFile === s.file ? null : s.file)}
-                          className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 hover:bg-white/5 transition-all text-left"
+                          className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3.5 hover:bg-white/10 transition-all text-left"
                         >
-                          <div className={`w-2.5 h-2.5 rounded-full ${s.color.dot}`} />
+                          <div className={`w-3 h-3 rounded-full ${s.color.dot} shadow-lg ring-4 ring-white/10`} />
                           <span className="font-black text-white text-sm flex-1 min-w-0 truncate">{s.label}</span>
                           <span className="text-white/70 text-xs font-semibold whitespace-nowrap">{s.totalGames} games</span>
                           {expandedFile === s.file
@@ -754,15 +754,15 @@ export default function AdminGameManager() {
                              <p className="text-white/50 text-xs text-center py-4">Tiada games lagi</p>
                            ) : (
                              filteredGames.map(g => (
-                               <div key={g.id} className="flex items-start gap-3 px-3 sm:px-4 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/8 transition-all">
+                               <div key={g.id} className="flex items-start gap-3 px-3 sm:px-4 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/10 transition-all">
                                  <div className="flex-1 min-w-0">
                                    <p className="text-white text-xs font-bold truncate">{g.title}</p>
                                    <div className="flex gap-x-2 gap-y-1 mt-1 flex-wrap">
-                                     <span className="text-white/60 text-xs">{g.type}</span>
-                                     <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
+                                     <span className="text-white/75 text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/10 border border-white/10">{g.type}</span>
+                                     <span className={`text-[11px] font-black px-2 py-0.5 rounded-full border ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-200 bg-green-400/15 border-green-300/20' : 'text-yellow-200 bg-yellow-400/15 border-yellow-300/20'}`}>
                                        {g.questionCount} soalan
                                      </span>
-                                     {g.players > 0 && <span className="text-white/60 text-xs">{g.players} players</span>}
+                                     {g.players > 0 && <span className="text-white/70 text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/10 border border-white/10">{g.players} players</span>}
                                    </div>
                                  </div>
                                  <button
@@ -825,13 +825,13 @@ export default function AdminGameManager() {
                     );
                     if (filteredGames.length === 0 && managerSearch) return null;
                     return (
-                      <motion.div key={s.file} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} className="rounded-[1.75rem] overflow-hidden shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.18)' }}>
+                      <motion.div key={s.file} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} className="rounded-[2rem] overflow-hidden shadow-2xl shadow-indigo-950/20 border border-white/20 transition-all hover:-translate-y-0.5" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06))', backdropFilter: 'blur(24px)' }}>
                         {/* Subject header */}
                         <button
                           onClick={() => setExpandedFile(expandedFile === s.file ? null : s.file)}
-                          className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 hover:bg-white/5 transition-all text-left"
+                          className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3.5 hover:bg-white/10 transition-all text-left"
                         >
-                          <div className={`w-2.5 h-2.5 rounded-full ${s.color.dot}`} />
+                          <div className={`w-3 h-3 rounded-full ${s.color.dot} shadow-lg ring-4 ring-white/10`} />
                           <span className="font-black text-white text-sm flex-1 min-w-0 truncate">{s.label}</span>
                           <span className="text-white/70 text-xs font-semibold whitespace-nowrap">{s.totalGames} games</span>
                           {expandedFile === s.file
@@ -847,15 +847,15 @@ export default function AdminGameManager() {
                              <p className="text-white/50 text-xs text-center py-4">Tiada games lagi</p>
                            ) : (
                              filteredGames.map(g => (
-                               <div key={g.id} className="flex items-start gap-3 px-3 sm:px-4 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/8 transition-all">
+                               <div key={g.id} className="flex items-start gap-3 px-3 sm:px-4 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/10 transition-all">
                                  <div className="flex-1 min-w-0">
                                    <p className="text-white text-xs font-bold truncate">{g.title}</p>
                                    <div className="flex gap-x-2 gap-y-1 mt-1 flex-wrap">
-                                     <span className="text-white/60 text-xs">{g.type}</span>
-                                      <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
+                                     <span className="text-white/75 text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/10 border border-white/10">{g.type}</span>
+                                      <span className={`text-[11px] font-black px-2 py-0.5 rounded-full border ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-200 bg-green-400/15 border-green-300/20' : 'text-yellow-200 bg-yellow-400/15 border-yellow-300/20'}`}>
                                         {g.questionCount} soalan
                                       </span>
-                                      {g.players > 0 && <span className="text-white/60 text-xs">{g.players} players</span>}
+                                      {g.players > 0 && <span className="text-white/70 text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/10 border border-white/10">{g.players} players</span>}
                                     </div>
                                   </div>
                                   <button
@@ -871,14 +871,14 @@ export default function AdminGameManager() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 px-3 sm:px-4 py-3 border-t border-white/10">
                               <button
                                 onClick={() => setGenerateModal({ games: s.totalGames || 5, questions: 20, ageGroup: s.ageGroup, subject: s.subject, label: s.label, currentCount: s.totalGames })}
-                                className="min-h-10 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-green-500/20 text-green-300 border border-green-400/20 text-xs font-bold hover:bg-green-500/30 transition-all"
+                                className="min-h-10 flex items-center justify-center gap-1.5 px-3 py-2 rounded-2xl bg-gradient-to-r from-emerald-400/20 to-cyan-400/15 text-emerald-100 border border-emerald-300/25 text-xs font-black hover:from-emerald-400/30 hover:to-cyan-400/25 shadow-lg shadow-emerald-950/10 transition-all"
                               >
                                 <Wand2 className="w-3 h-3" /> Sync Games
                               </button>
                               <button
                                 onClick={() => handleVerifySubject(s.file, s.label, s.ageGroup, s.subject, dbGamesCache)}
                                 disabled={actionLoading === `verify-${s.file}`}
-                                className="min-h-10 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-yellow-500/20 text-yellow-300 border border-yellow-400/20 text-xs font-bold hover:bg-yellow-500/30 disabled:opacity-50 transition-all"
+                                className="min-h-10 flex items-center justify-center gap-1.5 px-3 py-2 rounded-2xl bg-gradient-to-r from-yellow-400/20 to-orange-400/15 text-yellow-100 border border-yellow-300/25 text-xs font-black hover:from-yellow-400/30 hover:to-orange-400/25 disabled:opacity-50 shadow-lg shadow-yellow-950/10 transition-all"
                               >
                                 {actionLoading === `verify-${s.file}` ? <Loader2 className="w-3 h-3 animate-spin" /> : '✅'} Verify
                               </button>
