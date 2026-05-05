@@ -27,7 +27,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
   // Multiple Choice & True/False
   if (['multiple_choice', 'true_false', 'yes_no'].includes(type)) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
         {question.options?.map((option, i) => (
           <motion.button
             key={`opt-${i}`}
