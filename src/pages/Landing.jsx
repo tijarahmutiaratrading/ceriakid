@@ -50,11 +50,10 @@ const tiers = [
   priceMYR: '99',
   perMonth: '8.25',
   period: '/tahun',
-  savings: 'PALING POPULAR',
   features: ['100 game Sekolah Rendah boleh dimainkan', 'Semua subjek', 'Sekolah Rendah sahaja', 'Game Prasekolah dikunci 🔒', 'Dashboard ibu bapa', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sehingga 2 peranti 📱📱'],
   noFeatures: ['Sehingga 4 anak'],
   cta: '🔥 Pilih Standard',
-  highlighted: true
+  highlighted: false
 },
 {
   name: 'keluarga',
@@ -62,10 +61,11 @@ const tiers = [
   priceMYR: '199',
   perMonth: '16.58',
   period: '/tahun',
+  savings: 'PALING POPULAR',
   features: ['200 game semua peringkat boleh dimainkan', 'Semua subjek', 'Prasekolah & Sekolah Rendah', 'Tiada game dikunci 🔓', 'Sehingga 4 profil anak', 'Dashboard ibu bapa lengkap', 'Boleh guna offline 📲', 'Sokongan prioriti', 'Sehingga 4 peranti 📱📱📱📱'],
   noFeatures: [],
   cta: 'Pilih Keluarga',
-  highlighted: false
+  highlighted: true
 }];
 
 

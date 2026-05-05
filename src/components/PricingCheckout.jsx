@@ -16,15 +16,15 @@ const TIERS = [
   nameMY: '⭐ Standard',
   priceMYR: '99',
   perMonth: '8.25',
-  description: 'Semua subjek • Sekolah Rendah sahaja',
-  badge: 'PALING POPULAR'
+  description: 'Semua subjek • Sekolah Rendah sahaja'
 },
 {
   name: 'keluarga',
   nameMY: '👑 Keluarga',
   priceMYR: '199',
   perMonth: '16.58',
-  description: 'Semua subjek • Semua peringkat • 4 profil anak'
+  description: 'Semua subjek • Semua peringkat • 4 profil anak',
+  badge: 'PALING POPULAR'
 }];
 
 
