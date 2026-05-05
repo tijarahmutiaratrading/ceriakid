@@ -366,18 +366,18 @@ export default function AdminGameManager() {
                 <h2 className="font-black text-white text-xl md:text-2xl">⚙️ Konfigurasi Generation</h2>
                 <p className="text-white/60 text-xs font-semibold mt-1">Tetapkan target game dan soalan sebelum masuk queue.</p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+              <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-5">
                 <div>
-                  <label className="text-white text-xs font-black uppercase tracking-wider block mb-2">🎮 Bilangan Games</label>
+                  <label className="text-white text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-1.5 sm:mb-2">🎮 Bilangan Games</label>
                   <input type="number" min="1" max="100" value={genConfig.games}
                     onChange={e => setGenConfig(c => ({ ...c, games: parseInt(e.target.value) || 1 }))}
-                    className="w-full p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all" />
+                    className="w-full px-3 py-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/10 text-white border border-white/20 font-black text-lg sm:text-2xl text-center shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all" />
                 </div>
                 <div>
-                  <label className="text-white text-xs font-black uppercase tracking-wider block mb-2">📝 Soalan per Game</label>
+                  <label className="text-white text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-1.5 sm:mb-2">📝 Soalan per Game</label>
                   <input type="number" min="1" max="50" value={genConfig.questions}
                     onChange={e => setGenConfig(c => ({ ...c, questions: parseInt(e.target.value) || 1 }))}
-                    className="w-full p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all" />
+                    className="w-full px-3 py-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/10 text-white border border-white/20 font-black text-lg sm:text-2xl text-center shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all" />
                 </div>
               </div>
 
