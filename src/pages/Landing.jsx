@@ -131,7 +131,12 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen font-nunito bg-slate-950 relative overflow-hidden">
+    <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 relative overflow-hidden">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-25" />
+        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-15" />
+      </div>
       <div className="relative">
 
       {/* ── PAYMENT STATUS BANNER ── */}
@@ -184,7 +189,7 @@ export default function Landing() {
 
       {/* ── NAVBAR ── */}
       <nav className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="max-w-6xl mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 sm:px-4 py-2.5 rounded-[1.75rem] bg-slate-900 border border-slate-700 shadow-xl">
+        <div className="max-w-6xl mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 sm:px-4 py-2.5 rounded-[1.75rem] bg-white/10 border border-white/20 shadow-xl backdrop-blur-xl">
           <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-2xl shadow-lg ring-1 ring-white/40" />
           <div className="hidden md:flex items-center justify-center gap-7 text-sm font-black text-white/75">
             <a href="#features" className="hover:text-white transition-colors">Ciri-ciri</a>
@@ -200,7 +205,7 @@ export default function Landing() {
 
       {/* ── HERO ── */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-12 sm:pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center bg-white/10 border border-white/20 rounded-[2rem] p-5 sm:p-8 shadow-2xl backdrop-blur-xl">
           
           {/* Left: Text */}
           <div>
@@ -325,7 +330,7 @@ export default function Landing() {
       </div>
 
       {/* ── PROBLEM SECTION ── */}
-      <div className="py-12 md:py-16 px-6 relative">
+      <div className="py-12 md:py-16 px-6 relative bg-slate-900">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
             <p className="text-4xl mb-3">😮‍💨</p>
@@ -356,7 +361,7 @@ export default function Landing() {
       </div>
 
       {/* ── SOLUTION / FEATURES ── */}
-      <div id="features" className="py-12 md:py-16 px-6 relative">
+      <div id="features" className="py-12 md:py-16 px-6 relative bg-indigo-950">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <span className="inline-block bg-green-100 text-green-700 font-black px-4 py-1.5 rounded-full text-sm mb-4">✅ SOLUSI SCREEN TIME BERFAEDAH</span>
@@ -409,7 +414,7 @@ export default function Landing() {
       </div>
 
       {/* ── INVESTOR WOW ── */}
-      <div className="py-12 md:py-16 px-6 bg-slate-950 text-white">
+      <div className="py-12 md:py-16 px-6 bg-purple-950 text-white">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
             <span className="inline-block bg-yellow-400/20 text-yellow-200 border border-yellow-300/30 font-black px-4 py-1.5 rounded-full text-sm mb-4">🚀 SEMUA DALAM SATU APP</span>
@@ -434,7 +439,7 @@ export default function Landing() {
       </div>
 
       {/* ── HOW IT WORKS ── */}
-      <div className="py-12 md:py-16 px-6 relative">
+      <div className="py-12 md:py-16 px-6 relative bg-blue-950">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <h2 className="text-3xl font-black text-white mb-3">Mulakan Dalam 3 Langkah</h2>
@@ -458,7 +463,7 @@ export default function Landing() {
       </div>
 
       {/* ── TESTIMONIALS ── */}
-      <div id="testimonials" className="py-12 md:py-16 px-6 relative">
+      <div id="testimonials" className="py-12 md:py-16 px-6 relative bg-slate-900">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_, i) => <span key={i} className="text-2xl text-orange-400">★</span>)}</div>
@@ -487,9 +492,9 @@ export default function Landing() {
       </div>
 
       {/* ── CONVERSION BOOSTER ── */}
-      <div className="py-12 md:py-16 px-6 relative">
+      <div className="py-12 md:py-16 px-6 relative bg-rose-950">
         <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} className="rounded-3xl overflow-hidden border border-white/20 bg-white/10  shadow-2xl">
+          <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} className="rounded-3xl overflow-hidden border border-white/20 bg-white/10 shadow-2xl">
             <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="p-6 md:p-8">
                 <span className="inline-block bg-orange-400 text-slate-950 font-black px-4 py-1.5 rounded-full text-xs mb-4">Untuk ibu bapa yang anak susah fokus belajar</span>
@@ -522,7 +527,7 @@ export default function Landing() {
       </div>
 
       {/* ── PRICING ── */}
-      <div id="pricing" className="py-12 md:py-16 px-6 bg-slate-950 relative overflow-hidden">
+      <div id="pricing" className="py-12 md:py-16 px-6 bg-indigo-950 relative overflow-hidden">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
             <span className="inline-block bg-green-500/25 text-green-100 font-black px-4 py-1.5 rounded-full text-sm mb-4 border border-green-300/30">
@@ -639,7 +644,7 @@ export default function Landing() {
       </div>
 
       {/* ── FAQ ── */}
-      <div id="faq" className="py-12 md:py-16 px-6 relative">
+      <div id="faq" className="py-12 md:py-16 px-6 relative bg-slate-900">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-black text-white mb-3">Soalan Lazim 🤔</h2>
