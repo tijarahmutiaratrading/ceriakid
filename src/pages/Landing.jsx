@@ -661,7 +661,7 @@ export default function Landing() {
       </div>
 
       {/* ── FOOTER ── */}
-      <footer className="text-white py-8 text-center md:py-10 relative bg-slate-950 border-t border-white/10">
+      <footer className="text-white py-5 text-center md:py-6 relative bg-slate-950 border-t border-white/10">
         <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
         <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
         <div className="flex justify-center gap-6 text-xs text-white/60">
