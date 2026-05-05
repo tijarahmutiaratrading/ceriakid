@@ -212,11 +212,18 @@ export default function MiniGamesGenerator({ onToast }) {
 
       {/* Task Queue */}
       <div className="p-6 rounded-3xl" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between gap-3 mb-4">
           <h2 className="font-black text-white">📋 Task Queue</h2>
-          <button onClick={loadTasks} disabled={loadingTasks} className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all">
-            <RefreshCw className={`w-4 h-4 text-white/70 ${loadingTasks ? 'animate-spin' : ''}`} />
-          </button>
+          <div className="flex items-center gap-2 flex-wrap justify-end">
+            {completedTasks.length > 0 && (
+              <button onClick={handleDeleteAllCompleted} className="text-xs font-bold text-green-300 hover:underline whitespace-nowrap">
+                Clear Completed
+              </button>
+            )}
+            <button onClick={loadTasks} disabled={loadingTasks} className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all">
+              <RefreshCw className={`w-4 h-4 text-white/70 ${loadingTasks ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
         </div>
 
         {/* Stats */}
