@@ -39,22 +39,21 @@ export default function GamesHub() {
         
         const loadedGames = [];
         gameIds.forEach((id, i) => {
-          const dbGames = results[i] || [];
+          const dbGames = (results[i] || []).filter(g => !g.ageGroup || g.ageGroup === ageGroup);
           if (dbGames.length > 0) {
             const meta = MINI_GAME_META[id];
-            dbGames.forEach(g => {
-              loadedGames.push({
-                id: g.id,
-                typeId: id,
-                emoji: meta.emoji,
-                title: meta.title,
-                description: meta.description,
-                path: meta.path,
-                color: meta.color,
-                level: meta.level,
-                skills: meta.skills,
-                ageGroup: g.ageGroup,
-              });
+            loadedGames.push({
+              id,
+              typeId: id,
+              emoji: meta.emoji,
+              title: meta.title,
+              description: meta.description,
+              path: meta.path,
+              color: meta.color,
+              level: meta.level,
+              skills: meta.skills,
+              ageGroup,
+              gameCount: dbGames.length,
             });
           }
         });
@@ -91,6 +90,9 @@ export default function GamesHub() {
             </div>
             <h3 className="text-white font-black text-sm leading-tight mb-1">{game.title}</h3>
             <p className="text-white/80 text-xs font-semibold leading-snug">{game.description}</p>
+            <p className="mt-2 inline-flex bg-white/25 rounded-full px-2 py-0.5 text-white text-xs font-black">
+              {game.gameCount} games dalam kategori ini
+            </p>
           </div>
           <div className="mt-3 flex gap-1 flex-wrap">
             {game.skills.map(s => (
@@ -126,7 +128,7 @@ export default function GamesHub() {
             <div className="flex-1">
               <h1 className="text-3xl font-black text-white leading-tight">Game Hub</h1>
               <p className="text-white/70 text-sm font-semibold">
-                {ageGroup === 'prasekolah' ? '🧒 Prasekolah' : '🎒 Sekolah Rendah'} · {filteredGames.length} permainan interaktif
+                {ageGroup === 'prasekolah' ? '🧒 Prasekolah' : '🎒 Sekolah Rendah'} · {filteredGames.length} kategori permainan
               </p>
             </div>
           </div>
@@ -152,7 +154,7 @@ export default function GamesHub() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
             {filteredGames.map((game, idx) => (
-              <GameCard key={game.id} game={game} idx={idx} />
+              <GameCard key={game.typeId} game={game} idx={idx} />
             ))}
           </div>
         )}
