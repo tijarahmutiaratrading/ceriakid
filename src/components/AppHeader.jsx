@@ -126,7 +126,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   return (
     <>
       {/* Top Header */}
-       <nav className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
+       <nav className="fixed bottom-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(100%)' }}>
          <div
            className={`max-w-5xl mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] ring-1 ${isPlayingGame ? 'ring-white/25 shadow-2xl shadow-slate-950/25' : 'pro-glass ring-white/20'}`}
            style={isPlayingGame ? { background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.82))', backdropFilter: 'blur(22px)' } : undefined}
@@ -183,7 +183,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -320, opacity: 0 }}
             transition={{ type: 'spring', damping: 22, stiffness: 280 }}
-            className={`fixed left-3 right-3 sm:right-auto top-20 bottom-3 z-50 sm:w-80 flex flex-col rounded-3xl overflow-hidden shadow-2xl ${isPlayingGame ? 'border border-white/20' : 'pro-glass'}`}
+            className={`fixed left-3 right-3 sm:right-auto top-3 bottom-24 z-50 sm:w-80 flex flex-col rounded-3xl overflow-hidden shadow-2xl ${isPlayingGame ? 'border border-white/20' : 'pro-glass'}`}
             style={isPlayingGame ? { background: 'linear-gradient(160deg, rgba(15,23,42,0.93), rgba(88,28,135,0.86), rgba(190,24,93,0.72))', backdropFilter: 'blur(24px)' } : undefined}
           >
             {/* Header with User Profile */}
