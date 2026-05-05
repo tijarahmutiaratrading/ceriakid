@@ -12,21 +12,21 @@ export default function InteractiveGameDemo() {
       emoji: '🍎',
       subject: 'Bahasa Melayu',
       question: 'Ini buah apa?',
-      options: ['Epal', 'Oren', 'Pisang'],
+      options: ['Epal', 'Oren', 'Pisang', 'Anggur'],
       correct: 0,
     },
     {
       emoji: '🐱',
       subject: 'English',
       question: 'What animal is this?',
-      options: ['Dog', 'Cat', 'Rabbit'],
+      options: ['Dog', 'Cat', 'Rabbit', 'Bird'],
       correct: 1,
     },
     {
       emoji: '五',
       subject: 'Mandarin',
       question: '这个数字是多少？',
-      options: ['三', '五', '七'],
+      options: ['三', '五', '七', '九'],
       correct: 1,
     },
   ];
@@ -96,7 +96,7 @@ export default function InteractiveGameDemo() {
             <p className="text-white text-xl font-black mb-5">
               {questions[currentQ].question}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               {questions[currentQ].options.map((option, idx) => (
                 <motion.button
                   key={idx}
