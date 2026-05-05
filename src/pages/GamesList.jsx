@@ -9,6 +9,7 @@ import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
 import GameListCard from '@/components/game/GameListCard';
 import AppHeader from '@/components/AppHeader';
+import { ArrowLeft } from 'lucide-react';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 
 const getCategoryLabel = (category, lang) => {
@@ -241,15 +242,19 @@ export default function GamesList() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-5 p-5 rounded-3xl flex items-center gap-4"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+          className="mb-5 p-5 rounded-3xl bg-gradient-to-br from-purple-500 to-pink-500 shadow-2xl"
         >
-          <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">
-            {getCategoryEmoji(category)}
-          </div>
-          <div>
-            <h1 className="text-2xl font-black text-white leading-tight">{getCategoryLabel(category, lang)}</h1>
-            <p className="text-white/70 text-xs font-semibold mt-0.5">🎮 {games.length} {t('games', lang)} · {t('selectForPlay', lang)}</p>
+          <Link to="/dashboard" className="inline-flex items-center gap-2 text-white/85 text-xs font-black mb-4">
+            <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
+          </Link>
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">
+              {getCategoryEmoji(category)}
+            </div>
+            <div>
+              <h1 className="text-2xl font-black text-white leading-tight">{getCategoryLabel(category, lang)}</h1>
+              <p className="text-white/80 text-xs font-bold mt-0.5">🎮 {games.length} {t('games', lang)} · {t('selectForPlay', lang)}</p>
+            </div>
           </div>
         </motion.div>
 
@@ -329,7 +334,7 @@ export default function GamesList() {
             </Link>
           </motion.div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-3">
             {games.map((game, i) => {
               const globalIdx = allGames.findIndex((g) => g === game);
               const gameKey = `${ageGroup}-${category}-${globalIdx}`;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Lock } from 'lucide-react';
+import { Lock, Play } from 'lucide-react';
 import GameBadge from './GameBadge';
 
 const difficultyConfig = {
@@ -14,9 +14,9 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
   const difficulty = difficultyConfig[game.difficulty || 'easy'];
 
   const cardStyle = {
-    background: locked ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)',
+    background: locked ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.12)',
     backdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255,255,255,0.35)',
+    border: '1px solid rgba(255,255,255,0.2)',
   };
 
   if (locked) {
@@ -26,7 +26,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: Math.min(idx * 0.03, 0.5) }}
-          className="rounded-2xl p-4 flex items-center gap-4 opacity-60 cursor-pointer mb-3"
+          className="rounded-3xl p-4 flex items-center gap-4 opacity-60 cursor-pointer shadow-xl"
           style={cardStyle}
         >
           <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl grayscale flex-shrink-0">
@@ -57,18 +57,18 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
         transition={{ delay: Math.min(idx * 0.03, 0.5) }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
-        className="rounded-2xl p-4 flex items-center gap-4 cursor-pointer group mb-3"
+        className="rounded-3xl p-4 flex items-center gap-4 cursor-pointer group shadow-xl hover:bg-white/10 transition-all"
         style={cardStyle}
       >
         {/* Emoji */}
-        <div className="w-12 h-12 rounded-xl bg-white/25 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner group-hover:scale-110 transition-transform">
+        <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner group-hover:scale-110 transition-transform">
           {game.emoji}
         </div>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-black text-sm text-white truncate">{game.title}</h3>
+            <h3 className="font-black text-base text-white truncate">{game.title}</h3>
             {badge && badge !== 'locked' && <GameBadge type={badge} />}
           </div>
 
@@ -94,8 +94,10 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
           )}
         </div>
 
-        {/* Arrow */}
-        <div className="text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all flex-shrink-0 text-lg">→</div>
+        {/* Play button */}
+        <div className="w-11 h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0 group-hover:scale-105 transition-all">
+          <Play className="w-5 h-5 fill-current" />
+        </div>
       </motion.div>
     </Link>
   );
