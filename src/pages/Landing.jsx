@@ -251,9 +251,9 @@ export default function Landing() {
             </motion.div>
 
             {/* Trust badges */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="grid grid-cols-2 gap-2 text-xs text-white/85 sm:flex sm:flex-wrap sm:gap-3 sm:text-sm">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex flex-wrap gap-2 text-xs sm:text-sm text-white/85">
               {['✅ Ikut silibus KSSR', '✅ Tiada iklan', '✅ Dashboard ibu bapa'].map((t, i) =>
-              <span key={i} className="rounded-full border border-white/15 bg-white/10 px-3 py-2 text-center font-bold shadow-lg backdrop-blur-xl sm:px-4">{t}</span>
+              <span key={i} className="flex items-center gap-1 rounded-full border border-white/20 bg-white/12 px-2.5 py-1 font-bold text-white/80 shadow-sm backdrop-blur-xl sm:px-3">{t}</span>
               )}
             </motion.div>
 
