@@ -303,7 +303,7 @@ export default function Landing() {
       </div>
 
       {/* ── STATS STRIP ── */}
-      <div className="py-8 md:py-10 border-y border-white/10" style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(18px)' }}>
+      <div className="py-8 md:py-10 border-y border-orange-200/60 bg-white/95 shadow-inner">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 text-center">
             {[
@@ -320,8 +320,8 @@ export default function Landing() {
                   md:border-t-0
                 `}>
                 <div className="text-2xl mb-1">{stat.icon}</div>
-                <div className="text-4xl md:text-5xl font-black text-orange-400">{stat.num}</div>
-                <div className="text-white/60 text-sm font-semibold mt-2">{stat.label}</div>
+                <div className="text-4xl md:text-5xl font-black text-purple-700">{stat.num}</div>
+                <div className="text-slate-600 text-sm font-semibold mt-2">{stat.label}</div>
               </motion.div>
             )}
           </div>
@@ -331,12 +331,12 @@ export default function Landing() {
       <TrustedMarquee />
 
       {/* ── PROBLEM SECTION ── */}
-      <div className="py-16 md:py-20 px-6 relative overflow-hidden">
+      <div className="py-16 md:py-20 px-6 relative overflow-hidden bg-gradient-to-br from-rose-50 via-orange-50 to-yellow-50 text-slate-900">
         <div className="max-w-4xl mx-auto relative z-10">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
             <p className="text-4xl mb-3">😮‍💨</p>
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Pening kepala bila<br />anak tak nak belajar?</h2>
-            <p className="text-white/65 text-lg">Kalau salah satu ni rasa familiar — anda bukan keseorangan...</p>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Pening kepala bila<br />anak tak nak belajar?</h2>
+            <p className="text-slate-600 text-lg">Kalau salah satu ni rasa familiar — anda bukan keseorangan...</p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 items-stretch auto-rows-fr">
             {[
@@ -345,29 +345,29 @@ export default function Landing() {
             { emoji: '😰', pain: '"Exam dah dekat, anak masih tak hafal"', desc: 'Pressure menjelang peperiksaan. Semua orang dalam rumah tegang.' },
             { emoji: '😪', pain: '"Kerja sampai malam, tak sempat nak ajar"', desc: 'Ibu bapa penat, anak perlukan bantuan. Tiada masa yang cukup.' }].
             map((p, i) =>
-            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="relative z-0 h-full min-h-[132px] md:min-h-[118px] flex items-start gap-3 sm:gap-4 bg-white/10 border border-white/15 rounded-2xl p-4 sm:p-5 shadow-xl backdrop-blur-xl text-left min-w-0 overflow-hidden">
+            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="relative z-0 h-full min-h-[132px] md:min-h-[118px] flex items-start gap-3 sm:gap-4 bg-white border border-rose-100 rounded-2xl p-4 sm:p-5 shadow-xl shadow-rose-100/60 text-left min-w-0 overflow-hidden">
                 <span className="text-3xl w-10 h-10 flex-shrink-0 flex items-center justify-center">{p.emoji}</span>
                 <div className="min-w-0 flex-1">
-                  <p className="font-black text-white mb-1 leading-snug">{p.pain}</p>
-                  <p className="text-white/65 text-sm leading-relaxed">{p.desc}</p>
+                  <p className="font-black text-slate-900 mb-1 leading-snug">{p.pain}</p>
+                  <p className="text-slate-600 text-sm leading-relaxed">{p.desc}</p>
                 </div>
               </motion.div>
             )}
           </div>
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mt-10">
-            <p className="text-xl font-bold text-white/80">Mestilah ada cara lain yang lebih senang...</p>
+            <p className="text-xl font-bold text-slate-700">Mestilah ada cara lain yang lebih senang...</p>
             <p className="text-2xl font-black text-orange-500 mt-2">ADA. Jom tengok 👇</p>
           </motion.div>
         </div>
       </div>
 
       {/* ── SOLUTION / FEATURES ── */}
-      <div id="features" className="py-12 md:py-16 px-6 relative">
+      <div id="features" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-sky-50 via-cyan-50 to-emerald-50 text-slate-900">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <span className="inline-block bg-green-100 text-green-700 font-black px-4 py-1.5 rounded-full text-sm mb-4">✅ SOLUSI SCREEN TIME BERFAEDAH</span>
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Perkenalkan — <span className="text-orange-500">CeriaKid</span><br />Latihan Harian Yang Anak Tak Cepat Bosan</h2>
-            <p className="text-lg text-white/65 max-w-2xl mx-auto">Permainan edukatif berasaskan topik sekolah Malaysia. Anak rasa macam main game, ibu bapa pula nampak perkembangan pembelajaran.</p>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">Perkenalkan — <span className="text-orange-600">CeriaKid</span><br />Latihan Harian Yang Anak Tak Cepat Bosan</h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">Permainan edukatif berasaskan topik sekolah Malaysia. Anak rasa macam main game, ibu bapa pula nampak perkembangan pembelajaran.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
@@ -376,10 +376,10 @@ export default function Landing() {
             { icon: '📊', title: 'Ibu Bapa Boleh Pantau', desc: 'Lihat markah, percubaan dan topik yang anak perlukan lebih latihan melalui dashboard.' },
             { icon: '📲', title: 'Sesuai Untuk Rutin Harian', desc: 'Gunakan 5–10 minit sehari di rumah, dalam kereta atau bila anak ada masa lapang.' }].
             map((f, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white/10 rounded-3xl p-7 border border-white/15 text-center mx-auto hover:bg-white/15 transition-all shadow-xl backdrop-blur-xl">
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white rounded-3xl p-7 border border-sky-100 text-center mx-auto hover:bg-sky-50 transition-all shadow-xl shadow-sky-100/70">
                 <div className="text-5xl mb-4">{f.icon}</div>
-                <h3 className="font-black text-white text-lg mb-2">{f.title}</h3>
-                <p className="text-white/65 text-sm leading-relaxed">{f.desc}</p>
+                <h3 className="font-black text-slate-900 text-lg mb-2">{f.title}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
             )}
           </div>
@@ -395,14 +395,14 @@ export default function Landing() {
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' }].
             map((s, i) =>
-            <motion.div key={s.sub} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ delay: i * 0.06 }} className="overflow-hidden rounded-2xl bg-white/10 border border-white/20 shadow-xl backdrop-blur-xl">
+            <motion.div key={s.sub} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ delay: i * 0.06 }} className="overflow-hidden rounded-2xl bg-white border border-sky-100 shadow-xl shadow-sky-100/70">
                 <div className="relative h-36 overflow-hidden">
                   <img src={s.img} alt={`Budak belajar ${s.sub}`} className="w-full h-full object-cover" />
                   <div className={`absolute inset-0 bg-gradient-to-t ${s.color} opacity-55`} />
                   <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/90 text-slate-900 font-black text-xs px-3 py-1.5 rounded-full shadow-md">{s.icon} {s.sub}</div>
                 </div>
                 <div className="p-4 text-left">
-                  <h3 className="font-black text-white text-lg leading-tight">{s.word}</h3>
+                  <h3 className="font-black text-slate-900 text-lg leading-tight">{s.word}</h3>
                   <div className="mt-3 bg-white/90 text-slate-800 rounded-xl px-3 py-2 shadow-lg">
                     <p className="font-black text-xs text-slate-900">Info belajar</p>
                     <p className="text-xs font-bold text-slate-600 leading-snug mt-0.5">{s.info}</p>
@@ -464,7 +464,7 @@ export default function Landing() {
       </div>
 
       {/* ── TESTIMONIALS ── */}
-      <div id="testimonials" className="py-12 md:py-16 px-6 relative">
+      <div id="testimonials" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-violet-950 via-purple-950 to-slate-950">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_, i) => <span key={i} className="text-2xl text-orange-400">★</span>)}</div>
@@ -595,11 +595,11 @@ export default function Landing() {
       </div>
 
       {/* ── FAQ ── */}
-      <div id="faq" className="py-12 md:py-16 px-6 relative">
+      <div id="faq" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-white via-yellow-50 to-orange-50 text-slate-900">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-black text-white mb-3">Soalan Lazim 🤔</h2>
-            <p className="text-white/65">Jawapan ringkas sebelum ibu bapa mula menggunakan CeriaKid.</p>
+            <h2 className="text-3xl font-black text-slate-900 mb-3">Soalan Lazim 🤔</h2>
+            <p className="text-slate-600">Jawapan ringkas sebelum ibu bapa mula menggunakan CeriaKid.</p>
           </div>
           <div className="space-y-4">
             {[
@@ -610,9 +610,9 @@ export default function Landing() {
             { q: 'Berapa anak boleh guna?', a: 'Pelan Asas untuk Prasekolah (1 anak), Standard untuk Sekolah Rendah (1 anak). Pelan Keluarga untuk kedua-dua peringkat dengan sehingga 4 profil anak — jimat lebih!' },
             { q: 'Macam mana nak mula?', a: 'Pilih pelan, isikan maklumat, bayar melalui FPX, dan anak terus boleh mula belajar dalam masa 2 minit!' }].
             map((faq, i) =>
-            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="bg-white/10 rounded-2xl p-5 border border-white/15 hover:bg-white/15 transition-all shadow-lg backdrop-blur-xl">
-                <p className="font-black text-white mb-1.5">❓ {faq.q}</p>
-                <p className="text-white/65 text-sm leading-relaxed">{faq.a}</p>
+            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl p-5 border border-orange-100 hover:bg-orange-50 transition-all shadow-lg shadow-orange-100/60">
+                <p className="font-black text-slate-900 mb-1.5">❓ {faq.q}</p>
+                <p className="text-slate-600 text-sm leading-relaxed">{faq.a}</p>
               </motion.div>
             )}
           </div>
@@ -620,7 +620,7 @@ export default function Landing() {
       </div>
 
       {/* ── FINAL CTA ── */}
-      <div className="py-12 md:py-16 px-6 text-white border-y border-white/10" style={{ background: 'linear-gradient(135deg, rgba(251,146,60,0.22), rgba(236,72,153,0.20), rgba(139,92,246,0.22))', backdropFilter: 'blur(18px)' }}>
+      <div className="py-12 md:py-16 px-6 text-white border-y border-white/10 bg-gradient-to-br from-slate-950 via-purple-950 to-pink-950">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
             <p className="text-5xl mb-5">🎓</p>
@@ -640,7 +640,7 @@ export default function Landing() {
       </div>
 
       {/* ── FOOTER ── */}
-      <footer className="text-white py-8 text-center md:py-10 relative" style={{ background: 'rgba(0,0,0,0.2)', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+      <footer className="text-white py-8 text-center md:py-10 relative bg-slate-950 border-t border-white/10">
         <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
         <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
         <div className="flex justify-center gap-6 text-xs text-white/60">
