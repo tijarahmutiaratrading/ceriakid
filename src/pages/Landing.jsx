@@ -8,6 +8,7 @@ import AppHeader from '@/components/AppHeader';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
+import FloatingWhatsApp from '@/components/landing/FloatingWhatsApp';
 
 // Countdown Timer Hook
 function useCountdown(minutes = 15) {
@@ -670,6 +671,8 @@ export default function Landing() {
           <a href="mailto:support@ceriakid.com" className="cursor-pointer hover:text-white">Hubungi Kami</a>
         </div>
       </footer>
+
+      <FloatingWhatsApp />
 
       </div>
     </div>);
