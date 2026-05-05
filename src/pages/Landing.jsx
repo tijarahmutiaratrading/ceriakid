@@ -219,7 +219,7 @@ export default function Landing() {
             </motion.div>
 
             {/* Headline */}
-             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-3xl sm:text-4xl md:text-6xl font-black leading-tight text-white mb-4">
+             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight text-white mb-4">
                Anak Suka Main Game?<br />{' '}
                <span className="relative inline-block">
                  <span className="relative z-10 text-black">Jadikan Ia</span>
