@@ -161,25 +161,28 @@ export default function AdminBBMGenerator() {
     setError('');
     setResult(null);
     const total = selectedSubjects.size * selectedLevels.size * selectedTypes.size;
-    let createdCount = 0;
+    let queuedCount = 0;
     try {
       for (const subject of selectedSubjects) {
         for (const level of selectedLevels) {
           for (const type of selectedTypes) {
-            const res = await generateBbmDirect({ 
-              subject, level, type, 
-              topic: form.topic, 
-              count: form.count,
-              autoPublish: true
+            await base44.entities.GameTask.create({
+              taskName: `BBM: ${SUBJECT_LABELS[subject] || subject} - ${LEVEL_LABELS[level] || level} - ${TYPE_LABELS[type] || type}${form.topic ? ` - ${form.topic}` : ''}`,
+              ageGroup: level,
+              subject: `bbm_${subject}_${type}`,
+              gamesCount: 1,
+              questionsPerGame: form.count,
+              status: 'pending',
+              errorMessage: JSON.stringify({ subject, level, type, topic: form.topic || '' })
             });
-            if (res.data?.success) createdCount++;
+            queuedCount++;
           }
         }
       }
-      setResult({ success: true, total, createdCount, title: `${createdCount}/${total} BBM berkualitas tinggi dijana & dipublish` });
-      loadResources();
+      setResult({ success: true, total, createdCount: queuedCount, title: `${queuedCount}/${total} BBM tasks dihantar ke queue` });
+      await loadTasks();
     } catch (e) {
-      setError(e.message || 'Gagal jana BBM');
+      setError(e.message || 'Gagal queue BBM');
     } finally {
       setLoading(false);
     }
@@ -437,7 +440,7 @@ export default function AdminBBMGenerator() {
                 disabled={loading}
                 className="w-full py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 bg-gradient-to-r from-cyan-300 via-blue-400 to-fuchsia-500 text-white shadow-2xl shadow-blue-950/30 disabled:opacity-50 disabled:shadow-none transition-all"
               >
-                {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Jana sedang dalam proses...</> : <><Wand2 className="w-5 h-5" /> Jana BBM ({selectedSubjects.size} × {selectedLevels.size} × {selectedTypes.size})!</>}
+                {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Menghantar ke queue...</> : <><Wand2 className="w-5 h-5" /> Queue BBM ({selectedSubjects.size} × {selectedLevels.size} × {selectedTypes.size})!</>}
               </motion.button>
             </div>
 
@@ -453,7 +456,7 @@ export default function AdminBBMGenerator() {
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center"><Check className="w-5 h-5 text-white" /></div>
                     <div>
-                      <p className="text-white font-black">BBM Berjaya Dijana!</p>
+                      <p className="text-white font-black">BBM Task Berjaya Masuk Queue!</p>
                       <p className="text-white/80 text-xs">{result.title}</p>
                     </div>
                   </div>

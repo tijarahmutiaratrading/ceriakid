@@ -218,6 +218,88 @@ Deno.serve(async (req) => {
       return { ...(sets[mode] || { mode }), variant: index + 1 };
     };
 
+    if (String(task.subject || '').startsWith('bbm_')) {
+      const meta = JSON.parse(task.errorMessage || '{}');
+      const subject = meta.subject || String(task.subject).replace(/^bbm_/, '').split('_')[0];
+      const level = meta.level || task.ageGroup || 'darjah_1';
+      const type = meta.type || 'lembaran_kerja';
+      const topic = meta.topic || 'umum';
+      const count = task.questionsPerGame || 10;
+
+      const subjectLabels = {
+        bahasa_melayu: 'Bahasa Melayu', english: 'English', mathematics: 'Matematik', science: 'Sains', jawi: 'Jawi',
+        pendidikan_islam: 'Pendidikan Islam', pendidikan_moral: 'Pendidikan Moral', sejarah: 'Sejarah'
+      };
+      const levelLabels = {
+        prasekolah: 'Prasekolah', darjah_1: 'Darjah 1', darjah_2: 'Darjah 2', darjah_3: 'Darjah 3',
+        darjah_4: 'Darjah 4', darjah_5: 'Darjah 5', darjah_6: 'Darjah 6'
+      };
+      const typeLabels = {
+        lembaran_kerja: 'Lembaran Kerja', kuiz: 'Kuiz', rancangan_pengajaran: 'RPH', kad_imbasan: 'Kad Imbasan',
+        carta: 'Carta', modul: 'Modul', aktiviti: 'Aktiviti', permainan_bilik_darjah: 'Permainan Bilik Darjah'
+      };
+      const typeEmojis = {
+        lembaran_kerja: '📄', kuiz: '🧩', rancangan_pengajaran: '📝', kad_imbasan: '🃏', carta: '📊', modul: '📦', aktiviti: '🎯', permainan_bilik_darjah: '🎲'
+      };
+      const subjectLabel = subjectLabels[subject] || subject;
+      const levelLabel = levelLabels[level] || level;
+      const typeLabel = typeLabels[type] || type;
+      const languageRule = subject === 'english'
+        ? 'Use English only for all title, description, instructions, content and answers.'
+        : 'Gunakan Bahasa Melayu Malaysia baku untuk semua kandungan.';
+
+      const data = await base44.asServiceRole.integrations.Core.InvokeLLM({
+        prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeLabel} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic}. Bilangan item/soalan: ${count}. ${languageRule} Wajib ada objektif pembelajaran jelas, arahan murid yang mudah, kandungan selari tahap umur, soalan pelbagai aras mudah-sederhana, contoh tempatan Malaysia, jawapan/skema ringkas, tiada placeholder dan tiada fakta meragukan. DILARANG guna heading generik seperti "Soalan 1", "Soalan 2", "Item", "Latihan", "Gambar di bawah", atau arahan yang perlukan imej jika tiada imej sebenar. Setiap heading mesti menerangkan kemahiran khusus. Output JSON sahaja: title, description, instructions, items[{heading,content,answer}].`,
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            title: { type: 'string' },
+            description: { type: 'string' },
+            instructions: { type: 'string' },
+            items: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  heading: { type: 'string' },
+                  content: { type: 'string' },
+                  answer: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      const items = (Array.isArray(data.items) ? data.items : []).map(item => ({
+        ...item,
+        heading: String(item.heading || 'Aktiviti Pembelajaran').replace(/^\s*(soalan|item|latihan)\s*\d+\s*[:\-.]?\s*/i, '').trim() || 'Aktiviti Pembelajaran'
+      }));
+      const htmlContent = `<!DOCTYPE html><html lang="ms"><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;max-width:820px;margin:auto;padding:24px;color:#1f2937;line-height:1.45}h1{text-align:center;color:#4f46e5}h2{text-align:center;color:#64748b;font-size:14px}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}.box,.item{border:1px solid #c7d2fe;border-radius:12px;padding:12px}.box{background:#eef2ff}.item{margin:14px 0;border-left:5px solid #6366f1;background:#fafafa;break-inside:avoid}.answer{color:#047857;font-weight:bold}footer{text-align:center;color:#64748b;font-size:11px;margin-top:28px;border-top:1px solid #eee;padding-top:12px}@media print{body{padding:12px}.item{page-break-inside:avoid}}</style></head><body><h1>${data.title || typeLabel}</h1><h2>${subjectLabel} | ${levelLabel} | ${typeLabel}</h2><div class="meta"><div class="box">Nama: ____________</div><div class="box">Kelas: ____________</div><div class="box">Tarikh: ____________</div></div><div class="box"><b>Arahan:</b> ${data.instructions || 'Gunakan bahan ini semasa pembelajaran.'}</div>${items.map((item, i) => `<section class="item"><h3>${i + 1}. ${item.heading}</h3><p>${item.content || ''}</p>${item.answer ? `<p class="answer">Jawapan/Nota: ${item.answer}</p>` : ''}</section>`).join('')}<footer>CeriaKid Educational Platform | Malaysia</footer></body></html>`;
+
+      await base44.asServiceRole.entities.BBMResource.create({
+        title: data.title || `${typeLabel} - ${subjectLabel}`,
+        description: data.description || `Jana AI | ${topic}`,
+        subject,
+        level,
+        type,
+        emoji: typeEmojis[type] || '📄',
+        tier: 'free',
+        downloadCount: 0,
+        isPublished: true,
+        tags: [subjectLabel, levelLabel, typeLabel, topic],
+        htmlContent,
+      });
+
+      await base44.asServiceRole.entities.GameTask.update(task.id, {
+        status: 'completed',
+        createdGames: 1,
+        completedAt: new Date().toISOString(),
+      });
+
+      return Response.json({ success: true, taskName: task.taskName, createdGames: 1, totalGames: 1, isDone: true });
+    }
+
     const miniGame = miniGameMap[task.subject];
     if (miniGame) {
       const existingMini = await base44.asServiceRole.entities.Game.filter({ category: task.subject });
