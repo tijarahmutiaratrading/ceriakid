@@ -331,21 +331,21 @@ export default function Landing() {
       <TrustedMarquee />
 
       {/* ── PROBLEM SECTION ── */}
-      <div className="py-12 md:py-16 px-6 relative">
-        <div className="max-w-4xl mx-auto">
+      <div className="py-16 md:py-20 px-6 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto relative z-10">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
             <p className="text-4xl mb-3">😮‍💨</p>
             <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Pening kepala bila<br />anak tak nak belajar?</h2>
             <p className="text-white/65 text-lg">Kalau salah satu ni rasa familiar — anda bukan keseorangan...</p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 items-stretch">
             {[
             { emoji: '😤', pain: '"Anak main game je, tak nak belajar"', desc: 'Screen time jadi perang setiap malam. Stress anak, stress ibu bapa.' },
             { emoji: '💸', pain: '"Dah bayar tuisyen RM300, result sama je"', desc: 'Wang habis tapi anak masih tak faham apa yang diajar.' },
             { emoji: '😰', pain: '"Exam dah dekat, anak masih tak hafal"', desc: 'Pressure menjelang peperiksaan. Semua orang dalam rumah tegang.' },
             { emoji: '😪', pain: '"Kerja sampai malam, tak sempat nak ajar"', desc: 'Ibu bapa penat, anak perlukan bantuan. Tiada masa yang cukup.' }].
             map((p, i) =>
-            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="flex items-start gap-3 sm:gap-4 bg-white/10 border border-white/15 rounded-2xl p-4 sm:p-5 shadow-xl backdrop-blur-xl text-left min-w-0">
+            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="relative z-0 h-full flex items-start gap-3 sm:gap-4 bg-white/10 border border-white/15 rounded-2xl p-4 sm:p-5 shadow-xl backdrop-blur-xl text-left min-w-0 overflow-hidden">
                 <span className="text-3xl w-10 h-10 flex-shrink-0 flex items-center justify-center">{p.emoji}</span>
                 <div className="min-w-0 flex-1">
                   <p className="font-black text-white mb-1">{p.pain}</p>
