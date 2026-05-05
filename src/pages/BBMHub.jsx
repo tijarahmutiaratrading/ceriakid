@@ -288,7 +288,7 @@ export default function BBMHub() {
         <div className="flex items-center justify-between mb-3 px-1">
           <p className="text-white/80 text-xs font-bold">{filtered.length} bahan dijumpai</p>
           {!isPremiumUser && (
-            <Link to="/landing">
+            <Link to="/">
               <span className="text-xs font-black text-yellow-300 flex items-center gap-1">
                 <Star className="w-3 h-3" /> Naik taraf untuk semua
               </span>

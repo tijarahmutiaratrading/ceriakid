@@ -106,7 +106,7 @@ export default function ParentDashboard() {
   };
 
   const shareToWhatsApp = (childName, stats) => {
-    const message = `🎓 Prestasi ${childName} di CeriaKid!\n\n📊 ${stats.totalGames} permainan diselesaikan\n⭐ ${stats.avgStars} bintang rata-rata\n\nCubit terus! 💪`;
+    const message = `🎓 Prestasi ${childName} di CeriaKid!\n\n📊 ${stats.totalGames} permainan diselesaikan\n⭐ ${stats.avgStars} bintang purata\n\nTeruskan usaha! 💪`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -124,7 +124,7 @@ export default function ParentDashboard() {
   };
 
   const exportAsText = (childName, stats) => {
-    const text = `LAPORAN PRESTASI ${childName.toUpperCase()}\n${'='.repeat(40)}\n\nTanggal: ${new Date().toLocaleDateString('ms-MY')}\n\nRINGKASAN PRESTASI:\n- Total Permainan: ${stats.totalGames}\n- Rata-rata Bintang: ${stats.avgStars}/3\n- Status: ${stats.avgStars >= 2.5 ? 'Cemerlang! 🔥' : 'Terus Berkembang ✨'}\n\nUntuk laporan detail, masuk ke aplikasi CeriaKid.\n\n🎓 CeriaKid - Platform Pembelajaran Anak`;
+    const text = `LAPORAN PRESTASI ${childName.toUpperCase()}\n${'='.repeat(40)}\n\nTarikh: ${new Date().toLocaleDateString('ms-MY')}\n\nRINGKASAN PRESTASI:\n- Jumlah Permainan: ${stats.totalGames}\n- Purata Bintang: ${stats.avgStars}/3\n- Status: ${stats.avgStars >= 2.5 ? 'Cemerlang! 🔥' : 'Terus Berkembang ✨'}\n\nUntuk laporan terperinci, masuk ke aplikasi CeriaKid.\n\n🎓 CeriaKid - Platform Pembelajaran Anak`;
     const element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', `prestasi-${childName}-${new Date().getTime()}.txt`);

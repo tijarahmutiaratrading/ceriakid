@@ -183,7 +183,7 @@ export default function Home() {
             >
               <div className="text-3xl mb-2">🎮</div>
               <p className="text-white font-black text-sm leading-tight">Game Hub</p>
-              <p className="text-white/70 text-xs mt-1">8 permainan seru</p>
+              <p className="text-white/70 text-xs mt-1">Permainan interaktif</p>
               <div className="mt-2 text-white/60 text-xs">→</div>
             </motion.div>
           </Link>

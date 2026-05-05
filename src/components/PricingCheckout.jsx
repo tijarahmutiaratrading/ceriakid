@@ -30,7 +30,7 @@ const TIERS = [
 
 
 export default function PricingCheckout({ onClose, selectedTier: initialTier, onTierChange }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     name: '',
@@ -47,9 +47,24 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
     }
   }, [initialTier]);
 
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        email: prev.email || user.email || '',
+        name: prev.name || user.full_name || '',
+      }));
+    }
+  }, [user]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (!isAuthenticated) {
+      base44.auth.redirectToLogin(window.location.href);
+      return;
+    }
 
     if (!formData.email.trim()) {setError('Sila masukkan email');return;}
     if (!formData.name.trim()) {setError('Sila masukkan nama');return;}
@@ -58,10 +73,6 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
     setLoading(true);
 
     try {
-      if (!isAuthenticated) {
-        base44.auth.redirectToLogin();
-        return;
-      }
 
       const response = await base44.functions.invoke('chipCheckout', {
         tier: formData.selectedTier,
@@ -85,6 +96,12 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {!isAuthenticated && (
+        <div className="rounded-2xl bg-yellow-300/20 border border-yellow-300/30 p-4 text-white text-sm font-bold">
+          Log masuk dahulu supaya pembayaran dan langganan boleh diaktifkan pada akaun anda.
+        </div>
+      )}
+
       {/* Tier Selection */}
       <div>
         <label className="block text-sm font-bold mb-3 text-white">Pilih Pelan Tahunan</label>
@@ -168,7 +185,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
         whileTap={{ scale: 0.98 }}
         disabled={loading}
         type="submit" className="min-h-12 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 font-bold rounded-2xl w-full transition-all hover:shadow-lg disabled:opacity-50 shadow-md">
-        {loading ? '🔄 Memproses...' : '💳 Bayar via FPX Sekarang'}
+        {loading ? '🔄 Memproses...' : isAuthenticated ? '💳 Bayar via FPX Sekarang' : '🔐 Log Masuk untuk Teruskan'}
       </motion.button>
 
       {/* Trust Badges */}

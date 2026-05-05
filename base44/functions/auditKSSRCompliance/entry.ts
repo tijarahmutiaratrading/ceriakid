@@ -86,7 +86,11 @@ Deno.serve(async (req) => {
       } else {
         if (questions.length < 8) issues.tooFewQuestions.push({ id: game.id, count: questions.length });
         const questionTexts = questions.map(q => String(q.problem || q.question || '').trim().toLowerCase().replace(/[^a-z0-9\u00C0-\u024F\u0600-\u06FF\u0B80-\u0BFF\u4E00-\u9FFF ]/gi, '')).filter(Boolean);
-        const badQuestions = questions.filter(q => bannedPattern.test([q.problem || q.question || '', ...(q.options || [])].join(' ')));
+        const badQuestions = questions.filter(q => {
+          const text = String(q.problem || q.question || '').trim();
+          if (game.category === 'english' && /^(which word starts|pick the word that begins|choose the opposite)/i.test(text)) return false;
+          return bannedPattern.test([text, ...(q.options || [])].join(' '));
+        });
         const weakQuestions = questions.filter(q => {
           const text = String(q.problem || q.question || '').trim();
           const options = Array.isArray(q.options) ? q.options.map(o => String(o).trim().toLowerCase()) : [];
@@ -101,15 +105,15 @@ Deno.serve(async (req) => {
       // Check language matching (basic check)
       if (game.category === 'english' && game.title?.includes('English')) {
         const firstQ = questions?.[0];
-        if (firstQ && typeof firstQ.question === 'string') {
+        const questionText = String(firstQ?.question || firstQ?.problem || '').toLowerCase();
+        if (questionText) {
           // Check if question looks like Malay (common Malay words)
           const malayWords = ['apa', 'siapa', 'berapa', 'mana', 'yang', 'atau', 'dan', 'ke', 'di'];
-          const questionLower = firstQ.question.toLowerCase();
-          if (malayWords.some(word => questionLower.includes(word))) {
+          if (malayWords.some(word => new RegExp(`\\b${word}\\b`, 'i').test(questionText))) {
             issues.wrongLanguageSubject.push({ 
               id: game.id, 
               title: game.title,
-              sampleQuestion: firstQ.question 
+              sampleQuestion: firstQ.question || firstQ.problem 
             });
           }
         }
