@@ -382,40 +382,31 @@ export default function Landing() {
           </div>
 
           {/* Subjects */}
-          <div className="overflow-x-auto -mx-2 px-2 pb-4 snap-x snap-mandatory scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <div className="flex gap-4 w-max">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-            { kid: '👧🏻', icon: '🇲🇾', sub: 'Bahasa Melayu', word: 'Baca • Eja • Faham', info: 'Latihan ayat mudah dan kosa kata harian.', color: 'from-blue-500 via-sky-400 to-cyan-300' },
-            { kid: '👦🏽', icon: '🇬🇧', sub: 'English', word: 'Read • Speak • Play', info: 'Belajar perkataan English dengan cara seronok.', color: 'from-emerald-500 via-green-400 to-lime-300' },
-            { kid: '👧🏽', icon: '🔢', sub: 'Matematik', word: 'Kira • Banding • Selesaikan', info: 'Nombor dan operasi asas dalam bentuk game.', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
-            { kid: '👦🏻', icon: '🧪', sub: 'Sains', word: 'Lihat • Tanya • Cuba', info: 'Kenal alam, haiwan dan eksperimen ringkas.', color: 'from-orange-500 via-amber-400 to-yellow-300' },
-            { kid: '👧🏾', icon: '🕌', sub: 'Jawi', word: 'Kenal • Sebut • Tulis', info: 'Huruf Jawi dan suku kata secara perlahan.', color: 'from-teal-500 via-cyan-400 to-blue-300' },
-            { kid: '👦🏾', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
-            { kid: '👧🏻', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' },
-            { kid: '👧🏻', icon: '🇲🇾', sub: 'Bahasa Melayu', word: 'Baca • Eja • Faham', info: 'Latihan ayat mudah dan kosa kata harian.', color: 'from-blue-500 via-sky-400 to-cyan-300' },
-            { kid: '👦🏽', icon: '🇬🇧', sub: 'English', word: 'Read • Speak • Play', info: 'Belajar perkataan English dengan cara seronok.', color: 'from-emerald-500 via-green-400 to-lime-300' },
-            { kid: '👧🏽', icon: '🔢', sub: 'Matematik', word: 'Kira • Banding • Selesaikan', info: 'Nombor dan operasi asas dalam bentuk game.', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
-            { kid: '👦🏻', icon: '🧪', sub: 'Sains', word: 'Lihat • Tanya • Cuba', info: 'Kenal alam, haiwan dan eksperimen ringkas.', color: 'from-orange-500 via-amber-400 to-yellow-300' },
-            { kid: '👧🏾', icon: '🕌', sub: 'Jawi', word: 'Kenal • Sebut • Tulis', info: 'Huruf Jawi dan suku kata secara perlahan.', color: 'from-teal-500 via-cyan-400 to-blue-300' },
-            { kid: '👦🏾', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
-            { kid: '👧🏻', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' }].
+            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/866fc318d_generated_image.png', icon: '🇲🇾', sub: 'Bahasa Melayu', word: 'Baca • Eja • Faham', info: 'Latihan ayat mudah dan kosa kata harian.', color: 'from-blue-500 via-sky-400 to-cyan-300' },
+            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🇬🇧', sub: 'English', word: 'Read • Speak • Play', info: 'Belajar perkataan English dengan cara seronok.', color: 'from-emerald-500 via-green-400 to-lime-300' },
+            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🔢', sub: 'Matematik', word: 'Kira • Banding • Selesaikan', info: 'Nombor dan operasi asas dalam bentuk game.', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
+            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/866fc318d_generated_image.png', icon: '🧪', sub: 'Sains', word: 'Lihat • Tanya • Cuba', info: 'Kenal alam, haiwan dan eksperimen ringkas.', color: 'from-orange-500 via-amber-400 to-yellow-300' },
+            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🕌', sub: 'Jawi', word: 'Kenal • Sebut • Tulis', info: 'Huruf Jawi dan suku kata secara perlahan.', color: 'from-teal-500 via-cyan-400 to-blue-300' },
+            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
+            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' }].
             map((s, i) =>
-            <motion.div key={i} initial={{ opacity: 0, scale: 0.94 }} whileInView={{ opacity: 1, scale: 1 }} whileHover={{ y: -4, scale: 1.03 }} transition={{ delay: (i % 7) * 0.06 }} className={`relative overflow-hidden bg-gradient-to-br ${s.color} rounded-2xl p-4 shadow-xl shadow-black/20 border border-white/30 min-h-[172px] w-[248px] sm:w-[286px] flex-shrink-0 snap-start`}>
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.38),transparent_44%)]" />
-                <div className="relative flex items-start gap-3">
-                  <div className="w-16 h-16 rounded-2xl bg-white/28 border border-white/35 flex items-center justify-center text-4xl shadow-inner">{s.kid}</div>
-                  <div className="flex-1 min-w-0 text-left">
-                    <div className="inline-flex items-center gap-1.5 bg-white/25 text-white font-black text-[10px] px-2.5 py-1 rounded-full border border-white/25 mb-2">{s.icon} {s.sub}</div>
-                    <div className="font-black text-white text-lg leading-tight drop-shadow">{s.word}</div>
-                  </div>
+            <motion.div key={s.sub} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ delay: i * 0.06 }} className="overflow-hidden rounded-2xl bg-white/10 border border-white/20 shadow-xl backdrop-blur-xl">
+                <div className="relative h-36 overflow-hidden">
+                  <img src={s.img} alt={`Budak belajar ${s.sub}`} className="w-full h-full object-cover" />
+                  <div className={`absolute inset-0 bg-gradient-to-t ${s.color} opacity-55`} />
+                  <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/90 text-slate-900 font-black text-xs px-3 py-1.5 rounded-full shadow-md">{s.icon} {s.sub}</div>
                 </div>
-                <div className="relative mt-3 bg-white/90 text-slate-800 rounded-xl px-3 py-2 text-left shadow-lg">
-                  <p className="font-black text-xs text-slate-900">Info belajar</p>
-                  <p className="text-xs font-bold text-slate-600 leading-snug mt-0.5">{s.info}</p>
+                <div className="p-4 text-left">
+                  <h3 className="font-black text-white text-lg leading-tight">{s.word}</h3>
+                  <div className="mt-3 bg-white/90 text-slate-800 rounded-xl px-3 py-2 shadow-lg">
+                    <p className="font-black text-xs text-slate-900">Info belajar</p>
+                    <p className="text-xs font-bold text-slate-600 leading-snug mt-0.5">{s.info}</p>
+                  </div>
                 </div>
               </motion.div>
             )}
-            </div>
           </div>
         </div>
       </div>
