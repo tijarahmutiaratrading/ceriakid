@@ -658,7 +658,7 @@ export default function AdminGameManager() {
 
             {/* Search + Filter bar */}
             <div className="p-4 md:p-5 rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <div className="flex gap-2 mb-3">
+              <div className="flex gap-2 mb-3 items-center">
                 <div className="relative flex-1">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">🔍</span>
                   <input
@@ -669,7 +669,7 @@ export default function AdminGameManager() {
                     className="w-full pl-9 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50 focus:bg-white/15 shadow-inner shadow-black/10 transition-all"
                   />
                 </div>
-                <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0">
+                <button onClick={fetchStats} disabled={loading} className="w-11 h-11 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0 flex items-center justify-center">
                   <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
                 </button>
               </div>
