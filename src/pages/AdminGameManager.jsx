@@ -657,8 +657,8 @@ export default function AdminGameManager() {
             </div>
 
             {/* Search + Filter bar */}
-            <div className="p-4 md:p-5 rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <div className="flex gap-2 mb-3">
+            <div className="p-3 sm:p-4 md:p-5 rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <div className="flex gap-2 mb-3 items-stretch">
                 <div className="relative flex-1">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">🔍</span>
                   <input
@@ -666,18 +666,18 @@ export default function AdminGameManager() {
                     placeholder="Cari..."
                     value={managerSearch}
                     onChange={e => setManagerSearch(e.target.value)}
-                    className="w-full pl-9 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50 focus:bg-white/15 shadow-inner shadow-black/10 transition-all"
+                    className="w-full min-h-11 pl-9 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50 focus:bg-white/15 shadow-inner shadow-black/10 transition-all"
                   />
                 </div>
-                <button onClick={fetchStats} disabled={loading} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0">
+                <button onClick={fetchStats} disabled={loading} className="w-11 min-h-11 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0 flex items-center justify-center">
                   <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
                 </button>
               </div>
-              <div className="flex gap-2 flex-wrap items-center justify-between">
-                <div className="flex gap-2 flex-wrap">
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap">
                   {['all', 'prasekolah', 'sekolah_rendah'].map(ag => (
                     <button key={ag} onClick={() => setManagerAgeFilter(ag)}
-                      className={`px-2 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${managerAgeFilter === ag ? 'bg-white text-indigo-700' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
+                      className={`min-h-10 px-3 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex-shrink-0 ${managerAgeFilter === ag ? 'bg-white text-indigo-700' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
                       {ag === 'all' ? 'Semua' : ag === 'prasekolah' ? '🧒' : '🎒'}
                       <span className="hidden sm:inline ml-1">{ag === 'all' ? 'Semua' : ag === 'prasekolah' ? 'Prasekolah' : 'SR'}</span>
                     </button>
@@ -695,9 +695,9 @@ export default function AdminGameManager() {
                     setActionLoading(null);
                   }}
                   disabled={!!actionLoading}
-                  className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all flex-shrink-0">
+                  className="min-h-10 w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-2 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all flex-shrink-0">
                   {actionLoading === 'delete-all' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
-                  <span className="hidden sm:inline">Delete All</span>
+                  <span>Delete All</span>
                 </button>
               </div>
             </div>
@@ -736,11 +736,11 @@ export default function AdminGameManager() {
                         {/* Subject header */}
                         <button
                           onClick={() => setExpandedFile(expandedFile === s.file ? null : s.file)}
-                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-left"
+                          className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 hover:bg-white/5 transition-all text-left"
                         >
                           <div className={`w-2.5 h-2.5 rounded-full ${s.color.dot}`} />
-                          <span className="font-black text-white text-sm flex-1">{s.label}</span>
-                          <span className="text-white/70 text-xs font-semibold">{s.totalGames} games</span>
+                          <span className="font-black text-white text-sm flex-1 min-w-0 truncate">{s.label}</span>
+                          <span className="text-white/70 text-xs font-semibold whitespace-nowrap">{s.totalGames} games</span>
                           {expandedFile === s.file
                            ? <ChevronDown className="w-4 h-4 text-white/60" />
                            : <ChevronRight className="w-4 h-4 text-white/60" />
@@ -754,10 +754,10 @@ export default function AdminGameManager() {
                              <p className="text-white/50 text-xs text-center py-4">Tiada games lagi</p>
                            ) : (
                              filteredGames.map(g => (
-                               <div key={g.id} className="flex items-center gap-3 px-4 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/8 transition-all">
+                               <div key={g.id} className="flex items-start gap-3 px-3 sm:px-4 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/8 transition-all">
                                  <div className="flex-1 min-w-0">
                                    <p className="text-white text-xs font-bold truncate">{g.title}</p>
-                                   <div className="flex gap-2 mt-0.5">
+                                   <div className="flex gap-x-2 gap-y-1 mt-1 flex-wrap">
                                      <span className="text-white/60 text-xs">{g.type}</span>
                                      <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
                                        {g.questionCount} soalan
@@ -829,11 +829,11 @@ export default function AdminGameManager() {
                         {/* Subject header */}
                         <button
                           onClick={() => setExpandedFile(expandedFile === s.file ? null : s.file)}
-                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-left"
+                          className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 hover:bg-white/5 transition-all text-left"
                         >
                           <div className={`w-2.5 h-2.5 rounded-full ${s.color.dot}`} />
-                          <span className="font-black text-white text-sm flex-1">{s.label}</span>
-                          <span className="text-white/70 text-xs font-semibold">{s.totalGames} games</span>
+                          <span className="font-black text-white text-sm flex-1 min-w-0 truncate">{s.label}</span>
+                          <span className="text-white/70 text-xs font-semibold whitespace-nowrap">{s.totalGames} games</span>
                           {expandedFile === s.file
                            ? <ChevronDown className="w-4 h-4 text-white/60" />
                            : <ChevronRight className="w-4 h-4 text-white/60" />
@@ -847,10 +847,10 @@ export default function AdminGameManager() {
                              <p className="text-white/50 text-xs text-center py-4">Tiada games lagi</p>
                            ) : (
                              filteredGames.map(g => (
-                               <div key={g.id} className="flex items-center gap-3 px-4 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/8 transition-all">
+                               <div key={g.id} className="flex items-start gap-3 px-3 sm:px-4 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/8 transition-all">
                                  <div className="flex-1 min-w-0">
                                    <p className="text-white text-xs font-bold truncate">{g.title}</p>
-                                   <div className="flex gap-2 mt-0.5">
+                                   <div className="flex gap-x-2 gap-y-1 mt-1 flex-wrap">
                                      <span className="text-white/60 text-xs">{g.type}</span>
                                       <span className={`text-xs font-bold ${g.questionCount >= QUESTION_THRESHOLD ? 'text-green-400' : 'text-yellow-400'}`}>
                                         {g.questionCount} soalan
@@ -860,7 +860,7 @@ export default function AdminGameManager() {
                                   </div>
                                   <button
                                     onClick={() => setEditGame(g._raw)}
-                                    className="p-1.5 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-all"
+                                    className="w-9 h-9 flex items-center justify-center rounded-xl bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-all flex-shrink-0"
                                   >
                                     <Edit3 className="w-3.5 h-3.5" />
                                   </button>
@@ -868,17 +868,17 @@ export default function AdminGameManager() {
                               ))
                             )}
                             {/* Subject-level actions */}
-                            <div className="flex gap-2 px-4 py-3 border-t border-white/10">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 px-3 sm:px-4 py-3 border-t border-white/10">
                               <button
                                 onClick={() => setGenerateModal({ games: s.totalGames || 5, questions: 20, ageGroup: s.ageGroup, subject: s.subject, label: s.label, currentCount: s.totalGames })}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-500/20 text-green-300 border border-green-400/20 text-xs font-bold hover:bg-green-500/30 transition-all"
+                                className="min-h-10 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-green-500/20 text-green-300 border border-green-400/20 text-xs font-bold hover:bg-green-500/30 transition-all"
                               >
                                 <Wand2 className="w-3 h-3" /> Sync Games
                               </button>
                               <button
                                 onClick={() => handleVerifySubject(s.file, s.label, s.ageGroup, s.subject, dbGamesCache)}
                                 disabled={actionLoading === `verify-${s.file}`}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-yellow-500/20 text-yellow-300 border border-yellow-400/20 text-xs font-bold hover:bg-yellow-500/30 disabled:opacity-50 transition-all"
+                                className="min-h-10 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-yellow-500/20 text-yellow-300 border border-yellow-400/20 text-xs font-bold hover:bg-yellow-500/30 disabled:opacity-50 transition-all"
                               >
                                 {actionLoading === `verify-${s.file}` ? <Loader2 className="w-3 h-3 animate-spin" /> : '✅'} Verify
                               </button>
