@@ -135,7 +135,7 @@ export default function WordBuilderGame() {
   if (gameOver) return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
       <AppHeader showBack={true} backTo="/games-hub" />
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
         <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
           className="rounded-3xl p-8 text-center" style={glassCard}>
           <p className="text-5xl mb-3">🏆</p>
@@ -156,7 +156,7 @@ export default function WordBuilderGame() {
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-green-300 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-pulse" />
       </div>
       <AppHeader showBack={true} backTo="/games-hub" />
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
 
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
           className="mb-5 p-5 rounded-3xl flex items-center justify-between" style={glassCard}>

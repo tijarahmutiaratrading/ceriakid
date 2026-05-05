@@ -117,7 +117,7 @@ export default function MemoryGame() {
         <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
       <AppHeader showBack={true} backTo="/games-hub" />
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-8">
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
 
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
           className="mb-5 p-5 rounded-3xl flex items-center justify-between" style={glassCard}>
