@@ -24,12 +24,12 @@ function useCountdown(minutes = 15) {
 }
 
 const testimonials = [
-{ name: 'Nurul Ain', location: 'Shah Alam, Selangor', quote: 'Anak saya lebih mudah duduk buat latihan bila bentuknya macam game. Saya suka sebab topik dia tersusun dan tak terlalu berat.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/452a6fc23_generated_image.png', highlight: 'anak lebih konsisten' },
-{ name: 'Ismail Hashim', location: 'Johor Bahru, Johor', quote: 'Dashboard ibu bapa sangat membantu. Saya boleh nampak subjek mana anak selalu cuba dan mana yang perlu ulang semula.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/606d26133_generated_image.png', highlight: 'mudah pantau progress' },
-{ name: 'Rohani Bakar', location: 'Kota Bharu, Kelantan', quote: 'Pelan keluarga memang praktikal untuk rumah kami. Anak-anak boleh guna ikut peringkat masing-masing tanpa perlu banyak app berbeza.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8110f9146_generated_image.png', highlight: 'sesuai untuk keluarga' },
-{ name: 'Faridah Mohamad', location: 'Penang', quote: 'Saya kerja shift, jadi latihan pendek macam ni memudahkan anak belajar sendiri sekejap setiap hari.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/239192d93_generated_image.png', highlight: 'latihan harian lebih mudah' },
-{ name: 'Ahmad Zulkifli', location: 'Kuching, Sarawak', quote: 'Saya suka interface dia ceria, mudah faham dan tidak terlalu serabut. Anak lebih selesa cuba soalan satu demi satu.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/51ea10412_generated_image.png', highlight: 'interface mesra anak' },
-{ name: 'Siti Hajar', location: 'Ipoh, Perak', quote: 'Cuba versi percuma dulu, kemudian upgrade sebab kandungan dan susunan subjeknya sesuai untuk latihan di rumah.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6becd008e_generated_image.png', highlight: 'boleh cuba dahulu' }];
+{ name: 'Nurul Ain', location: 'Shah Alam, Selangor', quote: 'Anak saya lebih mudah duduk buat latihan bila bentuknya macam game. Saya suka sebab topik dia tersusun dan tak terlalu berat.', stars: 5, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'anak lebih konsisten' },
+{ name: 'Ismail Hashim', location: 'Johor Bahru, Johor', quote: 'Dashboard ibu bapa sangat membantu. Saya boleh nampak subjek mana anak selalu cuba dan mana yang perlu ulang semula.', stars: 5, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'mudah pantau progress' },
+{ name: 'Rohani Bakar', location: 'Kota Bharu, Kelantan', quote: 'Pelan keluarga memang praktikal untuk rumah kami. Anak-anak boleh guna ikut peringkat masing-masing tanpa perlu banyak app berbeza.', stars: 5, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'sesuai untuk keluarga' },
+{ name: 'Faridah Mohamad', location: 'Penang', quote: 'Saya kerja shift, jadi latihan pendek macam ni memudahkan anak belajar sendiri sekejap setiap hari.', stars: 5, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'latihan harian lebih mudah' },
+{ name: 'Ahmad Zulkifli', location: 'Kuching, Sarawak', quote: 'Saya suka interface dia ceria, mudah faham dan tidak terlalu serabut. Anak lebih selesa cuba soalan satu demi satu.', stars: 5, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'interface mesra anak' },
+{ name: 'Siti Hajar', location: 'Ipoh, Perak', quote: 'Cuba versi percuma dulu, kemudian upgrade sebab kandungan dan susunan subjeknya sesuai untuk latihan di rumah.', stars: 5, avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&h=200&q=80', highlight: 'boleh cuba dahulu' }];
 
 
 const tiers = [
@@ -70,9 +70,9 @@ const tiers = [
 
 
 const avatars = [
-'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2b50ffa6a_generated_image.png',
-'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0120578d7_generated_image.png',
-'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b20705224_generated_image.png'];
+'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&h=120&q=80',
+'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80',
+'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=120&h=120&q=80'];
 
 
 export default function Landing() {
