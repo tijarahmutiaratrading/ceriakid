@@ -236,7 +236,7 @@ export default function Landing() {
                Belajar Sambil Main, Markah Pasti Naik
              </motion.p>
              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-base text-white/80 mb-8 leading-relaxed">
-               200+ permainan interaktif ikut silibus <strong>KSSR</strong> — Bahasa Melayu, English, Matematik, Sains & Jawi. Anak seronok, markah naik, ibu bapa tenang. ✅
+               Platform pembelajaran interaktif ikut silibus <strong>KSSR</strong> — BM, English, Matematik, Sains, Jawi, Tamil & Mandarin. Anak belajar melalui game, ibu bapa pantau progress dengan dashboard yang kemas. ✅
              </motion.p>
 
             {/* CTA */}
@@ -259,7 +259,7 @@ export default function Landing() {
 
             {/* Trust badges */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex flex-wrap gap-4 text-sm text-white/70">
-              {['✅ Ikut silibus KSSR', '✅ Tiada iklan', '✅ Jaminan Wang Balik 30 Hari'].map((t, i) =>
+              {['✅ Ikut silibus KSSR', '✅ Tiada iklan', '✅ Dashboard ibu bapa'].map((t, i) =>
               <span key={i} className="font-semibold">{t}</span>
               )}
             </motion.div>
@@ -318,10 +318,10 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 text-center">
             {[
-            { num: '5,000+', label: 'Keluarga Aktif', icon: '👨‍👩‍👧' },
-            { num: '200+', label: 'Permainan', icon: '🎮' },
-            { num: '4.9/5', label: 'Rating', icon: '⭐' },
-            { num: '92%', label: 'Markah Anak Naik', icon: '📈' }].
+            { num: '13', label: 'Subjek & Modul', icon: '📚' },
+            { num: '2', label: 'Peringkat Umur', icon: '🎯' },
+            { num: 'KSSR', label: 'Silibus Malaysia', icon: '🇲🇾' },
+            { num: '24/7', label: 'Belajar Sendiri', icon: '🚀' }].
             map((stat, i) =>
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
             className={`px-6 py-4
@@ -394,20 +394,47 @@ export default function Landing() {
           </div>
 
           {/* Subjects */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-4">
             {[
-            { icon: '🇲🇾', sub: 'Bahasa Melayu', count: '50+' },
-            { icon: '🇬🇧', sub: 'English', count: '45+' },
-            { icon: '🔢', sub: 'Matematik', count: '50+' },
-            { icon: '🧪', sub: 'Sains', count: '45+' },
-            { icon: '🕌', sub: 'Jawi', count: '30+' }].
+            { icon: '🇲🇾', sub: 'Bahasa Melayu', count: 'KSSR' },
+            { icon: '🇬🇧', sub: 'English', count: 'KSSR' },
+            { icon: '🔢', sub: 'Matematik', count: 'KSSR' },
+            { icon: '🧪', sub: 'Sains', count: 'KSSR' },
+            { icon: '🕌', sub: 'Jawi', count: 'KSSR' },
+            { icon: '🌺', sub: 'Tamil', count: 'KSSR' },
+            { icon: '🏮', sub: 'Mandarin', count: 'KSSR' }].
             map((s, i) =>
             <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.08 }} className="bg-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm hover:border-orange-200 transition-colors">
                 <div className="text-3xl mb-1">{s.icon}</div>
                 <div className="font-black text-gray-800 text-sm">{s.sub}</div>
-                <div className="text-orange-500 font-black text-xs mt-1">{s.count} permainan</div>
+                <div className="text-orange-500 font-black text-xs mt-1">{s.count}</div>
               </motion.div>
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* ── INVESTOR WOW ── */}
+      <div className="py-12 md:py-16 px-6 bg-slate-950 text-white">
+        <div className="max-w-6xl mx-auto">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
+            <span className="inline-block bg-yellow-400/20 text-yellow-200 border border-yellow-300/30 font-black px-4 py-1.5 rounded-full text-sm mb-4">🚀 BUILT FOR SCALE</span>
+            <h2 className="text-3xl md:text-4xl font-black mb-3">Bukan Sekadar App — Ini Ekosistem Pembelajaran</h2>
+            <p className="text-white/60 max-w-2xl mx-auto">CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSSR, BBM guru, progress tracking dan sistem langganan dalam satu platform.</p>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[
+              { icon: '🎮', title: 'Game Engine', desc: 'Soalan interaktif pelbagai format untuk subjek utama.' },
+              { icon: '📊', title: 'Parent Analytics', desc: 'Pantau skor, progress, streak dan prestasi anak.' },
+              { icon: '📚', title: 'BBM Library', desc: 'Bahan bantu mengajar untuk guru dan ibu bapa.' },
+              { icon: '💳', title: 'Subscription Ready', desc: 'Pelan tahunan dengan checkout pembayaran tersedia.' }
+            ].map((item, i) => (
+              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="rounded-3xl p-5 border border-white/10 bg-white/10 backdrop-blur-xl shadow-xl">
+                <div className="text-4xl mb-3">{item.icon}</div>
+                <h3 className="font-black text-lg mb-2">{item.title}</h3>
+                <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
@@ -551,11 +578,11 @@ export default function Landing() {
             <PricingCheckout selectedTier={selectedTierForCheckout} onTierChange={setSelectedTierForCheckout} />
           </motion.div>
 
-          {/* Money Back */}
+          {/* Trust */}
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-10 border border-green-400/30 rounded-2xl p-6 text-center max-w-xl mx-auto shadow-sm" style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}>
             <div className="text-4xl mb-3">🛡️</div>
-            <h3 className="text-xl font-black text-white mb-2">Jaminan Wang Balik 30 Hari</h3>
-            <p className="text-white/60 text-sm">Tidak berpuas hati dalam 30 hari? Kami pulangkan wang anda sepenuhnya — tanpa soal tanya. Kami yakin dengan produk kami. 💪</p>
+            <h3 className="text-xl font-black text-white mb-2">Direka Untuk Kanak-kanak Malaysia</h3>
+            <p className="text-white/60 text-sm">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
           </motion.div>
         </div>
       </div>
@@ -597,7 +624,7 @@ export default function Landing() {
               
               🎮 Pilih Pelan Sekarang <ArrowRight className="w-6 h-6" />
             </motion.button>
-            <p className="text-white/80 text-sm mt-5">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Jaminan Wang Balik 30 Hari &nbsp;•&nbsp; ✅ Cancel bila-bila</p>
+            <p className="text-white/80 text-sm mt-5">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Tanpa iklan &nbsp;•&nbsp; ✅ Dashboard ibu bapa</p>
           </motion.div>
         </div>
       </div>

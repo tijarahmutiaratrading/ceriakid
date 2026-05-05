@@ -10,20 +10,23 @@ export default function InteractiveGameDemo() {
   const questions = [
     {
       emoji: '🍎',
-      question: 'Ini apa?',
+      subject: 'Bahasa Melayu',
+      question: 'Ini buah apa?',
       options: ['Epal', 'Oren', 'Pisang'],
       correct: 0,
     },
     {
       emoji: '🐱',
-      question: 'Haiwan apa ini?',
-      options: ['Anjing', 'Kucing', 'Arnab'],
+      subject: 'English',
+      question: 'What animal is this?',
+      options: ['Dog', 'Cat', 'Rabbit'],
       correct: 1,
     },
     {
-      emoji: '🔵',
-      question: 'Warna apa?',
-      options: ['Merah', 'Biru', 'Hijau'],
+      emoji: '五',
+      subject: 'Mandarin',
+      question: '这个数字是多少？',
+      options: ['三', '五', '七'],
       correct: 1,
     },
   ];
@@ -54,7 +57,11 @@ export default function InteractiveGameDemo() {
 
 
   return (
-    <div className="rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-game-yellow via-game-pink to-game-blue min-h-[320px] flex items-center justify-center relative py-8 px-4">
+    <div className="rounded-[2rem] overflow-hidden shadow-2xl bg-gradient-to-br from-game-yellow via-game-pink to-game-blue min-h-[350px] flex items-center justify-center relative py-8 px-4 ring-4 ring-white/20">
+      <div className="absolute top-4 left-4 right-4 flex items-center justify-between text-white/90 text-xs font-black">
+        <span className="bg-white/20 backdrop-blur px-3 py-1 rounded-full">Live Demo</span>
+        <span className="bg-white/20 backdrop-blur px-3 py-1 rounded-full">Score {score}/{questions.length}</span>
+      </div>
       <AnimatePresence mode="wait">
         {showFeedback ? (
           <motion.div
@@ -79,8 +86,11 @@ export default function InteractiveGameDemo() {
             exit={{ opacity: 0, y: -20 }}
             className="text-center w-full max-w-sm mx-auto"
           >
-            <p className="text-white text-sm font-bold mb-3">
+            <p className="text-white text-sm font-bold mb-2">
               Soalan {currentQ + 1}/{questions.length}
+            </p>
+            <p className="inline-block bg-white/25 text-white text-xs font-black px-3 py-1 rounded-full mb-3">
+              {questions[currentQ].subject}
             </p>
             <div className="text-6xl mb-4">{questions[currentQ].emoji}</div>
             <p className="text-white text-xl font-black mb-5">
