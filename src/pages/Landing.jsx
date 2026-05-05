@@ -36,6 +36,7 @@ const tiers = [
 {
   name: 'asas',
   nameMY: '🌱 Asas',
+  oldPriceMYR: '79',
   priceMYR: '49',
   perMonth: '4.08',
   period: '/tahun',
@@ -47,6 +48,7 @@ const tiers = [
 {
   name: 'standard',
   nameMY: '⭐ Standard',
+  oldPriceMYR: '149',
   priceMYR: '99',
   perMonth: '8.25',
   period: '/tahun',
@@ -58,6 +60,7 @@ const tiers = [
 {
   name: 'keluarga',
   nameMY: '👑 Keluarga',
+  oldPriceMYR: '299',
   priceMYR: '199',
   perMonth: '16.58',
   period: '/tahun',
@@ -128,13 +131,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-      {/* Background blobs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
+    <div className="min-h-screen font-nunito bg-slate-950 relative overflow-hidden">
       <div className="relative">
 
       {/* ── PAYMENT STATUS BANNER ── */}
@@ -187,7 +184,7 @@ export default function Landing() {
 
       {/* ── NAVBAR ── */}
       <nav className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="max-w-6xl mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 sm:px-4 py-2.5 rounded-[1.75rem] pro-glass ring-1 ring-white/20">
+        <div className="max-w-6xl mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 sm:px-4 py-2.5 rounded-[1.75rem] bg-slate-900 border border-slate-700 shadow-xl">
           <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-2xl shadow-lg ring-1 ring-white/40" />
           <div className="hidden md:flex items-center justify-center gap-7 text-sm font-black text-white/75">
             <a href="#features" className="hover:text-white transition-colors">Ciri-ciri</a>
@@ -208,7 +205,7 @@ export default function Landing() {
           {/* Left: Text */}
           <div>
             {/* Social proof pill */}
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap sm:inline-flex items-center gap-2 max-w-full bg-white/12 border border-white/20 rounded-3xl sm:rounded-full px-3 sm:px-4 py-2 mb-6 sm:mb-8 shadow-xl backdrop-blur-xl">
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap sm:inline-flex items-center gap-2 max-w-full bg-white/12 border border-white/20 rounded-3xl sm:rounded-full px-3 sm:px-4 py-2 mb-6 sm:mb-8 shadow-xl ">
               <div className="flex -space-x-2 flex-shrink-0">
                 {avatars.map((a, i) =>
                 <img key={i} src={a} className="w-7 h-7 rounded-full border-2 border-white object-cover flex-shrink-0" />
@@ -263,7 +260,7 @@ export default function Landing() {
           <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, type: 'spring', damping: 20 }}>
             <div className="relative">
               {/* Floating badge */}
-              <div className="absolute -top-4 -left-4 z-10 bg-slate-950/75 border border-white/20 rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-2 backdrop-blur-xl">
+              <div className="absolute -top-4 -left-4 z-10 bg-slate-950/75 border border-white/20 rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-2 ">
                 <span className="text-2xl">🎮</span>
                 <div>
                   <p className="text-xs text-white/75 font-semibold">200+ Permainan</p>
@@ -272,7 +269,7 @@ export default function Landing() {
               </div>
               <InteractiveGameDemo />
               {/* Rating badge */}
-              <div className="absolute -bottom-4 -right-4 z-10 bg-slate-950/75 border border-white/20 rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-2 backdrop-blur-xl">
+              <div className="absolute -bottom-4 -right-4 z-10 bg-slate-950/75 border border-white/20 rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-2 ">
                 <span className="text-yellow-300 text-xl">⭐</span>
                 <div>
                   <p className="text-xs text-white/75 font-semibold">Rating Ibu Bapa</p>
@@ -290,7 +287,7 @@ export default function Landing() {
               { icon: '🔒', text: '100% Selamat' },
               { icon: '🧒', text: 'Mesra Kanak-kanak' }].
               map((s, i) =>
-              <span key={i} className="flex items-center gap-1 bg-white/12 border border-white/20 rounded-full px-2.5 py-1 text-xs font-bold text-white/80 shadow-sm backdrop-blur-xl">
+              <span key={i} className="flex items-center gap-1 bg-white/12 border border-white/20 rounded-full px-2.5 py-1 text-xs font-bold text-white/80 shadow-sm ">
                   {s.icon} {s.text}
                 </span>
               )}
@@ -302,7 +299,7 @@ export default function Landing() {
       </div>
 
       {/* ── STATS STRIP ── */}
-      <div className="py-8 md:py-10 border-y border-white/10" style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(18px)' }}>
+      <div className="py-8 md:py-10 border-y border-white/10" style={{ background: 'rgba(255,255,255,0.08)', backgroundColor: 'rgb(30 41 59)' }}>
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 text-center">
             {[
@@ -342,7 +339,7 @@ export default function Landing() {
             { emoji: '😰', pain: '"Exam dah dekat, anak masih tak hafal"', desc: 'Pressure menjelang peperiksaan. Semua orang dalam rumah tegang.' },
             { emoji: '😪', pain: '"Kerja sampai malam, tak sempat nak ajar"', desc: 'Ibu bapa penat, anak perlukan bantuan. Tiada masa yang cukup.' }].
             map((p, i) =>
-            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="flex gap-4 bg-white/10 border border-white/15 rounded-2xl p-5 shadow-xl backdrop-blur-xl">
+            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="flex gap-4 bg-white/10 border border-white/15 rounded-2xl p-5 shadow-xl ">
                 <span className="text-3xl">{p.emoji}</span>
                 <div>
                   <p className="font-black text-white mb-1">{p.pain}</p>
@@ -373,7 +370,7 @@ export default function Landing() {
             { icon: '📊', title: 'Ibu Bapa Boleh Pantau', desc: 'Lihat markah, percubaan dan topik yang anak perlukan lebih latihan melalui dashboard.' },
             { icon: '📲', title: 'Sesuai Untuk Rutin Harian', desc: 'Gunakan 5–10 minit sehari di rumah, dalam kereta atau bila anak ada masa lapang.' }].
             map((f, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white/10 rounded-3xl p-7 border border-white/15 text-center mx-auto hover:bg-white/15 transition-all shadow-xl backdrop-blur-xl">
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white/10 rounded-3xl p-7 border border-white/15 text-center mx-auto hover:bg-white/15 transition-all shadow-xl ">
                 <div className="text-5xl mb-4">{f.icon}</div>
                 <h3 className="font-black text-white text-lg mb-2">{f.title}</h3>
                 <p className="text-white/65 text-sm leading-relaxed">{f.desc}</p>
@@ -392,7 +389,7 @@ export default function Landing() {
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' }].
             map((s, i) =>
-            <motion.div key={s.sub} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ delay: i * 0.06 }} className="overflow-hidden rounded-2xl bg-white/10 border border-white/20 shadow-xl backdrop-blur-xl">
+            <motion.div key={s.sub} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ delay: i * 0.06 }} className="overflow-hidden rounded-2xl bg-white/10 border border-white/20 shadow-xl ">
                 <div className="relative h-36 overflow-hidden">
                   <img src={s.img} alt={`Budak belajar ${s.sub}`} className="w-full h-full object-cover" />
                   <div className={`absolute inset-0 bg-gradient-to-t ${s.color} opacity-55`} />
@@ -426,7 +423,7 @@ export default function Landing() {
               { icon: '📚', title: 'BBM Library', desc: 'Bahan bantu mengajar untuk guru dan ibu bapa.' },
               { icon: '🔒', title: 'Pembelajaran Selamat', desc: 'Pengalaman tanpa iklan dan lebih terkawal untuk kanak-kanak.' }
             ].map((item, i) => (
-              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="rounded-3xl p-5 border border-white/10 bg-white/10 backdrop-blur-xl shadow-xl">
+              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="rounded-3xl p-5 border border-white/10 bg-white/10  shadow-xl">
                 <div className="text-4xl mb-3">{item.icon}</div>
                 <h3 className="font-black text-lg mb-2">{item.title}</h3>
                 <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
@@ -470,7 +467,7 @@ export default function Landing() {
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {testimonials.map((t, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-white/10 rounded-3xl p-6 border border-white/15 flex flex-col justify-between shadow-xl backdrop-blur-xl">
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-white/10 rounded-3xl p-6 border border-white/15 flex flex-col justify-between shadow-xl ">
                 <div>
                   <div className="flex gap-1 mb-3">{[...Array(t.stars)].map((_, j) => <span key={j} className="text-orange-400">★</span>)}</div>
                   <p className="text-white/80 mb-4 leading-relaxed text-sm">"{t.quote}"</p>
@@ -492,7 +489,7 @@ export default function Landing() {
       {/* ── CONVERSION BOOSTER ── */}
       <div className="py-12 md:py-16 px-6 relative">
         <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} className="rounded-3xl overflow-hidden border border-white/20 bg-white/10 backdrop-blur-xl shadow-2xl">
+          <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} className="rounded-3xl overflow-hidden border border-white/20 bg-white/10  shadow-2xl">
             <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="p-6 md:p-8">
                 <span className="inline-block bg-orange-400 text-slate-950 font-black px-4 py-1.5 rounded-full text-xs mb-4">Untuk ibu bapa yang anak susah fokus belajar</span>
@@ -525,7 +522,7 @@ export default function Landing() {
       </div>
 
       {/* ── PRICING ── */}
-      <div id="pricing" className="py-12 md:py-16 px-6 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
+      <div id="pricing" className="py-12 md:py-16 px-6 bg-slate-950 relative overflow-hidden">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
             <span className="inline-block bg-green-500/25 text-green-100 font-black px-4 py-1.5 rounded-full text-sm mb-4 border border-green-300/30">
@@ -533,6 +530,18 @@ export default function Landing() {
             </span>
             <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Pilih Pelan Anda</h2>
             <p className="text-white/60">Pilih pelan yang sesuai untuk umur anak. Semua pelan tahunan dan mesra bajet keluarga.</p>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} className="mb-8 rounded-3xl bg-orange-500 border-2 border-yellow-300 p-5 text-center shadow-xl max-w-3xl mx-auto">
+            <p className="text-white font-black text-sm uppercase tracking-wider">Promo Launch CeriaKid</p>
+            <h3 className="text-2xl md:text-3xl font-black text-white mt-1">Harga Istimewa Tamat Dalam</h3>
+            <div className="mt-4 inline-flex items-center gap-3 rounded-2xl bg-slate-950 px-5 py-3 text-white font-black shadow-lg">
+              <span className="text-3xl tabular-nums">{String(countdown.m).padStart(2, '0')}</span>
+              <span className="text-yellow-300">min</span>
+              <span className="text-3xl tabular-nums">{String(countdown.s).padStart(2, '0')}</span>
+              <span className="text-yellow-300">saat</span>
+            </div>
+            <p className="text-white/90 text-sm font-bold mt-3">Daftar sekarang untuk lock harga promo tahunan sebelum kembali ke harga asal.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
@@ -547,8 +556,8 @@ export default function Landing() {
               'border-yellow-200/80 shadow-2xl shadow-yellow-950/30 md:scale-105' :
               'border-white/20 shadow-md hover:border-white/40'}`}
               style={tier.highlighted ? 
-                { background: 'linear-gradient(135deg, rgba(251,191,36,0.95), rgba(245,158,11,0.9), rgba(217,119,6,0.88))', backdropFilter: 'blur(20px)' } :
-                { background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }
+                { background: 'linear-gradient(135deg, rgba(251,191,36,0.95), rgba(245,158,11,0.9), rgba(217,119,6,0.88))', backgroundColor: 'rgb(30 41 59)' } :
+                { background: 'rgba(255,255,255,0.08)', backgroundColor: 'rgb(30 41 59)' }
               }
               >
               
@@ -560,12 +569,15 @@ export default function Landing() {
 
                 <h3 className="text-2xl font-black mb-2 text-white">{tier.nameMY}</h3>
 
+                <div className="mb-1">
+                 <span className="text-sm font-black text-white/45 line-through">Harga asal RM{tier.oldPriceMYR}</span>
+                </div>
                 <div className="flex items-baseline gap-1 mb-0.5">
                  <span className="text-3xl font-black text-yellow-300">RM{tier.priceMYR}</span>
                  <span className="text-sm font-bold text-white/60">{tier.period}</span>
                 </div>
                 <p className="text-xs font-bold mb-6 text-white/50">
-                 ≈ RM{tier.perMonth}/bulan
+                 Promo sekarang • ≈ RM{tier.perMonth}/bulan
                 </p>
 
                 <motion.button
@@ -610,7 +622,7 @@ export default function Landing() {
           </motion.div>
 
           {/* Trust */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-5 border border-sky-300/30 rounded-2xl p-3 md:p-4 text-center max-w-xl mx-auto shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.18), rgba(99,102,241,0.16))', backdropFilter: 'blur(20px)' }}>
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-5 border border-sky-300/30 rounded-2xl p-3 md:p-4 text-center max-w-xl mx-auto shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.18), rgba(99,102,241,0.16))', backgroundColor: 'rgb(30 41 59)' }}>
             <div className="text-2xl mb-1">🛡️</div>
             <h3 className="text-base font-black text-white mb-1">Direka Untuk Kanak-kanak Malaysia</h3>
             <p className="text-white/65 text-xs md:text-sm leading-snug">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
@@ -642,7 +654,7 @@ export default function Landing() {
             { q: 'Berapa anak boleh guna?', a: 'Pelan Asas untuk Prasekolah (1 anak), Standard untuk Sekolah Rendah (1 anak). Pelan Keluarga untuk kedua-dua peringkat dengan sehingga 4 profil anak — jimat lebih!' },
             { q: 'Macam mana nak mula?', a: 'Pilih pelan, isikan maklumat, bayar melalui FPX, dan anak terus boleh mula belajar dalam masa 2 minit!' }].
             map((faq, i) =>
-            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="bg-white/10 rounded-2xl p-5 border border-white/15 hover:bg-white/15 transition-all shadow-lg backdrop-blur-xl">
+            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="bg-white/10 rounded-2xl p-5 border border-white/15 hover:bg-white/15 transition-all shadow-lg ">
                 <p className="font-black text-white mb-1.5">❓ {faq.q}</p>
                 <p className="text-white/65 text-sm leading-relaxed">{faq.a}</p>
               </motion.div>
@@ -652,7 +664,7 @@ export default function Landing() {
       </div>
 
       {/* ── FINAL CTA ── */}
-      <div className="py-12 md:py-16 px-6 text-white border-y border-white/10" style={{ background: 'linear-gradient(135deg, rgba(251,146,60,0.22), rgba(236,72,153,0.20), rgba(139,92,246,0.22))', backdropFilter: 'blur(18px)' }}>
+      <div className="py-12 md:py-16 px-6 text-white border-y border-white/10" style={{ background: 'linear-gradient(135deg, rgba(251,146,60,0.22), rgba(236,72,153,0.20), rgba(139,92,246,0.22))', backgroundColor: 'rgb(30 41 59)' }}>
         <div className="max-w-3xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
             <p className="text-5xl mb-5">🎓</p>
