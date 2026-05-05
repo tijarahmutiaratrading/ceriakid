@@ -256,11 +256,7 @@ export default function Landing() {
               )}
             </motion.div>
 
-            {/* Star rating */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }} className="flex items-center gap-2 mt-5">
-              <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <span key={i} className="text-yellow-300 text-xl">★</span>)}</div>
-              <span className="text-sm font-bold text-white/70">Direka untuk bantu ibu bapa jadikan screen time lebih bermanfaat.</span>
-            </motion.div>
+
           </div>
 
           {/* Right: Game Demo */}
