@@ -63,6 +63,9 @@ export default function AdminGameManager() {
     darjah_5: 20,
     darjah_6: 20,
   });
+  const [categoryGameConfig, setCategoryGameConfig] = useState(() =>
+    Object.fromEntries(SUBJECT_CONFIG.map(sc => [`${sc.ageGroup}-${sc.subject}`, 20]))
+  );
   const [selectedSubjects, setSelectedSubjects] = useState(new Set());
   const [tasks, setTasks] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(false);
@@ -132,7 +135,7 @@ export default function AdminGameManager() {
             ? (currentCounts[subjectKey]?.darjah?.[darjah] || { games: 0, avgQuestions: 0 })
             : (currentCounts[subjectKey] || { games: 0, avgQuestions: 0 });
 
-          const targetGames = darjah ? (darjahGameConfig[darjah] || 0) : genConfig.games;
+          const targetGames = categoryGameConfig[subjectKey] || 0;
           const questionsToAdd = Math.max(0, genConfig.questions - curr.avgQuestions);
           const gamesToAdd = Math.max(0, targetGames - curr.games);
 
@@ -423,59 +426,18 @@ export default function AdminGameManager() {
                 <h2 className="font-black text-white text-xl md:text-2xl">⚙️ Konfigurasi Generation</h2>
                 <p className="text-white/60 text-xs font-semibold mt-1">Tetapkan target game dan soalan sebelum masuk queue.</p>
               </div>
-              <div className="mb-5 grid grid-cols-1 lg:grid-cols-[0.9fr_1.4fr_0.7fr] gap-3">
-                <div className="rounded-2xl bg-white/10 border border-white/10 p-4">
-                  <p className="text-white/60 text-[11px] font-black uppercase tracking-wider mb-1">Prasekolah</p>
-                  <label className="text-white font-black text-sm block mb-3">Jumlah games</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="100"
-                    value={genConfig.games}
-                    onChange={e => setGenConfig(c => ({ ...c, games: parseInt(e.target.value) || 1 }))}
-                    className="w-full px-4 py-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center outline-none focus:border-white/50 focus:bg-white/15"
-                  />
-                </div>
-
-                <div className="rounded-2xl bg-white/10 border border-white/10 p-4">
-                  <p className="text-white/60 text-[11px] font-black uppercase tracking-wider mb-1">Sekolah Rendah</p>
-                  <label className="text-white font-black text-sm block mb-3">Jumlah games ikut darjah</label>
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                    {[
-                      ['darjah_1', 'D1'],
-                      ['darjah_2', 'D2'],
-                      ['darjah_3', 'D3'],
-                      ['darjah_4', 'D4'],
-                      ['darjah_5', 'D5'],
-                      ['darjah_6', 'D6'],
-                    ].map(([key, label]) => (
-                      <div key={key}>
-                        <label className="text-white/55 text-[10px] font-black block mb-1 text-center">{label}</label>
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={darjahGameConfig[key]}
-                          onChange={e => setDarjahGameConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
-                          className="w-full px-2 py-3 rounded-xl bg-white/10 text-white border border-white/20 font-black text-lg text-center outline-none focus:border-white/50 focus:bg-white/15"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-2xl bg-white/10 border border-white/10 p-4">
-                  <p className="text-white/60 text-[11px] font-black uppercase tracking-wider mb-1">Semua</p>
-                  <label className="text-white font-black text-sm block mb-3">Soalan / game</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="50"
-                    value={genConfig.questions}
-                    onChange={e => setGenConfig(c => ({ ...c, questions: parseInt(e.target.value) || 1 }))}
-                    className="w-full px-4 py-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center outline-none focus:border-white/50 focus:bg-white/15"
-                  />
-                </div>
+              <div className="mb-5 rounded-3xl bg-white/10 border border-white/10 p-4">
+                <p className="text-white/60 text-[11px] font-black uppercase tracking-wider mb-1">1. Tetapan Umum</p>
+                <label className="text-white font-black text-sm block mb-3">Soalan / game</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="50"
+                  value={genConfig.questions}
+                  onChange={e => setGenConfig(c => ({ ...c, questions: parseInt(e.target.value) || 1 }))}
+                  className="w-full sm:max-w-xs px-4 py-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center outline-none focus:border-white/50 focus:bg-white/15"
+                />
+                <p className="text-white/45 text-xs mt-2">Jumlah games sekarang ditetapkan terus pada setiap subjek di bawah.</p>
               </div>
 
               {/* Subject selector */}
@@ -504,23 +466,33 @@ export default function AdminGameManager() {
                   <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🧒 Prasekolah</p>
-                      <span className="text-white/45 text-[11px] font-black">{SUBJECT_CONFIG.filter(s => s.ageGroup === 'prasekolah').length} subjek</span>
+                      <span className="text-white/45 text-[11px] font-black">set games ikut subjek</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {SUBJECT_CONFIG.filter(s => s.ageGroup === 'prasekolah').map(sc => {
                         const key = `${sc.ageGroup}-${sc.subject}`;
                         const sel = selectedSubjects.has(key);
                         const curr = currentCounts[key] || { games: 0, avgQuestions: 0 };
-                        const gameDiff = genConfig.games - curr.games;
+                        const targetGames = categoryGameConfig[key] || 0;
+                        const gameDiff = targetGames - curr.games;
                         return (
-                          <button key={key} onClick={() => toggleSubject(key)}
-                            className={`px-3 py-3 rounded-2xl text-left border transition-all ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white hover:bg-white/20 border-white/10'}`}>
-                            <div className="flex items-center gap-2">
+                          <div key={key} className={`p-3 rounded-2xl border transition-all ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white border-white/10'}`}>
+                            <button onClick={() => toggleSubject(key)} className="w-full flex items-center gap-2 text-left">
                               <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs font-black ${sel ? 'bg-indigo-600 text-white' : 'bg-white/10 text-white/40'}`}>{sel ? '✓' : '+'}</span>
                               <span className="font-black text-xs truncate">{sc.label.replace('Prasekolah - ', '')}</span>
+                            </button>
+                            <div className="mt-3 grid grid-cols-[1fr_4.5rem] gap-2 items-center">
+                              <p className={`text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} ada · {curr.avgQuestions}Q {gameDiff > 0 ? `· perlu +${gameDiff}` : '· cukup'}</p>
+                              <input
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={targetGames}
+                                onChange={e => setCategoryGameConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
+                                className={`w-full px-2 py-2 rounded-xl border font-black text-center outline-none ${sel ? 'bg-indigo-50 border-indigo-200 text-indigo-800' : 'bg-white/10 border-white/15 text-white'}`}
+                              />
                             </div>
-                            <p className={`mt-1.5 text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} games · {curr.avgQuestions}Q {gameDiff > 0 ? `· +${gameDiff}` : '· cukup'}</p>
-                          </button>
+                          </div>
                         );
                       })}
                     </div>
@@ -529,22 +501,32 @@ export default function AdminGameManager() {
                   <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🎒 Sekolah Rendah</p>
-                      <span className="text-white/45 text-[11px] font-black">D1-D6 ikut setting atas</span>
+                      <span className="text-white/45 text-[11px] font-black">set games per darjah ikut subjek</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {SUBJECT_CONFIG.filter(s => s.ageGroup === 'sekolah_rendah').map(sc => {
                         const key = `${sc.ageGroup}-${sc.subject}`;
                         const sel = selectedSubjects.has(key);
                         const curr = currentCounts[key] || { games: 0, avgQuestions: 0 };
+                        const targetGames = categoryGameConfig[key] || 0;
                         return (
-                          <button key={key} onClick={() => toggleSubject(key)}
-                            className={`px-3 py-3 rounded-2xl text-left border transition-all ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white hover:bg-white/20 border-white/10'}`}>
-                            <div className="flex items-center gap-2">
+                          <div key={key} className={`p-3 rounded-2xl border transition-all ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white border-white/10'}`}>
+                            <button onClick={() => toggleSubject(key)} className="w-full flex items-center gap-2 text-left">
                               <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs font-black ${sel ? 'bg-indigo-600 text-white' : 'bg-white/10 text-white/40'}`}>{sel ? '✓' : '+'}</span>
                               <span className="font-black text-xs truncate">{sc.label.replace('Sekolah Rendah - ', '')}</span>
+                            </button>
+                            <div className="mt-3 grid grid-cols-[1fr_4.5rem] gap-2 items-center">
+                              <p className={`text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} ada · {curr.avgQuestions}Q · setiap D1-D6</p>
+                              <input
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={targetGames}
+                                onChange={e => setCategoryGameConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
+                                className={`w-full px-2 py-2 rounded-xl border font-black text-center outline-none ${sel ? 'bg-indigo-50 border-indigo-200 text-indigo-800' : 'bg-white/10 border-white/15 text-white'}`}
+                              />
                             </div>
-                            <p className={`mt-1.5 text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} games · {curr.avgQuestions}Q · D1-D6</p>
-                          </button>
+                          </div>
                         );
                       })}
                     </div>
