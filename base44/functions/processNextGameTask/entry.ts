@@ -222,7 +222,7 @@ Deno.serve(async (req) => {
 
     const alreadyCreated = task.createdGames || 0;
     const totalNeeded = task.gamesCount;
-    const BATCH = 5; // max games per run to avoid timeout
+    const BATCH = 1; // smaller reliable batches; staggered automations run this more often
     const batchEnd = Math.min(alreadyCreated + BATCH, totalNeeded);
 
     console.log(`processNextGameTask: "${task.taskName}" — batch ${alreadyCreated + 1} to ${batchEnd} of ${totalNeeded}`);
