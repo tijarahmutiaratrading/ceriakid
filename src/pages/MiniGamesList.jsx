@@ -28,7 +28,7 @@ export default function MiniGamesList() {
     const loadGames = async () => {
       setLoading(true);
       const data = await base44.entities.Game.filter({ category: type, isPublished: true });
-      setGames((data || []).filter(g => !g.ageGroup || g.ageGroup === ageGroup));
+      setGames((data || []).sort((a, b) => (a.order || 0) - (b.order || 0)));
       setLoading(false);
     };
     loadGames();
