@@ -94,13 +94,15 @@ export default function DrawingStudio() {
   };
 
   const initCanvas = useCallback(() => {
-    const ctx = getCtx();
-    const canvas = getCanvas();
-    if (!ctx || !canvas) return;
-    const { w, h } = { w: canvas.width, h: canvas.height };
-    clearCanvas(ctx, w, h, mode === 'trace');
+    [canvasRef.current, fsCanvasRef.current].forEach((canvas) => {
+      const ctx = canvas?.getContext('2d');
+      if (ctx && canvas) {
+        clearCanvas(ctx, canvas.width, canvas.height, mode === 'trace');
+      }
+    });
     setHistory([]);
     setUserStrokes([]);
+    setCurrentStroke([]);
     setTracingAccuracy(null);
     setTracingDone(false);
   }, [mode, clearCanvas]);
