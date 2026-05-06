@@ -9,14 +9,14 @@ const TIERS = [
   nameMY: '🌱 Asas',
   priceMYR: '49',
   perMonth: '4.08',
-  description: 'Semua subjek • Prasekolah sahaja'
+  description: 'Semua subjek • Prasekolah & Sekolah Rendah • 50 game'
 },
 {
   name: 'standard',
   nameMY: '⭐ Standard',
   priceMYR: '99',
   perMonth: '8.25',
-  description: 'Semua subjek • Sekolah Rendah sahaja'
+  description: 'Semua subjek • Prasekolah & Sekolah Rendah • 100 game'
 },
 {
   name: 'keluarga',

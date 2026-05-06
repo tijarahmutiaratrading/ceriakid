@@ -55,14 +55,19 @@ export default function GamePlayer() {
       setUserTier(resolvedTier);
       const userTier = resolvedTier;
 
-      // Determine if this game index is locked for the user's tier
+      // Determine if this game index is locked for the user's tier game limit only
       const isLocked = (() => {
         if (!isAuthenticated) return gameIndex >= 5;
         if (userTier === 'trial' || userTier === 'keluarga' || userTier === 'pro') return false;
-        if (userTier === 'standard') return ageGroup === 'prasekolah';
-        if (userTier === 'asas') return ageGroup === 'sekolah_rendah';
-        if (userTier === 'premium') return gameIndex >= 100;
-        return gameIndex >= 5; // free
+
+        const tierLimits = {
+          asas: 50,
+          standard: 100,
+          premium: 100,
+        };
+
+        const limit = tierLimits[userTier] || 5;
+        return gameIndex >= limit;
       })();
 
       if (isLocked) {

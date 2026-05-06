@@ -135,34 +135,20 @@ export default function GamesList() {
     }
   };
 
-  // Determine if a game index is accessible based on tier + ageGroup rules
+  // Determine if a game index is accessible based on tier game limits only
   const isGameLocked = useCallback((globalIdx) => {
     if (!isAuthenticated) return globalIdx >= 5; // guests: first 5 only
+    if (userTier === 'trial' || userTier === 'keluarga' || userTier === 'pro') return false;
 
-    // Trial tier — AKSES PENUH SEMUA GAMES
-    if (userTier === 'trial') return false;
+    const tierLimits = {
+      asas: 50,
+      standard: 100,
+      premium: 100,
+    };
 
-    // Tier: keluarga — akses penuh semua peringkat
-    if (userTier === 'keluarga') return false;
-
-    // Tier: standard — Sekolah Rendah sahaja
-    if (userTier === 'standard') {
-      if (ageGroup === 'prasekolah') return true; // blocked for prasekolah
-      return false; // full access for sekolah rendah
-    }
-
-    // Tier: asas — Prasekolah sahaja
-    if (userTier === 'asas') {
-      if (ageGroup === 'sekolah_rendah') return true; // blocked for sekolah rendah
-      return false; // full access for prasekolah
-    }
-
-    // Legacy tiers
-    if (userTier === 'pro') return false;
-    if (userTier === 'premium') return globalIdx >= 100;
-
-    return globalIdx >= 5; // free
-  }, [isAuthenticated, userTier, ageGroup]);
+    const limit = tierLimits[userTier] || 5;
+    return globalIdx >= limit;
+  }, [isAuthenticated, userTier]);
 
   // Poll for game updates every 60 seconds (reduced from 10s)
   useEffect(() => {
@@ -287,28 +273,6 @@ export default function GamesList() {
                 </motion.button>
               ))}
             </div>
-          </motion.div>
-        )}
-
-        {/* Tier restriction banner */}
-        {((userTier === 'standard' && ageGroup === 'prasekolah') || (userTier === 'asas' && ageGroup === 'sekolah_rendah')) && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-4 p-4 rounded-2xl"
-            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,200,0,0.4)' }}
-          >
-            <p className="text-white font-black text-sm mb-1">🔒 Pelan Anda Tidak Merangkumi Ini</p>
-            <p className="text-white/80 text-xs mb-3">
-              {userTier === 'standard'
-                ? 'Pelan Standard hanya untuk Sekolah Rendah. Naik taraf ke Keluarga untuk akses Prasekolah juga!'
-                : 'Pelan Asas hanya untuk Prasekolah. Naik taraf ke Keluarga untuk akses Sekolah Rendah juga!'}
-            </p>
-            <Link to="/">
-              <motion.button whileTap={{ scale: 0.95 }} className="px-4 py-2 bg-white text-purple-600 rounded-full font-black text-xs shadow-lg">
-                👑 Naik Taraf ke Keluarga →
-              </motion.button>
-            </Link>
           </motion.div>
         )}
 
