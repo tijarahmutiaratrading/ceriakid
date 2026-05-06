@@ -40,35 +40,19 @@ const TYPES = [
 ];
 
 function FilterDropdown({ value, options, onChange, placeholder }) {
-  const [open, setOpen] = useState(false);
-  const selected = options.find(o => o.key === value);
-
   return (
-    <div className="relative">
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex min-h-11 items-center gap-1.5 px-3 py-2 bg-white/20 text-white rounded-xl text-xs font-bold border border-white/30 whitespace-nowrap"
-      >
-        <span>{selected?.label || placeholder}</span>
-        <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
-      </button>
-      {open && (
-        <>
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute top-full left-0 mt-1 z-20 bg-white rounded-2xl shadow-xl border border-gray-100 py-1 min-w-[160px] max-h-60 overflow-y-auto">
-            {options.map(opt => (
-              <button
-                key={opt.key}
-                onClick={() => { onChange(opt.key); setOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-sm font-semibold hover:bg-purple-50 transition-colors ${value === opt.key ? 'text-purple-600 font-black bg-purple-50' : 'text-gray-700'}`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      aria-label={placeholder}
+      className="min-h-11 px-3 py-2 bg-white/20 text-white rounded-xl text-xs font-bold border border-white/30 whitespace-nowrap outline-none focus:border-white/60"
+    >
+      {options.map(opt => (
+        <option key={opt.key} value={opt.key} className="bg-white text-gray-800 font-semibold">
+          {opt.label}
+        </option>
+      ))}
+    </select>
   );
 }
 
