@@ -230,12 +230,11 @@ export default function StoryKidGenerator({ onToast }) {
   const [slideCount, setSlideCount] = useState(10);
   const [generatedStories, setGeneratedStories] = useState([]);
   const [loadingQueue, setLoadingQueue] = useState(false);
-  const [generationStatus, setGenerationStatus] = useState('');
 
   const loadGeneratedStories = async () => {
     setLoadingQueue(true);
-    const stories = await base44.entities.Game.filter({ type: 'story_adventure', category: 'story', ageGroup: 'prasekolah' }, '-created_date', 30);
-    setGeneratedStories(stories.filter(story => story.gameData?.storyKid));
+    const tasks = await base44.entities.GameTask.list('-created_date', 50);
+    setGeneratedStories(tasks.filter(task => task.subject === 'storykid'));
     setLoadingQueue(false);
   };
 
@@ -249,27 +248,25 @@ export default function StoryKidGenerator({ onToast }) {
     for (let i = 0; i < selectedStories.length; i++) {
       const story = selectedStories[i];
       const scenes = prepareStoryScenes(story, slideCount);
-      const illustratedStory = await generateStorybookImages(story, scenes, setGenerationStatus);
-      await base44.entities.Game.create({
-        title: story.title,
-        description: story.moral,
-        type: 'story_adventure',
-        category: 'story',
+      await base44.entities.GameTask.create({
+        taskName: `Story Kid: ${story.title}`,
         ageGroup: 'prasekolah',
-        difficulty: 'easy',
-        tier: 'free',
-        emoji: story.emoji,
-        totalQuestions: illustratedStory.scenes.length,
-        gameData: { storyKid: true, moral: story.moral, cover: illustratedStory.cover, scenes: illustratedStory.scenes },
-        isPublished: true,
-        status: 'ready',
-        order: i,
+        subject: 'storykid',
+        gamesCount: scenes.length + 1,
+        questionsPerGame: scenes.length,
+        status: 'pending',
+        errorMessage: JSON.stringify({
+          story: { title: story.title, emoji: story.emoji, moral: story.moral },
+          scenes,
+          order: i,
+          cover: '',
+          generatedScenes: [],
+        }),
       });
     }
     await loadGeneratedStories();
-    setGenerationStatus('');
     setLoading(false);
-    onToast?.(`✅ ${selectedStories.length} Story Kid berjaya ditambah dengan visual AI storybook!`);
+    onToast?.(`✅ ${selectedStories.length} Story Kid masuk task queue. Boleh tutup browser, ia akan jalan di background.`);
   };
 
   return (
@@ -316,7 +313,7 @@ export default function StoryKidGenerator({ onToast }) {
         <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-white/10">
           <div>
             <p className="text-white font-black text-sm">📋 Story Kid Task Queue</p>
-            <p className="text-white/50 text-xs">Senarai story yang sudah dijana</p>
+            <p className="text-white/50 text-xs">Queue ini diproses background walaupun browser ditutup</p>
           </div>
           <button onClick={loadGeneratedStories} disabled={loadingQueue} className="p-2 rounded-xl bg-white/10 text-white/70 hover:bg-white/20 transition-all">
             <RefreshCw className={`w-4 h-4 ${loadingQueue ? 'animate-spin' : ''}`} />
@@ -331,13 +328,13 @@ export default function StoryKidGenerator({ onToast }) {
           <div className="max-h-72 overflow-y-auto divide-y divide-white/10">
             {generatedStories.map((story) => (
               <div key={story.id} className="flex items-center gap-3 px-4 py-3">
-                <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-xl flex-shrink-0">{story.emoji || '📖'}</div>
+                <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-xl flex-shrink-0">📖</div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white font-black text-sm truncate">{story.title}</p>
-                  <p className="text-white/45 text-xs">{story.gameData?.scenes?.length || story.totalQuestions || 0} slide · {story.isPublished ? 'Published' : 'Draft'}</p>
+                  <p className="text-white font-black text-sm truncate">{story.taskName}</p>
+                  <p className="text-white/45 text-xs">{story.createdGames || 0}/{story.gamesCount || 0} visual · {story.status}</p>
                 </div>
-                <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-black">
-                  <CheckCircle2 className="w-3 h-3" /> Done
+                <span className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-black ${story.status === 'completed' ? 'bg-green-100 text-green-700' : story.status === 'failed' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                  <CheckCircle2 className="w-3 h-3" /> {story.status === 'completed' ? 'Done' : 'Queue'}
                 </span>
               </div>
             ))}
@@ -345,15 +342,9 @@ export default function StoryKidGenerator({ onToast }) {
         )}
       </div>
 
-      {generationStatus && (
-        <div className="mb-3 rounded-2xl bg-white/10 border border-white/10 p-3 text-white/80 text-xs font-bold text-center">
-          {generationStatus}
-        </div>
-      )}
-
       <button onClick={seedStories} disabled={loading} className="w-full py-4 rounded-2xl bg-white text-purple-700 font-black shadow-xl flex items-center justify-center gap-2 disabled:opacity-60">
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-        {loading ? 'Generating AI storybook visuals...' : 'Tambah Story'}
+        {loading ? 'Masukkan ke queue...' : 'Tambah Story ke Queue'}
       </button>
 
       <Link to="/story-kid" className="mt-3 w-full py-3 rounded-2xl bg-white/10 text-white font-black border border-white/15 flex items-center justify-center gap-2">
