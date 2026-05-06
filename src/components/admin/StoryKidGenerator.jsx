@@ -75,6 +75,76 @@ export const STORY_KID_SEEDS = [
       { image: '🍎', text: 'Bobo berjaya beli 3 buah. Ibu sangat bangga!', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] }
     ],
   },
+  {
+    title: 'Mimi Kongsi Mainan', emoji: '🧸', moral: 'Berkongsi membuatkan semua orang gembira.',
+    scenes: [
+      { image: '🧸', text: 'Mimi membawa beruang mainan baharu ke tadika.', choices: [{ text: 'Tunjuk kepada kawan', next: 1, star: true }, { text: 'Sorok mainan', next: 2 }] },
+      { image: '👧', text: 'Lina ingin memegang beruang itu sebentar.', choices: [{ text: 'Beri giliran', next: 3, star: true }, { text: 'Kata tidak selamanya', next: 2 }] },
+      { image: '😔', text: 'Lina sedih kerana tidak dapat bermain bersama.', choices: [{ text: 'Fikir semula', next: 4, star: true }, { text: 'Terus bermain sendiri', next: 0 }] },
+      { image: '⏰', text: 'Cikgu cadang semua orang bermain ikut giliran.', choices: [{ text: 'Setuju ikut giliran', next: 5, star: true }, { text: 'Rebut mainan', next: 2 }] },
+      { image: '😊', text: 'Mimi memberi Lina bermain selama lima minit.', choices: [{ text: 'Tunggu dengan sabar', next: 6, star: true }, { text: 'Tarik semula', next: 2 }] },
+      { image: '🎈', text: 'Lina tersenyum dan menjaga mainan Mimi dengan baik.', choices: [{ text: 'Ucap terima kasih', next: 7, star: true }, { text: 'Marah Lina', next: 2 }] },
+      { image: '👫', text: 'Kawan-kawan lain juga mahu bermain bersama.', choices: [{ text: 'Buat kumpulan kecil', next: 8, star: true }, { text: 'Halau kawan', next: 2 }] },
+      { image: '🌟', text: 'Mereka mencipta cerita beruang yang sangat lucu.', choices: [{ text: 'Main bersama', next: 9, star: true }, { text: 'Main seorang diri', next: 2 }] },
+      { image: '🥰', text: 'Mimi belajar mainan lebih seronok apabila dikongsi.', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] }
+    ],
+  },
+  {
+    title: 'Rafi Berani Minta Maaf', emoji: '🙏', moral: 'Berani meminta maaf ialah sikap yang baik.',
+    scenes: [
+      { image: '⚽', text: 'Rafi bermain bola dan tidak sengaja terkena pasu kecil.', choices: [{ text: 'Berhenti bermain', next: 1, star: true }, { text: 'Lari cepat', next: 2 }] },
+      { image: '🏺', text: 'Pasu itu retak sedikit dan Rafi berasa takut.', choices: [{ text: 'Beritahu ibu', next: 3, star: true }, { text: 'Sembunyikan pasu', next: 2 }] },
+      { image: '😟', text: 'Rafi rasa tidak tenang kerana belum bercakap benar.', choices: [{ text: 'Tarik nafas', next: 4, star: true }, { text: 'Terus rahsiakan', next: 0 }] },
+      { image: '👩', text: 'Ibu mendengar cerita Rafi dengan tenang.', choices: [{ text: 'Minta maaf', next: 5, star: true }, { text: 'Salahkan kucing', next: 2 }] },
+      { image: '🧹', text: 'Ibu kata keselamatan lebih penting daripada barang.', choices: [{ text: 'Tolong kemas', next: 6, star: true }, { text: 'Tinggalkan ibu', next: 2 }] },
+      { image: '🧽', text: 'Rafi membantu mengemas serpihan kecil dengan berhati-hati.', choices: [{ text: 'Pakai sarung tangan', next: 7, star: true }, { text: 'Pegang dengan tangan kosong', next: 2 }] },
+      { image: '💬', text: 'Ibu memuji Rafi kerana bercakap benar.', choices: [{ text: 'Janji main di luar', next: 8, star: true }, { text: 'Ulang kesilapan', next: 2 }] },
+      { image: '🌳', text: 'Rafi bermain bola di halaman yang lebih selamat.', choices: [{ text: 'Ikut peraturan', next: 9, star: true }, { text: 'Tendang ke rumah', next: 2 }] },
+      { image: '💖', text: 'Rafi lega kerana meminta maaf dan bercakap benar.', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] }
+    ],
+  },
+  {
+    title: 'Lili Simpan Air', emoji: '💧', moral: 'Jimat air membantu menjaga bumi.',
+    scenes: [
+      { image: '🚰', text: 'Lili memberus gigi sambil paip air terbuka.', choices: [{ text: 'Tutup paip', next: 1, star: true }, { text: 'Biarkan air mengalir', next: 2 }] },
+      { image: '💧', text: 'Ayah menerangkan air bersih perlu dijimatkan.', choices: [{ text: 'Dengar nasihat ayah', next: 3, star: true }, { text: 'Abaikan ayah', next: 2 }] },
+      { image: '😮', text: 'Air mengalir banyak dan Lili sedar itu membazir.', choices: [{ text: 'Cuba semula', next: 4, star: true }, { text: 'Terus membazir', next: 0 }] },
+      { image: '🪥', text: 'Lili mengisi air dalam cawan kecil untuk berkumur.', choices: [{ text: 'Guna cawan', next: 5, star: true }, { text: 'Buka paip kuat', next: 2 }] },
+      { image: '🌱', text: 'Di taman, Lili nampak pokok perlukan air juga.', choices: [{ text: 'Siram secukupnya', next: 6, star: true }, { text: 'Siram terlalu banyak', next: 2 }] },
+      { image: '🪣', text: 'Lili mengumpul air hujan dalam baldi kecil.', choices: [{ text: 'Guna untuk pokok', next: 7, star: true }, { text: 'Buang air itu', next: 2 }] },
+      { image: '👨‍👩‍👧', text: 'Keluarga Lili membuat poster jimat air.', choices: [{ text: 'Tampal poster', next: 8, star: true }, { text: 'Koyak poster', next: 2 }] },
+      { image: '🏫', text: 'Lili berkongsi tip jimat air dengan kawan sekolah.', choices: [{ text: 'Ajak kawan ikut', next: 9, star: true }, { text: 'Simpan sendiri', next: 2 }] },
+      { image: '🌍', text: 'Lili gembira kerana dapat membantu menjaga bumi.', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] }
+    ],
+  },
+  {
+    title: 'Omar Susun Buku', emoji: '📚', moral: 'Menjaga barang dan mengemas menjadikan belajar lebih mudah.',
+    scenes: [
+      { image: '📚', text: 'Buku Omar berselerak di atas meja dan lantai.', choices: [{ text: 'Mula mengemas', next: 1, star: true }, { text: 'Biarkan bersepah', next: 2 }] },
+      { image: '🔤', text: 'Omar ingin susun buku ikut warna dan saiz.', choices: [{ text: 'Asingkan dahulu', next: 3, star: true }, { text: 'Campak semua', next: 2 }] },
+      { image: '😵', text: 'Meja yang bersepah membuat Omar susah cari pensel.', choices: [{ text: 'Kemas perlahan-lahan', next: 4, star: true }, { text: 'Tambah sepah lagi', next: 0 }] },
+      { image: '🟥', text: 'Omar kumpul buku merah di satu tempat.', choices: [{ text: 'Cari buku biru', next: 5, star: true }, { text: 'Sorok buku', next: 2 }] },
+      { image: '🟦', text: 'Buku biru pula diletakkan di sebelah buku merah.', choices: [{ text: 'Susun ikut saiz', next: 6, star: true }, { text: 'Letak terbalik semua', next: 2 }] },
+      { image: '📏', text: 'Buku besar diletakkan di bawah supaya rak lebih stabil.', choices: [{ text: 'Letak buku kecil atas', next: 7, star: true }, { text: 'Letak berat di atas', next: 2 }] },
+      { image: '✏️', text: 'Omar jumpa pensel yang hilang di bawah buku.', choices: [{ text: 'Simpan dalam bekas', next: 8, star: true }, { text: 'Buang pensel', next: 2 }] },
+      { image: '🧼', text: 'Meja Omar kini bersih dan mudah digunakan.', choices: [{ text: 'Baca buku', next: 9, star: true }, { text: 'Sepahkan semula', next: 2 }] },
+      { image: '😊', text: 'Omar senang hati kerana ruang belajarnya kemas.', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] }
+    ],
+  },
+  {
+    title: 'Tara Tolong Nenek', emoji: '👵', moral: 'Menolong keluarga ialah amalan mulia.',
+    scenes: [
+      { image: '🏠', text: 'Tara melihat nenek membawa beg yang berat.', choices: [{ text: 'Tawarkan bantuan', next: 1, star: true }, { text: 'Buat tidak nampak', next: 2 }] },
+      { image: '🛍️', text: 'Nenek tersenyum dan memberi beg yang ringan kepada Tara.', choices: [{ text: 'Pegang baik-baik', next: 3, star: true }, { text: 'Tarik semua beg', next: 2 }] },
+      { image: '😔', text: 'Nenek nampak letih apabila tiada siapa membantu.', choices: [{ text: 'Pergi bantu nenek', next: 4, star: true }, { text: 'Terus bermain', next: 0 }] },
+      { image: '🚪', text: 'Tara membuka pintu supaya nenek mudah masuk.', choices: [{ text: 'Tahan pintu', next: 5, star: true }, { text: 'Tutup pintu cepat', next: 2 }] },
+      { image: '🍵', text: 'Nenek duduk dan Tara ingin menyediakan air kosong.', choices: [{ text: 'Ambil gelas', next: 6, star: true }, { text: 'Main air', next: 2 }] },
+      { image: '🥛', text: 'Tara membawa gelas air dengan dua tangan.', choices: [{ text: 'Berjalan perlahan', next: 7, star: true }, { text: 'Berlari laju', next: 2 }] },
+      { image: '💬', text: 'Nenek mengucapkan terima kasih kepada Tara.', choices: [{ text: 'Senyum kepada nenek', next: 8, star: true }, { text: 'Minta hadiah', next: 2 }] },
+      { image: '🧺', text: 'Tara membantu menyusun barang dapur bersama nenek.', choices: [{ text: 'Susun di tempat betul', next: 9, star: true }, { text: 'Letak merata-rata', next: 2 }] },
+      { image: '❤️', text: 'Nenek bangga kerana Tara suka menolong keluarga.', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] }
+    ],
+  },
 ];
 
 const prepareStoryScenes = (story, targetSlideCount) => {
