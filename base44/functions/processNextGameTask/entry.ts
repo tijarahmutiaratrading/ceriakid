@@ -390,20 +390,30 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
     const miniGame = miniGameMap[task.subject];
     if (miniGame) {
       const existingMini = await base44.asServiceRole.entities.Game.filter({ category: task.subject });
+      const meta = (() => {
+        try { return JSON.parse(task.errorMessage || '{}'); } catch { return {}; }
+      })();
+      const levels = Math.max(1, Number(meta.levels || 3));
+      const itemsPerSet = Math.max(2, Number(meta.itemsPerSet || task.questionsPerGame || 4));
+
       for (let i = alreadyCreated; i < batchEnd; i++) {
+        const absoluteIndex = existingMini.length + i;
+        const level = (absoluteIndex % levels) + 1;
+        const setNo = Math.floor(absoluteIndex / levels) + 1;
+        const difficulty = level <= 1 ? 'easy' : level === 2 ? 'medium' : 'hard';
         await base44.asServiceRole.entities.Game.create({
-          title: `${miniGame.title} ${existingMini.length + i + 1}`,
+          title: `${miniGame.title} · Set ${setNo} Level ${level}`,
           type: miniGame.type,
           category: task.subject,
           ageGroup: task.ageGroup || 'sekolah_rendah',
-          difficulty: i % 3 === 0 ? 'easy' : i % 3 === 1 ? 'medium' : 'hard',
+          difficulty,
           tier: 'free',
           emoji: miniGame.emoji,
-          totalQuestions: 4,
-          gameData: buildMiniGameData(task.subject, existingMini.length + i),
+          totalQuestions: itemsPerSet,
+          gameData: { ...buildMiniGameData(task.subject, absoluteIndex), setNo, level, itemsPerSet },
           isPublished: true,
           status: 'ready',
-          order: existingMini.length + i,
+          order: absoluteIndex,
         });
         createdInBatch++;
       }
