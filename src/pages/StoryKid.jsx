@@ -84,6 +84,20 @@ const SAMPLE_STORIES = [
 
 const cardStyle = { background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.38)' };
 
+const formatDatabaseStory = (game) => ({
+  id: game.id,
+  title: game.title,
+  emoji: game.emoji || '📖',
+  cover: game.gameData?.cover || game.cover || '',
+  moral: game.gameData?.moral || game.description || 'Cerita interaktif',
+  scenes: (game.gameData?.scenes || []).map((scene) => ({
+    ...scene,
+    imageUrl: scene.imageUrl || scene.image_url || '',
+    image: scene.image || game.emoji || '📖',
+    choices: scene.choices || [],
+  })),
+});
+
 export default function StoryKid() {
   const [stories, setStories] = useState(SAMPLE_STORIES);
   const [selected, setSelected] = useState(null);
@@ -91,7 +105,15 @@ export default function StoryKid() {
   const [stars, setStars] = useState(0);
 
   useEffect(() => {
-    setStories(SAMPLE_STORIES);
+    const loadStories = async () => {
+      const dbStories = await base44.entities.Game.filter({ type: 'story_adventure', category: 'story', ageGroup: 'prasekolah', isPublished: true }, 'order');
+      const storyKidStories = dbStories
+        .filter(game => game.gameData?.storyKid && game.gameData?.scenes?.length)
+        .map(formatDatabaseStory);
+      setStories(storyKidStories.length > 0 ? storyKidStories : SAMPLE_STORIES);
+    };
+
+    loadStories();
   }, []);
 
   const story = selected !== null ? stories[selected] : null;
@@ -172,7 +194,13 @@ export default function StoryKid() {
               <motion.div key={sceneIndex} initial={{ opacity: 0, rotateY: 35, x: 40 }} animate={{ opacity: 1, rotateY: 0, x: 0 }} exit={{ opacity: 0, rotateY: -35, x: -40 }} transition={{ type: 'spring', stiffness: 120, damping: 18 }} className="rounded-[2rem] shadow-2xl shadow-purple-950/40 bg-amber-50 p-3" style={{ perspective: 1000 }}>
                 <div className="rounded-[1.6rem] overflow-hidden border-4 border-white bg-white shadow-inner">
                   <div className="relative h-[22rem] sm:h-[28rem] bg-gradient-to-br from-yellow-100 to-pink-100 overflow-hidden">
-                    <motion.img key={scene.imageUrl || story.cover} src={scene.imageUrl || story.cover} alt={scene.text} initial={{ scale: 1.08 }} animate={{ scale: 1 }} transition={{ duration: 0.8 }} className="absolute inset-0 w-full h-full object-cover" />
+                    {scene.imageUrl || story.cover ? (
+                      <motion.img key={scene.imageUrl || story.cover} src={scene.imageUrl || story.cover} alt={scene.text} initial={{ scale: 1.08 }} animate={{ scale: 1 }} transition={{ duration: 0.8 }} className="absolute inset-0 w-full h-full object-cover" />
+                    ) : (
+                      <motion.div key={scene.image || story.emoji} initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }} className="absolute inset-0 flex items-center justify-center text-9xl">
+                        {scene.image || story.emoji || '📖'}
+                      </motion.div>
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-white via-white/15 to-transparent" />
                     <motion.div animate={{ opacity: [0.25, 0.55, 0.25], scale: [1, 1.08, 1] }} transition={{ duration: 4, repeat: Infinity }} className="absolute -right-10 -top-10 w-32 h-32 bg-yellow-200 rounded-full blur-2xl" />
                     <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-white/85 text-purple-700 text-xs font-black">Halaman {Math.min(sceneIndex + 1, story.scenes.length)}</div>
