@@ -13,7 +13,17 @@ window.addEventListener('unhandledrejection', (event) => {
   }
 }, true);
 
-if ('serviceWorker' in navigator) {
+const shouldRegisterServiceWorker = 'serviceWorker' in navigator &&
+  !window.location.hostname.includes('preview-sandbox') &&
+  !window.location.hostname.includes('localhost');
+
+if ('serviceWorker' in navigator && !shouldRegisterServiceWorker) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => registration.unregister());
+  });
+}
+
+if (shouldRegisterServiceWorker) {
   let refreshing = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (refreshing) return;
