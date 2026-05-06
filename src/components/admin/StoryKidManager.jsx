@@ -59,6 +59,17 @@ export default function StoryKidManager({ onToast }) {
     loadStories();
   };
 
+  const deleteAllStories = async () => {
+    if (stories.length === 0) return;
+    if (!window.confirm(`Padam semua ${stories.length} Story Kid?`)) return;
+    setLoading(true);
+    for (const story of stories) {
+      await base44.entities.Game.delete(story.id);
+    }
+    onToast?.(`✅ ${stories.length} Story Kid dipadam`);
+    loadStories();
+  };
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 rounded-[2rem] shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
       <div className="flex items-center justify-between gap-3 mb-5">
@@ -66,9 +77,16 @@ export default function StoryKidManager({ onToast }) {
           <h2 className="font-black text-white text-2xl">Story Kid Management</h2>
           <p className="text-white/60 text-sm">Urus cerita, status publish dan kandungan Story Kid.</p>
         </div>
-        <button onClick={loadStories} disabled={loading} className="p-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white transition-all">
-          <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-        </button>
+        <div className="flex items-center gap-2">
+          {stories.length > 0 && (
+            <button onClick={deleteAllStories} disabled={loading} className="flex items-center gap-2 px-3 py-3 rounded-2xl bg-red-500/20 hover:bg-red-500/30 text-red-200 font-black text-xs transition-all">
+              <Trash2 className="w-4 h-4" /> Delete All
+            </button>
+          )}
+          <button onClick={loadStories} disabled={loading} className="p-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white transition-all">
+            <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
       </div>
 
       {loading ? (
