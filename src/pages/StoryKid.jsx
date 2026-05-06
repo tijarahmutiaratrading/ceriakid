@@ -67,9 +67,23 @@ export default function StoryKid() {
 
   useEffect(() => {
     base44.entities.Game.filter({ category: 'story', isPublished: true }).then((items) => {
+      const imageLibrary = Object.fromEntries(SAMPLE_STORIES.map(s => [s.title, s]));
       const storyKids = items
         .filter(g => g.gameData?.storyKid === true && Array.isArray(g.gameData?.scenes))
-        .map(g => ({ id: g.id, title: g.title, emoji: g.emoji || '📖', cover: g.gameData.cover, moral: g.gameData.moral, scenes: g.gameData.scenes }));
+        .map(g => {
+          const sample = imageLibrary[g.title];
+          return {
+            id: g.id,
+            title: g.title,
+            emoji: g.emoji || sample?.emoji || '📖',
+            cover: g.gameData.cover || sample?.cover,
+            moral: g.gameData.moral || sample?.moral,
+            scenes: g.gameData.scenes.map((scene, idx) => ({
+              ...scene,
+              imageUrl: scene.imageUrl || sample?.scenes?.[idx]?.imageUrl || g.gameData.cover || sample?.cover,
+            })),
+          };
+        });
       if (storyKids.length > 0) setStories(storyKids);
     });
   }, []);
