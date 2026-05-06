@@ -405,9 +405,9 @@ export default function AdminGameManager() {
           <div className="flex items-center gap-4 min-w-0">
             <div className="w-14 h-14 md:w-16 md:h-16 flex-shrink-0 rounded-3xl bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 flex items-center justify-center text-2xl md:text-3xl shadow-xl shadow-purple-950/30 ring-1 ring-white/30 leading-none">🎮</div>
             <div className="min-w-0">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/70 text-[11px] font-black uppercase tracking-wider mb-2">Premium Game Control</div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/70 text-[11px] font-black uppercase tracking-wider mb-2">Admin Content Studio</div>
               <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight">Master Generator</h1>
-              <p className="text-white/75 text-sm">Jana, urus dan pantau semua permainan serta BBM CeriaKid dengan lebih kemas.</p>
+              <p className="text-white/75 text-sm">Satu tempat untuk jana, urus dan pantau Games, BBM dan Story Kid.</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-2 w-full md:w-auto md:min-w-80">
@@ -420,9 +420,9 @@ export default function AdminGameManager() {
         {/* Main Tabs */}
         <div className="flex gap-2 mb-4 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
           {[
-            { id: 'subject', label: '📚 Subjek', labelFull: '📚 Games Subjek' },
-            { id: 'minigames', label: '🎯 Hub', labelFull: '🎯 Games Hub' },
-            { id: 'bbm', label: '📚 BBM', labelFull: '📚 BBM Generator' },
+            { id: 'subject', label: '🎮 Games', labelFull: '🎮 Games' },
+            { id: 'minigames', label: '🎯 Mini', labelFull: '🎯 Mini Games' },
+            { id: 'bbm', label: '📚 BBM', labelFull: '📚 BBM' },
             { id: 'storykid', label: '📖 Story', labelFull: '📖 Story Kid' },
           ].map(t => {
             const isSubjectActive = t.id === 'subject' && ['generator', 'manager', 'monthly'].includes(tab);
@@ -441,9 +441,9 @@ export default function AdminGameManager() {
         {['generator', 'manager', 'monthly'].includes(tab) && (
           <div className="flex gap-2 mb-6 p-2 rounded-[1.5rem] overflow-x-auto shadow-lg shadow-black/10" style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.12)', WebkitOverflowScrolling: 'touch' }}>
             {[
-              { id: 'generator', label: '🤖 Generator' },
-              { id: 'manager', label: '📋 Manager' },
-              { id: 'monthly', label: '📅 Auto Monthly' },
+              { id: 'generator', label: '🤖 Generate' },
+              { id: 'manager', label: '📋 Manage' },
+              { id: 'monthly', label: '📅 Monthly' },
             ].map(t => (
               <button key={t.id} onClick={() => setTab(t.id)}
                 className={`flex-1 min-w-[8rem] py-3 px-4 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
@@ -462,12 +462,6 @@ export default function AdminGameManager() {
                 <h2 className="font-black text-white text-xl md:text-2xl">⚙️ Konfigurasi Generation</h2>
                 <p className="text-white/60 text-xs font-semibold mt-1">Tetapkan target game dan soalan sebelum masuk queue.</p>
               </div>
-              <div className="mb-5 rounded-3xl bg-white/10 border border-white/10 p-4">
-                <p className="text-white/60 text-[11px] font-black uppercase tracking-wider mb-1">1. Cara guna</p>
-                <p className="text-white font-black text-sm">Setiap subjek ada 2 nombor: Games dan Soalan.</p>
-                <p className="text-white/45 text-xs mt-2">Games = berapa game nak ada. Soalan = berapa soalan dalam setiap game.</p>
-              </div>
-
               {/* Subject selector */}
               <div className="mb-5 rounded-3xl bg-white/10 border border-white/10 p-4">
                 <div className="flex items-center justify-between gap-3 mb-4">
@@ -494,7 +488,6 @@ export default function AdminGameManager() {
                   <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🧒 Prasekolah</p>
-                      <span className="text-white/45 text-[11px] font-black">master + custom subjek</span>
                     </div>
                     <div className="mb-3 rounded-2xl bg-white/10 border border-white/10 p-3">
                       <p className="text-white/60 text-[10px] font-black uppercase mb-2">Master Prasekolah</p>
@@ -551,7 +544,6 @@ export default function AdminGameManager() {
                   <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🎒 Sekolah Rendah</p>
-                      <span className="text-white/45 text-[11px] font-black">master + custom darjah</span>
                     </div>
                     <div className="mb-3 rounded-2xl bg-white/10 border border-white/10 p-3">
                       <p className="text-white/60 text-[10px] font-black uppercase mb-2">Master Sekolah Rendah</p>
