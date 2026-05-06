@@ -143,8 +143,8 @@ export default function Home() {
           <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
           <div className="grid grid-cols-2 gap-3 md:gap-4">
             {[
-              { key: 'prasekolah', label: t('prasekolah', lang), emoji: '🎨', sub: '4–6 tahun' },
-              { key: 'sekolah_rendah', label: t('sekolahRendah', lang), emoji: '📚', sub: '7–12 tahun' }
+              { key: 'prasekolah', label: `${t('prasekolah', lang)} · KSPK`, emoji: '🎨', sub: '4–6 tahun' },
+              { key: 'sekolah_rendah', label: `${t('sekolahRendah', lang)} · KSSR`, emoji: '📚', sub: '7–12 tahun' }
             ].map((age) => (
               <motion.button
                 key={age.key}

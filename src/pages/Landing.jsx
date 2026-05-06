@@ -232,10 +232,10 @@ export default function Landing() {
 
              {/* Subtext */}
              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="text-lg text-yellow-300 mb-2 font-bold">
-               Game pembelajaran KSSR untuk Prasekolah & Sekolah Rendah
+               Game pembelajaran KSPK untuk Prasekolah & KSSR untuk Sekolah Rendah
              </motion.p>
              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-sm sm:text-base text-white/80 mb-6 sm:mb-8 leading-relaxed">
-               CeriaKid bantu anak belajar BM, English, Matematik, Sains, Jawi, Tamil & Mandarin melalui game pendek, soalan interaktif dan dashboard ibu bapa — sesuai untuk latihan harian di rumah. ✅
+               CeriaKid bantu anak belajar BM, English, Matematik, Sains, Jawi, Tamil & Mandarin melalui game pendek, soalan interaktif dan dashboard ibu bapa — disusun ikut KSPK prasekolah dan KSSR sekolah rendah. ✅
              </motion.p>
 
             {/* CTA */}
@@ -253,7 +253,7 @@ export default function Landing() {
 
             {/* Trust badges */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex flex-wrap gap-2 text-xs sm:text-sm text-white/85">
-              {['✅ Ikut silibus KSSR', '✅ Tiada iklan', '✅ Dashboard ibu bapa'].map((t, i) =>
+              {['✅ KSPK + KSSR', '✅ Tiada iklan', '✅ Dashboard ibu bapa'].map((t, i) =>
               <span key={i} className="flex items-center gap-1 rounded-full border border-white/20 bg-white/12 px-2.5 py-1 font-bold text-white/80 shadow-sm backdrop-blur-xl sm:px-3">{t}</span>
               )}
             </motion.div>
@@ -286,7 +286,7 @@ export default function Landing() {
             {/* Mini badges below game demo */}
             <div className="flex flex-wrap gap-2 mt-8 justify-center">
               {[
-              { icon: '🏆', text: 'Ikut KSSR' },
+              { icon: '🏆', text: 'KSPK + KSSR' },
               { icon: '🚫', text: 'Tiada Iklan' },
               { icon: '📲', text: 'Offline' },
               { icon: '🔒', text: '100% Selamat' },
@@ -310,7 +310,7 @@ export default function Landing() {
             {[
             { num: '7+', label: 'Subjek Utama', icon: '📚' },
             { num: '2', label: 'Peringkat Umur', icon: '🎯' },
-            { num: 'KSSR', label: 'Silibus Malaysia', icon: '🇲🇾' },
+            { num: 'KSPK + KSSR', label: 'Standard Malaysia', icon: '🇲🇾' },
             { num: '5-10', label: 'Minit Latihan Harian', icon: '🚀' }].
             map((stat, i) =>
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
@@ -432,7 +432,7 @@ export default function Landing() {
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
             <span className="inline-block bg-orange-100 text-orange-700 border border-orange-300/70 font-black px-4 py-1.5 rounded-full text-sm mb-4">🚀 SEMUA DALAM SATU APP</span>
             <h2 className="text-3xl md:text-4xl font-black mb-3 text-slate-900">Lebih Mudah Untuk Anak Belajar, Lebih Senang Untuk Ibu Bapa Pantau</h2>
-            <p className="text-slate-700 max-w-2xl mx-auto">CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSSR, bahan latihan dan progress tracking dalam satu pengalaman yang mudah digunakan.</p>
+            <p className="text-slate-700 max-w-2xl mx-auto">CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSPK/KSSR, bahan latihan dan progress tracking dalam satu pengalaman yang mudah digunakan.</p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
@@ -648,7 +648,7 @@ export default function Landing() {
             { q: 'Adakah selamat untuk anak?', a: 'Ya, 100%! Tiada iklan, tiada pop-up, tiada chat dengan orang asing. App direka khas untuk keselamatan kanak-kanak.' },
             { q: 'Apakah peranti yang disokong?', a: 'Semua jenis smartphone, tablet, dan komputer. iOS, Android, dan browser. Boleh download untuk guna offline.' },
             { q: 'Bagaimana langganan berfungsi?', a: 'CeriaKid menggunakan pelan tahunan. Anda boleh semak status langganan dan maklumat akaun di bahagian tetapan selepas mendaftar.' },
-            { q: 'Adakah ikut silibus sekolah Malaysia?', a: 'Ya — kami ikut KSSR (Kurikulum Standard Sekolah Rendah) sepenuhnya. Sama persis dengan apa yang diajar di sekolah, Darjah 1-6.' },
+            { q: 'Adakah ikut standard pembelajaran Malaysia?', a: 'Ya — Prasekolah disusun ikut KSPK (Kurikulum Standard Prasekolah Kebangsaan), manakala Sekolah Rendah ikut KSSR (Kurikulum Standard Sekolah Rendah) Darjah 1–6.' },
             { q: 'Berapa anak boleh guna?', a: 'Pelan Asas untuk Prasekolah (1 anak), Standard untuk Sekolah Rendah (1 anak). Pelan Keluarga untuk kedua-dua peringkat dengan sehingga 4 profil anak — jimat lebih!' },
             { q: 'Macam mana nak mula?', a: 'Pilih pelan, isikan maklumat, bayar melalui FPX, dan anak terus boleh mula belajar dalam masa 2 minit!' }].
             map((faq, i) =>

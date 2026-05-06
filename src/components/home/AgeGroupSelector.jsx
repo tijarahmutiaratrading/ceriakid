@@ -8,8 +8,8 @@ export default function AgeGroupSelector() {
   return (
     <div className="flex gap-3 mb-8">
       {[
-        { id: 'prasekolah', label: 'Prasekolah (3-5)', emoji: '👶' },
-        { id: 'sekolah_rendah', label: 'Sekolah Rendah (6-12)', emoji: '👧' },
+        { id: 'prasekolah', label: 'Prasekolah · KSPK (4-6)', emoji: '👶' },
+        { id: 'sekolah_rendah', label: 'Sekolah Rendah · KSSR (7-12)', emoji: '👧' },
       ].map(group => (
         <motion.button
           key={group.id}
