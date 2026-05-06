@@ -66,6 +66,9 @@ export default function AdminGameManager() {
   const [categoryGameConfig, setCategoryGameConfig] = useState(() =>
     Object.fromEntries(SUBJECT_CONFIG.map(sc => [`${sc.ageGroup}-${sc.subject}`, 20]))
   );
+  const [categoryQuestionConfig, setCategoryQuestionConfig] = useState(() =>
+    Object.fromEntries(SUBJECT_CONFIG.map(sc => [`${sc.ageGroup}-${sc.subject}`, 20]))
+  );
   const [selectedSubjects, setSelectedSubjects] = useState(new Set());
   const [tasks, setTasks] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(false);
@@ -136,7 +139,8 @@ export default function AdminGameManager() {
             : (currentCounts[subjectKey] || { games: 0, avgQuestions: 0 });
 
           const targetGames = categoryGameConfig[subjectKey] || 0;
-          const questionsToAdd = Math.max(0, genConfig.questions - curr.avgQuestions);
+          const targetQuestions = categoryQuestionConfig[subjectKey] || 0;
+          const questionsToAdd = Math.max(0, targetQuestions - curr.avgQuestions);
           const gamesToAdd = Math.max(0, targetGames - curr.games);
 
           if (questionsToAdd > 0 || gamesToAdd > 0) {
@@ -146,7 +150,7 @@ export default function AdminGameManager() {
               ...(darjah ? { darjah } : {}),
               subject,
               gamesCount: gamesToAdd,
-              questionsPerGame: genConfig.questions,
+              questionsPerGame: targetQuestions,
               status: 'pending',
             });
             queuedCount++;
@@ -427,17 +431,9 @@ export default function AdminGameManager() {
                 <p className="text-white/60 text-xs font-semibold mt-1">Tetapkan target game dan soalan sebelum masuk queue.</p>
               </div>
               <div className="mb-5 rounded-3xl bg-white/10 border border-white/10 p-4">
-                <p className="text-white/60 text-[11px] font-black uppercase tracking-wider mb-1">1. Tetapan Umum</p>
-                <label className="text-white font-black text-sm block mb-3">Soalan / game</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="50"
-                  value={genConfig.questions}
-                  onChange={e => setGenConfig(c => ({ ...c, questions: parseInt(e.target.value) || 1 }))}
-                  className="w-full sm:max-w-xs px-4 py-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center outline-none focus:border-white/50 focus:bg-white/15"
-                />
-                <p className="text-white/45 text-xs mt-2">Jumlah games sekarang ditetapkan terus pada setiap subjek di bawah.</p>
+                <p className="text-white/60 text-[11px] font-black uppercase tracking-wider mb-1">1. Cara guna</p>
+                <p className="text-white font-black text-sm">Setiap subjek ada 2 nombor: Games dan Soalan.</p>
+                <p className="text-white/45 text-xs mt-2">Games = berapa game nak ada. Soalan = berapa soalan dalam setiap game.</p>
               </div>
 
               {/* Subject selector */}
@@ -481,16 +477,30 @@ export default function AdminGameManager() {
                               <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs font-black ${sel ? 'bg-indigo-600 text-white' : 'bg-white/10 text-white/40'}`}>{sel ? '✓' : '+'}</span>
                               <span className="font-black text-xs truncate">{sc.label.replace('Prasekolah - ', '')}</span>
                             </button>
-                            <div className="mt-3 grid grid-cols-[1fr_4.5rem] gap-2 items-center">
-                              <p className={`text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} ada · {curr.avgQuestions}Q {gameDiff > 0 ? `· perlu +${gameDiff}` : '· cukup'}</p>
-                              <input
-                                type="number"
-                                min="0"
-                                max="100"
-                                value={targetGames}
-                                onChange={e => setCategoryGameConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
-                                className={`w-full px-2 py-2 rounded-xl border font-black text-center outline-none ${sel ? 'bg-indigo-50 border-indigo-200 text-indigo-800' : 'bg-white/10 border-white/15 text-white'}`}
-                              />
+                            <p className={`mt-2 text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} games ada · avg {curr.avgQuestions} soalan {gameDiff > 0 ? `· perlu +${gameDiff}` : '· cukup'}</p>
+                            <div className="mt-3 grid grid-cols-2 gap-2">
+                              <div>
+                                <label className={`block text-[10px] font-black mb-1 ${sel ? 'text-indigo-500' : 'text-white/45'}`}>Games</label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  value={targetGames}
+                                  onChange={e => setCategoryGameConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
+                                  className={`w-full px-2 py-2 rounded-xl border font-black text-center outline-none ${sel ? 'bg-indigo-50 border-indigo-200 text-indigo-800' : 'bg-white/10 border-white/15 text-white'}`}
+                                />
+                              </div>
+                              <div>
+                                <label className={`block text-[10px] font-black mb-1 ${sel ? 'text-indigo-500' : 'text-white/45'}`}>Soalan</label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  max="50"
+                                  value={categoryQuestionConfig[key] || 0}
+                                  onChange={e => setCategoryQuestionConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
+                                  className={`w-full px-2 py-2 rounded-xl border font-black text-center outline-none ${sel ? 'bg-indigo-50 border-indigo-200 text-indigo-800' : 'bg-white/10 border-white/15 text-white'}`}
+                                />
+                              </div>
                             </div>
                           </div>
                         );
