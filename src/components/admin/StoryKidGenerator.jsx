@@ -77,13 +77,43 @@ export const STORY_KID_SEEDS = [
   },
 ];
 
+const prepareStoryScenes = (story, targetSlideCount) => {
+  const requestedCount = Math.max(3, Math.min(12, Number(targetSlideCount) || 10));
+  const baseScenes = story.scenes.map(scene => ({ ...scene, choices: scene.choices.map(choice => ({ ...choice })) }));
+  const finalScene = baseScenes[baseScenes.length - 1];
+  const middleScenes = baseScenes.slice(0, -1);
+  const scenes = middleScenes.slice(0, Math.max(1, requestedCount - 1));
+
+  while (scenes.length < requestedCount - 1) {
+    scenes.push({
+      image: story.emoji,
+      text: `${story.title} hampir selesai. Mari ingat semula pengajaran cerita ini.`,
+      choices: [{ text: 'Teruskan cerita', next: scenes.length + 1, star: true }],
+    });
+  }
+
+  scenes.push({ ...finalScene, choices: [{ text: 'Tamat cerita', next: 'end', star: true }] });
+
+  return scenes.map((scene, index) => ({
+    ...scene,
+    choices: scene.choices.map(choice => ({
+      ...choice,
+      next: choice.next === 'end' ? 'end' : Math.min(Number(choice.next) || index + 1, scenes.length - 1),
+    })),
+  }));
+};
+
 export default function StoryKidGenerator({ onToast }) {
   const [loading, setLoading] = useState(false);
+  const [storyCount, setStoryCount] = useState(5);
+  const [slideCount, setSlideCount] = useState(10);
 
   const seedStories = async () => {
     setLoading(true);
-    for (let i = 0; i < STORY_KID_SEEDS.length; i++) {
-      const story = STORY_KID_SEEDS[i];
+    const selectedStories = STORY_KID_SEEDS.slice(0, Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5)));
+    for (let i = 0; i < selectedStories.length; i++) {
+      const story = selectedStories[i];
+      const scenes = prepareStoryScenes(story, slideCount);
       await base44.entities.Game.create({
         title: story.title,
         description: story.moral,
@@ -93,15 +123,15 @@ export default function StoryKidGenerator({ onToast }) {
         difficulty: 'easy',
         tier: 'free',
         emoji: story.emoji,
-        totalQuestions: story.scenes.length,
-        gameData: { storyKid: true, moral: story.moral, scenes: story.scenes },
+        totalQuestions: scenes.length,
+        gameData: { storyKid: true, moral: story.moral, scenes },
         isPublished: true,
         status: 'ready',
         order: i,
       });
     }
     setLoading(false);
-    onToast?.('✅ 5 Story Kid berjaya ditambah!');
+    onToast?.(`✅ ${selectedStories.length} Story Kid berjaya ditambah (${slideCount} slide setiap cerita)!`);
   };
 
   return (
@@ -114,8 +144,38 @@ export default function StoryKidGenerator({ onToast }) {
         </div>
       </div>
 
+      <div className="grid grid-cols-2 gap-3 mb-5">
+        <div>
+          <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">Jumlah Story</label>
+          <input
+            type="number"
+            min="1"
+            max={STORY_KID_SEEDS.length}
+            value={storyCount}
+            onChange={(e) => setStoryCount(e.target.value)}
+            className="w-full p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center outline-none focus:bg-white/15"
+          />
+        </div>
+        <div>
+          <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">Slide / Story</label>
+          <input
+            type="number"
+            min="3"
+            max="12"
+            value={slideCount}
+            onChange={(e) => setSlideCount(e.target.value)}
+            className="w-full p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center outline-none focus:bg-white/15"
+          />
+        </div>
+      </div>
+
+      <div className="mb-5 rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
+        <p className="text-white/60 text-xs font-semibold">Akan dijana</p>
+        <p className="text-white font-black text-lg">{Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))} story × {Math.max(3, Math.min(12, Number(slideCount) || 10))} slide</p>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-        {STORY_KID_SEEDS.map((story) => (
+        {STORY_KID_SEEDS.slice(0, Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))).map((story) => (
           <div key={story.title} className="p-4 rounded-2xl bg-white/10 border border-white/10">
             <p className="text-3xl mb-2">{story.emoji}</p>
             <p className="text-white font-black text-sm">{story.title}</p>
@@ -126,7 +186,7 @@ export default function StoryKidGenerator({ onToast }) {
 
       <button onClick={seedStories} disabled={loading} className="w-full py-4 rounded-2xl bg-white text-purple-700 font-black shadow-xl flex items-center justify-center gap-2 disabled:opacity-60">
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-        {loading ? 'Menambah cerita...' : 'Tambah 5 Story Kid'}
+        {loading ? 'Menambah cerita...' : `Tambah ${Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))} Story Kid`}
       </button>
 
       <Link to="/story-kid" className="mt-3 w-full py-3 rounded-2xl bg-white/10 text-white font-black border border-white/15 flex items-center justify-center gap-2">
