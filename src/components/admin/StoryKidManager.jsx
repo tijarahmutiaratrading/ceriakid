@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { BookOpen, Edit3, Loader2, RefreshCw, Sparkles, Trash2 } from 'lucide-react';
+import { BookOpen, Edit3, Loader2, RefreshCw, Trash2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import EditGameModal from '@/components/admin/EditGameModal';
-import { STORY_KID_SEEDS } from '@/components/admin/StoryKidGenerator';
 
 export default function StoryKidManager({ onToast }) {
   const [stories, setStories] = useState([]);
@@ -26,30 +25,6 @@ export default function StoryKidManager({ onToast }) {
   const togglePublish = async (story) => {
     await base44.entities.Game.update(story.id, { isPublished: !story.isPublished });
     onToast?.(story.isPublished ? '✅ Cerita disembunyikan' : '✅ Cerita diterbitkan');
-    loadStories();
-  };
-
-  const importDefaultStories = async () => {
-    setLoading(true);
-    for (let i = 0; i < STORY_KID_SEEDS.length; i++) {
-      const story = STORY_KID_SEEDS[i];
-      await base44.entities.Game.create({
-        title: story.title,
-        description: story.moral,
-        type: 'story_adventure',
-        category: 'story',
-        ageGroup: 'prasekolah',
-        difficulty: 'easy',
-        tier: 'free',
-        emoji: story.emoji,
-        totalQuestions: story.scenes.length,
-        gameData: { storyKid: true, moral: story.moral, scenes: story.scenes },
-        isPublished: true,
-        status: 'ready',
-        order: i,
-      });
-    }
-    onToast?.('✅ 5 Story Kid berjaya diimport');
     loadStories();
   };
 
@@ -104,10 +79,7 @@ export default function StoryKidManager({ onToast }) {
         <div className="text-center py-12 px-5 rounded-3xl bg-white/10 border border-white/10">
           <p className="text-5xl mb-3">📖</p>
           <p className="text-white font-black">Belum ada Story Kid dalam database</p>
-          <p className="text-white/55 text-sm mt-1 mb-5">Cerita di page preview masih data default. Import dahulu untuk manage dalam database.</p>
-          <button onClick={importDefaultStories} className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-2xl bg-white text-purple-700 font-black shadow-xl">
-            <Sparkles className="w-4 h-4" /> Import 5 Story Kid
-          </button>
+          <p className="text-white/55 text-sm mt-1">Tambah cerita melalui tab Generator dahulu.</p>
         </div>
       ) : (
         <div className="space-y-3">
