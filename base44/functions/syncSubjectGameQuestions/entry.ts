@@ -22,6 +22,15 @@ const AGE_DESC = {
   sekolah_rendah: 'sekolah rendah (umur 7-12 tahun)',
 };
 
+const KSSR_LEVEL_GUIDE = {
+  darjah_1: 'Darjah 1 KSSR: asas huruf/perkataan/ayat pendek, nombor 0-100, tambah/tolak mudah, bentuk asas, deria dan benda hidup/bukan hidup.',
+  darjah_2: 'Darjah 2 KSSR: ayat mudah/kefahaman asas, nombor hingga 1000, operasi asas, wang/masa mudah, haiwan/tumbuhan/manusia/bahan harian.',
+  darjah_3: 'Darjah 3 KSSR: kefahaman ringkas, nombor hingga 10000, operasi asas, pecahan/ukuran mudah, pengelasan, magnet, cahaya, bunyi, sistem suria asas.',
+  darjah_4: 'Darjah 4 KSSR: konsep tahap 2 yang jelas, operasi bergabung mudah, pecahan/perpuluhan asas, proses hidup, sifat bahan, tenaga dan alam sekitar.',
+  darjah_5: 'Darjah 5 KSSR: aplikasi sederhana, pecahan/perpuluhan/peratus, nisbah mudah, data, mikroorganisma, elektrik asas, haba dan rantai makanan.',
+  darjah_6: 'Darjah 6 KSSR: pengukuhan tahap 2, penyelesaian masalah sederhana, peratus/purata/graf, daya, mesin ringkas, ekosistem dan penyiasatan saintifik.'
+};
+
 const GAME_TYPES_BY_SUBJECT = {
   bahasa_melayu: ['word_builder', 'matching', 'multiple_choice', 'spelling', 'true_false'],
   english: ['word_builder', 'matching', 'multiple_choice', 'spelling', 'true_false'],
@@ -34,6 +43,7 @@ async function generateQuestionsForGame(base44, game, needed, existingQuestions)
   const ageDesc = AGE_DESC[game.ageGroup] || game.ageGroup;
   const languageRule = LANGUAGE_RULES[game.category] || 'Gunakan bahasa yang sesuai dengan subjek.';
   const existingSample = existingQuestions.slice(0, 2).map(q => q.problem || q.question || '').filter(Boolean).join('; ');
+  const kssrGuide = game.darjah ? (KSSR_LEVEL_GUIDE[game.darjah] || '') : '';
 
   const gameTypesForSubject = GAME_TYPES_BY_SUBJECT[game.category] || ['multiple_choice', 'true_false', 'matching'];
   const typesList = gameTypesForSubject.join(', ');
@@ -44,7 +54,8 @@ TUGAS: Jana TEPAT ${needed} soalan pendidikan yang PELBAGAI JENIS dan MENARIK un
 
 Tajuk: "${game.title}"
 Subjek: ${subject}
-Tahap: ${ageDesc}
+Tahap: ${game.darjah ? game.darjah.replace('_', ' ').toUpperCase() : ageDesc}
+${kssrGuide ? `Panduan tahap KSSR: ${kssrGuide}` : ''}
 
 ${existingSample ? `Jangan ulang soalan ini: ${existingSample}` : ''}
 
@@ -54,7 +65,8 @@ ${gameTypesForSubject.map((t, i) => `${i + 1}. ${t}`).join('\n')}
 
 ────────────────────
 PERATURAN:
-- Semua soalan berdasarkan KSSR/KSSM
+- Semua soalan berdasarkan KSSR Malaysia sahaja, bukan KSSM dan bukan trivia rawak
+- WAJIB ikut tahap darjah jika game ada darjah; jangan terlalu tinggi/rendah
 - Setiap soalan = 1 konsep sahaja
 - Bahasa mudah difahami untuk ${ageDesc}
 - ${languageRule}
@@ -62,6 +74,7 @@ PERATURAN:
 - Gunakan nama tempatan (Ali, Siti, Karim, dll)
 - Soalan pendek dan jelas
 - WAJIB: Gunakan pelbagai type dari senarai atas, JANGAN semua sama
+- DILARANG soalan merepek, bahasa rojak, fakta meragukan, topik luar silibus, atau soalan yang tidak menguji kemahiran subjek
 
 ────────────────────
 FORMAT JSON:

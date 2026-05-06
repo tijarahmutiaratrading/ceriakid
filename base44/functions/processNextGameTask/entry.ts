@@ -14,6 +14,17 @@ const DARJAH_LABELS = {
   darjah_1: 'Darjah 1', darjah_2: 'Darjah 2', darjah_3: 'Darjah 3',
   darjah_4: 'Darjah 4', darjah_5: 'Darjah 5', darjah_6: 'Darjah 6',
 };
+
+const KSSR_LEVEL_GUIDE = {
+  darjah_1: 'Darjah 1: asas literasi/numerasi. BM/English: huruf, suku kata, perkataan mudah, ayat sangat pendek. Matematik: nombor 0-100, tambah/tolak mudah, bentuk asas, masa sangat asas. Sains: deria, anggota badan, haiwan/tumbuhan mudah, benda hidup/bukan hidup.',
+  darjah_2: 'Darjah 2: bina ayat mudah dan kefahaman asas. Matematik: nombor hingga 1000, tambah/tolak, darab bahagi asas 2/5/10, wang dan masa mudah. Sains: haiwan, tumbuhan, manusia, kebersihan, bahan harian.',
+  darjah_3: 'Darjah 3: kefahaman ringkas dan aplikasi mudah. Matematik: nombor hingga 10000, operasi asas, pecahan mudah, ukuran, wang dan masa. Sains: pengelasan haiwan/tumbuhan, magnet, cahaya, bunyi, sistem suria asas.',
+  darjah_4: 'Darjah 4: konsep lebih tersusun tetapi masih jelas. Matematik: nombor besar, operasi bergabung mudah, pecahan/perpuluhan asas, ukuran. Sains: proses hidup, sifat bahan, tenaga, bumi dan alam sekitar asas.',
+  darjah_5: 'Darjah 5: aplikasi dan penaakulan sederhana. Matematik: pecahan/perpuluhan/peratus, nisbah mudah, ruang, data. Sains: mikroorganisma, elektrik asas, haba, rantai makanan, teknologi mudah.',
+  darjah_6: 'Darjah 6: pengukuhan UPSR/KSSR tahap 2. Matematik: penyelesaian masalah multi-langkah sederhana, peratus, purata, graf/data. Sains: penyiasatan saintifik, daya, mesin ringkas, ekosistem, bumi/angkasa secara asas.'
+};
+
+const getKssrGuide = (darjah) => darjah ? (KSSR_LEVEL_GUIDE[darjah] || '') : '';
 const GAME_TYPES = ['multiple_choice','picture_quiz','word_builder','counting','spelling','reading','science_quiz','math_puzzle','phonics','letter_match'];
 
 // Unique topic pools per subject to avoid repetitive games
@@ -43,6 +54,7 @@ async function generateQuestionsForGame(base44, gameTitle, topicName, subject, a
   const alreadyMade = existingTitles && existingTitles.length > 0
     ? `\nElakkan soalan yang SAMA dengan games sedia ada: ${existingTitles.slice(-5).join(', ')}`
     : '';
+  const kssrGuide = getKssrGuide(darjah);
 
   const languageRule = subject === 'english'
     ? 'WAJIB guna English sahaja untuk problem, options dan jawapan. Jangan guna Bahasa Melayu kecuali nama tempat/nama orang Malaysia.'
@@ -78,6 +90,7 @@ Tajuk: "${gameTitle}"
 Topik KHUSUS: "${topicName}"
 Subjek: ${CATEGORY_LABELS[subject] || subject}
 Peringkat: ${darjah ? `${DARJAH_LABELS[darjah] || darjah} (${AGE_LABELS[ageGroup] || ageGroup})` : (AGE_LABELS[ageGroup] || ageGroup)}
+${kssrGuide ? `Panduan KSSR tahap ini: ${kssrGuide}` : ''}
 ${alreadyMade}
 ${extraInstruction}
 
@@ -93,6 +106,7 @@ WAJIB ikut standard mass production ini:
   9. Untuk Bahasa Tamil, Bahasa Mandarin dan Jawi, guna emoji neutral subjek sahaja supaya tidak tersalah petunjuk jawapan.
   10. Jangan guna placeholder seperti "Soalan 1", "Item", "Gambar di bawah", atau arahan yang perlukan gambar tetapi tiada gambar.
   11. Jangan ulang pola soalan yang sama; setiap soalan mesti menguji kemahiran berbeza dalam topik ini.
+  12. Untuk Darjah 1-6, WAJIB ikut tahap KSSR yang diberi. Jangan jana soalan terlalu tinggi/rendah, fakta luar silibus, trivia rawak, atau soalan 'merepek' yang tidak menguji kemahiran subjek.
 
 Output JSON sahaja: "questions" dengan problem, options[4], answer(0-3), emoji.`,
     response_json_schema: {
@@ -130,6 +144,7 @@ Output JSON sahaja: "questions" dengan problem, options[4], answer(0-3), emoji.`
 Konteks:
 - Subjek: ${CATEGORY_LABELS[subject] || subject}
 - Peringkat: ${darjah ? `${DARJAH_LABELS[darjah] || darjah} (${AGE_LABELS[ageGroup] || ageGroup})` : (AGE_LABELS[ageGroup] || ageGroup)}
+- Panduan KSSR tahap: ${kssrGuide || 'Ikut tahap umur yang dinyatakan'}
 - Topik: ${topicName}
 
 Tugas anda:
@@ -143,6 +158,7 @@ Tugas anda:
 8. Buang semua emoji daripada problem/options; emoji hanya dibenarkan dalam field emoji.
 9. Untuk Tamil, Mandarin dan Jawi, guna emoji neutral subjek sahaja, bukan emoji haiwan/buah/benda yang boleh trigger mismatch.
 10. Pastikan answer index sepadan dengan jawapan betul.
+11. Jika Darjah 1-6, pastikan setiap soalan benar-benar selari KSSR tahap tersebut; buang trivia rawak, soalan luar topik, atau kandungan terlalu tinggi/rendah.
 
 Soalan asal JSON:
 ${JSON.stringify(questions.slice(0, questionsCount))}
@@ -170,6 +186,9 @@ Output JSON sahaja: questions[{problem, options[4], answer, emoji}]`,
   });
 
   const finalQuestions = cleanQuestions(reviewed.questions);
+  if (ageGroup === 'sekolah_rendah' && darjah && finalQuestions.length < questionsCount) {
+    console.warn(`KSSR audit kept only ${finalQuestions.length}/${questionsCount} questions for ${darjah} ${subject} ${topicName}`);
+  }
   return (finalQuestions.length >= questionsCount ? finalQuestions : questions).slice(0, questionsCount);
 }
 

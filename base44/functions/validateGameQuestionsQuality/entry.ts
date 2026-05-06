@@ -25,12 +25,27 @@ Deno.serve(async (req) => {
 
     const darjahMap = {
       prasekolah: 'Prasekolah (4-6 tahun)',
+      darjah_1: 'Darjah 1',
+      darjah_2: 'Darjah 2',
+      darjah_3: 'Darjah 3',
+      darjah_4: 'Darjah 4',
+      darjah_5: 'Darjah 5',
+      darjah_6: 'Darjah 6',
       1: 'Darjah 1',
       2: 'Darjah 2',
       3: 'Darjah 3',
       4: 'Darjah 4',
       5: 'Darjah 5',
       6: 'Darjah 6',
+    };
+
+    const kssrGuideMap = {
+      darjah_1: 'KSSR D1: asas huruf/perkataan/ayat pendek, nombor 0-100, tambah/tolak mudah, bentuk asas, deria dan benda hidup/bukan hidup.',
+      darjah_2: 'KSSR D2: ayat mudah/kefahaman asas, nombor hingga 1000, operasi asas, wang/masa mudah, haiwan/tumbuhan/manusia/bahan harian.',
+      darjah_3: 'KSSR D3: kefahaman ringkas, nombor hingga 10000, operasi asas, pecahan/ukuran mudah, pengelasan, magnet, cahaya, bunyi, sistem suria asas.',
+      darjah_4: 'KSSR D4: konsep tahap 2 jelas, operasi bergabung mudah, pecahan/perpuluhan asas, proses hidup, sifat bahan, tenaga dan alam sekitar.',
+      darjah_5: 'KSSR D5: aplikasi sederhana, pecahan/perpuluhan/peratus, nisbah mudah, data, mikroorganisma, elektrik asas, haba dan rantai makanan.',
+      darjah_6: 'KSSR D6: pengukuhan tahap 2, penyelesaian masalah sederhana, peratus/purata/graf, daya, mesin ringkas, ekosistem dan penyiasatan saintifik.'
     };
 
     const categoryMap = {
@@ -45,6 +60,7 @@ Deno.serve(async (req) => {
 
     const darjahLabel = game.darjah ? darjahMap[game.darjah] : darjahMap[ageGroup];
     const categoryLabel = categoryMap[category] || category;
+    const kssrGuide = game.darjah ? (kssrGuideMap[game.darjah] || '') : '';
 
     // Detailed validation prompt checking soalan, jawapan, emoji/icon, images
     const questionsText = questions
@@ -64,6 +80,7 @@ Game Context:
 - Subject: ${categoryLabel}
 - Level: ${darjahLabel}
 - Game Type: ${game.type}
+- KSSR Level Guide: ${kssrGuide || 'Use the stated age/level only'}
 
 CRITICAL VALIDATION RULES:
 1. SOALAN CHECK: Is the question accurate, clear, age-appropriate for ${darjahLabel}?
@@ -72,7 +89,8 @@ CRITICAL VALIDATION RULES:
 4. EMOJI-ANSWER SEMANTIC MATCH: If emoji is 🦁 (lion), the correct answer MUST be about lions (singa/lion/etc). REJECT mismatches like 🦁 with bird answers.
 5. IMAGE CHECK: Is image URL valid/present if needed? (URL format check)
 6. DUPLICATE CHECK: Are any questions repeated or too similar?
-7. CURRICULUM FIT: Does question align with ${categoryLabel} curriculum?
+7. CURRICULUM FIT: Does question align with ${categoryLabel} KSSR curriculum and the exact ${darjahLabel} level?
+8. LEVEL MISMATCH CHECK: FAIL if too advanced, too childish, outside KSSR scope, random trivia, vague, or not testing the subject skill.
 
 Questions to validate:
 ${questionsText}
