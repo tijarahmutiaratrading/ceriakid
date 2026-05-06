@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Edit3, FileText, Loader2, RefreshCw, Search, ToggleLeft, ToggleRight, Trash2, Wand2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
-import BBMTaskQueue from '@/components/admin/BBMTaskQueue';
 
 const SUBJECTS = [
   { value: 'bahasa_melayu', label: '🇲🇾 Bahasa Melayu' },
@@ -216,7 +215,6 @@ export default function BBMGeneratorManager({ onToast }) {
 
           {error && <div className="p-4 rounded-2xl bg-red-500/20 border border-red-400/30 text-red-200 text-sm mb-4">⚠️ {error}</div>}
           <AnimatePresence>{result && <ResultCard result={result} onManage={() => setTab('manager')} onReset={() => setResult(null)} />}</AnimatePresence>
-          <BBMTaskQueue tasks={tasks} loadingTasks={loadingTasks} onRefresh={loadTasks} onDeleteTask={handleDeleteTask} onClearCompleted={handleDeleteCompletedTasks} onClearPending={handleDeletePendingTasks} />
         </div>
       )}
 
@@ -241,8 +239,6 @@ export default function BBMGeneratorManager({ onToast }) {
               }} className="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-red-500/20 text-red-300 border border-red-400/30 hover:bg-red-500/30 flex items-center justify-center flex-shrink-0 transition-all"><Trash2 className="w-4 h-4" /></button>
             </div>
           </div>
-
-          <div className="mb-5"><BBMTaskQueue tasks={tasks} loadingTasks={loadingTasks} onRefresh={loadTasks} onDeleteTask={handleDeleteTask} onClearCompleted={handleDeleteCompletedTasks} onClearPending={handleDeletePendingTasks} /></div>
 
           {loadingResources ? <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-white" /></div> : (
             <div className="space-y-2">

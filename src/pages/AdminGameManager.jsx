@@ -13,6 +13,7 @@ import MonthlyGenSettings from '@/components/admin/MonthlyGenSettings';
 import StoryKidGenerator from '@/components/admin/StoryKidGenerator';
 import StoryKidManager from '@/components/admin/StoryKidManager';
 import BBMGeneratorManager from '@/components/admin/BBMGeneratorManager';
+import MasterTaskQueue from '@/components/admin/MasterTaskQueue';
 
 const QUESTION_THRESHOLD = 20;
 const QUESTION_GENERATION_DELAY = 3000;
@@ -639,71 +640,6 @@ export default function AdminGameManager() {
               <p className="text-white/40 text-xs text-center mt-2">✅ Tasks diproses otomatik setiap 5 minit. Boleh tutup browser.</p>
             </div>
 
-            {/* Task Queue */}
-            <div className="p-5 md:p-7 rounded-[2rem] shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="font-black text-white">📋 Task Queue</h2>
-                <div className="flex gap-2 items-center flex-wrap justify-end">
-                  {completedTasks.length > 0 && (
-                    <button onClick={handleDeleteAllCompleted} className="text-xs font-bold text-green-300 hover:underline">Clear Completed</button>
-                  )}
-                  {pendingTasks.length > 0 && (
-                    <button onClick={handleDeleteAllPending} className="text-xs font-bold text-red-300 hover:underline">Padam Pending</button>
-                  )}
-                  <button onClick={loadTasks} className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all">
-                    <RefreshCw className={`w-4 h-4 text-white/70 ${loadingTasks ? 'animate-spin' : ''}`} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-4 gap-2 mb-4">
-                {[
-                  { label: 'Pending', value: pendingTasks.length, color: 'text-yellow-300' },
-                  { label: 'Running', value: runningTasks.length, color: 'text-blue-300' },
-                  { label: 'Done', value: completedTasks.length, color: 'text-green-300' },
-                  { label: 'Failed', value: failedTasks.length, color: 'text-red-300' },
-                ].map(s => (
-                  <div key={s.label} className="bg-white/10 rounded-2xl p-3 text-center border border-white/10 shadow-lg shadow-black/10">
-                    <p className={`font-black text-lg ${s.color}`}>{s.value}</p>
-                    <p className="text-xs text-white/80 font-semibold">{s.label}</p>
-                  </div>
-                ))}
-              </div>
-
-              {loadingTasks ? (
-                <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>
-              ) : tasks.length === 0 ? (
-                <div className="text-center py-8 text-white/40">
-                  <p className="text-3xl mb-2">📭</p>
-                  <p className="text-sm font-semibold text-white/80">Tiada tasks dalam queue</p>
-                </div>
-              ) : (
-                <div className="space-y-2 max-h-80 overflow-y-auto">
-                  {tasks.map(task => {
-                    const sc = statusConfig[task.status] || statusConfig.pending;
-                    return (
-                      <div key={task.id} className="flex items-center gap-3 rounded-2xl px-4 py-3 border border-white/10 shadow-lg shadow-black/10" style={{ background: 'rgba(255,255,255,0.08)' }}>
-                        <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${sc.color}`}>
-                          {sc.icon} {task.status}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-bold text-white truncate">{task.taskName}</p>
-                          <p className="text-xs text-white/70">{task.gamesCount} games · {task.questionsPerGame} soalan
-                            {task.createdGames > 0 && <span className="text-green-300 font-bold"> · {task.createdGames} dibuat</span>}
-                          </p>
-                        </div>
-                        {task.status === 'pending' && (
-                          <button onClick={() => handleDeleteTask(task.id)} className="p-1 text-red-300 hover:text-red-400 transition-all">
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
             </motion.div>
             )}
 
@@ -1069,6 +1005,8 @@ export default function AdminGameManager() {
             )}
           </motion.div>
         )}
+
+        <MasterTaskQueue onToast={showToast} />
       </div>
 
       {/* Edit Subject Config Modal */}
