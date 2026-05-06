@@ -1,24 +1,26 @@
 {
-  "name": "CeriaKid - Pembelajaran Anak",
+  "name": "CeriaKid",
   "short_name": "CeriaKid",
-  "description": "200+ permainan edukatif untuk anak prasekolah & sekolah rendah",
-  "start_url": "/",
+  "description": "Permainan pembelajaran interaktif untuk anak Prasekolah dan Sekolah Rendah Malaysia.",
+  "start_url": "/dashboard",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#312e81",
   "theme_color": "#8b5cf6",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
+  "lang": "ms-MY",
   "icons": [
     {
       "src": "https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ],
-  "categories": ["education", "kids"],
-  "lang": "ms"
+  ]
 }

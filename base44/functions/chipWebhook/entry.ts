@@ -20,15 +20,39 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Invalid payload' }, { status: 400 });
     }
 
+    const secretKey = Deno.env.get('CHIP_SECRET_KEY');
+    if (!secretKey) {
+      return Response.json({ error: 'Payment gateway not configured' }, { status: 500 });
+    }
+
     // Chip sends payment status in the payload
     const status = body.status;
     const purchaseId = body.id;
     const reference = body.reference; // format: "email__tier__timestamp"
 
-    // Only process successful payments
-    if (status !== 'paid') {
-      console.log('Payment not paid, status:', status);
+    // Verify purchase directly with Chip before activating subscription
+    const verifyResponse = await fetch(`https://gate.chip-in.asia/api/v1/purchases/${purchaseId}/`, {
+      headers: { 'Authorization': `Bearer ${secretKey}` }
+    });
+
+    if (!verifyResponse.ok) {
+      console.error('Unable to verify Chip purchase:', purchaseId);
+      return Response.json({ error: 'Unable to verify purchase' }, { status: 400 });
+    }
+
+    const verifiedPurchase = await verifyResponse.json();
+    const verifiedStatus = verifiedPurchase.status;
+    const verifiedReference = verifiedPurchase.reference;
+
+    // Only process successful payments confirmed by Chip API
+    if (status !== 'paid' || verifiedStatus !== 'paid') {
+      console.log('Payment not paid, webhook status:', status, 'verified status:', verifiedStatus);
       return Response.json({ received: true });
+    }
+
+    if (verifiedReference && verifiedReference !== reference) {
+      console.error('Reference mismatch:', reference, verifiedReference);
+      return Response.json({ error: 'Reference mismatch' }, { status: 400 });
     }
 
     if (!reference) {
