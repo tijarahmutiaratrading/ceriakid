@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, Loader2, Sparkles } from 'lucide-react';
+import { BookOpen, CheckCircle2, Loader2, RefreshCw, Sparkles } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 export const STORY_KID_SEEDS = [
@@ -107,6 +107,19 @@ export default function StoryKidGenerator({ onToast }) {
   const [loading, setLoading] = useState(false);
   const [storyCount, setStoryCount] = useState(5);
   const [slideCount, setSlideCount] = useState(10);
+  const [generatedStories, setGeneratedStories] = useState([]);
+  const [loadingQueue, setLoadingQueue] = useState(false);
+
+  const loadGeneratedStories = async () => {
+    setLoadingQueue(true);
+    const stories = await base44.entities.Game.filter({ type: 'story_adventure', category: 'story', ageGroup: 'prasekolah' }, '-created_date', 30);
+    setGeneratedStories(stories.filter(story => story.gameData?.storyKid));
+    setLoadingQueue(false);
+  };
+
+  useEffect(() => {
+    loadGeneratedStories();
+  }, []);
 
   const seedStories = async () => {
     setLoading(true);
@@ -130,6 +143,7 @@ export default function StoryKidGenerator({ onToast }) {
         order: i,
       });
     }
+    await loadGeneratedStories();
     setLoading(false);
     onToast?.(`✅ ${selectedStories.length} Story Kid berjaya ditambah (${slideCount} slide setiap cerita)!`);
   };
@@ -174,14 +188,37 @@ export default function StoryKidGenerator({ onToast }) {
         <p className="text-white font-black text-lg">{Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))} story × {Math.max(3, Math.min(12, Number(slideCount) || 10))} slide</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-        {STORY_KID_SEEDS.slice(0, Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))).map((story) => (
-          <div key={story.title} className="p-4 rounded-2xl bg-white/10 border border-white/10">
-            <p className="text-3xl mb-2">{story.emoji}</p>
-            <p className="text-white font-black text-sm">{story.title}</p>
-            <p className="text-white/55 text-xs mt-1">{story.moral}</p>
+      <div className="mb-5 rounded-2xl bg-white/10 border border-white/10 overflow-hidden">
+        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-white/10">
+          <div>
+            <p className="text-white font-black text-sm">📋 Story Kid Task Queue</p>
+            <p className="text-white/50 text-xs">Senarai story yang sudah dijana</p>
           </div>
-        ))}
+          <button onClick={loadGeneratedStories} disabled={loadingQueue} className="p-2 rounded-xl bg-white/10 text-white/70 hover:bg-white/20 transition-all">
+            <RefreshCw className={`w-4 h-4 ${loadingQueue ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+
+        {loadingQueue ? (
+          <div className="flex justify-center py-6"><Loader2 className="w-5 h-5 animate-spin text-white" /></div>
+        ) : generatedStories.length === 0 ? (
+          <div className="py-6 text-center text-white/45 text-sm font-semibold">Belum ada Story Kid dijana.</div>
+        ) : (
+          <div className="max-h-72 overflow-y-auto divide-y divide-white/10">
+            {generatedStories.map((story) => (
+              <div key={story.id} className="flex items-center gap-3 px-4 py-3">
+                <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-xl flex-shrink-0">{story.emoji || '📖'}</div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-black text-sm truncate">{story.title}</p>
+                  <p className="text-white/45 text-xs">{story.gameData?.scenes?.length || story.totalQuestions || 0} slide · {story.isPublished ? 'Published' : 'Draft'}</p>
+                </div>
+                <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-black">
+                  <CheckCircle2 className="w-3 h-3" /> Done
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <button onClick={seedStories} disabled={loading} className="w-full py-4 rounded-2xl bg-white text-purple-700 font-black shadow-xl flex items-center justify-center gap-2 disabled:opacity-60">
