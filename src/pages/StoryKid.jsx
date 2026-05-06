@@ -13,46 +13,46 @@ const SAMPLE_STORIES = [
     cover: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f57f9479f_generated_image.png',
     moral: 'Sayangi haiwan dan bantu dengan cara selamat.',
     scenes: [
-      { image: '🏫', text: 'Ali balik dari sekolah dan terdengar bunyi kucing kecil.', choices: [{ text: 'Cari bunyi itu', next: 1, star: true }, { text: 'Terus balik rumah', next: 2 }] },
-      { image: '🐱', text: 'Ali nampak anak kucing tersepit di tepi longkang.', choices: [{ text: 'Panggil orang dewasa', next: 3, star: true }, { text: 'Tarik sendiri kuat-kuat', next: 2 }] },
-      { image: '😟', text: 'Kucing masih takut. Ali belajar perlu minta bantuan.', choices: [{ text: 'Cuba semula', next: 0 }] },
-      { image: '🥰', text: 'Kucing berjaya diselamatkan. Ali rasa sangat gembira!', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0a97ddf90_generated_image.png', text: 'Ali balik dari sekolah dan terdengar bunyi kucing kecil.', choices: [{ text: 'Cari bunyi itu', next: 1, star: true }, { text: 'Terus balik rumah', next: 2 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3ff2b9379_generated_image.png', text: 'Ali nampak anak kucing tersepit di tepi longkang.', choices: [{ text: 'Panggil orang dewasa', next: 3, star: true }, { text: 'Tarik sendiri kuat-kuat', next: 2 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fdbdb4e85_generated_image.png', text: 'Kucing masih takut. Ali belajar perlu minta bantuan.', choices: [{ text: 'Cuba semula', next: 0 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f4b720a6a_generated_image.png', text: 'Kucing berjaya diselamatkan. Ali rasa sangat gembira!', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] },
     ],
   },
   {
     id: 'misi-angkasa', title: 'Misi Angkasa Nia', emoji: '🚀', cover: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3c03de7fd_generated_image.png', moral: 'Berani bertanya dan bekerjasama membawa kejayaan.',
     scenes: [
-      { image: '🚀', text: 'Nia menaiki roket ke bulan. Tiba-tiba lampu merah menyala!', choices: [{ text: 'Semak peta bintang', next: 1, star: true }, { text: 'Tekan semua butang', next: 2 }] },
-      { image: '🌙', text: 'Peta menunjukkan roket perlu mendarat perlahan di bulan.', choices: [{ text: 'Mendarat perlahan', next: 3, star: true }, { text: 'Turun laju', next: 2 }] },
-      { image: '💫', text: 'Roket berpusing! Nia tarik nafas dan cuba fikir semula.', choices: [{ text: 'Cuba semula', next: 0 }] },
-      { image: '👽', text: 'Nia bertemu alien comel yang memberi pelekat bintang.', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/44f9e58a4_generated_image.png', text: 'Nia menaiki roket ke bulan. Tiba-tiba lampu merah menyala!', choices: [{ text: 'Semak peta bintang', next: 1, star: true }, { text: 'Tekan semua butang', next: 2 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d52325143_generated_image.png', text: 'Peta menunjukkan roket perlu mendarat perlahan di bulan.', choices: [{ text: 'Mendarat perlahan', next: 3, star: true }, { text: 'Turun laju', next: 2 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/cc832417c_generated_image.png', text: 'Roket berpusing! Nia tarik nafas dan cuba fikir semula.', choices: [{ text: 'Cuba semula', next: 0 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4721af2f6_generated_image.png', text: 'Nia bertemu alien comel yang memberi pelekat bintang.', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] },
     ],
   },
   {
     id: 'hutan-bersih', title: 'Sara Jaga Hutan', emoji: '🌳', cover: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/7055e89d0_generated_image.png', moral: 'Jaga alam sekitar bermula dengan tindakan kecil.',
     scenes: [
-      { image: '🌲', text: 'Sara pergi berkelah dan nampak sampah di tepi pokok.', choices: [{ text: 'Kutip dan buang dalam tong', next: 1, star: true }, { text: 'Biarkan sahaja', next: 2 }] },
-      { image: '🦋', text: 'Rama-rama datang kerana kawasan sudah bersih.', choices: [{ text: 'Ajak kawan bersihkan lagi', next: 3, star: true }, { text: 'Balik terus', next: 3 }] },
-      { image: '😢', text: 'Hutan jadi kotor dan haiwan sedih.', choices: [{ text: 'Cuba semula', next: 0 }] },
-      { image: '🌈', text: 'Hutan kembali ceria dan semua orang seronok!', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/32fd99f2b_generated_image.png', text: 'Sara pergi berkelah dan nampak sampah di tepi pokok.', choices: [{ text: 'Kutip dan buang dalam tong', next: 1, star: true }, { text: 'Biarkan sahaja', next: 2 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e0c33c071_generated_image.png', text: 'Rama-rama datang kerana kawasan sudah bersih.', choices: [{ text: 'Ajak kawan bersihkan lagi', next: 3, star: true }, { text: 'Balik terus', next: 3 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/247d767b8_generated_image.png', text: 'Hutan jadi kotor dan haiwan sedih.', choices: [{ text: 'Cuba semula', next: 0 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e2865e747_generated_image.png', text: 'Hutan kembali ceria dan semua orang seronok!', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] },
     ],
   },
   {
     id: 'detektif-huruf', title: 'Detektif Huruf Aina', emoji: '🔎', cover: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/391ad2d64_generated_image.png', moral: 'Belajar membaca jadi seronok bila kita cuba perlahan-lahan.',
     scenes: [
-      { image: '🔤', text: 'Aina jumpa kotak misteri dengan huruf A di atasnya.', choices: [{ text: 'Cari benda bermula A', next: 1, star: true }, { text: 'Tendang kotak', next: 2 }] },
-      { image: '🍎', text: 'Aina jumpa epal! Epal bermula dengan huruf E.', choices: [{ text: 'Cari Ayam pula', next: 3, star: true }, { text: 'Pilih kereta', next: 2 }] },
-      { image: '🤔', text: 'Pilihan itu belum tepat. Aina cuba dengar bunyi huruf.', choices: [{ text: 'Cuba semula', next: 0 }] },
-      { image: '🐔', text: 'Aina jumpa ayam. Misteri huruf A berjaya diselesaikan!', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3e8bf81ab_generated_image.png', text: 'Aina jumpa kotak misteri dengan huruf A di atasnya.', choices: [{ text: 'Cari benda bermula A', next: 1, star: true }, { text: 'Tendang kotak', next: 2 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/923e639a7_generated_image.png', text: 'Aina jumpa epal! Sekarang Aina perlu cari benda bermula A.', choices: [{ text: 'Cari Ayam pula', next: 3, star: true }, { text: 'Pilih kereta', next: 2 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/301eea039_generated_image.png', text: 'Pilihan itu belum tepat. Aina cuba dengar bunyi huruf.', choices: [{ text: 'Cuba semula', next: 0 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e8decdec5_generated_image.png', text: 'Aina jumpa ayam. Misteri huruf A berjaya diselesaikan!', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] },
     ],
   },
   {
     id: 'pasar-buah', title: 'Bobo di Pasar Buah', emoji: '🍎', cover: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/713c12f6e_generated_image.png', moral: 'Mengira dan memilih makanan sihat itu penting.',
     scenes: [
-      { image: '🧺', text: 'Bobo mahu beli 3 biji buah untuk ibu.', choices: [{ text: 'Kira buah satu-satu', next: 1, star: true }, { text: 'Ambil seberapa banyak', next: 2 }] },
-      { image: '🍌', text: 'Bobo sudah ada 1 pisang. Perlu tambah berapa lagi?', choices: [{ text: 'Tambah 2 buah', next: 3, star: true }, { text: 'Tambah 5 buah', next: 2 }] },
-      { image: '😅', text: 'Bilangan buah belum betul. Bobo cuba kira semula.', choices: [{ text: 'Cuba semula', next: 0 }] },
-      { image: '🍎', text: 'Bobo berjaya beli 3 buah. Ibu sangat bangga!', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/230eb2846_generated_image.png', text: 'Bobo mahu beli 3 biji buah untuk ibu.', choices: [{ text: 'Kira buah satu-satu', next: 1, star: true }, { text: 'Ambil seberapa banyak', next: 2 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3a3fc73b2_generated_image.png', text: 'Bobo sudah ada 1 pisang. Perlu tambah berapa lagi?', choices: [{ text: 'Tambah 2 buah', next: 3, star: true }, { text: 'Tambah 5 buah', next: 2 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6653fd8e0_generated_image.png', text: 'Bilangan buah belum betul. Bobo cuba kira semula.', choices: [{ text: 'Cuba semula', next: 0 }] },
+      { imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/aa9c6088e_generated_image.png', text: 'Bobo berjaya beli 3 buah. Ibu sangat bangga!', choices: [{ text: 'Tamat cerita', next: 'end', star: true }] },
     ],
   },
 ];
@@ -138,7 +138,9 @@ export default function StoryKid() {
           <>
             <div className="mb-4 p-4 rounded-[2rem] flex items-center gap-3 shadow-2xl shadow-purple-950/20" style={cardStyle}>
               <button onClick={() => setSelected(null)} className="w-11 h-11 rounded-2xl bg-white/20 text-white font-black">←</button>
-              <div className="text-4xl">{story.emoji}</div>
+              <div className="w-12 h-12 rounded-2xl overflow-hidden bg-white/20 flex-shrink-0">
+                {story.cover && <img src={story.cover} alt={story.title} className="w-full h-full object-cover" />}
+              </div>
               <div className="flex-1 min-w-0">
                 <h1 className="text-white font-black text-lg truncate">{story.title}</h1>
                 <div className="h-2 bg-white/20 rounded-full mt-2 overflow-hidden"><div className="h-full bg-yellow-300 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} /></div>
@@ -149,10 +151,10 @@ export default function StoryKid() {
             <AnimatePresence mode="wait">
               <motion.div key={sceneIndex} initial={{ opacity: 0, rotateY: 35, x: 40 }} animate={{ opacity: 1, rotateY: 0, x: 0 }} exit={{ opacity: 0, rotateY: -35, x: -40 }} transition={{ type: 'spring', stiffness: 120, damping: 18 }} className="rounded-[2rem] shadow-2xl shadow-purple-950/40 bg-amber-50 p-3" style={{ perspective: 1000 }}>
                 <div className="rounded-[1.6rem] overflow-hidden border-4 border-white bg-white shadow-inner">
-                  <div className="relative h-56 sm:h-72 bg-gradient-to-br from-yellow-100 to-pink-100 overflow-hidden">
-                    {story.cover ? <img src={story.cover} alt={story.title} className="absolute inset-0 w-full h-full object-cover opacity-80" /> : null}
-                    <div className="absolute inset-0 bg-gradient-to-t from-white via-white/30 to-transparent" />
-                    <motion.div animate={{ y: [0, -8, 0], rotate: [0, 2, 0] }} transition={{ duration: 3, repeat: Infinity }} className="absolute inset-0 flex items-center justify-center text-8xl sm:text-9xl drop-shadow-2xl">{scene.image}</motion.div>
+                  <div className="relative h-[22rem] sm:h-[28rem] bg-gradient-to-br from-yellow-100 to-pink-100 overflow-hidden">
+                    <motion.img key={scene.imageUrl || story.cover} src={scene.imageUrl || story.cover} alt={scene.text} initial={{ scale: 1.08 }} animate={{ scale: 1 }} transition={{ duration: 0.8 }} className="absolute inset-0 w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-white/15 to-transparent" />
+                    <motion.div animate={{ opacity: [0.25, 0.55, 0.25], scale: [1, 1.08, 1] }} transition={{ duration: 4, repeat: Infinity }} className="absolute -right-10 -top-10 w-32 h-32 bg-yellow-200 rounded-full blur-2xl" />
                     <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-white/85 text-purple-700 text-xs font-black">Halaman {Math.min(sceneIndex + 1, story.scenes.length)}</div>
                   </div>
                   <div className="p-5 bg-white">
