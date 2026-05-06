@@ -270,16 +270,16 @@ export default function StoryKidGenerator({ onToast }) {
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 rounded-[2rem] shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.18), rgba(236,72,153,0.14))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
-      <div className="flex items-center gap-4 mb-5">
-        <div className="w-14 h-14 rounded-3xl bg-white/20 flex items-center justify-center text-3xl">📖</div>
-        <div>
-          <h2 className="font-black text-white text-2xl">Story Kid Generator</h2>
-          <p className="text-white/65 text-sm">Tambah 5 cerita interaktif awal untuk kanak-kanak.</p>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.18), rgba(236,72,153,0.14))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
+      <div className="flex items-start gap-3 sm:gap-4 mb-5">
+        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl sm:rounded-3xl bg-white/20 flex items-center justify-center text-2xl sm:text-3xl flex-shrink-0">📖</div>
+        <div className="min-w-0">
+          <h2 className="font-black text-white text-xl sm:text-2xl leading-tight">Story Kid Generator</h2>
+          <p className="text-white/65 text-xs sm:text-sm mt-1 leading-snug">Tambah cerita interaktif awal untuk kanak-kanak.</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
         <div>
           <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">Jumlah Story</label>
           <input
@@ -288,7 +288,7 @@ export default function StoryKidGenerator({ onToast }) {
             max={STORY_KID_SEEDS.length}
             value={storyCount}
             onChange={(e) => setStoryCount(e.target.value)}
-            className="w-full p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center outline-none focus:bg-white/15"
+            className="w-full p-3 sm:p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl sm:text-2xl text-center outline-none focus:bg-white/15"
           />
         </div>
         <div>
@@ -299,18 +299,18 @@ export default function StoryKidGenerator({ onToast }) {
             max="12"
             value={slideCount}
             onChange={(e) => setSlideCount(e.target.value)}
-            className="w-full p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center outline-none focus:bg-white/15"
+            className="w-full p-3 sm:p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl sm:text-2xl text-center outline-none focus:bg-white/15"
           />
         </div>
       </div>
 
       <div className="mb-5 rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
         <p className="text-white/60 text-xs font-semibold">Akan dijana</p>
-        <p className="text-white font-black text-lg">{Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))} story × {Math.max(3, Math.min(12, Number(slideCount) || 10))} slide</p>
+        <p className="text-white font-black text-base sm:text-lg leading-snug">{Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))} story × {Math.max(3, Math.min(12, Number(slideCount) || 10))} slide</p>
       </div>
 
       <div className="mb-5 rounded-2xl bg-white/10 border border-white/10 overflow-hidden">
-        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-white/10">
+        <div className="flex items-start sm:items-center justify-between gap-3 px-3 sm:px-4 py-3 border-b border-white/10">
           <div>
             <p className="text-white font-black text-sm">📋 Story Kid Task Queue</p>
             <p className="text-white/50 text-xs">Queue ini diproses background walaupun browser ditutup</p>
@@ -327,13 +327,13 @@ export default function StoryKidGenerator({ onToast }) {
         ) : (
           <div className="max-h-72 overflow-y-auto divide-y divide-white/10">
             {generatedStories.map((story) => (
-              <div key={story.id} className="flex items-center gap-3 px-4 py-3">
+              <div key={story.id} className="flex items-start gap-3 px-3 sm:px-4 py-3">
                 <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-xl flex-shrink-0">📖</div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white font-black text-sm truncate">{story.taskName}</p>
-                  <p className="text-white/45 text-xs">{story.createdGames || 0}/{story.gamesCount || 0} visual · {story.status}</p>
+                  <p className="text-white font-black text-xs sm:text-sm truncate">{story.taskName}</p>
+                  <p className="text-white/45 text-[11px] sm:text-xs mt-0.5">{story.createdGames || 0}/{story.gamesCount || 0} visual · {story.status}</p>
                 </div>
-                <span className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-black ${story.status === 'completed' ? 'bg-green-100 text-green-700' : story.status === 'failed' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                <span className={`flex items-center gap-1 px-2 py-1 rounded-full text-[10px] sm:text-xs font-black flex-shrink-0 ${story.status === 'completed' ? 'bg-green-100 text-green-700' : story.status === 'failed' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
                   <CheckCircle2 className="w-3 h-3" /> {story.status === 'completed' ? 'Done' : 'Queue'}
                 </span>
               </div>
@@ -342,12 +342,12 @@ export default function StoryKidGenerator({ onToast }) {
         )}
       </div>
 
-      <button onClick={seedStories} disabled={loading} className="w-full py-4 rounded-2xl bg-white text-purple-700 font-black shadow-xl flex items-center justify-center gap-2 disabled:opacity-60">
+      <button onClick={seedStories} disabled={loading} className="w-full py-3.5 sm:py-4 rounded-2xl bg-white text-purple-700 font-black shadow-xl flex items-center justify-center gap-2 disabled:opacity-60 text-sm sm:text-base">
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
         {loading ? 'Masukkan ke queue...' : 'Tambah Story ke Queue'}
       </button>
 
-      <Link to="/story-kid" className="mt-3 w-full py-3 rounded-2xl bg-white/10 text-white font-black border border-white/15 flex items-center justify-center gap-2">
+      <Link to="/story-kid" className="mt-3 w-full py-3 rounded-2xl bg-white/10 text-white font-black border border-white/15 flex items-center justify-center gap-2 text-sm sm:text-base">
         <BookOpen className="w-4 h-4" /> Preview Story Kid
       </Link>
     </motion.div>
