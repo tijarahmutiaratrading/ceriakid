@@ -246,8 +246,13 @@ Deno.serve(async (req) => {
       tracing: { title: 'Tracing Game', type: 'tracing', emoji: '✏️' },
     };
 
-    const storybookStyleReference = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/faa67071e_IMG_0482.jpeg';
-    const buildStoryImagePrompt = (story, scene, index, type = 'scene') => `Create a premium children's storybook illustration in the same polished quality as modern kids storybooks: vibrant colors, cute expressive characters, soft cinematic lighting, magical detailed background, charming 3D/cartoon digital painting, clean composition, child-friendly, high detail. Story title: ${story.title}. Scene ${index + 1}: ${scene?.text || story.moral}. Moral/theme: ${story.moral}. ${type === 'cover' ? 'Make it look like a beautiful book cover illustration with the main character centered, but do not include readable text.' : 'Make it look like a full-page illustrated storybook scene with clear action and emotion.'} Important: no words, no letters, no watermark, no logo, no UI, no speech bubbles.`;
+    const storybookStyleReference = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/580d3db6a_IMG_0482.jpeg';
+    const buildStoryImagePrompt = (story, scene, index, type = 'scene') => `Create a premium kids storybook illustration like a polished Canva children's book: bright magical forest/book-page style, cute expressive child character, friendly animals where relevant, cinematic warm sunlight, rich colorful background, glossy 3D cartoon digital painting, professional printed storybook quality, clean composition, child-safe, high detail.
+Story title: ${story.title}.
+Scene ${index + 1}: ${scene?.text || story.moral}
+Moral/theme: ${story.moral}.
+${type === 'cover' ? 'Make it a vertical front book cover illustration with the main character centered and strong storybook cover composition.' : 'Make it a full-page inner storybook illustration with clear action, emotion, and room at the bottom for app text overlay.'}
+Important: illustration only, no readable words, no letters, no watermark, no logo, no UI, no speech bubbles.`;
 
     const buildMiniGameData = (mode, index) => {
       const variant = index % 5;
@@ -317,6 +322,35 @@ Deno.serve(async (req) => {
       const meta = JSON.parse(task.errorMessage || '{}');
       const story = meta.story || { title: task.taskName, emoji: '📖', moral: task.taskName };
       const scenes = Array.isArray(meta.scenes) ? meta.scenes : [];
+      const generatedScenes = Array.isArray(meta.generatedScenes) ? meta.generatedScenes : [];
+
+      if (!meta.cover) {
+        const coverResult = await base44.asServiceRole.integrations.Core.GenerateImage({
+          prompt: buildStoryImagePrompt(story, scenes[0], 0, 'cover'),
+          existing_image_urls: [storybookStyleReference],
+        });
+        await base44.asServiceRole.entities.GameTask.update(task.id, {
+          status: 'pending',
+          createdGames: 1,
+          errorMessage: JSON.stringify({ ...meta, cover: coverResult.url, generatedScenes }),
+        });
+        return Response.json({ success: true, taskName: task.taskName, createdGames: 1, totalGames: scenes.length + 1, isDone: false });
+      }
+
+      if (generatedScenes.length < scenes.length) {
+        const index = generatedScenes.length;
+        const result = await base44.asServiceRole.integrations.Core.GenerateImage({
+          prompt: buildStoryImagePrompt(story, scenes[index], index, 'scene'),
+          existing_image_urls: [storybookStyleReference],
+        });
+        const nextScenes = [...generatedScenes, { ...scenes[index], imageUrl: result.url }];
+        await base44.asServiceRole.entities.GameTask.update(task.id, {
+          status: 'pending',
+          createdGames: nextScenes.length + 1,
+          errorMessage: JSON.stringify({ ...meta, cover: meta.cover, generatedScenes: nextScenes }),
+        });
+        return Response.json({ success: true, taskName: task.taskName, createdGames: nextScenes.length + 1, totalGames: scenes.length + 1, isDone: false });
+      }
 
       await base44.asServiceRole.entities.Game.create({
         title: story.title,
@@ -327,18 +361,18 @@ Deno.serve(async (req) => {
         difficulty: 'easy',
         tier: 'free',
         emoji: story.emoji || '📖',
-        totalQuestions: scenes.length,
-        gameData: { storyKid: true, moral: story.moral, cover: meta.cover || '', scenes },
+        totalQuestions: generatedScenes.length,
+        gameData: { storyKid: true, moral: story.moral, cover: meta.cover, scenes: generatedScenes },
         isPublished: true,
         status: 'ready',
         order: meta.order || 0,
       });
       await base44.asServiceRole.entities.GameTask.update(task.id, {
         status: 'completed',
-        createdGames: task.gamesCount,
+        createdGames: scenes.length + 1,
         completedAt: new Date().toISOString(),
       });
-      return Response.json({ success: true, taskName: task.taskName, createdGames: task.gamesCount, totalGames: task.gamesCount, isDone: true });
+      return Response.json({ success: true, taskName: task.taskName, createdGames: scenes.length + 1, totalGames: scenes.length + 1, isDone: true });
     }
 
     if (String(task.subject || '').startsWith('bbm_')) {

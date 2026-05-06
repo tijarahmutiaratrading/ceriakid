@@ -147,16 +147,16 @@ export const STORY_KID_SEEDS = [
   },
 ];
 
-const STORYBOOK_STYLE_REFERENCE = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/faa67071e_IMG_0482.jpeg';
+const STORYBOOK_STYLE_REFERENCE = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/580d3db6a_IMG_0482.jpeg';
 
 const buildStoryImagePrompt = (story, scene, index, type = 'scene') => {
   const sceneText = scene?.text || story.moral;
-  return `Create a premium children's storybook illustration in the same polished quality as modern kids storybooks: vibrant colors, cute expressive characters, soft cinematic lighting, magical detailed background, charming 3D/cartoon digital painting, clean composition, child-friendly, high detail.
+  return `Create a premium kids storybook illustration like a polished Canva children's book: bright magical forest/book-page style, cute expressive child character, friendly animals where relevant, cinematic warm sunlight, rich colorful background, glossy 3D cartoon digital painting, professional printed storybook quality, clean composition, child-safe, high detail.
 Story title: ${story.title}.
 Scene ${index + 1}: ${sceneText}
 Moral/theme: ${story.moral}.
-${type === 'cover' ? 'Make it look like a beautiful book cover illustration with the main character centered, but do not include readable text.' : 'Make it look like a full-page illustrated storybook scene with clear action and emotion.'}
-Important: no words, no letters, no watermark, no logo, no UI, no speech bubbles.`;
+${type === 'cover' ? 'Make it a vertical front book cover illustration with the main character centered and strong storybook cover composition.' : 'Make it a full-page inner storybook illustration with clear action, emotion, and room at the bottom for app text overlay.'}
+Important: illustration only, no readable words, no letters, no watermark, no logo, no UI, no speech bubbles.`;
 };
 
 const generateStorybookImages = async (story, scenes, setGenerationStatus) => {
