@@ -177,24 +177,28 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Fetch pending tasks
+    // Reset stuck running tasks first, then fetch pending tasks
+    const running = await base44.asServiceRole.entities.GameTask.filter({ status: 'running' });
+    for (const t of running) {
+      const startedAt = new Date(t.startedAt || t.created_date);
+      const minutesAgo = (Date.now() - startedAt.getTime()) / 60000;
+      if (minutesAgo > 10) {
+        await base44.asServiceRole.entities.GameTask.update(t.id, { status: 'pending' });
+      }
+    }
+
     const pending = await base44.asServiceRole.entities.GameTask.filter({ status: 'pending' });
     if (!pending || pending.length === 0) {
-      // Also check if any running tasks are stuck (older than 10 mins) and reset them
-      const running = await base44.asServiceRole.entities.GameTask.filter({ status: 'running' });
-      for (const t of running) {
-        const startedAt = new Date(t.startedAt || t.created_date);
-        const minutesAgo = (Date.now() - startedAt.getTime()) / 60000;
-        if (minutesAgo > 10) {
-          await base44.asServiceRole.entities.GameTask.update(t.id, { status: 'pending' });
-        }
-      }
       console.log('processNextGameTask: No pending tasks.');
       return Response.json({ success: true, message: 'No pending tasks' });
     }
 
-    // Sort oldest first
-    pending.sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
+    // Prioritize Story Kid, then oldest first
+    pending.sort((a, b) => {
+      if (a.subject === 'storykid' && b.subject !== 'storykid') return -1;
+      if (a.subject !== 'storykid' && b.subject === 'storykid') return 1;
+      return new Date(a.created_date) - new Date(b.created_date);
+    });
     const task = pending[0];
 
     const alreadyCreated = task.createdGames || 0;
@@ -294,36 +298,6 @@ Deno.serve(async (req) => {
       const meta = JSON.parse(task.errorMessage || '{}');
       const story = meta.story || { title: task.taskName, emoji: '📖', moral: task.taskName };
       const scenes = Array.isArray(meta.scenes) ? meta.scenes : [];
-      const generatedScenes = Array.isArray(meta.generatedScenes) ? meta.generatedScenes : [];
-
-      if ((task.createdGames || 0) === 0) {
-        const coverResult = await base44.asServiceRole.integrations.Core.GenerateImage({
-          prompt: buildStoryImagePrompt(story, scenes[0] || {}, 0, 'cover'),
-          existing_image_urls: [storybookStyleReference],
-        });
-        await base44.asServiceRole.entities.GameTask.update(task.id, {
-          status: 'pending',
-          createdGames: 1,
-          errorMessage: JSON.stringify({ ...meta, cover: coverResult.url, generatedScenes }),
-        });
-        return Response.json({ success: true, taskName: task.taskName, progress: 1, totalGames: task.gamesCount, isDone: false });
-      }
-
-      const sceneIndex = (task.createdGames || 1) - 1;
-      if (sceneIndex < scenes.length) {
-        const result = await base44.asServiceRole.integrations.Core.GenerateImage({
-          prompt: buildStoryImagePrompt(story, scenes[sceneIndex], sceneIndex, 'scene'),
-          existing_image_urls: [storybookStyleReference],
-        });
-        const nextGeneratedScenes = [...generatedScenes, { ...scenes[sceneIndex], imageUrl: result.url }];
-        const nextProgress = (task.createdGames || 1) + 1;
-        await base44.asServiceRole.entities.GameTask.update(task.id, {
-          status: 'pending',
-          createdGames: nextProgress,
-          errorMessage: JSON.stringify({ ...meta, generatedScenes: nextGeneratedScenes }),
-        });
-        return Response.json({ success: true, taskName: task.taskName, progress: nextProgress, totalGames: task.gamesCount, isDone: false });
-      }
 
       await base44.asServiceRole.entities.Game.create({
         title: story.title,
@@ -334,8 +308,8 @@ Deno.serve(async (req) => {
         difficulty: 'easy',
         tier: 'free',
         emoji: story.emoji || '📖',
-        totalQuestions: generatedScenes.length,
-        gameData: { storyKid: true, moral: story.moral, cover: meta.cover || '', scenes: generatedScenes },
+        totalQuestions: scenes.length,
+        gameData: { storyKid: true, moral: story.moral, cover: meta.cover || '', scenes },
         isPublished: true,
         status: 'ready',
         order: meta.order || 0,
