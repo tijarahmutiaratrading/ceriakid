@@ -757,7 +757,7 @@ export default function AdminGameManager() {
                           onClick={() => setExpandedFile(expandedFile === s.file ? null : s.file)}
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-left"
                         >
-                          <div className={`w-2.5 h-2.5 rounded-full ${s.color.dot}`} />
+                          <div className="w-2 h-2 rounded-full bg-white/35" />
                           <span className="font-black text-white text-sm flex-1">{s.label}</span>
                           <span className="text-white/70 text-xs font-semibold">{s.totalGames} games</span>
                           {expandedFile === s.file
@@ -850,7 +850,7 @@ export default function AdminGameManager() {
                           onClick={() => setExpandedFile(expandedFile === s.file ? null : s.file)}
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-all text-left"
                         >
-                          <div className={`w-2.5 h-2.5 rounded-full ${s.color.dot}`} />
+                          <div className="w-2 h-2 rounded-full bg-white/35" />
                           <span className="font-black text-white text-sm flex-1">{s.label}</span>
                           <span className="text-white/70 text-xs font-semibold">{s.totalGames} games</span>
                           {expandedFile === s.file
