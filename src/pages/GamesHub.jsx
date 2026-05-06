@@ -39,7 +39,7 @@ export default function GamesHub() {
         
         const loadedGames = [];
         gameIds.forEach((id, i) => {
-          const dbGames = (results[i] || []).filter(g => !g.ageGroup || g.ageGroup === ageGroup);
+          const dbGames = results[i] || [];
           if (dbGames.length > 0) {
             const meta = MINI_GAME_META[id];
             loadedGames.push({
@@ -69,7 +69,7 @@ export default function GamesHub() {
     loadGames();
   }, [ageGroup]);
 
-  const filteredGames = games.filter(g => !g.ageGroup || g.ageGroup === ageGroup);
+  const filteredGames = games;
 
   const GameCard = ({ game, idx }) => (
     <motion.div
