@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { BookOpen, Loader2, Sparkles } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
-const STORY_KID_SEEDS = [
+export const STORY_KID_SEEDS = [
   {
     title: 'Ali Tolong Kucing', emoji: '🐱', moral: 'Sayangi haiwan dan bantu dengan cara selamat.',
     scenes: [
