@@ -91,7 +91,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
       adminItems = [
         { path: '/admin-dashboard', emoji: '🎛️', label: 'Admin Dashboard' },
         { path: '/admin-game-manager', emoji: '⚙️', label: 'Game Manager' },
-        { path: '/admin-bbm-generator', emoji: '📚', label: 'BBM Generator' },
       ];
     }
   }

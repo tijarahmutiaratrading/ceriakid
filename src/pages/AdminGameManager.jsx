@@ -12,6 +12,7 @@ import MiniGamesManager from '@/components/admin/MiniGamesManager';
 import MonthlyGenSettings from '@/components/admin/MonthlyGenSettings';
 import StoryKidGenerator from '@/components/admin/StoryKidGenerator';
 import StoryKidManager from '@/components/admin/StoryKidManager';
+import BBMGeneratorManager from '@/components/admin/BBMGeneratorManager';
 
 const QUESTION_THRESHOLD = 20;
 const QUESTION_GENERATION_DELAY = 3000;
@@ -421,6 +422,7 @@ export default function AdminGameManager() {
           {[
             { id: 'subject', label: '📚 Subjek', labelFull: '📚 Games Subjek' },
             { id: 'minigames', label: '🎯 Hub', labelFull: '🎯 Games Hub' },
+            { id: 'bbm', label: '📚 BBM', labelFull: '📚 BBM Generator' },
             { id: 'storykid', label: '📖 Story', labelFull: '📖 Story Kid' },
           ].map(t => {
             const isSubjectActive = t.id === 'subject' && ['generator', 'manager', 'monthly'].includes(tab);
@@ -788,6 +790,13 @@ export default function AdminGameManager() {
         {tab === 'monthly' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <MonthlyGenSettings onToast={showToast} />
+          </motion.div>
+        )}
+
+        {/* ══════════════ BBM TAB ══════════════ */}
+        {tab === 'bbm' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <BBMGeneratorManager onToast={showToast} />
           </motion.div>
         )}
 
