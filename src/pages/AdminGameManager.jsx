@@ -525,16 +525,30 @@ export default function AdminGameManager() {
                               <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs font-black ${sel ? 'bg-indigo-600 text-white' : 'bg-white/10 text-white/40'}`}>{sel ? '✓' : '+'}</span>
                               <span className="font-black text-xs truncate">{sc.label.replace('Sekolah Rendah - ', '')}</span>
                             </button>
-                            <div className="mt-3 grid grid-cols-[1fr_4.5rem] gap-2 items-center">
-                              <p className={`text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} ada · {curr.avgQuestions}Q · setiap D1-D6</p>
-                              <input
-                                type="number"
-                                min="0"
-                                max="100"
-                                value={targetGames}
-                                onChange={e => setCategoryGameConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
-                                className={`w-full px-2 py-2 rounded-xl border font-black text-center outline-none ${sel ? 'bg-indigo-50 border-indigo-200 text-indigo-800' : 'bg-white/10 border-white/15 text-white'}`}
-                              />
+                            <p className={`mt-2 text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} games ada · avg {curr.avgQuestions} soalan · D1-D6</p>
+                            <div className="mt-3 grid grid-cols-2 gap-2">
+                              <div>
+                                <label className={`block text-[10px] font-black mb-1 ${sel ? 'text-indigo-500' : 'text-white/45'}`}>Games</label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  value={targetGames}
+                                  onChange={e => setCategoryGameConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
+                                  className={`w-full px-2 py-2 rounded-xl border font-black text-center outline-none ${sel ? 'bg-indigo-50 border-indigo-200 text-indigo-800' : 'bg-white/10 border-white/15 text-white'}`}
+                                />
+                              </div>
+                              <div>
+                                <label className={`block text-[10px] font-black mb-1 ${sel ? 'text-indigo-500' : 'text-white/45'}`}>Soalan</label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  max="50"
+                                  value={categoryQuestionConfig[key] || 0}
+                                  onChange={e => setCategoryQuestionConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
+                                  className={`w-full px-2 py-2 rounded-xl border font-black text-center outline-none ${sel ? 'bg-indigo-50 border-indigo-200 text-indigo-800' : 'bg-white/10 border-white/15 text-white'}`}
+                                />
+                              </div>
                             </div>
                           </div>
                         );
