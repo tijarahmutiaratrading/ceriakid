@@ -79,6 +79,8 @@ export default function AdminGameManager() {
       ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'].map(darjah => [`${sc.ageGroup}-${sc.subject}-${darjah}`, 20])
     ))
   );
+  const [prasekolahMaster, setPrasekolahMaster] = useState({ games: 20, questions: 20 });
+  const [sekolahRendahMaster, setSekolahRendahMaster] = useState({ games: 20, questions: 20 });
   const [selectedSubjects, setSelectedSubjects] = useState(new Set());
   const [tasks, setTasks] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(false);
@@ -127,6 +129,23 @@ export default function AdminGameManager() {
 
   const selectAll = () => setSelectedSubjects(new Set(SUBJECT_CONFIG.map(sc => `${sc.ageGroup}-${sc.subject}`)));
   const selectNone = () => setSelectedSubjects(new Set());
+
+  const applyPrasekolahMaster = () => {
+    const keys = SUBJECT_CONFIG.filter(sc => sc.ageGroup === 'prasekolah').map(sc => `${sc.ageGroup}-${sc.subject}`);
+    setCategoryGameConfig(prev => ({ ...prev, ...Object.fromEntries(keys.map(key => [key, prasekolahMaster.games])) }));
+    setCategoryQuestionConfig(prev => ({ ...prev, ...Object.fromEntries(keys.map(key => [key, prasekolahMaster.questions])) }));
+    showToast('✅ Master Prasekolah digunakan');
+  };
+
+  const applySekolahRendahMaster = () => {
+    const darjahLevels = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
+    const keys = SUBJECT_CONFIG.filter(sc => sc.ageGroup === 'sekolah_rendah').flatMap(sc =>
+      darjahLevels.map(darjah => `${sc.ageGroup}-${sc.subject}-${darjah}`)
+    );
+    setDarjahSubjectGameConfig(prev => ({ ...prev, ...Object.fromEntries(keys.map(key => [key, sekolahRendahMaster.games])) }));
+    setDarjahSubjectQuestionConfig(prev => ({ ...prev, ...Object.fromEntries(keys.map(key => [key, sekolahRendahMaster.questions])) }));
+    showToast('✅ Master Sekolah Rendah digunakan');
+  };
 
   const handleQueueGeneration = async () => {
     if (selectedSubjects.size === 0) { showToast('Pilih sekurang-kurangnya satu subjek', false); return; }
@@ -473,7 +492,15 @@ export default function AdminGameManager() {
                   <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🧒 Prasekolah</p>
-                      <span className="text-white/45 text-[11px] font-black">set games ikut subjek</span>
+                      <span className="text-white/45 text-[11px] font-black">master + custom subjek</span>
+                    </div>
+                    <div className="mb-3 rounded-2xl bg-white/10 border border-white/10 p-3">
+                      <p className="text-white/60 text-[10px] font-black uppercase mb-2">Master Prasekolah</p>
+                      <div className="grid grid-cols-2 gap-2 mb-2">
+                        <input type="number" min="0" max="100" value={prasekolahMaster.games} onChange={e => setPrasekolahMaster(m => ({ ...m, games: parseInt(e.target.value) || 0 }))} className="w-full px-2 py-2 rounded-xl bg-white/10 border border-white/15 text-white font-black text-center outline-none" placeholder="Games" />
+                        <input type="number" min="1" max="50" value={prasekolahMaster.questions} onChange={e => setPrasekolahMaster(m => ({ ...m, questions: parseInt(e.target.value) || 0 }))} className="w-full px-2 py-2 rounded-xl bg-white/10 border border-white/15 text-white font-black text-center outline-none" placeholder="Soalan" />
+                      </div>
+                      <button onClick={applyPrasekolahMaster} className="w-full py-2 rounded-xl bg-yellow-300 text-yellow-950 text-xs font-black">Apply ke semua Prasekolah</button>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {SUBJECT_CONFIG.filter(s => s.ageGroup === 'prasekolah').map(sc => {
@@ -522,7 +549,15 @@ export default function AdminGameManager() {
                   <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🎒 Sekolah Rendah</p>
-                      <span className="text-white/45 text-[11px] font-black">custom ikut darjah</span>
+                      <span className="text-white/45 text-[11px] font-black">master + custom darjah</span>
+                    </div>
+                    <div className="mb-3 rounded-2xl bg-white/10 border border-white/10 p-3">
+                      <p className="text-white/60 text-[10px] font-black uppercase mb-2">Master Sekolah Rendah</p>
+                      <div className="grid grid-cols-2 gap-2 mb-2">
+                        <input type="number" min="0" max="100" value={sekolahRendahMaster.games} onChange={e => setSekolahRendahMaster(m => ({ ...m, games: parseInt(e.target.value) || 0 }))} className="w-full px-2 py-2 rounded-xl bg-white/10 border border-white/15 text-white font-black text-center outline-none" placeholder="Games" />
+                        <input type="number" min="1" max="50" value={sekolahRendahMaster.questions} onChange={e => setSekolahRendahMaster(m => ({ ...m, questions: parseInt(e.target.value) || 0 }))} className="w-full px-2 py-2 rounded-xl bg-white/10 border border-white/15 text-white font-black text-center outline-none" placeholder="Soalan" />
+                      </div>
+                      <button onClick={applySekolahRendahMaster} className="w-full py-2 rounded-xl bg-cyan-300 text-cyan-950 text-xs font-black">Apply ke semua SR D1-D6</button>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {SUBJECT_CONFIG.filter(s => s.ageGroup === 'sekolah_rendah').map(sc => {
