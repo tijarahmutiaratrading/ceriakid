@@ -10,6 +10,7 @@ export default function StoryKidManager({ onToast }) {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editStory, setEditStory] = useState(null);
+  const [confirmDeleteAll, setConfirmDeleteAll] = useState(false);
 
   const loadStories = async () => {
     setLoading(true);
@@ -61,7 +62,7 @@ export default function StoryKidManager({ onToast }) {
 
   const deleteAllStories = async () => {
     if (stories.length === 0) return;
-    if (!window.confirm(`Padam semua ${stories.length} Story Kid?`)) return;
+    setConfirmDeleteAll(false);
     setLoading(true);
     for (const story of stories) {
       await base44.entities.Game.delete(story.id);
@@ -79,9 +80,17 @@ export default function StoryKidManager({ onToast }) {
         </div>
         <div className="flex items-center gap-2">
           {stories.length > 0 && (
-            <button onClick={deleteAllStories} disabled={loading} className="flex items-center gap-2 px-3 py-3 rounded-2xl bg-red-500/20 hover:bg-red-500/30 text-red-200 font-black text-xs transition-all">
-              <Trash2 className="w-4 h-4" /> Delete All
-            </button>
+            confirmDeleteAll ? (
+              <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-red-500/20 border border-red-400/20">
+                <span className="text-red-100 font-black text-xs whitespace-nowrap">Confirm?</span>
+                <button onClick={deleteAllStories} disabled={loading} className="px-3 py-1.5 rounded-xl bg-red-500 text-white font-black text-xs">Ya</button>
+                <button onClick={() => setConfirmDeleteAll(false)} disabled={loading} className="px-3 py-1.5 rounded-xl bg-white/10 text-white font-black text-xs">Batal</button>
+              </div>
+            ) : (
+              <button onClick={() => setConfirmDeleteAll(true)} disabled={loading} className="flex items-center gap-2 px-3 py-3 rounded-2xl bg-red-500/20 hover:bg-red-500/30 text-red-200 font-black text-xs transition-all">
+                <Trash2 className="w-4 h-4" /> Delete All
+              </button>
+            )
           )}
           <button onClick={loadStories} disabled={loading} className="p-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white transition-all">
             <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
