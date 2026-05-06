@@ -339,7 +339,7 @@ export default function AdminGameManager() {
         )}
       </AnimatePresence>
 
-      <div className="relative max-w-6xl mx-auto px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-7">
+      <div className="relative max-w-6xl mx-auto px-3 sm:px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-7">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
           className="mb-7 p-5 md:p-7 rounded-[2rem] flex flex-col md:flex-row md:items-center md:justify-between gap-5 shadow-2xl shadow-fuchsia-950/30"
@@ -360,7 +360,7 @@ export default function AdminGameManager() {
         </motion.div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
+        <div className="flex gap-2 mb-6 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
           {[
             { id: 'generator', label: '🤖 Gen', labelFull: '🤖 Generator' },
             { id: 'manager', label: '📋 Mgr', labelFull: '📋 Manager' },
@@ -369,7 +369,7 @@ export default function AdminGameManager() {
             { id: 'storykid', label: '📖 Story', labelFull: '📖 Story Kid' },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className={`flex-1 py-3 px-3 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
+              className={`flex-none min-w-[5.6rem] sm:min-w-[7rem] md:flex-1 py-3.5 px-4 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap snap-start ${tab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
               title={t.labelFull}>
               <span className="md:hidden">{t.label}</span>
               <span className="hidden md:inline">{t.labelFull}</span>
@@ -638,13 +638,13 @@ export default function AdminGameManager() {
             </div>
 
             {/* Mini Games Sub-tabs */}
-            <div className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
+            <div className="flex gap-2 mb-6 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
               {[
                 { id: 'generate', label: '🤖 Generate' },
                 { id: 'manage', label: '📋 Manage' },
               ].map(t => (
                 <button key={t.id} onClick={() => setMiniGamesTab(t.id)}
-                  className={`flex-1 py-3 rounded-2xl font-black text-sm transition-all ${miniGamesTab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
+                  className={`flex-1 min-w-[8rem] py-3.5 px-4 rounded-2xl font-black text-sm transition-all whitespace-nowrap ${miniGamesTab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
                   {t.label}
                 </button>
               ))}
@@ -665,13 +665,13 @@ export default function AdminGameManager() {
         {/* ══════════════ STORY KID TAB ══════════════ */}
         {tab === 'storykid' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
+            <div className="flex gap-2 mb-6 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
               {[
                 { id: 'generate', label: '🤖 Generator' },
                 { id: 'manage', label: '📋 Management' },
               ].map(t => (
                 <button key={t.id} onClick={() => setStoryKidTab(t.id)}
-                  className={`flex-1 py-3 rounded-2xl font-black text-sm transition-all ${storyKidTab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
+                  className={`flex-1 min-w-[8rem] py-3.5 px-4 rounded-2xl font-black text-sm transition-all whitespace-nowrap ${storyKidTab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
                   {t.label}
                 </button>
               ))}
