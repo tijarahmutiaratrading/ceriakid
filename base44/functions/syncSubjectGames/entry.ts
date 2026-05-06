@@ -10,7 +10,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const { targetCount: rawTarget, ageGroup, subject, category } = await req.json();
+    const { targetCount: rawTarget, ageGroup, subject, category, darjah } = await req.json();
 
     // Cap max 20 games per call to avoid rate limits
     const targetCount = Math.min(rawTarget || 0, 20);
@@ -22,11 +22,11 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'ageGroup and category required' }, { status: 400 });
     }
 
+    const filter = { ageGroup, category };
+    if (ageGroup === 'sekolah_rendah' && darjah) filter.darjah = darjah;
+
     // Get all games for this subject from DB
-    const existing = await base44.asServiceRole.entities.Game.filter({
-      ageGroup,
-      category,
-    });
+    const existing = await base44.asServiceRole.entities.Game.filter(filter);
 
     // Sort by order
     existing.sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -37,16 +37,15 @@ Deno.serve(async (req) => {
 
     if (targetCount > currentCount) {
       const gamesToAdd = targetCount - currentCount;
-      const existingPending = await base44.asServiceRole.entities.GameTask.filter({
-        ageGroup,
-        subject: category,
-        status: 'pending',
-      });
+      const pendingFilter = { ageGroup, subject: category, status: 'pending' };
+      if (ageGroup === 'sekolah_rendah' && darjah) pendingFilter.darjah = darjah;
+      const existingPending = await base44.asServiceRole.entities.GameTask.filter(pendingFilter);
 
       if (existingPending.length === 0) {
         await base44.asServiceRole.entities.GameTask.create({
-          taskName: `Sync Generate: ${ageGroup} - ${category}`,
+          taskName: `Sync Generate: ${ageGroup} - ${category}${darjah ? ` - ${darjah}` : ''}`,
           ageGroup,
+          ...(ageGroup === 'sekolah_rendah' && darjah ? { darjah } : {}),
           subject: category,
           gamesCount: gamesToAdd,
           questionsPerGame: 20,
@@ -67,6 +66,7 @@ Deno.serve(async (req) => {
       success: true,
       ageGroup,
       category,
+      darjah: darjah || null,
       previousCount: currentCount,
       targetCount,
       added,

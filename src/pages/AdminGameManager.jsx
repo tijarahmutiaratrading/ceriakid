@@ -105,26 +105,34 @@ export default function AdminGameManager() {
     if (selectedSubjects.size === 0) { showToast('Pilih sekurang-kurangnya satu subjek', false); return; }
     setSubmitting(true);
     try {
+      const darjahLevels = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
+      const darjahLabels = { darjah_1: 'Darjah 1', darjah_2: 'Darjah 2', darjah_3: 'Darjah 3', darjah_4: 'Darjah 4', darjah_5: 'Darjah 5', darjah_6: 'Darjah 6' };
+
       for (const subjectKey of Array.from(selectedSubjects)) {
         const [ageGroup, ...rest] = subjectKey.split('-');
         const subject = rest.join('-');
         const sc = SUBJECT_CONFIG.find(s => s.ageGroup === ageGroup && s.subject === subject);
-        const curr = currentCounts[subjectKey] || { games: 0, avgQuestions: 0 };
-        
-        // PRIORITY 1: Expand existing games that are underfilled (questions below target)
-        // PRIORITY 2: Create new games to reach target count
-        const questionsToAdd = Math.max(0, genConfig.questions - curr.avgQuestions);
-        const gamesToAdd = Math.max(0, genConfig.games - curr.games);
-        
-        if (questionsToAdd > 0 || gamesToAdd > 0) {
-          await base44.entities.GameTask.create({
-            taskName: sc?.label || subjectKey,
-            ageGroup,
-            subject,
-            gamesCount: gamesToAdd,
-            questionsPerGame: genConfig.questions,
-            status: 'pending',
-          });
+        const levelsToQueue = ageGroup === 'sekolah_rendah' ? darjahLevels : [null];
+
+        for (const darjah of levelsToQueue) {
+          const curr = darjah
+            ? (currentCounts[subjectKey]?.darjah?.[darjah] || { games: 0, avgQuestions: 0 })
+            : (currentCounts[subjectKey] || { games: 0, avgQuestions: 0 });
+
+          const questionsToAdd = Math.max(0, genConfig.questions - curr.avgQuestions);
+          const gamesToAdd = Math.max(0, genConfig.games - curr.games);
+
+          if (questionsToAdd > 0 || gamesToAdd > 0) {
+            await base44.entities.GameTask.create({
+              taskName: `${sc?.label || subjectKey}${darjah ? ` - ${darjahLabels[darjah]}` : ''}`,
+              ageGroup,
+              ...(darjah ? { darjah } : {}),
+              subject,
+              gamesCount: gamesToAdd,
+              questionsPerGame: genConfig.questions,
+              status: 'pending',
+            });
+          }
         }
       }
       showToast(`✅ ${selectedSubjects.size} tasks dihantar ke queue (expand → create)!`);

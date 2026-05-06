@@ -71,12 +71,12 @@ const getCategoryEmoji = (category) => {
 };
 
 const DARJAH_LABELS = {
-  1: 'Darjah 1',
-  2: 'Darjah 2',
-  3: 'Darjah 3',
-  4: 'Darjah 4',
-  5: 'Darjah 5',
-  6: 'Darjah 6',
+  darjah_1: 'Darjah 1',
+  darjah_2: 'Darjah 2',
+  darjah_3: 'Darjah 3',
+  darjah_4: 'Darjah 4',
+  darjah_5: 'Darjah 5',
+  darjah_6: 'Darjah 6',
 };
 
 export default function GamesList() {
@@ -123,7 +123,13 @@ export default function GamesList() {
     try {
       const dbGames = await base44.entities.Game.filter({ ageGroup, category, isPublished: true });
       if (dbGames.length > 0) {
-        setAllGames(dbGames.sort((a, b) => (a.order || 0) - (b.order || 0)));
+      setAllGames(dbGames.sort((a, b) => {
+        const darjahOrder = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
+        const da = darjahOrder.indexOf(a.darjah);
+        const db = darjahOrder.indexOf(b.darjah);
+        if (da !== db) return da - db;
+        return (a.order || 0) - (b.order || 0);
+      }));
       } else {
         setAllGames(getGamesByAgeAndCategory(ageGroup, category));
       }

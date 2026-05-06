@@ -10,6 +10,10 @@ const CATEGORY_LABELS = {
 const AGE_LABELS = {
   prasekolah: 'Prasekolah (4-6 tahun)', sekolah_rendah: 'Sekolah Rendah (7-12 tahun)',
 };
+const DARJAH_LABELS = {
+  darjah_1: 'Darjah 1', darjah_2: 'Darjah 2', darjah_3: 'Darjah 3',
+  darjah_4: 'Darjah 4', darjah_5: 'Darjah 5', darjah_6: 'Darjah 6',
+};
 const GAME_TYPES = ['multiple_choice','picture_quiz','word_builder','counting','spelling','reading','science_quiz','math_puzzle','phonics','letter_match'];
 
 // Unique topic pools per subject to avoid repetitive games
@@ -24,7 +28,7 @@ const TOPIC_POOLS = {
   default: ['Topik 1','Topik 2','Topik 3','Topik 4','Topik 5','Topik 6','Topik 7','Topik 8','Topik 9','Topik 10'],
 };
 
-async function generateQuestionsForGame(base44, gameTitle, topicName, subject, ageGroup, questionsCount, existingTitles) {
+async function generateQuestionsForGame(base44, gameTitle, topicName, subject, ageGroup, questionsCount, existingTitles, darjah = null) {
   const emojiMap = {
     bahasa_melayu: '📚 📖 ✏️ 🔤 💬 📝 🎓 🌍 🐛 🌳 🏠 🚗 🍎 🎨 🐘 🦁 🌺 🎭 🏫 🦋',
     english: '🌟 📚 ✍️ 🔤 💬 📖 🎤 🏆 🦁 🌸 🎸 ⚽ 🚀 🎯 🌈 🦄 🎪 🎠 🌻 🦊',
@@ -73,7 +77,7 @@ Buat TEPAT ${needed} soalan game yang HIGH QUALITY, UNIK & BERBEZA untuk:
 Tajuk: "${gameTitle}"
 Topik KHUSUS: "${topicName}"
 Subjek: ${CATEGORY_LABELS[subject] || subject}
-Peringkat: ${AGE_LABELS[ageGroup] || ageGroup}
+Peringkat: ${darjah ? `${DARJAH_LABELS[darjah] || darjah} (${AGE_LABELS[ageGroup] || ageGroup})` : (AGE_LABELS[ageGroup] || ageGroup)}
 ${alreadyMade}
 ${extraInstruction}
 
@@ -125,7 +129,7 @@ Output JSON sahaja: "questions" dengan problem, options[4], answer(0-3), emoji.`
 
 Konteks:
 - Subjek: ${CATEGORY_LABELS[subject] || subject}
-- Peringkat: ${AGE_LABELS[ageGroup] || ageGroup}
+- Peringkat: ${darjah ? `${DARJAH_LABELS[darjah] || darjah} (${AGE_LABELS[ageGroup] || ageGroup})` : (AGE_LABELS[ageGroup] || ageGroup)}
 - Topik: ${topicName}
 
 Tugas anda:
@@ -422,7 +426,9 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
         .filter(q => !bannedPattern.test([q.problem, ...q.options].join(' ')));
     };
 
-    const existingGames = await base44.asServiceRole.entities.Game.filter({ ageGroup: task.ageGroup, category: task.subject });
+    const gameFilter = { ageGroup: task.ageGroup, category: task.subject };
+    if (task.ageGroup === 'sekolah_rendah' && task.darjah) gameFilter.darjah = task.darjah;
+    const existingGames = await base44.asServiceRole.entities.Game.filter(gameFilter);
     const underfilledGames = existingGames.filter(g => sanitizeExistingQuestions(g.gameData?.questions || []).length < task.questionsPerGame);
     const totalWork = underfilledGames.length + (task.gamesCount || 0);
 
@@ -432,7 +438,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
       for (const game of expandBatch) {
         const existingClean = sanitizeExistingQuestions(game.gameData?.questions || []);
         const missing = task.questionsPerGame - existingClean.length;
-        const generated = await generateQuestionsForGame(base44, game.title, game.title, task.subject, task.ageGroup, missing, existingClean.map(q => q.problem));
+        const generated = await generateQuestionsForGame(base44, game.title, game.title, task.subject, task.ageGroup, missing, existingClean.map(q => q.problem), game.darjah || task.darjah || null);
         const questions = [...existingClean, ...generated].slice(0, task.questionsPerGame);
         await base44.asServiceRole.entities.Game.update(game.id, { totalQuestions: questions.length, gameData: { ...game.gameData, questions } });
         createdInBatch++;
@@ -450,7 +456,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
 
     // Get topics pool for this subject
     const topics = TOPIC_POOLS[task.subject] || TOPIC_POOLS.default;
-    const latestGamesAfterExpand = await base44.asServiceRole.entities.Game.filter({ ageGroup: task.ageGroup, category: task.subject });
+    const latestGamesAfterExpand = await base44.asServiceRole.entities.Game.filter(gameFilter);
     const existingTitles = latestGamesAfterExpand.map(g => g.title);
     const createStart = Math.max(0, alreadyCreated - underfilledGames.length);
     const createEnd = Math.min(createStart + BATCH, task.gamesCount || 0);
@@ -458,12 +464,14 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
     for (let i = createStart; i < createEnd; i++) {
       const gameType = GAME_TYPES[i % GAME_TYPES.length];
       // Pick a unique topic by cycling through the pool
-      const topicIdx = (alreadyCreated + createdInBatch) % topics.length;
+      const darjahNumber = task.darjah ? Number(String(task.darjah).replace('darjah_', '')) || 0 : 0;
+      const topicIdx = (darjahNumber * 3 + alreadyCreated + createdInBatch) % topics.length;
       const topicName = topics[topicIdx];
-      const gameTitle = `${CATEGORY_LABELS[task.subject] || task.taskName} — ${topicName}`;
+      const darjahLabel = task.ageGroup === 'sekolah_rendah' && task.darjah ? DARJAH_LABELS[task.darjah] : '';
+      const gameTitle = `${CATEGORY_LABELS[task.subject] || task.taskName}${darjahLabel ? ` ${darjahLabel}` : ''} — ${topicName}`;
 
       try {
-        const questions = await generateQuestionsForGame(base44, gameTitle, topicName, task.subject, task.ageGroup, task.questionsPerGame, existingTitles);
+        const questions = await generateQuestionsForGame(base44, gameTitle, topicName, task.subject, task.ageGroup, task.questionsPerGame, existingTitles, task.darjah || null);
 
         if (!questions || questions.length === 0) {
           console.error(`Skip ${gameTitle} — no questions`);
@@ -472,7 +480,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
         }
 
         // Refetch latest order
-        const latestExisting = await base44.asServiceRole.entities.Game.filter({ ageGroup: task.ageGroup, category: task.subject });
+        const latestExisting = await base44.asServiceRole.entities.Game.filter(gameFilter);
 
         // Tag with current month for rotation (format: 'YYYY-MM')
         const now = new Date();
@@ -483,6 +491,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
           type: gameType,
           category: task.subject,
           ageGroup: task.ageGroup,
+          ...(task.ageGroup === 'sekolah_rendah' && task.darjah ? { darjah: task.darjah } : {}),
           difficulty: i % 3 === 0 ? 'easy' : i % 3 === 1 ? 'medium' : 'hard',
           tier: 'free',
           emoji: questions[0]?.emoji || '🎮',

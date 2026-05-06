@@ -30,15 +30,35 @@ Deno.serve(async (req) => {
 
     const { gamesCount = 30, questionsPerGame = 20 } = await req.json();
 
-    // Generate tasks - each task creates games for one subject
-    const tasks = SUBJECT_CONFIGS.map((config, idx) => ({
-      taskId: idx + 1,
-      taskName: config.label,
-      ageGroup: config.ageGroup,
-      subject: config.subject,
-      gamesCount,
-      questionsPerGame,
-    }));
+    // Generate tasks - Sekolah Rendah is separated by Darjah 1-6
+    const darjahLevels = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
+    const darjahLabels = { darjah_1: 'Darjah 1', darjah_2: 'Darjah 2', darjah_3: 'Darjah 3', darjah_4: 'Darjah 4', darjah_5: 'Darjah 5', darjah_6: 'Darjah 6' };
+    const tasks = [];
+
+    for (const config of SUBJECT_CONFIGS) {
+      if (config.ageGroup === 'sekolah_rendah') {
+        for (const darjah of darjahLevels) {
+          tasks.push({
+            taskId: tasks.length + 1,
+            taskName: `${config.label} - ${darjahLabels[darjah]}`,
+            ageGroup: config.ageGroup,
+            darjah,
+            subject: config.subject,
+            gamesCount,
+            questionsPerGame,
+          });
+        }
+      } else {
+        tasks.push({
+          taskId: tasks.length + 1,
+          taskName: config.label,
+          ageGroup: config.ageGroup,
+          subject: config.subject,
+          gamesCount,
+          questionsPerGame,
+        });
+      }
+    }
 
     return Response.json({
       success: true,

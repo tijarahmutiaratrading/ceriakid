@@ -8,6 +8,18 @@
     "ageGroup": {
       "type": "string"
     },
+    "darjah": {
+      "type": "string",
+      "enum": [
+        "darjah_1",
+        "darjah_2",
+        "darjah_3",
+        "darjah_4",
+        "darjah_5",
+        "darjah_6"
+      ],
+      "description": "Sekolah Rendah year level for generation tasks"
+    },
     "subject": {
       "type": "string"
     },

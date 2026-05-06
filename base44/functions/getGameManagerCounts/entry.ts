@@ -52,7 +52,20 @@ Deno.serve(async (req) => {
       const avgQuestions = filtered.length > 0
         ? Math.round(filtered.reduce((sum, g) => sum + (g.gameData?.questions?.length || g.totalQuestions || 0), 0) / filtered.length)
         : 0;
-      subjectCounts[`${s.ageGroup}-${s.subject}`] = { games: filtered.length, avgQuestions };
+      const countData = { games: filtered.length, avgQuestions };
+      if (s.ageGroup === 'sekolah_rendah') {
+        countData.darjah = {};
+        for (const darjah of ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6']) {
+          const byDarjah = filtered.filter(g => g.darjah === darjah);
+          countData.darjah[darjah] = {
+            games: byDarjah.length,
+            avgQuestions: byDarjah.length > 0
+              ? Math.round(byDarjah.reduce((sum, g) => sum + (g.gameData?.questions?.length || g.totalQuestions || 0), 0) / byDarjah.length)
+              : 0,
+          };
+        }
+      }
+      subjectCounts[`${s.ageGroup}-${s.subject}`] = countData;
     }
 
     for (const id of MINI_GAMES) {

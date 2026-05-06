@@ -14,6 +14,10 @@ const AGE_LABELS = {
   prasekolah: 'Prasekolah (4-6 tahun)',
   sekolah_rendah: 'Sekolah Rendah (7-12 tahun)',
 };
+const DARJAH_LABELS = {
+  darjah_1: 'Darjah 1', darjah_2: 'Darjah 2', darjah_3: 'Darjah 3',
+  darjah_4: 'Darjah 4', darjah_5: 'Darjah 5', darjah_6: 'Darjah 6',
+};
 
 const GAME_TYPES = [
   'multiple_choice',
@@ -48,7 +52,7 @@ async function validateQuestionQuality(question) {
   return true;
 }
 
-async function generateGameQuestions(base44, gameTitle, subject, ageGroup, gameType, questionsCount) {
+async function generateGameQuestions(base44, gameTitle, subject, ageGroup, gameType, questionsCount, darjah = null) {
   const emojiOptions = {
     bahasa_melayu: '📚 📖 ✏️ 🔤 💬 🗣️ 📝 📄 🎓 🌍 🐛 🌳 🐠 🎪 🏠 🚗 🍎 🎨',
     english: '🌟 📚 ✍️ 🔤 💬 🇬🇧 📖 🎤 💭 🏆 🦁 🌸 🎸 ⚽ 🎭 🚀 👑 🎯',
@@ -59,7 +63,7 @@ async function generateGameQuestions(base44, gameTitle, subject, ageGroup, gameT
   const availableEmoji = (emojiOptions[subject] || emojiOptions.default).split(' ');
   
   const prompt = `Buat TEPAT ${questionsCount} soalan berkualiti UNIK dan BERBEZA untuk:
-"${gameTitle}" - ${CATEGORY_LABELS[subject]} (${AGE_LABELS[ageGroup]})
+"${gameTitle}" - ${CATEGORY_LABELS[subject]} (${darjah ? `${DARJAH_LABELS[darjah]} / ${AGE_LABELS[ageGroup]}` : AGE_LABELS[ageGroup]})
 
 RULES KETAT—MESTI DIIKUTI SEMPURNA:
 1. Setiap soalan MESTI BERBEZA topic/subtopic—JANGAN soalan SIMILAR!
@@ -147,7 +151,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const { taskId, taskName, ageGroup, subject, gamesCount, questionsPerGame } = await req.json();
+    const { taskId, taskName, ageGroup, darjah, subject, gamesCount, questionsPerGame } = await req.json();
 
     if (!ageGroup || !subject || !gamesCount || !questionsPerGame) {
       return Response.json({ error: 'Missing required task parameters' }, { status: 400 });
@@ -160,7 +164,8 @@ Deno.serve(async (req) => {
 
     for (let i = 0; i < gamesCount; i++) {
       const gameType = GAME_TYPES[i % GAME_TYPES.length];
-      const gameTitle = `${taskName} Game ${i + 1}`;
+      const darjahLabel = ageGroup === 'sekolah_rendah' && darjah ? DARJAH_LABELS[darjah] : '';
+      const gameTitle = `${taskName}${darjahLabel ? ` ${darjahLabel}` : ''} Game ${i + 1}`;
 
       try {
         // Generate questions for this game
@@ -170,7 +175,8 @@ Deno.serve(async (req) => {
           subject,
           ageGroup,
           gameType,
-          questionsPerGame
+          questionsPerGame,
+          darjah || null
         );
 
         // Skip if no questions generated
@@ -185,6 +191,7 @@ Deno.serve(async (req) => {
           type: gameType,
           category: subject,
           ageGroup,
+          ...(ageGroup === 'sekolah_rendah' && darjah ? { darjah } : {}),
           difficulty: i % 3 === 0 ? 'easy' : i % 3 === 1 ? 'medium' : 'hard',
           tier: 'free',
           emoji: questions[0]?.emoji || '🎮',

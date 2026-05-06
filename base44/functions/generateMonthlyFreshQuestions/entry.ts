@@ -62,31 +62,35 @@ Deno.serve(async (req) => {
     let queued = 0;
     let skipped = 0;
 
+    const darjahLevels = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
+    const darjahLabels = { darjah_1: 'Darjah 1', darjah_2: 'Darjah 2', darjah_3: 'Darjah 3', darjah_4: 'Darjah 4', darjah_5: 'Darjah 5', darjah_6: 'Darjah 6' };
+
     for (const s of SUBJECTS) {
-      // Avoid duplicate tasks for this month
-      const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-      const existing = await base44.asServiceRole.entities.GameTask.filter({
-        ageGroup: s.ageGroup,
-        subject: s.subject,
-        status: 'pending',
-      });
-      const alreadyQueued = existing.filter(t => t.created_date >= thisMonthStart);
-      if (alreadyQueued.length > 0) {
-        skipped++;
-        continue;
+      const levelsToQueue = s.ageGroup === 'sekolah_rendah' ? darjahLevels : [null];
+      for (const darjah of levelsToQueue) {
+        // Avoid duplicate tasks for this month
+        const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+        const pendingFilter = { ageGroup: s.ageGroup, subject: s.subject, status: 'pending' };
+        if (darjah) pendingFilter.darjah = darjah;
+        const existing = await base44.asServiceRole.entities.GameTask.filter(pendingFilter);
+        const alreadyQueued = existing.filter(t => t.created_date >= thisMonthStart);
+        if (alreadyQueued.length > 0) {
+          skipped++;
+          continue;
+        }
+
+        await base44.asServiceRole.entities.GameTask.create({
+          taskName: `[${currentTag}] ${s.label}${darjah ? ` - ${darjahLabels[darjah]}` : ''}`,
+          ageGroup: s.ageGroup,
+          ...(darjah ? { darjah } : {}),
+          subject: s.subject,
+          gamesCount: NEW_GAMES_PER_SUBJECT,
+          questionsPerGame: QUESTIONS_PER_GAME,
+          status: 'pending',
+        });
+
+        queued++;
       }
-
-      await base44.asServiceRole.entities.GameTask.create({
-        taskName: `[${currentTag}] ${s.label}`,
-        ageGroup: s.ageGroup,
-        subject: s.subject,
-        gamesCount: NEW_GAMES_PER_SUBJECT,
-        questionsPerGame: QUESTIONS_PER_GAME,
-        status: 'pending',
-        // monthTag passed via taskName prefix; processNextGameTask will tag games via title
-      });
-
-      queued++;
     }
 
     console.log(`Queued ${queued} subjects, skipped ${skipped}`);
