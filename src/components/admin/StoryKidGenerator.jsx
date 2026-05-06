@@ -147,6 +147,38 @@ export const STORY_KID_SEEDS = [
   },
 ];
 
+const STORYBOOK_STYLE_REFERENCE = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/faa67071e_IMG_0482.jpeg';
+
+const buildStoryImagePrompt = (story, scene, index, type = 'scene') => {
+  const sceneText = scene?.text || story.moral;
+  return `Create a premium children's storybook illustration in the same polished quality as modern kids storybooks: vibrant colors, cute expressive characters, soft cinematic lighting, magical detailed background, charming 3D/cartoon digital painting, clean composition, child-friendly, high detail.
+Story title: ${story.title}.
+Scene ${index + 1}: ${sceneText}
+Moral/theme: ${story.moral}.
+${type === 'cover' ? 'Make it look like a beautiful book cover illustration with the main character centered, but do not include readable text.' : 'Make it look like a full-page illustrated storybook scene with clear action and emotion.'}
+Important: no words, no letters, no watermark, no logo, no UI, no speech bubbles.`;
+};
+
+const generateStorybookImages = async (story, scenes, setGenerationStatus) => {
+  setGenerationStatus(`Generating cover: ${story.title}`);
+  const coverResult = await base44.integrations.Core.GenerateImage({
+    prompt: buildStoryImagePrompt(story, scenes[0], 0, 'cover'),
+    existing_image_urls: [STORYBOOK_STYLE_REFERENCE],
+  });
+
+  const illustratedScenes = [];
+  for (let index = 0; index < scenes.length; index++) {
+    setGenerationStatus(`Generating slide ${index + 1}/${scenes.length}: ${story.title}`);
+    const result = await base44.integrations.Core.GenerateImage({
+      prompt: buildStoryImagePrompt(story, scenes[index], index, 'scene'),
+      existing_image_urls: [STORYBOOK_STYLE_REFERENCE],
+    });
+    illustratedScenes.push({ ...scenes[index], imageUrl: result.url });
+  }
+
+  return { cover: coverResult.url, scenes: illustratedScenes };
+};
+
 const STORY_VISUAL_STYLES = [
   { bg: 'from-sky-200 via-cyan-100 to-emerald-200', side: ['☁️', '🌈', '✨'] },
   { bg: 'from-amber-200 via-orange-100 to-pink-200', side: ['🌸', '⭐', '🦋'] },
@@ -198,6 +230,7 @@ export default function StoryKidGenerator({ onToast }) {
   const [slideCount, setSlideCount] = useState(10);
   const [generatedStories, setGeneratedStories] = useState([]);
   const [loadingQueue, setLoadingQueue] = useState(false);
+  const [generationStatus, setGenerationStatus] = useState('');
 
   const loadGeneratedStories = async () => {
     setLoadingQueue(true);
@@ -216,6 +249,7 @@ export default function StoryKidGenerator({ onToast }) {
     for (let i = 0; i < selectedStories.length; i++) {
       const story = selectedStories[i];
       const scenes = prepareStoryScenes(story, slideCount);
+      const illustratedStory = await generateStorybookImages(story, scenes, setGenerationStatus);
       await base44.entities.Game.create({
         title: story.title,
         description: story.moral,
@@ -225,16 +259,17 @@ export default function StoryKidGenerator({ onToast }) {
         difficulty: 'easy',
         tier: 'free',
         emoji: story.emoji,
-        totalQuestions: scenes.length,
-        gameData: { storyKid: true, moral: story.moral, scenes },
+        totalQuestions: illustratedStory.scenes.length,
+        gameData: { storyKid: true, moral: story.moral, cover: illustratedStory.cover, scenes: illustratedStory.scenes },
         isPublished: true,
         status: 'ready',
         order: i,
       });
     }
     await loadGeneratedStories();
+    setGenerationStatus('');
     setLoading(false);
-    onToast?.(`✅ ${selectedStories.length} Story Kid berjaya ditambah (${slideCount} slide setiap cerita)!`);
+    onToast?.(`✅ ${selectedStories.length} Story Kid berjaya ditambah dengan visual AI storybook!`);
   };
 
   return (
@@ -310,9 +345,15 @@ export default function StoryKidGenerator({ onToast }) {
         )}
       </div>
 
+      {generationStatus && (
+        <div className="mb-3 rounded-2xl bg-white/10 border border-white/10 p-3 text-white/80 text-xs font-bold text-center">
+          {generationStatus}
+        </div>
+      )}
+
       <button onClick={seedStories} disabled={loading} className="w-full py-4 rounded-2xl bg-white text-purple-700 font-black shadow-xl flex items-center justify-center gap-2 disabled:opacity-60">
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-        {loading ? 'Menambah cerita...' : 'Tambah Story'}
+        {loading ? 'Generating AI storybook visuals...' : 'Tambah Story'}
       </button>
 
       <Link to="/story-kid" className="mt-3 w-full py-3 rounded-2xl bg-white/10 text-white font-black border border-white/15 flex items-center justify-center gap-2">
