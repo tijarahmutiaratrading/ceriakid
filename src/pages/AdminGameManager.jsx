@@ -412,44 +412,58 @@ export default function AdminGameManager() {
                 <h2 className="font-black text-white text-xl md:text-2xl">⚙️ Konfigurasi Generation</h2>
                 <p className="text-white/60 text-xs font-semibold mt-1">Tetapkan target game dan soalan sebelum masuk queue.</p>
               </div>
-              <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-5">
-                <div>
-                  <label className="text-white text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-1.5 sm:mb-2">🎮 Games Prasekolah</label>
-                  <input type="number" min="1" max="100" value={genConfig.games}
+              <div className="mb-5 grid grid-cols-1 lg:grid-cols-[0.9fr_1.4fr_0.7fr] gap-3">
+                <div className="rounded-2xl bg-white/10 border border-white/10 p-4">
+                  <p className="text-white/60 text-[11px] font-black uppercase tracking-wider mb-1">Prasekolah</p>
+                  <label className="text-white font-black text-sm block mb-3">Jumlah games</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={genConfig.games}
                     onChange={e => setGenConfig(c => ({ ...c, games: parseInt(e.target.value) || 1 }))}
-                    className="w-full px-3 py-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/10 text-white border border-white/20 font-black text-lg sm:text-2xl text-center shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all" />
+                    className="w-full px-4 py-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center outline-none focus:border-white/50 focus:bg-white/15"
+                  />
                 </div>
-                <div>
-                  <label className="text-white text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-1.5 sm:mb-2">📝 Soalan per Game</label>
-                  <input type="number" min="1" max="50" value={genConfig.questions}
-                    onChange={e => setGenConfig(c => ({ ...c, questions: parseInt(e.target.value) || 1 }))}
-                    className="w-full px-3 py-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/10 text-white border border-white/20 font-black text-lg sm:text-2xl text-center shadow-inner shadow-black/10 outline-none focus:border-white/50 focus:bg-white/15 transition-all" />
-                </div>
-              </div>
 
-              <div className="mb-5 p-3 sm:p-4 rounded-2xl bg-white/10 border border-white/10">
-                <p className="text-white text-xs font-black uppercase tracking-wider mb-3">🎒 Games Sekolah Rendah ikut Darjah</p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
-                  {[
-                    ['darjah_1', 'Darjah 1'],
-                    ['darjah_2', 'Darjah 2'],
-                    ['darjah_3', 'Darjah 3'],
-                    ['darjah_4', 'Darjah 4'],
-                    ['darjah_5', 'Darjah 5'],
-                    ['darjah_6', 'Darjah 6'],
-                  ].map(([key, label]) => (
-                    <div key={key}>
-                      <label className="text-white/70 text-[10px] font-black block mb-1">{label}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={darjahGameConfig[key]}
-                        onChange={e => setDarjahGameConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
-                        className="w-full px-2 py-2.5 rounded-xl bg-white/10 text-white border border-white/20 font-black text-lg text-center outline-none focus:border-white/50 focus:bg-white/15"
-                      />
-                    </div>
-                  ))}
+                <div className="rounded-2xl bg-white/10 border border-white/10 p-4">
+                  <p className="text-white/60 text-[11px] font-black uppercase tracking-wider mb-1">Sekolah Rendah</p>
+                  <label className="text-white font-black text-sm block mb-3">Jumlah games ikut darjah</label>
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                    {[
+                      ['darjah_1', 'D1'],
+                      ['darjah_2', 'D2'],
+                      ['darjah_3', 'D3'],
+                      ['darjah_4', 'D4'],
+                      ['darjah_5', 'D5'],
+                      ['darjah_6', 'D6'],
+                    ].map(([key, label]) => (
+                      <div key={key}>
+                        <label className="text-white/55 text-[10px] font-black block mb-1 text-center">{label}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          value={darjahGameConfig[key]}
+                          onChange={e => setDarjahGameConfig(c => ({ ...c, [key]: parseInt(e.target.value) || 0 }))}
+                          className="w-full px-2 py-3 rounded-xl bg-white/10 text-white border border-white/20 font-black text-lg text-center outline-none focus:border-white/50 focus:bg-white/15"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl bg-white/10 border border-white/10 p-4">
+                  <p className="text-white/60 text-[11px] font-black uppercase tracking-wider mb-1">Semua</p>
+                  <label className="text-white font-black text-sm block mb-3">Soalan / game</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="50"
+                    value={genConfig.questions}
+                    onChange={e => setGenConfig(c => ({ ...c, questions: parseInt(e.target.value) || 1 }))}
+                    className="w-full px-4 py-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-2xl text-center outline-none focus:border-white/50 focus:bg-white/15"
+                  />
                 </div>
               </div>
 
@@ -523,11 +537,7 @@ export default function AdminGameManager() {
                           <span>{curr.games} games</span>
                           <span>·</span>
                           <span>{curr.avgQuestions}Q avg</span>
-                          {!loadingCounts && (
-                            <span className={`font-black ${gameDiff > 0 ? 'text-green-500' : gameDiff < 0 ? 'text-red-400' : sel ? 'text-indigo-400' : 'text-white/30'}`}>
-                              {gameDiff > 0 ? `+${gameDiff}` : gameDiff < 0 ? `${gameDiff}` : '✓'}
-                            </span>
-                          )}
+                          <span className={sel ? 'text-indigo-400 font-black' : 'text-white/40 font-black'}>ikut D1-D6</span>
                         </div>
                       </div>
                     </button>
@@ -546,8 +556,8 @@ export default function AdminGameManager() {
                       <div key={key} className="flex items-center justify-between text-xs">
                         <span className="text-white font-semibold truncate">{sc?.label}</span>
                         <div className="flex gap-2 flex-shrink-0 ml-2">
-                          <span className={`font-black ${gameDiff > 0 ? 'text-green-300' : gameDiff < 0 ? 'text-red-300' : 'text-white/40'}`}>
-                            {gameDiff > 0 ? `+${gameDiff} games` : gameDiff < 0 ? `${gameDiff} games` : 'games ✓'}
+                          <span className={`font-black ${key.startsWith('sekolah_rendah') ? 'text-cyan-300' : gameDiff > 0 ? 'text-green-300' : gameDiff < 0 ? 'text-red-300' : 'text-white/40'}`}>
+                            {key.startsWith('sekolah_rendah') ? 'custom D1-D6' : gameDiff > 0 ? `+${gameDiff} games` : gameDiff < 0 ? `${gameDiff} games` : 'games ✓'}
                           </span>
                           <span className={`font-black ${qDiff > 0 ? 'text-blue-300' : qDiff < 0 ? 'text-orange-300' : 'text-white/40'}`}>
                             {qDiff > 0 ? `+${qDiff}Q` : qDiff < 0 ? `${qDiff}Q` : 'Q ✓'}
