@@ -367,19 +367,29 @@ Deno.serve(async (req) => {
       const subjectLabel = subjectLabels[subject] || subject;
       const levelLabel = levelLabels[level] || level;
       const typeLabel = typeLabels[type] || type;
+      const bbmKssrGuide = {
+        darjah_1: 'Darjah 1: asas literasi/numerasi, nombor 0-100, ayat pendek, deria dan benda harian.',
+        darjah_2: 'Darjah 2: ayat mudah, nombor hingga 1000, operasi asas, wang/masa mudah, haiwan/tumbuhan/manusia.',
+        darjah_3: 'Darjah 3: kefahaman ringkas, nombor hingga 10000, operasi asas, pecahan/ukuran mudah, magnet/cahaya/bunyi.',
+        darjah_4: 'Darjah 4: operasi bergabung mudah, pecahan/perpuluhan asas, proses hidup, sifat bahan, tenaga.',
+        darjah_5: 'Darjah 5: aplikasi sederhana, peratus/nisbah/data, mikroorganisma, elektrik, haba, rantai makanan.',
+        darjah_6: 'Darjah 6: penyelesaian masalah sederhana, graf/purata/peratus, daya, mesin ringkas, ekosistem.'
+      }[level] || 'Ikut tahap umur dan KSSR/DSKP Malaysia yang sesuai.';
       const languageRule = subject === 'english'
         ? 'Use English only for all title, description, instructions, content and answers.'
         : 'Gunakan Bahasa Melayu Malaysia baku untuk semua kandungan.';
 
       const data = await base44.asServiceRole.integrations.Core.InvokeLLM({
         prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeLabel} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic}. Bilangan item/soalan: ${count}. ${languageRule}
+Panduan tahap KSSR: ${bbmKssrGuide}
 
 WAJIB ikut standard generator CeriaKid:
 1. Kandungan mesti spesifik kepada topik, bukan umum atau berulang.
 2. Setiap item mesti ada kemahiran jelas, soalan/aktiviti penuh, dan jawapan/skema tepat.
 3. Guna contoh tempatan Malaysia yang sesuai umur dan selari KSSR/DSKP.
-4. Variasikan aras mudah-sederhana-tinggi secara seimbang.
-5. DILARANG placeholder: "Soalan 1", "Item", "Latihan", "Gambar di bawah", "lihat gambar", atau content kosong.
+4. Variasikan aras mudah-sederhana-tinggi secara seimbang, tetapi jangan melebihi tahap KSSR ${levelLabel}.
+5. DILARANG soalan atau aktiviti generik, merepek, terlalu tinggi/rendah, atau berulang antara item.
+6. DILARANG placeholder: "Soalan 1", "Item", "Latihan", "Gambar di bawah", "lihat gambar", atau content kosong.
 6. DILARANG fakta meragukan, bahasa rojak, bahasa Indonesia tidak sesuai, dan tajuk generik.
 7. Setiap heading mesti menerangkan kemahiran khusus seperti "Kenal Pasti Kata Nama Am" atau "Selesaikan Tambah Dalam Lingkungan 100".
 8. Untuk RPH, mesti ada objektif, set induksi, aktiviti, pentaksiran dan refleksi ringkas.
