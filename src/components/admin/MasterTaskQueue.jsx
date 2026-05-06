@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AlertCircle, CheckCircle2, Clock, Loader2, RefreshCw, Trash2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
@@ -22,11 +22,22 @@ function getTaskGroup(task) {
 export default function MasterTaskQueue({ onToast }) {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const lastLoadRef = useRef(0);
 
   const loadTasks = async () => {
+    const now = Date.now();
+    if (loading || now - lastLoadRef.current < 5000) {
+      onToast?.('Tunggu sekejap sebelum refresh lagi', false);
+      return;
+    }
+    lastLoadRef.current = now;
     setLoading(true);
-    const data = await base44.entities.GameTask.list('-created_date', 120);
-    setTasks(data);
+    try {
+      const data = await base44.entities.GameTask.list('-created_date', 120);
+      setTasks(data);
+    } catch (error) {
+      onToast?.('Refresh terlalu kerap. Cuba lagi sebentar.', false);
+    }
     setLoading(false);
   };
 
@@ -66,7 +77,7 @@ export default function MasterTaskQueue({ onToast }) {
         <div className="flex items-center gap-2 flex-wrap justify-end">
           {summary.completed > 0 && <button onClick={() => clearByStatus('completed')} className="text-xs font-bold text-green-300 hover:underline whitespace-nowrap">Clear Done</button>}
           {summary.pending > 0 && <button onClick={() => clearByStatus('pending')} className="text-xs font-bold text-red-300 hover:underline whitespace-nowrap">Clear Pending</button>}
-          <button onClick={loadTasks} disabled={loading} className="p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all">
+          <button onClick={loadTasks} disabled={loading} className="p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all disabled:opacity-50">
             <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
           </button>
         </div>
