@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, RotateCcw } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, Star, RotateCcw } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
@@ -136,6 +137,9 @@ export default function WordBuilderGame() {
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)' }}>
       <AppHeader showBack={true} backTo="/games-hub" />
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
+        <Link to="/mini-games/wordbuilder" className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
+          <ArrowLeft className="w-4 h-4" /> Kembali ke mini games
+        </Link>
         <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
           className="rounded-3xl p-8 text-center" style={glassCard}>
           <p className="text-5xl mb-3">🏆</p>
@@ -157,6 +161,9 @@ export default function WordBuilderGame() {
       </div>
       <AppHeader showBack={true} backTo="/games-hub" />
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
+        <Link to="/mini-games/wordbuilder" className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
+          <ArrowLeft className="w-4 h-4" /> Kembali ke mini games
+        </Link>
 
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
           className="mb-5 p-5 rounded-3xl flex items-center justify-between" style={glassCard}>
