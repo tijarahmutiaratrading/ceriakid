@@ -293,7 +293,7 @@ export default function StoryKidGenerator({ onToast }) {
 
       <button onClick={seedStories} disabled={loading} className="w-full py-4 rounded-2xl bg-white text-purple-700 font-black shadow-xl flex items-center justify-center gap-2 disabled:opacity-60">
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-        {loading ? 'Menambah cerita...' : `Tambah ${Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))} Story Kid`}
+        {loading ? 'Menambah cerita...' : 'Tambah Story'}
       </button>
 
       <Link to="/story-kid" className="mt-3 w-full py-3 rounded-2xl bg-white/10 text-white font-black border border-white/15 flex items-center justify-center gap-2">
