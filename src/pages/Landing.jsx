@@ -617,7 +617,7 @@ export default function Landing() {
       </div>
 
       {/* ── FINAL CTA ── */}
-      <div className="py-12 md:py-16 px-6 text-white border-y border-orange-200/30 bg-gradient-to-br from-orange-500 via-amber-400 to-pink-500">
+      <div className="py-12 md:py-16 px-6 text-white border-y border-purple-300/25 bg-gradient-to-br from-violet-950 via-purple-900 to-fuchsia-900">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
             <p className="text-5xl mb-5">🎓</p>
