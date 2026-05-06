@@ -14,6 +14,7 @@ import StoryKidGenerator from '@/components/admin/StoryKidGenerator';
 import StoryKidManager from '@/components/admin/StoryKidManager';
 import BBMGeneratorManager from '@/components/admin/BBMGeneratorManager';
 import MasterTaskQueue from '@/components/admin/MasterTaskQueue';
+import ProductionSafetyChecklist from '@/components/admin/ProductionSafetyChecklist';
 
 const QUESTION_THRESHOLD = 20;
 const QUESTION_GENERATION_DELAY = 3000;
@@ -417,6 +418,8 @@ export default function AdminGameManager() {
             <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{totalPlayers}</p><p className="text-white/60 text-[11px] font-bold">Players</p></div>
           </div>
         </motion.div>
+
+        <ProductionSafetyChecklist />
 
         {/* Main Tabs */}
         <div className="flex gap-2 mb-4 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
