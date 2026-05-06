@@ -80,7 +80,7 @@ export default function StoryKid() {
             moral: g.gameData.moral || sample?.moral,
             scenes: g.gameData.scenes.map((scene, idx) => ({
               ...scene,
-              imageUrl: scene.imageUrl || sample?.scenes?.[idx]?.imageUrl || g.gameData.cover || sample?.cover,
+              imageUrl: sample?.scenes?.[idx]?.imageUrl || (scene.imageUrl && scene.imageUrl !== g.gameData.cover ? scene.imageUrl : null) || sample?.cover || g.gameData.cover,
             })),
           };
         });
