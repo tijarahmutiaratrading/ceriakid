@@ -1,5 +1,13 @@
-const CACHE_NAME = 'ceriakid-v1';
+const CACHE_NAME = 'ceriakid-v2';
 const APP_SHELL = ['/', '/dashboard', '/index.html', '/manifest.json'];
+
+const shouldBypassCache = (request, url) => {
+  if (request.method !== 'GET') return true;
+  if (url.pathname.startsWith('/api/')) return true;
+  if (url.pathname.includes('/node_modules/.vite/deps/')) return true;
+  if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) return true;
+  return false;
+};
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -25,7 +33,7 @@ self.addEventListener('fetch', (event) => {
   const request = event.request;
   const url = new URL(request.url);
 
-  if (request.method !== 'GET' || url.pathname.startsWith('/api/')) {
+  if (shouldBypassCache(request, url)) {
     return;
   }
 
@@ -46,7 +54,7 @@ self.addEventListener('fetch', (event) => {
     caches.match(request).then((cached) => {
       if (cached) return cached;
       return fetch(request).then((response) => {
-        if (response && response.status === 200) {
+        if (response && response.status === 200 && response.type === 'basic') {
           const copy = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
         }
