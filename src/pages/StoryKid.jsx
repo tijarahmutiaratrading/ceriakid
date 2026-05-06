@@ -101,7 +101,7 @@ const formatDatabaseStory = (game) => ({
 });
 
 export default function StoryKid() {
-  const [stories, setStories] = useState(SAMPLE_STORIES);
+  const [stories, setStories] = useState([]);
   const [selected, setSelected] = useState(null);
   const [sceneIndex, setSceneIndex] = useState(0);
   const [stars, setStars] = useState(0);
@@ -112,7 +112,7 @@ export default function StoryKid() {
       const storyKidStories = dbStories
         .filter(game => game.gameData?.storyKid && game.gameData?.scenes?.length)
         .map(formatDatabaseStory);
-      setStories(storyKidStories.length > 0 ? storyKidStories : SAMPLE_STORIES);
+      setStories(storyKidStories);
     };
 
     loadStories();
@@ -148,6 +148,13 @@ export default function StoryKid() {
               <h1 className="text-4xl font-black text-white leading-tight">Story Kid</h1>
               <p className="text-white/75 text-sm font-semibold mt-2">Pilih buku, baca halaman demi halaman, klik pilihan dan kumpul bintang.</p>
             </motion.div>
+            {stories.length === 0 ? (
+              <div className="rounded-[2rem] p-8 text-center bg-white/15 border border-white/25 shadow-2xl shadow-purple-950/20">
+                <p className="text-6xl mb-4">📭</p>
+                <h2 className="text-white font-black text-2xl mb-2">Belum ada Story Kid</h2>
+                <p className="text-white/70 text-sm font-semibold">Cerita yang dipadam di management tidak akan muncul di sini.</p>
+              </div>
+            ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {stories.map((item, idx) => (
                 <motion.button key={item.id || idx} initial={{ opacity: 0, y: 18, rotate: -1 }} animate={{ opacity: 1, y: 0, rotate: 0 }} transition={{ delay: idx * 0.06 }} whileHover={{ y: -6, rotate: idx % 2 ? 1.5 : -1.5 }} whileTap={{ scale: 0.97 }} onClick={() => { setSelected(idx); resetStory(); }} className="group text-left">
@@ -166,6 +173,7 @@ export default function StoryKid() {
                 </motion.button>
               ))}
             </div>
+            )}
           </>
         ) : sceneIndex >= story.scenes.length ? (
           <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} className="p-7 rounded-3xl text-center" style={cardStyle}>
