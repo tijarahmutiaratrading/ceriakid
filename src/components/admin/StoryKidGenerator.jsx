@@ -147,6 +147,24 @@ export const STORY_KID_SEEDS = [
   },
 ];
 
+const STORY_VISUAL_STYLES = [
+  { bg: 'from-sky-200 via-cyan-100 to-emerald-200', side: ['☁️', '🌈', '✨'] },
+  { bg: 'from-amber-200 via-orange-100 to-pink-200', side: ['🌸', '⭐', '🦋'] },
+  { bg: 'from-lime-200 via-green-100 to-teal-200', side: ['🌿', '🍃', '🌼'] },
+  { bg: 'from-violet-200 via-fuchsia-100 to-rose-200', side: ['💫', '🌟', '🎈'] },
+  { bg: 'from-blue-200 via-indigo-100 to-purple-200', side: ['🌙', '⭐', '☄️'] },
+  { bg: 'from-yellow-200 via-amber-100 to-red-200', side: ['☀️', '🍀', '✨'] },
+];
+
+const buildSlideVisual = (story, scene, index) => {
+  const style = STORY_VISUAL_STYLES[index % STORY_VISUAL_STYLES.length];
+  return {
+    ...style,
+    main: scene.image || story.emoji || '📖',
+    caption: scene.text,
+  };
+};
+
 const prepareStoryScenes = (story, targetSlideCount) => {
   const requestedCount = Math.max(3, Math.min(12, Number(targetSlideCount) || 10));
   const baseScenes = story.scenes.map(scene => ({ ...scene, choices: scene.choices.map(choice => ({ ...choice })) }));
@@ -166,6 +184,7 @@ const prepareStoryScenes = (story, targetSlideCount) => {
 
   return scenes.map((scene, index) => ({
     ...scene,
+    slideVisual: buildSlideVisual(story, scene, index),
     choices: scene.choices.map(choice => ({
       ...choice,
       next: choice.next === 'end' ? 'end' : Math.min(Number(choice.next) || index + 1, scenes.length - 1),

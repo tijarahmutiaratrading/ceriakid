@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, RotateCcw, Star } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import StorySlideVisual from '@/components/story/StorySlideVisual';
 import { base44 } from '@/api/base44Client';
 
 const SAMPLE_STORIES = [
@@ -94,6 +95,7 @@ const formatDatabaseStory = (game) => ({
     ...scene,
     imageUrl: scene.imageUrl || scene.image_url || '',
     image: scene.image || game.emoji || '📖',
+    slideVisual: scene.slideVisual || null,
     choices: scene.choices || [],
   })),
 });
@@ -151,7 +153,7 @@ export default function StoryKid() {
                 <motion.button key={item.id || idx} initial={{ opacity: 0, y: 18, rotate: -1 }} animate={{ opacity: 1, y: 0, rotate: 0 }} transition={{ delay: idx * 0.06 }} whileHover={{ y: -6, rotate: idx % 2 ? 1.5 : -1.5 }} whileTap={{ scale: 0.97 }} onClick={() => { setSelected(idx); resetStory(); }} className="group text-left">
                   <div className="rounded-[1.8rem] p-3 bg-white/20 shadow-2xl shadow-purple-950/30 border border-white/35">
                     <div className="relative aspect-[4/5] rounded-[1.35rem] overflow-hidden bg-gradient-to-br from-yellow-200 to-pink-200 shadow-inner">
-                      {item.cover ? <img src={item.cover} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" /> : <div className="w-full h-full flex items-center justify-center text-8xl">{item.emoji}</div>}
+                      {item.cover ? <img src={item.cover} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" /> : <StorySlideVisual visual={item.scenes?.[0]?.slideVisual} emoji={item.emoji} compact />}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-white/10" />
                       <div className="absolute top-3 left-3 px-3 py-1 bg-white/85 rounded-full text-purple-700 text-xs font-black">{item.emoji} Story</div>
                       <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -197,9 +199,7 @@ export default function StoryKid() {
                     {scene.imageUrl || story.cover ? (
                       <motion.img key={scene.imageUrl || story.cover} src={scene.imageUrl || story.cover} alt={scene.text} initial={{ scale: 1.08 }} animate={{ scale: 1 }} transition={{ duration: 0.8 }} className="absolute inset-0 w-full h-full object-cover" />
                     ) : (
-                      <motion.div key={scene.image || story.emoji} initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }} className="absolute inset-0 flex items-center justify-center text-9xl">
-                        {scene.image || story.emoji || '📖'}
-                      </motion.div>
+                      <StorySlideVisual visual={scene.slideVisual} emoji={scene.image || story.emoji} title={story.title} />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-white via-white/15 to-transparent" />
                     <motion.div animate={{ opacity: [0.25, 0.55, 0.25], scale: [1, 1.08, 1] }} transition={{ duration: 4, repeat: Infinity }} className="absolute -right-10 -top-10 w-32 h-32 bg-yellow-200 rounded-full blur-2xl" />
