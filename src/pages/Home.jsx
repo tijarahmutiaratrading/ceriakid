@@ -202,20 +202,32 @@ export default function Home() {
             </motion.div>
           </Link>
 
-          <Link to="/story-kid" className="block col-span-2">
+          <Link to="/story-kid" className="block">
             <motion.div
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="p-4 rounded-2xl h-full flex items-center gap-4 relative overflow-hidden"
+              className="p-4 rounded-2xl h-full relative overflow-hidden"
               style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.38), rgba(236,72,153,0.36), rgba(59,130,246,0.3))', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.45)', boxShadow: '0 4px 20px rgba(0,0,0,0.12)' }}
             >
               <div className="absolute top-2 right-3 text-yellow-200 animate-pulse">✨</div>
-              <div className="text-4xl">📖</div>
-              <div className="flex-1">
-                <p className="text-white font-black text-sm leading-tight">Story Kid</p>
-                <p className="text-white/75 text-xs mt-1">Cerita interaktif klik pilihan</p>
-                <div className="mt-2 text-yellow-300 font-black text-xs">5 cerita baru →</div>
-              </div>
+              <div className="text-3xl mb-2">📖</div>
+              <p className="text-white font-black text-sm leading-tight">Story Kid</p>
+              <p className="text-white/75 text-xs mt-1">Cerita interaktif</p>
+              <div className="mt-2 text-yellow-300 font-black text-xs">10 slide →</div>
+            </motion.div>
+          </Link>
+
+          <Link to="/bbm" className="block">
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="p-4 rounded-2xl h-full"
+              style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.5), rgba(168,85,247,0.4))', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+            >
+              <div className="text-3xl mb-2">📚</div>
+              <p className="text-white font-black text-sm leading-tight">BBM</p>
+              <p className="text-white/70 text-xs mt-1">Bahan bantu mengajar</p>
+              <div className="mt-2 text-yellow-300 font-black text-xs">Untuk cikgu →</div>
             </motion.div>
           </Link>
         </motion.div>
@@ -252,29 +264,6 @@ export default function Home() {
           );
         })()}
 
-        {/* BBM Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.18 }}
-          className="mb-5"
-        >
-          <Link to="/bbm" className="block">
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              className="p-4 rounded-2xl flex items-center gap-4"
-              style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.5), rgba(168,85,247,0.4))', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
-            >
-              <div className="text-4xl">📚</div>
-              <div className="flex-1">
-                <p className="text-white font-black text-sm">Bahan Bantu Mengajar (BBM)</p>
-                <p className="text-white/70 text-xs mt-0.5">Lembaran kerja, RPH, kad imbasan & lebih</p>
-                <p className="text-yellow-300 text-xs font-black mt-1">✨ Untuk Cikgu & Ibu Bapa →</p>
-              </div>
-            </motion.div>
-          </Link>
-        </motion.div>
 
         {/* Daily Challenge */}
         {isAuthenticated && (
