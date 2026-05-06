@@ -201,6 +201,23 @@ export default function Home() {
               <div className="mt-2 text-white/60 text-xs">→</div>
             </motion.div>
           </Link>
+
+          <Link to="/story-kid" className="block col-span-2">
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="p-4 rounded-2xl h-full flex items-center gap-4 relative overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.38), rgba(236,72,153,0.36), rgba(59,130,246,0.3))', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.45)', boxShadow: '0 4px 20px rgba(0,0,0,0.12)' }}
+            >
+              <div className="absolute top-2 right-3 text-yellow-200 animate-pulse">✨</div>
+              <div className="text-4xl">📖</div>
+              <div className="flex-1">
+                <p className="text-white font-black text-sm leading-tight">Story Kid</p>
+                <p className="text-white/75 text-xs mt-1">Cerita interaktif klik pilihan</p>
+                <div className="mt-2 text-yellow-300 font-black text-xs">5 cerita baru →</div>
+              </div>
+            </motion.div>
+          </Link>
         </motion.div>
 
         {/* New Games Coming Soon Banner — tukar COMING_SOON_DATE untuk ubah tarikh, set null untuk sembunyikan */}

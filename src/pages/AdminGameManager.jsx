@@ -10,6 +10,7 @@ import SubjectCard from '@/components/admin/SubjectCard';
 import MiniGamesGenerator from '@/components/admin/MiniGamesGenerator';
 import MiniGamesManager from '@/components/admin/MiniGamesManager';
 import MonthlyGenSettings from '@/components/admin/MonthlyGenSettings';
+import StoryKidGenerator from '@/components/admin/StoryKidGenerator';
 
 const QUESTION_THRESHOLD = 20;
 const QUESTION_GENERATION_DELAY = 3000;
@@ -363,6 +364,7 @@ export default function AdminGameManager() {
             { id: 'manager', label: '📋 Mgr', labelFull: '📋 Manager' },
             { id: 'minigames', label: '🎯 Mini', labelFull: '🎯 Mini Games Hub' },
             { id: 'monthly', label: '📅 Auto', labelFull: '📅 Auto Monthly' },
+            { id: 'storykid', label: '📖 Story', labelFull: '📖 Story Kid' },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
               className={`flex-1 py-3 px-3 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
@@ -656,6 +658,11 @@ export default function AdminGameManager() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <MonthlyGenSettings onToast={showToast} />
           </motion.div>
+        )}
+
+        {/* ══════════════ STORY KID TAB ══════════════ */}
+        {tab === 'storykid' && (
+          <StoryKidGenerator onToast={showToast} />
         )}
 
             {/* ══════════════ MANAGER TAB ══════════════ */}

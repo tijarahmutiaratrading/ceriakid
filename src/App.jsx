@@ -34,6 +34,7 @@ import QuizGame from '@/pages/QuizGame';
 import ShapesGame from '@/pages/ShapesGame';
 import Scoreboard from '@/pages/Scoreboard';
 import ChildrenProfiles from '@/pages/ChildrenProfiles';
+import StoryKid from '@/pages/StoryKid';
 
 // Interactive Games
 import MemoryGame from '@/pages/games/MemoryGame';
@@ -94,6 +95,7 @@ const AuthenticatedApp = () => {
 
           <Route path="/settings" element={<ClientDashboard />} />
           <Route path="/children-profiles" element={<ChildrenProfiles />} />
+          <Route path="/story-kid" element={<StoryKid />} />
           <Route path="/games-hub" element={<GamesHub />} />
           <Route path="/mini-games/:type" element={<MiniGamesList />} />
           <Route path="/bbm" element={<BBMHub />} />

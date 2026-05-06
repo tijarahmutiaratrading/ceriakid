@@ -58,6 +58,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     { path: '/children-profiles', emoji: '👨‍👩‍👧‍👦', label: 'Profil Anak' },
     { path: '/bbm', emoji: '📚', label: 'Bahan Bantu Mengajar' },
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
+    { path: '/story-kid', emoji: '📖', label: 'Story Kid' },
     { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi Anak' },
     { path: '/friends', emoji: '👥', label: 'Kawan' },
     { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
