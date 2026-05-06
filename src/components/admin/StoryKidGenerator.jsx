@@ -269,6 +269,15 @@ export default function StoryKidGenerator({ onToast }) {
     onToast?.(`✅ ${selectedStories.length} Story Kid masuk task queue. Boleh tutup browser, ia akan jalan di background.`);
   };
 
+  const clearCompletedTasks = async () => {
+    const completed = generatedStories.filter(task => task.status === 'completed');
+    for (const task of completed) {
+      await base44.entities.GameTask.delete(task.id);
+    }
+    await loadGeneratedStories();
+    onToast?.(`✅ ${completed.length} completed Story Kid task dipadam`);
+  };
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.18), rgba(236,72,153,0.14))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
       <div className="flex items-start gap-3 sm:gap-4 mb-5">
@@ -315,9 +324,16 @@ export default function StoryKidGenerator({ onToast }) {
             <p className="text-white font-black text-sm">📋 Story Kid Task Queue</p>
             <p className="text-white/50 text-xs">Queue ini diproses background walaupun browser ditutup</p>
           </div>
-          <button onClick={loadGeneratedStories} disabled={loadingQueue} className="p-2 rounded-xl bg-white/10 text-white/70 hover:bg-white/20 transition-all">
-            <RefreshCw className={`w-4 h-4 ${loadingQueue ? 'animate-spin' : ''}`} />
-          </button>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {generatedStories.some(task => task.status === 'completed') && (
+              <button onClick={clearCompletedTasks} disabled={loadingQueue} className="px-3 py-2 rounded-xl bg-green-400/20 text-green-100 hover:bg-green-400/30 transition-all text-xs font-black whitespace-nowrap">
+                Clear Completed
+              </button>
+            )}
+            <button onClick={loadGeneratedStories} disabled={loadingQueue} className="p-2 rounded-xl bg-white/10 text-white/70 hover:bg-white/20 transition-all">
+              <RefreshCw className={`w-4 h-4 ${loadingQueue ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
         </div>
 
         {loadingQueue ? (
