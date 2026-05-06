@@ -27,17 +27,14 @@ Deno.serve(async (req) => {
     let message = '';
 
     if (targetCount > currentCount) {
-      // Expand by duplicating
       const difference = targetCount - currentCount;
-      const lastGame = gameHubGames[gameHubGames.length - 1];
-      
-      for (let i = 0; i < difference; i++) {
-        const clonedGame = { ...lastGame };
-        clonedGame.id = `${lastGame.id}_copy_${i + 1}`;
-        clonedGame.title = `${lastGame.title} - Copy ${i + 1}`;
-        gameHubGames.push(clonedGame);
-      }
-      message = `${difference} games added`;
+      return Response.json({
+        success: false,
+        error: 'Game Hub tidak boleh dikembangkan dengan copy. Guna Mini Games Generator supaya content unik dijana dalam database.',
+        targetCount,
+        currentCount,
+        totalGames: currentCount,
+      }, { status: 400 });
     } else if (targetCount < currentCount) {
       // Reduce by removing from end
       const difference = currentCount - targetCount;

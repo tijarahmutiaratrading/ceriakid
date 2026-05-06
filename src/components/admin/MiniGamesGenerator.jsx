@@ -109,7 +109,7 @@ export default function MiniGamesGenerator({ onToast }) {
             ageGroup: 'sekolah_rendah',
             subject: gameId,
             gamesCount: gamesToAdd,
-            questionsPerGame: 1,
+            questionsPerGame: 4,
             status: 'pending',
           });
         }

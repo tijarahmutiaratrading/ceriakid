@@ -38,7 +38,10 @@ Syarat WAJIB:
 6. Footer: "CeriaKid Educational Platform | Malaysia"
 7. @media print CSS untuk print-friendly
 8. Bahasa Malaysia (Melayu) kecuali subjek English
-9. Minimum 2-3 muka surat konten bila di-print
+  9. Minimum 2-3 muka surat konten bila di-print
+  10. DILARANG placeholder seperti "Soalan 1", "Item", "Latihan", "Gambar di bawah", "lihat gambar", content kosong, atau tajuk generik
+  11. Setiap heading mesti menerangkan kemahiran khusus dan setiap item mesti ada jawapan/skema tepat
+  12. Guna contoh tempatan Malaysia dan variasikan aras mudah-sederhana-tinggi
 
 Output: HTML string sahaja, tanpa markdown backtick atau penjelasan lain.`,
         });

@@ -48,10 +48,21 @@ async function generateQuestionsForGame(base44, gameTitle, topicName, subject, a
         ? 'WAJIB guna Bahasa Mandarin/Chinese sahaja untuk problem, options dan jawapan. Jangan terjemah soalan ke Bahasa Melayu.'
         : 'Gunakan Bahasa Malaysia baku yang betul, mudah dan mesra kanak-kanak.';
 
-  const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah)/i;
+  const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja)/i;
+  const emojiRegex = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu;
+  const neutralEmoji = subject === 'bahasa_tamil' ? '🌺' : subject === 'bahasa_mandarin' ? '🏮' : subject === 'jawi' ? '🕌' : null;
   const cleanQuestions = (items) => (items || [])
-    .filter(q => q?.problem && q.options?.length === 4 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3)
-    .map(q => ({ problem: String(q.problem).trim(), options: q.options.map(o => String(o).trim()), answer: q.answer, emoji: String(q.emoji || '🎮').trim() }))
+    .filter(q => q?.problem && q.options?.length === 4)
+    .map(q => {
+      const answer = Math.round(Number(q.answer));
+      return {
+        problem: String(q.problem).replace(emojiRegex, '').replace(/\s+/g, ' ').trim(),
+        options: q.options.map(o => String(o).replace(emojiRegex, '').replace(/\s+/g, ' ').trim()),
+        answer,
+        emoji: neutralEmoji || String(q.emoji || '🎮').trim(),
+      };
+    })
+    .filter(q => Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3)
     .filter(q => q.problem.length >= 8 && q.options.every(Boolean) && new Set(q.options.map(o => o.toLowerCase())).size === 4)
     .filter(q => !bannedPattern.test([q.problem, ...q.options].join(' ')));
 
@@ -74,8 +85,10 @@ WAJIB ikut standard mass production ini:
 5. Untuk Bahasa Melayu, WAJIB Bahasa Melayu Malaysia baku. DILARANG guna bahasa Indonesia/asing seperti "hewan", "Singh", "lama" untuk llama, atau ayat pelik.
 6. Soalan mesti pendek, natural, fakta tepat, tidak berbentuk teka-teki kabur, tidak mengelirukan, dan tiada pilihan jawapan sensitif.
 7. 4 pilihan jawapan mesti munasabah, unik, hanya satu jawapan betul, dan answer index mesti tepat.
-8. Emoji mesti relevan dengan topik umum sahaja; jangan jadikan emoji sebagai petunjuk jawapan jika boleh mengelirukan.
-9. Jangan guna placeholder seperti "Soalan 1", "Item", "Gambar di bawah", atau arahan yang perlukan gambar tetapi tiada gambar.
+8. JANGAN masukkan emoji dalam problem/options. Emoji hanya dalam field emoji.
+  9. Untuk Bahasa Tamil, Bahasa Mandarin dan Jawi, guna emoji neutral subjek sahaja supaya tidak tersalah petunjuk jawapan.
+  10. Jangan guna placeholder seperti "Soalan 1", "Item", "Gambar di bawah", atau arahan yang perlukan gambar tetapi tiada gambar.
+  11. Jangan ulang pola soalan yang sama; setiap soalan mesti menguji kemahiran berbeza dalam topik ini.
 
 Output JSON sahaja: "questions" dengan problem, options[4], answer(0-3), emoji.`,
     response_json_schema: {
@@ -123,7 +136,9 @@ Tugas anda:
 5. Untuk Bahasa Mandarin, semua problem/options/jawapan mesti dalam Mandarin/Chinese sahaja.
 6. Untuk Bahasa Melayu, guna BM Malaysia baku sahaja: contoh "arnab" bukan "kelinci", "kura-kura" bukan "turtle", "katak" bukan "kodok".
 7. Soalan mesti literal, mudah, natural, dan sesuai kanak-kanak; elakkan frasa pelik/panjang seperti "semangat ketua", "daki", "dua jenis rupa", "rongga hidung", "dua telinga panjang dan sangat comel", atau "badan kecil dan suka berlari-lari".
-8. Pastikan answer index sepadan dengan jawapan betul.
+8. Buang semua emoji daripada problem/options; emoji hanya dibenarkan dalam field emoji.
+9. Untuk Tamil, Mandarin dan Jawi, guna emoji neutral subjek sahaja, bukan emoji haiwan/buah/benda yang boleh trigger mismatch.
+10. Pastikan answer index sepadan dengan jawapan betul.
 
 Soalan asal JSON:
 ${JSON.stringify(questions.slice(0, questionsCount))}
@@ -205,17 +220,67 @@ Deno.serve(async (req) => {
     };
 
     const buildMiniGameData = (mode, index) => {
+      const variant = index % 5;
       const sets = {
-        memory: { mode, pairs: [['A', 'Apple'], ['B', 'Ball'], ['C', 'Cat'], ['D', 'Dog']], theme: 'letters' },
-        dragdrop: { mode, items: ['Epal', 'Bola', 'Kucing', 'Ikan'], targets: ['Buah', 'Mainan', 'Haiwan', 'Haiwan'], instruction: 'Seret item ke kategori yang betul.' },
-        wordbuilder: { mode, words: ['makan', 'buku', 'bola', 'rumah'], letters: ['m','a','k','n','b','u','o','l','r','h'], instruction: 'Bina perkataan mudah.' },
-        sorting: { mode, items: [{ text: '2', group: 'Nombor' }, { text: 'A', group: 'Huruf' }, { text: '5', group: 'Nombor' }, { text: 'B', group: 'Huruf' }], groups: ['Nombor', 'Huruf'] },
-        tilematch: { mode, tiles: ['🐱', '🐱', '🐶', '🐶', '🍎', '🍎', '⭐', '⭐'], instruction: 'Padankan jubin yang sama.' },
-        story: { mode, scenes: [{ text: 'Ali jumpa anak kucing di taman.', choices: ['Bantu kucing', 'Tinggalkan'], answer: 0 }, { text: 'Ali beri air kepada kucing.', choices: ['Bagus', 'Tidak baik'], answer: 0 }] },
-        physics: { mode, challenges: [{ question: 'Objek berat jatuh ke bawah kerana apa?', options: ['Graviti', 'Angin', 'Cahaya', 'Bunyi'], answer: 0 }] },
-        tracing: { mode, letters: ['A', 'B', 'C', '1', '2', '3'], instruction: 'Surih huruf dan nombor dengan kemas.' },
+        memory: [
+          { mode, pairs: [['A', 'Ayam'], ['B', 'Bola'], ['C', 'Cawan'], ['D', 'Daun']], theme: 'huruf awal' },
+          { mode, pairs: [['1', 'Satu'], ['2', 'Dua'], ['3', 'Tiga'], ['4', 'Empat']], theme: 'nombor' },
+          { mode, pairs: [['🐱', 'Kucing'], ['🐟', 'Ikan'], ['🐔', 'Ayam'], ['🐰', 'Arnab']], theme: 'haiwan' },
+          { mode, pairs: [['🍎', 'Epal'], ['🍌', 'Pisang'], ['🍊', 'Oren'], ['🍇', 'Anggur']], theme: 'buah' },
+          { mode, pairs: [['🔴', 'Merah'], ['🔵', 'Biru'], ['🟢', 'Hijau'], ['🟡', 'Kuning']], theme: 'warna' },
+        ],
+        dragdrop: [
+          { mode, items: ['Epal', 'Pisang', 'Kereta', 'Bas'], targets: ['Buah', 'Buah', 'Kenderaan', 'Kenderaan'], instruction: 'Seret item ke kategori yang betul.' },
+          { mode, items: ['Kucing', 'Ikan', 'Meja', 'Kerusi'], targets: ['Haiwan', 'Haiwan', 'Perabot', 'Perabot'], instruction: 'Padankan objek dengan kumpulannya.' },
+          { mode, items: ['Pensil', 'Buku', 'Nasi', 'Roti'], targets: ['Alat Sekolah', 'Alat Sekolah', 'Makanan', 'Makanan'], instruction: 'Susun item mengikut kategori.' },
+          { mode, items: ['Mata', 'Telinga', 'Merah', 'Biru'], targets: ['Anggota Badan', 'Anggota Badan', 'Warna', 'Warna'], instruction: 'Letakkan perkataan pada kumpulan yang sesuai.' },
+          { mode, items: ['Isnin', 'Selasa', 'Pagi', 'Malam'], targets: ['Hari', 'Hari', 'Masa', 'Masa'], instruction: 'Kenal pasti kategori setiap perkataan.' },
+        ],
+        wordbuilder: [
+          { mode, words: ['makan', 'buku', 'bola', 'rumah'], letters: ['m','a','k','n','b','u','o','l','r','h'], instruction: 'Bina perkataan mudah.' },
+          { mode, words: ['ayam', 'ikan', 'kuda', 'itik'], letters: ['a','y','m','i','k','n','u','d','t'], instruction: 'Bina nama haiwan.' },
+          { mode, words: ['satu', 'dua', 'tiga', 'lima'], letters: ['s','a','t','u','d','i','g','l','m'], instruction: 'Bina perkataan nombor.' },
+          { mode, words: ['merah', 'biru', 'hijau', 'putih'], letters: ['m','e','r','a','h','b','i','u','j','p','t'], instruction: 'Bina nama warna.' },
+          { mode, words: ['meja', 'baju', 'topi', 'kasut'], letters: ['m','e','j','a','b','u','t','o','p','i','k','s'], instruction: 'Bina perkataan harian.' },
+        ],
+        sorting: [
+          { mode, items: [{ text: '2', group: 'Nombor' }, { text: 'A', group: 'Huruf' }, { text: '5', group: 'Nombor' }, { text: 'B', group: 'Huruf' }], groups: ['Nombor', 'Huruf'] },
+          { mode, items: [{ text: 'Epal', group: 'Buah' }, { text: 'Kucing', group: 'Haiwan' }, { text: 'Pisang', group: 'Buah' }, { text: 'Ayam', group: 'Haiwan' }], groups: ['Buah', 'Haiwan'] },
+          { mode, items: [{ text: 'Kereta', group: 'Kenderaan' }, { text: 'Buku', group: 'Alat Sekolah' }, { text: 'Bas', group: 'Kenderaan' }, { text: 'Pensil', group: 'Alat Sekolah' }], groups: ['Kenderaan', 'Alat Sekolah'] },
+          { mode, items: [{ text: 'Merah', group: 'Warna' }, { text: 'Bulat', group: 'Bentuk' }, { text: 'Biru', group: 'Warna' }, { text: 'Segi Tiga', group: 'Bentuk' }], groups: ['Warna', 'Bentuk'] },
+          { mode, items: [{ text: 'Pagi', group: 'Masa' }, { text: 'Isnin', group: 'Hari' }, { text: 'Malam', group: 'Masa' }, { text: 'Jumaat', group: 'Hari' }], groups: ['Masa', 'Hari'] },
+        ],
+        tilematch: [
+          { mode, tiles: ['🐱', '🐱', '🐶', '🐶', '🍎', '🍎', '⭐', '⭐'], instruction: 'Padankan jubin yang sama.' },
+          { mode, tiles: ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D'], instruction: 'Padankan huruf yang sama.' },
+          { mode, tiles: ['1', '1', '2', '2', '3', '3', '4', '4'], instruction: 'Padankan nombor yang sama.' },
+          { mode, tiles: ['🔴', '🔴', '🔵', '🔵', '🟢', '🟢', '🟡', '🟡'], instruction: 'Padankan warna yang sama.' },
+          { mode, tiles: ['☀️', '☀️', '🌙', '🌙', '⭐', '⭐', '☁️', '☁️'], instruction: 'Padankan objek langit yang sama.' },
+        ],
+        story: [
+          { mode, scenes: [{ text: 'Ali jumpa anak kucing di taman.', choices: ['Bantu kucing', 'Tinggalkan'], answer: 0 }, { text: 'Ali beri air kepada kucing.', choices: ['Bagus', 'Tidak baik'], answer: 0 }] },
+          { mode, scenes: [{ text: 'Mira melihat sampah di lantai kelas.', choices: ['Kutip sampah', 'Pijak sampah'], answer: 0 }, { text: 'Kelas menjadi bersih.', choices: ['Terus jaga kebersihan', 'Buang sampah lagi'], answer: 0 }] },
+          { mode, scenes: [{ text: 'Danial terlupa membawa pensil.', choices: ['Minta izin pinjam', 'Ambil tanpa izin'], answer: 0 }, { text: 'Kawan meminjamkan pensil.', choices: ['Ucap terima kasih', 'Marah kawan'], answer: 0 }] },
+          { mode, scenes: [{ text: 'Aina nampak adik menangis.', choices: ['Tanya dengan baik', 'Ketawakan adik'], answer: 0 }, { text: 'Adik perlukan bantuan.', choices: ['Bantu adik', 'Lari pergi'], answer: 0 }] },
+          { mode, scenes: [{ text: 'Guru memberi arahan aktiviti.', choices: ['Dengar arahan', 'Bising'], answer: 0 }, { text: 'Aktiviti berjalan lancar.', choices: ['Ikut giliran', 'Berebut'], answer: 0 }] },
+        ],
+        physics: [
+          { mode, challenges: [{ question: 'Objek jatuh ke bawah kerana apa?', options: ['Graviti', 'Angin', 'Cahaya', 'Bunyi'], answer: 0 }] },
+          { mode, challenges: [{ question: 'Menolak kereta mainan dengan kuat membuatnya bergerak bagaimana?', options: ['Lebih jauh', 'Lebih perlahan', 'Tidak bergerak', 'Hilang'], answer: 0 }] },
+          { mode, challenges: [{ question: 'Permukaan licin membuat objek meluncur dengan lebih?', options: ['Mudah', 'Sukar', 'Gelap', 'Panas'], answer: 0 }] },
+          { mode, challenges: [{ question: 'Magnet menarik objek yang dibuat daripada apa?', options: ['Besi', 'Kertas', 'Kain', 'Kayu'], answer: 0 }] },
+          { mode, challenges: [{ question: 'Bola melantun lebih tinggi di atas permukaan yang?', options: ['Keras', 'Lembut', 'Basah', 'Berlubang'], answer: 0 }] },
+        ],
+        tracing: [
+          { mode, letters: ['A', 'B', 'C', '1', '2', '3'], instruction: 'Surih huruf dan nombor dengan kemas.' },
+          { mode, letters: ['D', 'E', 'F', '4', '5', '6'], instruction: 'Surih bentuk huruf dan nombor.' },
+          { mode, letters: ['G', 'H', 'I', '7', '8', '9'], instruction: 'Ikut garisan dengan perlahan.' },
+          { mode, letters: ['J', 'K', 'L', '0', '+', '-'], instruction: 'Latih koordinasi tangan dan mata.' },
+          { mode, letters: ['M', 'N', 'O', 'a', 'b', 'c'], instruction: 'Surih huruf besar dan kecil.' },
+        ],
       };
-      return { ...(sets[mode] || { mode }), variant: index + 1 };
+      const selected = Array.isArray(sets[mode]) ? sets[mode][variant] : { mode };
+      return { ...selected, variant: index + 1 };
     };
 
     if (String(task.subject || '').startsWith('bbm_')) {
@@ -249,7 +314,20 @@ Deno.serve(async (req) => {
         : 'Gunakan Bahasa Melayu Malaysia baku untuk semua kandungan.';
 
       const data = await base44.asServiceRole.integrations.Core.InvokeLLM({
-        prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeLabel} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic}. Bilangan item/soalan: ${count}. ${languageRule} Wajib ada objektif pembelajaran jelas, arahan murid yang mudah, kandungan selari tahap umur, soalan pelbagai aras mudah-sederhana, contoh tempatan Malaysia, jawapan/skema ringkas, tiada placeholder dan tiada fakta meragukan. DILARANG guna heading generik seperti "Soalan 1", "Soalan 2", "Item", "Latihan", "Gambar di bawah", atau arahan yang perlukan imej jika tiada imej sebenar. Setiap heading mesti menerangkan kemahiran khusus. Output JSON sahaja: title, description, instructions, items[{heading,content,answer}].`,
+        prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeLabel} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic}. Bilangan item/soalan: ${count}. ${languageRule}
+
+WAJIB ikut standard generator CeriaKid:
+1. Kandungan mesti spesifik kepada topik, bukan umum atau berulang.
+2. Setiap item mesti ada kemahiran jelas, soalan/aktiviti penuh, dan jawapan/skema tepat.
+3. Guna contoh tempatan Malaysia yang sesuai umur dan selari KSSR/DSKP.
+4. Variasikan aras mudah-sederhana-tinggi secara seimbang.
+5. DILARANG placeholder: "Soalan 1", "Item", "Latihan", "Gambar di bawah", "lihat gambar", atau content kosong.
+6. DILARANG fakta meragukan, bahasa rojak, bahasa Indonesia tidak sesuai, dan tajuk generik.
+7. Setiap heading mesti menerangkan kemahiran khusus seperti "Kenal Pasti Kata Nama Am" atau "Selesaikan Tambah Dalam Lingkungan 100".
+8. Untuk RPH, mesti ada objektif, set induksi, aktiviti, pentaksiran dan refleksi ringkas.
+9. Untuk lembaran/kuiz/kad imbasan, mesti ada item yang terus boleh digunakan murid.
+
+Output JSON sahaja: title, description, instructions, items[{heading,content,answer}].`,
         response_json_schema: {
           type: 'object',
           properties: {
@@ -271,10 +349,15 @@ Deno.serve(async (req) => {
         },
       });
 
-      const items = (Array.isArray(data.items) ? data.items : []).map(item => ({
-        ...item,
-        heading: String(item.heading || 'Aktiviti Pembelajaran').replace(/^\s*(soalan|item|latihan)\s*\d+\s*[:\-.]?\s*/i, '').trim() || 'Aktiviti Pembelajaran'
-      }));
+      const badBbmPattern = /^(soalan|item|latihan|aktiviti pembelajaran|umum)$/i;
+      const items = (Array.isArray(data.items) ? data.items : [])
+        .map(item => ({
+          ...item,
+          heading: String(item.heading || '').replace(/^\s*(soalan|item|latihan)\s*\d+\s*[:\-.]?\s*/i, '').trim(),
+          content: String(item.content || '').trim(),
+          answer: String(item.answer || '').trim(),
+        }))
+        .filter(item => item.heading.length >= 8 && item.content.length >= 20 && !badBbmPattern.test(item.heading));
       const htmlContent = `<!DOCTYPE html><html lang="ms"><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;max-width:820px;margin:auto;padding:24px;color:#1f2937;line-height:1.45}h1{text-align:center;color:#4f46e5}h2{text-align:center;color:#64748b;font-size:14px}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}.box,.item{border:1px solid #c7d2fe;border-radius:12px;padding:12px}.box{background:#eef2ff}.item{margin:14px 0;border-left:5px solid #6366f1;background:#fafafa;break-inside:avoid}.answer{color:#047857;font-weight:bold}footer{text-align:center;color:#64748b;font-size:11px;margin-top:28px;border-top:1px solid #eee;padding-top:12px}@media print{body{padding:12px}.item{page-break-inside:avoid}}</style></head><body><h1>${data.title || typeLabel}</h1><h2>${subjectLabel} | ${levelLabel} | ${typeLabel}</h2><div class="meta"><div class="box">Nama: ____________</div><div class="box">Kelas: ____________</div><div class="box">Tarikh: ____________</div></div><div class="box"><b>Arahan:</b> ${data.instructions || 'Gunakan bahan ini semasa pembelajaran.'}</div>${items.map((item, i) => `<section class="item"><h3>${i + 1}. ${item.heading}</h3><p>${item.content || ''}</p>${item.answer ? `<p class="answer">Jawapan/Nota: ${item.answer}</p>` : ''}</section>`).join('')}<footer>CeriaKid Educational Platform | Malaysia</footer></body></html>`;
 
       await base44.asServiceRole.entities.BBMResource.create({
@@ -312,8 +395,8 @@ Deno.serve(async (req) => {
           difficulty: i % 3 === 0 ? 'easy' : i % 3 === 1 ? 'medium' : 'hard',
           tier: 'free',
           emoji: miniGame.emoji,
-          totalQuestions: 1,
-          gameData: buildMiniGameData(task.subject, i),
+          totalQuestions: 4,
+          gameData: buildMiniGameData(task.subject, existingMini.length + i),
           isPublished: true,
           status: 'ready',
           order: existingMini.length + i,
