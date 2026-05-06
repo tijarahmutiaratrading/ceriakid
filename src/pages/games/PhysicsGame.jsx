@@ -79,7 +79,7 @@ export default function PhysicsGame() {
       </div>
       <AppHeader showBack={true} backTo="/games-hub" />
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
-        <Link to="/mini-games/physics" className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
+        <Link to="/mini-games/physics" className="inline-flex items-center gap-1.5 mb-3 px-3 py-2 rounded-full bg-white/80 text-game-purple font-black text-xs shadow-lg hover:bg-white transition-all sm:gap-2 sm:mb-4 sm:px-4 sm:py-2.5 sm:text-sm">
           <ArrowLeft className="w-4 h-4" /> Kembali ke mini games
         </Link>
 
