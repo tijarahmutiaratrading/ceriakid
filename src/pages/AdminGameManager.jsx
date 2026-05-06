@@ -11,6 +11,7 @@ import MiniGamesGenerator from '@/components/admin/MiniGamesGenerator';
 import MiniGamesManager from '@/components/admin/MiniGamesManager';
 import MonthlyGenSettings from '@/components/admin/MonthlyGenSettings';
 import StoryKidGenerator from '@/components/admin/StoryKidGenerator';
+import StoryKidManager from '@/components/admin/StoryKidManager';
 
 const QUESTION_THRESHOLD = 20;
 const QUESTION_GENERATION_DELAY = 3000;
@@ -45,6 +46,7 @@ const GAME_HUB = [
 export default function AdminGameManager() {
   const [tab, setTab] = useState('generator');
   const [miniGamesTab, setMiniGamesTab] = useState('generate');
+  const [storyKidTab, setStoryKidTab] = useState('generate');
   const [expandedSections, setExpandedSections] = useState({ prasekolah: true, sekolah_rendah: true });
 
   // Shared
@@ -662,7 +664,22 @@ export default function AdminGameManager() {
 
         {/* ══════════════ STORY KID TAB ══════════════ */}
         {tab === 'storykid' && (
-          <StoryKidGenerator onToast={showToast} />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <div className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
+              {[
+                { id: 'generate', label: '🤖 Generator' },
+                { id: 'manage', label: '📋 Management' },
+              ].map(t => (
+                <button key={t.id} onClick={() => setStoryKidTab(t.id)}
+                  className={`flex-1 py-3 rounded-2xl font-black text-sm transition-all ${storyKidTab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+
+            {storyKidTab === 'generate' && <StoryKidGenerator onToast={showToast} />}
+            {storyKidTab === 'manage' && <StoryKidManager onToast={showToast} />}
+          </motion.div>
         )}
 
             {/* ══════════════ MANAGER TAB ══════════════ */}
