@@ -676,7 +676,7 @@ export default function AdminGameManager() {
             </div>
 
             {/* Search + Filter bar */}
-            <div className="p-4 md:p-5 rounded-[1.75rem] mb-5 shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+            <div className="p-3 md:p-5 rounded-2xl md:rounded-[1.75rem] mb-3 md:mb-5 shadow-lg md:shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <div className="flex gap-2 mb-3 items-center">
                 <div className="relative flex-1">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">🔍</span>
