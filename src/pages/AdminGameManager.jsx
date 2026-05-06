@@ -406,8 +406,8 @@ export default function AdminGameManager() {
             <div className="w-14 h-14 md:w-16 md:h-16 flex-shrink-0 rounded-3xl bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 flex items-center justify-center text-2xl md:text-3xl shadow-xl shadow-purple-950/30 ring-1 ring-white/30 leading-none">🎮</div>
             <div className="min-w-0">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/70 text-[11px] font-black uppercase tracking-wider mb-2">Premium Game Control</div>
-              <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight">Game Manager</h1>
-              <p className="text-white/75 text-sm">Jana, urus dan pantau semua permainan CeriaKid dengan lebih kemas.</p>
+              <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight">Master Generator</h1>
+              <p className="text-white/75 text-sm">Jana, urus dan pantau semua permainan serta BBM CeriaKid dengan lebih kemas.</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-2 w-full md:w-auto md:min-w-80">

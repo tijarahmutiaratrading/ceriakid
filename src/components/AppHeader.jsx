@@ -90,7 +90,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     if (isAdmin) {
       adminItems = [
         { path: '/admin-dashboard', emoji: '🎛️', label: 'Admin Dashboard' },
-        { path: '/admin-game-manager', emoji: '⚙️', label: 'Game Manager' },
+        { path: '/admin-game-manager', emoji: '⚙️', label: 'Master Generator' },
       ];
     }
   }
@@ -117,7 +117,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     '/challenges': 'Cabaran',
     '/drawing': 'Studio Lukisan',
     '/admin-dashboard': 'Admin Dashboard',
-    '/admin-game-manager': 'Game Manager',
+    '/admin-game-manager': 'Master Generator',
     '/admin-bbm-generator': 'BBM Generator',
   };
 
