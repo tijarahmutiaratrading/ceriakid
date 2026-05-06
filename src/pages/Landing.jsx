@@ -616,6 +616,26 @@ export default function Landing() {
         </div>
       </div>
 
+      {/* ── FINAL CTA ── */}
+      <div className="py-12 md:py-16 px-6 text-white border-y border-orange-200/30 bg-gradient-to-br from-orange-500 via-amber-400 to-pink-500">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
+            <p className="text-5xl mb-5">🎓</p>
+            <h2 className="text-3xl md:text-4xl font-black mb-4">Anak Anda Layak Dapat<br />Yang Terbaik</h2>
+            <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">Mulakan dengan latihan pendek yang anak boleh konsisten buat setiap hari — lebih mudah, lebih ceria, lebih teratur.</p>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={scrollToPricing}
+              className="px-8 py-4 bg-white text-game-purple rounded-full font-black text-lg shadow-2xl inline-flex items-center gap-3">
+              
+              🎮 Pilih Pelan Sekarang <ArrowRight className="w-6 h-6" />
+            </motion.button>
+            <p className="text-white/80 text-sm mt-5">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Tanpa iklan &nbsp;•&nbsp; ✅ Dashboard ibu bapa</p>
+          </motion.div>
+        </div>
+      </div>
+
       {/* ── FAQ ── */}
       <div id="faq" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-amber-100 via-yellow-200 to-orange-300 text-slate-900">
         <div className="max-w-3xl mx-auto">
@@ -638,26 +658,6 @@ export default function Landing() {
               </motion.div>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* ── FINAL CTA ── */}
-      <div className="py-12 md:py-16 px-6 text-white border-y border-orange-200/30 bg-gradient-to-br from-orange-500 via-amber-400 to-pink-500">
-        <div className="max-w-3xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
-            <p className="text-5xl mb-5">🎓</p>
-            <h2 className="text-3xl md:text-4xl font-black mb-4">Anak Anda Layak Dapat<br />Yang Terbaik</h2>
-            <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">Mulakan dengan latihan pendek yang anak boleh konsisten buat setiap hari — lebih mudah, lebih ceria, lebih teratur.</p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={scrollToPricing}
-              className="px-8 py-4 bg-white text-game-purple rounded-full font-black text-lg shadow-2xl inline-flex items-center gap-3">
-              
-              🎮 Pilih Pelan Sekarang <ArrowRight className="w-6 h-6" />
-            </motion.button>
-            <p className="text-white/80 text-sm mt-5">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Tanpa iklan &nbsp;•&nbsp; ✅ Dashboard ibu bapa</p>
-          </motion.div>
         </div>
       </div>
 
