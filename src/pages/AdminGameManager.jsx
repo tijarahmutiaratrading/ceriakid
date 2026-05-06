@@ -10,6 +10,7 @@ import SubjectCard from '@/components/admin/SubjectCard';
 import MiniGamesGenerator from '@/components/admin/MiniGamesGenerator';
 import MiniGamesManager from '@/components/admin/MiniGamesManager';
 import MonthlyGenSettings from '@/components/admin/MonthlyGenSettings';
+import DarjahGenerationSummary from '@/components/admin/DarjahGenerationSummary';
 
 const QUESTION_THRESHOLD = 20;
 const QUESTION_GENERATION_DELAY = 3000;
@@ -464,15 +465,11 @@ export default function AdminGameManager() {
                       <div className="flex-1 min-w-0">
                         <p className="truncate">{sc.label.replace('Sekolah Rendah - ', '')}</p>
                         <div className={`flex gap-2 mt-0.5 text-xs font-semibold ${sel ? 'text-indigo-400' : 'text-white/70'}`}>
-                          <span>{curr.games} games</span>
+                          <span>{curr.games} games total</span>
                           <span>·</span>
                           <span>{curr.avgQuestions}Q avg</span>
-                          {!loadingCounts && (
-                            <span className={`font-black ${gameDiff > 0 ? 'text-green-500' : gameDiff < 0 ? 'text-red-400' : sel ? 'text-indigo-400' : 'text-white/30'}`}>
-                              {gameDiff > 0 ? `+${gameDiff}` : gameDiff < 0 ? `${gameDiff}` : '✓'}
-                            </span>
-                          )}
                         </div>
+                        <DarjahGenerationSummary counts={curr} targetGames={genConfig.games} selected={sel} />
                       </div>
                     </button>
                   );
