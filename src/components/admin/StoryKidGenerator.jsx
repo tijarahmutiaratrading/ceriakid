@@ -279,7 +279,7 @@ export default function StoryKidGenerator({ onToast }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+      <div className="grid grid-cols-2 gap-3 mb-5">
         <div>
           <label className="text-white/70 text-xs font-black uppercase tracking-wider block mb-2">Jumlah Story</label>
           <input
