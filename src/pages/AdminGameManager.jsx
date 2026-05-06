@@ -119,6 +119,8 @@ export default function AdminGameManager() {
       const darjahLevels = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
       const darjahLabels = { darjah_1: 'Darjah 1', darjah_2: 'Darjah 2', darjah_3: 'Darjah 3', darjah_4: 'Darjah 4', darjah_5: 'Darjah 5', darjah_6: 'Darjah 6' };
 
+      let queuedCount = 0;
+
       for (const subjectKey of Array.from(selectedSubjects)) {
         const [ageGroup, ...rest] = subjectKey.split('-');
         const subject = rest.join('-');
@@ -130,7 +132,7 @@ export default function AdminGameManager() {
             ? (currentCounts[subjectKey]?.darjah?.[darjah] || { games: 0, avgQuestions: 0 })
             : (currentCounts[subjectKey] || { games: 0, avgQuestions: 0 });
 
-          const targetGames = darjah ? (darjahGameConfig[darjah] || genConfig.games) : genConfig.games;
+          const targetGames = darjah ? (darjahGameConfig[darjah] || 0) : genConfig.games;
           const questionsToAdd = Math.max(0, genConfig.questions - curr.avgQuestions);
           const gamesToAdd = Math.max(0, targetGames - curr.games);
 
@@ -144,10 +146,17 @@ export default function AdminGameManager() {
               questionsPerGame: genConfig.questions,
               status: 'pending',
             });
+            queuedCount++;
           }
         }
       }
-      showToast(`✅ ${selectedSubjects.size} tasks dihantar ke queue (expand → create)!`);
+
+      if (queuedCount === 0) {
+        showToast('Semua subjek/darjah sudah capai target. Naikkan jumlah games atau soalan.', false);
+        return;
+      }
+
+      showToast(`✅ ${queuedCount} task dihantar ke queue!`);
       setSelectedSubjects(new Set());
       loadTasks();
     } catch (err) {
@@ -162,16 +171,18 @@ export default function AdminGameManager() {
   };
 
   const handleDeleteAllPending = async () => {
-    if (!window.confirm('Padam semua pending tasks?')) return;
     const pending = tasks.filter(t => t.status === 'pending');
+    if (pending.length === 0) { showToast('Tiada pending task untuk dipadam', false); return; }
+    if (!window.confirm('Padam semua pending tasks?')) return;
     for (const t of pending) await base44.entities.GameTask.delete(t.id);
     loadTasks();
     showToast(`✅ ${pending.length} tasks dipadam`);
   };
 
   const handleDeleteAllCompleted = async () => {
-    if (!window.confirm('Padam semua completed tasks?')) return;
     const completed = tasks.filter(t => t.status === 'completed');
+    if (completed.length === 0) { showToast('Tiada completed task untuk dipadam', false); return; }
+    if (!window.confirm('Padam semua completed tasks?')) return;
     for (const t of completed) await base44.entities.GameTask.delete(t.id);
     loadTasks();
     showToast(`✅ ${completed.length} completed tasks dipadam`);
