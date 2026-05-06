@@ -19,16 +19,45 @@ const TOOLS = [
   { id: 'eraser', emoji: '🧹', label: 'Pemadam', lineWidth: 24, opacity: 1, lineDash: [] },
 ];
 
-const TRACING_SHAPES = [
-  { label: 'Huruf A', letter: 'A', strokes: [[[0.5,0.1],[0.2,0.9]],[[0.5,0.1],[0.8,0.9]],[[0.3,0.55],[0.7,0.55]]] },
-  { label: 'Huruf B', letter: 'B', strokes: [[[0.3,0.1],[0.3,0.9]],[[0.3,0.1],[0.6,0.3],[0.3,0.5]],[[0.3,0.5],[0.65,0.7],[0.3,0.9]]] },
-  { label: 'Huruf C', letter: 'C', strokes: [[[0.7,0.2],[0.4,0.1],[0.2,0.3],[0.2,0.7],[0.4,0.9],[0.7,0.8]]] },
-  { label: 'Nombor 1', letter: '1', strokes: [[[0.5,0.1],[0.5,0.9]]] },
-  { label: 'Nombor 2', letter: '2', strokes: [[[0.3,0.2],[0.6,0.1],[0.7,0.4],[0.3,0.7],[0.3,0.9],[0.7,0.9]]] },
-  { label: 'Bulatan ⭕', letter: '○', strokes: [[[0.5,0.1],[0.85,0.35],[0.9,0.5],[0.85,0.65],[0.5,0.9],[0.15,0.65],[0.1,0.5],[0.15,0.35],[0.5,0.1]]] },
-  { label: 'Segitiga △', letter: '△', strokes: [[[0.5,0.1],[0.85,0.85],[0.15,0.85],[0.5,0.1]]] },
-  { label: 'Segiempat ⬜', letter: '□', strokes: [[[0.2,0.2],[0.8,0.2],[0.8,0.8],[0.2,0.8],[0.2,0.2]]] },
+const letterStrokes = {
+  A: [[[0.5,0.1],[0.2,0.9]],[[0.5,0.1],[0.8,0.9]],[[0.3,0.55],[0.7,0.55]]],
+  B: [[[0.3,0.1],[0.3,0.9]],[[0.3,0.1],[0.6,0.3],[0.3,0.5]],[[0.3,0.5],[0.65,0.7],[0.3,0.9]]],
+  C: [[[0.7,0.2],[0.4,0.1],[0.2,0.3],[0.2,0.7],[0.4,0.9],[0.7,0.8]]],
+};
+
+const createLetterShape = (letter) => ({
+  label: `Huruf ${letter}`,
+  letter,
+  strokes: letterStrokes[letter] || [[[0.5,0.12],[0.5,0.88]],[[0.25,0.25],[0.75,0.75]]],
+});
+
+const createNumberShape = (number) => ({
+  label: `Nombor ${number}`,
+  letter: String(number),
+  strokes: number === 1
+    ? [[[0.5,0.1],[0.5,0.9]]]
+    : number === 2
+      ? [[[0.3,0.2],[0.6,0.1],[0.7,0.4],[0.3,0.7],[0.3,0.9],[0.7,0.9]]]
+      : [[[0.35,0.18],[0.7,0.25],[0.55,0.5],[0.72,0.75],[0.35,0.85]]],
+});
+
+const TRACING_CATEGORIES = [
+  { id: 'letters', label: '🔤 Huruf A-Z', shapes: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(createLetterShape) },
+  { id: 'numbers', label: '🔢 Nombor 1-9', shapes: Array.from({ length: 9 }, (_, i) => createNumberShape(i + 1)) },
+  {
+    id: 'shapes',
+    label: '⭐ Shape',
+    shapes: [
+      { label: 'Bulatan ⭕', letter: '○', strokes: [[[0.5,0.1],[0.85,0.35],[0.9,0.5],[0.85,0.65],[0.5,0.9],[0.15,0.65],[0.1,0.5],[0.15,0.35],[0.5,0.1]]] },
+      { label: 'Segitiga △', letter: '△', strokes: [[[0.5,0.1],[0.85,0.85],[0.15,0.85],[0.5,0.1]]] },
+      { label: 'Segiempat ⬜', letter: '□', strokes: [[[0.2,0.2],[0.8,0.2],[0.8,0.8],[0.2,0.8],[0.2,0.2]]] },
+      { label: 'Bintang ⭐', letter: '★', strokes: [[[0.5,0.1],[0.62,0.38],[0.9,0.38],[0.68,0.58],[0.76,0.88],[0.5,0.7],[0.24,0.88],[0.32,0.58],[0.1,0.38],[0.38,0.38],[0.5,0.1]]] },
+      { label: 'Hati ❤️', letter: '♡', strokes: [[[0.5,0.85],[0.2,0.55],[0.22,0.25],[0.45,0.25],[0.5,0.38],[0.55,0.25],[0.78,0.25],[0.8,0.55],[0.5,0.85]]] },
+    ],
+  },
 ];
+
+const TRACING_SHAPES = TRACING_CATEGORIES.flatMap(category => category.shapes);
 
 const MODES = [
   { id: 'draw', label: '🎨 Lukis Bebas' },
@@ -44,7 +73,8 @@ export default function DrawingStudio() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastPoint, setLastPoint] = useState(null);
   const [history, setHistory] = useState([]);
-  const [selectedShape, setSelectedShape] = useState(TRACING_SHAPES[0]);
+  const [selectedTracingCategory, setSelectedTracingCategory] = useState(TRACING_CATEGORIES[0].id);
+  const [selectedShape, setSelectedShape] = useState(TRACING_CATEGORIES[0].shapes[0]);
   const [tracingAccuracy, setTracingAccuracy] = useState(null);
   const [tracingDone, setTracingDone] = useState(false);
   const [userStrokes, setUserStrokes] = useState([]);
@@ -55,6 +85,7 @@ export default function DrawingStudio() {
   const activeCanvasRef = isFullscreen ? fsCanvasRef : canvasRef;
   const getCanvas = () => activeCanvasRef.current;
   const getCtx = () => activeCanvasRef.current?.getContext('2d');
+  const tracingShapes = TRACING_CATEGORIES.find(category => category.id === selectedTracingCategory)?.shapes || TRACING_CATEGORIES[0].shapes;
 
   const canvasSize = () => {
     const el = getCanvas();
@@ -109,7 +140,7 @@ export default function DrawingStudio() {
 
   useEffect(() => {
     initCanvas();
-  }, [mode, selectedShape]);
+  }, [mode, selectedShape, initCanvas]);
 
   // When entering fullscreen: copy normal canvas → fs canvas
   useEffect(() => {
@@ -302,9 +333,29 @@ export default function DrawingStudio() {
               className="mb-4 rounded-3xl p-4"
               style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
             >
-              <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-2">Pilih bentuk:</p>
+              <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-2">Pilih kategori:</p>
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {TRACING_CATEGORIES.map(category => (
+                  <motion.button
+                    key={category.id}
+                    whileTap={{ scale: 0.92 }}
+                    onClick={() => {
+                      setSelectedTracingCategory(category.id);
+                      setSelectedShape(category.shapes[0]);
+                    }}
+                    className={`px-2 py-2 rounded-xl font-black text-[11px] transition-all ${
+                      selectedTracingCategory === category.id
+                        ? 'bg-white text-purple-600 shadow'
+                        : 'bg-white/20 text-white border border-white/30'
+                    }`}
+                  >
+                    {category.label}
+                  </motion.button>
+                ))}
+              </div>
+              <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-2">Pilih item:</p>
               <div className="flex gap-2 overflow-x-auto pb-1">
-                {TRACING_SHAPES.map(s => (
+                {tracingShapes.map(s => (
                   <motion.button
                     key={s.label}
                     whileTap={{ scale: 0.92 }}
@@ -402,12 +453,23 @@ export default function DrawingStudio() {
                     )}
                   </>
                 )}
-                {mode === 'trace' && TRACING_SHAPES.map(s => (
-                  <button key={s.label} onClick={() => setSelectedShape(s)}
-                    className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedShape.label === s.label ? 'bg-white text-purple-600' : 'bg-white/20 text-white'}`}>
-                    {s.label}
-                  </button>
-                ))}
+                {mode === 'trace' && (
+                  <>
+                    {TRACING_CATEGORIES.map(category => (
+                      <button key={category.id} onClick={() => { setSelectedTracingCategory(category.id); setSelectedShape(category.shapes[0]); }}
+                        className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedTracingCategory === category.id ? 'bg-white text-purple-600' : 'bg-white/20 text-white'}`}>
+                        {category.label}
+                      </button>
+                    ))}
+                    <span className="w-px bg-white/30 mx-1 flex-shrink-0" />
+                    {tracingShapes.map(s => (
+                      <button key={s.label} onClick={() => setSelectedShape(s)}
+                        className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedShape.label === s.label ? 'bg-white text-purple-600' : 'bg-white/20 text-white'}`}>
+                        {s.label}
+                      </button>
+                    ))}
+                  </>
+                )}
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button onClick={undo} disabled={history.length === 0}
