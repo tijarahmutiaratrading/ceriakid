@@ -359,23 +359,40 @@ export default function AdminGameManager() {
           </div>
         </motion.div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
+        {/* Main Tabs */}
+        <div className="flex gap-2 mb-4 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
           {[
-            { id: 'generator', label: '🤖 Gen', labelFull: '🤖 Generator' },
-            { id: 'manager', label: '📋 Mgr', labelFull: '📋 Manager' },
-            { id: 'minigames', label: '🎯 Mini', labelFull: '🎯 Mini Games Hub' },
-            { id: 'monthly', label: '📅 Auto', labelFull: '📅 Auto Monthly' },
+            { id: 'subject', label: '📚 Subjek', labelFull: '📚 Games Subjek' },
+            { id: 'minigames', label: '🎯 Hub', labelFull: '🎯 Games Hub' },
             { id: 'storykid', label: '📖 Story', labelFull: '📖 Story Kid' },
-          ].map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)}
-              className={`flex-none min-w-[5.6rem] sm:min-w-[7rem] md:flex-1 py-3.5 px-4 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap snap-start ${tab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
-              title={t.labelFull}>
-              <span className="md:hidden">{t.label}</span>
-              <span className="hidden md:inline">{t.labelFull}</span>
-            </button>
-          ))}
+          ].map(t => {
+            const isSubjectActive = t.id === 'subject' && ['generator', 'manager', 'monthly'].includes(tab);
+            const isActiveTab = tab === t.id || isSubjectActive;
+            return (
+              <button key={t.id} onClick={() => setTab(t.id === 'subject' ? 'generator' : t.id)}
+                className={`flex-none min-w-[7.5rem] sm:min-w-[9rem] md:flex-1 py-3.5 px-4 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap snap-start ${isActiveTab ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
+                title={t.labelFull}>
+                <span className="md:hidden">{t.label}</span>
+                <span className="hidden md:inline">{t.labelFull}</span>
+              </button>
+            );
+          })}
         </div>
+
+        {['generator', 'manager', 'monthly'].includes(tab) && (
+          <div className="flex gap-2 mb-6 p-2 rounded-[1.5rem] overflow-x-auto shadow-lg shadow-black/10" style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.12)', WebkitOverflowScrolling: 'touch' }}>
+            {[
+              { id: 'generator', label: '🤖 Generator' },
+              { id: 'manager', label: '📋 Manager' },
+              { id: 'monthly', label: '📅 Auto Monthly' },
+            ].map(t => (
+              <button key={t.id} onClick={() => setTab(t.id)}
+                className={`flex-1 min-w-[8rem] py-3 px-4 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
+                {t.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* ══════════════ GENERATOR TAB ══════════════ */}
         {tab === 'generator' && (
