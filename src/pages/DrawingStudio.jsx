@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Trash2, Download, Undo2, Maximize2, Minimize2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Trash2, Download, Undo2, Maximize2, Minimize2, ArrowLeft } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import AppHeader from '@/components/AppHeader';
 
@@ -121,6 +121,7 @@ const MODES = [
 ];
 
 export default function DrawingStudio() {
+  const navigate = useNavigate();
   const canvasRef = useRef(null);
   const fsCanvasRef = useRef(null);
   const [mode, setMode] = useState('draw');
@@ -342,6 +343,13 @@ export default function DrawingStudio() {
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28">
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/90 text-purple-700 font-black text-sm shadow-lg hover:bg-white transition-all"
+        >
+          <ArrowLeft className="w-4 h-4" /> Kembali
+        </motion.button>
 
         {/* Header */}
         <motion.div
