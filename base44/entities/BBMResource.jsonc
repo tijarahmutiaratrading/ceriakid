@@ -27,7 +27,13 @@
         "sivik",
         "rbt",
         "pjk",
-        "seni"
+        "seni",
+        "biology",
+        "chemistry",
+        "physics",
+        "perniagaan",
+        "ekonomi",
+        "add_math"
       ],
       "description": "Subjek"
     },
@@ -40,9 +46,14 @@
         "darjah_3",
         "darjah_4",
         "darjah_5",
-        "darjah_6"
+        "darjah_6",
+        "tingkatan_1",
+        "tingkatan_2",
+        "tingkatan_3",
+        "tingkatan_4",
+        "tingkatan_5"
       ],
-      "description": "Tahap/Darjah"
+      "description": "Tahap/Darjah/Tingkatan"
     },
     "type": {
       "type": "string",
@@ -55,7 +66,22 @@
         "modul",
         "kuiz",
         "aktiviti",
-        "permainan_bilik_darjah"
+        "permainan_bilik_darjah",
+        "poster_pendidikan",
+        "nota_ringkas",
+        "infografik",
+        "latihan_pemahaman",
+        "latihan_peperiksaan",
+        "bahan_pbd",
+        "aktiviti_stem",
+        "mind_map",
+        "latihan_kbat",
+        "roleplay",
+        "eksperimen_sains",
+        "spelling_activity",
+        "vocabulary_builder",
+        "karangan_builder",
+        "teaching_kit"
       ],
       "description": "Jenis BBM"
     },

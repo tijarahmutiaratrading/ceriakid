@@ -57,6 +57,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const otherItems = [
     { path: '/children-profiles', emoji: '👨‍👩‍👧‍👦', label: 'Profil Anak' },
     { path: '/bbm', emoji: '📚', label: 'Bahan Bantu Mengajar' },
+    { path: '/ai-bbm-generator', emoji: '✨', label: 'AI BBM Generator' },
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
     { path: '/story-kid', emoji: '📖', label: 'Story Kid' },
     { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi Anak' },

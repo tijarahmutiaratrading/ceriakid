@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, Lock, Search, BookOpen, FileText, Star } from 'lucide-react';
+import { Download, Lock, Search, BookOpen, FileText, Star, Sparkles } from 'lucide-react';
 
 import { Link } from 'react-router-dom';
 import AppHeader from '@/components/AppHeader';
@@ -230,6 +230,12 @@ export default function BBMHub() {
               </div>
             ))}
           </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.03 }} className="mb-4">
+          <Link to="/ai-bbm-generator" className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-300 via-blue-400 to-fuchsia-500 text-white font-black shadow-2xl shadow-purple-950/30">
+            <Sparkles className="w-5 h-5" /> Buka AI BBM Generator Premium
+          </Link>
         </motion.div>
 
         {/* Search */}
