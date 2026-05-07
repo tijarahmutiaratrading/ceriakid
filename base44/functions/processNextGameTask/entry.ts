@@ -262,7 +262,19 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         'makanan dan budaya Malaysia', 'keselamatan dan nilai murni', 'cuaca dan alam semula jadi',
         'pengangkutan dan komuniti', 'cerita mini berwatak kanak-kanak', 'cabaran logik mudah'
       ];
-      const microTopic = `${theme} · ${variationAngles[index % variationAngles.length]} · siri ${index + 1}`;
+      const playStylesByMode = {
+        memory: ['padan pasangan nilai-maksud', 'ingat urutan kad', 'cari kad hilang', 'padan kategori', 'padan situasi-jawapan', 'cabaran pilih pasangan paling sesuai'],
+        dragdrop: ['seret item ke kategori', 'susun langkah ikut turutan', 'padan objek ke tempat', 'asingkan betul dan salah', 'lengkapkan jadual mini', 'pilih item untuk misi cerita'],
+        wordbuilder: ['bina perkataan daripada suku kata', 'susun huruf bersepah', 'lengkapkan huruf hilang', 'bina frasa pendek', 'padan bunyi kepada perkataan', 'cabaran ejaan berpetunjuk'],
+        sorting: ['kumpul ikut kategori', 'susun dari kecil ke besar', 'asingkan fakta betul/salah', 'susun ikut proses', 'kelaskan contoh dan bukan contoh', 'susun mengikut tempat kegunaan'],
+        tilematch: ['padan jubin sama maksud', 'padan gambar-perkataan', 'padan soalan-jawapan', 'padan lawan kata', 'padan nombor-kuantiti', 'padan sebab-akibat'],
+        story: ['pilih tindakan terbaik', 'pilih sambungan cerita', 'pilih nilai murni', 'selesaikan masalah watak', 'pilih dialog sopan', 'pilih akibat tindakan'],
+        physics: ['ramal apa berlaku', 'pilih alat yang sesuai', 'susun eksperimen ringkas', 'bezakan kuat/lemah', 'pilih sebab saintifik', 'selesaikan cabaran objek harian'],
+        tracing: ['surih huruf besar', 'surih huruf kecil', 'surih nombor', 'surih suku kata', 'surih bentuk asas', 'surih pola berulang'],
+      };
+      const playStyles = playStylesByMode[mode] || ['aktiviti unik'];
+      const playStyle = playStyles[index % playStyles.length];
+      const microTopic = `${theme} · ${variationAngles[index % variationAngles.length]} · ${playStyle} · siri ${index + 1}`;
       const recentExamples = existingMini.slice(-12).map(g => ({ title: g.title, data: JSON.stringify(g.gameData || {}).slice(0, 260) }));
       const gameGuides = {
         memory: 'Pasangan padanan ingatan. Output pairs sebagai array [depan, belakang].',
@@ -278,6 +290,7 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
       const baseProps = {
         title: { type: 'string' },
         microTopic: { type: 'string' },
+        playStyle: { type: 'string' },
         instruction: { type: 'string' },
       };
       const schemaByMode = {
@@ -292,7 +305,7 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
       };
 
       let data = await base44.asServiceRole.integrations.Core.InvokeLLM({
-        prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\nPeraturan anti-repeat:\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n4. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n5. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n6. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n7. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n8. Output JSON sahaja ikut schema.`,
+        prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nGaya aktiviti WAJIB untuk set ini: ${playStyle}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\nPeraturan anti-repeat:\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
       });
 
@@ -302,6 +315,7 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
 Jenis game: ${mode}
 Tema: ${theme}
 Micro-topic: ${microTopic}
+Gaya aktiviti wajib: ${playStyle}
 Level: ${level} (${difficultyLabel})
 Jumlah item sasaran: ${itemsPerSet}
 
@@ -311,7 +325,8 @@ ${JSON.stringify(data)}
 Wajib baiki:
 1. Semua kandungan mesti fakta tepat, natural, sesuai KSSR Malaysia dan terus boleh dimainkan.
 2. Tiada duplicate item/pasangan/jawapan dalam satu game.
-3. Tiada bahasa Indonesia/asing seperti "bisa", "total", "langkah" dalam BM; guna "boleh", "jumlah", "keping/biji/helai".
+3. Kekalkan gaya aktiviti yang diminta supaya set ini tidak sama format dengan set lain: ${playStyle}.
+4. Tiada bahasa Indonesia/asing seperti "bisa", "total", "langkah" dalam BM; guna "boleh", "jumlah", "keping/biji/helai".
 4. Jika topik wang Malaysia/RM: guna hanya fakta semasa; jangan sebut RM1 syiling, RM2 syiling, RM2 note, atau warna/ciri duit yang tidak pasti.
 5. Guna Bahasa Melayu Malaysia baku; contoh "pemadam" bukan "penghapus".
 6. Untuk memory, pasangan mesti unik dan tidak mengulang nilai kiri yang sama.
@@ -322,7 +337,7 @@ Output JSON sahaja ikut schema.`,
       });
       data = reviewed || data;
 
-      return { mode, ...data, variant: index + 1, generatedTheme: theme, microTopic: data.microTopic || microTopic };
+      return { mode, ...data, variant: index + 1, generatedTheme: theme, playStyle: data.playStyle || playStyle, microTopic: data.microTopic || microTopic };
     };
 
     if (task.subject === 'storykid') {
