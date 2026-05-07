@@ -7,10 +7,9 @@ export const GENERATION_MODES = [
 ];
 
 export const SCHOOL_LEVELS = [
+  { value: 'prasekolah', label: 'Prasekolah' },
   { value: 'darjah_1', label: 'Darjah 1' }, { value: 'darjah_2', label: 'Darjah 2' }, { value: 'darjah_3', label: 'Darjah 3' },
   { value: 'darjah_4', label: 'Darjah 4' }, { value: 'darjah_5', label: 'Darjah 5' }, { value: 'darjah_6', label: 'Darjah 6' },
-  { value: 'tingkatan_1', label: 'Tingkatan 1' }, { value: 'tingkatan_2', label: 'Tingkatan 2' }, { value: 'tingkatan_3', label: 'Tingkatan 3' },
-  { value: 'tingkatan_4', label: 'Tingkatan 4' }, { value: 'tingkatan_5', label: 'Tingkatan 5' },
 ];
 
 export const SUBJECTS = [
@@ -18,10 +17,6 @@ export const SUBJECTS = [
   { value: 'mathematics', label: 'Matematik', emoji: '🔢' }, { value: 'science', label: 'Sains', emoji: '🔬' },
   { value: 'pendidikan_islam', label: 'Pendidikan Islam', emoji: '🌙' }, { value: 'jawi', label: 'Jawi', emoji: '🕌' },
   { value: 'sejarah', label: 'Sejarah', emoji: '🏛️' }, { value: 'rbt', label: 'RBT', emoji: '🛠️' },
-  { value: 'biology', label: 'Biology', emoji: '🧬' }, { value: 'chemistry', label: 'Chemistry', emoji: '⚗️' },
-  { value: 'physics', label: 'Physics', emoji: '⚡' }, { value: 'geografi', label: 'Geografi', emoji: '🌏' },
-  { value: 'perniagaan', label: 'Perniagaan', emoji: '💼' }, { value: 'ekonomi', label: 'Ekonomi', emoji: '📈' },
-  { value: 'add_math', label: 'Add Math', emoji: '📐' },
 ];
 
 export const BBM_TYPES = [

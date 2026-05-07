@@ -23,19 +23,11 @@
         "pendidikan_islam",
         "pendidikan_moral",
         "sejarah",
-        "geografi",
-        "sivik",
         "rbt",
         "pjk",
-        "seni",
-        "biology",
-        "chemistry",
-        "physics",
-        "perniagaan",
-        "ekonomi",
-        "add_math"
+        "seni"
       ],
-      "description": "Subjek"
+      "description": "Subjek Prasekolah dan Sekolah Rendah"
     },
     "level": {
       "type": "string",
@@ -46,14 +38,9 @@
         "darjah_3",
         "darjah_4",
         "darjah_5",
-        "darjah_6",
-        "tingkatan_1",
-        "tingkatan_2",
-        "tingkatan_3",
-        "tingkatan_4",
-        "tingkatan_5"
+        "darjah_6"
       ],
-      "description": "Tahap/Darjah/Tingkatan"
+      "description": "Tahap Prasekolah/Darjah"
     },
     "type": {
       "type": "string",

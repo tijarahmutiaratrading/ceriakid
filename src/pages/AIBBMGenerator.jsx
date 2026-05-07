@@ -123,8 +123,8 @@ htmlContent mesti full inner HTML sahaja untuk bahan A4, dengan inline CSS lengk
           <div className="grid lg:grid-cols-[1fr_auto] gap-5 items-end">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-300/15 border border-cyan-200/20 text-cyan-100 text-xs font-black uppercase tracking-wider mb-3">✨ AI BBM Generator Platform</div>
-              <h1 className="text-3xl md:text-5xl font-black text-white leading-tight">Generate BBM Premium untuk Guru Malaysia</h1>
-              <p className="text-white/70 mt-3 max-w-2xl">Worksheet, slides, kuiz, flashcard, infografik, PBD, STEM, KBAT dan teaching kit yang nampak macam Canva/Twinkl premium.</p>
+              <h1 className="text-3xl md:text-5xl font-black text-white leading-tight">Generate BBM Premium untuk Prasekolah & Sekolah Rendah</h1>
+              <p className="text-white/70 mt-3 max-w-2xl">Worksheet, slides, kuiz, flashcard, infografik, PBD, STEM, KBAT dan teaching kit untuk guru prasekolah hingga Darjah 6.</p>
             </div>
             <div className="grid grid-cols-2 gap-2 md:w-96">
               {featureCards.map(({ icon: Icon, label, text }) => <div key={label} className="rounded-2xl bg-white/10 border border-white/15 p-3"><Icon className="w-4 h-4 text-cyan-200 mb-2" /><p className="text-white text-xs font-black">{label}</p><p className="text-white/55 text-[10px] leading-snug">{text}</p></div>)}
