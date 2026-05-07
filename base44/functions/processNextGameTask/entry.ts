@@ -265,7 +265,7 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
       const microTopic = `${theme} · ${variationAngles[index % variationAngles.length]} · siri ${index + 1}`;
       const recentExamples = existingMini.slice(-12).map(g => ({ title: g.title, data: JSON.stringify(g.gameData || {}).slice(0, 260) }));
       const gameGuides = {
-        memory: 'Pasangan padanan ingatan. Output pairs sebagai array [depan, belakang]. WAJIB variasi ikut index: index%3=0 gaya emoji sama, index%3=1 gaya cari perbezaan gambar pertama/gambar kedua, index%3=2 gaya bayang-bayang/objek atau petunjuk-clue.',
+        memory: 'Pasangan padanan ingatan. Output pairs sebagai array [depan, belakang].',
         dragdrop: 'Aktiviti seret dan lepas. Output items dan targets dengan panjang sama.',
         wordbuilder: 'Bina perkataan. Output words dan letters yang cukup untuk membina perkataan.',
         sorting: 'Susun mengikut kumpulan. Output groups dan items dengan field text + group.',
@@ -314,8 +314,8 @@ Wajib baiki:
 3. Tiada bahasa Indonesia/asing seperti "bisa", "total", "langkah" dalam BM; guna "boleh", "jumlah", "keping/biji/helai".
 4. Jika topik wang Malaysia/RM: guna hanya fakta semasa; jangan sebut RM1 syiling, RM2 syiling, RM2 note, atau warna/ciri duit yang tidak pasti.
 5. Guna Bahasa Melayu Malaysia baku; contoh "pemadam" bukan "penghapus".
-6. Untuk memory, pasangan mesti unik dan tidak mengulang nilai kiri yang sama. Variasikan konsep: game pertama boleh emoji, game kedua cari perbezaan gambar pertama/gambar kedua, game ketiga bayang-bayang/objek atau clue/jawapan.
-7. Pastikan output masih ikut schema asal dan lengkap.
+6. Untuk memory, pasangan mesti unik dan tidak mengulang nilai kiri yang sama.
+6. Pastikan output masih ikut schema asal dan lengkap.
 
 Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
@@ -560,7 +560,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
           tier: 'free',
           emoji: miniGame.emoji,
           totalQuestions: itemsPerSet,
-          gameData: { ...generatedData, visualStyle: task.subject === 'memory' ? (absoluteIndex % 3 === 0 ? 'emoji' : absoluteIndex % 3 === 1 ? 'difference' : 'shadow') : undefined, setNo, level, itemsPerSet },
+          gameData: { ...generatedData, setNo, level, itemsPerSet },
           isPublished: true,
           status: 'ready',
           order: absoluteIndex,
