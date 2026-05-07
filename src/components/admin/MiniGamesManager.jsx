@@ -3,17 +3,59 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, RefreshCw, Edit3, Trash2, Eye, EyeOff } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import EditGameModal from '@/components/admin/EditGameModal';
+import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 
-const MINI_GAMES = [
-  { id: 'memory', label: 'Memory', emoji: '🧠' },
-  { id: 'dragdrop', label: 'Drag & Drop', emoji: '🎯' },
-  { id: 'wordbuilder', label: 'Word Builder', emoji: '📝' },
-  { id: 'sorting', label: 'Sorting', emoji: '🔄' },
-  { id: 'tilematch', label: 'Tile Match', emoji: '🎮' },
-  { id: 'story', label: 'Story', emoji: '📖' },
-  { id: 'physics', label: 'Physics', emoji: '⚡' },
-  { id: 'tracing', label: 'Tracing', emoji: '✏️' },
-];
+const MINI_GAMES = MINI_GAME_CATEGORIES.map(category => ({
+  id: category.id,
+  label: category.title,
+  emoji: category.emoji,
+}));
+
+const TYPE_BY_MODE = {
+  memory: 'memory_game',
+  dragdrop: 'drag_drop',
+  wordbuilder: 'word_builder',
+  sorting: 'sorting',
+  tilematch: 'tile_match',
+  story: 'story_adventure',
+  tracing: 'tracing',
+  picture_hunt: 'picture_quiz',
+  sequence: 'pattern_fill',
+  falling_catch: 'counting',
+  stacking: 'counting',
+  balloon_pop: 'letter_match',
+  typing_challenge: 'spelling',
+  true_false: 'multiple_choice',
+};
+
+const DIFFICULTY_MAP = {
+  Mudah: 'easy',
+  Sederhana: 'medium',
+  Sukar: 'hard',
+};
+
+const buildMiniGameRecord = (category, game, index) => ({
+  title: game.title,
+  description: `${category.title} · ${game.objective || category.objective}`,
+  type: TYPE_BY_MODE[game.mode] || 'multiple_choice',
+  category: category.id,
+  ageGroup: 'prasekolah',
+  difficulty: DIFFICULTY_MAP[game.difficulty] || 'easy',
+  tier: 'free',
+  emoji: game.emoji || category.emoji,
+  totalQuestions: Math.max(1, game.items?.length || game.words?.length || game.scenes?.length || game.statements?.length || 3),
+  gameData: {
+    ...game,
+    miniGameBlueprint: true,
+    categoryId: category.id,
+    categoryTitle: category.title,
+    playStyle: game.mode,
+    instruction: game.instruction,
+  },
+  isPublished: true,
+  status: 'ready',
+  order: index + 1,
+});
 
 export default function MiniGamesManager({ onToast }) {
   const [games, setGames] = useState([]);
@@ -26,6 +68,18 @@ export default function MiniGamesManager({ onToast }) {
     const results = await Promise.all(
       MINI_GAMES.map((game) => base44.entities.Game.filter({ category: game.id }))
     );
+
+    if (results.flat().length === 0) {
+      const blueprintRecords = MINI_GAME_CATEGORIES.flatMap(category =>
+        category.games.map((game, index) => buildMiniGameRecord(category, game, index))
+      );
+      await base44.entities.Game.bulkCreate(blueprintRecords);
+      onToast?.(`✅ ${blueprintRecords.length} mini games diimport ke manager`);
+      const importedResults = await Promise.all(
+        MINI_GAMES.map((game) => base44.entities.Game.filter({ category: game.id }))
+      );
+      results.splice(0, results.length, ...importedResults);
+    }
 
     const allGames = results.flat().sort((a, b) => {
       const categoryA = MINI_GAMES.findIndex((game) => game.id === a.category);
@@ -106,7 +160,7 @@ export default function MiniGamesManager({ onToast }) {
         ) : games.length === 0 ? (
           <div className="text-center py-10 text-white/60">
             <p className="text-4xl mb-2">📭</p>
-            <p className="text-sm font-bold">Belum ada mini games untuk diurus.</p>
+            <p className="text-sm font-bold">Mini games sedang diimport dari Mini Game Hub...</p>
           </div>
         ) : (
           <div className="space-y-3 max-h-[34rem] overflow-y-auto pr-1">

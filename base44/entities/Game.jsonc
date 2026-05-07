@@ -56,7 +56,14 @@
         "tilematch",
         "story",
         "physics",
-        "tracing"
+        "tracing",
+        "abc_phonics",
+        "math_counting",
+        "english_vocabulary",
+        "sains_awal",
+        "jawi_iqra",
+        "memory_logic",
+        "islamic_learning"
       ],
       "description": "Subject category"
     },
