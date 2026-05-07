@@ -345,10 +345,10 @@ export default function DrawingStudio() {
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28">
         <motion.button
           whileTap={{ scale: 0.95 }}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/dashboard')}
           className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/90 text-purple-700 font-black text-sm shadow-lg hover:bg-white transition-all"
         >
-          <ArrowLeft className="w-4 h-4" /> Kembali
+          <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
         </motion.button>
 
         {/* Header */}

@@ -138,7 +138,7 @@ export default function StoryKid() {
       </div>
       <AppHeader showBack={true} backTo="/dashboard" />
       <div className="relative max-w-2xl mx-auto px-4 pb-32 pt-28 md:pt-32">
-        <Link to="/dashboard" className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-white/85 text-purple-700 font-black text-sm shadow-lg"><ArrowLeft className="w-4 h-4" /> Dashboard</Link>
+        <Link to="/dashboard" className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/85 text-purple-700 font-black text-sm shadow-lg hover:bg-white transition-all"><ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard</Link>
 
         {!story ? (
           <>
