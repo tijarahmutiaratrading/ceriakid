@@ -14,6 +14,29 @@ function isMostlyEmoji(text = '') {
   return /^[\p{Emoji}\s]+$/u.test(text) && text.length <= 6;
 }
 
+function isImageUrl(text = '') {
+  return /^https?:\/\/.+\.(png|jpe?g|webp|gif|svg)(\?.*)?$/i.test(text);
+}
+
+function getCardIcon(text = '') {
+  const value = text.toLowerCase();
+  if (isMostlyEmoji(text)) return text;
+  if (value.includes('harimau')) return '🐅';
+  if (value.includes('bunga')) return '🌺';
+  if (value.includes('penyu')) return '🐢';
+  if (value.includes('daun')) return '🍃';
+  if (value.includes('ayam')) return '🐔';
+  if (value.includes('ikan')) return '🐟';
+  if (value.includes('buah') || value.includes('epal')) return '🍎';
+  if (value.includes('bola')) return '⚽';
+  if (value.includes('pensil')) return '✏️';
+  if (value.includes('buku')) return '📚';
+  if (value.includes('rumah')) return '🏠';
+  if (value.includes('pokok')) return '🌳';
+  if (value.includes('rm') || value.includes('wang')) return '💵';
+  return '🖼️';
+}
+
 export default function MemoryCard({ card, isFlipped, isMatched, onClick }) {
   const tone = toneStyles[card.visualStyle] || toneStyles[card.tone || card.side] || toneStyles.word;
   const isEmojiCard = card.visualStyle === 'emoji' || isMostlyEmoji(card.label);
@@ -33,7 +56,10 @@ export default function MemoryCard({ card, isFlipped, isMatched, onClick }) {
       className="relative aspect-square rounded-[1.35rem] overflow-hidden font-black shadow-xl ring-4 ring-white/80"
       style={{ transformStyle: 'preserve-3d' }}
     >
-      <div className="absolute inset-0 rounded-[1.35rem] bg-gradient-to-br from-purple-700 via-fuchsia-700 to-purple-950 border-2 border-white/80 flex items-center justify-center">
+      <div
+        className="absolute inset-0 rounded-[1.35rem] bg-gradient-to-br from-purple-700 via-fuchsia-700 to-purple-950 border-2 border-white/80 flex items-center justify-center"
+        style={{ backfaceVisibility: 'hidden' }}
+      >
         <div className="absolute inset-2 rounded-2xl border-2 border-dashed border-white/80" />
         <div className="absolute top-3 left-3 text-white/80 text-lg">✦</div>
         <div className="absolute bottom-3 right-3 text-yellow-200 text-xl">✧</div>
@@ -56,8 +82,15 @@ export default function MemoryCard({ card, isFlipped, isMatched, onClick }) {
         {card.visualStyle === 'shadow' && (
           <div className="absolute top-4 w-12 h-12 rounded-2xl bg-slate-900/15 blur-[1px] rotate-12" />
         )}
-        <span className="text-[9px] uppercase tracking-wider opacity-60 mb-1 mt-7 bg-white/60 rounded-full px-2 py-0.5">{sideLabel}</span>
-        <span className={`${isEmojiCard ? 'text-4xl sm:text-5xl' : 'text-sm sm:text-base'} leading-tight line-clamp-3`}>{card.label}</span>
+        <span className="text-[9px] uppercase tracking-wider opacity-60 mb-1 bg-white/60 rounded-full px-2 py-0.5">{sideLabel}</span>
+        {isImageUrl(card.label) ? (
+          <img src={card.label} alt="Kad memory" className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-white shadow-lg" />
+        ) : (
+          <>
+            <span className="text-4xl sm:text-5xl leading-none">{getCardIcon(card.label)}</span>
+            {!isEmojiCard && <span className="mt-1 text-[10px] sm:text-xs leading-tight line-clamp-2">{card.label}</span>}
+          </>
+        )}
         {isMatched && <span className="mt-2 text-xs bg-white/70 rounded-full px-2 py-0.5">Padan</span>}
       </div>
     </motion.button>
