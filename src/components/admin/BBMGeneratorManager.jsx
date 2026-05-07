@@ -78,6 +78,10 @@ export default function BBMGeneratorManager({ onToast }) {
   }, [tab]);
 
   const handleGenerate = async () => {
+    if (!form.topic.trim()) {
+      setError('Masukkan topik yang jelas dulu supaya BBM tidak jadi terlalu umum. Contoh: Pecahan Wang, Kata Adjektif, Sistem Suria.');
+      return;
+    }
     setLoading(true);
     setError('');
     setResult(null);

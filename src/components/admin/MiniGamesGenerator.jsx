@@ -15,7 +15,7 @@ const GAME_HUB = [
 ];
 
 export default function MiniGamesGenerator({ onToast }) {
-  const [miniGameConfig, setMiniGameConfig] = useState({ sets: 5, levels: 3, itemsPerSet: 4 });
+  const [miniGameConfig, setMiniGameConfig] = useState({ sets: 5, levels: 3, itemsPerSet: 4, theme: 'KSSR asas: nombor, huruf, haiwan, buah, warna, sekolah dan nilai murni' });
   const [selectedMiniGames, setSelectedMiniGames] = useState(new Set());
   const [miniGameSubmitting, setMiniGameSubmitting] = useState(false);
   const [tasks, setTasks] = useState([]);
@@ -112,7 +112,7 @@ export default function MiniGamesGenerator({ onToast }) {
             gamesCount: gamesToAdd,
             questionsPerGame: miniGameConfig.itemsPerSet,
             status: 'pending',
-            errorMessage: JSON.stringify({ sets: miniGameConfig.sets, levels: miniGameConfig.levels, itemsPerSet: miniGameConfig.itemsPerSet }),
+            errorMessage: JSON.stringify({ sets: miniGameConfig.sets, levels: miniGameConfig.levels, itemsPerSet: miniGameConfig.itemsPerSet, theme: miniGameConfig.theme }),
           });
         }
       }
@@ -176,6 +176,17 @@ export default function MiniGamesGenerator({ onToast }) {
             />
           </div>
         </div>
+        <div className="mb-5">
+          <label className="text-white/70 text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-2">🎯 Tema/KSSR Content</label>
+          <textarea
+            value={miniGameConfig.theme}
+            onChange={e => setMiniGameConfig(c => ({ ...c, theme: e.target.value }))}
+            rows={2}
+            className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-bold text-sm resize-none outline-none focus:bg-white/15"
+            placeholder="Contoh: Darjah 1 Matematik nombor 1-100, tambah tolak mudah, wang asas"
+          />
+        </div>
+
         <div className="mb-5 rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
           <p className="text-white/60 text-xs font-semibold">Target setiap mini game</p>
           <p className="text-white font-black text-lg">{miniGameConfig.sets * miniGameConfig.levels} games</p>
