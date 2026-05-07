@@ -15,7 +15,7 @@ const GAME_HUB = [
 ];
 
 export default function MiniGamesGenerator({ onToast }) {
-  const [miniGameConfig, setMiniGameConfig] = useState({ sets: 5, levels: 3, itemsPerSet: 4, theme: 'KSSR asas: nombor, huruf, haiwan, buah, warna, sekolah dan nilai murni' });
+  const [miniGameConfig, setMiniGameConfig] = useState({ sets: 5, levels: 3, itemsPerSet: 4, theme: '' });
   const [selectedMiniGames, setSelectedMiniGames] = useState(new Set());
   const [miniGameSubmitting, setMiniGameSubmitting] = useState(false);
   const [tasks, setTasks] = useState([]);
@@ -94,6 +94,10 @@ export default function MiniGamesGenerator({ onToast }) {
   const handleQueueMiniGames = async () => {
     if (selectedMiniGames.size === 0) {
       onToast('Pilih sekurang-kurangnya satu mini game', false);
+      return;
+    }
+    if (!miniGameConfig.theme.trim()) {
+      onToast('Masukkan tema/topik spesifik supaya mini games tidak repetitive', false);
       return;
     }
     setMiniGameSubmitting(true);
@@ -183,7 +187,7 @@ export default function MiniGamesGenerator({ onToast }) {
             onChange={e => setMiniGameConfig(c => ({ ...c, theme: e.target.value }))}
             rows={2}
             className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-bold text-sm resize-none outline-none focus:bg-white/15"
-            placeholder="Contoh: Darjah 1 Matematik nombor 1-100, tambah tolak mudah, wang asas"
+            placeholder="Wajib spesifik: cth Darjah 2 Matematik wang RM1-RM10 di pasar, atau Darjah 1 BM suku kata KVKV"
           />
         </div>
 

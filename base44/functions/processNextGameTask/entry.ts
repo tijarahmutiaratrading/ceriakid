@@ -254,8 +254,16 @@ Moral/theme: ${story.moral}.
 ${type === 'cover' ? 'Make it a vertical front book cover illustration with the main character centered and strong storybook cover composition.' : 'Make it a full-page inner storybook illustration with clear action, emotion, and room at the bottom for app text overlay.'}
 Important: illustration only, no readable words, no letters, no watermark, no logo, no UI, no speech bubbles.`;
 
-    const buildMiniGameData = async (base44, mode, index, theme, itemsPerSet, level) => {
+    const buildMiniGameData = async (base44, mode, index, theme, itemsPerSet, level, existingMini = []) => {
       const difficultyLabel = level <= 1 ? 'mudah' : level === 2 ? 'sederhana' : 'mencabar';
+      const variationAngles = [
+        'situasi bilik darjah Malaysia', 'aktiviti rumah dan keluarga', 'pasar dan wang harian',
+        'alam sekitar tempatan', 'haiwan dan tumbuhan Malaysia', 'sukan dan permainan kanak-kanak',
+        'makanan dan budaya Malaysia', 'keselamatan dan nilai murni', 'cuaca dan alam semula jadi',
+        'pengangkutan dan komuniti', 'cerita mini berwatak kanak-kanak', 'cabaran logik mudah'
+      ];
+      const microTopic = `${theme} · ${variationAngles[index % variationAngles.length]} · siri ${index + 1}`;
+      const recentExamples = existingMini.slice(-12).map(g => ({ title: g.title, data: JSON.stringify(g.gameData || {}).slice(0, 260) }));
       const gameGuides = {
         memory: 'Pasangan padanan ingatan. Output pairs sebagai array [depan, belakang].',
         dragdrop: 'Aktiviti seret dan lepas. Output items dan targets dengan panjang sama.',
@@ -267,23 +275,28 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         tracing: 'Latihan surih huruf/nombor/simbol. Output letters dan instruction.',
       };
 
+      const baseProps = {
+        title: { type: 'string' },
+        microTopic: { type: 'string' },
+        instruction: { type: 'string' },
+      };
       const schemaByMode = {
-        memory: { type: 'object', properties: { pairs: { type: 'array', items: { type: 'array', items: { type: 'string' } } }, theme: { type: 'string' } }, required: ['pairs', 'theme'] },
-        dragdrop: { type: 'object', properties: { items: { type: 'array', items: { type: 'string' } }, targets: { type: 'array', items: { type: 'string' } }, instruction: { type: 'string' } }, required: ['items', 'targets', 'instruction'] },
-        wordbuilder: { type: 'object', properties: { words: { type: 'array', items: { type: 'string' } }, letters: { type: 'array', items: { type: 'string' } }, instruction: { type: 'string' } }, required: ['words', 'letters', 'instruction'] },
-        sorting: { type: 'object', properties: { groups: { type: 'array', items: { type: 'string' } }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['groups', 'items'] },
-        tilematch: { type: 'object', properties: { tiles: { type: 'array', items: { type: 'string' } }, instruction: { type: 'string' } }, required: ['tiles', 'instruction'] },
-        story: { type: 'object', properties: { scenes: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, choices: { type: 'array', items: { type: 'string' } }, answer: { type: 'number' } }, required: ['text', 'choices', 'answer'] } } }, required: ['scenes'] },
-        physics: { type: 'object', properties: { challenges: { type: 'array', items: { type: 'object', properties: { question: { type: 'string' }, options: { type: 'array', items: { type: 'string' } }, answer: { type: 'number' } }, required: ['question', 'options', 'answer'] } } }, required: ['challenges'] },
-        tracing: { type: 'object', properties: { letters: { type: 'array', items: { type: 'string' } }, instruction: { type: 'string' } }, required: ['letters', 'instruction'] },
+        memory: { type: 'object', properties: { ...baseProps, pairs: { type: 'array', items: { type: 'array', items: { type: 'string' } } } }, required: ['title', 'microTopic', 'instruction', 'pairs'] },
+        dragdrop: { type: 'object', properties: { ...baseProps, items: { type: 'array', items: { type: 'string' } }, targets: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'items', 'targets'] },
+        wordbuilder: { type: 'object', properties: { ...baseProps, words: { type: 'array', items: { type: 'string' } }, letters: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'words', 'letters'] },
+        sorting: { type: 'object', properties: { ...baseProps, groups: { type: 'array', items: { type: 'string' } }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['title', 'microTopic', 'instruction', 'groups', 'items'] },
+        tilematch: { type: 'object', properties: { ...baseProps, tiles: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'tiles'] },
+        story: { type: 'object', properties: { ...baseProps, scenes: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, choices: { type: 'array', items: { type: 'string' } }, answer: { type: 'number' } }, required: ['text', 'choices', 'answer'] } } }, required: ['title', 'microTopic', 'instruction', 'scenes'] },
+        physics: { type: 'object', properties: { ...baseProps, challenges: { type: 'array', items: { type: 'object', properties: { question: { type: 'string' }, options: { type: 'array', items: { type: 'string' } }, answer: { type: 'number' } }, required: ['question', 'options', 'answer'] } } }, required: ['title', 'microTopic', 'instruction', 'challenges'] },
+        tracing: { type: 'object', properties: { ...baseProps, letters: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'letters'] },
       };
 
       const data = await base44.asServiceRole.integrations.Core.InvokeLLM({
-        prompt: `Jana content mini game CeriaKid yang berkualiti, tidak berulang dan sesuai KSSR/KSPK Malaysia.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema/topik wajib: ${theme}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nPeraturan:\n1. Content mesti spesifik ikut tema, bukan generic template.\n2. Guna Bahasa Melayu Malaysia baku kecuali tema minta English/Mandarin/Tamil.\n3. Sesuai kanak-kanak, fakta tepat, pilihan jawapan jelas.\n4. Jangan guna placeholder, jangan ulang set lama seperti A-Ayam/B-Bola sahaja.\n5. Untuk tilematch, tiles mesti ada pasangan yang sama.\n6. Untuk dragdrop/sorting, setiap item mesti ada kategori/target yang tepat.\n7. Output JSON sahaja ikut schema.`,
-        response_json_schema: schemaByMode[mode] || { type: 'object', properties: { instruction: { type: 'string' } } },
+        prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\nPeraturan anti-repeat:\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n4. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n5. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n6. Output JSON sahaja ikut schema.`,
+        response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
       });
 
-      return { mode, ...data, variant: index + 1, generatedTheme: theme };
+      return { mode, ...data, variant: index + 1, generatedTheme: theme, microTopic: data.microTopic || microTopic };
     };
 
     if (task.subject === 'storykid') {
@@ -467,8 +480,9 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
         const level = (absoluteIndex % levels) + 1;
         const setNo = Math.floor(absoluteIndex / levels) + 1;
         const difficulty = level <= 1 ? 'easy' : level === 2 ? 'medium' : 'hard';
+        const generatedData = await buildMiniGameData(base44, task.subject, absoluteIndex, meta.theme || 'KSSR asas Malaysia', itemsPerSet, level, existingMini);
         await base44.asServiceRole.entities.Game.create({
-          title: `${miniGame.title} · Set ${setNo} Level ${level}`,
+          title: generatedData.title || `${miniGame.title} · ${generatedData.microTopic || `Set ${setNo} Level ${level}`}`,
           type: miniGame.type,
           category: task.subject,
           ageGroup: task.ageGroup || 'sekolah_rendah',
@@ -476,11 +490,12 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
           tier: 'free',
           emoji: miniGame.emoji,
           totalQuestions: itemsPerSet,
-          gameData: { ...(await buildMiniGameData(base44, task.subject, absoluteIndex, meta.theme || 'KSSR asas Malaysia', itemsPerSet, level)), setNo, level, itemsPerSet },
+          gameData: { ...generatedData, setNo, level, itemsPerSet },
           isPublished: true,
           status: 'ready',
           order: absoluteIndex,
         });
+        existingMini.push({ title: generatedData.title, gameData: generatedData });
         createdInBatch++;
       }
 
