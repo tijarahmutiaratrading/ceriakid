@@ -15,6 +15,7 @@ import StoryKidManager from '@/components/admin/StoryKidManager';
 import BBMGeneratorManager from '@/components/admin/BBMGeneratorManager';
 import MasterTaskQueue from '@/components/admin/MasterTaskQueue';
 import ProductionSafetyChecklist from '@/components/admin/ProductionSafetyChecklist';
+import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 
 const QUESTION_THRESHOLD = 20;
 const QUESTION_GENERATION_DELAY = 3000;
@@ -33,17 +34,6 @@ const SUBJECT_CONFIG = [
   { file: 'gameData_sr_science', label: 'Sekolah Rendah - Science', ageGroup: 'sekolah_rendah', subject: 'science', color: { border: 'border-l-orange-500', badge: 'bg-orange-100 text-orange-700', dot: 'bg-orange-500' } },
   { file: 'gameData_sr_tamil', label: 'Sekolah Rendah - Tamil', ageGroup: 'sekolah_rendah', subject: 'bahasa_tamil', color: { border: 'border-l-red-500', badge: 'bg-red-100 text-red-700', dot: 'bg-red-500' } },
   { file: 'gameData_sr_mandarin', label: 'Sekolah Rendah - Mandarin', ageGroup: 'sekolah_rendah', subject: 'bahasa_mandarin', color: { border: 'border-l-yellow-500', badge: 'bg-yellow-100 text-yellow-700', dot: 'bg-yellow-500' } },
-];
-
-const GAME_HUB = [
-  { id: 'memory', title: 'Memory Game' },
-  { id: 'dragdrop', title: 'Drag & Drop' },
-  { id: 'wordbuilder', title: 'Word Builder' },
-  { id: 'sorting', title: 'Sorting Game' },
-  { id: 'tilematch', title: 'Tile Match' },
-  { id: 'story', title: 'Story Adventure' },
-  { id: 'physics', title: 'Physics Game' },
-  { id: 'tracing', title: 'Tracing Game' },
 ];
 
 export default function AdminGameManager() {
@@ -668,28 +658,30 @@ export default function AdminGameManager() {
                 <>
                   {/* Mobile carousel */}
                   <div className="sm:hidden flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
-                    {['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'].map(gameId => {
-                      const data = miniGamesData[gameId] || { count: 0, totalQuestions: 0 };
-                      const shortNames = { memory: '🧠', dragdrop: '🎯', wordbuilder: '📝', sorting: '🔄', tilematch: '🎮', story: '📖', physics: '⚡', tracing: '✏️' };
-                      const colors = { memory: 'from-purple-400 to-purple-500', dragdrop: 'from-blue-400 to-blue-500', wordbuilder: 'from-pink-400 to-pink-500', sorting: 'from-green-400 to-green-500', tilematch: 'from-yellow-400 to-yellow-500', story: 'from-red-400 to-red-500', physics: 'from-indigo-400 to-indigo-500', tracing: 'from-cyan-400 to-cyan-500' };
+                    {MINI_GAME_CATEGORIES.map(category => {
+                      const data = miniGamesData[category.id] || { count: 0, totalQuestions: 0 };
                       return (
-                        <div key={gameId} className={`bg-gradient-to-br ${colors[gameId]} rounded-2xl p-3 text-center flex-shrink-0 w-24 shadow-lg`}>
-                          <p className="text-white font-black text-xl mb-1">{shortNames[gameId]}</p>
-                          <p className="text-white text-lg font-black">{data.count}</p>
+                        <div key={category.id} className={`bg-gradient-to-br ${category.color} rounded-2xl p-3 text-center flex-shrink-0 w-32 shadow-lg`}>
+                          <p className="text-white font-black text-2xl mb-1">{category.emoji}</p>
+                          <p className="text-white text-xs font-black leading-tight line-clamp-2 min-h-[2rem]">{category.title}</p>
+                          <p className="text-white text-lg font-black mt-2">{data.count}</p>
                           <p className="text-white/80 text-xs font-semibold">games</p>
                         </div>
                       );
                     })}
                   </div>
                   {/* Desktop grid */}
-                  <div className="hidden sm:grid sm:grid-cols-4 gap-3">
-                    {['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'].map(gameId => {
-                      const data = miniGamesData[gameId] || { count: 0, totalQuestions: 0 };
-                      const gameNames = { memory: '🧠 Memory', dragdrop: '🎯 Drag&Drop', wordbuilder: '📝 Word', sorting: '🔄 Sort', tilematch: '🎮 Tile', story: '📖 Story', physics: '⚡ Physics', tracing: '✏️ Tracing' };
-                      const colors = { memory: 'from-purple-400 to-purple-500', dragdrop: 'from-blue-400 to-blue-500', wordbuilder: 'from-pink-400 to-pink-500', sorting: 'from-green-400 to-green-500', tilematch: 'from-yellow-400 to-yellow-500', story: 'from-red-400 to-red-500', physics: 'from-indigo-400 to-indigo-500', tracing: 'from-cyan-400 to-cyan-500' };
+                  <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    {MINI_GAME_CATEGORIES.map(category => {
+                      const data = miniGamesData[category.id] || { count: 0, totalQuestions: 0 };
                       return (
-                        <div key={gameId} className={`bg-gradient-to-br ${colors[gameId]} rounded-2xl p-4 text-center shadow-lg hover:shadow-xl transition-all`}>
-                          <p className="text-white font-black text-sm mb-2">{gameNames[gameId]}</p>
+                        <div key={category.id} className={`bg-gradient-to-br ${category.color} rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all`}>
+                          <div className="flex items-start justify-between gap-3 mb-3">
+                            <p className="text-3xl">{category.emoji}</p>
+                            <span className="text-xs px-2 py-1 rounded-full font-black bg-white/25 text-white">{category.games.length} jenis</span>
+                          </div>
+                          <p className="text-white font-black text-sm leading-tight mb-1">{category.title}</p>
+                          <p className="text-white/80 text-[11px] font-bold leading-snug line-clamp-2 mb-3">{category.objective}</p>
                           <p className="text-white text-2xl font-black">{data.count}</p>
                           <p className="text-white/80 text-xs font-semibold">games</p>
                         </div>
