@@ -193,6 +193,7 @@ export default function AdminGameManager() {
 
       if (queuedCount === 0) {
         showToast('Semua subjek/darjah sudah capai target. Naikkan jumlah games atau soalan.', false);
+        setSubmitting(false);
         return;
       }
 

@@ -120,6 +120,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     '/admin-dashboard': 'Admin Dashboard',
     '/admin-game-manager': 'Master Generator',
     '/admin-bbm-generator': 'BBM Generator',
+    '/ai-bbm-generator': 'AI BBM Generator',
   };
 
   const displayTitle = title || pageTitles[location.pathname] || (location.pathname.startsWith('/games/') ? 'Permainan' : 'CeriaKid');

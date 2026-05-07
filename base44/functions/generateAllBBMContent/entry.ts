@@ -30,6 +30,7 @@ Jenis: ${bbm.type}
 Penerangan: ${bbm.description || ''}
 
 Syarat WAJIB:
+0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6. DILARANG jana kandungan Tingkatan, PT3, SPM, sekolah menengah, atau silibus luar tahap ini.
 1. HTML lengkap dengan <!DOCTYPE html>, <head> dan <body>
 2. CSS inline dalam <style> tag — warna-warni, sesuai untuk kanak-kanak Malaysia
 3. Kandungan PENUH dan BERMAKNA — bukan placeholder. Kalau lembaran kerja, ada soalan betul. Kalau carta, ada kandungan betul. Kalau RPH, ada struktur lengkap. Kalau kuiz, ada 15-20 soalan betul dengan jawapan.
