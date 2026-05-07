@@ -1,38 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Loader2, Play, ArrowLeft } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { Play, ArrowLeft, Trophy, Volume2, Sparkles } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
-import { useAgeGroup } from '@/lib/AgeGroupContext';
+import { findMiniCategory } from '@/lib/miniGameBlueprints';
 
-const MINI_GAME_META = {
-  memory: { emoji: '🧠', title: 'Permainan Ingatan', playPath: '/games/memory', color: 'from-purple-500 to-pink-500' },
-  dragdrop: { emoji: '🎯', title: 'Padankan Huruf', playPath: '/games/dragdrop', color: 'from-blue-500 to-cyan-400' },
-  wordbuilder: { emoji: '📝', title: 'Bentuk Perkataan', playPath: '/games/wordbuilder', color: 'from-green-500 to-emerald-400' },
-  sorting: { emoji: '🗂️', title: 'Isih Kategori', playPath: '/games/sorting', color: 'from-orange-500 to-yellow-400' },
-  tracing: { emoji: '✏️', title: 'Seni Menulis', playPath: '/games/tracing', color: 'from-violet-500 to-purple-500' },
-  story: { emoji: '📖', title: 'Petualangan Cerita', playPath: '/games/story', color: 'from-amber-500 to-orange-400' },
-  tilematch: { emoji: '🔢', title: 'Padankan 3 Sama', playPath: '/games/tilematch', color: 'from-pink-500 to-purple-500' },
-  physics: { emoji: '🚀', title: 'Lontarkan Bola', playPath: '/games/physics', color: 'from-sky-500 to-blue-500' },
+const modeLabels = {
+  balloon_pop: 'Balloon Pop', tracing: 'Finger Tracing', dragdrop: 'Drag & Drop', falling_catch: 'Catch Falling Object', stacking: 'Object Stacking', sequence: 'Sequence Arrangement', wordbuilder: 'Build Word', swipe_select: 'Swipe Selection', spin_wheel: 'Spin Wheel', picture_hunt: 'Picture Hunt', typing_challenge: 'Typing Challenge', tilematch: 'Tile Match', sorting: 'Sorting Game', mini_simulation: 'Mini Simulation', true_false: 'True / False', memory: 'Memory Card Flip', rhythm_tap: 'Rhythm Tapping', connect_dots: 'Connect The Dots', maze: 'Maze', hidden_object: 'Hidden Object', reaction_speed: 'Reaction Speed', story: 'Story Choice', coloring: 'Coloring Activity'
 };
 
 export default function MiniGamesList() {
   const { type } = useParams();
-  const { ageGroup } = useAgeGroup() || { ageGroup: 'prasekolah' };
-  const [games, setGames] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const meta = MINI_GAME_META[type] || MINI_GAME_META.memory;
-
-  useEffect(() => {
-    const loadGames = async () => {
-      setLoading(true);
-      const data = await base44.entities.Game.filter({ category: type, isPublished: true });
-      setGames((data || []).sort((a, b) => (a.order || 0) - (b.order || 0)));
-      setLoading(false);
-    };
-    loadGames();
-  }, [type, ageGroup]);
+  const category = findMiniCategory(type);
 
   return (
     <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
@@ -44,45 +23,45 @@ export default function MiniGamesList() {
       <AppHeader showBack={true} backTo="/games-hub" />
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className={`mb-5 rounded-3xl p-5 bg-gradient-to-br ${meta.color} shadow-2xl`}>
+        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className={`mb-5 rounded-3xl p-5 bg-gradient-to-br ${category.color} shadow-2xl`}>
           <Link to="/games-hub" className="inline-flex items-center gap-2 text-white/85 text-xs font-black mb-4">
             <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
           </Link>
           <div className="flex items-center gap-4">
-            <div className="text-5xl">{meta.emoji}</div>
+            <div className="text-5xl">{category.emoji}</div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white">{meta.title}</h1>
-              <p className="text-white/80 text-sm font-bold">{games.length} games tersedia</p>
+              <h1 className="text-2xl sm:text-3xl font-black text-white">{category.title}</h1>
+              <p className="text-white/80 text-sm font-bold">3 gameplay berbeza · {category.objective}</p>
             </div>
           </div>
         </motion.div>
 
-        {loading ? (
-          <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-white" /></div>
-        ) : games.length === 0 ? (
-          <div className="text-center py-16 rounded-3xl bg-white/10 border border-white/20">
-            <p className="text-white/70 font-bold">Tiada game dalam kategori ini lagi.</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {games.map((game, idx) => (
-              <motion.div key={game.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}>
-                <Link to={`${meta.playPath}?gameId=${game.id}`} className="block rounded-3xl p-4 bg-white/12 border border-white/20 hover:bg-white/18 transition-all shadow-xl">
-                  <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl flex-shrink-0">{game.emoji || meta.emoji}</div>
-                    <div className="flex-1 min-w-0">
-                      <h2 className="text-white font-black text-base truncate">{game.title || meta.title}</h2>
-                      <p className="text-white/60 text-xs font-bold mt-1">{game.difficulty || 'easy'} · {game.totalQuestions || 1} aktiviti</p>
+        <div className="space-y-3">
+          {category.games.map((game, idx) => (
+            <motion.div key={game.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.06 }}>
+              <Link to={`/mini-games/${category.id}/play/${game.id}`} className="block rounded-3xl p-4 bg-white/12 border border-white/20 hover:bg-white/18 transition-all shadow-xl">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-3xl bg-white/20 flex items-center justify-center text-4xl flex-shrink-0">{game.emoji}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <h2 className="text-white font-black text-base">{game.title}</h2>
+                      <span className="px-2 py-0.5 rounded-full bg-white/20 text-white/85 text-[10px] font-black">{game.difficulty}</span>
                     </div>
-                    <div className="w-11 h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0">
-                      <Play className="w-5 h-5 fill-current" />
+                    <p className="text-white/75 text-xs font-bold">{modeLabels[game.mode] || game.mode} · {game.objective}</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Trophy className="w-3 h-3" /> {game.reward}</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Volume2 className="w-3 h-3" /> sound</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Sparkles className="w-3 h-3" /> animasi</span>
                     </div>
                   </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        )}
+                  <div className="w-11 h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0">
+                    <Play className="w-5 h-5 fill-current" />
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );

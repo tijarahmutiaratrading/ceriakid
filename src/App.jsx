@@ -22,6 +22,7 @@ import GamesList from '@/pages/GamesList';
 import GamePlayer from '@/pages/GamePlayer';
 import GamesHub from '@/pages/GamesHub';
 import MiniGamesList from '@/pages/MiniGamesList';
+import MiniGamePlayground from '@/pages/MiniGamePlayground';
 import BBMHub from '@/pages/BBMHub';
 import ParentDashboard from '@/pages/ParentDashboard';
 import FriendsList from '@/pages/FriendsList';
@@ -97,6 +98,7 @@ const AuthenticatedApp = () => {
           <Route path="/story-kid" element={<StoryKid />} />
           <Route path="/games-hub" element={<GamesHub />} />
           <Route path="/mini-games/:type" element={<MiniGamesList />} />
+          <Route path="/mini-games/:categoryId/play/:gameId" element={<MiniGamePlayground />} />
           <Route path="/bbm" element={<BBMHub />} />
           <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
