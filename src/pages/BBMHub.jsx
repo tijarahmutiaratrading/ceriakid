@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, Lock, Search, BookOpen, FileText, Star, Sparkles } from 'lucide-react';
+import { Download, Lock, Search, BookOpen, FileText, Star, Sparkles, ArrowLeft } from 'lucide-react';
 
 import { Link } from 'react-router-dom';
 import AppHeader from '@/components/AppHeader';
@@ -201,6 +201,9 @@ export default function BBMHub() {
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
+        <Link to="/dashboard" className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/85 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
+          <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
+        </Link>
 
         {/* Header Card */}
         <motion.div
