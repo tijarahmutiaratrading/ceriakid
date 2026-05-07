@@ -291,10 +291,36 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         tracing: { type: 'object', properties: { ...baseProps, letters: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'letters'] },
       };
 
-      const data = await base44.asServiceRole.integrations.Core.InvokeLLM({
-        prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\nPeraturan anti-repeat:\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n4. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n5. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n6. Output JSON sahaja ikut schema.`,
+      let data = await base44.asServiceRole.integrations.Core.InvokeLLM({
+        prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\nPeraturan anti-repeat:\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n4. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n5. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n6. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n7. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n8. Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
       });
+
+      const reviewed = await base44.asServiceRole.integrations.Core.InvokeLLM({
+        prompt: `Audit dan baiki mini game ini sebelum disimpan.
+
+Jenis game: ${mode}
+Tema: ${theme}
+Micro-topic: ${microTopic}
+Level: ${level} (${difficultyLabel})
+Jumlah item sasaran: ${itemsPerSet}
+
+Data asal:
+${JSON.stringify(data)}
+
+Wajib baiki:
+1. Semua kandungan mesti fakta tepat, natural, sesuai KSSR Malaysia dan terus boleh dimainkan.
+2. Tiada duplicate item/pasangan/jawapan dalam satu game.
+3. Tiada bahasa Indonesia/asing seperti "bisa", "total", "langkah" dalam BM; guna "boleh", "jumlah", "keping/biji/helai".
+4. Jika topik wang Malaysia/RM: guna hanya fakta semasa; jangan sebut RM1 syiling, RM2 syiling, RM2 note, atau warna/ciri duit yang tidak pasti.
+5. Guna Bahasa Melayu Malaysia baku; contoh "pemadam" bukan "penghapus".
+6. Untuk memory, pasangan mesti unik dan tidak mengulang nilai kiri yang sama.
+6. Pastikan output masih ikut schema asal dan lengkap.
+
+Output JSON sahaja ikut schema.`,
+        response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
+      });
+      data = reviewed || data;
 
       return { mode, ...data, variant: index + 1, generatedTheme: theme, microTopic: data.microTopic || microTopic };
     };
@@ -394,7 +420,7 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         ? 'Use English only for all title, description, instructions, content and answers.'
         : 'Gunakan Bahasa Melayu Malaysia baku untuk semua kandungan.';
 
-      const data = await base44.asServiceRole.integrations.Core.InvokeLLM({
+      let data = await base44.asServiceRole.integrations.Core.InvokeLLM({
         prompt: `Anda ialah guru pakar KSSR/DSKP Malaysia. Jana ${typeLabel} lengkap, berkualiti dan siap cetak A4 untuk ${subjectLabel} ${levelLabel}. Topik: ${topic}. Bilangan item/soalan: ${count}. ${languageRule}
 Panduan tahap KSSR: ${bbmKssrGuide}
 
@@ -404,11 +430,12 @@ WAJIB ikut standard generator CeriaKid:
 3. Guna contoh tempatan Malaysia yang sesuai umur dan selari KSSR/DSKP.
 4. Variasikan aras mudah-sederhana-tinggi secara seimbang, tetapi jangan melebihi tahap KSSR ${levelLabel}.
 5. DILARANG soalan atau aktiviti generik, merepek, terlalu tinggi/rendah, atau berulang antara item.
-6. DILARANG placeholder: "Soalan 1", "Item", "Latihan", "Gambar di bawah", "lihat gambar", atau content kosong.
-6. DILARANG fakta meragukan, bahasa rojak, bahasa Indonesia tidak sesuai, dan tajuk generik.
+6. DILARANG placeholder: "Soalan 1", "Item", "Latihan", "Gambar di bawah", "Gambar di halaman ini", "lihat gambar", atau content kosong.
+6. DILARANG fakta meragukan, bahasa rojak, bahasa Indonesia tidak sesuai, arahan yang perlukan gambar, dan tajuk generik.
 7. Setiap heading mesti menerangkan kemahiran khusus seperti "Kenal Pasti Kata Nama Am" atau "Selesaikan Tambah Dalam Lingkungan 100".
 8. Untuk RPH, mesti ada objektif, set induksi, aktiviti, pentaksiran dan refleksi ringkas.
 9. Untuk lembaran/kuiz/kad imbasan, mesti ada item yang terus boleh digunakan murid.
+10. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.
 
 Output JSON sahaja: title, description, instructions, items[{heading,content,answer}].`,
         response_json_schema: {
@@ -431,6 +458,49 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
           },
         },
       });
+
+      const reviewedBbm = await base44.asServiceRole.integrations.Core.InvokeLLM({
+        prompt: `Audit dan baiki BBM ini sebelum disimpan.
+
+Subjek: ${subjectLabel}
+Tahap: ${levelLabel}
+Jenis: ${typeLabel}
+Topik: ${topic}
+
+Data asal:
+${JSON.stringify(data)}
+
+Wajib baiki:
+1. Kekalkan bilangan item lebih kurang ${count}, tetapi hanya item berkualiti.
+2. Semua kandungan mesti fakta tepat, sesuai KSSR Malaysia dan terus boleh cetak.
+3. Guna Bahasa Melayu Malaysia baku; buang bahasa Indonesia/asing seperti "bisa", "total", "langkah", "penghapus" jika konteks BM.
+4. Jangan guna arahan yang perlukan gambar/imej kerana BBM ini dijana sebagai teks cetak sahaja; ganti dengan senarai nilai, jadual ringkas, atau situasi cerita.
+5. Jika topik wang Malaysia/RM: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1, RM5, RM10, RM20, RM50, RM100. Jangan sebut RM1 syiling, RM2 syiling, RM2 note.
+5. Soalan mesti natural dan unit mesti betul: keping, biji, helai, batang, kotak.
+6. Jawapan/skema mesti tepat dan tidak mengelirukan.
+
+Output JSON sahaja: title, description, instructions, items[{heading,content,answer}].`,
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            title: { type: 'string' },
+            description: { type: 'string' },
+            instructions: { type: 'string' },
+            items: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  heading: { type: 'string' },
+                  content: { type: 'string' },
+                  answer: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      });
+      data = reviewedBbm || data;
 
       const badBbmPattern = /^(soalan|item|latihan|aktiviti pembelajaran|umum)$/i;
       const items = (Array.isArray(data.items) ? data.items : [])
