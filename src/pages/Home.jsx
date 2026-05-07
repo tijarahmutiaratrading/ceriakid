@@ -81,7 +81,7 @@ export default function Home() {
 
       <AppHeader />
 
-      <div className="relative max-w-2xl mx-auto px-3 md:px-4 pb-32 pt-28 md:pt-32 space-y-5">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32 space-y-5">
 
         {/* Welcome Card */}
         {isAuthenticated && (
@@ -172,7 +172,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="grid grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-5"
+          className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-5"
         >
           <Link to="/games-hub" className="block">
             <motion.div
