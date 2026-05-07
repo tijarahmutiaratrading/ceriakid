@@ -10,21 +10,6 @@ import BBMFilterBar from '@/components/bbm/BBMFilterBar';
 import BBMCard from '@/components/bbm/BBMCard';
 import BBMEmptyState from '@/components/bbm/BBMEmptyState';
 
-const SAMPLE_BBM = [
-  { id: 's1', title: 'Kad Imbasan Abjad A-Z', subject: 'bahasa_melayu', level: 'prasekolah', type: 'kad_imbasan', emoji: '🔤', tier: 'free', downloadCount: 342, description: 'Set kad imbasan huruf besar dan kecil dengan gambar menarik', isPublished: true },
-  { id: 's2', title: 'Lembaran Kerja Nombor 1-10', subject: 'mathematics', level: 'prasekolah', type: 'lembaran_kerja', emoji: '🔢', tier: 'free', downloadCount: 289, description: 'Latihan menulis dan mengira nombor 1 hingga 10', isPublished: true },
-  { id: 's3', title: 'Carta Jadual Sifir 1-12', subject: 'mathematics', level: 'darjah_3', type: 'carta', emoji: '📊', tier: 'free', downloadCount: 512, description: 'Carta warna-warni jadual sifir untuk ditampal di kelas', isPublished: true },
-  { id: 's4', title: 'Slaid PPT: Sistem Suria', subject: 'science', level: 'darjah_4', type: 'slaid_powerpoint', emoji: '🚀', tier: 'premium', downloadCount: 198, description: 'Slaid PowerPoint interaktif tentang sistem suria dan planet', isPublished: true },
-  { id: 's5', title: 'RPH Penulisan Karangan Darjah 5', subject: 'bahasa_melayu', level: 'darjah_5', type: 'rancangan_pengajaran', emoji: '📝', tier: 'premium', downloadCount: 156, description: 'Rancangan Pengajaran Harian lengkap untuk topik karangan', isPublished: true },
-  { id: 's6', title: 'Lembaran Kerja English Vocabulary', subject: 'english', level: 'darjah_1', type: 'lembaran_kerja', emoji: '🇬🇧', tier: 'free', downloadCount: 445, description: 'Latihan kosa kata asas Bahasa Inggeris dengan gambar', isPublished: true },
-  { id: 's7', title: 'Kad Imbasan Jawi Alif-Ya', subject: 'jawi', level: 'darjah_2', type: 'kad_imbasan', emoji: '🕌', tier: 'free', downloadCount: 267, description: 'Kad imbasan huruf jawi lengkap dengan cara sebutan', isPublished: true },
-  { id: 's8', title: 'Modul Sains: Haiwan & Habitatnya', subject: 'science', level: 'darjah_3', type: 'modul', emoji: '🦁', tier: 'premium', downloadCount: 134, description: 'Modul lengkap tentang haiwan dan habitat mereka', isPublished: true },
-  { id: 's9', title: 'Permainan: Siapa Cepat Dia Dapat (BM)', subject: 'bahasa_melayu', level: 'darjah_2', type: 'permainan_bilik_darjah', emoji: '🎯', tier: 'free', downloadCount: 378, description: 'Aktiviti permainan kumpulan untuk latih ejaan dan kosa kata', isPublished: true },
-  { id: 's10', title: 'Kuiz Matematik Darjah 6 UPSR', subject: 'mathematics', level: 'darjah_6', type: 'kuiz', emoji: '🏆', tier: 'premium', downloadCount: 223, description: 'Soalan kuiz format UPSR dengan jawapan lengkap', isPublished: true },
-  { id: 's11', title: 'Carta Buah-buahan Malaysia', subject: 'bahasa_melayu', level: 'prasekolah', type: 'carta', emoji: '🍎', tier: 'free', downloadCount: 401, description: 'Carta warna-warni buah-buahan tempatan dengan nama BM & English', isPublished: true },
-  { id: 's12', title: 'RPH English: My Family Darjah 1', subject: 'english', level: 'darjah_1', type: 'rancangan_pengajaran', emoji: '👨‍👩‍👧', tier: 'premium', downloadCount: 189, description: 'Rancangan Pengajaran Harian topik keluarga untuk Year 1', isPublished: true },
-];
-
 export default function BBMHub() {
   const { user, isAuthenticated } = useAuth();
   const [resources, setResources] = useState([]);
@@ -48,16 +33,11 @@ export default function BBMHub() {
           setUserTier(subs[0].tier || 'free');
         }
       }
-      // Load BBM from DB, fall back to sample
-      try {
-        const dbResources = await base44.entities.BBMResource.list('-created_date', 100);
-        const published = dbResources.filter(r => r.isPublished !== false);
-        setResources(published.length > 0 ? published : SAMPLE_BBM);
-      } catch {
-        setResources(SAMPLE_BBM);
-      }
+      const dbResources = await base44.entities.BBMResource.list('-created_date', 100);
+      const published = dbResources.filter(r => r.isPublished !== false);
+      setResources(published);
     } catch {
-      setResources(SAMPLE_BBM);
+      setResources([]);
     } finally {
       setLoading(false);
     }
@@ -175,6 +155,8 @@ export default function BBMHub() {
 
   const handleDownload = async (resource) => {
     if (resource.tier === 'premium' && !isPremiumUser) return;
+
+    if (resource.id?.startsWith('s')) return;
 
     if (resource.htmlContent) {
       const printWindow = window.open('', '_blank');
