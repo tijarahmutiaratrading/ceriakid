@@ -172,10 +172,10 @@ export default function MemoryGame() {
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
           className="mb-5 p-4 sm:p-5 rounded-[2rem] flex items-center justify-between bg-white/10 border-2 border-dashed border-white/70 shadow-2xl">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-inner flex-shrink-0">🍭</div>
+            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-inner flex-shrink-0">🧠</div>
             <div className="min-w-0">
-              <h1 className="text-xl sm:text-2xl font-black text-white line-clamp-2">MEMORY GAME</h1>
-              <p className="text-white/80 text-xs sm:text-sm font-bold truncate">{gameTitle} · Pusingan {round + 1}/{rounds.length}</p>
+              <h1 className="text-xl sm:text-2xl font-black text-white line-clamp-2">{gameTitle}</h1>
+              <p className="text-white/80 text-xs sm:text-sm font-bold truncate">Memory Game · Pusingan {round + 1}/{rounds.length}</p>
             </div>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">

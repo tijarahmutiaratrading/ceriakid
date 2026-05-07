@@ -37,7 +37,7 @@ export default function MemoryCard({ card, isFlipped, isMatched, onClick }) {
         <div className="absolute inset-2 rounded-2xl border-2 border-dashed border-white/80" />
         <div className="absolute top-3 left-3 text-white/80 text-lg">✦</div>
         <div className="absolute bottom-3 right-3 text-yellow-200 text-xl">✧</div>
-        <span className="text-white text-3xl drop-shadow-lg">🍬</span>
+        <span className="text-white text-3xl drop-shadow-lg">?</span>
       </div>
 
       <div
