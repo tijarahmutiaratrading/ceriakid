@@ -2,32 +2,50 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, RotateCcw, Star } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
+import MemoryCard from '@/components/games/MemoryCard';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
-const ALL_ROUNDS = [
-  [{ id: 1, emoji: '🐱' }, { id: 2, emoji: '🐶' }, { id: 3, emoji: '🐦' }, { id: 4, emoji: '🐟' }, { id: 5, emoji: '🐘' }, { id: 6, emoji: '🦁' }],
-  [{ id: 1, emoji: '🍎' }, { id: 2, emoji: '🍌' }, { id: 3, emoji: '🍊' }, { id: 4, emoji: '🍇' }, { id: 5, emoji: '🍓' }, { id: 6, emoji: '🍉' }],
-  [{ id: 1, emoji: '🚗' }, { id: 2, emoji: '✈️' }, { id: 3, emoji: '🚢' }, { id: 4, emoji: '🚂' }, { id: 5, emoji: '🚁' }, { id: 6, emoji: '🛸' }],
-  [{ id: 1, emoji: '⚽' }, { id: 2, emoji: '🏀' }, { id: 3, emoji: '🎾' }, { id: 4, emoji: '🏐' }, { id: 5, emoji: '🎱' }, { id: 6, emoji: '🏓' }],
-  [{ id: 1, emoji: '🌸' }, { id: 2, emoji: '🌻' }, { id: 3, emoji: '🌹' }, { id: 4, emoji: '🌺' }, { id: 5, emoji: '🌼' }, { id: 6, emoji: '🍀' }],
-  [{ id: 1, emoji: '🍕' }, { id: 2, emoji: '🍔' }, { id: 3, emoji: '🍜' }, { id: 4, emoji: '🍦' }, { id: 5, emoji: '🎂' }, { id: 6, emoji: '🍩' }],
-  [{ id: 1, emoji: '🌍' }, { id: 2, emoji: '🌙' }, { id: 3, emoji: '⭐' }, { id: 4, emoji: '🌈' }, { id: 5, emoji: '⚡' }, { id: 6, emoji: '🌊' }],
-  [{ id: 1, emoji: '🐸' }, { id: 2, emoji: '🦊' }, { id: 3, emoji: '🐼' }, { id: 4, emoji: '🦋' }, { id: 5, emoji: '🐢' }, { id: 6, emoji: '🦄' }],
-  [{ id: 1, emoji: '📚' }, { id: 2, emoji: '✏️' }, { id: 3, emoji: '🎨' }, { id: 4, emoji: '🎸' }, { id: 5, emoji: '🎭' }, { id: 6, emoji: '🎯' }],
-  [{ id: 1, emoji: '🏠' }, { id: 2, emoji: '🏫' }, { id: 3, emoji: '🏥' }, { id: 4, emoji: '🏪' }, { id: 5, emoji: '⛪' }, { id: 6, emoji: '🏗️' }],
+const FALLBACK_ROUNDS = [
+  [
+    { id: 'a', label: 'RM1', side: 'value' }, { id: 'a', label: 'Pensil', side: 'item' },
+    { id: 'b', label: 'RM2', side: 'value' }, { id: 'b', label: 'Pemadam', side: 'item' },
+    { id: 'c', label: 'RM5', side: 'value' }, { id: 'c', label: 'Buku Nota', side: 'item' },
+    { id: 'd', label: 'RM10', side: 'value' }, { id: 'd', label: 'Set Warna', side: 'item' },
+  ],
+  [
+    { id: 'a', label: 'Kata Nama', side: 'value' }, { id: 'a', label: 'Meja', side: 'item' },
+    { id: 'b', label: 'Kata Kerja', side: 'value' }, { id: 'b', label: 'Makan', side: 'item' },
+    { id: 'c', label: 'Kata Adjektif', side: 'value' }, { id: 'c', label: 'Cantik', side: 'item' },
+    { id: 'd', label: 'Kata Arah', side: 'value' }, { id: 'd', label: 'Atas', side: 'item' },
+  ],
 ];
 
-// Pick 5 random rounds each game session for variety
 function getRandomRounds() {
-  const shuffled = [...ALL_ROUNDS].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, 5);
+  return [...FALLBACK_ROUNDS].sort(() => Math.random() - 0.5);
 }
 
-const ROUNDS = getRandomRounds();
+function buildRoundsFromGame(game) {
+  const pairs = game?.gameData?.pairs;
+  if (!Array.isArray(pairs) || pairs.length === 0) return null;
+
+  const round = pairs.slice(0, 6).flatMap((pair, index) => {
+    const left = Array.isArray(pair) ? pair[0] : pair?.left;
+    const right = Array.isArray(pair) ? pair[1] : pair?.right;
+    return [
+      { id: String(index), label: String(left || ''), side: 'value' },
+      { id: String(index), label: String(right || ''), side: 'item' },
+    ];
+  }).filter(card => card.label.trim());
+
+  return round.length >= 4 ? [round] : null;
+}
 
 export default function MemoryGame() {
+  const [rounds, setRounds] = useState(() => getRandomRounds());
+  const [gameTitle, setGameTitle] = useState('Permainan Ingatan');
   const [round, setRound] = useState(0);
   const [cards, setCards] = useState([]);
   const [flipped, setFlipped] = useState([]);
@@ -39,11 +57,27 @@ export default function MemoryGame() {
   const [feedback, setFeedback] = useState(null); // 'match' | 'nomatch'
   const isChecking = useRef(false);
 
-  useEffect(() => { initRound(round); }, [round]);
+  useEffect(() => {
+    const loadSelectedGame = async () => {
+      const gameId = new URLSearchParams(window.location.search).get('gameId');
+      if (!gameId) return;
+      const matches = await base44.entities.Game.filter({ id: gameId });
+      const game = matches?.[0];
+      const generatedRounds = buildRoundsFromGame(game);
+      if (generatedRounds) {
+        setGameTitle(game.title || 'Permainan Ingatan');
+        setRounds(generatedRounds);
+        initRound(0, generatedRounds);
+      }
+    };
+    loadSelectedGame();
+  }, []);
 
-  const initRound = (r) => {
-    const data = ROUNDS[r];
-    const shuffled = [...data, ...data].sort(() => Math.random() - 0.5);
+  useEffect(() => { initRound(round); }, [round, rounds]);
+
+  const initRound = (r, sourceRounds = rounds) => {
+    const data = sourceRounds[r] || sourceRounds[0] || [];
+    const shuffled = [...data].sort(() => Math.random() - 0.5);
     setCards(shuffled.map((card, idx) => ({ ...card, index: idx })));
     setFlipped([]);
     setMatched(new Set());
@@ -98,15 +132,16 @@ export default function MemoryGame() {
   };
 
   const nextRound = () => {
-    if (round + 1 >= ROUNDS.length) { setGameOver(true); } else { setRound(r => r + 1); }
+    if (round + 1 >= rounds.length) { setGameOver(true); } else { setRound(r => r + 1); }
   };
 
   const restartGame = () => {
-    // Shuffle new rounds on restart for variety
-    const newRounds = getRandomRounds();
-    ROUNDS.length = 0;
-    newRounds.forEach(r => ROUNDS.push(r));
-    setRound(0); setScore(0); setGameOver(false);
+    const nextRounds = gameTitle === 'Permainan Ingatan' ? getRandomRounds() : rounds;
+    setRounds(nextRounds);
+    setRound(0);
+    setScore(0);
+    setGameOver(false);
+    initRound(0, nextRounds);
   };
 
   const stars = Math.max(3 - Math.floor(moves / 5), 1);
@@ -128,8 +163,8 @@ export default function MemoryGame() {
           <div className="flex items-center gap-3">
             <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner">🧠</div>
             <div>
-              <h1 className="text-xl font-black text-white">Permainan Ingatan</h1>
-              <p className="text-white/70 text-xs">Pusingan {round + 1} / {ROUNDS.length}</p>
+              <h1 className="text-xl font-black text-white line-clamp-2">{gameTitle}</h1>
+              <p className="text-white/70 text-xs">Pusingan {round + 1} / {rounds.length}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -143,7 +178,7 @@ export default function MemoryGame() {
 
         {/* Round progress */}
         <div className="flex gap-2 mb-4">
-          {ROUNDS.map((_, i) => (
+          {rounds.map((_, i) => (
             <div key={i} className={`flex-1 h-2 rounded-full transition-all ${i < round ? 'bg-white' : i === round ? 'bg-white/70' : 'bg-white/20'}`} />
           ))}
         </div>
@@ -182,18 +217,13 @@ export default function MemoryGame() {
             {cards.map((card, idx) => {
               const isFlipped = flipped.includes(idx) || matched.has(idx);
               return (
-                <motion.button
+                <MemoryCard
                   key={idx}
-                  whileTap={{ scale: 0.92 }}
+                  card={card}
+                  isFlipped={isFlipped}
+                  isMatched={matched.has(idx)}
                   onClick={() => toggleFlip(idx)}
-                  animate={{ rotateY: isFlipped ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="aspect-square rounded-2xl font-black text-3xl transition-all"
-                  style={isFlipped
-                    ? { background: matched.has(idx) ? 'rgba(52,211,153,0.9)' : 'white' }
-                    : { background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.4)' }}>
-                  {isFlipped ? card.emoji : '?'}
-                </motion.button>
+                />
               );
             })}
           </div>
@@ -210,7 +240,7 @@ export default function MemoryGame() {
             </div>
             <motion.button whileTap={{ scale: 0.95 }} onClick={nextRound}
               className="px-6 py-3 bg-white text-purple-600 rounded-full font-black shadow-lg">
-              {round + 1 >= ROUNDS.length ? 'Tamat! Lihat Skor' : 'Pusingan Seterusnya →'}
+              {round + 1 >= rounds.length ? 'Tamat! Lihat Skor' : 'Pusingan Seterusnya →'}
             </motion.button>
           </motion.div>
         )}
