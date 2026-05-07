@@ -113,10 +113,14 @@ export default function MiniGamesManager({ onToast }) {
   };
 
   const handleDelete = async (game) => {
-    if (!window.confirm(`Padam mini game "${game.title}"?`)) return;
     await base44.entities.Game.delete(game.id);
     onToast?.('✅ Mini game dipadam');
-    loadGames();
+    setGames(prev => prev.filter(item => item.id !== game.id));
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      next.delete(game.id);
+      return next;
+    });
   };
 
   const toggleSelect = (gameId) => {
@@ -131,11 +135,15 @@ export default function MiniGamesManager({ onToast }) {
   const clearSelection = () => setSelectedIds(new Set());
 
   const deleteSelected = async () => {
-    if (selectedIds.size === 0) return;
-    if (!window.confirm(`Padam ${selectedIds.size} mini games yang dipilih?`)) return;
-    for (const gameId of selectedIds) await base44.entities.Game.delete(gameId);
-    onToast?.(`✅ ${selectedIds.size} mini games dipadam`);
-    loadGames();
+    if (selectedIds.size === 0) {
+      onToast?.('Pilih mini game dulu untuk delete');
+      return;
+    }
+    const idsToDelete = Array.from(selectedIds);
+    await Promise.all(idsToDelete.map(gameId => base44.entities.Game.delete(gameId)));
+    onToast?.(`✅ ${idsToDelete.length} mini games dipadam`);
+    setGames(prev => prev.filter(game => !selectedIds.has(game.id)));
+    setSelectedIds(new Set());
   };
 
   const getMeta = (category) => MINI_GAMES.find((game) => game.id === category) || { label: category, emoji: '🎮' };
@@ -154,7 +162,7 @@ export default function MiniGamesManager({ onToast }) {
                 <button onClick={selectedIds.size === games.length ? clearSelection : selectAll} className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-black transition-all">
                   {selectedIds.size === games.length ? 'Clear' : 'Select All'}
                 </button>
-                <button onClick={deleteSelected} disabled={selectedIds.size === 0} className="px-3 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-100 text-xs font-black transition-all disabled:opacity-40">
+                <button onClick={deleteSelected} className="px-3 py-2 rounded-xl bg-red-500/30 hover:bg-red-500/45 text-red-100 text-xs font-black transition-all">
                   Delete ({selectedIds.size})
                 </button>
               </>
