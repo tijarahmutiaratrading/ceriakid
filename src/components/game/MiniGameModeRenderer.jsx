@@ -48,15 +48,24 @@ function MemoryMode({ data }) {
 
 function DragDropMode({ data }) {
   const [placed, setPlaced] = useState({});
+  const [selectedItem, setSelectedItem] = useState(null);
   const dragText = useRef(null);
   const items = data.items || [];
   const targets = data.targets || [];
 
+  const placeItem = (target) => {
+    const item = dragText.current || selectedItem;
+    if (!item) return;
+    setPlaced(prev => ({ ...prev, [target]: item }));
+    setSelectedItem(null);
+    dragText.current = null;
+  };
+
   return <div className="space-y-4">
-    <div className={panel}><p className="text-white/70 text-xs font-black mb-3 uppercase">Seret item</p><div className="flex flex-wrap gap-2">{items.filter(item => !Object.values(placed).includes(item)).map(item => <div key={item} draggable onDragStart={() => { dragText.current = item; }} className="px-4 py-3 rounded-2xl bg-white text-purple-700 font-black cursor-grab">{item}</div>)}</div></div>
-    <div className="grid grid-cols-2 gap-3">{targets.map((target, i) => <div key={target} onDragOver={e => e.preventDefault()} onDrop={() => setPlaced(prev => ({ ...prev, [target]: dragText.current }))} className={`${panel} min-h-28 text-center`}>
-      <p className="text-white/60 text-xs font-black">{target}</p><p className="text-white text-lg font-black mt-4">{placed[target] || 'Drop sini'}</p>
-    </div>)}</div>
+    <div className={panel}><p className="text-white/70 text-xs font-black mb-3 uppercase">Pilih atau seret item</p><div className="flex flex-wrap gap-2">{items.filter(item => !Object.values(placed).includes(item)).map(item => <button key={item} type="button" draggable onClick={() => setSelectedItem(item)} onDragStart={() => { dragText.current = item; }} className={`px-4 py-3 rounded-2xl font-black cursor-grab transition-all ${selectedItem === item ? 'bg-yellow-300 text-purple-900 ring-4 ring-white/50' : 'bg-white text-purple-700'}`}>{item}</button>)}</div></div>
+    <div className="grid grid-cols-2 gap-3">{targets.map((target) => <button key={target} type="button" onClick={() => placeItem(target)} onDragOver={e => e.preventDefault()} onDrop={() => placeItem(target)} className={`${panel} min-h-28 text-center transition-all ${selectedItem ? 'ring-4 ring-yellow-300/50' : ''}`}>
+      <p className="text-white/60 text-xs font-black">{target}</p><p className="text-white text-lg font-black mt-4">{placed[target] || (selectedItem ? 'Klik untuk letak' : 'Drop sini')}</p>
+    </button>)}</div>
   </div>;
 }
 
