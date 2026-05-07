@@ -15,7 +15,7 @@ const GAME_HUB = [
 ];
 
 export default function MiniGamesGenerator({ onToast }) {
-  const [miniGameConfig, setMiniGameConfig] = useState({ sets: 5, levels: 3, itemsPerSet: 4 });
+  const [miniGameConfig, setMiniGameConfig] = useState({ gamesCount: 15, roundsPerGame: 4 });
   const [selectedMiniGames, setSelectedMiniGames] = useState(new Set());
   const [miniGameSubmitting, setMiniGameSubmitting] = useState(false);
   const [tasks, setTasks] = useState([]);
@@ -101,18 +101,18 @@ export default function MiniGamesGenerator({ onToast }) {
       for (const gameId of Array.from(selectedMiniGames)) {
         const gameData = GAME_HUB.find(g => g.id === gameId);
         const curr = currentCounts[gameId] || 0;
-        const targetTotal = miniGameConfig.sets * miniGameConfig.levels;
+        const targetTotal = miniGameConfig.gamesCount;
         const gamesToAdd = Math.max(0, targetTotal - curr);
         
         if (gamesToAdd > 0) {
           await base44.entities.GameTask.create({
-            taskName: `Mini Game: ${gameData?.title || gameId} · ${miniGameConfig.sets} set x ${miniGameConfig.levels} level`,
+            taskName: `Mini Game: ${gameData?.title || gameId} · ${miniGameConfig.gamesCount} games x ${miniGameConfig.roundsPerGame} round`,
             ageGroup: 'sekolah_rendah',
             subject: gameId,
             gamesCount: gamesToAdd,
-            questionsPerGame: miniGameConfig.itemsPerSet,
+            questionsPerGame: miniGameConfig.roundsPerGame,
             status: 'pending',
-            errorMessage: JSON.stringify({ sets: miniGameConfig.sets, levels: miniGameConfig.levels, itemsPerSet: miniGameConfig.itemsPerSet, theme: 'KSSR asas Malaysia' }),
+            errorMessage: JSON.stringify({ sets: miniGameConfig.gamesCount, levels: 1, itemsPerSet: miniGameConfig.roundsPerGame, theme: 'KSSR asas Malaysia' }),
           });
         }
       }
@@ -141,45 +141,34 @@ export default function MiniGamesGenerator({ onToast }) {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="p-6 rounded-3xl mb-5" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
         <h2 className="font-black text-white mb-4">⚙️ Mini Games Sets & Levels</h2>
-        <div className="grid grid-cols-3 gap-2 mb-5">
+        <div className="grid grid-cols-2 gap-2 mb-5">
           <div>
-            <label className="text-white/70 text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-2">📦 Set</label>
+            <label className="text-white/70 text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-2">🎮 Games</label>
             <input
               type="number"
               min="1"
-              max="20"
-              value={miniGameConfig.sets}
-              onChange={e => setMiniGameConfig(c => ({ ...c, sets: parseInt(e.target.value) || 1 }))}
+              max="100"
+              value={miniGameConfig.gamesCount}
+              onChange={e => setMiniGameConfig(c => ({ ...c, gamesCount: parseInt(e.target.value) || 1 }))}
               className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center"
             />
           </div>
           <div>
-            <label className="text-white/70 text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-2">⭐ Level</label>
+            <label className="text-white/70 text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-2">🔁 Round/Game</label>
             <input
               type="number"
               min="1"
-              max="6"
-              value={miniGameConfig.levels}
-              onChange={e => setMiniGameConfig(c => ({ ...c, levels: parseInt(e.target.value) || 1 }))}
-              className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center"
-            />
-          </div>
-          <div>
-            <label className="text-white/70 text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-2">🧩 Item</label>
-            <input
-              type="number"
-              min="2"
               max="10"
-              value={miniGameConfig.itemsPerSet}
-              onChange={e => setMiniGameConfig(c => ({ ...c, itemsPerSet: parseInt(e.target.value) || 2 }))}
+              value={miniGameConfig.roundsPerGame}
+              onChange={e => setMiniGameConfig(c => ({ ...c, roundsPerGame: parseInt(e.target.value) || 1 }))}
               className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center"
             />
           </div>
         </div>
         <div className="mb-5 rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
           <p className="text-white/60 text-xs font-semibold">Target setiap mini game</p>
-          <p className="text-white font-black text-lg">{miniGameConfig.sets * miniGameConfig.levels} games</p>
-          <p className="text-white/40 text-xs">{miniGameConfig.sets} set × {miniGameConfig.levels} level · {miniGameConfig.itemsPerSet} item/set</p>
+          <p className="text-white font-black text-lg">{miniGameConfig.gamesCount} games</p>
+          <p className="text-white/40 text-xs">{miniGameConfig.roundsPerGame} round dalam setiap game</p>
         </div>
 
         <div className="flex items-center justify-between mb-3">
@@ -199,7 +188,7 @@ export default function MiniGamesGenerator({ onToast }) {
           {GAME_HUB.map(game => {
             const sel = selectedMiniGames.has(game.id);
             const curr = currentCounts[game.id] || 0;
-            const targetTotal = miniGameConfig.sets * miniGameConfig.levels;
+            const targetTotal = miniGameConfig.gamesCount;
             const gameDiff = targetTotal - curr;
             return (
               <button
