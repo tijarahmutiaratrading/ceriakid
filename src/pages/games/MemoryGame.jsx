@@ -10,16 +10,22 @@ const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(2
 
 const FALLBACK_ROUNDS = [
   [
-    { id: 'a', label: 'RM1', side: 'value' }, { id: 'a', label: 'Pensil', side: 'item' },
-    { id: 'b', label: 'RM2', side: 'value' }, { id: 'b', label: 'Pemadam', side: 'item' },
-    { id: 'c', label: 'RM5', side: 'value' }, { id: 'c', label: 'Buku Nota', side: 'item' },
-    { id: 'd', label: 'RM10', side: 'value' }, { id: 'd', label: 'Set Warna', side: 'item' },
+    { id: 'a', label: '🐱', side: 'value', visualStyle: 'emoji' }, { id: 'a', label: '🐱', side: 'item', visualStyle: 'emoji' },
+    { id: 'b', label: '🍎', side: 'value', visualStyle: 'emoji' }, { id: 'b', label: '🍎', side: 'item', visualStyle: 'emoji' },
+    { id: 'c', label: '🚗', side: 'value', visualStyle: 'emoji' }, { id: 'c', label: '🚗', side: 'item', visualStyle: 'emoji' },
+    { id: 'd', label: '⚽', side: 'value', visualStyle: 'emoji' }, { id: 'd', label: '⚽', side: 'item', visualStyle: 'emoji' },
   ],
   [
-    { id: 'a', label: 'Kata Nama', side: 'value' }, { id: 'a', label: 'Meja', side: 'item' },
-    { id: 'b', label: 'Kata Kerja', side: 'value' }, { id: 'b', label: 'Makan', side: 'item' },
-    { id: 'c', label: 'Kata Adjektif', side: 'value' }, { id: 'c', label: 'Cantik', side: 'item' },
-    { id: 'd', label: 'Kata Arah', side: 'value' }, { id: 'd', label: 'Atas', side: 'item' },
+    { id: 'a', label: 'Ada 2 bintang', side: 'value', visualStyle: 'difference' }, { id: 'a', label: 'Ada 3 bintang', side: 'item', visualStyle: 'difference' },
+    { id: 'b', label: 'Pokok kecil', side: 'value', visualStyle: 'difference' }, { id: 'b', label: 'Pokok besar', side: 'item', visualStyle: 'difference' },
+    { id: 'c', label: 'Bola merah', side: 'value', visualStyle: 'difference' }, { id: 'c', label: 'Bola biru', side: 'item', visualStyle: 'difference' },
+    { id: 'd', label: 'Rumah satu pintu', side: 'value', visualStyle: 'difference' }, { id: 'd', label: 'Rumah dua pintu', side: 'item', visualStyle: 'difference' },
+  ],
+  [
+    { id: 'a', label: 'Bayang bulat', side: 'value', visualStyle: 'shadow' }, { id: 'a', label: 'Bola', side: 'item', visualStyle: 'shadow' },
+    { id: 'b', label: 'Bayang panjang', side: 'value', visualStyle: 'shadow' }, { id: 'b', label: 'Pensil', side: 'item', visualStyle: 'shadow' },
+    { id: 'c', label: 'Bayang kotak', side: 'value', visualStyle: 'shadow' }, { id: 'c', label: 'Buku', side: 'item', visualStyle: 'shadow' },
+    { id: 'd', label: 'Bayang segi tiga', side: 'value', visualStyle: 'shadow' }, { id: 'd', label: 'Kon', side: 'item', visualStyle: 'shadow' },
   ],
 ];
 
@@ -31,12 +37,13 @@ function buildRoundsFromGame(game) {
   const pairs = game?.gameData?.pairs;
   if (!Array.isArray(pairs) || pairs.length === 0) return null;
 
+  const style = game?.gameData?.visualStyle || (game?.order % 3 === 0 ? 'emoji' : game?.order % 3 === 1 ? 'difference' : 'shadow');
   const round = pairs.slice(0, 6).flatMap((pair, index) => {
     const left = Array.isArray(pair) ? pair[0] : pair?.left;
     const right = Array.isArray(pair) ? pair[1] : pair?.right;
     return [
-      { id: String(index), label: String(left || ''), side: 'value' },
-      { id: String(index), label: String(right || ''), side: 'item' },
+      { id: String(index), label: String(left || ''), side: 'value', visualStyle: style },
+      { id: String(index), label: String(right || ''), side: 'item', visualStyle: style },
     ];
   }).filter(card => card.label.trim());
 
@@ -164,7 +171,7 @@ export default function MemoryGame() {
             <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner">🧠</div>
             <div>
               <h1 className="text-xl font-black text-white line-clamp-2">{gameTitle}</h1>
-              <p className="text-white/70 text-xs">Pusingan {round + 1} / {rounds.length}</p>
+              <p className="text-white/70 text-xs">Pusingan {round + 1} / {rounds.length} · cari pasangan yang sepadan</p>
             </div>
           </div>
           <div className="flex items-center gap-2">

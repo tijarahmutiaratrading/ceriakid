@@ -5,10 +5,23 @@ const toneStyles = {
   value: 'from-emerald-100 to-cyan-100 text-emerald-900 border-emerald-200',
   item: 'from-amber-100 to-pink-100 text-amber-950 border-amber-200',
   word: 'from-violet-100 to-indigo-100 text-violet-950 border-violet-200',
+  emoji: 'from-yellow-100 to-orange-100 text-orange-950 border-yellow-200',
+  difference: 'from-sky-100 to-indigo-100 text-sky-950 border-sky-200',
+  shadow: 'from-slate-100 to-violet-100 text-slate-950 border-slate-200',
 };
 
+function isMostlyEmoji(text = '') {
+  return /^[\p{Emoji}\s]+$/u.test(text) && text.length <= 6;
+}
+
 export default function MemoryCard({ card, isFlipped, isMatched, onClick }) {
-  const tone = toneStyles[card.tone || card.side] || toneStyles.word;
+  const tone = toneStyles[card.visualStyle] || toneStyles[card.tone || card.side] || toneStyles.word;
+  const isEmojiCard = card.visualStyle === 'emoji' || isMostlyEmoji(card.label);
+  const sideLabel = card.visualStyle === 'difference'
+    ? (card.side === 'value' ? 'Gambar 1' : 'Gambar 2')
+    : card.visualStyle === 'shadow'
+      ? (card.side === 'value' ? 'Bayang' : 'Objek')
+      : (card.side === 'item' ? 'Padanan' : 'Kad');
 
   return (
     <motion.button
@@ -33,8 +46,18 @@ export default function MemoryCard({ card, isFlipped, isMatched, onClick }) {
       >
         <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-white/60" />
         <div className="absolute bottom-2 left-2 w-7 h-2 rounded-full bg-white/50" />
-        <span className="text-[10px] uppercase tracking-wider opacity-60 mb-1">{card.side === 'item' ? 'Barang' : 'Nilai'}</span>
-        <span className="text-sm sm:text-base leading-tight line-clamp-3">{card.label}</span>
+        {card.visualStyle === 'difference' && (
+          <div className="absolute inset-x-3 top-3 h-10 rounded-xl bg-white/50 border border-white/60">
+            <div className="absolute left-2 top-2 w-5 h-5 rounded-full bg-game-yellow/70" />
+            <div className="absolute right-3 top-3 w-4 h-4 rounded-full bg-game-pink/60" />
+            <div className="absolute left-1/2 bottom-1 w-8 h-2 rounded-full bg-game-green/50" />
+          </div>
+        )}
+        {card.visualStyle === 'shadow' && (
+          <div className="absolute top-4 w-12 h-12 rounded-2xl bg-slate-900/15 blur-[1px] rotate-12" />
+        )}
+        <span className="text-[10px] uppercase tracking-wider opacity-60 mb-1 mt-8">{sideLabel}</span>
+        <span className={`${isEmojiCard ? 'text-4xl sm:text-5xl' : 'text-sm sm:text-base'} leading-tight line-clamp-3`}>{card.label}</span>
         {isMatched && <span className="mt-2 text-xs bg-white/70 rounded-full px-2 py-0.5">Padan</span>}
       </div>
     </motion.button>
