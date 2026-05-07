@@ -69,12 +69,17 @@ export default function MiniGamesManager({ onToast }) {
       MINI_GAMES.map((game) => base44.entities.Game.filter({ category: game.id }))
     );
 
-    if (results.flat().length === 0) {
-      const blueprintRecords = MINI_GAME_CATEGORIES.flatMap(category =>
-        category.games.map((game, index) => buildMiniGameRecord(category, game, index))
-      );
-      await base44.entities.Game.bulkCreate(blueprintRecords);
-      onToast?.(`✅ ${blueprintRecords.length} mini games diimport ke manager`);
+    const existingGames = results.flat();
+    const existingKeys = new Set(existingGames.map(game => `${game.category}-${game.gameData?.id || game.title}`));
+    const missingBlueprintRecords = MINI_GAME_CATEGORIES.flatMap(category =>
+      category.games
+        .filter(game => !existingKeys.has(`${category.id}-${game.id}`))
+        .map((game, index) => buildMiniGameRecord(category, game, index))
+    );
+
+    if (missingBlueprintRecords.length > 0) {
+      await base44.entities.Game.bulkCreate(missingBlueprintRecords);
+      onToast?.(`✅ ${missingBlueprintRecords.length} mini games diimport ke manager`);
       const importedResults = await Promise.all(
         MINI_GAMES.map((game) => base44.entities.Game.filter({ category: game.id }))
       );
