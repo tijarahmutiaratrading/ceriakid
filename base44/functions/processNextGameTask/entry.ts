@@ -254,68 +254,36 @@ Moral/theme: ${story.moral}.
 ${type === 'cover' ? 'Make it a vertical front book cover illustration with the main character centered and strong storybook cover composition.' : 'Make it a full-page inner storybook illustration with clear action, emotion, and room at the bottom for app text overlay.'}
 Important: illustration only, no readable words, no letters, no watermark, no logo, no UI, no speech bubbles.`;
 
-    const buildMiniGameData = (mode, index) => {
-      const variant = index % 5;
-      const sets = {
-        memory: [
-          { mode, pairs: [['A', 'Ayam'], ['B', 'Bola'], ['C', 'Cawan'], ['D', 'Daun']], theme: 'huruf awal' },
-          { mode, pairs: [['1', 'Satu'], ['2', 'Dua'], ['3', 'Tiga'], ['4', 'Empat']], theme: 'nombor' },
-          { mode, pairs: [['🐱', 'Kucing'], ['🐟', 'Ikan'], ['🐔', 'Ayam'], ['🐰', 'Arnab']], theme: 'haiwan' },
-          { mode, pairs: [['🍎', 'Epal'], ['🍌', 'Pisang'], ['🍊', 'Oren'], ['🍇', 'Anggur']], theme: 'buah' },
-          { mode, pairs: [['🔴', 'Merah'], ['🔵', 'Biru'], ['🟢', 'Hijau'], ['🟡', 'Kuning']], theme: 'warna' },
-        ],
-        dragdrop: [
-          { mode, items: ['Epal', 'Pisang', 'Kereta', 'Bas'], targets: ['Buah', 'Buah', 'Kenderaan', 'Kenderaan'], instruction: 'Seret item ke kategori yang betul.' },
-          { mode, items: ['Kucing', 'Ikan', 'Meja', 'Kerusi'], targets: ['Haiwan', 'Haiwan', 'Perabot', 'Perabot'], instruction: 'Padankan objek dengan kumpulannya.' },
-          { mode, items: ['Pensil', 'Buku', 'Nasi', 'Roti'], targets: ['Alat Sekolah', 'Alat Sekolah', 'Makanan', 'Makanan'], instruction: 'Susun item mengikut kategori.' },
-          { mode, items: ['Mata', 'Telinga', 'Merah', 'Biru'], targets: ['Anggota Badan', 'Anggota Badan', 'Warna', 'Warna'], instruction: 'Letakkan perkataan pada kumpulan yang sesuai.' },
-          { mode, items: ['Isnin', 'Selasa', 'Pagi', 'Malam'], targets: ['Hari', 'Hari', 'Masa', 'Masa'], instruction: 'Kenal pasti kategori setiap perkataan.' },
-        ],
-        wordbuilder: [
-          { mode, words: ['makan', 'buku', 'bola', 'rumah'], letters: ['m','a','k','n','b','u','o','l','r','h'], instruction: 'Bina perkataan mudah.' },
-          { mode, words: ['ayam', 'ikan', 'kuda', 'itik'], letters: ['a','y','m','i','k','n','u','d','t'], instruction: 'Bina nama haiwan.' },
-          { mode, words: ['satu', 'dua', 'tiga', 'lima'], letters: ['s','a','t','u','d','i','g','l','m'], instruction: 'Bina perkataan nombor.' },
-          { mode, words: ['merah', 'biru', 'hijau', 'putih'], letters: ['m','e','r','a','h','b','i','u','j','p','t'], instruction: 'Bina nama warna.' },
-          { mode, words: ['meja', 'baju', 'topi', 'kasut'], letters: ['m','e','j','a','b','u','t','o','p','i','k','s'], instruction: 'Bina perkataan harian.' },
-        ],
-        sorting: [
-          { mode, items: [{ text: '2', group: 'Nombor' }, { text: 'A', group: 'Huruf' }, { text: '5', group: 'Nombor' }, { text: 'B', group: 'Huruf' }], groups: ['Nombor', 'Huruf'] },
-          { mode, items: [{ text: 'Epal', group: 'Buah' }, { text: 'Kucing', group: 'Haiwan' }, { text: 'Pisang', group: 'Buah' }, { text: 'Ayam', group: 'Haiwan' }], groups: ['Buah', 'Haiwan'] },
-          { mode, items: [{ text: 'Kereta', group: 'Kenderaan' }, { text: 'Buku', group: 'Alat Sekolah' }, { text: 'Bas', group: 'Kenderaan' }, { text: 'Pensil', group: 'Alat Sekolah' }], groups: ['Kenderaan', 'Alat Sekolah'] },
-          { mode, items: [{ text: 'Merah', group: 'Warna' }, { text: 'Bulat', group: 'Bentuk' }, { text: 'Biru', group: 'Warna' }, { text: 'Segi Tiga', group: 'Bentuk' }], groups: ['Warna', 'Bentuk'] },
-          { mode, items: [{ text: 'Pagi', group: 'Masa' }, { text: 'Isnin', group: 'Hari' }, { text: 'Malam', group: 'Masa' }, { text: 'Jumaat', group: 'Hari' }], groups: ['Masa', 'Hari'] },
-        ],
-        tilematch: [
-          { mode, tiles: ['🐱', '🐱', '🐶', '🐶', '🍎', '🍎', '⭐', '⭐'], instruction: 'Padankan jubin yang sama.' },
-          { mode, tiles: ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D'], instruction: 'Padankan huruf yang sama.' },
-          { mode, tiles: ['1', '1', '2', '2', '3', '3', '4', '4'], instruction: 'Padankan nombor yang sama.' },
-          { mode, tiles: ['🔴', '🔴', '🔵', '🔵', '🟢', '🟢', '🟡', '🟡'], instruction: 'Padankan warna yang sama.' },
-          { mode, tiles: ['☀️', '☀️', '🌙', '🌙', '⭐', '⭐', '☁️', '☁️'], instruction: 'Padankan objek langit yang sama.' },
-        ],
-        story: [
-          { mode, scenes: [{ text: 'Ali jumpa anak kucing di taman.', choices: ['Bantu kucing', 'Tinggalkan'], answer: 0 }, { text: 'Ali beri air kepada kucing.', choices: ['Bagus', 'Tidak baik'], answer: 0 }] },
-          { mode, scenes: [{ text: 'Mira melihat sampah di lantai kelas.', choices: ['Kutip sampah', 'Pijak sampah'], answer: 0 }, { text: 'Kelas menjadi bersih.', choices: ['Terus jaga kebersihan', 'Buang sampah lagi'], answer: 0 }] },
-          { mode, scenes: [{ text: 'Danial terlupa membawa pensil.', choices: ['Minta izin pinjam', 'Ambil tanpa izin'], answer: 0 }, { text: 'Kawan meminjamkan pensil.', choices: ['Ucap terima kasih', 'Marah kawan'], answer: 0 }] },
-          { mode, scenes: [{ text: 'Aina nampak adik menangis.', choices: ['Tanya dengan baik', 'Ketawakan adik'], answer: 0 }, { text: 'Adik perlukan bantuan.', choices: ['Bantu adik', 'Lari pergi'], answer: 0 }] },
-          { mode, scenes: [{ text: 'Guru memberi arahan aktiviti.', choices: ['Dengar arahan', 'Bising'], answer: 0 }, { text: 'Aktiviti berjalan lancar.', choices: ['Ikut giliran', 'Berebut'], answer: 0 }] },
-        ],
-        physics: [
-          { mode, challenges: [{ question: 'Objek jatuh ke bawah kerana apa?', options: ['Graviti', 'Angin', 'Cahaya', 'Bunyi'], answer: 0 }] },
-          { mode, challenges: [{ question: 'Menolak kereta mainan dengan kuat membuatnya bergerak bagaimana?', options: ['Lebih jauh', 'Lebih perlahan', 'Tidak bergerak', 'Hilang'], answer: 0 }] },
-          { mode, challenges: [{ question: 'Permukaan licin membuat objek meluncur dengan lebih?', options: ['Mudah', 'Sukar', 'Gelap', 'Panas'], answer: 0 }] },
-          { mode, challenges: [{ question: 'Magnet menarik objek yang dibuat daripada apa?', options: ['Besi', 'Kertas', 'Kain', 'Kayu'], answer: 0 }] },
-          { mode, challenges: [{ question: 'Bola melantun lebih tinggi di atas permukaan yang?', options: ['Keras', 'Lembut', 'Basah', 'Berlubang'], answer: 0 }] },
-        ],
-        tracing: [
-          { mode, letters: ['A', 'B', 'C', '1', '2', '3'], instruction: 'Surih huruf dan nombor dengan kemas.' },
-          { mode, letters: ['D', 'E', 'F', '4', '5', '6'], instruction: 'Surih bentuk huruf dan nombor.' },
-          { mode, letters: ['G', 'H', 'I', '7', '8', '9'], instruction: 'Ikut garisan dengan perlahan.' },
-          { mode, letters: ['J', 'K', 'L', '0', '+', '-'], instruction: 'Latih koordinasi tangan dan mata.' },
-          { mode, letters: ['M', 'N', 'O', 'a', 'b', 'c'], instruction: 'Surih huruf besar dan kecil.' },
-        ],
+    const buildMiniGameData = async (base44, mode, index, theme, itemsPerSet, level) => {
+      const difficultyLabel = level <= 1 ? 'mudah' : level === 2 ? 'sederhana' : 'mencabar';
+      const gameGuides = {
+        memory: 'Pasangan padanan ingatan. Output pairs sebagai array [depan, belakang].',
+        dragdrop: 'Aktiviti seret dan lepas. Output items dan targets dengan panjang sama.',
+        wordbuilder: 'Bina perkataan. Output words dan letters yang cukup untuk membina perkataan.',
+        sorting: 'Susun mengikut kumpulan. Output groups dan items dengan field text + group.',
+        tilematch: 'Padankan jubin sama. Output tiles berpasangan, jumlah genap.',
+        story: 'Cerita pilihan nilai murni. Output scenes dengan text, choices[2], answer.',
+        physics: 'Cabaran sains/fizik mudah. Output challenges dengan question, options[4], answer.',
+        tracing: 'Latihan surih huruf/nombor/simbol. Output letters dan instruction.',
       };
-      const selected = Array.isArray(sets[mode]) ? sets[mode][variant] : { mode };
-      return { ...selected, variant: index + 1 };
+
+      const schemaByMode = {
+        memory: { type: 'object', properties: { pairs: { type: 'array', items: { type: 'array', items: { type: 'string' } } }, theme: { type: 'string' } }, required: ['pairs', 'theme'] },
+        dragdrop: { type: 'object', properties: { items: { type: 'array', items: { type: 'string' } }, targets: { type: 'array', items: { type: 'string' } }, instruction: { type: 'string' } }, required: ['items', 'targets', 'instruction'] },
+        wordbuilder: { type: 'object', properties: { words: { type: 'array', items: { type: 'string' } }, letters: { type: 'array', items: { type: 'string' } }, instruction: { type: 'string' } }, required: ['words', 'letters', 'instruction'] },
+        sorting: { type: 'object', properties: { groups: { type: 'array', items: { type: 'string' } }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['groups', 'items'] },
+        tilematch: { type: 'object', properties: { tiles: { type: 'array', items: { type: 'string' } }, instruction: { type: 'string' } }, required: ['tiles', 'instruction'] },
+        story: { type: 'object', properties: { scenes: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, choices: { type: 'array', items: { type: 'string' } }, answer: { type: 'number' } }, required: ['text', 'choices', 'answer'] } } }, required: ['scenes'] },
+        physics: { type: 'object', properties: { challenges: { type: 'array', items: { type: 'object', properties: { question: { type: 'string' }, options: { type: 'array', items: { type: 'string' } }, answer: { type: 'number' } }, required: ['question', 'options', 'answer'] } } }, required: ['challenges'] },
+        tracing: { type: 'object', properties: { letters: { type: 'array', items: { type: 'string' } }, instruction: { type: 'string' } }, required: ['letters', 'instruction'] },
+      };
+
+      const data = await base44.asServiceRole.integrations.Core.InvokeLLM({
+        prompt: `Jana content mini game CeriaKid yang berkualiti, tidak berulang dan sesuai KSSR/KSPK Malaysia.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema/topik wajib: ${theme}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nPeraturan:\n1. Content mesti spesifik ikut tema, bukan generic template.\n2. Guna Bahasa Melayu Malaysia baku kecuali tema minta English/Mandarin/Tamil.\n3. Sesuai kanak-kanak, fakta tepat, pilihan jawapan jelas.\n4. Jangan guna placeholder, jangan ulang set lama seperti A-Ayam/B-Bola sahaja.\n5. Untuk tilematch, tiles mesti ada pasangan yang sama.\n6. Untuk dragdrop/sorting, setiap item mesti ada kategori/target yang tepat.\n7. Output JSON sahaja ikut schema.`,
+        response_json_schema: schemaByMode[mode] || { type: 'object', properties: { instruction: { type: 'string' } } },
+      });
+
+      return { mode, ...data, variant: index + 1, generatedTheme: theme };
     };
 
     if (task.subject === 'storykid') {
@@ -508,7 +476,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
           tier: 'free',
           emoji: miniGame.emoji,
           totalQuestions: itemsPerSet,
-          gameData: { ...buildMiniGameData(task.subject, absoluteIndex), setNo, level, itemsPerSet },
+          gameData: { ...(await buildMiniGameData(base44, task.subject, absoluteIndex, meta.theme || 'KSSR asas Malaysia', itemsPerSet, level)), setNo, level, itemsPerSet },
           isPublished: true,
           status: 'ready',
           order: absoluteIndex,
