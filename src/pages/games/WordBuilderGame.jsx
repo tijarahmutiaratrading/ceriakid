@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Star, RotateCcw } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import useSelectedMiniGame from '@/hooks/useSelectedMiniGame';
+import GeneratedMiniGamePlayer from '@/components/game/GeneratedMiniGamePlayer';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
@@ -68,7 +70,7 @@ function shuffle(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
-export default function WordBuilderGame() {
+function LegacyWordBuilderGame() {
   const [setIdx, setSetIdx] = useState(0);
   const [wordIdx, setWordIdx] = useState(0);
   const [userWord, setUserWord] = useState([]);
@@ -262,4 +264,10 @@ export default function WordBuilderGame() {
       </div>
     </div>
   );
+}
+
+export default function WordBuilderGame() {
+  const selected = useSelectedMiniGame('wordbuilder');
+  if (selected.game || selected.loading) return <GeneratedMiniGamePlayer {...selected} backTo="/mini-games/wordbuilder" />;
+  return <LegacyWordBuilderGame />;
 }

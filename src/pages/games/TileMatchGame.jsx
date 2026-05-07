@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, RotateCcw, Star } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import useSelectedMiniGame from '@/hooks/useSelectedMiniGame';
+import GeneratedMiniGamePlayer from '@/components/game/GeneratedMiniGamePlayer';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
@@ -32,7 +34,7 @@ function getRandomRounds() {
 
 const ROUNDS = getRandomRounds();
 
-export default function TileMatchGame() {
+function LegacyTileMatchGame() {
   const [round, setRound] = useState(0);
   const [grid, setGrid] = useState([]);
   const [selectedTiles, setSelectedTiles] = useState([]);
@@ -194,4 +196,10 @@ export default function TileMatchGame() {
       </div>
     </div>
   );
+}
+
+export default function TileMatchGame() {
+  const selected = useSelectedMiniGame('tilematch');
+  if (selected.game || selected.loading) return <GeneratedMiniGamePlayer {...selected} backTo="/mini-games/tilematch" />;
+  return <LegacyTileMatchGame />;
 }

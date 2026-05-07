@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Star } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import useSelectedMiniGame from '@/hooks/useSelectedMiniGame';
+import GeneratedMiniGamePlayer from '@/components/game/GeneratedMiniGamePlayer';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
@@ -23,7 +25,7 @@ function getRandomRounds() {
 
 const ROUNDS = getRandomRounds();
 
-export default function SortingGame() {
+function LegacySortingGame() {
   const [round, setRound] = useState(0);
   const [items, setItems] = useState(() => [...ROUNDS[0].items].sort(() => Math.random() - 0.5));
   const [sorted, setSorted] = useState({});
@@ -215,4 +217,10 @@ export default function SortingGame() {
       </div>
     </div>
   );
+}
+
+export default function SortingGame() {
+  const selected = useSelectedMiniGame('sorting');
+  if (selected.game || selected.loading) return <GeneratedMiniGamePlayer {...selected} backTo="/mini-games/sorting" />;
+  return <LegacySortingGame />;
 }

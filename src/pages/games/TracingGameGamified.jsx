@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import useSelectedMiniGame from '@/hooks/useSelectedMiniGame';
+import GeneratedMiniGamePlayer from '@/components/game/GeneratedMiniGamePlayer';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
@@ -14,7 +16,7 @@ const SETS = [
   { label: 'Huruf U-Z', letters: ['U', 'V', 'W', 'X', 'Y', 'Z'] },
 ];
 
-export default function TracingGameGamified() {
+function LegacyTracingGameGamified() {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [setIdx, setSetIdx] = useState(0);
@@ -197,4 +199,10 @@ export default function TracingGameGamified() {
       </div>
     </div>
   );
+}
+
+export default function TracingGameGamified() {
+  const selected = useSelectedMiniGame('tracing');
+  if (selected.game || selected.loading) return <GeneratedMiniGamePlayer {...selected} backTo="/mini-games/tracing" />;
+  return <LegacyTracingGameGamified />;
 }

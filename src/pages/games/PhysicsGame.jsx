@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import useSelectedMiniGame from '@/hooks/useSelectedMiniGame';
+import GeneratedMiniGamePlayer from '@/components/game/GeneratedMiniGamePlayer';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
@@ -14,7 +16,7 @@ const LEVELS = [
   { targets: [{ x: 70, y: 10, label: '🎯' }, { x: 85, y: 30, label: '🎪' }, { x: 75, y: 55, label: '🏆' }, { x: 90, y: 20, label: '⭐' }], maxShots: 6 },
 ];
 
-export default function PhysicsGame() {
+function LegacyPhysicsGame() {
   const [level, setLevel] = useState(0);
   const [power, setPower] = useState(50);
   const [angle, setAngle] = useState(45);
@@ -160,4 +162,10 @@ export default function PhysicsGame() {
       </div>
     </div>
   );
+}
+
+export default function PhysicsGame() {
+  const selected = useSelectedMiniGame('physics');
+  if (selected.game || selected.loading) return <GeneratedMiniGamePlayer {...selected} backTo="/mini-games/physics" />;
+  return <LegacyPhysicsGame />;
 }

@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import useSelectedMiniGame from '@/hooks/useSelectedMiniGame';
+import GeneratedMiniGamePlayer from '@/components/game/GeneratedMiniGamePlayer';
 
 const glassCard = { background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' };
 
@@ -64,7 +66,7 @@ const STORIES = [
   },
 ];
 
-export default function StoryAdventureGame() {
+function LegacyStoryAdventureGame() {
   const [storyIdx, setStoryIdx] = useState(0);
   const [currentScene, setCurrentScene] = useState('start');
   const [score, setScore] = useState(0);
@@ -153,4 +155,10 @@ export default function StoryAdventureGame() {
       </div>
     </div>
   );
+}
+
+export default function StoryAdventureGame() {
+  const selected = useSelectedMiniGame('story');
+  if (selected.game || selected.loading) return <GeneratedMiniGamePlayer {...selected} backTo="/mini-games/story" />;
+  return <LegacyStoryAdventureGame />;
 }
