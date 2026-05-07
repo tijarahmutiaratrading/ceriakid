@@ -30,18 +30,18 @@ export default function MemoryCard({ card, isFlipped, isMatched, onClick }) {
       onClick={onClick}
       animate={{ rotateY: isFlipped ? 180 : 0, scale: isMatched ? 0.96 : 1 }}
       transition={{ duration: 0.32 }}
-      className="relative aspect-[4/5] rounded-[1.35rem] overflow-hidden font-black shadow-xl"
+      className="relative aspect-square rounded-[1.35rem] overflow-hidden font-black shadow-xl ring-4 ring-white/80"
       style={{ transformStyle: 'preserve-3d' }}
     >
-      <div className="absolute inset-0 rounded-[1.35rem] bg-gradient-to-br from-slate-900/80 via-purple-800/80 to-fuchsia-700/80 border border-white/30 flex items-center justify-center">
-        <div className="absolute inset-2 rounded-2xl border-2 border-dashed border-white/25" />
-        <div className="absolute top-3 left-3 w-6 h-6 rounded-full bg-white/20" />
-        <div className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-yellow-300/25" />
-        <span className="text-white text-3xl drop-shadow-lg">?</span>
+      <div className="absolute inset-0 rounded-[1.35rem] bg-gradient-to-br from-purple-700 via-fuchsia-700 to-purple-950 border-2 border-white/80 flex items-center justify-center">
+        <div className="absolute inset-2 rounded-2xl border-2 border-dashed border-white/80" />
+        <div className="absolute top-3 left-3 text-white/80 text-lg">✦</div>
+        <div className="absolute bottom-3 right-3 text-yellow-200 text-xl">✧</div>
+        <span className="text-white text-3xl drop-shadow-lg">🍬</span>
       </div>
 
       <div
-        className={`absolute inset-0 rounded-[1.35rem] bg-gradient-to-br ${tone} border-2 flex flex-col items-center justify-center p-2 text-center`}
+        className={`absolute inset-0 rounded-[1.35rem] bg-gradient-to-br ${tone} border-4 border-white flex flex-col items-center justify-center p-2 text-center shadow-inner`}
         style={{ transform: 'rotateY(180deg)', backfaceVisibility: 'hidden' }}
       >
         <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-white/60" />
@@ -56,7 +56,7 @@ export default function MemoryCard({ card, isFlipped, isMatched, onClick }) {
         {card.visualStyle === 'shadow' && (
           <div className="absolute top-4 w-12 h-12 rounded-2xl bg-slate-900/15 blur-[1px] rotate-12" />
         )}
-        <span className="text-[10px] uppercase tracking-wider opacity-60 mb-1 mt-8">{sideLabel}</span>
+        <span className="text-[9px] uppercase tracking-wider opacity-60 mb-1 mt-7 bg-white/60 rounded-full px-2 py-0.5">{sideLabel}</span>
         <span className={`${isEmojiCard ? 'text-4xl sm:text-5xl' : 'text-sm sm:text-base'} leading-tight line-clamp-3`}>{card.label}</span>
         {isMatched && <span className="mt-2 text-xs bg-white/70 rounded-full px-2 py-0.5">Padan</span>}
       </div>
