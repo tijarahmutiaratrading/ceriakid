@@ -62,6 +62,7 @@ export default function MiniGamesManager({ onToast }) {
   const [loading, setLoading] = useState(false);
   const [editGame, setEditGame] = useState(null);
   const [selectedIds, setSelectedIds] = useState(new Set());
+  const [blueprintImportChecked, setBlueprintImportChecked] = useState(() => localStorage.getItem('miniGamesBlueprintImported') === 'true');
 
   const loadGames = async () => {
     setLoading(true);
@@ -77,13 +78,17 @@ export default function MiniGamesManager({ onToast }) {
         .map((game, index) => buildMiniGameRecord(category, game, index))
     );
 
-    if (missingBlueprintRecords.length > 0) {
-      await base44.entities.Game.bulkCreate(missingBlueprintRecords);
-      onToast?.(`✅ ${missingBlueprintRecords.length} mini games diimport ke manager`);
-      const importedResults = await Promise.all(
-        MINI_GAMES.map((game) => base44.entities.Game.filter({ category: game.id }))
-      );
-      results.splice(0, results.length, ...importedResults);
+    if (!blueprintImportChecked) {
+      if (missingBlueprintRecords.length > 0) {
+        await base44.entities.Game.bulkCreate(missingBlueprintRecords);
+        onToast?.(`✅ ${missingBlueprintRecords.length} mini games diimport ke manager`);
+        const importedResults = await Promise.all(
+          MINI_GAMES.map((game) => base44.entities.Game.filter({ category: game.id }))
+        );
+        results.splice(0, results.length, ...importedResults);
+      }
+      localStorage.setItem('miniGamesBlueprintImported', 'true');
+      setBlueprintImportChecked(true);
     }
 
     const allGames = results.flat().sort((a, b) => {
