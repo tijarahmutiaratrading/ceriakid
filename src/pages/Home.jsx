@@ -114,7 +114,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-[1.5rem] border border-white/15 bg-white/[0.08] p-3 shadow-2xl shadow-black/15 backdrop-blur-2xl md:rounded-[2rem] md:p-5"
+          className="rounded-[1.5rem] border border-white/15 bg-white/[0.08] p-3 shadow-2xl shadow-black/15 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[2rem] md:p-5 md:[clip-path:inset(0_round_2rem)]"
         >
           <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
           <div className="grid grid-cols-2 gap-3 md:gap-4">
@@ -196,7 +196,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <div className="mb-4 flex items-center gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur-xl">
+          <div className="mb-4 flex items-center gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.5rem)]">
             <div className="h-2 w-2 rounded-full bg-yellow-300 shadow-lg shadow-yellow-300/40" />
             <p className="text-white font-black text-base uppercase tracking-wider">
               {lang === 'bm' ? 'Pilih Subjek' : 'Choose Subject'}

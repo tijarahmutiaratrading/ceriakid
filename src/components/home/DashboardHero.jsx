@@ -14,7 +14,7 @@ export default function DashboardHero({ user, avatarUrl, lang }) {
         initial={{ opacity: 0, y: -14 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.01 }}
-        className="relative isolate overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/10 p-4 shadow-2xl shadow-fuchsia-950/25 backdrop-blur-3xl md:rounded-[2.25rem] md:p-7"
+        className="relative isolate overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/10 p-4 shadow-2xl shadow-fuchsia-950/25 backdrop-blur-3xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[2.25rem] md:p-7 md:[clip-path:inset(0_round_2.25rem)]"
       >
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/18 via-white/6 to-transparent" />
         <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-pink-500/30 blur-3xl" />

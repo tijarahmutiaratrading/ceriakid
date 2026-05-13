@@ -16,7 +16,7 @@ export default function QuickAccessGrid() {
         const Icon = item.icon;
         return (
           <Link key={item.to} to={item.to} className="block min-w-0">
-            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} className={`group relative h-full overflow-hidden rounded-[1.5rem] border border-white/15 bg-gradient-to-br ${item.tone} p-4 shadow-xl shadow-black/10 backdrop-blur-2xl md:rounded-[1.75rem] md:p-5`}>
+            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} className={`group relative h-full overflow-hidden rounded-[1.5rem] border border-white/15 bg-gradient-to-br ${item.tone} p-4 shadow-xl shadow-black/10 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[1.75rem] md:p-5 md:[clip-path:inset(0_round_1.75rem)]`}>
               <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/15 blur-2xl transition-all group-hover:bg-white/25" />
               {item.featured && <div className="absolute right-3 top-3 text-yellow-200 animate-pulse">✨</div>}
               <div className="relative z-10 flex items-start justify-between gap-3">
