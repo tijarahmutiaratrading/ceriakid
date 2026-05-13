@@ -27,7 +27,7 @@ export const MINI_GAME_CATEGORIES = [
   { id: 'jawi_iqra', title: 'Jawi & Iqra', emoji: '🕌', color: 'from-amber-500 to-yellow-400', objective: 'Kenal huruf Jawi dan bacaan asas.', games: [
     { id: 'jawi-memory', title: 'Jawi Memory Flip', emoji: '🧠', mode: 'memory', difficulty: 'Mudah', objective: 'Ingat pasangan huruf Jawi.', instruction: 'Flip dan cari pasangan huruf.', pairs: [['ا', 'Alif'], ['ب', 'Ba'], ['ت', 'Ta']], reward: 'Moon stars' },
     { id: 'iqra-rhythm', title: 'Iqra Step Tap', emoji: '🥁', mode: 'sequence', difficulty: 'Sederhana', objective: 'Kenal urutan huruf Jawi asas.', instruction: 'Tap huruf Jawi mengikut turutan Alif, Ba, Ta, Tha.', items: ['ت', 'ا', 'ث', 'ب'], answer: ['ا', 'ب', 'ت', 'ث'], reward: 'Rhythm combo' },
-    { id: 'jawi-connect-dots', title: 'Jawi Connect Dots', emoji: '✨', mode: 'connect_dots', difficulty: 'Sederhana', objective: 'Latih urutan titik untuk bentuk huruf.', instruction: 'Tekan titik 1, 2, 3, 4 mengikut turutan untuk lengkapkan latihan.', items: ['1', '2', '3', '4'], reward: 'Glowing letter' },
+    { id: 'jawi-connect-dots', title: 'Jawi Connect Dots', emoji: '✨', mode: 'connect_dots', difficulty: 'Sederhana', objective: 'Kenal urutan huruf Jawi asas.', instruction: 'Tekan huruf Jawi mengikut turutan Alif, Ba, Ta, Tha.', items: ['ا', 'ب', 'ت', 'ث'], reward: 'Glowing letter' },
   ]},
   { id: 'memory_logic', title: 'Memory & Logic', emoji: '🧠', color: 'from-fuchsia-500 to-pink-500', objective: 'Ingatan, fokus dan penyelesaian masalah.', games: [
     { id: 'maze-runner', title: 'Mini Maze Runner', emoji: '🌀', mode: 'maze', difficulty: 'Sederhana', objective: 'Cari jalan ke bintang.', instruction: 'Tap arah untuk bawa watak ke bintang.', reward: 'Maze clear confetti' },

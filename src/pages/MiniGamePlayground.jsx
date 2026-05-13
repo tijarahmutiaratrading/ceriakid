@@ -28,7 +28,7 @@ const guideByMode = {
   typing_challenge: 'Taip perkataan sasaran dengan tepat.',
   mini_simulation: 'Pilih objek yang termasuk dalam kumpulan sasaran.',
   rhythm_tap: 'Tekan butang Tap Rentak untuk ikut bacaan satu demi satu.',
-  connect_dots: 'Tekan nombor/huruf mengikut turutan.',
+  connect_dots: 'Tekan simbol atau huruf mengikut turutan yang ditunjukkan.',
   maze: 'Gerakkan watak sampai ke bintang.',
   reaction_speed: 'Tekan Mula, tunggu arahan TAP, kemudian tekan dengan cepat.',
   coloring: 'Tekan ikon untuk mewarnakan semua gambar.',
