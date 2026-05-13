@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
-import { ArrowLeft, Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, Cog, RefreshCw } from 'lucide-react';
+import { Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import AppHeader from '@/components/AppHeader';
@@ -176,45 +176,10 @@ export default function AdminDashboard() {
         <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-emerald-500/10 rounded-full blur-3xl" />
       </div>
 
-      <aside className="hidden lg:flex fixed left-0 top-0 bottom-0 z-30 w-72 flex-col border-r border-white/10 bg-slate-950/80 backdrop-blur-2xl">
-        <div className="px-6 py-6 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-emerald-500/15 border border-emerald-400/25 flex items-center justify-center text-2xl">🎓</div>
-            <div>
-              <h2 className="font-black text-white leading-tight">CeriaKid Admin</h2>
-              <p className="text-white/45 text-xs font-bold">Control Center</p>
-            </div>
-          </div>
-        </div>
-        <nav className="flex-1 px-4 py-5 space-y-2">
-          <button onClick={() => setActiveTab('analytics')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-black transition-all ${activeTab === 'analytics' ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-400/25 shadow-lg shadow-emerald-950/20' : 'text-white/65 hover:text-white hover:bg-white/8'}`}>
-            <BarChart3 className="w-4 h-4" /> Analytics
-          </button>
-          <button onClick={() => setActiveTab('settings')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-black transition-all ${activeTab === 'settings' ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-400/25 shadow-lg shadow-emerald-950/20' : 'text-white/65 hover:text-white hover:bg-white/8'}`}>
-            <Settings className="w-4 h-4" /> Settings
-          </button>
-          <Link to="/admin-game-manager" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-black text-white/65 hover:text-white hover:bg-white/8 transition-all">
-            <Cog className="w-4 h-4" /> Game Manager
-          </Link>
-          <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-black text-white/65 hover:text-white hover:bg-white/8 transition-all">
-            <ArrowLeft className="w-4 h-4" /> User Dashboard
-          </Link>
-        </nav>
-        <div className="px-4 py-5 border-t border-white/10">
-          <button
-            type="button"
-            onClick={handleClearCache}
-            disabled={clearingCache}
-            className="w-full rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 px-4 py-3 text-sm font-black transition-all disabled:opacity-60 flex items-center justify-center gap-2"
-          >
-            <RefreshCw className={`w-4 h-4 ${clearingCache ? 'animate-spin' : ''}`} />
-            Refresh Cache
-          </button>
-        </div>
-      </aside>
+      <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative lg:pl-72">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6 md:pt-8 pb-32 space-y-7">
+      <div className="relative">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-32 space-y-7">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -236,8 +201,8 @@ export default function AdminDashboard() {
           </div>
         </motion.div>
 
-        {/* Mobile Tabs */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:hidden flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto bg-white/8 border border-white/10 shadow-xl shadow-black/10 backdrop-blur-xl">
+        {/* Admin Tabs */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto bg-white/8 border border-white/10 shadow-xl shadow-black/10 backdrop-blur-xl">
           {tabs.map(tab => (
             <button
               key={tab.key}
