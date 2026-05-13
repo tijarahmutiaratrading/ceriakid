@@ -168,12 +168,11 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-slate-950 text-white">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-indigo-600 via-fuchsia-500 to-amber-400 text-white">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(148,163,184,0.16) 1px, transparent 0)', backgroundSize: '30px 30px' }} />
-        <div className="absolute -top-40 left-1/3 w-[34rem] h-[34rem] bg-blue-600/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-emerald-500/10 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-28 w-[28rem] h-[28rem] bg-white/25 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/4 -left-28 w-96 h-96 bg-pink-300/35 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-yellow-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
