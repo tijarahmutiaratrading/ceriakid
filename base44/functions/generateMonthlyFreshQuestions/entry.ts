@@ -21,8 +21,8 @@ const SUBJECTS = [
   { ageGroup: 'sekolah_rendah', subject: 'bahasa_mandarin', label: 'Sekolah Rendah - Mandarin' },
 ];
 
-const NEW_GAMES_PER_SUBJECT = 20;
-const QUESTIONS_PER_GAME = 20;
+const DEFAULT_GAMES_PER_SUBJECT = 20;
+const DEFAULT_QUESTIONS_PER_GAME = 20;
 
 // Returns 'YYYY-MM' string, offset by monthsAgo (0 = current, -1 = last month, -2 = 2 months ago)
 function getMonthTag(date, offsetMonths = 0) {
@@ -35,6 +35,11 @@ function getMonthTag(date, offsetMonths = 0) {
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
+    const body = await req.json().catch(() => ({}));
+    const savedSettings = await base44.asServiceRole.entities.MonthlyGenSetting.list('-created_date', 1);
+    const setting = savedSettings?.[0] || null;
+    const gamesPerSubject = Math.max(1, Math.min(50, Math.round(Number(body.gamesPerSubject || setting?.gamesPerSubject || DEFAULT_GAMES_PER_SUBJECT))));
+    const questionsPerGame = Math.max(5, Math.min(50, Math.round(Number(body.questionsPerGame || setting?.questionsPerGame || DEFAULT_QUESTIONS_PER_GAME))));
 
     const now = new Date();
     const currentTag = getMonthTag(now, 0);        // e.g. '2026-05'
@@ -84,8 +89,8 @@ Deno.serve(async (req) => {
           ageGroup: s.ageGroup,
           ...(darjah ? { darjah } : {}),
           subject: s.subject,
-          gamesCount: NEW_GAMES_PER_SUBJECT,
-          questionsPerGame: QUESTIONS_PER_GAME,
+          gamesCount: gamesPerSubject,
+          questionsPerGame,
           status: 'pending',
         });
 
@@ -104,6 +109,8 @@ Deno.serve(async (req) => {
       deleted,
       queued,
       skipped,
+      gamesPerSubject,
+      questionsPerGame,
       message: `Deleted ${deleted} old games. Queued ${queued} subjects for fresh content.`,
     });
 

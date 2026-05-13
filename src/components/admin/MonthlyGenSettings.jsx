@@ -12,24 +12,45 @@ export default function MonthlyGenSettings({ onToast }) {
   const [testing, setTesting] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setGames(parsed.games || 20);
-      setQuestions(parsed.questions || 20);
-    }
+    const loadSettings = async () => {
+      const saved = await base44.entities.MonthlyGenSetting.list('-created_date', 1);
+      const setting = saved?.[0];
+      if (setting) {
+        setGames(setting.gamesPerSubject || 20);
+        setQuestions(setting.questionsPerGame || 20);
+        return;
+      }
+
+      const localSaved = localStorage.getItem(STORAGE_KEY);
+      if (localSaved) {
+        const parsed = JSON.parse(localSaved);
+        setGames(parsed.games || 20);
+        setQuestions(parsed.questions || 20);
+      }
+    };
+
+    loadSettings();
   }, []);
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    setSaving(true);
+    const existing = await base44.entities.MonthlyGenSetting.list('-created_date', 1);
+    const payload = { gamesPerSubject: games, questionsPerGame: questions };
+    if (existing?.[0]) {
+      await base44.entities.MonthlyGenSetting.update(existing[0].id, payload);
+    } else {
+      await base44.entities.MonthlyGenSetting.create(payload);
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ games, questions }));
     onToast('✅ Tetapan disimpan! Akan digunakan bulan depan.');
+    setSaving(false);
   };
 
   const handleTestRun = async () => {
     if (!window.confirm(`Ini akan PADAM games lama dan QUEUE ${games} games baru untuk semua subjek. Teruskan?`)) return;
     setTesting(true);
     try {
-      const res = await base44.functions.invoke('generateMonthlyFreshQuestions', {});
+      const res = await base44.functions.invoke('generateMonthlyFreshQuestions', { gamesPerSubject: games, questionsPerGame: questions });
       const d = res.data;
       onToast(`✅ Done! Deleted: ${d.deleted} | Queued: ${d.queued} subjek`);
     } catch (err) {
@@ -93,9 +114,10 @@ export default function MonthlyGenSettings({ onToast }) {
           <motion.button
             whileTap={{ scale: 0.97 }} whileHover={{ scale: 1.02 }}
             onClick={handleSave}
-            className="flex-1 min-w-[140px] py-2.5 px-3 rounded-2xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg"
+            disabled={saving}
+            className="flex-1 min-w-[140px] py-2.5 px-3 rounded-2xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg disabled:opacity-50"
           >
-            <Save className="w-4 h-4" /> Simpan Tetapan
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Simpan Tetapan
           </motion.button>
 
           <motion.button

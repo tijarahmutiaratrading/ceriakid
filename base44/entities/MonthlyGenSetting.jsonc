@@ -1,0 +1,20 @@
+{
+  "name": "MonthlyGenSetting",
+  "type": "object",
+  "properties": {
+    "gamesPerSubject": {
+      "type": "number",
+      "default": 20,
+      "description": "Bilangan games baru setiap subjek untuk auto-generate bulanan"
+    },
+    "questionsPerGame": {
+      "type": "number",
+      "default": 20,
+      "description": "Bilangan soalan setiap game untuk auto-generate bulanan"
+    }
+  },
+  "required": [
+    "gamesPerSubject",
+    "questionsPerGame"
+  ]
+}
