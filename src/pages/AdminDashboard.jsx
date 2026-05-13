@@ -244,7 +244,7 @@ export default function AdminDashboard() {
                   whileHover={{ y: -4, scale: 1.02 }}
                   className={`rounded-3xl min-h-[8.5rem] p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all`}
                 >
-                  <div className={`absolute right-4 top-4 w-12 h-12 rounded-xl ${stat.accent} flex items-center justify-center text-xl shadow-lg backdrop-blur-sm`}>
+                  <div className={`absolute right-4 top-4 w-12 h-12 rounded-2xl ${stat.accent} flex items-center justify-center text-xl shadow-lg shadow-black/10 ring-1 ring-white/20 backdrop-blur-sm`}>
                     {stat.icon}
                   </div>
                   <p className="text-white/80 text-xs font-bold mb-3">{stat.label}</p>
