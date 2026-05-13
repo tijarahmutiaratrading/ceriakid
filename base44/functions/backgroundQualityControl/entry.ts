@@ -2,7 +2,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const SUBJECTS = ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'bahasa_tamil', 'bahasa_mandarin'];
 const DARJAH_LEVELS = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
-const MINI_CATEGORIES = ['abc_phonics', 'math_counting', 'english_vocabulary', 'sains_awal', 'jawi_iqra', 'memory_logic', 'islamic_learning'];
+const MINI_CATEGORIES = ['abc_phonics', 'math_counting', 'bahasa_melayu', 'english_vocabulary', 'sains_awal', 'jawi_iqra', 'memory_logic', 'islamic_learning'];
 const MIN_PASS_SCORE = 90;
 const MAX_DELETE_PER_RUN = 12;
 
@@ -65,11 +65,21 @@ function auditMiniGame(game) {
   return [...new Set(issues)];
 }
 
+function auditStoryGame(game) {
+  const issues = [];
+  const scenes = Array.isArray(game.gameData?.scenes) ? game.gameData.scenes : [];
+  if (!game.title) issues.push('missing_title');
+  if (!game.description && !game.gameData?.moral) issues.push('missing_moral');
+  if (scenes.length < 3) issues.push('too_few_story_slides');
+  if (BANNED_PATTERN.test(`${game.title} ${game.description} ${JSON.stringify(scenes)}`)) issues.push('banned_text');
+  return [...new Set(issues)];
+}
+
 function buildReplacementTask(game, count) {
-  if (SUBJECTS.includes(game.category)) {
-    return { taskName: `QC Replacement: ${game.title || game.category}`, ageGroup: game.ageGroup, ...(game.ageGroup === 'sekolah_rendah' && game.darjah ? { darjah: game.darjah } : {}), subject: game.category, gamesCount: count, questionsPerGame: Math.max(8, Math.min(Number(game.totalQuestions || 8), 20)), status: 'pending', createdGames: 0, errorMessage: 'Auto re-queue by background quality control after failed audit.' };
+  if (game.gameData?.miniGameGenerated || MINI_CATEGORIES.includes(game.category)) {
+    return { taskName: `QC Mini Replacement: ${game.category}`, ageGroup: game.ageGroup || 'prasekolah', subject: game.category, gamesCount: count, questionsPerGame: Math.max(4, Math.min(Number(game.totalQuestions || game.gameData?.itemsPerSet || 4), 10)), status: 'pending', createdGames: 0, errorMessage: JSON.stringify({ theme: game.title || game.category, itemsPerSet: Math.max(4, Number(game.totalQuestions || 4)), modes: game.gameData?.mode ? [game.gameData.mode] : [] }) };
   }
-  return { taskName: `QC Mini Replacement: ${game.category}`, ageGroup: game.ageGroup || 'prasekolah', subject: game.category, gamesCount: count, questionsPerGame: Math.max(4, Math.min(Number(game.totalQuestions || game.gameData?.itemsPerSet || 4), 10)), status: 'pending', createdGames: 0, errorMessage: JSON.stringify({ theme: game.title || game.category, itemsPerSet: Math.max(4, Number(game.totalQuestions || 4)) }) };
+  return { taskName: `QC Replacement: ${game.title || game.category}`, ageGroup: game.ageGroup, ...(game.ageGroup === 'sekolah_rendah' && game.darjah ? { darjah: game.darjah } : {}), subject: game.category, gamesCount: count, questionsPerGame: Math.max(8, Math.min(Number(game.totalQuestions || 8), 20)), status: 'pending', createdGames: 0, errorMessage: 'Auto re-queue by background quality control after failed audit.' };
 }
 
 Deno.serve(async (req) => {
@@ -87,7 +97,9 @@ Deno.serve(async (req) => {
     const crossSeen = new Map();
     const failed = [];
     for (const game of auditableGames) {
-      const issues = SUBJECTS.includes(game.category) ? auditSubjectGame(game, crossSeen) : auditMiniGame(game);
+      const isStoryKid = game.gameData?.storyKid || game.category === 'story' || game.type === 'story_adventure';
+      const isGeneratedMiniGame = game.gameData?.miniGameGenerated || MINI_CATEGORIES.includes(game.category);
+      const issues = isStoryKid ? auditStoryGame(game) : isGeneratedMiniGame ? auditMiniGame(game) : auditSubjectGame(game, crossSeen);
       if (issues.length > 0) failed.push({ game, issues });
     }
     const total = auditableGames.length;
