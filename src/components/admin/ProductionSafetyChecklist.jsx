@@ -9,7 +9,7 @@ const statusMeta = {
 
 export default function ProductionSafetyChecklist() {
   const [loading, setLoading] = useState(false);
-  const [summary, setSummary] = useState({ pending: 0, running: 0, failed: 0, games: 0, miniGames: 0 });
+  const [summary, setSummary] = useState({ pending: 0, running: 0, failed: 0, games: 0, miniGames: 0, storyKid: 0 });
 
   const loadSummary = async () => {
     setLoading(true);
@@ -20,6 +20,7 @@ export default function ProductionSafetyChecklist() {
 
     const miniTotal = Object.values(countsRes.data?.miniCounts || {}).reduce((sum, item) => sum + (item.count || 0), 0);
     const subjectTotal = Object.values(countsRes.data?.subjectCounts || {}).reduce((sum, item) => sum + (item.games || 0), 0);
+    const storyKidTotal = countsRes.data?.storyKidCounts?.count || 0;
 
     setSummary({
       pending: tasks.filter(t => t.status === 'pending').length,
@@ -27,6 +28,7 @@ export default function ProductionSafetyChecklist() {
       failed: tasks.filter(t => t.status === 'failed').length,
       games: subjectTotal,
       miniGames: miniTotal,
+      storyKid: storyKidTotal,
     });
     setLoading(false);
   };
@@ -40,6 +42,7 @@ export default function ProductionSafetyChecklist() {
     { label: 'Failed task perlu semak', value: `${summary.failed} failed`, status: summary.failed > 0 ? 'warning' : 'safe' },
     { label: 'Kandungan utama tersedia', value: `${summary.games} games subjek`, status: summary.games > 0 ? 'safe' : 'warning' },
     { label: 'Mini Games tersedia', value: `${summary.miniGames} mini games`, status: summary.miniGames > 0 ? 'safe' : 'warning' },
+    { label: 'Story Kid tersedia', value: `${summary.storyKid} story`, status: summary.storyKid > 0 ? 'safe' : 'warning' },
   ];
 
   return (
@@ -59,7 +62,7 @@ export default function ProductionSafetyChecklist() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
         {checks.map((check) => {
           const meta = statusMeta[check.status];
           const Icon = meta.icon;
