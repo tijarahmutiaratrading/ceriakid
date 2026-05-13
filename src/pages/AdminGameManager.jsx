@@ -13,6 +13,7 @@ import MonthlyGenSettings from '@/components/admin/MonthlyGenSettings';
 import StoryKidGenerator from '@/components/admin/StoryKidGenerator';
 import StoryKidManager from '@/components/admin/StoryKidManager';
 import MasterTaskQueue from '@/components/admin/MasterTaskQueue';
+import QualityControlPanel from '@/components/admin/QualityControlPanel';
 import ProductionSafetyChecklist from '@/components/admin/ProductionSafetyChecklist';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 
@@ -410,6 +411,7 @@ export default function AdminGameManager() {
         </motion.div>
 
         <ProductionSafetyChecklist />
+        <QualityControlPanel onToast={showToast} />
 
         {/* Main Tabs */}
         <div className="flex gap-2 mb-4 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
