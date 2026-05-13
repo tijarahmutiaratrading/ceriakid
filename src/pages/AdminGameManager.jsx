@@ -15,6 +15,8 @@ import StoryKidManager from '@/components/admin/StoryKidManager';
 import MasterTaskQueue from '@/components/admin/MasterTaskQueue';
 import QualityControlPanel from '@/components/admin/QualityControlPanel';
 import ProductionSafetyChecklist from '@/components/admin/ProductionSafetyChecklist';
+import MasterGeneratorHero from '@/components/admin/MasterGeneratorHero';
+import MasterGeneratorTabs from '@/components/admin/MasterGeneratorTabs';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 
 const QUESTION_THRESHOLD = 20;
@@ -373,10 +375,11 @@ export default function AdminGameManager() {
   return (
     <div className="min-h-screen pb-32 relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.12) 1px, transparent 0)', backgroundSize: '28px 28px' }} />
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-80 h-80 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-violet-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute inset-0 opacity-35" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.13) 1px, transparent 0)', backgroundSize: '30px 30px' }} />
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-fuchsia-500/20 to-transparent" />
+        <div className="absolute -top-40 -right-40 w-[30rem] h-[30rem] bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
+        <div className="absolute top-1/3 -left-28 w-96 h-96 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-[32rem] h-[32rem] bg-violet-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-dashboard" />
 
@@ -390,49 +393,29 @@ export default function AdminGameManager() {
         )}
       </AnimatePresence>
 
-      <div className="relative max-w-6xl mx-auto px-3 sm:px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-7">
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-          className="mb-7 p-5 md:p-7 rounded-[2rem] flex flex-col md:flex-row md:items-center md:justify-between gap-5 shadow-2xl shadow-fuchsia-950/30"
-          style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.25)' }}>
-          <div className="flex items-center gap-4 min-w-0">
-            <div className="w-14 h-14 md:w-16 md:h-16 flex-shrink-0 rounded-3xl bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 flex items-center justify-center text-2xl md:text-3xl shadow-xl shadow-purple-950/30 ring-1 ring-white/30 leading-none">🎮</div>
-            <div className="min-w-0">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/70 text-[11px] font-black uppercase tracking-wider mb-2">Admin Content Studio</div>
-              <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight">Master Generator</h1>
-              <p className="text-white/75 text-sm">Satu tempat untuk jana, urus dan pantau Games dan Story Kid.</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-2 w-full md:w-auto md:min-w-80">
-            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{totalGames}</p><p className="text-white/60 text-[11px] font-bold">Games</p></div>
-            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{totalFull}</p><p className="text-white/60 text-[11px] font-bold">Penuh</p></div>
-            <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{totalPlayers}</p><p className="text-white/60 text-[11px] font-bold">Players</p></div>
-          </div>
-        </motion.div>
+      <div className="relative max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-6 md:space-y-7">
+        <MasterGeneratorHero
+          totalGames={totalGames}
+          totalFull={totalFull}
+          totalPlayers={totalPlayers}
+          pendingTasks={pendingTasks}
+          runningTasks={runningTasks}
+          failedTasks={failedTasks}
+        />
 
-        <ProductionSafetyChecklist />
-        <QualityControlPanel onToast={showToast} />
-
-        {/* Main Tabs */}
-        <div className="sticky top-24 z-30 mb-6 rounded-[2rem] p-1.5 shadow-2xl shadow-purple-950/25 ring-1 ring-white/20 overflow-x-auto snap-x scroll-px-2" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.09))', backdropFilter: 'blur(24px)', WebkitOverflowScrolling: 'touch' }}>
-          <div className="flex gap-1.5 min-w-max lg:min-w-0">
-            {[
-              { id: 'generator', label: '🎮 Generate', onClick: () => setTab('generator'), active: tab === 'generator' },
-              { id: 'manager', label: '📋 Manage', onClick: () => setTab('manager'), active: tab === 'manager' },
-              { id: 'monthly', label: '📅 Monthly', onClick: () => setTab('monthly'), active: tab === 'monthly' },
-              { id: 'mini-generate', label: '🎯 Mini Generate', onClick: () => { setTab('minigames'); setMiniGamesTab('generate'); }, active: tab === 'minigames' && miniGamesTab === 'generate' },
-              { id: 'mini-manage', label: '🎯 Mini Manage', onClick: () => { setTab('minigames'); setMiniGamesTab('manage'); }, active: tab === 'minigames' && miniGamesTab === 'manage' },
-              { id: 'story-generate', label: '📖 Story Generate', onClick: () => { setTab('storykid'); setStoryKidTab('generate'); }, active: tab === 'storykid' && storyKidTab === 'generate' },
-              { id: 'story-manage', label: '📖 Story Manage', onClick: () => { setTab('storykid'); setStoryKidTab('manage'); }, active: tab === 'storykid' && storyKidTab === 'manage' },
-            ].map(t => (
-              <button key={t.id} onClick={t.onClick}
-                className={`group relative flex-none min-w-[8.75rem] lg:min-w-0 lg:flex-1 py-3.5 px-4 rounded-[1.35rem] font-black text-xs md:text-sm transition-all duration-200 whitespace-nowrap snap-start ${t.active ? 'bg-white text-indigo-800 shadow-xl shadow-black/15 scale-[1.01]' : 'text-white/70 hover:text-white hover:bg-white/12'}`}>
-                <span className="relative z-10">{t.label}</span>
-                {t.active && <span className="absolute inset-x-5 -bottom-0.5 h-1 rounded-full bg-gradient-to-r from-yellow-300 via-pink-400 to-cyan-300" />}
-              </button>
-            ))}
-          </div>
+        <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+          <ProductionSafetyChecklist />
+          <QualityControlPanel onToast={showToast} />
         </div>
+
+        <MasterGeneratorTabs
+          tab={tab}
+          setTab={setTab}
+          miniGamesTab={miniGamesTab}
+          setMiniGamesTab={setMiniGamesTab}
+          storyKidTab={storyKidTab}
+          setStoryKidTab={setStoryKidTab}
+        />
 
         {/* ══════════════ GENERATOR TAB ══════════════ */}
         {tab === 'generator' && (
