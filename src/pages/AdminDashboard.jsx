@@ -180,7 +180,7 @@ export default function AdminDashboard() {
       <div className="relative">
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-32 space-y-6">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-2xl bg-slate-800/70 border border-white/10 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-3xl bg-slate-800/70 border border-white/10 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <p className="text-emerald-300 text-xs font-black uppercase tracking-[0.22em] mb-2">CeriaKid Control Center</p>
             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">Admin Dashboard</h1>
@@ -242,7 +242,7 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -4, scale: 1.02 }}
-                  className={`rounded-xl min-h-[8.5rem] p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all`}
+                  className={`rounded-3xl min-h-[8.5rem] p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all`}
                 >
                   <div className={`absolute right-4 top-4 w-12 h-12 rounded-xl ${stat.accent} flex items-center justify-center text-xl shadow-lg backdrop-blur-sm`}>
                     {stat.icon}
@@ -275,7 +275,7 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
                     whileHover={{ scale: 1.03, y: -2 }}
-                    className={`rounded-xl p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all relative overflow-hidden`}
+                    className={`rounded-3xl p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all relative overflow-hidden`}
                   >
                     <div className="flex items-center justify-between gap-3 mb-4 relative">
                       <p className="text-2xl">{item.icon}</p>
@@ -298,7 +298,7 @@ export default function AdminDashboard() {
               </div>
               <motion.div
                whileHover={{ y: -2 }}
-               className="rounded-2xl p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto bg-slate-800/85 border border-white/10 backdrop-blur-xl"
+               className="rounded-3xl p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto bg-slate-800/85 border border-white/10 backdrop-blur-xl"
               >
                 <table className="w-full min-w-[720px] text-sm">
                   <thead>
