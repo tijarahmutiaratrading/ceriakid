@@ -228,10 +228,11 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Reset stuck running tasks first, then fetch pending tasks
+    // Reset stuck running tasks first, then continue active task or fetch pending tasks
     const running = await base44.asServiceRole.entities.GameTask.filter({ status: 'running' });
+    const activeRunning = [];
     for (const t of running) {
-      const startedAt = new Date(t.startedAt || t.created_date);
+      const startedAt = new Date(t.startedAt || t.updated_date || t.created_date);
       const minutesAgo = (Date.now() - startedAt.getTime()) / 60000;
       if (minutesAgo > 10) {
         try {
@@ -239,17 +240,24 @@ Deno.serve(async (req) => {
         } catch (err) {
           console.warn(`Skip stale running task ${t.id}: ${err.message}`);
         }
+      } else {
+        activeRunning.push(t);
       }
     }
 
-    const pending = await base44.asServiceRole.entities.GameTask.filter({ status: 'pending' });
+    const pending = activeRunning.length > 0
+      ? activeRunning
+      : await base44.asServiceRole.entities.GameTask.filter({ status: 'pending' });
+
     if (!pending || pending.length === 0) {
       console.log('processNextGameTask: No pending tasks.');
       return Response.json({ success: true, message: 'No pending tasks' });
     }
 
-    // Prioritize Story Kid, then oldest first
+    // Continue running tasks first, then prioritize Story Kid, then oldest first
     pending.sort((a, b) => {
+      if (a.status === 'running' && b.status !== 'running') return -1;
+      if (a.status !== 'running' && b.status === 'running') return 1;
       if (a.subject === 'storykid' && b.subject !== 'storykid') return -1;
       if (a.subject !== 'storykid' && b.subject === 'storykid') return 1;
       return new Date(a.created_date) - new Date(b.created_date);
@@ -493,7 +501,7 @@ Output JSON sahaja ikut schema.`,
           existing_image_urls: [storybookStyleReference],
         });
         await base44.asServiceRole.entities.GameTask.update(task.id, {
-          status: 'pending',
+          status: 'running',
           createdGames: 1,
           errorMessage: JSON.stringify({ ...meta, cover: coverResult.url, generatedScenes }),
         });
@@ -508,7 +516,7 @@ Output JSON sahaja ikut schema.`,
         });
         const nextScenes = [...generatedScenes, { ...scenes[index], imageUrl: result.url }];
         await base44.asServiceRole.entities.GameTask.update(task.id, {
-          status: 'pending',
+          status: 'running',
           createdGames: nextScenes.length + 1,
           errorMessage: JSON.stringify({ ...meta, cover: meta.cover, generatedScenes: nextScenes }),
         });
@@ -730,7 +738,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
       const newTotal = alreadyCreated + createdInBatch;
       const isDone = newTotal >= totalNeeded;
       await base44.asServiceRole.entities.GameTask.update(task.id, {
-        status: isDone ? 'completed' : 'pending',
+        status: isDone ? 'completed' : 'running',
         createdGames: newTotal,
         ...(isDone ? { completedAt: new Date().toISOString() } : {}),
       });
@@ -766,7 +774,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
       const newTotal = alreadyCreated + createdInBatch;
       const isDone = newTotal >= totalWork;
       await base44.asServiceRole.entities.GameTask.update(task.id, {
-        status: isDone ? 'completed' : 'pending',
+        status: isDone ? 'completed' : 'running',
         createdGames: newTotal,
         ...(isDone ? { completedAt: new Date().toISOString() } : {}),
       });
@@ -841,7 +849,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
     const isDone = newTotal >= finalTarget;
 
     await base44.asServiceRole.entities.GameTask.update(task.id, {
-      status: isDone ? 'completed' : 'pending', // reset to pending for next batch
+      status: isDone ? 'completed' : 'running', // reset to pending for next batch
       createdGames: newTotal,
       ...(isDone ? { completedAt: new Date().toISOString() } : {}),
     });
