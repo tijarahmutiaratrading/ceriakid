@@ -46,15 +46,15 @@ export default function ProductionSafetyChecklist() {
   ];
 
   return (
-    <div className="rounded-[2rem] p-4 md:p-5 shadow-2xl shadow-black/20 bg-white/10 border border-white/15 backdrop-blur-2xl">
-      <div className="flex items-center justify-between gap-3 mb-4">
+    <div className="w-full min-w-0 max-w-full overflow-hidden rounded-[1.5rem] p-3 shadow-2xl shadow-black/20 bg-white/10 border border-white/15 backdrop-blur-2xl md:rounded-[2rem] md:p-5">
+      <div className="flex items-start justify-between gap-2 mb-4 min-w-0">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-11 h-11 rounded-2xl bg-green-400/20 border border-green-300/20 flex items-center justify-center flex-shrink-0">
             <ShieldCheck className="w-5 h-5 text-green-200" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-white font-black text-base md:text-lg">Production Safety Checklist</h3>
-            <p className="text-white/55 text-xs font-semibold">Semak ringkas sebelum run bulk generation besar.</p>
+            <h3 className="text-white font-black text-sm leading-tight md:text-lg">Production Safety Checklist</h3>
+            <p className="text-white/55 text-[11px] font-semibold leading-snug md:text-xs">Semak ringkas sebelum run bulk generation besar.</p>
           </div>
         </div>
         <button onClick={loadSummary} disabled={loading} className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white transition-all flex-shrink-0">
@@ -62,7 +62,7 @@ export default function ProductionSafetyChecklist() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+      <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-5 lg:gap-2.5">
         {checks.map((check) => {
           const meta = statusMeta[check.status];
           const Icon = meta.icon;

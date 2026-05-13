@@ -20,9 +20,9 @@ export default function MasterGeneratorHero({ totalGames, totalFull, totalPlayer
   const queueTotal = (pendingTasks?.length || 0) + (runningTasks?.length || 0);
 
   return (
-    <div className="relative overflow-hidden rounded-[1.75rem] border border-white/20 bg-white/10 p-4 shadow-2xl shadow-fuchsia-950/30 backdrop-blur-3xl md:rounded-[2.25rem] md:p-7">
+    <div className="relative w-full min-w-0 max-w-full overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/10 p-3.5 shadow-2xl shadow-fuchsia-950/30 backdrop-blur-3xl md:rounded-[2.25rem] md:p-7">
       <div className="absolute inset-0 bg-gradient-to-br from-white/18 via-white/6 to-transparent" />
-      <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-pink-500/30 blur-3xl" />
+      <div className="absolute -right-32 -top-28 h-56 w-56 rounded-full bg-pink-500/30 blur-3xl md:-right-20 md:-top-24 md:h-64 md:w-64" />
       <div className="absolute -bottom-28 left-1/3 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
 
       <div className="relative grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-end">

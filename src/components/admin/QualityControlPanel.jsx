@@ -59,8 +59,8 @@ export default function QualityControlPanel({ onToast }) {
   const isWaiting = qc?.status === 'waiting_for_generation';
 
   return (
-    <div className="p-5 md:p-7 rounded-[2rem] mb-6 shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.20), rgba(59,130,246,0.12))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+    <div className="w-full min-w-0 max-w-full overflow-hidden p-3 md:p-7 rounded-[1.5rem] md:rounded-[2rem] mb-5 md:mb-6 shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.20), rgba(59,130,246,0.12))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
+      <div className="flex min-w-0 flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 mb-4 md:mb-5">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center">
             <ShieldCheck className="w-6 h-6 text-green-300" />

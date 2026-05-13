@@ -12,7 +12,7 @@ export default function MasterGeneratorTabs({ tab, setTab, miniGamesTab, setMini
   ];
 
   return (
-    <div className="sticky top-20 z-30 rounded-[1.5rem] border border-white/20 bg-white/10 p-1.5 shadow-2xl shadow-purple-950/25 backdrop-blur-3xl md:top-24 md:rounded-[2rem] md:p-2">
+    <div className="sticky top-20 z-30 w-full min-w-0 max-w-full overflow-hidden rounded-[1.35rem] border border-white/20 bg-white/10 p-1.5 shadow-2xl shadow-purple-950/25 backdrop-blur-3xl md:top-24 md:rounded-[2rem] md:p-2">
       <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:grid-cols-7 lg:gap-2">
         {tabs.map((item) => (
           <button

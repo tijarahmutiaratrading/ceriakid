@@ -373,8 +373,8 @@ export default function AdminGameManager() {
 
 
   return (
-    <div className="min-h-screen pb-32 relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+    <div className="min-h-screen w-full max-w-full pb-32 relative overflow-x-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
         <div className="absolute inset-0 opacity-35" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.13) 1px, transparent 0)', backgroundSize: '30px 30px' }} />
         <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-fuchsia-500/20 to-transparent" />
         <div className="absolute -top-40 -right-40 w-[30rem] h-[30rem] bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
@@ -393,7 +393,7 @@ export default function AdminGameManager() {
         )}
       </AnimatePresence>
 
-      <div className="relative max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-6 md:space-y-7">
+      <div className="relative w-full max-w-7xl mx-auto px-2.5 sm:px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-5 md:space-y-7 overflow-x-hidden">
         <MasterGeneratorHero
           totalGames={totalGames}
           totalFull={totalFull}
@@ -403,7 +403,7 @@ export default function AdminGameManager() {
           failedTasks={failedTasks}
         />
 
-        <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <div className="grid min-w-0 gap-4 md:gap-6 xl:grid-cols-[0.95fr_1.05fr]">
           <ProductionSafetyChecklist />
           <QualityControlPanel onToast={showToast} />
         </div>
@@ -421,7 +421,7 @@ export default function AdminGameManager() {
         {tab === 'generator' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Config */}
-            <div className="mb-6 rounded-[2rem] border border-white/15 bg-white/[0.08] p-4 shadow-2xl shadow-black/15 backdrop-blur-2xl md:p-6">
+            <div className="mb-5 w-full max-w-full overflow-hidden rounded-[1.5rem] border border-white/15 bg-white/[0.08] p-3 shadow-2xl shadow-black/15 backdrop-blur-2xl md:mb-6 md:rounded-[2rem] md:p-6">
               <div className="mb-5">
                 <h2 className="font-black text-white text-xl md:text-2xl">⚙️ Konfigurasi Generation</h2>
                 <p className="text-white/60 text-xs font-semibold mt-1">Tetapkan target game dan soalan sebelum masuk queue.</p>
@@ -449,7 +449,7 @@ export default function AdminGameManager() {
                 )}
 
                 <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-                  <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.055] p-4">
+                  <div className="min-w-0 rounded-[1.25rem] border border-white/10 bg-white/[0.055] p-3 md:rounded-[1.5rem] md:p-4">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🧒 Prasekolah</p>
                     </div>
@@ -505,7 +505,7 @@ export default function AdminGameManager() {
                     </div>
                   </div>
 
-                  <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.055] p-4">
+                  <div className="min-w-0 rounded-[1.25rem] border border-white/10 bg-white/[0.055] p-3 md:rounded-[1.5rem] md:p-4">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🎒 Sekolah Rendah</p>
                     </div>
