@@ -213,7 +213,11 @@ Deno.serve(async (req) => {
       const startedAt = new Date(t.startedAt || t.created_date);
       const minutesAgo = (Date.now() - startedAt.getTime()) / 60000;
       if (minutesAgo > 10) {
-        await base44.asServiceRole.entities.GameTask.update(t.id, { status: 'pending' });
+        try {
+          await base44.asServiceRole.entities.GameTask.update(t.id, { status: 'pending' });
+        } catch (err) {
+          console.warn(`Skip stale running task ${t.id}: ${err.message}`);
+        }
       }
     }
 
