@@ -25,6 +25,7 @@ const KSSR_LEVEL_GUIDE = {
 };
 
 const getKssrGuide = (darjah) => darjah ? (KSSR_LEVEL_GUIDE[darjah] || '') : '';
+const CORE_SUBJECTS = Object.keys(CATEGORY_LABELS);
 const GAME_TYPES = ['multiple_choice','picture_quiz','word_builder','counting','spelling','reading','science_quiz','math_puzzle','phonics','letter_match'];
 
 // Unique topic pools per subject to avoid repetitive games
@@ -64,6 +65,10 @@ async function generateQuestionsForGame(base44, gameTitle, topicName, subject, a
         ? 'WAJIB guna Bahasa Mandarin/Chinese sahaja untuk problem, options dan jawapan. Jangan terjemah soalan ke Bahasa Melayu.'
         : 'Gunakan Bahasa Malaysia baku yang betul, mudah dan mesra kanak-kanak.';
 
+  const exactDarjahRule = ageGroup === 'sekolah_rendah' && darjah
+    ? `WAJIB tepat untuk ${DARJAH_LABELS[darjah] || darjah} sahaja. Jangan jana soalan terlalu mudah seperti tahap Darjah lebih rendah, dan jangan jana soalan terlalu tinggi seperti tahap Darjah lebih atas. Jika topik sama wujud di beberapa darjah, guna aras kemahiran, nombor, kosa kata dan konteks yang sepadan dengan ${DARJAH_LABELS[darjah] || darjah}.`
+    : 'Untuk prasekolah, kekalkan sangat asas dan tidak bercampur silibus sekolah rendah.';
+
   const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja)/i;
   const emojiRegex = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu;
   const neutralEmoji = subject === 'bahasa_tamil' ? '🌺' : subject === 'bahasa_mandarin' ? '🏮' : subject === 'jawi' ? '🕌' : null;
@@ -91,6 +96,7 @@ Topik KHUSUS: "${topicName}"
 Subjek: ${CATEGORY_LABELS[subject] || subject}
 Peringkat: ${darjah ? `${DARJAH_LABELS[darjah] || darjah} (${AGE_LABELS[ageGroup] || ageGroup})` : (AGE_LABELS[ageGroup] || ageGroup)}
 ${kssrGuide ? `Panduan KSSR tahap ini: ${kssrGuide}` : ''}
+${exactDarjahRule}
 ${alreadyMade}
 ${extraInstruction}
 
@@ -108,6 +114,7 @@ WAJIB ikut standard mass production ini:
   10. Jangan guna placeholder seperti "Soalan 1", "Item", "Gambar di bawah", atau arahan yang perlukan gambar tetapi tiada gambar.
   11. Jangan ulang pola soalan yang sama; setiap soalan mesti menguji kemahiran berbeza dalam topik ini.
   12. Untuk Darjah 1-6, WAJIB ikut tahap KSSR yang diberi. Jangan jana soalan terlalu tinggi/rendah, fakta luar silibus, trivia rawak, atau soalan 'merepek' yang tidak menguji kemahiran subjek.
+  13. Untuk Sekolah Rendah, jangan pindahkan aras Darjah: Darjah 1 mesti asas, Darjah 6 mesti tahap pengukuhan; setiap soalan mesti jelas sesuai dengan darjah yang diminta sahaja.
 
 Output JSON sahaja: "questions" dengan problem, options[4], answer(0-3), emoji.`,
     response_json_schema: {
@@ -146,6 +153,7 @@ Konteks:
 - Subjek: ${CATEGORY_LABELS[subject] || subject}
 - Peringkat: ${darjah ? `${DARJAH_LABELS[darjah] || darjah} (${AGE_LABELS[ageGroup] || ageGroup})` : (AGE_LABELS[ageGroup] || ageGroup)}
 - Panduan KSSR tahap: ${kssrGuide || 'Ikut tahap umur yang dinyatakan'}
+- Peraturan tepat darjah: ${exactDarjahRule}
 - Topik: ${topicName}
 
 Tugas anda:
@@ -220,6 +228,15 @@ Deno.serve(async (req) => {
       return new Date(a.created_date) - new Date(b.created_date);
     });
     const task = pending[0];
+
+    if (task.ageGroup === 'sekolah_rendah' && CORE_SUBJECTS.includes(task.subject) && !task.darjah) {
+      await base44.asServiceRole.entities.GameTask.update(task.id, {
+        status: 'failed',
+        errorMessage: 'Sekolah Rendah subject game mesti ada darjah_1 hingga darjah_6 supaya silibus tidak bercampur.',
+        completedAt: new Date().toISOString(),
+      });
+      return Response.json({ error: 'Missing darjah for Sekolah Rendah subject task' }, { status: 400 });
+    }
 
     const alreadyCreated = task.createdGames || 0;
     const totalNeeded = task.gamesCount;

@@ -137,6 +137,7 @@ Deno.serve(async (req) => {
     const storyKidIssues = [];
 
     for (const game of games || []) {
+      if (!SUBJECTS.includes(game.category)) continue;
       const questions = extractQuestions(game);
       const isMini = MINI_CATEGORIES.includes(game.category);
       const isStoryKid = game.gameData?.storyKid || STORY_CATEGORIES.includes(game.category) || game.type === 'story_adventure';
@@ -166,17 +167,15 @@ Deno.serve(async (req) => {
       }
     }
 
-    const bbmIssues = (bbmResources || [])
-      .map(resource => ({ id: resource.id, title: resource.title, subject: resource.subject, level: resource.level, type: resource.type, issues: auditBbm(resource) }))
-      .filter(item => item.issues.length > 0);
+    const bbmIssues = [];
 
     const repeatAcrossDarjahCount = gameIssues.reduce((sum, item) => sum + item.issues.filter(issue => issue.type === 'repeat_across_darjah_1_6').length, 0);
     const totalIssues = gameIssues.length + miniGameIssues.length + bbmIssues.length + storyKidIssues.length;
 
     return Response.json({
-      message: 'Full KSSR Quality Audit Complete',
+      message: 'Subject Games KSSR Quality Audit Complete',
       summary: {
-        totalGames: games?.length || 0,
+        totalGames: games?.filter(g => SUBJECTS.includes(g.category)).length || 0,
         totalBBM: bbmResources?.length || 0,
         gamesWithIssues: gameIssues.length,
         miniGamesWithIssues: miniGameIssues.length,
