@@ -168,45 +168,44 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-indigo-600 via-fuchsia-500 to-amber-400 text-white">
+    <div className="min-h-screen relative overflow-hidden bg-slate-900 text-white">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-28 w-[28rem] h-[28rem] bg-white/25 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-1/4 -left-28 w-96 h-96 bg-pink-300/35 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-yellow-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800" />
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(148,163,184,0.12) 1px, transparent 0)', backgroundSize: '28px 28px' }} />
+        <div className="absolute -top-40 right-1/4 w-[32rem] h-[32rem] bg-emerald-500/10 rounded-full blur-3xl" />
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-32 space-y-7">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-32 space-y-6">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <p className="text-emerald-300/80 text-xs font-black uppercase tracking-[0.24em] mb-2">Real-time Admin Overview</p>
             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">Admin Dashboard</h1>
-            <p className="text-slate-400 text-sm mt-1">Pantau pelanggan, revenue dan konfigurasi sistem CeriaKid.</p>
+            <p className="text-slate-400 text-sm mt-1">Real-time overview untuk pelanggan, revenue dan konfigurasi CeriaKid.</p>
           </div>
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={loadData}
-              className="rounded-xl bg-black/50 hover:bg-black/70 border border-white/10 px-4 py-2.5 text-xs font-black transition-all flex items-center gap-2"
+              className="rounded-lg bg-black hover:bg-slate-950 border border-white/10 px-4 py-2.5 text-xs font-black transition-all flex items-center gap-2"
             >
               <RefreshCw className="w-4 h-4" /> Refresh
             </button>
-            <Link to="/admin-game-manager" className="rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2.5 text-xs font-black shadow-lg shadow-emerald-950/20 transition-all">
+            <Link to="/admin-game-manager" className="rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-2.5 text-xs font-black shadow-lg shadow-emerald-950/20 transition-all">
               Game Manager
             </Link>
           </div>
         </motion.div>
 
         {/* Admin Tabs */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto bg-white/8 border border-white/10 shadow-xl shadow-black/10 backdrop-blur-xl">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-2 mb-6 p-1 rounded-xl overflow-x-auto bg-slate-800/80 border border-white/10 shadow-xl shadow-black/10 backdrop-blur-xl">
           {tabs.map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-3 rounded-2xl font-black text-xs transition-all whitespace-nowrap px-3 flex items-center justify-center gap-2 ${activeTab === tab.key ? 'bg-emerald-500 text-slate-950 shadow-lg' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+              className={`flex-1 py-3 rounded-lg font-black text-xs transition-all whitespace-nowrap px-3 flex items-center justify-center gap-2 ${activeTab === tab.key ? 'bg-emerald-500 text-white shadow-lg' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
             >
               <span>{tab.label}</span>
             </button>
@@ -234,9 +233,9 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -4, scale: 1.02 }}
-                  className={`rounded-[1.25rem] p-5 text-white shadow-xl shadow-black/25 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/15 hover:border-white/35 transition-all`}
+                  className={`rounded-lg p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/5 hover:border-white/20 transition-all`}
                 >
-                  <div className={`absolute right-4 top-4 w-12 h-12 rounded-2xl ${stat.accent} flex items-center justify-center text-xl shadow-lg backdrop-blur-sm`}>
+                  <div className={`absolute right-4 top-4 w-12 h-12 rounded-xl ${stat.accent} flex items-center justify-center text-xl shadow-lg backdrop-blur-sm`}>
                     {stat.icon}
                   </div>
                   <p className="text-white/80 text-xs font-bold mb-3">{stat.label}</p>
@@ -254,7 +253,7 @@ export default function AdminDashboard() {
                   <p className="text-white/60 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 {[
                    { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', card: 'from-slate-600 to-slate-800' },
                    { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', card: 'from-emerald-500 to-green-600' },
@@ -267,7 +266,7 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
                     whileHover={{ scale: 1.03, y: -2 }}
-                    className={`rounded-[1.25rem] p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/15 hover:border-white/35 transition-all relative overflow-hidden`}
+                    className={`rounded-lg p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/5 hover:border-white/20 transition-all relative overflow-hidden`}
                   >
                     <div className="flex items-center justify-between gap-3 mb-4 relative">
                       <p className="text-2xl">{item.icon}</p>
@@ -290,7 +289,7 @@ export default function AdminDashboard() {
               </div>
               <motion.div
                whileHover={{ y: -2 }}
-               className="rounded-[1.25rem] p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto bg-slate-900/80 border border-white/8"
+               className="rounded-lg p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto bg-slate-800/80 border border-white/8"
               >
                 <table className="w-full min-w-[720px] text-sm">
                   <thead>
