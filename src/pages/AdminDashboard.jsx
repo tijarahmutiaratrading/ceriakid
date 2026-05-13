@@ -259,10 +259,10 @@ export default function AdminDashboard() {
               className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8"
             >
               {[
-                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', accent: 'from-emerald-500 to-teal-500', change: '+ aktif' },
-                { label: 'Pendapatan', value: `RM${totalRevenue.toFixed(0)}`, icon: '💰', accent: 'from-blue-500 to-indigo-500', change: 'bulan ini' },
-                { label: 'Pelanggan Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', accent: 'from-amber-500 to-orange-500', change: 'premium' },
-                { label: 'Admin Access', value: 'Online', icon: '🛡️', accent: 'from-fuchsia-500 to-purple-500', change: 'secure' },
+                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', card: 'from-emerald-500 to-teal-600', accent: 'bg-white/20', change: '+ aktif' },
+                { label: 'Pendapatan', value: `RM${totalRevenue.toFixed(0)}`, icon: '💰', card: 'from-orange-500 to-amber-500', accent: 'bg-white/20', change: 'bulan ini' },
+                { label: 'Pelanggan Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', card: 'from-blue-500 to-indigo-600', accent: 'bg-white/20', change: 'premium' },
+                { label: 'Admin Access', value: 'Online', icon: '🛡️', card: 'from-purple-500 to-fuchsia-600', accent: 'bg-white/20', change: 'secure' },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
@@ -270,14 +270,16 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -4, scale: 1.02 }}
-                  className="rounded-[1.25rem] p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-slate-900/85 border border-white/8 hover:border-white/15 transition-all"
+                  className={`rounded-[1.25rem] p-5 text-white shadow-xl shadow-black/25 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/15 hover:border-white/35 transition-all`}
                 >
-                  <div className={`absolute right-4 top-4 w-12 h-12 rounded-2xl bg-gradient-to-br ${stat.accent} flex items-center justify-center text-xl shadow-lg`}>
+                  <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-white/15" />
+                  <div className="absolute -right-2 bottom-2 w-16 h-16 rounded-full bg-white/10" />
+                  <div className={`absolute right-4 top-4 w-12 h-12 rounded-2xl ${stat.accent} flex items-center justify-center text-xl shadow-lg backdrop-blur-sm`}>
                     {stat.icon}
                   </div>
-                  <p className="text-slate-400 text-xs font-bold mb-3">{stat.label}</p>
+                  <p className="text-white/80 text-xs font-bold mb-3">{stat.label}</p>
                   <p className="text-3xl font-black mb-2 text-white tracking-tight">{stat.value}</p>
-                  <p className="text-emerald-300 text-xs font-black">↗ {stat.change}</p>
+                  <p className="text-white/80 text-xs font-black">↗ {stat.change}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -292,10 +294,10 @@ export default function AdminDashboard() {
               </div>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 {[
-                   { label: 'Percuma', value: tierBreakdown.free, icon: '🆓' },
-                   { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱' },
-                   { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐' },
-                   { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑' },
+                   { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', card: 'from-slate-600 to-slate-800' },
+                   { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', card: 'from-emerald-500 to-green-600' },
+                   { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', card: 'from-sky-500 to-blue-600' },
+                   { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', card: 'from-violet-500 to-purple-600' },
                 ].map((item, idx) => (
                   <motion.div
                     key={idx}
@@ -303,14 +305,15 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
                     whileHover={{ scale: 1.03, y: -2 }}
-                    className="rounded-[1.25rem] p-4 md:p-5 text-white shadow-xl shadow-black/10 bg-slate-900/75 border border-white/8 hover:border-emerald-400/25 transition-all"
+                    className={`rounded-[1.25rem] p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/15 hover:border-white/35 transition-all relative overflow-hidden`}
                   >
-                    <div className="flex items-center justify-between gap-3 mb-4">
+                    <div className="absolute -right-8 -bottom-8 w-24 h-24 rounded-full bg-white/15" />
+                    <div className="flex items-center justify-between gap-3 mb-4 relative">
                       <p className="text-2xl">{item.icon}</p>
-                      <span className="text-[11px] font-black text-emerald-300 bg-emerald-400/10 px-2 py-1 rounded-full">Plan</span>
+                      <span className="text-[11px] font-black text-white bg-white/18 px-2 py-1 rounded-full">Plan</span>
                     </div>
-                    <p className="text-xs font-bold mb-1 text-slate-400">{item.label}</p>
-                    <p className="text-3xl font-black text-white">{item.value}</p>
+                    <p className="text-xs font-bold mb-1 text-white/80 relative">{item.label}</p>
+                    <p className="text-3xl font-black text-white relative">{item.value}</p>
                   </motion.div>
                 ))}
               </div>
