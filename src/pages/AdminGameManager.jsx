@@ -428,12 +428,12 @@ export default function AdminGameManager() {
               </div>
               {/* Subject selector */}
               <div className="mb-5">
-                <div className="flex items-center justify-between gap-3 mb-4">
+                <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="text-white font-black text-sm">2. Pilih Subjek</p>
                     <p className="text-white/50 text-xs">Klik subjek yang nak dimasukkan ke queue.</p>
                   </div>
-                  <div className="flex gap-2 items-center flex-shrink-0">
+                  <div className="flex flex-wrap gap-2 items-center sm:flex-shrink-0">
                     <button onClick={refreshGeneratorCounts} disabled={loadingCounts} className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all" title="Refresh counts">
                       <RefreshCw className={`w-4 h-4 text-white/60 ${loadingCounts ? 'animate-spin' : ''}`} />
                     </button>
@@ -448,7 +448,7 @@ export default function AdminGameManager() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                   <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.055] p-4">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🧒 Prasekolah</p>
@@ -461,7 +461,7 @@ export default function AdminGameManager() {
                       </div>
                       <button onClick={applyPrasekolahMaster} className="w-full py-2 rounded-xl bg-yellow-300 text-yellow-950 text-xs font-black">Apply ke semua Prasekolah</button>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                       {SUBJECT_CONFIG.filter(s => s.ageGroup === 'prasekolah').map(sc => {
                         const key = `${sc.ageGroup}-${sc.subject}`;
                         const sel = selectedSubjects.has(key);
@@ -517,7 +517,7 @@ export default function AdminGameManager() {
                       </div>
                       <button onClick={applySekolahRendahMaster} className="w-full py-2 rounded-xl bg-cyan-300 text-cyan-950 text-xs font-black">Apply ke semua SR D1-D6</button>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                       {SUBJECT_CONFIG.filter(s => s.ageGroup === 'sekolah_rendah').map(sc => {
                         const key = `${sc.ageGroup}-${sc.subject}`;
                         const sel = selectedSubjects.has(key);
