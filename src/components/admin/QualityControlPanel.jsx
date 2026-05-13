@@ -47,7 +47,7 @@ export default function QualityControlPanel({ onToast }) {
           </div>
           <div>
             <h2 className="font-black text-white text-lg">🛡️ Quality Control Worker</h2>
-            <p className="text-white/55 text-xs font-semibold">Auto audit bila queue siap, delete content gagal, dan re-queue replacement sampai ≥90%.</p>
+            <p className="text-white/55 text-xs font-semibold">Auto audit, repair, re-queue replacement, dan ajar generator elak isu sama berulang.</p>
           </div>
         </div>
         <div className="flex gap-2">
@@ -55,7 +55,7 @@ export default function QualityControlPanel({ onToast }) {
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} Audit
           </button>
           <button onClick={() => runCheck(true)} disabled={loading || repairing || isPassing} className="px-4 py-2 rounded-2xl bg-green-400 text-green-950 text-xs font-black flex items-center gap-2 disabled:opacity-50">
-            {repairing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wrench className="w-4 h-4" />} Repair Now
+            {repairing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wrench className="w-4 h-4" />} Repair + Teach Generator
           </button>
         </div>
       </div>

@@ -35,6 +35,17 @@ QUALITY CONTROL HARD RULES:
 const CORE_SUBJECTS = Object.keys(CATEGORY_LABELS);
 const GAME_TYPES = ['multiple_choice','picture_quiz','word_builder','counting','spelling','reading','science_quiz','math_puzzle','phonics','letter_match'];
 
+async function getQcLearningNotes(base44) {
+  const logs = await base44.asServiceRole.entities.QCLog.list('-created_date', 8);
+  const issueLines = (logs || [])
+    .flatMap(log => Array.isArray(log.sampleIssues) ? log.sampleIssues : [])
+    .slice(0, 12)
+    .map(item => `- ${item.title || item.category || 'Content'}: ${(item.issues || []).join(', ')}`)
+    .filter(line => line.trim().length > 4);
+  if (issueLines.length === 0) return '';
+  return `\nQC LEARNING MEMORY - JANGAN ULANG KESILAPAN INI:\n${issueLines.join('\n')}\nJika isu sama berulang, content akan dipadam dan di-queue semula oleh QC.`;
+}
+
 // Unique topic pools per subject to avoid repetitive games
 const TOPIC_POOLS = {
   bahasa_melayu: ['Haiwan','Buah-buahan','Nombor','Warna','Hari & Bulan','Kata Nama Am','Kata Kerja','Kata Adjektif','Keluarga','Rumah','Sekolah','Makanan','Pakaian','Alam Sekitar','Peribahasa','Sajak','Cerita Pendek','Pantun','Tatabahasa','Sinonim'],
@@ -47,7 +58,7 @@ const TOPIC_POOLS = {
   default: ['Topik 1','Topik 2','Topik 3','Topik 4','Topik 5','Topik 6','Topik 7','Topik 8','Topik 9','Topik 10'],
 };
 
-async function generateQuestionsForGame(base44, gameTitle, topicName, subject, ageGroup, questionsCount, existingTitles, darjah = null) {
+async function generateQuestionsForGame(base44, gameTitle, topicName, subject, ageGroup, questionsCount, existingTitles, darjah = null, qcLearningNotes = '') {
   const emojiMap = {
     bahasa_melayu: '📚 📖 ✏️ 🔤 💬 📝 🎓 🌍 🐛 🌳 🏠 🚗 🍎 🎨 🐘 🦁 🌺 🎭 🏫 🦋',
     english: '🌟 📚 ✍️ 🔤 💬 📖 🎤 🏆 🦁 🌸 🎸 ⚽ 🚀 🎯 🌈 🦄 🎪 🎠 🌻 🦊',
@@ -108,6 +119,7 @@ ${alreadyMade}
 ${extraInstruction}
 
 ${QC_GENERATOR_RULES}
+${qcLearningNotes}
 
 WAJIB ikut standard mass production ini:
 0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6. DILARANG jana kandungan Tingkatan, PT3, SPM, sekolah menengah, atau silibus luar tahap ini.
@@ -255,6 +267,7 @@ Deno.serve(async (req) => {
 
     const alreadyCreated = task.createdGames || 0;
     const totalNeeded = task.gamesCount;
+    const qcLearningNotes = await getQcLearningNotes(base44);
     const BATCH = 1; // smaller reliable batches; staggered automations run this more often
     const batchEnd = Math.min(alreadyCreated + BATCH, totalNeeded);
 
@@ -287,7 +300,7 @@ Moral/theme: ${story.moral}.
 ${type === 'cover' ? 'Make it a vertical front book cover illustration with the main character centered and strong storybook cover composition.' : 'Make it a full-page inner storybook illustration with clear action, emotion, and room at the bottom for app text overlay.'}
 Important: illustration only, no readable words, no letters, no watermark, no logo, no UI, no speech bubbles.`;
 
-    const buildMiniGameData = async (base44, mode, index, theme, itemsPerSet, level, existingMini = []) => {
+    const buildMiniGameData = async (base44, mode, index, theme, itemsPerSet, level, existingMini = [], qcLearningNotes = '') => {
       const difficultyLabel = level <= 1 ? 'mudah' : level === 2 ? 'sederhana' : 'mencabar';
       const variationAngles = [
         'situasi bilik darjah Malaysia', 'aktiviti rumah dan keluarga', 'pasar dan wang harian',
@@ -421,6 +434,7 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
 
       let data = await base44.asServiceRole.integrations.Core.InvokeLLM({
         prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nGaya aktiviti WAJIB untuk set ini: ${playStyle}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\n${QC_GENERATOR_RULES}
+${qcLearningNotes}
 
 Peraturan anti-repeat:\n0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6; jangan jana kandungan Tingkatan/PT3/SPM/sekolah menengah.\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Untuk balloon_pop dan falling_catch: target mesti string; items mesti array string; items mesti mengandungi target yang sama tepat sekurang-kurangnya 2 kali; jangan guna object untuk items.\n10. Untuk mini_simulation: items mesti array object {text, group}; sekurang-kurangnya satu item mesti group sama tepat dengan target.\n11. Setiap mini game mesti ada jawapan/target/group yang jelas supaya app boleh papar popup Betul atau Cuba lagi.\n12. Jika arahan menyebut gambar/objek visual, items mesti guna emoji/simbol visual, bukan perkataan biasa sahaja.\n13. Jangan cipta aktiviti yang jawapannya bergantung pada warna sahaja; mesti ada label teks, simbol atau bentuk yang jelas untuk kanak-kanak dan kontras tinggi.\n14. Arahan mesti sangat jelas untuk ibu bapa dan kanak-kanak: nyatakan apa perlu ditekan, apa sasaran, dan bila dikira betul dalam satu ayat mudah.\n15. Elakkan mekanik abstrak seperti hanya 'ikut rentak', 'putar dan padan', atau 'simulasi' tanpa jawapan jelas; setiap game mesti ada target/answer/group yang boleh disemak automatik.\n16. Jika tema/subjek Jawi atau Iqra, jangan jana aktiviti yang nampak seperti matematik atau nombor sahaja; gunakan huruf Jawi, suku kata Arab/Jawi, bacaan mudah atau adab Islam yang jelas.\n17. Jika tema Islamic Learning, jangan jana coloring/aktiviti kosong; gunakan story, sequence wuduk/doa, atau true_false adab dengan jawapan jelas.\n18. Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
@@ -694,7 +708,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
         const setNo = Math.floor(absoluteIndex / levels) + 1;
         const difficulty = level <= 1 ? 'easy' : level === 2 ? 'medium' : 'hard';
         const mode = (meta.modes?.length ? meta.modes : miniGame.modes || [task.subject])[absoluteIndex % (meta.modes?.length || miniGame.modes?.length || 1)];
-        const generatedData = await buildMiniGameData(base44, mode, absoluteIndex, meta.theme || miniGame.title || 'Mini game CeriaKid', itemsPerSet, level, existingMini);
+        const generatedData = await buildMiniGameData(base44, mode, absoluteIndex, meta.theme || miniGame.title || 'Mini game CeriaKid', itemsPerSet, level, existingMini, qcLearningNotes);
         await base44.asServiceRole.entities.Game.create({
           title: generatedData.title || `${miniGame.title} · ${generatedData.microTopic || `Set ${setNo} Level ${level}`}`,
           type: miniGame.type,
@@ -743,7 +757,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
       for (const game of expandBatch) {
         const existingClean = sanitizeExistingQuestions(game.gameData?.questions || []);
         const missing = task.questionsPerGame - existingClean.length;
-        const generated = await generateQuestionsForGame(base44, game.title, game.title, task.subject, task.ageGroup, missing, existingClean.map(q => q.problem), game.darjah || task.darjah || null);
+        const generated = await generateQuestionsForGame(base44, game.title, game.title, task.subject, task.ageGroup, missing, existingClean.map(q => q.problem), game.darjah || task.darjah || null, qcLearningNotes);
         const questions = [...existingClean, ...generated].slice(0, task.questionsPerGame);
         await base44.asServiceRole.entities.Game.update(game.id, { totalQuestions: questions.length, gameData: { ...game.gameData, questions } });
         createdInBatch++;
@@ -776,7 +790,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
       const gameTitle = `${CATEGORY_LABELS[task.subject] || task.taskName}${darjahLabel ? ` ${darjahLabel}` : ''} — ${topicName}`;
 
       try {
-        const questions = await generateQuestionsForGame(base44, gameTitle, topicName, task.subject, task.ageGroup, task.questionsPerGame, existingTitles, task.darjah || null);
+        const questions = await generateQuestionsForGame(base44, gameTitle, topicName, task.subject, task.ageGroup, task.questionsPerGame, existingTitles, task.darjah || null, qcLearningNotes);
 
         if (!questions || questions.length === 0) {
           console.error(`Skip ${gameTitle} — no questions`);
