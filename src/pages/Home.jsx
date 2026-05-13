@@ -9,7 +9,8 @@ import { t } from '@/lib/i18n';
 import AppHeader from '@/components/AppHeader';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
-import ChildSelector from '@/components/ChildSelector';
+import DashboardHero from '@/components/home/DashboardHero';
+import QuickAccessGrid from '@/components/home/QuickAccessGrid';
 import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
 import { checkAndRegisterDevice } from '@/lib/deviceManager';
 import { syncOfflineProgress } from '@/lib/offlineSyncManager';
@@ -71,44 +72,20 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-      {/* Background blobs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950 relative">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
+        <div className="absolute inset-0 opacity-35" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.13) 1px, transparent 0)', backgroundSize: '30px 30px' }} />
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-fuchsia-500/20 to-transparent" />
+        <div className="absolute -top-40 -right-40 w-[30rem] h-[30rem] bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
+        <div className="absolute top-1/3 -left-28 w-96 h-96 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-[32rem] h-[32rem] bg-violet-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <AppHeader />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32 space-y-5">
+      <div className="relative w-full max-w-7xl mx-auto px-3 sm:px-5 md:px-6 pb-32 pt-28 md:pt-32 space-y-5 md:space-y-7 overflow-x-hidden">
 
-        {/* Welcome Card */}
-        {isAuthenticated && (
-          <Link to="/settings">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-4 md:mb-6 p-3 md:p-4 rounded-3xl flex items-center gap-3 md:gap-4 cursor-pointer hover:scale-[1.01] transition-transform"
-            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
-          >
-            {homeAvatarUrl ? (
-              <img src={homeAvatarUrl} alt="Avatar" className="w-12 h-12 md:w-14 md:h-14 rounded-2xl object-cover shadow-inner flex-shrink-0 border-2 border-white/50" />
-            ) : (
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-white/40 flex items-center justify-center text-2xl md:text-3xl shadow-inner flex-shrink-0">🐱</div>
-            )}
-            <div className="flex-1 min-w-0">
-              <p className="text-white/80 text-xs font-bold">
-                {lang === 'bm' ? 'Selamat datang kembali!' : 'Welcome back!'}
-              </p>
-              <p className="text-white font-black text-lg truncate">{user?.full_name || 'Teman'}</p>
-            </div>
-            <div className="flex-shrink-0">
-              <ChildSelector />
-            </div>
-          </motion.div>
-          </Link>
-        )}
+        {isAuthenticated && <DashboardHero user={user} avatarUrl={homeAvatarUrl} lang={lang} />}
 
         {/* Not logged in welcome */}
         {!isAuthenticated && (
@@ -137,8 +114,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mb-4 md:mb-5 p-3 md:p-4 rounded-3xl"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+          className="rounded-[1.5rem] border border-white/15 bg-white/[0.08] p-3 shadow-2xl shadow-black/15 backdrop-blur-2xl md:rounded-[2rem] md:p-5"
         >
           <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
           <div className="grid grid-cols-2 gap-3 md:gap-4">
@@ -153,8 +129,8 @@ export default function Home() {
                 whileHover={{ scale: 1.02 }}
                 className={`py-2 md:py-3 px-3 md:px-4 rounded-2xl font-black text-xs md:text-sm transition-all flex items-center gap-2 md:gap-3 ${
                   safeAgeGroup === age.key
-                    ? 'bg-white text-purple-600 shadow-xl'
-                    : 'bg-white/20 text-white border border-white/30'
+                    ? 'bg-white text-purple-700 shadow-xl shadow-purple-950/20'
+                    : 'bg-white/10 text-white border border-white/15 hover:bg-white/15'
                 }`}
               >
                 <span className="text-2xl">{age.emoji}</span>
@@ -167,57 +143,7 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Quick Access Row */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-5"
-        >
-          <Link to="/games-hub" className="block">
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="p-4 rounded-2xl h-full"
-              style={{ background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
-            >
-              <div className="text-3xl mb-2">🎮</div>
-              <p className="text-white font-black text-sm leading-tight">Game Hub</p>
-              <p className="text-white/70 text-xs mt-1">Permainan interaktif</p>
-              <div className="mt-2 text-white/60 text-xs">→</div>
-            </motion.div>
-          </Link>
-
-          <Link to="/drawing" className="block">
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="p-4 rounded-2xl h-full"
-              style={{ background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
-            >
-              <div className="text-3xl mb-2">🎨</div>
-              <p className="text-white font-black text-sm leading-tight">Studio Lukisan</p>
-              <p className="text-white/70 text-xs mt-1">Lukis bebas & tracing</p>
-              <div className="mt-2 text-white/60 text-xs">→</div>
-            </motion.div>
-          </Link>
-
-          <Link to="/story-kid" className="block">
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="p-4 rounded-2xl h-full relative overflow-hidden"
-              style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.38), rgba(236,72,153,0.36), rgba(59,130,246,0.3))', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.45)', boxShadow: '0 4px 20px rgba(0,0,0,0.12)' }}
-            >
-              <div className="absolute top-2 right-3 text-yellow-200 animate-pulse">✨</div>
-              <div className="text-3xl mb-2">📖</div>
-              <p className="text-white font-black text-sm leading-tight">Story Kid</p>
-              <p className="text-white/75 text-xs mt-1">Cerita interaktif</p>
-              <div className="mt-2 text-yellow-300 font-black text-xs">10 slide →</div>
-            </motion.div>
-          </Link>
-
-        </motion.div>
+        <QuickAccessGrid />
 
         {/* New Games Coming Soon Banner — tukar COMING_SOON_DATE untuk ubah tarikh, set null untuk sembunyikan */}
         {(() => {
@@ -270,12 +196,12 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <div className="flex items-center gap-2 mb-4">
-            <div className="h-1 w-6 rounded-full bg-white/60" />
+          <div className="mb-4 flex items-center gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur-xl">
+            <div className="h-2 w-2 rounded-full bg-yellow-300 shadow-lg shadow-yellow-300/40" />
             <p className="text-white font-black text-base uppercase tracking-wider">
               {lang === 'bm' ? 'Pilih Subjek' : 'Choose Subject'}
             </p>
-            <div className="h-1 flex-1 rounded-full bg-white/20" />
+            <div className="h-px flex-1 bg-white/15" />
           </div>
           <CategoryGrid />
         </motion.div>

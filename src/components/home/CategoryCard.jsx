@@ -24,10 +24,11 @@ export default function CategoryCard({ category, gameCount, idx }) {
         transition={{ delay: idx * 0.08 }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.96 }}
-        className={`rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative`}
+        className="rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative border border-white/20 shadow-2xl shadow-black/15"
         >
-         {/* Gradient Background */}
         <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-90`} />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent backdrop-blur-[1px]" />
+        <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
 
         
 
@@ -39,10 +40,10 @@ export default function CategoryCard({ category, gameCount, idx }) {
           </div>
 
           <div className="flex items-end justify-between gap-2">
-            <div className="bg-white/30 backdrop-blur-sm rounded-full px-2 sm:px-3 py-0.5 sm:py-1">
-              <p className="text-xs sm:text-sm font-bold text-white whitespace-nowrap">{gameCount} Permainan</p>
+            <div className="bg-white/25 backdrop-blur-xl rounded-full px-3 py-1 ring-1 ring-white/20">
+              <p className="text-xs sm:text-sm font-black text-white whitespace-nowrap">{gameCount} Permainan</p>
             </div>
-            <div className="text-2xl opacity-70">→</div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/25 text-white shadow-lg ring-1 ring-white/20 transition-transform group-hover:translate-x-1">→</div>
           </div>
         </div>
       </motion.div>

@@ -58,9 +58,10 @@ export default function DailyChallenge({ ageGroup }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-r from-orange-400 to-red-500 rounded-3xl p-6 text-white mb-6 shadow-lg"
+      className="relative overflow-hidden rounded-[1.75rem] border border-white/20 bg-gradient-to-r from-orange-400/85 via-red-500/80 to-pink-500/80 p-5 md:p-6 text-white shadow-2xl shadow-red-950/20 backdrop-blur-2xl"
     >
-      <div className="flex items-center justify-between">
+      <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/20 blur-2xl" />
+      <div className="relative z-10 flex items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <Zap className="w-5 h-5 text-yellow-300" />
