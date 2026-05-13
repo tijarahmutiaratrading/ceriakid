@@ -9,10 +9,11 @@ export default function StorySlideVisual({ visual, emoji = '📖', title = '', c
 
   return (
     <div className={`relative w-full h-full overflow-hidden bg-gradient-to-br ${bg}`}>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_35%_20%,rgba(255,255,255,0.55),transparent_32%)]" />
       <motion.div
-        animate={{ y: [0, -10, 0], rotate: [-2, 2, -2] }}
+        animate={{ y: [0, -12, 0], rotate: [-2, 2, -2], scale: [1, 1.04, 1] }}
         transition={{ duration: 4, repeat: Infinity }}
-        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${compact ? 'text-8xl' : 'text-[9rem] sm:text-[11rem]'} drop-shadow-2xl`}
+        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${compact ? 'text-8xl' : 'text-[9rem] sm:text-[12rem]'} drop-shadow-2xl`}
       >
         {main}
       </motion.div>
@@ -20,7 +21,7 @@ export default function StorySlideVisual({ visual, emoji = '📖', title = '', c
       {side.map((item, index) => (
         <motion.div
           key={`${item}-${index}`}
-          animate={{ y: [0, index % 2 ? 12 : -12, 0], scale: [1, 1.12, 1] }}
+          animate={{ y: [0, index % 2 ? 14 : -14, 0], scale: [1, 1.16, 1], rotate: [0, index % 2 ? 8 : -8, 0] }}
           transition={{ duration: 3 + index, repeat: Infinity, delay: index * 0.35 }}
           className={`absolute ${compact ? 'text-3xl' : 'text-5xl'} drop-shadow-lg`}
           style={{
@@ -32,9 +33,9 @@ export default function StorySlideVisual({ visual, emoji = '📖', title = '', c
         </motion.div>
       ))}
 
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/80 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-white/85 via-white/25 to-transparent" />
       {title && !compact && (
-        <div className="absolute left-4 right-4 bottom-4 text-center text-purple-900 font-black text-sm bg-white/65 rounded-2xl px-4 py-2 shadow-lg">
+        <div className="absolute left-4 right-4 bottom-4 text-center text-purple-900 font-black text-sm sm:text-base bg-white/75 backdrop-blur-md rounded-2xl px-4 py-2.5 shadow-lg border border-white/60">
           {title}
         </div>
       )}
