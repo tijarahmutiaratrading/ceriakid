@@ -5,6 +5,8 @@ import { base44 } from '@/api/base44Client';
 export default function QualityControlPanel({ onToast }) {
   const [qc, setQc] = useState(null);
   const [history, setHistory] = useState([]);
+  const [intervalMinutes, setIntervalMinutes] = useState(10);
+  const [savingInterval, setSavingInterval] = useState(false);
   const [loading, setLoading] = useState(false);
   const [repairing, setRepairing] = useState(false);
 
@@ -13,6 +15,23 @@ export default function QualityControlPanel({ onToast }) {
       const logs = await base44.entities.QCLog.list('-created_date', 10);
       setHistory(logs || []);
     } catch {}
+  };
+
+  const loadSetting = async () => {
+    const res = await base44.functions.invoke('updateQualityControlSettings', {});
+    if (res.data?.setting?.intervalMinutes) setIntervalMinutes(res.data.setting.intervalMinutes);
+  };
+
+  const saveSetting = async () => {
+    setSavingInterval(true);
+    try {
+      const res = await base44.functions.invoke('updateQualityControlSettings', { intervalMinutes });
+      setIntervalMinutes(res.data?.setting?.intervalMinutes || intervalMinutes);
+      onToast?.(`✅ QC auto check setiap ${res.data?.setting?.intervalMinutes || intervalMinutes} minit`);
+    } catch (error) {
+      onToast?.('❌ Gagal simpan QC interval: ' + error.message, false);
+    }
+    setSavingInterval(false);
   };
 
   const runCheck = async (repair = false) => {
@@ -32,6 +51,7 @@ export default function QualityControlPanel({ onToast }) {
   useEffect(() => {
     runCheck(false);
     loadHistory();
+    loadSetting();
   }, []);
 
   const score = typeof qc?.score === 'number' ? qc.score : 0;
@@ -50,7 +70,22 @@ export default function QualityControlPanel({ onToast }) {
             <p className="text-white/55 text-xs font-semibold">Auto audit, repair, re-queue replacement, dan ajar generator elak isu sama berulang.</p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex items-center gap-2 rounded-2xl bg-white/10 border border-white/15 px-3 py-2">
+            <span className="text-white/60 text-xs font-black whitespace-nowrap">Auto QC</span>
+            <input
+              type="number"
+              min="5"
+              max="1440"
+              value={intervalMinutes}
+              onChange={(e) => setIntervalMinutes(parseInt(e.target.value) || 5)}
+              className="w-16 bg-white/10 border border-white/10 rounded-xl px-2 py-1 text-white text-xs font-black text-center"
+            />
+            <span className="text-white/60 text-xs font-bold">min</span>
+            <button onClick={saveSetting} disabled={savingInterval} className="px-2 py-1 rounded-xl bg-blue-400 text-blue-950 text-xs font-black disabled:opacity-50">
+              {savingInterval ? '...' : 'Simpan'}
+            </button>
+          </div>
           <button onClick={() => runCheck(false)} disabled={loading || repairing} className="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-black border border-white/15 flex items-center gap-2 disabled:opacity-50">
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} Audit
           </button>

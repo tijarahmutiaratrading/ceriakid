@@ -1,0 +1,19 @@
+{
+  "name": "QCSetting",
+  "type": "object",
+  "properties": {
+    "intervalMinutes": {
+      "type": "number",
+      "default": 10,
+      "description": "Berapa minit sekali auto QC dibenarkan berjalan"
+    },
+    "lastAutoRunAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Masa terakhir auto QC benar-benar berjalan"
+    }
+  },
+  "required": [
+    "intervalMinutes"
+  ]
+}

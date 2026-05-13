@@ -104,10 +104,27 @@ Deno.serve(async (req) => {
     const base44 = createClientFromRequest(req);
     const body = await req.json().catch(() => ({}));
     const force = body.force === true;
+    const settings = await base44.asServiceRole.entities.QCSetting.list('-created_date', 1);
+    const qcSetting = settings?.[0] || await base44.asServiceRole.entities.QCSetting.create({ intervalMinutes: 10 });
+    const intervalMinutes = Math.max(5, Number(qcSetting.intervalMinutes || 10));
+    const lastAutoRunAt = qcSetting.lastAutoRunAt ? new Date(qcSetting.lastAutoRunAt).getTime() : 0;
+    const minutesSinceLastRun = lastAutoRunAt ? (Date.now() - lastAutoRunAt) / 60000 : Infinity;
+
+    if (!force && body.auditOnly !== true && minutesSinceLastRun < intervalMinutes) {
+      return Response.json({
+        success: true,
+        status: 'skipped_interval',
+        intervalMinutes,
+        minutesUntilNextRun: Math.ceil(intervalMinutes - minutesSinceLastRun),
+        message: `QC skip dulu. Auto check setiap ${intervalMinutes} minit.`
+      });
+    }
+
     const tasks = await base44.asServiceRole.entities.GameTask.list('-created_date', 500);
     const activeTasks = (tasks || []).filter(task => ['pending', 'running'].includes(task.status));
     if (activeTasks.length > 0 && !force) {
       const payload = { success: true, status: 'waiting_for_generation', score: null, activeTasks: activeTasks.length, message: 'Queue belum siap, audit akan jalan bila semua completed.' };
+      await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
       await createQcLog(base44, { action: 'auto_audit', ...payload });
       return Response.json(payload);
     }
@@ -126,6 +143,7 @@ Deno.serve(async (req) => {
     const score = total === 0 ? 0 : Math.round((passed / total) * 100);
     if (score >= MIN_PASS_SCORE) {
       const payload = { success: true, status: 'passed', score, total, passed, failed: failed.length, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues })), message: `Quality score ${score}% — cukup baik.` };
+      if (!force && body.auditOnly !== true) await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
       await createQcLog(base44, { action: body.auditOnly === true ? 'audit' : 'auto_audit', ...payload });
       return Response.json(payload);
     }
@@ -148,6 +166,7 @@ Deno.serve(async (req) => {
       await base44.asServiceRole.entities.GameTask.create(buildReplacementTask(group.sample, group.count));
     }
     const payload = { success: true, status: 'repair_queued', score, threshold: MIN_PASS_SCORE, total, passed, failedBeforeRepair: failed.length, failed: failed.length, deletedThisRun: selected.length, deletedCount: selected.length, replacementTasks: grouped.size, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues })), message: `Score ${score}%, ${selected.length} failed games deleted and replacements queued.` };
+    if (!force) await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
     await createQcLog(base44, { action: force ? 'repair' : 'auto_repair', ...payload });
     return Response.json(payload);
   } catch (error) {
