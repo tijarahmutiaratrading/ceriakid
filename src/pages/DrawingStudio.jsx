@@ -115,9 +115,23 @@ const TRACING_CATEGORIES = [
 
 const TRACING_SHAPES = TRACING_CATEGORIES.flatMap(category => category.shapes);
 
+const COLORING_PAGES = [
+  { id: 'cat', label: 'Kucing 🐱', emoji: '🐱', strokes: [[[0.25,0.55],[0.35,0.28],[0.48,0.42],[0.62,0.28],[0.75,0.55],[0.62,0.78],[0.38,0.78],[0.25,0.55]],[[0.36,0.56],[0.44,0.56]],[[0.56,0.56],[0.64,0.56]],[[0.5,0.62],[0.46,0.68],[0.54,0.68]],[[0.38,0.76],[0.32,0.9]],[[0.62,0.76],[0.68,0.9]]] },
+  { id: 'rabbit', label: 'Arnab 🐰', emoji: '🐰', strokes: [[[0.38,0.46],[0.28,0.1],[0.44,0.42]],[[0.56,0.42],[0.72,0.1],[0.62,0.46]],[[0.28,0.58],[0.5,0.84],[0.72,0.58],[0.62,0.42],[0.38,0.42],[0.28,0.58]],[[0.4,0.58],[0.44,0.58]],[[0.56,0.58],[0.6,0.58]],[[0.5,0.64],[0.46,0.7],[0.54,0.7]]] },
+  { id: 'fish', label: 'Ikan 🐟', emoji: '🐟', strokes: [[[0.16,0.5],[0.42,0.25],[0.76,0.5],[0.42,0.75],[0.16,0.5]],[[0.76,0.5],[0.94,0.32],[0.94,0.68],[0.76,0.5]],[[0.36,0.45],[0.41,0.45]],[[0.48,0.34],[0.42,0.5],[0.48,0.66]]] },
+  { id: 'house', label: 'Rumah 🏠', emoji: '🏠', strokes: [[[0.16,0.48],[0.5,0.16],[0.84,0.48]],[[0.27,0.46],[0.27,0.84],[0.73,0.84],[0.73,0.46]],[[0.43,0.84],[0.43,0.62],[0.57,0.62],[0.57,0.84]],[[0.32,0.56],[0.42,0.56],[0.42,0.66],[0.32,0.66],[0.32,0.56]]] },
+  { id: 'tree', label: 'Pokok 🌳', emoji: '🌳', strokes: [[[0.46,0.82],[0.46,0.55],[0.54,0.55],[0.54,0.82]],[[0.5,0.18],[0.28,0.36],[0.36,0.58],[0.5,0.52],[0.64,0.58],[0.72,0.36],[0.5,0.18]],[[0.2,0.84],[0.8,0.84]]] },
+  { id: 'flower', label: 'Bunga 🌸', emoji: '🌸', strokes: [[[0.5,0.52],[0.5,0.88]],[[0.5,0.36],[0.6,0.24],[0.72,0.34],[0.62,0.48],[0.5,0.36]],[[0.5,0.36],[0.4,0.24],[0.28,0.34],[0.38,0.48],[0.5,0.36]],[[0.5,0.36],[0.38,0.48],[0.5,0.62],[0.62,0.48],[0.5,0.36]],[[0.5,0.44],[0.53,0.44]],[[0.5,0.7],[0.32,0.62]],[[0.5,0.72],[0.68,0.62]]] },
+  { id: 'car', label: 'Kereta 🚗', emoji: '🚗', strokes: [[[0.16,0.62],[0.3,0.42],[0.68,0.42],[0.84,0.62],[0.78,0.76],[0.22,0.76],[0.16,0.62]],[[0.32,0.42],[0.4,0.3],[0.6,0.3],[0.68,0.42]],[[0.3,0.76],[0.3,0.88]],[[0.7,0.76],[0.7,0.88]],[[0.36,0.54],[0.48,0.54]],[[0.56,0.54],[0.7,0.54]]] },
+  { id: 'robot', label: 'Robot 🤖', emoji: '🤖', strokes: [[[0.32,0.28],[0.68,0.28],[0.68,0.62],[0.32,0.62],[0.32,0.28]],[[0.5,0.28],[0.5,0.14]],[[0.44,0.14],[0.56,0.14]],[[0.4,0.42],[0.44,0.42]],[[0.56,0.42],[0.6,0.42]],[[0.42,0.52],[0.58,0.52]],[[0.25,0.38],[0.32,0.48]],[[0.75,0.38],[0.68,0.48]],[[0.42,0.62],[0.42,0.82]],[[0.58,0.62],[0.58,0.82]]] },
+  { id: 'person', label: 'Orang 🙂', emoji: '🙂', strokes: [[[0.5,0.16],[0.64,0.28],[0.58,0.44],[0.42,0.44],[0.36,0.28],[0.5,0.16]],[[0.43,0.3],[0.47,0.3]],[[0.55,0.3],[0.59,0.3]],[[0.44,0.38],[0.56,0.38]],[[0.5,0.44],[0.5,0.72]],[[0.5,0.52],[0.32,0.64]],[[0.5,0.52],[0.68,0.64]],[[0.5,0.72],[0.36,0.9]],[[0.5,0.72],[0.64,0.9]]] },
+  { id: 'sun', label: 'Matahari ☀️', emoji: '☀️', strokes: [[[0.5,0.28],[0.66,0.36],[0.72,0.52],[0.64,0.68],[0.48,0.74],[0.32,0.66],[0.26,0.5],[0.34,0.34],[0.5,0.28]],[[0.5,0.08],[0.5,0.22]],[[0.5,0.8],[0.5,0.94]],[[0.12,0.5],[0.22,0.5]],[[0.78,0.5],[0.9,0.5]],[[0.24,0.2],[0.32,0.28]],[[0.7,0.72],[0.78,0.82]],[[0.76,0.2],[0.68,0.28]],[[0.24,0.82],[0.32,0.72]]] },
+];
+
 const MODES = [
   { id: 'draw', label: '🎨 Lukis Bebas' },
   { id: 'trace', label: '✏️ Tracing' },
+  { id: 'color', label: '🖍️ Mewarna' },
 ];
 
 export default function DrawingStudio() {
@@ -132,6 +146,7 @@ export default function DrawingStudio() {
   const [history, setHistory] = useState([]);
   const [selectedTracingCategory, setSelectedTracingCategory] = useState(TRACING_CATEGORIES[0].id);
   const [selectedShape, setSelectedShape] = useState(TRACING_CATEGORIES[0].shapes[0]);
+  const [selectedColoringPage, setSelectedColoringPage] = useState(COLORING_PAGES[0]);
   const [tracingAccuracy, setTracingAccuracy] = useState(null);
   const [tracingDone, setTracingDone] = useState(false);
   const [userStrokes, setUserStrokes] = useState([]);
@@ -149,12 +164,32 @@ export default function DrawingStudio() {
     return el ? { w: el.width, h: el.height } : { w: 320, h: 320 };
   };
 
-  const clearCanvas = useCallback((ctx, w, h, withTracing = false) => {
+  const drawColoringGuide = (ctx, w, h, page) => {
+    ctx.save();
+    ctx.strokeStyle = '#1f2937';
+    ctx.lineWidth = 8;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    page.strokes.forEach(stroke => {
+      ctx.beginPath();
+      ctx.moveTo(stroke[0][0] * w, stroke[0][1] * h);
+      for (let i = 1; i < stroke.length; i++) ctx.lineTo(stroke[i][0] * w, stroke[i][1] * h);
+      ctx.stroke();
+    });
+    ctx.fillStyle = 'rgba(139,92,246,0.08)';
+    ctx.font = `bold ${Math.min(w, h) * 0.18}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(page.label.replace(/ .*/, ''), w / 2, h * 0.08);
+    ctx.restore();
+  };
+
+  const clearCanvas = useCallback((ctx, w, h) => {
     ctx.clearRect(0, 0, w, h);
     ctx.fillStyle = '#fff9f0';
     ctx.fillRect(0, 0, w, h);
-    if (withTracing && selectedShape) drawTracingGuide(ctx, w, h, selectedShape);
-  }, [selectedShape]);
+    if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape);
+    if (mode === 'color' && selectedColoringPage) drawColoringGuide(ctx, w, h, selectedColoringPage);
+  }, [mode, selectedShape, selectedColoringPage]);
 
   const drawTracingGuide = (ctx, w, h, shape) => {
     ctx.save();
@@ -185,7 +220,7 @@ export default function DrawingStudio() {
     [canvasRef.current, fsCanvasRef.current].forEach((canvas) => {
       const ctx = canvas?.getContext('2d');
       if (ctx && canvas) {
-        clearCanvas(ctx, canvas.width, canvas.height, mode === 'trace');
+        clearCanvas(ctx, canvas.width, canvas.height);
       }
     });
     setHistory([]);
@@ -197,7 +232,7 @@ export default function DrawingStudio() {
 
   useEffect(() => {
     initCanvas();
-  }, [mode, selectedShape, initCanvas]);
+  }, [mode, selectedShape, selectedColoringPage, initCanvas]);
 
   // When entering fullscreen: copy normal canvas → fs canvas
   useEffect(() => {
@@ -310,6 +345,12 @@ export default function DrawingStudio() {
         }
       }
     }
+
+    if (mode === 'color') {
+      const ctx = getCtx();
+      const canvas = getCanvas();
+      if (ctx && canvas) drawColoringGuide(ctx, canvas.width, canvas.height, selectedColoringPage);
+    }
   };
 
   const downloadCanvas = () => {
@@ -361,17 +402,17 @@ export default function DrawingStudio() {
               <div className="min-w-0">
                 <p className="text-white/70 text-xs font-black uppercase tracking-[0.22em] mb-1">Creative Learning</p>
                 <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight">Studio Lukisan</h1>
-                <p className="text-white/75 text-sm font-semibold mt-1">Ruang lukisan premium untuk melukis bebas, tracing huruf, nombor, bentuk dan objek.</p>
+                <p className="text-white/75 text-sm font-semibold mt-1">Ruang kreatif untuk melukis bebas, tracing dan mewarna gambar comel.</p>
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-2 text-center">
               <div className="rounded-2xl bg-white/18 border border-white/25 px-3 py-3">
-                <p className="text-white font-black text-lg">{mode === 'draw' ? 'Bebas' : 'Trace'}</p>
+                <p className="text-white font-black text-lg">{mode === 'draw' ? 'Bebas' : mode === 'trace' ? 'Trace' : 'Warna'}</p>
                 <p className="text-white/60 text-[11px] font-bold">Mode</p>
               </div>
               <div className="rounded-2xl bg-white/18 border border-white/25 px-3 py-3">
-                <p className="text-white font-black text-lg">{mode === 'draw' ? tool.label : selectedShape.label.split(' ')[0]}</p>
+                <p className="text-white font-black text-lg">{mode === 'trace' ? selectedShape.label.split(' ')[0] : mode === 'color' ? selectedColoringPage.label.split(' ')[0] : tool.label}</p>
                 <p className="text-white/60 text-[11px] font-bold">Aktif</p>
               </div>
               <div className="rounded-2xl bg-white/18 border border-white/25 px-3 py-3">
@@ -391,7 +432,7 @@ export default function DrawingStudio() {
           >
             <section className="rounded-[2rem] p-4 bg-white/18 border border-white/35 backdrop-blur-2xl shadow-xl shadow-purple-950/15">
               <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-3">Pilih aktiviti</p>
-              <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-white/15 border border-white/20">
+              <div className="grid grid-cols-3 gap-2 p-1 rounded-2xl bg-white/15 border border-white/20">
                 {MODES.map(m => (
                   <motion.button
                     key={m.id}
@@ -472,7 +513,31 @@ export default function DrawingStudio() {
                   exit={{ opacity: 0, y: -10 }}
                   className="rounded-[2rem] p-4 bg-white/18 border border-white/35 backdrop-blur-2xl shadow-xl shadow-purple-950/15"
                 >
-                  <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-3">Alat lukisan</p>
+                  {mode === 'color' && (
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between gap-3 mb-3">
+                        <div>
+                          <p className="text-white/70 text-xs font-black uppercase tracking-wider">Aktiviti mewarna</p>
+                          <h2 className="text-white font-black text-lg">{selectedColoringPage.label}</h2>
+                        </div>
+                        <div className="w-12 h-12 rounded-2xl bg-white/25 border border-white/25 flex items-center justify-center text-2xl">{selectedColoringPage.emoji}</div>
+                      </div>
+                      <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-2 pr-1">
+                        {COLORING_PAGES.map(page => (
+                          <motion.button
+                            key={page.id}
+                            whileTap={{ scale: 0.92 }}
+                            onClick={() => setSelectedColoringPage(page)}
+                            className={`px-3 py-2.5 rounded-2xl font-bold text-xs transition-all ${selectedColoringPage.id === page.id ? 'bg-white text-purple-600 shadow-lg' : 'bg-white/15 text-white border border-white/20'}`}
+                          >
+                            {page.label}
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-3">{mode === 'color' ? 'Alat mewarna' : 'Alat lukisan'}</p>
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     {TOOLS.map(t => (
                       <motion.button
@@ -522,7 +587,7 @@ export default function DrawingStudio() {
             <section className="rounded-[2rem] p-4 bg-white/18 border border-white/35 backdrop-blur-2xl shadow-xl shadow-purple-950/15">
               <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2">Tip cepat</p>
               <p className="text-white/75 text-sm font-semibold leading-relaxed">
-                {mode === 'draw' ? 'Pilih alat dan warna, kemudian lukis di kanvas. Gunakan fullscreen untuk ruang lebih besar.' : 'Minta anak ikut garisan putus-putus perlahan-lahan sampai semua strok selesai.'}
+                {mode === 'draw' ? 'Pilih alat dan warna, kemudian lukis di kanvas. Gunakan fullscreen untuk ruang lebih besar.' : mode === 'trace' ? 'Minta anak ikut garisan putus-putus perlahan-lahan sampai semua strok selesai.' : 'Pilih gambar, pilih warna, kemudian warnakan ruang kosong ikut kreativiti anak.'}
               </p>
             </section>
           </motion.aside>
@@ -536,7 +601,7 @@ export default function DrawingStudio() {
             <div className="flex items-center justify-between gap-3 p-4 border-b border-white/15">
               <div className="min-w-0">
                 <p className="text-white/60 text-xs font-black uppercase tracking-wider">Kanvas aktif</p>
-                <h2 className="text-white font-black text-lg truncate">{mode === 'draw' ? `${tool.emoji} ${tool.label}` : `✏️ ${selectedShape.label}`}</h2>
+                <h2 className="text-white font-black text-lg truncate">{mode === 'draw' ? `${tool.emoji} ${tool.label}` : mode === 'trace' ? `✏️ ${selectedShape.label}` : `🖍️ ${selectedColoringPage.label}`}</h2>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button onClick={undo} disabled={history.length === 0} className="p-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white disabled:opacity-40 transition-all" title="Undo">
@@ -557,7 +622,7 @@ export default function DrawingStudio() {
             <div className="p-3 sm:p-5">
               <div className="relative rounded-[1.75rem] overflow-hidden bg-white shadow-2xl shadow-purple-950/20 ring-4 ring-white/25">
                 <div className="absolute left-4 top-4 z-10 px-3 py-1.5 rounded-full bg-white/90 text-purple-700 text-xs font-black shadow-lg">
-                  {mode === 'trace' ? `${userStrokes.length}/${selectedShape.strokes.length} strok` : color.toUpperCase()}
+                  {mode === 'trace' ? `${userStrokes.length}/${selectedShape.strokes.length} strok` : mode === 'color' ? selectedColoringPage.label : color.toUpperCase()}
                 </div>
                 <canvas
                   ref={canvasRef}
@@ -594,7 +659,7 @@ export default function DrawingStudio() {
           <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5a623 100%)', display: 'flex', flexDirection: 'column' }}>
             <div className="flex items-center gap-2 px-4 py-3 flex-shrink-0 overflow-x-auto" style={{ background: 'rgba(0,0,0,0.25)' }}>
               <div className="flex gap-2 overflow-x-auto flex-1 min-w-0">
-                {mode === 'draw' && (
+                {(mode === 'draw' || mode === 'color') && (
                   <>
                     {TOOLS.map(t => (
                       <button key={t.id} onClick={() => setTool(t)} className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-bold transition-all ${tool.id === t.id ? 'bg-white text-purple-600 shadow' : 'bg-white/20 text-white'}`}>
@@ -609,6 +674,15 @@ export default function DrawingStudio() {
                         <input type="color" value={color} onChange={e => setColor(e.target.value)} className="w-7 h-7 rounded-full cursor-pointer border-2 border-white/30 flex-shrink-0" />
                       </div>
                     )}
+                  </>
+                )}
+                {mode === 'color' && (
+                  <>
+                    {COLORING_PAGES.map(page => (
+                      <button key={page.id} onClick={() => setSelectedColoringPage(page)} className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedColoringPage.id === page.id ? 'bg-white text-purple-600' : 'bg-white/20 text-white'}`}>
+                        {page.label}
+                      </button>
+                    ))}
                   </>
                 )}
                 {mode === 'trace' && (
