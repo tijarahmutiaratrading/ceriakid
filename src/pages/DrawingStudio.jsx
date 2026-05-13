@@ -561,19 +561,29 @@ export default function DrawingStudio() {
             transition={{ delay: 0.05 }}
             className="space-y-4 lg:sticky lg:top-28 order-2 lg:order-1"
           >
-            <section className="rounded-[2rem] p-4 bg-white/18 border border-white/35 backdrop-blur-2xl shadow-xl shadow-purple-950/15">
-              <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-3">Pilih aktiviti</p>
-              <div className="grid grid-cols-3 gap-2 p-1 rounded-2xl bg-white/15 border border-white/20">
-                {MODES.map(m => (
-                  <motion.button
-                    key={m.id}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setMode(m.id)}
-                    className={`py-3 rounded-xl font-black text-sm transition-all ${mode === m.id ? 'bg-white text-purple-600 shadow-lg' : 'text-white hover:bg-white/15'}`}
-                  >
-                    {m.label}
-                  </motion.button>
-                ))}
+            <section className="relative overflow-hidden rounded-[2.5rem] p-4 bg-white/20 border border-white/35 backdrop-blur-2xl shadow-2xl shadow-purple-950/20">
+              <div className="absolute -top-10 -right-8 w-28 h-28 bg-yellow-200/25 rounded-full blur-2xl" />
+              <div className="absolute -bottom-12 -left-8 w-32 h-32 bg-pink-300/25 rounded-full blur-2xl" />
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-11 h-11 rounded-2xl bg-white/25 border border-white/30 flex items-center justify-center text-2xl shadow-inner">✨</div>
+                  <div>
+                    <p className="text-white/60 text-[11px] font-black uppercase tracking-[0.2em]">Aktiviti kreatif</p>
+                    <h2 className="text-white font-black text-lg leading-tight">Pilih aktiviti</h2>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2 p-1.5 rounded-[1.5rem] bg-white/14 border border-white/20 shadow-inner">
+                  {MODES.map(m => (
+                    <motion.button
+                      key={m.id}
+                      whileTap={{ scale: 0.94 }}
+                      onClick={() => setMode(m.id)}
+                      className={`min-h-[4.2rem] px-2 py-3 rounded-[1.15rem] font-black text-xs sm:text-sm transition-all ${mode === m.id ? 'bg-white text-purple-600 shadow-xl shadow-purple-950/15 ring-2 ring-white/70' : 'text-white/90 hover:bg-white/18'}`}
+                    >
+                      <span className="block leading-tight">{m.label}</span>
+                    </motion.button>
+                  ))}
+                </div>
               </div>
             </section>
 
