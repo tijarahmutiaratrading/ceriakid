@@ -708,19 +708,19 @@ export default function AdminGameManager() {
             </div>
 
             {/* Search + Filter bar */}
-            <div className="p-3 md:p-5 rounded-2xl md:rounded-[1.75rem] mb-3 md:mb-5 shadow-lg md:shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <div className="flex gap-2 mb-3 items-center">
+            <div className="p-2 md:p-5 rounded-xl md:rounded-[1.75rem] mb-2 md:mb-5 shadow-md md:shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
+              <div className="flex gap-1.5 md:gap-2 mb-2 md:mb-3 items-center">
                 <div className="relative flex-1">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">🔍</span>
+                  <span className="absolute left-2.5 md:left-3 top-1/2 -translate-y-1/2 text-white/40 text-xs md:text-sm">🔍</span>
                   <input
                     type="text"
                     placeholder="Cari..."
                     value={managerSearch}
                     onChange={e => setManagerSearch(e.target.value)}
-                    className="w-full pl-9 pr-4 py-3 rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-sm font-semibold outline-none focus:border-white/50 focus:bg-white/15 shadow-inner shadow-black/10 transition-all"
+                    className="w-full pl-8 md:pl-9 pr-3 md:pr-4 py-2 md:py-3 rounded-xl md:rounded-2xl bg-white/10 text-white placeholder-white/30 border border-white/20 text-xs md:text-sm font-semibold outline-none focus:border-white/50 focus:bg-white/15 shadow-inner shadow-black/10 transition-all"
                   />
                 </div>
-                <button onClick={fetchStats} disabled={loading} className="w-11 h-11 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all flex-shrink-0 flex items-center justify-center">
+                <button onClick={fetchStats} disabled={loading} className="w-9 h-9 md:w-11 md:h-11 bg-white/10 hover:bg-white/20 rounded-xl md:rounded-2xl border border-white/20 transition-all flex-shrink-0 flex items-center justify-center">
                   <RefreshCw className={`w-4 h-4 text-white/70 ${loading ? 'animate-spin' : ''}`} />
                 </button>
               </div>
@@ -728,7 +728,7 @@ export default function AdminGameManager() {
                 <div className="flex gap-2 flex-wrap">
                   {['all', 'prasekolah', 'sekolah_rendah'].map(ag => (
                     <button key={ag} onClick={() => setManagerAgeFilter(ag)}
-                      className={`px-2 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${managerAgeFilter === ag ? 'bg-white text-indigo-700' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
+                      className={`px-2 md:px-3 py-1 md:py-1.5 rounded-lg md:rounded-xl text-[11px] md:text-xs font-bold transition-all whitespace-nowrap ${managerAgeFilter === ag ? 'bg-white text-indigo-700' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
                       {ag === 'all' ? 'Semua' : ag === 'prasekolah' ? '🧒' : '🎒'}
                       <span className="hidden sm:inline ml-1">{ag === 'all' ? 'Semua' : ag === 'prasekolah' ? 'Prasekolah' : 'SR'}</span>
                     </button>
@@ -746,7 +746,7 @@ export default function AdminGameManager() {
                     setActionLoading(null);
                   }}
                   disabled={!!actionLoading}
-                  className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 bg-red-500/20 text-red-300 border border-red-400/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition-all flex-shrink-0">
+                  className="flex items-center gap-1 px-2 md:px-3 py-1 md:py-1.5 bg-red-500/20 text-red-300 border border-red-400/30 rounded-lg md:rounded-xl text-[11px] md:text-xs font-bold hover:bg-red-500/30 transition-all flex-shrink-0">
                   {actionLoading === 'delete-all' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
                   <span className="hidden sm:inline">Delete All</span>
                 </button>
