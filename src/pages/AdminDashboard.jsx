@@ -180,8 +180,9 @@ export default function AdminDashboard() {
       <div className="relative">
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-32 space-y-6">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-3xl bg-slate-800/70 border border-white/10 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
+            <p className="text-emerald-300 text-xs font-black uppercase tracking-[0.22em] mb-2">CeriaKid Control Center</p>
             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">Admin Dashboard</h1>
             <p className="text-slate-400 text-sm mt-1">Real-time overview untuk pelanggan, revenue dan konfigurasi CeriaKid.</p>
           </div>
@@ -193,6 +194,14 @@ export default function AdminDashboard() {
             >
               <RefreshCw className="w-4 h-4" /> Refresh
             </button>
+            <button
+              type="button"
+              onClick={handleClearCache}
+              disabled={clearingCache}
+              className="rounded-lg bg-slate-700 hover:bg-slate-600 border border-white/10 px-4 py-2.5 text-xs font-black transition-all disabled:opacity-60 flex items-center gap-2"
+            >
+              <RefreshCw className={`w-4 h-4 ${clearingCache ? 'animate-spin' : ''}`} /> Cache
+            </button>
             <Link to="/admin-game-manager" className="rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-2.5 text-xs font-black shadow-lg shadow-emerald-950/20 transition-all">
               Game Manager
             </Link>
@@ -200,12 +209,12 @@ export default function AdminDashboard() {
         </motion.div>
 
         {/* Admin Tabs */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="sticky top-24 z-20 flex gap-2 mb-6 p-1 rounded-2xl overflow-x-auto bg-slate-800/90 border border-white/10 shadow-xl shadow-black/20 backdrop-blur-xl">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="sticky top-24 z-20 flex gap-2 mb-6 p-1 rounded-xl overflow-x-auto bg-slate-800/90 border border-white/10 shadow-xl shadow-black/20 backdrop-blur-xl">
           {tabs.map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-3 rounded-xl font-black text-xs transition-all whitespace-nowrap px-3 flex items-center justify-center gap-2 ${activeTab === tab.key ? 'bg-emerald-600 text-white shadow-lg' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+              className={`flex-1 py-3 rounded-lg font-black text-xs transition-all whitespace-nowrap px-3 flex items-center justify-center gap-2 ${activeTab === tab.key ? 'bg-emerald-500 text-white shadow-lg' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
             >
               <span>{tab.label}</span>
             </button>
@@ -222,10 +231,10 @@ export default function AdminDashboard() {
               className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8"
             >
               {[
-                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', card: 'from-slate-800 to-slate-800', accent: 'bg-emerald-500', change: '+ aktif' },
-                { label: 'Pendapatan', value: `RM${totalRevenue.toFixed(0)}`, icon: '💰', card: 'from-slate-800 to-slate-800', accent: 'bg-red-500', change: 'bulan ini' },
-                { label: 'Pelanggan Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', card: 'from-slate-800 to-slate-800', accent: 'bg-amber-500', change: 'premium' },
-                { label: 'Admin Access', value: 'Online', icon: '🛡️', card: 'from-slate-800 to-slate-800', accent: 'bg-violet-500', change: 'secure' },
+                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', card: 'from-emerald-500 to-teal-600', accent: 'bg-white/20', change: '+ aktif' },
+                { label: 'Pendapatan', value: `RM${totalRevenue.toFixed(0)}`, icon: '💰', card: 'from-orange-500 to-amber-500', accent: 'bg-white/20', change: 'bulan ini' },
+                { label: 'Pelanggan Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', card: 'from-blue-500 to-indigo-600', accent: 'bg-white/20', change: 'premium' },
+                { label: 'Admin Access', value: 'Online', icon: '🛡️', card: 'from-purple-500 to-fuchsia-600', accent: 'bg-white/20', change: 'secure' },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
@@ -233,14 +242,14 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -4, scale: 1.02 }}
-                  className={`rounded-2xl min-h-[8.5rem] p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/5 hover:border-white/20 hover:bg-slate-700/80 transition-all`}
+                  className={`rounded-3xl min-h-[8.5rem] p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all`}
                 >
-                  <div className={`absolute right-4 top-4 w-13 h-13 rounded-2xl ${stat.accent} flex items-center justify-center text-xl shadow-lg shadow-black/20`}>
+                  <div className={`absolute right-4 top-4 w-12 h-12 rounded-xl ${stat.accent} flex items-center justify-center text-xl shadow-lg backdrop-blur-sm`}>
                     {stat.icon}
                   </div>
-                  <p className="text-slate-400 text-xs font-bold mb-3">{stat.label}</p>
+                  <p className="text-white/80 text-xs font-bold mb-3">{stat.label}</p>
                   <p className="text-3xl font-black mb-2 text-white tracking-tight">{stat.value}</p>
-                  <p className="text-emerald-400 text-xs font-black">↗ {stat.change}</p>
+                  <p className="text-white/80 text-xs font-black">↗ {stat.change}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -255,10 +264,10 @@ export default function AdminDashboard() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 {[
-                   { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', card: 'from-orange-500 to-orange-600' },
-                   { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', card: 'from-cyan-500 to-sky-500' },
-                   { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', card: 'from-blue-500 to-indigo-600' },
-                   { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', card: 'from-purple-500 to-fuchsia-600' },
+                   { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', card: 'from-slate-600 to-slate-800' },
+                   { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', card: 'from-emerald-500 to-green-600' },
+                   { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', card: 'from-sky-500 to-blue-600' },
+                   { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', card: 'from-violet-500 to-purple-600' },
                 ].map((item, idx) => (
                   <motion.div
                     key={idx}
@@ -266,7 +275,7 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
                     whileHover={{ scale: 1.03, y: -2 }}
-                    className={`rounded-2xl min-h-[8rem] p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all relative overflow-hidden`}
+                    className={`rounded-3xl p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all relative overflow-hidden`}
                   >
                     <div className="flex items-center justify-between gap-3 mb-4 relative">
                       <p className="text-2xl">{item.icon}</p>
@@ -289,7 +298,7 @@ export default function AdminDashboard() {
               </div>
               <motion.div
                whileHover={{ y: -2 }}
-               className="rounded-2xl p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto bg-slate-800/85 border border-white/10 backdrop-blur-xl"
+               className="rounded-3xl p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto bg-slate-800/85 border border-white/10 backdrop-blur-xl"
               >
                 <table className="w-full min-w-[720px] text-sm">
                   <thead>
