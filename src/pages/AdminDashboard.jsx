@@ -180,18 +180,27 @@ export default function AdminDashboard() {
       <div className="relative">
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-32 space-y-6">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-2xl bg-slate-800/70 border border-white/10 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
+            <p className="text-emerald-300 text-xs font-black uppercase tracking-[0.22em] mb-2">CeriaKid Control Center</p>
             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">Admin Dashboard</h1>
             <p className="text-slate-400 text-sm mt-1">Real-time overview untuk pelanggan, revenue dan konfigurasi CeriaKid.</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={loadData}
               className="rounded-lg bg-black hover:bg-slate-950 border border-white/10 px-4 py-2.5 text-xs font-black transition-all flex items-center gap-2"
             >
               <RefreshCw className="w-4 h-4" /> Refresh
+            </button>
+            <button
+              type="button"
+              onClick={handleClearCache}
+              disabled={clearingCache}
+              className="rounded-lg bg-slate-700 hover:bg-slate-600 border border-white/10 px-4 py-2.5 text-xs font-black transition-all disabled:opacity-60 flex items-center gap-2"
+            >
+              <RefreshCw className={`w-4 h-4 ${clearingCache ? 'animate-spin' : ''}`} /> Cache
             </button>
             <Link to="/admin-game-manager" className="rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-2.5 text-xs font-black shadow-lg shadow-emerald-950/20 transition-all">
               Game Manager
@@ -200,7 +209,7 @@ export default function AdminDashboard() {
         </motion.div>
 
         {/* Admin Tabs */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-2 mb-6 p-1 rounded-xl overflow-x-auto bg-slate-800/80 border border-white/10 shadow-xl shadow-black/10 backdrop-blur-xl">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="sticky top-24 z-20 flex gap-2 mb-6 p-1 rounded-xl overflow-x-auto bg-slate-800/90 border border-white/10 shadow-xl shadow-black/20 backdrop-blur-xl">
           {tabs.map(tab => (
             <button
               key={tab.key}
@@ -233,7 +242,7 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -4, scale: 1.02 }}
-                  className={`rounded-lg p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/5 hover:border-white/20 transition-all`}
+                  className={`rounded-xl min-h-[8.5rem] p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all`}
                 >
                   <div className={`absolute right-4 top-4 w-12 h-12 rounded-xl ${stat.accent} flex items-center justify-center text-xl shadow-lg backdrop-blur-sm`}>
                     {stat.icon}
@@ -266,7 +275,7 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
                     whileHover={{ scale: 1.03, y: -2 }}
-                    className={`rounded-lg p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/5 hover:border-white/20 transition-all relative overflow-hidden`}
+                    className={`rounded-xl p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all relative overflow-hidden`}
                   >
                     <div className="flex items-center justify-between gap-3 mb-4 relative">
                       <p className="text-2xl">{item.icon}</p>
@@ -289,7 +298,7 @@ export default function AdminDashboard() {
               </div>
               <motion.div
                whileHover={{ y: -2 }}
-               className="rounded-lg p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto bg-slate-800/80 border border-white/8"
+               className="rounded-2xl p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto bg-slate-800/85 border border-white/10 backdrop-blur-xl"
               >
                 <table className="w-full min-w-[720px] text-sm">
                   <thead>
