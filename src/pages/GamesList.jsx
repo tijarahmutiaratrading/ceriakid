@@ -11,6 +11,7 @@ import GameListCard from '@/components/game/GameListCard';
 import AppHeader from '@/components/AppHeader';
 import { ArrowLeft } from 'lucide-react';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
+import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
 
 const getCategoryLabel = (category, lang) => {
   const labels = {
@@ -106,15 +107,7 @@ export default function GamesList() {
     try {
       const subs = await base44.entities.UserSubscription.filter({ email: user.email });
       if (subs.length > 0) {
-        const sub = subs[0];
-        const isExpired = sub.currentPeriodEnd && new Date(sub.currentPeriodEnd) < new Date();
-        if ((sub.status === 'active' || sub.status === 'trial') && !isExpired) {
-          setUserTier(sub.tier || 'free');
-        }
-        // If trial expired, keep as free
-        if (sub.status === 'trial' && isExpired) {
-          setUserTier('free');
-        }
+        setUserTier(getActiveTier(subs[0]));
       }
     } catch (e) {
       // default free
@@ -142,20 +135,9 @@ export default function GamesList() {
     }
   };
 
-  // Determine if a game index is accessible based on tier game limits only
-  const isGameLocked = useCallback((globalIdx) => {
-    if (!isAuthenticated) return globalIdx >= 5; // guests: first 5 only
-    if (userTier === 'trial' || userTier === 'keluarga' || userTier === 'pro') return false;
-
-    const tierLimits = {
-      asas: 50,
-      standard: 100,
-      premium: 100,
-    };
-
-    const limit = tierLimits[userTier] || 5;
-    return globalIdx >= limit;
-  }, [isAuthenticated, userTier]);
+  const isGameLocked = useCallback((globalIdx) => (
+    isGameIndexLocked({ index: globalIdx, tier: userTier, isAuthenticated })
+  ), [isAuthenticated, userTier]);
 
   // Poll for game updates every 60 seconds (reduced from 10s)
   useEffect(() => {

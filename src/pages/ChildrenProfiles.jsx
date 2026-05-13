@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/AuthContext';
 import AppHeader from '@/components/AppHeader';
 import { base44 } from '@/api/base44Client';
 import { Link } from 'react-router-dom';
+import { getActiveTier, getTierLimit } from '@/lib/tierAccess';
 
 const AGE_OPTIONS = [
   { value: 'prasekolah', label: 'Prasekolah', sub: '4–6 tahun', emoji: '🎨' },
@@ -23,14 +24,13 @@ export default function ChildrenProfiles() {
   const [formData, setFormData] = useState({ name: '', ageGroup: 'prasekolah' });
   const [error, setError] = useState('');
 
-  // Max children based on tier: free/asas/standard = 1, keluarga = 4
-  const MAX_CHILDREN = ['keluarga', 'pro'].includes(userTier) ? 4 : 1;
+  const MAX_CHILDREN = getTierLimit(userTier, 'children');
 
   useEffect(() => {
     if (user) {
       loadChildren();
       base44.entities.UserSubscription.filter({ email: user.email }).then(subs => {
-        if (subs?.[0]) setUserTier(subs[0].tier || 'free');
+        setUserTier(getActiveTier(subs?.[0]));
       });
     }
   }, [user]);

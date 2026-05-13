@@ -1,15 +1,9 @@
 import { base44 } from '@/api/base44Client';
+import { TIER_LIMITS, getTierLimit } from '@/lib/tierAccess';
 
-// Device limits per subscription tier
-export const DEVICE_LIMITS = {
-  free: 1,
-  trial: 1,
-  asas: 1,
-  standard: 2,
-  premium: 2,
-  keluarga: 4,
-  pro: 4,
-};
+export const DEVICE_LIMITS = Object.fromEntries(
+  Object.entries(TIER_LIMITS).map(([tier, limits]) => [tier, limits.devices])
+);
 
 // Generate a stable device fingerprint based on browser/OS info
 export function getDeviceFingerprint() {
@@ -57,7 +51,7 @@ export function getDeviceName() {
 // Returns: { allowed: boolean, devices: [], limitReached: boolean }
 export async function checkAndRegisterDevice(userEmail, tier) {
   const deviceId = getDeviceFingerprint();
-  const limit = DEVICE_LIMITS[tier] || 1;
+  const limit = getTierLimit(tier, 'devices');
 
   const devices = await base44.entities.RegisteredDevice.filter({ userEmail });
 

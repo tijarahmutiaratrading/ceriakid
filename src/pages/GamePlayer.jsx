@@ -21,6 +21,9 @@ import QuestionRenderer from '@/components/game/QuestionRenderer';
 import { playSound } from '@/lib/soundManager';
 import { checkAchievements, calculateStreak } from '@/lib/achievementManager';
 import { queueGameProgress, syncOfflineProgress } from '@/lib/offlineSyncManager';
+import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
+
+const DARJAH_ORDER = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
 
 export default function GamePlayer() {
   const { category, index } = useParams();
@@ -44,31 +47,14 @@ export default function GamePlayer() {
         try {
           const subs = await base44.entities.UserSubscription.filter({ email: user.email });
           if (subs.length > 0) {
-            const sub = subs[0];
-            const notExpired = !sub.currentPeriodEnd || new Date(sub.currentPeriodEnd) > new Date();
-            if ((sub.status === 'active' || sub.status === 'trial') && notExpired) {
-              resolvedTier = sub.tier || 'free';
-            }
+            resolvedTier = getActiveTier(subs[0]);
           }
         } catch (_) {}
       }
       setUserTier(resolvedTier);
       const userTier = resolvedTier;
 
-      // Determine if this game index is locked for the user's tier game limit only
-      const isLocked = (() => {
-        if (!isAuthenticated) return gameIndex >= 5;
-        if (userTier === 'trial' || userTier === 'keluarga' || userTier === 'pro') return false;
-
-        const tierLimits = {
-          asas: 50,
-          standard: 100,
-          premium: 100,
-        };
-
-        const limit = tierLimits[userTier] || 5;
-        return gameIndex >= limit;
-      })();
+      const isLocked = isGameIndexLocked({ index: gameIndex, tier: userTier, isAuthenticated });
 
       if (isLocked) {
         setAccessDenied(true);
@@ -78,7 +64,12 @@ export default function GamePlayer() {
 
       try {
         const dbGames = await base44.entities.Game.filter({ ageGroup, category, isPublished: true });
-        dbGames.sort((a, b) => (a.order || 0) - (b.order || 0));
+        dbGames.sort((a, b) => {
+          const da = DARJAH_ORDER.indexOf(a.darjah);
+          const db = DARJAH_ORDER.indexOf(b.darjah);
+          if (da !== db) return (da === -1 ? 99 : da) - (db === -1 ? 99 : db);
+          return (a.order || 0) - (b.order || 0);
+        });
         if (dbGames.length > gameIndex && dbGames[gameIndex]) {
           setGame(dbGames[gameIndex]);
           setGameLoaded(true);

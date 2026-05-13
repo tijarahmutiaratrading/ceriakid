@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Lock } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
-import { findMiniGame } from '@/lib/miniGameBlueprints';
+import { findMiniGame, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
+import { useAuth } from '@/lib/AuthContext';
+import { base44 } from '@/api/base44Client';
+import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
 
 const glassCard = { background: 'rgba(15,23,42,0.72)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' };
 
@@ -36,7 +39,19 @@ const guideByMode = {
 
 export default function MiniGamePlayground() {
   const { categoryId, gameId } = useParams();
+  const { user, isAuthenticated } = useAuth();
+  const [userTier, setUserTier] = React.useState('free');
   const { category, game } = findMiniGame(categoryId, gameId);
+  const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 3;
+  const gameIndex = categoryOffset + Math.max(0, category.games.findIndex(item => item.id === gameId));
+  const locked = isGameIndexLocked({ index: gameIndex, tier: userTier, isAuthenticated });
+
+  React.useEffect(() => {
+    if (!user?.email) return;
+    base44.entities.UserSubscription.filter({ email: user.email }).then(subs => {
+      setUserTier(getActiveTier(subs?.[0]));
+    });
+  }, [user?.email]);
 
   const normalizedGame = {
     title: game.title,
@@ -76,7 +91,18 @@ export default function MiniGamePlayground() {
           <p className="text-xs font-bold text-slate-600 mt-2">Untuk ibu bapa: game ini latih {game.objective?.toLowerCase() || 'kemahiran asas'}.</p>
         </motion.div>
 
-        <MiniGameModeRenderer game={normalizedGame} />
+        {locked ? (
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl bg-white p-8 text-center shadow-2xl">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-100 text-purple-700">
+              <Lock className="h-8 w-8" />
+            </div>
+            <p className="text-2xl font-black text-slate-900 mb-2">Mini Game Terkunci</p>
+            <p className="text-slate-600 font-bold mb-5">Naik taraf pakej untuk akses mini game ini.</p>
+            <Link to="/" className="inline-flex rounded-2xl bg-purple-600 px-5 py-3 font-black text-white">Lihat Pakej</Link>
+          </motion.div>
+        ) : (
+          <MiniGameModeRenderer game={normalizedGame} />
+        )}
       </div>
     </div>
   );

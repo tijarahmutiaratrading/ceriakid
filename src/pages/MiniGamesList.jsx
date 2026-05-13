@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Play, ArrowLeft, Trophy, Volume2, Sparkles } from 'lucide-react';
+import { Play, ArrowLeft, Trophy, Volume2, Sparkles, Lock } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
-import { findMiniCategory } from '@/lib/miniGameBlueprints';
+import { findMiniCategory, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
+import { useAuth } from '@/lib/AuthContext';
+import { base44 } from '@/api/base44Client';
+import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
 
 const modeLabels = {
   balloon_pop: 'Balloon Pop', tracing: 'Finger Tracing', dragdrop: 'Drag & Drop', falling_catch: 'Catch Falling Object', stacking: 'Object Stacking', sequence: 'Sequence Arrangement', wordbuilder: 'Build Word', swipe_select: 'Swipe Selection', spin_wheel: 'Spin Wheel', picture_hunt: 'Picture Hunt', typing_challenge: 'Typing Challenge', tilematch: 'Tile Match', sorting: 'Sorting Game', mini_simulation: 'Mini Simulation', true_false: 'True / False', memory: 'Memory Card Flip', rhythm_tap: 'Rhythm Tapping', connect_dots: 'Connect The Dots', maze: 'Maze', hidden_object: 'Hidden Object', reaction_speed: 'Reaction Speed', story: 'Story Choice', coloring: 'Coloring Activity'
@@ -11,7 +14,17 @@ const modeLabels = {
 
 export default function MiniGamesList() {
   const { type } = useParams();
+  const { user, isAuthenticated } = useAuth();
+  const [userTier, setUserTier] = React.useState('free');
   const category = findMiniCategory(type);
+  const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 3;
+
+  React.useEffect(() => {
+    if (!user?.email) return;
+    base44.entities.UserSubscription.filter({ email: user.email }).then(subs => {
+      setUserTier(getActiveTier(subs?.[0]));
+    });
+  }, [user?.email]);
 
   return (
     <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
@@ -37,9 +50,14 @@ export default function MiniGamesList() {
         </motion.div>
 
         <div className="space-y-3">
-          {category.games.map((game, idx) => (
+          {category.games.map((game, idx) => {
+            const globalIdx = categoryOffset + idx;
+            const locked = isGameIndexLocked({ index: globalIdx, tier: userTier, isAuthenticated });
+            const CardWrapper = locked ? 'div' : Link;
+            const wrapperProps = locked ? {} : { to: `/mini-games/${category.id}/play/${game.id}` };
+            return (
             <motion.div key={game.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.06 }}>
-              <Link to={`/mini-games/${category.id}/play/${game.id}`} className="block rounded-3xl p-4 bg-white/12 border border-white/20 hover:bg-white/18 transition-all shadow-xl">
+              <CardWrapper {...wrapperProps} className={`block rounded-3xl p-4 bg-white/12 border border-white/20 transition-all shadow-xl ${locked ? 'opacity-60' : 'hover:bg-white/18'}`}>
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-3xl bg-white/20 flex items-center justify-center text-4xl flex-shrink-0">{game.emoji}</div>
                   <div className="flex-1 min-w-0">
@@ -55,12 +73,14 @@ export default function MiniGamesList() {
                     </div>
                   </div>
                   <div className="w-11 h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0">
-                    <Play className="w-5 h-5 fill-current" />
+                    {locked ? <Lock className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
                   </div>
                 </div>
-              </Link>
+              </CardWrapper>
+              {locked && <p className="mt-2 text-center text-xs font-black text-yellow-200">Naik taraf untuk akses mini game ini</p>}
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
