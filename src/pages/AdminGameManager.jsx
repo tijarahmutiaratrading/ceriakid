@@ -421,13 +421,13 @@ export default function AdminGameManager() {
         {tab === 'generator' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Config */}
-            <div className="p-5 md:p-7 rounded-[2rem] mb-6 shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
+            <div className="mb-6 rounded-[2rem] border border-white/15 bg-white/[0.08] p-4 shadow-2xl shadow-black/15 backdrop-blur-2xl md:p-6">
               <div className="mb-5">
                 <h2 className="font-black text-white text-xl md:text-2xl">⚙️ Konfigurasi Generation</h2>
                 <p className="text-white/60 text-xs font-semibold mt-1">Tetapkan target game dan soalan sebelum masuk queue.</p>
               </div>
               {/* Subject selector */}
-              <div className="mb-5 rounded-3xl bg-white/10 border border-white/10 p-4">
+              <div className="mb-5">
                 <div className="flex items-center justify-between gap-3 mb-4">
                   <div>
                     <p className="text-white font-black text-sm">2. Pilih Subjek</p>
@@ -449,11 +449,11 @@ export default function AdminGameManager() {
                 )}
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                  <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
+                  <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.055] p-4">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🧒 Prasekolah</p>
                     </div>
-                    <div className="mb-3 rounded-2xl bg-white/10 border border-white/10 p-3">
+                    <div className="mb-4 rounded-2xl border border-white/10 bg-slate-950/20 p-3">
                       <p className="text-white/60 text-[10px] font-black uppercase mb-2">Master Prasekolah</p>
                       <div className="grid grid-cols-2 gap-2 mb-2">
                         <input type="number" min="0" max="100" value={prasekolahMaster.games} onChange={e => setPrasekolahMaster(m => ({ ...m, games: parseInt(e.target.value) || 0 }))} className="w-full px-2 py-2 rounded-xl bg-white/10 border border-white/15 text-white font-black text-center outline-none" placeholder="Games" />
@@ -469,7 +469,7 @@ export default function AdminGameManager() {
                         const targetGames = categoryGameConfig[key] || 0;
                         const gameDiff = targetGames - curr.games;
                         return (
-                          <div key={key} className={`p-3 rounded-2xl border transition-all ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white border-white/10'}`}>
+                          <div key={key} className={`p-3 rounded-2xl border transition-all ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/[0.045] text-white border-white/10 hover:bg-white/[0.075]'}`}>
                             <button onClick={() => toggleSubject(key)} className="w-full flex items-center gap-2 text-left">
                               <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs font-black ${sel ? 'bg-indigo-600 text-white' : 'bg-white/10 text-white/40'}`}>{sel ? '✓' : '+'}</span>
                               <span className="font-black text-xs truncate">{sc.label.replace('Prasekolah - ', '')}</span>
@@ -505,11 +505,11 @@ export default function AdminGameManager() {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
+                  <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.055] p-4">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🎒 Sekolah Rendah</p>
                     </div>
-                    <div className="mb-3 rounded-2xl bg-white/10 border border-white/10 p-3">
+                    <div className="mb-4 rounded-2xl border border-white/10 bg-slate-950/20 p-3">
                       <p className="text-white/60 text-[10px] font-black uppercase mb-2">Master Sekolah Rendah</p>
                       <div className="grid grid-cols-2 gap-2 mb-2">
                         <input type="number" min="0" max="100" value={sekolahRendahMaster.games} onChange={e => setSekolahRendahMaster(m => ({ ...m, games: parseInt(e.target.value) || 0 }))} className="w-full px-2 py-2 rounded-xl bg-white/10 border border-white/15 text-white font-black text-center outline-none" placeholder="Games" />
@@ -524,7 +524,7 @@ export default function AdminGameManager() {
                         const darjahLevels = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
                         const darjahLabels = { darjah_1: 'D1', darjah_2: 'D2', darjah_3: 'D3', darjah_4: 'D4', darjah_5: 'D5', darjah_6: 'D6' };
                         return (
-                          <div key={key} className={`p-3 rounded-2xl border transition-all ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/10 text-white border-white/10'}`}>
+                          <div key={key} className={`p-3 rounded-2xl border transition-all ${sel ? 'bg-white text-indigo-800 shadow-lg border-white' : 'bg-white/[0.045] text-white border-white/10 hover:bg-white/[0.075]'}`}>
                             <button onClick={() => toggleSubject(key)} className="w-full flex items-center gap-2 text-left">
                               <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs font-black ${sel ? 'bg-indigo-600 text-white' : 'bg-white/10 text-white/40'}`}>{sel ? '✓' : '+'}</span>
                               <span className="font-black text-xs truncate">{sc.label.replace('Sekolah Rendah - ', '')}</span>
@@ -534,7 +534,7 @@ export default function AdminGameManager() {
                                 const darjahKey = `${key}-${darjah}`;
                                 const currDarjah = currentCounts[key]?.darjah?.[darjah] || { games: 0, avgQuestions: 0 };
                                 return (
-                                  <div key={darjah} className={`rounded-xl p-2 ${sel ? 'bg-indigo-50' : 'bg-white/5'}`}>
+                                  <div key={darjah} className={`rounded-xl p-2 ${sel ? 'bg-indigo-50' : 'bg-slate-950/20'}`}>
                                     <div className={`text-[10px] font-black mb-1 ${sel ? 'text-indigo-500' : 'text-white/45'}`}>{darjahLabels[darjah]} · {currDarjah.games} games · avg {currDarjah.avgQuestions} soalan</div>
                                     <div className="grid grid-cols-2 gap-2">
                                       <input
@@ -571,7 +571,7 @@ export default function AdminGameManager() {
               </div>
 
               {selectedSubjects.size > 0 && (
-                <div className="mb-3 p-3 rounded-2xl bg-white/10 space-y-1">
+                <div className="mb-3 rounded-2xl border border-white/10 bg-slate-950/20 p-3 space-y-1">
                   {Array.from(selectedSubjects).map(key => {
                     const sc = SUBJECT_CONFIG.find(s => `${s.ageGroup}-${s.subject}` === key);
                     const curr = currentCounts[key] || { games: 0, avgQuestions: 0 };
