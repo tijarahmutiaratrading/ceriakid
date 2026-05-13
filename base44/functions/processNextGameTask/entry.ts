@@ -115,6 +115,7 @@ WAJIB ikut standard mass production ini:
   11. Jangan ulang pola soalan yang sama; setiap soalan mesti menguji kemahiran berbeza dalam topik ini.
   12. Untuk Darjah 1-6, WAJIB ikut tahap KSSR yang diberi. Jangan jana soalan terlalu tinggi/rendah, fakta luar silibus, trivia rawak, atau soalan 'merepek' yang tidak menguji kemahiran subjek.
   13. Untuk Sekolah Rendah, jangan pindahkan aras Darjah: Darjah 1 mesti asas, Darjah 6 mesti tahap pengukuhan; setiap soalan mesti jelas sesuai dengan darjah yang diminta sahaja.
+  14. Jika topik sama wujud untuk Darjah lain, JANGAN guna soalan definisi umum seperti "Apakah maksud..." berulang. Guna situasi, nombor, kosa kata dan kemahiran khusus yang membezakan ${DARJAH_LABELS[darjah] || darjah}.
 
 Output JSON sahaja: "questions" dengan problem, options[4], answer(0-3), emoji.`,
     response_json_schema: {
@@ -168,6 +169,7 @@ Tugas anda:
 9. Untuk Tamil, Mandarin dan Jawi, guna emoji neutral subjek sahaja, bukan emoji haiwan/buah/benda yang boleh trigger mismatch.
 10. Pastikan answer index sepadan dengan jawapan betul.
 11. Jika Darjah 1-6, pastikan setiap soalan benar-benar selari KSSR tahap tersebut; buang trivia rawak, soalan luar topik, atau kandungan terlalu tinggi/rendah.
+12. Elakkan soalan definisi generic yang boleh sama untuk Darjah lain; wajib guna konteks dan aras khusus Darjah yang diminta.
 
 Soalan asal JSON:
 ${JSON.stringify(questions.slice(0, questionsCount))}
