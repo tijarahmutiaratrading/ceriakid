@@ -151,6 +151,11 @@ export default function StoryKid() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               className="mb-7 rounded-[2.5rem] p-5 sm:p-6 bg-white/18 backdrop-blur-2xl shadow-2xl shadow-purple-950/20 overflow-hidden relative isolate"
+              style={{
+                borderRadius: '2.5rem',
+                clipPath: 'inset(0 round 2.5rem)',
+                WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+              }}
             >
               <div className="absolute -top-16 -right-10 w-44 h-44 bg-yellow-200/30 rounded-full blur-2xl" />
               <div className="absolute -bottom-20 -left-12 w-56 h-56 bg-pink-200/30 rounded-full blur-2xl" />
