@@ -414,7 +414,8 @@ export default function AdminGameManager() {
         <QualityControlPanel onToast={showToast} />
 
         {/* Main Tabs */}
-        <div className="flex gap-2 mb-4 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
+        <div className="sticky top-24 z-30 mb-3 rounded-[2rem] p-1.5 shadow-2xl shadow-purple-950/25 ring-1 ring-white/20 overflow-x-auto snap-x scroll-px-2" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.09))', backdropFilter: 'blur(24px)', WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex gap-1.5 min-w-max md:min-w-0">
           {[
             { id: 'subject', label: '🎮 Games', labelFull: '🎮 Games' },
             { id: 'minigames', label: '🎯 Mini', labelFull: '🎯 Mini Games' },
@@ -424,27 +425,32 @@ export default function AdminGameManager() {
             const isActiveTab = tab === t.id || isSubjectActive;
             return (
               <button key={t.id} onClick={() => setTab(t.id === 'subject' ? 'generator' : t.id)}
-                className={`flex-none min-w-[7.5rem] sm:min-w-[9rem] md:flex-1 py-3.5 px-4 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap snap-start ${isActiveTab ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
+                className={`group relative flex-none min-w-[8rem] sm:min-w-[10rem] md:flex-1 py-3.5 px-4 rounded-[1.35rem] font-black text-xs md:text-sm transition-all duration-200 whitespace-nowrap snap-start ${isActiveTab ? 'bg-white text-indigo-800 shadow-xl shadow-black/15 scale-[1.01]' : 'text-white/70 hover:text-white hover:bg-white/12'}`}
                 title={t.labelFull}>
-                <span className="md:hidden">{t.label}</span>
-                <span className="hidden md:inline">{t.labelFull}</span>
+                <span className="relative z-10 md:hidden">{t.label}</span>
+                <span className="relative z-10 hidden md:inline">{t.labelFull}</span>
+                {isActiveTab && <span className="absolute inset-x-5 -bottom-0.5 h-1 rounded-full bg-gradient-to-r from-yellow-300 via-pink-400 to-cyan-300" />}
               </button>
             );
           })}
+          </div>
         </div>
 
         {['generator', 'manager', 'monthly'].includes(tab) && (
-          <div className="flex gap-2 mb-6 p-2 rounded-[1.5rem] overflow-x-auto shadow-lg shadow-black/10" style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.12)', WebkitOverflowScrolling: 'touch' }}>
+          <div className="mb-6 rounded-[1.5rem] p-1.5 overflow-x-auto shadow-xl shadow-black/10 ring-1 ring-white/15" style={{ background: 'rgba(15,23,42,0.18)', backdropFilter: 'blur(18px)', WebkitOverflowScrolling: 'touch' }}>
+            <div className="flex gap-1.5 min-w-max sm:min-w-0">
             {[
               { id: 'generator', label: '🤖 Generate' },
               { id: 'manager', label: '📋 Manage' },
               { id: 'monthly', label: '📅 Monthly' },
             ].map(t => (
               <button key={t.id} onClick={() => setTab(t.id)}
-                className={`flex-1 min-w-[8rem] py-3 px-4 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
+                className={`relative flex-1 min-w-[8.5rem] py-3 px-4 rounded-[1.2rem] font-black text-xs md:text-sm transition-all duration-200 whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-800 shadow-lg shadow-black/10' : 'text-white/65 hover:text-white hover:bg-white/10'}`}>
                 {t.label}
+                {tab === t.id && <span className="absolute left-1/2 -translate-x-1/2 bottom-1.5 w-8 h-0.5 rounded-full bg-indigo-500/70" />}
               </button>
             ))}
+            </div>
           </div>
         )}
 
@@ -693,16 +699,19 @@ export default function AdminGameManager() {
             </div>
 
             {/* Mini Games Sub-tabs */}
-            <div className="flex gap-2 mb-6 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
+            <div className="mb-6 rounded-[1.5rem] p-1.5 overflow-x-auto shadow-xl shadow-black/10 ring-1 ring-white/15" style={{ background: 'rgba(15,23,42,0.18)', backdropFilter: 'blur(18px)', WebkitOverflowScrolling: 'touch' }}>
+              <div className="flex gap-1.5 min-w-max sm:min-w-0">
               {[
                 { id: 'generate', label: '🤖 Generate' },
                 { id: 'manage', label: '📋 Manage' },
               ].map(t => (
                 <button key={t.id} onClick={() => setMiniGamesTab(t.id)}
-                  className={`flex-1 min-w-[8rem] py-3.5 px-4 rounded-2xl font-black text-sm transition-all whitespace-nowrap ${miniGamesTab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
+                  className={`relative flex-1 min-w-[8.5rem] py-3 px-4 rounded-[1.2rem] font-black text-sm transition-all duration-200 whitespace-nowrap ${miniGamesTab === t.id ? 'bg-white text-indigo-800 shadow-lg shadow-black/10' : 'text-white/65 hover:text-white hover:bg-white/10'}`}>
                   {t.label}
+                  {miniGamesTab === t.id && <span className="absolute left-1/2 -translate-x-1/2 bottom-1.5 w-8 h-0.5 rounded-full bg-indigo-500/70" />}
                 </button>
               ))}
+              </div>
             </div>
 
             {miniGamesTab === 'generate' && <MiniGamesGenerator onToast={showToast} />}
@@ -720,16 +729,19 @@ export default function AdminGameManager() {
         {/* ══════════════ STORY KID TAB ══════════════ */}
         {tab === 'storykid' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div className="flex gap-2 mb-6 p-2 rounded-[1.75rem] sm:rounded-3xl overflow-x-auto shadow-xl shadow-black/10 snap-x scroll-px-2" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)', WebkitOverflowScrolling: 'touch' }}>
+            <div className="mb-6 rounded-[1.5rem] p-1.5 overflow-x-auto shadow-xl shadow-black/10 ring-1 ring-white/15" style={{ background: 'rgba(15,23,42,0.18)', backdropFilter: 'blur(18px)', WebkitOverflowScrolling: 'touch' }}>
+              <div className="flex gap-1.5 min-w-max sm:min-w-0">
               {[
                 { id: 'generate', label: '🤖 Generator' },
                 { id: 'manage', label: '📋 Management' },
               ].map(t => (
                 <button key={t.id} onClick={() => setStoryKidTab(t.id)}
-                  className={`flex-1 min-w-[8rem] py-3.5 px-4 rounded-2xl font-black text-sm transition-all whitespace-nowrap ${storyKidTab === t.id ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/75 hover:text-white hover:bg-white/10'}`}>
+                  className={`relative flex-1 min-w-[8.5rem] py-3 px-4 rounded-[1.2rem] font-black text-sm transition-all duration-200 whitespace-nowrap ${storyKidTab === t.id ? 'bg-white text-indigo-800 shadow-lg shadow-black/10' : 'text-white/65 hover:text-white hover:bg-white/10'}`}>
                   {t.label}
+                  {storyKidTab === t.id && <span className="absolute left-1/2 -translate-x-1/2 bottom-1.5 w-8 h-0.5 rounded-full bg-indigo-500/70" />}
                 </button>
               ))}
+              </div>
             </div>
 
             {storyKidTab === 'generate' && <StoryKidGenerator onToast={showToast} />}
