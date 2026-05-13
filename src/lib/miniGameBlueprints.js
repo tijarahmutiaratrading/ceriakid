@@ -37,7 +37,7 @@ export const MINI_GAME_CATEGORIES = [
   { id: 'islamic_learning', title: 'Islamic Learning', emoji: '🌙', color: 'from-teal-500 to-emerald-400', objective: 'Adab, doa dan nilai Islam.', games: [
     { id: 'adab-story-choice', title: 'Adab Story Choice', emoji: '📖', mode: 'story', difficulty: 'Mudah', objective: 'Pilih adab yang baik.', instruction: 'Bantu watak pilih tindakan baik.', scenes: [{ text: 'Ali mahu makan.', choices: ['Baca Bismillah', 'Terus makan'], answer: 0 }, { text: 'Jumpa guru di sekolah.', choices: ['Beri salam', 'Lari pergi'], answer: 0 }], reward: 'Good adab star' },
     { id: 'wuduk-sequence', title: 'Wuduk Sequence', emoji: '💧', mode: 'sequence', difficulty: 'Sederhana', objective: 'Susun langkah wuduk asas.', instruction: 'Tap langkah mengikut turutan.', items: ['Basuh muka', 'Niat', 'Basuh tangan', 'Sapu kepala'], answer: ['Niat', 'Basuh muka', 'Basuh tangan', 'Sapu kepala'], reward: 'Water sparkle' },
-    { id: 'doa-coloring', title: 'Doa Coloring Calm', emoji: '🎨', mode: 'coloring', difficulty: 'Mudah', objective: 'Kenal suasana doa dan zikir.', instruction: 'Warnakan bintang doa.', items: ['⭐', '🌙', '🕌', '🤲'], reward: 'Calm sticker' },
+    { id: 'doa-coloring', title: 'Doa & Adab Quiz', emoji: '🤲', mode: 'true_false', difficulty: 'Mudah', objective: 'Fahami doa dan adab harian.', instruction: 'Baca ayat, kemudian pilih Betul atau Salah.', statements: [{ text: 'Kita membaca Bismillah sebelum makan.', answer: true }, { text: 'Kita menjerit ketika orang sedang berdoa.', answer: false }, { text: 'Kita mengucapkan Alhamdulillah selepas mendapat nikmat.', answer: true }], reward: 'Good adab star' },
   ]},
 ];
 
