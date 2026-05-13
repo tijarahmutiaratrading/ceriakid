@@ -168,54 +168,85 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen pb-32 relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950">
+    <div className="min-h-screen relative overflow-hidden bg-slate-950 text-white">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.12) 1px, transparent 0)', backgroundSize: '28px 28px' }} />
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-80 h-80 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-violet-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(148,163,184,0.16) 1px, transparent 0)', backgroundSize: '30px 30px' }} />
+        <div className="absolute -top-40 left-1/3 w-[34rem] h-[34rem] bg-blue-600/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-emerald-500/10 rounded-full blur-3xl" />
       </div>
-      <AppHeader showBack={true} backTo="/admin-dashboard" />
-      <div className="relative max-w-6xl mx-auto px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-7">
-        {/* Header */}
-         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-7 p-5 md:p-7 rounded-[2rem] flex flex-col md:flex-row md:items-center md:justify-between gap-5 shadow-2xl shadow-fuchsia-950/30" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.25)' }}>
-          <div className="flex items-center gap-4 min-w-0">
-            <div className="w-14 h-14 md:w-16 md:h-16 flex-shrink-0 rounded-3xl bg-gradient-to-br from-fuchsia-400 via-purple-500 to-indigo-500 flex items-center justify-center text-2xl md:text-3xl shadow-xl shadow-purple-950/30 ring-1 ring-white/30 leading-none">🎛️</div>
-            <div className="min-w-0">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/70 text-[11px] font-black uppercase tracking-wider mb-2">Premium Admin Control</div>
-              <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight truncate">Admin Dashboard</h1>
-              <p className="text-white/75 text-sm">Analytics, settings & configurations dalam satu panel profesional.</p>
+
+      <aside className="hidden lg:flex fixed left-0 top-0 bottom-0 z-30 w-72 flex-col border-r border-white/10 bg-slate-950/80 backdrop-blur-2xl">
+        <div className="px-6 py-6 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-emerald-500/15 border border-emerald-400/25 flex items-center justify-center text-2xl">🎓</div>
+            <div>
+              <h2 className="font-black text-white leading-tight">CeriaKid Admin</h2>
+              <p className="text-white/45 text-xs font-bold">Control Center</p>
             </div>
           </div>
-          <div className="w-full md:w-auto md:min-w-72 space-y-2">
-            <div className="grid grid-cols-3 gap-2">
-              <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">{subscriptions.length}</p><p className="text-white/60 text-[11px] font-bold">Pelanggan</p></div>
-              <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">RM{totalRevenue.toFixed(0)}</p><p className="text-white/60 text-[11px] font-bold">Revenue</p></div>
-              <div className="rounded-2xl bg-white/10 border border-white/15 p-3 text-center"><p className="text-white font-black text-lg">Admin</p><p className="text-white/60 text-[11px] font-bold">Access</p></div>
-            </div>
+        </div>
+        <nav className="flex-1 px-4 py-5 space-y-2">
+          <button onClick={() => setActiveTab('analytics')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-black transition-all ${activeTab === 'analytics' ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-400/25 shadow-lg shadow-emerald-950/20' : 'text-white/65 hover:text-white hover:bg-white/8'}`}>
+            <BarChart3 className="w-4 h-4" /> Analytics
+          </button>
+          <button onClick={() => setActiveTab('settings')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-black transition-all ${activeTab === 'settings' ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-400/25 shadow-lg shadow-emerald-950/20' : 'text-white/65 hover:text-white hover:bg-white/8'}`}>
+            <Settings className="w-4 h-4" /> Settings
+          </button>
+          <Link to="/admin-game-manager" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-black text-white/65 hover:text-white hover:bg-white/8 transition-all">
+            <Cog className="w-4 h-4" /> Game Manager
+          </Link>
+          <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-black text-white/65 hover:text-white hover:bg-white/8 transition-all">
+            <ArrowLeft className="w-4 h-4" /> User Dashboard
+          </Link>
+        </nav>
+        <div className="px-4 py-5 border-t border-white/10">
+          <button
+            type="button"
+            onClick={handleClearCache}
+            disabled={clearingCache}
+            className="w-full rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 px-4 py-3 text-sm font-black transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+          >
+            <RefreshCw className={`w-4 h-4 ${clearingCache ? 'animate-spin' : ''}`} />
+            Refresh Cache
+          </button>
+        </div>
+      </aside>
+
+      <div className="relative lg:pl-72">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6 md:pt-8 pb-32 space-y-7">
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p className="text-emerald-300/80 text-xs font-black uppercase tracking-[0.24em] mb-2">Real-time Admin Overview</p>
+            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">Admin Dashboard</h1>
+            <p className="text-slate-400 text-sm mt-1">Pantau pelanggan, revenue dan konfigurasi sistem CeriaKid.</p>
+          </div>
+          <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={handleClearCache}
-              disabled={clearingCache}
-              className="w-full rounded-2xl bg-white text-indigo-900 px-4 py-3 text-sm font-black shadow-lg hover:bg-yellow-300 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+              onClick={loadData}
+              className="rounded-xl bg-black/50 hover:bg-black/70 border border-white/10 px-4 py-2.5 text-xs font-black transition-all flex items-center gap-2"
             >
-              <RefreshCw className={`w-4 h-4 ${clearingCache ? 'animate-spin' : ''}`} />
-              {clearingCache ? 'Clearing Cache...' : 'Clear Cache & Reload'}
+              <RefreshCw className="w-4 h-4" /> Refresh
             </button>
+            <Link to="/admin-game-manager" className="rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2.5 text-xs font-black shadow-lg shadow-emerald-950/20 transition-all">
+              Game Manager
+            </Link>
           </div>
         </motion.div>
 
-        {/* Main Tabs */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
-           {tabs.map(tab => (
-             <button
-               key={tab.key}
-               onClick={() => setActiveTab(tab.key)}
-               className={`flex-1 py-3 rounded-2xl font-black text-xs md:text-sm transition-all whitespace-nowrap px-3 flex items-center justify-center gap-2 ${activeTab === tab.key ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
-               >
-               <span>{tab.label}</span>
-             </button>
-           ))}
+        {/* Mobile Tabs */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:hidden flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto bg-white/8 border border-white/10 shadow-xl shadow-black/10 backdrop-blur-xl">
+          {tabs.map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`flex-1 py-3 rounded-2xl font-black text-xs transition-all whitespace-nowrap px-3 flex items-center justify-center gap-2 ${activeTab === tab.key ? 'bg-emerald-500 text-slate-950 shadow-lg' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+            >
+              <span>{tab.label}</span>
+            </button>
+          ))}
         </motion.div>
 
         {/* ═══ ANALYTICS TAB ═══ */}
@@ -225,12 +256,13 @@ export default function AdminDashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"
+              className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8"
             >
               {[
-                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥' },
-                { label: 'Pendapatan (RM)', value: totalRevenue.toFixed(0), icon: '💰' },
-                { label: 'Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎' },
+                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', accent: 'from-emerald-500 to-teal-500', change: '+ aktif' },
+                { label: 'Pendapatan', value: `RM${totalRevenue.toFixed(0)}`, icon: '💰', accent: 'from-blue-500 to-indigo-500', change: 'bulan ini' },
+                { label: 'Pelanggan Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', accent: 'from-amber-500 to-orange-500', change: 'premium' },
+                { label: 'Admin Access', value: 'Online', icon: '🛡️', accent: 'from-fuchsia-500 to-purple-500', change: 'secure' },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
@@ -238,13 +270,14 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -4, scale: 1.02 }}
-                  className="rounded-[1.75rem] p-5 md:p-6 text-white shadow-2xl shadow-black/20 relative overflow-hidden"
-                  style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.08))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.22)' }}
+                  className="rounded-[1.25rem] p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-slate-900/85 border border-white/8 hover:border-white/15 transition-all"
                 >
-                  <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-white/10" />
-                  <p className="text-4xl mb-4 relative">{stat.icon}</p>
-                  <p className="text-4xl font-black mb-1 text-white relative tracking-tight">{stat.value}</p>
-                  <p className="text-xs font-black uppercase tracking-wider text-white/70 relative">{stat.label}</p>
+                  <div className={`absolute right-4 top-4 w-12 h-12 rounded-2xl bg-gradient-to-br ${stat.accent} flex items-center justify-center text-xl shadow-lg`}>
+                    {stat.icon}
+                  </div>
+                  <p className="text-slate-400 text-xs font-bold mb-3">{stat.label}</p>
+                  <p className="text-3xl font-black mb-2 text-white tracking-tight">{stat.value}</p>
+                  <p className="text-emerald-300 text-xs font-black">↗ {stat.change}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -270,12 +303,14 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.08 }}
                     whileHover={{ scale: 1.03, y: -2 }}
-                    className="rounded-3xl p-4 md:p-5 text-white text-center shadow-xl shadow-black/10"
-                    style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.18)' }}
+                    className="rounded-[1.25rem] p-4 md:p-5 text-white shadow-xl shadow-black/10 bg-slate-900/75 border border-white/8 hover:border-emerald-400/25 transition-all"
                   >
-                    <p className="text-2xl mb-2">{item.icon}</p>
-                    <p className="text-xs font-bold mb-1 text-white/90">{item.label}</p>
-                    <p className="text-2xl font-black text-white">{item.value}</p>
+                    <div className="flex items-center justify-between gap-3 mb-4">
+                      <p className="text-2xl">{item.icon}</p>
+                      <span className="text-[11px] font-black text-emerald-300 bg-emerald-400/10 px-2 py-1 rounded-full">Plan</span>
+                    </div>
+                    <p className="text-xs font-bold mb-1 text-slate-400">{item.label}</p>
+                    <p className="text-3xl font-black text-white">{item.value}</p>
                   </motion.div>
                 ))}
               </div>
@@ -291,8 +326,7 @@ export default function AdminDashboard() {
               </div>
               <motion.div
                whileHover={{ y: -2 }}
-               className="rounded-[1.75rem] p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto"
-               style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}
+               className="rounded-[1.25rem] p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto bg-slate-900/80 border border-white/8"
               >
                 <table className="w-full min-w-[720px] text-sm">
                   <thead>
@@ -348,12 +382,12 @@ export default function AdminDashboard() {
         {activeTab === 'settings' && (
           <>
             {/* Settings Sub-tabs */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.16)' }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10 bg-slate-900/80 border border-white/8 backdrop-blur-xl">
               {settingsTabs.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setSettingsTab(tab.key)}
-                  className={`flex-1 py-3 px-3 rounded-2xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-white text-indigo-800 shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
+                  className={`flex-1 py-3 px-3 rounded-2xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-emerald-500 text-slate-950 shadow-lg' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                 >
                   {tab.icon}<span className="hidden sm:inline">{tab.label}</span><span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                 </button>
@@ -521,6 +555,7 @@ export default function AdminDashboard() {
             </motion.div>
           </>
         )}
+        </div>
       </div>
     </div>
   );
