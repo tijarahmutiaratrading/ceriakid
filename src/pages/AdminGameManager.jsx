@@ -414,45 +414,25 @@ export default function AdminGameManager() {
         <QualityControlPanel onToast={showToast} />
 
         {/* Main Tabs */}
-        <div className="sticky top-24 z-30 mb-3 rounded-[2rem] p-1.5 shadow-2xl shadow-purple-950/25 ring-1 ring-white/20 overflow-x-auto snap-x scroll-px-2" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.09))', backdropFilter: 'blur(24px)', WebkitOverflowScrolling: 'touch' }}>
-          <div className="flex gap-1.5 min-w-max md:min-w-0">
-          {[
-            { id: 'subject', label: '🎮 Games', labelFull: '🎮 Games' },
-            { id: 'minigames', label: '🎯 Mini', labelFull: '🎯 Mini Games' },
-            { id: 'storykid', label: '📖 Story', labelFull: '📖 Story Kid' },
-          ].map(t => {
-            const isSubjectActive = t.id === 'subject' && ['generator', 'manager', 'monthly'].includes(tab);
-            const isActiveTab = tab === t.id || isSubjectActive;
-            return (
-              <button key={t.id} onClick={() => setTab(t.id === 'subject' ? 'generator' : t.id)}
-                className={`group relative flex-none min-w-[8rem] sm:min-w-[10rem] md:flex-1 py-3.5 px-4 rounded-[1.35rem] font-black text-xs md:text-sm transition-all duration-200 whitespace-nowrap snap-start ${isActiveTab ? 'bg-white text-indigo-800 shadow-xl shadow-black/15 scale-[1.01]' : 'text-white/70 hover:text-white hover:bg-white/12'}`}
-                title={t.labelFull}>
-                <span className="relative z-10 md:hidden">{t.label}</span>
-                <span className="relative z-10 hidden md:inline">{t.labelFull}</span>
-                {isActiveTab && <span className="absolute inset-x-5 -bottom-0.5 h-1 rounded-full bg-gradient-to-r from-yellow-300 via-pink-400 to-cyan-300" />}
-              </button>
-            );
-          })}
-          </div>
-        </div>
-
-        {['generator', 'manager', 'monthly'].includes(tab) && (
-          <div className="mb-6 rounded-[1.5rem] p-1.5 overflow-x-auto shadow-xl shadow-black/10 ring-1 ring-white/15" style={{ background: 'rgba(15,23,42,0.18)', backdropFilter: 'blur(18px)', WebkitOverflowScrolling: 'touch' }}>
-            <div className="flex gap-1.5 min-w-max sm:min-w-0">
+        <div className="sticky top-24 z-30 mb-6 rounded-[2rem] p-1.5 shadow-2xl shadow-purple-950/25 ring-1 ring-white/20 overflow-x-auto snap-x scroll-px-2" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.09))', backdropFilter: 'blur(24px)', WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex gap-1.5 min-w-max lg:min-w-0">
             {[
-              { id: 'generator', label: '🤖 Generate' },
-              { id: 'manager', label: '📋 Manage' },
-              { id: 'monthly', label: '📅 Monthly' },
+              { id: 'generator', label: '🎮 Generate', onClick: () => setTab('generator'), active: tab === 'generator' },
+              { id: 'manager', label: '📋 Manage', onClick: () => setTab('manager'), active: tab === 'manager' },
+              { id: 'monthly', label: '📅 Monthly', onClick: () => setTab('monthly'), active: tab === 'monthly' },
+              { id: 'mini-generate', label: '🎯 Mini Generate', onClick: () => { setTab('minigames'); setMiniGamesTab('generate'); }, active: tab === 'minigames' && miniGamesTab === 'generate' },
+              { id: 'mini-manage', label: '🎯 Mini Manage', onClick: () => { setTab('minigames'); setMiniGamesTab('manage'); }, active: tab === 'minigames' && miniGamesTab === 'manage' },
+              { id: 'story-generate', label: '📖 Story Generate', onClick: () => { setTab('storykid'); setStoryKidTab('generate'); }, active: tab === 'storykid' && storyKidTab === 'generate' },
+              { id: 'story-manage', label: '📖 Story Manage', onClick: () => { setTab('storykid'); setStoryKidTab('manage'); }, active: tab === 'storykid' && storyKidTab === 'manage' },
             ].map(t => (
-              <button key={t.id} onClick={() => setTab(t.id)}
-                className={`relative flex-1 min-w-[8.5rem] py-3 px-4 rounded-[1.2rem] font-black text-xs md:text-sm transition-all duration-200 whitespace-nowrap ${tab === t.id ? 'bg-white text-indigo-800 shadow-lg shadow-black/10' : 'text-white/65 hover:text-white hover:bg-white/10'}`}>
-                {t.label}
-                {tab === t.id && <span className="absolute left-1/2 -translate-x-1/2 bottom-1.5 w-8 h-0.5 rounded-full bg-indigo-500/70" />}
+              <button key={t.id} onClick={t.onClick}
+                className={`group relative flex-none min-w-[8.75rem] lg:min-w-0 lg:flex-1 py-3.5 px-4 rounded-[1.35rem] font-black text-xs md:text-sm transition-all duration-200 whitespace-nowrap snap-start ${t.active ? 'bg-white text-indigo-800 shadow-xl shadow-black/15 scale-[1.01]' : 'text-white/70 hover:text-white hover:bg-white/12'}`}>
+                <span className="relative z-10">{t.label}</span>
+                {t.active && <span className="absolute inset-x-5 -bottom-0.5 h-1 rounded-full bg-gradient-to-r from-yellow-300 via-pink-400 to-cyan-300" />}
               </button>
             ))}
-            </div>
           </div>
-        )}
+        </div>
 
         {/* ══════════════ GENERATOR TAB ══════════════ */}
         {tab === 'generator' && (
@@ -698,22 +678,6 @@ export default function AdminGameManager() {
               )}
             </div>
 
-            {/* Mini Games Sub-tabs */}
-            <div className="mb-6 rounded-[1.5rem] p-1.5 overflow-x-auto shadow-xl shadow-black/10 ring-1 ring-white/15" style={{ background: 'rgba(15,23,42,0.18)', backdropFilter: 'blur(18px)', WebkitOverflowScrolling: 'touch' }}>
-              <div className="flex gap-1.5 min-w-max sm:min-w-0">
-              {[
-                { id: 'generate', label: '🤖 Generate' },
-                { id: 'manage', label: '📋 Manage' },
-              ].map(t => (
-                <button key={t.id} onClick={() => setMiniGamesTab(t.id)}
-                  className={`relative flex-1 min-w-[8.5rem] py-3 px-4 rounded-[1.2rem] font-black text-sm transition-all duration-200 whitespace-nowrap ${miniGamesTab === t.id ? 'bg-white text-indigo-800 shadow-lg shadow-black/10' : 'text-white/65 hover:text-white hover:bg-white/10'}`}>
-                  {t.label}
-                  {miniGamesTab === t.id && <span className="absolute left-1/2 -translate-x-1/2 bottom-1.5 w-8 h-0.5 rounded-full bg-indigo-500/70" />}
-                </button>
-              ))}
-              </div>
-            </div>
-
             {miniGamesTab === 'generate' && <MiniGamesGenerator onToast={showToast} />}
             {miniGamesTab === 'manage' && <MiniGamesManager onToast={showToast} />}
             </motion.div>
@@ -729,21 +693,6 @@ export default function AdminGameManager() {
         {/* ══════════════ STORY KID TAB ══════════════ */}
         {tab === 'storykid' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div className="mb-6 rounded-[1.5rem] p-1.5 overflow-x-auto shadow-xl shadow-black/10 ring-1 ring-white/15" style={{ background: 'rgba(15,23,42,0.18)', backdropFilter: 'blur(18px)', WebkitOverflowScrolling: 'touch' }}>
-              <div className="flex gap-1.5 min-w-max sm:min-w-0">
-              {[
-                { id: 'generate', label: '🤖 Generator' },
-                { id: 'manage', label: '📋 Management' },
-              ].map(t => (
-                <button key={t.id} onClick={() => setStoryKidTab(t.id)}
-                  className={`relative flex-1 min-w-[8.5rem] py-3 px-4 rounded-[1.2rem] font-black text-sm transition-all duration-200 whitespace-nowrap ${storyKidTab === t.id ? 'bg-white text-indigo-800 shadow-lg shadow-black/10' : 'text-white/65 hover:text-white hover:bg-white/10'}`}>
-                  {t.label}
-                  {storyKidTab === t.id && <span className="absolute left-1/2 -translate-x-1/2 bottom-1.5 w-8 h-0.5 rounded-full bg-indigo-500/70" />}
-                </button>
-              ))}
-              </div>
-            </div>
-
             {storyKidTab === 'generate' && <StoryKidGenerator onToast={showToast} />}
             {storyKidTab === 'manage' && <StoryKidManager onToast={showToast} />}
           </motion.div>
