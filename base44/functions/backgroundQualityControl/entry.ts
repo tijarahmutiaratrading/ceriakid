@@ -82,6 +82,23 @@ function buildReplacementTask(game, count) {
   return { taskName: `QC Replacement: ${game.title || game.category}`, ageGroup: game.ageGroup, ...(game.ageGroup === 'sekolah_rendah' && game.darjah ? { darjah: game.darjah } : {}), subject: game.category, gamesCount: count, questionsPerGame: Math.max(8, Math.min(Number(game.totalQuestions || 8), 20)), status: 'pending', createdGames: 0, errorMessage: 'Auto re-queue by background quality control after failed audit.' };
 }
 
+async function createQcLog(base44, payload) {
+  await base44.asServiceRole.entities.QCLog.create({
+    runAt: new Date().toISOString(),
+    action: payload.action || 'audit',
+    status: payload.status || 'unknown',
+    score: typeof payload.score === 'number' ? payload.score : null,
+    total: payload.total || 0,
+    passed: payload.passed || 0,
+    failed: payload.failed || 0,
+    deletedCount: payload.deletedCount || 0,
+    replacementTasks: payload.replacementTasks || 0,
+    activeTasks: payload.activeTasks || 0,
+    message: payload.message || '',
+    sampleIssues: payload.sampleIssues || [],
+  });
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -90,7 +107,9 @@ Deno.serve(async (req) => {
     const tasks = await base44.asServiceRole.entities.GameTask.list('-created_date', 500);
     const activeTasks = (tasks || []).filter(task => ['pending', 'running'].includes(task.status));
     if (activeTasks.length > 0 && !force) {
-      return Response.json({ success: true, status: 'waiting_for_generation', score: null, activeTasks: activeTasks.length, message: 'Queue belum siap, audit akan jalan bila semua completed.' });
+      const payload = { success: true, status: 'waiting_for_generation', score: null, activeTasks: activeTasks.length, message: 'Queue belum siap, audit akan jalan bila semua completed.' };
+      await createQcLog(base44, { action: 'auto_audit', ...payload });
+      return Response.json(payload);
     }
     const games = await base44.asServiceRole.entities.Game.list('-created_date', 1000);
     const auditableGames = (games || []).filter(game => SUBJECTS.includes(game.category) || MINI_CATEGORIES.includes(game.category) || game.gameData?.storyKid);
@@ -106,10 +125,14 @@ Deno.serve(async (req) => {
     const passed = Math.max(0, total - failed.length);
     const score = total === 0 ? 0 : Math.round((passed / total) * 100);
     if (score >= MIN_PASS_SCORE) {
-      return Response.json({ success: true, status: 'passed', score, total, passed, failed: failed.length, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues })), message: `Quality score ${score}% — cukup baik.` });
+      const payload = { success: true, status: 'passed', score, total, passed, failed: failed.length, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues })), message: `Quality score ${score}% — cukup baik.` };
+      await createQcLog(base44, { action: body.auditOnly === true ? 'audit' : 'auto_audit', ...payload });
+      return Response.json(payload);
     }
     if (body.auditOnly === true) {
-      return Response.json({ success: true, status: 'needs_repair', score, total, passed, failed: failed.length, sampleIssues: failed.slice(0, 10).map(item => ({ title: item.game.title, category: item.game.category, issues: item.issues })) });
+      const payload = { success: true, status: 'needs_repair', score, total, passed, failed: failed.length, sampleIssues: failed.slice(0, 10).map(item => ({ title: item.game.title, category: item.game.category, issues: item.issues })), message: `Quality score ${score}% — perlu repair.` };
+      await createQcLog(base44, { action: 'audit', ...payload });
+      return Response.json(payload);
     }
     const selected = failed.slice(0, MAX_DELETE_PER_RUN);
     const grouped = new Map();
@@ -124,7 +147,9 @@ Deno.serve(async (req) => {
     for (const group of grouped.values()) {
       await base44.asServiceRole.entities.GameTask.create(buildReplacementTask(group.sample, group.count));
     }
-    return Response.json({ success: true, status: 'repair_queued', score, threshold: MIN_PASS_SCORE, total, passed, failedBeforeRepair: failed.length, deletedThisRun: selected.length, replacementTasks: grouped.size, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues })), message: `Score ${score}%, ${selected.length} failed games deleted and replacements queued.` });
+    const payload = { success: true, status: 'repair_queued', score, threshold: MIN_PASS_SCORE, total, passed, failedBeforeRepair: failed.length, failed: failed.length, deletedThisRun: selected.length, deletedCount: selected.length, replacementTasks: grouped.size, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues })), message: `Score ${score}%, ${selected.length} failed games deleted and replacements queued.` };
+    await createQcLog(base44, { action: force ? 'repair' : 'auto_repair', ...payload });
+    return Response.json(payload);
   } catch (error) {
     console.error('backgroundQualityControl error:', error);
     return Response.json({ error: error.message }, { status: 500 });

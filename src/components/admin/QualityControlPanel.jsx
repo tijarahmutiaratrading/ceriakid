@@ -1,17 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { AlertTriangle, CheckCircle2, Loader2, RefreshCw, ShieldCheck, Wrench } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, History, Loader2, RefreshCw, ShieldCheck, Wrench } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 export default function QualityControlPanel({ onToast }) {
   const [qc, setQc] = useState(null);
+  const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [repairing, setRepairing] = useState(false);
+
+  const loadHistory = async () => {
+    try {
+      const logs = await base44.entities.QCLog.list('-created_date', 10);
+      setHistory(logs || []);
+    } catch {}
+  };
 
   const runCheck = async (repair = false) => {
     repair ? setRepairing(true) : setLoading(true);
     try {
       const res = await base44.functions.invoke('backgroundQualityControl', repair ? { force: true } : { auditOnly: true, force: true });
       setQc(res.data);
+      await loadHistory();
       onToast?.(repair ? '✅ QC repair dijalankan' : '✅ QC audit dikemaskini');
     } catch (error) {
       onToast?.('❌ QC gagal: ' + error.message, false);
@@ -22,6 +31,7 @@ export default function QualityControlPanel({ onToast }) {
 
   useEffect(() => {
     runCheck(false);
+    loadHistory();
   }, []);
 
   const score = typeof qc?.score === 'number' ? qc.score : 0;
@@ -83,6 +93,31 @@ export default function QualityControlPanel({ onToast }) {
           ))}
         </div>
       )}
+
+      <div className="mt-4 rounded-2xl bg-white/8 border border-white/10 p-3">
+        <div className="flex items-center gap-2 mb-2 text-white font-black text-xs uppercase tracking-wider">
+          <History className="w-4 h-4 text-blue-200" /> History Audit & Repair
+        </div>
+        {history.length === 0 ? (
+          <p className="text-white/45 text-xs font-semibold">Belum ada rekod QC.</p>
+        ) : (
+          <div className="space-y-2 max-h-52 overflow-y-auto">
+            {history.map(log => (
+              <div key={log.id} className="rounded-xl bg-white/8 border border-white/10 px-3 py-2 text-xs">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-white font-black">{log.action === 'repair' || log.action === 'auto_repair' ? 'Repair' : 'Audit'} · {log.status}</span>
+                  <span className="text-white/45 font-semibold">{log.runAt ? new Date(log.runAt).toLocaleString('ms-MY') : '-'}</span>
+                </div>
+                <p className="text-white/65 mt-1">
+                  Score {typeof log.score === 'number' ? `${log.score}%` : '-'} · Lulus {log.passed || 0}/{log.total || 0} · Gagal {log.failed || 0}
+                  {(log.deletedCount || log.replacementTasks) ? ` · Fixed ${log.deletedCount || 0}, Queue ${log.replacementTasks || 0}` : ''}
+                </p>
+                {log.message && <p className="text-white/45 mt-1 truncate">{log.message}</p>}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

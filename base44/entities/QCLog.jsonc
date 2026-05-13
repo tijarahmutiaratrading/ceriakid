@@ -1,0 +1,74 @@
+{
+  "name": "QCLog",
+  "type": "object",
+  "properties": {
+    "runAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Bila QC audit/repair dijalankan"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "audit",
+        "repair",
+        "auto_audit",
+        "auto_repair"
+      ],
+      "default": "audit",
+      "description": "Jenis tindakan QC"
+    },
+    "status": {
+      "type": "string",
+      "description": "Status keputusan QC"
+    },
+    "score": {
+      "type": "number",
+      "description": "Quality score percentage"
+    },
+    "total": {
+      "type": "number",
+      "description": "Jumlah content diaudit"
+    },
+    "passed": {
+      "type": "number",
+      "description": "Jumlah content lulus"
+    },
+    "failed": {
+      "type": "number",
+      "description": "Jumlah content gagal"
+    },
+    "deletedCount": {
+      "type": "number",
+      "default": 0,
+      "description": "Jumlah games gagal yang dipadam semasa repair"
+    },
+    "replacementTasks": {
+      "type": "number",
+      "default": 0,
+      "description": "Jumlah replacement queue yang dibuat"
+    },
+    "activeTasks": {
+      "type": "number",
+      "default": 0,
+      "description": "Jumlah queue aktif ketika QC menunggu"
+    },
+    "message": {
+      "type": "string",
+      "description": "Ringkasan keputusan QC"
+    },
+    "sampleIssues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "description": "Contoh isu yang ditemui"
+    }
+  },
+  "required": [
+    "runAt",
+    "action",
+    "status"
+  ]
+}
