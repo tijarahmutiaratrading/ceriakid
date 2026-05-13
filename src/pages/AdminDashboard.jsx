@@ -272,8 +272,6 @@ export default function AdminDashboard() {
                   whileHover={{ y: -4, scale: 1.02 }}
                   className={`rounded-[1.25rem] p-5 text-white shadow-xl shadow-black/25 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/15 hover:border-white/35 transition-all`}
                 >
-                  <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-white/15" />
-                  <div className="absolute -right-2 bottom-2 w-16 h-16 rounded-full bg-white/10" />
                   <div className={`absolute right-4 top-4 w-12 h-12 rounded-2xl ${stat.accent} flex items-center justify-center text-xl shadow-lg backdrop-blur-sm`}>
                     {stat.icon}
                   </div>
@@ -307,7 +305,6 @@ export default function AdminDashboard() {
                     whileHover={{ scale: 1.03, y: -2 }}
                     className={`rounded-[1.25rem] p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/15 hover:border-white/35 transition-all relative overflow-hidden`}
                   >
-                    <div className="absolute -right-8 -bottom-8 w-24 h-24 rounded-full bg-white/15" />
                     <div className="flex items-center justify-between gap-3 mb-4 relative">
                       <p className="text-2xl">{item.icon}</p>
                       <span className="text-[11px] font-black text-white bg-white/18 px-2 py-1 rounded-full">Plan</span>
