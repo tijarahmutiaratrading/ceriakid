@@ -561,7 +561,14 @@ export default function DrawingStudio() {
             transition={{ delay: 0.05 }}
             className="space-y-4 lg:sticky lg:top-28 order-2 lg:order-1"
           >
-            <section className="relative overflow-hidden rounded-[2.5rem] p-4 bg-white/20 border border-white/35 backdrop-blur-2xl shadow-2xl shadow-purple-950/20">
+            <section
+              className="relative isolate overflow-hidden rounded-[2.5rem] p-4 bg-white/20 border border-white/35 backdrop-blur-2xl shadow-2xl shadow-purple-950/20"
+              style={{
+                borderRadius: '2.5rem',
+                clipPath: 'inset(0 round 2.5rem)',
+                WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+              }}
+            >
               <div className="absolute -top-10 -right-8 w-28 h-28 bg-yellow-200/25 rounded-full blur-2xl" />
               <div className="absolute -bottom-12 -left-8 w-32 h-32 bg-pink-300/25 rounded-full blur-2xl" />
               <div className="relative">
