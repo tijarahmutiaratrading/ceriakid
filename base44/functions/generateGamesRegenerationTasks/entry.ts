@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
 
     const { gamesCount = 30, questionsPerGame = 20 } = await req.json();
 
-    // Generate tasks - Sekolah Rendah is separated by Darjah 1-6
+    // Generate tasks - Sekolah Rendah MUST be separated by Darjah 1-6 so games never mix levels
     const darjahLevels = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
     const darjahLabels = { darjah_1: 'Darjah 1', darjah_2: 'Darjah 2', darjah_3: 'Darjah 3', darjah_4: 'Darjah 4', darjah_5: 'Darjah 5', darjah_6: 'Darjah 6' };
     const tasks = [];

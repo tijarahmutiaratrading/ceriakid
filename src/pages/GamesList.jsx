@@ -70,6 +70,8 @@ const getCategoryEmoji = (category) => {
   return emojis[category] || '📚';
 };
 
+const DARJAH_ORDER = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
+
 const DARJAH_LABELS = {
   darjah_1: 'Darjah 1',
   darjah_2: 'Darjah 2',
@@ -124,10 +126,9 @@ export default function GamesList() {
       const dbGames = await base44.entities.Game.filter({ ageGroup, category, isPublished: true });
       if (dbGames.length > 0) {
       setAllGames(dbGames.sort((a, b) => {
-        const darjahOrder = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
-        const da = darjahOrder.indexOf(a.darjah);
-        const db = darjahOrder.indexOf(b.darjah);
-        if (da !== db) return da - db;
+        const da = DARJAH_ORDER.indexOf(a.darjah);
+        const db = DARJAH_ORDER.indexOf(b.darjah);
+        if (da !== db) return (da === -1 ? 99 : da) - (db === -1 ? 99 : db);
         return (a.order || 0) - (b.order || 0);
       }));
       } else {
@@ -162,24 +163,22 @@ export default function GamesList() {
     return () => clearInterval(interval);
   }, [ageGroup, category]);
 
-  // Check if games have darjah field (sekolah rendah)
-  const hasDarjah = ageGroup === 'sekolah_rendah' && allGames.some(g => g.darjah);
+  // Sekolah Rendah is always divided by Darjah 1-6
+  const hasDarjah = ageGroup === 'sekolah_rendah';
 
-  // Get available darjah levels
-  const availableDarjah = hasDarjah
-    ? [...new Set(allGames.map(g => g.darjah).filter(Boolean))].sort()
-    : [];
+  // Always show all Darjah tabs so subjects don't get mixed together
+  const availableDarjah = hasDarjah ? DARJAH_ORDER : [];
 
   // Set default darjah on first load
   useEffect(() => {
-    if (hasDarjah && availableDarjah.length > 0 && selectedDarjah === null) {
-      setSelectedDarjah(availableDarjah[0]);
+    if (hasDarjah && selectedDarjah === null) {
+      setSelectedDarjah('darjah_1');
     } else if (!hasDarjah) {
       setSelectedDarjah(null);
     }
-  }, [hasDarjah, ageGroup, category]);
+  }, [hasDarjah, ageGroup, category, selectedDarjah]);
 
-  // Filter games by darjah
+  // Filter games by selected Darjah for Sekolah Rendah
   const games = hasDarjah && selectedDarjah !== null
     ? allGames.filter(g => g.darjah === selectedDarjah)
     : allGames;
