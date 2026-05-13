@@ -302,8 +302,8 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         story: 'Cerita pilihan nilai murni. Output scenes dengan text, choices[2], answer.',
         physics: 'Cabaran sains/fizik mudah. Output challenges dengan question, options[4], answer.',
         tracing: 'Latihan surih huruf/nombor/simbol. Output letters dan instruction.',
-        balloon_pop: 'Pop item sasaran. Output target dan items yang mengandungi beberapa sasaran betul.',
-        falling_catch: 'Tangkap item sasaran. Output target dan items dengan sasaran muncul lebih dari sekali.',
+        balloon_pop: 'Pop item sasaran. Output target string dan items array string. Items WAJIB ada target sekurang-kurangnya 2 kali dengan ejaan sama tepat supaya belon boleh di-pop.',
+        falling_catch: 'Tangkap item sasaran. Output target string dan items array string. Items WAJIB ada target sekurang-kurangnya 2 kali dengan ejaan sama tepat supaya objek boleh ditangkap.',
         stacking: 'Bina menara ikut jumlah. Output target nombor 3-10.',
         sequence: 'Susun turutan. Output items rawak dan answer turutan betul.',
         swipe_select: 'Pilih kumpulan betul. Output items dengan text dan group, guna dua kumpulan sahaja.',
@@ -353,8 +353,30 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         coloring: { type: 'object', properties: { ...baseProps, items: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'items'] },
       };
 
+      const normalizeMiniGameData = (currentMode, rawData, requestedItems) => {
+        const next = { ...(rawData || {}) };
+        const minimumItems = Math.max(4, Number(requestedItems || 4));
+        if (currentMode === 'balloon_pop' || currentMode === 'falling_catch') {
+          const target = String(next.target || '').trim() || 'A';
+          const rawItems = Array.isArray(next.items) ? next.items : [];
+          const cleaned = rawItems.map(item => String(typeof item === 'object' && item !== null ? (item.text || item.label || item.value || '') : item).trim()).filter(Boolean);
+          const others = cleaned.filter(item => item.toLowerCase() !== target.toLowerCase());
+          next.target = target;
+          next.items = [target, target, ...others].slice(0, Math.max(minimumItems, 4));
+          while (next.items.length < minimumItems) next.items.push(target);
+        }
+        if (currentMode === 'mini_simulation') {
+          const target = String(next.target || '').trim() || 'Betul';
+          const rawItems = Array.isArray(next.items) ? next.items : [];
+          next.target = target;
+          next.items = rawItems.map(item => ({ text: String(item?.text || item?.label || item || '').trim(), group: String(item?.group || '').trim() })).filter(item => item.text && item.group);
+          if (!next.items.some(item => item.group.toLowerCase() === target.toLowerCase())) next.items.unshift({ text: target, group: target });
+        }
+        return next;
+      };
+
       let data = await base44.asServiceRole.integrations.Core.InvokeLLM({
-        prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nGaya aktiviti WAJIB untuk set ini: ${playStyle}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\nPeraturan anti-repeat:\n0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6; jangan jana kandungan Tingkatan/PT3/SPM/sekolah menengah.\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Output JSON sahaja ikut schema.`,
+        prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nGaya aktiviti WAJIB untuk set ini: ${playStyle}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\nPeraturan anti-repeat:\n0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6; jangan jana kandungan Tingkatan/PT3/SPM/sekolah menengah.\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Untuk balloon_pop dan falling_catch: target mesti string; items mesti array string; items mesti mengandungi target yang sama tepat sekurang-kurangnya 2 kali; jangan guna object untuk items.\n10. Untuk mini_simulation: items mesti array object {text, group}; sekurang-kurangnya satu item mesti group sama tepat dengan target.\n11. Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
       });
 
@@ -380,12 +402,14 @@ Wajib baiki:
 4. Jika topik wang Malaysia/RM: guna hanya fakta semasa; jangan sebut RM1 syiling, RM2 syiling, RM2 note, atau warna/ciri duit yang tidak pasti.
 5. Guna Bahasa Melayu Malaysia baku; contoh "pemadam" bukan "penghapus".
 6. Untuk memory, pasangan mesti unik dan tidak mengulang nilai kiri yang sama.
-6. Pastikan output masih ikut schema asal dan lengkap.
+7. Untuk balloon_pop dan falling_catch, pastikan target ada sekurang-kurangnya 2 kali dalam items dengan ejaan sama tepat, dan items hanya string.
+8. Untuk mini_simulation, pastikan sekurang-kurangnya satu item mempunyai group yang sama tepat dengan target.
+9. Pastikan output masih ikut schema asal dan lengkap.
 
 Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
       });
-      data = reviewed || data;
+      data = normalizeMiniGameData(mode, reviewed || data, itemsPerSet);
 
       return { mode, ...data, variant: index + 1, generatedTheme: theme, playStyle: data.playStyle || playStyle, microTopic: data.microTopic || microTopic };
     };

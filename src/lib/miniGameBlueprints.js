@@ -1,6 +1,6 @@
 export const MINI_GAME_CATEGORIES = [
   { id: 'abc_phonics', title: 'ABC & Phonics', emoji: '🔤', color: 'from-pink-500 to-rose-400', objective: 'Kenal huruf, bunyi dan bentuk huruf.', games: [
-    { id: 'letter-balloon-pop', title: 'Letter Balloon Pop', emoji: '🎈', mode: 'balloon_pop', difficulty: 'Mudah', objective: 'Kenal huruf disebut.', instruction: 'Pop belon huruf sasaran.', target: 'A', items: ['A', 'B', 'C', 'D'], reward: 'Star combo + pop sound' },
+    { id: 'letter-balloon-pop', title: 'Letter Balloon Pop', emoji: '🎈', mode: 'balloon_pop', difficulty: 'Mudah', objective: 'Kenal huruf disebut.', instruction: 'Pop belon huruf sasaran.', target: 'A', items: ['A', 'B', 'A', 'C', 'D'], reward: 'Star combo + pop sound' },
     { id: 'trace-alphabet', title: 'Trace The Alphabet', emoji: '✏️', mode: 'tracing', difficulty: 'Mudah', objective: 'Belajar tulis huruf.', instruction: 'Tap titik glowing ikut urutan.', letters: ['A', 'B', 'C'], reward: 'Unlock sticker' },
     { id: 'phonics-match', title: 'Phonics Match', emoji: '🔊', mode: 'dragdrop', difficulty: 'Sederhana', objective: 'Padankan bunyi dengan gambar.', instruction: 'Pilih bunyi, kemudian letak pada gambar betul.', items: ['ba', 'ca', 'da', 'ma'], targets: ['Bola', 'Cawan', 'Dadu', 'Mata'], reward: 'Confetti padanan' },
   ]},
