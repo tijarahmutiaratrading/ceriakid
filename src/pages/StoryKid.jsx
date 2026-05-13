@@ -147,11 +147,39 @@ export default function StoryKid() {
 
         {!story ? (
           <>
-            <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-7">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-[2rem] bg-white shadow-xl text-5xl mb-4">📖</div>
-              <h1 className="text-4xl sm:text-5xl font-black text-purple-700">Story Kid</h1>
-              <p className="text-purple-500 font-bold mt-2 max-w-xl mx-auto">Pilih cerita, baca bersama anak dan kumpul bintang melalui pilihan yang baik.</p>
-            </motion.div>
+            <motion.section
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-7 rounded-[2rem] p-5 sm:p-6 bg-white/55 border border-white/70 backdrop-blur-2xl shadow-2xl shadow-purple-950/10 overflow-hidden relative"
+            >
+              <div className="absolute -top-16 -right-10 w-40 h-40 bg-yellow-300/35 rounded-full blur-2xl" />
+              <div className="absolute -bottom-20 -left-12 w-52 h-52 bg-pink-300/35 rounded-full blur-2xl" />
+              <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[1.7rem] bg-gradient-to-br from-yellow-300 via-pink-300 to-purple-300 flex items-center justify-center text-4xl sm:text-5xl shadow-xl border-4 border-white/70 flex-shrink-0">📖</div>
+                  <div className="min-w-0">
+                    <p className="text-purple-400 text-xs font-black uppercase tracking-[0.22em] mb-1">Interactive Storytime</p>
+                    <h1 className="text-3xl sm:text-4xl font-black text-purple-800 leading-tight">Story Kid</h1>
+                    <p className="text-purple-500 text-sm font-bold mt-1 max-w-2xl">Pilih cerita, baca bersama anak dan kumpul bintang melalui pilihan yang baik.</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="rounded-2xl bg-white/70 border border-white px-3 py-3 shadow-sm">
+                    <p className="text-purple-800 font-black text-lg">{stories.length}</p>
+                    <p className="text-purple-400 text-[11px] font-bold">Cerita</p>
+                  </div>
+                  <div className="rounded-2xl bg-white/70 border border-white px-3 py-3 shadow-sm">
+                    <p className="text-purple-800 font-black text-lg">⭐</p>
+                    <p className="text-purple-400 text-[11px] font-bold">Bintang</p>
+                  </div>
+                  <div className="rounded-2xl bg-white/70 border border-white px-3 py-3 shadow-sm">
+                    <p className="text-purple-800 font-black text-lg">🎨</p>
+                    <p className="text-purple-400 text-[11px] font-bold">Kartun</p>
+                  </div>
+                </div>
+              </div>
+            </motion.section>
 
             {stories.length === 0 ? (
               <div className="rounded-[2rem] p-8 text-center bg-white shadow-xl">
