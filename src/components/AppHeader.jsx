@@ -56,8 +56,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
   const otherItems = [
     { path: '/children-profiles', emoji: '👨‍👩‍👧‍👦', label: 'Profil Anak' },
-    { path: '/bbm', emoji: '📚', label: 'Bahan Bantu Mengajar' },
-    { path: '/ai-bbm-generator', emoji: '✨', label: 'AI BBM Generator' },
     { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
     { path: '/story-kid', emoji: '📖', label: 'Story Kid' },
     { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi Anak' },
@@ -112,15 +110,12 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     '/settings': 'Tetapan Akaun',
     '/children-profiles': 'Profil Anak',
     '/games-hub': 'Games Hub',
-    '/bbm': 'BBM Hub',
     '/parent-dashboard': 'Prestasi Anak',
     '/friends': 'Kawan',
     '/challenges': 'Cabaran',
     '/drawing': 'Studio Lukisan',
     '/admin-dashboard': 'Admin Dashboard',
     '/admin-game-manager': 'Master Generator',
-    '/admin-bbm-generator': 'BBM Generator',
-    '/ai-bbm-generator': 'AI BBM Generator',
   };
 
   const displayTitle = title || pageTitles[location.pathname] || (location.pathname.startsWith('/games/') ? 'Permainan' : 'CeriaKid');

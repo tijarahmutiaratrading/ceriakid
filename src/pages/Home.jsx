@@ -172,7 +172,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-5"
+          className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-5"
         >
           <Link to="/games-hub" className="block">
             <motion.div
@@ -217,19 +217,6 @@ export default function Home() {
             </motion.div>
           </Link>
 
-          <Link to="/bbm" className="block">
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="p-4 rounded-2xl h-full"
-              style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.5), rgba(168,85,247,0.4))', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
-            >
-              <div className="text-3xl mb-2">📚</div>
-              <p className="text-white font-black text-sm leading-tight">BBM</p>
-              <p className="text-white/70 text-xs mt-1">Bahan bantu mengajar</p>
-              <div className="mt-2 text-yellow-300 font-black text-xs">Untuk cikgu →</div>
-            </motion.div>
-          </Link>
         </motion.div>
 
         {/* New Games Coming Soon Banner — tukar COMING_SOON_DATE untuk ubah tarikh, set null untuk sembunyikan */}

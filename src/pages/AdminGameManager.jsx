@@ -12,7 +12,6 @@ import MiniGamesManager from '@/components/admin/MiniGamesManager';
 import MonthlyGenSettings from '@/components/admin/MonthlyGenSettings';
 import StoryKidGenerator from '@/components/admin/StoryKidGenerator';
 import StoryKidManager from '@/components/admin/StoryKidManager';
-import BBMGeneratorManager from '@/components/admin/BBMGeneratorManager';
 import MasterTaskQueue from '@/components/admin/MasterTaskQueue';
 import ProductionSafetyChecklist from '@/components/admin/ProductionSafetyChecklist';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
@@ -400,7 +399,7 @@ export default function AdminGameManager() {
             <div className="min-w-0">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/70 text-[11px] font-black uppercase tracking-wider mb-2">Admin Content Studio</div>
               <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight">Master Generator</h1>
-              <p className="text-white/75 text-sm">Satu tempat untuk jana, urus dan pantau Games, BBM dan Story Kid.</p>
+              <p className="text-white/75 text-sm">Satu tempat untuk jana, urus dan pantau Games dan Story Kid.</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-2 w-full md:w-auto md:min-w-80">
@@ -417,7 +416,6 @@ export default function AdminGameManager() {
           {[
             { id: 'subject', label: '🎮 Games', labelFull: '🎮 Games' },
             { id: 'minigames', label: '🎯 Mini', labelFull: '🎯 Mini Games' },
-            { id: 'bbm', label: '📚 BBM', labelFull: '📚 BBM' },
             { id: 'storykid', label: '📖 Story', labelFull: '📖 Story Kid' },
           ].map(t => {
             const isSubjectActive = t.id === 'subject' && ['generator', 'manager', 'monthly'].includes(tab);
@@ -714,13 +712,6 @@ export default function AdminGameManager() {
         {tab === 'monthly' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <MonthlyGenSettings onToast={showToast} />
-          </motion.div>
-        )}
-
-        {/* ══════════════ BBM TAB ══════════════ */}
-        {tab === 'bbm' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <BBMGeneratorManager onToast={showToast} />
           </motion.div>
         )}
 
