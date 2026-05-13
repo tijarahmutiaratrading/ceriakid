@@ -657,7 +657,7 @@ export default function AdminGameManager() {
                   {/* Mobile carousel */}
                   <div className="sm:hidden flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
                     {MINI_GAME_CATEGORIES.map(category => {
-                      const data = miniGamesData[category.id] || { count: category.games.length, totalQuestions: 0 };
+                      const data = miniGamesData[category.id] || { count: 0, totalQuestions: 0 };
                       return (
                         <div key={category.id} className={`bg-gradient-to-br ${category.color} rounded-2xl p-3 text-center flex-shrink-0 w-32 shadow-lg`}>
                           <p className="text-white font-black text-2xl mb-1">{category.emoji}</p>
@@ -671,7 +671,7 @@ export default function AdminGameManager() {
                   {/* Desktop grid */}
                   <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     {MINI_GAME_CATEGORIES.map(category => {
-                      const data = miniGamesData[category.id] || { count: category.games.length, totalQuestions: 0 };
+                      const data = miniGamesData[category.id] || { count: 0, totalQuestions: 0 };
                       return (
                         <div key={category.id} className={`bg-gradient-to-br ${category.color} rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all`}>
                           <div className="flex items-start justify-between gap-3 mb-3">

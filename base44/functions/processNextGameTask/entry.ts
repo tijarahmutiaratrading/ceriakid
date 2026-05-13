@@ -237,14 +237,14 @@ Deno.serve(async (req) => {
     let createdInBatch = 0;
 
     const miniGameMap = {
-      memory: { title: 'Memory Game', type: 'memory_game', emoji: '🧠' },
-      dragdrop: { title: 'Drag & Drop Game', type: 'drag_drop', emoji: '🎯' },
-      wordbuilder: { title: 'Word Builder Game', type: 'word_builder', emoji: '📝' },
-      sorting: { title: 'Sorting Game', type: 'sorting', emoji: '🔄' },
-      tilematch: { title: 'Tile Match Game', type: 'tile_match', emoji: '🎮' },
-      story: { title: 'Story Adventure Game', type: 'story_adventure', emoji: '📖' },
-      physics: { title: 'Physics Game', type: 'physics', emoji: '⚡' },
-      tracing: { title: 'Tracing Game', type: 'tracing', emoji: '✏️' },
+      abc_phonics: { title: 'ABC & Phonics', type: 'phonics', emoji: '🔤', modes: ['balloon_pop', 'tracing', 'dragdrop'] },
+      math_counting: { title: 'Math & Counting', type: 'counting', emoji: '🔢', modes: ['falling_catch', 'stacking', 'sequence'] },
+      bahasa_melayu: { title: 'Bahasa Melayu', type: 'word_builder', emoji: '📚', modes: ['wordbuilder', 'swipe_select', 'spin_wheel'] },
+      english_vocabulary: { title: 'English Vocabulary', type: 'picture_quiz', emoji: '🌟', modes: ['picture_hunt', 'typing_challenge', 'tilematch'] },
+      sains_awal: { title: 'Sains Awal', type: 'science_quiz', emoji: '🔬', modes: ['sorting', 'mini_simulation', 'true_false'] },
+      jawi_iqra: { title: 'Jawi & Iqra', type: 'memory_game', emoji: '🕌', modes: ['memory', 'rhythm_tap', 'connect_dots'] },
+      memory_logic: { title: 'Memory & Logic', type: 'memory_game', emoji: '🧠', modes: ['maze', 'hidden_object', 'reaction_speed'] },
+      islamic_learning: { title: 'Islamic Learning', type: 'story_adventure', emoji: '🌙', modes: ['story', 'sequence', 'coloring'] },
     };
 
     const storybookStyleReference = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/580d3db6a_IMG_0482.jpeg';
@@ -568,7 +568,8 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
         const level = (absoluteIndex % levels) + 1;
         const setNo = Math.floor(absoluteIndex / levels) + 1;
         const difficulty = level <= 1 ? 'easy' : level === 2 ? 'medium' : 'hard';
-        const generatedData = await buildMiniGameData(base44, task.subject, absoluteIndex, meta.theme || 'KSSR asas Malaysia', itemsPerSet, level, existingMini);
+        const mode = (meta.modes?.length ? meta.modes : miniGame.modes || [task.subject])[absoluteIndex % (meta.modes?.length || miniGame.modes?.length || 1)];
+        const generatedData = await buildMiniGameData(base44, mode, absoluteIndex, meta.theme || miniGame.title || 'Mini game CeriaKid', itemsPerSet, level, existingMini);
         await base44.asServiceRole.entities.Game.create({
           title: generatedData.title || `${miniGame.title} · ${generatedData.microTopic || `Set ${setNo} Level ${level}`}`,
           type: miniGame.type,
@@ -578,7 +579,7 @@ Output JSON sahaja: title, description, instructions, items[{heading,content,ans
           tier: 'free',
           emoji: miniGame.emoji,
           totalQuestions: itemsPerSet,
-          gameData: { ...generatedData, setNo, level, itemsPerSet },
+          gameData: { ...generatedData, miniGameGenerated: true, categoryId: task.subject, categoryTitle: miniGame.title, setNo, level, itemsPerSet },
           isPublished: true,
           status: 'ready',
           order: absoluteIndex,

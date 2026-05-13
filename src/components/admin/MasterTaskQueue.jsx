@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AlertCircle, CheckCircle2, Clock, Loader2, RefreshCw, Trash2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
-const MINI_GAME_SUBJECTS = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
+const MINI_GAME_SUBJECTS = ['abc_phonics', 'math_counting', 'bahasa_melayu', 'english_vocabulary', 'sains_awal', 'jawi_iqra', 'memory_logic', 'islamic_learning'];
 
 const statusConfig = {
   pending: { color: 'bg-yellow-100 text-yellow-700', icon: Clock },
@@ -14,7 +14,6 @@ const statusConfig = {
 function getTaskGroup(task) {
   const name = task.taskName?.toLowerCase() || '';
   if (task.subject === 'storykid') return { label: 'Story Kid', color: 'bg-pink-400/20 text-pink-100' };
-  if (name.includes('bbm') || task.subject?.startsWith('bbm_')) return { label: 'BBM', color: 'bg-cyan-400/20 text-cyan-100' };
   if (MINI_GAME_SUBJECTS.includes(task.subject)) return { label: 'Mini Games', color: 'bg-purple-400/20 text-purple-100' };
   return { label: 'Games', color: 'bg-yellow-400/20 text-yellow-100' };
 }
@@ -72,7 +71,7 @@ export default function MasterTaskQueue({ onToast }) {
       <div className="flex items-center justify-between gap-3 mb-4">
         <div>
           <h2 className="font-black text-white text-lg">📋 Master Task Queue</h2>
-          <p className="text-white/50 text-xs">Semua queue Games, Mini Games, BBM dan Story Kid dalam satu tempat.</p>
+          <p className="text-white/50 text-xs">Semua queue Games, Mini Games dan Story Kid dalam satu tempat.</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap justify-end">
           {summary.completed > 0 && <button onClick={() => clearByStatus('completed')} className="text-xs font-bold text-green-300 hover:underline whitespace-nowrap">Clear Done</button>}

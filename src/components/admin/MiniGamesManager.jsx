@@ -70,7 +70,11 @@ export default function MiniGamesManager({ onToast }) {
       MINI_GAMES.map((game) => base44.entities.Game.filter({ category: game.id }))
     );
 
-    const existingGames = results.flat();
+    const existingGames = results.flat().filter(game =>
+      game.gameData?.miniGameBlueprint ||
+      game.gameData?.miniGameGenerated ||
+      game.gameData?.categoryId === game.category
+    );
     const existingKeys = new Set(existingGames.map(game => `${game.category}-${game.gameData?.id || game.title}`));
     const missingBlueprintRecords = MINI_GAME_CATEGORIES.flatMap(category =>
       category.games
@@ -91,7 +95,11 @@ export default function MiniGamesManager({ onToast }) {
       setBlueprintImportChecked(true);
     }
 
-    const allGames = results.flat().sort((a, b) => {
+    const allGames = results.flat().filter(game =>
+      game.gameData?.miniGameBlueprint ||
+      game.gameData?.miniGameGenerated ||
+      game.gameData?.categoryId === game.category
+    ).sort((a, b) => {
       const categoryA = MINI_GAMES.findIndex((game) => game.id === a.category);
       const categoryB = MINI_GAMES.findIndex((game) => game.id === b.category);
       return categoryA - categoryB || (a.order || 0) - (b.order || 0);

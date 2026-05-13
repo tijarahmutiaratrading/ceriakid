@@ -16,7 +16,7 @@ const SUBJECTS = [
   { ageGroup: 'sekolah_rendah', subject: 'bahasa_mandarin' },
 ];
 
-const MINI_GAMES = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
+const MINI_GAMES = ['abc_phonics', 'math_counting', 'bahasa_melayu', 'english_vocabulary', 'sains_awal', 'jawi_iqra', 'memory_logic', 'islamic_learning'];
 
 async function listAllGames(base44) {
   const all = [];
@@ -46,6 +46,7 @@ Deno.serve(async (req) => {
     const games = await listAllGames(base44);
     const subjectCounts = {};
     const miniCounts = {};
+    const storyKidGames = games.filter(g => g.category === 'story' && g.type === 'story_adventure' && g.gameData?.storyKid && g.isPublished !== false);
 
     for (const s of SUBJECTS) {
       const filtered = games.filter(g => g.ageGroup === s.ageGroup && g.category === s.subject && g.isPublished !== false);
@@ -69,14 +70,26 @@ Deno.serve(async (req) => {
     }
 
     for (const id of MINI_GAMES) {
-      const filtered = games.filter(g => g.category === id && g.isPublished !== false);
+      const filtered = games.filter(g =>
+        g.category === id &&
+        g.isPublished !== false &&
+        (g.gameData?.miniGameBlueprint || g.gameData?.miniGameGenerated || g.gameData?.categoryId === id)
+      );
       miniCounts[id] = {
         count: filtered.length,
         totalQuestions: filtered.reduce((sum, g) => sum + (g.gameData?.questions?.length || g.totalQuestions || 0), 0),
       };
     }
 
-    return Response.json({ success: true, subjectCounts, miniCounts });
+    return Response.json({
+      success: true,
+      subjectCounts,
+      miniCounts,
+      storyKidCounts: {
+        count: storyKidGames.length,
+        totalSlides: storyKidGames.reduce((sum, g) => sum + (g.gameData?.scenes?.length || g.totalQuestions || 0), 0),
+      },
+    });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }

@@ -230,11 +230,16 @@ export default function StoryKidGenerator({ onToast }) {
   const [slideCount, setSlideCount] = useState(10);
   const [generatedStories, setGeneratedStories] = useState([]);
   const [loadingQueue, setLoadingQueue] = useState(false);
+  const [storyKidCounts, setStoryKidCounts] = useState({ count: 0, totalSlides: 0 });
 
   const loadGeneratedStories = async () => {
     setLoadingQueue(true);
-    const tasks = await base44.entities.GameTask.list('-created_date', 50);
+    const [tasks, countsRes] = await Promise.all([
+      base44.entities.GameTask.list('-created_date', 50),
+      base44.functions.invoke('getGameManagerCounts', {}),
+    ]);
     setGeneratedStories(tasks.filter(task => task.subject === 'storykid'));
+    setStoryKidCounts(countsRes.data?.storyKidCounts || { count: 0, totalSlides: 0 });
     setLoadingQueue(false);
   };
 
@@ -313,9 +318,16 @@ export default function StoryKidGenerator({ onToast }) {
         </div>
       </div>
 
-      <div className="mb-5 rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
-        <p className="text-white/60 text-xs font-semibold">Akan dijana</p>
-        <p className="text-white font-black text-base sm:text-lg leading-snug">{Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))} story × {Math.max(3, Math.min(12, Number(slideCount) || 10))} slide</p>
+      <div className="mb-5 grid grid-cols-2 gap-3">
+        <div className="rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
+          <p className="text-white/60 text-xs font-semibold">Dalam database</p>
+          <p className="text-white font-black text-base sm:text-lg leading-snug">{storyKidCounts.count} story</p>
+          <p className="text-white/40 text-xs">{storyKidCounts.totalSlides} slide</p>
+        </div>
+        <div className="rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
+          <p className="text-white/60 text-xs font-semibold">Akan dijana</p>
+          <p className="text-white font-black text-base sm:text-lg leading-snug">{Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))} story × {Math.max(3, Math.min(12, Number(slideCount) || 10))} slide</p>
+        </div>
       </div>
 
       <button onClick={seedStories} disabled={loading} className="w-full py-3.5 sm:py-4 rounded-2xl bg-white text-purple-700 font-black shadow-xl flex items-center justify-center gap-2 disabled:opacity-60 text-sm sm:text-base">

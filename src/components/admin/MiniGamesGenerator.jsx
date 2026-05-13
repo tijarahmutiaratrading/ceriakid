@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2, Wand2, RefreshCw, Clock, AlertCircle, CheckCircle2, Trash2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 
-const GAME_HUB = [
-  { id: 'memory', title: 'Memory Game' },
-  { id: 'dragdrop', title: 'Drag & Drop' },
-  { id: 'wordbuilder', title: 'Word Builder' },
-  { id: 'sorting', title: 'Sorting Game' },
-  { id: 'tilematch', title: 'Tile Match' },
-  { id: 'story', title: 'Story Adventure' },
-  { id: 'physics', title: 'Physics Game' },
-  { id: 'tracing', title: 'Tracing Game' },
-];
+const GAME_HUB = MINI_GAME_CATEGORIES.map(category => ({
+  id: category.id,
+  title: category.title,
+  emoji: category.emoji,
+  objective: category.objective,
+  modes: category.games.map(game => game.mode),
+}));
 
 export default function MiniGamesGenerator({ onToast }) {
   const [miniGameConfig, setMiniGameConfig] = useState({ gamesCount: 15, roundsPerGame: 4 });
@@ -31,7 +29,7 @@ export default function MiniGamesGenerator({ onToast }) {
   const loadTasks = async () => {
     setLoadingTasks(true);
     try {
-      const miniGameSubjects = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
+      const miniGameSubjects = GAME_HUB.map(game => game.id);
       const data = await base44.entities.GameTask.list('-created_date', 100);
       const miniGameTasks = data.filter(t => miniGameSubjects.includes(t.subject));
       setTasks(miniGameTasks);
@@ -107,12 +105,20 @@ export default function MiniGamesGenerator({ onToast }) {
         if (gamesToAdd > 0) {
           await base44.entities.GameTask.create({
             taskName: `Mini Game: ${gameData?.title || gameId} · ${miniGameConfig.gamesCount} games x ${miniGameConfig.roundsPerGame} round`,
-            ageGroup: 'sekolah_rendah',
+            ageGroup: 'prasekolah',
             subject: gameId,
             gamesCount: gamesToAdd,
             questionsPerGame: miniGameConfig.roundsPerGame,
             status: 'pending',
-            errorMessage: JSON.stringify({ sets: miniGameConfig.gamesCount, levels: 1, itemsPerSet: miniGameConfig.roundsPerGame, theme: 'KSSR asas Malaysia' }),
+            errorMessage: JSON.stringify({
+              sets: miniGameConfig.gamesCount,
+              levels: 1,
+              itemsPerSet: miniGameConfig.roundsPerGame,
+              theme: gameData?.objective || gameData?.title || 'Mini game CeriaKid',
+              categoryTitle: gameData?.title,
+              emoji: gameData?.emoji,
+              modes: gameData?.modes || [],
+            }),
           });
         }
       }
