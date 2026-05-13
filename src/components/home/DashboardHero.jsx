@@ -14,11 +14,11 @@ export default function DashboardHero({ user, avatarUrl, lang }) {
         initial={{ opacity: 0, y: -14 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.01 }}
-        className="relative isolate overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/10 p-4 shadow-2xl shadow-fuchsia-950/25 backdrop-blur-3xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[2.25rem] md:p-7 md:[clip-path:inset(0_round_2.25rem)]"
+        className="relative isolate overflow-hidden rounded-[1.5rem] border border-orange-200/25 bg-gradient-to-br from-orange-400/35 via-amber-300/20 to-pink-500/25 p-4 shadow-2xl shadow-orange-950/25 backdrop-blur-3xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[2.25rem] md:p-7 md:[clip-path:inset(0_round_2.25rem)]"
       >
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/18 via-white/6 to-transparent" />
-        <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-pink-500/30 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-cyan-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-orange-300/35 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-yellow-300/20 blur-3xl" />
 
         <div className="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex min-w-0 items-center gap-4">
