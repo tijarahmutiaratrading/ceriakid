@@ -15,7 +15,7 @@ export const MINI_GAME_CATEGORIES = [
     { id: 'pantun-spin', title: 'Pantun Spin Wheel', emoji: '🎡', mode: 'spin_wheel', difficulty: 'Sederhana', objective: 'Kenal rima mudah.', instruction: 'Putar roda dan padankan rima.', items: ['batu', 'paku', 'meja', 'kerusi'], target: 'buku', reward: 'Wheel fireworks' },
   ]},
   { id: 'english_vocabulary', title: 'English Vocabulary', emoji: '🌟', color: 'from-violet-500 to-purple-400', objective: 'Vocabulary harian dan perkataan mudah.', games: [
-    { id: 'word-picture-hunt', title: 'Word Picture Hunt', emoji: '🔍', mode: 'picture_hunt', difficulty: 'Mudah', objective: 'Cari gambar mengikut perkataan.', instruction: 'Tap gambar untuk perkataan sasaran.', target: 'cat', items: ['cat', 'ball', 'fish', 'book'], reward: 'Magnifier sparkle' },
+    { id: 'word-picture-hunt', title: 'Word Picture Hunt', emoji: '🔍', mode: 'picture_hunt', difficulty: 'Mudah', objective: 'Cari gambar mengikut perkataan.', instruction: 'Tap gambar yang sepadan dengan perkataan sasaran.', target: 'cat', items: [{ text: '🐱', value: 'cat' }, { text: '⚽', value: 'ball' }, { text: '🐟', value: 'fish' }, { text: '📚', value: 'book' }], reward: 'Magnifier sparkle' },
     { id: 'typing-race', title: 'Mini Typing Race', emoji: '⌨️', mode: 'typing_challenge', difficulty: 'Sederhana', objective: 'Taip perkataan mudah.', instruction: 'Taip perkataan sasaran.', target: 'sun', reward: 'Race car boost' },
     { id: 'opposite-tiles', title: 'Opposite Tile Match', emoji: '🟨', mode: 'tilematch', difficulty: 'Sederhana', objective: 'Padankan lawan kata.', instruction: 'Cari pasangan opposite words.', tiles: ['big', 'small', 'hot', 'cold', 'up', 'down'], reward: 'Tile burst' },
   ]},

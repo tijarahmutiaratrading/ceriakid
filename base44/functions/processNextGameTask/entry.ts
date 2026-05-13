@@ -308,8 +308,8 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         sequence: 'Susun turutan. Output items rawak dan answer turutan betul.',
         swipe_select: 'Pilih kumpulan betul. Output items dengan text dan group, guna dua kumpulan sahaja.',
         spin_wheel: 'Putar roda padanan. Output target dan items yang sesuai untuk dipilih.',
-        picture_hunt: 'Cari objek/perkataan. Output target dan items termasuk jawapan betul.',
-        hidden_object: 'Cari objek tersembunyi. Output target dan items termasuk jawapan betul.',
+        picture_hunt: 'Cari gambar/emoji berdasarkan perkataan sasaran. Output target string dan items array object {text, value}; text mesti emoji/gambar ringkas untuk dipaparkan, value mesti jawapan/perkataan. Sekurang-kurangnya satu item value sama tepat dengan target.',
+        hidden_object: 'Cari objek tersembunyi. Output target string dan items array object {text, value}; text mesti emoji/simbol visual untuk dipaparkan, value mesti nama objek. Sekurang-kurangnya satu item value sama tepat dengan target.',
         typing_challenge: 'Taip perkataan sasaran. Output target satu perkataan pendek.',
         mini_simulation: 'Simulasi sains mudah. Output target dan items dengan text + group.',
         true_false: 'Fakta betul/salah. Output statements dengan text dan answer boolean.',
@@ -341,8 +341,8 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         sequence: { type: 'object', properties: { ...baseProps, items: { type: 'array', items: { type: 'string' } }, answer: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'items', 'answer'] },
         swipe_select: { type: 'object', properties: { ...baseProps, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['title', 'microTopic', 'instruction', 'items'] },
         spin_wheel: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
-        picture_hunt: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
-        hidden_object: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
+        picture_hunt: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, value: { type: 'string' } }, required: ['text', 'value'] } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
+        hidden_object: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, value: { type: 'string' } }, required: ['text', 'value'] } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
         typing_challenge: { type: 'object', properties: { ...baseProps, target: { type: 'string' } }, required: ['title', 'microTopic', 'instruction', 'target'] },
         mini_simulation: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
         true_false: { type: 'object', properties: { ...baseProps, statements: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, answer: { type: 'boolean' } }, required: ['text', 'answer'] } } }, required: ['title', 'microTopic', 'instruction', 'statements'] },
@@ -372,11 +372,23 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
           next.items = rawItems.map(item => ({ text: String(item?.text || item?.label || item || '').trim(), group: String(item?.group || '').trim() })).filter(item => item.text && item.group);
           if (!next.items.some(item => item.group.toLowerCase() === target.toLowerCase())) next.items.unshift({ text: target, group: target });
         }
+        if (currentMode === 'picture_hunt' || currentMode === 'hidden_object') {
+          const emojiMap = { cat: '🐱', ball: '⚽', fish: '🐟', book: '📚', apple: '🍎', sun: '☀️', moon: '🌙', star: '⭐', car: '🚗', house: '🏠', bird: '🐦', flower: '🌸' };
+          const target = String(next.target || '').trim() || 'star';
+          const rawItems = Array.isArray(next.items) ? next.items : [];
+          next.target = target;
+          next.items = rawItems.map(item => {
+            const value = String(item?.value || item?.answer || item?.label || item?.text || item || '').trim();
+            const text = String(item?.text || emojiMap[value.toLowerCase()] || value).trim();
+            return { text, value };
+          }).filter(item => item.text && item.value);
+          if (!next.items.some(item => item.value.toLowerCase() === target.toLowerCase())) next.items.unshift({ text: emojiMap[target.toLowerCase()] || '⭐', value: target });
+        }
         return next;
       };
 
       let data = await base44.asServiceRole.integrations.Core.InvokeLLM({
-        prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nGaya aktiviti WAJIB untuk set ini: ${playStyle}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\nPeraturan anti-repeat:\n0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6; jangan jana kandungan Tingkatan/PT3/SPM/sekolah menengah.\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Untuk balloon_pop dan falling_catch: target mesti string; items mesti array string; items mesti mengandungi target yang sama tepat sekurang-kurangnya 2 kali; jangan guna object untuk items.\n10. Untuk mini_simulation: items mesti array object {text, group}; sekurang-kurangnya satu item mesti group sama tepat dengan target.\n11. Setiap mini game mesti ada jawapan/target/group yang jelas supaya app boleh papar popup Betul atau Cuba lagi.\n12. Output JSON sahaja ikut schema.`,
+        prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nGaya aktiviti WAJIB untuk set ini: ${playStyle}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\nPeraturan anti-repeat:\n0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6; jangan jana kandungan Tingkatan/PT3/SPM/sekolah menengah.\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Untuk balloon_pop dan falling_catch: target mesti string; items mesti array string; items mesti mengandungi target yang sama tepat sekurang-kurangnya 2 kali; jangan guna object untuk items.\n10. Untuk mini_simulation: items mesti array object {text, group}; sekurang-kurangnya satu item mesti group sama tepat dengan target.\n11. Setiap mini game mesti ada jawapan/target/group yang jelas supaya app boleh papar popup Betul atau Cuba lagi.\n12. Jika arahan menyebut gambar/objek visual, items mesti guna emoji/simbol visual, bukan perkataan biasa sahaja.\n13. Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
       });
 
@@ -405,7 +417,8 @@ Wajib baiki:
 7. Untuk balloon_pop dan falling_catch, pastikan target ada sekurang-kurangnya 2 kali dalam items dengan ejaan sama tepat, dan items hanya string.
 8. Untuk mini_simulation, pastikan sekurang-kurangnya satu item mempunyai group yang sama tepat dengan target.
 9. Untuk sorting, swipe_select dan story, setiap item/choice mesti ada jawapan betul yang jelas supaya popup Betul/Cuba lagi boleh dipaparkan.
-10. Pastikan output masih ikut schema asal dan lengkap.
+10. Untuk picture_hunt dan hidden_object, jangan guna perkataan biasa sebagai paparan gambar; items mesti object {text, value}, text ialah emoji/simbol visual dan value ialah jawapan yang dipadankan dengan target.
+11. Pastikan output masih ikut schema asal dan lengkap.
 
 Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
