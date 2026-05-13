@@ -2,9 +2,9 @@ import React from 'react';
 import { CheckCircle2, Clock, Database, Loader2, Users, AlertTriangle, Sparkles } from 'lucide-react';
 
 const StatCard = ({ icon: Icon, label, value, tone }) => (
-  <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/10 p-3 shadow-xl shadow-black/10 md:rounded-3xl md:p-4">
-    <div className={`absolute -right-5 -top-5 h-20 w-20 rounded-full blur-2xl ${tone}`} />
-    <div className="relative flex items-center justify-between gap-3">
+  <div className="relative isolate overflow-hidden rounded-2xl border border-white/15 bg-white/10 p-3 shadow-xl shadow-black/10 transform-gpu [clip-path:inset(0_round_1rem)] md:rounded-3xl md:p-4 md:[clip-path:inset(0_round_1.5rem)]">
+    <div className={`pointer-events-none absolute -right-5 -top-5 z-0 h-20 w-20 rounded-full blur-2xl ${tone}`} />
+    <div className="relative z-10 flex items-center justify-between gap-3">
       <div>
         <p className="text-lg font-black text-white leading-none md:text-2xl">{value}</p>
         <p className="mt-1 text-[9px] font-black uppercase tracking-wider text-white/55 md:text-[11px]">{label}</p>
