@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
+import { trackPixelEvent } from '@/lib/pixel';
+
+const TIER_VALUES = {
+  asas: 49,
+  standard: 99,
+  keluarga: 199,
+};
 
 const TIERS = [
 {
@@ -70,6 +77,11 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
     if (!formData.phone.trim()) {setError('Sila masukkan nombor telefon');return;}
 
     setLoading(true);
+    trackPixelEvent('InitiateCheckout', {
+      currency: 'MYR',
+      value: TIER_VALUES[formData.selectedTier] || 0,
+      content_name: formData.selectedTier,
+    });
 
     try {
 

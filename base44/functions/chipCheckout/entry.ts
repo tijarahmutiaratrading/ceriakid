@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
         full_name: name,
         phone: phone
       },
-      success_redirect: `${origin}/?payment=success&tier=${tier}`,
+      success_redirect: `${origin}/thank-you?tier=${tier}`,
       failure_redirect: `${origin}/?payment=failed`,
       success_callback: `https://api.base44.com/api/apps/${Deno.env.get('BASE44_APP_ID')}/functions/chipWebhook`,
       send_receipt: true,
