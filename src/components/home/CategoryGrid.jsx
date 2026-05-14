@@ -34,6 +34,13 @@ export default function CategoryGrid() {
           grouped[g.category].push(g);
         }
       });
+
+      const fallbackGames = getGamesByAge(ageGroup);
+      Object.keys(CATEGORY_MAP).forEach(cat => {
+        if ((grouped[cat]?.length || 0) === 0 && (fallbackGames[cat]?.length || 0) > 0) {
+          grouped[cat] = fallbackGames[cat];
+        }
+      });
       
       setGames(grouped);
     } catch (err) {
