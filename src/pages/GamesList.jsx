@@ -209,7 +209,7 @@ export default function GamesList() {
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
 
         {/* Header Card */}
         <motion.div
@@ -285,7 +285,7 @@ export default function GamesList() {
             </Link>
           </motion.div>
         ) : (
-          <div className="space-y-3 md:space-y-4">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
             {games.map((game, i) => {
               const globalIdx = allGames.findIndex((g) => g === game);
               const gameKey = `${ageGroup}-${category}-${globalIdx}`;

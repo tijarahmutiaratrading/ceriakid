@@ -50,7 +50,7 @@ export default function MiniGamesList() {
 
       <AppHeader showBack={true} backTo="/games-hub" />
 
-      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className={`mb-5 rounded-3xl p-5 bg-gradient-to-br ${category.color} shadow-2xl`}>
           <Link to="/games-hub" className="inline-flex items-center gap-2 text-white/85 text-xs font-black mb-4">
             <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
@@ -64,7 +64,7 @@ export default function MiniGamesList() {
           </div>
         </motion.div>
 
-        <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
           {loadingGames && <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>}
           {!loadingGames && gamesToShow.map((game, idx) => {
             const globalIdx = categoryOffset + idx;
@@ -75,12 +75,12 @@ export default function MiniGamesList() {
             const wrapperProps = locked ? {} : { to: `/mini-games/${category.id}/play/${playId}` };
             return (
             <motion.div key={game.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.06 }}>
-              <CardWrapper {...wrapperProps} className={`block rounded-3xl p-4 bg-white/12 border border-white/20 transition-all shadow-xl ${locked ? 'opacity-60' : 'hover:bg-white/18'}`}>
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-3xl bg-white/20 flex items-center justify-center text-4xl flex-shrink-0">{game.emoji}</div>
+              <CardWrapper {...wrapperProps} className={`block h-full rounded-3xl p-3 sm:p-4 bg-white/12 border border-white/20 transition-all shadow-xl ${locked ? 'opacity-60' : 'hover:bg-white/18'}`}>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-3xl bg-white/20 flex items-center justify-center text-3xl sm:text-4xl flex-shrink-0">{game.emoji}</div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h2 className="text-white font-black text-base">{game.title}</h2>
+                      <h2 className="text-white font-black text-sm sm:text-base leading-tight line-clamp-2">{game.title}</h2>
                       <span className="px-2 py-0.5 rounded-full bg-white/20 text-white/85 text-[10px] font-black">{game.difficulty || data.difficulty || 'Mudah'}</span>
                     </div>
                     <p className="text-white/75 text-xs font-bold">{modeLabels[data.mode || data.playStyle] || data.mode || data.playStyle || game.type} · {data.objective || game.description || category.objective}</p>
@@ -90,7 +90,7 @@ export default function MiniGamesList() {
                       <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Sparkles className="w-3 h-3" /> animasi</span>
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0">
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0 self-end sm:self-auto">
                     {locked ? <Lock className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
                   </div>
                 </div>

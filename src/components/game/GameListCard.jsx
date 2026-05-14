@@ -26,14 +26,14 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: Math.min(idx * 0.03, 0.5) }}
-          className="rounded-3xl p-4 flex items-center gap-4 opacity-60 cursor-pointer shadow-xl"
+          className="h-full rounded-3xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 opacity-60 cursor-pointer shadow-xl"
           style={cardStyle}
         >
           <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl grayscale flex-shrink-0">
             {game.emoji}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-sm truncate text-white/60">{game.title}</h3>
+            <h3 className="font-bold text-sm leading-tight line-clamp-2 text-white/60">{game.title}</h3>
             <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full text-white/70 ${difficulty.color} mt-1`}>
               {difficulty.icon} {difficulty.label}
             </span>
@@ -57,7 +57,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
         transition={{ delay: Math.min(idx * 0.03, 0.5) }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
-        className="rounded-3xl p-4 flex items-center gap-4 cursor-pointer group shadow-xl hover:bg-white/10 transition-all"
+        className="h-full rounded-3xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 cursor-pointer group shadow-xl hover:bg-white/10 transition-all"
         style={cardStyle}
       >
         {/* Emoji */}
@@ -68,7 +68,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-black text-base text-white truncate">{game.title}</h3>
+            <h3 className="font-black text-sm sm:text-base leading-tight line-clamp-2 text-white">{game.title}</h3>
             {badge && badge !== 'locked' && <GameBadge type={badge} />}
           </div>
 
@@ -95,7 +95,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
         </div>
 
         {/* Play button */}
-        <div className="w-11 h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0 group-hover:scale-105 transition-all">
+        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0 self-end sm:self-auto group-hover:scale-105 transition-all">
           <Play className="w-5 h-5 fill-current" />
         </div>
       </motion.div>
