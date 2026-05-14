@@ -5,7 +5,6 @@ export default function ProMiniGameShell({ data = {}, mode, children }) {
   const rounds = Array.isArray(data.rounds) ? data.rounds : [];
   const theme = data.visualTheme || data.generatedTheme || 'Genius Quest';
   const powerUps = Array.isArray(data.powerUps) && data.powerUps.length ? data.powerUps : ['Combo', 'Focus', 'Boost'];
-  const totalRounds = rounds.length || data.itemsPerSet || data.totalQuestions || 4;
 
   return (
     <div className="relative overflow-hidden rounded-[2rem] border border-white/30 bg-slate-950/55 p-3 shadow-2xl shadow-fuchsia-950/40 backdrop-blur-2xl">
@@ -45,21 +44,6 @@ export default function ProMiniGameShell({ data = {}, mode, children }) {
             ))}
           </div>
         )}
-
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          <div className="rounded-2xl bg-white/14 px-3 py-2 text-center ring-1 ring-white/15">
-            <p className="text-[9px] font-black uppercase text-white/55">Level</p>
-            <p className="text-sm font-black text-white">{data.level || 1}</p>
-          </div>
-          <div className="rounded-2xl bg-white/14 px-3 py-2 text-center ring-1 ring-white/15">
-            <p className="text-[9px] font-black uppercase text-white/55">Rounds</p>
-            <p className="text-sm font-black text-white">{totalRounds}</p>
-          </div>
-          <div className="rounded-2xl bg-white/14 px-3 py-2 text-center ring-1 ring-white/15">
-            <p className="text-[9px] font-black uppercase text-white/55">Combo</p>
-            <p className="text-sm font-black text-yellow-200">x2</p>
-          </div>
-        </div>
 
         <div className="mt-3 flex flex-wrap gap-2">
           {powerUps.slice(0, 3).map((item) => (
