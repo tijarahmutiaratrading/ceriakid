@@ -61,7 +61,7 @@ export default function CategoryGrid() {
     return () => clearInterval(interval);
   }, [ageGroup]);
 
-  const categories = Object.keys(games).filter(category => (games[category]?.length || 0) > 0);
+  const categories = Object.keys(CATEGORY_MAP).filter(category => ageGroup === 'sekolah_rendah' || category !== 'jawi');
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
