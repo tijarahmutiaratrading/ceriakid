@@ -9,7 +9,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
 
-const glassCard = { background: 'rgba(15,23,42,0.72)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' };
+const glassCard = { background: 'rgba(255,255,255,0.78)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.8)', boxShadow: '0 18px 45px rgba(168,85,247,0.18)' };
 
 const guideByMode = {
   memory: 'Buka 2 kad. Jika pasangan sama maksud, markah akan naik.',
@@ -77,7 +77,7 @@ export default function MiniGamePlayground() {
   };
 
   return (
-    <div className="min-h-screen font-nunito bg-[radial-gradient(circle_at_top_left,#22d3ee_0%,transparent_24%),radial-gradient(circle_at_top_right,#f472b6_0%,transparent_26%),linear-gradient(135deg,#0f172a_0%,#4c1d95_48%,#831843_100%)] relative overflow-hidden">
+    <div className="min-h-screen font-nunito bg-[radial-gradient(circle_at_top_left,#fde68a_0%,transparent_28%),radial-gradient(circle_at_top_right,#f9a8d4_0%,transparent_30%),radial-gradient(circle_at_bottom,#93c5fd_0%,transparent_36%),linear-gradient(135deg,#fff7ad_0%,#a7f3d0_36%,#bae6fd_68%,#fbcfe8_100%)] relative overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
         <div className="absolute top-1/3 -left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
@@ -92,11 +92,11 @@ export default function MiniGamePlayground() {
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner">{game.emoji}</div>
             <div className="min-w-0">
-              <h1 className="text-xl font-black text-white leading-tight">{game.title}</h1>
-              <p className="text-white/70 text-xs font-bold mt-1">{gameData.objective || game.description || category.objective} · {game.difficulty || gameData.difficulty || 'Mudah'}</p>
+              <h1 className="text-xl font-black text-slate-900 leading-tight">{game.title}</h1>
+              <p className="text-purple-700 text-xs font-black mt-1">{gameData.objective || game.description || category.objective} · {game.difficulty || gameData.difficulty || 'Mudah'}</p>
             </div>
           </div>
-          <p className="text-white text-sm font-bold mt-4 leading-relaxed">{gameData.instruction || 'Ikut arahan dan pilih jawapan yang betul.'}</p>
+          <p className="text-slate-700 text-sm font-black mt-4 leading-relaxed">{gameData.instruction || 'Ikut arahan dan pilih jawapan yang betul.'}</p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }} className="mb-5 rounded-3xl bg-white p-4 text-slate-900 shadow-2xl border-4 border-white/70">
