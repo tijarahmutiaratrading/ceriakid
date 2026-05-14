@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Play, ArrowLeft, Trophy, Volume2, Sparkles, Lock } from 'lucide-react';
+import { Play, ArrowLeft, Trophy, Volume2, Sparkles, Lock, Loader2 } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { findMiniCategory, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { useAuth } from '@/lib/AuthContext';
@@ -16,6 +16,8 @@ export default function MiniGamesList() {
   const { type } = useParams();
   const { user, isAuthenticated } = useAuth();
   const [userTier, setUserTier] = React.useState('free');
+  const [dbGames, setDbGames] = React.useState([]);
+  const [loadingGames, setLoadingGames] = React.useState(true);
   const category = findMiniCategory(type);
   const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 3;
 
@@ -25,6 +27,19 @@ export default function MiniGamesList() {
       setUserTier(getActiveTier(subs?.[0]));
     });
   }, [user?.email]);
+
+  React.useEffect(() => {
+    setLoadingGames(true);
+    base44.entities.Game.filter({ category: category.id }).then(games => {
+      setDbGames((games || []).filter(game =>
+        game.isPublished !== false &&
+        (game.gameData?.miniGameBlueprint || game.gameData?.miniGameGenerated || game.gameData?.categoryId === game.category)
+      ).sort((a, b) => (a.order || 0) - (b.order || 0)));
+      setLoadingGames(false);
+    });
+  }, [category.id]);
+
+  const gamesToShow = dbGames.length > 0 ? dbGames : category.games;
 
   return (
     <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
@@ -44,17 +59,20 @@ export default function MiniGamesList() {
             <div className="text-5xl">{category.emoji}</div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-black text-white">{category.title}</h1>
-              <p className="text-white/80 text-sm font-bold">3 gameplay berbeza · {category.objective}</p>
+              <p className="text-white/80 text-sm font-bold">{loadingGames ? 'Syncing games...' : `${gamesToShow.length} mini games`} · {category.objective}</p>
             </div>
           </div>
         </motion.div>
 
         <div className="space-y-3">
-          {category.games.map((game, idx) => {
+          {loadingGames && <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>}
+          {!loadingGames && gamesToShow.map((game, idx) => {
             const globalIdx = categoryOffset + idx;
             const locked = isGameIndexLocked({ index: globalIdx, tier: userTier, isAuthenticated });
             const CardWrapper = locked ? 'div' : Link;
-            const wrapperProps = locked ? {} : { to: `/mini-games/${category.id}/play/${game.id}` };
+            const playId = game.id;
+            const data = game.gameData || game;
+            const wrapperProps = locked ? {} : { to: `/mini-games/${category.id}/play/${playId}` };
             return (
             <motion.div key={game.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.06 }}>
               <CardWrapper {...wrapperProps} className={`block rounded-3xl p-4 bg-white/12 border border-white/20 transition-all shadow-xl ${locked ? 'opacity-60' : 'hover:bg-white/18'}`}>
@@ -63,11 +81,11 @@ export default function MiniGamesList() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <h2 className="text-white font-black text-base">{game.title}</h2>
-                      <span className="px-2 py-0.5 rounded-full bg-white/20 text-white/85 text-[10px] font-black">{game.difficulty}</span>
+                      <span className="px-2 py-0.5 rounded-full bg-white/20 text-white/85 text-[10px] font-black">{game.difficulty || data.difficulty || 'Mudah'}</span>
                     </div>
-                    <p className="text-white/75 text-xs font-bold">{modeLabels[game.mode] || game.mode} · {game.objective}</p>
+                    <p className="text-white/75 text-xs font-bold">{modeLabels[data.mode || data.playStyle] || data.mode || data.playStyle || game.type} · {data.objective || game.description || category.objective}</p>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Trophy className="w-3 h-3" /> {game.reward}</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Trophy className="w-3 h-3" /> {data.reward || `${game.totalQuestions || data.itemsPerSet || 4} round`}</span>
                       <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Volume2 className="w-3 h-3" /> sound</span>
                       <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Sparkles className="w-3 h-3" /> animasi</span>
                     </div>

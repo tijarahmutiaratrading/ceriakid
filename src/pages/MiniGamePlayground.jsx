@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Lock } from 'lucide-react';
+import { ArrowLeft, Lock, Loader2 } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
 import { findMiniGame, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
@@ -41,9 +41,14 @@ export default function MiniGamePlayground() {
   const { categoryId, gameId } = useParams();
   const { user, isAuthenticated } = useAuth();
   const [userTier, setUserTier] = React.useState('free');
-  const { category, game } = findMiniGame(categoryId, gameId);
+  const [dbGame, setDbGame] = React.useState(null);
+  const [loadingGame, setLoadingGame] = React.useState(true);
+  const { category, game: blueprintGame } = findMiniGame(categoryId, gameId);
+  const game = dbGame || blueprintGame;
+  const gameData = game?.gameData || game || {};
   const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 3;
-  const gameIndex = categoryOffset + Math.max(0, category.games.findIndex(item => item.id === gameId));
+  const blueprintIndex = Math.max(0, category.games.findIndex(item => item.id === gameId));
+  const gameIndex = categoryOffset + (dbGame ? Number(dbGame.order || 0) : blueprintIndex);
   const locked = isGameIndexLocked({ index: gameIndex, tier: userTier, isAuthenticated });
 
   React.useEffect(() => {
@@ -53,13 +58,22 @@ export default function MiniGamePlayground() {
     });
   }, [user?.email]);
 
+  React.useEffect(() => {
+    setLoadingGame(true);
+    base44.entities.Game.filter({ category: category.id }).then(games => {
+      const found = (games || []).find(item => item.id === gameId);
+      setDbGame(found || null);
+      setLoadingGame(false);
+    });
+  }, [category.id, gameId]);
+
   const normalizedGame = {
     title: game.title,
-    emoji: game.emoji,
-    type: game.mode,
+    emoji: game.emoji || category.emoji,
+    type: gameData.mode || gameData.playStyle || game.type,
     category: category.id,
-    difficulty: game.difficulty,
-    gameData: { ...game, mode: game.mode },
+    difficulty: game.difficulty || gameData.difficulty,
+    gameData: { ...gameData, mode: gameData.mode || gameData.playStyle || game.type },
   };
 
   return (
@@ -79,19 +93,21 @@ export default function MiniGamePlayground() {
             <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner">{game.emoji}</div>
             <div className="min-w-0">
               <h1 className="text-xl font-black text-white leading-tight">{game.title}</h1>
-              <p className="text-white/70 text-xs font-bold mt-1">{game.objective} · {game.difficulty}</p>
+              <p className="text-white/70 text-xs font-bold mt-1">{gameData.objective || game.description || category.objective} · {game.difficulty || gameData.difficulty || 'Mudah'}</p>
             </div>
           </div>
-          <p className="text-white text-sm font-bold mt-4 leading-relaxed">{game.instruction}</p>
+          <p className="text-white text-sm font-bold mt-4 leading-relaxed">{gameData.instruction || 'Ikut arahan dan pilih jawapan yang betul.'}</p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }} className="mb-5 rounded-3xl bg-white p-4 text-slate-900 shadow-2xl border-4 border-white/70">
           <p className="text-[11px] font-black uppercase tracking-[0.18em] text-purple-700 mb-1">Cara Main Ringkas</p>
-          <p className="text-base font-black leading-snug">{guideByMode[game.mode] || 'Ikut arahan, pilih jawapan yang paling sesuai, dan lihat popup Betul/Cuba lagi.'}</p>
-          <p className="text-xs font-bold text-slate-600 mt-2">Untuk ibu bapa: game ini latih {game.objective?.toLowerCase() || 'kemahiran asas'}.</p>
+          <p className="text-base font-black leading-snug">{guideByMode[gameData.mode || gameData.playStyle] || 'Ikut arahan, pilih jawapan yang paling sesuai, dan lihat popup Betul/Cuba lagi.'}</p>
+          <p className="text-xs font-bold text-slate-600 mt-2">Untuk ibu bapa: game ini latih {(gameData.objective || game.description || category.objective)?.toLowerCase() || 'kemahiran asas'}.</p>
         </motion.div>
 
-        {locked ? (
+        {loadingGame ? (
+          <div className="flex justify-center py-10"><Loader2 className="w-7 h-7 animate-spin text-white" /></div>
+        ) : locked ? (
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl bg-white p-8 text-center shadow-2xl">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-100 text-purple-700">
               <Lock className="h-8 w-8" />

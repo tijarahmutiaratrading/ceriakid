@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
+import { base44 } from '@/api/base44Client';
 
 const levelColors = {
   Mudah: 'bg-green-400/85 text-white',
@@ -14,6 +15,30 @@ const levelColors = {
 
 export default function GamesHub() {
   const { ageGroup } = useAgeGroup() || { ageGroup: 'prasekolah' };
+  const [counts, setCounts] = React.useState({});
+  const [loadingCounts, setLoadingCounts] = React.useState(true);
+
+  React.useEffect(() => {
+    const loadCounts = async () => {
+      setLoadingCounts(true);
+      const results = await Promise.all(
+        MINI_GAME_CATEGORIES.map(category => base44.entities.Game.filter({ category: category.id }))
+      );
+      const nextCounts = {};
+      results.forEach((games, index) => {
+        nextCounts[MINI_GAME_CATEGORIES[index].id] = games.filter(game =>
+          game.isPublished !== false &&
+          (game.gameData?.miniGameBlueprint || game.gameData?.miniGameGenerated || game.gameData?.categoryId === game.category)
+        ).length;
+      });
+      setCounts(nextCounts);
+      setLoadingCounts(false);
+    };
+
+    loadCounts();
+  }, []);
+
+  const totalGames = MINI_GAME_CATEGORIES.reduce((sum, category) => sum + (counts[category.id] ?? category.games.length), 0);
 
   return (
     <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
@@ -35,7 +60,7 @@ export default function GamesHub() {
             <div className="flex-1">
               <h1 className="text-3xl font-black text-white leading-tight">Mini Games Hub</h1>
               <p className="text-white/70 text-sm font-semibold">
-                {ageGroup === 'prasekolah' ? '🧒 Prasekolah' : '🎒 Sekolah Rendah'} · 8 kategori · 24 mini games unik
+                {ageGroup === 'prasekolah' ? '🧒 Prasekolah' : '🎒 Sekolah Rendah'} · 8 kategori · {loadingCounts ? 'syncing...' : `${totalGames} mini games`}
               </p>
             </div>
           </div>
@@ -51,7 +76,9 @@ export default function GamesHub() {
                 <div className={`bg-gradient-to-br ${category.color} rounded-3xl p-4 h-full shadow-lg`}>
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="text-4xl">{category.emoji}</div>
-                    <span className="text-xs px-2 py-1 rounded-full font-black bg-white/25 text-white">3 games</span>
+                    <span className="text-xs px-2 py-1 rounded-full font-black bg-white/25 text-white">
+                      {loadingCounts ? <Loader2 className="w-3 h-3 animate-spin" /> : `${counts[category.id] ?? category.games.length} games`}
+                    </span>
                   </div>
                   <h3 className="text-white font-black text-lg leading-tight mb-1">{category.title}</h3>
                   <p className="text-white/85 text-xs font-bold leading-snug mb-3">{category.objective}</p>
@@ -66,7 +93,7 @@ export default function GamesHub() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="p-5 rounded-3xl text-center" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}>
           <p className="text-white font-black text-base mb-1">💡 Tips Ibu Bapa</p>
-          <p className="text-white/70 text-sm">Setiap kategori ada 3 pengalaman berbeza supaya anak tak rasa main game yang sama berulang-ulang.</p>
+          <p className="text-white/70 text-sm">Senarai ini kini sync terus dengan mini games yang telah dijana di Games Generator.</p>
         </motion.div>
       </div>
     </div>
