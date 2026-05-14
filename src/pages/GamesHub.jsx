@@ -28,7 +28,7 @@ export default function GamesHub() {
       results.forEach((games, index) => {
         nextCounts[MINI_GAME_CATEGORIES[index].id] = games.filter(game =>
           game.isPublished !== false &&
-          (game.gameData?.miniGameBlueprint || game.gameData?.miniGameGenerated || game.gameData?.categoryId === game.category)
+          (game.gameData?.miniGameBlueprint === true || game.gameData?.miniGameGenerated === true)
         ).length;
       });
       setCounts(nextCounts);

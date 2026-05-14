@@ -71,9 +71,8 @@ export default function MiniGamesManager({ onToast }) {
     );
 
     const existingGames = results.flat().filter(game =>
-      game.gameData?.miniGameBlueprint ||
-      game.gameData?.miniGameGenerated ||
-      game.gameData?.categoryId === game.category
+      game.gameData?.miniGameBlueprint === true ||
+      game.gameData?.miniGameGenerated === true
     );
     const existingKeys = new Set(existingGames.map(game => `${game.category}-${game.gameData?.id || game.title}`));
     const missingBlueprintRecords = MINI_GAME_CATEGORIES.flatMap(category =>
@@ -96,9 +95,8 @@ export default function MiniGamesManager({ onToast }) {
     }
 
     const allGames = results.flat().filter(game =>
-      game.gameData?.miniGameBlueprint ||
-      game.gameData?.miniGameGenerated ||
-      game.gameData?.categoryId === game.category
+      game.gameData?.miniGameBlueprint === true ||
+      game.gameData?.miniGameGenerated === true
     ).sort((a, b) => {
       const categoryA = MINI_GAMES.findIndex((game) => game.id === a.category);
       const categoryB = MINI_GAMES.findIndex((game) => game.id === b.category);

@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
       const filtered = games.filter(g =>
         g.category === id &&
         g.isPublished !== false &&
-        (g.gameData?.miniGameBlueprint || g.gameData?.miniGameGenerated || g.gameData?.categoryId === id)
+        (g.gameData?.miniGameBlueprint === true || g.gameData?.miniGameGenerated === true)
       );
       miniCounts[id] = {
         count: filtered.length,

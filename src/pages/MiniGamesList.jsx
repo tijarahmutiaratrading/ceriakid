@@ -33,7 +33,7 @@ export default function MiniGamesList() {
     base44.entities.Game.filter({ category: category.id }).then(games => {
       setDbGames((games || []).filter(game =>
         game.isPublished !== false &&
-        (game.gameData?.miniGameBlueprint || game.gameData?.miniGameGenerated || game.gameData?.categoryId === game.category)
+        (game.gameData?.miniGameBlueprint === true || game.gameData?.miniGameGenerated === true)
       ).sort((a, b) => (a.order || 0) - (b.order || 0)));
       setLoadingGames(false);
     });
