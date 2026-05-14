@@ -292,7 +292,7 @@ Deno.serve(async (req) => {
     const miniGameMap = {
       abc_phonics: { title: 'ABC & Phonics', type: 'phonics', emoji: '🔤', modes: ['balloon_pop', 'tracing', 'dragdrop'] },
       math_counting: { title: 'Math & Counting', type: 'counting', emoji: '🔢', modes: ['falling_catch', 'stacking', 'sequence'] },
-      bahasa_melayu: { title: 'Bahasa Melayu', type: 'word_builder', emoji: '📚', modes: ['wordbuilder', 'swipe_select', 'spin_wheel'] },
+      mini_bahasa_melayu: { title: 'Bahasa Melayu', type: 'word_builder', emoji: '📚', modes: ['wordbuilder', 'swipe_select', 'spin_wheel'] },
       english_vocabulary: { title: 'English Vocabulary', type: 'picture_quiz', emoji: '🌟', modes: ['picture_hunt', 'typing_challenge', 'tilematch'] },
       sains_awal: { title: 'Sains Awal', type: 'science_quiz', emoji: '🔬', modes: ['sorting', 'mini_simulation', 'true_false'] },
       jawi_iqra: { title: 'Jawi & Iqra', type: 'memory_game', emoji: '🕌', modes: ['memory', 'rhythm_tap', 'connect_dots'] },

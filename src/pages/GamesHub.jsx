@@ -21,6 +21,10 @@ export default function GamesHub() {
   React.useEffect(() => {
     const loadCounts = async () => {
       setLoadingCounts(true);
+      const me = await base44.auth.me();
+      if (me?.role === 'admin') {
+        await base44.functions.invoke('migrateMiniBahasaMelayu', {});
+      }
       const results = await Promise.all(
         MINI_GAME_CATEGORIES.map(category => base44.entities.Game.filter({ category: category.id }))
       );
