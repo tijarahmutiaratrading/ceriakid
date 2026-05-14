@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Play, ArrowLeft, Trophy, Volume2, Sparkles, Lock, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Search } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import ArcadeGameCard from '@/components/game/ArcadeGameCard';
 import { findMiniCategory, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
@@ -18,6 +19,7 @@ export default function MiniGamesList() {
   const [userTier, setUserTier] = React.useState('free');
   const [dbGames, setDbGames] = React.useState([]);
   const [loadingGames, setLoadingGames] = React.useState(true);
+  const [search, setSearch] = React.useState('');
   const category = findMiniCategory(type);
   const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 3;
 
@@ -39,7 +41,11 @@ export default function MiniGamesList() {
     });
   }, [category.id]);
 
-  const gamesToShow = dbGames.length > 0 ? dbGames : category.games;
+  const gamesToShow = (dbGames.length > 0 ? dbGames : category.games).filter(game => {
+    const data = game.gameData || game;
+    const text = `${game.title || ''} ${data.mode || ''} ${data.objective || game.description || ''}`.toLowerCase();
+    return text.includes(search.toLowerCase());
+  });
 
   return (
     <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
@@ -51,52 +57,51 @@ export default function MiniGamesList() {
       <AppHeader showBack={true} backTo="/games-hub" />
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className={`mb-5 rounded-3xl p-5 bg-gradient-to-br ${category.color} shadow-2xl`}>
-          <Link to="/games-hub" className="inline-flex items-center gap-2 text-white/85 text-xs font-black mb-4">
-            <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
-          </Link>
-          <div className="flex items-center gap-4">
-            <div className="text-5xl">{category.emoji}</div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white">{category.title}</h1>
-              <p className="text-white/80 text-sm font-bold">{loadingGames ? 'Syncing games...' : `${gamesToShow.length} mini games`} · {category.objective}</p>
+        <motion.div initial={{ opacity: 0, y: -16, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} className="relative mb-5 overflow-hidden rounded-[2rem] border border-white/25 bg-slate-950/55 p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl">
+          <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-70`} />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.48),transparent_25%),radial-gradient(circle_at_80%_100%,rgba(0,0,0,0.36),transparent_35%)]" />
+          <div className="relative">
+            <Link to="/games-hub" className="inline-flex items-center gap-2 text-white/90 text-xs font-black mb-4">
+              <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
+            </Link>
+            <div className="flex items-center gap-4">
+              <motion.div animate={{ y: [0, -7, 0], rotate: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="flex h-20 w-20 items-center justify-center rounded-[1.75rem] bg-white/22 text-6xl shadow-xl ring-1 ring-white/25">{category.emoji}</motion.div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-black uppercase tracking-[0.22em] text-white/70">Arcade Channel</p>
+                <h1 className="text-2xl sm:text-4xl font-black text-white drop-shadow">{category.title}</h1>
+                <p className="text-white/82 text-sm font-bold">{loadingGames ? 'Syncing games...' : `${gamesToShow.length} mini games`} · {category.objective}</p>
+              </div>
+            </div>
+            <div className="relative mt-5">
+              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/55" />
+              <input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Cari game arcade..."
+                className="w-full rounded-2xl border border-white/20 bg-white/14 py-3 pl-11 pr-4 text-sm font-black text-white placeholder:text-white/55 shadow-inner outline-none"
+              />
             </div>
           </div>
         </motion.div>
 
-        <div className="space-y-3">
-          {loadingGames && <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {loadingGames && <div className="col-span-full flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>}
           {!loadingGames && gamesToShow.map((game, idx) => {
             const globalIdx = categoryOffset + idx;
             const locked = isGameIndexLocked({ index: globalIdx, tier: userTier, isAuthenticated });
-            const CardWrapper = locked ? 'div' : Link;
             const playId = game.id;
             const data = game.gameData || game;
-            const wrapperProps = locked ? {} : { to: `/mini-games/${category.id}/play/${playId}` };
             return (
-            <motion.div key={game.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.06 }}>
-              <CardWrapper {...wrapperProps} className={`block rounded-3xl p-4 bg-white/12 border border-white/20 transition-all shadow-xl ${locked ? 'opacity-60' : 'hover:bg-white/18'}`}>
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-3xl bg-white/20 flex items-center justify-center text-4xl flex-shrink-0">{game.emoji}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h2 className="text-white font-black text-base">{game.title}</h2>
-                      <span className="px-2 py-0.5 rounded-full bg-white/20 text-white/85 text-[10px] font-black">{game.difficulty || data.difficulty || 'Mudah'}</span>
-                    </div>
-                    <p className="text-white/75 text-xs font-bold">{modeLabels[data.mode || data.playStyle] || data.mode || data.playStyle || game.type} · {data.objective || game.description || category.objective}</p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Trophy className="w-3 h-3" /> {data.reward || `${game.totalQuestions || data.itemsPerSet || 4} round`}</span>
-                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Volume2 className="w-3 h-3" /> sound</span>
-                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Sparkles className="w-3 h-3" /> animasi</span>
-                    </div>
-                  </div>
-                  <div className="w-11 h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0">
-                    {locked ? <Lock className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
-                  </div>
-                </div>
-              </CardWrapper>
-              {locked && <p className="mt-2 text-center text-xs font-black text-yellow-200">Naik taraf untuk akses mini game ini</p>}
-            </motion.div>
+              <ArcadeGameCard
+                key={game.id}
+                game={game}
+                data={data}
+                category={category}
+                locked={locked}
+                to={`/mini-games/${category.id}/play/${playId}`}
+                index={idx}
+                modeLabel={modeLabels[data.mode || data.playStyle] || data.mode || data.playStyle || game.type}
+              />
             );
           })}
         </div>

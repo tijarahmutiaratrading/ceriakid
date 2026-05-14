@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import ArcadeCategoryCard from '@/components/game/ArcadeCategoryCard';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { base44 } from '@/api/base44Client';
@@ -51,43 +52,37 @@ export default function GamesHub() {
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-5 rounded-3xl" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}>
-          <Link to="/dashboard" className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
-            <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
-          </Link>
-          <div className="flex items-center gap-3">
-            <div className="text-5xl">🎮</div>
-            <div className="flex-1">
-              <h1 className="text-3xl font-black text-white leading-tight">Mini Games Hub</h1>
-              <p className="text-white/70 text-sm font-semibold">
-                Genius Games · 8 kategori · {loadingCounts ? 'syncing...' : `${totalGames} games`}
-              </p>
+        <motion.div initial={{ opacity: 0, y: -20, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} className="relative mb-6 overflow-hidden rounded-[2rem] border border-white/25 bg-slate-950/55 p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(34,211,238,0.35),transparent_26%),radial-gradient(circle_at_85%_10%,rgba(244,114,182,0.35),transparent_24%),radial-gradient(circle_at_50%_100%,rgba(250,204,21,0.22),transparent_30%)]" />
+          <div className="relative">
+            <Link to="/dashboard" className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/90 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
+              <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
+            </Link>
+            <div className="flex items-center gap-4">
+              <motion.div animate={{ y: [0, -8, 0], rotate: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="flex h-20 w-20 items-center justify-center rounded-[1.75rem] bg-white/18 text-6xl shadow-xl ring-1 ring-white/25">🎮</motion.div>
+              <div className="flex-1">
+                <p className="text-[11px] font-black uppercase tracking-[0.24em] text-cyan-100/80">Arcade Games Portal</p>
+                <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight drop-shadow">Genius Mini Games</h1>
+                <p className="text-white/72 text-sm font-semibold">
+                  8 kategori · {loadingCounts ? 'syncing...' : `${totalGames} games`} · play cepat, animasi kaya, reward arcade
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="mt-4 rounded-2xl bg-white/15 border border-white/20 p-3">
-            <p className="text-white text-sm font-black">Fun first: balloon pop, maze, tracing, spin wheel, catching game, coloring, rhythm tap dan banyak lagi.</p>
+            <div className="mt-5 grid grid-cols-3 gap-2">
+              {['3D Cards', 'Combo', 'Fast Play'].map(item => <div key={item} className="rounded-2xl bg-white/12 px-3 py-2 text-center text-xs font-black text-white ring-1 ring-white/15">{item}</div>)}
+            </div>
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           {MINI_GAME_CATEGORIES.map((category, idx) => (
-            <motion.div key={category.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} whileHover={{ scale: 1.03, y: -4 }} whileTap={{ scale: 0.97 }}>
-              <Link to={`/mini-games/${category.id}`} className="block h-full">
-                <div className={`bg-gradient-to-br ${category.color} rounded-3xl p-4 h-full shadow-lg`}>
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="text-4xl">{category.emoji}</div>
-                    <span className="text-xs px-2 py-1 rounded-full font-black bg-white/25 text-white">
-                      {loadingCounts ? <Loader2 className="w-3 h-3 animate-spin" /> : `${counts[category.id] ?? category.games.length} games`}
-                    </span>
-                  </div>
-                  <h3 className="text-white font-black text-lg leading-tight mb-1">{category.title}</h3>
-                  <p className="text-white/85 text-xs font-bold leading-snug mb-3">{category.objective}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {category.games.map(game => <span key={game.id} className={`${levelColors[game.difficulty]} text-[10px] px-2 py-0.5 rounded-full font-black`}>{game.mode.replace('_', ' ')}</span>)}
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
+            <ArcadeCategoryCard
+              key={category.id}
+              category={category}
+              index={idx}
+              count={counts[category.id] ?? category.games.length}
+              loading={loadingCounts}
+            />
           ))}
         </div>
 
