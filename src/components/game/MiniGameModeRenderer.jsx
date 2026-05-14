@@ -1,44 +1,49 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import MiniFeedback from '@/components/game/MiniFeedback';
+import ProMiniGameShell from '@/components/game/ProMiniGameShell';
 import useMiniFeedback from '@/hooks/useMiniFeedback';
 
-const panel = 'rounded-3xl p-5 bg-slate-950/65 border border-white/35 shadow-xl shadow-black/20 backdrop-blur-xl';
-const action = 'rounded-2xl bg-white text-purple-800 font-black shadow-lg ring-1 ring-slate-900/10 active:scale-95 transition-all';
-const chip = 'px-4 py-3 rounded-2xl bg-white text-purple-800 font-black shadow-lg ring-1 ring-slate-900/10 active:scale-95 transition-all';
+const panel = 'rounded-[1.75rem] p-5 bg-gradient-to-br from-white/22 to-white/8 border border-white/35 shadow-2xl shadow-black/25 backdrop-blur-xl ring-1 ring-white/20';
+const action = 'rounded-2xl bg-gradient-to-br from-white to-cyan-100 text-purple-900 font-black shadow-xl shadow-cyan-950/20 ring-1 ring-white/70 active:scale-95 hover:-translate-y-0.5 transition-all';
+const chip = 'px-4 py-3 rounded-2xl bg-gradient-to-br from-white to-fuchsia-100 text-purple-900 font-black shadow-xl shadow-fuchsia-950/20 ring-1 ring-white/70 active:scale-95 hover:-translate-y-0.5 transition-all';
 
 export default function MiniGameModeRenderer({ game }) {
   const data = game?.gameData || {};
   const mode = data.mode || game?.category;
 
-  if (mode === 'memory') return <MemoryMode data={data} />;
-  if (mode === 'dragdrop') return <DragDropMode data={data} />;
-  if (mode === 'wordbuilder') return <WordBuilderMode data={data} />;
-  if (mode === 'sorting') return <SortingMode data={data} />;
-  if (mode === 'tilematch') return <TileMatchMode data={data} />;
-  if (mode === 'story') return <StoryMode data={data} />;
-  if (mode === 'physics' || mode === 'true_false') return <TrueFalseMode data={data} />;
-  if (mode === 'tracing') return <TracingMode data={data} />;
-  if (mode === 'balloon_pop') return <BalloonPopMode data={data} />;
-  if (mode === 'falling_catch') return <FallingCatchMode data={data} />;
-  if (mode === 'stacking') return <StackingMode data={data} />;
-  if (mode === 'sequence') return <SequenceMode data={data} />;
-  if (mode === 'swipe_select') return <SwipeSelectMode data={data} />;
-  if (mode === 'spin_wheel') return <SpinWheelMode data={data} />;
-  if (mode === 'picture_hunt' || mode === 'hidden_object') return <PictureHuntMode data={data} />;
-  if (mode === 'typing_challenge') return <TypingMode data={data} />;
-  if (mode === 'mini_simulation') return <MiniSimulationMode data={data} />;
-  if (mode === 'rhythm_tap') return <RhythmTapMode data={data} />;
-  if (mode === 'connect_dots') return <ConnectDotsMode data={data} />;
-  if (mode === 'maze') return <MazeMode data={data} />;
-  if (mode === 'reaction_speed') return <ReactionSpeedMode data={data} />;
-  if (mode === 'coloring') return <ColoringMode data={data} />;
+  const renderMode = () => {
+    if (mode === 'memory') return <MemoryMode data={data} />;
+    if (mode === 'dragdrop') return <DragDropMode data={data} />;
+    if (mode === 'wordbuilder') return <WordBuilderMode data={data} />;
+    if (mode === 'sorting') return <SortingMode data={data} />;
+    if (mode === 'tilematch') return <TileMatchMode data={data} />;
+    if (mode === 'story') return <StoryMode data={data} />;
+    if (mode === 'physics' || mode === 'true_false') return <TrueFalseMode data={data} />;
+    if (mode === 'tracing') return <TracingMode data={data} />;
+    if (mode === 'balloon_pop') return <BalloonPopMode data={data} />;
+    if (mode === 'falling_catch') return <FallingCatchMode data={data} />;
+    if (mode === 'stacking') return <StackingMode data={data} />;
+    if (mode === 'sequence') return <SequenceMode data={data} />;
+    if (mode === 'swipe_select') return <SwipeSelectMode data={data} />;
+    if (mode === 'spin_wheel') return <SpinWheelMode data={data} />;
+    if (mode === 'picture_hunt' || mode === 'hidden_object') return <PictureHuntMode data={data} />;
+    if (mode === 'typing_challenge') return <TypingMode data={data} />;
+    if (mode === 'mini_simulation') return <MiniSimulationMode data={data} />;
+    if (mode === 'rhythm_tap') return <RhythmTapMode data={data} />;
+    if (mode === 'connect_dots') return <ConnectDotsMode data={data} />;
+    if (mode === 'maze') return <MazeMode data={data} />;
+    if (mode === 'reaction_speed') return <ReactionSpeedMode data={data} />;
+    if (mode === 'coloring') return <ColoringMode data={data} />;
+    return <div className={panel}><p className="text-white font-bold">Mini game belum tersedia.</p></div>;
+  };
 
-  return <div className={panel}><p className="text-white font-bold">Mini game belum tersedia.</p></div>;
+  return <ProMiniGameShell data={data} mode={mode}>{renderMode()}</ProMiniGameShell>;
 }
 
 function MiniScore({ score, total = 3 }) {
-  return <div className="mb-3 flex items-center justify-between rounded-2xl bg-slate-950/75 border border-white/35 px-4 py-2 shadow-lg shadow-black/15"><span className="text-white font-black text-xs">Score: {score}</span><span className="text-yellow-200 text-sm drop-shadow">{'★'.repeat(Math.min(3, Math.ceil((score / Math.max(1, total)) * 3)))}{'☆'.repeat(3 - Math.min(3, Math.ceil((score / Math.max(1, total)) * 3)))}</span></div>;
+  const percent = Math.min(100, Math.round((score / Math.max(1, total)) * 100));
+  return <div className="mb-3 rounded-2xl bg-slate-950/75 border border-white/35 px-4 py-3 shadow-lg shadow-black/15"><div className="flex items-center justify-between"><span className="text-white font-black text-xs">Score: {score}</span><span className="text-yellow-200 text-sm drop-shadow">{'★'.repeat(Math.min(3, Math.ceil((score / Math.max(1, total)) * 3)))}{'☆'.repeat(3 - Math.min(3, Math.ceil((score / Math.max(1, total)) * 3)))}</span></div><div className="mt-2 h-2 rounded-full bg-white/15 overflow-hidden"><motion.div animate={{ width: `${percent}%` }} className="h-full rounded-full bg-gradient-to-r from-cyan-300 via-yellow-300 to-pink-300" /></div></div>;
 }
 
 function MemoryMode({ data }) {

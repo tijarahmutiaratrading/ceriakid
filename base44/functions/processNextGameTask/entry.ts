@@ -379,6 +379,8 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         title: { type: 'string' },
         microTopic: { type: 'string' },
         playStyle: { type: 'string' },
+        visualTheme: { type: 'string' },
+        powerUps: { type: 'array', items: { type: 'string' } },
         instruction: { type: 'string' },
         rounds: { type: 'array', items: { type: 'string' } },
       };
@@ -447,7 +449,7 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nGaya aktiviti WAJIB untuk set ini: ${playStyle}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\n${QC_GENERATOR_RULES}
 ${qcLearningNotes}
 
-Peraturan anti-repeat:\n0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6; jangan jana kandungan Tingkatan/PT3/SPM/sekolah menengah.\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Untuk balloon_pop dan falling_catch: target mesti string; items mesti array string; items mesti mengandungi target yang sama tepat sekurang-kurangnya 2 kali; jangan guna object untuk items.\n10. Untuk mini_simulation: items mesti array object {text, group}; sekurang-kurangnya satu item mesti group sama tepat dengan target.\n11. Setiap mini game mesti ada jawapan/target/group yang jelas supaya app boleh papar popup Betul atau Cuba lagi.\n12. Jika arahan menyebut gambar/objek visual, items mesti guna emoji/simbol visual, bukan perkataan biasa sahaja.\n13. Jangan cipta aktiviti yang jawapannya bergantung pada warna sahaja; mesti ada label teks, simbol atau bentuk yang jelas untuk kanak-kanak dan kontras tinggi.\n14. Arahan mesti sangat jelas untuk ibu bapa dan kanak-kanak: nyatakan apa perlu ditekan, apa sasaran, dan bila dikira betul dalam satu ayat mudah.\n15. Elakkan mekanik abstrak seperti hanya 'ikut rentak', 'putar dan padan', atau 'simulasi' tanpa jawapan jelas; setiap game mesti ada target/answer/group yang boleh disemak automatik.\n16. Semua mini game mesti fokus latihan genius umum: memori, logik, fokus, kelajuan, pola, maze, kreativiti atau problem solving — jangan kaitkan dengan subjek sekolah, Jawi, Iqra atau silibus khusus.\n17. Setiap game mesti mempunyai round yang berlainan mengikut jumlah Round/Game; rounds mesti terasa berbeza dari segi sasaran, arahan mikro atau cara cabaran.\n18. Output JSON sahaja ikut schema.`,
+Peraturan anti-repeat:\n0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6; jangan jana kandungan Tingkatan/PT3/SPM/sekolah menengah.\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Untuk balloon_pop dan falling_catch: target mesti string; items mesti array string; items mesti mengandungi target yang sama tepat sekurang-kurangnya 2 kali; jangan guna object untuk items.\n10. Untuk mini_simulation: items mesti array object {text, group}; sekurang-kurangnya satu item mesti group sama tepat dengan target.\n11. Setiap mini game mesti ada jawapan/target/group yang jelas supaya app boleh papar popup Betul atau Cuba lagi.\n12. Jika arahan menyebut gambar/objek visual, items mesti guna emoji/simbol visual, bukan perkataan biasa sahaja.\n13. Jangan cipta aktiviti yang jawapannya bergantung pada warna sahaja; mesti ada label teks, simbol atau bentuk yang jelas untuk kanak-kanak dan kontras tinggi.\n14. Arahan mesti sangat jelas untuk ibu bapa dan kanak-kanak: nyatakan apa perlu ditekan, apa sasaran, dan bila dikira betul dalam satu ayat mudah.\n15. Elakkan mekanik abstrak seperti hanya 'ikut rentak', 'putar dan padan', atau 'simulasi' tanpa jawapan jelas; setiap game mesti ada target/answer/group yang boleh disemak automatik.\n16. Semua mini game mesti fokus latihan genius umum: memori, logik, fokus, kelajuan, pola, maze, kreativiti atau problem solving — jangan kaitkan dengan subjek sekolah, Jawi, Iqra atau silibus khusus.\n17. Setiap game mesti mempunyai round yang berlainan mengikut jumlah Round/Game; rounds mesti terasa berbeza dari segi sasaran, arahan mikro atau cara cabaran.\n18. Wajib cipta rasa 3D/animasi kaya: tajuk cinematic, visualTheme, 3 powerUps ringkas, sasaran yang terasa seperti misi, dan item/round yang lebih interaktif berbanding game klasik.\n19. Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
       });
 
@@ -482,7 +484,8 @@ Wajib baiki:
 13. Jika mekanik tidak mempunyai jawapan yang boleh disemak, tukar kepada sequence/sorting/true_false/picture_hunt yang lebih jelas.
 14. Buang sebarang kaitan subjek sekolah, Jawi, Iqra, bahasa, sains, matematik atau silibus khusus; kandungan mesti jadi Genius Games umum sahaja.
 15. Pastikan setiap round berlainan dan boleh dimainkan: sasaran, item, atau cabaran mikro tidak boleh terasa sama.
-16. Pastikan output masih ikut schema asal dan lengkap.
+16. Tambah/kekalkan visualTheme dan 3 powerUps supaya UI boleh papar rasa 3D premium, misi, combo dan boost.
+17. Pastikan output masih ikut schema asal dan lengkap.
 
 Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
@@ -494,7 +497,17 @@ Output JSON sahaja ikut schema.`,
         data.rounds?.[roundIndex] || `Round ${roundIndex + 1}: ${roundStyles[(index + roundIndex) % roundStyles.length]} · ${playStyle}`
       );
 
-      return { mode, ...data, rounds, variant: index + 1, generatedTheme: theme, playStyle: data.playStyle || playStyle, microTopic: data.microTopic || microTopic };
+      return {
+        mode,
+        ...data,
+        rounds,
+        variant: index + 1,
+        generatedTheme: theme,
+        visualTheme: data.visualTheme || `${theme} 3D Neon Arena`,
+        powerUps: Array.isArray(data.powerUps) && data.powerUps.length ? data.powerUps.slice(0, 3) : ['Combo Boost', 'Focus Shield', 'Star Rush'],
+        playStyle: data.playStyle || playStyle,
+        microTopic: data.microTopic || microTopic,
+      };
     };
 
     if (task.subject === 'storykid') {
