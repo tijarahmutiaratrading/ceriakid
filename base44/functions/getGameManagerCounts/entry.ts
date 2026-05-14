@@ -16,7 +16,7 @@ const SUBJECTS = [
   { ageGroup: 'sekolah_rendah', subject: 'bahasa_mandarin' },
 ];
 
-const MINI_GAMES = ['abc_phonics', 'math_counting', 'mini_bahasa_melayu', 'english_vocabulary', 'sains_awal', 'jawi_iqra', 'memory_logic', 'islamic_learning'];
+const MINI_GAMES = ['abc_phonics', 'math_counting', 'creative_arts', 'english_vocabulary', 'sains_awal', 'jawi_iqra', 'memory_logic', 'islamic_learning'];
 
 async function listAllGames(base44) {
   const all = [];
