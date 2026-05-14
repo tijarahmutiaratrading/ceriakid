@@ -245,17 +245,19 @@ Deno.serve(async (req) => {
       }
     }
 
-    const pending = activeRunning.length > 0
-      ? activeRunning
-      : await base44.asServiceRole.entities.GameTask.filter({ status: 'pending' });
+    const pendingTasks = await base44.asServiceRole.entities.GameTask.filter({ status: 'pending' });
+    const pending = [...activeRunning, ...pendingTasks];
 
     if (!pending || pending.length === 0) {
       console.log('processNextGameTask: No pending tasks.');
       return Response.json({ success: true, message: 'No pending tasks' });
     }
 
-    // Continue running tasks first, then prioritize Story Kid, then oldest first
+    const geniusSubjects = ['memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius', 'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training'];
+    // Prioritize Genius Games first, then continue running tasks, Story Kid, then oldest first
     pending.sort((a, b) => {
+      if (geniusSubjects.includes(a.subject) && !geniusSubjects.includes(b.subject)) return -1;
+      if (!geniusSubjects.includes(a.subject) && geniusSubjects.includes(b.subject)) return 1;
       if (a.status === 'running' && b.status !== 'running') return -1;
       if (a.status !== 'running' && b.status === 'running') return 1;
       if (a.subject === 'storykid' && b.subject !== 'storykid') return -1;
@@ -290,14 +292,14 @@ Deno.serve(async (req) => {
     let createdInBatch = 0;
 
     const miniGameMap = {
-      abc_phonics: { title: 'ABC & Phonics', type: 'phonics', emoji: '🔤', modes: ['balloon_pop', 'tracing', 'dragdrop'] },
-      math_counting: { title: 'Math & Counting', type: 'counting', emoji: '🔢', modes: ['falling_catch', 'stacking', 'sequence'] },
-      creative_arts: { title: 'Creative Arts', type: 'picture_quiz', emoji: '🎨', modes: ['coloring', 'rhythm_tap', 'dragdrop'] },
-      english_vocabulary: { title: 'English Vocabulary', type: 'picture_quiz', emoji: '🌟', modes: ['picture_hunt', 'typing_challenge', 'tilematch'] },
-      sains_awal: { title: 'Sains Awal', type: 'science_quiz', emoji: '🔬', modes: ['sorting', 'mini_simulation', 'true_false'] },
-      jawi_iqra: { title: 'Jawi & Iqra', type: 'memory_game', emoji: '🕌', modes: ['memory', 'rhythm_tap', 'connect_dots'] },
-      memory_logic: { title: 'Memory & Logic', type: 'memory_game', emoji: '🧠', modes: ['maze', 'hidden_object', 'reaction_speed'] },
-      islamic_learning: { title: 'Islamic Learning', type: 'story_adventure', emoji: '🌙', modes: ['story', 'sequence', 'true_false'] },
+      memory_master: { title: 'Memory Master', type: 'memory_game', emoji: '🧠', modes: ['memory', 'hidden_object', 'sequence'] },
+      logic_puzzles: { title: 'Logic Puzzles', type: 'sorting', emoji: '🧩', modes: ['sorting', 'tilematch', 'dragdrop'] },
+      speed_focus: { title: 'Speed Focus', type: 'picture_quiz', emoji: '⚡', modes: ['reaction_speed', 'falling_catch', 'balloon_pop'] },
+      pattern_genius: { title: 'Pattern Genius', type: 'pattern_fill', emoji: '🔷', modes: ['sequence', 'connect_dots', 'rhythm_tap'] },
+      maze_adventure: { title: 'Maze Adventure', type: 'story_adventure', emoji: '🌀', modes: ['maze', 'hidden_object', 'story'] },
+      creative_builder: { title: 'Creative Builder', type: 'drag_drop', emoji: '🎨', modes: ['coloring', 'stacking', 'dragdrop'] },
+      problem_solver: { title: 'Problem Solver', type: 'science_quiz', emoji: '💡', modes: ['true_false', 'mini_simulation', 'physics'] },
+      brain_training: { title: 'Brain Training', type: 'memory_game', emoji: '🏆', modes: ['memory', 'swipe_select', 'spin_wheel'] },
     };
 
     const storybookStyleReference = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/580d3db6a_IMG_0482.jpeg';
@@ -378,6 +380,7 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         microTopic: { type: 'string' },
         playStyle: { type: 'string' },
         instruction: { type: 'string' },
+        rounds: { type: 'array', items: { type: 'string' } },
       };
       const schemaByMode = {
         memory: { type: 'object', properties: { ...baseProps, pairs: { type: 'array', items: { type: 'array', items: { type: 'string' } } } }, required: ['title', 'microTopic', 'instruction', 'pairs'] },
@@ -444,7 +447,7 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nGaya aktiviti WAJIB untuk set ini: ${playStyle}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\n${QC_GENERATOR_RULES}
 ${qcLearningNotes}
 
-Peraturan anti-repeat:\n0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6; jangan jana kandungan Tingkatan/PT3/SPM/sekolah menengah.\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Untuk balloon_pop dan falling_catch: target mesti string; items mesti array string; items mesti mengandungi target yang sama tepat sekurang-kurangnya 2 kali; jangan guna object untuk items.\n10. Untuk mini_simulation: items mesti array object {text, group}; sekurang-kurangnya satu item mesti group sama tepat dengan target.\n11. Setiap mini game mesti ada jawapan/target/group yang jelas supaya app boleh papar popup Betul atau Cuba lagi.\n12. Jika arahan menyebut gambar/objek visual, items mesti guna emoji/simbol visual, bukan perkataan biasa sahaja.\n13. Jangan cipta aktiviti yang jawapannya bergantung pada warna sahaja; mesti ada label teks, simbol atau bentuk yang jelas untuk kanak-kanak dan kontras tinggi.\n14. Arahan mesti sangat jelas untuk ibu bapa dan kanak-kanak: nyatakan apa perlu ditekan, apa sasaran, dan bila dikira betul dalam satu ayat mudah.\n15. Elakkan mekanik abstrak seperti hanya 'ikut rentak', 'putar dan padan', atau 'simulasi' tanpa jawapan jelas; setiap game mesti ada target/answer/group yang boleh disemak automatik.\n16. Jika tema/subjek Jawi atau Iqra, jangan jana aktiviti yang nampak seperti matematik atau nombor sahaja; gunakan huruf Jawi, suku kata Arab/Jawi, bacaan mudah atau adab Islam yang jelas.\n17. Jika tema Islamic Learning, jangan jana coloring/aktiviti kosong; gunakan story, sequence wuduk/doa, atau true_false adab dengan jawapan jelas.\n18. Output JSON sahaja ikut schema.`,
+Peraturan anti-repeat:\n0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6; jangan jana kandungan Tingkatan/PT3/SPM/sekolah menengah.\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Untuk balloon_pop dan falling_catch: target mesti string; items mesti array string; items mesti mengandungi target yang sama tepat sekurang-kurangnya 2 kali; jangan guna object untuk items.\n10. Untuk mini_simulation: items mesti array object {text, group}; sekurang-kurangnya satu item mesti group sama tepat dengan target.\n11. Setiap mini game mesti ada jawapan/target/group yang jelas supaya app boleh papar popup Betul atau Cuba lagi.\n12. Jika arahan menyebut gambar/objek visual, items mesti guna emoji/simbol visual, bukan perkataan biasa sahaja.\n13. Jangan cipta aktiviti yang jawapannya bergantung pada warna sahaja; mesti ada label teks, simbol atau bentuk yang jelas untuk kanak-kanak dan kontras tinggi.\n14. Arahan mesti sangat jelas untuk ibu bapa dan kanak-kanak: nyatakan apa perlu ditekan, apa sasaran, dan bila dikira betul dalam satu ayat mudah.\n15. Elakkan mekanik abstrak seperti hanya 'ikut rentak', 'putar dan padan', atau 'simulasi' tanpa jawapan jelas; setiap game mesti ada target/answer/group yang boleh disemak automatik.\n16. Semua mini game mesti fokus latihan genius umum: memori, logik, fokus, kelajuan, pola, maze, kreativiti atau problem solving — jangan kaitkan dengan subjek sekolah, Jawi, Iqra atau silibus khusus.\n17. Setiap game mesti mempunyai round yang berlainan mengikut jumlah Round/Game; rounds mesti terasa berbeza dari segi sasaran, arahan mikro atau cara cabaran.\n18. Output JSON sahaja ikut schema.`,
         response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
       });
 
@@ -477,8 +480,8 @@ Wajib baiki:
 11. Jangan hasilkan mini game yang bergantung pada beza warna sahaja; setiap pilihan mesti ada teks/simbol/emoji yang jelas dan mudah dibaca.
 12. Arahan mesti parent-friendly: terang dalam satu ayat apa anak perlu buat, contoh 'Pilih item, kemudian tekan kumpulan yang betul'.
 13. Jika mekanik tidak mempunyai jawapan yang boleh disemak, tukar kepada sequence/sorting/true_false/picture_hunt yang lebih jelas.
-14. Jika tema/subjek Jawi atau Iqra, buang item nombor-only atau gaya matematik; kandungan mesti jelas Jawi/Iqra seperti huruf ا ب ت ث, bacaan mudah, atau adab Islam.
-15. Jika tema Islamic Learning, buang coloring/aktiviti kosong dan tukar kepada story, sequence, atau true_false yang ada jawapan/adab jelas.
+14. Buang sebarang kaitan subjek sekolah, Jawi, Iqra, bahasa, sains, matematik atau silibus khusus; kandungan mesti jadi Genius Games umum sahaja.
+15. Pastikan setiap round berlainan dan boleh dimainkan: sasaran, item, atau cabaran mikro tidak boleh terasa sama.
 16. Pastikan output masih ikut schema asal dan lengkap.
 
 Output JSON sahaja ikut schema.`,
@@ -486,7 +489,12 @@ Output JSON sahaja ikut schema.`,
       });
       data = normalizeMiniGameData(mode, reviewed || data, itemsPerSet);
 
-      return { mode, ...data, variant: index + 1, generatedTheme: theme, playStyle: data.playStyle || playStyle, microTopic: data.microTopic || microTopic };
+      const roundStyles = ['ingat', 'padan', 'susun', 'pilih cepat', 'cari sasaran', 'selesai cabaran', 'fokus semula', 'bonus genius'];
+      const rounds = Array.from({ length: itemsPerSet }, (_, roundIndex) =>
+        data.rounds?.[roundIndex] || `Round ${roundIndex + 1}: ${roundStyles[(index + roundIndex) % roundStyles.length]} · ${playStyle}`
+      );
+
+      return { mode, ...data, rounds, variant: index + 1, generatedTheme: theme, playStyle: data.playStyle || playStyle, microTopic: data.microTopic || microTopic };
     };
 
     if (task.subject === 'storykid') {

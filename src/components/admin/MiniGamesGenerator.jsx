@@ -112,8 +112,9 @@ export default function MiniGamesGenerator({ onToast }) {
             status: 'pending',
             errorMessage: JSON.stringify({
               sets: miniGameConfig.gamesCount,
-              levels: 1,
+              levels: Math.min(3, Math.max(1, miniGameConfig.roundsPerGame)),
               itemsPerSet: miniGameConfig.roundsPerGame,
+              roundVariation: true,
               theme: gameData?.objective || gameData?.title || 'Mini game CeriaKid',
               categoryTitle: gameData?.title,
               emoji: gameData?.emoji,

@@ -60,7 +60,7 @@ export default function GamesHub() {
             <div className="flex-1">
               <h1 className="text-3xl font-black text-white leading-tight">Mini Games Hub</h1>
               <p className="text-white/70 text-sm font-semibold">
-                {ageGroup === 'prasekolah' ? '🧒 Prasekolah' : '🎒 Sekolah Rendah'} · 8 kategori · {loadingCounts ? 'syncing...' : `${totalGames} mini games`}
+                Genius Games · 8 kategori · {loadingCounts ? 'syncing...' : `${totalGames} games`}
               </p>
             </div>
           </div>
