@@ -8,16 +8,27 @@ import AppHeader from '@/components/AppHeader';
 
 const COLORS = [
   '#1a1a1a', '#ef4444', '#f97316', '#eab308',
-  '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899',
-  '#ffffff', '#94a3b8', '#78350f', '#134e4a',
+  '#22c55e', '#14b8a6', '#3b82f6', '#8b5cf6',
+  '#ec4899', '#f5a8c4', '#78350f', '#ffffff',
 ];
 
+// Tool presets — lineWidth is "default", users boleh adjust via BRUSH_SIZES
 const TOOLS = [
-  { id: 'pencil', emoji: '✏️', label: 'Pensel', lineWidth: 3, opacity: 1, lineDash: [] },
-  { id: 'brush', emoji: '🖌️', label: 'Berus', lineWidth: 14, opacity: 0.7, lineDash: [] },
-  { id: 'marker', emoji: '🖊️', label: 'Marker', lineWidth: 8, opacity: 1, lineDash: [] },
-  { id: 'eraser', emoji: '🧹', label: 'Pemadam', lineWidth: 24, opacity: 1, lineDash: [] },
+  { id: 'pencil', emoji: '✏️', label: 'Pensel', lineWidth: 4, opacity: 1, hint: 'Garis nipis & tajam' },
+  { id: 'brush', emoji: '🖌️', label: 'Berus', lineWidth: 18, opacity: 0.75, hint: 'Sapuan lembut' },
+  { id: 'marker', emoji: '🖊️', label: 'Marker', lineWidth: 10, opacity: 1, hint: 'Garis tebal jelas' },
+  { id: 'crayon', emoji: '🖍️', label: 'Krayon', lineWidth: 14, opacity: 0.85, hint: 'Macam krayon sebenar' },
+  { id: 'eraser', emoji: '🧽', label: 'Pemadam', lineWidth: 28, opacity: 1, hint: 'Padam silap' },
 ];
+
+const BRUSH_SIZES = [
+  { id: 'sm', label: 'Kecil', mult: 0.5, dot: 6 },
+  { id: 'md', label: 'Sederhana', mult: 1, dot: 12 },
+  { id: 'lg', label: 'Besar', mult: 1.8, dot: 18 },
+  { id: 'xl', label: 'Sangat Besar', mult: 2.8, dot: 24 },
+];
+
+const STICKERS = ['⭐', '❤️', '🌸', '🌈', '☀️', '🦋', '🐱', '🎈', '🍎', '🌟', '🦄', '🌻'];
 
 const letterStrokes = {
   A: [[[0.5,0.1],[0.2,0.9]],[[0.5,0.1],[0.8,0.9]],[[0.32,0.55],[0.68,0.55]]],
@@ -216,6 +227,9 @@ export default function DrawingStudio() {
   const [userStrokes, setUserStrokes] = useState([]);
   const [currentStroke, setCurrentStroke] = useState([]);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [brushSize, setBrushSize] = useState(BRUSH_SIZES[1]);
+  const [stickerMode, setStickerMode] = useState(null);
+  const [showSavedToast, setShowSavedToast] = useState(false);
 
   // Active canvas ref — points to whichever canvas is currently active
   const activeCanvasRef = isFullscreen ? fsCanvasRef : canvasRef;
@@ -415,19 +429,42 @@ export default function DrawingStudio() {
     };
   };
 
+  const effectiveLineWidth = () => Math.max(2, Math.round(tool.lineWidth * brushSize.mult));
+
+  const stampSticker = (pt, emoji) => {
+    const ctx = getCtx();
+    if (!ctx) return;
+    saveToHistory();
+    const size = Math.max(36, effectiveLineWidth() * 2.5);
+    ctx.save();
+    ctx.font = `${size}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(emoji, pt.x, pt.y);
+    ctx.restore();
+  };
+
   const startDraw = (e) => {
     e.preventDefault();
     const canvas = getCanvas();
     const ctx = getCtx();
     if (!ctx || !canvas) return;
-    saveToHistory();
     const pt = getPoint(e, canvas);
+
+    // Sticker stamping mode — single tap drops emoji
+    if (stickerMode && mode !== 'trace') {
+      stampSticker(pt, stickerMode);
+      return;
+    }
+
+    saveToHistory();
     setIsDrawing(true);
     setLastPoint(pt);
     if (mode === 'trace') setCurrentStroke([pt]);
 
+    const lw = effectiveLineWidth();
     ctx.beginPath();
-    ctx.arc(pt.x, pt.y, (tool.id === 'eraser' ? tool.lineWidth : tool.lineWidth) / 2, 0, Math.PI * 2);
+    ctx.arc(pt.x, pt.y, lw / 2, 0, Math.PI * 2);
     ctx.fillStyle = tool.id === 'eraser' ? '#fff9f0' : color;
     ctx.fill();
   };
@@ -444,7 +481,7 @@ export default function DrawingStudio() {
     ctx.moveTo(lastPoint.x, lastPoint.y);
     ctx.lineTo(pt.x, pt.y);
     ctx.strokeStyle = tool.id === 'eraser' ? '#fff9f0' : color;
-    ctx.lineWidth = tool.lineWidth;
+    ctx.lineWidth = effectiveLineWidth();
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.globalAlpha = tool.opacity;
@@ -488,9 +525,12 @@ export default function DrawingStudio() {
     const canvas = getCanvas();
     if (!canvas) return;
     const link = document.createElement('a');
-    link.download = 'lukisan-saya.png';
-    link.href = canvas.toDataURL();
+    link.download = `lukisan-saya-${Date.now()}.png`;
+    link.href = canvas.toDataURL('image/png');
     link.click();
+    setShowSavedToast(true);
+    confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 }, colors: ['#fbbf24', '#ec4899', '#8b5cf6'] });
+    setTimeout(() => setShowSavedToast(false), 2200);
   };
 
   const resetTracing = () => {
@@ -513,6 +553,19 @@ export default function DrawingStudio() {
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
+      <AnimatePresence>
+        {showSavedToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="fixed top-24 left-1/2 -translate-x-1/2 z-[110] px-6 py-3 rounded-full bg-green-500 text-white font-black text-sm shadow-2xl flex items-center gap-2"
+          >
+            <span className="text-xl">✅</span> Lukisan disimpan ke peranti!
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <main className="relative max-w-6xl mx-auto px-4 sm:px-6 pb-28 pt-28">
         <motion.button
           whileTap={{ scale: 0.95 }}
@@ -529,26 +582,26 @@ export default function DrawingStudio() {
         >
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
             <div className="flex items-center gap-4 min-w-0">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[1.7rem] bg-white/30 flex items-center justify-center text-4xl sm:text-5xl shadow-inner border border-white/30 flex-shrink-0">🎨</div>
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[1.7rem] bg-gradient-to-br from-yellow-300 via-pink-400 to-purple-500 flex items-center justify-center text-4xl sm:text-5xl shadow-xl ring-4 ring-white/40 flex-shrink-0">🎨</div>
               <div className="min-w-0">
-                <p className="text-white/70 text-xs font-black uppercase tracking-[0.22em] mb-1">Creative Learning</p>
-                <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight">Studio Lukisan</h1>
-                <p className="text-white/75 text-sm font-semibold mt-1">Ruang kreatif untuk melukis bebas, tracing dan mewarna gambar comel.</p>
+                <p className="text-white/80 text-xs font-black uppercase tracking-[0.22em] mb-1">✨ Creative Studio</p>
+                <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight drop-shadow-lg">Studio Lukisan</h1>
+                <p className="text-white/85 text-sm font-semibold mt-1">Lukis bebas, surih huruf, atau warnakan gambar comel — semua dalam satu tempat.</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <div className="rounded-2xl bg-white/18 border border-white/25 px-3 py-3">
-                <p className="text-white font-black text-lg">{mode === 'draw' ? 'Bebas' : mode === 'trace' ? 'Trace' : 'Warna'}</p>
-                <p className="text-white/60 text-[11px] font-bold">Mode</p>
+            <div className="flex flex-wrap gap-2">
+              <div className="rounded-2xl bg-white px-4 py-2.5 shadow-lg">
+                <p className="text-purple-600 font-black text-base leading-tight">{mode === 'draw' ? '🎨 Lukis Bebas' : mode === 'trace' ? '✏️ Tracing' : '🖍️ Mewarna'}</p>
+                <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Mode Aktif</p>
               </div>
-              <div className="rounded-2xl bg-white/18 border border-white/25 px-3 py-3">
-                <p className="text-white font-black text-lg">{mode === 'trace' ? selectedShape.label.split(' ')[0] : mode === 'color' ? selectedColoringPage.label.split(' ')[0] : tool.label}</p>
-                <p className="text-white/60 text-[11px] font-bold">Aktif</p>
+              <div className="rounded-2xl bg-white/25 border border-white/40 px-4 py-2.5">
+                <p className="text-white font-black text-base leading-tight">{stickerMode ? `${stickerMode} Sticker` : tool.emoji + ' ' + tool.label}</p>
+                <p className="text-white/70 text-[10px] font-bold uppercase tracking-wider">Alat</p>
               </div>
-              <div className="rounded-2xl bg-white/18 border border-white/25 px-3 py-3">
-                <p className="text-white font-black text-lg">{history.length}</p>
-                <p className="text-white/60 text-[11px] font-bold">Undo</p>
+              <div className="rounded-2xl bg-white/25 border border-white/40 px-4 py-2.5">
+                <p className="text-white font-black text-base leading-tight">{history.length} <span className="text-xs">langkah</span></p>
+                <p className="text-white/70 text-[10px] font-bold uppercase tracking-wider">Boleh Undo</p>
               </div>
             </div>
           </div>
@@ -691,11 +744,30 @@ export default function DrawingStudio() {
                       <motion.button
                         key={t.id}
                         whileTap={{ scale: 0.9 }}
-                        onClick={() => setTool(t)}
-                        className={`flex items-center gap-3 px-3 py-3 rounded-2xl transition-all ${tool.id === t.id ? 'bg-white text-purple-600 shadow-lg' : 'bg-white/15 text-white border border-white/20'}`}
+                        onClick={() => { setTool(t); setStickerMode(null); }}
+                        className={`flex items-center gap-3 px-3 py-3 rounded-2xl transition-all ${tool.id === t.id && !stickerMode ? 'bg-white text-purple-600 shadow-lg ring-2 ring-yellow-300' : 'bg-white/15 text-white border border-white/20'}`}
                       >
                         <span className="text-2xl">{t.emoji}</span>
-                        <span className="text-xs font-black text-left">{t.label}</span>
+                        <span className="text-xs font-black text-left leading-tight">
+                          {t.label}
+                          <span className="block text-[10px] font-bold opacity-70">{t.hint}</span>
+                        </span>
+                      </motion.button>
+                    ))}
+                  </div>
+
+                  <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-3">Saiz brush</p>
+                  <div className="grid grid-cols-4 gap-2 mb-4">
+                    {BRUSH_SIZES.map(s => (
+                      <motion.button
+                        key={s.id}
+                        whileTap={{ scale: 0.88 }}
+                        onClick={() => setBrushSize(s)}
+                        className={`flex flex-col items-center justify-center gap-1 py-2.5 rounded-2xl transition-all ${brushSize.id === s.id ? 'bg-white shadow-lg ring-2 ring-yellow-300' : 'bg-white/15 border border-white/20'}`}
+                        title={s.label}
+                      >
+                        <span className="rounded-full" style={{ width: s.dot, height: s.dot, backgroundColor: brushSize.id === s.id ? '#7c3aed' : '#fff' }} />
+                        <span className={`text-[10px] font-black ${brushSize.id === s.id ? 'text-purple-700' : 'text-white/80'}`}>{s.label}</span>
                       </motion.button>
                     ))}
                   </div>
@@ -708,23 +780,39 @@ export default function DrawingStudio() {
                           <motion.button
                             key={c}
                             whileTap={{ scale: 0.85 }}
-                            onClick={() => setColor(c)}
-                            className="h-10 rounded-2xl border-4 transition-all"
+                            onClick={() => { setColor(c); setStickerMode(null); }}
+                            className="h-11 rounded-2xl border-4 transition-all"
                             style={{
                               backgroundColor: c,
                               borderColor: color === c ? '#ffffff' : 'rgba(255,255,255,0.15)',
-                              boxShadow: color === c ? '0 0 0 2px rgba(255,255,255,0.8)' : '0 1px 4px rgba(0,0,0,0.16)',
+                              boxShadow: color === c ? '0 0 0 3px rgba(253,224,71,0.9), 0 4px 14px rgba(0,0,0,0.2)' : '0 1px 4px rgba(0,0,0,0.16)',
                             }}
+                            aria-label={`Warna ${c}`}
                           />
                         ))}
                       </div>
                       <div className="flex items-center gap-3 mt-3 rounded-2xl bg-white/12 border border-white/18 p-3">
-                        <input type="color" value={color} onChange={e => setColor(e.target.value)} className="w-11 h-11 rounded-2xl cursor-pointer border-2 border-white/30" />
+                        <input type="color" value={color} onChange={e => { setColor(e.target.value); setStickerMode(null); }} className="w-11 h-11 rounded-2xl cursor-pointer border-2 border-white/30" />
                         <div className="flex-1 min-w-0">
                           <p className="text-white font-black text-sm">Warna custom</p>
                           <p className="text-white/55 text-xs font-semibold">Pilih warna lain ikut kreativiti anak.</p>
                         </div>
                         <div className="w-10 h-10 rounded-2xl border-2 border-white/40" style={{ backgroundColor: color }} />
+                      </div>
+
+                      <p className="text-white/70 text-xs font-black uppercase tracking-wider mt-4 mb-2">Tampal Sticker</p>
+                      <p className="text-white/55 text-[11px] font-semibold mb-2">Tekan satu sticker, kemudian tap kanvas untuk tampal.</p>
+                      <div className="grid grid-cols-6 gap-2">
+                        {STICKERS.map(s => (
+                          <motion.button
+                            key={s}
+                            whileTap={{ scale: 0.85 }}
+                            onClick={() => setStickerMode(stickerMode === s ? null : s)}
+                            className={`h-11 rounded-2xl text-2xl transition-all ${stickerMode === s ? 'bg-yellow-300 ring-2 ring-white shadow-lg' : 'bg-white/15 border border-white/20'}`}
+                          >
+                            {s}
+                          </motion.button>
+                        ))}
                       </div>
                     </>
                   )}
@@ -732,10 +820,16 @@ export default function DrawingStudio() {
               )}
             </AnimatePresence>
 
-            <section className="rounded-[2rem] p-4 bg-white/18 border border-white/35 backdrop-blur-2xl shadow-xl shadow-purple-950/15">
-              <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2">Tip cepat</p>
-              <p className="text-white/75 text-sm font-semibold leading-relaxed">
-                {mode === 'draw' ? 'Pilih alat dan warna, kemudian lukis di kanvas. Gunakan fullscreen untuk ruang lebih besar.' : mode === 'trace' ? 'Minta anak ikut garisan putus-putus perlahan-lahan sampai semua strok selesai.' : 'Pilih gambar, pilih warna, kemudian warnakan ruang kosong ikut kreativiti anak.'}
+            <section className="rounded-[2rem] p-4 bg-gradient-to-br from-yellow-300/30 to-pink-300/20 border border-white/40 backdrop-blur-2xl shadow-xl">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">💡</span>
+                <p className="text-white text-xs font-black uppercase tracking-wider">Panduan Untuk Anak</p>
+              </div>
+              <p className="text-white text-sm font-bold leading-relaxed">
+                {mode === 'draw' ? '🎨 Pilih warna, pilih saiz brush, kemudian lukis di kanvas putih. Cuba tampal sticker untuk hiasan!' : mode === 'trace' ? '✏️ Ikuti garisan putus-putus dari awal ke hujung. Selesaikan semua strok untuk dapat bintang!' : '🖍️ Pilih gambar, pilih warna, dan warnakan ruang kosong. Tiada salah — bebas berkreatif!'}
+              </p>
+              <p className="text-white/70 text-[11px] font-bold mt-2 pt-2 border-t border-white/20">
+                Untuk ibu bapa: aktiviti ini melatih kawalan motor halus & kreativiti.
               </p>
             </section>
           </motion.aside>
@@ -769,13 +863,23 @@ export default function DrawingStudio() {
 
             <div className="p-3 sm:p-5">
               <div className="relative rounded-[1.75rem] overflow-hidden bg-white shadow-2xl shadow-purple-950/20 ring-4 ring-white/25">
-                <div className="absolute left-4 top-4 z-10 px-3 py-1.5 rounded-full bg-white/90 text-purple-700 text-xs font-black shadow-lg">
-                  {mode === 'trace' ? `${userStrokes.length}/${selectedShape.strokes.length} strok` : mode === 'color' ? selectedColoringPage.label : color.toUpperCase()}
+                <div className="absolute left-3 top-3 z-10 flex items-center gap-2 flex-wrap">
+                  <div className="px-3 py-1.5 rounded-full bg-white text-purple-700 text-xs font-black shadow-lg flex items-center gap-1.5">
+                    {stickerMode ? <span>Sticker {stickerMode}</span> : (
+                      <>
+                        <span className="inline-block rounded-full" style={{ width: 12, height: 12, backgroundColor: tool.id === 'eraser' ? '#fff9f0' : color, border: tool.id === 'eraser' ? '2px dashed #cbd5e1' : '2px solid rgba(0,0,0,0.1)' }} />
+                        <span>{brushSize.label}</span>
+                      </>
+                    )}
+                  </div>
+                  {mode === 'trace' && (
+                    <div className="px-3 py-1.5 rounded-full bg-purple-600 text-white text-xs font-black shadow-lg">{userStrokes.length}/{selectedShape.strokes.length} strok</div>
+                  )}
                 </div>
                 <canvas
                   ref={canvasRef}
-                  width={560}
-                  height={480}
+                  width={720}
+                  height={540}
                   onPointerDown={startDraw}
                   onPointerMove={draw}
                   onPointerUp={endDraw}
@@ -783,8 +887,8 @@ export default function DrawingStudio() {
                   onTouchStart={startDraw}
                   onTouchMove={draw}
                   onTouchEnd={endDraw}
-                  className="w-full touch-none cursor-crosshair block"
-                  style={{ backgroundColor: '#fff9f0' }}
+                  className="w-full touch-none block"
+                  style={{ backgroundColor: '#fff9f0', cursor: stickerMode ? 'pointer' : 'crosshair' }}
                 />
               </div>
             </div>
