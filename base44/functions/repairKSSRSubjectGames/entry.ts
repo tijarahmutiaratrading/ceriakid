@@ -211,7 +211,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
-    const { limit = 8, dryRun = false } = await req.json();
+    const { limit = 5, dryRun = false } = await req.json().catch(() => ({}));
     const games = await base44.asServiceRole.entities.Game.list('-updated_date', 1000);
     const subjectGames = (games || []).filter(g => SUBJECTS.includes(g.category));
     const crossSeen = new Map();
@@ -224,7 +224,7 @@ Deno.serve(async (req) => {
       if (issue) targets.push(game);
     }
 
-    const selected = targets.slice(0, Math.max(1, Math.min(Number(limit) || 8, 20)));
+    const selected = targets.slice(0, Math.max(1, Math.min(Number(limit) || 5, 8)));
     const repaired = [];
     const skipped = [];
 
@@ -234,23 +234,44 @@ Deno.serve(async (req) => {
         continue;
       }
 
-      const count = Math.max(8, Math.min(Number(game.totalQuestions || getQuestions(game).length || 8), 20));
-      const questions = await regenerateQuestions(base44, game, count, existingTexts);
+      // Re-verify game still exists (race condition with auto-repair / monthly delete)
+      let fresh;
+      try {
+        fresh = await base44.asServiceRole.entities.Game.get?.(game.id);
+      } catch {
+        fresh = null;
+      }
+      if (!fresh) {
+        const found = await base44.asServiceRole.entities.Game.filter({ id: game.id });
+        fresh = found?.[0];
+      }
+      if (!fresh) {
+        skipped.push({ id: game.id, title: game.title, reason: 'already_deleted' });
+        continue;
+      }
+
+      const count = Math.max(8, Math.min(Number(fresh.totalQuestions || getQuestions(fresh).length || 8), 20));
+      const questions = await regenerateQuestions(base44, fresh, count, existingTexts);
       if (questions.length < 8) {
-        skipped.push({ id: game.id, title: game.title, reason: 'not_enough_clean_questions' });
+        skipped.push({ id: fresh.id, title: fresh.title, reason: 'not_enough_clean_questions' });
         continue;
       }
 
       if (!dryRun) {
-        await base44.asServiceRole.entities.Game.update(game.id, {
-          totalQuestions: questions.length,
-          gameData: { ...(game.gameData || {}), questions },
-          status: 'ready',
-          isPublished: true,
-        });
+        try {
+          await base44.asServiceRole.entities.Game.update(fresh.id, {
+            totalQuestions: questions.length,
+            gameData: { ...(fresh.gameData || {}), questions },
+            status: 'ready',
+            isPublished: true,
+          });
+        } catch (err) {
+          skipped.push({ id: fresh.id, title: fresh.title, reason: `update_failed: ${err.message}` });
+          continue;
+        }
       }
 
-      repaired.push({ id: game.id, title: game.title, darjah: game.darjah || null, questions: questions.length });
+      repaired.push({ id: fresh.id, title: fresh.title, darjah: fresh.darjah || null, questions: questions.length });
       questions.forEach(q => existingTexts.push(q.problem));
     }
 
