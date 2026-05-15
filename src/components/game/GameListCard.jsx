@@ -14,9 +14,9 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
   const difficulty = difficultyConfig[game.difficulty || 'easy'];
 
   const cardStyle = {
-    background: locked ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.12)',
+    background: locked ? 'rgba(15,23,42,0.55)' : 'rgba(15,23,42,0.65)',
     backdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255,255,255,0.2)',
+    border: '1px solid rgba(255,255,255,0.35)',
   };
 
   if (locked) {
@@ -33,16 +33,16 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
             {game.emoji}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-sm leading-tight line-clamp-2 text-white/60">{game.title}</h3>
-            <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full text-white/70 ${difficulty.color} mt-1`}>
+            <h3 className="font-black text-sm leading-tight line-clamp-2 text-white/85">{game.title}</h3>
+            <span className={`inline-flex items-center gap-1 text-xs font-black px-2 py-0.5 rounded-full text-white ${difficulty.color} mt-1`}>
               {difficulty.icon} {difficulty.label}
             </span>
           </div>
           <div className="flex flex-col items-center gap-1 flex-shrink-0">
-            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-              <Lock className="w-4 h-4 text-white/60" />
+            <div className="w-8 h-8 rounded-full bg-white/25 flex items-center justify-center">
+              <Lock className="w-4 h-4 text-white" />
             </div>
-            <span className="text-xs text-white/50 font-bold">Premium</span>
+            <span className="text-xs text-yellow-200 font-black">Premium</span>
           </div>
         </motion.div>
       </Link>
@@ -76,7 +76,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
             <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full text-white ${difficulty.color}`}>
               {difficulty.icon} {difficulty.label}
             </span>
-            <span className="text-white/50 text-xs font-semibold capitalize truncate">
+            <span className="text-white/80 text-xs font-bold capitalize truncate">
               {game.type?.replace(/_/g, ' ')}
             </span>
           </div>
@@ -86,10 +86,10 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
             <div className="flex items-center gap-2 mt-2">
               <div className="flex gap-0.5">
                 {[1,2,3].map(s => (
-                  <span key={s} className={`text-xs ${s <= gameProgress.bestStars ? 'text-yellow-300' : 'text-white/25'}`}>★</span>
+                  <span key={s} className={`text-xs ${s <= gameProgress.bestStars ? 'text-yellow-300' : 'text-white/40'}`}>★</span>
                 ))}
               </div>
-              <span className="text-white/50 text-xs">{gameProgress.timesPlayed}x dimainkan</span>
+              <span className="text-white/80 text-xs font-bold">{gameProgress.timesPlayed}x dimainkan</span>
             </div>
           )}
         </div>

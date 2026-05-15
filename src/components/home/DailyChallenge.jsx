@@ -70,7 +70,7 @@ export default function DailyChallenge({ ageGroup }) {
           <h3 className="text-2xl font-black mb-1">
             {categoryEmojis[challenge.gameCategory]} Mainkan & Menang
           </h3>
-          <p className="text-white/80 text-sm mb-4">
+          <p className="text-white text-sm font-bold mb-4 drop-shadow">
             Selesaikan cabaran hari ini untuk +{challenge.bonusReward} bonus poin! ⭐
           </p>
           <Link to={`/play/${challenge.gameCategory}/${challenge.gameIndex}`}>

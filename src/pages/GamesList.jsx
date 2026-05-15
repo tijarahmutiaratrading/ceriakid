@@ -238,22 +238,22 @@ export default function GamesList() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-4"
           >
-            <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2 px-1">{t('selectDarjah', lang)}</p>
+            <p className="text-white text-xs font-black uppercase tracking-wider mb-2 px-1">{t('selectDarjah', lang)}</p>
             <div className="flex gap-2 overflow-x-auto pb-1">
               {availableDarjah.map(d => (
                 <motion.button
                   key={d}
                   whileTap={{ scale: 0.92 }}
                   onClick={() => setSelectedDarjah(d)}
-                  className={`flex-shrink-0 px-4 py-2 rounded-2xl font-bold text-sm transition-all ${
+                  className={`flex-shrink-0 px-4 py-2 rounded-2xl font-black text-sm transition-all ${
                     selectedDarjah === d
-                      ? 'bg-white text-purple-600 shadow-lg'
-                      : 'bg-white/20 text-white border border-white/30'
+                      ? 'bg-white text-purple-700 shadow-lg ring-2 ring-white/60'
+                      : 'bg-slate-950/55 text-white border border-white/40 shadow-md'
                   }`}
                 >
                   {DARJAH_LABELS[d] || `Darjah ${d}`}
-                  <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full ${
-                    selectedDarjah === d ? 'bg-purple-100 text-purple-600' : 'bg-white/20 text-white/80'
+                  <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full font-black ${
+                    selectedDarjah === d ? 'bg-purple-100 text-purple-700' : 'bg-white text-purple-900'
                   }`}>
                     {allGames.filter(g => g.darjah === d).length}
                   </span>
@@ -273,7 +273,7 @@ export default function GamesList() {
           >
             <p className="text-5xl mb-4">🚀</p>
             <p className="text-xl font-black text-white mb-2">{t('newGamesComingSoon', lang)}</p>
-            <p className="text-white/70 text-sm mb-6">{t('gamesBeingPrepared', lang)}</p>
+            <p className="text-white/90 text-sm font-bold mb-6">{t('gamesBeingPrepared', lang)}</p>
             <Link to="/">
               <motion.button
                 whileHover={{ scale: 1.05 }}

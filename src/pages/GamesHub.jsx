@@ -59,7 +59,7 @@ export default function GamesHub() {
             <div className="text-5xl">🎮</div>
             <div className="flex-1">
               <h1 className="text-3xl font-black text-white leading-tight">Mini Games Hub</h1>
-              <p className="text-white/70 text-sm font-semibold">
+              <p className="text-white/90 text-sm font-bold">
                 Genius Games · 8 kategori · {loadingCounts ? 'syncing...' : `${totalGames} games`}
               </p>
             </div>
@@ -76,12 +76,12 @@ export default function GamesHub() {
                 <div className={`bg-gradient-to-br ${category.color} rounded-3xl p-4 h-full shadow-lg`}>
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="text-4xl">{category.emoji}</div>
-                    <span className="text-xs px-2 py-1 rounded-full font-black bg-white/25 text-white">
+                    <span className="text-xs px-2 py-1 rounded-full font-black bg-white text-purple-900 shadow-md">
                       {loadingCounts ? <Loader2 className="w-3 h-3 animate-spin" /> : `${counts[category.id] ?? category.games.length} games`}
                     </span>
                   </div>
                   <h3 className="text-white font-black text-lg leading-tight mb-1">{category.title}</h3>
-                  <p className="text-white/85 text-xs font-bold leading-snug mb-3">{category.objective}</p>
+                  <p className="text-white text-xs font-bold leading-snug mb-3 drop-shadow">{category.objective}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {category.games.map(game => <span key={game.id} className={`${levelColors[game.difficulty]} text-[10px] px-2 py-0.5 rounded-full font-black`}>{game.mode.replace('_', ' ')}</span>)}
                   </div>
@@ -91,9 +91,9 @@ export default function GamesHub() {
           ))}
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="p-5 rounded-3xl text-center" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="p-5 rounded-3xl text-center" style={{ background: 'rgba(15,23,42,0.55)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}>
           <p className="text-white font-black text-base mb-1">💡 Tips Ibu Bapa</p>
-          <p className="text-white/70 text-sm">Senarai ini kini sync terus dengan mini games yang telah dijana di Games Generator.</p>
+          <p className="text-white/90 text-sm font-bold">Senarai ini kini sync terus dengan mini games yang telah dijana di Games Generator.</p>
         </motion.div>
       </div>
     </div>

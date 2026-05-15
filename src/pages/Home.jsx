@@ -136,7 +136,7 @@ export default function Home() {
                 <span className="text-2xl">{age.emoji}</span>
                 <div className="text-left">
                   <div className="font-black text-sm leading-tight">{age.label}</div>
-                  <div className={`text-xs font-semibold ${safeAgeGroup === age.key ? 'text-purple-400' : 'text-white/60'}`}>{age.sub}</div>
+                  <div className={`text-xs font-bold ${safeAgeGroup === age.key ? 'text-purple-700' : 'text-white/80'}`}>{age.sub}</div>
                 </div>
               </motion.button>
             ))}

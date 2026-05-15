@@ -28,10 +28,10 @@ export default function DashboardHero({ user, avatarUrl, lang }) {
               <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-[1.35rem] bg-white/20 text-4xl shadow-2xl ring-1 ring-white/30 md:h-20 md:w-20">🐱</div>
             )}
             <div className="min-w-0">
-              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-white/70">
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-white">
                 <Sparkles className="h-3.5 w-3.5 text-yellow-200" /> CeriaKid Dashboard
               </div>
-              <p className="text-xs font-bold text-white/65 md:text-sm">{greeting}</p>
+              <p className="text-xs font-bold text-white/90 md:text-sm">{greeting}</p>
               <h1 className="truncate text-2xl font-black tracking-tight text-white md:text-4xl">{name}</h1>
             </div>
           </div>

@@ -22,14 +22,14 @@ export default function QuickAccessGrid() {
               <div className="relative z-10 flex items-start justify-between gap-3">
                 <div>
                   <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-3xl ring-1 ring-white/15">{item.emoji}</div>
-                  <p className="font-black text-white leading-tight">{item.title}</p>
-                  <p className="mt-1 text-xs font-bold text-white/65">{item.subtitle}</p>
+                  <p className="font-black text-white leading-tight drop-shadow">{item.title}</p>
+                  <p className="mt-1 text-xs font-bold text-white/85">{item.subtitle}</p>
                 </div>
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-white text-purple-800 shadow-lg">
                   <Icon className="h-4 w-4" />
                 </div>
               </div>
-              <div className="relative z-10 mt-4 inline-flex items-center gap-1 text-xs font-black text-white/70">
+              <div className="relative z-10 mt-4 inline-flex items-center gap-1 text-xs font-black text-white/90">
                 Buka <ArrowRight className="h-3.5 w-3.5" />
               </div>
             </motion.div>
