@@ -58,65 +58,32 @@ export default function DailyChallenge({ ageGroup }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -3 }}
-      className="relative overflow-hidden rounded-[1.75rem] border border-white/25 bg-gradient-to-br from-orange-400/90 via-red-500/85 to-pink-500/85 p-5 md:p-6 text-white shadow-2xl shadow-red-950/30 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.75rem)]"
+      className="relative overflow-hidden rounded-[1.75rem] border border-white/20 bg-gradient-to-r from-orange-400/85 via-red-500/80 to-pink-500/80 p-5 md:p-6 text-white shadow-2xl shadow-red-950/20 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.75rem)]"
     >
-      {/* Animated rings around target */}
-      <motion.div
-        aria-hidden
-        animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0, 0.4] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut' }}
-        className="absolute right-6 top-1/2 -translate-y-1/2 h-24 w-24 rounded-full border-2 border-white/60"
-      />
-      <motion.div
-        aria-hidden
-        animate={{ scale: [1, 1.6, 1], opacity: [0.3, 0, 0.3] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut', delay: 0.6 }}
-        className="absolute right-6 top-1/2 -translate-y-1/2 h-24 w-24 rounded-full border-2 border-yellow-300/60"
-      />
-      <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/25 blur-2xl" />
-      <div className="absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-yellow-300/30 blur-2xl" />
-
-      {/* Shimmer */}
-      <motion.div
-        aria-hidden
-        initial={{ x: '-150%' }}
-        animate={{ x: '200%' }}
-        transition={{ duration: 3, repeat: Infinity, repeatDelay: 4, ease: 'easeInOut' }}
-        className="pointer-events-none absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-12"
-      />
-
+      <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/20 blur-2xl" />
       <div className="relative z-10 flex items-center justify-between gap-4">
-        <div className="min-w-0">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-sm px-3 py-1 ring-1 ring-white/30 mb-3">
-            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.2, repeat: Infinity }}>
-              <Zap className="w-4 h-4 text-yellow-300 drop-shadow" fill="currentColor" />
-            </motion.div>
-            <span className="font-black text-[11px] uppercase tracking-wider">Cabaran Harian</span>
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <Zap className="w-5 h-5 text-yellow-300" />
+            <span className="font-black text-sm">CABARAN HARIAN</span>
           </div>
-          <h3 className="text-2xl md:text-3xl font-black mb-1 drop-shadow-md leading-tight">
-            {categoryEmojis[challenge.gameCategory]} Mainkan & Menang!
+          <h3 className="text-2xl font-black mb-1">
+            {categoryEmojis[challenge.gameCategory]} Mainkan & Menang
           </h3>
-          <p className="text-white/95 text-sm font-bold mb-4 drop-shadow">
-            Selesaikan untuk dapat <span className="rounded-md bg-yellow-300 px-1.5 py-0.5 text-orange-700">+{challenge.bonusReward} poin</span> ⭐
+          <p className="text-white text-sm font-bold mb-4 drop-shadow">
+            Selesaikan cabaran hari ini untuk +{challenge.bonusReward} bonus poin! ⭐
           </p>
           <Link to={`/play/${challenge.gameCategory}/${challenge.gameIndex}`}>
             <motion.button
-              whileHover={{ scale: 1.05, gap: '0.75rem' }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-white text-orange-600 px-5 py-2.5 rounded-full font-black text-sm flex items-center gap-2 shadow-xl ring-2 ring-white/50 hover:ring-yellow-300"
+              className="bg-white text-orange-600 px-6 py-2 rounded-full font-black flex items-center gap-2"
             >
-              Mula Cabaran <ArrowRight className="w-4 h-4" />
+              Ambil Cabaran <ArrowRight className="w-4 h-4" />
             </motion.button>
           </Link>
         </div>
-        <motion.div
-          animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.08, 1] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          className="text-6xl md:text-7xl drop-shadow-2xl relative z-10"
-        >
-          🎯
-        </motion.div>
+        <div className="text-6xl">🎯</div>
       </div>
     </motion.div>
   );
