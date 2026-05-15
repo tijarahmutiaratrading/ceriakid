@@ -4,9 +4,9 @@ import MiniFeedback from '@/components/game/MiniFeedback';
 import ProMiniGameShell from '@/components/game/ProMiniGameShell';
 import useMiniFeedback from '@/hooks/useMiniFeedback';
 
-const panel = 'rounded-[1.75rem] p-5 bg-gradient-to-br from-white/22 to-white/8 border border-white/35 shadow-2xl shadow-black/25 backdrop-blur-xl ring-1 ring-white/20';
-const action = 'rounded-2xl bg-gradient-to-br from-white to-cyan-100 text-purple-900 font-black shadow-xl shadow-cyan-950/20 ring-1 ring-white/70 active:scale-95 hover:-translate-y-0.5 transition-all';
-const chip = 'px-4 py-3 rounded-2xl bg-gradient-to-br from-white to-fuchsia-100 text-purple-900 font-black shadow-xl shadow-fuchsia-950/20 ring-1 ring-white/70 active:scale-95 hover:-translate-y-0.5 transition-all';
+const panel = 'rounded-[1.75rem] p-5 bg-slate-950/90 border border-white/45 shadow-2xl shadow-black/35 backdrop-blur-xl ring-1 ring-white/25';
+const action = 'rounded-2xl bg-white text-purple-950 font-black shadow-xl shadow-purple-950/20 ring-2 ring-purple-200 active:scale-95 hover:-translate-y-0.5 transition-all';
+const chip = 'px-4 py-3 rounded-2xl bg-white text-purple-950 font-black shadow-xl shadow-purple-950/20 ring-2 ring-purple-200 active:scale-95 hover:-translate-y-0.5 transition-all';
 
 export default function MiniGameModeRenderer({ game }) {
   const data = game?.gameData || {};

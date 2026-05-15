@@ -75,19 +75,19 @@ export default function MiniGamesList() {
             const wrapperProps = locked ? {} : { to: `/mini-games/${category.id}/play/${playId}` };
             return (
             <motion.div key={game.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.06 }}>
-              <CardWrapper {...wrapperProps} className={`block h-full rounded-3xl p-3 sm:p-4 bg-white/12 border border-white/20 transition-all shadow-xl ${locked ? 'opacity-60' : 'hover:bg-white/18'}`}>
+              <CardWrapper {...wrapperProps} className={`block h-full rounded-3xl p-3 sm:p-4 bg-slate-950/60 border border-white/35 transition-all shadow-xl shadow-black/25 backdrop-blur-xl ${locked ? 'opacity-70' : 'hover:bg-slate-950/75'}`}>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
                   <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-3xl bg-white/20 flex items-center justify-center text-3xl sm:text-4xl flex-shrink-0">{game.emoji}</div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <h2 className="text-white font-black text-sm sm:text-base leading-tight line-clamp-2">{game.title}</h2>
-                      <span className="px-2 py-0.5 rounded-full bg-white/20 text-white/85 text-[10px] font-black">{game.difficulty || data.difficulty || 'Mudah'}</span>
+                      <span className="px-2 py-0.5 rounded-full bg-white text-purple-950 text-[10px] font-black">{game.difficulty || data.difficulty || 'Mudah'}</span>
                     </div>
-                    <p className="text-white/75 text-xs font-bold">{modeLabels[data.mode || data.playStyle] || data.mode || data.playStyle || game.type} · {data.objective || game.description || category.objective}</p>
+                    <p className="text-white/90 text-xs font-bold">{modeLabels[data.mode || data.playStyle] || data.mode || data.playStyle || game.type} · {data.objective || game.description || category.objective}</p>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Trophy className="w-3 h-3" /> {data.reward || `${game.totalQuestions || data.itemsPerSet || 4} round`}</span>
-                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Volume2 className="w-3 h-3" /> sound</span>
-                      <span className="inline-flex items-center gap-1 text-[10px] text-white/75 font-black"><Sparkles className="w-3 h-3" /> animasi</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] text-white/90 font-black"><Trophy className="w-3 h-3" /> {data.reward || `${game.totalQuestions || data.itemsPerSet || 4} round`}</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] text-white/90 font-black"><Volume2 className="w-3 h-3" /> sound</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] text-white/90 font-black"><Sparkles className="w-3 h-3" /> animasi</span>
                     </div>
                   </div>
                   <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0 self-end sm:self-auto">
