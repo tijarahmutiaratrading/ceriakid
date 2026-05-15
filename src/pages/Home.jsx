@@ -46,17 +46,25 @@ export default function Home() {
   // Check device registration once user is known
   React.useEffect(() => {
     if (!isAuthenticated || !user?.email) return;
-    base44.entities.UserSubscription.filter({ email: user.email }).then(async (subs) => {
-      const sub = subs?.[0];
-      const isExpired = sub?.currentPeriodEnd && new Date(sub.currentPeriodEnd) < new Date();
-      const tier = (sub && !isExpired) ? (sub.tier || 'free') : 'free';
-      const result = await checkAndRegisterDevice(user.email, tier);
-      setDeviceCheck({ status: result.allowed ? 'allowed' : 'blocked', devices: result.devices, tier });
-      // Sync any offline-queued progress when back online
-      if (navigator.onLine) {
-        syncOfflineProgress(base44, user);
+    let cancelled = false;
+    (async () => {
+      try {
+        const subs = await base44.entities.UserSubscription.filter({ email: user.email });
+        const sub = subs?.[0];
+        const isExpired = sub?.currentPeriodEnd && new Date(sub.currentPeriodEnd) < new Date();
+        const tier = (sub && !isExpired) ? (sub.tier || 'free') : 'free';
+        const result = await checkAndRegisterDevice(user.email, tier);
+        if (cancelled) return;
+        setDeviceCheck({ status: result.allowed ? 'allowed' : 'blocked', devices: result.devices, tier });
+        if (navigator.onLine) {
+          syncOfflineProgress(base44, user);
+        }
+      } catch (err) {
+        console.error('Device check failed:', err);
+        if (!cancelled) setDeviceCheck({ status: 'allowed', devices: [], tier: 'free' });
       }
-    });
+    })();
+    return () => { cancelled = true; };
   }, [isAuthenticated, user?.email]);
 
   if (!isAuthenticated) return null;

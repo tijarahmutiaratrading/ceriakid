@@ -19,26 +19,34 @@ export default function GamesHub() {
   const [loadingCounts, setLoadingCounts] = React.useState(true);
 
   React.useEffect(() => {
+    let cancelled = false;
     const loadCounts = async () => {
       setLoadingCounts(true);
-      const results = await Promise.all(
-        MINI_GAME_CATEGORIES.map(category => base44.entities.Game.filter({ category: category.id }))
-      );
-      const nextCounts = {};
-      results.forEach((games, index) => {
-        nextCounts[MINI_GAME_CATEGORIES[index].id] = games.filter(game =>
-          game.isPublished !== false &&
-          (game.gameData?.miniGameBlueprint === true || game.gameData?.miniGameGenerated === true)
-        ).length;
-      });
-      setCounts(nextCounts);
-      setLoadingCounts(false);
+      try {
+        const results = await Promise.all(
+          MINI_GAME_CATEGORIES.map(category =>
+            base44.entities.Game.filter({ category: category.id }).catch(() => [])
+          )
+        );
+        if (cancelled) return;
+        const nextCounts = {};
+        results.forEach((games, index) => {
+          nextCounts[MINI_GAME_CATEGORIES[index].id] = (games || []).filter(game =>
+            game.isPublished !== false &&
+            (game.gameData?.miniGameBlueprint === true || game.gameData?.miniGameGenerated === true)
+          ).length;
+        });
+        setCounts(nextCounts);
+      } finally {
+        if (!cancelled) setLoadingCounts(false);
+      }
     };
 
     loadCounts();
+    return () => { cancelled = true; };
   }, []);
 
-  const totalGames = MINI_GAME_CATEGORIES.reduce((sum, category) => sum + (counts[category.id] ?? category.games.length), 0);
+  const totalGames = MINI_GAME_CATEGORIES.reduce((sum, category) => sum + (counts[category.id] ?? 0), 0);
 
   return (
     <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
@@ -77,7 +85,7 @@ export default function GamesHub() {
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="text-4xl">{category.emoji}</div>
                     <span className="text-xs px-2 py-1 rounded-full font-black bg-white text-purple-900 shadow-md">
-                      {loadingCounts ? <Loader2 className="w-3 h-3 animate-spin" /> : `${counts[category.id] ?? category.games.length} games`}
+                      {loadingCounts ? <Loader2 className="w-3 h-3 animate-spin" /> : `${counts[category.id] ?? 0} games`}
                     </span>
                   </div>
                   <h3 className="text-white font-black text-lg leading-tight mb-1">{category.title}</h3>

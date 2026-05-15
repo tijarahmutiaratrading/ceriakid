@@ -52,9 +52,8 @@ export default function GamePlayer() {
         } catch (_) {}
       }
       setUserTier(resolvedTier);
-      const userTier = resolvedTier;
 
-      const isLocked = isGameIndexLocked({ index: gameIndex, tier: userTier, isAuthenticated });
+      const isLocked = isGameIndexLocked({ index: gameIndex, tier: resolvedTier, isAuthenticated });
 
       if (isLocked) {
         setAccessDenied(true);
