@@ -48,7 +48,7 @@ async function getQcLearningNotes(base44) {
 
 // Unique topic pools per subject to avoid repetitive games
 const TOPIC_POOLS = {
-  bahasa_melayu: ['Haiwan','Buah-buahan','Nombor','Warna','Hari & Bulan','Kata Nama Am','Kata Kerja','Kata Adjektif','Keluarga','Rumah','Sekolah','Makanan','Pakaian','Alam Sekitar','Peribahasa','Sajak','Cerita Pendek','Pantun','Tatabahasa','Sinonim'],
+  bahasa_melayu: ['Kata Nama Am','Kata Nama Khas','Kata Kerja','Kata Adjektif','Kata Hubung','Imbuhan Awalan','Imbuhan Akhiran','Sinonim','Antonim','Ejaan Suku Kata','Ayat Mudah','Ayat Penyata vs Tanya','Tanda Baca','Peribahasa','Simpulan Bahasa','Pantun 2 Kerat','Pantun 4 Kerat','Sajak','Bina Ayat Gambar','Kefahaman Petikan Pendek'],
   english: ['Animals','Fruits','Colours','Numbers','Family','School','Food','Clothes','Nature','Action Words','Opposite Words','Phonics A-E','Phonics F-J','Phonics K-O','Phonics P-T','Phonics U-Z','Greetings','Body Parts','Weather','Transport'],
   mathematics: ['Tambah 1-10','Tolak 1-10','Tambah 11-20','Tolak 11-20','Pendaraban 2','Pendaraban 3','Pendaraban 4','Pendaraban 5','Pembahagian','Masa & Jam','Wang Ringgit','Pecahan Mudah','Bentuk 2D','Bentuk 3D','Ukuran Panjang','Berat','Isipadu','Susun Nombor','Nombor Genap Ganjil','Anggaran'],
   science: ['Haiwan Vertebrata','Haiwan Invertebrata','Tumbuhan','Kitaran Air','Cuaca','Sumber Alam','Tubuh Badan','Deria Lima','Jenis Makanan','Jirim & Bahan','Magnet','Cahaya','Bunyi','Gaya','Mudarat Alam Sekitar','Sistem Suria','Bintang & Bulan','Proses Foto','Adaptasi Haiwan','Ekosistem'],
@@ -87,7 +87,7 @@ async function generateQuestionsForGame(base44, gameTitle, topicName, subject, a
     ? `WAJIB tepat untuk ${DARJAH_LABELS[darjah] || darjah} sahaja. Jangan jana soalan terlalu mudah seperti tahap Darjah lebih rendah, dan jangan jana soalan terlalu tinggi seperti tahap Darjah lebih atas. Jika topik sama wujud di beberapa darjah, guna aras kemahiran, nombor, kosa kata dan konteks yang sepadan dengan ${DARJAH_LABELS[darjah] || darjah}.`
     : 'Untuk prasekolah, kekalkan sangat asas dan tidak bercampur silibus sekolah rendah.';
 
-  const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja)/i;
+  const bannedPattern = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|\bpohon\b|\bsepatu\b|strawberi|tampak|cantik|santai|membazir|merata-rata|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja)/i;
   const emojiRegex = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu;
   const neutralEmoji = subject === 'bahasa_tamil' ? '🌺' : subject === 'bahasa_mandarin' ? '🏮' : subject === 'jawi' ? '🕌' : null;
   const cleanQuestions = (items) => (items || [])
