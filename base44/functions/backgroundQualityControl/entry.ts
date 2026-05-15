@@ -2,7 +2,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const SUBJECTS = ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'bahasa_tamil', 'bahasa_mandarin'];
 const DARJAH_LEVELS = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
-const MINI_CATEGORIES = ['abc_phonics', 'math_counting', 'bahasa_melayu', 'english_vocabulary', 'sains_awal', 'jawi_iqra', 'memory_logic', 'islamic_learning'];
+const MINI_CATEGORIES = ['memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius', 'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training', 'memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
 const MIN_PASS_SCORE = 90;
 const MAX_DELETE_PER_RUN = 12;
 
@@ -76,8 +76,14 @@ function auditStoryGame(game) {
 }
 
 function buildReplacementTask(game, count) {
-  if (game.gameData?.miniGameGenerated || MINI_CATEGORIES.includes(game.category)) {
+  const isMiniGame = game.gameData?.miniGameGenerated === true || (MINI_CATEGORIES.includes(game.category) && !SUBJECTS.includes(game.category));
+  if (isMiniGame) {
     return { taskName: `QC Mini Replacement: ${game.category}`, ageGroup: game.ageGroup || 'prasekolah', subject: game.category, gamesCount: count, questionsPerGame: Math.max(4, Math.min(Number(game.totalQuestions || game.gameData?.itemsPerSet || 4), 10)), status: 'pending', createdGames: 0, errorMessage: JSON.stringify({ theme: game.title || game.category, itemsPerSet: Math.max(4, Number(game.totalQuestions || 4)), modes: game.gameData?.mode ? [game.gameData.mode] : [] }) };
+  }
+  // Subject game: ensure darjah is set for sekolah_rendah so generator does not reject the task
+  if (game.ageGroup === 'sekolah_rendah' && !game.darjah) {
+    // Cannot safely re-queue without darjah; skip task creation (caller will just log deletion).
+    return null;
   }
   return { taskName: `QC Replacement: ${game.title || game.category}`, ageGroup: game.ageGroup, ...(game.ageGroup === 'sekolah_rendah' && game.darjah ? { darjah: game.darjah } : {}), subject: game.category, gamesCount: count, questionsPerGame: Math.max(8, Math.min(Number(game.totalQuestions || 8), 20)), status: 'pending', createdGames: 0, errorMessage: 'Auto re-queue by background quality control after failed audit.' };
 }
@@ -162,10 +168,15 @@ Deno.serve(async (req) => {
       grouped.set(groupKey, existing);
       await base44.asServiceRole.entities.Game.delete(game.id);
     }
+    let createdTaskCount = 0;
     for (const group of grouped.values()) {
-      await base44.asServiceRole.entities.GameTask.create(buildReplacementTask(group.sample, group.count));
+      const task = buildReplacementTask(group.sample, group.count);
+      if (task) {
+        await base44.asServiceRole.entities.GameTask.create(task);
+        createdTaskCount++;
+      }
     }
-    const payload = { success: true, status: 'repair_queued', score, threshold: MIN_PASS_SCORE, total, passed, failedBeforeRepair: failed.length, failed: failed.length, deletedThisRun: selected.length, deletedCount: selected.length, replacementTasks: grouped.size, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues })), message: `Score ${score}%, ${selected.length} failed games deleted and replacements queued.` };
+    const payload = { success: true, status: 'repair_queued', score, threshold: MIN_PASS_SCORE, total, passed, failedBeforeRepair: failed.length, failed: failed.length, deletedThisRun: selected.length, deletedCount: selected.length, replacementTasks: createdTaskCount, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues })), message: `Score ${score}%, ${selected.length} failed games deleted and ${createdTaskCount} replacements queued.` };
     if (!force) await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
     await createQcLog(base44, { action: force ? 'repair' : 'auto_repair', ...payload });
     return Response.json(payload);
