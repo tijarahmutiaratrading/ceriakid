@@ -122,9 +122,12 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-[1.5rem] border border-white/15 bg-white/[0.08] p-3 shadow-2xl shadow-black/15 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[2rem] md:p-5 md:[clip-path:inset(0_round_2rem)]"
+          className="rounded-[1.5rem] border border-white/15 bg-gradient-to-br from-white/[0.10] to-white/[0.04] p-3 shadow-2xl shadow-black/20 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[2rem] md:p-5 md:[clip-path:inset(0_round_2rem)]"
         >
-          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-white/85 text-xs font-black uppercase tracking-wider">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
+            <span className="rounded-full bg-yellow-300/20 px-2 py-0.5 text-[10px] font-black text-yellow-200 ring-1 ring-yellow-300/30">{lang === 'bm' ? 'Penting' : 'Important'}</span>
+          </div>
           <div className="grid grid-cols-2 gap-3 md:gap-4">
             {[
               { key: 'prasekolah', label: `${t('prasekolah', lang)} · KSPK`, emoji: '🎨', sub: '4–6 tahun' },
@@ -204,12 +207,13 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <div className="mb-4 flex items-center gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.5rem)]">
-            <div className="h-2 w-2 rounded-full bg-yellow-300 shadow-lg shadow-yellow-300/40" />
-            <p className="text-white font-black text-base uppercase tracking-wider">
-              {lang === 'bm' ? 'Pilih Subjek' : 'Choose Subject'}
+          <div className="mb-4 flex items-center gap-3 rounded-[1.5rem] border border-white/15 bg-gradient-to-r from-white/[0.10] via-white/[0.06] to-transparent px-4 py-3 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.5rem)]">
+            <motion.div animate={{ scale: [1, 1.3, 1], opacity: [1, 0.6, 1] }} transition={{ duration: 2, repeat: Infinity }} className="h-2.5 w-2.5 rounded-full bg-yellow-300 shadow-lg shadow-yellow-300/60" />
+            <p className="text-white font-black text-base uppercase tracking-wider drop-shadow">
+              📚 {lang === 'bm' ? 'Pilih Subjek' : 'Choose Subject'}
             </p>
-            <div className="h-px flex-1 bg-white/15" />
+            <div className="h-px flex-1 bg-gradient-to-r from-white/30 to-transparent" />
+            <span className="text-white/60 text-[10px] font-black uppercase tracking-wider">{lang === 'bm' ? 'Tap untuk main' : 'Tap to play'}</span>
           </div>
           <CategoryGrid />
         </motion.div>

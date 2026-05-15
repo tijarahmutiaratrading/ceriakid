@@ -24,26 +24,42 @@ export default function CategoryCard({ category, gameCount, idx }) {
         transition={{ delay: idx * 0.08 }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.96 }}
-        className="rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative border border-white/20 shadow-2xl shadow-black/15 transform-gpu [clip-path:inset(0_round_1.5rem)] sm:[clip-path:inset(0_round_2rem)]"
-        >
+        whileHover={{ scale: 1.03, y: -4 }}
+        className="rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer h-full min-h-[170px] sm:min-h-[210px] group relative border border-white/25 shadow-2xl shadow-black/25 transform-gpu [clip-path:inset(0_round_1.5rem)] sm:[clip-path:inset(0_round_2rem)]"
+      >
         <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-90`} />
-        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent backdrop-blur-[1px]" />
-        <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-white/8 to-transparent backdrop-blur-[1px]" />
+        <div className="absolute -right-10 -top-10 h-36 w-36 rounded-full bg-white/25 blur-2xl transition-all group-hover:bg-white/40 group-hover:scale-110" />
+        <div className="absolute -left-8 -bottom-8 h-24 w-24 rounded-full bg-white/15 blur-2xl transition-all group-hover:bg-white/25" />
 
-        
+        {/* Shimmer sweep */}
+        <motion.div
+          aria-hidden
+          initial={{ x: '-150%' }}
+          animate={{ x: '200%' }}
+          transition={{ duration: 2.8, repeat: Infinity, repeatDelay: 5 + idx * 0.6, ease: 'easeInOut' }}
+          className="pointer-events-none absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
+        />
 
-         {/* Content */}
-        <div className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-between">
+        {/* Content */}
+        <div className="relative z-10 p-4 sm:p-6 md:p-7 h-full flex flex-col justify-between">
           <div>
-            <div className="text-4xl sm:text-5xl md:text-6xl mb-2 sm:mb-4">{config.emoji}</div>
-            <h3 className="font-black text-lg sm:text-xl md:text-2xl text-white drop-shadow-sm leading-tight break-words">{config.label}</h3>
+            <motion.div
+              whileHover={{ rotate: [0, -8, 8, -4, 0], scale: 1.08 }}
+              transition={{ duration: 0.5 }}
+              className="text-4xl sm:text-5xl md:text-6xl mb-2 sm:mb-3 drop-shadow-lg inline-block"
+            >
+              {config.emoji}
+            </motion.div>
+            <h3 className="font-black text-lg sm:text-xl md:text-2xl text-white drop-shadow-md leading-tight break-words">{config.label}</h3>
           </div>
 
           <div className="flex items-end justify-between gap-2">
-            <div className="bg-slate-950/55 backdrop-blur-xl rounded-full px-3 py-1 ring-1 ring-white/40 shadow-md">
-              <p className="text-xs sm:text-sm font-black text-white whitespace-nowrap">{gameCount} Permainan</p>
+            <div className="flex items-center gap-1.5 bg-slate-950/60 backdrop-blur-xl rounded-full pl-2 pr-3 py-1 ring-1 ring-white/40 shadow-lg">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-yellow-400 text-[10px] font-black text-slate-900">🎮</span>
+              <p className="text-xs sm:text-sm font-black text-white whitespace-nowrap">{gameCount}</p>
             </div>
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/25 text-white shadow-lg ring-1 ring-white/20 transition-transform group-hover:translate-x-1">→</div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-purple-700 shadow-xl ring-2 ring-white/60 font-black text-lg transition-all group-hover:translate-x-1 group-hover:rotate-12">→</div>
           </div>
         </div>
       </motion.div>
