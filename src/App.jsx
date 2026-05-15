@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
+import ErrorBoundary from '@/components/ErrorBoundary'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -11,6 +12,9 @@ import { AgeGroupProvider } from '@/lib/AgeGroupContext';
 import { SelectedChildProvider } from '@/lib/SelectedChildContext';
 
 import Landing from '@/pages/Landing';
+import Terms from '@/pages/Terms';
+import Privacy from '@/pages/Privacy';
+import Contact from '@/pages/Contact';
 import Home from '@/pages/Home';
 import AdminDashboard from '@/pages/AdminDashboard';
 import AdminGameManager from '@/pages/AdminGameManager';
@@ -87,6 +91,9 @@ const AuthenticatedApp = () => {
         <Routes>
           {/* Public pages - check if not authenticated */}
           <Route path="/" element={<Landing />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/admin-dashboard" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
           <Route path="/admin-game-manager" element={<AdminGuard><AdminGameManager /></AdminGuard>} />
@@ -135,36 +142,22 @@ const AuthenticatedApp = () => {
 };
 
 function App() {
-  useEffect(() => {
-    // Clear stale cache data on app load
-    const clearStaleData = () => {
-      // Clear old localStorage keys yang outdated
-      const keysToPreserve = ['ck_auth_token', 'ck_user_preference', 'ck_offline_data'];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && !keysToPreserve.some(k => key.includes(k)) && key.startsWith('ck_')) {
-          localStorage.removeItem(key);
-        }
-      }
-      // Clear sessionStorage completely (session-specific data)
-      sessionStorage.clear();
-      // Invalidate all React Query cache
-      queryClientInstance.clear();
-    };
-    
-    clearStaleData();
-  }, []);
+  // NOTE: Aggressive localStorage purge removed — was deleting user offline progress, 
+  // selected child, language preference, etc on every reload.
+  // React Query cache resets naturally on full page reload.
 
   return (
-    <Router>
-      <QueryClientProvider client={queryClientInstance}>
-        <AuthProvider>
-          <OfflineBanner />
-          <AuthenticatedAppWithChild />
-          <Toaster />
-        </AuthProvider>
-      </QueryClientProvider>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <QueryClientProvider client={queryClientInstance}>
+          <AuthProvider>
+            <OfflineBanner />
+            <AuthenticatedAppWithChild />
+            <Toaster />
+          </AuthProvider>
+        </QueryClientProvider>
+      </Router>
+    </ErrorBoundary>
   );
 }
 

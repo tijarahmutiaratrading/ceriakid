@@ -1,11 +1,15 @@
+// IMPORTANT: 'games' = max games per category accessible by tier.
+// Tiers below match what's actually sold on the Landing page.
+// 'premium' and 'pro' kept for legacy users only — DO NOT advertise.
 export const TIER_LIMITS = {
   free: { games: 5, devices: 1, children: 1 },
-  trial: { games: Infinity, devices: 1, children: 1 },
+  trial: { games: 50, devices: 1, children: 1 },
   asas: { games: 50, devices: 1, children: 1 },
   standard: { games: 100, devices: 2, children: 1 },
+  keluarga: { games: 200, devices: 4, children: 4 },
+  // Legacy tiers (existing customers only)
   premium: { games: 100, devices: 2, children: 1 },
-  keluarga: { games: Infinity, devices: 4, children: 4 },
-  pro: { games: Infinity, devices: 4, children: 4 },
+  pro: { games: 200, devices: 4, children: 4 },
 };
 
 export const getActiveTier = (subscription) => {

@@ -13,11 +13,19 @@ export const AuthProvider = ({ children }) => {
   const [authChecked, setAuthChecked] = useState(false);
   const [appPublicSettings, setAppPublicSettings] = useState(null);
 
+  const isMountedRef = React.useRef(true);
   useEffect(() => {
-    // Defer initialization to next tick to ensure React is fully initialized
+    isMountedRef.current = true;
     const timer = setTimeout(() => checkAppState(), 0);
-    return () => clearTimeout(timer);
+    return () => {
+      isMountedRef.current = false;
+      clearTimeout(timer);
+    };
   }, []);
+
+  const safeSet = (setter, value) => {
+    if (isMountedRef.current) setter(value);
+  };
 
   const checkAppState = async () => {
     try {

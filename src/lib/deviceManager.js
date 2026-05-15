@@ -5,26 +5,30 @@ export const DEVICE_LIMITS = Object.fromEntries(
   Object.entries(TIER_LIMITS).map(([tier, limits]) => [tier, limits.devices])
 );
 
-// Generate a stable device fingerprint based on browser/OS info
-export function getDeviceFingerprint() {
-  const nav = window.navigator;
-  const screen = window.screen;
-  const raw = [
-    nav.userAgent,
-    nav.language,
-    screen.colorDepth,
-    screen.width + 'x' + screen.height,
-    new Date().getTimezoneOffset(),
-  ].join('|');
+// Generate a STABLE device fingerprint.
+// We persist a random UUID in localStorage so browser updates / minor UA changes
+// don't lock the user out of their own device. Falls back to a UA hash if storage blocked.
+const DEVICE_ID_KEY = 'ck_device_id';
 
-  // Simple hash
-  let hash = 0;
-  for (let i = 0; i < raw.length; i++) {
-    const char = raw.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash |= 0;
+export function getDeviceFingerprint() {
+  try {
+    let stored = localStorage.getItem(DEVICE_ID_KEY);
+    if (stored) return stored;
+    // Generate new stable id
+    const newId = (crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`);
+    localStorage.setItem(DEVICE_ID_KEY, newId);
+    return newId;
+  } catch {
+    // Fallback when localStorage blocked (private mode, etc.)
+    const nav = window.navigator;
+    const screen = window.screen;
+    const raw = [nav.userAgent, nav.language, screen.colorDepth, screen.width + 'x' + screen.height].join('|');
+    let hash = 0;
+    for (let i = 0; i < raw.length; i++) {
+      hash = ((hash << 5) - hash + raw.charCodeAt(i)) | 0;
+    }
+    return 'fb-' + Math.abs(hash).toString(36);
   }
-  return Math.abs(hash).toString(36);
 }
 
 // Generate human-readable device name

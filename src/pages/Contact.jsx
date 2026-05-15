@@ -1,0 +1,48 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, Mail, MessageCircle } from 'lucide-react';
+
+export default function Contact() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-12 px-4">
+      <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 md:p-10 shadow-2xl">
+        <Link to="/" className="inline-flex items-center gap-2 text-game-purple font-bold mb-6 hover:underline">
+          <ArrowLeft className="w-4 h-4" /> Kembali ke Laman Utama
+        </Link>
+        <h1 className="text-3xl font-black text-slate-900 mb-2">Hubungi Kami</h1>
+        <p className="text-slate-600 mb-8">Kami sedia membantu. Pilih saluran yang paling sesuai untuk anda.</p>
+
+        <div className="space-y-4">
+          <a href="mailto:support@ceriakid.com" className="flex items-center gap-4 p-5 bg-purple-50 rounded-2xl border-2 border-purple-100 hover:bg-purple-100 transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-game-purple text-white flex items-center justify-center flex-shrink-0">
+              <Mail className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="font-black text-slate-900">Emel</p>
+              <p className="text-sm text-slate-600">support@ceriakid.com</p>
+              <p className="text-xs text-slate-500 mt-1">Balasan dalam 24 jam pada hari bekerja</p>
+            </div>
+          </a>
+
+          <a href="https://wa.me/60123456789" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-5 bg-green-50 rounded-2xl border-2 border-green-100 hover:bg-green-100 transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-green-500 text-white flex items-center justify-center flex-shrink-0">
+              <MessageCircle className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="font-black text-slate-900">WhatsApp</p>
+              <p className="text-sm text-slate-600">Lebih pantas untuk soalan pendek</p>
+            </div>
+          </a>
+        </div>
+
+        <div className="mt-8 p-5 bg-slate-50 rounded-2xl">
+          <p className="font-black text-slate-900 mb-2">Soalan Lazim?</p>
+          <p className="text-sm text-slate-600 mb-3">Banyak soalan boleh dijawab di seksyen FAQ kami.</p>
+          <Link to="/#faq" className="inline-block px-4 py-2 bg-white text-game-purple rounded-full font-bold text-sm border border-purple-200 hover:bg-purple-50">
+            Lihat FAQ →
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
