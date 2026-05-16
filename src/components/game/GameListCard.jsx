@@ -16,7 +16,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
   const [showUpgrade, setShowUpgrade] = useState(false);
 
   const cardStyle = {
-    background: locked ? 'rgba(15,23,42,0.65)' : 'rgba(15,23,42,0.72)',
+    background: locked ? 'rgba(88,28,135,0.35)' : 'rgba(120,40,160,0.40)',
     backdropFilter: 'blur(20px)',
     border: '1px solid rgba(255,255,255,0.35)',
   };
