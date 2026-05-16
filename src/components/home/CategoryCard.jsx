@@ -26,15 +26,11 @@ export default function CategoryCard({ category, gameCount, idx }) {
         whileTap={{ scale: 0.96 }}
         className="rounded-[2rem] overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative border border-white/50 shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 transition-shadow transform-gpu [clip-path:inset(0_round_2rem)]"
         >
-        {/* Background Image */}
-        <div className="absolute inset-0 overflow-hidden z-0">
-          <img src={config.image} alt={config.label} className="w-full h-full object-cover opacity-50 group-hover:opacity-65 transition-opacity duration-300" onError={(e) => e.target.style.display = 'none'} />
-        </div>
+        {/* Background Image - FULL VISIBLE */}
+        <img src={config.image} alt={config.label} className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-110 transition-transform duration-500" onError={(e) => e.target.style.display = 'none'} />
 
-        {/* Overlays */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-70 z-[1]`} />
-        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent backdrop-blur-sm z-[2]" />
-        <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/30 blur-3xl transition-all group-hover:bg-white/40 z-[2]" />
+        {/* Dark gradient only at bottom for text legibility */}
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/75 via-black/35 to-transparent z-[1]" />
 
         {/* Content */}
         <div className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-between">
