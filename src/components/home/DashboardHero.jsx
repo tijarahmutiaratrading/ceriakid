@@ -36,11 +36,8 @@ export default function DashboardHero({ user, avatarUrl, lang }) {
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
+          <div className="flex items-center justify-end">
             <ChildSelector />
-            <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 px-5 py-2.5 text-xs font-black text-white shadow-lg shadow-purple-400/40 hover:shadow-xl hover:from-purple-600 transition-all">
-              <UserRound className="h-4 w-4" /> Tetapan <ChevronRight className="h-4 w-4" />
-            </div>
           </div>
         </div>
       </motion.div>
