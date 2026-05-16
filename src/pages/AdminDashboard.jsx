@@ -6,6 +6,7 @@ import { Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook
 import { Link } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import AppHeader from '@/components/AppHeader';
+import AdminHeroCard from '@/components/admin/AdminHeroCard';
 
 const SETTINGS_KEY = 'admin_app_settings';
 
@@ -179,34 +180,15 @@ export default function AdminDashboard() {
 
       <div className="relative">
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-32 space-y-6">
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-3xl bg-slate-800/70 border border-white/10 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <p className="text-emerald-300 text-xs font-black uppercase tracking-[0.22em] mb-2">CeriaKid Control Center</p>
-            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">Admin Dashboard</h1>
-            <p className="text-slate-400 text-sm mt-1">Real-time overview untuk pelanggan, revenue dan konfigurasi CeriaKid.</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={loadData}
-              className="rounded-lg bg-black hover:bg-slate-950 border border-white/10 px-4 py-2.5 text-xs font-black transition-all flex items-center gap-2"
-            >
-              <RefreshCw className="w-4 h-4" /> Refresh
-            </button>
-            <button
-              type="button"
-              onClick={handleClearCache}
-              disabled={clearingCache}
-              className="rounded-lg bg-slate-700 hover:bg-slate-600 border border-white/10 px-4 py-2.5 text-xs font-black transition-all disabled:opacity-60 flex items-center gap-2"
-            >
-              <RefreshCw className={`w-4 h-4 ${clearingCache ? 'animate-spin' : ''}`} /> Cache
-            </button>
-            <Link to="/admin-game-manager" className="rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-2.5 text-xs font-black shadow-lg shadow-emerald-950/20 transition-all">
-              Game Manager
-            </Link>
-          </div>
-        </motion.div>
+        {/* Hero Header with stats */}
+        <AdminHeroCard
+          totalUsers={subscriptions.length}
+          totalRevenue={totalRevenue.toFixed(0)}
+          paidCustomers={tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga}
+          onRefresh={loadData}
+          onClearCache={handleClearCache}
+          clearingCache={clearingCache}
+        />
 
         {/* Admin Tabs */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="sticky top-24 z-20 flex gap-2 mb-6 p-1 rounded-xl overflow-x-auto bg-slate-800/90 border border-white/10 shadow-xl shadow-black/20 backdrop-blur-xl">
