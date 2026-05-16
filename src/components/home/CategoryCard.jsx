@@ -32,9 +32,6 @@ export default function CategoryCard({ category, gameCount, idx }) {
 
         
 
-         {/* Dark overlay for better text contrast */}
-         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-slate-950/20 to-transparent" />
-
          {/* Content */}
         <div className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-between">
           <div>
