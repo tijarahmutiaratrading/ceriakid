@@ -71,11 +71,11 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
         aria-hidden="true"
       />
 
-      <div className="relative p-4 sm:p-5 pl-12 sm:pl-14 flex items-start gap-3 sm:gap-4 min-h-[120px]">
+      <div className="relative p-3 sm:p-5 pl-10 sm:pl-14 flex items-start gap-2.5 sm:gap-4 min-h-[96px] sm:min-h-[120px]">
         {/* Emoji "sticker" — looks like a doodle stuck on the paper */}
-        <div className="flex-shrink-0 -mt-2">
+        <div className="flex-shrink-0 -mt-1 sm:-mt-2">
           <div
-            className="w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-full bg-white flex items-center justify-center text-3xl sm:text-4xl shadow-[3px_4px_8px_rgba(15,23,42,0.18)] ring-[2.5px] ring-slate-900/85"
+            className="w-12 h-12 sm:w-[72px] sm:h-[72px] rounded-full bg-white flex items-center justify-center text-2xl sm:text-4xl shadow-[3px_4px_8px_rgba(15,23,42,0.18)] ring-2 sm:ring-[2.5px] ring-slate-900/85"
             style={{ transform: `rotate(${-rotation * 1.5}deg)` }}
           >
             <span className={locked ? 'grayscale opacity-70' : ''}>{game.emoji}</span>
@@ -87,7 +87,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
           {/* Title — bold navy, slightly handwritten feel via tracking */}
           <div className="flex items-start gap-2 flex-wrap">
             <h3
-              className="font-black text-base sm:text-lg leading-tight text-[#1e3a8a] uppercase tracking-tight line-clamp-2"
+              className="font-black text-sm sm:text-lg leading-tight text-[#1e3a8a] uppercase tracking-tight line-clamp-2"
               style={{ textShadow: '0 1px 0 rgba(255,255,255,0.6)' }}
             >
               {game.title}
@@ -96,10 +96,10 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
           </div>
 
           {/* Difficulty — hand-circled stamp */}
-          <div className="inline-block relative mt-2 px-4 py-1">
+          <div className="inline-block relative mt-1.5 sm:mt-2 px-3 sm:px-4 py-0.5 sm:py-1">
             <CircleStamp stroke={difficulty.stroke} />
             <span
-              className="relative font-black text-sm"
+              className="relative font-black text-xs sm:text-sm"
               style={{ color: difficulty.stroke, fontFamily: '"Nunito", cursive' }}
             >
               {difficulty.label}
@@ -108,19 +108,19 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
 
           {/* Game type — handwritten style */}
           {game.type && (
-            <p className="mt-2 text-slate-700 text-sm font-bold capitalize" style={{ fontFamily: '"Nunito", cursive' }}>
+            <p className="mt-1 sm:mt-2 text-slate-700 text-xs sm:text-sm font-bold capitalize" style={{ fontFamily: '"Nunito", cursive' }}>
               {game.type.replace(/_/g, ' ')}
             </p>
           )}
 
           {/* Stars + plays */}
           {gameProgress && (
-            <div className="flex items-center gap-3 mt-2">
+            <div className="flex items-center gap-2 sm:gap-3 mt-1.5 sm:mt-2">
               <div className="flex gap-0.5" aria-label={`${stars} bintang daripada 3`}>
                 {[1,2,3].map(s => (
                   <span
                     key={s}
-                    className="text-base leading-none"
+                    className="text-sm sm:text-base leading-none"
                     style={{
                       color: s <= stars ? '#facc15' : '#cbd5e1',
                       textShadow: s <= stars ? '0 1px 0 #b45309' : 'none',
@@ -130,7 +130,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
                   </span>
                 ))}
               </div>
-              <span className="text-slate-700 text-xs font-bold" style={{ fontFamily: '"Nunito", cursive' }}>
+              <span className="text-slate-700 text-[10px] sm:text-xs font-bold" style={{ fontFamily: '"Nunito", cursive' }}>
                 Dimainkan {playCount} kali
               </span>
             </div>
@@ -141,17 +141,17 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
         <div className="flex-shrink-0 self-center">
           {locked ? (
             <div
-              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-400 flex items-center justify-center shadow-[2px_3px_6px_rgba(15,23,42,0.25)] ring-[2.5px] ring-amber-900"
+              className="w-9 h-9 sm:w-14 sm:h-14 rounded-full bg-amber-400 flex items-center justify-center shadow-[2px_3px_6px_rgba(15,23,42,0.25)] ring-2 sm:ring-[2.5px] ring-amber-900"
               style={{ transform: `rotate(${rotation * 2}deg)` }}
             >
-              <Lock className="w-5 h-5 sm:w-6 sm:h-6 text-amber-900" strokeWidth={3} />
+              <Lock className="w-4 h-4 sm:w-6 sm:h-6 text-amber-900" strokeWidth={3} />
             </div>
           ) : (
             <div
-              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-red-500 flex items-center justify-center shadow-[2px_3px_6px_rgba(15,23,42,0.25)] ring-[2.5px] ring-red-800"
+              className="w-9 h-9 sm:w-14 sm:h-14 rounded-full bg-red-500 flex items-center justify-center shadow-[2px_3px_6px_rgba(15,23,42,0.25)] ring-2 sm:ring-[2.5px] ring-red-800"
               style={{ transform: `rotate(${rotation * 2}deg)` }}
             >
-              <Play className="w-5 h-5 sm:w-6 sm:h-6 text-white fill-white ml-0.5" strokeWidth={2.5} />
+              <Play className="w-4 h-4 sm:w-6 sm:h-6 text-white fill-white ml-0.5" strokeWidth={2.5} />
             </div>
           )}
         </div>
