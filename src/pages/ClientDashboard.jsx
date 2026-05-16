@@ -77,12 +77,12 @@ export default function ClientDashboard() {
   const tier = TIER_CONFIG[userTier] || TIER_CONFIG.free;
 
   return (
-    <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
+    <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-600 via-fuchsia-500 to-amber-300 relative overflow-hidden">
       {/* Background blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute -top-40 -right-28 w-[28rem] h-[28rem] bg-white/25 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/4 -left-28 w-96 h-96 bg-pink-300/35 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-yellow-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <AppHeader />
@@ -93,11 +93,13 @@ export default function ClientDashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 md:mb-6 rounded-3xl overflow-hidden shadow-2xl"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.4)' }}
+          className="mb-4 md:mb-6 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-purple-950/20 border border-white/40 relative isolate"
+          style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(26px)', clipPath: 'inset(0 round 2.5rem)' }}
         >
+          <div className="absolute -top-16 -right-10 w-44 h-44 bg-yellow-200/30 rounded-full blur-2xl" />
+          <div className="absolute -bottom-20 -left-12 w-56 h-56 bg-pink-200/30 rounded-full blur-2xl" />
           {/* Avatar overlapping strip */}
-          <div className="px-4 md:px-6 pb-4 md:pb-6 pt-4 md:pt-6">
+          <div className="relative px-4 md:px-6 pb-4 md:pb-6 pt-4 md:pt-6">
             <div className="flex items-end gap-4 mb-6">
               <div className="relative">
                 {avatarUrl && avatarUrl.includes('http') ? (
@@ -142,10 +144,13 @@ export default function ClientDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mb-4 mt-6 md:mt-8 rounded-3xl p-4 md:p-5"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+          className="mb-4 mt-6 md:mt-8 rounded-3xl p-4 md:p-5 shadow-lg"
+          style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.4)' }}
         >
-          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-4">👤 Jantina</p>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-pink-300 rounded-full" />
+            <p className="text-white/80 text-xs font-black uppercase tracking-wider">👤 Jantina</p>
+          </div>
           <div className="grid grid-cols-2 gap-2 md:gap-3">
             {[
               { value: 'male', label: 'Lelaki', emoji: '👨' },
@@ -175,7 +180,10 @@ export default function ClientDashboard() {
           transition={{ delay: 0.15 }}
           className="mb-4"
         >
-          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3 px-1">💎 Langganan Saya</p>
+          <div className="flex items-center gap-2 mb-3 px-1">
+            <div className="h-1 w-8 bg-gradient-to-r from-purple-300 to-pink-300 rounded-full" />
+            <p className="text-white/80 text-xs font-black uppercase tracking-wider">💎 Langganan Saya</p>
+          </div>
           <SubscriptionWidget userEmail={user?.email} />
         </motion.div>
 
@@ -186,8 +194,11 @@ export default function ClientDashboard() {
           transition={{ delay: 0.2 }}
           className="mb-5"
         >
-          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3 px-1">📱 Device Berdaftar</p>
-          <div className="rounded-3xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}>
+          <div className="flex items-center gap-2 mb-3 px-1">
+            <div className="h-1 w-8 bg-gradient-to-r from-cyan-300 to-pink-300 rounded-full" />
+            <p className="text-white/80 text-xs font-black uppercase tracking-wider">📱 Device Berdaftar</p>
+          </div>
+          <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.4)' }}>
             <div className="p-4">
               <ManageDevices userEmail={user?.email} tier={userTier} />
             </div>
