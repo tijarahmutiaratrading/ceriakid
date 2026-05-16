@@ -365,7 +365,7 @@ export default function GamesList() {
             </Link>
           </motion.div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             {games.map((game) => {
               const globalIdx = allGames.findIndex((g) => g === game);
               const gameKey = `${ageGroup}-${category}-${globalIdx}`;
