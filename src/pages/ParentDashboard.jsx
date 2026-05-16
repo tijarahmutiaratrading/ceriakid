@@ -10,6 +10,9 @@ import AppHeader from '@/components/AppHeader';
 import SubjectBreakdown from '@/components/home/SubjectBreakdown';
 import SmartRecommendations from '@/components/dashboard/SmartRecommendations';
 import LeaderboardWidget from '@/components/dashboard/LeaderboardWidget';
+import ParentHeroCard from '@/components/parent/ParentHeroCard';
+import InsightsCard from '@/components/parent/InsightsCard';
+import RecentActivity from '@/components/parent/RecentActivity';
 
 
 const categoryLabels = {
@@ -157,21 +160,31 @@ export default function ParentDashboard() {
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
+      <div className="relative max-w-5xl mx-auto px-4 pb-32 pt-28 md:pt-32">
 
-        {/* Header Card */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-5 p-5 rounded-3xl flex items-center gap-4"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
-        >
-          <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">📊</div>
-          <div>
-            <h1 className="text-2xl font-black text-white leading-tight">Prestasi Anak</h1>
-            <p className="text-white/90 text-sm font-bold mt-0.5">{totalChildren} anak sedang belajar</p>
+        {/* Hero Card with overview stats */}
+        {(() => {
+          const allGames = Object.values(childrenData).flat();
+          const totalGames = allGames.length;
+          const totalStars = allGames.reduce((sum, g) => sum + (g.bestStars || 0), 0);
+          const avgStars = totalGames > 0 ? (totalStars / totalGames).toFixed(1) : '0.0';
+          return (
+            <ParentHeroCard
+              totalChildren={totalChildren}
+              totalGames={totalGames}
+              totalStars={totalStars}
+              avgStars={avgStars}
+            />
+          );
+        })()}
+
+        {/* Insights & Recent Activity (combined view across all children) */}
+        {totalChildren > 0 && (
+          <div className="grid lg:grid-cols-2 gap-4 mb-1">
+            <InsightsCard games={Object.values(childrenData).flat()} />
+            <RecentActivity games={Object.values(childrenData).flat()} />
           </div>
-        </motion.div>
+        )}
 
         {/* Empty state */}
         {totalChildren === 0 ? (
@@ -196,14 +209,12 @@ export default function ParentDashboard() {
           </motion.div>
         ) : (
           <div className="space-y-4">
-            {/* Smart Recommendations */}
+            {/* Smart Recommendations + Leaderboard side-by-side on desktop */}
             {selectedChild && (
-              <SmartRecommendations userEmail={user.email} childName={selectedChild} ageGroup={ageGroup} />
-            )}
-
-            {/* Leaderboard */}
-            {selectedChild && (
-              <LeaderboardWidget userEmail={user.email} childName={selectedChild} ageGroup={ageGroup} />
+              <div className="grid lg:grid-cols-2 gap-4">
+                <SmartRecommendations userEmail={user.email} childName={selectedChild} ageGroup={ageGroup} />
+                <LeaderboardWidget userEmail={user.email} childName={selectedChild} ageGroup={ageGroup} />
+              </div>
             )}
 
             {Object.entries(childrenData).map(([childName, games], idx) => {
