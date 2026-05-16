@@ -462,15 +462,20 @@ export default function DrawingStudio() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedColoringPage.id, mode]);
 
-  // Setup HiDPI for normal canvas on mount + on window resize
+  // Setup HiDPI for normal canvas on mount + on container resize.
+  // We use ResizeObserver so canvas always matches its real visible size,
+  // preventing pointer-to-pixel offset bugs when layout changes.
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
     const setupNormal = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
       const cssW = Math.max(320, Math.round(rect.width || 720));
       // maintain 4:3 aspect ratio
-      const cssH = Math.round(cssW * (540 / 720));
+      const cssH = Math.round(cssW * (3 / 4));
+      // Skip if size unchanged (avoid wiping the drawing on every micro-resize)
+      if (canvas._cssW === cssW && canvas._cssH === cssH) return;
       // Snapshot existing content (if any) so we can restore after resize
       let snapshot = null;
       if (canvas.width > 0 && canvas.height > 0) {
@@ -481,18 +486,27 @@ export default function DrawingStudio() {
           snapshot.getContext('2d').drawImage(canvas, 0, 0);
         } catch { snapshot = null; }
       }
+      // Lock the CSS height explicitly so the canvas matches the logical size
+      // we set internally. Without this, the parent's flex/grid layout can
+      // stretch the canvas a few px and offset pointer coordinates.
+      canvas.style.height = cssH + 'px';
       setupHiDPICanvas(canvas, cssW, cssH);
       const ctx = canvas.getContext('2d');
-      // restore (scaled to new logical size)
       if (snapshot) {
         ctx.drawImage(snapshot, 0, 0, cssW, cssH);
       } else {
         clearCanvas(ctx, cssW, cssH);
       }
     };
+
     setupNormal();
+    const ro = new ResizeObserver(() => setupNormal());
+    ro.observe(canvas);
     window.addEventListener('resize', setupNormal);
-    return () => window.removeEventListener('resize', setupNormal);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', setupNormal);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -555,13 +569,18 @@ export default function DrawingStudio() {
 
   const getPoint = (e, canvas) => {
     const rect = canvas.getBoundingClientRect();
-    // Map screen coords directly to CSS-logical coords (no DPR scaling needed
-    // because ctx is already transformed by DPR)
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    // Map screen coords to canvas LOGICAL (CSS) pixel coords.
+    // Because the visible canvas size may not equal the logical size we set
+    // (e.g. when CSS scales it due to container resize), we must scale.
+    const logicalW = canvas._cssW || rect.width;
+    const logicalH = canvas._cssH || rect.height;
+    const scaleX = logicalW / rect.width;
+    const scaleY = logicalH / rect.height;
     return {
-      x: clientX - rect.left,
-      y: clientY - rect.top,
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY,
     };
   };
 
@@ -1030,11 +1049,8 @@ export default function DrawingStudio() {
                   onPointerMove={draw}
                   onPointerUp={endDraw}
                   onPointerLeave={endDraw}
-                  onTouchStart={startDraw}
-                  onTouchMove={draw}
-                  onTouchEnd={endDraw}
                   className="w-full touch-none block"
-                  style={{ backgroundColor: '#fff9f0', cursor: stickerMode ? 'pointer' : 'crosshair', aspectRatio: '4/3' }}
+                  style={{ backgroundColor: '#fff9f0', cursor: stickerMode ? 'pointer' : 'crosshair' }}
                 />
               </div>
             </div>
@@ -1112,9 +1128,6 @@ export default function DrawingStudio() {
               onPointerMove={draw}
               onPointerUp={endDraw}
               onPointerLeave={endDraw}
-              onTouchStart={startDraw}
-              onTouchMove={draw}
-              onTouchEnd={endDraw}
               style={{ flex: 1, width: '100%', touchAction: 'none', cursor: stickerMode ? 'pointer' : 'crosshair', display: 'block', backgroundColor: '#fff9f0' }}
             />
           </div>,
