@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Gamepad2, Palette, BookOpen } from 'lucide-react';
 
 const actions = [
-  { to: '/games-hub', icon: Gamepad2, emoji: '🎮', title: 'Game Hub', subtitle: 'Permainan interaktif', tone: 'from-violet-400/30 to-blue-400/20' },
-  { to: '/drawing', icon: Palette, emoji: '🎨', title: 'Studio Lukisan', subtitle: 'Lukis bebas & tracing', tone: 'from-pink-400/30 to-orange-400/20' },
-  { to: '/story-kid', icon: BookOpen, emoji: '📖', title: 'Story Kid', subtitle: 'Cerita interaktif', tone: 'from-yellow-300/30 to-pink-400/20', featured: true },
+  { to: '/games-hub', icon: Gamepad2, emoji: '🎮', title: 'Game Hub', subtitle: 'Permainan interaktif', tone: 'from-violet-400/30 to-blue-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c313ca888_generated_image.png' },
+  { to: '/drawing', icon: Palette, emoji: '🎨', title: 'Studio Lukisan', subtitle: 'Lukis bebas & tracing', tone: 'from-pink-400/30 to-orange-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1bf081296_generated_image.png' },
+  { to: '/story-kid', icon: BookOpen, emoji: '📖', title: 'Story Kid', subtitle: 'Cerita interaktif', tone: 'from-yellow-300/30 to-pink-400/20', featured: true, image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/71823ab6e_generated_image.png' },
 ];
 
 export default function QuickAccessGrid() {
@@ -17,8 +17,11 @@ export default function QuickAccessGrid() {
         return (
           <Link key={item.to} to={item.to} className="block min-w-0" aria-label={`Buka ${item.title}`}>
             <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} className={`group relative h-full min-h-[130px] overflow-hidden rounded-[1.75rem] border border-white/40 bg-gradient-to-br ${item.tone} p-5 shadow-lg shadow-purple-200/20 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.75rem)] md:p-6`}>
-              <div className="absolute inset-0 bg-gradient-to-t from-purple-950/15 to-white/5" />
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
+              {item.image && (
+                <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-110 transition-transform duration-500" onError={(e) => e.target.style.display = 'none'} />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-purple-950/80 via-purple-950/40 to-purple-900/20 z-[1]" />
+              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30 z-[1]" />
               {item.featured && <div className="absolute right-3 top-3 text-yellow-200 animate-pulse">✨</div>}
               <div className="relative z-10 flex items-start justify-between gap-3">
                 <div>
