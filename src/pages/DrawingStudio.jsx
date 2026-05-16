@@ -133,75 +133,30 @@ const makeOval = (cx, cy, rx, ry, steps = 36, start = 0, end = Math.PI * 2) =>
   });
 
 const COLORING_PAGES = [
-  {
-    id: 'cat', label: 'Kucing Kartun 🐱', emoji: '🐱', strokes: [
-      makeOval(0.5, 0.5, 0.25, 0.22), [[0.3,0.34],[0.36,0.16],[0.45,0.32]], [[0.55,0.32],[0.64,0.16],[0.7,0.34]],
-      makeOval(0.42,0.47,0.035,0.045), makeOval(0.58,0.47,0.035,0.045), makeOval(0.5,0.57,0.035,0.025), [[0.5,0.59],[0.44,0.66]], [[0.5,0.59],[0.56,0.66]],
-      [[0.3,0.56],[0.12,0.5]], [[0.3,0.61],[0.13,0.62]], [[0.7,0.56],[0.88,0.5]], [[0.7,0.61],[0.87,0.62]],
-      makeOval(0.5,0.8,0.18,0.13), [[0.38,0.88],[0.32,0.95]], [[0.62,0.88],[0.68,0.95]], makeOval(0.74,0.78,0.09,0.18,24, -1.5, 1.7)
-    ]
-  },
-  {
-    id: 'rabbit', label: 'Arnab Kartun 🐰', emoji: '🐰', strokes: [
-      makeOval(0.42,0.27,0.07,0.2), makeOval(0.58,0.27,0.07,0.2), makeOval(0.5,0.52,0.24,0.23),
-      makeOval(0.41,0.5,0.035,0.045), makeOval(0.59,0.5,0.035,0.045), makeOval(0.5,0.6,0.035,0.025), [[0.5,0.62],[0.44,0.68]], [[0.5,0.62],[0.56,0.68]],
-      makeOval(0.5,0.82,0.2,0.13), makeOval(0.32,0.9,0.08,0.04), makeOval(0.68,0.9,0.08,0.04), makeOval(0.76,0.72,0.06,0.06)
-    ]
-  },
-  {
-    id: 'fish', label: 'Ikan Kartun 🐟', emoji: '🐟', strokes: [
-      makeOval(0.45,0.5,0.27,0.18), [[0.71,0.5],[0.92,0.32],[0.86,0.5],[0.92,0.68],[0.71,0.5]],
-      makeOval(0.34,0.45,0.035,0.035), [[0.26,0.58],[0.36,0.64],[0.48,0.62]], [[0.48,0.33],[0.58,0.18],[0.64,0.36]], [[0.48,0.67],[0.58,0.82],[0.64,0.64]],
-      [[0.18,0.5],[0.24,0.46],[0.24,0.54],[0.18,0.5]]
-    ]
-  },
-  {
-    id: 'house', label: 'Rumah Kartun 🏠', emoji: '🏠', strokes: [
-      [[0.16,0.46],[0.5,0.14],[0.84,0.46]], [[0.24,0.43],[0.24,0.84],[0.76,0.84],[0.76,0.43]],
-      [[0.41,0.84],[0.41,0.62],[0.59,0.62],[0.59,0.84]], [[0.31,0.54],[0.43,0.54],[0.43,0.66],[0.31,0.66],[0.31,0.54]], [[0.6,0.54],[0.72,0.54],[0.72,0.66],[0.6,0.66],[0.6,0.54]],
-      [[0.62,0.23],[0.62,0.13],[0.72,0.13],[0.72,0.32]], [[0.18,0.84],[0.82,0.84]], makeOval(0.5,0.72,0.018,0.018)
-    ]
-  },
-  {
-    id: 'tree', label: 'Pokok Kartun 🌳', emoji: '🌳', strokes: [
-      [[0.43,0.86],[0.43,0.58],[0.57,0.58],[0.57,0.86],[0.43,0.86]], makeOval(0.5,0.34,0.21,0.18), makeOval(0.35,0.45,0.17,0.16), makeOval(0.65,0.45,0.17,0.16), makeOval(0.5,0.52,0.22,0.16),
-      [[0.5,0.58],[0.42,0.72]], [[0.5,0.62],[0.58,0.72]], [[0.2,0.88],[0.8,0.88]], makeOval(0.67,0.35,0.035,0.045), makeOval(0.38,0.52,0.035,0.045)
-    ]
-  },
-  {
-    id: 'flower', label: 'Bunga Kartun 🌸', emoji: '🌸', strokes: [
-      [[0.5,0.58],[0.5,0.9]], makeOval(0.5,0.38,0.055,0.055), makeOval(0.5,0.24,0.09,0.12), makeOval(0.64,0.38,0.12,0.09), makeOval(0.5,0.52,0.09,0.12), makeOval(0.36,0.38,0.12,0.09),
-      makeOval(0.38,0.74,0.11,0.045,24, -0.2, Math.PI + 0.2), makeOval(0.62,0.72,0.11,0.045,24, -Math.PI - 0.2, 0.2), [[0.18,0.92],[0.82,0.92]]
-    ]
-  },
-  {
-    id: 'car', label: 'Kereta Kartun 🚗', emoji: '🚗', strokes: [
-      [[0.13,0.63],[0.27,0.42],[0.39,0.35],[0.65,0.35],[0.78,0.43],[0.88,0.63],[0.82,0.76],[0.2,0.76],[0.13,0.63]],
-      [[0.34,0.42],[0.43,0.3],[0.57,0.3],[0.67,0.42]], [[0.27,0.52],[0.43,0.52]], [[0.58,0.52],[0.75,0.52]], makeOval(0.3,0.77,0.08,0.08), makeOval(0.7,0.77,0.08,0.08), makeOval(0.3,0.77,0.035,0.035), makeOval(0.7,0.77,0.035,0.035), [[0.2,0.61],[0.25,0.58]], [[0.8,0.61],[0.75,0.58]]
-    ]
-  },
-  {
-    id: 'robot', label: 'Robot Kartun 🤖', emoji: '🤖', strokes: [
-      [[0.29,0.27],[0.71,0.27],[0.71,0.61],[0.29,0.61],[0.29,0.27]], [[0.5,0.27],[0.5,0.13]], makeOval(0.5,0.12,0.035,0.035),
-      makeOval(0.4,0.42,0.045,0.045), makeOval(0.6,0.42,0.045,0.045), [[0.4,0.53],[0.6,0.53]], [[0.22,0.38],[0.29,0.48]], [[0.78,0.38],[0.71,0.48]],
-      [[0.34,0.61],[0.34,0.84],[0.66,0.84],[0.66,0.61]], [[0.42,0.84],[0.38,0.94]], [[0.58,0.84],[0.62,0.94]], [[0.38,0.7],[0.62,0.7]]
-    ]
-  },
-  {
-    id: 'person', label: 'Kanak-kanak Kartun 🙂', emoji: '🙂', strokes: [
-      makeOval(0.5,0.25,0.15,0.14), makeOval(0.44,0.24,0.025,0.03), makeOval(0.56,0.24,0.025,0.03), makeOval(0.5,0.33,0.06,0.025,18, 0, Math.PI),
-      [[0.36,0.14],[0.44,0.08],[0.54,0.08],[0.65,0.16]], [[0.39,0.39],[0.61,0.39],[0.68,0.67],[0.32,0.67],[0.39,0.39]],
-      [[0.36,0.43],[0.2,0.58]], [[0.64,0.43],[0.8,0.58]], makeOval(0.2,0.59,0.035,0.035), makeOval(0.8,0.59,0.035,0.035),
-      [[0.43,0.67],[0.38,0.9]], [[0.57,0.67],[0.62,0.9]], makeOval(0.36,0.92,0.08,0.035), makeOval(0.64,0.92,0.08,0.035)
-    ]
-  },
-  {
-    id: 'sun', label: 'Matahari Kartun ☀️', emoji: '☀️', strokes: [
-      makeOval(0.5,0.5,0.19,0.19), makeOval(0.43,0.46,0.025,0.03), makeOval(0.57,0.46,0.025,0.03), makeOval(0.5,0.58,0.07,0.035,18, 0, Math.PI),
-      [[0.5,0.08],[0.5,0.22]], [[0.5,0.78],[0.5,0.92]], [[0.08,0.5],[0.22,0.5]], [[0.78,0.5],[0.92,0.5]], [[0.2,0.2],[0.3,0.3]], [[0.7,0.7],[0.8,0.8]], [[0.8,0.2],[0.7,0.3]], [[0.2,0.8],[0.3,0.7]], [[0.36,0.12],[0.4,0.25]], [[0.64,0.12],[0.6,0.25]], [[0.36,0.88],[0.4,0.75]], [[0.64,0.88],[0.6,0.75]]
-    ]
-  },
+  { id: 'cat', label: 'Kucing Kartun 🐱', emoji: '🐱', imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/71d0614d5_generated_image.png' },
+  { id: 'rabbit', label: 'Arnab Kartun 🐰', emoji: '🐰', imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8918cface_generated_image.png' },
+  { id: 'fish', label: 'Ikan Kartun 🐟', emoji: '🐟', imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9e2772b41_generated_image.png' },
+  { id: 'house', label: 'Rumah Kartun 🏠', emoji: '🏠', imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0b504e10f_generated_image.png' },
+  { id: 'tree', label: 'Pokok Kartun 🌳', emoji: '🌳', imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fed3eb4d4_generated_image.png' },
+  { id: 'flower', label: 'Bunga Kartun 🌸', emoji: '🌸', imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/21247ecda_generated_image.png' },
+  { id: 'car', label: 'Kereta Kartun 🚗', emoji: '🚗', imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f2c68a554_generated_image.png' },
+  { id: 'robot', label: 'Robot Kartun 🤖', emoji: '🤖', imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6f6dfac8f_generated_image.png' },
+  { id: 'person', label: 'Kanak-kanak Kartun 🙂', emoji: '🙂', imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2f4927547_generated_image.png' },
+  { id: 'sun', label: 'Matahari Kartun ☀️', emoji: '☀️', imageUrl: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a3e7ca7f2_generated_image.png' },
 ];
+
+// Cache loaded coloring images so they don't reload every redraw
+const coloringImageCache = {};
+const loadColoringImage = (url) => {
+  if (coloringImageCache[url]) return Promise.resolve(coloringImageCache[url]);
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => { coloringImageCache[url] = img; resolve(img); };
+    img.onerror = reject;
+    img.src = url;
+  });
+};
 
 const MODES = [
   { id: 'draw', label: '🎨 Lukis Bebas' },
@@ -243,6 +198,33 @@ export default function DrawingStudio() {
   };
 
   const drawColoringGuide = (ctx, w, h, page) => {
+    // New version: render the AI-generated coloring book line art image as the guide.
+    // The image already contains clean black outlines on white — we just composite it
+    // on top of whatever the user has colored so outlines stay crisp.
+    if (page?.imageUrl) {
+      const cached = coloringImageCache[page.imageUrl];
+      const drawIt = (img) => {
+        const iw = img.naturalWidth || img.width;
+        const ih = img.naturalHeight || img.height;
+        const scale = Math.min(w / iw, h / ih) * 0.92;
+        const dw = iw * scale;
+        const dh = ih * scale;
+        const dx = (w - dw) / 2;
+        const dy = (h - dh) / 2;
+        ctx.save();
+        // Multiply so user's coloring shows through behind the lines
+        ctx.globalCompositeOperation = 'multiply';
+        ctx.drawImage(img, dx, dy, dw, dh);
+        ctx.restore();
+      };
+      if (cached) {
+        drawIt(cached);
+      } else {
+        loadColoringImage(page.imageUrl).then(drawIt).catch(() => {});
+      }
+      return;
+    }
+    // Fallback (legacy stroke-based guide) — kept for safety only
     const sx = (x) => x * w;
     const sy = (y) => y * h;
     const line = (points) => {
@@ -378,6 +360,21 @@ export default function DrawingStudio() {
   useEffect(() => {
     initCanvas();
   }, [mode, selectedShape, selectedColoringPage, initCanvas]);
+
+  // Preload all coloring page images on mount, and re-init canvas once the current one loads
+  useEffect(() => {
+    COLORING_PAGES.forEach((p) => {
+      if (p.imageUrl) loadColoringImage(p.imageUrl).then(() => {
+        // If user is currently viewing this coloring page, redraw with the now-loaded image
+        if (mode === 'color' && selectedColoringPage.id === p.id) {
+          const ctx = getCtx();
+          const canvas = getCanvas();
+          if (ctx && canvas) clearCanvas(ctx, canvas.width, canvas.height);
+        }
+      }).catch(() => {});
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedColoringPage.id, mode]);
 
   // When entering fullscreen: copy normal canvas → fs canvas
   useEffect(() => {
