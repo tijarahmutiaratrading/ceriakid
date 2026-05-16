@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Sparkles, UserRound, ChevronRight } from 'lucide-react';
 import ChildSelector from '@/components/ChildSelector';
+
+const SUNSET_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/dae5af1e6_generated_image.png';
 
 export default function DashboardHero({ user, avatarUrl, lang }) {
   const greeting = lang === 'bm' ? 'Selamat datang kembali!' : 'Welcome back!';
@@ -14,30 +15,52 @@ export default function DashboardHero({ user, avatarUrl, lang }) {
         initial={{ opacity: 0, y: -14 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.01 }}
-        className="relative isolate overflow-hidden rounded-[2.5rem] border border-white/40 bg-gradient-to-br from-purple-600/60 via-pink-600/55 to-blue-600/50 p-5 shadow-lg backdrop-blur-3xl transform-gpu [clip-path:inset(0_round_2.5rem)] md:p-8"
+        className="relative isolate overflow-hidden rounded-[2rem] border border-white/30 shadow-2xl shadow-orange-950/30 transform-gpu [clip-path:inset(0_round_2rem)] min-h-[200px] md:min-h-[260px]"
       >
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/35 via-white/15 to-transparent" />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-purple-300/30 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 left-1/3 h-60 w-60 rounded-full bg-pink-300/25 blur-3xl" />
+        {/* Sunset background image */}
+        <img
+          src={SUNSET_BG}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          onError={(e) => { e.target.style.display = 'none'; }}
+        />
 
-        <div className="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex min-w-0 items-center gap-4">
-            {avatarUrl ? (
-              <img src={avatarUrl} alt="Avatar" className="h-16 w-16 flex-shrink-0 rounded-[1.5rem] object-cover shadow-lg ring-2 ring-white/70 md:h-20 md:w-20" />
-            ) : (
-              <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-purple-300 to-pink-300 text-4xl shadow-md ring-1 ring-white/60 md:h-20 md:w-20">🐱</div>
-            )}
-            <div className="min-w-0">
-              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/25 backdrop-blur-sm px-3.5 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-white shadow-sm">
-                <Sparkles className="h-3.5 w-3.5 text-yellow-200" /> CeriaKid Dashboard
-              </div>
-              <p className="text-xs font-bold text-white/90 md:text-sm">{greeting}</p>
-              <h1 className="truncate text-2xl font-black tracking-tight text-white md:text-4xl">{name}</h1>
-            </div>
+        {/* Subtle dark overlay for text legibility */}
+        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-black/30 via-transparent to-black/20" />
+
+        {/* Content */}
+        <div className="relative z-10 h-full p-5 md:p-8 flex flex-col justify-between gap-4">
+          {/* Top: Title */}
+          <div>
+            <h2 className="text-white font-black text-xl md:text-3xl drop-shadow-lg tracking-tight">
+              CeriaKid Dashboard
+            </h2>
+            <p className="text-white/95 font-black text-base md:text-xl drop-shadow-md mt-1 md:mt-2">
+              {greeting}
+            </p>
           </div>
 
-          <div className="flex items-center justify-end">
-            <ChildSelector />
+          {/* Bottom: Avatar + Name + Child Selector */}
+          <div className="flex items-center gap-3 md:gap-4 flex-wrap">
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt="Avatar"
+                className="h-14 w-14 md:h-16 md:w-16 rounded-full object-cover shadow-xl ring-4 ring-white/60 flex-shrink-0"
+              />
+            ) : (
+              <div className="h-14 w-14 md:h-16 md:w-16 rounded-full bg-gradient-to-br from-orange-300 to-pink-400 flex items-center justify-center text-3xl shadow-xl ring-4 ring-white/60 flex-shrink-0">
+                🐱
+              </div>
+            )}
+
+            <h1 className="text-white font-black text-lg md:text-2xl drop-shadow-lg truncate flex-1 min-w-0">
+              {name}
+            </h1>
+
+            <div onClick={(e) => e.preventDefault()} className="flex-shrink-0">
+              <ChildSelector />
+            </div>
           </div>
         </div>
       </motion.div>
