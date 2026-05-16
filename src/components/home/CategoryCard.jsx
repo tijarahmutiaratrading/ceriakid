@@ -24,7 +24,7 @@ export default function CategoryCard({ category, gameCount, idx }) {
         transition={{ delay: idx * 0.08 }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.96 }}
-        className="rounded-[2rem] overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative border border-white/50 shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 transition-shadow transform-gpu [clip-path:inset(0_round_2rem)]"
+        className="rounded-xl overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative border border-white/50 shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 transition-shadow transform-gpu"
         >
         <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-85`} />
         <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-white/8 to-transparent backdrop-blur-sm" />
