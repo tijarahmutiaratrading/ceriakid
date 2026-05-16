@@ -239,9 +239,9 @@ export default function GamesList() {
               onError={(e) => { e.target.style.display = 'none'; }}
             />
           )}
-          {/* Gradient overlay for text legibility */}
-          <div className="absolute inset-0 z-[1] bg-gradient-to-br from-purple-900/70 via-purple-800/55 to-pink-700/65" />
-          <div className="absolute inset-x-0 bottom-0 h-1/2 z-[1] bg-gradient-to-t from-black/55 to-transparent" />
+          {/* Gradient overlay for text legibility — light enough to let image show through */}
+          <div className="absolute inset-0 z-[1] bg-gradient-to-br from-purple-900/25 via-transparent to-pink-700/20" />
+          <div className="absolute inset-x-0 bottom-0 h-2/3 z-[1] bg-gradient-to-t from-black/65 via-black/25 to-transparent" />
 
           {/* Content */}
           <div className="relative z-10">
