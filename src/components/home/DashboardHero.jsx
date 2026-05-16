@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import ChildSelector from '@/components/ChildSelector';
 
-const SCIENTIST_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/99415a6da_generated_image.png';
+const SCIENTIST_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0db82d394_generated_image.png';
 const CERIAKID_LOGO = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png';
 
 export default function DashboardHero({ user, avatarUrl, lang }) {
