@@ -84,6 +84,18 @@ const CATEGORY_BG_IMAGES = {
   bahasa_mandarin: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/477e24964_generated_image.png',
 };
 
+// Animated emojis per subject — cartoon-style mascots/items that float around the background
+const CATEGORY_ANIMATIONS = {
+  bahasa_melayu: ['📖', '✍️', '🇲🇾', '📝', '🎭', '💬'],
+  english: ['📚', '🔤', '🇬🇧', '✏️', '🗣️', '📖'],
+  mathematics: ['🔢', '➕', '➖', '✖️', '➗', '📐', '🧮'],
+  science: ['🧪', '⚗️', '🔬', '🧫', '🔭', '🧬', '⚛️'],
+  jawi: ['🕌', '📜', '🌙', '⭐', '📿'],
+  worksheet: ['✏️', '📝', '📋', '✂️', '📎', '🖍️'],
+  bahasa_tamil: ['📖', '✍️', '🇮🇳', '🪷', '🎭'],
+  bahasa_mandarin: ['📖', '🏮', '🇨🇳', '🐉', '🧧'],
+};
+
 const DARJAH_ORDER = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
 
 const DARJAH_LABELS = {
@@ -239,9 +251,48 @@ export default function GamesList() {
               onError={(e) => { e.target.style.display = 'none'; }}
             />
           )}
+          {/* Animated floating emojis based on subject */}
+          <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none">
+            {(CATEGORY_ANIMATIONS[category] || ['✨', '⭐', '🎈']).map((emoji, i) => {
+              const items = CATEGORY_ANIMATIONS[category] || ['✨', '⭐', '🎈'];
+              const total = items.length;
+              const leftPct = 8 + (i * (84 / Math.max(total - 1, 1)));
+              const topPct = 15 + ((i * 37) % 65);
+              const duration = 4 + (i % 3);
+              const delay = (i * 0.4) % 2;
+              const size = 26 + (i % 3) * 8;
+              return (
+                <motion.span
+                  key={`${category}-${i}`}
+                  className="absolute select-none drop-shadow-lg"
+                  style={{
+                    left: `${leftPct}%`,
+                    top: `${topPct}%`,
+                    fontSize: `${size}px`,
+                    filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))',
+                  }}
+                  animate={{
+                    y: [0, -14, 0, -8, 0],
+                    x: [0, 6, 0, -4, 0],
+                    rotate: [0, 12, -8, 6, 0],
+                    scale: [1, 1.12, 1, 1.06, 1],
+                  }}
+                  transition={{
+                    duration,
+                    delay,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                >
+                  {emoji}
+                </motion.span>
+              );
+            })}
+          </div>
+
           {/* Gradient overlay for text legibility — light enough to let image show through */}
-          <div className="absolute inset-0 z-[1] bg-gradient-to-br from-purple-900/25 via-transparent to-pink-700/20" />
-          <div className="absolute inset-x-0 bottom-0 h-2/3 z-[1] bg-gradient-to-t from-black/65 via-black/25 to-transparent" />
+          <div className="absolute inset-0 z-[2] bg-gradient-to-br from-purple-900/25 via-transparent to-pink-700/20" />
+          <div className="absolute inset-x-0 bottom-0 h-2/3 z-[2] bg-gradient-to-t from-black/65 via-black/25 to-transparent" />
 
           {/* Content */}
           <div className="relative z-10">
