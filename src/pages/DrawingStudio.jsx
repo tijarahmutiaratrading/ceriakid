@@ -200,10 +200,33 @@ export default function DrawingStudio() {
   const getCtx = () => activeCanvasRef.current?.getContext('2d');
   const tracingShapes = TRACING_CATEGORIES.find(category => category.id === selectedTracingCategory)?.shapes || TRACING_CATEGORIES[0].shapes;
 
-  const canvasSize = () => {
-    const el = getCanvas();
-    return el ? { w: el.width, h: el.height } : { w: 320, h: 320 };
-  };
+  // Setup high-DPI canvas — sharp on retina/4K screens.
+  // We set canvas.width = cssWidth * DPR (actual bitmap), keep CSS size the same,
+  // then scale the context so drawing code uses logical CSS coordinates.
+  const setupHiDPICanvas = useCallback((canvas, cssW, cssH) => {
+    if (!canvas) return null;
+    const dpr = Math.min(window.devicePixelRatio || 1, 3); // cap at 3 for perf
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    canvas.style.width = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d');
+    // reset & scale so all coordinates are in CSS pixels
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    // store logical (css) size for drawing helpers
+    canvas._cssW = cssW;
+    canvas._cssH = cssH;
+    canvas._dpr = dpr;
+    return ctx;
+  }, []);
+
+  // Helpers: get logical (CSS) dimensions for drawing
+  const getLogicalSize = (canvas) => ({
+    w: canvas?._cssW || canvas?.width || 0,
+    h: canvas?._cssH || canvas?.height || 0,
+  });
 
   const drawColoringGuide = (ctx, w, h, page) => {
     // New version: render the AI-generated coloring book line art image as the guide.
@@ -319,7 +342,10 @@ export default function DrawingStudio() {
   };
 
   const clearCanvas = useCallback((ctx, w, h) => {
-    ctx.clearRect(0, 0, w, h);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0); // clear in device pixels
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.restore();
     ctx.fillStyle = '#fff9f0';
     ctx.fillRect(0, 0, w, h);
     if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape);
@@ -403,9 +429,11 @@ export default function DrawingStudio() {
 
   const initCanvas = useCallback(() => {
     [canvasRef.current, fsCanvasRef.current].forEach((canvas) => {
-      const ctx = canvas?.getContext('2d');
-      if (ctx && canvas) {
-        clearCanvas(ctx, canvas.width, canvas.height);
+      if (!canvas) return;
+      const { w, h } = getLogicalSize(canvas);
+      const ctx = canvas.getContext('2d');
+      if (ctx && w && h) {
+        clearCanvas(ctx, w, h);
       }
     });
     setHistory([]);
@@ -434,32 +462,82 @@ export default function DrawingStudio() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedColoringPage.id, mode]);
 
-  // When entering fullscreen: copy normal canvas → fs canvas
+  // Setup HiDPI for normal canvas on mount + on window resize
+  useEffect(() => {
+    const setupNormal = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const cssW = Math.max(320, Math.round(rect.width || 720));
+      // maintain 4:3 aspect ratio
+      const cssH = Math.round(cssW * (540 / 720));
+      // Snapshot existing content (if any) so we can restore after resize
+      let snapshot = null;
+      if (canvas.width > 0 && canvas.height > 0) {
+        try {
+          snapshot = document.createElement('canvas');
+          snapshot.width = canvas.width;
+          snapshot.height = canvas.height;
+          snapshot.getContext('2d').drawImage(canvas, 0, 0);
+        } catch { snapshot = null; }
+      }
+      setupHiDPICanvas(canvas, cssW, cssH);
+      const ctx = canvas.getContext('2d');
+      // restore (scaled to new logical size)
+      if (snapshot) {
+        ctx.drawImage(snapshot, 0, 0, cssW, cssH);
+      } else {
+        clearCanvas(ctx, cssW, cssH);
+      }
+    };
+    setupNormal();
+    window.addEventListener('resize', setupNormal);
+    return () => window.removeEventListener('resize', setupNormal);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Fullscreen setup + sync drawings between normal ↔ fullscreen
   useEffect(() => {
     if (isFullscreen) {
       requestAnimationFrame(() => {
         const src = canvasRef.current;
         const dst = fsCanvasRef.current;
         if (!src || !dst) return;
-        dst.width = src.width;
-        dst.height = src.height;
-        dst.getContext('2d').drawImage(src, 0, 0);
+        // Size fullscreen canvas to its parent (the flex container)
+        const parent = dst.parentElement;
+        const parentRect = parent.getBoundingClientRect();
+        const cssW = Math.round(parentRect.width);
+        const cssH = Math.round(parentRect.height);
+        setupHiDPICanvas(dst, cssW, cssH);
+        const ctx = dst.getContext('2d');
+        const srcSize = getLogicalSize(src);
+        // Paint base + copy normal canvas content scaled to fullscreen logical size
+        ctx.fillStyle = '#fff9f0';
+        ctx.fillRect(0, 0, cssW, cssH);
+        if (srcSize.w && srcSize.h) {
+          ctx.drawImage(src, 0, 0, cssW, cssH);
+        }
       });
     } else {
-      // When closing fullscreen: copy fs canvas → normal canvas
       requestAnimationFrame(() => {
         const src = fsCanvasRef.current;
         const dst = canvasRef.current;
         if (!src || !dst) return;
-        dst.getContext('2d').drawImage(src, 0, 0);
+        const dstSize = getLogicalSize(dst);
+        const ctx = dst.getContext('2d');
+        ctx.fillStyle = '#fff9f0';
+        ctx.fillRect(0, 0, dstSize.w, dstSize.h);
+        ctx.drawImage(src, 0, 0, dstSize.w, dstSize.h);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFullscreen]);
 
   const saveToHistory = () => {
     const ctx = getCtx();
     const canvas = getCanvas();
     if (!ctx || !canvas) return;
+    // Save raw device-pixel image data — putImageData ignores transform
     setHistory(prev => [...prev.slice(-10), ctx.getImageData(0, 0, canvas.width, canvas.height)]);
   };
 
@@ -468,19 +546,22 @@ export default function DrawingStudio() {
     const canvas = getCanvas();
     if (!ctx || !canvas || history.length === 0) return;
     const prev = history[history.length - 1];
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.putImageData(prev, 0, 0);
+    ctx.restore();
     setHistory(h => h.slice(0, -1));
   };
 
   const getPoint = (e, canvas) => {
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+    // Map screen coords directly to CSS-logical coords (no DPR scaling needed
+    // because ctx is already transformed by DPR)
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     return {
-      x: (clientX - rect.left) * scaleX,
-      y: (clientY - rect.top) * scaleY,
+      x: clientX - rect.left,
+      y: clientY - rect.top,
     };
   };
 
@@ -572,7 +653,10 @@ export default function DrawingStudio() {
     if (mode === 'color') {
       const ctx = getCtx();
       const canvas = getCanvas();
-      if (ctx && canvas) drawColoringGuide(ctx, canvas.width, canvas.height, selectedColoringPage);
+      if (ctx && canvas) {
+        const { w, h } = getLogicalSize(canvas);
+        drawColoringGuide(ctx, w, h, selectedColoringPage);
+      }
     }
   };
 
@@ -595,7 +679,10 @@ export default function DrawingStudio() {
     setTracingDone(false);
     const ctx = getCtx();
     const canvas = getCanvas();
-    if (ctx && canvas) clearCanvas(ctx, canvas.width, canvas.height, true);
+    if (ctx && canvas) {
+      const { w, h } = getLogicalSize(canvas);
+      clearCanvas(ctx, w, h);
+    }
   };
 
   return (
@@ -939,8 +1026,6 @@ export default function DrawingStudio() {
                 </div>
                 <canvas
                   ref={canvasRef}
-                  width={720}
-                  height={540}
                   onPointerDown={startDraw}
                   onPointerMove={draw}
                   onPointerUp={endDraw}
@@ -949,7 +1034,7 @@ export default function DrawingStudio() {
                   onTouchMove={draw}
                   onTouchEnd={endDraw}
                   className="w-full touch-none block"
-                  style={{ backgroundColor: '#fff9f0', cursor: stickerMode ? 'pointer' : 'crosshair' }}
+                  style={{ backgroundColor: '#fff9f0', cursor: stickerMode ? 'pointer' : 'crosshair', aspectRatio: '4/3' }}
                 />
               </div>
             </div>
@@ -1023,8 +1108,6 @@ export default function DrawingStudio() {
             </div>
             <canvas
               ref={fsCanvasRef}
-              width={560}
-              height={480}
               onPointerDown={startDraw}
               onPointerMove={draw}
               onPointerUp={endDraw}
@@ -1032,7 +1115,7 @@ export default function DrawingStudio() {
               onTouchStart={startDraw}
               onTouchMove={draw}
               onTouchEnd={endDraw}
-              style={{ flex: 1, width: '100%', touchAction: 'none', cursor: 'crosshair', display: 'block', backgroundColor: '#fff9f0' }}
+              style={{ flex: 1, width: '100%', touchAction: 'none', cursor: stickerMode ? 'pointer' : 'crosshair', display: 'block', backgroundColor: '#fff9f0' }}
             />
           </div>,
           document.body
