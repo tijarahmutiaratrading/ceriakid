@@ -36,11 +36,11 @@ export default function SubjectBreakdown({ progress }) {
               <div className="flex items-center gap-2">
                 <span className="text-2xl">{subject.emoji}</span>
                 <div>
-                  <p className="font-bold">{subject.name}</p>
-                  <p className="text-xs text-gray-600">{data.count} permainan</p>
+                  <p className="font-bold text-white">{subject.name}</p>
+                  <p className="text-xs text-white/70">{data.count} permainan</p>
                 </div>
               </div>
-              <span className="font-black text-2xl text-game-purple">
+              <span className="font-black text-2xl text-white">
                 {data.avg.toFixed(1)}/3
               </span>
             </div>
