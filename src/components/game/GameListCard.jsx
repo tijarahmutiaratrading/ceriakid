@@ -1,51 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Lock, Play } from 'lucide-react';
 import GameBadge from './GameBadge';
+import UpgradeLockModal from './UpgradeLockModal';
 
 const difficultyConfig = {
-  easy:   { label: 'Mudah',     color: 'bg-green-400/80',  icon: '🟢' },
-  medium: { label: 'Sederhana', color: 'bg-yellow-400/80', icon: '🟡' },
-  hard:   { label: 'Sukar',     color: 'bg-red-400/80',    icon: '🔴' },
+  easy:   { label: 'Mudah',     color: 'bg-green-500',   icon: '🟢' },
+  medium: { label: 'Sederhana', color: 'bg-yellow-500',  icon: '🟡' },
+  hard:   { label: 'Sukar',     color: 'bg-red-500',     icon: '🔴' },
 };
 
 export default function GameListCard({ game, gameKey, gameProgress, idx, category, badge, locked }) {
   const difficulty = difficultyConfig[game.difficulty || 'easy'];
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   const cardStyle = {
-    background: locked ? 'rgba(15,23,42,0.55)' : 'rgba(15,23,42,0.65)',
+    background: locked ? 'rgba(15,23,42,0.65)' : 'rgba(15,23,42,0.72)',
     backdropFilter: 'blur(20px)',
     border: '1px solid rgba(255,255,255,0.35)',
   };
 
   if (locked) {
     return (
-      <Link to="/" className="block">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: Math.min(idx * 0.03, 0.5) }}
-          className="h-full rounded-3xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 opacity-60 cursor-pointer shadow-xl"
-          style={cardStyle}
+      <>
+        <button
+          type="button"
+          onClick={() => setShowUpgrade(true)}
+          aria-label={`${game.title} — Permainan premium, klik untuk upgrade`}
+          className="block text-left w-full"
         >
-          <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl grayscale flex-shrink-0">
-            {game.emoji}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-black text-sm leading-tight line-clamp-2 text-white/85">{game.title}</h3>
-            <span className={`inline-flex items-center gap-1 text-xs font-black px-2 py-0.5 rounded-full text-white ${difficulty.color} mt-1`}>
-              {difficulty.icon} {difficulty.label}
-            </span>
-          </div>
-          <div className="flex flex-col items-center gap-1 flex-shrink-0">
-            <div className="w-8 h-8 rounded-full bg-white/25 flex items-center justify-center">
-              <Lock className="w-4 h-4 text-white" />
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: Math.min(idx * 0.03, 0.5) }}
+            whileTap={{ scale: 0.97 }}
+            className="h-full rounded-3xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 cursor-pointer shadow-xl min-h-[88px]"
+            style={cardStyle}
+          >
+            <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl grayscale flex-shrink-0">
+              {game.emoji}
             </div>
-            <span className="text-xs text-yellow-200 font-black">Premium</span>
-          </div>
-        </motion.div>
-      </Link>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-black text-sm sm:text-base leading-tight line-clamp-2 text-white">{game.title}</h3>
+              <span className={`inline-flex items-center gap-1 text-xs font-black px-2.5 py-1 rounded-full text-white ${difficulty.color} mt-1.5`}>
+                {difficulty.icon} {difficulty.label}
+              </span>
+            </div>
+            <div className="flex flex-col items-center gap-1 flex-shrink-0">
+              <div className="w-11 h-11 rounded-full bg-yellow-300 flex items-center justify-center shadow-lg">
+                <Lock className="w-5 h-5 text-purple-900" />
+              </div>
+              <span className="text-xs text-yellow-200 font-black">Premium</span>
+            </div>
+          </motion.div>
+        </button>
+        <UpgradeLockModal open={showUpgrade} onClose={() => setShowUpgrade(false)} gameTitle={game.title} />
+      </>
     );
   }
 
@@ -57,7 +68,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
         transition={{ delay: Math.min(idx * 0.03, 0.5) }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
-        className="h-full rounded-3xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 cursor-pointer group shadow-xl hover:bg-white/10 transition-all"
+        className="h-full rounded-3xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 cursor-pointer group shadow-xl hover:bg-white/10 transition-all min-h-[88px]"
         style={cardStyle}
       >
         {/* Emoji */}
@@ -72,11 +83,11 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
             {badge && badge !== 'locked' && <GameBadge type={badge} />}
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full text-white ${difficulty.color}`}>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className={`inline-flex items-center gap-1 text-xs font-black px-2.5 py-1 rounded-full text-white ${difficulty.color}`}>
               {difficulty.icon} {difficulty.label}
             </span>
-            <span className="text-white/80 text-xs font-bold capitalize truncate">
+            <span className="text-white/90 text-xs font-bold capitalize truncate">
               {game.type?.replace(/_/g, ' ')}
             </span>
           </div>
@@ -84,18 +95,18 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
           {/* Progress */}
           {gameProgress && (
             <div className="flex items-center gap-2 mt-2">
-              <div className="flex gap-0.5">
+              <div className="flex gap-0.5" aria-label={`${gameProgress.bestStars} bintang daripada 3`}>
                 {[1,2,3].map(s => (
-                  <span key={s} className={`text-xs ${s <= gameProgress.bestStars ? 'text-yellow-300' : 'text-white/40'}`}>★</span>
+                  <span key={s} className={`text-sm ${s <= gameProgress.bestStars ? 'text-yellow-300' : 'text-white/50'}`}>★</span>
                 ))}
               </div>
-              <span className="text-white/80 text-xs font-bold">{gameProgress.timesPlayed}x dimainkan</span>
+              <span className="text-white/90 text-xs font-bold">{gameProgress.timesPlayed}x dimainkan</span>
             </div>
           )}
         </div>
 
         {/* Play button */}
-        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0 self-end sm:self-auto group-hover:scale-105 transition-all">
+        <div className="w-12 h-12 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0 self-end sm:self-auto group-hover:scale-105 transition-all">
           <Play className="w-5 h-5 fill-current" />
         </div>
       </motion.div>

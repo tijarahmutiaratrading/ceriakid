@@ -15,21 +15,22 @@ export default function QuickAccessGrid() {
       {actions.map((item) => {
         const Icon = item.icon;
         return (
-          <Link key={item.to} to={item.to} className="block min-w-0">
-            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} className={`group relative h-full overflow-hidden rounded-[1.5rem] border border-white/15 bg-gradient-to-br ${item.tone} p-4 shadow-xl shadow-black/10 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[1.75rem] md:p-5 md:[clip-path:inset(0_round_1.75rem)]`}>
+          <Link key={item.to} to={item.to} className="block min-w-0" aria-label={`Buka ${item.title}`}>
+            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} className={`group relative h-full min-h-[120px] overflow-hidden rounded-[1.5rem] border border-white/20 bg-gradient-to-br ${item.tone} p-4 shadow-xl shadow-black/15 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[1.75rem] md:p-5 md:[clip-path:inset(0_round_1.75rem)]`}>
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 to-transparent" />
               <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/15 blur-2xl transition-all group-hover:bg-white/25" />
               {item.featured && <div className="absolute right-3 top-3 text-yellow-200 animate-pulse">✨</div>}
               <div className="relative z-10 flex items-start justify-between gap-3">
                 <div>
-                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-3xl ring-1 ring-white/15">{item.emoji}</div>
-                  <p className="font-black text-white leading-tight drop-shadow">{item.title}</p>
-                  <p className="mt-1 text-xs font-bold text-white/85">{item.subtitle}</p>
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-3xl ring-1 ring-white/25">{item.emoji}</div>
+                  <p className="font-black text-white text-sm leading-tight" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>{item.title}</p>
+                  <p className="mt-1 text-xs font-bold text-white/95">{item.subtitle}</p>
                 </div>
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-white text-purple-800 shadow-lg">
-                  <Icon className="h-4 w-4" />
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-white text-purple-800 shadow-lg">
+                  <Icon className="h-5 w-5" />
                 </div>
               </div>
-              <div className="relative z-10 mt-4 inline-flex items-center gap-1 text-xs font-black text-white/90">
+              <div className="relative z-10 mt-4 inline-flex items-center gap-1 text-xs font-black text-white">
                 Buka <ArrowRight className="h-3.5 w-3.5" />
               </div>
             </motion.div>

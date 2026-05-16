@@ -169,7 +169,7 @@ export default function ParentDashboard() {
           <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">📊</div>
           <div>
             <h1 className="text-2xl font-black text-white leading-tight">Prestasi Anak</h1>
-            <p className="text-white/70 text-xs font-semibold mt-0.5">{totalChildren} anak sedang belajar</p>
+            <p className="text-white/90 text-sm font-bold mt-0.5">{totalChildren} anak sedang belajar</p>
           </div>
         </motion.div>
 
@@ -183,7 +183,16 @@ export default function ParentDashboard() {
           >
             <p className="text-5xl mb-4">🎮</p>
             <p className="text-white font-black text-lg mb-2">Belum ada data</p>
-            <p className="text-white/70 text-sm">Biarkan anak bermain permainan untuk melihat prestasi mereka di sini</p>
+            <p className="text-white/90 text-sm mb-5">Biarkan anak bermain permainan untuk melihat prestasi mereka di sini</p>
+            <Link to="/dashboard">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="min-h-12 px-6 py-3 bg-white text-purple-700 rounded-full font-black shadow-lg"
+              >
+                🎯 Mula Main Game
+              </motion.button>
+            </Link>
           </motion.div>
         ) : (
           <div className="space-y-4">
@@ -219,11 +228,11 @@ export default function ParentDashboard() {
                       <div className="w-12 h-12 rounded-2xl bg-white/25 flex items-center justify-center text-2xl">🌟</div>
                       <div>
                         <h2 className="text-xl font-black text-white">{childName}</h2>
-                        <p className="text-white/60 text-xs">{totalGames} permainan dimainkan</p>
+                        <p className="text-white/90 text-sm font-bold">{totalGames} permainan dimainkan</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-white/60 text-xs">Rata-rata</p>
+                      <p className="text-white/90 text-xs font-bold">Rata-rata</p>
                       <p className="text-white font-black text-2xl">{avgStars}<span className="text-sm text-yellow-300">★</span></p>
                     </div>
                   </div>
@@ -235,26 +244,26 @@ export default function ParentDashboard() {
                       { label: 'Bintang', value: totalStars, emoji: '⭐' },
                       { label: 'Subjek', value: weakSubjects.length, emoji: '📚' },
                     ].map((stat, i) => (
-                      <div key={i} className="rounded-2xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+                      <div key={i} className="rounded-2xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.18)' }}>
                         <p className="text-xl mb-1">{stat.emoji}</p>
                         <p className="text-white font-black text-lg leading-none">{stat.value}</p>
-                        <p className="text-white/60 text-xs mt-0.5">{stat.label}</p>
+                        <p className="text-white/90 text-xs font-bold mt-1">{stat.label}</p>
                       </div>
                     ))}
                   </div>
 
                   {/* Progress Bars */}
                   <div className="space-y-3">
-                    <p className="text-white/80 text-xs font-black uppercase tracking-wider">📈 Prestasi Per Subjek</p>
+                    <p className="text-white text-xs font-black uppercase tracking-wider">📈 Prestasi Per Subjek</p>
                     {weakSubjects.map((subject) => {
                       const percentage = (subject.averageStars / 3) * 100;
                       return (
                         <div key={subject.category}>
                           <div className="flex justify-between mb-1">
-                            <span className="text-white text-xs font-bold flex items-center gap-1.5">
+                            <span className="text-white text-sm font-bold flex items-center gap-1.5">
                               {categoryEmojis[subject.category]} {categoryLabels[subject.category] || subject.category}
                             </span>
-                            <span className="text-white/60 text-xs">{subject.totalPlayed} games · {Math.round(percentage)}%</span>
+                            <span className="text-white/90 text-xs font-bold">{subject.totalPlayed} games · {Math.round(percentage)}%</span>
                           </div>
                           <div className="w-full bg-white/20 rounded-full h-3 overflow-hidden">
                             <motion.div
@@ -280,46 +289,46 @@ export default function ParentDashboard() {
 
                   {/* Alert / Motivation */}
                   {weakSubjects[0]?.averageStars < 2 && (
-                    <div className="rounded-2xl p-4 flex gap-3" style={{ background: 'rgba(251,191,36,0.2)', border: '1px solid rgba(251,191,36,0.3)' }}>
-                      <TrendingDown className="w-5 h-5 text-yellow-300 flex-shrink-0 mt-0.5" />
+                    <div className="rounded-2xl p-4 flex gap-3" style={{ background: 'rgba(251,191,36,0.25)', border: '1px solid rgba(251,191,36,0.4)' }}>
+                      <TrendingDown className="w-5 h-5 text-yellow-200 flex-shrink-0 mt-0.5" />
                       <div className="text-sm">
                         <p className="font-black text-white">Subjek perlu ditingkatkan</p>
-                        <p className="text-white/70">{categoryLabels[weakSubjects[0].category]} perlukan lebih latihan</p>
+                        <p className="text-white/95 font-semibold">{categoryLabels[weakSubjects[0].category]} perlukan lebih latihan</p>
                       </div>
                     </div>
                   )}
 
                   {parseFloat(avgStars) >= 2.5 && (
-                    <div className="rounded-2xl p-4 flex gap-3" style={{ background: 'rgba(52,211,153,0.2)', border: '1px solid rgba(52,211,153,0.3)' }}>
-                      <Flame className="w-5 h-5 text-emerald-300 flex-shrink-0 mt-0.5" />
+                    <div className="rounded-2xl p-4 flex gap-3" style={{ background: 'rgba(52,211,153,0.25)', border: '1px solid rgba(52,211,153,0.4)' }}>
+                      <Flame className="w-5 h-5 text-emerald-200 flex-shrink-0 mt-0.5" />
                       <div className="text-sm">
                         <p className="font-black text-white">Cemerlang! 🔥</p>
-                        <p className="text-white/70">{childName} sedang dalam momentum terbaik!</p>
+                        <p className="text-white/95 font-semibold">{childName} sedang dalam momentum terbaik!</p>
                       </div>
                     </div>
                   )}
 
                   {/* Share Buttons */}
                   <div className="pt-2 border-t border-white/20 space-y-2">
-                    <p className="text-white/60 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                    <p className="text-white text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
                       <Share2 className="w-3 h-3" /> Kongsi Pencapaian
                     </p>
                     <div className="grid grid-cols-3 gap-2">
                       <motion.button whileTap={{ scale: 0.95 }} onClick={() => shareToWhatsApp(childName, { totalGames, avgStars })}
-                        className="bg-green-500/80 hover:bg-green-500 text-white rounded-xl py-2.5 font-bold text-xs transition-all">
+                        className="bg-green-500 hover:bg-green-600 text-white rounded-xl min-h-11 py-2.5 font-bold text-xs transition-all">
                         💬 WhatsApp
                       </motion.button>
                       <motion.button whileTap={{ scale: 0.95 }} onClick={() => shareToFacebook(childName, { totalGames, avgStars })}
-                        className="bg-blue-600/80 hover:bg-blue-600 text-white rounded-xl py-2.5 font-bold text-xs transition-all">
+                        className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl min-h-11 py-2.5 font-bold text-xs transition-all">
                         f Facebook
                       </motion.button>
                       <motion.button whileTap={{ scale: 0.95 }} onClick={() => shareToTwitter(childName, { totalGames, avgStars })}
-                        className="bg-sky-500/80 hover:bg-sky-500 text-white rounded-xl py-2.5 font-bold text-xs transition-all">
+                        className="bg-sky-500 hover:bg-sky-600 text-white rounded-xl min-h-11 py-2.5 font-bold text-xs transition-all">
                         𝕏 Twitter
                       </motion.button>
                     </div>
                     <motion.button whileTap={{ scale: 0.95 }} onClick={() => exportAsText(childName, { totalGames, avgStars })}
-                      className="w-full bg-white/20 hover:bg-white/30 text-white rounded-xl py-2.5 font-bold text-sm transition-all flex items-center justify-center gap-2">
+                      className="w-full bg-white/25 hover:bg-white/35 text-white rounded-xl min-h-11 py-2.5 font-bold text-sm transition-all flex items-center justify-center gap-2">
                       <Download className="w-4 h-4" /> Export Laporan
                     </motion.button>
                   </div>

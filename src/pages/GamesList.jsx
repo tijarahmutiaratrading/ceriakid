@@ -226,7 +226,7 @@ export default function GamesList() {
             </div>
             <div>
               <h1 className="text-2xl font-black text-white leading-tight">{getCategoryLabel(category, lang)}</h1>
-              <p className="text-white/80 text-xs font-bold mt-0.5">🎮 {games.length} {t('games', lang)} · {t('selectForPlay', lang)}</p>
+              <p className="text-white text-sm font-bold mt-1">🎮 {games.length} {t('games', lang)} · {t('selectForPlay', lang)}</p>
             </div>
           </div>
         </motion.div>
@@ -245,10 +245,10 @@ export default function GamesList() {
                   key={d}
                   whileTap={{ scale: 0.92 }}
                   onClick={() => setSelectedDarjah(d)}
-                  className={`flex-shrink-0 px-4 py-2 rounded-2xl font-black text-sm transition-all ${
+                  className={`flex-shrink-0 min-h-11 px-4 py-2.5 rounded-2xl font-black text-sm transition-all ${
                     selectedDarjah === d
                       ? 'bg-white text-purple-700 shadow-lg ring-2 ring-white/60'
-                      : 'bg-slate-950/55 text-white border border-white/40 shadow-md'
+                      : 'bg-slate-950/70 text-white border border-white/40 shadow-md'
                   }`}
                 >
                   {DARJAH_LABELS[d] || `Darjah ${d}`}
