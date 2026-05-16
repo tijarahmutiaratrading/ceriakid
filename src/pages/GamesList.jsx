@@ -67,8 +67,21 @@ const getCategoryEmoji = (category) => {
     science: '🧪',
     jawi: '🕌',
     worksheet: '✏️',
+    bahasa_tamil: '🇮🇳',
+    bahasa_mandarin: '🇨🇳',
   };
   return emojis[category] || '📚';
+};
+
+const CATEGORY_BG_IMAGES = {
+  bahasa_melayu: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a82b01ff6_generated_image.png',
+  english: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8ffcc1bb9_generated_image.png',
+  mathematics: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b948e01dd_generated_image.png',
+  science: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6f0853b3a_generated_image.png',
+  jawi: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/110e1698a_generated_image.png',
+  worksheet: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/5e14e4531_generated_image.png',
+  bahasa_tamil: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1dac8b0f4_generated_image.png',
+  bahasa_mandarin: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/477e24964_generated_image.png',
 };
 
 const DARJAH_ORDER = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
@@ -215,18 +228,34 @@ export default function GamesList() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-5 p-5 rounded-3xl bg-gradient-to-br from-purple-500 to-pink-500 shadow-2xl"
+          className="relative isolate overflow-hidden mb-5 p-5 rounded-3xl shadow-2xl border border-white/30 transform-gpu [clip-path:inset(0_round_1.5rem)] min-h-[180px]"
         >
-          <Link to="/dashboard" className="inline-flex items-center gap-2 text-white/85 text-xs font-black mb-4">
-            <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
-          </Link>
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">
-              {getCategoryEmoji(category)}
-            </div>
-            <div>
-              <h1 className="text-2xl font-black text-white leading-tight">{getCategoryLabel(category, lang)}</h1>
-              <p className="text-white text-sm font-bold mt-1">🎮 {games.length} {t('games', lang)} · {t('selectForPlay', lang)}</p>
+          {/* Background image */}
+          {CATEGORY_BG_IMAGES[category] && (
+            <img
+              src={CATEGORY_BG_IMAGES[category]}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover z-0"
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+          )}
+          {/* Gradient overlay for text legibility */}
+          <div className="absolute inset-0 z-[1] bg-gradient-to-br from-purple-900/70 via-purple-800/55 to-pink-700/65" />
+          <div className="absolute inset-x-0 bottom-0 h-1/2 z-[1] bg-gradient-to-t from-black/55 to-transparent" />
+
+          {/* Content */}
+          <div className="relative z-10">
+            <Link to="/dashboard" className="inline-flex items-center gap-2 text-white/95 text-xs font-black mb-4 drop-shadow-md">
+              <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
+            </Link>
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-white/25 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center text-3xl shadow-lg flex-shrink-0">
+                {getCategoryEmoji(category)}
+              </div>
+              <div>
+                <h1 className="text-2xl font-black text-white leading-tight drop-shadow-lg">{getCategoryLabel(category, lang)}</h1>
+                <p className="text-white text-sm font-bold mt-1 drop-shadow-md">🎮 {games.length} {t('games', lang)} · {t('selectForPlay', lang)}</p>
+              </div>
             </div>
           </div>
         </motion.div>
