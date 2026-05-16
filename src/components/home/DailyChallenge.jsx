@@ -75,14 +75,14 @@ export default function DailyChallenge({ ageGroup }) {
   };
 
   const gradientClass = completed
-    ? 'from-emerald-500/90 via-green-500/85 to-teal-500/85 shadow-emerald-950/20'
-    : 'from-orange-500/90 via-red-500/85 to-pink-500/85 shadow-red-950/20';
+    ? 'from-emerald-400/85 via-teal-400/75 to-cyan-400/70 shadow-emerald-300/30'
+    : 'from-orange-400/85 via-pink-400/75 to-rose-400/70 shadow-pink-300/30';
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`relative overflow-hidden rounded-[1.75rem] border border-white/25 bg-gradient-to-r ${gradientClass} p-5 md:p-6 text-white shadow-2xl backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.75rem)]`}
+      className={`relative overflow-hidden rounded-[2rem] border border-white/40 bg-gradient-to-r ${gradientClass} p-5 md:p-6 text-white shadow-lg backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_2rem)]`}
     >
       <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/15 blur-2xl" />
       <div className="relative z-10 flex items-center justify-between gap-4">
@@ -103,7 +103,7 @@ export default function DailyChallenge({ ageGroup }) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`min-h-12 px-6 py-3 rounded-full font-black flex items-center gap-2 shadow-lg ${completed ? 'bg-white text-emerald-700' : 'bg-white text-orange-600'}`}
+              className={`min-h-12 px-6 py-3 rounded-full font-black flex items-center gap-2 shadow-lg shadow-white/40 hover:shadow-lg ${completed ? 'bg-white/95 text-emerald-700' : 'bg-white/95 text-orange-600'}`}
             >
               {completed ? 'Main Sekali Lagi' : 'Ambil Cabaran'} <ArrowRight className="w-4 h-4" />
             </motion.button>

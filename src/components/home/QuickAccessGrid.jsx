@@ -16,17 +16,17 @@ export default function QuickAccessGrid() {
         const Icon = item.icon;
         return (
           <Link key={item.to} to={item.to} className="block min-w-0" aria-label={`Buka ${item.title}`}>
-            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} className={`group relative h-full min-h-[120px] overflow-hidden rounded-[1.5rem] border border-white/20 bg-gradient-to-br ${item.tone} p-4 shadow-xl shadow-black/15 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[1.75rem] md:p-5 md:[clip-path:inset(0_round_1.75rem)]`}>
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 to-transparent" />
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/15 blur-2xl transition-all group-hover:bg-white/25" />
+            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} className={`group relative h-full min-h-[130px] overflow-hidden rounded-[1.75rem] border border-white/40 bg-gradient-to-br ${item.tone} p-5 shadow-lg shadow-purple-200/20 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.75rem)] md:p-6`}>
+              <div className="absolute inset-0 bg-gradient-to-t from-purple-950/15 to-white/5" />
+              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
               {item.featured && <div className="absolute right-3 top-3 text-yellow-200 animate-pulse">✨</div>}
               <div className="relative z-10 flex items-start justify-between gap-3">
                 <div>
-                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-3xl ring-1 ring-white/25">{item.emoji}</div>
-                  <p className="font-black text-white text-sm leading-tight" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>{item.title}</p>
-                  <p className="mt-1 text-xs font-bold text-white/95">{item.subtitle}</p>
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/50 text-3xl ring-1 ring-white/70">{item.emoji}</div>
+                  <p className="font-black text-white text-sm leading-tight">{item.title}</p>
+                  <p className="mt-1 text-xs font-bold text-white/90">{item.subtitle}</p>
                 </div>
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-white text-purple-800 shadow-lg">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-white/90 text-purple-600 shadow-lg shadow-white/20 hover:bg-white transition-colors">
                   <Icon className="h-5 w-5" />
                 </div>
               </div>

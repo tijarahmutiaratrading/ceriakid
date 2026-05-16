@@ -80,13 +80,11 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-purple-950 via-violet-900 to-pink-950 relative">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 relative">
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute inset-0 opacity-35" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.13) 1px, transparent 0)', backgroundSize: '30px 30px' }} />
-        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-fuchsia-500/20 to-transparent" />
-        <div className="absolute -top-40 -right-40 w-[30rem] h-[30rem] bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
-        <div className="absolute top-1/3 -left-28 w-96 h-96 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-[32rem] h-[32rem] bg-violet-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute -top-40 -right-40 w-[32rem] h-[32rem] bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute top-1/3 -left-28 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 right-10 w-[32rem] h-[32rem] bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <AppHeader />
@@ -122,9 +120,9 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-[1.5rem] border border-white/15 bg-white/[0.08] p-3 shadow-2xl shadow-black/15 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[2rem] md:p-5 md:[clip-path:inset(0_round_2rem)]"
+          className="rounded-[2rem] border border-purple-200 bg-white/90 p-4 shadow-lg shadow-purple-200/30 transform-gpu [clip-path:inset(0_round_2rem)] md:p-6"
         >
-          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
+          <p className="text-purple-900 text-xs font-black uppercase tracking-wider mb-4">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
           <div className="grid grid-cols-2 gap-3 md:gap-4">
             {[
               { key: 'prasekolah', label: `${t('prasekolah', lang)} · KSPK`, emoji: '🎨', sub: '4–6 tahun' },
@@ -135,16 +133,16 @@ export default function Home() {
                 onClick={() => safeToggle(age.key)}
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ scale: 1.02 }}
-                className={`py-2 md:py-3 px-3 md:px-4 rounded-2xl font-black text-xs md:text-sm transition-all flex items-center gap-2 md:gap-3 ${
+                className={`py-2 md:py-3 px-4 md:px-5 rounded-2xl font-black text-xs md:text-sm transition-all flex items-center gap-2 md:gap-3 ${
                   safeAgeGroup === age.key
-                    ? 'bg-white text-purple-700 shadow-xl shadow-purple-950/20'
-                    : 'bg-white/10 text-white border border-white/15 hover:bg-white/15'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-400/30'
+                    : 'bg-white text-purple-700 border border-purple-200 hover:bg-purple-50'
                 }`}
               >
                 <span className="text-2xl">{age.emoji}</span>
                 <div className="text-left">
                   <div className="font-black text-sm leading-tight">{age.label}</div>
-                  <div className={`text-xs font-bold ${safeAgeGroup === age.key ? 'text-purple-700' : 'text-white/80'}`}>{age.sub}</div>
+                  <div className={`text-xs font-bold ${safeAgeGroup === age.key ? 'text-white/90' : 'text-purple-600'}`}>{age.sub}</div>
                 </div>
               </motion.button>
             ))}
@@ -204,12 +202,12 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <div className="mb-4 flex items-center gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.5rem)]">
-            <div className="h-2 w-2 rounded-full bg-yellow-300 shadow-lg shadow-yellow-300/40" />
-            <p className="text-white font-black text-base uppercase tracking-wider">
+          <div className="mb-5 flex items-center gap-3 rounded-[1.5rem] border border-purple-200 bg-white/80 px-4 py-3 backdrop-blur transform-gpu [clip-path:inset(0_round_1.5rem)]">
+            <div className="h-2 w-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg" />
+            <p className="text-purple-900 font-black text-base uppercase tracking-wider">
               {lang === 'bm' ? 'Pilih Subjek' : 'Choose Subject'}
             </p>
-            <div className="h-px flex-1 bg-white/15" />
+            <div className="h-px flex-1 bg-purple-200" />
           </div>
           <CategoryGrid />
         </motion.div>
