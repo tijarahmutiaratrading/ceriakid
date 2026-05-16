@@ -40,8 +40,11 @@ export default function CategoryCard({ category, gameCount, idx }) {
           </div>
 
           <div className="flex items-end justify-between gap-2">
-            <div className="bg-white/20 backdrop-blur-xl rounded-full px-3 py-1.5 ring-1 ring-white/50 shadow-md">
-              <p className="text-xs sm:text-sm font-black text-white whitespace-nowrap">{gameCount} Permainan</p>
+            <div className="inline-flex items-center gap-1.5 bg-white/95 rounded-full pl-2 pr-3.5 py-1.5 shadow-lg ring-1 ring-white/60">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-white text-xs font-black shadow-inner">🎮</span>
+              <p className="text-sm font-black text-purple-700 whitespace-nowrap leading-none">
+                {gameCount}<span className="text-purple-400 font-bold ml-1">permainan</span>
+              </p>
             </div>
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-purple-700 shadow-lg ring-1 ring-white/40 transition-transform group-hover:translate-x-1 font-black">→</div>
           </div>
