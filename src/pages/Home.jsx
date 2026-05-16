@@ -80,7 +80,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950 relative">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-purple-950 via-violet-900 to-pink-950 relative">
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
         <div className="absolute inset-0 opacity-35" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.13) 1px, transparent 0)', backgroundSize: '30px 30px' }} />
         <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-fuchsia-500/20 to-transparent" />
