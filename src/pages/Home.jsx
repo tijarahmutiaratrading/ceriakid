@@ -80,16 +80,16 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 relative">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 relative">
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-40 -right-40 w-[32rem] h-[32rem] bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-28 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-[32rem] h-[32rem] bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute -top-48 -right-44 w-96 h-96 bg-gradient-to-br from-purple-400 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-pulse" />
+        <div className="absolute top-40 -left-32 w-80 h-80 bg-gradient-to-tr from-pink-400 to-rose-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-tl from-blue-400 to-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2.5s' }} />
       </div>
 
       <AppHeader />
 
-      <div className="relative w-full max-w-7xl mx-auto px-3 sm:px-5 md:px-6 pb-32 pt-28 md:pt-32 space-y-5 md:space-y-7 overflow-x-hidden">
+      <div className="relative w-full max-w-7xl mx-auto px-3 sm:px-5 md:px-6 pb-40 pt-24 md:pt-28 space-y-6 md:space-y-8 overflow-x-hidden">
 
         {isAuthenticated && <DashboardHero user={user} avatarUrl={homeAvatarUrl} lang={lang} />}
 
@@ -120,9 +120,9 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-[2rem] border border-purple-200 bg-white/90 p-4 shadow-lg shadow-purple-200/30 transform-gpu [clip-path:inset(0_round_2rem)] md:p-6"
+          className="rounded-[2.5rem] border border-white/60 bg-gradient-to-br from-white/95 via-white/90 to-purple-50/80 p-5 shadow-xl shadow-purple-200/20 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_2.5rem)] md:p-8"
         >
-          <p className="text-purple-900 text-xs font-black uppercase tracking-wider mb-4">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
+          <p className="text-purple-900 text-xs font-black uppercase tracking-wider mb-5">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
           <div className="grid grid-cols-2 gap-3 md:gap-4">
             {[
               { key: 'prasekolah', label: `${t('prasekolah', lang)} · KSPK`, emoji: '🎨', sub: '4–6 tahun' },
@@ -133,10 +133,10 @@ export default function Home() {
                 onClick={() => safeToggle(age.key)}
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ scale: 1.02 }}
-                className={`py-2 md:py-3 px-4 md:px-5 rounded-2xl font-black text-xs md:text-sm transition-all flex items-center gap-2 md:gap-3 ${
+                className={`py-3 md:py-3.5 px-5 md:px-6 rounded-2xl font-black text-xs md:text-sm transition-all flex items-center gap-2 md:gap-3 ${
                   safeAgeGroup === age.key
-                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-400/30'
-                    : 'bg-white text-purple-700 border border-purple-200 hover:bg-purple-50'
+                    ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-rose-500 text-white shadow-lg shadow-purple-500/40 ring-1 ring-white/80'
+                    : 'bg-white/80 text-purple-700 border border-white/70 hover:bg-white/95 shadow-sm'
                 }`}
               >
                 <span className="text-2xl">{age.emoji}</span>
@@ -161,12 +161,12 @@ export default function Home() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.16 }}
-              className="mb-5"
-            >
+              className="mb-6"
+              >
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="p-4 rounded-2xl flex items-center gap-4 relative overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.4), rgba(249,115,22,0.45))', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                className="p-5 rounded-2xl flex items-center gap-4 relative overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.5), rgba(249,115,22,0.5))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.5)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
               >
                 <div className="absolute top-1 right-3 text-yellow-200 text-lg opacity-60 animate-pulse">✨</div>
                 <div className="text-4xl">🎉</div>
@@ -202,12 +202,12 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <div className="mb-5 flex items-center gap-3 rounded-[1.5rem] border border-purple-200 bg-white/80 px-4 py-3 backdrop-blur transform-gpu [clip-path:inset(0_round_1.5rem)]">
-            <div className="h-2 w-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg" />
-            <p className="text-purple-900 font-black text-base uppercase tracking-wider">
-              {lang === 'bm' ? 'Pilih Subjek' : 'Choose Subject'}
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-white/70 bg-white/80 px-5 py-4 backdrop-blur-xl shadow-sm transform-gpu [clip-path:inset(0_round_1.75rem)]">
+            <div className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 shadow-lg" />
+            <p className="text-purple-900 font-black text-sm md:text-base uppercase tracking-wider">
+              {lang === 'bm' ? '📚 Pilih Subjek' : '📚 Choose Subject'}
             </p>
-            <div className="h-px flex-1 bg-purple-200" />
+            <div className="h-px flex-1 bg-purple-200/50" />
           </div>
           <CategoryGrid />
         </motion.div>
