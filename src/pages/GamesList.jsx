@@ -248,7 +248,7 @@ export default function GamesList() {
                   className={`flex-shrink-0 min-h-11 px-4 py-2.5 rounded-2xl font-black text-sm transition-all ${
                     selectedDarjah === d
                       ? 'bg-white text-purple-700 shadow-lg ring-2 ring-white/60'
-                      : 'bg-slate-950/70 text-white border border-white/40 shadow-md'
+                      : 'bg-white/20 text-white border border-white/40 shadow-md backdrop-blur-xl'
                   }`}
                 >
                   {DARJAH_LABELS[d] || `Darjah ${d}`}
