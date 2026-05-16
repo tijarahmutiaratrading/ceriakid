@@ -83,9 +83,9 @@ export default function Home() {
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative">
       {/* Floating orbs background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-96 -right-96 w-[600px] h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
-        <div className="absolute top-1/2 -left-64 w-[500px] h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-32 right-1/3 w-[700px] h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
+        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
+        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
       </div>
 
       <AppHeader />
@@ -137,16 +137,16 @@ export default function Home() {
                 onClick={() => safeToggle(age.key)}
                 whileTap={{ scale: 0.92 }}
                 whileHover={{ y: -4 }}
-                className={`py-4 md:py-5 px-5 md:px-6 rounded-2xl font-black text-sm md:text-base transition-all flex items-center gap-3 ${
+                className={`py-3 sm:py-4 md:py-5 px-4 sm:px-5 md:px-6 rounded-2xl font-black text-xs sm:text-sm md:text-base transition-all flex items-center gap-2 sm:gap-3 ${
                   safeAgeGroup === age.key
                     ? 'bg-gradient-to-br from-yellow-400 via-orange-400 to-pink-500 text-white shadow-2xl shadow-orange-400/50 scale-105'
                     : 'bg-white/20 text-white border border-white/30 hover:bg-white/30'
                 }`}
               >
-                <span className="text-3xl">{age.emoji}</span>
+                <span className="text-2xl sm:text-3xl flex-shrink-0">{age.emoji}</span>
                 <div className="text-left">
-                  <div className="font-black text-sm">{age.label}</div>
-                  <div className="text-xs font-bold opacity-90">{age.sub}</div>
+                  <div className="font-black text-xs sm:text-sm">{age.label}</div>
+                  <div className="text-[10px] sm:text-xs font-bold opacity-90">{age.sub}</div>
                 </div>
               </motion.button>
             ))}
@@ -169,16 +169,16 @@ export default function Home() {
               >
               <motion.div
                 whileHover={{ scale: 1.02, y: -3 }}
-                className="p-6 rounded-3xl flex items-center gap-5 relative overflow-hidden bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400 shadow-2xl shadow-yellow-400/50"
+                className="p-4 sm:p-6 rounded-3xl flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 relative overflow-hidden bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400 shadow-2xl shadow-yellow-400/50"
               >
-                <div className="absolute top-3 right-4 text-2xl animate-bounce">✨</div>
-                <div className="text-5xl flex-shrink-0">🎉</div>
+                <div className="absolute top-2 right-2 sm:top-3 sm:right-4 text-lg sm:text-2xl animate-bounce">✨</div>
+                <div className="text-4xl sm:text-5xl flex-shrink-0">🎉</div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <p className="text-white font-black text-base">Permainan Baru Akan Datang!</p>
-                    <span className="px-3 py-1 bg-white text-orange-600 text-xs font-black rounded-full">{COMING_SOON_DATE}</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                    <p className="text-white font-black text-sm sm:text-base">Permainan Baru Akan Datang!</p>
+                    <span className="inline-block px-3 py-1 bg-white text-orange-600 text-xs font-black rounded-full w-fit">{COMING_SOON_DATE}</span>
                   </div>
-                  <p className="text-white font-bold text-sm">Games baru untuk semua subjek akan dilancarkan pada {COMING_SOON_DATE} 🚀</p>
+                  <p className="text-white font-bold text-xs sm:text-sm">Games baru untuk semua subjek akan dilancarkan pada {COMING_SOON_DATE} 🚀</p>
                 </div>
               </motion.div>
             </motion.div>
