@@ -204,9 +204,12 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <div className="mb-7 flex items-center gap-3">
-            <h2 className="text-white font-black text-2xl md:text-3xl">📚 Pilih Subjek</h2>
-            <div className="h-1.5 flex-1 bg-gradient-to-r from-cyan-300 via-pink-300 to-transparent rounded-full" />
+          <div className="mb-6 flex items-center gap-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-4 py-2.5 backdrop-blur-md">
+              <span className="text-xl">📚</span>
+              <h2 className="text-white font-black text-lg md:text-xl">Pilih Subjek</h2>
+            </div>
+            <div className="h-1 flex-1 bg-gradient-to-r from-cyan-300 via-pink-300 to-transparent rounded-full" />
           </div>
           <CategoryGrid />
         </motion.div>
