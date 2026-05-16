@@ -116,40 +116,90 @@ export default function Home() {
           </motion.div>
         )}
 
-        {/* Age Group Toggle - Bold design */}
+        {/* Age Group Selector - Mascot Illustration Style */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 p-4 md:p-5 shadow-lg"
         >
-          <div className="flex items-center gap-2 mb-4">
-            <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-pink-300 rounded-full" />
-            <p className="text-white text-xs md:text-sm font-black uppercase tracking-widest">Pilih Umur Anak</p>
-          </div>
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
+          <h2 className="text-white font-black text-xl md:text-2xl mb-4">Pilih Umur Anak</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
             {[
-              { key: 'prasekolah', label: `${t('prasekolah', lang)} (KSPK)`, emoji: '🎨', sub: '4–6 Tahun' },
-              { key: 'sekolah_rendah', label: `${t('sekolahRendah', lang)} (KSSR)`, emoji: '📚', sub: '7–12 Tahun' }
-            ].map((age) => (
-              <motion.button
-                key={age.key}
-                onClick={() => safeToggle(age.key)}
-                whileTap={{ scale: 0.92 }}
-                whileHover={{ y: -4 }}
-                className={`py-3 sm:py-4 md:py-5 px-4 sm:px-5 md:px-6 rounded-2xl font-black text-xs sm:text-sm md:text-base transition-all flex items-center gap-2 sm:gap-3 ${
-                  safeAgeGroup === age.key
-                    ? 'bg-gradient-to-br from-yellow-400 via-orange-400 to-pink-500 text-white shadow-lg scale-105'
-                    : 'bg-white/20 text-white border border-white/30 hover:bg-white/30'
-                }`}
-              >
-                <span className="text-2xl sm:text-3xl flex-shrink-0">{age.emoji}</span>
-                <div className="text-left">
-                  <div className="font-black text-xs sm:text-sm">{age.label}</div>
-                  <div className="text-[10px] sm:text-xs font-bold opacity-90">{age.sub}</div>
-                </div>
-              </motion.button>
-            ))}
+              {
+                key: 'prasekolah',
+                title: `${t('prasekolah', lang)} (KSPK)`,
+                age: '4–6 Tahun',
+                emoji: '🎨',
+                desc: 'Tahap umur Prasekolah (KSPK) 4–6 Tahun',
+                sub: 'Bahasa, Matematik, Sains & banyak lagi',
+                image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/98cf1f885_generated_image.png',
+                gradient: 'from-sky-200 via-cyan-200 to-emerald-200',
+              },
+              {
+                key: 'sekolah_rendah',
+                title: `${t('sekolahRendah', lang)} (KSSR)`,
+                age: '7–12 Tahun',
+                emoji: '📚',
+                desc: 'Tahap umur Sekolah Rendah (KSSR) 7–12 Tahun',
+                sub: 'Darjah 1 hingga Darjah 6 mengikut KSSR',
+                image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d1137d39a_generated_image.png',
+                gradient: 'from-pink-200 via-rose-200 to-amber-200',
+              },
+            ].map((age) => {
+              const isActive = safeAgeGroup === age.key;
+              return (
+                <motion.button
+                  key={age.key}
+                  onClick={() => safeToggle(age.key)}
+                  whileHover={{ y: -4, scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`group relative overflow-hidden rounded-[2rem] bg-gradient-to-br ${age.gradient} p-4 sm:p-5 text-left shadow-xl shadow-black/20 transition-all border-2 ${
+                    isActive ? 'border-white ring-4 ring-white/40' : 'border-white/40'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    {/* Mascot Image */}
+                    <div className="flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden bg-white/30 flex items-center justify-center">
+                      <img
+                        src={age.image}
+                        alt={age.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    </div>
+
+                    {/* Text Content */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-black text-slate-800 text-base sm:text-lg leading-tight">
+                        {age.title}
+                      </h3>
+                      <p className="font-black text-slate-800 text-base sm:text-lg flex items-center gap-1 mb-2">
+                        {age.age} <span>{age.emoji}</span>
+                      </p>
+                      <p className="text-slate-700 text-xs sm:text-sm font-semibold leading-snug mb-1 line-clamp-2">
+                        {age.desc}
+                      </p>
+                      <p className="text-slate-600 text-[11px] sm:text-xs font-medium leading-snug line-clamp-2">
+                        {age.sub}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Pilih Button */}
+                  <div className="mt-3 sm:mt-4">
+                    <div
+                      className={`w-full py-2.5 sm:py-3 rounded-full text-center font-black text-sm sm:text-base shadow-md transition-all ${
+                        isActive
+                          ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                          : 'bg-white text-slate-800 group-hover:bg-slate-50'
+                      }`}
+                    >
+                      {isActive ? '✓ Dipilih' : 'Pilih'}
+                    </div>
+                  </div>
+                </motion.button>
+              );
+            })}
           </div>
         </motion.div>
 
