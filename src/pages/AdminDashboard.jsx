@@ -25,8 +25,8 @@ const defaultSettings = {
 function FieldGroup({ label, hint, children }) {
   return (
     <div className="mb-5">
-      <label className="block text-sm font-black text-slate-800 mb-1.5">{label}</label>
-      {hint && <p className="text-xs text-slate-500 mb-2.5">{hint}</p>}
+      <label className="block text-sm font-black text-white mb-1.5">{label}</label>
+      {hint && <p className="text-xs text-white/70 mb-2.5">{hint}</p>}
       {children}
     </div>
   );
@@ -41,9 +41,9 @@ function SecretInput({ value, onChange, placeholder }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full border border-slate-200 rounded-xl px-4 py-3 pr-12 text-sm font-mono bg-slate-50 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-violet-400 focus:bg-white transition-all"
+        className="w-full border border-white/25 rounded-xl px-4 py-3 pr-12 text-sm font-mono bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/55 focus:bg-white/15 transition-all"
       />
-      <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+      <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white">
         {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
       </button>
     </div>
@@ -57,7 +57,7 @@ function TextInput({ value, onChange, placeholder }) {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm font-mono bg-slate-50 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-violet-400 focus:bg-white transition-all"
+      className="w-full border border-white/25 rounded-xl px-4 py-3 text-sm font-mono bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/55 focus:bg-white/15 transition-all"
     />
   );
 }
@@ -176,7 +176,13 @@ export default function AdminDashboard() {
   const activeCount = subscriptions.filter(s => s.status === 'active').length;
 
   return (
-    <div className="min-h-screen relative bg-slate-50 text-slate-900">
+    <div className="min-h-screen relative overflow-hidden bg-background text-foreground">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] bg-game-purple/25 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-game-pink/25 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] bg-game-blue/20 rounded-full blur-3xl" />
+      </div>
+
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative">
@@ -186,20 +192,20 @@ export default function AdminDashboard() {
 
           <main className="flex-1 min-w-0 space-y-5">
         {/* Page header */}
-        <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 rounded-3xl p-5 md:p-6 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-4">
-            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="w-14 h-14 rounded-2xl object-cover shadow-lg flex-shrink-0" />
+            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="w-14 h-14 rounded-2xl object-cover shadow-lg ring-2 ring-white/40 flex-shrink-0" />
             <div>
-              <p className="text-violet-600 text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> CeriaKid Analytics</p>
-              <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">Dashboard</h1>
-              <p className="text-slate-500 text-xs md:text-sm font-semibold">Pantau prestasi jualan kau secara realtime</p>
+              <p className="text-white/70 text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> CeriaKid Analytics</p>
+              <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight leading-tight drop-shadow">Dashboard</h1>
+              <p className="text-white/85 text-xs md:text-sm font-semibold">Pantau prestasi jualan kau secara realtime</p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <button type="button" onClick={loadData} className="rounded-xl bg-slate-100 hover:bg-slate-200 px-3.5 py-2 text-xs font-black text-slate-700 transition-all flex items-center gap-1.5">
+            <button type="button" onClick={loadData} className="rounded-xl bg-white/15 hover:bg-white/25 px-3.5 py-2 text-xs font-black text-white transition-all flex items-center gap-1.5 ring-1 ring-white/20">
               <RefreshCw className="w-3.5 h-3.5" /> Refresh
             </button>
-            <button type="button" onClick={handleClearCache} disabled={clearingCache} className="rounded-xl bg-slate-100 hover:bg-slate-200 px-3.5 py-2 text-xs font-black text-slate-700 transition-all disabled:opacity-60 flex items-center gap-1.5">
+            <button type="button" onClick={handleClearCache} disabled={clearingCache} className="rounded-xl bg-white/15 hover:bg-white/25 px-3.5 py-2 text-xs font-black text-white transition-all disabled:opacity-60 flex items-center gap-1.5 ring-1 ring-white/20">
               <RefreshCw className={`w-3.5 h-3.5 ${clearingCache ? 'animate-spin' : ''}`} /> Cache
             </button>
           </div>
@@ -220,12 +226,12 @@ export default function AdminDashboard() {
         )}
 
         {/* Mobile-only tabs (sidebar handles desktop) */}
-        <div className="lg:hidden flex gap-2 p-1 rounded-2xl bg-white border border-slate-200 shadow-sm">
+        <div className="lg:hidden pro-glass flex gap-2 p-1 rounded-2xl">
           {tabs.map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-2.5 rounded-xl font-black text-xs transition-all whitespace-nowrap ${activeTab === tab.key ? 'bg-violet-500 text-white shadow' : 'text-slate-600 hover:bg-slate-100'}`}
+              className={`flex-1 py-2.5 rounded-xl font-black text-xs transition-all whitespace-nowrap ${activeTab === tab.key ? 'bg-white text-game-purple shadow' : 'text-white/85 hover:bg-white/15'}`}
             >
               {tab.label}
             </button>
@@ -244,11 +250,11 @@ export default function AdminDashboard() {
             </div>
 
             {/* Sales Breakdown */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="pro-glass rounded-3xl p-5">
               <div className="flex items-end justify-between mb-4">
                 <div>
-                  <h2 className="text-lg md:text-xl font-black text-slate-900">💳 Jualan Mengikut Pelan</h2>
-                  <p className="text-slate-500 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
+                  <h2 className="text-lg md:text-xl font-black text-white drop-shadow">💳 Jualan Mengikut Pelan</h2>
+                  <p className="text-white/75 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
@@ -282,28 +288,28 @@ export default function AdminDashboard() {
 
         {/* ═══ CUSTOMERS TAB ═══ */}
         {activeTab === 'customers' && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5">
             <div className="flex items-end justify-between mb-4 flex-wrap gap-3">
               <div>
-                <h2 className="text-lg md:text-xl font-black text-slate-900">📋 Database Pelanggan</h2>
-                <p className="text-slate-500 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
+                <h2 className="text-lg md:text-xl font-black text-white drop-shadow">📋 Database Pelanggan</h2>
+                <p className="text-white/75 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
               </div>
-              <span className="text-xs font-black text-violet-700 bg-violet-50 px-3 py-1.5 rounded-full">{subscriptions.length} pelanggan</span>
+              <span className="text-xs font-black text-white bg-white/20 px-3 py-1.5 rounded-full ring-1 ring-white/25">{subscriptions.length} pelanggan</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[720px] text-sm">
                 <thead>
-                  <tr className="border-b border-slate-200">
-                    <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Email</th>
-                    <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Paket</th>
-                    <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Status</th>
-                    <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Tarikh</th>
+                  <tr className="border-b border-white/20">
+                    <th className="text-left py-3 px-4 font-black text-white/90 text-xs uppercase tracking-wider">Email</th>
+                    <th className="text-left py-3 px-4 font-black text-white/90 text-xs uppercase tracking-wider">Paket</th>
+                    <th className="text-left py-3 px-4 font-black text-white/90 text-xs uppercase tracking-wider">Status</th>
+                    <th className="text-left py-3 px-4 font-black text-white/90 text-xs uppercase tracking-wider">Tarikh</th>
                   </tr>
                 </thead>
                 <tbody>
                   {subscriptions.map((sub) => (
-                    <tr key={sub.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                      <td className="py-3 px-4 text-xs text-slate-700 font-semibold">{sub.email}</td>
+                    <tr key={sub.id} className="border-b border-white/10 hover:bg-white/10 transition-colors">
+                      <td className="py-3 px-4 text-xs text-white/90 font-semibold">{sub.email}</td>
                       <td className="py-3 px-4 whitespace-nowrap">
                         <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
                           sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
@@ -330,12 +336,12 @@ export default function AdminDashboard() {
                            '✕ Batal'}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-xs text-slate-500 font-semibold whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
+                      <td className="py-3 px-4 text-xs text-white/70 font-semibold whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
                     </tr>
                   ))}
                   {subscriptions.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="py-12 text-center text-slate-400 font-semibold">Tiada pelanggan lagi.</td>
+                      <td colSpan={4} className="py-12 text-center text-white/60 font-semibold">Tiada pelanggan lagi.</td>
                     </tr>
                   )}
                 </tbody>
@@ -348,12 +354,12 @@ export default function AdminDashboard() {
         {activeTab === 'settings' && (
           <>
             {/* Settings Sub-tabs */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 p-1.5 rounded-2xl overflow-x-auto bg-white border border-slate-200 shadow-sm">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="pro-glass flex gap-2 p-1.5 rounded-2xl overflow-x-auto">
               {settingsTabs.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setSettingsTab(tab.key)}
-                  className={`flex-1 py-2.5 px-3 rounded-xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-violet-500 text-white shadow' : 'text-slate-600 hover:bg-slate-100'}`}
+                  className={`flex-1 py-2.5 px-3 rounded-xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-white text-game-purple shadow' : 'text-white/85 hover:bg-white/15'}`}
                 >
                   {tab.icon}<span className="hidden sm:inline">{tab.label}</span><span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                 </button>
@@ -362,14 +368,14 @@ export default function AdminDashboard() {
 
             {/* Facebook Pixel */}
             {settingsTab === 'pixel' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl p-5 md:p-7 bg-white border border-slate-200 shadow-sm">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5 md:p-7">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-md">
                     <Facebook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-slate-900 text-lg">Meta / Facebook Pixel</h2>
-                    <p className="text-xs text-slate-500 font-semibold">Untuk tracking FB Ads & conversion events</p>
+                    <h2 className="font-black text-white text-lg drop-shadow">Meta / Facebook Pixel</h2>
+                    <p className="text-xs text-white/75 font-semibold">Untuk tracking FB Ads & conversion events</p>
                   </div>
                 </div>
 
@@ -395,14 +401,14 @@ export default function AdminDashboard() {
 
             {/* Chip Payment */}
             {settingsTab === 'chip' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl p-5 md:p-7 bg-white border border-slate-200 shadow-sm">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5 md:p-7">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-md">
                     <CreditCard className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-slate-900 text-lg">Chip Payment Gateway</h2>
-                    <p className="text-xs text-slate-500 font-semibold">FPX, kad kredit & e-wallet Malaysia</p>
+                    <h2 className="font-black text-white text-lg drop-shadow">Chip Payment Gateway</h2>
+                    <p className="text-xs text-white/75 font-semibold">FPX, kad kredit & e-wallet Malaysia</p>
                   </div>
                 </div>
 
@@ -448,13 +454,13 @@ export default function AdminDashboard() {
 
             {/* Webhook */}
             {settingsTab === 'webhook' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl p-5 md:p-7 bg-white border border-slate-200 shadow-sm">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5 md:p-7">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-md">
                     <Webhook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-slate-900 text-lg">Webhook Settings</h2>
+                    <h2 className="font-black text-white text-lg drop-shadow">Webhook Settings</h2>
                     <p className="text-xs text-slate-500 font-semibold">Untuk receive payment callbacks dari Chip</p>
                   </div>
                 </div>
@@ -464,10 +470,10 @@ export default function AdminDashboard() {
                 </FieldGroup>
 
                 <div className="mt-2 mb-5">
-                  <label className="block text-sm font-black text-slate-800 mb-1">Webhook URL Anda</label>
-                  <p className="text-xs text-slate-500 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
+                  <label className="block text-sm font-black text-white mb-1">Webhook URL Anda</label>
+                  <p className="text-xs text-white/70 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
                   <div className="flex gap-2">
-                    <div className="flex-1 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl px-3 py-3 text-xs font-mono text-slate-600 break-all overflow-x-auto">
+                    <div className="flex-1 bg-white/10 border-2 border-dashed border-white/25 rounded-xl px-3 py-3 text-xs font-mono text-white/85 break-all overflow-x-auto">
                       {window.location.origin}/api/webhook/chip
                     </div>
                     <button
@@ -475,7 +481,7 @@ export default function AdminDashboard() {
                         navigator.clipboard.writeText(`${window.location.origin}/api/webhook/chip`);
                         toast({ title: '📋 URL disalin!', description: 'Paste dalam Chip Dashboard.' });
                       }}
-                      className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-all border border-slate-200"
+                      className="px-4 py-2 bg-white/15 hover:bg-white/25 text-white rounded-xl font-bold text-xs transition-all ring-1 ring-white/25"
                     >
                       Copy
                     </button>
@@ -517,7 +523,7 @@ export default function AdminDashboard() {
                   <><Save className="w-5 h-5" /> Simpan Tetapan</>
                 )}
               </motion.button>
-              <p className="text-center text-xs text-slate-500 mt-4 font-semibold">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
+              <p className="text-center text-xs text-white/70 mt-4 font-semibold">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
             </motion.div>
           </>
         )}

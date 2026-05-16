@@ -18,16 +18,16 @@ export default function AdminQuickStats({ pending, succeeded, visitorsToday, tot
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.05 }}
-          className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all"
+          className="pro-glass rounded-2xl p-4 hover:bg-white/15 transition-all"
         >
           <div className="flex items-start gap-3">
-            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 ${s.tint}`}>
+            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 ${s.tint} ring-1 ring-white/40`}>
               <s.icon className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-[11px] font-bold text-slate-500">{s.label}</p>
-              <p className="text-2xl font-black text-slate-900 leading-tight">{s.value}</p>
-              <p className="text-[10px] text-slate-400 font-semibold">{s.sub}</p>
+              <p className="text-[11px] font-bold text-white/70">{s.label}</p>
+              <p className="text-2xl font-black text-white leading-tight drop-shadow">{s.value}</p>
+              <p className="text-[10px] text-white/65 font-semibold">{s.sub}</p>
             </div>
           </div>
         </motion.div>
