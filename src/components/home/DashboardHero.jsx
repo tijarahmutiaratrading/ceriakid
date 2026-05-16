@@ -14,7 +14,7 @@ export default function DashboardHero({ user, avatarUrl, lang }) {
         initial={{ opacity: 0, y: -14 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.01 }}
-        className="relative isolate overflow-hidden rounded-[2.5rem] border border-white/60 bg-gradient-to-br from-purple-300/45 via-pink-250/35 to-blue-300/30 p-5 shadow-xl shadow-purple-200/25 backdrop-blur-3xl transform-gpu [clip-path:inset(0_round_2.5rem)] md:p-8"
+        className="relative isolate overflow-hidden rounded-[2.5rem] border border-white/40 bg-gradient-to-br from-purple-600/60 via-pink-600/55 to-blue-600/50 p-5 shadow-xl shadow-purple-900/40 backdrop-blur-3xl transform-gpu [clip-path:inset(0_round_2.5rem)] md:p-8"
       >
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/35 via-white/15 to-transparent" />
         <div className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-purple-300/30 blur-3xl" />
@@ -28,11 +28,11 @@ export default function DashboardHero({ user, avatarUrl, lang }) {
               <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-purple-300 to-pink-300 text-4xl shadow-md ring-1 ring-white/60 md:h-20 md:w-20">🐱</div>
             )}
             <div className="min-w-0">
-              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/50 px-3.5 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-purple-700 shadow-sm">
-                <Sparkles className="h-3.5 w-3.5 text-purple-600" /> CeriaKid Dashboard
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/25 backdrop-blur-sm px-3.5 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-white shadow-sm">
+                <Sparkles className="h-3.5 w-3.5 text-yellow-200" /> CeriaKid Dashboard
               </div>
-              <p className="text-xs font-bold text-purple-800 md:text-sm">{greeting}</p>
-              <h1 className="truncate text-2xl font-black tracking-tight text-purple-900 md:text-4xl">{name}</h1>
+              <p className="text-xs font-bold text-white/90 md:text-sm">{greeting}</p>
+              <h1 className="truncate text-2xl font-black tracking-tight text-white md:text-4xl">{name}</h1>
             </div>
           </div>
 
