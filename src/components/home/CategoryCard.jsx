@@ -82,17 +82,17 @@ export default function CategoryCard({ category, gameCount, idx }) {
         transition={{ delay: idx * 0.06, type: 'spring', damping: 20 }}
         whileHover={{ scale: 1.03, y: -4 }}
         whileTap={{ scale: 0.96 }}
-        className={`relative overflow-hidden cursor-pointer h-full min-h-[170px] sm:min-h-[200px] group rounded-3xl shadow-xl ${config.glow}`}
+        className={`relative isolate overflow-hidden cursor-pointer h-full min-h-[170px] sm:min-h-[200px] group rounded-3xl shadow-xl ${config.glow}`}
       >
         {/* Gradient background */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient}`} />
+        <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${config.gradient}`} />
 
         {/* Glass overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-white/5 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/25 via-white/5 to-transparent" />
 
         {/* Decorative orbs */}
-        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-white/25 blur-3xl transition-all group-hover:bg-white/40 group-hover:scale-110" />
-        <div className="absolute -left-8 -bottom-8 h-28 w-28 rounded-full bg-white/15 blur-2xl" />
+        <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-white/25 blur-3xl transition-all group-hover:bg-white/40 group-hover:scale-110" />
+        <div className="pointer-events-none absolute -left-8 -bottom-8 h-28 w-28 rounded-full bg-white/15 blur-2xl" />
 
         {/* Floating accent emoji */}
         <motion.div

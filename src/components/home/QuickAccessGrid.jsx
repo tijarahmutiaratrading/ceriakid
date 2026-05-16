@@ -52,11 +52,11 @@ export default function QuickAccessGrid() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 + i * 0.06 }}
-              className={`group relative h-full min-h-[140px] overflow-hidden rounded-3xl bg-gradient-to-br ${item.gradient} p-3 shadow-xl ${item.glow} md:min-h-[160px] md:p-4`}
+              className={`group relative h-full min-h-[140px] overflow-hidden rounded-3xl bg-gradient-to-br ${item.gradient} p-3 shadow-xl ${item.glow} md:min-h-[160px] md:p-4 isolate`}
             >
               {/* Decorative shine */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-transparent to-transparent" />
-              <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/35" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/25 via-transparent to-transparent" />
+              <div className="pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/35" />
 
               {item.featured && (
                 <motion.div
