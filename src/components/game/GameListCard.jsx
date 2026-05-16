@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Lock, Play } from 'lucide-react';
@@ -6,20 +6,170 @@ import GameBadge from './GameBadge';
 import UpgradeLockModal from './UpgradeLockModal';
 
 const difficultyConfig = {
-  easy:   { label: 'Mudah',     color: 'bg-green-500',   icon: '🟢' },
-  medium: { label: 'Sederhana', color: 'bg-yellow-500',  icon: '🟡' },
-  hard:   { label: 'Sukar',     color: 'bg-red-500',     icon: '🔴' },
+  easy:   { label: 'Mudah',     stroke: '#16a34a' },
+  medium: { label: 'Sederhana', stroke: '#15803d' },
+  hard:   { label: 'Sukar',     stroke: '#dc2626' },
 };
+
+// Subtle horizontal lined-paper background (CSS gradient — keeps it lightweight + crisp)
+const paperStyle = {
+  backgroundColor: '#fbf7ec',
+  backgroundImage:
+    'repeating-linear-gradient(to bottom, transparent 0, transparent 31px, rgba(59,130,246,0.18) 31px, rgba(59,130,246,0.18) 32px)',
+};
+
+// Hand-drawn ellipse SVG used to "circle" the difficulty word
+const CircleStamp = ({ stroke }) => (
+  <svg
+    viewBox="0 0 120 60"
+    className="absolute inset-0 w-full h-full pointer-events-none"
+    preserveAspectRatio="none"
+  >
+    <ellipse
+      cx="60" cy="30" rx="54" ry="22"
+      fill="none"
+      stroke={stroke}
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeDasharray="180 12"
+      strokeDashoffset="6"
+      transform="rotate(-3 60 30)"
+      opacity="0.9"
+    />
+  </svg>
+);
 
 export default function GameListCard({ game, gameKey, gameProgress, idx, category, badge, locked }) {
   const difficulty = difficultyConfig[game.difficulty || 'easy'];
   const [showUpgrade, setShowUpgrade] = useState(false);
 
-  const cardStyle = {
-    background: locked ? 'rgba(88,28,135,0.35)' : 'rgba(120,40,160,0.40)',
-    backdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255,255,255,0.35)',
-  };
+  // Slight random rotation per card so they feel like scattered paper notes — stable per card
+  const rotation = useMemo(() => {
+    const variants = [-2.2, -1.2, -0.6, 0.4, 1.1, 1.8, 2.4];
+    return variants[idx % variants.length];
+  }, [idx]);
+
+  const stars = gameProgress?.bestStars || 0;
+  const playCount = gameProgress?.timesPlayed || 0;
+
+  const cardInner = (
+    <div
+      className="relative h-full rounded-[14px] overflow-hidden shadow-[6px_8px_18px_rgba(15,23,42,0.18),0_1px_0_rgba(0,0,0,0.04)] ring-1 ring-amber-900/10"
+      style={paperStyle}
+    >
+      {/* Red margin line on the left — classic notebook */}
+      <div className="absolute top-0 bottom-0 left-9 w-px bg-red-400/70" aria-hidden="true" />
+
+      {/* Torn edge feel — subtle dotted top edge */}
+      <div
+        className="absolute top-0 left-0 right-0 h-1.5 opacity-40"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 4px 0, transparent 2px, #fbf7ec 2.5px)',
+          backgroundSize: '8px 6px',
+          backgroundRepeat: 'repeat-x',
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative p-4 sm:p-5 pl-12 sm:pl-14 flex items-start gap-3 sm:gap-4 min-h-[120px]">
+        {/* Emoji "sticker" — looks like a doodle stuck on the paper */}
+        <div className="flex-shrink-0 -mt-2">
+          <div
+            className="w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-full bg-white flex items-center justify-center text-3xl sm:text-4xl shadow-[3px_4px_8px_rgba(15,23,42,0.18)] ring-[2.5px] ring-slate-900/85"
+            style={{ transform: `rotate(${-rotation * 1.5}deg)` }}
+          >
+            <span className={locked ? 'grayscale opacity-70' : ''}>{game.emoji}</span>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0 pt-0.5">
+          {/* Title — bold navy, slightly handwritten feel via tracking */}
+          <div className="flex items-start gap-2 flex-wrap">
+            <h3
+              className="font-black text-base sm:text-lg leading-tight text-[#1e3a8a] uppercase tracking-tight line-clamp-2"
+              style={{ textShadow: '0 1px 0 rgba(255,255,255,0.6)' }}
+            >
+              {game.title}
+            </h3>
+            {badge && badge !== 'locked' && <GameBadge type={badge} />}
+          </div>
+
+          {/* Difficulty — hand-circled stamp */}
+          <div className="inline-block relative mt-2 px-4 py-1">
+            <CircleStamp stroke={difficulty.stroke} />
+            <span
+              className="relative font-black text-sm"
+              style={{ color: difficulty.stroke, fontFamily: '"Nunito", cursive' }}
+            >
+              {difficulty.label}
+            </span>
+          </div>
+
+          {/* Game type — handwritten style */}
+          {game.type && (
+            <p className="mt-2 text-slate-700 text-sm font-bold capitalize" style={{ fontFamily: '"Nunito", cursive' }}>
+              {game.type.replace(/_/g, ' ')}
+            </p>
+          )}
+
+          {/* Stars + plays */}
+          {gameProgress && (
+            <div className="flex items-center gap-3 mt-2">
+              <div className="flex gap-0.5" aria-label={`${stars} bintang daripada 3`}>
+                {[1,2,3].map(s => (
+                  <span
+                    key={s}
+                    className="text-base leading-none"
+                    style={{
+                      color: s <= stars ? '#facc15' : '#cbd5e1',
+                      textShadow: s <= stars ? '0 1px 0 #b45309' : 'none',
+                    }}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+              <span className="text-slate-700 text-xs font-bold" style={{ fontFamily: '"Nunito", cursive' }}>
+                Dimainkan {playCount} kali
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Play / Lock — rubber stamp circle */}
+        <div className="flex-shrink-0 self-center">
+          {locked ? (
+            <div
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-400 flex items-center justify-center shadow-[2px_3px_6px_rgba(15,23,42,0.25)] ring-[2.5px] ring-amber-900"
+              style={{ transform: `rotate(${rotation * 2}deg)` }}
+            >
+              <Lock className="w-5 h-5 sm:w-6 sm:h-6 text-amber-900" strokeWidth={3} />
+            </div>
+          ) : (
+            <div
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-red-500 flex items-center justify-center shadow-[2px_3px_6px_rgba(15,23,42,0.25)] ring-[2.5px] ring-red-800"
+              style={{ transform: `rotate(${rotation * 2}deg)` }}
+            >
+              <Play className="w-5 h-5 sm:w-6 sm:h-6 text-white fill-white ml-0.5" strokeWidth={2.5} />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Premium label for locked cards */}
+      {locked && (
+        <div className="absolute top-2 right-3">
+          <span
+            className="inline-block px-2 py-0.5 text-[10px] font-black text-amber-900 bg-amber-300 rounded shadow-sm uppercase tracking-wider"
+            style={{ transform: 'rotate(8deg)', fontFamily: '"Nunito", cursive' }}
+          >
+            Premium
+          </span>
+        </div>
+      )}
+    </div>
+  );
 
   if (locked) {
     return (
@@ -32,27 +182,13 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
         >
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0, rotate: rotation }}
             transition={{ delay: Math.min(idx * 0.03, 0.5) }}
-            whileTap={{ scale: 0.97 }}
-            className="h-full rounded-3xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 cursor-pointer shadow-xl min-h-[88px]"
-            style={cardStyle}
+            whileTap={{ scale: 0.97, rotate: 0 }}
+            whileHover={{ rotate: 0, scale: 1.02 }}
+            className="h-full cursor-pointer"
           >
-            <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl grayscale flex-shrink-0">
-              {game.emoji}
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-black text-sm sm:text-base leading-tight line-clamp-2 text-white">{game.title}</h3>
-              <span className={`inline-flex items-center gap-1 text-xs font-black px-2.5 py-1 rounded-full text-white ${difficulty.color} mt-1.5`}>
-                {difficulty.icon} {difficulty.label}
-              </span>
-            </div>
-            <div className="flex flex-col items-center gap-1 flex-shrink-0">
-              <div className="w-11 h-11 rounded-full bg-yellow-300 flex items-center justify-center shadow-lg">
-                <Lock className="w-5 h-5 text-purple-900" />
-              </div>
-              <span className="text-xs text-yellow-200 font-black">Premium</span>
-            </div>
+            {cardInner}
           </motion.div>
         </button>
         <UpgradeLockModal open={showUpgrade} onClose={() => setShowUpgrade(false)} gameTitle={game.title} />
@@ -64,51 +200,13 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
     <Link to={`/play/${category}/${idx}`} className="block">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={{ opacity: 1, y: 0, rotate: rotation }}
         transition={{ delay: Math.min(idx * 0.03, 0.5) }}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.97 }}
-        className="h-full rounded-3xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 cursor-pointer group shadow-xl hover:bg-white/10 transition-all min-h-[88px]"
-        style={cardStyle}
+        whileHover={{ scale: 1.03, rotate: 0 }}
+        whileTap={{ scale: 0.97, rotate: 0 }}
+        className="h-full cursor-pointer"
       >
-        {/* Emoji */}
-        <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner group-hover:scale-110 transition-transform">
-          {game.emoji}
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-black text-sm sm:text-base leading-tight line-clamp-2 text-white">{game.title}</h3>
-            {badge && badge !== 'locked' && <GameBadge type={badge} />}
-          </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className={`inline-flex items-center gap-1 text-xs font-black px-2.5 py-1 rounded-full text-white ${difficulty.color}`}>
-              {difficulty.icon} {difficulty.label}
-            </span>
-            <span className="text-white/90 text-xs font-bold capitalize truncate">
-              {game.type?.replace(/_/g, ' ')}
-            </span>
-          </div>
-
-          {/* Progress */}
-          {gameProgress && (
-            <div className="flex items-center gap-2 mt-2">
-              <div className="flex gap-0.5" aria-label={`${gameProgress.bestStars} bintang daripada 3`}>
-                {[1,2,3].map(s => (
-                  <span key={s} className={`text-sm ${s <= gameProgress.bestStars ? 'text-yellow-300' : 'text-white/50'}`}>★</span>
-                ))}
-              </div>
-              <span className="text-white/90 text-xs font-bold">{gameProgress.timesPlayed}x dimainkan</span>
-            </div>
-          )}
-        </div>
-
-        {/* Play button */}
-        <div className="w-12 h-12 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0 self-end sm:self-auto group-hover:scale-105 transition-all">
-          <Play className="w-5 h-5 fill-current" />
-        </div>
+        {cardInner}
       </motion.div>
     </Link>
   );
