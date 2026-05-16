@@ -121,13 +121,13 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 p-6 md:p-8 shadow-lg"
+          className="rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 p-4 md:p-5 shadow-lg"
         >
-          <div className="flex items-center gap-2 mb-6">
-            <div className="h-1 w-10 bg-gradient-to-r from-yellow-300 to-pink-300 rounded-full" />
-            <p className="text-white text-sm font-black uppercase tracking-widest">Pilih Umur Anak</p>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-pink-300 rounded-full" />
+            <p className="text-white text-xs md:text-sm font-black uppercase tracking-widest">Pilih Umur Anak</p>
           </div>
-          <div className="grid grid-cols-2 gap-4 md:gap-5">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
             {[
               { key: 'prasekolah', label: `${t('prasekolah', lang)} (KSPK)`, emoji: '🎨', sub: '4–6 Tahun' },
               { key: 'sekolah_rendah', label: `${t('sekolahRendah', lang)} (KSSR)`, emoji: '📚', sub: '7–12 Tahun' }
