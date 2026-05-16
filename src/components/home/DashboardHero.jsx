@@ -1,61 +1,49 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Sparkles, Settings, ChevronRight } from 'lucide-react';
+import { Sparkles, UserRound, ChevronRight } from 'lucide-react';
 import ChildSelector from '@/components/ChildSelector';
 
 export default function DashboardHero({ user, avatarUrl, lang }) {
-  const hour = new Date().getHours();
-  const greeting = lang === 'bm'
-    ? (hour < 12 ? 'Selamat pagi' : hour < 18 ? 'Selamat petang' : 'Selamat malam')
-    : (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening');
-  const name = user?.full_name?.split(' ')[0] || 'Teman';
+  const greeting = lang === 'bm' ? 'Selamat datang kembali!' : 'Welcome back!';
+  const name = user?.full_name || 'Teman';
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -14 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="relative isolate overflow-hidden rounded-[1.75rem] border border-white/20 bg-gradient-to-br from-fuchsia-500/30 via-purple-500/20 to-indigo-500/25 p-4 shadow-2xl shadow-purple-950/30 backdrop-blur-3xl md:rounded-[2.25rem] md:p-6"
-    >
-      {/* Decorative orbs */}
-      <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-pink-400/30 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-24 -left-10 h-56 w-56 rounded-full bg-blue-400/25 blur-3xl" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
+    <Link to="/settings" className="block">
+      <motion.div
+        initial={{ opacity: 0, y: -14 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ scale: 1.01 }}
+        className="relative isolate overflow-hidden rounded-[1.5rem] border border-orange-200/25 bg-gradient-to-br from-orange-400/35 via-amber-300/20 to-pink-500/25 p-4 shadow-2xl shadow-orange-950/25 backdrop-blur-3xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[2.25rem] md:p-7 md:[clip-path:inset(0_round_2.25rem)]"
+      >
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/18 via-white/6 to-transparent" />
+        <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-orange-300/35 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-yellow-300/20 blur-3xl" />
 
-      <div className="relative z-10 flex items-center gap-4">
-        <Link to="/settings" className="flex-shrink-0">
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="relative">
+        <div className="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center gap-4">
             {avatarUrl ? (
-              <img src={avatarUrl} alt="Avatar" className="h-16 w-16 rounded-2xl object-cover shadow-2xl ring-2 ring-white/60 md:h-20 md:w-20" />
+              <img src={avatarUrl} alt="Avatar" className="h-16 w-16 flex-shrink-0 rounded-[1.35rem] object-cover shadow-2xl ring-2 ring-white/50 md:h-20 md:w-20" />
             ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/25 text-4xl shadow-2xl ring-2 ring-white/40 md:h-20 md:w-20">🐱</div>
+              <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-[1.35rem] bg-white/20 text-4xl shadow-2xl ring-1 ring-white/30 md:h-20 md:w-20">🐱</div>
             )}
-          </motion.div>
-        </Link>
-
-        <div className="min-w-0 flex-1">
-          <div className="mb-1.5 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/15 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
-            <Sparkles className="h-3 w-3 text-yellow-300" /> {greeting}
+            <div className="min-w-0">
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-white">
+                <Sparkles className="h-3.5 w-3.5 text-yellow-200" /> CeriaKid Dashboard
+              </div>
+              <p className="text-xs font-bold text-white/90 md:text-sm">{greeting}</p>
+              <h1 className="truncate text-2xl font-black tracking-tight text-white md:text-4xl">{name}</h1>
+            </div>
           </div>
-          <h1 className="truncate text-xl font-black leading-tight text-white md:text-3xl" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.25)' }}>
-            Hai, {name}! 👋
-          </h1>
-          <p className="mt-0.5 text-xs font-bold text-white/85 md:text-sm">
-            {lang === 'bm' ? 'Jom belajar hari ini!' : "Let's learn today!"}
-          </p>
+
+          <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
+            <ChildSelector />
+            <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-black text-purple-800 shadow-lg">
+              <UserRound className="h-4 w-4" /> Tetapan <ChevronRight className="h-4 w-4" />
+            </div>
+          </div>
         </div>
-
-        <Link to="/settings" className="flex-shrink-0">
-          <motion.div whileTap={{ scale: 0.92 }} className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/20 ring-1 ring-white/30 backdrop-blur-xl transition hover:bg-white/30">
-            <Settings className="h-5 w-5 text-white" />
-          </motion.div>
-        </Link>
-      </div>
-
-      {/* Child Selector bar */}
-      <div className="relative z-10 mt-4 rounded-2xl border border-white/15 bg-white/10 p-2 backdrop-blur-xl">
-        <ChildSelector />
-      </div>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
 }
