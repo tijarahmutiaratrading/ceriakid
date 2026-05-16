@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const categoryConfigs = {
-  bahasa_melayu: { emoji: '🇲🇾', label: 'Bahasa Melayu', color: 'from-amber-300 to-yellow-400', accentBg: 'bg-amber-100/30' },
-  english: { emoji: '🇬🇧', label: 'English', color: 'from-sky-300 to-blue-400', accentBg: 'bg-sky-100/30' },
-  mathematics: { emoji: '🔢', label: 'Matematik', color: 'from-pink-300 to-rose-400', accentBg: 'bg-pink-100/30' },
-  science: { emoji: '🔬', label: 'Sains', color: 'from-emerald-300 to-green-400', accentBg: 'bg-emerald-100/30' },
-  jawi: { emoji: '🕌', label: 'Aksara Jawi', color: 'from-purple-300 to-indigo-400', accentBg: 'bg-purple-100/30' },
-  worksheet: { emoji: '✏️', label: 'Worksheet', color: 'from-orange-300 to-amber-400', accentBg: 'bg-orange-100/30' },
-  bahasa_tamil: { emoji: '🇮🇳', label: 'Bahasa Tamil', color: 'from-orange-300 to-red-400', accentBg: 'bg-orange-100/30' },
-  bahasa_mandarin: { emoji: '🇨🇳', label: 'Bahasa Mandarin', color: 'from-red-300 to-pink-400', accentBg: 'bg-red-100/30' },
+  bahasa_melayu: { image: 'https://images.unsplash.com/photo-1577720643272-265f434e54f1?w=400&h=300&fit=crop', label: 'Bahasa Melayu', color: 'from-amber-300 to-yellow-400', accentBg: 'bg-amber-100/30' },
+  english: { image: 'https://images.unsplash.com/photo-1546410531-bb4caa6b0e71?w=400&h=300&fit=crop', label: 'English', color: 'from-sky-300 to-blue-400', accentBg: 'bg-sky-100/30' },
+  mathematics: { image: 'https://images.unsplash.com/photo-1596533405514-b30251012c96?w=400&h=300&fit=crop', label: 'Matematik', color: 'from-pink-300 to-rose-400', accentBg: 'bg-pink-100/30' },
+  science: { image: 'https://images.unsplash.com/photo-1579154204601-01d966d545d1?w=400&h=300&fit=crop', label: 'Sains', color: 'from-emerald-300 to-green-400', accentBg: 'bg-emerald-100/30' },
+  jawi: { image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&h=300&fit=crop', label: 'Aksara Jawi', color: 'from-purple-300 to-indigo-400', accentBg: 'bg-purple-100/30' },
+  worksheet: { image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop', label: 'Worksheet', color: 'from-orange-300 to-amber-400', accentBg: 'bg-orange-100/30' },
+  bahasa_tamil: { image: 'https://images.unsplash.com/photo-1504995617088-87a37e9d0e15?w=400&h=300&fit=crop', label: 'Bahasa Tamil', color: 'from-orange-300 to-red-400', accentBg: 'bg-orange-100/30' },
+  bahasa_mandarin: { image: 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=400&h=300&fit=crop', label: 'Bahasa Mandarin', color: 'from-red-300 to-pink-400', accentBg: 'bg-red-100/30' },
 };
 
 export default function CategoryCard({ category, gameCount, idx }) {
@@ -32,11 +32,15 @@ export default function CategoryCard({ category, gameCount, idx }) {
 
         
 
-         {/* Content */}
+        {/* Background Image */}
+        <div className="absolute inset-0 overflow-hidden">
+          <img src={config.image} alt={config.label} className="w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-300" />
+        </div>
+
+        {/* Content */}
         <div className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-between">
           <div>
-            <div className="text-5xl sm:text-6xl md:text-7xl mb-3 sm:mb-4 drop-shadow-md">{config.emoji}</div>
-            <h3 className="font-black text-lg sm:text-xl md:text-2xl text-white leading-tight break-words drop-shadow-sm">{config.label}</h3>
+            <h3 className="font-black text-lg sm:text-xl md:text-2xl text-white leading-tight break-words drop-shadow-md">{config.label}</h3>
           </div>
 
           <div className="flex items-end justify-between gap-3">
