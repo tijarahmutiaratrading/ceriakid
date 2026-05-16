@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const categoryConfigs = {
-  bahasa_melayu: { emoji: '🇲🇾', label: 'Bahasa Melayu', color: 'from-amber-400 via-yellow-400 to-orange-400', shadow: 'shadow-amber-400/50' },
-  english: { emoji: '🇬🇧', label: 'English', color: 'from-sky-400 via-blue-400 to-cyan-500', shadow: 'shadow-blue-400/50' },
-  mathematics: { emoji: '🔢', label: 'Matematik', color: 'from-pink-400 via-rose-400 to-red-400', shadow: 'shadow-pink-400/50' },
-  science: { emoji: '🔬', label: 'Sains', color: 'from-emerald-400 via-green-400 to-teal-500', shadow: 'shadow-emerald-400/50' },
-  jawi: { emoji: '🕌', label: 'Aksara Jawi', color: 'from-purple-400 via-indigo-400 to-blue-500', shadow: 'shadow-purple-400/50' },
-  worksheet: { emoji: '✏️', label: 'Worksheet', color: 'from-orange-400 via-amber-400 to-yellow-400', shadow: 'shadow-orange-400/50' },
-  bahasa_tamil: { emoji: '🇮🇳', label: 'Bahasa Tamil', color: 'from-orange-500 via-red-400 to-pink-500', shadow: 'shadow-red-400/50' },
-  bahasa_mandarin: { emoji: '🇨🇳', label: 'Bahasa Mandarin', color: 'from-red-400 via-pink-400 to-rose-400', shadow: 'shadow-red-400/50' },
+  bahasa_melayu: { emoji: '🇲🇾', label: 'Bahasa Melayu', color: 'from-amber-300 to-yellow-400', accentBg: 'bg-amber-100/30' },
+  english: { emoji: '🇬🇧', label: 'English', color: 'from-sky-300 to-blue-400', accentBg: 'bg-sky-100/30' },
+  mathematics: { emoji: '🔢', label: 'Matematik', color: 'from-pink-300 to-rose-400', accentBg: 'bg-pink-100/30' },
+  science: { emoji: '🔬', label: 'Sains', color: 'from-emerald-300 to-green-400', accentBg: 'bg-emerald-100/30' },
+  jawi: { emoji: '🕌', label: 'Aksara Jawi', color: 'from-purple-300 to-indigo-400', accentBg: 'bg-purple-100/30' },
+  worksheet: { emoji: '✏️', label: 'Worksheet', color: 'from-orange-300 to-amber-400', accentBg: 'bg-orange-100/30' },
+  bahasa_tamil: { emoji: '🇮🇳', label: 'Bahasa Tamil', color: 'from-orange-300 to-red-400', accentBg: 'bg-orange-100/30' },
+  bahasa_mandarin: { emoji: '🇨🇳', label: 'Bahasa Mandarin', color: 'from-red-300 to-pink-400', accentBg: 'bg-red-100/30' },
 };
 
 export default function CategoryCard({ category, gameCount, idx }) {
@@ -22,27 +22,31 @@ export default function CategoryCard({ category, gameCount, idx }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: idx * 0.08 }}
-        whileHover={{ scale: 1.05, y: -8 }}
-        whileTap={{ scale: 0.94 }}
-        className={`rounded-3xl overflow-hidden cursor-pointer h-full min-h-[180px] sm:min-h-[220px] group relative shadow-2xl ${config.shadow} hover:shadow-2xl transition-all transform-gpu [clip-path:inset(0_round_3rem)]`}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.96 }}
+        className="rounded-[2rem] overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative border border-white/50 shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 transition-shadow transform-gpu [clip-path:inset(0_round_2rem)]"
         >
-        <div className={`absolute inset-0 bg-gradient-to-br ${config.color}`} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        <div className="absolute -right-20 -top-20 w-56 h-56 bg-white/15 rounded-full blur-3xl group-hover:bg-white/25 transition-all" />
+        <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-85`} />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-white/8 to-transparent backdrop-blur-sm" />
+        <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/30 blur-3xl transition-all group-hover:bg-white/40" />
 
-        {/* Content */}
-        <div className="relative z-10 p-6 sm:p-7 md:p-8 h-full flex flex-col justify-between">
+        
+
+         {/* Content */}
+        <div className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-between">
           <div>
-            <div className="text-7xl sm:text-8xl md:text-9xl mb-4 drop-shadow-lg select-none">{config.emoji}</div>
-            <h3 className="font-black text-2xl sm:text-3xl md:text-4xl text-white leading-tight drop-shadow-md">{config.label}</h3>
+            <div className="text-5xl sm:text-6xl md:text-7xl mb-3 sm:mb-4 drop-shadow-md">{config.emoji}</div>
+            <h3 className="font-black text-lg sm:text-xl md:text-2xl text-white leading-tight break-words drop-shadow-sm">{config.label}</h3>
           </div>
 
-          <div className="flex items-center justify-between gap-4">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full font-black shadow-xl bg-white text-gray-900 hover:bg-gray-50 transition-colors">
-              <span className="text-lg">🎮</span>
-              <p className="text-sm font-black">{gameCount} Games</p>
+          <div className="flex items-end justify-between gap-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full font-black shadow-lg shadow-black/15 ring-1.5 ring-white/70 bg-white/95 backdrop-blur-sm hover:bg-white transition-colors">
+              <span className="text-base">🎮</span>
+              <p className="text-xs text-purple-700 whitespace-nowrap leading-none font-bold">
+                {gameCount} <span className="text-purple-600">Game</span>
+              </p>
             </div>
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-gray-900 shadow-xl transition-all group-hover:translate-x-2 group-hover:scale-125 font-black text-2xl">→</div>
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-purple-700 shadow-lg hover:shadow-xl ring-1 ring-white/70 transition-all group-hover:translate-x-1.5 group-hover:scale-110 font-black text-lg">→</div>
           </div>
         </div>
       </motion.div>
