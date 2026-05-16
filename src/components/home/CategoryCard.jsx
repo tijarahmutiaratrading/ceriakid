@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const categoryConfigs = {
-  bahasa_melayu: { image: 'https://images.unsplash.com/photo-1577720643272-265f434e54f1?w=400&h=300&fit=crop', label: 'Bahasa Melayu', color: 'from-amber-300 to-yellow-400', accentBg: 'bg-amber-100/30' },
+  bahasa_melayu: { image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&h=300&fit=crop', label: 'Bahasa Melayu', color: 'from-amber-300 to-yellow-400', accentBg: 'bg-amber-100/30' },
   english: { image: 'https://images.unsplash.com/photo-1546410531-bb4caa6b0e71?w=400&h=300&fit=crop', label: 'English', color: 'from-sky-300 to-blue-400', accentBg: 'bg-sky-100/30' },
   mathematics: { image: 'https://images.unsplash.com/photo-1596533405514-b30251012c96?w=400&h=300&fit=crop', label: 'Matematik', color: 'from-pink-300 to-rose-400', accentBg: 'bg-pink-100/30' },
-  science: { image: 'https://images.unsplash.com/photo-1579154204601-01d966d545d1?w=400&h=300&fit=crop', label: 'Sains', color: 'from-emerald-300 to-green-400', accentBg: 'bg-emerald-100/30' },
-  jawi: { image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&h=300&fit=crop', label: 'Aksara Jawi', color: 'from-purple-300 to-indigo-400', accentBg: 'bg-purple-100/30' },
+  science: { image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=300&fit=crop', label: 'Sains', color: 'from-emerald-300 to-green-400', accentBg: 'bg-emerald-100/30' },
+  jawi: { image: 'https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?w=400&h=300&fit=crop', label: 'Aksara Jawi', color: 'from-purple-300 to-indigo-400', accentBg: 'bg-purple-100/30' },
   worksheet: { image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop', label: 'Worksheet', color: 'from-orange-300 to-amber-400', accentBg: 'bg-orange-100/30' },
-  bahasa_tamil: { image: 'https://images.unsplash.com/photo-1504995617088-87a37e9d0e15?w=400&h=300&fit=crop', label: 'Bahasa Tamil', color: 'from-orange-300 to-red-400', accentBg: 'bg-orange-100/30' },
-  bahasa_mandarin: { image: 'https://images.unsplash.com/photo-1536882240095-0379873feb4e?w=400&h=300&fit=crop', label: 'Bahasa Mandarin', color: 'from-red-300 to-pink-400', accentBg: 'bg-red-100/30' },
+  bahasa_tamil: { image: 'https://images.unsplash.com/photo-1523050854058-7df90110b8f3?w=400&h=300&fit=crop', label: 'Bahasa Tamil', color: 'from-orange-300 to-red-400', accentBg: 'bg-orange-100/30' },
+  bahasa_mandarin: { image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop', label: 'Bahasa Mandarin', color: 'from-red-300 to-pink-400', accentBg: 'bg-red-100/30' },
 };
 
 export default function CategoryCard({ category, gameCount, idx }) {
