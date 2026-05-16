@@ -10,28 +10,11 @@ import PricingCheckout from '@/components/PricingCheckout';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import FloatingWhatsApp from '@/components/landing/FloatingWhatsApp';
 
-// Countdown Timer Hook
-function useCountdown(minutes = 15) {
-  const [time, setTime] = useState({ m: minutes, s: 0 });
-  useEffect(() => {
-    const end = Date.now() + minutes * 60 * 1000;
-    const interval = setInterval(() => {
-      const diff = end - Date.now();
-      if (diff <= 0) {setTime({ m: 0, s: 0 });clearInterval(interval);return;}
-      setTime({ m: Math.floor(diff / 60000), s: Math.floor(diff % 60000 / 1000) });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-  return time;
-}
-
+// Beta tester highlights — placeholder sehingga testimoni sebenar dikumpul
 const testimonials = [
-{ name: 'Nurul Ain', location: 'Shah Alam, Selangor', quote: 'Anak saya lebih mudah duduk buat latihan bila bentuknya macam game. Saya suka sebab topik dia tersusun dan tak terlalu berat.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/512f26c46_generated_image.png', highlight: 'anak lebih konsisten' },
-{ name: 'Ismail Hashim', location: 'Johor Bahru, Johor', quote: 'Dashboard ibu bapa sangat membantu. Saya boleh nampak subjek mana anak selalu cuba dan mana yang perlu ulang semula.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e997c6e39_generated_image.png', highlight: 'mudah pantau progress' },
-{ name: 'Rohani Bakar', location: 'Kota Bharu, Kelantan', quote: 'Pelan keluarga memang praktikal untuk rumah kami. Anak-anak boleh guna ikut peringkat masing-masing tanpa perlu banyak app berbeza.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png', highlight: 'sesuai untuk keluarga' },
-{ name: 'Faridah Mohamad', location: 'Penang', quote: 'Saya kerja shift, jadi latihan pendek macam ni memudahkan anak belajar sendiri sekejap setiap hari.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e1156a4f3_generated_image.png', highlight: 'latihan harian lebih mudah' },
-{ name: 'Ahmad Zulkifli', location: 'Kuching, Sarawak', quote: 'Saya suka interface dia ceria, mudah faham dan tidak terlalu serabut. Anak lebih selesa cuba soalan satu demi satu.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fa45e0b6a_generated_image.png', highlight: 'interface mesra anak' },
-{ name: 'Siti Hajar', location: 'Ipoh, Perak', quote: 'Cuba versi percuma dulu, kemudian upgrade sebab kandungan dan susunan subjeknya sesuai untuk latihan di rumah.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/845d3a3d9_generated_image.png', highlight: 'boleh cuba dahulu' }];
+{ name: 'Beta Tester', location: 'Selangor', quote: 'Saya suka susunan subjek ikut KSPK/KSSR. Anak boleh main latihan pendek tanpa rasa terbeban.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/512f26c46_generated_image.png', highlight: 'susunan jelas' },
+{ name: 'Beta Tester', location: 'Johor', quote: 'Dashboard ibu bapa sangat membantu untuk lihat subjek mana yang anak perlu lebih latihan.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e997c6e39_generated_image.png', highlight: 'pantau progress' },
+{ name: 'Beta Tester', location: 'Kuala Lumpur', quote: 'Interface ceria dan mesra kanak-kanak. Setup pun cepat — boleh terus mula belajar.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png', highlight: 'mesra anak' }];
 
 
 const tiers = [
@@ -80,7 +63,6 @@ const avatars = [
 export default function Landing() {
   const { isAuthenticated, refreshAuth } = useAuth();
   const navigate = useNavigate();
-  const countdown = useCountdown(15);
   const [selectedTierForCheckout, setSelectedTierForCheckout] = useState('keluarga');
   const [navVisible, setNavVisible] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState(null); // 'success' | 'failed' | null
@@ -217,7 +199,7 @@ export default function Landing() {
                 )}
               </div>
               <div className="flex gap-0.5 flex-shrink-0">{[...Array(5)].map((_, i) => <span key={i} className="text-orange-400 text-xs">★</span>)}</div>
-              <span className="text-[11px] sm:text-xs font-black text-white/85 leading-snug min-w-0 flex-1 sm:flex-none">Dipercayai <span className="text-yellow-300">5,000+ keluarga</span> Malaysia • Dibina khas untuk <span className="text-yellow-300">anak Malaysia</span> 🇲🇾</span>
+              <span className="text-[11px] sm:text-xs font-black text-white/85 leading-snug min-w-0 flex-1 sm:flex-none">Sedang dalam ujian beta dengan <span className="text-yellow-300">keluarga pilihan</span> • Dibina khas untuk <span className="text-yellow-300">anak Malaysia</span> 🇲🇾</span>
             </motion.div>
 
             {/* Headline */}
@@ -479,8 +461,8 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
             <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_, i) => <span key={i} className="text-2xl text-orange-400">★</span>)}</div>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">Ini Kata Ibu Bapa<br />Yang Dah Cuba Sendiri</h2>
-            <p className="text-slate-600">Bukan kami cakap — mereka yang cerita sendiri 👇</p>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">Maklum Balas Daripada<br />Ujian Beta</h2>
+            <p className="text-slate-600">Komen ringkas daripada ibu bapa yang menyertai fasa ujian beta CeriaKid 👇</p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {testimonials.map((t, i) =>
