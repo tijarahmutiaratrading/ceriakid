@@ -208,7 +208,10 @@ export default function DrawingStudio() {
     const dpr = Math.min(window.devicePixelRatio || 1, 3); // cap at 3 for perf
     canvas.width = Math.round(cssW * dpr);
     canvas.height = Math.round(cssH * dpr);
-    canvas.style.width = cssW + 'px';
+    // Use 100% width + fixed height so the canvas never overflows its container.
+    // Some browsers ignore inline width:Xpx when parent flex/grid shrinks — using
+    // 100% guarantees the canvas tracks the actual container width.
+    canvas.style.width = '100%';
     canvas.style.height = cssH + 'px';
     const ctx = canvas.getContext('2d');
     // reset & scale so all coordinates are in CSS pixels
