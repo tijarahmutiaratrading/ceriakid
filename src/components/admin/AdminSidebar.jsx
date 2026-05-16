@@ -14,7 +14,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, user }) {
     <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 bg-white border border-slate-200 rounded-3xl shadow-sm p-4 sticky top-28 h-fit">
       {/* Brand */}
       <div className="flex items-center gap-3 px-2 py-3 mb-2">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-xl shadow-md">🛡️</div>
+        <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="w-10 h-10 rounded-2xl object-cover shadow-md" />
         <div>
           <p className="font-black text-slate-900 text-sm leading-tight">Admin Panel</p>
           <p className="text-[10px] text-slate-500 font-semibold">CeriaKid Control</p>
