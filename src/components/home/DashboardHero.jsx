@@ -30,7 +30,6 @@ export default function DashboardHero({ user, avatarUrl, lang }) {
             ) : (
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/25 text-4xl shadow-2xl ring-2 ring-white/40 md:h-20 md:w-20">🐱</div>
             )}
-            <div className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-green-400 ring-2 ring-purple-900 text-[10px]">✨</div>
           </motion.div>
         </Link>
 
