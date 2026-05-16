@@ -187,7 +187,7 @@ export default function AdminDashboard() {
         {/* Page header */}
         <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 rounded-3xl p-5 md:p-6 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-3xl shadow-lg flex-shrink-0">📊</div>
+            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="w-14 h-14 rounded-2xl object-cover shadow-lg flex-shrink-0" />
             <div>
               <p className="text-violet-600 text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> CeriaKid Analytics</p>
               <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">Dashboard</h1>
