@@ -176,11 +176,11 @@ export default function AdminDashboard() {
   const activeCount = subscriptions.filter(s => s.status === 'active').length;
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-background text-foreground">
+    <div className="min-h-screen relative overflow-hidden text-foreground" style={{ background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 35%, #4a1d6e 70%, #6b1d52 100%)' }}>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] bg-game-purple/25 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-game-pink/25 rounded-full blur-3xl" />
-        <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] bg-game-blue/20 rounded-full blur-3xl" />
+        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] bg-game-purple/40 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-game-pink/35 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] bg-game-blue/30 rounded-full blur-3xl" />
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
@@ -196,9 +196,9 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-4">
             <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="w-14 h-14 rounded-2xl object-cover shadow-lg ring-2 ring-white/40 flex-shrink-0" />
             <div>
-              <p className="text-white/70 text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> CeriaKid Analytics</p>
-              <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight leading-tight drop-shadow">Dashboard</h1>
-              <p className="text-white/85 text-xs md:text-sm font-semibold">Pantau prestasi jualan kau secara realtime</p>
+              <p className="text-amber-300 text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> CeriaKid Analytics</p>
+              <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight leading-tight">Dashboard</h1>
+              <p className="text-white/90 text-xs md:text-sm font-semibold">Pantau prestasi jualan kau secara realtime</p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -253,8 +253,8 @@ export default function AdminDashboard() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="pro-glass rounded-3xl p-5">
               <div className="flex items-end justify-between mb-4">
                 <div>
-                  <h2 className="text-lg md:text-xl font-black text-white drop-shadow">💳 Jualan Mengikut Pelan</h2>
-                  <p className="text-white/75 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
+                  <h2 className="text-lg md:text-xl font-black text-white">💳 Jualan Mengikut Pelan</h2>
+                  <p className="text-white/85 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
@@ -291,10 +291,10 @@ export default function AdminDashboard() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5">
             <div className="flex items-end justify-between mb-4 flex-wrap gap-3">
               <div>
-                <h2 className="text-lg md:text-xl font-black text-white drop-shadow">📋 Database Pelanggan</h2>
-                <p className="text-white/75 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
+                <h2 className="text-lg md:text-xl font-black text-white">📋 Database Pelanggan</h2>
+                <p className="text-white/85 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
               </div>
-              <span className="text-xs font-black text-white bg-white/20 px-3 py-1.5 rounded-full ring-1 ring-white/25">{subscriptions.length} pelanggan</span>
+              <span className="text-xs font-black text-purple-900 bg-amber-300 px-3 py-1.5 rounded-full ring-1 ring-amber-200">{subscriptions.length} pelanggan</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[720px] text-sm">
@@ -309,25 +309,25 @@ export default function AdminDashboard() {
                 <tbody>
                   {subscriptions.map((sub) => (
                     <tr key={sub.id} className="border-b border-white/10 hover:bg-white/10 transition-colors">
-                      <td className="py-3 px-4 text-xs text-white/90 font-semibold">{sub.email}</td>
+                      <td className="py-3 px-4 text-xs text-white font-semibold">{sub.email}</td>
                       <td className="py-3 px-4 whitespace-nowrap">
                         <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
-                          sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
-                          sub.tier === 'asas' ? 'bg-green-200 text-green-700' :
-                          sub.tier === 'standard' ? 'bg-blue-200 text-blue-700' :
-                          sub.tier === 'pro' ? 'bg-red-200 text-red-700' :
-                          'bg-purple-200 text-purple-700'
+                          sub.tier === 'free' ? 'bg-gray-300 text-gray-900' :
+                          sub.tier === 'asas' ? 'bg-emerald-300 text-emerald-950' :
+                          sub.tier === 'standard' ? 'bg-sky-300 text-sky-950' :
+                          sub.tier === 'pro' ? 'bg-rose-300 text-rose-950' :
+                          'bg-violet-300 text-violet-950'
                         }`}>
                           {sub.tier === 'free' ? 'Percuma' : sub.tier === 'asas' ? 'Asas' : sub.tier === 'standard' ? 'Standard' : sub.tier === 'pro' ? 'Pro' : 'Keluarga'}
                         </span>
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
                         <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
-                          sub.status === 'active' ? 'bg-green-200 text-green-700' :
-                          sub.status === 'trial' ? 'bg-blue-200 text-blue-700' :
-                          sub.status === 'incomplete' ? 'bg-yellow-200 text-yellow-700' :
-                          sub.status === 'past_due' ? 'bg-orange-200 text-orange-700' :
-                          'bg-red-200 text-red-700'
+                          sub.status === 'active' ? 'bg-emerald-300 text-emerald-950' :
+                          sub.status === 'trial' ? 'bg-sky-300 text-sky-950' :
+                          sub.status === 'incomplete' ? 'bg-amber-300 text-amber-950' :
+                          sub.status === 'past_due' ? 'bg-orange-300 text-orange-950' :
+                          'bg-rose-300 text-rose-950'
                         }`}>
                           {sub.status === 'active' ? '✓ Aktif' :
                            sub.status === 'trial' ? '⏳ Trial' :
@@ -336,12 +336,12 @@ export default function AdminDashboard() {
                            '✕ Batal'}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-xs text-white/70 font-semibold whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
+                      <td className="py-3 px-4 text-xs text-white/80 font-semibold whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
                     </tr>
                   ))}
                   {subscriptions.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="py-12 text-center text-white/60 font-semibold">Tiada pelanggan lagi.</td>
+                      <td colSpan={4} className="py-12 text-center text-white/70 font-semibold">Tiada pelanggan lagi.</td>
                     </tr>
                   )}
                 </tbody>
@@ -374,8 +374,8 @@ export default function AdminDashboard() {
                     <Facebook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg drop-shadow">Meta / Facebook Pixel</h2>
-                    <p className="text-xs text-white/75 font-semibold">Untuk tracking FB Ads & conversion events</p>
+                    <h2 className="font-black text-white text-lg">Meta / Facebook Pixel</h2>
+                    <p className="text-xs text-white/85 font-semibold">Untuk tracking FB Ads & conversion events</p>
                   </div>
                 </div>
 
@@ -407,8 +407,8 @@ export default function AdminDashboard() {
                     <CreditCard className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg drop-shadow">Chip Payment Gateway</h2>
-                    <p className="text-xs text-white/75 font-semibold">FPX, kad kredit & e-wallet Malaysia</p>
+                    <h2 className="font-black text-white text-lg">Chip Payment Gateway</h2>
+                    <p className="text-xs text-white/85 font-semibold">FPX, kad kredit & e-wallet Malaysia</p>
                   </div>
                 </div>
 
@@ -460,8 +460,8 @@ export default function AdminDashboard() {
                     <Webhook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg drop-shadow">Webhook Settings</h2>
-                    <p className="text-xs text-slate-500 font-semibold">Untuk receive payment callbacks dari Chip</p>
+                    <h2 className="font-black text-white text-lg">Webhook Settings</h2>
+                    <p className="text-xs text-white/85 font-semibold">Untuk receive payment callbacks dari Chip</p>
                   </div>
                 </div>
 
@@ -523,7 +523,7 @@ export default function AdminDashboard() {
                   <><Save className="w-5 h-5" /> Simpan Tetapan</>
                 )}
               </motion.button>
-              <p className="text-center text-xs text-white/70 mt-4 font-semibold">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
+              <p className="text-center text-xs text-white/85 mt-4 font-semibold">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
             </motion.div>
           </>
         )}
