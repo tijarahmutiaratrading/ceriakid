@@ -26,16 +26,15 @@ export default function CategoryCard({ category, gameCount, idx }) {
         whileTap={{ scale: 0.96 }}
         className="rounded-[2rem] overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative border border-white/50 shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 transition-shadow transform-gpu [clip-path:inset(0_round_2rem)]"
         >
-        <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-85`} />
-        <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-white/8 to-transparent backdrop-blur-sm" />
-        <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/30 blur-3xl transition-all group-hover:bg-white/40" />
-
-        
-
         {/* Background Image */}
-        <div className="absolute inset-0 overflow-hidden">
-          <img src={config.image} alt={config.label} className="w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-300" />
+        <div className="absolute inset-0 overflow-hidden z-0">
+          <img src={config.image} alt={config.label} className="w-full h-full object-cover opacity-50 group-hover:opacity-65 transition-opacity duration-300" onError={(e) => e.target.style.display = 'none'} />
         </div>
+
+        {/* Overlays */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-70 z-[1]`} />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent backdrop-blur-sm z-[2]" />
+        <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/30 blur-3xl transition-all group-hover:bg-white/40 z-[2]" />
 
         {/* Content */}
         <div className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-between">
