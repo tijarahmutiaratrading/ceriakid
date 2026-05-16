@@ -320,26 +320,76 @@ export default function DrawingStudio() {
 
   const drawTracingGuide = (ctx, w, h, shape) => {
     ctx.save();
-    ctx.strokeStyle = 'rgba(180,180,220,0.55)';
-    ctx.lineWidth = 18;
+
+    // 1) Soft background hint — large faded letter/shape behind everything
+    ctx.fillStyle = 'rgba(139,92,246,0.10)';
+    ctx.font = `900 ${Math.min(w, h) * 0.62}px "Nunito", system-ui, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(shape.letter, w / 2, h / 2);
+
+    // 2) Outlined letter stroke (subtle) for extra guidance
+    ctx.strokeStyle = 'rgba(139,92,246,0.22)';
+    ctx.lineWidth = 3;
+    ctx.strokeText(shape.letter, w / 2, h / 2);
+
+    // 3) Chunky dashed path strokes — clear, kid-friendly
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.setLineDash([12, 8]);
-    shape.strokes.forEach(stroke => {
+
+    shape.strokes.forEach((stroke, strokeIdx) => {
+      // Outer halo for visibility
+      ctx.strokeStyle = 'rgba(196,181,253,0.45)';
+      ctx.lineWidth = 24;
+      ctx.setLineDash([]);
       ctx.beginPath();
       ctx.moveTo(stroke[0][0] * w, stroke[0][1] * h);
       for (let i = 1; i < stroke.length; i++) {
         ctx.lineTo(stroke[i][0] * w, stroke[i][1] * h);
       }
       ctx.stroke();
+
+      // Dashed inner guide
+      ctx.strokeStyle = 'rgba(124,58,237,0.75)';
+      ctx.lineWidth = 4;
+      ctx.setLineDash([14, 10]);
+      ctx.beginPath();
+      ctx.moveTo(stroke[0][0] * w, stroke[0][1] * h);
+      for (let i = 1; i < stroke.length; i++) {
+        ctx.lineTo(stroke[i][0] * w, stroke[i][1] * h);
+      }
+      ctx.stroke();
+
+      // Start point — green circle with number
+      ctx.setLineDash([]);
+      const sx = stroke[0][0] * w;
+      const sy = stroke[0][1] * h;
+      ctx.fillStyle = '#22c55e';
+      ctx.beginPath();
+      ctx.arc(sx, sy, 16, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `900 18px "Nunito", system-ui, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(strokeIdx + 1), sx, sy);
+
+      // End point — red dot
+      const last = stroke[stroke.length - 1];
+      const ex = last[0] * w;
+      const ey = last[1] * h;
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(ex, ey, 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
     });
-    // draw letter hint
-    ctx.setLineDash([]);
-    ctx.fillStyle = 'rgba(160,160,200,0.18)';
-    ctx.font = `bold ${Math.min(w, h) * 0.55}px sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(shape.letter, w / 2, h / 2);
+
     ctx.restore();
   };
 
@@ -870,7 +920,13 @@ export default function DrawingStudio() {
                     )}
                   </div>
                   {mode === 'trace' && (
-                    <div className="px-3 py-1.5 rounded-full bg-purple-600 text-white text-xs font-black shadow-lg">{userStrokes.length}/{selectedShape.strokes.length} strok</div>
+                    <>
+                      <div className="px-3 py-1.5 rounded-full bg-purple-600 text-white text-xs font-black shadow-lg">{userStrokes.length}/{selectedShape.strokes.length} strok</div>
+                      <div className="px-3 py-1.5 rounded-full bg-white text-slate-700 text-xs font-black shadow-lg flex items-center gap-1.5">
+                        <span className="inline-block w-3 h-3 rounded-full bg-green-500 ring-2 ring-white" /> Mula
+                        <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white ml-1" /> Akhir
+                      </div>
+                    </>
                   )}
                 </div>
                 <canvas
