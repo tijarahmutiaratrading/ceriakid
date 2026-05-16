@@ -40,13 +40,13 @@ export default function CategoryCard({ category, gameCount, idx }) {
           </div>
 
           <div className="flex items-end justify-between gap-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full font-black shadow-lg shadow-black/15 ring-1.5 ring-white/70 bg-white/95 backdrop-blur-sm hover:bg-white transition-colors">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-black shadow-xl shadow-black/20 ring-1 ring-white/40 bg-gradient-to-br from-white/35 to-white/15 backdrop-blur-lg hover:from-white/45 hover:to-white/25 transition-all">
               <span className="text-base">🎮</span>
-              <p className="text-xs text-purple-700 whitespace-nowrap leading-none font-bold">
-                {gameCount} <span className="text-purple-600">Game</span>
+              <p className="text-xs text-white whitespace-nowrap leading-none font-bold">
+                {gameCount} <span className="text-white/90">Game</span>
               </p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-purple-700 shadow-lg hover:shadow-xl ring-1 ring-white/70 transition-all group-hover:translate-x-1.5 group-hover:scale-110 font-black text-lg">→</div>
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-white/40 to-white/20 text-white shadow-lg hover:shadow-xl ring-1 ring-white/40 backdrop-blur-lg transition-all group-hover:translate-x-1.5 group-hover:scale-110 font-black text-lg">→</div>
           </div>
         </div>
       </motion.div>
