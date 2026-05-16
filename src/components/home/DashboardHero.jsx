@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import ChildSelector from '@/components/ChildSelector';
 
-const SUNSET_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/dae5af1e6_generated_image.png';
+const SUNSET_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3e9c6f5a4_generated_image.png';
 
 export default function DashboardHero({ user, avatarUrl, lang }) {
   const greeting = lang === 'bm' ? 'Selamat datang kembali!' : 'Welcome back!';
