@@ -121,7 +121,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 p-6 md:p-8 shadow-2xl"
+          className="rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 p-6 md:p-8 shadow-lg"
         >
           <div className="flex items-center gap-2 mb-6">
             <div className="h-1 w-10 bg-gradient-to-r from-yellow-300 to-pink-300 rounded-full" />
@@ -139,7 +139,7 @@ export default function Home() {
                 whileHover={{ y: -4 }}
                 className={`py-3 sm:py-4 md:py-5 px-4 sm:px-5 md:px-6 rounded-2xl font-black text-xs sm:text-sm md:text-base transition-all flex items-center gap-2 sm:gap-3 ${
                   safeAgeGroup === age.key
-                    ? 'bg-gradient-to-br from-yellow-400 via-orange-400 to-pink-500 text-white shadow-2xl shadow-orange-400/50 scale-105'
+                    ? 'bg-gradient-to-br from-yellow-400 via-orange-400 to-pink-500 text-white shadow-lg scale-105'
                     : 'bg-white/20 text-white border border-white/30 hover:bg-white/30'
                 }`}
               >
@@ -169,7 +169,7 @@ export default function Home() {
               >
               <motion.div
                 whileHover={{ scale: 1.02, y: -3 }}
-                className="p-4 sm:p-6 rounded-3xl flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 relative overflow-hidden bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400 shadow-2xl shadow-yellow-400/50"
+                className="p-4 sm:p-6 rounded-3xl flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 relative overflow-hidden bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400 shadow-lg"
               >
                 <div className="absolute top-2 right-2 sm:top-3 sm:right-4 text-lg sm:text-2xl animate-bounce">✨</div>
                 <div className="text-4xl sm:text-5xl flex-shrink-0">🎉</div>
