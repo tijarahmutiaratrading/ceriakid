@@ -40,7 +40,7 @@ export default function CategoryCard({ category, gameCount, idx }) {
           </div>
 
           <div className="flex items-end justify-between gap-2">
-            <div className="bg-slate-950/70 backdrop-blur-xl rounded-full px-3 py-1.5 ring-1 ring-white/40 shadow-md">
+            <div className="bg-white/20 backdrop-blur-xl rounded-full px-3 py-1.5 ring-1 ring-white/50 shadow-md">
               <p className="text-xs sm:text-sm font-black text-white whitespace-nowrap">{gameCount} Permainan</p>
             </div>
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-purple-700 shadow-lg ring-1 ring-white/40 transition-transform group-hover:translate-x-1 font-black">→</div>
