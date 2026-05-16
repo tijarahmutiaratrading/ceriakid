@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AlertTriangle, CheckCircle2, History, Loader2, RefreshCw, ShieldCheck, Wrench } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import QcOverviewReport from '@/components/admin/QcOverviewReport';
 
 export default function QualityControlPanel({ onToast }) {
   const [qc, setQc] = useState(null);
@@ -59,6 +60,8 @@ export default function QualityControlPanel({ onToast }) {
   const isWaiting = qc?.status === 'waiting_for_generation';
 
   return (
+    <>
+    <QcOverviewReport onToast={onToast} />
     <div className="w-full min-w-0 max-w-full overflow-hidden p-3 md:p-7 rounded-[1.5rem] md:rounded-[2rem] mb-5 md:mb-6 shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.20), rgba(59,130,246,0.12))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
       <div className="flex min-w-0 flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 mb-4 md:mb-5">
         <div className="flex items-center gap-3">
@@ -154,5 +157,6 @@ export default function QualityControlPanel({ onToast }) {
         )}
       </div>
     </div>
+    </>
   );
 }
