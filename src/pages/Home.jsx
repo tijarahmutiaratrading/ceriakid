@@ -117,37 +117,52 @@ export default function Home() {
           </motion.div>
         )}
 
-        {/* Age Group Toggle */}
+        {/* Age Group Toggle - Segmented Pill Style */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-[1.5rem] border border-white/15 bg-white/[0.08] p-3 shadow-2xl shadow-black/15 backdrop-blur-2xl transform-gpu [clip-path:inset(0_round_1.5rem)] md:rounded-[2rem] md:p-5 md:[clip-path:inset(0_round_2rem)]"
         >
-          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎯 {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}</p>
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
-            {[
-              { key: 'prasekolah', label: `${t('prasekolah', lang)} · KSPK`, emoji: '🎨', sub: '4–6 tahun' },
-              { key: 'sekolah_rendah', label: `${t('sekolahRendah', lang)} · KSSR`, emoji: '📚', sub: '7–12 tahun' }
-            ].map((age) => (
-              <motion.button
-                key={age.key}
-                onClick={() => safeToggle(age.key)}
-                whileTap={{ scale: 0.95 }}
-                whileHover={{ scale: 1.02 }}
-                className={`py-2 md:py-3 px-3 md:px-4 rounded-2xl font-black text-xs md:text-sm transition-all flex items-center gap-2 md:gap-3 ${
-                  safeAgeGroup === age.key
-                    ? 'bg-white text-purple-700 shadow-xl shadow-purple-950/20'
-                    : 'bg-white/10 text-white border border-white/15 hover:bg-white/15'
-                }`}
-              >
-                <span className="text-2xl">{age.emoji}</span>
-                <div className="text-left">
-                  <div className="font-black text-sm leading-tight">{age.label}</div>
-                  <div className={`text-xs font-bold ${safeAgeGroup === age.key ? 'text-purple-700' : 'text-white/80'}`}>{age.sub}</div>
-                </div>
-              </motion.button>
-            ))}
+          <div className="mb-2.5 flex items-center gap-2 px-1">
+            <span className="text-base">🎯</span>
+            <p className="text-white/85 text-xs font-black uppercase tracking-wider">
+              {lang === 'bm' ? 'Pilih Umur Anak' : "Child's Age"}
+            </p>
+          </div>
+          <div className="relative rounded-2xl border border-white/15 bg-white/[0.08] p-1.5 backdrop-blur-2xl shadow-xl shadow-black/15">
+            <div className="grid grid-cols-2 gap-1.5 relative">
+              {[
+                { key: 'prasekolah', label: t('prasekolah', lang), tag: 'KSPK', emoji: '🎨', sub: '4–6 tahun' },
+                { key: 'sekolah_rendah', label: t('sekolahRendah', lang), tag: 'KSSR', emoji: '📚', sub: '7–12 tahun' }
+              ].map((age) => {
+                const active = safeAgeGroup === age.key;
+                return (
+                  <motion.button
+                    key={age.key}
+                    onClick={() => safeToggle(age.key)}
+                    whileTap={{ scale: 0.97 }}
+                    className={`relative py-2.5 px-3 rounded-xl font-black text-xs md:text-sm transition-all flex items-center gap-2.5 overflow-hidden ${
+                      active
+                        ? 'bg-white text-purple-700 shadow-lg'
+                        : 'text-white/90 hover:bg-white/10'
+                    }`}
+                  >
+                    <span className="text-2xl flex-shrink-0">{age.emoji}</span>
+                    <div className="text-left min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-black text-sm leading-tight truncate">{age.label}</span>
+                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full flex-shrink-0 ${active ? 'bg-purple-100 text-purple-700' : 'bg-white/15 text-white/80'}`}>
+                          {age.tag}
+                        </span>
+                      </div>
+                      <div className={`text-[10px] font-bold mt-0.5 ${active ? 'text-purple-600' : 'text-white/70'}`}>
+                        {age.sub}
+                      </div>
+                    </div>
+                  </motion.button>
+                );
+              })}
+            </div>
           </div>
         </motion.div>
 
@@ -204,12 +219,22 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <div className="mb-4 flex items-center gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.5rem)]">
-            <div className="h-2 w-2 rounded-full bg-yellow-300 shadow-lg shadow-yellow-300/40" />
-            <p className="text-white font-black text-base uppercase tracking-wider">
-              {lang === 'bm' ? 'Pilih Subjek' : 'Choose Subject'}
-            </p>
-            <div className="h-px flex-1 bg-white/15" />
+          <div className="mb-4 flex items-center justify-between px-1">
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl">📚</span>
+              <div>
+                <p className="text-white font-black text-base leading-tight">
+                  {lang === 'bm' ? 'Pilih Subjek' : 'Choose Subject'}
+                </p>
+                <p className="text-white/60 text-xs font-bold">
+                  {lang === 'bm' ? 'Tap untuk mula belajar' : 'Tap to start learning'}
+                </p>
+              </div>
+            </div>
+            <div className="hidden sm:flex items-center gap-1.5 rounded-full bg-white/10 border border-white/20 px-3 py-1.5 backdrop-blur-xl">
+              <div className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-white/80 text-[10px] font-black uppercase tracking-wider">Live</span>
+            </div>
           </div>
           <CategoryGrid />
         </motion.div>
