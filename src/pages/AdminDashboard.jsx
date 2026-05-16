@@ -6,7 +6,10 @@ import { Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook
 import { Link } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import AppHeader from '@/components/AppHeader';
-import AdminHeroCard from '@/components/admin/AdminHeroCard';
+import AdminSidebar from '@/components/admin/AdminSidebar';
+import AdminQuickStats from '@/components/admin/AdminQuickStats';
+import AdminStatCard from '@/components/admin/AdminStatCard';
+import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles } from 'lucide-react';
 
 const SETTINGS_KEY = 'admin_app_settings';
 
@@ -21,9 +24,9 @@ const defaultSettings = {
 
 function FieldGroup({ label, hint, children }) {
   return (
-    <div className="mb-6">
-      <label className="block text-sm font-black text-white mb-2">{label}</label>
-      {hint && <p className="text-xs text-white/60 mb-3">{hint}</p>}
+    <div className="mb-5">
+      <label className="block text-sm font-black text-slate-800 mb-1.5">{label}</label>
+      {hint && <p className="text-xs text-slate-500 mb-2.5">{hint}</p>}
       {children}
     </div>
   );
@@ -38,9 +41,9 @@ function SecretInput({ value, onChange, placeholder }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full border border-white/20 rounded-2xl px-4 py-3.5 pr-12 text-sm font-mono bg-white/10 text-white placeholder-white/40 shadow-inner shadow-black/10 focus:outline-none focus:border-white/50 focus:bg-white/15 transition-all"
+        className="w-full border border-slate-200 rounded-xl px-4 py-3 pr-12 text-sm font-mono bg-slate-50 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-violet-400 focus:bg-white transition-all"
       />
-      <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70">
+      <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
         {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
       </button>
     </div>
@@ -54,7 +57,7 @@ function TextInput({ value, onChange, placeholder }) {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full border border-white/20 rounded-2xl px-4 py-3.5 text-sm font-mono bg-white/10 text-white placeholder-white/40 shadow-inner shadow-black/10 focus:outline-none focus:border-white/50 focus:bg-white/15 transition-all"
+      className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm font-mono bg-slate-50 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-violet-400 focus:bg-white transition-all"
     />
   );
 }
@@ -97,10 +100,10 @@ export default function AdminDashboard() {
 
   if (user?.role !== 'admin') {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
-          <p className="text-2xl font-black mb-4">🔒</p>
-          <p className="font-bold text-white">Akses Ditolak</p>
+          <p className="text-4xl mb-3">🔒</p>
+          <p className="font-black text-slate-700">Akses Ditolak</p>
         </div>
       </div>
     );
@@ -108,10 +111,8 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}>
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -168,80 +169,85 @@ export default function AdminDashboard() {
     { key: 'webhook', label: 'Webhook', icon: <Webhook className="w-4 h-4" /> },
   ];
 
-  return (
-    <div className="min-h-screen relative overflow-hidden bg-slate-900 text-white">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800" />
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(148,163,184,0.12) 1px, transparent 0)', backgroundSize: '28px 28px' }} />
-        <div className="absolute -top-40 right-1/4 w-[32rem] h-[32rem] bg-emerald-500/10 rounded-full blur-3xl" />
-      </div>
+  const paidCount = tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga;
+  const avgOrderValue = paidCount > 0 ? (totalRevenue / paidCount).toFixed(2) : '0.00';
+  const pendingCount = subscriptions.filter(s => s.status === 'incomplete' || s.status === 'past_due').length;
+  const activeCount = subscriptions.filter(s => s.status === 'active').length;
 
+  return (
+    <div className="min-h-screen relative bg-slate-50 text-slate-900">
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-32 space-y-6">
-        {/* Hero Header with stats */}
-        <AdminHeroCard
-          totalUsers={subscriptions.length}
-          totalRevenue={totalRevenue.toFixed(0)}
-          paidCustomers={tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga}
-          onRefresh={loadData}
-          onClearCache={handleClearCache}
-          clearingCache={clearingCache}
-        />
+        <div className="max-w-7xl mx-auto px-4 md:px-6 pt-28 pb-32">
+        <div className="flex gap-6 items-start">
+          <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} user={user} />
 
-        {/* Admin Tabs */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="sticky top-24 z-20 flex gap-2 mb-6 p-1 rounded-xl overflow-x-auto bg-slate-800/90 border border-white/10 shadow-xl shadow-black/20 backdrop-blur-xl">
+          <main className="flex-1 min-w-0 space-y-5">
+        {/* Page header */}
+        <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 rounded-3xl p-5 md:p-6 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-3xl shadow-lg flex-shrink-0">📊</div>
+            <div>
+              <p className="text-violet-600 text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> CeriaKid Analytics</p>
+              <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">Dashboard</h1>
+              <p className="text-slate-500 text-xs md:text-sm font-semibold">Pantau prestasi jualan kau secara realtime</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button type="button" onClick={loadData} className="rounded-xl bg-slate-100 hover:bg-slate-200 px-3.5 py-2 text-xs font-black text-slate-700 transition-all flex items-center gap-1.5">
+              <RefreshCw className="w-3.5 h-3.5" /> Refresh
+            </button>
+            <button type="button" onClick={handleClearCache} disabled={clearingCache} className="rounded-xl bg-slate-100 hover:bg-slate-200 px-3.5 py-2 text-xs font-black text-slate-700 transition-all disabled:opacity-60 flex items-center gap-1.5">
+              <RefreshCw className={`w-3.5 h-3.5 ${clearingCache ? 'animate-spin' : ''}`} /> Cache
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Quick stats row */}
+        {activeTab === 'analytics' && (
+          <AdminQuickStats
+            pending={pendingCount}
+            succeeded={activeCount}
+            visitorsToday={subscriptions.filter(s => {
+              const d = new Date(s.created_date);
+              const today = new Date();
+              return d.toDateString() === today.toDateString();
+            }).length}
+            totalVisitors={subscriptions.length}
+          />
+        )}
+
+        {/* Mobile-only tabs (sidebar handles desktop) */}
+        <div className="lg:hidden flex gap-2 p-1 rounded-2xl bg-white border border-slate-200 shadow-sm">
           {tabs.map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-3 rounded-lg font-black text-xs transition-all whitespace-nowrap px-3 flex items-center justify-center gap-2 ${activeTab === tab.key ? 'bg-emerald-500 text-white shadow-lg' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+              className={`flex-1 py-2.5 rounded-xl font-black text-xs transition-all whitespace-nowrap ${activeTab === tab.key ? 'bg-violet-500 text-white shadow' : 'text-slate-600 hover:bg-slate-100'}`}
             >
-              <span>{tab.label}</span>
+              {tab.label}
             </button>
           ))}
-        </motion.div>
+        </div>
 
         {/* ═══ ANALYTICS TAB ═══ */}
         {activeTab === 'analytics' && (
           <>
-            {/* Stats Cards */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8"
-            >
-              {[
-                { label: 'Total Pembeli', value: subscriptions.length, icon: '👥', card: 'from-emerald-500 to-teal-600', accent: 'bg-white/20', change: '+ aktif' },
-                { label: 'Pendapatan', value: `RM${totalRevenue.toFixed(0)}`, icon: '💰', card: 'from-orange-500 to-amber-500', accent: 'bg-white/20', change: 'bulan ini' },
-                { label: 'Pelanggan Berbayar', value: (tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga), icon: '💎', card: 'from-blue-500 to-indigo-600', accent: 'bg-white/20', change: 'premium' },
-                { label: 'Admin Access', value: 'Online', icon: '🛡️', card: 'from-purple-500 to-fuchsia-600', accent: 'bg-white/20', change: 'secure' },
-              ].map((stat, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.1 }}
-                  whileHover={{ y: -4, scale: 1.02 }}
-                  className={`rounded-3xl min-h-[8.5rem] p-5 text-white shadow-xl shadow-black/20 relative overflow-hidden bg-gradient-to-br ${stat.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all`}
-                >
-                  <div className={`absolute right-4 top-4 w-12 h-12 rounded-2xl ${stat.accent} flex items-center justify-center text-xl shadow-lg shadow-black/10 ring-1 ring-white/20 backdrop-blur-sm`}>
-                    {stat.icon}
-                  </div>
-                  <p className="text-white/80 text-xs font-bold mb-3">{stat.label}</p>
-                  <p className="text-3xl font-black mb-2 text-white tracking-tight">{stat.value}</p>
-                  <p className="text-white/80 text-xs font-black">↗ {stat.change}</p>
-                </motion.div>
-              ))}
-            </motion.div>
+            {/* Vibrant solid-color stat cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+              <AdminStatCard icon={DollarSign} color="violet" label="Total Revenue" value={`RM${totalRevenue.toFixed(0)}`} sub={`${paidCount} transaksi`} delay={0} />
+              <AdminStatCard icon={ShoppingCart} color="amber" label="Jumlah Orders" value={subscriptions.length} sub="Pembayaran diterima" delay={0.05} />
+              <AdminStatCard icon={TrendingUp} color="sky" label="Avg. Order Value" value={`RM${avgOrderValue}`} sub="Per transaksi" delay={0.1} />
+              <AdminStatCard icon={ClockIcon} color="rose" label="Pending Revenue" value={pendingCount} sub="order menunggu" delay={0.15} />
+            </div>
 
             {/* Sales Breakdown */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-6 md:mb-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm">
               <div className="flex items-end justify-between mb-4">
                 <div>
-                  <h2 className="text-xl md:text-2xl font-black text-white">💳 Jualan Mengikut Pelan</h2>
-                  <p className="text-white/60 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
+                  <h2 className="text-lg md:text-xl font-black text-slate-900">💳 Jualan Mengikut Pelan</h2>
+                  <p className="text-slate-500 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
@@ -271,30 +277,27 @@ export default function AdminDashboard() {
             </motion.div>
 
             {/* Customer Database */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm">
               <div className="flex items-end justify-between mb-4">
                 <div>
-                  <h2 className="text-xl md:text-2xl font-black text-white">📋 Database Pelanggan</h2>
-                  <p className="text-white/60 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
+                  <h2 className="text-lg md:text-xl font-black text-slate-900">📋 Database Pelanggan</h2>
+                  <p className="text-slate-500 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
                 </div>
               </div>
-              <motion.div
-               whileHover={{ y: -2 }}
-               className="rounded-3xl p-3 md:p-5 shadow-2xl shadow-black/20 overflow-x-auto bg-slate-800/85 border border-white/10 backdrop-blur-xl"
-              >
+              <div className="overflow-x-auto">
                 <table className="w-full min-w-[720px] text-sm">
                   <thead>
-                    <tr className="border-b-2 border-white/20">
-                      <th className="text-left py-3 px-4 font-black text-white">Email</th>
-                      <th className="text-left py-3 px-4 font-black text-white">Paket</th>
-                      <th className="text-left py-3 px-4 font-black text-white">Status</th>
-                      <th className="text-left py-3 px-4 font-black text-white">Tarikh</th>
+                    <tr className="border-b border-slate-200">
+                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Email</th>
+                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Paket</th>
+                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Status</th>
+                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Tarikh</th>
                     </tr>
                   </thead>
                   <tbody>
                     {subscriptions.slice(0, 10).map((sub) => (
-                      <tr key={sub.id} className="border-b border-white/10 hover:bg-white/5 transition-colors">
-                        <td className="py-3 px-4 text-xs text-white/90">{sub.email}</td>
+                      <tr key={sub.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                        <td className="py-3 px-4 text-xs text-slate-700 font-semibold">{sub.email}</td>
                         <td className="py-3 px-4 whitespace-nowrap">
                           <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
                             sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
@@ -321,13 +324,13 @@ export default function AdminDashboard() {
                              '✕ Batal'}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-xs text-white/80 whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
+                        <td className="py-3 px-4 text-xs text-slate-500 font-semibold whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <p className="text-xs text-white/70 mt-4 text-center">Menunjukkan {Math.min(10, subscriptions.length)} daripada {subscriptions.length} pelanggan</p>
-              </motion.div>
+                <p className="text-xs text-slate-500 mt-4 text-center font-semibold">Menunjukkan {Math.min(10, subscriptions.length)} daripada {subscriptions.length} pelanggan</p>
+              </div>
             </motion.div>
           </>
         )}
@@ -336,12 +339,12 @@ export default function AdminDashboard() {
         {activeTab === 'settings' && (
           <>
             {/* Settings Sub-tabs */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 mb-6 p-1.5 rounded-3xl overflow-x-auto shadow-xl shadow-black/10 bg-slate-900/80 border border-white/8 backdrop-blur-xl">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 p-1.5 rounded-2xl overflow-x-auto bg-white border border-slate-200 shadow-sm">
               {settingsTabs.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setSettingsTab(tab.key)}
-                  className={`flex-1 py-3 px-3 rounded-2xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-emerald-500 text-slate-950 shadow-lg' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+                  className={`flex-1 py-2.5 px-3 rounded-xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-violet-500 text-white shadow' : 'text-slate-600 hover:bg-slate-100'}`}
                 >
                   {tab.icon}<span className="hidden sm:inline">{tab.label}</span><span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                 </button>
@@ -350,14 +353,14 @@ export default function AdminDashboard() {
 
             {/* Facebook Pixel */}
             {settingsTab === 'pixel' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] p-5 md:p-7 lg:p-8 shadow-2xl shadow-black/20 mb-8" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl p-5 md:p-7 bg-white border border-slate-200 shadow-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-md">
                     <Facebook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg">Meta / Facebook Pixel</h2>
-                    <p className="text-xs text-white/80">Untuk tracking FB Ads & conversion events</p>
+                    <h2 className="font-black text-slate-900 text-lg">Meta / Facebook Pixel</h2>
+                    <p className="text-xs text-slate-500 font-semibold">Untuk tracking FB Ads & conversion events</p>
                   </div>
                 </div>
 
@@ -383,14 +386,14 @@ export default function AdminDashboard() {
 
             {/* Chip Payment */}
             {settingsTab === 'chip' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] p-5 md:p-7 lg:p-8 shadow-2xl shadow-black/20 mb-8" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl p-5 md:p-7 bg-white border border-slate-200 shadow-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-md">
                     <CreditCard className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg">Chip Payment Gateway</h2>
-                    <p className="text-xs text-white/80">FPX, kad kredit & e-wallet Malaysia</p>
+                    <h2 className="font-black text-slate-900 text-lg">Chip Payment Gateway</h2>
+                    <p className="text-xs text-slate-500 font-semibold">FPX, kad kredit & e-wallet Malaysia</p>
                   </div>
                 </div>
 
@@ -436,14 +439,14 @@ export default function AdminDashboard() {
 
             {/* Webhook */}
             {settingsTab === 'webhook' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] p-5 md:p-7 lg:p-8 shadow-2xl shadow-black/20 mb-8" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl p-5 md:p-7 bg-white border border-slate-200 shadow-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-md">
                     <Webhook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg">Webhook Settings</h2>
-                    <p className="text-xs text-white/80">Untuk receive payment callbacks dari Chip</p>
+                    <h2 className="font-black text-slate-900 text-lg">Webhook Settings</h2>
+                    <p className="text-xs text-slate-500 font-semibold">Untuk receive payment callbacks dari Chip</p>
                   </div>
                 </div>
 
@@ -452,10 +455,10 @@ export default function AdminDashboard() {
                 </FieldGroup>
 
                 <div className="mt-2 mb-5">
-                  <label className="block text-sm font-black text-white mb-1">Webhook URL Anda</label>
-                  <p className="text-xs text-white/80 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
+                  <label className="block text-sm font-black text-slate-800 mb-1">Webhook URL Anda</label>
+                  <p className="text-xs text-slate-500 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
                   <div className="flex gap-2">
-                    <div className="flex-1 bg-white/10 border-2 border-dashed border-white/20 rounded-xl px-3 py-3 text-xs font-mono text-white/70 break-all overflow-x-auto">
+                    <div className="flex-1 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl px-3 py-3 text-xs font-mono text-slate-600 break-all overflow-x-auto">
                       {window.location.origin}/api/webhook/chip
                     </div>
                     <button
@@ -463,7 +466,7 @@ export default function AdminDashboard() {
                         navigator.clipboard.writeText(`${window.location.origin}/api/webhook/chip`);
                         toast({ title: '📋 URL disalin!', description: 'Paste dalam Chip Dashboard.' });
                       }}
-                      className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold text-xs transition-all border border-white/20"
+                      className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-all border border-slate-200"
                     >
                       Copy
                     </button>
@@ -505,10 +508,12 @@ export default function AdminDashboard() {
                   <><Save className="w-5 h-5" /> Simpan Tetapan</>
                 )}
               </motion.button>
-              <p className="text-center text-xs text-white/70 mt-4">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
+              <p className="text-center text-xs text-slate-500 mt-4 font-semibold">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
             </motion.div>
           </>
         )}
+          </main>
+        </div>
         </div>
       </div>
     </div>
