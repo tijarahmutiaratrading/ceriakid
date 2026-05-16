@@ -160,6 +160,7 @@ export default function AdminDashboard() {
 
   const tabs = [
     { key: 'analytics', label: '📊 Analytics', icon: <BarChart3 className="w-4 h-4" /> },
+    { key: 'customers', label: '👥 Pelanggan', icon: <BarChart3 className="w-4 h-4" /> },
     { key: 'settings', label: '⚙️ Settings', icon: <Settings className="w-4 h-4" /> },
   ];
 
@@ -276,63 +277,71 @@ export default function AdminDashboard() {
               </div>
             </motion.div>
 
-            {/* Customer Database */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm">
-              <div className="flex items-end justify-between mb-4">
-                <div>
-                  <h2 className="text-lg md:text-xl font-black text-slate-900">📋 Database Pelanggan</h2>
-                  <p className="text-slate-500 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
-                </div>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[720px] text-sm">
-                  <thead>
-                    <tr className="border-b border-slate-200">
-                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Email</th>
-                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Paket</th>
-                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Status</th>
-                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Tarikh</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {subscriptions.slice(0, 10).map((sub) => (
-                      <tr key={sub.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                        <td className="py-3 px-4 text-xs text-slate-700 font-semibold">{sub.email}</td>
-                        <td className="py-3 px-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
-                            sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
-                            sub.tier === 'asas' ? 'bg-green-200 text-green-700' :
-                            sub.tier === 'standard' ? 'bg-blue-200 text-blue-700' :
-                            sub.tier === 'pro' ? 'bg-red-200 text-red-700' :
-                            'bg-purple-200 text-purple-700'
-                          }`}>
-                            {sub.tier === 'free' ? 'Percuma' : sub.tier === 'asas' ? 'Asas' : sub.tier === 'standard' ? 'Standard' : sub.tier === 'pro' ? 'Pro' : 'Keluarga'}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
-                            sub.status === 'active' ? 'bg-green-200 text-green-700' :
-                            sub.status === 'trial' ? 'bg-blue-200 text-blue-700' :
-                            sub.status === 'incomplete' ? 'bg-yellow-200 text-yellow-700' :
-                            sub.status === 'past_due' ? 'bg-orange-200 text-orange-700' :
-                            'bg-red-200 text-red-700'
-                          }`}>
-                            {sub.status === 'active' ? '✓ Aktif' :
-                             sub.status === 'trial' ? '⏳ Trial' :
-                             sub.status === 'incomplete' ? '⏸ Pending' :
-                             sub.status === 'past_due' ? '⚠ Lewat' :
-                             '✕ Batal'}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-xs text-slate-500 font-semibold whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <p className="text-xs text-slate-500 mt-4 text-center font-semibold">Menunjukkan {Math.min(10, subscriptions.length)} daripada {subscriptions.length} pelanggan</p>
-              </div>
-            </motion.div>
           </>
+        )}
+
+        {/* ═══ CUSTOMERS TAB ═══ */}
+        {activeTab === 'customers' && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm">
+            <div className="flex items-end justify-between mb-4 flex-wrap gap-3">
+              <div>
+                <h2 className="text-lg md:text-xl font-black text-slate-900">📋 Database Pelanggan</h2>
+                <p className="text-slate-500 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
+              </div>
+              <span className="text-xs font-black text-violet-700 bg-violet-50 px-3 py-1.5 rounded-full">{subscriptions.length} pelanggan</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] text-sm">
+                <thead>
+                  <tr className="border-b border-slate-200">
+                    <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Email</th>
+                    <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Paket</th>
+                    <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Status</th>
+                    <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Tarikh</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {subscriptions.map((sub) => (
+                    <tr key={sub.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                      <td className="py-3 px-4 text-xs text-slate-700 font-semibold">{sub.email}</td>
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
+                          sub.tier === 'free' ? 'bg-gray-200 text-gray-700' :
+                          sub.tier === 'asas' ? 'bg-green-200 text-green-700' :
+                          sub.tier === 'standard' ? 'bg-blue-200 text-blue-700' :
+                          sub.tier === 'pro' ? 'bg-red-200 text-red-700' :
+                          'bg-purple-200 text-purple-700'
+                        }`}>
+                          {sub.tier === 'free' ? 'Percuma' : sub.tier === 'asas' ? 'Asas' : sub.tier === 'standard' ? 'Standard' : sub.tier === 'pro' ? 'Pro' : 'Keluarga'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
+                          sub.status === 'active' ? 'bg-green-200 text-green-700' :
+                          sub.status === 'trial' ? 'bg-blue-200 text-blue-700' :
+                          sub.status === 'incomplete' ? 'bg-yellow-200 text-yellow-700' :
+                          sub.status === 'past_due' ? 'bg-orange-200 text-orange-700' :
+                          'bg-red-200 text-red-700'
+                        }`}>
+                          {sub.status === 'active' ? '✓ Aktif' :
+                           sub.status === 'trial' ? '⏳ Trial' :
+                           sub.status === 'incomplete' ? '⏸ Pending' :
+                           sub.status === 'past_due' ? '⚠ Lewat' :
+                           '✕ Batal'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-xs text-slate-500 font-semibold whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
+                    </tr>
+                  ))}
+                  {subscriptions.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="py-12 text-center text-slate-400 font-semibold">Tiada pelanggan lagi.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
         )}
 
         {/* ═══ SETTINGS TAB ═══ */}
