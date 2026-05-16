@@ -231,6 +231,48 @@ export default function GamesList() {
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
         <div className="absolute top-1/3 -left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+
+        {/* Floating subject emojis across the whole page */}
+        {(() => {
+          const items = CATEGORY_ANIMATIONS[category] || ['✨', '⭐', '🎈'];
+          // duplicate to spread across the page
+          const spread = [...items, ...items, ...items];
+          return spread.map((emoji, i) => {
+            const leftPct = (i * 13 + 7) % 95;
+            const topPct = (i * 17 + 5) % 92;
+            const duration = 6 + (i % 5);
+            const delay = (i * 0.35) % 3;
+            const size = 28 + (i % 4) * 10;
+            const opacity = 0.18 + ((i % 3) * 0.05);
+            return (
+              <motion.span
+                key={`bg-${category}-${i}`}
+                className="absolute select-none"
+                style={{
+                  left: `${leftPct}%`,
+                  top: `${topPct}%`,
+                  fontSize: `${size}px`,
+                  opacity,
+                  filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))',
+                }}
+                animate={{
+                  y: [0, -20, 0, -10, 0],
+                  x: [0, 10, 0, -8, 0],
+                  rotate: [0, 18, -10, 8, 0],
+                  scale: [1, 1.15, 1, 1.08, 1],
+                }}
+                transition={{
+                  duration,
+                  delay,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              >
+                {emoji}
+              </motion.span>
+            );
+          });
+        })()}
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
