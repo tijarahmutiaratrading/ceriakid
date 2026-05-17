@@ -441,21 +441,23 @@ export default function AdminGameManager({ embedded = false }) {
           failedTasks={failedTasks}
         />
 
-        {/* QC Carousel - Mobile carousel / Desktop side-by-side */}
+        <ProductionSafetyChecklist />
+
+        {/* QC Carousel - QC Report + QC Worker */}
         <div>
           {/* Mobile carousel tabs */}
           <div className="xl:hidden mb-3 flex items-center gap-2">
             <button
               onClick={() => setGeneratorSlide(0)}
-              className={`flex-1 py-2.5 rounded-2xl text-xs font-black transition-all ${generatorSlide === 0 ? 'bg-purple-300 text-purple-950 shadow-lg' : 'bg-white/10 text-white/65 hover:bg-white/15'}`}
+              className={`flex-1 py-2.5 rounded-2xl text-xs font-black transition-all ${generatorSlide === 0 ? 'bg-blue-300 text-blue-950 shadow-lg' : 'bg-white/10 text-white/65 hover:bg-white/15'}`}
             >
-              ✅ Safety Check
+              📊 QC Report
             </button>
             <button
               onClick={() => setGeneratorSlide(1)}
-              className={`flex-1 py-2.5 rounded-2xl text-xs font-black transition-all ${generatorSlide === 1 ? 'bg-blue-300 text-blue-950 shadow-lg' : 'bg-white/10 text-white/65 hover:bg-white/15'}`}
+              className={`flex-1 py-2.5 rounded-2xl text-xs font-black transition-all ${generatorSlide === 1 ? 'bg-cyan-300 text-cyan-950 shadow-lg' : 'bg-white/10 text-white/65 hover:bg-white/15'}`}
             >
-              📊 QC Report
+              ⚙️ QC Worker
             </button>
           </div>
 
@@ -467,18 +469,18 @@ export default function AdminGameManager({ embedded = false }) {
               transition={{ type: 'spring', damping: 28, stiffness: 220 }}
             >
               <div className="w-full flex-shrink-0 px-2.5">
-                <ProductionSafetyChecklist />
+                <QualityControlPanel onToast={showToast} />
               </div>
               <div className="w-full flex-shrink-0 px-2.5">
-                <QualityControlPanel onToast={showToast} />
+                {/* QC Worker / Task Queue would go here if separate */}
               </div>
             </motion.div>
           </div>
 
           {/* Desktop side-by-side */}
           <div className="hidden xl:grid grid-cols-[0.95fr_1.05fr] gap-4 md:gap-6">
-            <ProductionSafetyChecklist />
             <QualityControlPanel onToast={showToast} />
+            {/* QC Worker / Task Queue component here for desktop */}
           </div>
         </div>
 
