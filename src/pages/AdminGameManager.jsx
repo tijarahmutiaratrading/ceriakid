@@ -204,12 +204,12 @@ export default function AdminGameManager({ embedded = false }) {
       }
 
       if (queuedCount === 0) {
-        showToast('Semua subjek/darjah sudah capai target. Naikkan jumlah games atau soalan.', false);
+        showToast('✓ Semua subjek/darjah sudah cukup. QC akan handle excess automatik.');
         setSubmitting(false);
         return;
       }
 
-      showToast(`✅ ${queuedCount} task dihantar ke queue!`);
+      showToast(`✅ ${queuedCount} task masuk queue · AI akan jana games baru untuk yang kurang. (Skip subjek/darjah yang dah cukup.)`);
       setSelectedSubjects(new Set());
       loadTasks();
     } catch (err) {

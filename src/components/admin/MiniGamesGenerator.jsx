@@ -96,14 +96,24 @@ export default function MiniGamesGenerator({ onToast }) {
       return;
     }
     setMiniGameSubmitting(true);
+    let totalAdded = 0;
+    let totalSkipped = 0;
+    let totalAi = 0;
     try {
       for (const gameId of Array.from(selectedMiniGames)) {
         const gameData = GAME_HUB.find(g => g.id === gameId);
         const curr = currentCounts[gameId] || 0;
         const targetTotal = miniGameConfig.gamesCount;
         const gamesToAdd = Math.max(0, targetTotal - curr);
-        
+
+        if (gamesToAdd === 0) {
+          totalSkipped++;
+          continue;
+        }
+
         if (gamesToAdd > 0) {
+          totalAdded++;
+          totalAi += gamesToAdd;
           await base44.entities.GameTask.create({
             taskName: `Mini Game: ${gameData?.title || gameId} · ${miniGameConfig.gamesCount} games`,
             ageGroup: 'prasekolah',
@@ -124,7 +134,11 @@ export default function MiniGamesGenerator({ onToast }) {
           });
         }
       }
-      onToast(`✅ ${selectedMiniGames.size} mini game tasks dihantar ke queue ikut set & level!`);
+      if (totalAdded === 0 && totalSkipped > 0) {
+        onToast(`✓ Semua ${totalSkipped} mini game dah cukup ${miniGameConfig.gamesCount} games. QC akan handle excess.`);
+      } else {
+        onToast(`✅ ${totalAdded} mini game · AI akan jana ${totalAi} game baru (skip ${totalSkipped} yang dah cukup).`);
+      }
       setSelectedMiniGames(new Set());
       loadCurrentCounts();
     } catch (err) {
