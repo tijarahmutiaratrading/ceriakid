@@ -204,9 +204,9 @@ export default function StoryKid() {
                     onClick={() => { setSelected(idx); resetStory(); }}
                     className="group text-left rounded-[2rem] bg-white/18 border border-white/35 backdrop-blur-2xl p-3 shadow-2xl shadow-purple-950/15 hover:bg-white/25 hover:-translate-y-1 transition-all overflow-hidden"
                   >
-                    <div className="aspect-[4/3] rounded-[1.5rem] overflow-hidden bg-gradient-to-br from-yellow-200 to-pink-200 mb-4 ring-4 ring-white/25 shadow-xl group-hover:ring-white/45 transition-all">
+                    <div className="aspect-[4/3] rounded-[1.5rem] overflow-hidden mb-4 ring-4 ring-white/25 shadow-xl group-hover:ring-white/45 transition-all">
                       {item.cover ? (
-                        <img src={item.cover} alt={item.title} className="w-full h-full object-fill" />
+                        <img src={item.cover} alt={item.title} className="w-full h-full object-cover" />
                       ) : (
                         <StorySlideVisual visual={item.scenes?.[0]?.slideVisual} emoji={item.emoji} compact />
                       )}
