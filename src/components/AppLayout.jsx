@@ -8,10 +8,12 @@ import UserSidebar from '@/components/UserSidebar';
  *
  * Design:
  *   - Sidebar is FIXED at the top-left so it stays visible while scrolling.
- *   - We DO NOT render <AppHeader /> or a background here — each page already
- *     handles its own header + background. This keeps the layout non-intrusive.
- *   - The Outlet wrapper adds md:pl-[17rem] so the page content shifts right
- *     to make room for the fixed sidebar on desktop. Mobile is unaffected.
+ *   - We DO NOT add any padding/wrapper around <Outlet /> — that previously
+ *     created a 2-colour split because the page's gradient only covered the
+ *     padded area, leaving the area BEHIND the sidebar a different colour.
+ *   - Each page is responsible for its own background (full-bleed) and for
+ *     reserving space on the left so its content doesn't sit under the
+ *     sidebar (e.g. md:pl-[17rem] on the page's inner content container).
  */
 export default function AppLayout() {
   return (
@@ -19,9 +21,7 @@ export default function AppLayout() {
       <div className="hidden md:block fixed top-6 left-6 z-30">
         <UserSidebar />
       </div>
-      <div className="md:pl-[17rem]">
-        <Outlet />
-      </div>
+      <Outlet />
     </>
   );
 }
