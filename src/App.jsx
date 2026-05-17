@@ -17,7 +17,6 @@ import Privacy from '@/pages/Privacy';
 import Contact from '@/pages/Contact';
 import Home from '@/pages/Home';
 import AdminDashboard from '@/pages/AdminDashboard';
-import AdminGameManager from '@/pages/AdminGameManager';
 import GameAnalytics from '@/pages/GameAnalytics';
 import GameDatabase from '@/pages/GameDatabase';
 import ClientDashboard from '@/pages/ClientDashboard';
@@ -96,7 +95,6 @@ const AuthenticatedApp = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/admin-dashboard" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
-          <Route path="/admin-game-manager" element={<AdminGuard><AdminGameManager /></AdminGuard>} />
           <Route path="/game-analytics" element={<AdminGuard><GameAnalytics /></AdminGuard>} />
           <Route path="/game-database" element={<AdminGuard><GameDatabase /></AdminGuard>} />
 

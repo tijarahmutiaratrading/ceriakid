@@ -6,7 +6,7 @@ import { LayoutDashboard, Users, Settings, ExternalLink, Gamepad2 } from 'lucide
 const MENU = [
   { key: 'dashboard', label: 'Dashboard', sub: 'Order & Analytics', icon: LayoutDashboard, tab: 'analytics' },
   { key: 'customers', label: 'Pelanggan', sub: 'Customer Database', icon: Users, tab: 'customers' },
-  { key: 'gamemanager', label: 'Game Manager', sub: 'Master Generator', icon: Gamepad2, tab: 'gamemanager' },
+  { key: 'gamemanager', label: 'Game Manager', sub: 'Generator & QC', icon: Gamepad2, tab: 'gamemanager' },
   { key: 'settings', label: 'Settings', sub: 'Payment & Pixel', icon: Settings, tab: 'settings' },
 ];
 
