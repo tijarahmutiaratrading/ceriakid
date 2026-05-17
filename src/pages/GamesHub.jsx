@@ -58,7 +58,7 @@ export default function GamesHub() {
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pb-32 pt-28 md:pt-32">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-32 pt-20 md:pt-24">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-5 rounded-3xl" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}>
           <Link to="/dashboard" className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
             <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard

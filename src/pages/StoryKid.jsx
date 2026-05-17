@@ -131,16 +131,16 @@ export default function StoryKid() {
   const resetStory = () => { setSceneIndex(0); setStars(0); };
 
   return (
-    <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-600 via-fuchsia-500 to-amber-300 relative overflow-hidden">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-28 w-[28rem] h-[28rem] bg-white/25 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-1/4 -left-28 w-96 h-96 bg-pink-300/35 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-yellow-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
+        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
+        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pb-28 pt-28">
+      <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-28 pt-20 md:pt-24 overflow-x-hidden">
         <Link to="/dashboard" className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full bg-white/95 text-purple-700 font-black text-sm shadow-xl shadow-purple-950/15 hover:bg-white hover:scale-105 transition-all">
           <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
         </Link>
