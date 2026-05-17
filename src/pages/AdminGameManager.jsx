@@ -463,20 +463,19 @@ export default function AdminGameManager({ embedded = false }) {
             </button>
           </div>
 
-          {/* Mobile carousel */}
-          <div className="xl:hidden overflow-hidden -mx-2.5">
-            <motion.div
-              className="flex"
-              animate={{ x: qcSlide === 0 ? '0%' : '-100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-            >
-              <div className="w-full flex-shrink-0 px-2.5">
-                <QcOverviewReport onToast={showToast} />
-              </div>
-              <div className="w-full flex-shrink-0 px-2.5">
-                <QualityControlPanel onToast={showToast} />
-              </div>
-            </motion.div>
+          {/* Mobile carousel — render active slide only to avoid height-locked gap */}
+          <div className="xl:hidden">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={qcSlide}
+                initial={{ opacity: 0, x: qcSlide === 0 ? -20 : 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: qcSlide === 0 ? 20 : -20 }}
+                transition={{ duration: 0.22 }}
+              >
+                {qcSlide === 0 ? <QcOverviewReport onToast={showToast} /> : <QualityControlPanel onToast={showToast} />}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           {/* Desktop side-by-side */}
@@ -542,45 +541,48 @@ export default function AdminGameManager({ embedded = false }) {
                   </button>
                 </div>
 
-                {/* Carousel — slides horizontally on mobile/tablet, side-by-side on xl+ */}
+                {/* Carousel — render active slide only on mobile, side-by-side on xl+ */}
                 <div className="xl:grid xl:grid-cols-2 xl:gap-4">
-                  <div className="xl:hidden overflow-hidden -mx-1">
-                    <motion.div
-                      className="flex"
-                      animate={{ x: generatorSlide === 0 ? '0%' : '-100%' }}
-                      transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-                    >
-                      <div className="w-full flex-shrink-0 px-1">
-                        <PrasekolahPanel
-                          prasekolahMaster={prasekolahMaster}
-                          setPrasekolahMaster={setPrasekolahMaster}
-                          applyPrasekolahMaster={applyPrasekolahMaster}
-                          SUBJECT_CONFIG={SUBJECT_CONFIG}
-                          selectedSubjects={selectedSubjects}
-                          toggleSubject={toggleSubject}
-                          currentCounts={currentCounts}
-                          categoryGameConfig={categoryGameConfig}
-                          setCategoryGameConfig={setCategoryGameConfig}
-                          categoryQuestionConfig={categoryQuestionConfig}
-                          setCategoryQuestionConfig={setCategoryQuestionConfig}
-                        />
-                      </div>
-                      <div className="w-full flex-shrink-0 px-1">
-                        <SekolahRendahPanel
-                          sekolahRendahMaster={sekolahRendahMaster}
-                          setSekolahRendahMaster={setSekolahRendahMaster}
-                          applySekolahRendahMaster={applySekolahRendahMaster}
-                          SUBJECT_CONFIG={SUBJECT_CONFIG}
-                          selectedSubjects={selectedSubjects}
-                          toggleSubject={toggleSubject}
-                          currentCounts={currentCounts}
-                          darjahSubjectGameConfig={darjahSubjectGameConfig}
-                          setDarjahSubjectGameConfig={setDarjahSubjectGameConfig}
-                          darjahSubjectQuestionConfig={darjahSubjectQuestionConfig}
-                          setDarjahSubjectQuestionConfig={setDarjahSubjectQuestionConfig}
-                        />
-                      </div>
-                    </motion.div>
+                  <div className="xl:hidden">
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.div
+                        key={generatorSlide}
+                        initial={{ opacity: 0, x: generatorSlide === 0 ? -20 : 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: generatorSlide === 0 ? 20 : -20 }}
+                        transition={{ duration: 0.22 }}
+                      >
+                        {generatorSlide === 0 ? (
+                          <PrasekolahPanel
+                            prasekolahMaster={prasekolahMaster}
+                            setPrasekolahMaster={setPrasekolahMaster}
+                            applyPrasekolahMaster={applyPrasekolahMaster}
+                            SUBJECT_CONFIG={SUBJECT_CONFIG}
+                            selectedSubjects={selectedSubjects}
+                            toggleSubject={toggleSubject}
+                            currentCounts={currentCounts}
+                            categoryGameConfig={categoryGameConfig}
+                            setCategoryGameConfig={setCategoryGameConfig}
+                            categoryQuestionConfig={categoryQuestionConfig}
+                            setCategoryQuestionConfig={setCategoryQuestionConfig}
+                          />
+                        ) : (
+                          <SekolahRendahPanel
+                            sekolahRendahMaster={sekolahRendahMaster}
+                            setSekolahRendahMaster={setSekolahRendahMaster}
+                            applySekolahRendahMaster={applySekolahRendahMaster}
+                            SUBJECT_CONFIG={SUBJECT_CONFIG}
+                            selectedSubjects={selectedSubjects}
+                            toggleSubject={toggleSubject}
+                            currentCounts={currentCounts}
+                            darjahSubjectGameConfig={darjahSubjectGameConfig}
+                            setDarjahSubjectGameConfig={setDarjahSubjectGameConfig}
+                            darjahSubjectQuestionConfig={darjahSubjectQuestionConfig}
+                            setDarjahSubjectQuestionConfig={setDarjahSubjectQuestionConfig}
+                          />
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
 
                   {/* Desktop xl+: side-by-side (original layout, hidden on mobile) */}
