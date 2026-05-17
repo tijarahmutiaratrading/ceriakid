@@ -7,7 +7,6 @@ import { useLang } from '@/lib/LanguageContext';
 import { t } from '@/lib/i18n';
 
 import AppHeader from '@/components/AppHeader';
-import UserSidebar from '@/components/UserSidebar';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
 import DashboardHero from '@/components/home/DashboardHero';
@@ -91,11 +90,9 @@ export default function Home() {
 
       <AppHeader />
 
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-40 pt-20 md:pt-8 md:flex md:gap-6 md:items-start">
-        <UserSidebar />
-        <div className="flex-1 min-w-0 space-y-8 md:space-y-10">
+      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-40 pt-20 md:pt-8 space-y-8 md:space-y-10">
 
-        {isAuthenticated && <DashboardHero user={user} avatarUrl={homeAvatarUrl} lang={lang} />}
+      {isAuthenticated && <DashboardHero user={user} avatarUrl={homeAvatarUrl} lang={lang} />}
 
         {/* Not logged in welcome */}
         {!isAuthenticated && (
@@ -291,7 +288,6 @@ export default function Home() {
             </Link>
           </motion.div>
         )}
-        </div>
       </div>
     </div>
   );

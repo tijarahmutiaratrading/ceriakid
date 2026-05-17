@@ -5,6 +5,7 @@ import { queryClientInstance } from '@/lib/query-client'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
+import AppLayout from '@/components/AppLayout';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { LanguageProvider } from '@/lib/LanguageContext';
@@ -88,40 +89,41 @@ const AuthenticatedApp = () => {
     <LanguageProvider>
       <AgeGroupProvider>
         <Routes>
-          {/* Public pages - check if not authenticated */}
+          {/* Public pages - NO sidebar */}
           <Route path="/" element={<Landing />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/dashboard" element={<Home />} />
+          <Route path="/thank-you" element={<ThankYou />} />
+
+          {/* Admin pages - have own layout, NO shared sidebar */}
           <Route path="/admin-dashboard" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
           <Route path="/game-analytics" element={<AdminGuard><GameAnalytics /></AdminGuard>} />
           <Route path="/game-database" element={<AdminGuard><GameDatabase /></AdminGuard>} />
 
-          <Route path="/settings" element={<ClientDashboard />} />
-          <Route path="/children-profiles" element={<ChildrenProfiles />} />
+          {/* Authenticated user pages - WITH sidebar (navigation/hub pages) */}
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<Home />} />
+            <Route path="/settings" element={<ClientDashboard />} />
+            <Route path="/children-profiles" element={<ChildrenProfiles />} />
+            <Route path="/games-hub" element={<GamesHub />} />
+            <Route path="/games/:category" element={<GamesList />} />
+            <Route path="/mini-games/:type" element={<MiniGamesList />} />
+            <Route path="/parent-dashboard" element={<ParentDashboard />} />
+            <Route path="/friends" element={<FriendsList />} />
+            <Route path="/challenges" element={<Challenges />} />
+            <Route path="/scoreboard" element={<Scoreboard />} />
+          </Route>
+
+          {/* Game-play / fullscreen pages - NO sidebar (immersive experience) */}
           <Route path="/story-kid" element={<StoryKid />} />
-          <Route path="/thank-you" element={<ThankYou />} />
-          <Route path="/games-hub" element={<GamesHub />} />
-          <Route path="/mini-games/:type" element={<MiniGamesList />} />
           <Route path="/mini-games/:categoryId/play/:gameId" element={<MiniGamePlayground />} />
-          <Route path="/games/:category" element={<GamesList />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
-          <Route path="/parent-dashboard" element={<ParentDashboard />} />
-          <Route path="/friends" element={<FriendsList />} />
-          <Route path="/challenges" element={<Challenges />} />
-          
-          {/* Drawing Studio */}
           <Route path="/drawing" element={<DrawingStudio />} />
-          
-          {/* Legacy games */}
           <Route path="/abc" element={<ABCGame />} />
           <Route path="/numbers" element={<NumberGame />} />
           <Route path="/quiz" element={<QuizGame />} />
           <Route path="/shapes" element={<ShapesGame />} />
-          <Route path="/scoreboard" element={<Scoreboard />} />
-          
-          {/* Interactive Games */}
           <Route path="/games/memory" element={<MemoryGame />} />
           <Route path="/games/dragdrop" element={<DragDropGame />} />
           <Route path="/games/wordbuilder" element={<WordBuilderGame />} />
@@ -130,7 +132,7 @@ const AuthenticatedApp = () => {
           <Route path="/games/story" element={<StoryAdventureGame />} />
           <Route path="/games/physics" element={<PhysicsGame />} />
           <Route path="/games/tracing" element={<TracingGameGamified />} />
-          
+
           {/* Catch all */}
           <Route path="*" element={<PageNotFound />} />
         </Routes>

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
-import AppHeader from '@/components/AppHeader';
 import { base44 } from '@/api/base44Client';
 import { Link } from 'react-router-dom';
+import AppHeader from '@/components/AppHeader';
 import { getActiveTier, getTierLimit } from '@/lib/tierAccess';
 
 const AGE_OPTIONS = [
@@ -118,9 +118,9 @@ export default function ChildrenProfiles() {
         <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
       </div>
 
-      <AppHeader showBack={true} backTo="/dashboard" />
+      <AppHeader />
 
-      <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-32 pt-20 md:pt-24 overflow-x-hidden">
+      <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-32 pt-20 md:pt-8">
 
         {/* Header */}
         <motion.div
