@@ -7,6 +7,7 @@ const MIN_PASS_SCORE = 90;
 const MAX_DELETE_PER_RUN = 20;
 const MAX_AUTOFIX_PER_RUN = 15;
 const MIN_GAMES_PER_BUCKET = 4;
+const MAX_GAMES_PER_BUCKET = 30;
 const STUCK_TASK_MINUTES = 30;
 
 const BANNED_PATTERN = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|\bpohon\b|\bsepatu\b|strawberi|tampak|cantik|santai|membazir|merata-rata|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja|aktiviti pembelajaran)/i;
@@ -195,8 +196,10 @@ async function ensureBucketsNotEmpty(base44, games, activeTaskKeys) {
   // Prasekolah buckets
   for (const subject of SUBJECTS) {
     const key = `prasekolah||${subject}`;
-    const need = MIN_GAMES_PER_BUCKET - (counts.get(key) || 0);
-    if (need > 0 && !activeTaskKeys.has(`prasekolah||${subject}`)) {
+    const current = counts.get(key) || 0;
+    const need = MIN_GAMES_PER_BUCKET - current;
+    // Skip if already at cap (prevents over-generation)
+    if (need > 0 && current < MAX_GAMES_PER_BUCKET && !activeTaskKeys.has(`prasekolah||${subject}`)) {
       refillTasks.push({ taskName: `QC Bucket Refill: prasekolah ${subject}`, ageGroup: 'prasekolah', subject, gamesCount: need, questionsPerGame: 10, status: 'pending', createdGames: 0, errorMessage: 'Auto refill by QC: bucket below minimum' });
     }
   }
@@ -204,8 +207,9 @@ async function ensureBucketsNotEmpty(base44, games, activeTaskKeys) {
   for (const subject of SUBJECTS) {
     for (const darjah of DARJAH_LEVELS) {
       const key = `sekolah_rendah|${darjah}|${subject}`;
-      const need = MIN_GAMES_PER_BUCKET - (counts.get(key) || 0);
-      if (need > 0 && !activeTaskKeys.has(`sekolah_rendah|${darjah}|${subject}`)) {
+      const current = counts.get(key) || 0;
+      const need = MIN_GAMES_PER_BUCKET - current;
+      if (need > 0 && current < MAX_GAMES_PER_BUCKET && !activeTaskKeys.has(`sekolah_rendah|${darjah}|${subject}`)) {
         refillTasks.push({ taskName: `QC Bucket Refill: ${darjah} ${subject}`, ageGroup: 'sekolah_rendah', darjah, subject, gamesCount: need, questionsPerGame: 10, status: 'pending', createdGames: 0, errorMessage: 'Auto refill by QC: bucket below minimum' });
       }
     }
@@ -338,6 +342,14 @@ Deno.serve(async (req) => {
     }
 
     // ─── Step 5: For games that can't be fixed → delete & queue replacement ───
+    // Build per-bucket counts to enforce MAX_GAMES_PER_BUCKET cap
+    const bucketCounts = new Map();
+    for (const g of games || []) {
+      if (!SUBJECTS.includes(g.category)) continue;
+      const key = `${g.ageGroup}|${g.darjah || ''}|${g.category}`;
+      bucketCounts.set(key, (bucketCounts.get(key) || 0) + 1);
+    }
+
     const selected = stillBroken.slice(0, MAX_DELETE_PER_RUN);
     const grouped = new Map();
     for (const item of selected) {
@@ -347,10 +359,21 @@ Deno.serve(async (req) => {
       existing.count += 1;
       grouped.set(groupKey, existing);
       await base44.asServiceRole.entities.Game.delete(game.id);
+      // Decrement bucket count after delete
+      bucketCounts.set(groupKey, Math.max(0, (bucketCounts.get(groupKey) || 1) - 1));
     }
     let createdTaskCount = 0;
-    for (const group of grouped.values()) {
-      const task = buildReplacementTask(group.sample, group.count);
+    let skippedTasksAtCap = 0;
+    for (const [groupKey, group] of grouped.entries()) {
+      const currentCount = bucketCounts.get(groupKey) || 0;
+      const room = MAX_GAMES_PER_BUCKET - currentCount;
+      if (room <= 0) {
+        // Bucket already at/over cap → don't queue replacements (prevents Mandarin-style infinite loop)
+        skippedTasksAtCap++;
+        continue;
+      }
+      const replaceCount = Math.min(group.count, room);
+      const task = buildReplacementTask(group.sample, replaceCount);
       if (task) {
         await base44.asServiceRole.entities.GameTask.create(task);
         createdTaskCount++;
