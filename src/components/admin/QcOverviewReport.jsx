@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Loader2, RefreshCw, BookOpen, Gamepad2, Sparkles, Send, ListChecks } from 'lucide-react';
+import { Loader2, RefreshCw, BookOpen, Gamepad2, Sparkles, ListChecks } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 const SUBJECT_LABELS = {
@@ -31,8 +31,6 @@ function bucketColor(b) {
 export default function QcOverviewReport({ onToast }) {
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [command, setCommand] = useState('');
-  const [sending, setSending] = useState(false);
 
   const load = async (silent = false, attempt = 0) => {
     setLoading(true);
@@ -53,24 +51,6 @@ export default function QcOverviewReport({ onToast }) {
 
   useEffect(() => { load(true); }, []);
 
-  const sendCommand = async (cmd) => {
-    setSending(true);
-    try {
-      let payload = {};
-      if (cmd === 'audit') payload = { auditOnly: true, force: true };
-      else if (cmd === 'repair') payload = { force: true };
-      else if (cmd === 'custom') payload = { force: true, note: command };
-
-      const res = await base44.functions.invoke('backgroundQualityControl', payload);
-      onToast?.(`✅ Worker reply: ${res.data?.message || res.data?.status}`);
-      await load();
-      setCommand('');
-    } catch (e) {
-      onToast?.('❌ Command gagal: ' + e.message, false);
-    }
-    setSending(false);
-  };
-
   if (!report && loading) {
     return (
       <div className="rounded-3xl p-6 border border-white/15 bg-white/5 flex items-center justify-center gap-3 text-white/80 text-sm font-bold">
@@ -81,7 +61,10 @@ export default function QcOverviewReport({ onToast }) {
 
   if (!report) return null;
 
-  const { totals, subjectBuckets, miniBreakdown, storySummary, queue, health } = report;
+  const { totals, subjectBuckets, miniBreakdown, storySummary, queue, health, qcSetting } = report;
+  const subjectCap = qcSetting?.subjectCap || 30;
+  const miniCap = qcSetting?.miniGameCap || 30;
+  const storyCap = qcSetting?.storyKidCap || 30;
 
   // Group subject buckets by subject
   const subjectsBySubject = {};
@@ -130,11 +113,14 @@ export default function QcOverviewReport({ onToast }) {
             <div key={subject} className="flex items-center gap-2">
               <span className="text-white/80 text-xs font-black w-14 flex-shrink-0">{SUBJECT_LABELS[subject] || subject}</span>
               <div className="flex gap-1 flex-wrap">
-                {buckets.map(b => (
-                  <span key={b.level} className={`px-2 py-1 rounded-lg text-[10px] font-black border ${bucketColor(b)}`} title={`${subject} · ${b.level}: ${b.count} games`}>
-                    {LEVEL_LABELS[b.level] || b.level}: {b.count}
-                  </span>
-                ))}
+                {buckets.map(b => {
+                  const atCap = b.count >= subjectCap;
+                  return (
+                    <span key={b.level} className={`px-2 py-1 rounded-lg text-[10px] font-black border ${atCap ? 'bg-purple-500/25 text-purple-100 border-purple-300/40' : bucketColor(b)}`} title={`${subject} · ${b.level}: ${b.count}/${subjectCap} games`}>
+                      {LEVEL_LABELS[b.level] || b.level}: {b.count}/{subjectCap}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           ))}
@@ -142,21 +128,24 @@ export default function QcOverviewReport({ onToast }) {
       </Section>
 
       {/* Mini Games breakdown */}
-      <Section title="🎮 Mini Games · per category">
+      <Section title={`🎮 Mini Games · per category (cap ${miniCap})`}>
         <div className="flex flex-wrap gap-1.5">
-          {miniBreakdown.map(b => (
-            <span key={b.category} className={`px-2 py-1 rounded-lg text-[10px] font-black border ${bucketColor(b)}`}>
-              {b.category}: {b.count}
-            </span>
-          ))}
+          {miniBreakdown.map(b => {
+            const atCap = b.count >= miniCap;
+            return (
+              <span key={b.category} className={`px-2 py-1 rounded-lg text-[10px] font-black border ${atCap ? 'bg-purple-500/25 text-purple-100 border-purple-300/40' : bucketColor(b)}`}>
+                {b.category}: {b.count}/{miniCap}
+              </span>
+            );
+          })}
         </div>
       </Section>
 
       {/* Story Kid breakdown */}
-      <Section title="📖 Story Kid">
+      <Section title={`📖 Story Kid (cap ${storyCap})`}>
         <div className="flex flex-wrap gap-1.5">
-          <span className={`px-2 py-1 rounded-lg text-[10px] font-black border ${bucketColor({ empty: storySummary.empty, low: storySummary.low })}`}>
-            Total: {storySummary.total}
+          <span className={`px-2 py-1 rounded-lg text-[10px] font-black border ${storySummary.total >= storyCap ? 'bg-purple-500/25 text-purple-100 border-purple-300/40' : bucketColor({ empty: storySummary.empty, low: storySummary.low })}`}>
+            Total: {storySummary.total}/{storyCap}
           </span>
           <span className="px-2 py-1 rounded-lg text-[10px] font-black border bg-white/10 text-white/85 border-white/15">
             Prasekolah: {storySummary.prasekolah}

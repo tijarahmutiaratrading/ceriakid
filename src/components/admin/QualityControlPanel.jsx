@@ -10,8 +10,7 @@ export default function QualityControlPanel({ onToast }) {
   const [subjectCap, setSubjectCap] = useState(30);
   const [miniGameCap, setMiniGameCap] = useState(30);
   const [storyKidCap, setStoryKidCap] = useState(30);
-  const [savingInterval, setSavingInterval] = useState(false);
-  const [savingCaps, setSavingCaps] = useState(false);
+  const [savingSettings, setSavingSettings] = useState(false);
   const [loading, setLoading] = useState(false);
   const [repairing, setRepairing] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -33,31 +32,20 @@ export default function QualityControlPanel({ onToast }) {
     if (s?.storyKidCap) setStoryKidCap(s.storyKidCap);
   };
 
-  const saveCaps = async () => {
-    setSavingCaps(true);
+  const saveAllSettings = async () => {
+    setSavingSettings(true);
     try {
-      const res = await base44.functions.invoke('updateQualityControlSettings', { subjectCap, miniGameCap, storyKidCap });
+      const res = await base44.functions.invoke('updateQualityControlSettings', { intervalMinutes, subjectCap, miniGameCap, storyKidCap });
       const s = res.data?.setting;
+      if (s?.intervalMinutes) setIntervalMinutes(s.intervalMinutes);
       if (s?.subjectCap) setSubjectCap(s.subjectCap);
       if (s?.miniGameCap) setMiniGameCap(s.miniGameCap);
       if (s?.storyKidCap) setStoryKidCap(s.storyKidCap);
-      onToast?.(`✅ Cap dikemaskini: Subjek ${s?.subjectCap}, Mini ${s?.miniGameCap}, Story ${s?.storyKidCap}`);
+      onToast?.(`✅ Tetapan disimpan: ${s?.intervalMinutes}min · Cap ${s?.subjectCap}/${s?.miniGameCap}/${s?.storyKidCap}`);
     } catch (error) {
-      onToast?.('❌ Gagal simpan cap: ' + error.message, false);
+      onToast?.('❌ Gagal simpan tetapan: ' + error.message, false);
     }
-    setSavingCaps(false);
-  };
-
-  const saveSetting = async () => {
-    setSavingInterval(true);
-    try {
-      const res = await base44.functions.invoke('updateQualityControlSettings', { intervalMinutes });
-      setIntervalMinutes(res.data?.setting?.intervalMinutes || intervalMinutes);
-      onToast?.(`✅ QC auto check setiap ${res.data?.setting?.intervalMinutes || intervalMinutes} minit`);
-    } catch (error) {
-      onToast?.('❌ Gagal simpan QC interval: ' + error.message, false);
-    }
-    setSavingInterval(false);
+    setSavingSettings(false);
   };
 
   const runCheck = async (repair = false, silent = false) => {
@@ -75,7 +63,7 @@ export default function QualityControlPanel({ onToast }) {
   };
 
   useEffect(() => {
-    runCheck(false, true); // silent on mount — elak noti rimas tiap kali buka page
+    // Skip auto-audit on mount (jimat credits). User klik "Audit" untuk run.
     loadHistory();
     loadSetting();
   }, []);
@@ -83,6 +71,11 @@ export default function QualityControlPanel({ onToast }) {
   const score = typeof qc?.score === 'number' ? qc.score : 0;
   const isPassing = score >= 90;
   const isWaiting = qc?.status === 'waiting_for_generation';
+  const hasIssues = (qc?.failed || qc?.failedBeforeRepair || 0) > 0;
+  const hasStuckTasks = (qc?.stuckTasksCleaned || 0) > 0 || (qc?.bucketRefills || 0) > 0;
+  const canRepair = hasIssues || hasStuckTasks || !qc;
+  const deletedCount = qc?.deletedThisRun || qc?.deletedCount || 0;
+  const queuedCount = qc?.replacementTasks || 0;
 
   return (
     <>
@@ -103,57 +96,45 @@ export default function QualityControlPanel({ onToast }) {
         <button onClick={() => runCheck(false)} disabled={loading || repairing} className="px-3 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-black border border-white/15 flex items-center justify-center gap-2 disabled:opacity-50">
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} Audit
         </button>
-        <button onClick={() => runCheck(true)} disabled={loading || repairing || isPassing} className="px-3 py-2.5 rounded-2xl bg-green-400 text-green-950 text-xs font-black flex items-center justify-center gap-2 disabled:opacity-50">
+        <button onClick={() => runCheck(true)} disabled={loading || repairing || !canRepair} className="px-3 py-2.5 rounded-2xl bg-green-400 text-green-950 text-xs font-black flex items-center justify-center gap-2 disabled:opacity-50">
           {repairing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wrench className="w-4 h-4" />} <span className="truncate">Repair + Teach</span>
         </button>
       </div>
 
-      {/* Auto QC interval */}
-      <div className="flex items-center gap-2 rounded-2xl bg-white/10 border border-white/15 px-3 py-2 mb-3 flex-wrap">
-        <span className="text-white/60 text-xs font-black whitespace-nowrap">Auto QC setiap</span>
-        <input
-          type="number"
-          min="5"
-          max="1440"
-          value={intervalMinutes}
-          onChange={(e) => setIntervalMinutes(parseInt(e.target.value) || 5)}
-          className="w-16 bg-white/10 border border-white/10 rounded-xl px-2 py-1 text-white text-xs font-black text-center"
-        />
-        <span className="text-white/60 text-xs font-bold">min</span>
-        <button onClick={saveSetting} disabled={savingInterval} className="ml-auto px-3 py-1 rounded-xl bg-blue-400 text-blue-950 text-xs font-black disabled:opacity-50">
-          {savingInterval ? '...' : 'Simpan'}
-        </button>
-      </div>
-
-      {/* Auto-Replace Caps */}
+      {/* Combined Settings: Interval + Caps */}
       <div className="rounded-2xl bg-white/10 border border-white/15 px-3 py-3 mb-4 md:mb-5">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-white font-black text-xs">🎯 Cap Auto-Replace</span>
-          <span className="text-white/45 text-[10px] font-semibold">QC akan delete game rosak & queue baru supaya total kekal pada cap</span>
+          <span className="text-white font-black text-xs">⚙️ Tetapan QC</span>
+          <span className="text-white/45 text-[10px] font-semibold">Auto interval + cap auto-replace</span>
         </div>
-        <div className="grid grid-cols-3 gap-2 mb-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2">
+          <div>
+            <label className="block text-white/55 text-[10px] font-black mb-1">⏱️ Interval (min)</label>
+            <input type="number" min="5" max="1440" value={intervalMinutes} onChange={(e) => setIntervalMinutes(parseInt(e.target.value) || 5)}
+              className="w-full bg-white/10 border border-white/10 rounded-xl px-2 py-1.5 text-white text-xs font-black text-center" />
+          </div>
           <div>
             <label className="block text-white/55 text-[10px] font-black mb-1">📚 Subjek</label>
             <input type="number" min="4" max="200" value={subjectCap} onChange={(e) => setSubjectCap(parseInt(e.target.value) || 4)}
               className="w-full bg-white/10 border border-white/10 rounded-xl px-2 py-1.5 text-white text-xs font-black text-center" />
           </div>
           <div>
-            <label className="block text-white/55 text-[10px] font-black mb-1">🎮 Mini Games</label>
+            <label className="block text-white/55 text-[10px] font-black mb-1">🎮 Mini</label>
             <input type="number" min="4" max="200" value={miniGameCap} onChange={(e) => setMiniGameCap(parseInt(e.target.value) || 4)}
               className="w-full bg-white/10 border border-white/10 rounded-xl px-2 py-1.5 text-white text-xs font-black text-center" />
           </div>
           <div>
-            <label className="block text-white/55 text-[10px] font-black mb-1">📖 Story Kid</label>
+            <label className="block text-white/55 text-[10px] font-black mb-1">📖 Story</label>
             <input type="number" min="4" max="200" value={storyKidCap} onChange={(e) => setStoryKidCap(parseInt(e.target.value) || 4)}
               className="w-full bg-white/10 border border-white/10 rounded-xl px-2 py-1.5 text-white text-xs font-black text-center" />
           </div>
         </div>
-        <button onClick={saveCaps} disabled={savingCaps} className="w-full px-3 py-2 rounded-xl bg-green-400 text-green-950 text-xs font-black disabled:opacity-50">
-          {savingCaps ? 'Menyimpan...' : '💾 Simpan Cap'}
+        <button onClick={saveAllSettings} disabled={savingSettings} className="w-full px-3 py-2 rounded-xl bg-green-400 text-green-950 text-xs font-black disabled:opacity-50">
+          {savingSettings ? 'Menyimpan...' : '💾 Simpan Semua Tetapan'}
         </button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
         <div className="rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
           <p className={`text-2xl font-black ${isPassing ? 'text-green-300' : 'text-yellow-300'}`}>{isWaiting ? 'WAIT' : `${score}%`}</p>
           <p className="text-white/60 text-xs font-bold">Quality Score</p>
@@ -171,6 +152,20 @@ export default function QualityControlPanel({ onToast }) {
           <p className="text-white/60 text-xs font-bold">Failed</p>
         </div>
       </div>
+
+      {/* Last repair summary — show what QC did */}
+      {(deletedCount > 0 || queuedCount > 0) && (
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          <div className="rounded-2xl bg-orange-400/15 border border-orange-300/20 p-3 text-center">
+            <p className="text-2xl font-black text-orange-200">{deletedCount}</p>
+            <p className="text-orange-100/70 text-[10px] font-bold uppercase tracking-wider">Deleted</p>
+          </div>
+          <div className="rounded-2xl bg-blue-400/15 border border-blue-300/20 p-3 text-center">
+            <p className="text-2xl font-black text-blue-200">{queuedCount}</p>
+            <p className="text-blue-100/70 text-[10px] font-bold uppercase tracking-wider">Queued Replacement</p>
+          </div>
+        </div>
+      )}
 
       <div className={`rounded-2xl p-3 border text-xs font-bold flex items-start gap-2 ${isPassing ? 'bg-green-400/15 border-green-300/20 text-green-100' : 'bg-yellow-400/15 border-yellow-300/20 text-yellow-100'}`}>
         {isPassing ? <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" /> : <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />}
