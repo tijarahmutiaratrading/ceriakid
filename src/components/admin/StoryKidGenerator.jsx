@@ -249,7 +249,7 @@ export default function StoryKidGenerator({ onToast }) {
 
   const seedStories = async () => {
     setLoading(true);
-    const target = Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5));
+    const target = Math.max(1, Math.min(200, Number(storyCount) || 5));
     const currentInDb = storyKidCounts.count || 0;
     const toAdd = Math.max(0, target - currentInDb);
 
@@ -259,16 +259,98 @@ export default function StoryKidGenerator({ onToast }) {
       return;
     }
 
-    // Pilih story yang belum diqueue/in-db (skip yang sama title)
+    // Skip tajuk yang dah ada dalam DB/queue
     const existingTitles = new Set(generatedStories.map(t => {
       try { return JSON.parse(t.errorMessage || '{}')?.story?.title; } catch { return null; }
     }).filter(Boolean));
+
+    // Step 1: Guna seeds dulu yang belum ada
     const availableSeeds = STORY_KID_SEEDS.filter(s => !existingTitles.has(s.title));
-    const selectedStories = availableSeeds.slice(0, toAdd);
+    const seedSlice = availableSeeds.slice(0, toAdd);
+    const remainingNeeded = toAdd - seedSlice.length;
+
+    // Step 2: Bila seeds habis, jana cerita BARU pakai AI
+    let aiStories = [];
+    if (remainingNeeded > 0) {
+      onToast?.(`🤖 Menjana ${remainingNeeded} cerita baru pakai AI...`, true);
+      try {
+        const aiRes = await base44.integrations.Core.InvokeLLM({
+          prompt: `Cipta ${remainingNeeded} cerita kanak-kanak interaktif yang ORIGINAL dalam Bahasa Melayu untuk aplikasi pendidikan prasekolah CeriaKid.
+
+ELAKKAN tajuk-tajuk ini (dah wujud): ${[...existingTitles, ...STORY_KID_SEEDS.map(s => s.title)].join(', ')}
+
+Setiap cerita perlu:
+- title: Tajuk unik dan menarik (3-5 patah)
+- emoji: 1 emoji utama
+- moral: Pengajaran ringkas dalam 1 ayat
+- scenes: TEPAT 9 scenes (index 0 hingga 8)
+
+Setiap scene ada:
+- image: 1 emoji yang sesuai dengan scene
+- text: Ayat ringkas (1-2 ayat) gambarkan situasi
+- choices: 1-2 pilihan. Setiap choice ada:
+  - text: Pilihan tindakan
+  - next: Nombor scene seterusnya (0-8) atau "end" untuk scene terakhir
+  - star: true untuk pilihan baik, false untuk pilihan buruk (optional)
+
+Scene terakhir (index 8) WAJIB ada satu choice dengan next="end" dan star=true.
+
+Tema variasi: persahabatan, kejujuran, keberanian, tolong-menolong, kebersihan, sains, alam sekitar, kreatif, sukan, masakan.
+
+Pastikan cerita SELAMAT untuk kanak-kanak, mesej positif, dan bahasa mudah.`,
+          response_json_schema: {
+            type: 'object',
+            properties: {
+              stories: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    title: { type: 'string' },
+                    emoji: { type: 'string' },
+                    moral: { type: 'string' },
+                    scenes: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          image: { type: 'string' },
+                          text: { type: 'string' },
+                          choices: {
+                            type: 'array',
+                            items: {
+                              type: 'object',
+                              properties: {
+                                text: { type: 'string' },
+                                next: {},
+                                star: { type: 'boolean' },
+                              },
+                              required: ['text', 'next'],
+                            },
+                          },
+                        },
+                        required: ['image', 'text', 'choices'],
+                      },
+                    },
+                  },
+                  required: ['title', 'emoji', 'moral', 'scenes'],
+                },
+              },
+            },
+            required: ['stories'],
+          },
+        });
+        aiStories = (aiRes?.stories || []).filter(s => s.title && Array.isArray(s.scenes) && s.scenes.length >= 3);
+      } catch (err) {
+        onToast?.(`⚠️ AI gagal jana cerita: ${err.message}. Hanya add ${seedSlice.length} dari seeds.`, false);
+      }
+    }
+
+    const selectedStories = [...seedSlice, ...aiStories].slice(0, toAdd);
 
     if (selectedStories.length === 0) {
       setLoading(false);
-      onToast?.(`✓ Semua ${STORY_KID_SEEDS.length} story seed dah ada dalam DB/queue.`);
+      onToast?.(`⚠️ Tiada cerita berjaya dijana.`, false);
       return;
     }
 
@@ -293,7 +375,9 @@ export default function StoryKidGenerator({ onToast }) {
     }
     await loadGeneratedStories();
     setLoading(false);
-    onToast?.(`✅ Smart add: ${selectedStories.length} story baru masuk queue (target ${target}, ada ${currentInDb}).`);
+    const fromSeed = seedSlice.length;
+    const fromAi = aiStories.length;
+    onToast?.(`✅ ${selectedStories.length} story masuk queue (${fromSeed} seed + ${fromAi} AI-generated). Target ${target}, sedia ada ${currentInDb}.`);
   };
 
   const clearCompletedTasks = async () => {
@@ -321,7 +405,7 @@ export default function StoryKidGenerator({ onToast }) {
           <input
             type="number"
             min="1"
-            max={STORY_KID_SEEDS.length}
+            max="200"
             value={storyCount}
             onChange={(e) => setStoryCount(e.target.value)}
             className="w-full p-3 sm:p-4 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl sm:text-2xl text-center outline-none focus:bg-white/15"
@@ -349,9 +433,9 @@ export default function StoryKidGenerator({ onToast }) {
         <div className="rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
           <p className="text-white/60 text-xs font-semibold">Smart add</p>
           {(() => {
-            const target = Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5));
+            const target = Math.max(1, Math.min(200, Number(storyCount) || 5));
             const diff = target - (storyKidCounts.count || 0);
-            if (diff > 0) return <p className="text-green-300 font-black text-base sm:text-lg leading-snug">+{diff} story baru</p>;
+            if (diff > 0) return <p className="text-green-300 font-black text-base sm:text-lg leading-snug">+{diff} story baru (AI)</p>;
             if (diff < 0) return <p className="text-white/70 font-black text-sm leading-snug">✓ cukup ({Math.abs(diff)} lebih, QC handle)</p>;
             return <p className="text-white/70 font-black text-base sm:text-lg leading-snug">✓ cukup</p>;
           })()}
