@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -53,13 +53,10 @@ export default function UserSidebar() {
     return localStorage.getItem('sidebar-collapsed') === 'true';
   });
 
-  // Sync collapsed state → CSS variable + localStorage so pages can adjust their padding
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    // Sidebar width: w-20=5rem (collapsed) / w-64=16rem (expanded)
-    document.documentElement.style.setProperty('--sidebar-pad', collapsed ? '5rem' : '16rem');
-    localStorage.setItem('sidebar-collapsed', String(collapsed));
-  }, [collapsed]);
+  const handleCollapse = (newState) => {
+    setCollapsed(newState);
+    localStorage.setItem('sidebar-collapsed', String(newState));
+  };
 
   const [expanded, setExpanded] = useState(() => {
     // Auto-expand group containing active route
@@ -91,7 +88,7 @@ export default function UserSidebar() {
         )}
         <button
           type="button"
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => handleCollapse(!collapsed)}
           className="w-7 h-7 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center text-white/85 transition-all flex-shrink-0"
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >

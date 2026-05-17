@@ -87,7 +87,7 @@ export default function ClientDashboard() {
 
       <AppHeader />
 
-      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 md:pl-[var(--sidebar-pad,18rem)] pb-32 pt-20 md:pt-8 space-y-5 transition-[padding] duration-300">
+      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-5">
 
         {/* Hero Profile Card */}
         <motion.div

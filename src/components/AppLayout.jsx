@@ -17,11 +17,11 @@ import UserSidebar from '@/components/UserSidebar';
  */
 export default function AppLayout() {
   return (
-    <>
-      <div className="hidden md:block fixed top-6 left-6 z-30">
-        <UserSidebar />
-      </div>
-      <Outlet />
-    </>
+    <div className="flex min-h-screen">
+      <UserSidebar />
+      <main className="flex-1 w-full overflow-x-hidden">
+        <Outlet />
+      </main>
+    </div>
   );
 }
