@@ -77,14 +77,30 @@ export default function MiniGamePlayground() {
   };
 
   return (
-    <div className="min-h-screen font-nunito bg-[radial-gradient(circle_at_top_left,#fde68a_0%,transparent_28%),radial-gradient(circle_at_top_right,#f9a8d4_0%,transparent_30%),radial-gradient(circle_at_bottom,#93c5fd_0%,transparent_36%),linear-gradient(135deg,#fff7ad_0%,#a7f3d0_36%,#bae6fd_68%,#fbcfe8_100%)] relative overflow-hidden">
+    <div className="min-h-screen font-nunito relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #B5D8B0 0%, #A8CFA3 50%, #9FCFA5 100%)' }}>
+      {/* Decorative organic shapes */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+        <svg className="absolute -top-20 -right-20 w-[28rem] h-[28rem] opacity-50" viewBox="0 0 400 400" fill="none">
+          <path d="M200 50 Q 320 80, 350 200 T 200 350 Q 80 320, 50 200 T 200 50 Z" fill="#C8E0BF" />
+        </svg>
+        <svg className="absolute top-1/3 -left-32 w-96 h-96 opacity-40" viewBox="0 0 400 400" fill="none">
+          <path d="M200 60 Q 310 90, 340 210 T 190 340 Q 70 310, 60 190 T 200 60 Z" fill="#BBDDB3" />
+        </svg>
+        <svg className="absolute bottom-10 right-10 w-40 h-40 opacity-60" viewBox="0 0 100 100">
+          <path d="M50 10 Q 70 30, 60 55 Q 50 80, 40 55 Q 30 30, 50 10 Z" fill="#7BAB6E" />
+          <path d="M30 40 Q 45 50, 40 70 Q 35 85, 25 70 Q 20 55, 30 40 Z" fill="#8FBC82" />
+        </svg>
+        <svg className="absolute top-32 left-8 w-28 h-28 opacity-50" viewBox="0 0 100 100">
+          <path d="M50 15 Q 68 35, 58 60 Q 48 80, 42 60 Q 32 35, 50 15 Z" fill="#7BAB6E" />
+        </svg>
+        <svg className="absolute bottom-32 left-16 w-24 h-24 opacity-45" viewBox="0 0 100 100">
+          <ellipse cx="50" cy="50" rx="30" ry="20" fill="#8FBC82" />
+          <ellipse cx="40" cy="45" rx="20" ry="14" fill="#A0C893" />
+        </svg>
       </div>
       <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} />
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
-        <Link to={`/mini-games/${category.id}`} className="inline-flex items-center gap-1.5 mb-3 px-3 py-2 rounded-full bg-white/80 text-game-purple font-black text-xs shadow-lg hover:bg-white transition-all">
+        <Link to={`/mini-games/${category.id}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-2xl font-black text-sm shadow-lg hover:shadow-xl transition-all" style={{ background: 'linear-gradient(135deg, #A67B5B 0%, #8B5A3C 100%)', color: '#FDF6E3', border: '2px solid #6B4423' }}>
           <ArrowLeft className="w-4 h-4" /> Kembali ke {category.title}
         </Link>
 
