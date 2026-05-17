@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
+import { Menu, X, ArrowLeft, LogOut, ChevronDown, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
@@ -11,6 +11,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
   const [isOpen, setIsOpen] = useState(false);
   const [navVisible, setNavVisible] = useState(true);
+  const [expandedSubmenu, setExpandedSubmenu] = useState(null);
   const { isAuthenticated, user, logout } = useAuth() || {};
   const [headerAvatarUrl, setHeaderAvatarUrl] = useState(user?.avatarUrl || '');
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
@@ -88,7 +89,17 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
     
     if (isAdmin) {
       adminItems = [
-        { path: '/admin-dashboard', emoji: '🎛️', label: 'Admin Dashboard' },
+        {
+          path: '/admin-dashboard',
+          emoji: '🎛️',
+          label: 'Admin Dashboard',
+          submenu: [
+            { path: '/admin-dashboard?tab=analytics', label: '📊 Analytics' },
+            { path: '/admin-dashboard?tab=customers', label: '👥 Pelanggan' },
+            { path: '/admin-dashboard?tab=gamemanager', label: '🎮 Game Manager' },
+            { path: '/admin-dashboard?tab=settings', label: '⚙️ Settings' },
+          ],
+        },
       ];
     }
   }
@@ -275,16 +286,63 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                   <div className="pt-2 pb-1.5">
                     <p className="text-xs font-black text-white/60 uppercase tracking-wider px-4">🎛️ Admin</p>
                   </div>
-                  {adminItems.map((item) => (
-                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
-                      <motion.div whileTap={{ scale: 0.97 }}
-                        className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
-                          isActive(item.path) ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
-                        }`}>
-                        <span>{item.label}</span>
-                      </motion.div>
-                    </Link>
-                  ))}
+                  {adminItems.map((item) => {
+                    const hasSubmenu = item.submenu && item.submenu.length > 0;
+                    const isExpanded = expandedSubmenu === item.path;
+                    const itemActive = isActive(item.path);
+
+                    if (!hasSubmenu) {
+                      return (
+                        <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
+                          <motion.div whileTap={{ scale: 0.97 }}
+                            className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
+                              itemActive ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
+                            }`}>
+                            <span>{item.label}</span>
+                          </motion.div>
+                        </Link>
+                      );
+                    }
+
+                    return (
+                      <div key={item.path}>
+                        <motion.button
+                          type="button"
+                          whileTap={{ scale: 0.97 }}
+                          onClick={() => setExpandedSubmenu(isExpanded ? null : item.path)}
+                          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
+                            itemActive ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
+                          }`}
+                        >
+                          <span>{item.label}</span>
+                          {isExpanded ? <ChevronDown className="w-4 h-4 flex-shrink-0" /> : <ChevronRight className="w-4 h-4 flex-shrink-0" />}
+                        </motion.button>
+
+                        <AnimatePresence initial={false}>
+                          {isExpanded && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="ml-3 mt-1 mb-1 pl-3 border-l-2 border-white/20 space-y-1">
+                                {item.submenu.map((sub) => (
+                                  <Link key={sub.path} to={sub.path} onClick={() => setIsOpen(false)}>
+                                    <motion.div whileTap={{ scale: 0.97 }}
+                                      className="flex items-center px-3 py-2.5 rounded-xl font-bold text-xs text-white/85 hover:bg-white/15 hover:text-white transition-all">
+                                      <span>{sub.label}</span>
+                                    </motion.div>
+                                  </Link>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  })}
                 </>
               )}
             </nav>

@@ -3,10 +3,9 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, RefreshCw } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import AppHeader from '@/components/AppHeader';
-import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminQuickStats from '@/components/admin/AdminQuickStats';
 import AdminStatCard from '@/components/admin/AdminStatCard';
 import AdminGameManager from '@/pages/AdminGameManager';
@@ -66,11 +65,21 @@ function TextInput({ value, onChange, placeholder }) {
 export default function AdminDashboard() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const location = useLocation();
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('analytics');
   const [gameManagerMounted, setGameManagerMounted] = useState(false);
   const [settingsTab, setSettingsTab] = useState('pixel');
+
+  // Sync activeTab dgn URL ?tab=... (dari hamburger submenu AppHeader)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tabFromUrl = params.get('tab');
+    if (tabFromUrl && ['analytics', 'customers', 'gamemanager', 'settings'].includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [location.search]);
 
   // Lazy mount Game Manager once user enters the tab — elak fire QC + counts API serentak masa buka admin dashboard
   useEffect(() => {
@@ -195,9 +204,6 @@ export default function AdminDashboard() {
 
       <div className="relative">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-24 md:pt-28 pb-32">
-        <div className="flex gap-4 lg:gap-6 items-start">
-          <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} user={user} />
-
           <main className="flex-1 min-w-0 space-y-4 md:space-y-5">
         {/* Mobile tab pill (shows current section) */}
         <div className="lg:hidden pro-glass rounded-2xl px-3 py-2 flex items-center justify-between gap-2">
@@ -543,7 +549,6 @@ export default function AdminDashboard() {
           </>
         )}
           </main>
-        </div>
         </div>
       </div>
     </div>
