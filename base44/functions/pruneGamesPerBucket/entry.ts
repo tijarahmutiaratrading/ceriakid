@@ -2,6 +2,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const SUBJECTS = ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'bahasa_tamil', 'bahasa_mandarin'];
 const DARJAH_LEVELS = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
+const MINI_CATEGORIES = ['memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius', 'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training', 'memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
 
 Deno.serve(async (req) => {
   try {
@@ -26,13 +27,14 @@ Deno.serve(async (req) => {
       if (page.length < 200) break;
     }
 
-    // Group by bucket: ageGroup|darjah|category
+    // Group by bucket. For subjects: ageGroup|darjah|category. For mini games: mini|category.
     const buckets = new Map();
     for (const g of all) {
-      if (!SUBJECTS.includes(g.category)) continue;
-      if (g.ageGroup === 'sekolah_rendah' && !DARJAH_LEVELS.includes(g.darjah)) continue;
+      const isMini = MINI_CATEGORIES.includes(g.category) && !SUBJECTS.includes(g.category);
+      if (!SUBJECTS.includes(g.category) && !isMini) continue;
+      if (g.ageGroup === 'sekolah_rendah' && !isMini && !DARJAH_LEVELS.includes(g.darjah)) continue;
       if (onlySubject && g.category !== onlySubject) continue;
-      const key = `${g.ageGroup}|${g.darjah || ''}|${g.category}`;
+      const key = isMini ? `mini|${g.category}` : `${g.ageGroup}|${g.darjah || ''}|${g.category}`;
       if (!buckets.has(key)) buckets.set(key, []);
       buckets.get(key).push(g);
     }
@@ -66,9 +68,10 @@ Deno.serve(async (req) => {
     for (const t of tasks || []) {
       if (t.status !== 'pending') continue;
       if (onlySubject && t.subject !== onlySubject) continue;
-      const key = `${t.ageGroup}|${t.darjah || ''}|${t.subject}`;
+      const isMiniTask = MINI_CATEGORIES.includes(t.subject) && !SUBJECTS.includes(t.subject);
+      const key = isMiniTask ? `mini|${t.subject}` : `${t.ageGroup}|${t.darjah || ''}|${t.subject}`;
       const bucket = buckets.get(key);
-      if (bucket && bucket.length >= maxPerBucket && /^QC (Replacement|Bucket Refill)/i.test(t.taskName || '')) {
+      if (bucket && bucket.length >= maxPerBucket && /^QC (Mini Replacement|Replacement|Bucket Refill)/i.test(t.taskName || '')) {
         await base44.asServiceRole.entities.GameTask.delete(t.id);
         cancelledTasks++;
       }
