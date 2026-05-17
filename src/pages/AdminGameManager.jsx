@@ -611,7 +611,7 @@ export default function AdminGameManager({ embedded = false }) {
                               <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs font-black ${sel ? 'bg-indigo-600 text-white' : 'bg-white/10 text-white/40'}`}>{sel ? '✓' : '+'}</span>
                               <span className="font-black text-xs truncate">{sc.label.replace('Prasekolah - ', '')}</span>
                             </button>
-                            <p className={`mt-2 text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} games ada · avg {curr.avgQuestions} soalan {gameDiff > 0 ? `· perlu +${gameDiff}` : '· cukup'}</p>
+                            <p className={`mt-2 text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} games ada · avg {curr.avgQuestions} soalan {gameDiff > 0 ? `· perlu +${gameDiff}` : gameDiff < 0 ? `· ✓ cukup (QC handle ${Math.abs(gameDiff)} lebih)` : '· ✓ cukup'}</p>
                             <div className="mt-3 grid grid-cols-2 gap-2">
                               <div>
                                 <label className={`block text-[10px] font-black mb-1 ${sel ? 'text-indigo-500' : 'text-white/45'}`}>Games</label>
@@ -727,8 +727,8 @@ export default function AdminGameManager({ embedded = false }) {
                       <div key={key} className="flex items-center justify-between text-xs">
                         <span className="text-white font-semibold truncate">{sc?.label}</span>
                         <div className="flex gap-2 flex-shrink-0 ml-2">
-                          <span className={`font-black ${key.startsWith('sekolah_rendah') ? 'text-cyan-300' : gameDiff > 0 ? 'text-green-300' : gameDiff < 0 ? 'text-red-300' : 'text-white/40'}`}>
-                            {key.startsWith('sekolah_rendah') ? 'custom D1-D6' : gameDiff > 0 ? `+${gameDiff} games` : gameDiff < 0 ? `${gameDiff} games` : 'games ✓'}
+                          <span className={`font-black ${key.startsWith('sekolah_rendah') ? 'text-cyan-300' : gameDiff > 0 ? 'text-green-300' : 'text-white/50'}`}>
+                            {key.startsWith('sekolah_rendah') ? 'custom D1-D6' : gameDiff > 0 ? `+${gameDiff} games` : gameDiff < 0 ? `✓ cukup (${Math.abs(gameDiff)} lebih)` : '✓ cukup'}
                           </span>
                           <span className={`font-black ${qDiff > 0 ? 'text-blue-300' : qDiff < 0 ? 'text-orange-300' : 'text-white/40'}`}>
                             {qDiff > 0 ? `+${qDiff}Q` : qDiff < 0 ? `${qDiff}Q` : 'Q ✓'}

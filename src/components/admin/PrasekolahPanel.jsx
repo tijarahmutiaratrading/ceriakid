@@ -39,7 +39,7 @@ export default function PrasekolahPanel({
                 <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs font-black ${sel ? 'bg-indigo-600 text-white' : 'bg-white/10 text-white/40'}`}>{sel ? '✓' : '+'}</span>
                 <span className="font-black text-xs truncate">{sc.label.replace('Prasekolah - ', '')}</span>
               </button>
-              <p className={`mt-2 text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} games ada · avg {curr.avgQuestions} soalan {gameDiff > 0 ? `· perlu +${gameDiff}` : '· cukup'}</p>
+              <p className={`mt-2 text-[11px] font-bold ${sel ? 'text-indigo-500' : 'text-white/55'}`}>{curr.games} games ada · avg {curr.avgQuestions} soalan {gameDiff > 0 ? `· perlu +${gameDiff}` : gameDiff < 0 ? `· ✓ cukup (QC handle ${Math.abs(gameDiff)} lebih)` : '· ✓ cukup'}</p>
               <div className="mt-3 grid grid-cols-2 gap-2">
                 <div>
                   <label className={`block text-[10px] font-black mb-1 ${sel ? 'text-indigo-500' : 'text-white/45'}`}>Games</label>

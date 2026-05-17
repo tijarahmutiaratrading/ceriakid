@@ -198,7 +198,7 @@ export default function MiniGamesGenerator({ onToast }) {
                 <div className="flex-1 min-w-0">
                   <p className="truncate">{game.title}</p>
                   <p className={`text-xs mt-0.5 ${sel ? 'text-indigo-500' : 'text-white/40'}`}>
-                    {curr} ada · {gameDiff > 0 ? `+${gameDiff} perlu` : gameDiff < 0 ? `${gameDiff}` : '✓'}
+                    {curr} ada · {gameDiff > 0 ? `+${gameDiff} perlu` : gameDiff < 0 ? `✓ cukup (QC handle ${Math.abs(gameDiff)} lebih)` : '✓ cukup'}
                   </p>
                 </div>
               </button>

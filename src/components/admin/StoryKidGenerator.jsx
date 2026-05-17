@@ -249,7 +249,29 @@ export default function StoryKidGenerator({ onToast }) {
 
   const seedStories = async () => {
     setLoading(true);
-    const selectedStories = STORY_KID_SEEDS.slice(0, Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5)));
+    const target = Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5));
+    const currentInDb = storyKidCounts.count || 0;
+    const toAdd = Math.max(0, target - currentInDb);
+
+    if (toAdd === 0) {
+      setLoading(false);
+      onToast?.(`✓ Sudah cukup! Ada ${currentInDb} story (target ${target}). QC akan handle excess bila perlu.`);
+      return;
+    }
+
+    // Pilih story yang belum diqueue/in-db (skip yang sama title)
+    const existingTitles = new Set(generatedStories.map(t => {
+      try { return JSON.parse(t.errorMessage || '{}')?.story?.title; } catch { return null; }
+    }).filter(Boolean));
+    const availableSeeds = STORY_KID_SEEDS.filter(s => !existingTitles.has(s.title));
+    const selectedStories = availableSeeds.slice(0, toAdd);
+
+    if (selectedStories.length === 0) {
+      setLoading(false);
+      onToast?.(`✓ Semua ${STORY_KID_SEEDS.length} story seed dah ada dalam DB/queue.`);
+      return;
+    }
+
     for (let i = 0; i < selectedStories.length; i++) {
       const story = selectedStories[i];
       const scenes = prepareStoryScenes(story, slideCount);
@@ -271,7 +293,7 @@ export default function StoryKidGenerator({ onToast }) {
     }
     await loadGeneratedStories();
     setLoading(false);
-    onToast?.(`✅ ${selectedStories.length} Story Kid masuk task queue. Boleh tutup browser, ia akan jalan di background.`);
+    onToast?.(`✅ Smart add: ${selectedStories.length} story baru masuk queue (target ${target}, ada ${currentInDb}).`);
   };
 
   const clearCompletedTasks = async () => {
@@ -325,8 +347,15 @@ export default function StoryKidGenerator({ onToast }) {
           <p className="text-white/40 text-xs">{storyKidCounts.totalSlides} slide</p>
         </div>
         <div className="rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
-          <p className="text-white/60 text-xs font-semibold">Akan dijana</p>
-          <p className="text-white font-black text-base sm:text-lg leading-snug">{Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5))} story × {Math.max(3, Math.min(12, Number(slideCount) || 10))} slide</p>
+          <p className="text-white/60 text-xs font-semibold">Smart add</p>
+          {(() => {
+            const target = Math.max(1, Math.min(STORY_KID_SEEDS.length, Number(storyCount) || 5));
+            const diff = target - (storyKidCounts.count || 0);
+            if (diff > 0) return <p className="text-green-300 font-black text-base sm:text-lg leading-snug">+{diff} story baru</p>;
+            if (diff < 0) return <p className="text-white/70 font-black text-sm leading-snug">✓ cukup ({Math.abs(diff)} lebih, QC handle)</p>;
+            return <p className="text-white/70 font-black text-base sm:text-lg leading-snug">✓ cukup</p>;
+          })()}
+          <p className="text-white/40 text-xs">× {Math.max(3, Math.min(12, Number(slideCount) || 10))} slide</p>
         </div>
       </div>
 
