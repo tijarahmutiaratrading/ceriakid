@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { AlertTriangle, CheckCircle2, History, Loader2, RefreshCw, ShieldCheck, Wrench } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, History, Loader2, RefreshCw, ShieldCheck, Wrench, Eye } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import QcOverviewReport from '@/components/admin/QcOverviewReport';
+import QcIssueDetailModal from '@/components/admin/QcIssueDetailModal';
 
 export default function QualityControlPanel({ onToast }) {
   const [qc, setQc] = useState(null);
@@ -10,6 +11,8 @@ export default function QualityControlPanel({ onToast }) {
   const [savingInterval, setSavingInterval] = useState(false);
   const [loading, setLoading] = useState(false);
   const [repairing, setRepairing] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailSource, setDetailSource] = useState(null); // null = current qc, else log object
 
   const loadHistory = async () => {
     try {
@@ -126,13 +129,21 @@ export default function QualityControlPanel({ onToast }) {
       </div>
 
       {qc?.sampleIssues?.length > 0 && (
-        <div className="mt-3 space-y-1 max-h-36 overflow-y-auto">
-          {qc.sampleIssues.slice(0, 5).map((item, index) => (
-            <div key={index} className="rounded-xl bg-white/8 border border-white/10 px-3 py-2 text-xs text-white/70">
-              <span className="font-black text-white">{item.title}</span> · {item.issues?.join(', ')}
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="mt-3 space-y-1 max-h-36 overflow-y-auto">
+            {qc.sampleIssues.slice(0, 5).map((item, index) => (
+              <div key={index} className="rounded-xl bg-white/8 border border-white/10 px-3 py-2 text-xs text-white/70">
+                <span className="font-black text-white">{item.title}</span> · {item.issues?.join(', ')}
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => { setDetailSource(null); setDetailOpen(true); }}
+            className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-2xl bg-blue-400/20 hover:bg-blue-400/30 border border-blue-300/20 text-blue-100 text-xs font-black transition-all"
+          >
+            <Eye className="w-4 h-4" /> Lihat detail issues
+          </button>
+        </>
       )}
 
       <div className="mt-4 rounded-2xl bg-white/8 border border-white/10 p-3">
@@ -143,23 +154,43 @@ export default function QualityControlPanel({ onToast }) {
           <p className="text-white/45 text-xs font-semibold">Belum ada rekod QC.</p>
         ) : (
           <div className="space-y-2 max-h-52 overflow-y-auto">
-            {history.map(log => (
-              <div key={log.id} className="rounded-xl bg-white/8 border border-white/10 px-3 py-2 text-xs">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-white font-black">{log.action === 'repair' || log.action === 'auto_repair' ? 'Repair' : 'Audit'} · {log.status}</span>
-                  <span className="text-white/45 font-semibold">{log.runAt ? new Date(log.runAt).toLocaleString('ms-MY') : '-'}</span>
+            {history.map(log => {
+              const hasIssues = Array.isArray(log.sampleIssues) && log.sampleIssues.length > 0;
+              return (
+                <div key={log.id} className="rounded-xl bg-white/8 border border-white/10 px-3 py-2 text-xs">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-white font-black">{log.action === 'repair' || log.action === 'auto_repair' ? 'Repair' : 'Audit'} · {log.status}</span>
+                    <span className="text-white/45 font-semibold">{log.runAt ? new Date(log.runAt).toLocaleString('ms-MY') : '-'}</span>
+                  </div>
+                  <p className="text-white/65 mt-1">
+                    Score {typeof log.score === 'number' ? `${log.score}%` : '-'} · Lulus {log.passed || 0}/{log.total || 0} · Gagal {log.failed || 0}
+                    {(log.deletedCount || log.replacementTasks) ? ` · Fixed ${log.deletedCount || 0}, Queue ${log.replacementTasks || 0}` : ''}
+                  </p>
+                  {log.message && <p className="text-white/45 mt-1 truncate">{log.message}</p>}
+                  {hasIssues && (
+                    <button
+                      onClick={() => { setDetailSource(log); setDetailOpen(true); }}
+                      className="mt-1.5 inline-flex items-center gap-1 text-blue-300 hover:text-blue-200 text-[11px] font-black"
+                    >
+                      <Eye className="w-3 h-3" /> Lihat {log.sampleIssues.length} issues
+                    </button>
+                  )}
                 </div>
-                <p className="text-white/65 mt-1">
-                  Score {typeof log.score === 'number' ? `${log.score}%` : '-'} · Lulus {log.passed || 0}/{log.total || 0} · Gagal {log.failed || 0}
-                  {(log.deletedCount || log.replacementTasks) ? ` · Fixed ${log.deletedCount || 0}, Queue ${log.replacementTasks || 0}` : ''}
-                </p>
-                {log.message && <p className="text-white/45 mt-1 truncate">{log.message}</p>}
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
     </div>
+
+    <QcIssueDetailModal
+      open={detailOpen}
+      onClose={() => setDetailOpen(false)}
+      sampleIssues={detailSource ? (detailSource.sampleIssues || []) : (qc?.sampleIssues || [])}
+      lastRunAt={detailSource ? detailSource.runAt : (history[0]?.runAt)}
+      score={detailSource ? detailSource.score : qc?.score}
+      message={detailSource ? detailSource.message : qc?.message}
+    />
     </>
   );
 }
