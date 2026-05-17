@@ -1,18 +1,47 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { LayoutDashboard, Users, Settings, ExternalLink, Gamepad2, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { LayoutDashboard, Users, Settings, ExternalLink, Gamepad2, ChevronLeft, ChevronRight, ChevronDown, Menu, X, Home, Palette, BookOpen, UserCircle, BarChart3, UserPlus, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const MENU = [
+const ADMIN_MENU = [
   { key: 'dashboard', label: 'Dashboard', sub: 'Order & Analytics', icon: LayoutDashboard, tab: 'analytics' },
   { key: 'customers', label: 'Pelanggan', sub: 'Customer Database', icon: Users, tab: 'customers' },
   { key: 'gamemanager', label: 'Game Manager', sub: 'Generator & QC', icon: Gamepad2, tab: 'gamemanager' },
   { key: 'settings', label: 'Settings', sub: 'Payment & Pixel', icon: Settings, tab: 'settings' },
 ];
 
+const USER_GROUPS = [
+  { key: 'user_dashboard', label: 'Dashboard Pengguna', icon: Home, path: '/dashboard' },
+  {
+    key: 'keluarga', label: 'Keluarga', icon: Users,
+    submenu: [
+      { path: '/children-profiles', label: 'Profil Anak', icon: UserCircle },
+      { path: '/parent-dashboard', label: 'Prestasi Anak', icon: BarChart3 },
+      { path: '/settings', label: 'Tetapan', icon: Settings },
+    ],
+  },
+  {
+    key: 'aktiviti', label: 'Aktiviti', icon: Palette,
+    submenu: [
+      { path: '/drawing', label: 'Studio Lukisan', icon: Palette },
+      { path: '/story-kid', label: 'Story Kid', icon: BookOpen },
+    ],
+  },
+  {
+    key: 'sosial', label: 'Sosial', icon: UserPlus,
+    submenu: [
+      { path: '/friends', label: 'Kawan', icon: UserPlus },
+      { path: '/challenges', label: 'Cabaran', icon: Trophy },
+    ],
+  },
+];
+
 export default function AdminSidebar({ activeTab, setActiveTab, user }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [expandedGroup, setExpandedGroup] = useState(null);
+  const location = useLocation();
+  const isPathActive = (path) => location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
 
   const SidebarContent = ({ isDrawer = false }) => {
     const showLabels = isDrawer || !collapsed;
@@ -55,7 +84,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, user }) {
         )}
 
         <nav className="flex flex-col gap-1">
-          {MENU.map(item => {
+          {ADMIN_MENU.map(item => {
             const Icon = item.icon;
             const active = activeTab === item.tab;
             return (
@@ -84,11 +113,97 @@ export default function AdminSidebar({ activeTab, setActiveTab, user }) {
             );
           })}
 
+          {/* User navigation groups */}
+          {showLabels && (
+            <div className="px-2 mt-4 mb-1">
+              <p className="text-[10px] font-black text-white/55 uppercase tracking-widest">Pengguna</p>
+            </div>
+          )}
+          {!showLabels && <div className="h-px bg-white/10 my-2" />}
+
+          {USER_GROUPS.map(group => {
+            const Icon = group.icon;
+            const hasSubmenu = group.submenu && group.submenu.length > 0;
+            const groupActive = hasSubmenu ? group.submenu.some(s => isPathActive(s.path)) : isPathActive(group.path);
+            const isExpanded = expandedGroup === group.key;
+
+            if (!hasSubmenu) {
+              return (
+                <Link
+                  key={group.key}
+                  to={group.path}
+                  onClick={() => isDrawer && setMobileOpen(false)}
+                  title={!showLabels ? group.label : undefined}
+                  className={`flex items-center gap-3 rounded-2xl transition-all ${!showLabels ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} ${groupActive ? 'bg-white/20 ring-1 ring-white/30' : 'hover:bg-white/10'}`}
+                >
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${groupActive ? 'bg-white text-game-purple' : 'bg-white/15 text-white/85'}`}>
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  {showLabels && <p className={`flex-1 font-black text-sm leading-tight ${groupActive ? 'text-white' : 'text-white/90'}`}>{group.label}</p>}
+                </Link>
+              );
+            }
+
+            return (
+              <div key={group.key}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!showLabels) { setCollapsed(false); setExpandedGroup(group.key); return; }
+                    setExpandedGroup(isExpanded ? null : group.key);
+                  }}
+                  title={!showLabels ? group.label : undefined}
+                  className={`w-full flex items-center gap-3 rounded-2xl transition-all ${!showLabels ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} ${groupActive ? 'bg-white/20 ring-1 ring-white/30' : 'hover:bg-white/10'}`}
+                >
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${groupActive ? 'bg-white text-game-purple' : 'bg-white/15 text-white/85'}`}>
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  {showLabels && (
+                    <>
+                      <p className={`flex-1 text-left font-black text-sm leading-tight ${groupActive ? 'text-white' : 'text-white/90'}`}>{group.label}</p>
+                      <ChevronDown className={`w-4 h-4 text-white/70 transition-transform ${isExpanded ? 'rotate-0' : '-rotate-90'}`} />
+                    </>
+                  )}
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {showLabels && isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="ml-5 mt-1 mb-1 pl-3 border-l-2 border-white/20 space-y-1">
+                        {group.submenu.map(sub => {
+                          const SubIcon = sub.icon;
+                          const subActive = isPathActive(sub.path);
+                          return (
+                            <Link
+                              key={sub.path}
+                              to={sub.path}
+                              onClick={() => isDrawer && setMobileOpen(false)}
+                              className={`flex items-center gap-2.5 px-2.5 py-2 rounded-xl font-bold text-xs transition-all ${subActive ? 'bg-white text-game-purple shadow-sm' : 'text-white/85 hover:bg-white/15 hover:text-white'}`}
+                            >
+                              <SubIcon className="w-3.5 h-3.5 flex-shrink-0" />
+                              <span>{sub.label}</span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+
           <Link
             to="/"
             onClick={() => isDrawer && setMobileOpen(false)}
             title={!showLabels ? 'Lihat Website' : undefined}
-            className={`flex items-center gap-3 rounded-2xl hover:bg-white/10 transition-all ${!showLabels ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'}`}
+            className={`flex items-center gap-3 rounded-2xl hover:bg-white/10 transition-all mt-1 ${!showLabels ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'}`}
           >
             <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-white/15 text-white/85 flex-shrink-0">
               <ExternalLink className="w-4 h-4" />
