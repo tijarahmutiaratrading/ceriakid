@@ -93,38 +93,18 @@ export default function MiniGamesList() {
                   background: palette.bg,
                   borderRadius: '36px',
                   boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+                  minHeight: '180px',
                 }}
               >
-                {/* Emoji icon — large, centered, no container */}
-                <div className="flex justify-center mb-3">
-                  <div className="text-6xl sm:text-7xl drop-shadow-lg" style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>{game.emoji}</div>
+                {/* Emoji icon — large, centered */}
+                <div className="flex justify-center mb-4 mt-2">
+                  <div className="text-6xl sm:text-7xl" style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>{game.emoji}</div>
                 </div>
 
-                {/* Title + difficulty badge */}
-                <div className="flex items-center gap-2 flex-wrap justify-center mb-2">
-                  <h2 className="font-black text-sm sm:text-base leading-tight line-clamp-1" style={{ color: palette.text }}>{game.title}</h2>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black" style={{ background: 'rgba(255,255,255,0.45)', color: palette.text }}>
-                    {game.difficulty || data.difficulty || 'Mudah'}
-                  </span>
-                </div>
-
-                {/* Mode/objective */}
-                <p className="text-center text-xs font-bold leading-snug mb-3 line-clamp-2" style={{ color: palette.text, opacity: 0.85 }}>
-                  {modeLabels[data.mode || data.playStyle] || data.mode || data.playStyle || game.type} · {data.objective || game.description || category.objective}
-                </p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 justify-center mb-2 pr-12">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black" style={{ background: 'rgba(255,255,255,0.45)', color: palette.text }}>
-                    <Trophy className="w-3 h-3" /> {data.reward || `${game.totalQuestions || data.itemsPerSet || 4} round`}
-                  </span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black" style={{ background: 'rgba(255,255,255,0.45)', color: palette.text }}>
-                    <Volume2 className="w-3 h-3" /> sound
-                  </span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black" style={{ background: 'rgba(255,255,255,0.45)', color: palette.text }}>
-                    <Sparkles className="w-3 h-3" /> animasi
-                  </span>
-                </div>
+                {/* Title only */}
+                <h2 className="text-center font-black text-sm sm:text-base leading-tight line-clamp-2 pr-10" style={{ color: palette.text }}>
+                  {game.title}
+                </h2>
 
                 {/* Play button — bottom right corner */}
                 <div className="absolute bottom-4 right-4 w-11 h-11 rounded-2xl bg-white flex items-center justify-center shadow-lg" style={{ color: palette.accent }}>
