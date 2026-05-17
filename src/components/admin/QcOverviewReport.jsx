@@ -167,33 +167,6 @@ export default function QcOverviewReport({ onToast }) {
         </div>
       </Section>
 
-      {/* Communicate with worker */}
-      <div className="rounded-2xl bg-white/8 border border-white/15 p-3 mt-3">
-        <p className="text-white text-xs font-black uppercase tracking-wider mb-2 flex items-center gap-2">
-          <Send className="w-3.5 h-3.5 text-cyan-200" /> Communicate dengan QC Worker
-        </p>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <button onClick={() => sendCommand('audit')} disabled={sending} className="px-3 py-2 rounded-xl bg-blue-400/90 text-blue-950 text-xs font-black disabled:opacity-50 flex items-center justify-center gap-1.5">
-            {sending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : '🔍'} Audit Sekarang
-          </button>
-          <button onClick={() => sendCommand('repair')} disabled={sending} className="px-3 py-2 rounded-xl bg-green-400/90 text-green-950 text-xs font-black disabled:opacity-50 flex items-center justify-center gap-1.5">
-            {sending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : '🛠️'} Force Repair
-          </button>
-        </div>
-        <div className="mt-2 flex gap-2">
-          <input
-            type="text"
-            value={command}
-            onChange={(e) => setCommand(e.target.value)}
-            placeholder="Custom note untuk worker (e.g. focus darjah 4 BM)"
-            className="flex-1 bg-white/10 border border-white/15 rounded-xl px-3 py-2 text-white text-xs placeholder-white/40 focus:outline-none focus:border-white/40"
-          />
-          <button onClick={() => sendCommand('custom')} disabled={sending || !command.trim()} className="px-3 py-2 rounded-xl bg-purple-400/90 text-purple-950 text-xs font-black disabled:opacity-50 flex items-center gap-1.5">
-            <Send className="w-3.5 h-3.5" /> Hantar
-          </button>
-        </div>
-        <p className="text-white/45 text-[10px] mt-2">Worker akan run repair + log note kau dalam QC history.</p>
-      </div>
     </div>
   );
 }
