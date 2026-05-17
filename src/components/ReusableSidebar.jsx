@@ -69,6 +69,33 @@ export default function ReusableSidebar({
             const Icon = item.icon;
             const active = activeTab ? activeTab === item.tab : isPathActive(item.path);
 
+            if (item.tab && setActiveTab) {
+              return (
+                <button
+                  key={item.key}
+                  onClick={() => {
+                    setActiveTab(item.tab);
+                    onMenuClick();
+                  }}
+                  title={!showLabels ? item.label : undefined}
+                  className={`flex items-center gap-3 rounded-2xl text-left transition-all ${!showLabels ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} ${active ? 'bg-white/20 ring-1 ring-white/30' : 'hover:bg-white/10'}`}
+                >
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${active ? 'bg-white text-game-purple' : 'bg-white/15 text-white/85'}`}>
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  {showLabels && (
+                    <>
+                      <div className="flex-1 min-w-0">
+                        <p className={`font-black text-sm leading-tight ${active ? 'text-white' : 'text-white/90'}`}>{item.label}</p>
+                        {item.sub && <p className="text-[10px] text-white/60 font-semibold truncate">{item.sub}</p>}
+                      </div>
+                      {active && <span className="w-2 h-2 rounded-full bg-white flex-shrink-0" />}
+                    </>
+                  )}
+                </button>
+              );
+            }
+
             if (item.action) {
               return (
                 <button

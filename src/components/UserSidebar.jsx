@@ -29,17 +29,12 @@ const USER_GROUPS = [
 
 export default function UserSidebar() {
   const { user, isAuthenticated, logout } = useAuth() || {};
-  const isAdmin = user?.role === 'admin';
 
   if (!isAuthenticated) return null;
 
-  const menuItems = isAdmin 
-    ? [{ key: 'admin', label: 'Admin', sub: 'Dashboard Admin', icon: Shield, path: '/admin-dashboard' }]
-    : [];
-
   return (
     <ReusableSidebar
-      menuItems={menuItems}
+      menuItems={[]}
       userGroups={USER_GROUPS}
       logoLabel="CeriaKid"
       logoSub="User Dashboard"
