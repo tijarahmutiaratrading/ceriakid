@@ -120,7 +120,7 @@ export default function ChildrenProfiles() {
 
       <AppHeader />
 
-      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 md:pl-[17rem] lg:pl-[18rem] pb-32 pt-20 md:pt-8">
+      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 md:pl-[var(--sidebar-pad,18rem)] pb-32 pt-20 md:pt-8 transition-[padding] duration-300">
 
         {/* Header */}
         <motion.div

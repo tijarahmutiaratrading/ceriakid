@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -48,7 +48,19 @@ const NAV_GROUPS = [
 export default function UserSidebar() {
   const { user, logout } = useAuth() || {};
   const location = useSafeLocation();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('sidebar-collapsed') === 'true';
+  });
+
+  // Sync collapsed state → CSS variable + localStorage so pages can adjust their padding
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    // Sidebar width (5rem collapsed / 16rem expanded) + 1.5rem left offset + 1rem gap
+    document.documentElement.style.setProperty('--sidebar-pad', collapsed ? '7.5rem' : '18rem');
+    localStorage.setItem('sidebar-collapsed', String(collapsed));
+  }, [collapsed]);
+
   const [expanded, setExpanded] = useState(() => {
     // Auto-expand group containing active route
     const active = NAV_GROUPS.find(g => g.submenu?.some(s => location.pathname.startsWith(s.path)));
