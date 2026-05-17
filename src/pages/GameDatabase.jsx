@@ -160,7 +160,7 @@ export default function GameDatabase() {
         )}
       </AnimatePresence>
 
-      <div className="relative max-w-4xl mx-auto px-3 pt-8 pb-8">
+      <div className="relative max-w-4xl mx-auto px-4 pt-8 pb-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 p-5 rounded-3xl" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}>
           <div>
