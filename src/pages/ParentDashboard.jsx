@@ -160,7 +160,7 @@ export default function ParentDashboard() {
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="relative max-w-5xl mx-auto px-4 pb-32 pt-28 md:pt-32">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-32 pt-20 md:pt-24">
 
         {/* Hero Card with overview stats */}
         {(() => {
