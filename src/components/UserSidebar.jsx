@@ -56,8 +56,8 @@ export default function UserSidebar() {
   // Sync collapsed state → CSS variable + localStorage so pages can adjust their padding
   useEffect(() => {
     if (typeof document === 'undefined') return;
-    // Sidebar width: w-20=5rem (collapsed) / w-64=16rem (expanded) + 1rem gap
-    document.documentElement.style.setProperty('--sidebar-pad', collapsed ? '6.5rem' : '17.5rem');
+    // Sidebar width: w-20=5rem (collapsed) / w-64=16rem (expanded), +1rem for gap between sidebar and content
+    document.documentElement.style.setProperty('--sidebar-pad', collapsed ? '6rem' : '17rem');
     localStorage.setItem('sidebar-collapsed', String(collapsed));
   }, [collapsed]);
 
