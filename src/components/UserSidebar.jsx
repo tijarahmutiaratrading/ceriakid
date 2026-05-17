@@ -61,10 +61,11 @@ export default function UserSidebar() {
 
   return (
     <aside
-      className={`hidden md:flex flex-col flex-shrink-0 rounded-3xl p-3 max-h-[calc(100vh-3rem)] overflow-y-auto transition-all duration-300 shadow-2xl shadow-purple-950/40 ring-1 ring-white/15 ${collapsed ? 'w-20' : 'w-64'}`}
+      className={`hidden md:flex flex-col flex-shrink-0 rounded-3xl p-3 max-h-[calc(100vh-3rem)] overflow-y-auto transition-all duration-300 shadow-2xl shadow-black/30 ring-1 ring-white/15 ${collapsed ? 'w-20' : 'w-64'}`}
       style={{
-        background: 'linear-gradient(160deg, rgba(76, 29, 149, 0.92), rgba(124, 58, 237, 0.88) 45%, rgba(190, 24, 93, 0.85))',
-        backdropFilter: 'blur(20px)',
+        background: 'rgba(15, 10, 30, 0.35)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
       }}
     >
       {/* Header */}
