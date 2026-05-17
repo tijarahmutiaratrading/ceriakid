@@ -83,12 +83,19 @@ export default function AdminGameManager({ embedded = false }) {
   const [currentCounts, setCurrentCounts] = useState({}); // { 'prasekolah-bahasa_melayu': { games: 20, questions: 18 } }
   const [loadingCounts, setLoadingCounts] = useState(false);
 
-  const loadCurrentCounts = async () => {
+  const loadCurrentCounts = async (attempt = 0) => {
     setLoadingCounts(true);
     try {
       const res = await base44.functions.invoke('getGameManagerCounts', {});
       setCurrentCounts(res.data?.subjectCounts || {});
-    } catch {}
+    } catch (err) {
+      // 429 rate limit — retry sekali lepas 2 saat. Lain-lain error, swallow.
+      const is429 = err?.response?.status === 429 || /rate limit/i.test(err?.message || '');
+      if (is429 && attempt < 1) {
+        setTimeout(() => loadCurrentCounts(attempt + 1), 2000);
+        return;
+      }
+    }
     setLoadingCounts(false);
   };
 
@@ -239,13 +246,19 @@ export default function AdminGameManager({ embedded = false }) {
   const [miniGamesData, setMiniGamesData] = useState({});
   const [loadingMiniGames, setLoadingMiniGames] = useState(false);
 
-  const loadMiniGamesData = async () => {
+  const loadMiniGamesData = async (attempt = 0) => {
     setLoadingMiniGames(true);
     try {
       const res = await base44.functions.invoke('getGameManagerCounts', {});
       setMiniGamesData(res.data?.miniCounts || {});
     } catch (err) {
-      showToast('❌ Failed to load mini games data', false);
+      const is429 = err?.response?.status === 429 || /rate limit/i.test(err?.message || '');
+      if (is429 && attempt < 1) {
+        setTimeout(() => loadMiniGamesData(attempt + 1), 2000);
+        return;
+      }
+      // Hanya tunjuk toast bila bukan rate-limit transient
+      if (!is429) showToast('❌ Failed to load mini games data', false);
     }
     setLoadingMiniGames(false);
   };

@@ -34,14 +34,19 @@ export default function QcOverviewReport({ onToast }) {
   const [command, setCommand] = useState('');
   const [sending, setSending] = useState(false);
 
-  const load = async (silent = false) => {
+  const load = async (silent = false, attempt = 0) => {
     setLoading(true);
     try {
       const res = await base44.functions.invoke('getQcOverviewReport', {});
       setReport(res.data);
     } catch (e) {
-      // Silent on auto-mount — elak toast rate-limit (429) bila banyak panel load serentak
-      if (!silent) onToast?.('❌ Gagal load report: ' + e.message, false);
+      // 429 rate limit — retry sekali lepas 2.5s. Silent mode tak tunjuk toast (auto-mount).
+      const is429 = e?.response?.status === 429 || /rate limit/i.test(e?.message || '');
+      if (is429 && attempt < 1) {
+        setTimeout(() => load(silent, attempt + 1), 2500);
+        return;
+      }
+      if (!silent && !is429) onToast?.('❌ Gagal load report: ' + e.message, false);
     }
     setLoading(false);
   };
