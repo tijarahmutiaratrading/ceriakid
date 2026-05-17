@@ -27,14 +27,15 @@ Deno.serve(async (req) => {
       if (page.length < 200) break;
     }
 
-    // Group by bucket. For subjects: ageGroup|darjah|category. For mini games: mini|category.
+    // Group by bucket. For subjects: ageGroup|darjah|category. For mini games: mini|category. For story kid: storykid.
     const buckets = new Map();
     for (const g of all) {
-      const isMini = MINI_CATEGORIES.includes(g.category) && !SUBJECTS.includes(g.category);
-      if (!SUBJECTS.includes(g.category) && !isMini) continue;
-      if (g.ageGroup === 'sekolah_rendah' && !isMini && !DARJAH_LEVELS.includes(g.darjah)) continue;
-      if (onlySubject && g.category !== onlySubject) continue;
-      const key = isMini ? `mini|${g.category}` : `${g.ageGroup}|${g.darjah || ''}|${g.category}`;
+      const isStoryKid = g.gameData?.storyKid === true;
+      const isMini = !isStoryKid && MINI_CATEGORIES.includes(g.category) && !SUBJECTS.includes(g.category);
+      if (!isStoryKid && !SUBJECTS.includes(g.category) && !isMini) continue;
+      if (g.ageGroup === 'sekolah_rendah' && !isMini && !isStoryKid && !DARJAH_LEVELS.includes(g.darjah)) continue;
+      if (onlySubject && g.category !== onlySubject && !(onlySubject === 'storykid' && isStoryKid)) continue;
+      const key = isStoryKid ? 'storykid' : (isMini ? `mini|${g.category}` : `${g.ageGroup}|${g.darjah || ''}|${g.category}`);
       if (!buckets.has(key)) buckets.set(key, []);
       buckets.get(key).push(g);
     }

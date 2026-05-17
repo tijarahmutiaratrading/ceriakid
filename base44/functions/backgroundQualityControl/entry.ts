@@ -9,6 +9,7 @@ const MAX_AUTOFIX_PER_RUN = 15;
 const MIN_GAMES_PER_BUCKET = 4;
 const MAX_GAMES_PER_BUCKET = 30;
 const MAX_MINI_GAMES_PER_CATEGORY = 30;
+const MAX_STORY_KID_GAMES = 30;
 const STUCK_TASK_MINUTES = 30;
 
 const BANNED_PATTERN = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|\bpohon\b|\bsepatu\b|strawberi|tampak|cantik|santai|membazir|merata-rata|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja|aktiviti pembelajaran)/i;
@@ -343,12 +344,15 @@ Deno.serve(async (req) => {
     }
 
     // ─── Step 5: For games that can't be fixed → delete & queue replacement ───
-    // Build per-bucket counts to enforce MAX_GAMES_PER_BUCKET cap
-    // Also track mini game category counts to prevent infinite generation loops
+    // Build per-bucket counts to enforce caps for subjects, mini games, and story kid
     const bucketCounts = new Map();
     const miniCategoryCounts = new Map();
+    let storyKidCount = 0;
     for (const g of games || []) {
-      if (SUBJECTS.includes(g.category)) {
+      const isStoryKid = g.gameData?.storyKid === true;
+      if (isStoryKid) {
+        storyKidCount++;
+      } else if (SUBJECTS.includes(g.category)) {
         const key = `${g.ageGroup}|${g.darjah || ''}|${g.category}`;
         bucketCounts.set(key, (bucketCounts.get(key) || 0) + 1);
       } else if (MINI_CATEGORIES.includes(g.category)) {
@@ -368,14 +372,17 @@ Deno.serve(async (req) => {
     const grouped = new Map();
     for (const item of selected) {
       const game = item.game;
-      const isMini = MINI_CATEGORIES.includes(game.category) && !SUBJECTS.includes(game.category);
-      const groupKey = isMini ? `mini|${game.category}` : `${game.ageGroup}|${game.darjah || ''}|${game.category}`;
-      const existing = grouped.get(groupKey) || { sample: game, count: 0, isMini };
+      const isStoryKid = game.gameData?.storyKid === true || item.kind === 'story';
+      const isMini = !isStoryKid && MINI_CATEGORIES.includes(game.category) && !SUBJECTS.includes(game.category);
+      const groupKey = isStoryKid ? 'storykid' : (isMini ? `mini|${game.category}` : `${game.ageGroup}|${game.darjah || ''}|${game.category}`);
+      const existing = grouped.get(groupKey) || { sample: game, count: 0, isMini, isStoryKid };
       existing.count += 1;
       grouped.set(groupKey, existing);
       await base44.asServiceRole.entities.Game.delete(game.id);
       // Decrement count after delete
-      if (isMini) {
+      if (isStoryKid) {
+        storyKidCount = Math.max(0, storyKidCount - 1);
+      } else if (isMini) {
         miniCategoryCounts.set(game.category, Math.max(0, (miniCategoryCounts.get(game.category) || 1) - 1));
       } else {
         bucketCounts.set(groupKey, Math.max(0, (bucketCounts.get(groupKey) || 1) - 1));
@@ -385,7 +392,9 @@ Deno.serve(async (req) => {
     let skippedTasksAtCap = 0;
     for (const [groupKey, group] of grouped.entries()) {
       let room;
-      if (group.isMini) {
+      if (group.isStoryKid) {
+        room = MAX_STORY_KID_GAMES - storyKidCount;
+      } else if (group.isMini) {
         const category = group.sample.category;
         const current = miniCategoryCounts.get(category) || 0;
         const pending = activeMiniCounts.get(category) || 0;
@@ -397,6 +406,10 @@ Deno.serve(async (req) => {
       if (room <= 0) {
         // Already at/over cap → don't queue replacements (prevents infinite loop)
         skippedTasksAtCap++;
+        continue;
+      }
+      // Story kid: skip auto-queue (no replacement task type defined). Cap acts as ceiling only.
+      if (group.isStoryKid) {
         continue;
       }
       const replaceCount = Math.min(group.count, room);
