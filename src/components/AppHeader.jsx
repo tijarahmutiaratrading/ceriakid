@@ -55,49 +55,67 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
 
 
 
-  const otherItems = [
-    { path: '/children-profiles', emoji: '👨‍👩‍👧‍👦', label: 'Profil Anak' },
-    { path: '/drawing', emoji: '🎨', label: 'Studio Lukisan' },
-    { path: '/story-kid', emoji: '📖', label: 'Story Kid' },
-    { path: '/parent-dashboard', emoji: '📊', label: 'Prestasi Anak' },
-    { path: '/friends', emoji: '👥', label: 'Kawan' },
-    { path: '/challenges', emoji: '⚡', label: 'Cabaran' },
-  ];
-
   // Determine menu based on user role and location
   let topItems = [];
   let adminItems = [];
   let dashboardItems = [];
+  let groupedItems = [];
 
   if (isLanding && !isAuthenticated) {
     topItems = [
-      { path: '/', emoji: '🏠', label: 'Rumah' },
-      { path: '#features', emoji: '⭐', label: 'Ciri-ciri', external: true },
-      { path: '#testimonials', emoji: '💬', label: 'Testimoni', external: true },
-      { path: '#pricing', emoji: '💰', label: 'Harga', external: true },
-      { path: '#faq', emoji: '❓', label: 'Soalan Lazim', external: true },
+      { path: '/', label: 'Rumah' },
+      { path: '#features', label: 'Ciri-ciri', external: true },
+      { path: '#testimonials', label: 'Testimoni', external: true },
+      { path: '#pricing', label: 'Harga', external: true },
+      { path: '#faq', label: 'Soalan Lazim', external: true },
     ];
   } else {
-    topItems = [{ path: '/', emoji: '🏠', label: 'Halaman Utama' }];
-    
+    topItems = [{ path: '/', label: 'Halaman Utama' }];
+
     if (isAuthenticated) {
       dashboardItems = [
-        { path: '/dashboard', emoji: '📊', label: 'Dashboard Pengguna' },
-        { path: '/settings', emoji: '⚙️', label: 'Tetapan' },
+        { path: '/dashboard', label: 'Dashboard Pengguna' },
+      ];
+
+      groupedItems = [
+        {
+          path: '/group-keluarga',
+          label: 'Keluarga',
+          submenu: [
+            { path: '/children-profiles', label: 'Profil Anak' },
+            { path: '/parent-dashboard', label: 'Prestasi Anak' },
+            { path: '/settings', label: 'Tetapan' },
+          ],
+        },
+        {
+          path: '/group-aktiviti',
+          label: 'Aktiviti',
+          submenu: [
+            { path: '/drawing', label: 'Studio Lukisan' },
+            { path: '/story-kid', label: 'Story Kid' },
+          ],
+        },
+        {
+          path: '/group-sosial',
+          label: 'Sosial',
+          submenu: [
+            { path: '/friends', label: 'Kawan' },
+            { path: '/challenges', label: 'Cabaran' },
+          ],
+        },
       ];
     }
-    
+
     if (isAdmin) {
       adminItems = [
         {
           path: '/admin-dashboard',
-          emoji: '🎛️',
           label: 'Admin Dashboard',
           submenu: [
-            { path: '/admin-dashboard?tab=analytics', label: '📊 Analytics' },
-            { path: '/admin-dashboard?tab=customers', label: '👥 Pelanggan' },
-            { path: '/admin-dashboard?tab=gamemanager', label: '🎮 Game Manager' },
-            { path: '/admin-dashboard?tab=settings', label: '⚙️ Settings' },
+            { path: '/admin-dashboard?tab=analytics', label: 'Analytics' },
+            { path: '/admin-dashboard?tab=customers', label: 'Pelanggan' },
+            { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager' },
+            { path: '/admin-dashboard?tab=settings', label: 'Settings' },
           ],
         },
       ];
@@ -258,26 +276,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 </>
               )}
 
-              {/* Other features */}
-              {isAuthenticated && otherItems.length > 0 && (
+              {/* Grouped features (Keluarga / Aktiviti / Sosial) + Admin section */}
+              {[...groupedItems, ...adminItems].length > 0 && (
                 <>
-                  {otherItems.map((item) => (
-                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
-                      <motion.div whileTap={{ scale: 0.97 }}
-                        className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
-                          isActive(item.path) ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
-                        }`}>
-                        <span>{item.label}</span>
-                      </motion.div>
-                    </Link>
-                  ))}
-                </>
-              )}
-
-              {/* Admin section */}
-              {adminItems.length > 0 && (
-                <>
-                  {adminItems.map((item) => {
+                  {[...groupedItems, ...adminItems].map((item) => {
                     const hasSubmenu = item.submenu && item.submenu.length > 0;
                     const isExpanded = expandedSubmenu === item.path;
                     const itemActive = isActive(item.path);
