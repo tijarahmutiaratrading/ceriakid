@@ -128,39 +128,6 @@ export default function AdminSidebar({ activeTab, setActiveTab, user }) {
         <SidebarContent isDrawer={false} />
       </aside>
 
-      {/* Mobile Hamburger Button */}
-      <button
-        type="button"
-        onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed bottom-6 right-6 z-40 w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-all"
-        title="Admin menu"
-      >
-        <Menu className="w-6 h-6" />
-      </button>
-
-      {/* Mobile Drawer */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileOpen(false)}
-              className="lg:hidden fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
-            />
-            <motion.div
-              initial={{ x: -320, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -320, opacity: 0 }}
-              transition={{ type: 'spring', damping: 22, stiffness: 280 }}
-              className="lg:hidden fixed left-3 right-3 top-20 bottom-3 z-50 w-auto pro-glass rounded-3xl p-3 flex flex-col overflow-y-auto"
-            >
-              <SidebarContent isDrawer={true} />
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
     </>
   );
 }
