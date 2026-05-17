@@ -239,7 +239,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, user }) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className={`hidden lg:flex flex-col flex-shrink-0 pro-glass rounded-3xl p-3 sticky top-28 h-fit transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
+      <aside className={`hidden lg:flex flex-col flex-shrink-0 pro-glass rounded-3xl p-3 sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
         <SidebarContent isDrawer={false} />
       </aside>
 
