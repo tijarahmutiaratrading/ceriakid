@@ -69,21 +69,14 @@ export default function UserSidebar() {
   const showLabels = !collapsed;
 
   return (
-    <aside
-      className={`hidden md:flex flex-col flex-shrink-0 rounded-3xl p-2 max-h-[calc(100vh-6rem)] overflow-y-auto transition-all duration-300 shadow-2xl shadow-black/30 ${collapsed ? 'w-20' : 'w-64'}`}
-      style={{
-        background: 'rgba(15, 10, 30, 0.35)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-      }}
-    >
+    <aside className={`hidden md:flex flex-col flex-shrink-0 pro-glass rounded-3xl p-3 sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
       {/* Header */}
-      <div className={`flex items-center gap-2 mb-1 ${collapsed ? 'flex-col px-0 py-1' : 'px-2 py-2'}`}>
+      <div className={`flex items-center gap-3 mb-2 ${collapsed ? 'flex-col px-0 py-2' : 'px-2 py-3'}`}>
         <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="w-10 h-10 rounded-2xl object-cover shadow-md ring-2 ring-white/40 flex-shrink-0" />
         {showLabels && (
           <div className="flex-1 min-w-0">
             <p className="font-black text-white text-sm leading-tight drop-shadow truncate">CeriaKid</p>
-            <p className="text-[10px] text-white/70 font-semibold truncate">Dashboard Pengguna</p>
+            <p className="text-[10px] text-white/70 font-semibold truncate">User Dashboard</p>
           </div>
         )}
         <button
@@ -97,12 +90,12 @@ export default function UserSidebar() {
       </div>
 
       {showLabels && (
-        <div className="px-2 mb-1">
+        <div className="px-2 mb-2">
           <p className="text-[10px] font-black text-white/55 uppercase tracking-widest">Menu</p>
         </div>
       )}
 
-      <nav className="flex flex-col gap-0.5">
+      <nav className="flex flex-col gap-1">
         {NAV_GROUPS.map(group => {
           const Icon = group.icon;
           const hasSubmenu = group.submenu && group.submenu.length > 0;
@@ -147,6 +140,7 @@ export default function UserSidebar() {
                 {showLabels && (
                   <>
                     <p className={`flex-1 text-left font-black text-sm leading-tight ${groupActive ? 'text-white' : 'text-white/90'}`}>{group.label}</p>
+                    {groupActive && <span className="w-2 h-2 rounded-full bg-white flex-shrink-0" />}
                     <ChevronDown className={`w-4 h-4 text-white/70 transition-transform ${isExpanded ? 'rotate-0' : '-rotate-90'}`} />
                   </>
                 )}
@@ -194,17 +188,20 @@ export default function UserSidebar() {
               <Shield className="w-4 h-4" />
             </div>
             {showLabels && (
-              <div className="flex-1 min-w-0">
-                <p className="font-black text-sm text-white/90 leading-tight">Admin</p>
-                <p className="text-[10px] text-white/60 font-semibold">Dashboard Admin</p>
-              </div>
+              <>
+                <div className="flex-1 min-w-0">
+                  <p className="font-black text-sm text-white/90 leading-tight">Admin</p>
+                  <p className="text-[10px] text-white/60 font-semibold">Dashboard Admin</p>
+                </div>
+                {isAdmin && <span className="w-2 h-2 rounded-full bg-white flex-shrink-0" />}
+              </>
             )}
           </Link>
         )}
       </nav>
 
       {user && (
-        <div className="mt-3 pt-2 border-t border-white/15">
+        <div className="mt-6 pt-4 border-t border-white/15">
           <div className={`flex items-center gap-3 rounded-2xl bg-white/10 ${!showLabels ? 'justify-center p-2' : 'p-2'}`} title={!showLabels ? user.full_name || 'User' : undefined}>
             {user.avatarUrl ? (
               <img src={user.avatarUrl} alt="Avatar" className="w-9 h-9 rounded-full object-cover flex-shrink-0 ring-2 ring-white/30" />
@@ -224,7 +221,7 @@ export default function UserSidebar() {
             <button
               type="button"
               onClick={() => logout?.()}
-              className="mt-1 w-full flex items-center gap-2 px-3 py-1.5 rounded-xl font-bold text-xs text-white/80 hover:bg-white/10 hover:text-red-300 transition-all"
+              className="mt-2 w-full flex items-center gap-2.5 px-3 py-2 rounded-xl font-bold text-xs text-white/80 hover:bg-white/10 hover:text-red-300 transition-all"
             >
               <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
               <span>Log Keluar</span>
