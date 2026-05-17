@@ -22,8 +22,31 @@ const LEVEL_LABELS = {
   darjah_6: 'D6',
 };
 
-function bucketColor(b) {
-  if (b.empty) return 'bg-red-500/30 text-red-100 border-red-300/40';
+const MINI_LABELS = {
+  memory_master: 'Memory Master',
+  logic_puzzles: 'Logic Puzzles',
+  speed_focus: 'Speed Focus',
+  pattern_genius: 'Pattern Genius',
+  maze_adventure: 'Maze Adventure',
+  creative_builder: 'Creative Builder',
+  problem_solver: 'Problem Solver',
+  brain_training: 'Brain Training',
+  memory: 'Memory',
+  dragdrop: 'Drag & Drop',
+  wordbuilder: 'Word Builder',
+  sorting: 'Sorting',
+  tilematch: 'Tile Match',
+  story: 'Story',
+  physics: 'Physics',
+  tracing: 'Tracing',
+};
+
+const GENIUS_MINI = new Set(['memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius', 'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training']);
+
+function bucketColor(b, count, cap) {
+  if (b.empty || count === 0) return 'bg-red-500/30 text-red-100 border-red-300/40';
+  if (cap && count >= cap) return 'bg-purple-500/25 text-purple-100 border-purple-300/40';
+  if (cap && count >= cap * 0.9) return 'bg-orange-500/25 text-orange-100 border-orange-300/40';
   if (b.low) return 'bg-yellow-500/25 text-yellow-100 border-yellow-300/40';
   return 'bg-green-500/20 text-green-100 border-green-300/30';
 }
@@ -59,7 +82,16 @@ export default function QcOverviewReport({ onToast }) {
     );
   }
 
-  if (!report) return null;
+  if (!report) {
+    return (
+      <div className="rounded-3xl p-6 border border-white/15 bg-white/5 text-center text-white/70 text-sm font-bold">
+        <p className="mb-3">Belum ada data report.</p>
+        <button onClick={() => load(false)} className="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-black border border-white/15 inline-flex items-center gap-2">
+          <RefreshCw className="w-4 h-4" /> Load Report
+        </button>
+      </div>
+    );
+  }
 
   const { totals, subjectBuckets, miniBreakdown, storySummary, queue, health, qcSetting } = report;
   const subjectCap = qcSetting?.subjectCap || 30;
@@ -83,12 +115,21 @@ export default function QcOverviewReport({ onToast }) {
           </div>
           <div>
             <h2 className="font-black text-white text-lg">📊 QC Overview Report</h2>
-            <p className="text-white/60 text-xs font-semibold">Status keseluruhan & komunikasi dengan QC worker</p>
+            <p className="text-white/60 text-xs font-semibold">Status game library & queue di seluruh platform</p>
           </div>
         </div>
-        <button onClick={load} disabled={loading} className="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-black border border-white/15 flex items-center gap-2 disabled:opacity-50">
+        <button onClick={() => load(false)} disabled={loading} className="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-black border border-white/15 flex items-center gap-2 disabled:opacity-50">
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} Refresh
         </button>
+      </div>
+
+      {/* Color legend */}
+      <div className="flex flex-wrap gap-1.5 mb-3 px-1">
+        <LegendChip color="bg-red-500/30 border-red-300/40" label="Kosong" />
+        <LegendChip color="bg-yellow-500/25 border-yellow-300/40" label="Low" />
+        <LegendChip color="bg-green-500/20 border-green-300/30" label="OK" />
+        <LegendChip color="bg-orange-500/25 border-orange-300/40" label="≥90%" />
+        <LegendChip color="bg-purple-500/25 border-purple-300/40" label="At cap" />
       </div>
 
       {/* Top-level totals */}
@@ -99,13 +140,6 @@ export default function QcOverviewReport({ onToast }) {
         <StatTile icon={ListChecks} color="text-amber-200" label="Queue Aktif" value={queue.active} sub={`${queue.failed} failed`} />
       </div>
 
-      {/* Health alerts */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
-        <HealthChip label="Subject buckets kosong" value={health.emptySubjectBuckets} total={health.totalSubjectBuckets} danger={health.emptySubjectBuckets > 0} />
-        <HealthChip label="Subject buckets low" value={health.lowSubjectBuckets} total={health.totalSubjectBuckets} warn={health.lowSubjectBuckets > 0} />
-        <HealthChip label="Mini categories kosong" value={health.emptyMiniBuckets} total={miniBreakdown.length} danger={health.emptyMiniBuckets > 0} />
-      </div>
-
       {/* Subject Games breakdown */}
       <Section title="📚 Subject Games · per subject × darjah">
         <div className="space-y-1.5">
@@ -113,38 +147,57 @@ export default function QcOverviewReport({ onToast }) {
             <div key={subject} className="flex items-center gap-2">
               <span className="text-white/80 text-xs font-black w-14 flex-shrink-0">{SUBJECT_LABELS[subject] || subject}</span>
               <div className="flex gap-1 flex-wrap">
-                {buckets.map(b => {
-                  const atCap = b.count >= subjectCap;
-                  return (
-                    <span key={b.level} className={`px-2 py-1 rounded-lg text-[10px] font-black border ${atCap ? 'bg-purple-500/25 text-purple-100 border-purple-300/40' : bucketColor(b)}`} title={`${subject} · ${b.level}: ${b.count}/${subjectCap} games`}>
-                      {LEVEL_LABELS[b.level] || b.level}: {b.count}/{subjectCap}
-                    </span>
-                  );
-                })}
+                {buckets.map(b => (
+                  <span key={b.level} className={`px-2 py-1 rounded-lg text-[10px] font-black border ${bucketColor(b, b.count, subjectCap)}`} title={`${subject} · ${b.level}: ${b.count}/${subjectCap} games`}>
+                    {LEVEL_LABELS[b.level] || b.level}: {b.count}/{subjectCap}
+                  </span>
+                ))}
               </div>
             </div>
           ))}
         </div>
       </Section>
 
-      {/* Mini Games breakdown */}
+      {/* Mini Games breakdown — grouped Genius vs Legacy */}
       <Section title={`🎮 Mini Games · per category (cap ${miniCap})`}>
-        <div className="flex flex-wrap gap-1.5">
-          {miniBreakdown.map(b => {
-            const atCap = b.count >= miniCap;
-            return (
-              <span key={b.category} className={`px-2 py-1 rounded-lg text-[10px] font-black border ${atCap ? 'bg-purple-500/25 text-purple-100 border-purple-300/40' : bucketColor(b)}`}>
-                {b.category}: {b.count}/{miniCap}
-              </span>
-            );
-          })}
-        </div>
+        {(() => {
+          const genius = miniBreakdown.filter(b => GENIUS_MINI.has(b.category));
+          const legacy = miniBreakdown.filter(b => !GENIUS_MINI.has(b.category));
+          return (
+            <div className="space-y-2">
+              {genius.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-white/65 text-[10px] font-black uppercase w-14 flex-shrink-0">Genius</span>
+                  <div className="flex gap-1 flex-wrap">
+                    {genius.map(b => (
+                      <span key={b.category} className={`px-2 py-1 rounded-lg text-[10px] font-black border ${bucketColor(b, b.count, miniCap)}`}>
+                        {MINI_LABELS[b.category] || b.category}: {b.count}/{miniCap}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {legacy.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-white/65 text-[10px] font-black uppercase w-14 flex-shrink-0">Legacy</span>
+                  <div className="flex gap-1 flex-wrap">
+                    {legacy.map(b => (
+                      <span key={b.category} className={`px-2 py-1 rounded-lg text-[10px] font-black border ${bucketColor(b, b.count, miniCap)}`}>
+                        {MINI_LABELS[b.category] || b.category}: {b.count}/{miniCap}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
       </Section>
 
       {/* Story Kid breakdown */}
       <Section title={`📖 Story Kid (cap ${storyCap})`}>
         <div className="flex flex-wrap gap-1.5">
-          <span className={`px-2 py-1 rounded-lg text-[10px] font-black border ${storySummary.total >= storyCap ? 'bg-purple-500/25 text-purple-100 border-purple-300/40' : bucketColor({ empty: storySummary.empty, low: storySummary.low })}`}>
+          <span className={`px-2 py-1 rounded-lg text-[10px] font-black border ${bucketColor({ empty: storySummary.empty, low: storySummary.low }, storySummary.total, storyCap)}`}>
             Total: {storySummary.total}/{storyCap}
           </span>
           <span className="px-2 py-1 rounded-lg text-[10px] font-black border bg-white/10 text-white/85 border-white/15">
@@ -173,13 +226,11 @@ function StatTile({ icon: Icon, color, label, value, sub }) {
   );
 }
 
-function HealthChip({ label, value, total, danger, warn }) {
-  const tone = danger ? 'bg-red-500/20 text-red-100 border-red-300/30' : warn ? 'bg-yellow-500/20 text-yellow-100 border-yellow-300/30' : 'bg-green-500/15 text-green-100 border-green-300/25';
+function LegendChip({ color, label }) {
   return (
-    <div className={`rounded-xl border px-3 py-2 ${tone}`}>
-      <p className="text-[10px] font-black uppercase tracking-wider opacity-80">{label}</p>
-      <p className="text-sm font-black">{value} / {total}</p>
-    </div>
+    <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider border ${color} text-white/85`}>
+      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" /> {label}
+    </span>
   );
 }
 
