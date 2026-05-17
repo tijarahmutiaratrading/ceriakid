@@ -60,7 +60,13 @@ export default function UserSidebar() {
   const showLabels = !collapsed;
 
   return (
-    <aside className={`hidden md:flex flex-col flex-shrink-0 pro-glass rounded-3xl p-3 sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
+    <aside
+      className={`hidden md:flex flex-col flex-shrink-0 rounded-3xl p-3 max-h-[calc(100vh-3rem)] overflow-y-auto transition-all duration-300 shadow-2xl shadow-purple-950/40 ring-1 ring-white/15 ${collapsed ? 'w-20' : 'w-64'}`}
+      style={{
+        background: 'linear-gradient(160deg, rgba(76, 29, 149, 0.92), rgba(124, 58, 237, 0.88) 45%, rgba(190, 24, 93, 0.85))',
+        backdropFilter: 'blur(20px)',
+      }}
+    >
       {/* Header */}
       <div className={`flex items-center gap-3 mb-2 ${collapsed ? 'flex-col px-0 py-2' : 'px-2 py-3'}`}>
         <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="w-10 h-10 rounded-2xl object-cover shadow-md ring-2 ring-white/40 flex-shrink-0" />
