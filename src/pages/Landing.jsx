@@ -199,7 +199,7 @@ export default function Landing() {
                 )}
               </div>
               <div className="flex gap-0.5 flex-shrink-0">{[...Array(5)].map((_, i) => <span key={i} className="text-orange-400 text-xs">★</span>)}</div>
-              <span className="text-[11px] sm:text-xs font-black text-white/85 leading-snug min-w-0 flex-1 sm:flex-none">Sedang dalam ujian beta dengan <span className="text-yellow-300">keluarga pilihan</span> • Dibina khas untuk <span className="text-yellow-300">anak Malaysia</span> 🇲🇾</span>
+              <span className="text-[11px] sm:text-xs font-black text-white/85 leading-snug min-w-0 flex-1 sm:flex-none">Dibina khas untuk <span className="text-yellow-300">anak Malaysia</span> 🇲🇾</span>
             </motion.div>
 
             {/* Headline */}
