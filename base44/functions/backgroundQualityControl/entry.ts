@@ -7,9 +7,7 @@ const MIN_PASS_SCORE = 90;
 const MAX_DELETE_PER_RUN = 20;
 const MAX_AUTOFIX_PER_RUN = 15;
 const MIN_GAMES_PER_BUCKET = 4;
-const MAX_GAMES_PER_BUCKET = 30;
-const MAX_MINI_GAMES_PER_CATEGORY = 30;
-const MAX_STORY_KID_GAMES = 30;
+const DEFAULT_CAP = 30;
 const STUCK_TASK_MINUTES = 30;
 
 const BANNED_PATTERN = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|\bpohon\b|\bsepatu\b|strawberi|tampak|cantik|santai|membazir|merata-rata|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja|aktiviti pembelajaran)/i;
@@ -186,7 +184,7 @@ async function cleanupStuckTasks(base44) {
 }
 
 // ─── Ensure each subject×darjah bucket has minimum games; queue refill if empty ───
-async function ensureBucketsNotEmpty(base44, games, activeTaskKeys) {
+async function ensureBucketsNotEmpty(base44, games, activeTaskKeys, subjectCap) {
   const counts = new Map();
   for (const g of games) {
     if (!SUBJECTS.includes(g.category)) continue;
@@ -201,7 +199,7 @@ async function ensureBucketsNotEmpty(base44, games, activeTaskKeys) {
     const current = counts.get(key) || 0;
     const need = MIN_GAMES_PER_BUCKET - current;
     // Skip if already at cap (prevents over-generation)
-    if (need > 0 && current < MAX_GAMES_PER_BUCKET && !activeTaskKeys.has(`prasekolah||${subject}`)) {
+    if (need > 0 && current < subjectCap && !activeTaskKeys.has(`prasekolah||${subject}`)) {
       refillTasks.push({ taskName: `QC Bucket Refill: prasekolah ${subject}`, ageGroup: 'prasekolah', subject, gamesCount: need, questionsPerGame: 10, status: 'pending', createdGames: 0, errorMessage: 'Auto refill by QC: bucket below minimum' });
     }
   }
@@ -211,7 +209,7 @@ async function ensureBucketsNotEmpty(base44, games, activeTaskKeys) {
       const key = `sekolah_rendah|${darjah}|${subject}`;
       const current = counts.get(key) || 0;
       const need = MIN_GAMES_PER_BUCKET - current;
-      if (need > 0 && current < MAX_GAMES_PER_BUCKET && !activeTaskKeys.has(`sekolah_rendah|${darjah}|${subject}`)) {
+      if (need > 0 && current < subjectCap && !activeTaskKeys.has(`sekolah_rendah|${darjah}|${subject}`)) {
         refillTasks.push({ taskName: `QC Bucket Refill: ${darjah} ${subject}`, ageGroup: 'sekolah_rendah', darjah, subject, gamesCount: need, questionsPerGame: 10, status: 'pending', createdGames: 0, errorMessage: 'Auto refill by QC: bucket below minimum' });
       }
     }
@@ -232,6 +230,9 @@ Deno.serve(async (req) => {
     const settings = await base44.asServiceRole.entities.QCSetting.list('-created_date', 1);
     const qcSetting = settings?.[0] || await base44.asServiceRole.entities.QCSetting.create({ intervalMinutes: 10 });
     const intervalMinutes = Math.max(5, Number(qcSetting.intervalMinutes || 10));
+    const subjectCap = Math.max(4, Number(qcSetting.subjectCap || DEFAULT_CAP));
+    const miniGameCap = Math.max(4, Number(qcSetting.miniGameCap || DEFAULT_CAP));
+    const storyKidCap = Math.max(4, Number(qcSetting.storyKidCap || DEFAULT_CAP));
     const lastAutoRunAt = qcSetting.lastAutoRunAt ? new Date(qcSetting.lastAutoRunAt).getTime() : 0;
     const minutesSinceLastRun = lastAutoRunAt ? (Date.now() - lastAutoRunAt) / 60000 : Infinity;
 
@@ -257,7 +258,7 @@ Deno.serve(async (req) => {
 
     // ─── Step 2: Load games & detect empty buckets EVEN if queue is busy ───
     const games = await base44.asServiceRole.entities.Game.list('-created_date', 1500);
-    const bucketRefillCount = await ensureBucketsNotEmpty(base44, games || [], activeTaskKeys);
+    const bucketRefillCount = await ensureBucketsNotEmpty(base44, games || [], activeTaskKeys, subjectCap);
 
     if (activeTasks.length > 0 && !force) {
       const payload = { success: true, status: 'waiting_for_generation', score: null, activeTasks: activeTasks.length, replacementTasks: bucketRefillCount, message: `Queue belum siap (${activeTasks.length} aktif). Stuck cleaned: ${stuckCleaned}. Bucket refills: ${bucketRefillCount}.` };
@@ -393,15 +394,15 @@ Deno.serve(async (req) => {
     for (const [groupKey, group] of grouped.entries()) {
       let room;
       if (group.isStoryKid) {
-        room = MAX_STORY_KID_GAMES - storyKidCount;
+        room = storyKidCap - storyKidCount;
       } else if (group.isMini) {
         const category = group.sample.category;
         const current = miniCategoryCounts.get(category) || 0;
         const pending = activeMiniCounts.get(category) || 0;
-        room = MAX_MINI_GAMES_PER_CATEGORY - current - pending;
+        room = miniGameCap - current - pending;
       } else {
         const currentCount = bucketCounts.get(groupKey) || 0;
-        room = MAX_GAMES_PER_BUCKET - currentCount;
+        room = subjectCap - currentCount;
       }
       if (room <= 0) {
         // Already at/over cap → don't queue replacements (prevents infinite loop)

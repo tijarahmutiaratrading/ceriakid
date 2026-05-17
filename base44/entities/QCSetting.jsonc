@@ -11,6 +11,21 @@
       "type": "string",
       "format": "date-time",
       "description": "Masa terakhir auto QC benar-benar berjalan"
+    },
+    "subjectCap": {
+      "type": "number",
+      "default": 30,
+      "description": "Cap maksimum games per subjek bucket (ageGroup \u00d7 darjah \u00d7 subject)"
+    },
+    "miniGameCap": {
+      "type": "number",
+      "default": 30,
+      "description": "Cap maksimum games per mini game category"
+    },
+    "storyKidCap": {
+      "type": "number",
+      "default": 30,
+      "description": "Cap maksimum total story kid games"
     }
   },
   "required": [

@@ -7,7 +7,11 @@ export default function QualityControlPanel({ onToast }) {
   const [qc, setQc] = useState(null);
   const [history, setHistory] = useState([]);
   const [intervalMinutes, setIntervalMinutes] = useState(10);
+  const [subjectCap, setSubjectCap] = useState(30);
+  const [miniGameCap, setMiniGameCap] = useState(30);
+  const [storyKidCap, setStoryKidCap] = useState(30);
   const [savingInterval, setSavingInterval] = useState(false);
+  const [savingCaps, setSavingCaps] = useState(false);
   const [loading, setLoading] = useState(false);
   const [repairing, setRepairing] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -22,7 +26,26 @@ export default function QualityControlPanel({ onToast }) {
 
   const loadSetting = async () => {
     const res = await base44.functions.invoke('updateQualityControlSettings', {});
-    if (res.data?.setting?.intervalMinutes) setIntervalMinutes(res.data.setting.intervalMinutes);
+    const s = res.data?.setting;
+    if (s?.intervalMinutes) setIntervalMinutes(s.intervalMinutes);
+    if (s?.subjectCap) setSubjectCap(s.subjectCap);
+    if (s?.miniGameCap) setMiniGameCap(s.miniGameCap);
+    if (s?.storyKidCap) setStoryKidCap(s.storyKidCap);
+  };
+
+  const saveCaps = async () => {
+    setSavingCaps(true);
+    try {
+      const res = await base44.functions.invoke('updateQualityControlSettings', { subjectCap, miniGameCap, storyKidCap });
+      const s = res.data?.setting;
+      if (s?.subjectCap) setSubjectCap(s.subjectCap);
+      if (s?.miniGameCap) setMiniGameCap(s.miniGameCap);
+      if (s?.storyKidCap) setStoryKidCap(s.storyKidCap);
+      onToast?.(`✅ Cap dikemaskini: Subjek ${s?.subjectCap}, Mini ${s?.miniGameCap}, Story ${s?.storyKidCap}`);
+    } catch (error) {
+      onToast?.('❌ Gagal simpan cap: ' + error.message, false);
+    }
+    setSavingCaps(false);
   };
 
   const saveSetting = async () => {
@@ -86,7 +109,7 @@ export default function QualityControlPanel({ onToast }) {
       </div>
 
       {/* Auto QC interval */}
-      <div className="flex items-center gap-2 rounded-2xl bg-white/10 border border-white/15 px-3 py-2 mb-4 md:mb-5 flex-wrap">
+      <div className="flex items-center gap-2 rounded-2xl bg-white/10 border border-white/15 px-3 py-2 mb-3 flex-wrap">
         <span className="text-white/60 text-xs font-black whitespace-nowrap">Auto QC setiap</span>
         <input
           type="number"
@@ -99,6 +122,34 @@ export default function QualityControlPanel({ onToast }) {
         <span className="text-white/60 text-xs font-bold">min</span>
         <button onClick={saveSetting} disabled={savingInterval} className="ml-auto px-3 py-1 rounded-xl bg-blue-400 text-blue-950 text-xs font-black disabled:opacity-50">
           {savingInterval ? '...' : 'Simpan'}
+        </button>
+      </div>
+
+      {/* Auto-Replace Caps */}
+      <div className="rounded-2xl bg-white/10 border border-white/15 px-3 py-3 mb-4 md:mb-5">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-white font-black text-xs">🎯 Cap Auto-Replace</span>
+          <span className="text-white/45 text-[10px] font-semibold">QC akan delete game rosak & queue baru supaya total kekal pada cap</span>
+        </div>
+        <div className="grid grid-cols-3 gap-2 mb-2">
+          <div>
+            <label className="block text-white/55 text-[10px] font-black mb-1">📚 Subjek</label>
+            <input type="number" min="4" max="200" value={subjectCap} onChange={(e) => setSubjectCap(parseInt(e.target.value) || 4)}
+              className="w-full bg-white/10 border border-white/10 rounded-xl px-2 py-1.5 text-white text-xs font-black text-center" />
+          </div>
+          <div>
+            <label className="block text-white/55 text-[10px] font-black mb-1">🎮 Mini Games</label>
+            <input type="number" min="4" max="200" value={miniGameCap} onChange={(e) => setMiniGameCap(parseInt(e.target.value) || 4)}
+              className="w-full bg-white/10 border border-white/10 rounded-xl px-2 py-1.5 text-white text-xs font-black text-center" />
+          </div>
+          <div>
+            <label className="block text-white/55 text-[10px] font-black mb-1">📖 Story Kid</label>
+            <input type="number" min="4" max="200" value={storyKidCap} onChange={(e) => setStoryKidCap(parseInt(e.target.value) || 4)}
+              className="w-full bg-white/10 border border-white/10 rounded-xl px-2 py-1.5 text-white text-xs font-black text-center" />
+          </div>
+        </div>
+        <button onClick={saveCaps} disabled={savingCaps} className="w-full px-3 py-2 rounded-xl bg-green-400 text-green-950 text-xs font-black disabled:opacity-50">
+          {savingCaps ? 'Menyimpan...' : '💾 Simpan Cap'}
         </button>
       </div>
 
