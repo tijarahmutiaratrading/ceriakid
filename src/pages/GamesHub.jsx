@@ -5,6 +5,7 @@ import { ArrowLeft, Loader2 } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
+import { getCategoryIllustration } from '@/lib/miniCategoryIllustrations';
 import { base44 } from '@/api/base44Client';
 
 const levelColors = {
@@ -93,7 +94,16 @@ export default function GamesHub() {
               <Link to={`/mini-games/${category.id}`} className="block h-full">
                 <div className={`bg-gradient-to-br ${category.color} rounded-3xl p-4 h-full shadow-lg`}>
                   <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="text-4xl">{category.emoji}</div>
+                    {getCategoryIllustration(category.id) ? (
+                      <img
+                        src={getCategoryIllustration(category.id)}
+                        alt={category.title}
+                        className="w-16 h-16 object-contain rounded-xl"
+                        style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))' }}
+                      />
+                    ) : (
+                      <div className="text-4xl">{category.emoji}</div>
+                    )}
                     <span className="text-xs px-2 py-1 rounded-full font-black bg-white text-purple-900 shadow-md">
                       {loadingCounts ? <Loader2 className="w-3 h-3 animate-spin" /> : `${counts[category.id] ?? 0} games`}
                     </span>

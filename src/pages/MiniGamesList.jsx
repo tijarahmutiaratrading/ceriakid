@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Play, ArrowLeft, Trophy, Volume2, Sparkles, Lock, Loader2 } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { findMiniCategory, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
+import { getCategoryIllustration } from '@/lib/miniCategoryIllustrations';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
@@ -107,9 +108,18 @@ export default function MiniGamesList() {
                   minHeight: '180px',
                 }}
               >
-                {/* Emoji icon — large, centered */}
+                {/* Illustration — large, centered */}
                 <div className="flex justify-center mb-4 mt-2">
-                  <div className="text-6xl sm:text-7xl" style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>{game.emoji}</div>
+                  {getCategoryIllustration(category.id) ? (
+                    <img
+                      src={getCategoryIllustration(category.id)}
+                      alt={game.title}
+                      className="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded-2xl"
+                      style={{ filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.18))' }}
+                    />
+                  ) : (
+                    <div className="text-6xl sm:text-7xl" style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>{game.emoji}</div>
+                  )}
                 </div>
 
                 {/* Title only */}
