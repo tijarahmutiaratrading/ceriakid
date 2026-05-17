@@ -88,23 +88,6 @@ export default function MiniGamePlayground() {
           <ArrowLeft className="w-4 h-4" /> Kembali ke {category.title}
         </Link>
 
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-5 p-5 rounded-3xl" style={glassCard}>
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner">{game.emoji}</div>
-            <div className="min-w-0">
-              <h1 className="text-xl font-black text-slate-900 leading-tight">{game.title}</h1>
-              <p className="text-purple-950 text-xs font-black mt-1">{gameData.objective || game.description || category.objective} · {game.difficulty || gameData.difficulty || 'Mudah'}</p>
-            </div>
-          </div>
-          <p className="text-slate-950 text-sm font-black mt-4 leading-relaxed">{gameData.instruction || 'Ikut arahan dan pilih jawapan yang betul.'}</p>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }} className="mb-5 rounded-3xl bg-white p-4 text-slate-900 shadow-2xl border-4 border-white/70">
-          <p className="text-[11px] font-black uppercase tracking-[0.18em] text-purple-700 mb-1">Cara Main Ringkas</p>
-          <p className="text-base font-black leading-snug">{guideByMode[gameData.mode || gameData.playStyle] || 'Ikut arahan, pilih jawapan yang paling sesuai, dan lihat popup Betul/Cuba lagi.'}</p>
-          <p className="text-xs font-black text-slate-800 mt-2">Untuk ibu bapa: game ini latih {(gameData.objective || game.description || category.objective)?.toLowerCase() || 'kemahiran asas'}.</p>
-        </motion.div>
-
         {loadingGame ? (
           <div className="flex justify-center py-10"><Loader2 className="w-7 h-7 animate-spin text-white" /></div>
         ) : locked ? (
