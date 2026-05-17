@@ -63,39 +63,42 @@ export default function QualityControlPanel({ onToast }) {
     <>
     <QcOverviewReport onToast={onToast} />
     <div className="w-full min-w-0 max-w-full overflow-hidden p-3 md:p-7 rounded-[1.5rem] md:rounded-[2rem] mb-5 md:mb-6 shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.20), rgba(59,130,246,0.12))', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.22)' }}>
-      <div className="flex min-w-0 flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 mb-4 md:mb-5">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center">
-            <ShieldCheck className="w-6 h-6 text-green-300" />
-          </div>
-          <div>
-            <h2 className="font-black text-white text-lg">🛡️ Quality Control Worker</h2>
-            <p className="text-white/55 text-xs font-semibold">Auto audit, repair, re-queue replacement, dan ajar generator elak isu sama berulang.</p>
-          </div>
+      {/* Header */}
+      <div className="flex items-start gap-3 mb-4">
+        <div className="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center flex-shrink-0">
+          <ShieldCheck className="w-5 h-5 md:w-6 md:h-6 text-green-300" />
         </div>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <div className="flex items-center gap-2 rounded-2xl bg-white/10 border border-white/15 px-3 py-2">
-            <span className="text-white/60 text-xs font-black whitespace-nowrap">Auto QC</span>
-            <input
-              type="number"
-              min="5"
-              max="1440"
-              value={intervalMinutes}
-              onChange={(e) => setIntervalMinutes(parseInt(e.target.value) || 5)}
-              className="w-16 bg-white/10 border border-white/10 rounded-xl px-2 py-1 text-white text-xs font-black text-center"
-            />
-            <span className="text-white/60 text-xs font-bold">min</span>
-            <button onClick={saveSetting} disabled={savingInterval} className="px-2 py-1 rounded-xl bg-blue-400 text-blue-950 text-xs font-black disabled:opacity-50">
-              {savingInterval ? '...' : 'Simpan'}
-            </button>
-          </div>
-          <button onClick={() => runCheck(false)} disabled={loading || repairing} className="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-black border border-white/15 flex items-center gap-2 disabled:opacity-50">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} Audit
-          </button>
-          <button onClick={() => runCheck(true)} disabled={loading || repairing || isPassing} className="px-4 py-2 rounded-2xl bg-green-400 text-green-950 text-xs font-black flex items-center gap-2 disabled:opacity-50">
-            {repairing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wrench className="w-4 h-4" />} Repair + Teach Generator
-          </button>
+        <div className="min-w-0 flex-1">
+          <h2 className="font-black text-white text-base md:text-lg leading-tight">🛡️ Quality Control Worker</h2>
+          <p className="text-white/55 text-[11px] md:text-xs font-semibold leading-snug mt-0.5">Auto audit, repair, re-queue replacement, dan ajar generator elak isu sama berulang.</p>
         </div>
+      </div>
+
+      {/* Action buttons — full width on mobile, inline on desktop */}
+      <div className="grid grid-cols-2 gap-2 mb-3">
+        <button onClick={() => runCheck(false)} disabled={loading || repairing} className="px-3 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-black border border-white/15 flex items-center justify-center gap-2 disabled:opacity-50">
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} Audit
+        </button>
+        <button onClick={() => runCheck(true)} disabled={loading || repairing || isPassing} className="px-3 py-2.5 rounded-2xl bg-green-400 text-green-950 text-xs font-black flex items-center justify-center gap-2 disabled:opacity-50">
+          {repairing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wrench className="w-4 h-4" />} <span className="truncate">Repair + Teach</span>
+        </button>
+      </div>
+
+      {/* Auto QC interval */}
+      <div className="flex items-center gap-2 rounded-2xl bg-white/10 border border-white/15 px-3 py-2 mb-4 md:mb-5 flex-wrap">
+        <span className="text-white/60 text-xs font-black whitespace-nowrap">Auto QC setiap</span>
+        <input
+          type="number"
+          min="5"
+          max="1440"
+          value={intervalMinutes}
+          onChange={(e) => setIntervalMinutes(parseInt(e.target.value) || 5)}
+          className="w-16 bg-white/10 border border-white/10 rounded-xl px-2 py-1 text-white text-xs font-black text-center"
+        />
+        <span className="text-white/60 text-xs font-bold">min</span>
+        <button onClick={saveSetting} disabled={savingInterval} className="ml-auto px-3 py-1 rounded-xl bg-blue-400 text-blue-950 text-xs font-black disabled:opacity-50">
+          {savingInterval ? '...' : 'Simpan'}
+        </button>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
