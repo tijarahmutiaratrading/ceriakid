@@ -54,7 +54,7 @@ export default function GameAnalytics() {
       </div>
       <AppHeader showBack={true} backTo="/admin-game-manager" />
 
-      <div className="relative max-w-4xl mx-auto px-4 pt-8 pb-8">
+      <div className="relative max-w-4xl mx-auto px-3 pt-8 pb-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-5 rounded-3xl flex items-center gap-3" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}>
           <div className="text-4xl">📊</div>
           <div>
