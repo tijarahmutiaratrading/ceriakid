@@ -35,22 +35,22 @@ export default function QualityControlPanel({ onToast }) {
     setSavingInterval(false);
   };
 
-  const runCheck = async (repair = false) => {
+  const runCheck = async (repair = false, silent = false) => {
     repair ? setRepairing(true) : setLoading(true);
     try {
       const res = await base44.functions.invoke('backgroundQualityControl', repair ? { force: true } : { auditOnly: true, force: true });
       setQc(res.data);
       await loadHistory();
-      onToast?.(repair ? '✅ QC repair dijalankan' : '✅ QC audit dikemaskini');
+      if (!silent) onToast?.(repair ? '✅ QC repair dijalankan' : '✅ QC audit dikemaskini');
     } catch (error) {
-      onToast?.('❌ QC gagal: ' + error.message, false);
+      if (!silent) onToast?.('❌ QC gagal: ' + error.message, false);
     }
     setLoading(false);
     setRepairing(false);
   };
 
   useEffect(() => {
-    runCheck(false);
+    runCheck(false, true); // silent on mount — elak noti rimas tiap kali buka page
     loadHistory();
     loadSetting();
   }, []);
