@@ -81,6 +81,8 @@ export default function AdminGameManager({ embedded = false }) {
   const [loadingTasks, setLoadingTasks] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [currentCounts, setCurrentCounts] = useState({}); // { 'prasekolah-bahasa_melayu': { games: 20, questions: 18 } }
+  const [miniCounts, setMiniCounts] = useState({});
+  const [storyCount, setStoryCount] = useState(0);
   const [loadingCounts, setLoadingCounts] = useState(false);
 
   const loadCurrentCounts = async (attempt = 0) => {
@@ -88,6 +90,8 @@ export default function AdminGameManager({ embedded = false }) {
     try {
       const res = await base44.functions.invoke('getGameManagerCounts', {});
       setCurrentCounts(res.data?.subjectCounts || {});
+      setMiniCounts(res.data?.miniCounts || {});
+      setStoryCount(res.data?.storyKidCounts?.count || 0);
     } catch (err) {
       // 429 rate limit — retry sekali lepas 2 saat. Lain-lain error, swallow.
       const is429 = err?.response?.status === 429 || /rate limit/i.test(err?.message || '');
@@ -113,10 +117,14 @@ export default function AdminGameManager({ embedded = false }) {
     setLoadingTasks(false);
   };
 
+  // Load counts on first mount supaya hero stats tak kosong walaupun user belum buka tab Manager
+  useEffect(() => {
+    loadCurrentCounts();
+  }, []);
+
   useEffect(() => {
     if (tab === 'generator') {
       loadTasks();
-      loadCurrentCounts();
     }
   }, [tab]);
 
@@ -367,8 +375,13 @@ export default function AdminGameManager({ embedded = false }) {
     }
   };
 
-  const totalGames = subjects.reduce((a, s) => a + s.totalGames, 0);
-  const totalFull = subjects.reduce((a, s) => a + s.games.filter(g => g.questionCount >= QUESTION_THRESHOLD).length, 0);
+  // Hero stats — guna data dari getGameManagerCounts supaya tak kosong walaupun tab Manager belum dibuka
+  const subjectGamesCount = Object.values(currentCounts).reduce((sum, c) => sum + (c?.games || 0), 0);
+  const miniGamesCount = Object.values(miniCounts).reduce((sum, c) => sum + (c?.count || 0), 0);
+  const heroTotalGames = subjectGamesCount + miniGamesCount + storyCount;
+  // "Soalan Penuh" — bilangan subject games yang dah ada >=20 soalan (anggaran dari avgQuestions)
+  const heroTotalFull = Object.values(currentCounts).reduce((sum, c) => sum + ((c?.avgQuestions || 0) >= QUESTION_THRESHOLD ? (c?.games || 0) : 0), 0);
+  // Players hanya available bila tab Manager loaded (dari fetchStats)
   const totalPlayers = subjects.reduce((a, s) => a + s.games.reduce((b, g) => b + g.players, 0), 0);
 
   const pendingTasks = tasks.filter(t => t.status === 'pending');
@@ -417,8 +430,8 @@ export default function AdminGameManager({ embedded = false }) {
 
       <div className={innerClass}>
         <MasterGeneratorHero
-          totalGames={totalGames}
-          totalFull={totalFull}
+          totalGames={heroTotalGames}
+          totalFull={heroTotalFull}
           totalPlayers={totalPlayers}
           pendingTasks={pendingTasks}
           runningTasks={runningTasks}
@@ -718,8 +731,8 @@ export default function AdminGameManager({ embedded = false }) {
             {/* Stats row */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4">
               {[
-                { value: totalGames, label: 'Total Games', color: 'text-yellow-300' },
-                { value: totalFull, label: 'Soalan Penuh', color: 'text-green-300' },
+                { value: heroTotalGames, label: 'Total Games', color: 'text-yellow-300' },
+                { value: heroTotalFull, label: 'Soalan Penuh', color: 'text-green-300' },
                 { value: totalPlayers, label: 'Players', color: 'text-pink-300' },
               ].map(({ value, label, color }) => (
                 <div key={label} className="rounded-2xl p-3 sm:p-4 text-center shadow-lg shadow-black/10 border border-white/15" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)' }}>
