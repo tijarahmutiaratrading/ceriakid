@@ -52,10 +52,21 @@ export default function MiniGamesList() {
   const gamesToShow = dbGames.length > 0 ? dbGames : category.games;
 
   return (
-    <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
+    <div className="min-h-screen font-nunito relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #B5D8B0 0%, #A8CFA3 50%, #9FCFA5 100%)' }}>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+        <svg className="absolute -top-20 -right-20 w-[28rem] h-[28rem] opacity-50" viewBox="0 0 400 400" fill="none">
+          <path d="M200 50 Q 320 80, 350 200 T 200 350 Q 80 320, 50 200 T 200 50 Z" fill="#C8E0BF" />
+        </svg>
+        <svg className="absolute top-1/3 -left-32 w-96 h-96 opacity-40" viewBox="0 0 400 400" fill="none">
+          <path d="M200 60 Q 310 90, 340 210 T 190 340 Q 70 310, 60 190 T 200 60 Z" fill="#BBDDB3" />
+        </svg>
+        <svg className="absolute bottom-10 right-10 w-40 h-40 opacity-60" viewBox="0 0 100 100">
+          <path d="M50 10 Q 70 30, 60 55 Q 50 80, 40 55 Q 30 30, 50 10 Z" fill="#7BAB6E" />
+          <path d="M30 40 Q 45 50, 40 70 Q 35 85, 25 70 Q 20 55, 30 40 Z" fill="#8FBC82" />
+        </svg>
+        <svg className="absolute top-32 left-8 w-28 h-28 opacity-50" viewBox="0 0 100 100">
+          <path d="M50 15 Q 68 35, 58 60 Q 48 80, 42 60 Q 32 35, 50 15 Z" fill="#7BAB6E" />
+        </svg>
       </div>
 
       <AppHeader showBack={true} backTo="/games-hub" />
