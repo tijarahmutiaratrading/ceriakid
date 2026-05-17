@@ -245,9 +245,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Dashboard section */}
               {dashboardItems.length > 0 && (
                 <>
-                  <div className="pt-2 pb-1.5">
-                    <p className="text-xs font-black text-white/60 uppercase tracking-wider px-4">📱 Akaun</p>
-                  </div>
                   {dashboardItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
@@ -264,9 +261,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Other features */}
               {isAuthenticated && otherItems.length > 0 && (
                 <>
-                  <div className="pt-2 pb-1.5">
-                    <p className="text-xs font-black text-white/60 uppercase tracking-wider px-4">🎮 Fitur</p>
-                  </div>
                   {otherItems.map((item) => (
                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
                       <motion.div whileTap={{ scale: 0.97 }}
