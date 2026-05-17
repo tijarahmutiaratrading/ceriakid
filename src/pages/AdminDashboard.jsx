@@ -194,26 +194,34 @@ export default function AdminDashboard() {
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 pt-28 pb-32">
-        <div className="flex gap-6 items-start">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-24 md:pt-28 pb-32">
+        <div className="flex gap-4 lg:gap-6 items-start">
           <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} user={user} />
 
-          <main className="flex-1 min-w-0 space-y-5">
+          <main className="flex-1 min-w-0 space-y-4 md:space-y-5">
+        {/* Mobile tab pill (shows current section) */}
+        <div className="lg:hidden pro-glass rounded-2xl px-3 py-2 flex items-center justify-between gap-2">
+          <p className="text-white/65 text-[10px] font-black uppercase tracking-widest">Section</p>
+          <p className="text-white text-sm font-black truncate">
+            {tabs.find(t => t.key === activeTab)?.label || 'Dashboard'}
+          </p>
+        </div>
+
         {/* Page header */}
-        <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="w-14 h-14 rounded-2xl object-cover shadow-lg ring-2 ring-white/40 flex-shrink-0" />
-            <div>
-              <p className="text-amber-300 text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> CeriaKid Analytics</p>
-              <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight leading-tight">Dashboard</h1>
-              <p className="text-white/90 text-xs md:text-sm font-semibold">Pantau prestasi jualan kau secara realtime</p>
+        <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-4 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+          <div className="flex items-center gap-3 md:gap-4 min-w-0">
+            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="w-12 h-12 md:w-14 md:h-14 rounded-2xl object-cover shadow-lg ring-2 ring-white/40 flex-shrink-0" />
+            <div className="min-w-0">
+              <p className="text-amber-300 text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> CeriaKid Analytics</p>
+              <h1 className="text-xl md:text-3xl font-black text-white tracking-tight leading-tight">Dashboard</h1>
+              <p className="text-white/90 text-[11px] md:text-sm font-semibold truncate">Pantau prestasi jualan secara realtime</p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <button type="button" onClick={loadData} className="rounded-xl bg-white/15 hover:bg-white/25 px-3.5 py-2 text-xs font-black text-white transition-all flex items-center gap-1.5 ring-1 ring-white/20">
+            <button type="button" onClick={loadData} className="rounded-xl bg-white/15 hover:bg-white/25 px-3 py-2 text-xs font-black text-white transition-all flex items-center gap-1.5 ring-1 ring-white/20">
               <RefreshCw className="w-3.5 h-3.5" /> Refresh
             </button>
-            <button type="button" onClick={handleClearCache} disabled={clearingCache} className="rounded-xl bg-white/15 hover:bg-white/25 px-3.5 py-2 text-xs font-black text-white transition-all disabled:opacity-60 flex items-center gap-1.5 ring-1 ring-white/20">
+            <button type="button" onClick={handleClearCache} disabled={clearingCache} className="rounded-xl bg-white/15 hover:bg-white/25 px-3 py-2 text-xs font-black text-white transition-all disabled:opacity-60 flex items-center gap-1.5 ring-1 ring-white/20">
               <RefreshCw className={`w-3.5 h-3.5 ${clearingCache ? 'animate-spin' : ''}`} /> Cache
             </button>
           </div>
@@ -232,19 +240,6 @@ export default function AdminDashboard() {
             totalVisitors={subscriptions.length}
           />
         )}
-
-        {/* Mobile-only tabs (sidebar handles desktop) */}
-        <div className="lg:hidden pro-glass flex gap-2 p-1 rounded-2xl">
-          {tabs.map(tab => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-2.5 rounded-xl font-black text-xs transition-all whitespace-nowrap ${activeTab === tab.key ? 'bg-white text-game-purple shadow' : 'text-white/85 hover:bg-white/15'}`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
 
         {/* ═══ ANALYTICS TAB ═══ */}
         {activeTab === 'analytics' && (
@@ -364,7 +359,7 @@ export default function AdminDashboard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: activeTab === 'gamemanager' ? 1 : 0 }}
             style={{ display: activeTab === 'gamemanager' ? 'block' : 'none' }}
-            className="-mx-4 md:-mx-6"
+            className="-mx-3 sm:-mx-4 md:-mx-6"
           >
             <AdminGameManager embedded />
           </motion.div>
