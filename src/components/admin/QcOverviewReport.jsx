@@ -34,18 +34,19 @@ export default function QcOverviewReport({ onToast }) {
   const [command, setCommand] = useState('');
   const [sending, setSending] = useState(false);
 
-  const load = async () => {
+  const load = async (silent = false) => {
     setLoading(true);
     try {
       const res = await base44.functions.invoke('getQcOverviewReport', {});
       setReport(res.data);
     } catch (e) {
-      onToast?.('❌ Gagal load report: ' + e.message, false);
+      // Silent on auto-mount — elak toast rate-limit (429) bila banyak panel load serentak
+      if (!silent) onToast?.('❌ Gagal load report: ' + e.message, false);
     }
     setLoading(false);
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(true); }, []);
 
   const sendCommand = async (cmd) => {
     setSending(true);

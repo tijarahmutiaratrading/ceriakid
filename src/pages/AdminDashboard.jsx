@@ -69,7 +69,13 @@ export default function AdminDashboard() {
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('analytics');
+  const [gameManagerMounted, setGameManagerMounted] = useState(false);
   const [settingsTab, setSettingsTab] = useState('pixel');
+
+  // Lazy mount Game Manager once user enters the tab — elak fire QC + counts API serentak masa buka admin dashboard
+  useEffect(() => {
+    if (activeTab === 'gamemanager') setGameManagerMounted(true);
+  }, [activeTab]);
   const [settings, setSettings] = useState(defaultSettings);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -352,9 +358,14 @@ export default function AdminDashboard() {
           </motion.div>
         )}
 
-        {/* ═══ GAME MANAGER TAB ═══ */}
-        {activeTab === 'gamemanager' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="-mx-4 md:-mx-6">
+        {/* ═══ GAME MANAGER TAB (lazy-mounted; kekal mounted lepas first visit) ═══ */}
+        {gameManagerMounted && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: activeTab === 'gamemanager' ? 1 : 0 }}
+            style={{ display: activeTab === 'gamemanager' ? 'block' : 'none' }}
+            className="-mx-4 md:-mx-6"
+          >
             <AdminGameManager embedded />
           </motion.div>
         )}
