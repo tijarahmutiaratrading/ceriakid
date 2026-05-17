@@ -17,6 +17,8 @@ import QualityControlPanel from '@/components/admin/QualityControlPanel';
 import ProductionSafetyChecklist from '@/components/admin/ProductionSafetyChecklist';
 import MasterGeneratorHero from '@/components/admin/MasterGeneratorHero';
 import MasterGeneratorTabs from '@/components/admin/MasterGeneratorTabs';
+import PrasekolahPanel from '@/components/admin/PrasekolahPanel';
+import SekolahRendahPanel from '@/components/admin/SekolahRendahPanel';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 
 const QUESTION_THRESHOLD = 20;
@@ -43,6 +45,7 @@ export default function AdminGameManager({ embedded = false }) {
   const [miniGamesTab, setMiniGamesTab] = useState('generate');
   const [storyKidTab, setStoryKidTab] = useState('generate');
   const [expandedSections, setExpandedSections] = useState({ prasekolah: true, sekolah_rendah: true });
+  const [generatorSlide, setGeneratorSlide] = useState(0); // 0 = Prasekolah, 1 = Sekolah Rendah (mobile/tablet carousel)
 
   // Shared
   const [toast, setToast] = useState(null);
@@ -483,8 +486,65 @@ export default function AdminGameManager({ embedded = false }) {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-                  <div className="min-w-0 rounded-[1.25rem] border border-white/10 bg-white/[0.055] p-3 md:rounded-[1.5rem] md:p-4">
+                {/* Carousel tabs — mobile/tablet only */}
+                <div className="xl:hidden mb-3 flex items-center gap-2">
+                  <button
+                    onClick={() => setGeneratorSlide(0)}
+                    className={`flex-1 py-2.5 rounded-2xl text-xs font-black transition-all ${generatorSlide === 0 ? 'bg-yellow-300 text-yellow-950 shadow-lg' : 'bg-white/10 text-white/65 hover:bg-white/15'}`}
+                  >
+                    🧒 Prasekolah
+                  </button>
+                  <button
+                    onClick={() => setGeneratorSlide(1)}
+                    className={`flex-1 py-2.5 rounded-2xl text-xs font-black transition-all ${generatorSlide === 1 ? 'bg-cyan-300 text-cyan-950 shadow-lg' : 'bg-white/10 text-white/65 hover:bg-white/15'}`}
+                  >
+                    🎒 Sekolah Rendah
+                  </button>
+                </div>
+
+                {/* Carousel — slides horizontally on mobile/tablet, side-by-side on xl+ */}
+                <div className="xl:grid xl:grid-cols-2 xl:gap-4">
+                  <div className="xl:hidden overflow-hidden -mx-1">
+                    <motion.div
+                      className="flex"
+                      animate={{ x: generatorSlide === 0 ? '0%' : '-100%' }}
+                      transition={{ type: 'spring', damping: 28, stiffness: 220 }}
+                    >
+                      <div className="w-full flex-shrink-0 px-1">
+                        <PrasekolahPanel
+                          prasekolahMaster={prasekolahMaster}
+                          setPrasekolahMaster={setPrasekolahMaster}
+                          applyPrasekolahMaster={applyPrasekolahMaster}
+                          SUBJECT_CONFIG={SUBJECT_CONFIG}
+                          selectedSubjects={selectedSubjects}
+                          toggleSubject={toggleSubject}
+                          currentCounts={currentCounts}
+                          categoryGameConfig={categoryGameConfig}
+                          setCategoryGameConfig={setCategoryGameConfig}
+                          categoryQuestionConfig={categoryQuestionConfig}
+                          setCategoryQuestionConfig={setCategoryQuestionConfig}
+                        />
+                      </div>
+                      <div className="w-full flex-shrink-0 px-1">
+                        <SekolahRendahPanel
+                          sekolahRendahMaster={sekolahRendahMaster}
+                          setSekolahRendahMaster={setSekolahRendahMaster}
+                          applySekolahRendahMaster={applySekolahRendahMaster}
+                          SUBJECT_CONFIG={SUBJECT_CONFIG}
+                          selectedSubjects={selectedSubjects}
+                          toggleSubject={toggleSubject}
+                          currentCounts={currentCounts}
+                          darjahSubjectGameConfig={darjahSubjectGameConfig}
+                          setDarjahSubjectGameConfig={setDarjahSubjectGameConfig}
+                          darjahSubjectQuestionConfig={darjahSubjectQuestionConfig}
+                          setDarjahSubjectQuestionConfig={setDarjahSubjectQuestionConfig}
+                        />
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* Desktop xl+: side-by-side (original layout, hidden on mobile) */}
+                  <div className="hidden xl:block min-w-0 rounded-[1.25rem] border border-white/10 bg-white/[0.055] p-3 md:rounded-[1.5rem] md:p-4">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🧒 Prasekolah</p>
                     </div>
@@ -540,7 +600,7 @@ export default function AdminGameManager({ embedded = false }) {
                     </div>
                   </div>
 
-                  <div className="min-w-0 rounded-[1.25rem] border border-white/10 bg-white/[0.055] p-3 md:rounded-[1.5rem] md:p-4">
+                  <div className="hidden xl:block min-w-0 rounded-[1.25rem] border border-white/10 bg-white/[0.055] p-3 md:rounded-[1.5rem] md:p-4">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-white font-black text-sm">🎒 Sekolah Rendah</p>
                     </div>
