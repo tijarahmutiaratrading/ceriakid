@@ -48,6 +48,10 @@ export default function GamesHub() {
   }, []);
 
   const totalGames = MINI_GAME_CATEGORIES.reduce((sum, category) => sum + (counts[category.id] ?? 0), 0);
+  // Hide empty categories (0 games) once counts are loaded
+  const visibleCategories = loadingCounts
+    ? MINI_GAME_CATEGORIES
+    : MINI_GAME_CATEGORIES.filter(category => (counts[category.id] ?? 0) > 0);
 
   return (
     <div className="min-h-screen font-nunito relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #B5D8B0 0%, #A8CFA3 50%, #9FCFA5 100%)' }}>
@@ -89,7 +93,13 @@ export default function GamesHub() {
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-          {MINI_GAME_CATEGORIES.map((category, idx) => (
+          {!loadingCounts && visibleCategories.length === 0 && (
+            <div className="col-span-full p-6 rounded-3xl bg-white/15 text-center">
+              <p className="text-white font-black text-base">Tiada mini games lagi.</p>
+              <p className="text-white/80 text-sm font-bold mt-1">Sila jana mini games dari admin Games Generator.</p>
+            </div>
+          )}
+          {visibleCategories.map((category, idx) => (
             <motion.div key={category.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} whileHover={{ scale: 1.03, y: -4 }} whileTap={{ scale: 0.97 }}>
               <Link to={`/mini-games/${category.id}`} className="block h-full">
                 <div className={`bg-gradient-to-br ${category.color} rounded-3xl p-4 h-full shadow-lg`}>
