@@ -276,17 +276,46 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                 </>
               )}
 
-              {/* Grouped features (Keluarga / Aktiviti / Sosial) + Admin section */}
+              {/* Desktop-only: Admin Dashboard flat (parent + sub items all visible, no collapse) */}
+              {adminItems.length > 0 && (
+                <div className="hidden sm:block space-y-1">
+                  {adminItems.map((item) => (
+                    <React.Fragment key={`desktop-${item.path}`}>
+                      <Link to={item.path} onClick={() => setIsOpen(false)}>
+                        <motion.div whileTap={{ scale: 0.97 }}
+                          className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
+                            isActive(item.path) && !location.search ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
+                          }`}>
+                          <span>{item.label}</span>
+                        </motion.div>
+                      </Link>
+                      {item.submenu?.map((sub) => (
+                        <Link key={sub.path} to={sub.path} onClick={() => setIsOpen(false)}>
+                          <motion.div whileTap={{ scale: 0.97 }}
+                            className="flex items-center pl-7 pr-4 py-2.5 rounded-xl font-bold text-xs text-white/85 hover:bg-white/15 hover:text-white transition-all">
+                            <span>{sub.label}</span>
+                          </motion.div>
+                        </Link>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </div>
+              )}
+
+              {/* Grouped features (Keluarga / Aktiviti / Sosial) — always collapsible.
+                  Admin section — only mobile (collapsible); desktop renders flat above. */}
               {[...groupedItems, ...adminItems].length > 0 && (
                 <>
                   {[...groupedItems, ...adminItems].map((item) => {
+                    const isAdminItem = adminItems.some(a => a.path === item.path);
+                    const wrapperClass = isAdminItem ? 'sm:hidden' : '';
                     const hasSubmenu = item.submenu && item.submenu.length > 0;
                     const isExpanded = expandedSubmenu === item.path;
                     const itemActive = isActive(item.path);
 
                     if (!hasSubmenu) {
                       return (
-                        <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
+                        <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className={wrapperClass}>
                           <motion.div whileTap={{ scale: 0.97 }}
                             className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                               itemActive ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
@@ -298,7 +327,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
                     }
 
                     return (
-                      <div key={item.path}>
+                      <div key={item.path} className={wrapperClass}>
                         <motion.button
                           type="button"
                           whileTap={{ scale: 0.97 }}
