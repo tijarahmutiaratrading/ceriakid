@@ -17,7 +17,7 @@ import UserSidebar from '@/components/UserSidebar';
  */
 export default function AppLayout() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
       <UserSidebar />
       <main className="flex-1 w-full overflow-x-hidden">
         <Outlet />

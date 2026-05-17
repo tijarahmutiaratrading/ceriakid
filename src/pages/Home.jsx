@@ -80,7 +80,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
       {/* Floating orbs background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
         <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />

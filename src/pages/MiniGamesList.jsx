@@ -53,7 +53,7 @@ export default function MiniGamesList() {
   const gamesToShow = dbGames.length > 0 ? dbGames : category.games;
 
   return (
-    <div className="min-h-screen font-nunito relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #B5D8B0 0%, #A8CFA3 50%, #9FCFA5 100%)' }}>
+    <div className="min-h-screen font-nunito relative overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <svg className="absolute -top-20 -right-20 w-[28rem] h-[28rem] opacity-50" viewBox="0 0 400 400" fill="none">
           <path d="M200 50 Q 320 80, 350 200 T 200 350 Q 80 320, 50 200 T 200 50 Z" fill="#C8E0BF" />
