@@ -2,7 +2,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const SUBJECTS = ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'bahasa_tamil', 'bahasa_mandarin'];
 const DARJAH_LEVELS = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
-const MINI_CATEGORIES = ['memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius', 'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training', 'memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'physics', 'tracing'];
+const MINI_CATEGORIES = ['memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius', 'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training', 'memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
 const MIN_GAMES_PER_BUCKET = 4;
 
 Deno.serve(async (req) => {
@@ -20,9 +20,10 @@ Deno.serve(async (req) => {
     const all = games || [];
 
     // Classify
-    const subjectGames = all.filter(g => SUBJECTS.includes(g.category) && !g.gameData?.storyKid && !g.gameData?.miniGameGenerated);
-    const miniGames = all.filter(g => g.gameData?.miniGameGenerated || (MINI_CATEGORIES.includes(g.category) && !SUBJECTS.includes(g.category)));
-    const storyKid = all.filter(g => g.gameData?.storyKid || g.category === 'story' || g.type === 'story_adventure');
+    const storyKid = all.filter(g => g.gameData?.storyKid === true);
+    const storyKidIds = new Set(storyKid.map(g => g.id));
+    const subjectGames = all.filter(g => SUBJECTS.includes(g.category) && !storyKidIds.has(g.id) && !g.gameData?.miniGameGenerated);
+    const miniGames = all.filter(g => !storyKidIds.has(g.id) && (g.gameData?.miniGameGenerated || (MINI_CATEGORIES.includes(g.category) && !SUBJECTS.includes(g.category))));
 
     // ─── Subject games breakdown by subject × darjah/prasekolah ───
     const subjectBuckets = [];
