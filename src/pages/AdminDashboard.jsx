@@ -204,7 +204,7 @@ export default function AdminDashboard() {
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-24 md:pt-28 pb-32 lg:flex lg:gap-6">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-24 md:pt-8 pb-32 lg:flex lg:gap-6">
           <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} user={user} />
           <main className="flex-1 min-w-0 space-y-4 md:space-y-5">
         {/* Mobile tab pill (shows current section) */}

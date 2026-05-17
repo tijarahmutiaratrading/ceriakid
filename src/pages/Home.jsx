@@ -91,7 +91,7 @@ export default function Home() {
 
       <AppHeader />
 
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-40 pt-20 md:pt-24 md:flex md:gap-6 overflow-x-hidden">
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-40 pt-20 md:pt-8 md:flex md:gap-6 overflow-x-hidden">
         <UserSidebar />
         <div className="flex-1 min-w-0 space-y-8 md:space-y-10">
 
