@@ -14,6 +14,7 @@ import StoryKidGenerator from '@/components/admin/StoryKidGenerator';
 import StoryKidManager from '@/components/admin/StoryKidManager';
 import MasterTaskQueue from '@/components/admin/MasterTaskQueue';
 import QualityControlPanel from '@/components/admin/QualityControlPanel';
+import QcOverviewReport from '@/components/admin/QcOverviewReport';
 import ProductionSafetyChecklist from '@/components/admin/ProductionSafetyChecklist';
 import MasterGeneratorHero from '@/components/admin/MasterGeneratorHero';
 import MasterGeneratorTabs from '@/components/admin/MasterGeneratorTabs';
@@ -470,7 +471,7 @@ export default function AdminGameManager({ embedded = false }) {
               transition={{ type: 'spring', damping: 28, stiffness: 220 }}
             >
               <div className="w-full flex-shrink-0 px-2.5">
-                <MasterTaskQueue onToast={showToast} />
+                <QcOverviewReport onToast={showToast} />
               </div>
               <div className="w-full flex-shrink-0 px-2.5">
                 <QualityControlPanel onToast={showToast} />
@@ -480,7 +481,7 @@ export default function AdminGameManager({ embedded = false }) {
 
           {/* Desktop side-by-side */}
           <div className="hidden xl:grid grid-cols-[0.95fr_1.05fr] gap-4 md:gap-6">
-            <MasterTaskQueue onToast={showToast} />
+            <QcOverviewReport onToast={showToast} />
             <QualityControlPanel onToast={showToast} />
           </div>
         </div>
@@ -1082,6 +1083,7 @@ export default function AdminGameManager({ embedded = false }) {
           </motion.div>
         )}
 
+        <MasterTaskQueue onToast={showToast} />
       </div>
 
       {/* Edit Subject Config Modal */}
