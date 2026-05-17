@@ -90,7 +90,7 @@ export default function Home() {
 
       <AppHeader />
 
-      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-40 pt-20 md:pt-24 space-y-8 md:space-y-10 overflow-x-hidden">
+      <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-40 pt-20 md:pt-24 space-y-8 md:space-y-10 overflow-x-hidden">
 
         {isAuthenticated && <DashboardHero user={user} avatarUrl={homeAvatarUrl} lang={lang} />}
 
