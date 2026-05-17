@@ -72,7 +72,7 @@ export default function MiniGamesList() {
 
       <AppHeader showBack={true} backTo="/games-hub" />
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-32 pt-20 md:pt-24">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 md:pl-[17rem] lg:pl-[18rem] pb-32 pt-20 md:pt-24">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className={`mb-5 rounded-3xl p-5 bg-gradient-to-br ${category.color} shadow-2xl`}>
           <Link to="/games-hub" className="inline-flex items-center gap-2 text-white/85 text-xs font-black mb-4">
             <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
