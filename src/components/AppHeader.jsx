@@ -283,9 +283,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
               {/* Admin section */}
               {adminItems.length > 0 && (
                 <>
-                  <div className="pt-2 pb-1.5">
-                    <p className="text-xs font-black text-white/60 uppercase tracking-wider px-4">🎛️ Admin</p>
-                  </div>
                   {adminItems.map((item) => {
                     const hasSubmenu = item.submenu && item.submenu.length > 0;
                     const isExpanded = expandedSubmenu === item.path;
