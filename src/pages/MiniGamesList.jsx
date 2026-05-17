@@ -21,6 +21,16 @@ export default function MiniGamesList() {
   const category = findMiniCategory(type);
   const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 3;
 
+  // Pastel squircle palette — rotate per card
+  const pastelPalette = [
+    { bg: '#C7B8F5', text: '#3D2A7A', accent: '#7B5BE0' }, // lavender
+    { bg: '#B8E5D4', text: '#1F5A45', accent: '#3FA882' }, // mint
+    { bg: '#FFD4B8', text: '#7A3D1F', accent: '#E07A3F' }, // peach
+    { bg: '#FFC7D9', text: '#7A2A4A', accent: '#E04F7A' }, // pink
+    { bg: '#B8D4F5', text: '#1F3D7A', accent: '#3F7AE0' }, // blue
+    { bg: '#F5E5B8', text: '#7A5A1F', accent: '#E0A83F' }, // yellow
+  ];
+
   React.useEffect(() => {
     if (!user?.email) return;
     base44.entities.UserSubscription.filter({ email: user.email }).then(subs => {
@@ -64,8 +74,8 @@ export default function MiniGamesList() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-2 gap-3 md:gap-4">
-          {loadingGames && <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>}
+        <div className="grid grid-cols-2 gap-4 md:gap-5">
+          {loadingGames && <div className="col-span-2 flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>}
           {!loadingGames && gamesToShow.map((game, idx) => {
             const globalIdx = categoryOffset + idx;
             const locked = isGameIndexLocked({ index: globalIdx, tier: userTier, isAuthenticated });
@@ -73,26 +83,52 @@ export default function MiniGamesList() {
             const playId = game.id;
             const data = game.gameData || game;
             const wrapperProps = locked ? {} : { to: `/mini-games/${category.id}/play/${playId}` };
+            const palette = pastelPalette[idx % pastelPalette.length];
             return (
-            <motion.div key={game.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.06 }}>
-              <CardWrapper {...wrapperProps} className={`block h-full rounded-3xl p-3 sm:p-4 bg-slate-950/60 border border-white/35 transition-all shadow-xl shadow-black/25 backdrop-blur-xl ${locked ? 'opacity-70' : 'hover:bg-slate-950/75'}`}>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-3xl bg-white/20 flex items-center justify-center text-3xl sm:text-4xl flex-shrink-0">{game.emoji}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h2 className="text-white font-black text-sm sm:text-base leading-tight line-clamp-2">{game.title}</h2>
-                      <span className="px-2 py-0.5 rounded-full bg-white text-purple-950 text-[10px] font-black">{game.difficulty || data.difficulty || 'Mudah'}</span>
-                    </div>
-                    <p className="text-white/90 text-xs font-bold">{modeLabels[data.mode || data.playStyle] || data.mode || data.playStyle || game.type} · {data.objective || game.description || category.objective}</p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <span className="inline-flex items-center gap-1 text-[10px] text-white/90 font-black"><Trophy className="w-3 h-3" /> {data.reward || `${game.totalQuestions || data.itemsPerSet || 4} round`}</span>
-                      <span className="inline-flex items-center gap-1 text-[10px] text-white/90 font-black"><Volume2 className="w-3 h-3" /> sound</span>
-                      <span className="inline-flex items-center gap-1 text-[10px] text-white/90 font-black"><Sparkles className="w-3 h-3" /> animasi</span>
-                    </div>
-                  </div>
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white text-purple-700 flex items-center justify-center shadow-lg flex-shrink-0 self-end sm:self-auto">
-                    {locked ? <Lock className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
-                  </div>
+            <motion.div key={game.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.06 }} whileHover={!locked ? { y: -4 } : {}}>
+              <CardWrapper
+                {...wrapperProps}
+                className={`relative block h-full p-5 transition-all ${locked ? 'opacity-70' : 'hover:shadow-2xl'}`}
+                style={{
+                  background: palette.bg,
+                  borderRadius: '36px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+                }}
+              >
+                {/* Emoji icon — large, centered, no container */}
+                <div className="flex justify-center mb-3">
+                  <div className="text-6xl sm:text-7xl drop-shadow-lg" style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>{game.emoji}</div>
+                </div>
+
+                {/* Title + difficulty badge */}
+                <div className="flex items-center gap-2 flex-wrap justify-center mb-2">
+                  <h2 className="font-black text-sm sm:text-base leading-tight line-clamp-1" style={{ color: palette.text }}>{game.title}</h2>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black" style={{ background: 'rgba(255,255,255,0.45)', color: palette.text }}>
+                    {game.difficulty || data.difficulty || 'Mudah'}
+                  </span>
+                </div>
+
+                {/* Mode/objective */}
+                <p className="text-center text-xs font-bold leading-snug mb-3 line-clamp-2" style={{ color: palette.text, opacity: 0.85 }}>
+                  {modeLabels[data.mode || data.playStyle] || data.mode || data.playStyle || game.type} · {data.objective || game.description || category.objective}
+                </p>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1.5 justify-center mb-2 pr-12">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black" style={{ background: 'rgba(255,255,255,0.45)', color: palette.text }}>
+                    <Trophy className="w-3 h-3" /> {data.reward || `${game.totalQuestions || data.itemsPerSet || 4} round`}
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black" style={{ background: 'rgba(255,255,255,0.45)', color: palette.text }}>
+                    <Volume2 className="w-3 h-3" /> sound
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black" style={{ background: 'rgba(255,255,255,0.45)', color: palette.text }}>
+                    <Sparkles className="w-3 h-3" /> animasi
+                  </span>
+                </div>
+
+                {/* Play button — bottom right corner */}
+                <div className="absolute bottom-4 right-4 w-11 h-11 rounded-2xl bg-white flex items-center justify-center shadow-lg" style={{ color: palette.accent }}>
+                  {locked ? <Lock className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
                 </div>
               </CardWrapper>
               {locked && <p className="mt-2 text-center text-xs font-black text-yellow-200">Naik taraf untuk akses mini game ini</p>}
