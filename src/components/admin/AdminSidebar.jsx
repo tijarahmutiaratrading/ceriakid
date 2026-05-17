@@ -6,6 +6,7 @@ import { LayoutDashboard, Users, Settings, ExternalLink, Gamepad2 } from 'lucide
 const MENU = [
   { key: 'dashboard', label: 'Dashboard', sub: 'Order & Analytics', icon: LayoutDashboard, tab: 'analytics' },
   { key: 'customers', label: 'Pelanggan', sub: 'Customer Database', icon: Users, tab: 'customers' },
+  { key: 'gamemanager', label: 'Game Manager', sub: 'Master Generator', icon: Gamepad2, tab: 'gamemanager' },
   { key: 'settings', label: 'Settings', sub: 'Payment & Pixel', icon: Settings, tab: 'settings' },
 ];
 
@@ -46,19 +47,6 @@ export default function AdminSidebar({ activeTab, setActiveTab, user }) {
             </button>
           );
         })}
-
-        <Link
-          to="/admin-game-manager"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-2xl hover:bg-white/10 transition-all"
-        >
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-emerald-400/30 text-emerald-100 flex-shrink-0 ring-1 ring-white/15">
-            <Gamepad2 className="w-4 h-4" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-black text-sm text-white/90 leading-tight">Game Manager</p>
-            <p className="text-[10px] text-white/60 font-semibold">Master Generator</p>
-          </div>
-        </Link>
 
         <Link
           to="/"

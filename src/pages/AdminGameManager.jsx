@@ -38,7 +38,7 @@ const SUBJECT_CONFIG = [
   { file: 'gameData_sr_mandarin', label: 'Sekolah Rendah - Mandarin', ageGroup: 'sekolah_rendah', subject: 'bahasa_mandarin', color: { border: 'border-l-yellow-500', badge: 'bg-yellow-100 text-yellow-700', dot: 'bg-yellow-500' } },
 ];
 
-export default function AdminGameManager() {
+export default function AdminGameManager({ embedded = false }) {
   const [tab, setTab] = useState('generator');
   const [miniGamesTab, setMiniGamesTab] = useState('generate');
   const [storyKidTab, setStoryKidTab] = useState('generate');
@@ -372,16 +372,25 @@ export default function AdminGameManager() {
 
 
 
+  const wrapperClass = embedded
+    ? "w-full max-w-full relative overflow-x-hidden"
+    : "min-h-screen w-full max-w-full pb-32 relative overflow-x-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950";
+  const innerClass = embedded
+    ? "relative w-full max-w-full mx-auto px-2.5 sm:px-4 md:px-6 pb-4 space-y-5 md:space-y-7 overflow-x-hidden"
+    : "relative w-full max-w-7xl mx-auto px-2.5 sm:px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-5 md:space-y-7 overflow-x-hidden";
+
   return (
-    <div className="min-h-screen w-full max-w-full pb-32 relative overflow-x-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-fuchsia-950">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute inset-0 opacity-35" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.13) 1px, transparent 0)', backgroundSize: '30px 30px' }} />
-        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-fuchsia-500/20 to-transparent" />
-        <div className="absolute -top-40 -right-40 w-[30rem] h-[30rem] bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
-        <div className="absolute top-1/3 -left-28 w-96 h-96 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-[32rem] h-[32rem] bg-violet-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
-      <AppHeader showBack={true} backTo="/admin-dashboard" />
+    <div className={wrapperClass}>
+      {!embedded && (
+        <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
+          <div className="absolute inset-0 opacity-35" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.13) 1px, transparent 0)', backgroundSize: '30px 30px' }} />
+          <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-fuchsia-500/20 to-transparent" />
+          <div className="absolute -top-40 -right-40 w-[30rem] h-[30rem] bg-fuchsia-500 rounded-full mix-blend-screen filter blur-3xl opacity-25 animate-pulse" />
+          <div className="absolute top-1/3 -left-28 w-96 h-96 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute bottom-20 right-10 w-[32rem] h-[32rem] bg-violet-500 rounded-full mix-blend-screen filter blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }} />
+        </div>
+      )}
+      {!embedded && <AppHeader showBack={true} backTo="/admin-dashboard" />}
 
       {/* Toast */}
       <AnimatePresence>
@@ -393,7 +402,7 @@ export default function AdminGameManager() {
         )}
       </AnimatePresence>
 
-      <div className="relative w-full max-w-7xl mx-auto px-2.5 sm:px-4 md:px-6 pt-28 md:pt-32 pb-32 space-y-5 md:space-y-7 overflow-x-hidden">
+      <div className={innerClass}>
         <MasterGeneratorHero
           totalGames={totalGames}
           totalFull={totalFull}

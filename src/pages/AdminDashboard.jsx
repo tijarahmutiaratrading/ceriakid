@@ -9,7 +9,8 @@ import AppHeader from '@/components/AppHeader';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminQuickStats from '@/components/admin/AdminQuickStats';
 import AdminStatCard from '@/components/admin/AdminStatCard';
-import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles } from 'lucide-react';
+import AdminGameManager from '@/pages/AdminGameManager';
+import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2 } from 'lucide-react';
 
 const SETTINGS_KEY = 'admin_app_settings';
 
@@ -161,6 +162,7 @@ export default function AdminDashboard() {
   const tabs = [
     { key: 'analytics', label: '📊 Analytics', icon: <BarChart3 className="w-4 h-4" /> },
     { key: 'customers', label: '👥 Pelanggan', icon: <BarChart3 className="w-4 h-4" /> },
+    { key: 'gamemanager', label: '🎮 Game Manager', icon: <Gamepad2 className="w-4 h-4" /> },
     { key: 'settings', label: '⚙️ Settings', icon: <Settings className="w-4 h-4" /> },
   ];
 
@@ -347,6 +349,13 @@ export default function AdminDashboard() {
                 </tbody>
               </table>
             </div>
+          </motion.div>
+        )}
+
+        {/* ═══ GAME MANAGER TAB ═══ */}
+        {activeTab === 'gamemanager' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="-mx-4 md:-mx-6">
+            <AdminGameManager embedded />
           </motion.div>
         )}
 
