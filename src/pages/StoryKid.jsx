@@ -206,7 +206,7 @@ export default function StoryKid() {
                   >
                     <div className="aspect-[4/3] rounded-[1.5rem] overflow-hidden bg-gradient-to-br from-yellow-200 to-pink-200 mb-4 ring-4 ring-white/25 shadow-xl group-hover:ring-white/45 transition-all">
                       {item.cover ? (
-                        <img src={item.cover} alt={item.title} className="w-full h-full object-cover" />
+                        <img src={item.cover} alt={item.title} className="w-full h-full object-fill" />
                       ) : (
                         <StorySlideVisual visual={item.scenes?.[0]?.slideVisual} emoji={item.emoji} compact />
                       )}
