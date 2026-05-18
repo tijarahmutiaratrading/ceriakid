@@ -516,32 +516,65 @@ Output JSON sahaja ikut schema.`,
       const scenes = Array.isArray(meta.scenes) ? meta.scenes : [];
       const generatedScenes = Array.isArray(meta.generatedScenes) ? meta.generatedScenes : [];
 
+      // Helper: detect Gemini safety block so we don't crash the whole worker
+      const isContentBlockError = (err) => {
+        const msg = String(err?.message || '');
+        return /PROHIBITED_CONTENT|prohibited contents|block_reason|safety/i.test(msg);
+      };
+
       if (!meta.cover) {
-        const coverResult = await base44.asServiceRole.integrations.Core.GenerateImage({
-          prompt: buildStoryImagePrompt(story, scenes[0], 0, 'cover'),
-          existing_image_urls: [storybookStyleReference],
-        });
-        await base44.asServiceRole.entities.GameTask.update(task.id, {
-          status: 'running',
-          createdGames: 1,
-          errorMessage: JSON.stringify({ ...meta, cover: coverResult.url, generatedScenes }),
-        });
-        return Response.json({ success: true, taskName: task.taskName, createdGames: 1, totalGames: scenes.length + 1, isDone: false });
+        try {
+          const coverResult = await base44.asServiceRole.integrations.Core.GenerateImage({
+            prompt: buildStoryImagePrompt(story, scenes[0], 0, 'cover'),
+            existing_image_urls: [storybookStyleReference],
+          });
+          await base44.asServiceRole.entities.GameTask.update(task.id, {
+            status: 'running',
+            createdGames: 1,
+            errorMessage: JSON.stringify({ ...meta, cover: coverResult.url, generatedScenes }),
+          });
+          return Response.json({ success: true, taskName: task.taskName, createdGames: 1, totalGames: scenes.length + 1, isDone: false });
+        } catch (err) {
+          if (isContentBlockError(err)) {
+            // Skip this story task — Gemini blocked the prompt. Don't crash the worker.
+            await base44.asServiceRole.entities.GameTask.update(task.id, {
+              status: 'failed',
+              errorMessage: `Image generation blocked by safety filter: ${err.message}`,
+              completedAt: new Date().toISOString(),
+            });
+            console.warn(`Story task "${task.taskName}" skipped: content blocked by AI safety filter.`);
+            return Response.json({ success: false, skipped: true, taskName: task.taskName, reason: 'content_blocked' });
+          }
+          throw err;
+        }
       }
 
       if (generatedScenes.length < scenes.length) {
         const index = generatedScenes.length;
-        const result = await base44.asServiceRole.integrations.Core.GenerateImage({
-          prompt: buildStoryImagePrompt(story, scenes[index], index, 'scene'),
-          existing_image_urls: [storybookStyleReference],
-        });
-        const nextScenes = [...generatedScenes, { ...scenes[index], imageUrl: result.url }];
-        await base44.asServiceRole.entities.GameTask.update(task.id, {
-          status: 'running',
-          createdGames: nextScenes.length + 1,
-          errorMessage: JSON.stringify({ ...meta, cover: meta.cover, generatedScenes: nextScenes }),
-        });
-        return Response.json({ success: true, taskName: task.taskName, createdGames: nextScenes.length + 1, totalGames: scenes.length + 1, isDone: false });
+        try {
+          const result = await base44.asServiceRole.integrations.Core.GenerateImage({
+            prompt: buildStoryImagePrompt(story, scenes[index], index, 'scene'),
+            existing_image_urls: [storybookStyleReference],
+          });
+          const nextScenes = [...generatedScenes, { ...scenes[index], imageUrl: result.url }];
+          await base44.asServiceRole.entities.GameTask.update(task.id, {
+            status: 'running',
+            createdGames: nextScenes.length + 1,
+            errorMessage: JSON.stringify({ ...meta, cover: meta.cover, generatedScenes: nextScenes }),
+          });
+          return Response.json({ success: true, taskName: task.taskName, createdGames: nextScenes.length + 1, totalGames: scenes.length + 1, isDone: false });
+        } catch (err) {
+          if (isContentBlockError(err)) {
+            await base44.asServiceRole.entities.GameTask.update(task.id, {
+              status: 'failed',
+              errorMessage: `Scene ${index + 1} blocked by safety filter: ${err.message}`,
+              completedAt: new Date().toISOString(),
+            });
+            console.warn(`Story task "${task.taskName}" skipped at scene ${index + 1}: content blocked.`);
+            return Response.json({ success: false, skipped: true, taskName: task.taskName, reason: 'content_blocked' });
+          }
+          throw err;
+        }
       }
 
       await base44.asServiceRole.entities.Game.create({
