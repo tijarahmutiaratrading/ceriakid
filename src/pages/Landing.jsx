@@ -267,6 +267,43 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── PROBLEM SECTION ── */}
+      <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-purple-600 to-fuchsia-600">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
+            <span className="inline-block px-4 py-1.5 bg-yellow-300 text-purple-900 rounded-full text-xs font-black mb-4">😮‍💨 MASALAH BIASA</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white mb-3" style={{ textShadow: '3px 3px 0 rgba(0,0,0,0.15)' }}>
+              Pening Kepala?
+            </h2>
+            <p className="text-white/85 font-bold max-w-xl mx-auto">Kalau salah satu ni rasa familiar — anda bukan keseorangan</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+            {[
+              { emoji: '😤', pain: '"Anak main game je, tak nak belajar"', desc: 'Screen time jadi perang setiap malam', color: 'from-red-400 to-pink-500' },
+              { emoji: '💸', pain: '"Bayar tuisyen RM300, result sama je"', desc: 'Wang habis, anak masih tak faham', color: 'from-orange-400 to-yellow-500' },
+              { emoji: '😰', pain: '"Exam dekat, anak masih tak hafal"', desc: 'Pressure menjelang peperiksaan', color: 'from-fuchsia-400 to-purple-500' },
+              { emoji: '😪', pain: '"Kerja sampai malam, tak sempat ajar"', desc: 'Ibu bapa penat, anak perlukan bantuan', color: 'from-cyan-400 to-blue-500' },
+            ].map((p, i) => (
+              <motion.div key={i} initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                className="bg-white rounded-3xl p-5 shadow-2xl flex items-start gap-4">
+                <div className={`flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br ${p.color} flex items-center justify-center text-3xl shadow-lg`}>
+                  {p.emoji}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-black text-purple-900 mb-1 leading-snug">{p.pain}</p>
+                  <p className="text-slate-600 text-sm font-semibold">{p.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-10">
+            <p className="text-2xl sm:text-3xl font-black text-yellow-300" style={{ textShadow: '2px 2px 0 rgba(0,0,0,0.2)' }}>Ada cara yang lebih senang 👇</p>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ── FEATURES ── */}
       <section id="features" className="relative px-4 sm:px-6 py-14 sm:py-20">
         <div className="max-w-6xl mx-auto">
@@ -295,8 +332,75 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
+      {/* ── SUBJECTS ── */}
+      <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-purple-600 to-fuchsia-600">
+        <div className="max-w-6xl mx-auto">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
+            <span className="inline-block px-4 py-1.5 bg-yellow-300 text-purple-900 rounded-full text-xs font-black mb-4">📚 7 SUBJEK</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white mb-3" style={{ textShadow: '3px 3px 0 rgba(0,0,0,0.15)' }}>
+              Subjek Yang<br />Anak Boleh Belajar
+            </h2>
+            <p className="text-white/85 font-bold max-w-xl mx-auto">Disusun ikut KSPK prasekolah & KSSR sekolah rendah</p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            {[
+              { icon: '🇲🇾', sub: 'Bahasa Melayu', desc: 'Baca • Eja • Faham', color: 'from-red-400 to-pink-500' },
+              { icon: '🇬🇧', sub: 'English', desc: 'Read • Speak • Play', color: 'from-blue-400 to-indigo-500' },
+              { icon: '🔢', sub: 'Matematik', desc: 'Kira • Banding', color: 'from-violet-400 to-purple-500' },
+              { icon: '🧪', sub: 'Sains', desc: 'Lihat • Tanya • Cuba', color: 'from-green-400 to-emerald-500' },
+              { icon: '🕌', sub: 'Jawi', desc: 'Kenal • Sebut • Tulis', color: 'from-teal-400 to-cyan-500' },
+              { icon: '🌺', sub: 'Tamil', desc: 'அ • சொல் • வாசி', color: 'from-orange-400 to-red-500' },
+              { icon: '🏮', sub: 'Mandarin', desc: '听 • 说 • 认字', color: 'from-yellow-400 to-orange-500' },
+              { icon: '🎓', sub: '6 Tahap', desc: 'Pra + Darjah 1-6', color: 'from-fuchsia-400 to-pink-500' },
+            ].map((s, i) => (
+              <motion.div key={s.sub} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
+                whileHover={{ y: -6, scale: 1.04 }}
+                className="bg-white rounded-3xl p-4 sm:p-5 shadow-2xl text-center cursor-pointer">
+                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center text-3xl sm:text-4xl mx-auto mb-3 shadow-lg`}>
+                  {s.icon}
+                </div>
+                <p className="font-black text-purple-900 text-sm sm:text-base leading-tight">{s.sub}</p>
+                <p className="text-slate-500 text-xs font-semibold mt-1">{s.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── ALL IN ONE ── */}
       <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-fuchsia-600 to-pink-600">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
+            <span className="inline-block px-4 py-1.5 bg-yellow-300 text-purple-900 rounded-full text-xs font-black mb-4">🚀 SEMUA DALAM SATU APP</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white mb-3" style={{ textShadow: '3px 3px 0 rgba(0,0,0,0.15)' }}>
+              Lengkap & Mudah Guna
+            </h2>
+            <p className="text-white/85 font-bold max-w-xl mx-auto">Game interaktif, dashboard ibu bapa, dan progress tracking dalam satu pengalaman</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              { icon: '🎮', title: 'Game Engine', desc: 'Soalan interaktif pelbagai format untuk 7 subjek utama', color: 'from-yellow-400 to-orange-500' },
+              { icon: '📊', title: 'Parent Analytics', desc: 'Pantau skor, streak, dan prestasi setiap anak', color: 'from-cyan-400 to-blue-500' },
+              { icon: '🔒', title: 'Selamat 100%', desc: 'Tanpa iklan, tanpa chat orang asing, mesra keluarga', color: 'from-violet-400 to-purple-500' },
+            ].map((item, i) => (
+              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                whileHover={{ y: -6 }}
+                className="bg-white rounded-3xl p-6 shadow-2xl text-center">
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-4xl mx-auto mb-4 shadow-lg`}>
+                  {item.icon}
+                </div>
+                <h3 className="font-black text-purple-900 text-xl mb-2">{item.title}</h3>
+                <p className="text-slate-600 text-sm font-semibold leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── HOW IT WORKS ── */}
+      <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-pink-600 to-fuchsia-600">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-12">
             <span className="inline-block px-4 py-1.5 bg-white text-pink-600 rounded-full text-xs font-black mb-4">📲 MULA DALAM 3 LANGKAH</span>
@@ -326,7 +430,7 @@ export default function Landing() {
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section id="testimonials" className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-pink-600 to-violet-600">
+      <section id="testimonials" className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-fuchsia-600 to-violet-600">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
             <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_, i) => <span key={i} className="text-2xl text-yellow-300">⭐</span>)}</div>
