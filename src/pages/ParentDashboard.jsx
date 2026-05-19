@@ -20,6 +20,9 @@ const categoryLabels = {
   english: 'English',
   mathematics: 'Matematik',
   science: 'Sains',
+  jawi: 'Jawi',
+  bahasa_tamil: 'Bahasa Tamil',
+  bahasa_mandarin: 'Bahasa Mandarin',
 };
 
 export default function ParentDashboard() {
@@ -122,7 +125,7 @@ export default function ParentDashboard() {
 
   const shareToTwitter = (childName, stats) => {
     const message = `🎓 Prestasi ${childName} di @CeriaKidMY:\n${stats.totalGames} permainan, ${stats.avgStars}⭐ rata-rata!\n\n#Pendidikan #Pembelajaran #CeriaKid`;
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+    const twitterUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(message)}`;
     window.open(twitterUrl, '_blank');
   };
 
@@ -222,7 +225,7 @@ export default function ParentDashboard() {
               const totalGames = games.length;
               const totalStars = games.reduce((sum, g) => sum + (g.bestStars || 0), 0);
               const avgStars = (totalStars / totalGames).toFixed(1);
-              const categoryEmojis = { bahasa_melayu: '🇲🇾', english: '🇬🇧', mathematics: '🔢', science: '🧪' };
+              const categoryEmojis = { bahasa_melayu: '🇲🇾', english: '🇬🇧', mathematics: '🔢', science: '🧪', jawi: '🕌', bahasa_tamil: '🌺', bahasa_mandarin: '🏮' };
 
               return (
                 <motion.div
