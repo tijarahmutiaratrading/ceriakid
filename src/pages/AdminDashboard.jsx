@@ -86,7 +86,13 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (activeTab === 'gamemanager') setGameManagerMounted(true);
   }, [activeTab]);
-  const [settings, setSettings] = useState(defaultSettings);
+  const [settings, setSettings] = useState(() => {
+    try {
+      const stored = localStorage.getItem(SETTINGS_KEY);
+      if (stored) return { ...defaultSettings, ...JSON.parse(stored) };
+    } catch (_) {}
+    return defaultSettings;
+  });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [clearingCache, setClearingCache] = useState(false);
@@ -123,12 +129,7 @@ export default function AdminDashboard() {
     }
   }, [user]);
 
-  useEffect(() => {
-    const stored = localStorage.getItem(SETTINGS_KEY);
-    if (stored) {
-      try { setSettings({ ...defaultSettings, ...JSON.parse(stored) }); } catch (_) {}
-    }
-  }, []);
+  // NOTE: localStorage load dipindah ke useState initializer supaya tidak override server fetch yang berlaku selepas tab Settings dibuka.
 
   const loadData = async () => {
     try {
