@@ -170,13 +170,39 @@ export default function Landing() {
       {/* ── NAVBAR ── */}
       <nav className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="max-w-md sm:max-w-3xl mx-auto w-full px-4 py-3 rounded-3xl shadow-2xl border border-white/30" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))', backdropFilter: 'blur(12px)', boxShadow: '0 8px 32px rgba(31, 16, 92, 0.2)' }}>
-          {/* Top row: Logo + Menu toggle */}
+          {/* Top row: Logo + Menu toggle (mobile) / Pills + CTA (desktop) */}
           <div className="flex items-center justify-between">
             <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 rounded-xl shadow" />
+            
+            {/* Desktop: show all pills + CTA inline */}
+            <div className="hidden sm:flex items-center gap-2">
+              <a href="#features" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-purple-50 border-2 border-purple-200 text-purple-700 font-black text-sm hover:bg-purple-100 hover:scale-105 transition-all">
+                Ciri-ciri <span>⚙️</span>
+              </a>
+              <a href="#testimonials" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-pink-50 border-2 border-pink-200 text-pink-700 font-black text-sm hover:bg-pink-100 hover:scale-105 transition-all">
+                Testimoni <span>💬</span>
+              </a>
+              <a href="#pricing" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-amber-50 border-2 border-amber-200 text-amber-700 font-black text-sm hover:bg-amber-100 hover:scale-105 transition-all">
+                Harga <span>💰</span>
+              </a>
+              <a href="#faq" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-blue-50 border-2 border-blue-200 text-blue-700 font-black text-sm hover:bg-blue-100 hover:scale-105 transition-all">
+                FAQ <span>❓</span>
+              </a>
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
+                className="px-5 py-2 rounded-full font-black text-white text-sm shadow-lg"
+                style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)' }}
+              >
+                {isAuthenticated ? '📊 Dashboard' : '🔓 Log Masuk'}
+              </motion.button>
+            </div>
+
+            {/* Mobile: hamburger menu */}
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setMenuOpen(o => !o)}
-              className="flex items-center gap-2 px-4 py-2 rounded-full font-black text-white text-sm shadow-lg"
+              className="sm:hidden flex items-center gap-2 px-4 py-2 rounded-full font-black text-white text-sm shadow-lg"
               style={{ background: 'linear-gradient(135deg, #A855F7, #EC4899)' }}
               aria-expanded={menuOpen}
               aria-label="Menu"
@@ -186,7 +212,7 @@ export default function Landing() {
             </motion.button>
           </div>
 
-          {/* Collapsible: nav pills + CTA */}
+          {/* Mobile: Collapsible menu */}
           <AnimatePresence initial={false}>
             {menuOpen && (
               <motion.div
@@ -194,9 +220,9 @@ export default function Landing() {
                 animate={{ height: 'auto', opacity: 1, marginTop: 12 }}
                 exit={{ height: 0, opacity: 0, marginTop: 0 }}
                 transition={{ duration: 0.25 }}
-                className="overflow-hidden"
+                className="overflow-hidden sm:hidden"
               >
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   <a onClick={() => setMenuOpen(false)} href="#features" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-purple-50 border-2 border-purple-200 text-purple-700 font-black text-sm hover:bg-purple-100 hover:scale-105 transition-all">
                     Ciri-ciri <span>⚙️</span>
                   </a>
