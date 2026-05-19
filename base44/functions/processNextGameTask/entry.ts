@@ -382,34 +382,40 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
         visualTheme: { type: 'string' },
         powerUps: { type: 'array', items: { type: 'string' } },
         instruction: { type: 'string' },
-        rounds: { type: 'array', items: { type: 'string' } },
       };
-      const schemaByMode = {
-        memory: { type: 'object', properties: { ...baseProps, pairs: { type: 'array', items: { type: 'array', items: { type: 'string' } } } }, required: ['title', 'microTopic', 'instruction', 'pairs'] },
-        dragdrop: { type: 'object', properties: { ...baseProps, items: { type: 'array', items: { type: 'string' } }, targets: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'items', 'targets'] },
-        wordbuilder: { type: 'object', properties: { ...baseProps, words: { type: 'array', items: { type: 'string' } }, letters: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'words', 'letters'] },
-        sorting: { type: 'object', properties: { ...baseProps, groups: { type: 'array', items: { type: 'string' } }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['title', 'microTopic', 'instruction', 'groups', 'items'] },
-        tilematch: { type: 'object', properties: { ...baseProps, tiles: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'tiles'] },
-        story: { type: 'object', properties: { ...baseProps, scenes: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, choices: { type: 'array', items: { type: 'string' } }, answer: { type: 'number' } }, required: ['text', 'choices', 'answer'] } } }, required: ['title', 'microTopic', 'instruction', 'scenes'] },
-        physics: { type: 'object', properties: { ...baseProps, challenges: { type: 'array', items: { type: 'object', properties: { question: { type: 'string' }, options: { type: 'array', items: { type: 'string' } }, answer: { type: 'number' } }, required: ['question', 'options', 'answer'] } } }, required: ['title', 'microTopic', 'instruction', 'challenges'] },
-        tracing: { type: 'object', properties: { ...baseProps, letters: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'letters'] },
-        balloon_pop: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
-        falling_catch: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
-        stacking: { type: 'object', properties: { ...baseProps, target: { type: 'number', minimum: 3, maximum: 10 } }, required: ['title', 'microTopic', 'instruction', 'target'] },
-        sequence: { type: 'object', properties: { ...baseProps, items: { type: 'array', items: { type: 'string' } }, answer: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'items', 'answer'] },
-        swipe_select: { type: 'object', properties: { ...baseProps, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['title', 'microTopic', 'instruction', 'items'] },
-        spin_wheel: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
-        picture_hunt: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, value: { type: 'string' } }, required: ['text', 'value'] } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
-        hidden_object: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, value: { type: 'string' } }, required: ['text', 'value'] } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
-        typing_challenge: { type: 'object', properties: { ...baseProps, target: { type: 'string' } }, required: ['title', 'microTopic', 'instruction', 'target'] },
-        mini_simulation: { type: 'object', properties: { ...baseProps, target: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['title', 'microTopic', 'instruction', 'target', 'items'] },
-        true_false: { type: 'object', properties: { ...baseProps, statements: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, answer: { type: 'boolean' } }, required: ['text', 'answer'] } } }, required: ['title', 'microTopic', 'instruction', 'statements'] },
-        rhythm_tap: { type: 'object', properties: { ...baseProps, items: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'items'] },
-        connect_dots: { type: 'object', properties: { ...baseProps, items: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'items'] },
-        maze: { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
-        reaction_speed: { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
-        coloring: { type: 'object', properties: { ...baseProps, items: { type: 'array', items: { type: 'string' } } }, required: ['title', 'microTopic', 'instruction', 'items'] },
+      // Per-round content schemas — setiap round ada data sendiri yang BERBEZA
+      const roundSchemaByMode = {
+        memory: { type: 'object', properties: { label: { type: 'string' }, pairs: { type: 'array', items: { type: 'array', items: { type: 'string' } }, minItems: 3, maxItems: 4 } }, required: ['label', 'pairs'] },
+        dragdrop: { type: 'object', properties: { label: { type: 'string' }, items: { type: 'array', items: { type: 'string' } }, targets: { type: 'array', items: { type: 'string' } } }, required: ['label', 'items', 'targets'] },
+        wordbuilder: { type: 'object', properties: { label: { type: 'string' }, words: { type: 'array', items: { type: 'string' } }, letters: { type: 'array', items: { type: 'string' } } }, required: ['label', 'words', 'letters'] },
+        sorting: { type: 'object', properties: { label: { type: 'string' }, groups: { type: 'array', items: { type: 'string' } }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['label', 'groups', 'items'] },
+        tilematch: { type: 'object', properties: { label: { type: 'string' }, tiles: { type: 'array', items: { type: 'string' }, minItems: 4 } }, required: ['label', 'tiles'] },
+        story: { type: 'object', properties: { label: { type: 'string' }, scenes: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, choices: { type: 'array', items: { type: 'string' } }, answer: { type: 'number' } }, required: ['text', 'choices', 'answer'] } } }, required: ['label', 'scenes'] },
+        physics: { type: 'object', properties: { label: { type: 'string' }, challenges: { type: 'array', items: { type: 'object', properties: { question: { type: 'string' }, options: { type: 'array', items: { type: 'string' } }, answer: { type: 'number' } }, required: ['question', 'options', 'answer'] } } }, required: ['label', 'challenges'] },
+        tracing: { type: 'object', properties: { label: { type: 'string' }, letters: { type: 'array', items: { type: 'string' } } }, required: ['label', 'letters'] },
+        balloon_pop: { type: 'object', properties: { label: { type: 'string' }, target: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['label', 'target', 'items'] },
+        falling_catch: { type: 'object', properties: { label: { type: 'string' }, target: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['label', 'target', 'items'] },
+        stacking: { type: 'object', properties: { label: { type: 'string' }, target: { type: 'number', minimum: 3, maximum: 10 } }, required: ['label', 'target'] },
+        sequence: { type: 'object', properties: { label: { type: 'string' }, items: { type: 'array', items: { type: 'string' } }, answer: { type: 'array', items: { type: 'string' } } }, required: ['label', 'items', 'answer'] },
+        swipe_select: { type: 'object', properties: { label: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['label', 'items'] },
+        spin_wheel: { type: 'object', properties: { label: { type: 'string' }, target: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['label', 'target', 'items'] },
+        picture_hunt: { type: 'object', properties: { label: { type: 'string' }, target: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, value: { type: 'string' } }, required: ['text', 'value'] } } }, required: ['label', 'target', 'items'] },
+        hidden_object: { type: 'object', properties: { label: { type: 'string' }, target: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, value: { type: 'string' } }, required: ['text', 'value'] } } }, required: ['label', 'target', 'items'] },
+        typing_challenge: { type: 'object', properties: { label: { type: 'string' }, target: { type: 'string' } }, required: ['label', 'target'] },
+        mini_simulation: { type: 'object', properties: { label: { type: 'string' }, target: { type: 'string' }, items: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, group: { type: 'string' } }, required: ['text', 'group'] } } }, required: ['label', 'target', 'items'] },
+        true_false: { type: 'object', properties: { label: { type: 'string' }, statements: { type: 'array', items: { type: 'object', properties: { text: { type: 'string' }, answer: { type: 'boolean' } }, required: ['text', 'answer'] } } }, required: ['label', 'statements'] },
+        rhythm_tap: { type: 'object', properties: { label: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['label', 'items'] },
+        connect_dots: { type: 'object', properties: { label: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['label', 'items'] },
+        maze: { type: 'object', properties: { label: { type: 'string' } }, required: ['label'] },
+        reaction_speed: { type: 'object', properties: { label: { type: 'string' } }, required: ['label'] },
+        coloring: { type: 'object', properties: { label: { type: 'string' }, items: { type: 'array', items: { type: 'string' } } }, required: ['label', 'items'] },
       };
+      const roundSchema = roundSchemaByMode[mode] || { type: 'object', properties: { label: { type: 'string' } }, required: ['label'] };
+      const schemaByMode = Object.fromEntries(Object.keys(roundSchemaByMode).map(m => [m, {
+        type: 'object',
+        properties: { ...baseProps, rounds: { type: 'array', items: roundSchemaByMode[m], minItems: itemsPerSet, maxItems: itemsPerSet } },
+        required: ['title', 'microTopic', 'instruction', 'rounds'],
+      }]));
 
       const normalizeMiniGameData = (currentMode, rawData, requestedItems) => {
         const next = { ...(rawData || {}) };
@@ -446,69 +452,115 @@ Important: illustration only, no readable words, no letters, no watermark, no lo
       };
 
       let data = await base44.asServiceRole.integrations.Core.InvokeLLM({
-        prompt: `Jana SATU mini game CeriaKid yang unik, bukan variasi template lama.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB untuk set ini: ${microTopic}\nGaya aktiviti WAJIB untuk set ini: ${playStyle}\nLevel: ${level} (${difficultyLabel})\nJumlah item sasaran: ${itemsPerSet}\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\n${QC_GENERATOR_RULES}
+        prompt: `Jana SATU mini game CeriaKid dengan ${itemsPerSet} ROUND yang BERBEZA setiap satu.\n\nJenis game: ${mode}\nPanduan mekanik: ${gameGuides[mode] || mode}\nTema besar: ${theme}\nMicro-topic WAJIB: ${microTopic}\nGaya aktiviti WAJIB: ${playStyle}\nLevel: ${level} (${difficultyLabel})\nJumlah ROUND: ${itemsPerSet} (setiap round = mini cabaran berasingan dengan data sendiri)\n\nContent yang sudah wujud dan MESTI dielakkan:\n${JSON.stringify(recentExamples)}\n\n${QC_GENERATOR_RULES}
 ${qcLearningNotes}
 
-Peraturan anti-repeat:\n0. Platform ini HANYA untuk Prasekolah dan Sekolah Rendah Darjah 1-6; jangan jana kandungan Tingkatan/PT3/SPM/sekolah menengah.\n1. Tajuk mesti spesifik dan unik, bukan "Set 1" atau tajuk generic.\n2. Item, jawapan, kategori, ayat dan scenario mesti berbeza daripada content sedia ada.\n3. Setiap game dalam mini game yang sama MESTI terasa berlainan gaya bermain; ikut gaya aktiviti WAJIB: ${playStyle}.\n4. Jangan ulang pola A-Ayam/B-Bola, warna asas yang sama, haiwan sama, atau pasangan terlalu obvious berulang.\n5. Gunakan konteks Malaysia dan variasikan kemahiran: kenal pasti, padan, susun, beza, kira, pilih sebab, klasifikasi.\n6. Content mesti siap dimainkan, tiada placeholder, tiada arahan yang perlukan gambar luar.\n7. Jika topik melibatkan wang Malaysia/RM, WAJIB guna fakta mata wang semasa yang betul: syiling hanya 5 sen, 10 sen, 20 sen, 50 sen; wang kertas RM1 biru, RM5 hijau, RM10 merah, RM20 jingga, RM50 hijau-biru, RM100 ungu. DILARANG sebut RM1 syiling, RM2 syiling, atau RM2 note.\n8. Jangan reka fakta visual seperti warna, gambar tokoh, atau ciri duit jika tidak pasti; lebih baik guna nilai dan situasi membeli barang.\n9. Untuk balloon_pop dan falling_catch: target mesti string; items mesti array string; items mesti mengandungi target yang sama tepat sekurang-kurangnya 2 kali; jangan guna object untuk items.\n10. Untuk mini_simulation: items mesti array object {text, group}; sekurang-kurangnya satu item mesti group sama tepat dengan target.\n11. Setiap mini game mesti ada jawapan/target/group yang jelas supaya app boleh papar popup Betul atau Cuba lagi.\n12. Jika arahan menyebut gambar/objek visual, items mesti guna emoji/simbol visual, bukan perkataan biasa sahaja.\n13. Jangan cipta aktiviti yang jawapannya bergantung pada warna sahaja; mesti ada label teks, simbol atau bentuk yang jelas untuk kanak-kanak dan kontras tinggi.\n14. Arahan mesti sangat jelas untuk ibu bapa dan kanak-kanak: nyatakan apa perlu ditekan, apa sasaran, dan bila dikira betul dalam satu ayat mudah.\n15. Elakkan mekanik abstrak seperti hanya 'ikut rentak', 'putar dan padan', atau 'simulasi' tanpa jawapan jelas; setiap game mesti ada target/answer/group yang boleh disemak automatik.\n16. Semua mini game mesti fokus latihan genius umum: memori, logik, fokus, kelajuan, pola, maze, kreativiti atau problem solving — jangan kaitkan dengan subjek sekolah, Jawi, Iqra atau silibus khusus.\n17. Setiap game mesti mempunyai round yang berlainan mengikut jumlah Round/Game; rounds mesti terasa berbeza dari segi sasaran, arahan mikro atau cara cabaran.\n18. Wajib cipta rasa 3D/animasi kaya: tajuk cinematic, visualTheme, 3 powerUps ringkas, sasaran yang terasa seperti misi, dan item/round yang lebih interaktif berbanding game klasik.\n19. KRITIKAL — JUMLAH ENTRI MESTI TEPAT ${itemsPerSet}: untuk memory keluarkan TEPAT ${itemsPerSet} pasangan dalam 'pairs'; untuk sorting/swipe_select/mini_simulation/picture_hunt/hidden_object keluarkan SEKURANG-KURANGNYA ${itemsPerSet} item dalam 'items'; untuk balloon_pop/falling_catch keluarkan SEKURANG-KURANGNYA ${itemsPerSet} item dengan target diulang minimum 2 kali; untuk wordbuilder keluarkan TEPAT ${itemsPerSet} perkataan dalam 'words'; untuk story keluarkan TEPAT ${itemsPerSet} scenes; untuk physics/true_false keluarkan TEPAT ${itemsPerSet} challenges/statements; untuk sequence keluarkan SEKURANG-KURANGNYA ${itemsPerSet} items; untuk tracing keluarkan TEPAT ${itemsPerSet} letters; untuk tilematch keluarkan TEPAT ${itemsPerSet * 2} tiles berpasangan. Jangan kurang daripada angka ini.\n20. 'rounds' array MESTI ada TEPAT ${itemsPerSet} entri rounds yang berbeza (setiap round = satu pusingan permainan dalam satu sesi).\n21. Output JSON sahaja ikut schema.`,
-        response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
+KRITIKAL — STRUKTUR ROUNDS:
+- Output mesti ada array 'rounds' dengan TEPAT ${itemsPerSet} elemen.
+- SETIAP round adalah cabaran ASING dengan data SENDIRI (label + ${mode === 'memory' ? 'pairs unik 3-4 pasangan' : mode === 'balloon_pop' || mode === 'falling_catch' ? 'target + items berbeza' : mode === 'sorting' || mode === 'swipe_select' || mode === 'mini_simulation' ? 'items + groups berbeza' : mode === 'tilematch' ? 'tiles berpasangan unik' : mode === 'story' ? 'scenes berbeza' : mode === 'physics' ? 'challenges berbeza' : mode === 'true_false' ? 'statements berbeza' : mode === 'wordbuilder' ? 'words + letters berbeza' : mode === 'tracing' ? 'letters berbeza' : 'items/target berbeza'}).
+- JANGAN ulang content yang sama antara round. Setiap round MESTI ada topik mikro berbeza (contoh round 1: haiwan; round 2: tumbuhan; round 3: makanan).
+- 'label' setiap round = tajuk pendek round itu (contoh "Round 1: Padan Haiwan Hutan").
+
+Peraturan umum:
+0. Platform untuk Prasekolah dan Darjah 1-6 sahaja.
+1. Tajuk mesti unik dan cinematic.
+2. Gunakan konteks Malaysia.
+3. Tiada placeholder, tiada arahan yang perlukan gambar luar.
+4. Jika wang RM: syiling 5/10/20/50 sen; nota RM1/5/10/20/50/100.
+5. Untuk balloon_pop/falling_catch SETIAP ROUND: target string + items array string mengandungi target sekurang-kurangnya 2 kali.
+6. Untuk mini_simulation SETIAP ROUND: items {text, group}; minimum 1 item ada group sama dengan target.
+7. Untuk picture_hunt/hidden_object SETIAP ROUND: items {text(emoji), value}; minimum 1 item value sama dengan target.
+8. Setiap round mesti boleh disemak automatik (target/answer/group jelas).
+9. Mini game ini latihan genius UMUM (memori, logik, fokus, pola, kreativiti) — bukan subjek sekolah/Jawi/Iqra.
+10. visualTheme + 3 powerUps ringkas untuk rasa 3D premium.
+
+Output JSON sahaja ikut schema.`,
+        response_json_schema: schemaByMode[mode] || { type: 'object', properties: { ...baseProps, rounds: { type: 'array', items: roundSchema, minItems: itemsPerSet, maxItems: itemsPerSet } }, required: ['title', 'microTopic', 'instruction', 'rounds'] },
       });
 
       const reviewed = await base44.asServiceRole.integrations.Core.InvokeLLM({
-        prompt: `Audit dan baiki mini game ini sebelum disimpan.
+        prompt: `Audit mini game ini sebelum disimpan.
 
 Jenis game: ${mode}
 Tema: ${theme}
 Micro-topic: ${microTopic}
-Gaya aktiviti wajib: ${playStyle}
-Level: ${level} (${difficultyLabel})
-Jumlah item sasaran: ${itemsPerSet}
+Gaya aktiviti: ${playStyle}
+Jumlah rounds: ${itemsPerSet}
 
 Data asal:
 ${JSON.stringify(data)}
 
 Wajib baiki:
-0. Semua kandungan mesti hanya untuk Prasekolah atau Sekolah Rendah Darjah 1-6; buang kandungan Tingkatan/PT3/SPM/sekolah menengah.
-1. Semua kandungan mesti fakta tepat, natural, sesuai KSSR Malaysia dan terus boleh dimainkan.
-2. Tiada duplicate item/pasangan/jawapan dalam satu game.
-3. Kekalkan gaya aktiviti yang diminta supaya set ini tidak sama format dengan set lain: ${playStyle}.
-4. Tiada bahasa Indonesia/asing seperti "bisa", "total", "langkah" dalam BM; guna "boleh", "jumlah", "keping/biji/helai".
-4. Jika topik wang Malaysia/RM: guna hanya fakta semasa; jangan sebut RM1 syiling, RM2 syiling, RM2 note, atau warna/ciri duit yang tidak pasti.
-5. Guna Bahasa Melayu Malaysia baku; contoh "pemadam" bukan "penghapus".
-6. Untuk memory, pasangan mesti unik dan tidak mengulang nilai kiri yang sama.
-7. Untuk balloon_pop dan falling_catch, pastikan target ada sekurang-kurangnya 2 kali dalam items dengan ejaan sama tepat, dan items hanya string.
-8. Untuk mini_simulation, pastikan sekurang-kurangnya satu item mempunyai group yang sama tepat dengan target.
-9. Untuk sorting, swipe_select dan story, setiap item/choice mesti ada jawapan betul yang jelas supaya popup Betul/Cuba lagi boleh dipaparkan.
-10. Untuk picture_hunt dan hidden_object, jangan guna perkataan biasa sebagai paparan gambar; items mesti object {text, value}, text ialah emoji/simbol visual dan value ialah jawapan yang dipadankan dengan target.
-11. Jangan hasilkan mini game yang bergantung pada beza warna sahaja; setiap pilihan mesti ada teks/simbol/emoji yang jelas dan mudah dibaca.
-12. Arahan mesti parent-friendly: terang dalam satu ayat apa anak perlu buat, contoh 'Pilih item, kemudian tekan kumpulan yang betul'.
-13. Jika mekanik tidak mempunyai jawapan yang boleh disemak, tukar kepada sequence/sorting/true_false/picture_hunt yang lebih jelas.
-14. Buang sebarang kaitan subjek sekolah, Jawi, Iqra, bahasa, sains, matematik atau silibus khusus; kandungan mesti jadi Genius Games umum sahaja.
-15. Pastikan setiap round berlainan dan boleh dimainkan: sasaran, item, atau cabaran mikro tidak boleh terasa sama.
-16. Tambah/kekalkan visualTheme dan 3 powerUps supaya UI boleh papar rasa 3D premium, misi, combo dan boost.
-17. Pastikan output masih ikut schema asal dan lengkap.
-18. KRITIKAL — JUMLAH ENTRI MESTI ${itemsPerSet}: untuk memory pairs=${itemsPerSet}; untuk wordbuilder words=${itemsPerSet}; untuk story scenes=${itemsPerSet}; untuk physics challenges=${itemsPerSet}; untuk true_false statements=${itemsPerSet}; untuk tracing letters=${itemsPerSet}; untuk tilematch tiles=${itemsPerSet * 2}; untuk sorting/swipe_select/mini_simulation/picture_hunt/hidden_object/balloon_pop/falling_catch/sequence items minimum=${itemsPerSet}. Jika data asal kurang, TAMBAH entri baru yang berkualiti supaya cukup ${itemsPerSet}.
-19. 'rounds' array WAJIB ada TEPAT ${itemsPerSet} rounds yang berbeza.
+1. Pastikan 'rounds' ada TEPAT ${itemsPerSet} elemen, setiap satu ASING dengan data sendiri (label + content untuk mode ${mode}).
+2. JANGAN biar dua round ada data yang sama (contoh: dua round dengan pairs/items/target identical).
+3. Setiap round mesti boleh dimainkan secara berdiri sendiri.
+4. Untuk balloon_pop/falling_catch: setiap round mesti ada target + items dengan target diulang minimum 2 kali.
+5. Untuk mini_simulation/picture_hunt/hidden_object: setiap round mesti minimum 1 item match dengan target.
+6. Guna BM Malaysia baku. Jangan sebut RM1 syiling atau RM2 syiling.
+7. Tiada placeholder, tiada bahasa Indonesia.
+8. Kekalkan visualTheme dan 3 powerUps.
 
-Output JSON sahaja ikut schema.`,
-        response_json_schema: schemaByMode[mode] || { type: 'object', properties: baseProps, required: ['title', 'microTopic', 'instruction'] },
+Output JSON sahaja ikut schema (dengan rounds[${itemsPerSet}]).`,
+        response_json_schema: schemaByMode[mode] || { type: 'object', properties: { ...baseProps, rounds: { type: 'array', items: roundSchema, minItems: itemsPerSet, maxItems: itemsPerSet } }, required: ['title', 'microTopic', 'instruction', 'rounds'] },
       });
-      data = normalizeMiniGameData(mode, reviewed || data, itemsPerSet);
+      data = reviewed || data;
 
-      const roundStyles = ['ingat', 'padan', 'susun', 'pilih cepat', 'cari sasaran', 'selesai cabaran', 'fokus semula', 'bonus genius'];
-      const rounds = Array.from({ length: itemsPerSet }, (_, roundIndex) =>
-        data.rounds?.[roundIndex] || `Round ${roundIndex + 1}: ${roundStyles[(index + roundIndex) % roundStyles.length]} · ${playStyle}`
-      );
+      // Normalize per-round data
+      const normalizeRound = (currentMode, roundData) => {
+        const next = { ...(roundData || {}) };
+        if (currentMode === 'balloon_pop' || currentMode === 'falling_catch') {
+          const target = String(next.target || '').trim() || 'A';
+          const rawItems = Array.isArray(next.items) ? next.items : [];
+          const cleaned = rawItems.map(item => String(typeof item === 'object' && item !== null ? (item.text || item.label || item.value || '') : item).trim()).filter(Boolean);
+          const others = cleaned.filter(item => item.toLowerCase() !== target.toLowerCase());
+          next.target = target;
+          next.items = [target, target, ...others].slice(0, Math.max(4, cleaned.length));
+          while (next.items.length < 4) next.items.push(target);
+        }
+        if (currentMode === 'mini_simulation') {
+          const target = String(next.target || '').trim() || 'Betul';
+          const rawItems = Array.isArray(next.items) ? next.items : [];
+          next.target = target;
+          next.items = rawItems.map(item => ({ text: String(item?.text || item?.label || item || '').trim(), group: String(item?.group || '').trim() })).filter(item => item.text && item.group);
+          if (!next.items.some(item => item.group.toLowerCase() === target.toLowerCase())) next.items.unshift({ text: target, group: target });
+        }
+        if (currentMode === 'picture_hunt' || currentMode === 'hidden_object') {
+          const emojiMap = { cat: '🐱', ball: '⚽', fish: '🐟', book: '📚', apple: '🍎', sun: '☀️', moon: '🌙', star: '⭐', car: '🚗', house: '🏠', bird: '🐦', flower: '🌸' };
+          const target = String(next.target || '').trim() || 'star';
+          const rawItems = Array.isArray(next.items) ? next.items : [];
+          next.target = target;
+          next.items = rawItems.map(item => {
+            const value = String(item?.value || item?.answer || item?.label || item?.text || item || '').trim();
+            const text = String(item?.text || emojiMap[value.toLowerCase()] || value).trim();
+            return { text, value };
+          }).filter(item => item.text && item.value);
+          if (!next.items.some(item => item.value.toLowerCase() === target.toLowerCase())) next.items.unshift({ text: emojiMap[target.toLowerCase()] || '⭐', value: target });
+        }
+        return next;
+      };
+
+      // Ensure exactly itemsPerSet rounds, each normalized
+      let rounds = Array.isArray(data.rounds) ? data.rounds.slice(0, itemsPerSet) : [];
+      while (rounds.length < itemsPerSet) {
+        // Pad with duplicates if LLM under-delivered
+        rounds.push({ ...(rounds[rounds.length - 1] || {}), label: `Round ${rounds.length + 1}` });
+      }
+      rounds = rounds.map((r, i) => ({
+        ...normalizeRound(mode, r),
+        label: r.label || `Round ${i + 1}`,
+      }));
 
       return {
         mode,
-        ...data,
+        title: data.title,
+        microTopic: data.microTopic || microTopic,
+        instruction: data.instruction,
         rounds,
         variant: index + 1,
         generatedTheme: theme,
         visualTheme: data.visualTheme || `${theme} 3D Neon Arena`,
         powerUps: Array.isArray(data.powerUps) && data.powerUps.length ? data.powerUps.slice(0, 3) : ['Combo Boost', 'Focus Shield', 'Star Rush'],
         playStyle: data.playStyle || playStyle,
-        microTopic: data.microTopic || microTopic,
       };
     };
 
