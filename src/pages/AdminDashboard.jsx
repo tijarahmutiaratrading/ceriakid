@@ -455,12 +455,24 @@ export default function AdminDashboard() {
                   </div>
                 </FieldGroup>
 
-                <FieldGroup label="Brand ID" hint="Format UUID. Jumpa di Chip Dashboard → Settings → Brand.">
-                  <TextInput value={settings.chip_brand_id} onChange={v => set('chip_brand_id', v)} placeholder="abc12345-abcd-1234-abcd-abc123456789" />
+                <div className="mb-5 rounded-xl p-4 bg-green-500/15 border-2 border-green-400/40">
+                  <p className="font-black text-green-200 text-sm mb-2 flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4" /> Chip credentials dah tersimpan di server
+                  </p>
+                  <p className="text-xs text-green-100/90 leading-relaxed">
+                    <strong>CHIP_BRAND_ID</strong> dan <strong>CHIP_SECRET_KEY</strong> dah disimpan sebagai <strong>environment secrets</strong> (tempat selamat untuk API keys). Sebab tu input di bawah nampak kosong — atas sebab keselamatan, secrets tak boleh dibaca semula dari UI.
+                  </p>
+                  <p className="text-xs text-green-100/90 mt-2">
+                    ✅ Payment system anda dah berfungsi penuh. Tak perlu isi semula.
+                  </p>
+                </div>
+
+                <FieldGroup label="Brand ID (Override — Optional)" hint="Biarkan kosong jika anda dah set CHIP_BRAND_ID sebagai secret di server. Hanya isi untuk testing/local override.">
+                  <TextInput value={settings.chip_brand_id} onChange={v => set('chip_brand_id', v)} placeholder="(Guna server secret — biar kosong)" />
                 </FieldGroup>
 
-                <FieldGroup label="API Key (Secret Key)" hint="JANGAN kongsi dengan sesiapa.">
-                  <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="sk_live_..." />
+                <FieldGroup label="API Key (Override — Optional)" hint="Biarkan kosong jika anda dah set CHIP_SECRET_KEY sebagai secret di server.">
+                  <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="(Guna server secret — biar kosong)" />
                 </FieldGroup>
 
                 <div className="mt-6 rounded-xl p-4 text-sm" style={{ background: 'rgba(34,197,94,0.1)', border: '2px solid rgba(34,197,94,0.3)', color: 'rgba(220,252,231,1)' }}>
