@@ -90,6 +90,26 @@ export default function AdminDashboard() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [clearingCache, setClearingCache] = useState(false);
+  const [serverSecrets, setServerSecrets] = useState({ chip_brand_id: '', chip_secret_key: '' });
+  const [loadingSecrets, setLoadingSecrets] = useState(false);
+
+  // Load server secrets bila buka tab Chip
+  useEffect(() => {
+    if (activeTab === 'settings' && settingsTab === 'chip' && !serverSecrets.chip_brand_id && !loadingSecrets) {
+      setLoadingSecrets(true);
+      base44.functions.invoke('getAdminSecrets', {})
+        .then(res => {
+          if (res?.data) {
+            setServerSecrets({
+              chip_brand_id: res.data.chip_brand_id || '',
+              chip_secret_key: res.data.chip_secret_key || '',
+            });
+          }
+        })
+        .catch(err => console.error('Failed to load secrets:', err))
+        .finally(() => setLoadingSecrets(false));
+    }
+  }, [activeTab, settingsTab]);
 
   useEffect(() => {
     if (user?.role === 'admin') {
@@ -455,23 +475,38 @@ export default function AdminDashboard() {
                   </div>
                 </FieldGroup>
 
-                <div className="mb-5 rounded-xl p-4 bg-green-500/15 border-2 border-green-400/40">
-                  <p className="font-black text-green-200 text-sm mb-2 flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4" /> Chip credentials dah tersimpan di server
+                <div className="mb-5 rounded-xl p-4 bg-blue-500/15 border-2 border-blue-400/40">
+                  <p className="font-black text-blue-200 text-sm mb-2 flex items-center gap-2">
+                    🔐 Server Secrets (Live Values)
                   </p>
-                  <p className="text-xs text-green-100/90 leading-relaxed">
-                    <strong>CHIP_BRAND_ID</strong> dan <strong>CHIP_SECRET_KEY</strong> dah disimpan sebagai <strong>environment secrets</strong> (tempat selamat untuk API keys). Sebab tu input di bawah nampak kosong — atas sebab keselamatan, secrets tak boleh dibaca semula dari UI.
+                  <p className="text-xs text-blue-100/90 leading-relaxed">
+                    Nilai sebenar yang aktif di server (read-only). Untuk edit, pergi ke <strong>Base44 Dashboard → Settings → Environment Variables</strong>.
                   </p>
-                  <p className="text-xs text-green-100/90 mt-2">
-                    ✅ Payment system anda dah berfungsi penuh. Tak perlu isi semula.
-                  </p>
+                  {loadingSecrets ? (
+                    <p className="text-xs text-blue-100 mt-3">⏳ Memuat...</p>
+                  ) : (
+                    <div className="mt-3 space-y-2">
+                      <div>
+                        <p className="text-[10px] font-black text-blue-200/80 uppercase tracking-wider mb-1">CHIP_BRAND_ID</p>
+                        <div className="bg-black/30 border border-blue-400/30 rounded-lg px-3 py-2 text-xs font-mono text-white break-all">
+                          {serverSecrets.chip_brand_id || <span className="text-red-300">⚠️ Tidak ditetapkan</span>}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-black text-blue-200/80 uppercase tracking-wider mb-1">CHIP_SECRET_KEY</p>
+                        <div className="bg-black/30 border border-blue-400/30 rounded-lg px-3 py-2 text-xs font-mono text-white break-all">
+                          {serverSecrets.chip_secret_key || <span className="text-red-300">⚠️ Tidak ditetapkan</span>}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <FieldGroup label="Brand ID (Override — Optional)" hint="Biarkan kosong jika anda dah set CHIP_BRAND_ID sebagai secret di server. Hanya isi untuk testing/local override.">
+                <FieldGroup label="Brand ID (Local Override — Optional)" hint="Biarkan kosong untuk guna server secret. Hanya isi jika perlu override untuk testing.">
                   <TextInput value={settings.chip_brand_id} onChange={v => set('chip_brand_id', v)} placeholder="(Guna server secret — biar kosong)" />
                 </FieldGroup>
 
-                <FieldGroup label="API Key (Override — Optional)" hint="Biarkan kosong jika anda dah set CHIP_SECRET_KEY sebagai secret di server.">
+                <FieldGroup label="API Key (Local Override — Optional)" hint="Biarkan kosong untuk guna server secret.">
                   <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="(Guna server secret — biar kosong)" />
                 </FieldGroup>
 
