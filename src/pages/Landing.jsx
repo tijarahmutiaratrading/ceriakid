@@ -190,11 +190,15 @@ export default function Landing() {
         {/* Jungle BG illustration */}
         <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/5f3b025f7_generated_image.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-80 pointer-events-none select-none" />
 
-        {/* Tiger — bottom left, peeking */}
-        <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9a7761315_generated_image.png" alt="Tiger" className="absolute bottom-0 left-0 w-28 sm:w-36 md:w-44 object-contain pointer-events-none select-none z-10" style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))', transform: 'translateX(-10%)' }} />
+        {/* Tiger emoji — bottom left */}
+        <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 pointer-events-none select-none z-10 text-7xl sm:text-8xl md:text-9xl leading-none" style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))' }}>
+          🐯
+        </div>
 
-        {/* Elephant — bottom right area */}
-        <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/96bbb0b9c_generated_image.png" alt="Elephant" className="absolute bottom-0 right-4 sm:right-8 w-28 sm:w-36 md:w-44 object-contain pointer-events-none select-none z-10" style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }} />
+        {/* Elephant emoji — bottom right */}
+        <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-6 pointer-events-none select-none z-10 text-7xl sm:text-8xl md:text-9xl leading-none" style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.2))' }}>
+          🐘
+        </div>
 
         {/* Content grid */}
         <div className="relative z-20 max-w-6xl mx-auto px-6 sm:px-8 py-10 sm:py-14 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
