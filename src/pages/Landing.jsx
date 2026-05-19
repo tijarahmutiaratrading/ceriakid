@@ -92,16 +92,51 @@ export default function Landing() {
   return (
     <div className="min-h-screen font-nunito bg-gradient-to-b from-violet-600 via-purple-600 to-fuchsia-600 relative overflow-x-hidden">
 
-      {/* Floating decorative stars */}
+      {/* Floating cartoon decorations — clouds, stars, rainbows, planets */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {[...Array(8)].map((_, i) => (
-          <div key={i} className="absolute text-yellow-300 opacity-30 animate-pulse" style={{
-            left: `${(i * 17) % 100}%`,
-            top: `${(i * 23) % 100}%`,
-            fontSize: `${20 + (i % 3) * 10}px`,
-            animationDelay: `${i * 0.5}s`,
-            animationDuration: `${3 + (i % 3)}s`,
-          }}>✨</div>
+        {/* Stars */}
+        {[...Array(10)].map((_, i) => (
+          <motion.div
+            key={`star-${i}`}
+            className="absolute text-yellow-300 opacity-40"
+            style={{
+              left: `${(i * 13) % 100}%`,
+              top: `${(i * 19) % 100}%`,
+              fontSize: `${18 + (i % 3) * 8}px`,
+            }}
+            animate={{ rotate: [0, 360], scale: [1, 1.2, 1] }}
+            transition={{ duration: 6 + (i % 4), repeat: Infinity, ease: 'linear' }}
+          >✨</motion.div>
+        ))}
+        {/* Floating clouds */}
+        {['☁️', '☁️', '☁️'].map((c, i) => (
+          <motion.div
+            key={`cloud-${i}`}
+            className="absolute opacity-30"
+            style={{
+              left: `${10 + i * 35}%`,
+              top: `${15 + i * 25}%`,
+              fontSize: '60px',
+            }}
+            animate={{ x: [0, 20, 0], y: [0, -10, 0] }}
+            transition={{ duration: 8 + i * 2, repeat: Infinity, ease: 'easeInOut' }}
+          >{c}</motion.div>
+        ))}
+        {/* Floating cartoon emojis */}
+        {[
+          { emoji: '🌈', top: '20%', left: '85%', dur: 5 },
+          { emoji: '🪐', top: '60%', left: '5%', dur: 7 },
+          { emoji: '🎈', top: '40%', left: '92%', dur: 4 },
+          { emoji: '🦄', top: '75%', left: '88%', dur: 6 },
+          { emoji: '🌟', top: '85%', left: '15%', dur: 5 },
+        ].map((d, i) => (
+          <motion.div
+            key={`deco-${i}`}
+            className="absolute opacity-50 text-4xl sm:text-5xl"
+            style={{ top: d.top, left: d.left }}
+            animate={{ y: [0, -15, 0], rotate: [-8, 8, -8] }}
+            transition={{ duration: d.dur, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 }}
+          >{d.emoji}</motion.div>
         ))}
       </div>
 
@@ -175,7 +210,13 @@ export default function Landing() {
 
       {/* ── HERO ── */}
       <section className="relative pt-28 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        {/* Cartoon decorations around hero */}
+        <motion.div animate={{ y: [0, -12, 0], rotate: [-5, 5, -5] }} transition={{ duration: 4, repeat: Infinity }}
+          className="absolute top-32 left-4 sm:left-12 text-5xl sm:text-7xl opacity-80 z-0">🌈</motion.div>
+        <motion.div animate={{ y: [0, -10, 0], rotate: [10, -10, 10] }} transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
+          className="absolute top-40 right-8 sm:right-20 text-4xl sm:text-6xl opacity-80 z-0">🎈</motion.div>
+
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center relative">
           {/* Left: text */}
           <div className="relative z-10 text-center lg:text-left">
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-300 rounded-full shadow-lg mb-5">
@@ -220,31 +261,42 @@ export default function Landing() {
             </motion.div>
           </div>
 
-          {/* Right: game demo with floating mascots */}
+          {/* Right: game demo with floating cartoon mascots */}
           <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
             className="relative">
-            {/* Floating mascot emojis (3D-style for clean transparent look) */}
-            <motion.div animate={{ y: [0, -10, 0], rotate: [-3, 3, -3] }} transition={{ duration: 3, repeat: Infinity }}
-              className="absolute -top-8 -left-6 sm:-left-10 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center text-5xl sm:text-6xl shadow-2xl z-20 border-4 border-white">
+            {/* Cartoon mascot characters around demo */}
+            <motion.div animate={{ y: [0, -12, 0], rotate: [-8, 8, -8] }} transition={{ duration: 3, repeat: Infinity }}
+              className="absolute -top-10 -left-6 sm:-left-12 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center text-6xl sm:text-7xl shadow-2xl z-20 border-4 border-white ring-4 ring-yellow-300/30">
               🧒
             </motion.div>
-            <motion.div animate={{ y: [0, -8, 0], rotate: [3, -3, 3] }} transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
-              className="absolute -bottom-6 -right-4 sm:-right-8 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-5xl sm:text-6xl shadow-2xl z-20 border-4 border-white">
+            <motion.div animate={{ y: [0, -10, 0], rotate: [8, -8, 8] }} transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+              className="absolute -bottom-8 -right-4 sm:-right-10 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-6xl sm:text-7xl shadow-2xl z-20 border-4 border-white ring-4 ring-cyan-300/30">
               🐘
             </motion.div>
+            {/* Extra cartoon friends */}
+            <motion.div animate={{ y: [0, -8, 0], rotate: [-10, 10, -10] }} transition={{ duration: 3.5, repeat: Infinity, delay: 1 }}
+              className="absolute top-1/2 -right-8 sm:-right-12 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-4xl sm:text-5xl shadow-xl z-20 border-4 border-white">
+              🦊
+            </motion.div>
+            <motion.div animate={{ y: [0, -10, 0], rotate: [5, -5, 5] }} transition={{ duration: 4, repeat: Infinity, delay: 1.5 }}
+              className="absolute top-1/3 -left-8 sm:-left-12 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-4xl sm:text-5xl shadow-xl z-20 border-4 border-white">
+              🐼
+            </motion.div>
 
-            {/* Game demo card */}
-            <div className="relative rounded-[2.5rem] p-3 sm:p-4 shadow-2xl bg-white">
+            {/* Game demo card with cartoon border */}
+            <div className="relative rounded-[2.5rem] p-3 sm:p-4 shadow-2xl bg-white border-4 border-yellow-300">
               <InteractiveGameDemo />
             </div>
 
             {/* Floating badges */}
-            <div className="absolute -top-4 right-4 sm:right-8 bg-yellow-300 text-purple-900 px-3 py-1.5 rounded-full text-xs font-black shadow-lg rotate-6 z-10">
+            <motion.div animate={{ rotate: [6, -3, 6] }} transition={{ duration: 3, repeat: Infinity }}
+              className="absolute -top-4 right-4 sm:right-8 bg-yellow-300 text-purple-900 px-3 py-1.5 rounded-full text-xs font-black shadow-lg z-10 border-2 border-white">
               ⭐ 4.9/5.0
-            </div>
-            <div className="absolute -bottom-2 left-4 sm:left-8 bg-pink-400 text-white px-3 py-1.5 rounded-full text-xs font-black shadow-lg -rotate-3 z-10">
+            </motion.div>
+            <motion.div animate={{ rotate: [-3, 3, -3] }} transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+              className="absolute -bottom-2 left-4 sm:left-8 bg-pink-400 text-white px-3 py-1.5 rounded-full text-xs font-black shadow-lg z-10 border-2 border-white">
               🎮 1,500+ Games
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -274,8 +326,12 @@ export default function Landing() {
       </div>
 
       {/* ── PROBLEM SECTION ── */}
-      <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-purple-600 to-fuchsia-600">
-        <div className="max-w-5xl mx-auto">
+      <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-purple-600 to-fuchsia-600 overflow-hidden">
+        {/* Cartoon mascot peeking */}
+        <motion.div animate={{ y: [0, -10, 0], rotate: [-5, 5, -5] }} transition={{ duration: 3, repeat: Infinity }}
+          className="absolute top-8 right-4 sm:right-12 text-6xl sm:text-8xl opacity-90 z-0">🤔</motion.div>
+
+        <div className="max-w-5xl mx-auto relative">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
             <span className="inline-block px-4 py-1.5 bg-yellow-300 text-purple-900 rounded-full text-xs font-black mb-4">😮‍💨 MASALAH BIASA</span>
             <h2 className="text-4xl sm:text-5xl font-black text-white mb-3" style={{ textShadow: '3px 3px 0 rgba(0,0,0,0.15)' }}>
@@ -339,8 +395,14 @@ export default function Landing() {
       </section>
 
       {/* ── SUBJECTS ── */}
-      <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-purple-600 to-fuchsia-600">
-        <div className="max-w-6xl mx-auto">
+      <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-purple-600 to-fuchsia-600 overflow-hidden">
+        {/* Cartoon mascots */}
+        <motion.div animate={{ y: [0, -12, 0], rotate: [-8, 8, -8] }} transition={{ duration: 3.5, repeat: Infinity }}
+          className="absolute top-12 left-2 sm:left-8 text-5xl sm:text-7xl opacity-90 z-0">📚</motion.div>
+        <motion.div animate={{ y: [0, -10, 0], rotate: [8, -8, 8] }} transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+          className="absolute bottom-12 right-2 sm:right-8 text-5xl sm:text-7xl opacity-90 z-0">🎒</motion.div>
+
+        <div className="max-w-6xl mx-auto relative">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
             <span className="inline-block px-4 py-1.5 bg-yellow-300 text-purple-900 rounded-full text-xs font-black mb-4">📚 7 SUBJEK</span>
             <h2 className="text-4xl sm:text-5xl font-black text-white mb-3" style={{ textShadow: '3px 3px 0 rgba(0,0,0,0.15)' }}>
@@ -406,8 +468,14 @@ export default function Landing() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-pink-600 to-fuchsia-600">
-        <div className="max-w-5xl mx-auto">
+      <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-pink-600 to-fuchsia-600 overflow-hidden">
+        {/* Cartoon path decoration */}
+        <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          className="absolute top-16 right-8 text-5xl sm:text-7xl opacity-70 z-0">🌟</motion.div>
+        <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity }}
+          className="absolute bottom-16 left-8 text-5xl sm:text-7xl opacity-70 z-0">🚀</motion.div>
+
+        <div className="max-w-5xl mx-auto relative">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-12">
             <span className="inline-block px-4 py-1.5 bg-white text-pink-600 rounded-full text-xs font-black mb-4">📲 MULA DALAM 3 LANGKAH</span>
             <h2 className="text-4xl sm:text-5xl font-black text-white mb-3" style={{ textShadow: '3px 3px 0 rgba(0,0,0,0.15)' }}>
@@ -436,8 +504,14 @@ export default function Landing() {
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section id="testimonials" className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-fuchsia-600 to-violet-600">
-        <div className="max-w-6xl mx-auto">
+      <section id="testimonials" className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-fuchsia-600 to-violet-600 overflow-hidden">
+        {/* Cartoon heart mascots */}
+        <motion.div animate={{ scale: [1, 1.15, 1], rotate: [-5, 5, -5] }} transition={{ duration: 2.5, repeat: Infinity }}
+          className="absolute top-10 left-4 sm:left-12 text-5xl sm:text-7xl opacity-80 z-0">💖</motion.div>
+        <motion.div animate={{ scale: [1, 1.1, 1], rotate: [5, -5, 5] }} transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+          className="absolute bottom-10 right-4 sm:right-12 text-5xl sm:text-7xl opacity-80 z-0">⭐</motion.div>
+
+        <div className="max-w-6xl mx-auto relative">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
             <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_, i) => <span key={i} className="text-2xl text-yellow-300">⭐</span>)}</div>
             <span className="inline-block px-4 py-1.5 bg-yellow-300 text-purple-900 rounded-full text-xs font-black mb-4">💬 TESTIMONI</span>
@@ -467,8 +541,14 @@ export default function Landing() {
       </section>
 
       {/* ── PRICING ── */}
-      <section id="pricing" className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-violet-600 to-purple-700">
-        <div className="max-w-6xl mx-auto">
+      <section id="pricing" className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-violet-600 to-purple-700 overflow-hidden">
+        {/* Cartoon money/gift mascots */}
+        <motion.div animate={{ y: [0, -12, 0], rotate: [-8, 8, -8] }} transition={{ duration: 3, repeat: Infinity }}
+          className="absolute top-12 right-4 sm:right-16 text-5xl sm:text-7xl opacity-80 z-0">🎁</motion.div>
+        <motion.div animate={{ y: [0, -10, 0], rotate: [8, -8, 8] }} transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
+          className="absolute bottom-12 left-4 sm:left-16 text-5xl sm:text-7xl opacity-80 z-0">💎</motion.div>
+
+        <div className="max-w-6xl mx-auto relative">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-12">
             <span className="inline-block px-4 py-1.5 bg-yellow-300 text-purple-900 rounded-full text-xs font-black mb-4">💰 PILIH PELAN</span>
             <h2 className="text-4xl sm:text-5xl font-black text-white mb-3" style={{ textShadow: '3px 3px 0 rgba(0,0,0,0.15)' }}>
@@ -572,10 +652,15 @@ export default function Landing() {
       {/* ── FINAL CTA ── */}
       <section className="relative px-4 sm:px-6 py-16 sm:py-24 bg-gradient-to-br from-purple-700 via-fuchsia-600 to-pink-500 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* Cartoon mascot crew */}
           <motion.div animate={{ y: [0, -12, 0], rotate: [-5, 5, -5] }} transition={{ duration: 3, repeat: Infinity }}
             className="absolute bottom-8 left-4 sm:left-12 text-7xl sm:text-9xl">👧</motion.div>
           <motion.div animate={{ y: [0, -10, 0], rotate: [5, -5, 5] }} transition={{ duration: 2.5, repeat: Infinity, delay: 0.4 }}
             className="absolute bottom-8 right-4 sm:right-12 text-7xl sm:text-9xl">🧒</motion.div>
+          <motion.div animate={{ y: [0, -8, 0], rotate: [-8, 8, -8] }} transition={{ duration: 3.5, repeat: Infinity, delay: 0.8 }}
+            className="absolute top-8 left-1/4 text-5xl sm:text-7xl opacity-80">🦄</motion.div>
+          <motion.div animate={{ y: [0, -10, 0], rotate: [8, -8, 8] }} transition={{ duration: 3, repeat: Infinity, delay: 1.2 }}
+            className="absolute top-12 right-1/4 text-5xl sm:text-7xl opacity-80">🌈</motion.div>
         </div>
 
         <div className="relative max-w-3xl mx-auto text-center">
