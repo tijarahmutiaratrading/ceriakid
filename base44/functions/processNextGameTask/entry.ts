@@ -294,8 +294,8 @@ Deno.serve(async (req) => {
     const miniGameMap = {
       memory_master: { title: 'Memory Master', type: 'memory_game', emoji: '🧠', modes: ['memory', 'hidden_object', 'sequence'] },
       logic_puzzles: { title: 'Logic Puzzles', type: 'sorting', emoji: '🧩', modes: ['sorting', 'tilematch', 'dragdrop'] },
-      speed_focus: { title: 'Speed Focus', type: 'picture_quiz', emoji: '⚡', modes: ['reaction_speed', 'falling_catch', 'balloon_pop'] },
-      pattern_genius: { title: 'Pattern Genius', type: 'pattern_fill', emoji: '🔷', modes: ['sequence', 'connect_dots', 'rhythm_tap'] },
+      speed_focus: { title: 'Speed Focus', type: 'picture_quiz', emoji: '⚡', modes: ['falling_catch', 'balloon_pop', 'swipe_select'] },
+      pattern_genius: { title: 'Pattern Genius', type: 'pattern_fill', emoji: '🔷', modes: ['sequence', 'connect_dots', 'tilematch'] },
       maze_adventure: { title: 'Maze Adventure', type: 'story_adventure', emoji: '🌀', modes: ['maze', 'hidden_object', 'story'] },
       creative_builder: { title: 'Creative Builder', type: 'drag_drop', emoji: '🎨', modes: ['coloring', 'stacking', 'dragdrop'] },
       problem_solver: { title: 'Problem Solver', type: 'science_quiz', emoji: '💡', modes: ['true_false', 'mini_simulation', 'physics'] },
