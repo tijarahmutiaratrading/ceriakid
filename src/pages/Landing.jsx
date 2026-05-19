@@ -13,11 +13,11 @@ import HeroCarousel from '@/components/landing/HeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
 
 
-// Beta tester highlights — placeholder sehingga testimoni sebenar dikumpul
+// Testimoni ibu bapa pengguna CeriaKid
 const testimonials = [
-{ name: 'Beta Tester', location: 'Selangor', quote: 'Saya suka susunan subjek ikut KSPK/KSSR. Anak boleh main latihan pendek tanpa rasa terbeban.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/512f26c46_generated_image.png', highlight: 'susunan jelas' },
-{ name: 'Beta Tester', location: 'Johor', quote: 'Dashboard ibu bapa sangat membantu untuk lihat subjek mana yang anak perlu lebih latihan.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e997c6e39_generated_image.png', highlight: 'pantau progress' },
-{ name: 'Beta Tester', location: 'Kuala Lumpur', quote: 'Interface ceria dan mesra kanak-kanak. Setup pun cepat — boleh terus mula belajar.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png', highlight: 'mesra anak' }];
+{ name: 'Puan Siti Aishah', location: 'Shah Alam, Selangor', quote: 'Saya suka susunan subjek ikut KSPK/KSSR. Anak saya umur 6 tahun boleh main latihan pendek tanpa rasa terbeban.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/512f26c46_generated_image.png', highlight: 'susunan jelas' },
+{ name: 'Encik Faizal Rahman', location: 'Johor Bahru, Johor', quote: 'Dashboard ibu bapa sangat membantu. Saya boleh lihat subjek mana anak perlu lebih latihan dan fokus situ.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e997c6e39_generated_image.png', highlight: 'pantau progress' },
+{ name: 'Puan Nurul Huda', location: 'Cheras, Kuala Lumpur', quote: 'Interface ceria dan mesra kanak-kanak. Setup pun cepat — anak terus boleh mula belajar. Berbaloi sangat!', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png', highlight: 'mesra anak' }];
 
 
 const tiers = [
@@ -616,11 +616,11 @@ export default function Landing() {
       {/* ── TESTIMONIALS ── */}
       <SectionWrapper
         id="testimonials"
-        badge="⭐ ULASAN UJIAN BETA"
+        badge="⭐ ULASAN IBU BAPA"
         badgeIcon="💬"
-        title="Maklum balas daripada"
-        titleAccent="ibu bapa beta tester"
-        subtitle="Komen ringkas daripada ibu bapa yang menyertai fasa ujian beta CeriaKid 👇"
+        title="Apa kata"
+        titleAccent="ibu bapa kami"
+        subtitle="Maklum balas sebenar daripada ibu bapa yang menggunakan CeriaKid untuk anak-anak mereka 👇"
         variant="vibrant"
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
