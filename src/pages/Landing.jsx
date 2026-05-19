@@ -42,7 +42,7 @@ const tiers = [
   perMonth: '16.58',
   period: '/tahun',
   savings: 'PALING POPULAR',
-  features: ['200 game semua peringkat boleh dimainkan', 'Semua subjek', 'Prasekolah & Sekolah Rendah', 'Tiada game dikunci 🔓', 'Sehingga 4 profil anak', 'Dashboard ibu bapa lengkap', 'Boleh guna offline 📲', 'Sokongan prioriti', 'Sehingga 4 peranti 📱📱📱📱'],
+  features: ['200 game semua peringkat boleh dimainkan', 'Semua subjek', 'Prasekolah & Sekolah Rendah', 'Tiada game dikunci 🔓', 'Sehingga 4 profil anak', 'Boleh guna offline 📲', 'Sokongan prioriti', 'Sehingga 4 peranti 📱📱📱📱'],
   noFeatures: [],
   cta: '🔥 Pilih Keluarga',
   highlighted: true
@@ -53,7 +53,7 @@ const tiers = [
   priceMYR: '99',
   perMonth: '8.25',
   period: '/tahun',
-  features: ['100 game boleh dimainkan', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Dashboard ibu bapa', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sehingga 2 peranti 📱📱'],
+  features: ['100 game boleh dimainkan', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sehingga 2 peranti 📱📱'],
   noFeatures: ['Sehingga 4 anak'],
   cta: 'Pilih Standard',
   highlighted: false
