@@ -187,84 +187,149 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* ── HERO — Jungle Adventure ── */}
-      <div className="relative w-full overflow-hidden pt-20 sm:pt-24" style={{ background: 'linear-gradient(135deg, #2DB87A 0%, #1DA868 50%, #16956A 100%)' }}>
-        {/* Jungle BG illustration */}
-        <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/5f3b025f7_generated_image.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-80 pointer-events-none select-none" />
+      {/* ── HERO — Modern Clean Design ── */}
+      <section className="relative w-full overflow-hidden pt-24 sm:pt-28 pb-12 sm:pb-16">
+        {/* Soft gradient background */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #1E1B4B 0%, #312E81 40%, #4C1D95 100%)' }} />
 
-        {/* Tiger emoji — bottom left */}
-        <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 pointer-events-none select-none z-10 text-7xl sm:text-8xl md:text-9xl leading-none" style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))' }}>
-          🐯
-        </div>
+        {/* Decorative glow blobs */}
+        <div className="absolute top-20 -left-20 w-96 h-96 rounded-full bg-pink-500/20 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 -right-20 w-96 h-96 rounded-full bg-orange-500/20 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-purple-500/10 blur-3xl pointer-events-none" />
 
-        {/* Elephant emoji — bottom right */}
-        <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-6 pointer-events-none select-none z-10 text-7xl sm:text-8xl md:text-9xl leading-none" style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.2))' }}>
-          🐘
-        </div>
+        {/* Content */}
+        <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
 
-        {/* Content grid */}
-        <div className="relative z-20 max-w-6xl mx-auto px-6 sm:px-8 py-10 sm:py-14 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* LEFT: Text content */}
+            <div className="text-center lg:text-left">
+              {/* Top badge */}
+              <motion.div
+                initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6"
+              >
+                <span className="text-base">🇲🇾</span>
+                <span className="text-white/90 text-xs sm:text-sm font-bold">Untuk anak-anak Malaysia • KSPK + KSSR</span>
+              </motion.div>
 
-          {/* Left: Text */}
-          <div className="pb-20 sm:pb-24 lg:pb-0">
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight text-white mb-2 drop-shadow-md">
-              Anak Suka Main Game?
-            </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}
-              className="text-2xl sm:text-3xl md:text-4xl font-black mb-4"
-              style={{ color: '#F97316', textShadow: '0 2px 8px rgba(0,0,0,0.18)' }}>
-              Jadikan Ia Masa Belajar 🎉
-            </motion.p>
+              {/* Headline */}
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
+                className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] text-white tracking-tight mb-5"
+              >
+                Anak belajar<br />
+                <span className="bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
+                  sambil main game
+                </span>{' '}
+                yang berfaedah
+              </motion.h1>
 
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}
-              className="text-sm sm:text-base font-black text-orange-200 mb-3">
-              Game pembelajaran KSPK untuk Prasekolah<br className="hidden sm:block" /> & KSSR untuk Sekolah Rendah
-            </motion.p>
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}
-              className="text-xs sm:text-sm text-white/90 mb-6 leading-relaxed max-w-sm">
-              CeriaKid bantu anak belajar BM, English, Matematik, Sains, Jawi, Tamil & Mandarin melalui game pendek, soalan interaktif dan dashboard ibu bapa
-            </motion.p>
+              {/* Subheadline */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}
+                className="text-base sm:text-lg text-white/75 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0"
+              >
+                7 subjek utama dalam satu app — BM, English, Matematik, Sains, Jawi, Tamil & Mandarin. Anak rasa main game, ibu bapa pantau prestasi.
+              </motion.p>
 
-            <motion.button
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }}
-              onClick={scrollToPricing}
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full font-black text-white text-sm sm:text-base shadow-xl"
-              style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)', boxShadow: '0 6px 24px rgba(234,88,12,0.45)' }}>
-              Lihat Pelan Harga <ArrowRight className="w-4 h-4" />
-            </motion.button>
-          </div>
+              {/* CTAs */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}
+                className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-8"
+              >
+                <motion.button
+                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                  onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
+                  className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full font-black text-white text-base shadow-2xl"
+                  style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)', boxShadow: '0 10px 30px rgba(234,88,12,0.5)' }}
+                >
+                  🎮 Cuba Sekarang
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                  onClick={scrollToPricing}
+                  className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full font-black text-white/90 text-base bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-colors"
+                >
+                  Lihat Harga <ArrowRight className="w-4 h-4" />
+                </motion.button>
+              </motion.div>
 
-          {/* Right: Carousel + Features */}
-           <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15, type: 'spring', damping: 20 }}
-             className="pb-20 sm:pb-24 lg:pb-0">
-             <HeroCarousel />
-             <div className="space-y-3 mb-6">
-              {['✅ KSPK + KSSR', '✅ Tiada iklan', '✅ Dashboard ibu bapa', '✅ 200+ Permainan'].map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.07 }}
-                  className="flex items-center gap-3">
-                  <span className="text-white font-black text-lg sm:text-xl md:text-2xl drop-shadow">{item}</span>
-                </motion.div>
-              ))}
+              {/* Trust row */}
+              <motion.div
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
+                className="flex items-center gap-5 justify-center lg:justify-start"
+              >
+                <div className="flex -space-x-2">
+                  {avatars.map((src, i) => (
+                    <img key={i} src={src} alt="" className="w-8 h-8 rounded-full border-2 border-purple-900 object-cover" />
+                  ))}
+                </div>
+                <div className="text-left">
+                  <div className="flex gap-0.5 mb-0.5">
+                    {[...Array(5)].map((_, i) => <span key={i} className="text-yellow-300 text-sm">★</span>)}
+                  </div>
+                  <p className="text-white/70 text-xs font-bold">Rating ibu bapa <span className="text-white">4.9/5</span></p>
+                </div>
+              </motion.div>
             </div>
 
-            {/* Cuba sekarang button */}
-            <motion.button
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }}
-              onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-              className="w-full sm:w-auto px-8 py-4 rounded-full font-black text-white text-lg shadow-2xl mb-3"
-              style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)', boxShadow: '0 8px 28px rgba(234,88,12,0.5)' }}>
-              Cuba sekarang!
-            </motion.button>
+            {/* RIGHT: Carousel inside floating frame */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, type: 'spring', damping: 20 }}
+              className="relative"
+            >
+              {/* Glow behind carousel */}
+              <div className="absolute -inset-4 bg-gradient-to-br from-orange-400/30 via-pink-400/20 to-purple-400/30 rounded-[2.5rem] blur-2xl pointer-events-none" />
 
-            <p className="text-white/80 text-sm font-semibold">
-              Rating Ibu Bapa <span className="text-yellow-300 font-black">4.9</span> / 5.0
-            </p>
+              <div className="relative rounded-[2rem] p-2 bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+                <HeroCarousel />
+              </div>
+
+              {/* Floating stat chips */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}
+                className="hidden sm:flex absolute -left-4 top-6 items-center gap-2 px-3 py-2 rounded-2xl bg-white shadow-xl"
+              >
+                <span className="text-xl">🎯</span>
+                <div>
+                  <p className="text-[10px] font-bold text-slate-500 leading-none">Selari dengan</p>
+                  <p className="text-xs font-black text-slate-900 leading-tight">KSPK + KSSR</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }}
+                className="hidden sm:flex absolute -right-3 bottom-8 items-center gap-2 px-3 py-2 rounded-2xl bg-white shadow-xl"
+              >
+                <span className="text-xl">🏆</span>
+                <div>
+                  <p className="text-[10px] font-bold text-slate-500 leading-none">200+ permainan</p>
+                  <p className="text-xs font-black text-slate-900 leading-tight">Tanpa iklan</p>
+                </div>
+              </motion.div>
+            </motion.div>
+
+          </div>
+
+          {/* Feature pills row */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+            className="mt-12 flex flex-wrap justify-center gap-2 sm:gap-3"
+          >
+            {[
+              { icon: '✅', text: 'Tanpa iklan' },
+              { icon: '📊', text: 'Dashboard ibu bapa' },
+              { icon: '📲', text: 'Boleh offline' },
+              { icon: '🔒', text: 'Selamat untuk anak' },
+              { icon: '🎓', text: 'KSPK + KSSR' },
+            ].map((pill) => (
+              <div key={pill.text} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/10 border border-white/15 backdrop-blur-md text-white/90 text-xs sm:text-sm font-bold">
+                <span>{pill.icon}</span> {pill.text}
+              </div>
+            ))}
           </motion.div>
         </div>
-      </div>
+      </section>
 
       {/* ── STATS STRIP ── */}
       <div className="py-5 md:py-10 border-y border-orange-200/60 bg-white/95 shadow-inner">
