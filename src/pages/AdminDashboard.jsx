@@ -15,7 +15,7 @@ import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gam
 const SETTINGS_KEY = 'admin_app_settings';
 
 const defaultSettings = {
-  fb_pixel_id: '',
+  fb_pixel_id: '364206716624609',
   fb_access_token: '',
   chip_brand_id: '',
   chip_api_key: '',
@@ -402,7 +402,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <FieldGroup label="Pixel ID" hint="Jumpa di Meta Business → Events Manager → Pixel → Settings.">
+                <FieldGroup label="Pixel ID" hint="✅ Aktif & dipasang dalam index.html. Sudah tracking semua visitor.">
                   <TextInput value={settings.fb_pixel_id} onChange={v => set('fb_pixel_id', v)} placeholder="e.g. 1234567890123" />
                 </FieldGroup>
 
