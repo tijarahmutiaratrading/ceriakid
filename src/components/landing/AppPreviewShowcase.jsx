@@ -33,7 +33,7 @@ function GameSample() {
   const reset = () => { setQIdx(0); setSelected(null); setScore(0); setDone(false); };
 
   if (done) return (
-    <div className="flex flex-col items-center justify-center py-8 gap-4">
+    <div className="flex flex-col items-center justify-center py-8 gap-4 mx-auto">
       <div className="text-6xl">🏆</div>
       <h3 className="font-black text-2xl text-slate-900">Tahniah! 🎉</h3>
       <p className="text-lg font-bold text-slate-700">Markah: <span className="text-orange-500">{score}/{questions.length}</span></p>
@@ -43,8 +43,8 @@ function GameSample() {
   );
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="flex items-center justify-between mb-3">
+    <div className="max-w-md mx-auto text-center">
+      <div className="flex items-center justify-between mb-3 justify-center">
         <span className="text-xs font-black bg-blue-100 text-blue-700 px-3 py-1 rounded-full">{q.subject}</span>
         <span className="text-xs font-bold text-slate-500">Soalan {qIdx + 1} / {questions.length}</span>
         <span className="text-xs font-black text-orange-500">⭐ {score} mata</span>
@@ -52,11 +52,11 @@ function GameSample() {
       <div className="h-2 bg-gray-100 rounded-full mb-4 overflow-hidden">
         <div className="h-2 bg-gradient-to-r from-orange-400 to-pink-500 rounded-full transition-all duration-500" style={{ width: `${(qIdx / questions.length) * 100}%` }} />
       </div>
-      <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-5 mb-4 border border-purple-100 text-center">
+      <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-5 mb-4 border border-purple-100 text-center mx-auto">
         <p className="font-black text-slate-900 text-lg leading-snug">{q.q}</p>
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        {q.options.map((opt, i) => {
+      <div className="grid grid-cols-2 gap-3 mx-auto">
+         {q.options.map((opt, i) => {
           let cls = 'bg-white border-2 border-gray-200 text-slate-800 hover:border-orange-400 hover:bg-orange-50';
           if (selected !== null) {
             if (i === q.answer) cls = 'bg-green-100 border-2 border-green-500 text-green-800';
@@ -83,22 +83,22 @@ function StoryKidPreview() {
     { bg: 'from-yellow-400 to-orange-400', scene: '🦊❤️✨', text: 'Aqil memberi epal kepada rubah. Rubah itu tersenyum dan berterima kasih! Aqil rasa gembira kerana berbuat baik.', choice: null },
   ];
   const s = story[Math.min(page, story.length - 1)];
-  return (
-    <div className="max-w-md mx-auto">
-      <div className={`rounded-3xl bg-gradient-to-br ${s.bg} p-6 text-center text-white shadow-xl mb-4 min-h-[180px] flex flex-col items-center justify-center`}>
+   return (
+     <div className="max-w-md mx-auto text-center">
+      <div className={`rounded-3xl bg-gradient-to-br ${s.bg} p-6 text-center text-white shadow-xl mb-4 min-h-[180px] flex flex-col items-center justify-center mx-auto`}>
         <div className="text-5xl mb-3">{s.scene}</div>
         <p className="font-bold text-lg leading-relaxed">{s.text}</p>
       </div>
       {s.choice ? (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 mx-auto">
           {s.choice.map((c, i) => (
             <button key={i} onClick={() => setPage(2)} className="py-3 px-4 rounded-2xl bg-white border-2 border-orange-300 text-orange-700 font-black text-sm shadow hover:bg-orange-50 transition-all">{c}</button>
           ))}
         </div>
       ) : page < story.length - 1 ? (
-        <button onClick={() => setPage(p => p + 1)} className="w-full py-3 rounded-2xl bg-white text-blue-700 font-black text-sm shadow border-2 border-blue-200">Seterusnya →</button>
+        <button onClick={() => setPage(p => p + 1)} className="w-full py-3 rounded-2xl bg-white text-blue-700 font-black text-sm shadow border-2 border-blue-200 mx-auto">Seterusnya →</button>
       ) : (
-        <button onClick={() => setPage(0)} className="w-full py-3 rounded-2xl bg-orange-500 text-white font-black text-sm shadow">Cuba Cerita Lain 📖</button>
+        <button onClick={() => setPage(0)} className="w-full py-3 rounded-2xl bg-orange-500 text-white font-black text-sm shadow mx-auto">Cuba Cerita Lain 📖</button>
       )}
       <p className="text-center text-xs text-slate-400 mt-2">Halaman {Math.min(page + 1, story.length)} / {story.length}</p>
     </div>
