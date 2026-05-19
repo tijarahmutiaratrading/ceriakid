@@ -1,24 +1,80 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 
 export default function MiniFeedback({ feedback }) {
+  const isCorrect = feedback?.type === 'correct';
+
+  useEffect(() => {
+    if (feedback && isCorrect) {
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { y: 0.7 },
+        colors: ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#8b5cf6'],
+      });
+    }
+  }, [feedback, isCorrect]);
+
   return (
     <AnimatePresence>
       {feedback && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.75, y: 16 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.85, y: -12 }}
-          className="fixed inset-x-4 top-28 z-[80] mx-auto max-w-xs pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/30 backdrop-blur-sm pointer-events-none"
         >
-          <div className={`relative overflow-hidden rounded-[2rem] px-5 py-4 text-center shadow-2xl border-4 border-white/75 ${feedback.type === 'correct' ? 'bg-gradient-to-br from-emerald-300 via-cyan-400 to-blue-500 text-white' : 'bg-gradient-to-br from-rose-300 via-pink-500 to-purple-600 text-white'}`}>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(255,255,255,0.55),transparent_28%)]" />
-            <div className="relative">
-              <p className="text-5xl mb-1 drop-shadow-lg">{feedback.type === 'correct' ? '🏆' : '💫'}</p>
-              <p className="text-xl font-black drop-shadow">{feedback.type === 'correct' ? 'Combo Betul!' : 'Cuba Power Move!'}</p>
-              <p className="text-xs font-bold text-white/90">{feedback.message}</p>
-            </div>
-          </div>
+          <motion.div
+            initial={isCorrect ? { scale: 0, rotate: -20, y: 50 } : { scale: 0.5, rotate: 10, y: -20 }}
+            animate={{ scale: 1, rotate: 0, y: 0 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={isCorrect ? { type: 'spring', damping: 10, mass: 0.8, stiffness: 200 } : { type: 'spring', damping: 15, stiffness: 150 }}
+            className={`rounded-3xl p-8 text-center shadow-2xl ${
+              isCorrect
+                ? 'bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100 border-2 border-green-400'
+                : 'bg-gradient-to-br from-orange-100 via-amber-100 to-rose-100 border-2 border-orange-400'
+            }`}
+          >
+            <motion.div
+              animate={isCorrect ? { y: [0, -15, 0] } : { rotate: [0, -5, 5, 0] }}
+              transition={isCorrect ? { duration: 0.6, delay: 0.2 } : { duration: 0.5, delay: 0.2 }}
+              className="text-7xl mb-4"
+            >
+              {isCorrect ? '🎉' : '💪'}
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+              className={`text-3xl font-black ${isCorrect ? 'text-green-700' : 'text-orange-700'}`}
+            >
+              {feedback.message}
+            </motion.p>
+
+            {isCorrect && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="flex justify-center gap-2 mt-4"
+              >
+                {[1, 2, 3].map((i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 0.6 + i * 0.1, type: 'spring', damping: 10 }}
+                    className="text-3xl"
+                  >
+                    ⭐
+                  </motion.span>
+                ))}
+              </motion.div>
+            )}
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
