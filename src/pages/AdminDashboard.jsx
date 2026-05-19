@@ -93,17 +93,22 @@ export default function AdminDashboard() {
   const [serverSecrets, setServerSecrets] = useState({ chip_brand_id: '', chip_secret_key: '' });
   const [loadingSecrets, setLoadingSecrets] = useState(false);
 
-  // Load server secrets bila buka tab Chip
+  // Load server secrets bila buka tab Chip — auto-fill terus dalam input
   useEffect(() => {
     if (activeTab === 'settings' && settingsTab === 'chip' && !serverSecrets.chip_brand_id && !loadingSecrets) {
       setLoadingSecrets(true);
       base44.functions.invoke('getAdminSecrets', {})
         .then(res => {
           if (res?.data) {
-            setServerSecrets({
-              chip_brand_id: res.data.chip_brand_id || '',
-              chip_secret_key: res.data.chip_secret_key || '',
-            });
+            const brandId = res.data.chip_brand_id || '';
+            const secretKey = res.data.chip_secret_key || '';
+            setServerSecrets({ chip_brand_id: brandId, chip_secret_key: secretKey });
+            // Auto-fill terus dalam input form (kalau input kosong)
+            setSettings(prev => ({
+              ...prev,
+              chip_brand_id: prev.chip_brand_id || brandId,
+              chip_api_key: prev.chip_api_key || secretKey,
+            }));
           }
         })
         .catch(err => console.error('Failed to load secrets:', err))
@@ -475,39 +480,16 @@ export default function AdminDashboard() {
                   </div>
                 </FieldGroup>
 
-                <div className="mb-5 rounded-xl p-4 bg-blue-500/15 border-2 border-blue-400/40">
-                  <p className="font-black text-blue-200 text-sm mb-2 flex items-center gap-2">
-                    🔐 Server Secrets (Live Values)
-                  </p>
-                  <p className="text-xs text-blue-100/90 leading-relaxed">
-                    Nilai sebenar yang aktif di server (read-only). Untuk edit, pergi ke <strong>Base44 Dashboard → Settings → Environment Variables</strong>.
-                  </p>
-                  {loadingSecrets ? (
-                    <p className="text-xs text-blue-100 mt-3">⏳ Memuat...</p>
-                  ) : (
-                    <div className="mt-3 space-y-2">
-                      <div>
-                        <p className="text-[10px] font-black text-blue-200/80 uppercase tracking-wider mb-1">CHIP_BRAND_ID</p>
-                        <div className="bg-black/30 border border-blue-400/30 rounded-lg px-3 py-2 text-xs font-mono text-white break-all">
-                          {serverSecrets.chip_brand_id || <span className="text-red-300">⚠️ Tidak ditetapkan</span>}
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-black text-blue-200/80 uppercase tracking-wider mb-1">CHIP_SECRET_KEY</p>
-                        <div className="bg-black/30 border border-blue-400/30 rounded-lg px-3 py-2 text-xs font-mono text-white break-all">
-                          {serverSecrets.chip_secret_key || <span className="text-red-300">⚠️ Tidak ditetapkan</span>}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                {loadingSecrets && (
+                  <p className="text-xs text-white/70 mb-3">⏳ Memuat credentials dari server...</p>
+                )}
 
-                <FieldGroup label="Brand ID (Local Override — Optional)" hint="Biarkan kosong untuk guna server secret. Hanya isi jika perlu override untuk testing.">
-                  <TextInput value={settings.chip_brand_id} onChange={v => set('chip_brand_id', v)} placeholder="(Guna server secret — biar kosong)" />
+                <FieldGroup label="Brand ID" hint="✅ Auto-loaded dari server. Edit untuk update.">
+                  <TextInput value={settings.chip_brand_id} onChange={v => set('chip_brand_id', v)} placeholder="abc12345-abcd-1234-abcd-abc123456789" />
                 </FieldGroup>
 
-                <FieldGroup label="API Key (Local Override — Optional)" hint="Biarkan kosong untuk guna server secret.">
-                  <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="(Guna server secret — biar kosong)" />
+                <FieldGroup label="API Key (Secret Key)" hint="✅ Auto-loaded dari server. Edit untuk update.">
+                  <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="sk_live_..." />
                 </FieldGroup>
 
                 <div className="mt-6 rounded-xl p-4 text-sm" style={{ background: 'rgba(34,197,94,0.1)', border: '2px solid rgba(34,197,94,0.3)', color: 'rgba(220,252,231,1)' }}>
