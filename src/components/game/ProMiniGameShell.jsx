@@ -3,6 +3,7 @@ import React from 'react';
 export default function ProMiniGameShell({ data = {}, mode, children }) {
   const instruction = data.instruction || data.question || data.prompt || data.title || '';
   const modeLabel = String(mode || '').replaceAll('_', ' ');
+  const [roundKey, setRoundKey] = React.useState(0);
 
   return (
     <div
@@ -51,8 +52,23 @@ export default function ProMiniGameShell({ data = {}, mode, children }) {
           boxShadow: 'inset 0 2px 8px rgba(255,255,255,0.5)',
         }}
       >
-        {children}
+        <div key={roundKey}>{children}</div>
       </div>
+
+      {/* Round restart — supaya boleh main banyak kali */}
+      <button
+        type="button"
+        onClick={() => setRoundKey((k) => k + 1)}
+        className="relative mt-3 w-full py-3 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-transform"
+        style={{
+          background: 'linear-gradient(135deg, #FDF6E3 0%, #F5E6CC 100%)',
+          border: '2px solid #C8A878',
+          color: '#4A2E14',
+          boxShadow: 'inset 0 2px 6px rgba(255,255,255,0.6), 0 4px 10px rgba(74,46,20,0.25)',
+        }}
+      >
+        🔄 Main Sekali Lagi
+      </button>
     </div>
   );
 }
