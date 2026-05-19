@@ -115,13 +115,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-      {/* Background blobs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
+    <div className="min-h-screen font-nunito relative overflow-hidden bg-slate-950">
       <div className="relative">
 
       {/* ── PAYMENT STATUS BANNER ── */}
@@ -370,7 +364,7 @@ export default function Landing() {
         title="Pening kepala bila"
         titleAccent="anak tak nak belajar?"
         subtitle="Kalau salah satu ni rasa familiar — anda bukan keseorangan..."
-        variant="darker"
+        variant="alarm"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
           {[
@@ -414,6 +408,7 @@ export default function Landing() {
         title="Perkenalkan CeriaKid —"
         titleAccent="latihan harian yang anak suka"
         subtitle="Permainan edukatif berasaskan topik sekolah Malaysia. Anak rasa macam main game, ibu bapa pula nampak perkembangan pembelajaran."
+        variant="bright"
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
@@ -427,14 +422,11 @@ export default function Landing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="relative rounded-3xl p-6 sm:p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+              className="relative rounded-3xl p-6 sm:p-7 bg-white shadow-xl shadow-emerald-100 border border-emerald-100 hover:shadow-2xl hover:-translate-y-1 transition-all"
             >
-              <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-orange-400/20 via-pink-400/10 to-transparent opacity-0 hover:opacity-100 transition-opacity pointer-events-none" />
-              <div className="relative">
-                <div className="text-5xl mb-4">{f.icon}</div>
-                <h3 className="font-black text-white text-lg mb-2">{f.title}</h3>
-                <p className="text-white/65 text-sm leading-relaxed">{f.desc}</p>
-              </div>
+              <div className="text-5xl mb-4">{f.icon}</div>
+              <h3 className="font-black text-slate-900 text-lg mb-2">{f.title}</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -450,7 +442,7 @@ export default function Landing() {
         title="Subjek yang anak"
         titleAccent="boleh belajar"
         subtitle="Pilih topik mengikut silibus dan tahap anak — semuanya dalam gaya permainan yang menyeronokkan."
-        variant="darker"
+        variant="vibrant"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
@@ -492,6 +484,7 @@ export default function Landing() {
         title="Lebih mudah untuk anak,"
         titleAccent="lebih senang untuk ibu bapa"
         subtitle="CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSPK/KSSR dan progress tracking dalam satu pengalaman yang mudah digunakan."
+        variant="sky"
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
@@ -505,11 +498,11 @@ export default function Landing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="rounded-3xl p-6 bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all"
+              className="rounded-3xl p-6 bg-white shadow-xl shadow-blue-100 border border-blue-100 hover:shadow-2xl hover:-translate-y-1 transition-all"
             >
               <div className="text-4xl mb-3">{item.icon}</div>
-              <h3 className="font-black text-lg mb-2 text-white">{item.title}</h3>
-              <p className="text-white/65 text-sm leading-relaxed">{item.desc}</p>
+              <h3 className="font-black text-lg mb-2 text-slate-900">{item.title}</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -522,11 +515,11 @@ export default function Landing() {
         title="Mulakan dalam"
         titleAccent="3 langkah sahaja"
         subtitle="Setup dalam 2 minit. Anak terus boleh mula belajar."
-        variant="darker"
+        variant="cream"
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
           {/* Connecting line for desktop */}
-          <div className="hidden md:block absolute top-7 left-[16%] right-[16%] h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+          <div className="hidden md:block absolute top-7 left-[16%] right-[16%] h-px bg-gradient-to-r from-transparent via-orange-300/60 to-transparent pointer-events-none" />
           {[
             { step: '1', icon: '📲', title: 'Daftar & Langganan', desc: 'Buka app, pilih pelan, dan mula belajar dalam masa 2 minit.' },
             { step: '2', icon: '🎯', title: 'Pilih Peringkat Anak', desc: 'Prasekolah atau Sekolah Rendah. App auto-suggest permainan yang sesuai.' },
@@ -538,12 +531,12 @@ export default function Landing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="relative text-center rounded-3xl p-6 bg-white/5 backdrop-blur-md border border-white/10"
+              className="relative text-center rounded-3xl p-6 bg-white shadow-xl shadow-orange-100 border border-orange-100 hover:shadow-2xl hover:-translate-y-1 transition-all"
             >
               <div className="w-14 h-14 rounded-full flex items-center justify-center font-black text-xl mx-auto mb-4 shadow-xl text-white" style={{ background: 'linear-gradient(135deg, #F97316, #EC4899)', boxShadow: '0 8px 24px rgba(234,88,12,0.4)' }}>{s.step}</div>
               <div className="text-3xl mb-3">{s.icon}</div>
-              <h3 className="font-black text-white mb-2">{s.title}</h3>
-              <p className="text-white/65 text-sm">{s.desc}</p>
+              <h3 className="font-black text-slate-900 mb-2">{s.title}</h3>
+              <p className="text-slate-600 text-sm">{s.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -557,6 +550,7 @@ export default function Landing() {
         title="Maklum balas daripada"
         titleAccent="ibu bapa beta tester"
         subtitle="Komen ringkas daripada ibu bapa yang menyertai fasa ujian beta CeriaKid 👇"
+        variant="vibrant"
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {testimonials.map((t, i) => (
@@ -586,10 +580,10 @@ export default function Landing() {
       </SectionWrapper>
 
       {/* ── PRICING ── */}
-      <section id="pricing" className="relative overflow-hidden py-16 md:py-24 px-5 sm:px-8 bg-gradient-to-br from-slate-950 via-indigo-950 to-purple-950">
-        <div className="absolute top-10 -left-32 w-96 h-96 rounded-full bg-pink-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-10 -right-32 w-96 h-96 rounded-full bg-orange-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-purple-500/10 blur-3xl pointer-events-none" />
+      <section id="pricing" className="relative overflow-hidden py-16 md:py-24 px-5 sm:px-8 bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950">
+        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-purple-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(168,85,247,0.12),transparent_60%)] pointer-events-none" />
         <div className="relative z-10 max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -597,13 +591,13 @@ export default function Landing() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-5">
-              <span>💰</span>
-              <span className="text-white/90 text-xs sm:text-sm font-bold">PELAN TAHUNAN MESRA BAJET</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-300/30 backdrop-blur-md mb-5">
+              <span>💎</span>
+              <span className="text-yellow-200 text-xs sm:text-sm font-bold">PELAN TAHUNAN MESRA BAJET</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.1] text-white tracking-tight mb-4">
               Pilih pelan{' '}
-              <span className="bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-yellow-300 via-amber-300 to-yellow-200 bg-clip-text text-transparent">
                 yang sesuai
               </span>
             </h2>
@@ -681,7 +675,7 @@ export default function Landing() {
         title="Daftar &"
         titleAccent="aktifkan akaun"
         subtitle="Isi maklumat ringkas untuk teruskan pembayaran FPX yang selamat."
-        variant="darker"
+        variant="sky"
       >
         <motion.div
           id="checkout-form"
@@ -702,16 +696,16 @@ export default function Landing() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mt-6 rounded-2xl p-4 text-center max-w-xl mx-auto bg-white/5 backdrop-blur-md border border-white/10"
+          className="mt-6 rounded-2xl p-4 text-center max-w-xl mx-auto bg-white shadow-lg shadow-blue-100 border border-blue-100"
         >
           <div className="text-2xl mb-1">🛡️</div>
-          <h3 className="text-base font-black text-white mb-1">Direka untuk kanak-kanak Malaysia</h3>
-          <p className="text-white/65 text-xs md:text-sm leading-snug">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
+          <h3 className="text-base font-black text-slate-900 mb-1">Direka untuk kanak-kanak Malaysia</h3>
+          <p className="text-slate-600 text-xs md:text-sm leading-snug">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
         </motion.div>
 
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2 max-w-3xl mx-auto text-center">
           {['🔒 Pembayaran FPX selamat', '💳 Pelan tahunan jelas', '📊 Pantau progress anak'].map((item) => (
-            <div key={item} className="rounded-xl bg-white/5 border border-white/10 backdrop-blur-md px-3 py-2 text-white/85 text-xs md:text-sm font-bold">
+            <div key={item} className="rounded-xl bg-white border border-blue-100 shadow-sm px-3 py-2 text-slate-700 text-xs md:text-sm font-bold">
               {item}
             </div>
           ))}
@@ -761,6 +755,7 @@ export default function Landing() {
         title="Sebelum anda"
         titleAccent="mula menggunakan"
         subtitle="Jawapan ringkas untuk soalan yang biasa ditanya ibu bapa."
+        variant="bright"
       >
         <div className="space-y-3 max-w-3xl mx-auto">
           {[
@@ -777,13 +772,13 @@ export default function Landing() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="rounded-2xl p-5 bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+              className="rounded-2xl p-5 bg-white shadow-md shadow-emerald-100 border border-emerald-100 hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
-              <p className="font-black text-white mb-1.5 flex items-start gap-2">
-                <span className="text-orange-300 flex-shrink-0">❓</span>
+              <p className="font-black text-slate-900 mb-1.5 flex items-start gap-2">
+                <span className="text-emerald-600 flex-shrink-0">❓</span>
                 <span>{faq.q}</span>
               </p>
-              <p className="text-white/65 text-sm leading-relaxed pl-7">{faq.a}</p>
+              <p className="text-slate-600 text-sm leading-relaxed pl-7">{faq.a}</p>
             </motion.div>
           ))}
         </div>
