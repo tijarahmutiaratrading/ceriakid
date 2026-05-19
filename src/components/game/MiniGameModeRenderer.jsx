@@ -15,7 +15,7 @@ const panel = 'rounded-[1.75rem] p-5 bg-slate-950/90 border border-white/45 shad
 const action = 'rounded-2xl bg-white text-purple-950 font-black shadow-xl shadow-purple-950/20 ring-2 ring-purple-200 active:scale-95 hover:-translate-y-0.5 transition-all';
 const chip = 'px-4 py-3 rounded-2xl bg-white text-purple-950 font-black shadow-xl shadow-purple-950/20 ring-2 ring-purple-200 active:scale-95 hover:-translate-y-0.5 transition-all';
 
-export default function MiniGameModeRenderer({ game }) {
+export default function MiniGameModeRenderer({ game, onComplete }) {
   const data = game?.gameData || {};
   const mode = data.mode || game?.category;
 
@@ -45,7 +45,7 @@ export default function MiniGameModeRenderer({ game }) {
     return <div className={panel}><p className="text-white font-bold">Mini game belum tersedia.</p></div>;
   };
 
-  return <ProMiniGameShell data={data} mode={mode}>{renderMode()}</ProMiniGameShell>;
+  return <ProMiniGameShell data={data} mode={mode} onComplete={onComplete}>{renderMode()}</ProMiniGameShell>;
 }
 
 function MiniScore({ score, total = 3 }) {

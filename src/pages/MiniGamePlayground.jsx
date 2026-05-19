@@ -6,8 +6,10 @@ import AppHeader from '@/components/AppHeader';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
 import { findMiniGame, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { useAuth } from '@/lib/AuthContext';
+import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
+import { saveMiniGameProgress } from '@/lib/miniGameProgress';
 
 const glassCard = { background: 'rgba(255,255,255,0.78)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.8)', boxShadow: '0 18px 45px rgba(168,85,247,0.18)' };
 
@@ -40,6 +42,7 @@ const guideByMode = {
 export default function MiniGamePlayground() {
   const { categoryId, gameId } = useParams();
   const { user, isAuthenticated } = useAuth();
+  const { selectedChild } = useSelectedChild() || {};
   const [userTier, setUserTier] = React.useState('free');
   const [dbGame, setDbGame] = React.useState(null);
   const [loadingGame, setLoadingGame] = React.useState(true);
@@ -116,7 +119,20 @@ export default function MiniGamePlayground() {
             <Link to="/" className="inline-flex rounded-2xl bg-purple-600 px-5 py-3 font-black text-white">Lihat Pakej</Link>
           </motion.div>
         ) : (
-          <MiniGameModeRenderer game={normalizedGame} />
+          <MiniGameModeRenderer
+            game={normalizedGame}
+            onComplete={({ score, total }) => {
+              saveMiniGameProgress({
+                user,
+                childName: selectedChild?.name || user?.full_name || 'Anak',
+                categoryId: category.id,
+                gameId,
+                gameTitle: game.title,
+                score,
+                total,
+              });
+            }}
+          />
         )}
       </div>
     </div>

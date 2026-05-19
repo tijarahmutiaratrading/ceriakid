@@ -3,13 +3,16 @@ import React from 'react';
 // Context untuk current round data
 export const RoundContext = React.createContext({ roundData: null, roundIdx: 0, totalRounds: 1 });
 
-export default function ProMiniGameShell({ data = {}, mode, children }) {
+export default function ProMiniGameShell({ data = {}, mode, children, onComplete }) {
   const roundsArr = Array.isArray(data.rounds) && data.rounds.length > 0 && typeof data.rounds[0] === 'object'
     ? data.rounds
     : null;
   const totalRounds = roundsArr ? roundsArr.length : 1;
   const [roundIdx, setRoundIdx] = React.useState(0);
   const [roundKey, setRoundKey] = React.useState(0);
+  const [completedRounds, setCompletedRounds] = React.useState(0);
+  const [finished, setFinished] = React.useState(false);
+  const savedRef = React.useRef(false);
 
   const currentRound = roundsArr ? roundsArr[roundIdx] : null;
   const roundLabel = currentRound?.label || (typeof data.rounds?.[roundIdx] === 'string' ? data.rounds[roundIdx] : '');
@@ -18,12 +21,30 @@ export default function ProMiniGameShell({ data = {}, mode, children }) {
   const isLastRound = roundIdx >= totalRounds - 1;
 
   const nextRound = () => {
-    if (isLastRound) setRoundIdx(0);
-    else setRoundIdx((i) => i + 1);
-    setRoundKey((k) => k + 1);
+    const newCompleted = completedRounds + 1;
+    setCompletedRounds(newCompleted);
+    if (isLastRound) {
+      // Finished all rounds — trigger save once
+      if (!savedRef.current) {
+        savedRef.current = true;
+        setFinished(true);
+        if (typeof onComplete === 'function') onComplete({ score: newCompleted, total: totalRounds });
+      }
+    } else {
+      setRoundIdx((i) => i + 1);
+      setRoundKey((k) => k + 1);
+    }
   };
 
   const restartRound = () => setRoundKey((k) => k + 1);
+
+  const playAgain = () => {
+    setRoundIdx(0);
+    setRoundKey((k) => k + 1);
+    setCompletedRounds(0);
+    setFinished(false);
+    savedRef.current = false;
+  };
 
   return (
     <RoundContext.Provider value={{ roundData: currentRound, roundIdx, totalRounds }}>
@@ -87,38 +108,69 @@ export default function ProMiniGameShell({ data = {}, mode, children }) {
             boxShadow: 'inset 0 2px 8px rgba(255,255,255,0.5)',
           }}
         >
-          <div key={`${roundIdx}-${roundKey}`}>{children}</div>
+          {finished ? (
+            <div className="text-center py-8 px-4">
+              <div className="text-6xl mb-3">🏆</div>
+              <p className="text-2xl font-black mb-2" style={{ color: '#4A2E14' }}>Tahniah!</p>
+              <p className="font-bold mb-4" style={{ color: '#6B4423' }}>
+                Habis {completedRounds}/{totalRounds} pusingan
+              </p>
+              <div className="text-3xl mb-2">
+                {completedRounds === totalRounds ? '⭐⭐⭐' : completedRounds >= totalRounds * 0.7 ? '⭐⭐' : '⭐'}
+              </div>
+              <p className="text-xs font-bold" style={{ color: '#8B5A3C' }}>Progress disimpan ke Prestasi Anak ✅</p>
+            </div>
+          ) : (
+            <div key={`${roundIdx}-${roundKey}`}>{children}</div>
+          )}
         </div>
 
         <div className="relative mt-3 flex gap-2">
-          <button
-            type="button"
-            onClick={restartRound}
-            className="flex-1 py-3 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-transform"
-            style={{
-              background: 'linear-gradient(135deg, #FDF6E3 0%, #F5E6CC 100%)',
-              border: '2px solid #C8A878',
-              color: '#4A2E14',
-              boxShadow: 'inset 0 2px 6px rgba(255,255,255,0.6), 0 4px 10px rgba(74,46,20,0.25)',
-            }}
-          >
-            🔄 Ulang
-          </button>
-          {totalRounds > 1 && (
+          {finished ? (
             <button
               type="button"
-              onClick={nextRound}
-              className="flex-[2] py-3 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-transform text-white"
+              onClick={playAgain}
+              className="flex-1 py-3 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-transform text-white"
               style={{
-                background: isLastRound
-                  ? 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
-                  : 'linear-gradient(135deg, #8B5A3C 0%, #6B4423 100%)',
+                background: 'linear-gradient(135deg, #8B5A3C 0%, #6B4423 100%)',
                 border: '2px solid #4A2E14',
                 boxShadow: '0 4px 10px rgba(74,46,20,0.4)',
               }}
             >
-              {isLastRound ? '🏆 Mula Semula' : `➡️ Pusingan ${roundIdx + 2}`}
+              🔄 Main Sekali Lagi
             </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={restartRound}
+                className="flex-1 py-3 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-transform"
+                style={{
+                  background: 'linear-gradient(135deg, #FDF6E3 0%, #F5E6CC 100%)',
+                  border: '2px solid #C8A878',
+                  color: '#4A2E14',
+                  boxShadow: 'inset 0 2px 6px rgba(255,255,255,0.6), 0 4px 10px rgba(74,46,20,0.25)',
+                }}
+              >
+                🔄 Ulang
+              </button>
+              {totalRounds > 1 && (
+                <button
+                  type="button"
+                  onClick={nextRound}
+                  className="flex-[2] py-3 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-transform text-white"
+                  style={{
+                    background: isLastRound
+                      ? 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
+                      : 'linear-gradient(135deg, #8B5A3C 0%, #6B4423 100%)',
+                    border: '2px solid #4A2E14',
+                    boxShadow: '0 4px 10px rgba(74,46,20,0.4)',
+                  }}
+                >
+                  {isLastRound ? '🏆 Habiskan' : `➡️ Pusingan ${roundIdx + 2}`}
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>
