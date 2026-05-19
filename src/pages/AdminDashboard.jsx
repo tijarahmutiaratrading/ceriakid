@@ -103,11 +103,11 @@ export default function AdminDashboard() {
             const d = res.data;
             setSettings(prev => ({
               ...prev,
-              chip_brand_id: prev.chip_brand_id || d.chip_brand_id || '',
-              chip_api_key: prev.chip_api_key || d.chip_secret_key || '',
-              chip_webhook_secret: prev.chip_webhook_secret || d.chip_webhook_secret || '',
+              chip_brand_id: d.chip_brand_id || prev.chip_brand_id || '',
+              chip_api_key: d.chip_secret_key || prev.chip_api_key || '',
+              chip_webhook_secret: d.chip_webhook_secret || prev.chip_webhook_secret || '',
               fb_pixel_id: d.fb_pixel_id || prev.fb_pixel_id || '',
-              fb_access_token: prev.fb_access_token || d.fb_access_token || '',
+              fb_access_token: d.fb_access_token || prev.fb_access_token || '',
             }));
             setSecretsLoaded(true);
           }
