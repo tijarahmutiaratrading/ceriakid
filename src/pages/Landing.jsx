@@ -8,6 +8,7 @@ import AppHeader from '@/components/AppHeader';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
+import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 
 
 // Beta tester highlights — placeholder sehingga testimoni sebenar dikumpul
@@ -347,6 +348,9 @@ export default function Landing() {
 
         </div>
       </div>
+
+      {/* ── APP PREVIEW SHOWCASE ── */}
+      <AppPreviewShowcase />
 
       {/* ── SUBJECTS ── */}
       <div className="py-12 md:py-16 px-6 bg-gradient-to-br from-yellow-50 via-orange-50 to-pink-50 text-slate-900">
