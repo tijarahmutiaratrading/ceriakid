@@ -171,6 +171,30 @@ export default function QualityControlPanel({ onToast }) {
         </div>
       )}
 
+      {/* Capacity Gaps — kategori yang kurang dari target */}
+      {qc?.capacityGaps && (qc.capacityGaps.subject?.length > 0 || qc.capacityGaps.mini?.length > 0 || qc.capacityGaps.story?.length > 0) && (
+        <div className="rounded-2xl bg-amber-400/10 border border-amber-300/20 p-3 mb-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-amber-100 font-black text-xs flex items-center gap-1.5">📊 Kategori Bawah Target ({(qc.capacityGaps.subject?.length || 0) + (qc.capacityGaps.mini?.length || 0) + (qc.capacityGaps.story?.length || 0)})</span>
+            {(qc.capacityRefills || qc.bucketRefills) > 0 && (
+              <span className="text-green-200 text-[10px] font-black">+{qc.bucketRefills || 0} queued</span>
+            )}
+          </div>
+          <div className="space-y-1 max-h-40 overflow-y-auto">
+            {[...(qc.capacityGaps.subject || []), ...(qc.capacityGaps.mini || []), ...(qc.capacityGaps.story || [])].slice(0, 12).map((gap, i) => (
+              <div key={i} className="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg bg-white/5 text-[11px]">
+                <span className="text-white/80 font-bold truncate">{gap.label}</span>
+                <span className="text-white/60 font-black flex-shrink-0">
+                  {gap.current}/{gap.target}
+                  <span className="text-amber-300 ml-1">(−{gap.need})</span>
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="text-amber-100/60 text-[10px] font-semibold mt-2">💡 Klik "Repair + Teach" untuk auto-queue refill kategori ini.</p>
+        </div>
+      )}
+
       {/* Last repair summary — show what QC did */}
       {(deletedCount > 0 || queuedCount > 0 || qc?.autofixedGames > 0) && (
         <div className="grid grid-cols-3 gap-2 mb-3">

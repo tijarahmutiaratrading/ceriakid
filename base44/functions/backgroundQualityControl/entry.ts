@@ -225,14 +225,17 @@ async function ensureBucketsNotEmpty(base44, games, activeTaskKeys, subjectCap) 
     counts.set(key, (counts.get(key) || 0) + 1);
   }
   const refillTasks = [];
+  const subjectGaps = []; // [{label, current, target, need}]
+  // Target = 70% of cap (so capacity audit fires before bucket goes empty)
+  const subjectTarget = Math.max(MIN_GAMES_PER_BUCKET, Math.floor(subjectCap * 0.7));
   // Prasekolah buckets
   for (const subject of SUBJECTS) {
     const key = `prasekolah||${subject}`;
     const current = counts.get(key) || 0;
-    const need = MIN_GAMES_PER_BUCKET - current;
-    // Skip if already at cap (prevents over-generation)
-    if (need > 0 && current < subjectCap && !activeTaskKeys.has(`prasekolah||${subject}`)) {
-      refillTasks.push({ taskName: `QC Bucket Refill: prasekolah ${subject}`, ageGroup: 'prasekolah', subject, gamesCount: need, questionsPerGame: 10, status: 'pending', createdGames: 0, errorMessage: 'Auto refill by QC: bucket below minimum' });
+    const need = subjectTarget - current;
+    if (need > 0) subjectGaps.push({ label: `prasekolah/${subject}`, current, target: subjectTarget, need });
+    if (need > 0 && current < subjectCap && !activeTaskKeys.has(key)) {
+      refillTasks.push({ taskName: `QC Capacity Refill: prasekolah ${subject} (${current}/${subjectTarget})`, ageGroup: 'prasekolah', subject, gamesCount: Math.min(need, subjectCap - current), questionsPerGame: 10, status: 'pending', createdGames: 0, errorMessage: `Auto refill by QC: under capacity (${current}/${subjectTarget})` });
     }
   }
   // Sekolah rendah buckets per darjah
@@ -240,9 +243,10 @@ async function ensureBucketsNotEmpty(base44, games, activeTaskKeys, subjectCap) 
     for (const darjah of DARJAH_LEVELS) {
       const key = `sekolah_rendah|${darjah}|${subject}`;
       const current = counts.get(key) || 0;
-      const need = MIN_GAMES_PER_BUCKET - current;
-      if (need > 0 && current < subjectCap && !activeTaskKeys.has(`sekolah_rendah|${darjah}|${subject}`)) {
-        refillTasks.push({ taskName: `QC Bucket Refill: ${darjah} ${subject}`, ageGroup: 'sekolah_rendah', darjah, subject, gamesCount: need, questionsPerGame: 10, status: 'pending', createdGames: 0, errorMessage: 'Auto refill by QC: bucket below minimum' });
+      const need = subjectTarget - current;
+      if (need > 0) subjectGaps.push({ label: `${darjah}/${subject}`, current, target: subjectTarget, need });
+      if (need > 0 && current < subjectCap && !activeTaskKeys.has(key)) {
+        refillTasks.push({ taskName: `QC Capacity Refill: ${darjah} ${subject} (${current}/${subjectTarget})`, ageGroup: 'sekolah_rendah', darjah, subject, gamesCount: Math.min(need, subjectCap - current), questionsPerGame: 10, status: 'pending', createdGames: 0, errorMessage: `Auto refill by QC: under capacity (${current}/${subjectTarget})` });
       }
     }
   }
@@ -251,7 +255,70 @@ async function ensureBucketsNotEmpty(base44, games, activeTaskKeys, subjectCap) 
     await base44.asServiceRole.entities.GameTask.create(task);
     createdCount++;
   }
-  return createdCount;
+  return { createdCount, gaps: subjectGaps };
+}
+
+// ─── NEW: Capacity audit for Mini Game categories ───
+async function ensureMiniCategoriesAtCapacity(base44, games, activeTasks, miniGameCap) {
+  const counts = new Map();
+  for (const g of games) {
+    if (MINI_CATEGORIES.includes(g.category) && !SUBJECTS.includes(g.category)) {
+      counts.set(g.category, (counts.get(g.category) || 0) + 1);
+    }
+  }
+  // Count pending mini tasks per category so we don't double-queue
+  const pendingByCategory = new Map();
+  for (const t of activeTasks) {
+    if (MINI_CATEGORIES.includes(t.subject) && !SUBJECTS.includes(t.subject)) {
+      const remaining = (Number(t.gamesCount) || 0) - (Number(t.createdGames) || 0);
+      pendingByCategory.set(t.subject, (pendingByCategory.get(t.subject) || 0) + remaining);
+    }
+  }
+  const target = Math.max(MIN_GAMES_PER_BUCKET, Math.floor(miniGameCap * 0.7));
+  const refillTasks = [];
+  const miniGaps = [];
+  for (const category of MINI_CATEGORIES) {
+    if (SUBJECTS.includes(category)) continue;
+    const current = counts.get(category) || 0;
+    const pending = pendingByCategory.get(category) || 0;
+    const effective = current + pending;
+    const need = target - effective;
+    if (need > 0) miniGaps.push({ label: `mini/${category}`, current, pending, target, need });
+    if (need > 0 && effective < miniGameCap) {
+      const room = miniGameCap - effective;
+      const queueCount = Math.min(need, room);
+      refillTasks.push({ taskName: `QC Mini Capacity Refill: ${category} (${current}/${target})`, ageGroup: 'prasekolah', subject: category, gamesCount: queueCount, questionsPerGame: 6, status: 'pending', createdGames: 0, errorMessage: `Auto refill by QC: mini category under capacity (${current}/${target}). AVOID weak_mini_content, target_not_playable, banned_text.` });
+    }
+  }
+  let createdCount = 0;
+  for (const task of refillTasks.slice(0, 6)) {
+    await base44.asServiceRole.entities.GameTask.create(task);
+    createdCount++;
+  }
+  return { createdCount, gaps: miniGaps };
+}
+
+// ─── NEW: Capacity audit for Story Kid ───
+async function ensureStoryKidAtCapacity(base44, games, activeTasks, storyKidCap) {
+  const current = games.filter(g => g.gameData?.storyKid === true || g.category === 'story' || g.type === 'story_adventure').length;
+  const pending = activeTasks.filter(t => t.subject === 'story').reduce((s, t) => s + Math.max(0, (Number(t.gamesCount) || 0) - (Number(t.createdGames) || 0)), 0);
+  const effective = current + pending;
+  const target = Math.max(MIN_GAMES_PER_BUCKET, Math.floor(storyKidCap * 0.7));
+  const need = target - effective;
+  const gap = need > 0 ? { label: 'story_kid', current, pending, target, need } : null;
+  if (need <= 0 || effective >= storyKidCap) return { createdCount: 0, gap };
+  const queueCount = Math.min(need, storyKidCap - effective);
+  await base44.asServiceRole.entities.GameTask.create({
+    taskName: `QC Story Capacity Refill (${current}/${target})`,
+    ageGroup: 'prasekolah',
+    subject: 'story',
+    gamesCount: queueCount,
+    questionsPerGame: 5,
+    status: 'pending',
+    createdGames: 0,
+    errorMessage: JSON.stringify({ storyKid: true, theme: 'cerita kanak-kanak Malaysia', note: `Auto refill by QC: story kid under capacity (${current}/${target}).` })
+  });
+  return { createdCount: 1, gap };
 }
 
 Deno.serve(async (req) => {
@@ -288,12 +355,21 @@ Deno.serve(async (req) => {
       activeTaskKeys.add(`${t.ageGroup}|${t.darjah || ''}|${t.subject}`);
     }
 
-    // ─── Step 2: Load games & detect empty buckets EVEN if queue is busy ───
+    // ─── Step 2: Load games & detect under-capacity categories EVEN if queue is busy ───
     const games = await base44.asServiceRole.entities.Game.list('-created_date', 1500);
-    const bucketRefillCount = await ensureBucketsNotEmpty(base44, games || [], activeTaskKeys, subjectCap);
+    const subjectRefillResult = await ensureBucketsNotEmpty(base44, games || [], activeTaskKeys, subjectCap);
+    const miniRefillResult = await ensureMiniCategoriesAtCapacity(base44, games || [], activeTasks, miniGameCap);
+    const storyRefillResult = await ensureStoryKidAtCapacity(base44, games || [], activeTasks, storyKidCap);
+    const bucketRefillCount = subjectRefillResult.createdCount + miniRefillResult.createdCount + storyRefillResult.createdCount;
+    const capacityGaps = {
+      subject: subjectRefillResult.gaps,
+      mini: miniRefillResult.gaps,
+      story: storyRefillResult.gap ? [storyRefillResult.gap] : [],
+    };
+    const totalGaps = capacityGaps.subject.length + capacityGaps.mini.length + capacityGaps.story.length;
 
     if (activeTasks.length > 0 && !force) {
-      const payload = { success: true, status: 'waiting_for_generation', score: null, activeTasks: activeTasks.length, replacementTasks: bucketRefillCount, message: `Queue belum siap (${activeTasks.length} aktif). Stuck cleaned: ${stuckCleaned}. Bucket refills: ${bucketRefillCount}.` };
+      const payload = { success: true, status: 'waiting_for_generation', score: null, activeTasks: activeTasks.length, replacementTasks: bucketRefillCount, capacityGaps, message: `Queue belum siap (${activeTasks.length} aktif). Stuck cleaned: ${stuckCleaned}. Capacity refills: ${bucketRefillCount} (subjek:${subjectRefillResult.createdCount}, mini:${miniRefillResult.createdCount}, story:${storyRefillResult.createdCount}). Gaps detected: ${totalGaps}.` };
       await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
       await createQcLog(base44, { action: 'auto_audit', ...payload });
       return Response.json(payload);
@@ -334,15 +410,15 @@ Deno.serve(async (req) => {
       breakdown[bucket].failed++;
     }
 
-    if (score >= MIN_PASS_SCORE && bucketRefillCount === 0 && stuckCleaned === 0) {
-      const payload = { success: true, status: 'passed', score, total, passed, failed: failed.length, breakdown, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues, kind: item.kind })), message: `Quality score ${score}% — cukup baik. Subject ${breakdown.subject.failed}/${breakdown.subject.total}, Mini ${breakdown.mini.failed}/${breakdown.mini.total}, Story ${breakdown.story.failed}/${breakdown.story.total}.` };
+    if (score >= MIN_PASS_SCORE && bucketRefillCount === 0 && stuckCleaned === 0 && totalGaps === 0) {
+      const payload = { success: true, status: 'passed', score, total, passed, failed: failed.length, breakdown, capacityGaps, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues, kind: item.kind })), message: `Quality score ${score}% — cukup baik. Subject ${breakdown.subject.failed}/${breakdown.subject.total}, Mini ${breakdown.mini.failed}/${breakdown.mini.total}, Story ${breakdown.story.failed}/${breakdown.story.total}.` };
       if (!force && body.auditOnly !== true) await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
       await createQcLog(base44, { action: body.auditOnly === true ? 'audit' : 'auto_audit', ...payload });
       return Response.json(payload);
     }
 
     if (body.auditOnly === true) {
-      const payload = { success: true, status: 'needs_repair', score, total, passed, failed: failed.length, breakdown, sampleIssues: failed.slice(0, 10).map(item => ({ title: item.game.title, category: item.game.category, issues: item.issues, kind: item.kind })), message: `Score ${score}%. Failed: Subject ${breakdown.subject.failed}, Mini ${breakdown.mini.failed}, Story ${breakdown.story.failed}. Perlu repair.` };
+      const payload = { success: true, status: 'needs_repair', score, total, passed, failed: failed.length, breakdown, capacityGaps, sampleIssues: failed.slice(0, 10).map(item => ({ title: item.game.title, category: item.game.category, issues: item.issues, kind: item.kind })), message: `Score ${score}%. Failed: Subject ${breakdown.subject.failed}, Mini ${breakdown.mini.failed}, Story ${breakdown.story.failed}. Capacity gaps: ${totalGaps}.` };
       await createQcLog(base44, { action: 'audit', ...payload });
       return Response.json(payload);
     }
@@ -494,17 +570,19 @@ Deno.serve(async (req) => {
       failedBeforeRepair: failed.length,
       failed: failed.length,
       breakdown,
+      capacityGaps,
       autofixedGames: totalAutofixed,
       autofixedQuestions,
       autofixedMiniGames,
       stuckTasksCleaned: stuckCleaned,
       bucketRefills: bucketRefillCount,
+      capacityRefills: { subject: subjectRefillResult.createdCount, mini: miniRefillResult.createdCount, story: storyRefillResult.createdCount },
       deletedThisRun: selected.length,
       deletedCount: selected.length,
       replacementTasks: totalReplacementTasks,
       skippedAtCap: skippedTasksAtCap,
       sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues, kind: item.kind })),
-      message: `Score ${score}%. Auto-fix: ${autofixedGames} subject + ${autofixedMiniGames} mini (${autofixedQuestions} questions). Deleted: ${selected.length}. Queue: ${totalReplacementTasks}. Stuck cleaned: ${stuckCleaned}. ${skippedTasksAtCap > 0 ? `Skipped ${skippedTasksAtCap} at cap.` : ''}`,
+      message: `Score ${score}%. Auto-fix: ${autofixedGames} subject + ${autofixedMiniGames} mini (${autofixedQuestions} questions). Deleted: ${selected.length}. Replace queue: ${createdTaskCount}. Capacity refills: ${bucketRefillCount} (subjek:${subjectRefillResult.createdCount}, mini:${miniRefillResult.createdCount}, story:${storyRefillResult.createdCount}). Stuck cleaned: ${stuckCleaned}.`,
     };
     if (!force) await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
     await createQcLog(base44, { action: force ? 'repair' : 'auto_repair', ...payload });
