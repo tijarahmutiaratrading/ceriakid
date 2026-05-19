@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/AuthContext';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
 import FloatingWhatsApp from '@/components/landing/FloatingWhatsApp';
+import TrustedMarquee from '@/components/landing/TrustedMarquee';
 
 // Mascot assets
 const MASCOT_BOY = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fbf4ca9f6_generated_image.png';
@@ -266,6 +267,11 @@ export default function Landing() {
           ))}
         </div>
       </section>
+
+      {/* ── TRUSTED MARQUEE ── */}
+      <div className="relative py-6">
+        <TrustedMarquee />
+      </div>
 
       {/* ── PROBLEM SECTION ── */}
       <section className="relative px-4 sm:px-6 py-14 sm:py-20 bg-gradient-to-b from-purple-600 to-fuchsia-600">
