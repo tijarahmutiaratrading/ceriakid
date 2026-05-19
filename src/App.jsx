@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import ErrorBoundary from '@/components/ErrorBoundary'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { trackPageView } from '@/lib/pixel';
 import PageNotFound from './lib/PageNotFound';
 import AppLayout from '@/components/AppLayout';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -53,9 +54,18 @@ import TracingGameGamified from '@/pages/games/TracingGameGamified';
 import OfflineBanner from '@/components/OfflineBanner';
 import AdminGuard from '@/components/AdminGuard';
 
+const PixelPageViewTracker = () => {
+  const location = useLocation();
+  useEffect(() => {
+    trackPageView();
+  }, [location.pathname]);
+  return null;
+};
+
 const AuthenticatedAppWithChild = () => {
   return (
     <SelectedChildProvider>
+      <PixelPageViewTracker />
       <AuthenticatedApp />
     </SelectedChildProvider>
   );

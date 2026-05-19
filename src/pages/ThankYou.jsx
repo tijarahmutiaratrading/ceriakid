@@ -17,22 +17,31 @@ export default function ThankYou() {
   const [tier, setTier] = useState(new URLSearchParams(window.location.search).get('tier') || '');
 
   useEffect(() => {
-    if (window.fbq) {
-      window.fbq('track', 'Purchase', {
-        currency: 'MYR',
-        value: tier === 'asas' ? 49 : tier === 'standard' ? 99 : tier === 'keluarga' ? 199 : 0,
-        content_name: tierLabels[tier] || tier || 'CeriaKid Plan',
-      });
-    }
-
     const checkSubscription = async () => {
       if (!user?.email) return;
       const subs = await base44.entities.UserSubscription.filter({ email: user.email });
       const active = subs?.find(sub => sub.status === 'active');
       if (active) {
-        setTier(active.tier || tier);
+        const activeTier = active.tier || tier;
+        setTier(activeTier);
         setStatus('active');
         refreshAuth?.();
+
+        // Fire Purchase pixel — only after subscription confirmed active.
+        // Use subscription ID as eventID to dedupe across refreshes.
+        const eventID = `purchase_${active.id}`;
+        const alreadyFired = localStorage.getItem(`pixel_fired_${eventID}`);
+        if (!alreadyFired && window.fbq) {
+          const value = activeTier === 'asas' ? 49 : activeTier === 'standard' ? 99 : activeTier === 'keluarga' ? 199 : 0;
+          window.fbq('track', 'Purchase', {
+            currency: 'MYR',
+            value: value,
+            content_name: tierLabels[activeTier] || activeTier || 'CeriaKid Plan',
+            content_ids: [activeTier],
+            content_type: 'product',
+          }, { eventID });
+          localStorage.setItem(`pixel_fired_${eventID}`, '1');
+        }
       } else {
         setStatus('pending');
       }
