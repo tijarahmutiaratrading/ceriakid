@@ -90,31 +90,32 @@ export default function AdminDashboard() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [clearingCache, setClearingCache] = useState(false);
-  const [serverSecrets, setServerSecrets] = useState({ chip_brand_id: '', chip_secret_key: '' });
+  const [secretsLoaded, setSecretsLoaded] = useState(false);
   const [loadingSecrets, setLoadingSecrets] = useState(false);
 
-  // Load server secrets bila buka tab Chip — auto-fill terus dalam input
+  // Load semua server secrets bila masuk tab Settings — auto-fill terus dalam input
   useEffect(() => {
-    if (activeTab === 'settings' && settingsTab === 'chip' && !serverSecrets.chip_brand_id && !loadingSecrets) {
+    if (activeTab === 'settings' && !secretsLoaded && !loadingSecrets) {
       setLoadingSecrets(true);
       base44.functions.invoke('getAdminSecrets', {})
         .then(res => {
           if (res?.data) {
-            const brandId = res.data.chip_brand_id || '';
-            const secretKey = res.data.chip_secret_key || '';
-            setServerSecrets({ chip_brand_id: brandId, chip_secret_key: secretKey });
-            // Auto-fill terus dalam input form (kalau input kosong)
+            const d = res.data;
             setSettings(prev => ({
               ...prev,
-              chip_brand_id: prev.chip_brand_id || brandId,
-              chip_api_key: prev.chip_api_key || secretKey,
+              chip_brand_id: prev.chip_brand_id || d.chip_brand_id || '',
+              chip_api_key: prev.chip_api_key || d.chip_secret_key || '',
+              chip_webhook_secret: prev.chip_webhook_secret || d.chip_webhook_secret || '',
+              fb_pixel_id: d.fb_pixel_id || prev.fb_pixel_id || '',
+              fb_access_token: prev.fb_access_token || d.fb_access_token || '',
             }));
+            setSecretsLoaded(true);
           }
         })
         .catch(err => console.error('Failed to load secrets:', err))
         .finally(() => setLoadingSecrets(false));
     }
-  }, [activeTab, settingsTab]);
+  }, [activeTab]);
 
   useEffect(() => {
     if (user?.role === 'admin') {
@@ -427,11 +428,11 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <FieldGroup label="Pixel ID" hint="✅ Aktif & dipasang dalam index.html. Sudah tracking semua visitor.">
+                <FieldGroup label="Pixel ID" hint="✅ Auto-loaded dari server. Edit untuk update.">
                   <TextInput value={settings.fb_pixel_id} onChange={v => set('fb_pixel_id', v)} placeholder="e.g. 1234567890123" />
                 </FieldGroup>
 
-                <FieldGroup label="Access Token (Conversions API)" hint="Optional — untuk server-side tracking.">
+                <FieldGroup label="Access Token (Conversions API)" hint="✅ Auto-loaded dari server. Optional — untuk server-side tracking.">
                   <SecretInput value={settings.fb_access_token} onChange={v => set('fb_access_token', v)} placeholder="EAABsbCS1iHg..." />
                 </FieldGroup>
 
@@ -517,7 +518,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <FieldGroup label="Chip Webhook Secret" hint="Dijana oleh Chip untuk verify authenticity webhook.">
+                <FieldGroup label="Chip Webhook Secret" hint="✅ Auto-loaded dari server. Edit untuk update.">
                   <SecretInput value={settings.chip_webhook_secret} onChange={v => set('chip_webhook_secret', v)} placeholder="whsec_..." />
                 </FieldGroup>
 
