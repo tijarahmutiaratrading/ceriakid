@@ -223,7 +223,7 @@ function Section({ number, badge, badgeColor, title, desc, children }) {
       <p className="text-slate-600 mb-6 max-w-xl">{desc}</p>
 
       {/* Phone frame */}
-      <div className="bg-white rounded-3xl shadow-2xl shadow-orange-200/60 border border-orange-100 overflow-hidden max-w-lg">
+      <div className="bg-white rounded-3xl shadow-2xl shadow-orange-200/60 border border-orange-100 overflow-hidden max-w-lg mx-auto">
         {/* Mock header bar */}
         <div className="bg-gradient-to-r from-purple-600 to-pink-500 px-5 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
