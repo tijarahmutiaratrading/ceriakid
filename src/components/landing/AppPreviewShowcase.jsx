@@ -74,33 +74,59 @@ function GameSample() {
   );
 }
 
-// ── STORY KID ──
+// ── STORY KID ── (match real /story-kid page)
 function StoryKidPreview() {
   const [page, setPage] = useState(0);
-  const story = [
-    { bg: 'from-sky-400 to-blue-500', scene: '🌲🏡🌸', text: 'Suatu hari, Aqil berjalan ke hutan bersama ayahnya...', choice: null },
-    { bg: 'from-green-400 to-emerald-500', scene: '🦊🐦🌿', text: 'Tiba-tiba, seekor rubah kecil terjumpa mereka. Rubah itu nampak lapar.', choice: ['Beri makanan 🍎', 'Teruskan jalan 🚶'] },
-    { bg: 'from-yellow-400 to-orange-400', scene: '🦊❤️✨', text: 'Aqil memberi epal kepada rubah. Rubah itu tersenyum dan berterima kasih! Aqil rasa gembira kerana berbuat baik.', choice: null },
-  ];
-  const s = story[Math.min(page, story.length - 1)];
-   return (
-     <div className="max-w-md mx-auto text-center">
-      <div className={`rounded-3xl bg-gradient-to-br ${s.bg} p-6 text-center text-white shadow-xl mb-4 min-h-[180px] flex flex-col items-center justify-center mx-auto`}>
-        <div className="text-5xl mb-3">{s.scene}</div>
-        <p className="font-bold text-lg leading-relaxed">{s.text}</p>
+  const [stars, setStars] = useState(0);
+  const story = {
+    title: 'Ali Tolong Kucing',
+    cover: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f57f9479f_generated_image.png',
+    scenes: [
+      { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0a97ddf90_generated_image.png', text: 'Ali balik dari sekolah dan terdengar bunyi kucing kecil.', choices: ['Cari bunyi itu', 'Terus balik rumah'] },
+      { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3ff2b9379_generated_image.png', text: 'Ali nampak anak kucing tersepit di tepi longkang.', choices: ['Panggil orang dewasa', 'Tarik sendiri kuat-kuat'] },
+      { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f4b720a6a_generated_image.png', text: 'Cikgu datang dan menyelamatkan anak kucing dengan selamat!', choices: ['Tamat cerita 🏆'] },
+    ],
+  };
+  const s = story.scenes[Math.min(page, story.scenes.length - 1)];
+  const progress = ((page + 1) / story.scenes.length) * 100;
+
+  const handleChoice = (i) => {
+    if (i === 0) setStars(st => st + 1);
+    if (page >= story.scenes.length - 1) { setPage(0); setStars(0); }
+    else setPage(p => p + 1);
+  };
+
+  return (
+    <div className="max-w-md mx-auto">
+      {/* Mini header — match real story header */}
+      <div className="flex items-center gap-2 mb-3 bg-gradient-to-r from-indigo-600 to-purple-700 rounded-2xl p-3 shadow-lg">
+        <div className="flex-1 min-w-0">
+          <p className="text-white font-black text-sm truncate">{story.title}</p>
+          <div className="h-2 bg-white/20 rounded-full mt-1.5 overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-yellow-300 to-pink-400 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
+          </div>
+        </div>
+        <div className="px-2.5 py-1 rounded-xl bg-yellow-300 text-yellow-950 font-black text-xs flex-shrink-0">{stars} ⭐</div>
       </div>
-      {s.choice ? (
-        <div className="grid grid-cols-2 gap-3 mx-auto">
-          {s.choice.map((c, i) => (
-            <button key={i} onClick={() => setPage(2)} className="py-3 px-4 rounded-2xl bg-white border-2 border-orange-300 text-orange-700 font-black text-sm shadow hover:bg-orange-50 transition-all">{c}</button>
+
+      {/* Scene card — image + text + choices, sama macam real */}
+      <div className="rounded-3xl bg-white shadow-xl border-2 border-purple-100 p-2.5 mb-3">
+        <div className="relative h-44 rounded-2xl overflow-hidden ring-2 ring-purple-100 shadow-md mb-3">
+          <img src={s.img} alt={s.text} className="w-full h-full object-cover" />
+          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-white/95 text-purple-700 text-[10px] font-black shadow">Halaman {page + 1} / {story.scenes.length}</div>
+        </div>
+        <div className="rounded-2xl bg-purple-50 border border-purple-100 px-3 py-2.5 mb-3">
+          <p className="text-purple-800 text-sm font-black text-center leading-snug">{s.text}</p>
+        </div>
+        <div className={`grid gap-2 ${s.choices.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+          {s.choices.map((c, i) => (
+            <button key={i} onClick={() => handleChoice(i)} className="py-2.5 px-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black text-xs shadow-md hover:from-purple-600 hover:to-pink-600 transition-all flex items-center justify-between gap-2">
+              <span className="truncate">{c}</span>
+              <span className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">→</span>
+            </button>
           ))}
         </div>
-      ) : page < story.length - 1 ? (
-        <button onClick={() => setPage(p => p + 1)} className="w-full py-3 rounded-2xl bg-white text-blue-700 font-black text-sm shadow border-2 border-blue-200 mx-auto">Seterusnya →</button>
-      ) : (
-        <button onClick={() => setPage(0)} className="w-full py-3 rounded-2xl bg-orange-500 text-white font-black text-sm shadow mx-auto">Cuba Cerita Lain 📖</button>
-      )}
-      <p className="text-center text-xs text-slate-400 mt-2">Halaman {Math.min(page + 1, story.length)} / {story.length}</p>
+      </div>
     </div>
   );
 }
