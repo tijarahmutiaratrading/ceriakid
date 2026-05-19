@@ -13,8 +13,7 @@ const GAME_HUB = MINI_GAME_CATEGORIES.map(category => ({
 }));
 
 export default function MiniGamesGenerator({ onToast }) {
-  const [miniGameConfig, setMiniGameConfig] = useState({ gamesCount: 15 });
-  const ROUNDS_PER_GAME = 4; // default tetap; tak didedahkan dalam UI sebab tak relevan untuk mini games
+  const [miniGameConfig, setMiniGameConfig] = useState({ gamesCount: 15, roundsPerGame: 8 });
   const [selectedMiniGames, setSelectedMiniGames] = useState(new Set());
   const [miniGameSubmitting, setMiniGameSubmitting] = useState(false);
   const [tasks, setTasks] = useState([]);
@@ -119,12 +118,12 @@ export default function MiniGamesGenerator({ onToast }) {
             ageGroup: 'prasekolah',
             subject: gameId,
             gamesCount: gamesToAdd,
-            questionsPerGame: ROUNDS_PER_GAME,
+            questionsPerGame: miniGameConfig.roundsPerGame,
             status: 'pending',
             errorMessage: JSON.stringify({
               sets: miniGameConfig.gamesCount,
-              levels: Math.min(3, Math.max(1, ROUNDS_PER_GAME)),
-              itemsPerSet: ROUNDS_PER_GAME,
+              levels: Math.min(3, Math.max(1, miniGameConfig.roundsPerGame)),
+              itemsPerSet: miniGameConfig.roundsPerGame,
               roundVariation: true,
               theme: gameData?.objective || gameData?.title || 'Mini game CeriaKid',
               categoryTitle: gameData?.title,
@@ -163,20 +162,33 @@ export default function MiniGamesGenerator({ onToast }) {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="p-6 rounded-3xl mb-5" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
         <h2 className="font-black text-white mb-4">⚙️ Mini Games Generator</h2>
-        <div className="mb-5">
-          <label className="text-white/70 text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-2">🎮 Bilangan Games setiap Kategori</label>
-          <input
-            type="number"
-            min="1"
-            max="100"
-            value={miniGameConfig.gamesCount}
-            onChange={e => setMiniGameConfig(c => ({ ...c, gamesCount: parseInt(e.target.value) || 1 }))}
-            className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center"
-          />
+        <div className="grid grid-cols-2 gap-3 mb-5">
+          <div>
+            <label className="text-white/70 text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-2">🎮 Games / Kategori</label>
+            <input
+              type="number"
+              min="1"
+              max="100"
+              value={miniGameConfig.gamesCount}
+              onChange={e => setMiniGameConfig(c => ({ ...c, gamesCount: parseInt(e.target.value) || 1 }))}
+              className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center"
+            />
+          </div>
+          <div>
+            <label className="text-white/70 text-[10px] sm:text-xs font-black uppercase tracking-wider block mb-2">❓ Soalan / Game</label>
+            <input
+              type="number"
+              min="1"
+              max="30"
+              value={miniGameConfig.roundsPerGame}
+              onChange={e => setMiniGameConfig(c => ({ ...c, roundsPerGame: parseInt(e.target.value) || 1 }))}
+              className="w-full p-3 rounded-2xl bg-white/10 text-white border border-white/20 font-black text-xl text-center"
+            />
+          </div>
         </div>
         <div className="mb-5 rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
           <p className="text-white/60 text-xs font-semibold">Target setiap mini game</p>
-          <p className="text-white font-black text-lg">{miniGameConfig.gamesCount} games</p>
+          <p className="text-white font-black text-lg">{miniGameConfig.gamesCount} games · {miniGameConfig.roundsPerGame} soalan setiap satu</p>
         </div>
 
         <div className="flex items-center justify-between mb-3">
