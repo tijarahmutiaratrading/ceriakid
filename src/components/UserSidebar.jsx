@@ -70,7 +70,7 @@ export default function UserSidebar() {
 
   return (
     <aside
-      className={`hidden md:flex flex-col flex-shrink-0 rounded-3xl p-3 mt-6 ml-4 max-h-[calc(100vh-3rem)] overflow-y-auto transition-all duration-300 shadow-2xl shadow-black/30 ${collapsed ? 'w-20' : 'w-64'}`}
+      className={`hidden md:flex flex-col flex-shrink-0 rounded-3xl p-3 mt-6 ml-4 max-h-[calc(100vh-1.5rem)] overflow-y-auto transition-all duration-300 shadow-2xl shadow-black/30 sticky top-6 ${collapsed ? 'w-20' : 'w-64'}`}
       style={{
         background: 'rgba(15, 10, 30, 0.35)',
         backdropFilter: 'blur(24px)',
