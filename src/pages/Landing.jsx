@@ -9,6 +9,7 @@ import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
+import HeroCarousel from '@/components/landing/HeroCarousel';
 
 
 // Beta tester highlights — placeholder sehingga testimoni sebenar dikumpul
@@ -235,10 +236,11 @@ export default function Landing() {
             </motion.button>
           </div>
 
-          {/* Right: Checklist + CTA */}
-          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15, type: 'spring', damping: 20 }}
-            className="pb-20 sm:pb-24 lg:pb-0">
-            <div className="space-y-3 mb-6">
+          {/* Right: Carousel + Features */}
+           <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15, type: 'spring', damping: 20 }}
+             className="pb-20 sm:pb-24 lg:pb-0">
+             <HeroCarousel />
+             <div className="space-y-3 mb-6">
               {['✅ KSPK + KSSR', '✅ Tiada iklan', '✅ Dashboard ibu bapa', '✅ 200+ Permainan'].map((item, i) => (
                 <motion.div key={i} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.07 }}
                   className="flex items-center gap-3">
