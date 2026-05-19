@@ -167,36 +167,41 @@ export default function Landing() {
 
 
       {/* ── NAVBAR ── */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-3 sm:py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="max-w-6xl mx-auto w-full flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.95), rgba(168,85,247,0.92), rgba(236,72,153,0.88))', backdropFilter: 'blur(20px)' }}>
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-xl shadow-lg" />
-            <span className="hidden sm:inline text-white font-black text-sm">CeriaKid</span>
+      <nav className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div className="max-w-md sm:max-w-3xl mx-auto w-full px-4 py-3 rounded-3xl shadow-2xl" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #fdf4ff 100%)', boxShadow: '0 10px 40px rgba(168,85,247,0.25)' }}>
+          {/* Top row: Logo + CTA */}
+          <div className="flex items-center justify-between mb-3">
+            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 rounded-xl shadow" />
+            <motion.button 
+              whileTap={{ scale: 0.95 }} 
+              onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')} 
+              className="px-5 py-2 rounded-full font-black text-white text-sm shadow-lg"
+              style={{ background: 'linear-gradient(135deg, #A855F7, #EC4899)' }}
+            >
+              {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
+            </motion.button>
           </div>
 
-          {/* Center nav links */}
-          <div className="hidden md:flex items-center justify-center gap-8 flex-1 ml-8">
-            <a href="#features" className="text-white/90 text-sm font-bold hover:text-white transition-all duration-200 hover:scale-110">Ciri-ciri</a>
-            <a href="#testimonials" className="text-white/90 text-sm font-bold hover:text-white transition-all duration-200 hover:scale-110">Testimoni</a>
-            <a href="#pricing" className="text-white/90 text-sm font-bold hover:text-white transition-all duration-200 hover:scale-110">Harga</a>
-            <a href="#faq" className="text-white/90 text-sm font-bold hover:text-white transition-all duration-200 hover:scale-110">Soalan Lazim</a>
+          {/* Nav pills grid - 2x2 mobile, single row desktop */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <a href="#features" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-purple-50 border-2 border-purple-200 text-purple-700 font-black text-sm hover:bg-purple-100 hover:scale-105 transition-all">
+              Ciri-ciri <span>⚙️</span>
+            </a>
+            <a href="#testimonials" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-pink-50 border-2 border-pink-200 text-pink-700 font-black text-sm hover:bg-pink-100 hover:scale-105 transition-all">
+              Testimoni <span>💬</span>
+            </a>
+            <a href="#pricing" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-amber-50 border-2 border-amber-200 text-amber-700 font-black text-sm hover:bg-amber-100 hover:scale-105 transition-all">
+              Harga <span>💰</span>
+            </a>
+            <a href="#faq" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-blue-50 border-2 border-blue-200 text-blue-700 font-black text-sm hover:bg-blue-100 hover:scale-105 transition-all">
+              FAQ <span>❓</span>
+            </a>
           </div>
-
-          {/* CTA Button */}
-          <motion.button 
-            whileHover={{ scale: 1.05 }} 
-            whileTap={{ scale: 0.95 }} 
-            onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')} 
-            className="px-5 sm:px-7 py-2.5 sm:py-3 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-xl hover:shadow-2xl hover:bg-white/95 transition-all"
-          >
-            {isAuthenticated ? '📊 Dashboard' : '🔓 Log Masuk'}
-          </motion.button>
         </div>
       </nav>
 
       {/* ── HERO — Modern Clean Design ── */}
-      <section className="relative w-full overflow-hidden pt-24 sm:pt-28 pb-12 sm:pb-16">
+      <section className="relative w-full overflow-hidden pt-44 sm:pt-32 pb-12 sm:pb-16">
         {/* Soft gradient background */}
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #1E1B4B 0%, #312E81 40%, #4C1D95 100%)' }} />
 
