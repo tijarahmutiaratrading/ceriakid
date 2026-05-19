@@ -10,6 +10,7 @@ import PricingCheckout from '@/components/PricingCheckout';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import HeroCarousel from '@/components/landing/HeroCarousel';
+import SectionWrapper from '@/components/landing/SectionWrapper';
 
 
 // Beta tester highlights — placeholder sehingga testimoni sebenar dikumpul
@@ -332,217 +333,283 @@ export default function Landing() {
       </section>
 
       {/* ── STATS STRIP ── */}
-      <div className="py-5 md:py-10 border-y border-orange-200/60 bg-white/95 shadow-inner">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 text-center">
+      <section className="relative overflow-hidden py-10 md:py-14 px-5 sm:px-8 bg-gradient-to-br from-slate-950 via-indigo-950 to-purple-950 border-y border-white/5">
+        <div className="absolute top-0 -left-20 w-80 h-80 rounded-full bg-pink-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 -right-20 w-80 h-80 rounded-full bg-orange-500/10 blur-3xl pointer-events-none" />
+        <div className="relative z-10 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {[
-            { num: '7+', label: 'Subjek Utama', icon: '📚' },
-            { num: '2', label: 'Peringkat Umur', icon: '🎯' },
-            { num: 'KSPK + KSSR', label: 'Standard Malaysia', icon: '🇲🇾' },
-            { num: '5-10', label: 'Minit Latihan Harian', icon: '🚀' }].
-            map((stat, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-            className={`px-3 py-3 md:px-6 md:py-4
-                  ${i % 2 !== 0 ? 'border-l border-orange-100' : ''}
-                  ${i >= 2 ? 'border-t border-white/40' : ''}
-                  md:${i % 4 !== 0 ? 'border-l' : 'border-l-0'}
-                  md:border-t-0
-                `}>
-                <div className="text-xl md:text-2xl mb-1">{stat.icon}</div>
-                <div className="text-3xl md:text-5xl font-black text-purple-700">{stat.num}</div>
-                <div className="text-slate-600 text-xs md:text-sm font-semibold mt-1 md:mt-2">{stat.label}</div>
+              { num: '7+', label: 'Subjek Utama', icon: '📚' },
+              { num: '2', label: 'Peringkat Umur', icon: '🎯' },
+              { num: 'KSPK+KSSR', label: 'Standard Malaysia', icon: '🇲🇾' },
+              { num: '5-10', label: 'Minit Harian', icon: '🚀' },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                className="rounded-2xl p-4 md:p-5 bg-white/5 backdrop-blur-md border border-white/10 text-center"
+              >
+                <div className="text-2xl md:text-3xl mb-2">{stat.icon}</div>
+                <div className="text-2xl md:text-4xl font-black bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent leading-none">{stat.num}</div>
+                <div className="text-white/60 text-xs md:text-sm font-bold mt-2">{stat.label}</div>
               </motion.div>
-            )}
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
       <TrustedMarquee />
 
       {/* ── PROBLEM SECTION ── */}
-      <div className="py-16 md:py-20 px-6 relative overflow-hidden bg-gradient-to-br from-rose-50 via-orange-50 to-yellow-50 text-slate-900">
-        <div className="max-w-4xl mx-auto relative z-10">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
-            <p className="text-4xl mb-3">😮‍💨</p>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Pening kepala bila<br />anak tak nak belajar?</h2>
-            <p className="text-slate-600 text-lg">Kalau salah satu ni rasa familiar — anda bukan keseorangan...</p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 items-stretch auto-rows-fr">
-            {[
+      <SectionWrapper
+        badge="MASALAH BIASA IBU BAPA"
+        badgeIcon="😮‍💨"
+        title="Pening kepala bila"
+        titleAccent="anak tak nak belajar?"
+        subtitle="Kalau salah satu ni rasa familiar — anda bukan keseorangan..."
+        variant="darker"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+          {[
             { emoji: '😤', pain: '"Anak main game je, tak nak belajar"', desc: 'Screen time jadi perang setiap malam. Stress anak, stress ibu bapa.' },
             { emoji: '💸', pain: '"Dah bayar tuisyen RM300, result sama je"', desc: 'Wang habis tapi anak masih tak faham apa yang diajar.' },
             { emoji: '😰', pain: '"Exam dah dekat, anak masih tak hafal"', desc: 'Pressure menjelang peperiksaan. Semua orang dalam rumah tegang.' },
-            { emoji: '😪', pain: '"Kerja sampai malam, tak sempat nak ajar"', desc: 'Ibu bapa penat, anak perlukan bantuan. Tiada masa yang cukup.' }].
-            map((p, i) =>
-            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="relative z-0 h-full min-h-[132px] md:min-h-[118px] flex items-start gap-3 sm:gap-4 bg-white border border-rose-100 rounded-2xl p-4 sm:p-5 shadow-xl shadow-rose-100/60 text-left min-w-0 overflow-hidden">
-                <span className="text-3xl w-10 h-10 flex-shrink-0 flex items-center justify-center">{p.emoji}</span>
-                <div className="min-w-0 flex-1">
-                  <p className="font-black text-slate-900 mb-1 leading-snug">{p.pain}</p>
-                  <p className="text-slate-600 text-sm leading-relaxed">{p.desc}</p>
-                </div>
-              </motion.div>
-            )}
-          </div>
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mt-10">
-            <p className="text-xl font-bold text-slate-700">Mestilah ada cara lain yang lebih senang...</p>
-            <p className="text-2xl font-black text-orange-500 mt-2">ADA. Jom tengok 👇</p>
-          </motion.div>
+            { emoji: '😪', pain: '"Kerja sampai malam, tak sempat nak ajar"', desc: 'Ibu bapa penat, anak perlukan bantuan. Tiada masa yang cukup.' },
+          ].map((p, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="flex items-start gap-4 rounded-2xl p-5 sm:p-6 bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-colors"
+            >
+              <span className="text-3xl flex-shrink-0">{p.emoji}</span>
+              <div className="min-w-0 flex-1">
+                <p className="font-black text-white mb-1.5 leading-snug">{p.pain}</p>
+                <p className="text-white/65 text-sm leading-relaxed">{p.desc}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center mt-10"
+        >
+          <p className="text-base sm:text-lg text-white/70 font-semibold">Mestilah ada cara lain yang lebih senang...</p>
+          <p className="text-xl sm:text-2xl font-black bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent mt-2">ADA. Jom tengok 👇</p>
+        </motion.div>
+      </SectionWrapper>
 
       {/* ── SOLUTION / FEATURES ── */}
-      <div id="features" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50 text-slate-900">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
-            <span className="inline-block bg-green-100 text-green-700 font-black px-4 py-1.5 rounded-full text-sm mb-4">✅ SOLUSI SCREEN TIME BERFAEDAH</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">Perkenalkan — <span className="text-orange-600">CeriaKid</span><br />Latihan Harian Yang Anak Tak Cepat Bosan</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">Permainan edukatif berasaskan topik sekolah Malaysia. Anak rasa macam main game, ibu bapa pula nampak perkembangan pembelajaran.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
+      <SectionWrapper
+        id="features"
+        badge="SOLUSI SCREEN TIME BERFAEDAH"
+        badgeIcon="✅"
+        title="Perkenalkan CeriaKid —"
+        titleAccent="latihan harian yang anak suka"
+        subtitle="Permainan edukatif berasaskan topik sekolah Malaysia. Anak rasa macam main game, ibu bapa pula nampak perkembangan pembelajaran."
+      >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {[
             { icon: '🎮', title: 'Latihan Rasa Macam Game', desc: 'Soalan pendek, warna ceria dan feedback segera bantu anak kekal fokus tanpa rasa terbeban.' },
             { icon: '📊', title: 'Ibu Bapa Boleh Pantau', desc: 'Lihat markah, percubaan dan topik yang anak perlukan lebih latihan melalui dashboard.' },
-            { icon: '📲', title: 'Sesuai Untuk Rutin Harian', desc: 'Gunakan 5–10 minit sehari di rumah, dalam kereta atau bila anak ada masa lapang.' }].
-            map((f, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white rounded-3xl p-7 border border-orange-100 text-center mx-auto hover:bg-orange-50 transition-all shadow-xl shadow-orange-100/70">
+            { icon: '📲', title: 'Sesuai Untuk Rutin Harian', desc: 'Gunakan 5–10 minit sehari di rumah, dalam kereta atau bila anak ada masa lapang.' },
+          ].map((f, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="relative rounded-3xl p-6 sm:p-7 bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+            >
+              <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-orange-400/20 via-pink-400/10 to-transparent opacity-0 hover:opacity-100 transition-opacity pointer-events-none" />
+              <div className="relative">
                 <div className="text-5xl mb-4">{f.icon}</div>
-                <h3 className="font-black text-slate-900 text-lg mb-2">{f.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">{f.desc}</p>
-              </motion.div>
-            )}
-          </div>
-
+                <h3 className="font-black text-white text-lg mb-2">{f.title}</h3>
+                <p className="text-white/65 text-sm leading-relaxed">{f.desc}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      </SectionWrapper>
 
       {/* ── APP PREVIEW SHOWCASE ── */}
       <AppPreviewShowcase />
 
       {/* ── SUBJECTS ── */}
-      <div className="py-12 md:py-16 px-6 bg-gradient-to-br from-yellow-50 via-orange-50 to-pink-50 text-slate-900">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
-            <span className="inline-block bg-orange-100 text-orange-700 border border-orange-300/70 font-black px-4 py-1.5 rounded-full text-sm mb-4">📚 SUBJEK PEMBELAJARAN</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Subjek Yang Anak Boleh Belajar</h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">Pilih topik mengikut silibus dan tahap anak — semuanya dalam gaya permainan yang menyeronokkan.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
+      <SectionWrapper
+        badge="SUBJEK PEMBELAJARAN"
+        badgeIcon="📚"
+        title="Subjek yang anak"
+        titleAccent="boleh belajar"
+        subtitle="Pilih topik mengikut silibus dan tahap anak — semuanya dalam gaya permainan yang menyeronokkan."
+        variant="darker"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/866fc318d_generated_image.png', icon: '🇲🇾', sub: 'Bahasa Melayu', word: 'Baca • Eja • Faham', info: 'Latihan ayat mudah dan kosa kata harian.', color: 'from-blue-500 via-sky-400 to-cyan-300' },
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🇬🇧', sub: 'English', word: 'Read • Speak • Play', info: 'Belajar perkataan English dengan cara seronok.', color: 'from-emerald-500 via-green-400 to-lime-300' },
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🔢', sub: 'Matematik', word: 'Kira • Banding • Selesaikan', info: 'Nombor dan operasi asas dalam bentuk game.', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/866fc318d_generated_image.png', icon: '🧪', sub: 'Sains', word: 'Lihat • Tanya • Cuba', info: 'Kenal alam, haiwan dan eksperimen ringkas.', color: 'from-orange-500 via-amber-400 to-yellow-300' },
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🕌', sub: 'Jawi', word: 'Kenal • Sebut • Tulis', info: 'Huruf Jawi dan suku kata secara perlahan.', color: 'from-teal-500 via-cyan-400 to-blue-300' },
             { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' }].
-            map((s, i) =>
-            <motion.div key={s.sub} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ delay: i * 0.06 }} className="overflow-hidden rounded-2xl bg-white border border-orange-100 shadow-xl shadow-orange-100/70">
-                <div className="relative h-36 overflow-hidden">
-                  <img src={s.img} alt={`Budak belajar ${s.sub}`} className="w-full h-full object-cover" />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${s.color} opacity-55`} />
-                  <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/90 text-slate-900 font-black text-xs px-3 py-1.5 rounded-full shadow-md">{s.icon} {s.sub}</div>
-                </div>
-                <div className="p-4 text-left">
-                  <h3 className="font-black text-slate-900 text-lg leading-tight">{s.word}</h3>
-                  <div className="mt-3 bg-white/90 text-slate-800 rounded-xl px-3 py-2 shadow-lg">
-                    <p className="font-black text-xs text-slate-900">Info belajar</p>
-                    <p className="text-xs font-bold text-slate-600 leading-snug mt-0.5">{s.info}</p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </div>
+            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' },
+          ].map((s, i) => (
+            <motion.div
+              key={s.sub}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -4 }}
+              transition={{ delay: i * 0.06 }}
+              className="overflow-hidden rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/25 transition-all"
+            >
+              <div className="relative h-36 overflow-hidden">
+                <img src={s.img} alt={`Budak belajar ${s.sub}`} className="w-full h-full object-cover" />
+                <div className={`absolute inset-0 bg-gradient-to-t ${s.color} opacity-60`} />
+                <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/95 text-slate-900 font-black text-xs px-3 py-1.5 rounded-full shadow-md">{s.icon} {s.sub}</div>
+              </div>
+              <div className="p-4 text-left">
+                <h3 className="font-black text-white text-lg leading-tight">{s.word}</h3>
+                <p className="text-white/60 text-xs leading-snug mt-2">{s.info}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      </SectionWrapper>
 
       {/* ── INVESTOR WOW ── */}
-      <div className="py-12 md:py-16 px-6 bg-gradient-to-r from-yellow-100/95 via-orange-100/95 to-pink-100/95 text-slate-900 border-y border-yellow-200/30">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
-            <span className="inline-block bg-orange-100 text-orange-700 border border-orange-300/70 font-black px-4 py-1.5 rounded-full text-sm mb-4">🚀 SEMUA DALAM SATU APP</span>
-            <h2 className="text-3xl md:text-4xl font-black mb-3 text-slate-900">Lebih Mudah Untuk Anak Belajar, Lebih Senang Untuk Ibu Bapa Pantau</h2>
-            <p className="text-slate-700 max-w-2xl mx-auto">CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSPK/KSSR dan progress tracking dalam satu pengalaman yang mudah digunakan.</p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { icon: '🎮', title: 'Game Engine', desc: 'Soalan interaktif pelbagai format untuk subjek utama.' },
-              { icon: '📊', title: 'Parent Analytics', desc: 'Pantau skor, progress, streak dan prestasi anak.' },
-              { icon: '🔒', title: 'Pembelajaran Selamat', desc: 'Pengalaman tanpa iklan dan lebih terkawal untuk kanak-kanak.' }
-            ].map((item, i) => (
-              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="rounded-3xl p-5 border border-orange-200/70 bg-white/80 backdrop-blur-xl shadow-xl shadow-orange-200/30">
-                <div className="text-4xl mb-3">{item.icon}</div>
-                <h3 className="font-black text-lg mb-2 text-slate-900">{item.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
+      <SectionWrapper
+        badge="SEMUA DALAM SATU APP"
+        badgeIcon="🚀"
+        title="Lebih mudah untuk anak,"
+        titleAccent="lebih senang untuk ibu bapa"
+        subtitle="CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSPK/KSSR dan progress tracking dalam satu pengalaman yang mudah digunakan."
+      >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {[
+            { icon: '🎮', title: 'Game Engine', desc: 'Soalan interaktif pelbagai format untuk subjek utama.' },
+            { icon: '📊', title: 'Parent Analytics', desc: 'Pantau skor, progress, streak dan prestasi anak.' },
+            { icon: '🔒', title: 'Pembelajaran Selamat', desc: 'Pengalaman tanpa iklan dan lebih terkawal untuk kanak-kanak.' },
+          ].map((item, i) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="rounded-3xl p-6 bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all"
+            >
+              <div className="text-4xl mb-3">{item.icon}</div>
+              <h3 className="font-black text-lg mb-2 text-white">{item.title}</h3>
+              <p className="text-white/65 text-sm leading-relaxed">{item.desc}</p>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      </SectionWrapper>
 
       {/* ── HOW IT WORKS ── */}
-      <div className="py-12 md:py-16 px-6 relative">
-        <div className="max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
-            <h2 className="text-3xl font-black text-white mb-3">Mulakan Dalam 3 Langkah</h2>
-            <p className="text-white/65">Setup dalam 2 minit. Anak terus boleh mula belajar.</p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
+      <SectionWrapper
+        badge="MUDAH UNTUK MULA"
+        badgeIcon="🚀"
+        title="Mulakan dalam"
+        titleAccent="3 langkah sahaja"
+        subtitle="Setup dalam 2 minit. Anak terus boleh mula belajar."
+        variant="darker"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+          {/* Connecting line for desktop */}
+          <div className="hidden md:block absolute top-7 left-[16%] right-[16%] h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+          {[
             { step: '1', icon: '📲', title: 'Daftar & Langganan', desc: 'Buka app, pilih pelan, dan mula belajar dalam masa 2 minit.' },
             { step: '2', icon: '🎯', title: 'Pilih Peringkat Anak', desc: 'Prasekolah atau Sekolah Rendah. App auto-suggest permainan yang sesuai.' },
-            { step: '3', icon: '🏆', title: 'Anak Terus Main & Belajar', desc: 'Pantau progress dari dashboard. Lihat markah naik minggu demi minggu.' }].
-            map((s, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="text-center">
-                <div className="w-14 h-14 bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 text-white rounded-full flex items-center justify-center font-black text-xl mx-auto mb-4 shadow-xl shadow-orange-950/30">{s.step}</div>
-                <div className="text-3xl mb-3">{s.icon}</div>
-                <h3 className="font-black text-white mb-2">{s.title}</h3>
-                <p className="text-white/65 text-sm">{s.desc}</p>
-              </motion.div>
-            )}
-          </div>
+            { step: '3', icon: '🏆', title: 'Anak Terus Main & Belajar', desc: 'Pantau progress dari dashboard. Lihat markah naik minggu demi minggu.' },
+          ].map((s, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="relative text-center rounded-3xl p-6 bg-white/5 backdrop-blur-md border border-white/10"
+            >
+              <div className="w-14 h-14 rounded-full flex items-center justify-center font-black text-xl mx-auto mb-4 shadow-xl text-white" style={{ background: 'linear-gradient(135deg, #F97316, #EC4899)', boxShadow: '0 8px 24px rgba(234,88,12,0.4)' }}>{s.step}</div>
+              <div className="text-3xl mb-3">{s.icon}</div>
+              <h3 className="font-black text-white mb-2">{s.title}</h3>
+              <p className="text-white/65 text-sm">{s.desc}</p>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      </SectionWrapper>
 
       {/* ── TESTIMONIALS ── */}
-      <div id="testimonials" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-orange-50 via-rose-50 to-yellow-50 text-slate-900">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
-            <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_, i) => <span key={i} className="text-2xl text-orange-400">★</span>)}</div>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">Maklum Balas Daripada<br />Ujian Beta</h2>
-            <p className="text-slate-600">Komen ringkas daripada ibu bapa yang menyertai fasa ujian beta CeriaKid 👇</p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {testimonials.map((t, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-white rounded-3xl p-6 border border-orange-100 flex flex-col justify-between shadow-xl shadow-orange-100/70">
+      <SectionWrapper
+        id="testimonials"
+        badge="⭐ ULASAN UJIAN BETA"
+        badgeIcon="💬"
+        title="Maklum balas daripada"
+        titleAccent="ibu bapa beta tester"
+        subtitle="Komen ringkas daripada ibu bapa yang menyertai fasa ujian beta CeriaKid 👇"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="rounded-3xl p-6 bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex gap-1 mb-3">{[...Array(t.stars)].map((_, j) => <span key={j} className="text-yellow-300">★</span>)}</div>
+                <p className="text-white/85 mb-4 leading-relaxed text-sm">"{t.quote}"</p>
+                <div className="inline-block bg-green-500/15 text-green-200 border border-green-300/30 text-xs font-black px-3 py-1 rounded-full mb-4">✅ {t.highlight}</div>
+              </div>
+              <div className="flex items-center gap-3 pt-3 border-t border-white/10">
+                <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-white/20" />
                 <div>
-                  <div className="flex gap-1 mb-3">{[...Array(t.stars)].map((_, j) => <span key={j} className="text-orange-400">★</span>)}</div>
-                  <p className="text-slate-700 mb-4 leading-relaxed text-sm">"{t.quote}"</p>
-                  <div className="inline-block bg-green-100 text-green-700 text-xs font-black px-3 py-1 rounded-full mb-4">✅ {t.highlight}</div>
+                  <p className="font-black text-white text-sm">{t.name}</p>
+                  <p className="text-xs text-white/55">{t.location}</p>
                 </div>
-                <div className="flex items-center gap-3 pt-3 border-t border-orange-100">
-                  <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-orange-200" />
-                  <div>
-                    <p className="font-black text-slate-900 text-sm">{t.name}</p>
-                    <p className="text-xs text-slate-500">{t.location}</p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      </SectionWrapper>
 
       {/* ── PRICING ── */}
-      <div id="pricing" className="py-12 md:py-16 px-6 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
-            <span className="inline-block bg-green-500/25 text-green-100 font-black px-4 py-1.5 rounded-full text-sm mb-4 border border-green-300/30">
-              Pelan tahunan mesra bajet keluarga
-            </span>
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Pilih Pelan Anda</h2>
-            <p className="text-white/60">Pilih pelan yang sesuai untuk umur anak. Semua pelan tahunan dan mesra bajet keluarga.</p>
+      <section id="pricing" className="relative overflow-hidden py-16 md:py-24 px-5 sm:px-8 bg-gradient-to-br from-slate-950 via-indigo-950 to-purple-950">
+        <div className="absolute top-10 -left-32 w-96 h-96 rounded-full bg-pink-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-10 -right-32 w-96 h-96 rounded-full bg-orange-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-purple-500/10 blur-3xl pointer-events-none" />
+        <div className="relative z-10 max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-5">
+              <span>💰</span>
+              <span className="text-white/90 text-xs sm:text-sm font-bold">PELAN TAHUNAN MESRA BAJET</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.1] text-white tracking-tight mb-4">
+              Pilih pelan{' '}
+              <span className="bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
+                yang sesuai
+              </span>
+            </h2>
+            <p className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+              Pilih pelan yang sesuai untuk umur anak. Semua pelan tahunan dan mesra bajet keluarga.
+            </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
@@ -591,8 +658,8 @@ export default function Landing() {
 
                 <div className="space-y-2.5">
                   {tier.features.map((f, j) =>
-                <div key={j} className="flex items-center gap-2 text-sm font-semibold text-white">
-                      <Check className="w-4 h-4 text-green-400 flex-shrink-0" /> {f}
+                <div key={j} className={`flex items-center gap-2 text-sm font-semibold ${tier.highlighted ? 'text-slate-900' : 'text-white'}`}>
+                      <Check className={`w-4 h-4 flex-shrink-0 ${tier.highlighted ? 'text-green-700' : 'text-green-400'}`} /> {f}
                     </div>
                 )}
                   {tier.noFeatures.map((f, j) =>
@@ -605,91 +672,122 @@ export default function Landing() {
             )}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* ── CHECKOUT FORM ── */}
-      <div className="py-12 md:py-16 px-6 bg-gradient-to-br from-orange-50 via-yellow-50 to-pink-50 border-y border-orange-100">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-8">
-            <span className="inline-block bg-orange-100 text-orange-700 border border-orange-300/70 font-black px-4 py-1.5 rounded-full text-sm mb-4">Langkah terakhir</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Daftar & Aktifkan Akaun</h2>
-            <p className="text-slate-600 max-w-xl mx-auto">Isi maklumat ringkas untuk teruskan pembayaran FPX yang selamat.</p>
-          </motion.div>
-
-          <motion.div
-            id="checkout-form"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="border-2 border-orange-200/70 rounded-3xl p-4 md:p-6 max-w-lg mx-auto shadow-xl shadow-orange-200/30 bg-white/90 backdrop-blur-xl">
-            
-            <div className="mb-4">
-              <h3 className="text-xl md:text-2xl font-black text-slate-900">Daftar & Bayar 🔒</h3>
-              <p className="text-xs md:text-sm text-slate-600 mt-1 leading-snug">Pilih pakej, isi maklumat dan teruskan ke pembayaran FPX yang selamat.</p>
-            </div>
-            <PricingCheckout selectedTier={selectedTierForCheckout} onTierChange={setSelectedTierForCheckout} />
-          </motion.div>
-
-          {/* Trust */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-5 border border-orange-200/70 rounded-2xl p-3 md:p-4 text-center max-w-xl mx-auto shadow-lg shadow-orange-200/25 bg-white/85 backdrop-blur-xl">
-            <div className="text-2xl mb-1">🛡️</div>
-            <h3 className="text-base font-black text-slate-900 mb-1">Direka Untuk Kanak-kanak Malaysia</h3>
-            <p className="text-slate-600 text-xs md:text-sm leading-snug">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
-          </motion.div>
-
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2 max-w-3xl mx-auto text-center">
-            {['🔒 Pembayaran FPX selamat', '💳 Pelan tahunan jelas', '📊 Pantau progress anak'].map((item) => (
-              <div key={item} className="rounded-xl bg-white/90 border border-orange-200/70 px-3 py-2 text-slate-800 text-xs md:text-sm font-bold shadow-sm">
-                {item}
-              </div>
-            ))}
+      <SectionWrapper
+        badge="LANGKAH TERAKHIR"
+        badgeIcon="🔒"
+        title="Daftar &"
+        titleAccent="aktifkan akaun"
+        subtitle="Isi maklumat ringkas untuk teruskan pembayaran FPX yang selamat."
+        variant="darker"
+      >
+        <motion.div
+          id="checkout-form"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="rounded-3xl p-5 md:p-7 max-w-lg mx-auto bg-white/95 backdrop-blur-xl shadow-2xl border border-white/20"
+        >
+          <div className="mb-4">
+            <h3 className="text-xl md:text-2xl font-black text-slate-900">Daftar & Bayar 🔒</h3>
+            <p className="text-xs md:text-sm text-slate-600 mt-1 leading-snug">Pilih pakej, isi maklumat dan teruskan ke pembayaran FPX yang selamat.</p>
           </div>
+          <PricingCheckout selectedTier={selectedTierForCheckout} onTierChange={setSelectedTierForCheckout} />
+        </motion.div>
+
+        {/* Trust */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-6 rounded-2xl p-4 text-center max-w-xl mx-auto bg-white/5 backdrop-blur-md border border-white/10"
+        >
+          <div className="text-2xl mb-1">🛡️</div>
+          <h3 className="text-base font-black text-white mb-1">Direka untuk kanak-kanak Malaysia</h3>
+          <p className="text-white/65 text-xs md:text-sm leading-snug">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
+        </motion.div>
+
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2 max-w-3xl mx-auto text-center">
+          {['🔒 Pembayaran FPX selamat', '💳 Pelan tahunan jelas', '📊 Pantau progress anak'].map((item) => (
+            <div key={item} className="rounded-xl bg-white/5 border border-white/10 backdrop-blur-md px-3 py-2 text-white/85 text-xs md:text-sm font-bold">
+              {item}
+            </div>
+          ))}
         </div>
-      </div>
+      </SectionWrapper>
 
       {/* ── FINAL CTA ── */}
-      <div className="py-12 md:py-16 px-6 text-white border-y border-purple-300/25 bg-gradient-to-br from-violet-950 via-purple-900 to-fuchsia-900">
-        <div className="max-w-3xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
-            <p className="text-5xl mb-5">🎓</p>
-            <h2 className="text-3xl md:text-4xl font-black mb-4">Anak Anda Layak Dapat<br />Yang Terbaik</h2>
-            <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">Mulakan dengan latihan pendek yang anak boleh konsisten buat setiap hari — lebih mudah, lebih ceria, lebih teratur.</p>
+      <section className="relative overflow-hidden py-16 md:py-24 px-5 sm:px-8 bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-950">
+        <div className="absolute top-10 -left-32 w-96 h-96 rounded-full bg-pink-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-10 -right-32 w-96 h-96 rounded-full bg-orange-500/15 blur-3xl pointer-events-none" />
+        <div className="relative z-10 max-w-3xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6">
+              <span>🎓</span>
+              <span className="text-white/90 text-xs sm:text-sm font-bold">SEDIA UNTUK MULAKAN?</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-5 text-white leading-[1.1] tracking-tight">
+              Anak anda layak dapat{' '}
+              <span className="bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">yang terbaik</span>
+            </h2>
+            <p className="text-white/75 text-base sm:text-lg mb-8 max-w-xl mx-auto leading-relaxed">
+              Mulakan dengan latihan pendek yang anak boleh konsisten buat setiap hari — lebih mudah, lebih ceria, lebih teratur.
+            </p>
             <motion.button
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
               onClick={scrollToPricing}
-              className="px-8 py-4 bg-white text-game-purple rounded-full font-black text-lg shadow-2xl inline-flex items-center gap-3">
-              
-              🎮 Pilih Pelan Sekarang <ArrowRight className="w-6 h-6" />
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-black text-white text-base sm:text-lg shadow-2xl"
+              style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)', boxShadow: '0 10px 30px rgba(234,88,12,0.5)' }}
+            >
+              🎮 Pilih Pelan Sekarang <ArrowRight className="w-5 h-5" />
             </motion.button>
-            <p className="text-white/80 text-sm mt-5">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Tanpa iklan &nbsp;•&nbsp; ✅ Dashboard ibu bapa</p>
+            <p className="text-white/60 text-sm mt-5">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Tanpa iklan &nbsp;•&nbsp; ✅ Dashboard ibu bapa</p>
           </motion.div>
         </div>
-      </div>
+      </section>
 
       {/* ── FAQ ── */}
-      <div id="faq" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-amber-100 via-yellow-200 to-orange-300 text-slate-900">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-black text-slate-900 mb-3">Soalan Lazim 🤔</h2>
-            <p className="text-slate-600">Jawapan ringkas sebelum ibu bapa mula menggunakan CeriaKid.</p>
-          </div>
-          <div className="space-y-4">
-            {[
+      <SectionWrapper
+        id="faq"
+        badge="SOALAN LAZIM"
+        badgeIcon="🤔"
+        title="Sebelum anda"
+        titleAccent="mula menggunakan"
+        subtitle="Jawapan ringkas untuk soalan yang biasa ditanya ibu bapa."
+      >
+        <div className="space-y-3 max-w-3xl mx-auto">
+          {[
             { q: 'Adakah selamat untuk anak?', a: 'Ya, 100%! Tiada iklan, tiada pop-up, tiada chat dengan orang asing. App direka khas untuk keselamatan kanak-kanak.' },
             { q: 'Apakah peranti yang disokong?', a: 'Semua jenis smartphone, tablet, dan komputer. iOS, Android, dan browser. Boleh download untuk guna offline.' },
             { q: 'Bagaimana langganan berfungsi?', a: 'CeriaKid menggunakan pelan tahunan. Anda boleh semak status langganan dan maklumat akaun di bahagian tetapan selepas mendaftar.' },
             { q: 'Adakah ikut standard pembelajaran Malaysia?', a: 'Ya — Prasekolah disusun ikut KSPK (Kurikulum Standard Prasekolah Kebangsaan), manakala Sekolah Rendah ikut KSSR (Kurikulum Standard Sekolah Rendah) Darjah 1–6.' },
             { q: 'Berapa anak boleh guna?', a: 'Pelan Asas untuk Prasekolah (1 anak), Standard untuk Sekolah Rendah (1 anak). Pelan Keluarga untuk kedua-dua peringkat dengan sehingga 4 profil anak — jimat lebih!' },
-            { q: 'Macam mana nak mula?', a: 'Pilih pelan, isikan maklumat, bayar melalui FPX, dan anak terus boleh mula belajar dalam masa 2 minit!' }].
-            map((faq, i) =>
-            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl p-5 border border-orange-100 hover:bg-orange-50 transition-all shadow-lg shadow-orange-100/60">
-                <p className="font-black text-slate-900 mb-1.5">❓ {faq.q}</p>
-                <p className="text-slate-600 text-sm leading-relaxed">{faq.a}</p>
-              </motion.div>
-            )}
-          </div>
+            { q: 'Macam mana nak mula?', a: 'Pilih pelan, isikan maklumat, bayar melalui FPX, dan anak terus boleh mula belajar dalam masa 2 minit!' },
+          ].map((faq, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              className="rounded-2xl p-5 bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+            >
+              <p className="font-black text-white mb-1.5 flex items-start gap-2">
+                <span className="text-orange-300 flex-shrink-0">❓</span>
+                <span>{faq.q}</span>
+              </p>
+              <p className="text-white/65 text-sm leading-relaxed pl-7">{faq.a}</p>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      </SectionWrapper>
 
       {/* ── FOOTER ── */}
       <footer className="text-white py-5 text-center md:py-6 relative bg-slate-950 border-t border-white/10">

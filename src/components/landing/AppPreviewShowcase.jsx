@@ -220,10 +220,10 @@ function Section({ number, badge, badgeColor, title, desc, children }) {
         <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-white text-sm shadow-md ${badgeColor}`}>{number}</div>
         <span className={`inline-block font-black px-4 py-1.5 rounded-full text-sm border ${badge}`}>{title}</span>
       </div>
-      <p className="text-slate-600 mb-6 max-w-xl">{desc}</p>
+      <p className="text-white/70 mb-6 max-w-xl">{desc}</p>
 
       {/* Phone frame */}
-      <div className="bg-white rounded-3xl shadow-2xl shadow-purple-100 border border-purple-100 overflow-hidden max-w-lg">
+      <div className="bg-white rounded-3xl shadow-2xl shadow-purple-950/40 border border-white/20 overflow-hidden max-w-lg">
         {/* Mock header bar */}
         <div className="bg-gradient-to-r from-purple-600 to-pink-500 px-5 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -240,16 +240,21 @@ function Section({ number, badge, badgeColor, title, desc, children }) {
 
 export default function AppPreviewShowcase() {
   return (
-    <div className="py-16 md:py-20 px-4 sm:px-6 bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 text-slate-900">
-      <div className="max-w-3xl mx-auto">
+    <div className="relative overflow-hidden py-16 md:py-24 px-4 sm:px-6 bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-950 text-slate-900">
+      <div className="absolute top-10 -left-32 w-96 h-96 rounded-full bg-pink-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 -right-32 w-96 h-96 rounded-full bg-orange-500/10 blur-3xl pointer-events-none" />
+      <div className="relative z-10 max-w-3xl mx-auto">
 
         {/* Heading */}
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-14">
-          <span className="inline-block bg-purple-100 text-purple-700 font-black px-4 py-1.5 rounded-full text-sm mb-4 border border-purple-200">👀 TENGOK SENDIRI DULU</span>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">
-            Cuba <span className="text-orange-500">Sebelum Beli</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-5">
+            <span>👀</span>
+            <span className="text-white/90 text-xs sm:text-sm font-bold">TENGOK SENDIRI DULU</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-[1.1] tracking-tight mb-4">
+            Cuba <span className="bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">sebelum beli</span>
           </h2>
-          <p className="text-slate-600 max-w-2xl mx-auto text-lg">Scroll ke bawah — tengok sendiri apa yang anak dan ibu bapa akan dapat dalam CeriaKid.</p>
+          <p className="text-white/70 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">Scroll ke bawah — tengok sendiri apa yang anak dan ibu bapa akan dapat dalam CeriaKid.</p>
         </motion.div>
 
         {/* 1. Game Sample */}
@@ -346,7 +351,7 @@ export default function AppPreviewShowcase() {
 
         {/* Final CTA */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-4">
-          <p className="text-slate-600 text-lg mb-5">Dah tengok semuanya? Mulakan hari ini 👇</p>
+          <p className="text-white/75 text-base sm:text-lg mb-5">Dah tengok semuanya? Mulakan hari ini 👇</p>
           <a href="#pricing" className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-black text-white text-base shadow-xl" style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)', boxShadow: '0 6px 24px rgba(234,88,12,0.4)' }}>
             🎮 Lihat Pelan Harga →
           </a>
