@@ -5,110 +5,74 @@ import { Lock, Play } from 'lucide-react';
 import GameBadge from './GameBadge';
 import UpgradeLockModal from './UpgradeLockModal';
 
+// Playful cartoon palette — rotate per card for variety
+const CARD_THEMES = [
+  { bg: 'from-yellow-300 to-orange-400', accent: '#EA580C', ring: 'ring-orange-600' },
+  { bg: 'from-pink-300 to-rose-400',     accent: '#BE185D', ring: 'ring-pink-600' },
+  { bg: 'from-sky-300 to-blue-400',      accent: '#1D4ED8', ring: 'ring-blue-600' },
+  { bg: 'from-green-300 to-emerald-400', accent: '#047857', ring: 'ring-emerald-600' },
+  { bg: 'from-purple-300 to-violet-400', accent: '#6D28D9', ring: 'ring-violet-600' },
+  { bg: 'from-amber-300 to-yellow-400',  accent: '#A16207', ring: 'ring-amber-600' },
+];
+
 const difficultyConfig = {
-  easy:   { label: 'Mudah',     stroke: '#16a34a' },
-  medium: { label: 'Sederhana', stroke: '#15803d' },
-  hard:   { label: 'Sukar',     stroke: '#dc2626' },
+  easy:   { label: 'Mudah',     bg: 'bg-green-400',  text: 'text-green-900' },
+  medium: { label: 'Sederhana', bg: 'bg-orange-400', text: 'text-orange-950' },
+  hard:   { label: 'Sukar',     bg: 'bg-red-400',    text: 'text-red-950' },
 };
-
-// Subtle horizontal lined-paper background (CSS gradient — keeps it lightweight + crisp)
-const paperStyle = {
-  backgroundColor: '#fbf7ec',
-  backgroundImage:
-    'repeating-linear-gradient(to bottom, transparent 0, transparent 31px, rgba(59,130,246,0.18) 31px, rgba(59,130,246,0.18) 32px)',
-};
-
-// Hand-drawn ellipse SVG used to "circle" the difficulty word
-const CircleStamp = ({ stroke }) => (
-  <svg
-    viewBox="0 0 120 60"
-    className="absolute inset-0 w-full h-full pointer-events-none"
-    preserveAspectRatio="none"
-  >
-    <ellipse
-      cx="60" cy="30" rx="54" ry="22"
-      fill="none"
-      stroke={stroke}
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeDasharray="180 12"
-      strokeDashoffset="6"
-      transform="rotate(-3 60 30)"
-      opacity="0.9"
-    />
-  </svg>
-);
 
 export default function GameListCard({ game, gameKey, gameProgress, idx, category, badge, locked }) {
   const difficulty = difficultyConfig[game.difficulty || 'easy'];
+  const theme = useMemo(() => CARD_THEMES[idx % CARD_THEMES.length], [idx]);
   const [showUpgrade, setShowUpgrade] = useState(false);
-
-  // Slight random rotation per card so they feel like scattered paper notes — stable per card
-  const rotation = useMemo(() => {
-    const variants = [-2.2, -1.2, -0.6, 0.4, 1.1, 1.8, 2.4];
-    return variants[idx % variants.length];
-  }, [idx]);
 
   const stars = gameProgress?.bestStars || 0;
   const playCount = gameProgress?.timesPlayed || 0;
 
   const cardInner = (
-    <div
-      className="relative h-full rounded-[14px] overflow-hidden shadow-[6px_8px_18px_rgba(15,23,42,0.18),0_1px_0_rgba(0,0,0,0.04)] ring-1 ring-amber-900/10"
-      style={paperStyle}
-    >
-      {/* Red margin line on the left — classic notebook */}
-      <div className="absolute top-0 bottom-0 left-9 w-px bg-red-400/70" aria-hidden="true" />
-
-      {/* Torn edge feel — subtle dotted top edge */}
+    <div className={`relative h-full rounded-[28px] overflow-hidden bg-gradient-to-br ${theme.bg} border-[4px] border-slate-900 shadow-[6px_8px_0px_rgba(15,23,42,1)]`}>
+      {/* Playful dotted pattern overlay */}
       <div
-        className="absolute top-0 left-0 right-0 h-1.5 opacity-40"
+        className="absolute inset-0 opacity-20 pointer-events-none"
         style={{
-          backgroundImage: 'radial-gradient(circle at 4px 0, transparent 2px, #fbf7ec 2.5px)',
-          backgroundSize: '8px 6px',
-          backgroundRepeat: 'repeat-x',
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1.5px, transparent 2px)',
+          backgroundSize: '16px 16px',
         }}
         aria-hidden="true"
       />
 
-      <div className="relative p-3 sm:p-5 pl-10 sm:pl-14 flex items-start gap-2.5 sm:gap-4 min-h-[96px] sm:min-h-[120px]">
-        {/* Emoji "sticker" — looks like a doodle stuck on the paper */}
-        <div className="flex-shrink-0 -mt-1 sm:-mt-2">
-          <div
-            className="w-12 h-12 sm:w-[72px] sm:h-[72px] rounded-full bg-white flex items-center justify-center text-2xl sm:text-4xl shadow-[3px_4px_8px_rgba(15,23,42,0.18)] ring-2 sm:ring-[2.5px] ring-slate-900/85"
-            style={{ transform: `rotate(${-rotation * 1.5}deg)` }}
-          >
+      {/* Sparkle accents */}
+      <span className="absolute top-2 right-3 text-xl opacity-80 pointer-events-none">✨</span>
+      <span className="absolute bottom-3 left-3 text-base opacity-60 pointer-events-none">⭐</span>
+
+      <div className="relative p-3 sm:p-5 flex items-start gap-2.5 sm:gap-4 min-h-[100px] sm:min-h-[124px]">
+        {/* Emoji bubble — chunky cartoon sticker */}
+        <div className="flex-shrink-0">
+          <div className={`w-14 h-14 sm:w-[78px] sm:h-[78px] rounded-full bg-white flex items-center justify-center text-3xl sm:text-[44px] border-[4px] border-slate-900 shadow-[3px_4px_0px_rgba(15,23,42,1)]`}>
             <span className={locked ? 'grayscale opacity-70' : ''}>{game.emoji}</span>
           </div>
         </div>
 
         {/* Content */}
         <div className="flex-1 min-w-0 pt-0.5">
-          {/* Title — bold navy, slightly handwritten feel via tracking */}
           <div className="flex items-start gap-2 flex-wrap">
             <h3
-              className="font-black text-sm sm:text-lg leading-tight text-[#1e3a8a] uppercase tracking-tight line-clamp-2"
-              style={{ textShadow: '0 1px 0 rgba(255,255,255,0.6)' }}
+              className="font-black text-sm sm:text-lg leading-tight text-slate-900 line-clamp-2"
+              style={{ textShadow: '1px 1px 0 rgba(255,255,255,0.5)' }}
             >
               {game.title}
             </h3>
             {badge && badge !== 'locked' && <GameBadge type={badge} />}
           </div>
 
-          {/* Difficulty — hand-circled stamp */}
-          <div className="inline-block relative mt-1.5 sm:mt-2 px-3 sm:px-4 py-0.5 sm:py-1">
-            <CircleStamp stroke={difficulty.stroke} />
-            <span
-              className="relative font-black text-xs sm:text-sm"
-              style={{ color: difficulty.stroke, fontFamily: '"Nunito", cursive' }}
-            >
-              {difficulty.label}
-            </span>
+          {/* Difficulty — chunky pill */}
+          <div className={`inline-flex items-center gap-1 mt-2 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full ${difficulty.bg} ${difficulty.text} border-[2.5px] border-slate-900 shadow-[2px_2px_0px_rgba(15,23,42,1)]`}>
+            <span className="font-black text-[11px] sm:text-xs">{difficulty.label}</span>
           </div>
 
-          {/* Game type — handwritten style */}
+          {/* Game type */}
           {game.type && (
-            <p className="mt-1 sm:mt-2 text-slate-700 text-xs sm:text-sm font-bold capitalize" style={{ fontFamily: '"Nunito", cursive' }}>
+            <p className="mt-1.5 sm:mt-2 text-slate-800 text-xs sm:text-sm font-bold capitalize">
               {game.type.replace(/_/g, ' ')}
             </p>
           )}
@@ -120,51 +84,42 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
                 {[1,2,3].map(s => (
                   <span
                     key={s}
-                    className="text-sm sm:text-base leading-none"
+                    className="text-base sm:text-lg leading-none"
                     style={{
-                      color: s <= stars ? '#facc15' : '#cbd5e1',
-                      textShadow: s <= stars ? '0 1px 0 #b45309' : 'none',
+                      color: s <= stars ? '#facc15' : 'rgba(255,255,255,0.6)',
+                      textShadow: s <= stars ? '1px 1px 0 #78350f' : 'none',
                     }}
                   >
                     ★
                   </span>
                 ))}
               </div>
-              <span className="text-slate-700 text-[10px] sm:text-xs font-bold" style={{ fontFamily: '"Nunito", cursive' }}>
-                Dimainkan {playCount} kali
+              <span className="text-slate-800 text-[10px] sm:text-xs font-black">
+                {playCount}x main
               </span>
             </div>
           )}
         </div>
 
-        {/* Play / Lock — rubber stamp circle */}
+        {/* Play / Lock — chunky cartoon button */}
         <div className="flex-shrink-0 self-center">
           {locked ? (
-            <div
-              className="w-9 h-9 sm:w-14 sm:h-14 rounded-full bg-amber-400 flex items-center justify-center shadow-[2px_3px_6px_rgba(15,23,42,0.25)] ring-2 sm:ring-[2.5px] ring-amber-900"
-              style={{ transform: `rotate(${rotation * 2}deg)` }}
-            >
-              <Lock className="w-4 h-4 sm:w-6 sm:h-6 text-amber-900" strokeWidth={3} />
+            <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-amber-400 flex items-center justify-center border-[3px] sm:border-[4px] border-slate-900 shadow-[3px_4px_0px_rgba(15,23,42,1)]">
+              <Lock className="w-4 h-4 sm:w-6 sm:h-6 text-slate-900" strokeWidth={3} />
             </div>
           ) : (
-            <div
-              className="w-9 h-9 sm:w-14 sm:h-14 rounded-full bg-red-500 flex items-center justify-center shadow-[2px_3px_6px_rgba(15,23,42,0.25)] ring-2 sm:ring-[2.5px] ring-red-800"
-              style={{ transform: `rotate(${rotation * 2}deg)` }}
-            >
-              <Play className="w-4 h-4 sm:w-6 sm:h-6 text-white fill-white ml-0.5" strokeWidth={2.5} />
+            <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white flex items-center justify-center border-[3px] sm:border-[4px] border-slate-900 shadow-[3px_4px_0px_rgba(15,23,42,1)]">
+              <Play className="w-4 h-4 sm:w-6 sm:h-6 text-slate-900 fill-slate-900 ml-0.5" strokeWidth={2.5} />
             </div>
           )}
         </div>
       </div>
 
-      {/* Premium label for locked cards */}
+      {/* Premium label */}
       {locked && (
-        <div className="absolute top-2 right-3">
-          <span
-            className="inline-block px-2 py-0.5 text-[10px] font-black text-amber-900 bg-amber-300 rounded shadow-sm uppercase tracking-wider"
-            style={{ transform: 'rotate(8deg)', fontFamily: '"Nunito", cursive' }}
-          >
-            Premium
+        <div className="absolute top-2 left-3">
+          <span className="inline-block px-2 py-0.5 text-[10px] font-black text-amber-950 bg-amber-300 rounded-full border-[2px] border-slate-900 shadow-[1.5px_1.5px_0px_rgba(15,23,42,1)] uppercase tracking-wide">
+            ⭐ Premium
           </span>
         </div>
       )}
@@ -182,10 +137,10 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
         >
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0, rotate: rotation }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: Math.min(idx * 0.03, 0.5) }}
-            whileTap={{ scale: 0.97, rotate: 0 }}
-            whileHover={{ rotate: 0, scale: 1.02 }}
+            whileTap={{ scale: 0.97, y: 2 }}
+            whileHover={{ y: -2 }}
             className="h-full cursor-pointer"
           >
             {cardInner}
@@ -200,10 +155,10 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
     <Link to={`/play/${category}/${idx}`} className="block">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0, rotate: rotation }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: Math.min(idx * 0.03, 0.5) }}
-        whileHover={{ scale: 1.03, rotate: 0 }}
-        whileTap={{ scale: 0.97, rotate: 0 }}
+        whileHover={{ y: -3, scale: 1.02 }}
+        whileTap={{ scale: 0.97, y: 2 }}
         className="h-full cursor-pointer"
       >
         {cardInner}
