@@ -4,16 +4,16 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const HERO_IMAGES = [
   {
-    url: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/375ffb424_generated_image.png',
-    alt: 'Children playing educational games'
+    url: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/79e711b5a_generated_image.png',
+    alt: 'Anak-anak Malaysia bermain permainan pendidikan'
   },
   {
-    url: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/62bcb4737_generated_image.png',
-    alt: 'Parent dashboard showing progress'
+    url: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a1fa9bd0b_generated_image.png',
+    alt: 'Keluarga Malaysia memantau prestasi anak'
   },
   {
-    url: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a525198ae_generated_image.png',
-    alt: 'Children reading interactive stories'
+    url: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d5527397e_generated_image.png',
+    alt: 'Anak-anak Malaysia membaca cerita interaktif'
   },
 ];
 
