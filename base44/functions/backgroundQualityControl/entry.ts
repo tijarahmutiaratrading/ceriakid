@@ -96,13 +96,45 @@ function auditStoryGame(game) {
   return [...new Set(issues)];
 }
 
-function buildReplacementTask(game, count) {
-  const isMiniGame = game.gameData?.miniGameGenerated === true || (MINI_CATEGORIES.includes(game.category) && !SUBJECTS.includes(game.category));
+function buildReplacementTask(game, count, learnFromIssues = []) {
+  const isStoryKid = game.gameData?.storyKid === true || game.category === 'story' || game.type === 'story_adventure';
+  const isMiniGame = !isStoryKid && (game.gameData?.miniGameGenerated === true || (MINI_CATEGORIES.includes(game.category) && !SUBJECTS.includes(game.category)));
+  const teachNote = learnFromIssues.length > 0 ? ` AVOID these past issues: ${learnFromIssues.join(', ')}.` : '';
+
+  if (isStoryKid) {
+    return {
+      taskName: `QC Story Replacement: ${game.title || 'Story Kid'}`,
+      ageGroup: game.ageGroup || 'prasekolah',
+      subject: 'story',
+      gamesCount: count,
+      questionsPerGame: Math.max(3, Math.min(Number(game.gameData?.scenes?.length || 5), 8)),
+      status: 'pending',
+      createdGames: 0,
+      errorMessage: JSON.stringify({ storyKid: true, theme: game.title || 'cerita kanak-kanak', note: `QC replacement.${teachNote}` })
+    };
+  }
   if (isMiniGame) {
-    return { taskName: `QC Mini Replacement: ${game.category}`, ageGroup: game.ageGroup || 'prasekolah', subject: game.category, gamesCount: count, questionsPerGame: Math.max(4, Math.min(Number(game.totalQuestions || game.gameData?.itemsPerSet || 4), 10)), status: 'pending', createdGames: 0, errorMessage: JSON.stringify({ theme: game.title || game.category, itemsPerSet: Math.max(4, Number(game.totalQuestions || 4)), modes: game.gameData?.mode ? [game.gameData.mode] : [] }) };
+    return { taskName: `QC Mini Replacement: ${game.category}`, ageGroup: game.ageGroup || 'prasekolah', subject: game.category, gamesCount: count, questionsPerGame: Math.max(4, Math.min(Number(game.totalQuestions || game.gameData?.itemsPerSet || 4), 10)), status: 'pending', createdGames: 0, errorMessage: JSON.stringify({ theme: game.title || game.category, itemsPerSet: Math.max(4, Number(game.totalQuestions || 4)), modes: game.gameData?.mode ? [game.gameData.mode] : [], teachNote: teachNote.trim() }) };
   }
   if (game.ageGroup === 'sekolah_rendah' && !game.darjah) return null;
-  return { taskName: `QC Replacement: ${game.title || game.category}`, ageGroup: game.ageGroup, ...(game.ageGroup === 'sekolah_rendah' && game.darjah ? { darjah: game.darjah } : {}), subject: game.category, gamesCount: count, questionsPerGame: Math.max(8, Math.min(Number(game.totalQuestions || 8), 20)), status: 'pending', createdGames: 0, errorMessage: 'Auto re-queue by background quality control after failed audit.' };
+  return { taskName: `QC Replacement: ${game.title || game.category}`, ageGroup: game.ageGroup, ...(game.ageGroup === 'sekolah_rendah' && game.darjah ? { darjah: game.darjah } : {}), subject: game.category, gamesCount: count, questionsPerGame: Math.max(8, Math.min(Number(game.totalQuestions || 8), 20)), status: 'pending', createdGames: 0, errorMessage: `Auto re-queue by QC after failed audit.${teachNote}` };
+}
+
+// ─── AUTO-FIX: Strip banned items from mini game (lightweight repair, no LLM needed) ───
+function tryFixMiniGameInPlace(game) {
+  const data = { ...(game.gameData || {}) };
+  let touched = false;
+  for (const key of ['pairs', 'items', 'words', 'tiles', 'scenes', 'challenges', 'letters', 'statements']) {
+    if (Array.isArray(data[key])) {
+      const before = data[key].length;
+      data[key] = data[key].filter(item => !BANNED_PATTERN.test(JSON.stringify(item)));
+      if (data[key].length !== before) touched = true;
+    }
+  }
+  // Must still have minimum playable content
+  const newCount = ['pairs', 'items', 'words', 'tiles', 'scenes', 'challenges', 'letters', 'statements'].reduce((s, k) => s + (Array.isArray(data[k]) ? data[k].length : 0), 0);
+  if (touched && newCount >= 4) return data;
+  return null;
 }
 
 // ─── AUTO-FIX: Re-generate a single bad question via LLM ───
@@ -289,28 +321,58 @@ Deno.serve(async (req) => {
     const passed = Math.max(0, total - failed.length);
     const score = total === 0 ? 0 : Math.round((passed / total) * 100);
 
+    // Breakdown by content type — helps admin understand WHERE issues are
+    const breakdown = { subject: { total: 0, failed: 0 }, mini: { total: 0, failed: 0 }, story: { total: 0, failed: 0 } };
+    for (const game of auditableGames) {
+      const isStoryKid = game.gameData?.storyKid || game.category === 'story' || game.type === 'story_adventure';
+      const isMini = !isStoryKid && (game.gameData?.miniGameGenerated || MINI_CATEGORIES.includes(game.category));
+      const bucket = isStoryKid ? 'story' : (isMini ? 'mini' : 'subject');
+      breakdown[bucket].total++;
+    }
+    for (const item of failed) {
+      const bucket = item.kind === 'story' ? 'story' : (item.kind === 'mini' ? 'mini' : 'subject');
+      breakdown[bucket].failed++;
+    }
+
     if (score >= MIN_PASS_SCORE && bucketRefillCount === 0 && stuckCleaned === 0) {
-      const payload = { success: true, status: 'passed', score, total, passed, failed: failed.length, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues })), message: `Quality score ${score}% — cukup baik.` };
+      const payload = { success: true, status: 'passed', score, total, passed, failed: failed.length, breakdown, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues, kind: item.kind })), message: `Quality score ${score}% — cukup baik. Subject ${breakdown.subject.failed}/${breakdown.subject.total}, Mini ${breakdown.mini.failed}/${breakdown.mini.total}, Story ${breakdown.story.failed}/${breakdown.story.total}.` };
       if (!force && body.auditOnly !== true) await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
       await createQcLog(base44, { action: body.auditOnly === true ? 'audit' : 'auto_audit', ...payload });
       return Response.json(payload);
     }
 
     if (body.auditOnly === true) {
-      const payload = { success: true, status: 'needs_repair', score, total, passed, failed: failed.length, sampleIssues: failed.slice(0, 10).map(item => ({ title: item.game.title, category: item.game.category, issues: item.issues })), message: `Quality score ${score}% — perlu repair.` };
+      const payload = { success: true, status: 'needs_repair', score, total, passed, failed: failed.length, breakdown, sampleIssues: failed.slice(0, 10).map(item => ({ title: item.game.title, category: item.game.category, issues: item.issues, kind: item.kind })), message: `Score ${score}%. Failed: Subject ${breakdown.subject.failed}, Mini ${breakdown.mini.failed}, Story ${breakdown.story.failed}. Perlu repair.` };
       await createQcLog(base44, { action: 'audit', ...payload });
       return Response.json(payload);
     }
 
-    // ─── Step 4: AUTO-FIX repairable subject games first (per-question LLM fix) ───
+    // ─── Step 4: AUTO-FIX ───
+    // 4a: Subject games — per-question LLM fix
+    // 4b: Mini games — lightweight in-place strip of banned items (no LLM cost)
     let autofixedGames = 0;
     let autofixedQuestions = 0;
+    let autofixedMiniGames = 0;
     const stillBroken = [];
     let autofixBudget = MAX_AUTOFIX_PER_RUN;
 
     for (const item of failed) {
-      if (autofixBudget <= 0) { stillBroken.push(item); continue; }
+      // 4b: Mini game lightweight fix (only banned_text issue, no structural problems)
+      if (item.kind === 'mini') {
+        const onlyBanned = item.issues.length === 1 && item.issues[0] === 'banned_text';
+        if (onlyBanned) {
+          const fixedData = tryFixMiniGameInPlace(item.game);
+          if (fixedData) {
+            await base44.asServiceRole.entities.Game.update(item.game.id, { gameData: fixedData, status: 'ready' });
+            autofixedMiniGames++;
+            continue;
+          }
+        }
+        stillBroken.push(item);
+        continue;
+      }
       if (item.kind !== 'subject') { stillBroken.push(item); continue; }
+      if (autofixBudget <= 0) { stillBroken.push(item); continue; }
       const hasStructuralIssue = (item.gameIssues || []).some(i => STRUCTURAL_ISSUES.has(i));
       if (hasStructuralIssue) { stillBroken.push(item); continue; }
       const perQ = item.perQuestion || [];
@@ -376,8 +438,10 @@ Deno.serve(async (req) => {
       const isStoryKid = game.gameData?.storyKid === true || item.kind === 'story';
       const isMini = !isStoryKid && MINI_CATEGORIES.includes(game.category) && !SUBJECTS.includes(game.category);
       const groupKey = isStoryKid ? 'storykid' : (isMini ? `mini|${game.category}` : `${game.ageGroup}|${game.darjah || ''}|${game.category}`);
-      const existing = grouped.get(groupKey) || { sample: game, count: 0, isMini, isStoryKid };
+      const existing = grouped.get(groupKey) || { sample: game, count: 0, isMini, isStoryKid, learnedIssues: new Set() };
       existing.count += 1;
+      // "Teach" — accumulate unique issues so the next generation prompt can avoid them
+      (item.issues || []).forEach(i => existing.learnedIssues.add(i));
       grouped.set(groupKey, existing);
       await base44.asServiceRole.entities.Game.delete(game.id);
       // Decrement count after delete
@@ -409,12 +473,9 @@ Deno.serve(async (req) => {
         skippedTasksAtCap++;
         continue;
       }
-      // Story kid: skip auto-queue (no replacement task type defined). Cap acts as ceiling only.
-      if (group.isStoryKid) {
-        continue;
-      }
       const replaceCount = Math.min(group.count, room);
-      const task = buildReplacementTask(group.sample, replaceCount);
+      const learnedIssues = [...group.learnedIssues];
+      const task = buildReplacementTask(group.sample, replaceCount, learnedIssues);
       if (task) {
         await base44.asServiceRole.entities.GameTask.create(task);
         createdTaskCount++;
@@ -422,6 +483,7 @@ Deno.serve(async (req) => {
     }
 
     const totalReplacementTasks = createdTaskCount + bucketRefillCount;
+    const totalAutofixed = autofixedGames + autofixedMiniGames;
     const payload = {
       success: true,
       status: 'repair_queued',
@@ -431,15 +493,18 @@ Deno.serve(async (req) => {
       passed,
       failedBeforeRepair: failed.length,
       failed: failed.length,
-      autofixedGames,
+      breakdown,
+      autofixedGames: totalAutofixed,
       autofixedQuestions,
+      autofixedMiniGames,
       stuckTasksCleaned: stuckCleaned,
       bucketRefills: bucketRefillCount,
       deletedThisRun: selected.length,
       deletedCount: selected.length,
       replacementTasks: totalReplacementTasks,
-      sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues })),
-      message: `Score ${score}%. Auto-fix: ${autofixedGames} games / ${autofixedQuestions} questions. Deleted: ${selected.length}. Replacement tasks: ${totalReplacementTasks}. Stuck cleaned: ${stuckCleaned}.`,
+      skippedAtCap: skippedTasksAtCap,
+      sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues, kind: item.kind })),
+      message: `Score ${score}%. Auto-fix: ${autofixedGames} subject + ${autofixedMiniGames} mini (${autofixedQuestions} questions). Deleted: ${selected.length}. Queue: ${totalReplacementTasks}. Stuck cleaned: ${stuckCleaned}. ${skippedTasksAtCap > 0 ? `Skipped ${skippedTasksAtCap} at cap.` : ''}`,
     };
     if (!force) await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
     await createQcLog(base44, { action: force ? 'repair' : 'auto_repair', ...payload });

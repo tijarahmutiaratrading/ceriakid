@@ -153,16 +153,38 @@ export default function QualityControlPanel({ onToast }) {
         </div>
       </div>
 
-      {/* Last repair summary — show what QC did */}
-      {(deletedCount > 0 || queuedCount > 0) && (
-        <div className="grid grid-cols-2 gap-2 mb-3">
-          <div className="rounded-2xl bg-orange-400/15 border border-orange-300/20 p-3 text-center">
-            <p className="text-2xl font-black text-orange-200">{deletedCount}</p>
-            <p className="text-orange-100/70 text-[10px] font-bold uppercase tracking-wider">Deleted</p>
+      {/* Breakdown by content type */}
+      {qc?.breakdown && (
+        <div className="grid grid-cols-3 gap-2 mb-3">
+          <div className="rounded-2xl bg-purple-400/15 border border-purple-300/20 p-2.5 text-center">
+            <p className="text-lg font-black text-purple-200">{qc.breakdown.subject?.failed || 0}<span className="text-xs text-purple-200/60">/{qc.breakdown.subject?.total || 0}</span></p>
+            <p className="text-purple-100/70 text-[10px] font-bold uppercase tracking-wider">📚 Subjek</p>
           </div>
-          <div className="rounded-2xl bg-blue-400/15 border border-blue-300/20 p-3 text-center">
-            <p className="text-2xl font-black text-blue-200">{queuedCount}</p>
-            <p className="text-blue-100/70 text-[10px] font-bold uppercase tracking-wider">Queued Replacement</p>
+          <div className="rounded-2xl bg-pink-400/15 border border-pink-300/20 p-2.5 text-center">
+            <p className="text-lg font-black text-pink-200">{qc.breakdown.mini?.failed || 0}<span className="text-xs text-pink-200/60">/{qc.breakdown.mini?.total || 0}</span></p>
+            <p className="text-pink-100/70 text-[10px] font-bold uppercase tracking-wider">🎮 Mini</p>
+          </div>
+          <div className="rounded-2xl bg-cyan-400/15 border border-cyan-300/20 p-2.5 text-center">
+            <p className="text-lg font-black text-cyan-200">{qc.breakdown.story?.failed || 0}<span className="text-xs text-cyan-200/60">/{qc.breakdown.story?.total || 0}</span></p>
+            <p className="text-cyan-100/70 text-[10px] font-bold uppercase tracking-wider">📖 Story</p>
+          </div>
+        </div>
+      )}
+
+      {/* Last repair summary — show what QC did */}
+      {(deletedCount > 0 || queuedCount > 0 || qc?.autofixedGames > 0) && (
+        <div className="grid grid-cols-3 gap-2 mb-3">
+          <div className="rounded-2xl bg-green-400/15 border border-green-300/20 p-2.5 text-center">
+            <p className="text-lg font-black text-green-200">{qc?.autofixedGames || 0}</p>
+            <p className="text-green-100/70 text-[10px] font-bold uppercase tracking-wider">✨ Auto-Fixed</p>
+          </div>
+          <div className="rounded-2xl bg-orange-400/15 border border-orange-300/20 p-2.5 text-center">
+            <p className="text-lg font-black text-orange-200">{deletedCount}</p>
+            <p className="text-orange-100/70 text-[10px] font-bold uppercase tracking-wider">🗑️ Deleted</p>
+          </div>
+          <div className="rounded-2xl bg-blue-400/15 border border-blue-300/20 p-2.5 text-center">
+            <p className="text-lg font-black text-blue-200">{queuedCount}</p>
+            <p className="text-blue-100/70 text-[10px] font-bold uppercase tracking-wider">📥 Queued</p>
           </div>
         </div>
       )}
