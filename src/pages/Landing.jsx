@@ -4,11 +4,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check, CheckCircle, XCircle } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
-import AppHeader from '@/components/AppHeader';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
-import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import FloatingWhatsApp from '@/components/landing/FloatingWhatsApp';
+
+// Asset URLs
+const BG_TOP = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/ff7efefb9_generated_image.png';
+const MASCOT_BOY = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fbf4ca9f6_generated_image.png';
+const MASCOT_GIRL = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0837608b2_generated_image.png';
+const MASCOT_ELEPHANT = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0f1e041a2_generated_image.png';
+const LOGO = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png';
 
 // Beta tester highlights — placeholder sehingga testimoni sebenar dikumpul
 const testimonials = [
@@ -27,7 +32,8 @@ const tiers = [
   features: ['50 game boleh dimainkan', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', '1 peranti sahaja 📱'],
   noFeatures: ['Sehingga 4 anak'],
   cta: 'Mulakan Sekarang',
-  highlighted: false
+  highlighted: false,
+  bgColor: 'from-cyan-300 to-blue-400'
 },
 {
   name: 'keluarga',
@@ -39,7 +45,8 @@ const tiers = [
   features: ['200 game semua peringkat boleh dimainkan', 'Semua subjek', 'Prasekolah & Sekolah Rendah', 'Tiada game dikunci 🔓', 'Sehingga 4 profil anak', 'Dashboard ibu bapa lengkap', 'Boleh guna offline 📲', 'Sokongan prioriti', 'Sehingga 4 peranti 📱📱📱📱'],
   noFeatures: [],
   cta: '🔥 Pilih Keluarga',
-  highlighted: true
+  highlighted: true,
+  bgColor: 'from-yellow-300 via-orange-400 to-pink-500'
 },
 {
   name: 'standard',
@@ -50,14 +57,19 @@ const tiers = [
   features: ['100 game boleh dimainkan', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Dashboard ibu bapa', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sehingga 2 peranti 📱📱'],
   noFeatures: ['Sehingga 4 anak'],
   cta: 'Pilih Standard',
-  highlighted: false
+  highlighted: false,
+  bgColor: 'from-purple-400 to-pink-400'
 }];
 
 
-const avatars = [
-'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/512f26c46_generated_image.png',
-'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e997c6e39_generated_image.png',
-'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png'];
+const faqList = [
+  { q: 'Bagaimana CeriaKid membantu?', icon: '💡', a: 'Game pembelajaran pendek yang sesuai dengan tahap anak. Belajar BM, English, Math, Sains, Jawi, Tamil & Mandarin sambil bermain.' },
+  { q: 'Pelan tahunan jelas', icon: '📅', a: 'Pelan tahunan dengan harga jelas. Tiada hidden fee. Mula dari RM49/tahun (≈RM4/bulan).' },
+  { q: 'Pembayaran FPX selamat', icon: '💰', a: 'Pembayaran melalui FPX yang selamat dan diiktiraf bank Malaysia.' },
+  { q: 'Pantau progress anak', icon: '📈', a: 'Dashboard ibu bapa lengkap — lihat markah, streak, subjek mana anak kuat/lemah.' },
+  { q: 'Adakah CeriaKid sesuai untuk Prasekolah?', icon: '🏫', a: 'Ya! Kandungan disusun ikut KSPK (Kurikulum Standard Prasekolah Kebangsaan).' },
+  { q: 'Apakah content untuk Sekolah Rendah?', icon: '📚', a: 'Subjek penuh KSSR Darjah 1–6 dengan ratusan game untuk setiap tahap.' },
+];
 
 
 export default function Landing() {
@@ -65,18 +77,15 @@ export default function Landing() {
   const navigate = useNavigate();
   const [selectedTierForCheckout, setSelectedTierForCheckout] = useState('keluarga');
   const [navVisible, setNavVisible] = useState(true);
-  const [paymentStatus, setPaymentStatus] = useState(null); // 'success' | 'failed' | null
+  const [paymentStatus, setPaymentStatus] = useState(null);
   const lastScrollY = useRef(0);
 
-  // Detect payment return from Chip
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const payment = params.get('payment');
     if (payment === 'success') {
       setPaymentStatus('success');
-      // Clean URL
       window.history.replaceState({}, '', '/');
-      // Refresh auth to pick up new subscription
       setTimeout(() => refreshAuth?.(), 1500);
     } else if (payment === 'failed') {
       setPaymentStatus('failed');
@@ -87,22 +96,19 @@ export default function Landing() {
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
-      if (currentY < 50) {
-        setNavVisible(true);
-      } else if (currentY > lastScrollY.current) {
-        setNavVisible(false);
-      } else {
-        setNavVisible(true);
-      }
+      if (currentY < 50) setNavVisible(true);
+      else if (currentY > lastScrollY.current) setNavVisible(false);
+      else setNavVisible(true);
       lastScrollY.current = currentY;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-
-
   const scrollToPricing = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToFaq = () => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToTestimonials = () => document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToFeatures = () => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
 
   const handleTierSelect = (tierName) => {
     setSelectedTierForCheckout(tierName);
@@ -112,14 +118,13 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-      {/* Background blobs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-1/3 -left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
-      <div className="relative">
+    <div className="min-h-screen font-nunito relative overflow-x-hidden" style={{ background: 'linear-gradient(180deg, #d8b4fe 0%, #f0abfc 15%, #fbcfe8 30%, #fef3c7 55%, #fde68a 70%, #bef264 88%, #86efac 100%)' }}>
+      
+      {/* Decorative floating elements — top */}
+      <div className="absolute top-32 left-4 sm:left-12 text-3xl sm:text-5xl animate-bounce" style={{ animationDuration: '3s' }}>⭐</div>
+      <div className="absolute top-40 right-6 sm:right-16 text-2xl sm:text-4xl animate-pulse">💜</div>
+      <div className="absolute top-60 left-10 text-2xl sm:text-3xl">✨</div>
+      <div className="absolute top-72 right-20 text-3xl">🌟</div>
 
       {/* ── PAYMENT STATUS BANNER ── */}
       <AnimatePresence>
@@ -133,11 +138,7 @@ export default function Landing() {
             }`}
           >
             <div className="flex items-center gap-3">
-              {paymentStatus === 'success' ? (
-                <CheckCircle className="w-6 h-6 flex-shrink-0" />
-              ) : (
-                <XCircle className="w-6 h-6 flex-shrink-0" />
-              )}
+              {paymentStatus === 'success' ? <CheckCircle className="w-6 h-6 flex-shrink-0" /> : <XCircle className="w-6 h-6 flex-shrink-0" />}
               <div>
                 {paymentStatus === 'success' ? (
                   <>
@@ -154,10 +155,7 @@ export default function Landing() {
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
               {paymentStatus === 'success' && (
-                <button
-                  onClick={() => navigate('/dashboard')}
-                  className="px-4 py-2 bg-white text-green-600 rounded-full font-black text-sm shadow"
-                >
+                <button onClick={() => navigate('/dashboard')} className="px-4 py-2 bg-white text-green-600 rounded-full font-black text-sm shadow">
                   Ke Dashboard →
                 </button>
               )}
@@ -167,495 +165,350 @@ export default function Landing() {
         )}
       </AnimatePresence>
 
-
-
-      {/* ── NAVBAR ── */}
+      {/* ── NAVBAR (Cartoony Style) ── */}
       <nav className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="max-w-6xl mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 sm:px-4 py-2.5 rounded-[1.75rem] pro-glass ring-1 ring-white/20">
-          <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-2xl shadow-lg ring-1 ring-white/40" />
-          <div className="hidden md:flex items-center justify-center gap-7 text-sm font-black text-white/75">
-            <a href="#features" className="hover:text-white transition-colors">Ciri-ciri</a>
-            <a href="#testimonials" className="hover:text-white transition-colors">Testimoni</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Harga</a>
-            <a href="#faq" className="hover:text-white transition-colors">Soalan Lazim</a>
+        <div className="max-w-6xl mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-3 sm:px-5 py-2.5 rounded-[2rem] shadow-2xl border-4 border-white" style={{ background: 'linear-gradient(135deg, #c084fc 0%, #e879f9 50%, #f0abfc 100%)' }}>
+          {/* Logo + Elephant */}
+          <div className="flex items-center gap-2">
+            <img src={LOGO} alt="CeriaKid" className="h-9 sm:h-11 rounded-2xl shadow-lg ring-2 ring-white" />
+            <img src={MASCOT_ELEPHANT} alt="Mascot" className="hidden sm:block h-12 w-12 object-contain" />
           </div>
-          <motion.button whileTap={{ scale: 0.95 }} onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')} className="px-4 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-lg hover:bg-white/95 transition-colors">
-            {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
+          
+          {/* Nav buttons */}
+          <div className="hidden md:flex items-center justify-center gap-2 lg:gap-3">
+            <button onClick={scrollToFeatures} className="px-3 lg:px-4 py-2 bg-white text-purple-700 rounded-full font-black text-xs lg:text-sm shadow-md hover:scale-105 transition-transform">
+              Ciri-ciri ⚙️
+            </button>
+            <button onClick={scrollToTestimonials} className="px-3 lg:px-4 py-2 bg-white text-purple-700 rounded-full font-black text-xs lg:text-sm shadow-md hover:scale-105 transition-transform">
+              Testimoni 💬
+            </button>
+            <button onClick={scrollToPricing} className="px-3 lg:px-4 py-2 bg-white text-purple-700 rounded-full font-black text-xs lg:text-sm shadow-md hover:scale-105 transition-transform">
+              Harga 💰
+            </button>
+            <button onClick={scrollToFaq} className="px-3 lg:px-4 py-2 bg-white text-purple-700 rounded-full font-black text-xs lg:text-sm shadow-md hover:scale-105 transition-transform">
+              Soalan Lazim ❓
+            </button>
+          </div>
+          
+          {/* Login button */}
+          <motion.button whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.05 }} onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')} className="px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-yellow-300 to-orange-400 text-purple-900 rounded-full font-black text-xs sm:text-sm shadow-lg border-2 border-white hover:shadow-xl transition-shadow">
+            {isAuthenticated ? 'Dashboard 🏠' : 'Log Masuk 🔓'}
           </motion.button>
         </div>
       </nav>
 
       {/* ── HERO ── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-12 sm:pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          
-          {/* Left: Text */}
-          <div>
-            {/* Social proof pill */}
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap sm:inline-flex items-center gap-2 max-w-full bg-white/12 border border-white/20 rounded-3xl sm:rounded-full px-3 sm:px-4 py-2 mb-6 sm:mb-8 shadow-xl backdrop-blur-xl">
-              <div className="flex -space-x-2 flex-shrink-0">
-                {avatars.map((a, i) =>
-                <img key={i} src={a} className="w-7 h-7 rounded-full border-2 border-white object-cover flex-shrink-0" />
-                )}
-              </div>
-              <div className="flex gap-0.5 flex-shrink-0">{[...Array(5)].map((_, i) => <span key={i} className="text-orange-400 text-xs">★</span>)}</div>
-              <span className="text-[11px] sm:text-xs font-black text-white/85 leading-snug min-w-0 flex-1 sm:flex-none">Dibina khas untuk <span className="text-yellow-300">anak Malaysia</span> 🇲🇾</span>
-            </motion.div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-12 sm:pb-20 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-[2.5rem] sm:rounded-[3rem] p-5 sm:p-8 md:p-10 shadow-2xl border-4 border-white relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 30%, #fef3c7 60%, #fff7ed 100%)' }}
+        >
+          {/* Decorative items inside hero */}
+          <div className="absolute top-6 left-8 text-3xl opacity-60">✏️</div>
+          <div className="absolute top-32 left-4 text-2xl opacity-50">📚</div>
+          <div className="absolute top-12 right-12 text-2xl">🍎</div>
+          <div className="absolute top-32 right-6 text-2xl">🍌</div>
 
-            {/* Headline */}
-             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight text-white mb-4">
-               Anak Suka Main Game?<br />{' '}
-               <span className="relative inline-block">
-                 <span className="relative z-10 text-black">Jadikan Ia</span>
-                 <span className="absolute inset-0 bg-yellow-300 rounded-lg transform -rotate-1 z-0"></span>
-               </span>
-               {' '}Masa Belajar 🎉
-             </motion.h1>
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 lg:gap-8 items-center">
+            {/* Left: Text */}
+            <div className="relative z-10 text-center lg:text-left">
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm sm:text-base font-black text-purple-800 mb-3">
+                Dibuat Khas untuk anak Malaysia ✨
+              </motion.p>
 
-             {/* Subtext */}
-             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="text-lg text-yellow-300 mb-2 font-bold">
-               Game pembelajaran KSPK untuk Prasekolah & KSSR untuk Sekolah Rendah
-             </motion.p>
-             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-sm sm:text-base text-white/80 mb-6 sm:mb-8 leading-relaxed">
-               CeriaKid bantu anak belajar BM, English, Matematik, Sains, Jawi, Tamil & Mandarin melalui game pendek, soalan interaktif dan dashboard ibu bapa — disusun ikut KSPK prasekolah dan KSSR sekolah rendah. ✅
-             </motion.p>
+              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] mb-4">
+                <span className="block bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent drop-shadow-sm" style={{ textShadow: '3px 3px 0 rgba(255,255,255,0.6)' }}>
+                  Anak Suka<br />Main Game?
+                </span>
+                <span className="block text-2xl sm:text-3xl md:text-4xl text-purple-700 mt-2">
+                  Jadikan ia Masa Belajar
+                </span>
+              </motion.h1>
 
-            {/* CTA */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="flex flex-col sm:flex-row gap-3 mb-6">
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm sm:text-base text-slate-700 font-bold mb-2">
+                Game pembelajaran KSPK untuk Prasekolah & KSSR untuk Sekolah Rendah.
+              </motion.p>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
+                CeriaKid bantu anak belajar BM, English, Matematik, Sains, Jawi, Tamil & Mandarin melalui game pendek, soalan interaktif dan dashboard ibu bapa — ditetap ikut KSPK prasekolah dan KSSR sekolah rendah 🇲🇾
+              </motion.p>
+
+              {/* CTA */}
               <motion.button
-                whileHover={{ scale: 1.04 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={scrollToPricing}
-                className="px-5 py-3 bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 text-white rounded-full font-black text-sm shadow-2xl shadow-orange-950/30 flex items-center gap-2 justify-center">
-                
-                Lihat Pelan Harga <ArrowRight className="w-4 h-4" />
+                className="px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 text-white rounded-full font-black text-base sm:text-lg shadow-2xl shadow-orange-500/50 inline-flex items-center gap-2 border-4 border-white"
+              >
+                Lihat Pakej Harga <span className="text-xl">👆</span>
               </motion.button>
 
-            </motion.div>
+              {/* Mascot boy below CTA (mobile) */}
+              <div className="lg:hidden flex justify-center mt-6">
+                <img src={MASCOT_BOY} alt="Pelajar" className="h-32 object-contain" />
+              </div>
 
-            {/* Trust badges */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex flex-wrap gap-2 text-xs sm:text-sm text-white/85">
-              {['✅ KSPK + KSSR', '✅ Tiada iklan', '✅ Dashboard ibu bapa'].map((t, i) =>
-              <span key={i} className="flex items-center gap-1 rounded-full border border-white/20 bg-white/12 px-2.5 py-1 font-bold text-white/80 shadow-sm backdrop-blur-xl sm:px-3">{t}</span>
-              )}
-            </motion.div>
+              {/* Trust badges */}
+              <div className="flex flex-wrap gap-2 mt-6 justify-center lg:justify-start">
+                <span className="px-3 py-1.5 bg-gradient-to-r from-yellow-300 to-orange-300 text-orange-900 rounded-full text-xs font-black shadow-md border-2 border-white">✅ KSPK + KSSR</span>
+                <span className="px-3 py-1.5 bg-gradient-to-r from-red-300 to-pink-300 text-red-900 rounded-full text-xs font-black shadow-md border-2 border-white">❌ Tiada Iklan</span>
+                <span className="px-3 py-1.5 bg-gradient-to-r from-green-300 to-emerald-300 text-green-900 rounded-full text-xs font-black shadow-md border-2 border-white">📊 Dashboard Ibu Bapa</span>
+              </div>
+            </div>
 
-
-          </div>
-
-          {/* Right: Game Demo */}
-          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, type: 'spring', damping: 20 }}>
+            {/* Right: Game demo card */}
             <div className="relative">
-              {/* Floating badge */}
-              <div className="absolute -top-4 -left-4 z-10 bg-slate-950/75 border border-white/20 rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-2 backdrop-blur-xl">
-                <span className="text-2xl">🎮</span>
-                <div>
-                  <p className="text-xs text-white/75 font-semibold">200+ Permainan</p>
-                  <p className="text-xs font-black text-yellow-300">Cuba sekarang!</p>
-                </div>
+              {/* Floating fruits */}
+              <div className="absolute -top-4 -left-2 text-4xl z-20 animate-bounce" style={{ animationDuration: '2s' }}>🍎</div>
+              <div className="absolute -top-2 -right-4 text-4xl z-20 animate-bounce" style={{ animationDuration: '2.5s' }}>🍌</div>
+              <div className="absolute bottom-12 -left-6 text-3xl z-20 animate-bounce" style={{ animationDuration: '3s' }}>🍇</div>
+
+              <div className="rounded-[2rem] p-3 shadow-2xl border-4 border-white" style={{ background: 'linear-gradient(135deg, #c084fc 0%, #f0abfc 100%)' }}>
+                <InteractiveGameDemo />
               </div>
-              <InteractiveGameDemo />
-              {/* Rating badge */}
-              <div className="absolute -bottom-4 -right-4 z-10 bg-slate-950/75 border border-white/20 rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-2 backdrop-blur-xl">
-                <span className="text-yellow-300 text-xl">⭐</span>
-                <div>
-                  <p className="text-xs text-white/75 font-semibold">Rating Ibu Bapa</p>
-                  <p className="text-sm font-black text-white">4.9 / 5.0</p>
-                </div>
-              </div>
+
+              {/* Mascot girl beside game (desktop only) */}
+              <img src={MASCOT_GIRL} alt="Pelajar" className="hidden lg:block absolute -bottom-12 -left-20 h-36 object-contain z-10" />
             </div>
-
-            {/* Mini badges below game demo */}
-            <div className="flex flex-wrap gap-2 mt-8 justify-center">
-              {[
-              { icon: '🏆', text: 'KSPK + KSSR' },
-              { icon: '🚫', text: 'Tiada Iklan' },
-              { icon: '📲', text: 'Offline' },
-              { icon: '🔒', text: '100% Selamat' },
-              { icon: '🧒', text: 'Mesra Kanak-kanak' }].
-              map((s, i) =>
-              <span key={i} className="flex items-center gap-1 bg-white/12 border border-white/20 rounded-full px-2.5 py-1 text-xs font-bold text-white/80 shadow-sm backdrop-blur-xl">
-                  {s.icon} {s.text}
-                </span>
-              )}
-            </div>
-          </motion.div>
-        </div>
-
-
-      </div>
-
-      {/* ── STATS STRIP ── */}
-      <div className="py-5 md:py-10 border-y border-orange-200/60 bg-white/95 shadow-inner">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 text-center">
-            {[
-            { num: '7+', label: 'Subjek Utama', icon: '📚' },
-            { num: '2', label: 'Peringkat Umur', icon: '🎯' },
-            { num: 'KSPK + KSSR', label: 'Standard Malaysia', icon: '🇲🇾' },
-            { num: '5-10', label: 'Minit Latihan Harian', icon: '🚀' }].
-            map((stat, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-            className={`px-3 py-3 md:px-6 md:py-4
-                  ${i % 2 !== 0 ? 'border-l border-orange-100' : ''}
-                  ${i >= 2 ? 'border-t border-white/40' : ''}
-                  md:${i % 4 !== 0 ? 'border-l' : 'border-l-0'}
-                  md:border-t-0
-                `}>
-                <div className="text-xl md:text-2xl mb-1">{stat.icon}</div>
-                <div className="text-3xl md:text-5xl font-black text-purple-700">{stat.num}</div>
-                <div className="text-slate-600 text-xs md:text-sm font-semibold mt-1 md:mt-2">{stat.label}</div>
-              </motion.div>
-            )}
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      <TrustedMarquee />
-
-      {/* ── PROBLEM SECTION ── */}
-      <div className="py-16 md:py-20 px-6 relative overflow-hidden bg-gradient-to-br from-rose-50 via-orange-50 to-yellow-50 text-slate-900">
-        <div className="max-w-4xl mx-auto relative z-10">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
-            <p className="text-4xl mb-3">😮‍💨</p>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Pening kepala bila<br />anak tak nak belajar?</h2>
-            <p className="text-slate-600 text-lg">Kalau salah satu ni rasa familiar — anda bukan keseorangan...</p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 items-stretch auto-rows-fr">
-            {[
-            { emoji: '😤', pain: '"Anak main game je, tak nak belajar"', desc: 'Screen time jadi perang setiap malam. Stress anak, stress ibu bapa.' },
-            { emoji: '💸', pain: '"Dah bayar tuisyen RM300, result sama je"', desc: 'Wang habis tapi anak masih tak faham apa yang diajar.' },
-            { emoji: '😰', pain: '"Exam dah dekat, anak masih tak hafal"', desc: 'Pressure menjelang peperiksaan. Semua orang dalam rumah tegang.' },
-            { emoji: '😪', pain: '"Kerja sampai malam, tak sempat nak ajar"', desc: 'Ibu bapa penat, anak perlukan bantuan. Tiada masa yang cukup.' }].
-            map((p, i) =>
-            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }} className="relative z-0 h-full min-h-[132px] md:min-h-[118px] flex items-start gap-3 sm:gap-4 bg-white border border-rose-100 rounded-2xl p-4 sm:p-5 shadow-xl shadow-rose-100/60 text-left min-w-0 overflow-hidden">
-                <span className="text-3xl w-10 h-10 flex-shrink-0 flex items-center justify-center">{p.emoji}</span>
-                <div className="min-w-0 flex-1">
-                  <p className="font-black text-slate-900 mb-1 leading-snug">{p.pain}</p>
-                  <p className="text-slate-600 text-sm leading-relaxed">{p.desc}</p>
-                </div>
-              </motion.div>
-            )}
-          </div>
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mt-10">
-            <p className="text-xl font-bold text-slate-700">Mestilah ada cara lain yang lebih senang...</p>
-            <p className="text-2xl font-black text-orange-500 mt-2">ADA. Jom tengok 👇</p>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* ── SOLUTION / FEATURES ── */}
-      <div id="features" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50 text-slate-900">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
-            <span className="inline-block bg-green-100 text-green-700 font-black px-4 py-1.5 rounded-full text-sm mb-4">✅ SOLUSI SCREEN TIME BERFAEDAH</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">Perkenalkan — <span className="text-orange-600">CeriaKid</span><br />Latihan Harian Yang Anak Tak Cepat Bosan</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">Permainan edukatif berasaskan topik sekolah Malaysia. Anak rasa macam main game, ibu bapa pula nampak perkembangan pembelajaran.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-            { icon: '🎮', title: 'Latihan Rasa Macam Game', desc: 'Soalan pendek, warna ceria dan feedback segera bantu anak kekal fokus tanpa rasa terbeban.' },
-            { icon: '📊', title: 'Ibu Bapa Boleh Pantau', desc: 'Lihat markah, percubaan dan topik yang anak perlukan lebih latihan melalui dashboard.' },
-            { icon: '📲', title: 'Sesuai Untuk Rutin Harian', desc: 'Gunakan 5–10 minit sehari di rumah, dalam kereta atau bila anak ada masa lapang.' }].
-            map((f, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white rounded-3xl p-7 border border-orange-100 text-center mx-auto hover:bg-orange-50 transition-all shadow-xl shadow-orange-100/70">
-                <div className="text-5xl mb-4">{f.icon}</div>
-                <h3 className="font-black text-slate-900 text-lg mb-2">{f.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">{f.desc}</p>
-              </motion.div>
-            )}
-          </div>
-
-        </div>
-      </div>
-
-      {/* ── SUBJECTS ── */}
-      <div className="py-12 md:py-16 px-6 bg-gradient-to-br from-yellow-50 via-orange-50 to-pink-50 text-slate-900">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
-            <span className="inline-block bg-orange-100 text-orange-700 border border-orange-300/70 font-black px-4 py-1.5 rounded-full text-sm mb-4">📚 SUBJEK PEMBELAJARAN</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Subjek Yang Anak Boleh Belajar</h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">Pilih topik mengikut silibus dan tahap anak — semuanya dalam gaya permainan yang menyeronokkan.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/866fc318d_generated_image.png', icon: '🇲🇾', sub: 'Bahasa Melayu', word: 'Baca • Eja • Faham', info: 'Latihan ayat mudah dan kosa kata harian.', color: 'from-blue-500 via-sky-400 to-cyan-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🇬🇧', sub: 'English', word: 'Read • Speak • Play', info: 'Belajar perkataan English dengan cara seronok.', color: 'from-emerald-500 via-green-400 to-lime-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🔢', sub: 'Matematik', word: 'Kira • Banding • Selesaikan', info: 'Nombor dan operasi asas dalam bentuk game.', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/866fc318d_generated_image.png', icon: '🧪', sub: 'Sains', word: 'Lihat • Tanya • Cuba', info: 'Kenal alam, haiwan dan eksperimen ringkas.', color: 'from-orange-500 via-amber-400 to-yellow-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🕌', sub: 'Jawi', word: 'Kenal • Sebut • Tulis', info: 'Huruf Jawi dan suku kata secara perlahan.', color: 'from-teal-500 via-cyan-400 to-blue-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' }].
-            map((s, i) =>
-            <motion.div key={s.sub} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ delay: i * 0.06 }} className="overflow-hidden rounded-2xl bg-white border border-orange-100 shadow-xl shadow-orange-100/70">
-                <div className="relative h-36 overflow-hidden">
-                  <img src={s.img} alt={`Budak belajar ${s.sub}`} className="w-full h-full object-cover" />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${s.color} opacity-55`} />
-                  <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/90 text-slate-900 font-black text-xs px-3 py-1.5 rounded-full shadow-md">{s.icon} {s.sub}</div>
-                </div>
-                <div className="p-4 text-left">
-                  <h3 className="font-black text-slate-900 text-lg leading-tight">{s.word}</h3>
-                  <div className="mt-3 bg-white/90 text-slate-800 rounded-xl px-3 py-2 shadow-lg">
-                    <p className="font-black text-xs text-slate-900">Info belajar</p>
-                    <p className="text-xs font-bold text-slate-600 leading-snug mt-0.5">{s.info}</p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ── INVESTOR WOW ── */}
-      <div className="py-12 md:py-16 px-6 bg-gradient-to-r from-yellow-100/95 via-orange-100/95 to-pink-100/95 text-slate-900 border-y border-yellow-200/30">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
-            <span className="inline-block bg-orange-100 text-orange-700 border border-orange-300/70 font-black px-4 py-1.5 rounded-full text-sm mb-4">🚀 SEMUA DALAM SATU APP</span>
-            <h2 className="text-3xl md:text-4xl font-black mb-3 text-slate-900">Lebih Mudah Untuk Anak Belajar, Lebih Senang Untuk Ibu Bapa Pantau</h2>
-            <p className="text-slate-700 max-w-2xl mx-auto">CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSPK/KSSR dan progress tracking dalam satu pengalaman yang mudah digunakan.</p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { icon: '🎮', title: 'Game Engine', desc: 'Soalan interaktif pelbagai format untuk subjek utama.' },
-              { icon: '📊', title: 'Parent Analytics', desc: 'Pantau skor, progress, streak dan prestasi anak.' },
-              { icon: '🔒', title: 'Pembelajaran Selamat', desc: 'Pengalaman tanpa iklan dan lebih terkawal untuk kanak-kanak.' }
-            ].map((item, i) => (
-              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="rounded-3xl p-5 border border-orange-200/70 bg-white/80 backdrop-blur-xl shadow-xl shadow-orange-200/30">
-                <div className="text-4xl mb-3">{item.icon}</div>
-                <h3 className="font-black text-lg mb-2 text-slate-900">{item.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
-              </motion.div>
+      {/* ── TRUST STRIP ── */}
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-7 shadow-2xl border-4 border-white relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #ec4899 0%, #f472b6 50%, #f0abfc 100%)' }}
+        >
+          {/* Pennant decoration */}
+          <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1">
+            {['🚩', '🎉', '🎊', '🚩', '🎉'].map((e, i) => (
+              <span key={i} className="text-lg">{e}</span>
             ))}
           </div>
+
+          {/* Stars left & right */}
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-4xl sm:text-5xl">⭐</div>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-4xl sm:text-5xl">⭐</div>
+
+          <div className="text-center relative z-10 px-12 sm:px-16">
+            <p className="text-xs sm:text-sm font-black text-white/90 tracking-widest mb-1">DIPAPARKAN & DIPERCAYAI OLEH</p>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white">Dipercayai 5,000+ Keluarga Malaysia 🇲🇾</h2>
+          </div>
+
+          <div className="flex flex-wrap gap-2 justify-center mt-4 relative z-10">
+            {[
+              { txt: '4.9 Rating', icon: '⭐', bg: 'from-yellow-300 to-orange-300', text: 'text-orange-900' },
+              { txt: 'Verified Safe', icon: '✅', bg: 'from-green-300 to-emerald-300', text: 'text-green-900' },
+              { txt: 'Learn & Play Together', icon: '🎯', bg: 'from-purple-300 to-violet-300', text: 'text-purple-900' },
+              { txt: 'Anak Malaysia', icon: '🇲🇾', bg: 'from-red-300 to-pink-300', text: 'text-red-900' },
+              { txt: 'Belajar Sambil Main', icon: '🎮', bg: 'from-blue-300 to-cyan-300', text: 'text-blue-900' },
+              { txt: 'Trusted by 3,000+', icon: '✨', bg: 'from-fuchsia-300 to-pink-300', text: 'text-fuchsia-900' },
+            ].map((b, i) => (
+              <span key={i} className={`px-3 py-1.5 rounded-full text-xs font-black shadow-md border-2 border-white bg-gradient-to-r ${b.bg} ${b.text}`}>
+                {b.icon} {b.txt}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* ── DECORATIVE WAVE/HILLS DIVIDER ── */}
+      <div className="relative h-32 sm:h-48 overflow-hidden z-0">
+        <div className="absolute inset-0 flex items-end justify-around px-4 pb-8">
+          <span className="text-3xl sm:text-4xl">🎈</span>
+          <span className="text-2xl sm:text-3xl">🎒</span>
+          <span className="text-3xl sm:text-4xl">🚌</span>
+          <span className="text-2xl sm:text-3xl">🪁</span>
+          <span className="text-3xl sm:text-4xl">⭐</span>
         </div>
       </div>
 
-      {/* ── HOW IT WORKS ── */}
-      <div className="py-12 md:py-16 px-6 relative">
-        <div className="max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
-            <h2 className="text-3xl font-black text-white mb-3">Mulakan Dalam 3 Langkah</h2>
-            <p className="text-white/65">Setup dalam 2 minit. Anak terus boleh mula belajar.</p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-            { step: '1', icon: '📲', title: 'Daftar & Langganan', desc: 'Buka app, pilih pelan, dan mula belajar dalam masa 2 minit.' },
-            { step: '2', icon: '🎯', title: 'Pilih Peringkat Anak', desc: 'Prasekolah atau Sekolah Rendah. App auto-suggest permainan yang sesuai.' },
-            { step: '3', icon: '🏆', title: 'Anak Terus Main & Belajar', desc: 'Pantau progress dari dashboard. Lihat markah naik minggu demi minggu.' }].
-            map((s, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="text-center">
-                <div className="w-14 h-14 bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 text-white rounded-full flex items-center justify-center font-black text-xl mx-auto mb-4 shadow-xl shadow-orange-950/30">{s.step}</div>
-                <div className="text-3xl mb-3">{s.icon}</div>
-                <h3 className="font-black text-white mb-2">{s.title}</h3>
-                <p className="text-white/65 text-sm">{s.desc}</p>
-              </motion.div>
-            )}
-          </div>
+      {/* ── FEATURES SECTION (Hidden anchor) ── */}
+      <div id="features" className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
+          <h2 className="text-3xl sm:text-4xl font-black text-purple-800 mb-3">Ciri-ciri Hebat CeriaKid ⚙️</h2>
+          <p className="text-purple-700 font-bold">Semua yang ibu bapa & anak perlukan dalam satu app</p>
+        </motion.div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[
+            { icon: '🎮', title: 'Game Pendek 5-10 Min', desc: 'Latihan harian yang anak tak cepat bosan.', bg: 'from-yellow-200 to-orange-200', border: 'border-orange-300' },
+            { icon: '📊', title: 'Dashboard Ibu Bapa', desc: 'Pantau markah, streak, dan subjek lemah anak.', bg: 'from-pink-200 to-rose-200', border: 'border-pink-300' },
+            { icon: '📚', title: 'KSPK + KSSR Sebenar', desc: 'Disusun ikut silibus rasmi Kementerian Pendidikan.', bg: 'from-purple-200 to-violet-200', border: 'border-purple-300' },
+            { icon: '🌐', title: '7 Bahasa', desc: 'BM, English, Math, Sains, Jawi, Tamil, Mandarin.', bg: 'from-blue-200 to-cyan-200', border: 'border-blue-300' },
+            { icon: '📲', title: 'Offline Mode', desc: 'Boleh main tanpa internet di kereta atau bila travel.', bg: 'from-green-200 to-emerald-200', border: 'border-green-300' },
+            { icon: '🔒', title: 'Tiada Iklan', desc: 'Persekitaran selamat untuk kanak-kanak.', bg: 'from-fuchsia-200 to-pink-200', border: 'border-fuchsia-300' },
+          ].map((f, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className={`rounded-3xl p-5 bg-gradient-to-br ${f.bg} border-4 ${f.border} shadow-xl hover:scale-105 transition-transform`}>
+              <div className="text-5xl mb-3">{f.icon}</div>
+              <h3 className="font-black text-purple-900 text-lg mb-1">{f.title}</h3>
+              <p className="text-slate-700 text-sm font-semibold">{f.desc}</p>
+            </motion.div>
+          ))}
         </div>
       </div>
 
       {/* ── TESTIMONIALS ── */}
-      <div id="testimonials" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-orange-50 via-rose-50 to-yellow-50 text-slate-900">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-14">
-            <div className="flex justify-center gap-1 mb-3">{[...Array(5)].map((_, i) => <span key={i} className="text-2xl text-orange-400">★</span>)}</div>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">Maklum Balas Daripada<br />Ujian Beta</h2>
-            <p className="text-slate-600">Komen ringkas daripada ibu bapa yang menyertai fasa ujian beta CeriaKid 👇</p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {testimonials.map((t, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-white rounded-3xl p-6 border border-orange-100 flex flex-col justify-between shadow-xl shadow-orange-100/70">
+      <div id="testimonials" className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
+          <div className="flex justify-center gap-1 mb-2">{[...Array(5)].map((_, i) => <span key={i} className="text-2xl text-orange-500">⭐</span>)}</div>
+          <h2 className="text-3xl sm:text-4xl font-black text-purple-800 mb-2">Apa Kata Ibu Bapa 💬</h2>
+          <p className="text-purple-700 font-bold">Maklum balas daripada keluarga yang menggunakan CeriaKid</p>
+        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {testimonials.map((t, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-white rounded-3xl p-6 border-4 border-purple-200 shadow-xl">
+              <div className="flex gap-1 mb-3">{[...Array(t.stars)].map((_, j) => <span key={j} className="text-orange-500">⭐</span>)}</div>
+              <p className="text-slate-700 mb-4 text-sm font-semibold">"{t.quote}"</p>
+              <div className="inline-block bg-gradient-to-r from-green-200 to-emerald-200 text-green-900 text-xs font-black px-3 py-1 rounded-full mb-3 border-2 border-green-300">✅ {t.highlight}</div>
+              <div className="flex items-center gap-3 pt-3 border-t-2 border-purple-100">
+                <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-purple-300" />
                 <div>
-                  <div className="flex gap-1 mb-3">{[...Array(t.stars)].map((_, j) => <span key={j} className="text-orange-400">★</span>)}</div>
-                  <p className="text-slate-700 mb-4 leading-relaxed text-sm">"{t.quote}"</p>
-                  <div className="inline-block bg-green-100 text-green-700 text-xs font-black px-3 py-1 rounded-full mb-4">✅ {t.highlight}</div>
+                  <p className="font-black text-purple-900 text-sm">{t.name}</p>
+                  <p className="text-xs text-slate-500">{t.location}</p>
                 </div>
-                <div className="flex items-center gap-3 pt-3 border-t border-orange-100">
-                  <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-orange-200" />
-                  <div>
-                    <p className="font-black text-slate-900 text-sm">{t.name}</p>
-                    <p className="text-xs text-slate-500">{t.location}</p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
 
       {/* ── PRICING ── */}
-      <div id="pricing" className="py-12 md:py-16 px-6 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
-            <span className="inline-block bg-green-500/25 text-green-100 font-black px-4 py-1.5 rounded-full text-sm mb-4 border border-green-300/30">
-              Pelan tahunan mesra bajet keluarga
-            </span>
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Pilih Pelan Anda</h2>
-            <p className="text-white/60">Pilih pelan yang sesuai untuk umur anak. Semua pelan tahunan dan mesra bajet keluarga.</p>
-          </motion.div>
+      <div id="pricing" className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-10">
+          <h2 className="text-3xl sm:text-4xl font-black text-purple-800 mb-3">Pilih Pakej Harga 💰</h2>
+          <p className="text-purple-700 font-bold">Pelan tahunan mesra bajet keluarga</p>
+        </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
-            {tiers.map((tier, i) =>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {tiers.map((tier, i) => (
             <motion.div
               key={tier.name}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className={`rounded-3xl p-6 relative border-2 transition-all ${
-              tier.highlighted ?
-              'border-yellow-200/80 shadow-2xl shadow-yellow-950/30 md:scale-105' :
-              'border-white/20 shadow-md hover:border-white/40'}`}
-              style={tier.highlighted ? 
-                { background: 'linear-gradient(135deg, rgba(251,191,36,0.98), rgba(245,158,11,0.96), rgba(217,119,6,0.94))', backdropFilter: 'blur(20px)' } :
-                { background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }
-              }
-              >
-              
-                {tier.savings &&
-                <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-white text-orange-700 border border-white' : 'bg-white/15 text-white border border-white/20'}`}>
-                   💰 {tier.savings}
-                 </div>
-                }
-
-                <h3 className={`text-2xl font-black mb-2 ${tier.highlighted ? 'text-slate-950' : 'text-white'}`}>{tier.nameMY}</h3>
-
-                <div className="flex items-baseline gap-1 mb-0.5">
-                 <span className={`text-3xl font-black ${tier.highlighted ? 'text-slate-950' : 'text-yellow-300'}`}>RM{tier.priceMYR}</span>
-                 <span className={`text-sm font-bold ${tier.highlighted ? 'text-slate-800' : 'text-white/60'}`}>{tier.period}</span>
+              className={`rounded-3xl p-6 relative border-4 border-white shadow-2xl bg-gradient-to-br ${tier.bgColor} ${tier.highlighted ? 'md:scale-105 md:-mt-4' : ''}`}
+            >
+              {tier.savings && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-purple-700 text-xs font-black px-3 py-1 rounded-full shadow-lg border-2 border-purple-300">
+                  💰 {tier.savings}
                 </div>
-                <p className={`text-xs font-bold mb-6 ${tier.highlighted ? 'text-slate-800' : 'text-white/50'}`}>
-                 ≈ RM{tier.perMonth}/bulan
-                </p>
+              )}
 
-                <motion.button
+              <h3 className="text-2xl font-black mb-2 text-white drop-shadow-md">{tier.nameMY}</h3>
+
+              <div className="flex items-baseline gap-1 mb-0.5">
+                <span className="text-3xl font-black text-white drop-shadow-md">RM{tier.priceMYR}</span>
+                <span className="text-sm font-bold text-white/90">{tier.period}</span>
+              </div>
+              <p className="text-xs font-bold mb-5 text-white/80">≈ RM{tier.perMonth}/bulan</p>
+
+              <motion.button
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleTierSelect(tier.name)}
-                className={`w-full py-3.5 rounded-2xl font-black text-base mb-6 shadow-md transition-all ${
-                tier.highlighted ? 'bg-slate-950 text-yellow-200 hover:bg-slate-900 shadow-slate-950/30' : 'bg-orange-600 text-white hover:bg-orange-700'} ${
-                selectedTierForCheckout === tier.name ? 'ring-4 ring-yellow-300' : ''}`}>
-                
-                  {tier.cta}
-                </motion.button>
+                className={`w-full py-3 rounded-2xl font-black text-base mb-5 shadow-lg border-2 border-white bg-white text-purple-700 hover:bg-purple-50 transition-colors ${
+                  selectedTierForCheckout === tier.name ? 'ring-4 ring-yellow-300' : ''
+                }`}
+              >
+                {tier.cta}
+              </motion.button>
 
-                <div className="space-y-2.5">
-                  {tier.features.map((f, j) =>
-                <div key={j} className="flex items-center gap-2 text-sm font-semibold text-white">
-                      <Check className="w-4 h-4 text-green-400 flex-shrink-0" /> {f}
-                    </div>
-                )}
-                  {tier.noFeatures.map((f, j) =>
-                <div key={j} className={`flex items-center gap-2 text-sm font-semibold opacity-40 ${tier.highlighted ? 'text-slate-950' : 'text-white'}`}>
-                      <span className="w-4 flex-shrink-0">✕</span> {f}
-                    </div>
-                )}
-                </div>
-              </motion.div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ── CHECKOUT FORM ── */}
-      <div className="py-12 md:py-16 px-6 bg-gradient-to-br from-orange-50 via-yellow-50 to-pink-50 border-y border-orange-100">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-8">
-            <span className="inline-block bg-orange-100 text-orange-700 border border-orange-300/70 font-black px-4 py-1.5 rounded-full text-sm mb-4">Langkah terakhir</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Daftar & Aktifkan Akaun</h2>
-            <p className="text-slate-600 max-w-xl mx-auto">Isi maklumat ringkas untuk teruskan pembayaran FPX yang selamat.</p>
-          </motion.div>
-
-          <motion.div
-            id="checkout-form"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="border-2 border-orange-200/70 rounded-3xl p-4 md:p-6 max-w-lg mx-auto shadow-xl shadow-orange-200/30 bg-white/90 backdrop-blur-xl">
-            
-            <div className="mb-4">
-              <h3 className="text-xl md:text-2xl font-black text-slate-900">Daftar & Bayar 🔒</h3>
-              <p className="text-xs md:text-sm text-slate-600 mt-1 leading-snug">Pilih pakej, isi maklumat dan teruskan ke pembayaran FPX yang selamat.</p>
-            </div>
-            <PricingCheckout selectedTier={selectedTierForCheckout} onTierChange={setSelectedTierForCheckout} />
-          </motion.div>
-
-          {/* Trust */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-5 border border-orange-200/70 rounded-2xl p-3 md:p-4 text-center max-w-xl mx-auto shadow-lg shadow-orange-200/25 bg-white/85 backdrop-blur-xl">
-            <div className="text-2xl mb-1">🛡️</div>
-            <h3 className="text-base font-black text-slate-900 mb-1">Direka Untuk Kanak-kanak Malaysia</h3>
-            <p className="text-slate-600 text-xs md:text-sm leading-snug">Tanpa iklan, kandungan mesra keluarga, progress boleh dipantau ibu bapa, dan pembelajaran disusun mengikut tahap umur. 💪</p>
-          </motion.div>
-
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2 max-w-3xl mx-auto text-center">
-            {['🔒 Pembayaran FPX selamat', '💳 Pelan tahunan jelas', '📊 Pantau progress anak'].map((item) => (
-              <div key={item} className="rounded-xl bg-white/90 border border-orange-200/70 px-3 py-2 text-slate-800 text-xs md:text-sm font-bold shadow-sm">
-                {item}
+              <div className="space-y-2">
+                {tier.features.map((f, j) => (
+                  <div key={j} className="flex items-start gap-2 text-xs font-semibold text-white">
+                    <Check className="w-4 h-4 text-white flex-shrink-0 mt-0.5" /> {f}
+                  </div>
+                ))}
+                {tier.noFeatures.map((f, j) => (
+                  <div key={j} className="flex items-start gap-2 text-xs font-semibold text-white/60">
+                    <span className="w-4 flex-shrink-0">✕</span> {f}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </motion.div>
+          ))}
         </div>
       </div>
 
-      {/* ── FINAL CTA ── */}
-      <div className="py-12 md:py-16 px-6 text-white border-y border-purple-300/25 bg-gradient-to-br from-violet-950 via-purple-900 to-fuchsia-900">
-        <div className="max-w-3xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
-            <p className="text-5xl mb-5">🎓</p>
-            <h2 className="text-3xl md:text-4xl font-black mb-4">Anak Anda Layak Dapat<br />Yang Terbaik</h2>
-            <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">Mulakan dengan latihan pendek yang anak boleh konsisten buat setiap hari — lebih mudah, lebih ceria, lebih teratur.</p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={scrollToPricing}
-              className="px-8 py-4 bg-white text-game-purple rounded-full font-black text-lg shadow-2xl inline-flex items-center gap-3">
-              
-              🎮 Pilih Pelan Sekarang <ArrowRight className="w-6 h-6" />
-            </motion.button>
-            <p className="text-white/80 text-sm mt-5">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Tanpa iklan &nbsp;•&nbsp; ✅ Dashboard ibu bapa</p>
-          </motion.div>
-        </div>
+      {/* ── CHECKOUT ── */}
+      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 pb-12">
+        <motion.div
+          id="checkout-form"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="rounded-3xl p-5 sm:p-7 shadow-2xl border-4 border-white bg-white"
+        >
+          <div className="mb-4 text-center">
+            <h3 className="text-xl sm:text-2xl font-black text-purple-800">Daftar & Bayar 🔒</h3>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">Pilih pakej, isi maklumat dan teruskan ke pembayaran FPX yang selamat.</p>
+          </div>
+          <PricingCheckout selectedTier={selectedTierForCheckout} onTierChange={setSelectedTierForCheckout} />
+        </motion.div>
       </div>
 
       {/* ── FAQ ── */}
-      <div id="faq" className="py-12 md:py-16 px-6 relative bg-gradient-to-br from-amber-100 via-yellow-200 to-orange-300 text-slate-900">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-black text-slate-900 mb-3">Soalan Lazim 🤔</h2>
-            <p className="text-slate-600">Jawapan ringkas sebelum ibu bapa mula menggunakan CeriaKid.</p>
-          </div>
-          <div className="space-y-4">
-            {[
-            { q: 'Adakah selamat untuk anak?', a: 'Ya, 100%! Tiada iklan, tiada pop-up, tiada chat dengan orang asing. App direka khas untuk keselamatan kanak-kanak.' },
-            { q: 'Apakah peranti yang disokong?', a: 'Semua jenis smartphone, tablet, dan komputer. iOS, Android, dan browser. Boleh download untuk guna offline.' },
-            { q: 'Bagaimana langganan berfungsi?', a: 'CeriaKid menggunakan pelan tahunan. Anda boleh semak status langganan dan maklumat akaun di bahagian tetapan selepas mendaftar.' },
-            { q: 'Adakah ikut standard pembelajaran Malaysia?', a: 'Ya — Prasekolah disusun ikut KSPK (Kurikulum Standard Prasekolah Kebangsaan), manakala Sekolah Rendah ikut KSSR (Kurikulum Standard Sekolah Rendah) Darjah 1–6.' },
-            { q: 'Berapa anak boleh guna?', a: 'Pelan Asas untuk Prasekolah (1 anak), Standard untuk Sekolah Rendah (1 anak). Pelan Keluarga untuk kedua-dua peringkat dengan sehingga 4 profil anak — jimat lebih!' },
-            { q: 'Macam mana nak mula?', a: 'Pilih pelan, isikan maklumat, bayar melalui FPX, dan anak terus boleh mula belajar dalam masa 2 minit!' }].
-            map((faq, i) =>
-            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl p-5 border border-orange-100 hover:bg-orange-50 transition-all shadow-lg shadow-orange-100/60">
-                <p className="font-black text-slate-900 mb-1.5">❓ {faq.q}</p>
-                <p className="text-slate-600 text-sm leading-relaxed">{faq.a}</p>
-              </motion.div>
-            )}
-          </div>
+      <div id="faq" className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pb-12">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-8">
+          <h2 className="text-3xl sm:text-4xl font-black text-purple-800 mb-2">Soalan Lazim 🤔</h2>
+        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqList.map((faq, i) => (
+            <motion.details
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05 }}
+              className="bg-white rounded-2xl p-4 border-4 border-white shadow-xl cursor-pointer hover:shadow-2xl transition-shadow group"
+              style={{ background: 'linear-gradient(135deg, #ede9fe 0%, #fae8ff 100%)' }}
+            >
+              <summary className="font-black text-purple-900 text-sm sm:text-base list-none flex items-center gap-2">
+                <span className="flex-1">{faq.q}</span>
+                <span className="text-xl flex-shrink-0">{faq.icon}</span>
+              </summary>
+              <p className="text-slate-700 text-xs sm:text-sm mt-2 font-semibold leading-relaxed">{faq.a}</p>
+            </motion.details>
+          ))}
         </div>
       </div>
 
       {/* ── FOOTER ── */}
-      <footer className="text-white py-5 text-center md:py-6 relative bg-slate-950 border-t border-white/10">
-        <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
-        <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
-        <div className="flex justify-center gap-6 text-xs text-white/60">
-          <Link to="/terms" className="cursor-pointer hover:text-white">Terma Penggunaan</Link>
-          <Link to="/privacy" className="cursor-pointer hover:text-white">Dasar Privasi</Link>
-          <Link to="/contact" className="cursor-pointer hover:text-white">Hubungi Kami</Link>
+      <footer className="relative z-10 pb-8 pt-6 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Sun + Wood sign */}
+          <div className="flex items-center justify-between mb-6 px-4">
+            <div className="bg-gradient-to-br from-amber-700 to-amber-900 text-yellow-100 px-5 py-2.5 rounded-2xl font-black text-sm shadow-xl border-4 border-amber-600 transform -rotate-3">
+              CeriaKid @ 2026
+            </div>
+            <div className="text-6xl animate-pulse">☀️</div>
+          </div>
+
+          {/* Tagline */}
+          <div className="text-center mb-4">
+            <div className="inline-block bg-white px-5 py-2 rounded-full shadow-lg border-2 border-purple-200">
+              <p className="font-black text-purple-900 text-xs sm:text-sm">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
+            </div>
+          </div>
+
+          {/* Footer links */}
+          <div className="flex flex-wrap justify-center gap-2">
+            <Link to="/terms" className="px-4 py-1.5 bg-white text-purple-700 rounded-full text-xs font-black shadow-md border-2 border-purple-200 hover:scale-105 transition-transform">
+              Terma Penggunaan
+            </Link>
+            <Link to="/privacy" className="px-4 py-1.5 bg-white text-purple-700 rounded-full text-xs font-black shadow-md border-2 border-purple-200 hover:scale-105 transition-transform">
+              Dasar Privasi
+            </Link>
+            <Link to="/contact" className="px-4 py-1.5 bg-white text-purple-700 rounded-full text-xs font-black shadow-md border-2 border-purple-200 hover:scale-105 transition-transform">
+              Hubungi Kami
+            </Link>
+          </div>
         </div>
       </footer>
 
       <FloatingWhatsApp />
-
-      </div>
-    </div>);
-
+    </div>
+  );
 }
