@@ -170,9 +170,12 @@ export default function Landing() {
       {/* ── NAVBAR ── */}
       <nav className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="max-w-md sm:max-w-3xl mx-auto w-full px-4 py-3 rounded-3xl shadow-2xl border border-white/30" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))', backdropFilter: 'blur(12px)', boxShadow: '0 8px 32px rgba(31, 16, 92, 0.2)' }}>
-          {/* Top row: Centered navigation */}
-          <div className="flex items-center justify-center gap-8 sm:gap-10">
-            {/* Desktop: show text links + CTA inline */}
+          {/* Top row: Logo + Centered nav + CTA/Menu */}
+          <div className="flex items-center justify-between sm:justify-between">
+            {/* Logo */}
+            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 rounded-xl shadow flex-shrink-0" />
+            
+            {/* Desktop: centered text links + CTA */}
             <div className="hidden sm:flex items-center gap-6">
               <a href="#features" className="text-white/80 hover:text-white font-bold text-sm transition-colors">
                 Ciri-ciri
@@ -192,7 +195,7 @@ export default function Landing() {
                 className="px-5 py-2 rounded-full font-black text-white text-sm shadow-lg"
                 style={{ background: 'linear-gradient(135deg, #A855F7, #EC4899)' }}
               >
-                {isAuthenticated ? '📊 Dashboard' : '🔓 Log Masuk'}
+                {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
               </motion.button>
             </div>
 
