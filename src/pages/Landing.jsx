@@ -192,7 +192,7 @@ export default function Landing() {
                 whileTap={{ scale: 0.97 }}
                 onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
                 className="px-5 py-2 rounded-full font-black text-white text-sm shadow-lg"
-                style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)' }}
+                style={{ background: 'linear-gradient(135deg, #A855F7, #EC4899)' }}
               >
                 {isAuthenticated ? '📊 Dashboard' : '🔓 Log Masuk'}
               </motion.button>
