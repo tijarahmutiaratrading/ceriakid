@@ -133,7 +133,7 @@ function ParentDashboardPreview() {
         ))}
       </div>
       <div className="bg-white rounded-2xl p-4 border border-orange-100 shadow-sm">
-        <p className="font-black text-slate-900 text-sm mb-3">📊 Prestasi Aqil minggu ini</p>
+        <p className="font-black text-slate-900 text-sm mb-3 text-center">📊 Prestasi Aqil minggu ini</p>
         {[
           { sub: 'BM', score: 85, color: 'bg-blue-500' },
           { sub: 'Math', score: 92, color: 'bg-purple-500' },
@@ -171,7 +171,7 @@ function ProgressPreview() {
         </div>
       </div>
       <div className="bg-white rounded-2xl p-4 border border-yellow-100 shadow-sm">
-        <p className="font-black text-slate-900 text-sm mb-3">🏅 Pencapaian</p>
+        <p className="font-black text-slate-900 text-sm mb-3 text-center">🏅 Pencapaian</p>
         <div className="grid grid-cols-3 gap-2">
           {[
             { badge: '🏆', name: '10 Games', unlocked: true },
@@ -189,7 +189,7 @@ function ProgressPreview() {
         </div>
       </div>
       <div className="bg-white rounded-2xl p-4 border border-purple-100 shadow-sm">
-        <p className="font-black text-slate-900 text-sm mb-3">📈 Markah 7 Hari Lepas</p>
+        <p className="font-black text-slate-900 text-sm mb-3 text-center">📈 Markah 7 Hari Lepas</p>
         <div className="flex items-end gap-1.5 h-20">
           {[60, 75, 50, 90, 85, 70, 92].map((v, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
@@ -216,11 +216,11 @@ function Section({ number, badge, badgeColor, title, desc, children }) {
       className="mb-16 md:mb-20"
     >
       {/* Section label */}
-      <div className="flex items-center gap-3 mb-5">
-        <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-white text-sm shadow-md ${badgeColor}`}>{number}</div>
-        <span className={`inline-block font-black px-4 py-1.5 rounded-full text-sm border ${badge}`}>{title}</span>
-      </div>
-      <p className="text-slate-600 mb-6 max-w-xl">{desc}</p>
+       <div className="flex items-center justify-center gap-3 mb-5">
+         <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-white text-sm shadow-md ${badgeColor}`}>{number}</div>
+         <span className={`inline-block font-black px-4 py-1.5 rounded-full text-sm border ${badge}`}>{title}</span>
+       </div>
+       <p className="text-slate-600 mb-6 max-w-xl text-center mx-auto">{desc}</p>
 
       {/* Phone frame */}
       <div className="bg-white rounded-3xl shadow-2xl shadow-orange-200/60 border border-orange-100 overflow-hidden max-w-lg mx-auto">
@@ -279,7 +279,7 @@ export default function AppPreviewShowcase() {
         >
           <div className="space-y-5">
             <div>
-              <p className="font-black text-slate-800 text-sm mb-3">📚 Games Subjek (KSPK + KSSR)</p>
+              <p className="font-black text-slate-800 text-sm mb-3 text-center">📚 Games Subjek (KSPK + KSSR)</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {[
                   { icon: '🇲🇾', name: 'Bahasa Melayu', games: 42, color: 'from-blue-500 to-cyan-400' },
@@ -298,7 +298,7 @@ export default function AppPreviewShowcase() {
               </div>
             </div>
             <div>
-              <p className="font-black text-slate-800 text-sm mb-3">🎮 Mini Games (Genius Hub)</p>
+              <p className="font-black text-slate-800 text-sm mb-3 text-center">🎮 Mini Games (Genius Hub)</p>
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { icon: '🧠', name: 'Memory Master', desc: 'Latih daya ingatan' },
