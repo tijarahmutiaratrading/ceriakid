@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 const VARIANTS = {
   // Deep dark — hero-like
   dark: {
-    bg: 'bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-950',
+    bg: 'bg-[#0F0B1E]',
     blobs: (
       <>
         <div className="absolute top-10 -left-32 w-96 h-96 rounded-full bg-pink-500/10 blur-3xl pointer-events-none" />
@@ -24,7 +24,7 @@ const VARIANTS = {
 
   // ALARM / problem section — warm red/orange tones
   alarm: {
-    bg: 'bg-gradient-to-br from-rose-950 via-red-900 to-orange-950',
+    bg: 'bg-[#1A0E1F]',
     blobs: (
       <>
         <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-red-500/15 blur-3xl pointer-events-none" />
@@ -41,7 +41,7 @@ const VARIANTS = {
 
   // SOLUTION — bright optimistic teal/emerald
   bright: {
-    bg: 'bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50',
+    bg: 'bg-[#F8FAFC]',
     blobs: (
       <>
         <div className="absolute top-10 -left-20 w-80 h-80 rounded-full bg-emerald-300/30 blur-3xl pointer-events-none" />
@@ -58,7 +58,7 @@ const VARIANTS = {
 
   // CREAM warm — like a friendly notebook
   cream: {
-    bg: 'bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50',
+    bg: 'bg-[#FFFBF5]',
     blobs: (
       <>
         <div className="absolute top-10 -left-20 w-80 h-80 rounded-full bg-orange-300/30 blur-3xl pointer-events-none" />
@@ -75,7 +75,7 @@ const VARIANTS = {
 
   // VIBRANT purple/pink — fun & playful
   vibrant: {
-    bg: 'bg-gradient-to-br from-fuchsia-900 via-purple-800 to-indigo-900',
+    bg: 'bg-[#140B24]',
     blobs: (
       <>
         <div className="absolute top-10 left-10 w-80 h-80 rounded-full bg-pink-400/20 blur-3xl pointer-events-none" />
@@ -92,7 +92,7 @@ const VARIANTS = {
 
   // SOFT sky — calm & trustworthy
   sky: {
-    bg: 'bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50',
+    bg: 'bg-[#F5F7FB]',
     blobs: (
       <>
         <div className="absolute top-10 -left-20 w-80 h-80 rounded-full bg-sky-300/30 blur-3xl pointer-events-none" />
@@ -108,7 +108,7 @@ const VARIANTS = {
 
   // MIDNIGHT — premium pricing feel
   midnight: {
-    bg: 'bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950',
+    bg: 'bg-[#0A0717]',
     blobs: (
       <>
         <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-purple-500/15 blur-3xl pointer-events-none" />
