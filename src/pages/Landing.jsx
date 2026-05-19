@@ -174,19 +174,19 @@ export default function Landing() {
           <div className="flex items-center justify-between">
             <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 rounded-xl shadow" />
             
-            {/* Desktop: show all pills + CTA inline */}
-            <div className="hidden sm:flex items-center gap-2">
-              <a href="#features" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-purple-50 border-2 border-purple-200 text-purple-700 font-black text-sm hover:bg-purple-100 hover:scale-105 transition-all">
-                Ciri-ciri <span>⚙️</span>
+            {/* Desktop: show text links + CTA inline */}
+            <div className="hidden sm:flex items-center gap-6">
+              <a href="#features" className="text-white/80 hover:text-white font-bold text-sm transition-colors">
+                Ciri-ciri
               </a>
-              <a href="#testimonials" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-pink-50 border-2 border-pink-200 text-pink-700 font-black text-sm hover:bg-pink-100 hover:scale-105 transition-all">
-                Testimoni <span>💬</span>
+              <a href="#testimonials" className="text-white/80 hover:text-white font-bold text-sm transition-colors">
+                Testimoni
               </a>
-              <a href="#pricing" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-amber-50 border-2 border-amber-200 text-amber-700 font-black text-sm hover:bg-amber-100 hover:scale-105 transition-all">
-                Harga <span>💰</span>
+              <a href="#pricing" className="text-white/80 hover:text-white font-bold text-sm transition-colors">
+                Harga
               </a>
-              <a href="#faq" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-blue-50 border-2 border-blue-200 text-blue-700 font-black text-sm hover:bg-blue-100 hover:scale-105 transition-all">
-                FAQ <span>❓</span>
+              <a href="#faq" className="text-white/80 hover:text-white font-bold text-sm transition-colors">
+                FAQ
               </a>
               <motion.button
                 whileTap={{ scale: 0.97 }}
