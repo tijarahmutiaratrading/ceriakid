@@ -6,12 +6,13 @@ import { Crown, Check, X, Loader, ArrowUp } from 'lucide-react';
 // Tier hierarchy — used to filter what's shown as an upgrade option
 const TIER_ORDER = ['free', 'asas', 'standard', 'keluarga'];
 
+const TIER_PRICES = { free: 0, asas: 49, standard: 99, keluarga: 199 };
+
 const UPGRADE_TIERS = {
   asas: {
     name: 'asas',
     nameMY: '🌱 Asas',
     priceMYR: 49,
-    perMonth: '4.08',
     color: 'from-green-400 to-emerald-500',
     features: ['50 game', '1 anak', '1 peranti', 'Semua subjek', 'Tanpa iklan'],
   },
@@ -19,7 +20,6 @@ const UPGRADE_TIERS = {
     name: 'standard',
     nameMY: '⭐ Standard',
     priceMYR: 99,
-    perMonth: '8.25',
     color: 'from-blue-400 to-indigo-500',
     features: ['100 game', '1 anak', '2 peranti', 'Semua subjek', 'Tanpa iklan'],
   },
@@ -27,7 +27,6 @@ const UPGRADE_TIERS = {
     name: 'keluarga',
     nameMY: '👑 Keluarga',
     priceMYR: 199,
-    perMonth: '16.58',
     color: 'from-purple-500 to-pink-500',
     features: ['200 game (tiada kunci)', 'Sehingga 4 anak', '4 peranti', 'Sokongan prioriti'],
     popular: true,
@@ -64,6 +63,7 @@ export default function UpgradeTierCard({ currentTier, user }) {
         email: user.email,
         name: user.full_name || 'Pengguna',
         phone: user.phone || '60000000000',
+        isUpgrade: true,
       });
 
       const checkoutUrl = response?.data?.checkoutUrl;
@@ -102,6 +102,9 @@ export default function UpgradeTierCard({ currentTier, user }) {
         {upgradeOptions.map((tierKey) => {
           const tier = UPGRADE_TIERS[tierKey];
           const isProcessing = upgrading === tierKey;
+          const currentPrice = TIER_PRICES[currentTier] || 0;
+          const proRataPrice = Math.max(tier.priceMYR - currentPrice, 0);
+          const savings = currentPrice;
           return (
             <motion.div
               key={tier.name}
@@ -114,11 +117,21 @@ export default function UpgradeTierCard({ currentTier, user }) {
                 </span>
               )}
               <p className="font-black text-white text-lg leading-tight">{tier.nameMY}</p>
-              <div className="flex items-baseline gap-1 mt-1 mb-3">
-                <span className="text-2xl font-black text-white">RM{tier.priceMYR}</span>
-                <span className="text-white/80 text-xs font-bold">/tahun</span>
+
+              {/* Pro-rata price display */}
+              <div className="flex items-baseline gap-1 mt-1">
+                <span className="text-2xl font-black text-white">RM{proRataPrice}</span>
+                <span className="text-white/80 text-xs font-bold">sahaja</span>
               </div>
-              <p className="text-white/80 text-[11px] font-bold mb-3">≈ RM{tier.perMonth}/bulan</p>
+              {savings > 0 && (
+                <div className="flex items-center gap-1.5 mt-1 mb-2">
+                  <span className="text-white/70 text-[11px] font-bold line-through">RM{tier.priceMYR}</span>
+                  <span className="px-1.5 py-0.5 rounded-md bg-yellow-300 text-yellow-950 text-[10px] font-black">
+                    Jimat RM{savings}
+                  </span>
+                </div>
+              )}
+              <p className="text-white/80 text-[11px] font-bold mb-3">Bayar gap sahaja • 1 tahun penuh</p>
 
               <ul className="space-y-1.5 mb-4">
                 {tier.features.map((f, i) => (
@@ -132,7 +145,7 @@ export default function UpgradeTierCard({ currentTier, user }) {
               <motion.button
                 whileTap={{ scale: 0.96 }}
                 disabled={isProcessing || upgrading !== null}
-                onClick={() => setConfirmTier(tier)}
+                onClick={() => setConfirmTier({ ...tier, proRataPrice, savings })}
                 className="w-full py-2.5 rounded-xl bg-white text-slate-900 font-black text-sm shadow-md hover:bg-yellow-50 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {isProcessing ? (
@@ -147,7 +160,7 @@ export default function UpgradeTierCard({ currentTier, user }) {
       </div>
 
       <p className="text-white/60 text-[11px] text-center leading-relaxed">
-        💡 Bayaran sekali sahaja untuk 1 tahun. Tier baru aktif sebaik bayaran berjaya.
+        💡 Pro-rata: anda hanya bayar perbezaan harga. Tier baru aktif 1 tahun penuh sebaik bayaran berjaya.
       </p>
 
       {/* Confirmation modal */}
@@ -170,11 +183,25 @@ export default function UpgradeTierCard({ currentTier, user }) {
               <div className="text-center mb-4">
                 <div className="text-5xl mb-2">{confirmTier.nameMY.split(' ')[0]}</div>
                 <p className="font-black text-slate-900 text-xl">Naik Taraf ke {confirmTier.nameMY.split(' ').slice(1).join(' ')}?</p>
-                <p className="text-slate-600 text-sm mt-2">Anda akan diarahkan ke halaman pembayaran FPX untuk membayar <span className="font-black text-slate-900">RM{confirmTier.priceMYR}</span> untuk setahun.</p>
+                <p className="text-slate-600 text-sm mt-2">Anda akan dicaj <span className="font-black text-slate-900">RM{confirmTier.proRataPrice}</span> sahaja (perbezaan dari pelan semasa).</p>
               </div>
 
-              <div className="rounded-2xl bg-amber-50 border border-amber-200 p-3 mb-4">
-                <p className="text-amber-900 text-xs font-bold">⚠️ Nota: Bayaran adalah berasingan untuk pelan baru. Pelan semasa anda akan diganti selepas pembayaran berjaya.</p>
+              <div className="rounded-2xl bg-green-50 border border-green-200 p-3 mb-4 space-y-1.5">
+                <div className="flex justify-between text-xs">
+                  <span className="text-slate-600 font-semibold">Harga {confirmTier.nameMY.split(' ').slice(1).join(' ')}</span>
+                  <span className="font-black text-slate-900">RM{confirmTier.priceMYR}</span>
+                </div>
+                {confirmTier.savings > 0 && (
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-600 font-semibold">Tolak pelan semasa</span>
+                    <span className="font-black text-green-700">− RM{confirmTier.savings}</span>
+                  </div>
+                )}
+                <div className="border-t border-green-300 pt-1.5 flex justify-between">
+                  <span className="text-slate-900 font-black text-sm">Anda bayar</span>
+                  <span className="font-black text-green-700 text-sm">RM{confirmTier.proRataPrice}</span>
+                </div>
+                <p className="text-green-800 text-[11px] font-bold pt-1">✅ Tier baru aktif 1 tahun penuh dari hari pembayaran</p>
               </div>
 
               <div className="flex gap-2">

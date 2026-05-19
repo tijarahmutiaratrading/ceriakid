@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { tier, email, name, phone } = await req.json();
+    const { tier, email, name, phone, isUpgrade } = await req.json();
 
     if (!tier || !email || !name || !phone) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
@@ -22,8 +22,30 @@ Deno.serve(async (req) => {
       keluarga: { amount: 19900, label: 'Keluarga — RM199/tahun' },
     };
 
+    const TIER_ORDER = ['free', 'asas', 'standard', 'keluarga'];
+
     if (!pricing[tier]) {
       return Response.json({ error: 'Invalid tier' }, { status: 400 });
+    }
+
+    // Pro-rata upgrade: charge only the gap (newPrice − oldPrice)
+    let chargeAmount = pricing[tier].amount;
+    let chargeLabel = pricing[tier].label;
+
+    if (isUpgrade) {
+      const existingSub = await base44.asServiceRole.entities.UserSubscription.filter({ email: user.email });
+      const current = existingSub[0];
+      if (current && current.status === 'active' && pricing[current.tier]) {
+        const currentIdx = TIER_ORDER.indexOf(current.tier);
+        const newIdx = TIER_ORDER.indexOf(tier);
+        if (newIdx > currentIdx) {
+          const gap = pricing[tier].amount - pricing[current.tier].amount;
+          if (gap > 0) {
+            chargeAmount = gap;
+            chargeLabel = `Naik Taraf ${current.tier.toUpperCase()} → ${tier.toUpperCase()} (RM${(gap / 100).toFixed(0)})`;
+          }
+        }
+      }
     }
 
     const brandId = Deno.env.get('CHIP_BRAND_ID');
@@ -41,8 +63,8 @@ Deno.serve(async (req) => {
         currency: 'MYR',
         products: [
           {
-            name: pricing[tier].label,
-            price: pricing[tier].amount,
+            name: chargeLabel,
+            price: chargeAmount,
             quantity: 1
           }
         ]
