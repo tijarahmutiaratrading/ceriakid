@@ -102,7 +102,7 @@ export default function UserSidebar() {
         </div>
       )}
 
-      <nav className="flex flex-col gap-1">
+      <nav className="flex flex-col gap-1 flex-1">
         {NAV_GROUPS.map(group => {
           const Icon = group.icon;
           const hasSubmenu = group.submenu && group.submenu.length > 0;
@@ -204,7 +204,7 @@ export default function UserSidebar() {
       </nav>
 
       {user && (
-        <div className="mt-6 pt-4 border-t border-white/15">
+        <div className="mt-auto pt-2 border-t border-white/15">
           <div className={`flex items-center gap-3 rounded-2xl bg-white/10 ${!showLabels ? 'justify-center p-2' : 'p-2'}`} title={!showLabels ? user.full_name || 'User' : undefined}>
             {user.avatarUrl ? (
               <img src={user.avatarUrl} alt="Avatar" className="w-9 h-9 rounded-full object-cover flex-shrink-0 ring-2 ring-white/30" />
