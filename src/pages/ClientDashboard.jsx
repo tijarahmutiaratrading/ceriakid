@@ -8,6 +8,7 @@ import { Upload, Loader, User, Mail, Calendar, Shield, Smartphone, Crown, CheckC
 import AppHeader from '@/components/AppHeader';
 import { getDefaultAvatar } from '@/lib/avatarGenerator';
 import SubscriptionWidget from '@/components/dashboard/SubscriptionWidget';
+import UpgradeTierCard from '@/components/dashboard/UpgradeTierCard';
 import ManageDevices from '@/components/ManageDevices';
 
 const TIER_CONFIG = {
@@ -185,6 +186,20 @@ export default function ClientDashboard() {
             <p className="text-white/80 text-xs font-black uppercase tracking-wider">💎 Langganan Saya</p>
           </div>
           <SubscriptionWidget userEmail={user?.email} />
+        </motion.div>
+
+        {/* Upgrade Tier */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18 }}
+          className="mb-4"
+        >
+          <div className="flex items-center gap-2 mb-3 px-1">
+            <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-orange-400 rounded-full" />
+            <p className="text-white/80 text-xs font-black uppercase tracking-wider">🚀 Naik Taraf</p>
+          </div>
+          <UpgradeTierCard currentTier={userTier} user={user} />
         </motion.div>
 
         {/* Manage Devices */}
