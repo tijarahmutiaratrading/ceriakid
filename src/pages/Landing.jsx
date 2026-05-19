@@ -167,17 +167,30 @@ export default function Landing() {
 
 
       {/* ── NAVBAR ── */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="max-w-6xl mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 sm:px-4 py-2.5 rounded-[1.75rem] pro-glass ring-1 ring-white/20">
-          <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-10 rounded-2xl shadow-lg ring-1 ring-white/40" />
-          <div className="hidden md:flex items-center justify-center gap-7 text-sm font-black text-white/75">
-            <a href="#features" className="hover:text-white transition-colors">Ciri-ciri</a>
-            <a href="#testimonials" className="hover:text-white transition-colors">Testimoni</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Harga</a>
-            <a href="#faq" className="hover:text-white transition-colors">Soalan Lazim</a>
+      <nav className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-3 sm:py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div className="max-w-6xl mx-auto w-full flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.95), rgba(168,85,247,0.92), rgba(236,72,153,0.88))', backdropFilter: 'blur(20px)' }}>
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-xl shadow-lg" />
+            <span className="hidden sm:inline text-white font-black text-sm">CeriaKid</span>
           </div>
-          <motion.button whileTap={{ scale: 0.95 }} onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')} className="px-4 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-lg hover:bg-white/95 transition-colors">
-            {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
+
+          {/* Center nav links */}
+          <div className="hidden md:flex items-center justify-center gap-8 flex-1 ml-8">
+            <a href="#features" className="text-white/90 text-sm font-bold hover:text-white transition-all duration-200 hover:scale-110">Ciri-ciri</a>
+            <a href="#testimonials" className="text-white/90 text-sm font-bold hover:text-white transition-all duration-200 hover:scale-110">Testimoni</a>
+            <a href="#pricing" className="text-white/90 text-sm font-bold hover:text-white transition-all duration-200 hover:scale-110">Harga</a>
+            <a href="#faq" className="text-white/90 text-sm font-bold hover:text-white transition-all duration-200 hover:scale-110">Soalan Lazim</a>
+          </div>
+
+          {/* CTA Button */}
+          <motion.button 
+            whileHover={{ scale: 1.05 }} 
+            whileTap={{ scale: 0.95 }} 
+            onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')} 
+            className="px-5 sm:px-7 py-2.5 sm:py-3 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-xl hover:shadow-2xl hover:bg-white/95 transition-all"
+          >
+            {isAuthenticated ? '📊 Dashboard' : '🔓 Log Masuk'}
           </motion.button>
         </div>
       </nav>
