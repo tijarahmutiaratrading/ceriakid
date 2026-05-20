@@ -4,8 +4,8 @@ const SUBJECTS = ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 
 const DARJAH_LEVELS = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
 const MINI_CATEGORIES = ['memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius', 'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training', 'memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
 const MIN_PASS_SCORE = 90;
-const MAX_DELETE_PER_RUN = 60;
-const MAX_AUTOFIX_PER_RUN = 40;
+const MAX_DELETE_PER_RUN = 300;
+const MAX_AUTOFIX_PER_RUN = 20;
 const MIN_GAMES_PER_BUCKET = 4;
 const DEFAULT_CAP = 30;
 const STUCK_TASK_MINUTES = 30;
@@ -677,9 +677,12 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Kalau queue padat, skip delete+queue baru — biar autofix sahaja siap dulu
+    // PADAM SEMUA SAMPAH yang dikesan dalam run ni (cap 300 per run untuk elak timeout).
+    // Pusingan seterusnya (5 min lagi) akan padam yang berbaki — jadi tak bertumpuk.
+    // Kalau queue terlalu padat (>30 active), skip delete — biar generator catch-up dulu.
     const selected = skipNewReplacementTasks ? [] : stillBroken.slice(0, MAX_DELETE_PER_RUN);
     const grouped = new Map();
+    // Pass 1 (sync): group + accumulate counts/learnings
     for (const item of selected) {
       const game = item.game;
       const isStoryKid = game.gameData?.storyKid === true || item.kind === 'story';
@@ -687,11 +690,8 @@ Deno.serve(async (req) => {
       const groupKey = isStoryKid ? 'storykid' : (isMini ? `mini|${game.category}` : `${game.ageGroup}|${game.darjah || ''}|${game.category}`);
       const existing = grouped.get(groupKey) || { sample: game, count: 0, isMini, isStoryKid, learnedIssues: new Set() };
       existing.count += 1;
-      // "Teach" — accumulate unique issues so the next generation prompt can avoid them
       (item.issues || []).forEach(i => existing.learnedIssues.add(i));
       grouped.set(groupKey, existing);
-      await base44.asServiceRole.entities.Game.delete(game.id);
-      // Decrement count after delete
       if (isStoryKid) {
         storyKidCount = Math.max(0, storyKidCount - 1);
       } else if (isMini) {
@@ -699,6 +699,14 @@ Deno.serve(async (req) => {
       } else {
         bucketCounts.set(groupKey, Math.max(0, (bucketCounts.get(groupKey) || 1) - 1));
       }
+    }
+    // Pass 2 (parallel batches): delete in chunks of 20 supaya cepat tapi tak crash
+    const BATCH_SIZE = 20;
+    let deletedOk = 0;
+    for (let i = 0; i < selected.length; i += BATCH_SIZE) {
+      const batch = selected.slice(i, i + BATCH_SIZE);
+      const results = await Promise.allSettled(batch.map(item => base44.asServiceRole.entities.Game.delete(item.game.id)));
+      deletedOk += results.filter(r => r.status === 'fulfilled').length;
     }
     let createdTaskCount = 0;
     let skippedTasksAtCap = 0;
@@ -748,13 +756,13 @@ Deno.serve(async (req) => {
       stuckTasksCleaned: stuckCleaned,
       bucketRefills: bucketRefillCount,
       capacityRefills: { subject: subjectRefillResult.createdCount, mini: miniRefillResult.createdCount, story: storyRefillResult.createdCount },
-      deletedThisRun: selected.length,
-      deletedCount: selected.length,
+      deletedThisRun: deletedOk,
+      deletedCount: deletedOk,
       replacementTasks: totalReplacementTasks,
       skippedAtCap: skippedTasksAtCap,
       topIssues,
       sampleIssues: balancedSamples,
-      message: `Score ${score}%. Auto-fix: ${autofixedGames} subject + ${autofixedMiniGames} mini (${autofixedQuestions} questions). Deleted: ${selected.length}. Replace queue: ${createdTaskCount}. Capacity refills: ${bucketRefillCount} (subjek:${subjectRefillResult.createdCount}, mini:${miniRefillResult.createdCount}, story:${storyRefillResult.createdCount}). Stuck cleaned: ${stuckCleaned}.`,
+      message: `Score ${score}%. Auto-fix: ${autofixedGames} subject + ${autofixedMiniGames} mini (${autofixedQuestions} questions). Deleted: ${deletedOk}/${selected.length}. Replace queue: ${createdTaskCount}. Capacity refills: ${bucketRefillCount} (subjek:${subjectRefillResult.createdCount}, mini:${miniRefillResult.createdCount}, story:${storyRefillResult.createdCount}). Stuck cleaned: ${stuckCleaned}.`,
     };
     if (!force) await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
     await createQcLog(base44, { action: force ? 'repair' : 'auto_repair', ...payload });
