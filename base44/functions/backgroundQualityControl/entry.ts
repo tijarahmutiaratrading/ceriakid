@@ -461,7 +461,24 @@ Deno.serve(async (req) => {
     const lastAutoRunAt = qcSetting.lastAutoRunAt ? new Date(qcSetting.lastAutoRunAt).getTime() : 0;
     const minutesSinceLastRun = lastAutoRunAt ? (Date.now() - lastAutoRunAt) / 60000 : Infinity;
 
-    if (!force && body.auditOnly !== true && minutesSinceLastRun < intervalMinutes) {
+    // ─── AUTO-LOOP: Peek queue + last log dulu. Kalau queue kosong DAN score terakhir < 90,
+    //    bypass interval guard — jalankan repair pusingan seterusnya automatik.
+    let bypassInterval = false;
+    if (!force && body.auditOnly !== true) {
+      try {
+        const peekTasks = await base44.asServiceRole.entities.GameTask.list('-created_date', 100);
+        const peekActive = (peekTasks || []).filter(t => ['pending', 'running'].includes(t.status));
+        if (peekActive.length === 0) {
+          const recentLogs = await base44.asServiceRole.entities.QCLog.list('-created_date', 1);
+          const lastScore = recentLogs?.[0]?.score;
+          if (typeof lastScore === 'number' && lastScore < MIN_PASS_SCORE) {
+            bypassInterval = true;
+          }
+        }
+      } catch {}
+    }
+
+    if (!force && body.auditOnly !== true && !bypassInterval && minutesSinceLastRun < intervalMinutes) {
       return Response.json({
         success: true,
         status: 'skipped_interval',
