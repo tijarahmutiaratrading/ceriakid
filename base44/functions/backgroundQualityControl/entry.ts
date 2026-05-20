@@ -94,7 +94,9 @@ function auditOneQuestion(q, game, localSeen, crossSeen) {
   if (options.length === 4 && new Set(options.map(o => normalizeText(o))).size !== 4) issues.push('duplicate_options');
   if (localSeen.has(text)) issues.push('repeat_inside_game');
   localSeen.add(text);
-  if (game.ageGroup === 'sekolah_rendah' && game.darjah && crossSeen) {
+  // NOTE: Jawi sengaja dikecualikan dari repeat_across_darjah check.
+  // Huruf Jawi (Alif, Ba, Ta, dll) memang patut muncul Darjah 1-6 — ini curriculum, bukan bug.
+  if (game.ageGroup === 'sekolah_rendah' && game.darjah && crossSeen && game.category !== 'jawi') {
     const key = `${game.category}|${text}`;
     const prior = crossSeen.get(key);
     if (prior && prior.darjah !== game.darjah) issues.push('repeat_across_darjah');
@@ -186,13 +188,21 @@ function auditMiniGame(game, miniTitleSeen, miniMicroTopicSeen) {
   }
 
   // 9. Cross-game duplicate detection (mini games)
+  // Cap pada 5 duplicates — kalau dah lebih, LLM memang suka reuse title untuk theme sama,
+  // tapi content dalam game tetap berbeza. Tak worth delete lagi (loop infinite).
   if (miniTitleSeen && miniMicroTopicSeen) {
     const normTitle = normalizeText(game.title);
     const normMicro = normalizeText(data.microTopic);
-    if (normTitle && miniTitleSeen.has(normTitle)) issues.push('duplicate_title');
-    else if (normTitle) miniTitleSeen.add(normTitle);
-    if (normMicro && normMicro.length > 10 && miniMicroTopicSeen.has(normMicro)) issues.push('duplicate_microtopic');
-    else if (normMicro) miniMicroTopicSeen.add(normMicro);
+    if (normTitle) {
+      const titleCount = (miniTitleSeen.get(normTitle) || 0) + 1;
+      miniTitleSeen.set(normTitle, titleCount);
+      if (titleCount > 1 && titleCount <= 5) issues.push('duplicate_title');
+    }
+    if (normMicro && normMicro.length > 10) {
+      const microCount = (miniMicroTopicSeen.get(normMicro) || 0) + 1;
+      miniMicroTopicSeen.set(normMicro, microCount);
+      if (microCount > 1 && microCount <= 5) issues.push('duplicate_microtopic');
+    }
   }
 
   return [...new Set(issues)];
@@ -200,10 +210,15 @@ function auditMiniGame(game, miniTitleSeen, miniMicroTopicSeen) {
 
 function auditStoryGame(game) {
   const issues = [];
+  const mode = game.gameData?.mode;
+  // Maze / hidden_object games are NOT story-based — skip story-specific checks
+  const isMazeOrHiddenObject = mode === 'maze' || mode === 'hidden_object' || game.type === 'story_adventure' && (mode === 'maze' || mode === 'hidden_object');
   const scenes = Array.isArray(game.gameData?.scenes) ? game.gameData.scenes : [];
   if (!game.title) issues.push('missing_title');
-  if (!game.description && !game.gameData?.moral) issues.push('missing_moral');
-  if (scenes.length < 3) issues.push('too_few_story_slides');
+  if (!isMazeOrHiddenObject) {
+    if (!game.description && !game.gameData?.moral) issues.push('missing_moral');
+    if (scenes.length < 3) issues.push('too_few_story_slides');
+  }
   if (BANNED_PATTERN.test(`${game.title} ${game.description} ${JSON.stringify(scenes)}`)) issues.push('banned_text');
   return [...new Set(issues)];
 }
@@ -520,8 +535,8 @@ Deno.serve(async (req) => {
     // ─── Step 3: Audit all games ───
     const auditableGames = (games || []).filter(game => SUBJECTS.includes(game.category) || MINI_CATEGORIES.includes(game.category) || game.gameData?.storyKid);
     const crossSeen = new Map();
-    const miniTitleSeen = new Set();
-    const miniMicroTopicSeen = new Set();
+    const miniTitleSeen = new Map(); // title → count (cap at 5)
+    const miniMicroTopicSeen = new Map(); // micro → count (cap at 5)
     const failed = []; // {game, issues, perQuestion, gameIssues, kind}
     for (const game of auditableGames) {
       const isStoryKid = game.gameData?.storyKid || game.category === 'story' || game.type === 'story_adventure';
