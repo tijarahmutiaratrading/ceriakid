@@ -4,8 +4,8 @@ const SUBJECTS = ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 
 const DARJAH_LEVELS = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
 const MINI_CATEGORIES = ['memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius', 'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training', 'memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
 const MIN_PASS_SCORE = 90;
-const MAX_DELETE_PER_RUN = 20;
-const MAX_AUTOFIX_PER_RUN = 15;
+const MAX_DELETE_PER_RUN = 60;
+const MAX_AUTOFIX_PER_RUN = 40;
 const MIN_GAMES_PER_BUCKET = 4;
 const DEFAULT_CAP = 30;
 const STUCK_TASK_MINUTES = 30;
@@ -511,12 +511,11 @@ Deno.serve(async (req) => {
     };
     const totalGaps = capacityGaps.subject.length + capacityGaps.mini.length + capacityGaps.story.length;
 
-    if (activeTasks.length > 0 && !force) {
-      const payload = { success: true, status: 'waiting_for_generation', score: null, activeTasks: activeTasks.length, replacementTasks: bucketRefillCount, capacityGaps, message: `Queue belum siap (${activeTasks.length} aktif). Stuck cleaned: ${stuckCleaned}. Capacity refills: ${bucketRefillCount} (subjek:${subjectRefillResult.createdCount}, mini:${miniRefillResult.createdCount}, story:${storyRefillResult.createdCount}). Gaps detected: ${totalGaps}.` };
-      await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
-      await createQcLog(base44, { action: 'auto_audit', ...payload });
-      return Response.json(payload);
-    }
+    // NOTE: dulu kita STOP kalau queue busy. Sekarang kita TERUSKAN audit & autofix games sedia ada
+    //       — generator akan tetap proses queue di background secara selari. QC tak perlu tunggu queue habis
+    //       untuk fix games yang dah ada bug. Cuma kita skip auto-queue replacement baru kalau queue
+    //       terlalu padat (>30 active tasks) supaya tak overload.
+    const skipNewReplacementTasks = activeTasks.length > 30 && !force;
 
     // ─── Step 3: Audit all games ───
     const auditableGames = (games || []).filter(game => SUBJECTS.includes(game.category) || MINI_CATEGORIES.includes(game.category) || game.gameData?.storyKid);
@@ -678,7 +677,8 @@ Deno.serve(async (req) => {
       }
     }
 
-    const selected = stillBroken.slice(0, MAX_DELETE_PER_RUN);
+    // Kalau queue padat, skip delete+queue baru — biar autofix sahaja siap dulu
+    const selected = skipNewReplacementTasks ? [] : stillBroken.slice(0, MAX_DELETE_PER_RUN);
     const grouped = new Map();
     for (const item of selected) {
       const game = item.game;
