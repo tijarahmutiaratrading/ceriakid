@@ -61,9 +61,20 @@ export default function MasterTaskQueue({ onToast }) {
     const selected = tasks.filter(t => t.status === status);
     if (selected.length === 0) return onToast?.(`Tiada task ${status}`, false);
     if (!window.confirm(`Padam ${selected.length} task ${status}?`)) return;
-    for (const task of selected) await base44.entities.GameTask.delete(task.id);
+    setLoading(true);
+    let ok = 0;
+    let failed = 0;
+    // Delete dalam batch kecil (5 serentak) + delay 250ms antara batch → elak rate limit
+    for (let i = 0; i < selected.length; i += 5) {
+      const batch = selected.slice(i, i + 5);
+      const results = await Promise.allSettled(batch.map(t => base44.entities.GameTask.delete(t.id)));
+      results.forEach(r => r.status === 'fulfilled' ? ok++ : failed++);
+      if (i + 5 < selected.length) await new Promise(r => setTimeout(r, 250));
+    }
     setTasks(prev => prev.filter(t => t.status !== status));
-    onToast?.(`✅ ${selected.length} task ${status} dipadam`);
+    setLoading(false);
+    if (failed > 0) onToast?.(`⚠️ ${ok} dipadam, ${failed} gagal (rate limit). Cuba lagi.`, false);
+    else onToast?.(`✅ ${ok} task ${status} dipadam`);
   };
 
   return (
