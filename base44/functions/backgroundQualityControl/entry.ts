@@ -10,13 +10,30 @@ const MIN_GAMES_PER_BUCKET = 4;
 const DEFAULT_CAP = 30;
 const STUCK_TASK_MINUTES = 30;
 
-const BANNED_PATTERN = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|\bpohon\b|\bsepatu\b|strawberi|tampak|cantik|santai|membazir|merata-rata|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja|aktiviti pembelajaran)/i;
+const BANNED_PATTERN = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|\bpohon\b|\bsepatu\b|strawberi|tampak|cantik|santai|membazir|merata-rata|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja|aktiviti pembelajaran|preferensi|guara|trojan|loker|saksofon|kueh roti|gam pita|pancung)/i;
+
+// Off-theme content keywords — content yang ada keyword ni TAK PATUT muncul dalam mini game cognitive category
+// (sebab kategori macam brain_training/memory_master patut focus kognitif, bukan general knowledge)
+const OFF_THEME_KEYWORDS = {
+  brain_training:   /\b(haiwan peliharaan|makanan malaysia|nasi lemak|baju kurung|cheongsam|sari|bola sepak|kapal terbang)\b/i,
+  memory_master:    /\b()\b/i,
+  logic_puzzles:    /\b()\b/i,
+  pattern_genius:   /\b()\b/i,
+  maze_adventure:   /\b()\b/i,
+  speed_focus:      /\b()\b/i,
+  problem_solver:   /\b()\b/i,
+  creative_builder: /\b()\b/i,
+};
+
 const MAX_MATH_NUMBER = { darjah_1: 100, darjah_2: 1000, darjah_3: 10000, darjah_4: 100000, darjah_5: 1000000, darjah_6: 10000000 };
 
 // Issues that can be safely repaired by re-generating just the bad question via LLM
 const REPAIRABLE_QUESTION_ISSUES = new Set(['weak_question', 'banned_text', 'bad_options_count', 'bad_answer_index', 'duplicate_options', 'repeat_inside_game']);
 // Issues that affect the whole game (require replacement, not per-question fix)
 const STRUCTURAL_ISSUES = new Set(['missing_darjah', 'too_few_questions', 'repeat_across_darjah', 'math_level_too_high']);
+
+// Mini game issues that REQUIRE delete + replace (can't auto-fix)
+const MINI_STRUCTURAL_ISSUES = new Set(['empty_rounds', 'dragdrop_no_challenge', 'duplicate_title', 'duplicate_microtopic', 'off_theme_content', 'weak_mini_content', 'target_not_playable']);
 
 function normalizeText(value) {
   return String(value || '').toLowerCase().replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').replace(/[^a-z0-9\u00C0-\u024F\u0600-\u06FF\u0B80-\u0BFF\u4E00-\u9FFF ]/gi, ' ').replace(/\s+/g, ' ').trim();
@@ -28,7 +45,40 @@ function getQuestions(game) {
 
 function getMiniContentCount(game) {
   const data = game.gameData || {};
-  return ['pairs', 'items', 'words', 'tiles', 'scenes', 'challenges', 'letters', 'statements'].reduce((sum, key) => sum + (Array.isArray(data[key]) ? data[key].length : 0), 0);
+  // Count top-level content arrays
+  const topCount = ['pairs', 'items', 'words', 'tiles', 'scenes', 'challenges', 'letters', 'statements'].reduce((sum, key) => sum + (Array.isArray(data[key]) ? data[key].length : 0), 0);
+  // Count content inside rounds[] (spin_wheel, swipe_select, dragdrop, memory, hidden_object use rounds structure)
+  let roundCount = 0;
+  if (Array.isArray(data.rounds)) {
+    for (const r of data.rounds) {
+      if (!r || typeof r !== 'object') continue;
+      for (const key of ['items', 'pairs', 'targets', 'options', 'tiles', 'cards']) {
+        if (Array.isArray(r[key])) roundCount += r[key].length;
+      }
+    }
+  }
+  return topCount + roundCount;
+}
+
+// Get ALL text inside a mini game (deep walk, includes rounds, nested items, values)
+function getAllMiniText(game) {
+  const data = game.gameData || {};
+  const parts = [String(game.title || ''), String(game.description || ''), String(data.title || ''), String(data.microTopic || ''), String(data.instruction || '')];
+  const walk = (node) => {
+    if (node == null) return;
+    if (typeof node === 'string') { parts.push(node); return; }
+    if (Array.isArray(node)) { node.forEach(walk); return; }
+    if (typeof node === 'object') { Object.values(node).forEach(walk); return; }
+  };
+  walk(data.rounds);
+  walk(data.items);
+  walk(data.pairs);
+  walk(data.words);
+  walk(data.tiles);
+  walk(data.scenes);
+  walk(data.challenges);
+  walk(data.statements);
+  return parts.join(' || ');
 }
 
 // Per-question audit — returns issues array for ONE question
@@ -75,14 +125,76 @@ function auditSubjectGame(game, crossSeen) {
   return { issues: [...allIssues], gameIssues, perQuestion };
 }
 
-function auditMiniGame(game) {
+function auditMiniGame(game, miniTitleSeen, miniMicroTopicSeen) {
   const issues = [];
   const data = game.gameData || {};
-  const text = JSON.stringify(data);
+  const allText = getAllMiniText(game);
+
+  // 1. Missing metadata
   if (!game.title || !game.type || !game.category) issues.push('missing_metadata');
-  if (getMiniContentCount(game) < 2 && !data.target && !data.instruction) issues.push('weak_mini_content');
-  if (BANNED_PATTERN.test(text)) issues.push('banned_text');
-  if ((data.mode === 'balloon_pop' || data.mode === 'falling_catch') && (!data.target || !Array.isArray(data.items) || data.items.filter(item => String(item).toLowerCase() === String(data.target).toLowerCase()).length < 2)) issues.push('target_not_playable');
+
+  // 2. Banned text — scan ALL nested content now (not just top-level JSON.stringify)
+  if (BANNED_PATTERN.test(allText)) issues.push('banned_text');
+
+  // 3. Off-theme content (e.g. brain_training shouldn't be about haiwan peliharaan)
+  const offThemePattern = OFF_THEME_KEYWORDS[game.category];
+  if (offThemePattern && offThemePattern.source !== '\\b()\\b' && offThemePattern.test(allText)) {
+    issues.push('off_theme_content');
+  }
+
+  // 4. Content count check — must have enough playable items
+  const contentCount = getMiniContentCount(game);
+  if (contentCount < 4) issues.push('weak_mini_content');
+
+  // 5. Empty rounds — every round must have at least items/pairs/targets/options
+  if (Array.isArray(data.rounds)) {
+    let emptyRoundCount = 0;
+    for (const r of data.rounds) {
+      if (!r || typeof r !== 'object') { emptyRoundCount++; continue; }
+      const hasContent = ['items', 'pairs', 'targets', 'options', 'tiles', 'cards'].some(k => Array.isArray(r[k]) && r[k].length >= 2);
+      if (!hasContent && !r.target) emptyRoundCount++;
+    }
+    if (emptyRoundCount >= Math.ceil(data.rounds.length / 2)) issues.push('empty_rounds');
+  }
+
+  // 6. Dragdrop sanity — items must NOT be identical to targets (no challenge!)
+  if (data.mode === 'dragdrop' && Array.isArray(data.rounds)) {
+    let badRounds = 0;
+    for (const r of data.rounds) {
+      if (Array.isArray(r?.items) && Array.isArray(r?.targets) && r.items.length === r.targets.length) {
+        const sameSet = r.items.every((it, i) => normalizeText(it) === normalizeText(r.targets[i]));
+        if (sameSet) badRounds++;
+      }
+    }
+    if (badRounds > 0) issues.push('dragdrop_no_challenge');
+  }
+
+  // 7. balloon_pop / falling_catch target playability
+  if ((data.mode === 'balloon_pop' || data.mode === 'falling_catch') && (!data.target || !Array.isArray(data.items) || data.items.filter(item => String(item).toLowerCase() === String(data.target).toLowerCase()).length < 2)) {
+    issues.push('target_not_playable');
+  }
+
+  // 8. type vs mode mismatch (cosmetic but breaks UI sometimes)
+  const TYPE_MODE_MAP = {
+    memory_game: ['memory'],
+    drag_drop: ['dragdrop'],
+    story_adventure: ['maze', 'hidden_object', 'story'],
+  };
+  if (data.mode && TYPE_MODE_MAP[game.type] && !TYPE_MODE_MAP[game.type].includes(data.mode)) {
+    // Don't fail on this alone — just flag for "Teach" context
+    issues.push('type_mode_mismatch');
+  }
+
+  // 9. Cross-game duplicate detection (mini games)
+  if (miniTitleSeen && miniMicroTopicSeen) {
+    const normTitle = normalizeText(game.title);
+    const normMicro = normalizeText(data.microTopic);
+    if (normTitle && miniTitleSeen.has(normTitle)) issues.push('duplicate_title');
+    else if (normTitle) miniTitleSeen.add(normTitle);
+    if (normMicro && normMicro.length > 10 && miniMicroTopicSeen.has(normMicro)) issues.push('duplicate_microtopic');
+    else if (normMicro) miniMicroTopicSeen.add(normMicro);
+  }
+
   return [...new Set(issues)];
 }
 
@@ -122,8 +234,9 @@ function buildReplacementTask(game, count, learnFromIssues = []) {
 
 // ─── AUTO-FIX: Strip banned items from mini game (lightweight repair, no LLM needed) ───
 function tryFixMiniGameInPlace(game) {
-  const data = { ...(game.gameData || {}) };
+  const data = JSON.parse(JSON.stringify(game.gameData || {}));
   let touched = false;
+  // Clean top-level arrays
   for (const key of ['pairs', 'items', 'words', 'tiles', 'scenes', 'challenges', 'letters', 'statements']) {
     if (Array.isArray(data[key])) {
       const before = data[key].length;
@@ -131,9 +244,22 @@ function tryFixMiniGameInPlace(game) {
       if (data[key].length !== before) touched = true;
     }
   }
+  // Clean inside rounds[]
+  if (Array.isArray(data.rounds)) {
+    for (const r of data.rounds) {
+      if (!r || typeof r !== 'object') continue;
+      for (const key of ['items', 'pairs', 'targets', 'options', 'tiles', 'cards']) {
+        if (Array.isArray(r[key])) {
+          const before = r[key].length;
+          r[key] = r[key].filter(item => !BANNED_PATTERN.test(JSON.stringify(item)));
+          if (r[key].length !== before) touched = true;
+        }
+      }
+    }
+  }
   // Must still have minimum playable content
-  const newCount = ['pairs', 'items', 'words', 'tiles', 'scenes', 'challenges', 'letters', 'statements'].reduce((s, k) => s + (Array.isArray(data[k]) ? data[k].length : 0), 0);
-  if (touched && newCount >= 4) return data;
+  const fakeGame = { gameData: data };
+  if (touched && getMiniContentCount(fakeGame) >= 4) return data;
   return null;
 }
 
@@ -378,6 +504,8 @@ Deno.serve(async (req) => {
     // ─── Step 3: Audit all games ───
     const auditableGames = (games || []).filter(game => SUBJECTS.includes(game.category) || MINI_CATEGORIES.includes(game.category) || game.gameData?.storyKid);
     const crossSeen = new Map();
+    const miniTitleSeen = new Set();
+    const miniMicroTopicSeen = new Set();
     const failed = []; // {game, issues, perQuestion, gameIssues, kind}
     for (const game of auditableGames) {
       const isStoryKid = game.gameData?.storyKid || game.category === 'story' || game.type === 'story_adventure';
@@ -386,7 +514,7 @@ Deno.serve(async (req) => {
         const issues = auditStoryGame(game);
         if (issues.length > 0) failed.push({ game, issues, kind: 'story' });
       } else if (isGeneratedMiniGame) {
-        const issues = auditMiniGame(game);
+        const issues = auditMiniGame(game, miniTitleSeen, miniMicroTopicSeen);
         if (issues.length > 0) failed.push({ game, issues, kind: 'mini' });
       } else {
         const audit = auditSubjectGame(game, crossSeen);
@@ -411,14 +539,29 @@ Deno.serve(async (req) => {
     }
 
     if (score >= MIN_PASS_SCORE && bucketRefillCount === 0 && stuckCleaned === 0 && totalGaps === 0) {
-      const payload = { success: true, status: 'passed', score, total, passed, failed: failed.length, breakdown, capacityGaps, sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues, kind: item.kind })), message: `Quality score ${score}% — cukup baik. Subject ${breakdown.subject.failed}/${breakdown.subject.total}, Mini ${breakdown.mini.failed}/${breakdown.mini.total}, Story ${breakdown.story.failed}/${breakdown.story.total}.` };
+      const payload = { success: true, status: 'passed', score, total, passed, failed: failed.length, breakdown, capacityGaps, topIssues: [], sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues, kind: item.kind })), message: `Quality score ${score}% — cukup baik. Subject ${breakdown.subject.failed}/${breakdown.subject.total}, Mini ${breakdown.mini.failed}/${breakdown.mini.total}, Story ${breakdown.story.failed}/${breakdown.story.total}.` };
       if (!force && body.auditOnly !== true) await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });
       await createQcLog(base44, { action: body.auditOnly === true ? 'audit' : 'auto_audit', ...payload });
       return Response.json(payload);
     }
 
+    // Build per-kind sample (so admin sees variety, not just first 10 subject failures)
+    const sampleSubject = failed.filter(f => f.kind === 'subject').slice(0, 4).map(item => ({ title: item.game.title, category: item.game.category, issues: item.issues, kind: 'subject' }));
+    const sampleMini = failed.filter(f => f.kind === 'mini').slice(0, 8).map(item => ({ title: item.game.title, category: item.game.category, issues: item.issues, kind: 'mini' }));
+    const sampleStory = failed.filter(f => f.kind === 'story').slice(0, 3).map(item => ({ title: item.game.title, category: item.game.category, issues: item.issues, kind: 'story' }));
+    const balancedSamples = [...sampleSubject, ...sampleMini, ...sampleStory];
+
+    // Aggregate issue-type counts so admin sees WHICH problems are most common
+    const issueCounts = {};
+    for (const item of failed) {
+      for (const issue of (item.issues || [])) {
+        issueCounts[issue] = (issueCounts[issue] || 0) + 1;
+      }
+    }
+    const topIssues = Object.entries(issueCounts).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([issue, count]) => ({ issue, count }));
+
     if (body.auditOnly === true) {
-      const payload = { success: true, status: 'needs_repair', score, total, passed, failed: failed.length, breakdown, capacityGaps, sampleIssues: failed.slice(0, 10).map(item => ({ title: item.game.title, category: item.game.category, issues: item.issues, kind: item.kind })), message: `Score ${score}%. Failed: Subject ${breakdown.subject.failed}, Mini ${breakdown.mini.failed}, Story ${breakdown.story.failed}. Capacity gaps: ${totalGaps}.` };
+      const payload = { success: true, status: 'needs_repair', score, total, passed, failed: failed.length, breakdown, capacityGaps, topIssues, sampleIssues: balancedSamples, message: `Score ${score}%. Failed: Subject ${breakdown.subject.failed}, Mini ${breakdown.mini.failed}, Story ${breakdown.story.failed}. Capacity gaps: ${totalGaps}.` };
       await createQcLog(base44, { action: 'audit', ...payload });
       return Response.json(payload);
     }
@@ -433,10 +576,21 @@ Deno.serve(async (req) => {
     let autofixBudget = MAX_AUTOFIX_PER_RUN;
 
     for (const item of failed) {
-      // 4b: Mini game lightweight fix (only banned_text issue, no structural problems)
+      // 4b: Mini game lightweight fix
+      // - Only banned_text → strip banned items in-place
+      // - type_mode_mismatch alone → cosmetic fix (don't delete, just flag)
+      // - Anything in MINI_STRUCTURAL_ISSUES → delete + replace
       if (item.kind === 'mini') {
-        const onlyBanned = item.issues.length === 1 && item.issues[0] === 'banned_text';
-        if (onlyBanned) {
+        const hasStructural = item.issues.some(i => MINI_STRUCTURAL_ISSUES.has(i));
+        const nonCosmetic = item.issues.filter(i => i !== 'type_mode_mismatch');
+        const onlyBanned = nonCosmetic.length === 1 && nonCosmetic[0] === 'banned_text';
+        const onlyCosmetic = nonCosmetic.length === 0;
+
+        if (onlyCosmetic) {
+          // Just type_mode_mismatch — skip, not worth delete
+          continue;
+        }
+        if (onlyBanned && !hasStructural) {
           const fixedData = tryFixMiniGameInPlace(item.game);
           if (fixedData) {
             await base44.asServiceRole.entities.Game.update(item.game.id, { gameData: fixedData, status: 'ready' });
@@ -581,7 +735,8 @@ Deno.serve(async (req) => {
       deletedCount: selected.length,
       replacementTasks: totalReplacementTasks,
       skippedAtCap: skippedTasksAtCap,
-      sampleIssues: failed.slice(0, 5).map(item => ({ title: item.game.title, issues: item.issues, kind: item.kind })),
+      topIssues,
+      sampleIssues: balancedSamples,
       message: `Score ${score}%. Auto-fix: ${autofixedGames} subject + ${autofixedMiniGames} mini (${autofixedQuestions} questions). Deleted: ${selected.length}. Replace queue: ${createdTaskCount}. Capacity refills: ${bucketRefillCount} (subjek:${subjectRefillResult.createdCount}, mini:${miniRefillResult.createdCount}, story:${storyRefillResult.createdCount}). Stuck cleaned: ${stuckCleaned}.`,
     };
     if (!force) await base44.asServiceRole.entities.QCSetting.update(qcSetting.id, { lastAutoRunAt: new Date().toISOString() });

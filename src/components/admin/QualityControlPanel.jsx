@@ -171,6 +171,24 @@ export default function QualityControlPanel({ onToast }) {
         </div>
       )}
 
+      {/* Top Issues — apa masalah paling kerap */}
+      {qc?.topIssues && qc.topIssues.length > 0 && (
+        <div className="rounded-2xl bg-red-400/10 border border-red-300/20 p-3 mb-3">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-red-100 font-black text-xs">🔥 Top Issues Detected</span>
+            <span className="text-white/45 text-[10px] font-semibold">(masalah paling kerap)</span>
+          </div>
+          <div className="grid grid-cols-2 gap-1.5">
+            {qc.topIssues.slice(0, 8).map((it, i) => (
+              <div key={i} className="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg bg-white/5 text-[11px]">
+                <span className="text-white/80 font-bold truncate">{it.issue}</span>
+                <span className="text-red-300 font-black flex-shrink-0">×{it.count}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Capacity Gaps — kategori yang kurang dari target */}
       {qc?.capacityGaps && (qc.capacityGaps.subject?.length > 0 || qc.capacityGaps.mini?.length > 0 || qc.capacityGaps.story?.length > 0) && (
         <div className="rounded-2xl bg-amber-400/10 border border-amber-300/20 p-3 mb-3">

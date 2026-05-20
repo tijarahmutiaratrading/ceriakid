@@ -20,6 +20,13 @@ const ISSUE_LABELS = {
   missing_title: '📝 Tiada title',
   missing_moral: '💭 Tiada moral / description',
   too_few_story_slides: '📖 Slide story kurang 3',
+  // ─── Mini game specific (new strict checks) ───
+  empty_rounds: '🕳️ Rounds kosong (tiada items/pairs/targets)',
+  dragdrop_no_challenge: '🪄 Dragdrop tipu (items === targets, tiada cabaran)',
+  type_mode_mismatch: '⚙️ Type vs mode tak padan (cth memory_game + spin_wheel)',
+  duplicate_title: '🪞 Title duplicate dengan mini game lain',
+  duplicate_microtopic: '🪞 microTopic duplicate (generator pakai seed sama)',
+  off_theme_content: '🎭 Content tak relevan dengan kategori (cth brain_training jadi general knowledge)',
 };
 
 const labelize = (code) => ISSUE_LABELS[code] || code;
