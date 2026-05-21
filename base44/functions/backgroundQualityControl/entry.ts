@@ -178,9 +178,13 @@ function auditMiniGame(game, miniTitleSeen, miniMicroTopicSeen) {
 
   // 8. type vs mode mismatch (cosmetic but breaks UI sometimes)
   const TYPE_MODE_MAP = {
-    memory_game: ['memory'],
-    drag_drop: ['dragdrop'],
+    memory_game: ['memory', 'spin_wheel', 'swipe_select'],
+    drag_drop: ['dragdrop', 'coloring'],
     story_adventure: ['maze', 'hidden_object', 'story'],
+    picture_quiz: ['true_false', 'falling_catch', 'balloon_pop'],
+    multiple_choice: ['true_false', 'spin_wheel'],
+    pattern_fill: ['sequence'],
+    sorting: ['dragdrop'],
   };
   if (data.mode && TYPE_MODE_MAP[game.type] && !TYPE_MODE_MAP[game.type].includes(data.mode)) {
     // Don't fail on this alone — just flag for "Teach" context
@@ -241,7 +245,10 @@ function buildReplacementTask(game, count, learnFromIssues = []) {
     };
   }
   if (isMiniGame) {
-    return { taskName: `QC Mini Replacement: ${game.category}`, ageGroup: game.ageGroup || 'prasekolah', subject: game.category, gamesCount: count, questionsPerGame: Math.max(4, Math.min(Number(game.totalQuestions || game.gameData?.itemsPerSet || 4), 10)), status: 'pending', createdGames: 0, errorMessage: JSON.stringify({ theme: game.title || game.category, itemsPerSet: Math.max(4, Number(game.totalQuestions || 4)), modes: game.gameData?.mode ? [game.gameData.mode] : [], teachNote: teachNote.trim() }) };
+    // FIX: Jangan reuse title sampah / microTopic sampah sebagai theme baru — itu punca loop.
+    // Theme replacement guna category je → biar generator pick fresh angle setiap kali.
+    const categoryLabel = String(game.category || 'mini').replace(/_/g, ' ');
+    return { taskName: `QC Mini Replacement: ${game.category}`, ageGroup: game.ageGroup || 'prasekolah', subject: game.category, gamesCount: count, questionsPerGame: Math.max(4, Math.min(Number(game.totalQuestions || game.gameData?.itemsPerSet || 4), 10)), status: 'pending', createdGames: 0, errorMessage: JSON.stringify({ theme: `Fresh ${categoryLabel} variation`, itemsPerSet: Math.max(4, Number(game.totalQuestions || 4)), modes: game.gameData?.mode ? [game.gameData.mode] : [], teachNote: teachNote.trim() }) };
   }
   if (game.ageGroup === 'sekolah_rendah' && !game.darjah) return null;
   return { taskName: `QC Replacement: ${game.title || game.category}`, ageGroup: game.ageGroup, ...(game.ageGroup === 'sekolah_rendah' && game.darjah ? { darjah: game.darjah } : {}), subject: game.category, gamesCount: count, questionsPerGame: Math.max(8, Math.min(Number(game.totalQuestions || 8), 20)), status: 'pending', createdGames: 0, errorMessage: `Auto re-queue by QC after failed audit.${teachNote}` };
