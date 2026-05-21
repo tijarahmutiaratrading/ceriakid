@@ -210,6 +210,67 @@ Deno.serve(async (req) => {
       }
     } catch {}
 
+    // ───────────────────────────────────────────────
+    // Email alert kalau status warning/critical (cooldown 6 jam supaya tak spam)
+    // ───────────────────────────────────────────────
+    if (isScheduled && (overallStatus === 'critical' || overallStatus === 'warning')) {
+      try {
+        // Cari log sebelum ni — kalau dah hantar alert dalam 6 jam lepas, skip
+        const recentLogs = await base44.asServiceRole.entities.HealthCheckLog.list('-runAt', 20);
+        const sixHoursAgo = Date.now() - 6 * 60 * 60 * 1000;
+        const recentAlerts = recentLogs.filter(l => {
+          if (l.id === log.id) return false;
+          const runTime = new Date(l.runAt).getTime();
+          return runTime > sixHoursAgo && (l.overallStatus === 'critical' || l.overallStatus === 'warning');
+        });
+
+        if (recentAlerts.length === 0) {
+          // Cari admin emails
+          const admins = await base44.asServiceRole.entities.User.filter({ role: 'admin' });
+          const adminEmails = (admins || []).map(a => a.email).filter(Boolean);
+
+          if (adminEmails.length > 0) {
+            const issueRows = checks
+              .filter(c => c.status === 'warning' || c.status === 'critical')
+              .map(c => `<tr><td style="padding:8px 12px;border-bottom:1px solid #eee;"><strong>${c.label}</strong><br/><span style="color:#666;font-size:12px;">${c.category}</span></td><td style="padding:8px 12px;border-bottom:1px solid #eee;"><span style="background:${c.status === 'critical' ? '#fee2e2' : '#fef3c7'};color:${c.status === 'critical' ? '#991b1b' : '#92400e'};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:bold;">${c.status.toUpperCase()}</span></td><td style="padding:8px 12px;border-bottom:1px solid #eee;color:#444;font-size:13px;">${c.message}</td></tr>`)
+              .join('');
+
+            const statusEmoji = overallStatus === 'critical' ? '🚨' : '⚠️';
+            const statusLabel = overallStatus === 'critical' ? 'CRITICAL' : 'WARNING';
+            const statusColor = overallStatus === 'critical' ? '#dc2626' : '#d97706';
+
+            const body = `<div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
+              <div style="background:${statusColor};color:white;padding:20px;border-radius:12px 12px 0 0;">
+                <h1 style="margin:0;font-size:22px;">${statusEmoji} CeriaKid System Alert</h1>
+                <p style="margin:5px 0 0;opacity:0.9;font-size:14px;">Status: <strong>${statusLabel}</strong> · ${criticalCount} critical, ${warningCount} warning</p>
+              </div>
+              <div style="background:white;border:1px solid #eee;border-top:none;border-radius:0 0 12px 12px;padding:20px;">
+                <p style="color:#333;margin:0 0 15px;">Health audit dijalankan pada <strong>${new Date().toLocaleString('ms-MY', { timeZone: 'Asia/Kuala_Lumpur' })}</strong> menemui isu berikut:</p>
+                <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                  <thead><tr style="background:#f9fafb;"><th style="padding:8px 12px;text-align:left;border-bottom:2px solid #ddd;">Check</th><th style="padding:8px 12px;text-align:left;border-bottom:2px solid #ddd;">Status</th><th style="padding:8px 12px;text-align:left;border-bottom:2px solid #ddd;">Detail</th></tr></thead>
+                  <tbody>${issueRows}</tbody>
+                </table>
+                <div style="margin-top:20px;padding-top:15px;border-top:1px solid #eee;text-align:center;">
+                  <a href="https://app.base44.com" style="background:#7c3aed;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;">Buka Admin Dashboard</a>
+                </div>
+                <p style="color:#888;font-size:11px;margin-top:20px;text-align:center;">Email seterusnya hanya dihantar kalau masalah masih wujud selepas 6 jam.</p>
+              </div>
+            </div>`;
+
+            for (const email of adminEmails) {
+              await base44.asServiceRole.integrations.Core.SendEmail({
+                to: email,
+                subject: `${statusEmoji} CeriaKid ${statusLabel}: ${criticalCount} critical, ${warningCount} warning`,
+                body,
+              });
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Failed to send health alert email:', e);
+      }
+    }
+
     return Response.json({
       success: true,
       logId: log.id,
