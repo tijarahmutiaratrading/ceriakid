@@ -297,9 +297,8 @@ export default function AdminDashboard() {
                   <p className="text-white/85 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
                 </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
                 {[
-                   { label: 'Percuma', value: tierBreakdown.free, icon: '🆓', card: 'from-slate-600 to-slate-800' },
                    { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', card: 'from-emerald-500 to-green-600' },
                    { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', card: 'from-sky-500 to-blue-600' },
                    { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', card: 'from-violet-500 to-purple-600' },
