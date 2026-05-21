@@ -461,6 +461,64 @@ KRITIKAL — STRUKTUR ROUNDS:
 - JANGAN ulang content yang sama antara round. Setiap round MESTI ada topik mikro berbeza (contoh round 1: haiwan; round 2: tumbuhan; round 3: makanan).
 - 'label' setiap round = tajuk pendek round itu (contoh "Round 1: Padan Haiwan Hutan").
 
+CONTOH STRUKTUR YANG WAJIB DIIKUT untuk mode "${mode}":
+${mode === 'falling_catch' || mode === 'balloon_pop' ? `{
+  "label": "Round 1: Tangkap Nombor 5",
+  "target": "5",
+  "items": ["5", "5", "3", "7", "2", "5", "8"]
+}
+WAJIB: target string pendek; items mesti array string (BUKAN object); target mesti muncul SEKURANG-KURANGNYA 2 kali dalam items; minimum 6 items total (campuran target + distractor).` :
+mode === 'coloring' ? `{
+  "label": "Round 1: Warnakan Buah-buahan",
+  "items": ["🍎", "🍌", "🍇", "🍓"]
+}
+WAJIB: items mesti array string emoji/simbol; minimum 4 items per round; setiap item satu emoji sahaja.` :
+mode === 'spin_wheel' ? `{
+  "label": "Round 1: Padan Rima dengan 'kucing'",
+  "target": "kucing",
+  "items": ["pusing", "anjing", "kucing", "burung", "ikan", "ayam"]
+}
+WAJIB: target satu perkataan; items array string minimum 6 perkataan; satu daripada items mesti SAMA dengan target untuk jawapan betul.` :
+mode === 'true_false' ? `{
+  "label": "Round 1: Fakta tentang Haiwan",
+  "statements": [
+    {"text": "Kucing mempunyai empat kaki.", "answer": true},
+    {"text": "Ikan boleh terbang.", "answer": false},
+    {"text": "Burung mempunyai sayap.", "answer": true},
+    {"text": "Pokok boleh berjalan.", "answer": false}
+  ]
+}
+WAJIB: statements array minimum 4; setiap statement ada text (ayat penuh) + answer boolean.` :
+mode === 'memory' ? `{
+  "label": "Round 1: Padan Haiwan dengan Bunyi",
+  "pairs": [["kucing", "meow"], ["anjing", "woof"], ["lembu", "moo"]]
+}
+WAJIB: pairs array minimum 3 pasangan; setiap pasangan [item1, item2].` :
+mode === 'dragdrop' ? `{
+  "label": "Round 1: Susun Haiwan ke Habitat",
+  "items": ["ikan", "burung", "arnab"],
+  "targets": ["air", "udara", "darat"]
+}
+WAJIB: items dan targets ada panjang sama dan BUKAN identical.` :
+mode === 'sorting' ? `{
+  "label": "Round 1: Asingkan Buah dan Sayur",
+  "groups": ["Buah", "Sayur"],
+  "items": [{"text": "epal", "group": "Buah"}, {"text": "lobak", "group": "Sayur"}, {"text": "pisang", "group": "Buah"}, {"text": "bayam", "group": "Sayur"}]
+}
+WAJIB: items minimum 4; setiap item ada text + group; group mesti sepadan dengan groups.` :
+mode === 'sequence' ? `{
+  "label": "Round 1: Susun Nombor",
+  "items": ["3", "1", "5", "2", "4"],
+  "answer": ["1", "2", "3", "4", "5"]
+}
+WAJIB: items array (rawak); answer array (turutan betul); kedua-dua sama panjang.` :
+mode === 'tilematch' ? `{
+  "label": "Round 1: Padan Pasangan",
+  "tiles": ["🍎", "🍎", "🍌", "🍌", "🍇", "🍇"]
+}
+WAJIB: tiles minimum 4, jumlah genap, setiap tile ada pasangan.` :
+`Pastikan struktur round ikut schema yang diberi.`}
+
 Peraturan umum:
 0. Platform untuk Prasekolah dan Darjah 1-6 sahaja.
 1. Tajuk mesti unik dan cinematic.
@@ -509,13 +567,45 @@ Output JSON sahaja ikut schema (dengan rounds[${itemsPerSet}]).`,
       const normalizeRound = (currentMode, roundData) => {
         const next = { ...(roundData || {}) };
         if (currentMode === 'balloon_pop' || currentMode === 'falling_catch') {
-          const target = String(next.target || '').trim() || 'A';
+          const target = String(next.target || '').trim() || '5';
           const rawItems = Array.isArray(next.items) ? next.items : [];
           const cleaned = rawItems.map(item => String(typeof item === 'object' && item !== null ? (item.text || item.label || item.value || '') : item).trim()).filter(Boolean);
           const others = cleaned.filter(item => item.toLowerCase() !== target.toLowerCase());
           next.target = target;
-          next.items = [target, target, ...others].slice(0, Math.max(4, cleaned.length));
-          while (next.items.length < 4) next.items.push(target);
+          // FIX target_not_playable: WAJIB minimum 6 items, target muncul >= 2 kali
+          next.items = [target, target, ...others].slice(0, Math.max(6, cleaned.length + 2));
+          while (next.items.length < 6) next.items.push(target);
+        }
+        // FIX weak_mini_content + empty_rounds for coloring
+        if (currentMode === 'coloring') {
+          const rawItems = Array.isArray(next.items) ? next.items : [];
+          const cleaned = rawItems.map(item => String(typeof item === 'object' && item !== null ? (item.text || item.label || item.value || '') : item).trim()).filter(Boolean);
+          next.items = cleaned.length >= 4 ? cleaned : [...cleaned, '🎨', '🌈', '⭐', '🌟', '🎀', '🌸'].slice(0, 6);
+        }
+        // FIX weak_mini_content for spin_wheel
+        if (currentMode === 'spin_wheel') {
+          const target = String(next.target || '').trim() || 'bintang';
+          const rawItems = Array.isArray(next.items) ? next.items : [];
+          const cleaned = rawItems.map(item => String(typeof item === 'object' && item !== null ? (item.text || item.label || item.value || '') : item).trim()).filter(Boolean);
+          next.target = target;
+          // Ensure target in items + minimum 6 items
+          const hasTarget = cleaned.some(item => item.toLowerCase() === target.toLowerCase());
+          next.items = hasTarget ? cleaned : [target, ...cleaned];
+          while (next.items.length < 6) next.items.push(`pilihan ${next.items.length + 1}`);
+        }
+        // FIX empty_rounds for true_false
+        if (currentMode === 'true_false') {
+          const rawStmts = Array.isArray(next.statements) ? next.statements : [];
+          const cleaned = rawStmts
+            .map(s => ({ text: String(s?.text || '').trim(), answer: typeof s?.answer === 'boolean' ? s.answer : Boolean(s?.answer) }))
+            .filter(s => s.text.length >= 5);
+          next.statements = cleaned.length >= 3 ? cleaned : [
+            ...cleaned,
+            { text: 'Matahari terbit di sebelah timur.', answer: true },
+            { text: 'Ikan boleh terbang di udara.', answer: false },
+            { text: 'Air sejuk membentuk ais.', answer: true },
+            { text: 'Pokok boleh berjalan.', answer: false },
+          ].slice(0, 4);
         }
         if (currentMode === 'mini_simulation') {
           const target = String(next.target || '').trim() || 'Betul';
