@@ -11,6 +11,7 @@ import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
 import DashboardHero from '@/components/home/DashboardHero';
 import QuickAccessGrid from '@/components/home/QuickAccessGrid';
+import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
 import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
 import { checkAndRegisterDevice } from '@/lib/deviceManager';
 import { syncOfflineProgress } from '@/lib/offlineSyncManager';
@@ -93,6 +94,8 @@ export default function Home() {
       <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-8 lg:px-8 pb-40 pt-20 md:pt-8 space-y-8 md:space-y-10">
 
       {isAuthenticated && <DashboardHero user={user} avatarUrl={homeAvatarUrl} lang={lang} />}
+
+      {isAuthenticated && user?.email && <SubscriptionExpiryBanner userEmail={user.email} />}
 
         {/* Not logged in welcome */}
         {!isAuthenticated && (

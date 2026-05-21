@@ -74,6 +74,14 @@
           }
         }
       }
+    },
+    "sentReminders": {
+      "type": "array",
+      "description": "Track expiry reminder emails already sent (e.g. day_30, day_14, day_7, day_1, expired)",
+      "items": {
+        "type": "string"
+      },
+      "default": []
     }
   },
   "required": [
