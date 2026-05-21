@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Settings, ExternalLink, Gamepad2, ChevronLeft, ChevronRight, ChevronDown, Menu, X, Home, Palette, BookOpen, UserCircle, BarChart3, UserPlus, Trophy } from 'lucide-react';
+import { LayoutDashboard, Users, Settings, ExternalLink, Gamepad2, ChevronLeft, ChevronRight, ChevronDown, Menu, X, Home, Palette, BookOpen, UserCircle, BarChart3, UserPlus, Trophy, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ADMIN_MENU = [
   { key: 'dashboard', label: 'Dashboard', sub: 'Order & Analytics', icon: LayoutDashboard, tab: 'analytics' },
   { key: 'customers', label: 'Pelanggan', sub: 'Customer Database', icon: Users, tab: 'customers' },
   { key: 'gamemanager', label: 'Game Manager', sub: 'Generator & QC', icon: Gamepad2, tab: 'gamemanager' },
+  { key: 'health', label: 'System Health', sub: 'Monitoring & Uptime', icon: Activity, tab: 'health' },
   { key: 'settings', label: 'Settings', sub: 'Payment & Pixel', icon: Settings, tab: 'settings' },
 ];
 
