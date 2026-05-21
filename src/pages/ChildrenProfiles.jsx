@@ -80,6 +80,9 @@ export default function ChildrenProfiles() {
   };
 
   const handleDeleteChild = async (id) => {
+    const child = children.find(c => c.id === id);
+    const ok = window.confirm(`Padam profil "${child?.name || 'anak'}"? Progress pembelajaran anak ini akan kekal dalam sistem tetapi profil tidak akan kelihatan lagi.`);
+    if (!ok) return;
     const updated = children.filter(c => c.id !== id);
     setChildren(updated);
     await saveChildren(updated);

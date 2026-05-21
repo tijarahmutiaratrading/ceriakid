@@ -103,17 +103,22 @@ Deno.serve(async (req) => {
     const expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
+    const current = existing[0];
+    // Don't overwrite an ACTIVE paid subscription with an incomplete one — user is
+    // probably upgrading and we should keep them as paid until webhook confirms.
+    const hasActivePaid = current && current.status === 'active' && current.tier !== 'free';
+
     const subData = {
       email: user.email,
-      tier: tier,
-      status: 'incomplete',
-      currentPeriodStart: new Date().toISOString(),
-      currentPeriodEnd: expiryDate.toISOString(),
-      stripeCustomerId: data.id, // store Chip purchase ID here for webhook matching
+      tier: hasActivePaid ? current.tier : tier,
+      status: hasActivePaid ? 'active' : 'incomplete',
+      currentPeriodStart: hasActivePaid ? current.currentPeriodStart : new Date().toISOString(),
+      currentPeriodEnd: hasActivePaid ? current.currentPeriodEnd : expiryDate.toISOString(),
+      stripeCustomerId: data.id, // store latest Chip purchase ID for webhook matching
     };
 
-    if (existing.length > 0) {
-      await base44.asServiceRole.entities.UserSubscription.update(existing[0].id, subData);
+    if (current) {
+      await base44.asServiceRole.entities.UserSubscription.update(current.id, subData);
     } else {
       await base44.asServiceRole.entities.UserSubscription.create(subData);
     }

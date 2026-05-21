@@ -3,7 +3,6 @@
 // 'premium' and 'pro' kept for legacy users only — DO NOT advertise.
 export const TIER_LIMITS = {
   free: { games: 5, devices: 1, children: 1 },
-  trial: { games: 50, devices: 1, children: 1 },
   asas: { games: 50, devices: 1, children: 1 },
   standard: { games: 100, devices: 2, children: 1 },
   keluarga: { games: 200, devices: 4, children: 4 },
@@ -15,7 +14,7 @@ export const TIER_LIMITS = {
 export const getActiveTier = (subscription) => {
   const isExpired = subscription?.currentPeriodEnd && new Date(subscription.currentPeriodEnd) < new Date();
   if (!subscription || isExpired) return 'free';
-  if (subscription.status === 'active' || subscription.status === 'trial') return subscription.tier || 'free';
+  if (subscription.status === 'active') return subscription.tier || 'free';
   return 'free';
 };
 

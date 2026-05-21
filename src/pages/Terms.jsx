@@ -29,15 +29,8 @@ export default function Terms() {
           </section>
 
           <section>
-            <h2 className="text-xl font-black text-slate-900">4. Dasar Bayaran Balik (Refund Policy)</h2>
-            <p>Kami menawarkan <strong>jaminan pulangan wang 7 hari</strong> bagi pembelian pertama:</p>
-            <ul className="list-disc pl-5 space-y-1 mt-2">
-              <li>Permintaan refund mesti dibuat dalam tempoh <strong>7 hari kalendar</strong> selepas tarikh pembayaran.</li>
-              <li>Hantar e-mel ke <a href="mailto:support@ceriakid.com" className="text-game-purple font-bold">support@ceriakid.com</a> dengan resit pembayaran dan sebab refund.</li>
-              <li>Refund akan diproses dalam tempoh 7–14 hari bekerja melalui kaedah pembayaran asal.</li>
-              <li>Selepas 7 hari, bayaran adalah muktamad dan tidak boleh dikembalikan kecuali atas kebijaksanaan kami.</li>
-              <li>Refund tidak akan diberikan jika akaun ditamatkan kerana penyalahgunaan platform.</li>
-            </ul>
+            <h2 className="text-xl font-black text-slate-900">4. Dasar Bayaran Balik</h2>
+            <p>Semua pembelian adalah <strong>muktamad dan tidak boleh dikembalikan</strong> selepas pembayaran berjaya. Sila baca penerangan setiap pelan dengan teliti sebelum membuat pembayaran. Untuk sebarang isu teknikal, hubungi kami dan kami akan bantu selesaikan.</p>
           </section>
 
           <section>

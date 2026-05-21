@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check, CheckCircle, XCircle, Menu, X } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
+import { trackPixelEvent } from '@/lib/pixel';
 import AppHeader from '@/components/AppHeader';
 import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
@@ -11,6 +12,9 @@ import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import HeroCarousel from '@/components/landing/HeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
+
+// Tier values for FB Pixel Purchase event
+const TIER_VALUES = { asas: 49, standard: 99, keluarga: 199 };
 
 
 // Testimoni ibu bapa pengguna CeriaKid
@@ -67,7 +71,7 @@ const avatars = [
 
 
 export default function Landing() {
-  const { isAuthenticated, refreshAuth } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [selectedTierForCheckout, setSelectedTierForCheckout] = useState('keluarga');
   const [navVisible, setNavVisible] = useState(true);
@@ -79,12 +83,19 @@ export default function Landing() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const payment = params.get('payment');
+    const tier = params.get('tier');
     if (payment === 'success') {
       setPaymentStatus('success');
+      // Fire FB Pixel Purchase event so FB Ads optimize for paying customers
+      const value = TIER_VALUES[tier] || 0;
+      trackPixelEvent('Purchase', {
+        currency: 'MYR',
+        value,
+        content_name: tier || 'subscription',
+        content_type: 'product',
+      });
       // Clean URL
       window.history.replaceState({}, '', '/');
-      // Refresh auth to pick up new subscription
-      setTimeout(() => refreshAuth?.(), 1500);
     } else if (payment === 'failed') {
       setPaymentStatus('failed');
       window.history.replaceState({}, '', '/');
@@ -156,7 +167,7 @@ export default function Landing() {
             <div className="flex items-center gap-3 flex-shrink-0">
               {paymentStatus === 'success' && (
                 <button
-                  onClick={() => navigate('/dashboard')}
+                  onClick={() => { window.location.href = '/dashboard'; }}
                   className="px-4 py-2 bg-white text-green-600 rounded-full font-black text-sm shadow"
                 >
                   Ke Dashboard →

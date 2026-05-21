@@ -9,11 +9,43 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const bodyText = await req.text();
+
+    // ─── Verify Chip webhook signature (HMAC SHA256) ───
+    // Chip sends X-Signature header. We compute HMAC of raw body using CHIP_WEBHOOK_SECRET
+    // and compare. Reject if mismatch — prevents fake webhook attacks.
+    const webhookSecret = Deno.env.get('CHIP_WEBHOOK_SECRET');
+    const signatureHeader = req.headers.get('X-Signature') || req.headers.get('x-signature');
+    if (webhookSecret && signatureHeader) {
+      try {
+        const encoder = new TextEncoder();
+        const key = await crypto.subtle.importKey(
+          'raw',
+          encoder.encode(webhookSecret),
+          { name: 'HMAC', hash: 'SHA-256' },
+          false,
+          ['sign']
+        );
+        const sigBytes = await crypto.subtle.sign('HMAC', key, encoder.encode(bodyText));
+        const computedHex = Array.from(new Uint8Array(sigBytes)).map(b => b.toString(16).padStart(2, '0')).join('');
+        const provided = signatureHeader.replace(/^sha256=/, '').toLowerCase().trim();
+        if (computedHex !== provided) {
+          console.error('Webhook signature mismatch');
+          return Response.json({ error: 'Invalid signature' }, { status: 401 });
+        }
+      } catch (sigErr) {
+        console.error('Signature verification failed:', sigErr);
+        return Response.json({ error: 'Signature verification failed' }, { status: 401 });
+      }
+    } else if (webhookSecret && !signatureHeader) {
+      console.error('Missing webhook signature header');
+      return Response.json({ error: 'Missing signature' }, { status: 401 });
+    }
+    // ─── End signature verification ───
+
     const body = JSON.parse(bodyText);
 
     console.log('Chip webhook received:', JSON.stringify(body));
 
-    // Verify this is from Chip by checking required fields exist
     // Chip always sends id, status, reference on every event
     if (!body.id || body.status === undefined) {
       console.error('Invalid webhook payload — missing id or status');
