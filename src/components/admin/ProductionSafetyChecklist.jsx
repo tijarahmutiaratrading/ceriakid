@@ -13,8 +13,12 @@ export default function ProductionSafetyChecklist() {
 
   const loadSummary = async () => {
     setLoading(true);
-    const [tasks, countsRes] = await Promise.all([
-      base44.entities.GameTask.list('-created_date', 200),
+    // Guna filter terus pada setiap status — lebih tepat daripada list 200 task terbaharu
+    // (kalau pakai limit 200, task pending lama akan terpotong & count jadi salah).
+    const [pendingTasks, runningTasks, failedTasks, countsRes] = await Promise.all([
+      base44.entities.GameTask.filter({ status: 'pending' }, '-created_date', 500),
+      base44.entities.GameTask.filter({ status: 'running' }, '-created_date', 100),
+      base44.entities.GameTask.filter({ status: 'failed' }, '-created_date', 200),
       base44.functions.invoke('getGameManagerCounts', {}),
     ]);
 
@@ -23,9 +27,9 @@ export default function ProductionSafetyChecklist() {
     const storyKidTotal = countsRes.data?.storyKidCounts?.count || 0;
 
     setSummary({
-      pending: tasks.filter(t => t.status === 'pending').length,
-      running: tasks.filter(t => t.status === 'running').length,
-      failed: tasks.filter(t => t.status === 'failed').length,
+      pending: pendingTasks.length,
+      running: runningTasks.length,
+      failed: failedTasks.length,
       games: subjectTotal,
       miniGames: miniTotal,
       storyKid: storyKidTotal,
