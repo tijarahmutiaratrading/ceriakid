@@ -1,0 +1,78 @@
+{
+  "name": "HealthCheckLog",
+  "type": "object",
+  "properties": {
+    "runAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Bila health check dijalankan"
+    },
+    "overallStatus": {
+      "type": "string",
+      "enum": [
+        "healthy",
+        "warning",
+        "critical"
+      ],
+      "default": "healthy",
+      "description": "Status keseluruhan sistem"
+    },
+    "totalChecks": {
+      "type": "number",
+      "default": 0
+    },
+    "healthyCount": {
+      "type": "number",
+      "default": 0
+    },
+    "warningCount": {
+      "type": "number",
+      "default": 0
+    },
+    "criticalCount": {
+      "type": "number",
+      "default": 0
+    },
+    "durationMs": {
+      "type": "number",
+      "default": 0,
+      "description": "Berapa lama check ambil masa"
+    },
+    "checks": {
+      "type": "array",
+      "description": "Senarai check details",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "warning",
+              "critical"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "runAt",
+    "overallStatus"
+  ]
+}

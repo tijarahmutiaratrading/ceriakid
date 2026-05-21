@@ -10,7 +10,8 @@ import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminQuickStats from '@/components/admin/AdminQuickStats';
 import AdminStatCard from '@/components/admin/AdminStatCard';
 import AdminGameManager from '@/pages/AdminGameManager';
-import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2 } from 'lucide-react';
+import SystemHealthPanel from '@/components/admin/SystemHealthPanel';
+import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2, Activity } from 'lucide-react';
 
 const SETTINGS_KEY = 'admin_app_settings';
 
@@ -77,7 +78,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tabFromUrl = params.get('tab');
-    if (tabFromUrl && ['analytics', 'customers', 'gamemanager', 'settings'].includes(tabFromUrl)) {
+    if (tabFromUrl && ['analytics', 'customers', 'gamemanager', 'health', 'settings'].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
   }, [location.search]);
@@ -206,6 +207,7 @@ export default function AdminDashboard() {
     { key: 'analytics', label: '📊 Analytics', icon: <BarChart3 className="w-4 h-4" /> },
     { key: 'customers', label: '👥 Pelanggan', icon: <BarChart3 className="w-4 h-4" /> },
     { key: 'gamemanager', label: '🎮 Game Manager', icon: <Gamepad2 className="w-4 h-4" /> },
+    { key: 'health', label: '💚 System Health', icon: <Activity className="w-4 h-4" /> },
     { key: 'settings', label: '⚙️ Settings', icon: <Settings className="w-4 h-4" /> },
   ];
 
@@ -387,6 +389,9 @@ export default function AdminDashboard() {
             </div>
           </motion.div>
         )}
+
+        {/* ═══ SYSTEM HEALTH TAB ═══ */}
+        {activeTab === 'health' && <SystemHealthPanel />}
 
         {/* ═══ GAME MANAGER TAB (lazy-mounted; kekal mounted lepas first visit) ═══ */}
         {gameManagerMounted && (
