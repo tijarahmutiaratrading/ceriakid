@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AlertCircle, CheckCircle2, Clock, Loader2, RefreshCw, Trash2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
@@ -20,6 +20,7 @@ function getTaskGroup(task) {
 
 export default function MasterTaskQueue({ onToast }) {
   const [tasks, setTasks] = useState([]);
+  const [summary, setSummary] = useState({ pending: 0, running: 0, completed: 0, failed: 0 });
   const [loading, setLoading] = useState(false);
   const lastLoadRef = useRef(0);
 
@@ -32,8 +33,19 @@ export default function MasterTaskQueue({ onToast }) {
     lastLoadRef.current = now;
     setLoading(true);
     try {
-      const data = await base44.entities.GameTask.list('-created_date', 120);
+      // List recent 120 tasks for display + true DB counts via summary function
+      const [data, summaryRes] = await Promise.all([
+        base44.entities.GameTask.list('-created_date', 120),
+        base44.functions.invoke('getTaskQueueSummary', {}),
+      ]);
       setTasks(data);
+      const s = summaryRes?.data?.statuses || {};
+      setSummary({
+        pending: s.pending || 0,
+        running: s.running || 0,
+        completed: s.completed || 0,
+        failed: s.failed || 0,
+      });
     } catch (error) {
       onToast?.('Refresh terlalu kerap. Cuba lagi sebentar.', false);
     }
@@ -43,13 +55,6 @@ export default function MasterTaskQueue({ onToast }) {
   useEffect(() => {
     loadTasks();
   }, []);
-
-  const summary = useMemo(() => ({
-    pending: tasks.filter(t => t.status === 'pending').length,
-    running: tasks.filter(t => t.status === 'running').length,
-    completed: tasks.filter(t => t.status === 'completed').length,
-    failed: tasks.filter(t => t.status === 'failed').length,
-  }), [tasks]);
 
   const deleteTask = async (task) => {
     await base44.entities.GameTask.delete(task.id);
