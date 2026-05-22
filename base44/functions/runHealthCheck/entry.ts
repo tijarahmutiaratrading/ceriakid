@@ -211,9 +211,9 @@ Deno.serve(async (req) => {
     } catch {}
 
     // ───────────────────────────────────────────────
-    // Email alert kalau status warning/critical (cooldown 6 jam supaya tak spam)
+    // Email alert DISABLED — admin nak check manual je dalam dashboard
     // ───────────────────────────────────────────────
-    if (isScheduled && (overallStatus === 'critical' || overallStatus === 'warning')) {
+    if (false && isScheduled && (overallStatus === 'critical' || overallStatus === 'warning')) {
       try {
         // Cari log sebelum ni — kalau dah hantar alert dalam 6 jam lepas, skip
         const recentLogs = await base44.asServiceRole.entities.HealthCheckLog.list('-runAt', 20);
