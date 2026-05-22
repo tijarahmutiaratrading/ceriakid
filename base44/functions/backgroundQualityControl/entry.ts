@@ -145,16 +145,30 @@ function auditMiniGame(game, miniTitleSeen, miniMicroTopicSeen) {
   }
 
   // 4. Content count check — must have enough playable items
+  // Accept top-level OR rounds-level content (new generator structure stores per-round)
   const contentCount = getMiniContentCount(game);
-  if (contentCount < 4) issues.push('weak_mini_content');
+  // For round-based games (true_false, coloring, spin_wheel etc.), also count statements/items inside rounds
+  let roundExtraCount = 0;
+  if (Array.isArray(data.rounds)) {
+    for (const r of data.rounds) {
+      if (!r || typeof r !== 'object') continue;
+      // Also include statements (true_false), challenges (physics), scenes (story), letters (tracing), groups (sorting)
+      for (const key of ['statements', 'challenges', 'scenes', 'letters', 'words', 'targets', 'groups']) {
+        if (Array.isArray(r[key])) roundExtraCount += r[key].length;
+      }
+    }
+  }
+  if (contentCount + roundExtraCount < 4) issues.push('weak_mini_content');
 
-  // 5. Empty rounds — every round must have at least items/pairs/targets/options
+  // 5. Empty rounds — every round must have at least items/pairs/targets/options/statements/challenges/scenes/letters
   if (Array.isArray(data.rounds)) {
     let emptyRoundCount = 0;
     for (const r of data.rounds) {
       if (!r || typeof r !== 'object') { emptyRoundCount++; continue; }
-      const hasContent = ['items', 'pairs', 'targets', 'options', 'tiles', 'cards'].some(k => Array.isArray(r[k]) && r[k].length >= 2);
-      if (!hasContent && !r.target) emptyRoundCount++;
+      const hasArrayContent = ['items', 'pairs', 'targets', 'options', 'tiles', 'cards', 'statements', 'challenges', 'scenes', 'letters', 'words', 'groups'].some(k => Array.isArray(r[k]) && r[k].length >= 2);
+      // Single-target modes (balloon_pop, falling_catch, spin_wheel, stacking, typing_challenge) only need target
+      const hasTarget = r.target !== undefined && r.target !== null && String(r.target).length > 0;
+      if (!hasArrayContent && !hasTarget) emptyRoundCount++;
     }
     if (emptyRoundCount >= Math.ceil(data.rounds.length / 2)) issues.push('empty_rounds');
   }
@@ -172,8 +186,12 @@ function auditMiniGame(game, miniTitleSeen, miniMicroTopicSeen) {
   }
 
   // 7. balloon_pop / falling_catch target playability
-  if ((data.mode === 'balloon_pop' || data.mode === 'falling_catch') && (!data.target || !Array.isArray(data.items) || data.items.filter(item => String(item).toLowerCase() === String(data.target).toLowerCase()).length < 2)) {
-    issues.push('target_not_playable');
+  // New generator stores target/items INSIDE rounds[], not top-level. Check both.
+  if (data.mode === 'balloon_pop' || data.mode === 'falling_catch') {
+    const checkRoundPlayable = (target, items) => target && Array.isArray(items) && items.filter(item => String(item).toLowerCase() === String(target).toLowerCase()).length >= 2;
+    const topPlayable = checkRoundPlayable(data.target, data.items);
+    const roundsPlayable = Array.isArray(data.rounds) && data.rounds.length > 0 && data.rounds.every(r => checkRoundPlayable(r?.target, r?.items));
+    if (!topPlayable && !roundsPlayable) issues.push('target_not_playable');
   }
 
   // 8. type vs mode mismatch (cosmetic but breaks UI sometimes)
