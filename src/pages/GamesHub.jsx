@@ -9,8 +9,6 @@ import { getCategoryIllustration } from '@/lib/miniCategoryIllustrations';
 import { base44 } from '@/api/base44Client';
 import { COGNITIVE_CATEGORIES } from '@/lib/miniGameBuilder';
 
-const VARIANTS_PER_COGNITIVE_CATEGORY = 6;
-
 const levelColors = {
   Mudah: 'bg-green-400/85 text-white',
   Sederhana: 'bg-yellow-400/85 text-white',
@@ -28,12 +26,12 @@ export default function GamesHub() {
       setLoadingCounts(true);
       try {
         const nextCounts = {};
-        // Cognitive categories → template-based, sentiasa ada 6 variants
+        // Cognitive categories → guna jumlah games sebenar dari blueprint
         // Legacy categories → cari dalam DB (fallback)
         const legacyCategories = MINI_GAME_CATEGORIES.filter(c => !COGNITIVE_CATEGORIES.includes(c.id));
         for (const category of MINI_GAME_CATEGORIES) {
           if (COGNITIVE_CATEGORIES.includes(category.id)) {
-            nextCounts[category.id] = VARIANTS_PER_COGNITIVE_CATEGORY;
+            nextCounts[category.id] = (category.games || []).length;
           }
         }
         if (legacyCategories.length > 0) {
