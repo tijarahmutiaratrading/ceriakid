@@ -70,7 +70,7 @@ export default function MiniGamePlayground() {
   };
 
   return (
-    <div className="min-h-screen font-nunito relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #FFD9EC 0%, #C9B6FF 45%, #A8E0FF 100%)' }}>
+    <div className="min-h-screen w-full font-nunito relative overflow-hidden rounded-2xl" style={{ background: 'linear-gradient(180deg, #FFF1F8 0%, #F0E5FF 50%, #E0F0FF 100%)' }}>
       {/* Animated playful background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Soft sun glow */}
@@ -148,13 +148,9 @@ export default function MiniGamePlayground() {
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
         <Link
           to={`/mini-games/${category.id}`}
-          className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full font-black text-sm text-white shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-95 transition-all ring-2 ring-white/80"
-          style={{ background: 'linear-gradient(135deg,#F472B6 0%,#A855F7 60%,#6366F1 100%)' }}
+          className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full font-bold text-sm text-slate-700 bg-white/90 shadow-sm hover:bg-white hover:-translate-y-0.5 active:scale-95 transition-all"
         >
-          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/25 backdrop-blur">
-            <ArrowLeft className="w-3.5 h-3.5" />
-          </span>
-          Kembali ke {category.title}
+          <ArrowLeft className="w-3.5 h-3.5" /> Kembali ke {category.title}
         </Link>
 
         {loadingGame ? (

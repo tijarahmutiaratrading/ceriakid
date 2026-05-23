@@ -22,14 +22,16 @@ export default function MiniGamesList() {
   const category = findMiniCategory(type);
   const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 10;
 
-  // Pastel squircle palette — rotate per card
+  // Soft pastel gradient palette — rotate per card
   const pastelPalette = [
-    { bg: '#C7B8F5', text: '#3D2A7A', accent: '#7B5BE0' }, // lavender
-    { bg: '#B8E5D4', text: '#1F5A45', accent: '#3FA882' }, // mint
-    { bg: '#FFD4B8', text: '#7A3D1F', accent: '#E07A3F' }, // peach
-    { bg: '#FFC7D9', text: '#7A2A4A', accent: '#E04F7A' }, // pink
-    { bg: '#B8D4F5', text: '#1F3D7A', accent: '#3F7AE0' }, // blue
-    { bg: '#F5E5B8', text: '#7A5A1F', accent: '#E0A83F' }, // yellow
+    { bg: 'linear-gradient(135deg, #FFE5F1 0%, #F5D7FF 100%)', text: '#5B2A7A', accent: '#A855F7' }, // pink-lavender
+    { bg: 'linear-gradient(135deg, #FFF1D6 0%, #FFD9D9 100%)', text: '#7A4A2A', accent: '#F97316' }, // peach
+    { bg: 'linear-gradient(135deg, #FFE0CC 0%, #FFF1A8 100%)', text: '#7A5A1F', accent: '#EAB308' }, // warm yellow
+    { bg: 'linear-gradient(135deg, #D6F5E5 0%, #C8EEDD 100%)', text: '#1F5A45', accent: '#10B981' }, // mint
+    { bg: 'linear-gradient(135deg, #E5DEFF 0%, #D9E5FF 100%)', text: '#3D2A7A', accent: '#6366F1' }, // lavender-blue
+    { bg: 'linear-gradient(135deg, #D6F0FF 0%, #FFE0F0 100%)', text: '#1F3D7A', accent: '#3B82F6' }, // sky-pink
+    { bg: 'linear-gradient(135deg, #D9F0E8 0%, #E5E0FF 100%)', text: '#1F5A45', accent: '#14B8A6' }, // teal-lavender
+    { bg: 'linear-gradient(135deg, #FFE0F0 0%, #E5DEFF 100%)', text: '#7A2A4A', accent: '#EC4899' }, // pink-purple
   ];
 
   React.useEffect(() => {
@@ -49,35 +51,27 @@ export default function MiniGamesList() {
   const gamesToShow = category.games;
 
   return (
-    <div className="min-h-screen font-nunito relative overflow-hidden">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <svg className="absolute -top-20 -right-20 w-[28rem] h-[28rem] opacity-50" viewBox="0 0 400 400" fill="none">
-          <path d="M200 50 Q 320 80, 350 200 T 200 350 Q 80 320, 50 200 T 200 50 Z" fill="#C8E0BF" />
-        </svg>
-        <svg className="absolute top-1/3 -left-32 w-96 h-96 opacity-40" viewBox="0 0 400 400" fill="none">
-          <path d="M200 60 Q 310 90, 340 210 T 190 340 Q 70 310, 60 190 T 200 60 Z" fill="#BBDDB3" />
-        </svg>
-        <svg className="absolute bottom-10 right-10 w-40 h-40 opacity-60" viewBox="0 0 100 100">
-          <path d="M50 10 Q 70 30, 60 55 Q 50 80, 40 55 Q 30 30, 50 10 Z" fill="#7BAB6E" />
-          <path d="M30 40 Q 45 50, 40 70 Q 35 85, 25 70 Q 20 55, 30 40 Z" fill="#8FBC82" />
-        </svg>
-        <svg className="absolute top-32 left-8 w-28 h-28 opacity-50" viewBox="0 0 100 100">
-          <path d="M50 15 Q 68 35, 58 60 Q 48 80, 42 60 Q 32 35, 50 15 Z" fill="#7BAB6E" />
-        </svg>
-      </div>
-
+    <div className="min-h-screen w-full font-nunito rounded-2xl" style={{ background: '#FAF7FF' }}>
       <AppHeader showBack={true} backTo="/games-hub" />
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className={`mb-5 rounded-3xl p-5 bg-gradient-to-br ${category.color} shadow-2xl`}>
-          <Link to="/games-hub" className="inline-flex items-center gap-2 text-white/85 text-xs font-black mb-4">
-            <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-5 rounded-[1.75rem] p-5 sm:p-6"
+          style={{
+            background: 'linear-gradient(135deg, #FFD9EC 0%, #E0D4FF 45%, #C8E0FF 100%)',
+            boxShadow: '0 10px 30px rgba(168,85,247,0.12)',
+          }}
+        >
+          <Link to="/games-hub" className="inline-flex items-center gap-2 mb-4 px-3.5 py-2 rounded-full bg-white/85 text-slate-700 font-bold text-xs sm:text-sm shadow-sm hover:bg-white transition-all">
+            <ArrowLeft className="w-3.5 h-3.5" /> Kembali ke kategori
           </Link>
           <div className="flex items-center gap-4">
-            <div className="text-5xl">{category.emoji}</div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white">{category.title}</h1>
-              <p className="text-white/80 text-sm font-bold">{loadingGames ? 'Syncing games...' : `${gamesToShow.length} mini games`} · {category.objective}</p>
+            <div className="text-5xl" style={{ filter: 'drop-shadow(0 4px 8px rgba(168,85,247,0.2))' }}>{category.emoji}</div>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-800 leading-tight">{category.title}</h1>
+              <p className="text-slate-600 text-sm font-medium mt-1">{loadingGames ? 'Syncing games...' : `${gamesToShow.length} mini games`} · {category.objective}</p>
             </div>
           </div>
         </motion.div>
@@ -96,11 +90,11 @@ export default function MiniGamesList() {
             <motion.div key={game.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.06 }} whileHover={!locked ? { y: -4 } : {}}>
               <CardWrapper
                 {...wrapperProps}
-                className={`relative block h-full p-5 transition-all ${locked ? 'opacity-70' : 'hover:shadow-2xl'}`}
+                className={`relative block h-full p-5 transition-all ${locked ? 'opacity-70' : 'hover:-translate-y-1 hover:shadow-xl'}`}
                 style={{
                   background: palette.bg,
-                  borderRadius: '36px',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+                  borderRadius: '28px',
+                  boxShadow: '0 6px 20px rgba(168,85,247,0.10)',
                   minHeight: '180px',
                 }}
               >
@@ -124,11 +118,11 @@ export default function MiniGamesList() {
                 </h2>
 
                 {/* Play button — bottom right corner */}
-                <div className="absolute bottom-4 right-4 w-11 h-11 rounded-2xl bg-white flex items-center justify-center shadow-lg" style={{ color: palette.accent }}>
-                  {locked ? <Lock className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
+                <div className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-md" style={{ color: palette.accent }}>
+                  {locked ? <Lock className="w-4 h-4" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
                 </div>
               </CardWrapper>
-              {locked && <p className="mt-2 text-center text-xs font-black text-yellow-200">Naik taraf untuk akses mini game ini</p>}
+              {locked && <p className="mt-2 text-center text-xs font-bold text-slate-500">Naik taraf untuk akses mini game ini</p>}
             </motion.div>
             );
           })}
