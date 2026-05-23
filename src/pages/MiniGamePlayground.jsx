@@ -146,8 +146,15 @@ export default function MiniGamePlayground() {
       </div>
       <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} />
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
-        <Link to={`/mini-games/${category.id}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-2xl font-black text-sm shadow-lg hover:shadow-xl transition-all" style={{ background: 'linear-gradient(135deg, #A67B5B 0%, #8B5A3C 100%)', color: '#FDF6E3', border: '2px solid #6B4423' }}>
-          <ArrowLeft className="w-4 h-4" /> Kembali ke {category.title}
+        <Link
+          to={`/mini-games/${category.id}`}
+          className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full font-black text-sm text-white shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-95 transition-all ring-2 ring-white/80"
+          style={{ background: 'linear-gradient(135deg,#F472B6 0%,#A855F7 60%,#6366F1 100%)' }}
+        >
+          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/25 backdrop-blur">
+            <ArrowLeft className="w-3.5 h-3.5" />
+          </span>
+          Kembali ke {category.title}
         </Link>
 
         {loadingGame ? (
