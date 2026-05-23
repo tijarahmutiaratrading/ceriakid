@@ -7,6 +7,9 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { getCategoryIllustration } from '@/lib/miniCategoryIllustrations';
 import { base44 } from '@/api/base44Client';
+import { COGNITIVE_CATEGORIES } from '@/lib/miniGameBuilder';
+
+const VARIANTS_PER_COGNITIVE_CATEGORY = 6;
 
 const levelColors = {
   Mudah: 'bg-green-400/85 text-white',
@@ -24,20 +27,30 @@ export default function GamesHub() {
     const loadCounts = async () => {
       setLoadingCounts(true);
       try {
-        const results = await Promise.all(
-          MINI_GAME_CATEGORIES.map(category =>
-            base44.entities.Game.filter({ category: category.id }).catch(() => [])
-          )
-        );
-        if (cancelled) return;
         const nextCounts = {};
-        results.forEach((games, index) => {
-          nextCounts[MINI_GAME_CATEGORIES[index].id] = (games || []).filter(game =>
-            game.isPublished !== false &&
-            (game.gameData?.miniGameBlueprint === true || game.gameData?.miniGameGenerated === true)
-          ).length;
-        });
-        setCounts(nextCounts);
+        // Cognitive categories → template-based, sentiasa ada 6 variants
+        // Legacy categories → cari dalam DB (fallback)
+        const legacyCategories = MINI_GAME_CATEGORIES.filter(c => !COGNITIVE_CATEGORIES.includes(c.id));
+        for (const category of MINI_GAME_CATEGORIES) {
+          if (COGNITIVE_CATEGORIES.includes(category.id)) {
+            nextCounts[category.id] = VARIANTS_PER_COGNITIVE_CATEGORY;
+          }
+        }
+        if (legacyCategories.length > 0) {
+          const results = await Promise.all(
+            legacyCategories.map(category =>
+              base44.entities.Game.filter({ category: category.id }).catch(() => [])
+            )
+          );
+          if (cancelled) return;
+          results.forEach((games, index) => {
+            nextCounts[legacyCategories[index].id] = (games || []).filter(game =>
+              game.isPublished !== false &&
+              (game.gameData?.miniGameBlueprint === true || game.gameData?.miniGameGenerated === true)
+            ).length;
+          });
+        }
+        if (!cancelled) setCounts(nextCounts);
       } finally {
         if (!cancelled) setLoadingCounts(false);
       }
