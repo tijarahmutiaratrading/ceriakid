@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Play, Lightbulb } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
@@ -9,11 +9,19 @@ import { getCategoryIllustration } from '@/lib/miniCategoryIllustrations';
 import { base44 } from '@/api/base44Client';
 import { COGNITIVE_CATEGORIES } from '@/lib/miniGameBuilder';
 
-const levelColors = {
-  Mudah: 'bg-green-400/85 text-white',
-  Sederhana: 'bg-yellow-400/85 text-white',
-  Sukar: 'bg-red-400/85 text-white',
+// Pastel gradient palette per category — soft, breathable
+const cardPalettes = {
+  memory_master:    { bg: 'linear-gradient(135deg, #FFE5F1 0%, #F5D7FF 100%)', icon: 'linear-gradient(135deg, #FFC1DE 0%, #F0AEFF 100%)' },
+  logic_puzzles:    { bg: 'linear-gradient(135deg, #FFF1D6 0%, #FFD9D9 100%)', icon: 'linear-gradient(135deg, #FFE0A8 0%, #FFB8B8 100%)' },
+  speed_focus:      { bg: 'linear-gradient(135deg, #FFE0CC 0%, #FFF1A8 100%)', icon: 'linear-gradient(135deg, #FFCAB0 0%, #FFE585 100%)' },
+  pattern_genius:   { bg: 'linear-gradient(135deg, #D6F5E5 0%, #C8EEDD 100%)', icon: 'linear-gradient(135deg, #B8E8D2 0%, #9FDDC2 100%)' },
+  maze_adventure:   { bg: 'linear-gradient(135deg, #E5DEFF 0%, #D9E5FF 100%)', icon: 'linear-gradient(135deg, #C9BEFF 0%, #B5C9FF 100%)' },
+  creative_builder: { bg: 'linear-gradient(135deg, #D6F0FF 0%, #FFE0F0 100%)', icon: 'linear-gradient(135deg, #B0DDFF 0%, #FFC1DE 100%)' },
+  problem_solver:   { bg: 'linear-gradient(135deg, #D9F0E8 0%, #E5E0FF 100%)', icon: 'linear-gradient(135deg, #B8E5D2 0%, #C9BEFF 100%)' },
+  brain_training:   { bg: 'linear-gradient(135deg, #FFE0F0 0%, #E5DEFF 100%)', icon: 'linear-gradient(135deg, #FFC1DE 0%, #C9BEFF 100%)' },
 };
+
+const defaultPalette = { bg: 'linear-gradient(135deg, #F5E5FF 0%, #E5D4FF 100%)', icon: 'linear-gradient(135deg, #E0C8FF 0%, #CAB0FF 100%)' };
 
 export default function GamesHub() {
   const { ageGroup } = useAgeGroup() || { ageGroup: 'prasekolah' };
@@ -26,8 +34,6 @@ export default function GamesHub() {
       setLoadingCounts(true);
       try {
         const nextCounts = {};
-        // Cognitive categories → guna jumlah games sebenar dari blueprint
-        // Legacy categories → cari dalam DB (fallback)
         const legacyCategories = MINI_GAME_CATEGORIES.filter(c => !COGNITIVE_CATEGORIES.includes(c.id));
         for (const category of MINI_GAME_CATEGORIES) {
           if (COGNITIVE_CATEGORIES.includes(category.id)) {
@@ -59,90 +65,159 @@ export default function GamesHub() {
   }, []);
 
   const totalGames = MINI_GAME_CATEGORIES.reduce((sum, category) => sum + (counts[category.id] ?? 0), 0);
-  // Hide empty categories (0 games) once counts are loaded
   const visibleCategories = loadingCounts
     ? MINI_GAME_CATEGORIES
     : MINI_GAME_CATEGORIES.filter(category => (counts[category.id] ?? 0) > 0);
 
   return (
-    <div className="min-h-screen font-nunito relative overflow-hidden">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <svg className="absolute -top-20 -right-20 w-[28rem] h-[28rem] opacity-50" viewBox="0 0 400 400" fill="none">
-          <path d="M200 50 Q 320 80, 350 200 T 200 350 Q 80 320, 50 200 T 200 50 Z" fill="#C8E0BF" />
-        </svg>
-        <svg className="absolute top-1/3 -left-32 w-96 h-96 opacity-40" viewBox="0 0 400 400" fill="none">
-          <path d="M200 60 Q 310 90, 340 210 T 190 340 Q 70 310, 60 190 T 200 60 Z" fill="#BBDDB3" />
-        </svg>
-        <svg className="absolute bottom-10 right-10 w-40 h-40 opacity-60" viewBox="0 0 100 100">
-          <path d="M50 10 Q 70 30, 60 55 Q 50 80, 40 55 Q 30 30, 50 10 Z" fill="#7BAB6E" />
-          <path d="M30 40 Q 45 50, 40 70 Q 35 85, 25 70 Q 20 55, 30 40 Z" fill="#8FBC82" />
-        </svg>
-        <svg className="absolute top-32 left-8 w-28 h-28 opacity-50" viewBox="0 0 100 100">
-          <path d="M50 15 Q 68 35, 58 60 Q 48 80, 42 60 Q 32 35, 50 15 Z" fill="#7BAB6E" />
-        </svg>
-      </div>
-
+    <div className="min-h-screen font-nunito" style={{ background: '#FAF7FF' }}>
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-5 rounded-3xl" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}>
-          <Link to="/dashboard" className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
-            <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 pb-24 pt-20 md:pt-24">
+        {/* HERO HEADER — soft pastel gradient */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative mb-5 p-5 sm:p-6 rounded-[1.75rem] overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, #FFD9EC 0%, #E0D4FF 45%, #C8E0FF 100%)',
+            boxShadow: '0 10px 30px rgba(168,85,247,0.12)',
+          }}
+        >
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-2 mb-4 px-3.5 py-2 rounded-full bg-white/85 text-slate-700 font-bold text-xs sm:text-sm shadow-sm hover:bg-white transition-all"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> Kembali ke Dashboard
           </Link>
-          <div className="flex items-center gap-3">
-            <div className="text-5xl">🎮</div>
-            <div className="flex-1">
-              <h1 className="text-3xl font-black text-white leading-tight">Mini Games Hub</h1>
-              <p className="text-white/90 text-sm font-bold">
-                Genius Games · 8 kategori · {loadingCounts ? 'syncing...' : `${totalGames} games`}
+
+          <div className="relative flex items-start gap-3">
+            {/* Mascot */}
+            <div className="hidden xs:block flex-shrink-0">
+              <img
+                src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
+                alt="CeriaKid"
+                className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+                style={{ filter: 'drop-shadow(0 4px 12px rgba(168,85,247,0.25))' }}
+              />
+            </div>
+
+            <div className="flex-1 text-center sm:text-left">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-800 leading-tight">
+                🎮 Mini Games Hub
+              </h1>
+              <p className="text-slate-700 font-black text-lg sm:text-xl leading-tight">
+                Genius Games
+              </p>
+
+              {/* Stat pill */}
+              <div className="inline-flex items-center gap-2 mt-3 px-4 py-1.5 rounded-full bg-white/80 shadow-sm">
+                <span className="text-slate-700 font-bold text-xs sm:text-sm">8 kategori</span>
+                <span className="text-slate-400">│</span>
+                <span className="text-slate-700 font-bold text-xs sm:text-sm">
+                  {loadingCounts ? 'syncing...' : `${totalGames} games`}
+                </span>
+              </div>
+
+              <p className="text-slate-600 text-xs sm:text-sm font-medium mt-3 leading-snug">
+                Fun first: balloon pop, maze, tracing, spin wheel, catching game, coloring, rhythm tap dan banyak lagi.
               </p>
             </div>
           </div>
-          <div className="mt-4 rounded-2xl bg-white/15 border border-white/20 p-3">
-            <p className="text-white text-sm font-black">Fun first: balloon pop, maze, tracing, spin wheel, catching game, coloring, rhythm tap dan banyak lagi.</p>
-          </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        {/* CATEGORY GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
           {!loadingCounts && visibleCategories.length === 0 && (
-            <div className="col-span-full p-6 rounded-3xl bg-white/15 text-center">
-              <p className="text-white font-black text-base">Tiada mini games lagi.</p>
-              <p className="text-white/80 text-sm font-bold mt-1">Sila jana mini games dari admin Games Generator.</p>
+            <div className="col-span-full p-6 rounded-3xl bg-white text-center shadow-sm">
+              <p className="text-slate-800 font-black text-base">Tiada mini games lagi.</p>
+              <p className="text-slate-500 text-sm font-bold mt-1">Sila jana mini games dari admin Games Generator.</p>
             </div>
           )}
-          {visibleCategories.map((category, idx) => (
-            <motion.div key={category.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} whileHover={{ scale: 1.03, y: -4 }} whileTap={{ scale: 0.97 }}>
-              <Link to={`/mini-games/${category.id}`} className="block h-full">
-                <div className={`bg-gradient-to-br ${category.color} rounded-3xl p-4 h-full shadow-lg`}>
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    {getCategoryIllustration(category.id) ? (
-                      <img
-                        src={getCategoryIllustration(category.id)}
-                        alt={category.title}
-                        className="w-16 h-16 object-contain rounded-xl"
-                        style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))' }}
-                      />
-                    ) : (
-                      <div className="text-4xl">{category.emoji}</div>
-                    )}
-                    <span className="text-xs px-2 py-1 rounded-full font-black bg-white text-purple-900 shadow-md">
-                      {loadingCounts ? <Loader2 className="w-3 h-3 animate-spin" /> : `${counts[category.id] ?? 0} games`}
+
+          {visibleCategories.map((category, idx) => {
+            const palette = cardPalettes[category.id] || defaultPalette;
+            const count = counts[category.id] ?? 0;
+            return (
+              <motion.div
+                key={category.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.04 }}
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Link to={`/mini-games/${category.id}`} className="block h-full">
+                  <div
+                    className="relative rounded-[1.5rem] p-4 h-full overflow-hidden"
+                    style={{
+                      background: palette.bg,
+                      boxShadow: '0 6px 20px rgba(168,85,247,0.08)',
+                    }}
+                  >
+                    {/* Badge top-right */}
+                    <span className="absolute top-3 right-3 text-[11px] px-2.5 py-1 rounded-full font-black bg-white text-slate-700 shadow-sm">
+                      {loadingCounts ? <Loader2 className="w-3 h-3 animate-spin inline" /> : `${count} games`}
                     </span>
+
+                    {/* Top row: illustration + title/objective */}
+                    <div className="flex items-start gap-3 mb-4 pr-16">
+                      <div
+                        className="flex-shrink-0 w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-2xl flex items-center justify-center overflow-hidden"
+                        style={{ background: palette.icon }}
+                      >
+                        {getCategoryIllustration(category.id) ? (
+                          <img
+                            src={getCategoryIllustration(category.id)}
+                            alt={category.title}
+                            className="w-full h-full object-contain p-1"
+                          />
+                        ) : (
+                          <div className="text-4xl">{category.emoji}</div>
+                        )}
+                      </div>
+
+                      <div className="flex-1 min-w-0 pt-0.5">
+                        <h3 className="text-slate-800 font-black text-base sm:text-lg leading-tight mb-1">
+                          {category.title}
+                        </h3>
+                        <p className="text-slate-600 text-xs sm:text-[13px] font-medium leading-snug line-clamp-2">
+                          {category.objective}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Summary row bottom */}
+                    <div className="flex items-center justify-between pt-3 border-t border-white/60">
+                      <span className="text-slate-600 text-xs sm:text-sm font-bold">
+                        10 pusingan · 3 tahap kesukaran
+                      </span>
+                      <div className="flex-shrink-0 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-sm">
+                        <Play className="w-3.5 h-3.5 text-slate-700 fill-slate-700 ml-0.5" />
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-white font-black text-lg leading-tight mb-1">{category.title}</h3>
-                  <p className="text-white text-xs font-bold leading-snug mb-3 drop-shadow">{category.objective}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {category.games.map(game => <span key={game.id} className={`${levelColors[game.difficulty]} text-[10px] px-2 py-0.5 rounded-full font-black`}>{game.mode.replace('_', ' ')}</span>)}
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="p-5 rounded-3xl text-center" style={{ background: 'rgba(15,23,42,0.55)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}>
-          <p className="text-white font-black text-base mb-1">💡 Tips Ibu Bapa</p>
-          <p className="text-white/90 text-sm font-bold">Senarai ini kini sync terus dengan mini games yang telah dijana di Games Generator.</p>
+        {/* TIPS FOOTER */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="p-4 sm:p-5 rounded-2xl bg-white border-2 border-purple-100"
+          style={{ boxShadow: '0 4px 16px rgba(168,85,247,0.06)' }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Lightbulb className="w-5 h-5 text-yellow-500" fill="#FCD34D" />
+            <p className="text-slate-800 font-black text-base">Tips Ibu Bapa</p>
+          </div>
+          <p className="text-slate-600 text-sm font-medium leading-snug">
+            Senarai ini kini sync terus dengan mini games yang telah dijana di Games Generator.
+          </p>
         </motion.div>
       </div>
     </div>
