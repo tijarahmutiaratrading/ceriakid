@@ -42,7 +42,6 @@ const SUBJECT_CONFIG = [
 
 export default function AdminGameManager({ embedded = false }) {
   const [tab, setTab] = useState('generator');
-  const [miniGamesTab, setMiniGamesTab] = useState('generate');
   const [storyKidTab, setStoryKidTab] = useState('generate');
   const [expandedSections, setExpandedSections] = useState({ prasekolah: true, sekolah_rendah: true });
   const [generatorSlide, setGeneratorSlide] = useState(0); // 0 = Prasekolah, 1 = Sekolah Rendah (mobile/tablet carousel)
@@ -487,8 +486,6 @@ export default function AdminGameManager({ embedded = false }) {
         <MasterGeneratorTabs
           tab={tab}
           setTab={setTab}
-          miniGamesTab={miniGamesTab}
-          setMiniGamesTab={setMiniGamesTab}
           storyKidTab={storyKidTab}
           setStoryKidTab={setStoryKidTab}
         />

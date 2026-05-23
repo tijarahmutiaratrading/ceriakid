@@ -1,12 +1,11 @@
 import React from 'react';
 
-export default function MasterGeneratorTabs({ tab, setTab, miniGamesTab, setMiniGamesTab, storyKidTab, setStoryKidTab }) {
+export default function MasterGeneratorTabs({ tab, setTab, storyKidTab, setStoryKidTab }) {
   const tabs = [
     { id: 'generator', label: 'Generate', short: 'Generate', emoji: '🎮', section: 'Games', onClick: () => setTab('generator'), active: tab === 'generator' },
     { id: 'manager', label: 'Manage', short: 'Manage', emoji: '📋', section: 'Games', onClick: () => setTab('manager'), active: tab === 'manager' },
     { id: 'monthly', label: 'Monthly', short: 'Monthly', emoji: '📅', section: 'Games', onClick: () => setTab('monthly'), active: tab === 'monthly' },
-    { id: 'mini-generate', label: 'Generate', short: 'Mini Gen', emoji: '🎯', section: 'Mini Games', onClick: () => { setTab('minigames'); setMiniGamesTab('generate'); }, active: tab === 'minigames' && miniGamesTab === 'generate' },
-    { id: 'mini-manage', label: 'Manage', short: 'Mini Mgmt', emoji: '🧩', section: 'Mini Games', onClick: () => { setTab('minigames'); setMiniGamesTab('manage'); }, active: tab === 'minigames' && miniGamesTab === 'manage' },
+    { id: 'mini-info', label: 'Info', short: 'Mini Info', emoji: '🧩', section: 'Mini Games', onClick: () => setTab('minigames'), active: tab === 'minigames' },
     { id: 'story-generate', label: 'Generate', short: 'Story Gen', emoji: '📖', section: 'Story Kid', onClick: () => { setTab('storykid'); setStoryKidTab('generate'); }, active: tab === 'storykid' && storyKidTab === 'generate' },
     { id: 'story-manage', label: 'Manage', short: 'Story Mgmt', emoji: '📝', section: 'Story Kid', onClick: () => { setTab('storykid'); setStoryKidTab('manage'); }, active: tab === 'storykid' && storyKidTab === 'manage' },
   ];
@@ -14,7 +13,7 @@ export default function MasterGeneratorTabs({ tab, setTab, miniGamesTab, setMini
   return (
     <div className="sticky top-20 z-30 w-full min-w-0 max-w-full rounded-[1.35rem] border border-white/20 bg-white/10 p-1.5 shadow-2xl shadow-purple-950/25 backdrop-blur-3xl md:top-24 md:rounded-[2rem] md:p-2">
       {/* Horizontal scrollable rail on small/medium viewports, full grid on xl+ */}
-      <div className="flex gap-1.5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-1 xl:grid xl:grid-cols-7 xl:gap-2 xl:overflow-visible xl:pb-0 [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: 'none' }}>
+      <div className="flex gap-1.5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-1 xl:grid xl:grid-cols-6 xl:gap-2 xl:overflow-visible xl:pb-0 [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: 'none' }}>
         {tabs.map((item) => (
           <button
             key={item.id}
