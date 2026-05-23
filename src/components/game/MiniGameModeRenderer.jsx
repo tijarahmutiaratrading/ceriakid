@@ -119,15 +119,6 @@ function MemoryMode({ data: rawData }) {
                   <span className="text-4xl drop-shadow-lg">{backEmoji}</span>
                 )}
               </motion.div>
-              {isMatched && (
-                <motion.div
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="absolute top-1.5 right-1.5 bg-white rounded-full w-6 h-6 flex items-center justify-center text-sm shadow-md"
-                >
-                  ✅
-                </motion.div>
-              )}
             </motion.button>
           );
         })}
