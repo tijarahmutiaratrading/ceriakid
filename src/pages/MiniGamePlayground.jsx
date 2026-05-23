@@ -70,26 +70,79 @@ export default function MiniGamePlayground() {
   };
 
   return (
-    <div className="min-h-screen font-nunito relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #B5D8B0 0%, #A8CFA3 50%, #9FCFA5 100%)' }}>
-      {/* Decorative organic shapes */}
+    <div className="min-h-screen font-nunito relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #FFD9EC 0%, #C9B6FF 45%, #A8E0FF 100%)' }}>
+      {/* Animated playful background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <svg className="absolute -top-20 -right-20 w-[28rem] h-[28rem] opacity-50" viewBox="0 0 400 400" fill="none">
-          <path d="M200 50 Q 320 80, 350 200 T 200 350 Q 80 320, 50 200 T 200 50 Z" fill="#C8E0BF" />
+        {/* Soft sun glow */}
+        <motion.div
+          animate={{ scale: [1, 1.08, 1], opacity: [0.55, 0.8, 0.55] }}
+          transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
+          className="absolute -top-24 -right-24 w-[26rem] h-[26rem] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(255,236,150,0.85) 0%, rgba(255,200,120,0) 70%)' }}
+        />
+
+        {/* Floating clouds */}
+        {[
+          { top: '12%', size: 'w-28 h-12', delay: 0, range: 30 },
+          { top: '28%', size: 'w-20 h-10', delay: 1.5, range: 24 },
+          { top: '62%', size: 'w-32 h-14', delay: 0.6, range: 36 },
+          { top: '80%', size: 'w-24 h-10', delay: 2.2, range: 22 },
+        ].map((cloud, i) => (
+          <motion.div
+            key={`cloud-${i}`}
+            initial={{ x: '-20%' }}
+            animate={{ x: ['-20%', '120%'] }}
+            transition={{ repeat: Infinity, duration: 22 + i * 4, ease: 'linear', delay: cloud.delay }}
+            className={`absolute ${cloud.size} bg-white/80 rounded-full blur-sm`}
+            style={{ top: cloud.top }}
+          />
+        ))}
+
+        {/* Floating bubbles / sparkles */}
+        {['✨','⭐','🎈','🌈','💫','🎀','🌟','🪄'].map((bit, i) => (
+          <motion.span
+            key={`bit-${i}`}
+            className="absolute text-3xl"
+            style={{ left: `${(i * 13 + 6) % 92}%`, top: `${(i * 19 + 12) % 78}%` }}
+            animate={{ y: [0, -18, 0], rotate: [0, 12, -12, 0], opacity: [0.5, 1, 0.5] }}
+            transition={{ repeat: Infinity, duration: 4 + i * 0.5, ease: 'easeInOut', delay: i * 0.3 }}
+          >
+            {bit}
+          </motion.span>
+        ))}
+
+        {/* Bottom wave */}
+        <svg className="absolute bottom-0 left-0 w-full h-32" viewBox="0 0 1440 200" preserveAspectRatio="none">
+          <path d="M0,100 C320,160 720,40 1080,100 C1280,140 1380,100 1440,90 L1440,200 L0,200 Z" fill="rgba(255,255,255,0.55)" />
+          <path d="M0,140 C360,200 720,80 1100,140 C1300,170 1380,150 1440,140 L1440,200 L0,200 Z" fill="rgba(255,255,255,0.4)" />
         </svg>
-        <svg className="absolute top-1/3 -left-32 w-96 h-96 opacity-40" viewBox="0 0 400 400" fill="none">
-          <path d="M200 60 Q 310 90, 340 210 T 190 340 Q 70 310, 60 190 T 200 60 Z" fill="#BBDDB3" />
-        </svg>
-        <svg className="absolute bottom-10 right-10 w-40 h-40 opacity-60" viewBox="0 0 100 100">
-          <path d="M50 10 Q 70 30, 60 55 Q 50 80, 40 55 Q 30 30, 50 10 Z" fill="#7BAB6E" />
-          <path d="M30 40 Q 45 50, 40 70 Q 35 85, 25 70 Q 20 55, 30 40 Z" fill="#8FBC82" />
-        </svg>
-        <svg className="absolute top-32 left-8 w-28 h-28 opacity-50" viewBox="0 0 100 100">
-          <path d="M50 15 Q 68 35, 58 60 Q 48 80, 42 60 Q 32 35, 50 15 Z" fill="#7BAB6E" />
-        </svg>
-        <svg className="absolute bottom-32 left-16 w-24 h-24 opacity-45" viewBox="0 0 100 100">
-          <ellipse cx="50" cy="50" rx="30" ry="20" fill="#8FBC82" />
-          <ellipse cx="40" cy="45" rx="20" ry="14" fill="#A0C893" />
-        </svg>
+
+        {/* CeriaKid mascot — waving from bottom-right */}
+        <motion.div
+          className="absolute bottom-2 right-3 sm:right-6 z-10"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+        >
+          <motion.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
+            className="relative"
+          >
+            <img
+              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
+              alt="CeriaKid Mascot"
+              className="w-24 sm:w-28 h-auto rounded-3xl shadow-2xl ring-4 ring-white/80"
+            />
+            <motion.div
+              className="absolute -top-3 -left-4 bg-white px-3 py-1.5 rounded-2xl shadow-lg ring-2 ring-pink-200 text-xs font-black text-purple-700 whitespace-nowrap"
+              animate={{ rotate: [-4, 4, -4], scale: [1, 1.06, 1] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            >
+              Jom main! 👋
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
       <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} />
       <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
