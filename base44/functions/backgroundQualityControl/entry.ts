@@ -430,6 +430,9 @@ async function ensureBucketsNotEmpty(base44, games, activeTaskKeys, subjectCap) 
 
 // ─── NEW: Capacity audit for Mini Game categories ───
 async function ensureMiniCategoriesAtCapacity(base44, games, activeTasks, miniGameCap) {
+  // miniGameCap <= 0 → admin sengaja matikan auto-generation mini games legacy
+  // (sistem baru = template-based dari KSSR, tak perlu refill).
+  if (miniGameCap <= 0) return { createdCount: 0, gaps: [] };
   const counts = new Map();
   for (const g of games) {
     if (MINI_CATEGORIES.includes(g.category) && !SUBJECTS.includes(g.category)) {
@@ -470,6 +473,7 @@ async function ensureMiniCategoriesAtCapacity(base44, games, activeTasks, miniGa
 
 // ─── NEW: Capacity audit for Story Kid ───
 async function ensureStoryKidAtCapacity(base44, games, activeTasks, storyKidCap) {
+  if (storyKidCap <= 0) return { createdCount: 0, gap: null };
   const current = games.filter(g => g.gameData?.storyKid === true || g.category === 'story' || g.type === 'story_adventure').length;
   const pending = activeTasks.filter(t => t.subject === 'story').reduce((s, t) => s + Math.max(0, (Number(t.gamesCount) || 0) - (Number(t.createdGames) || 0)), 0);
   const effective = current + pending;
@@ -500,8 +504,9 @@ Deno.serve(async (req) => {
     const qcSetting = settings?.[0] || await base44.asServiceRole.entities.QCSetting.create({ intervalMinutes: 10 });
     const intervalMinutes = Math.max(5, Number(qcSetting.intervalMinutes || 10));
     const subjectCap = Math.max(4, Number(qcSetting.subjectCap || DEFAULT_CAP));
-    const miniGameCap = Math.max(4, Number(qcSetting.miniGameCap || DEFAULT_CAP));
-    const storyKidCap = Math.max(4, Number(qcSetting.storyKidCap || DEFAULT_CAP));
+    // miniGameCap & storyKidCap → 0 dibenarkan (matikan auto-generation kategori tersebut)
+    const miniGameCap = Number(qcSetting.miniGameCap ?? DEFAULT_CAP);
+    const storyKidCap = Number(qcSetting.storyKidCap ?? DEFAULT_CAP);
     const lastAutoRunAt = qcSetting.lastAutoRunAt ? new Date(qcSetting.lastAutoRunAt).getTime() : 0;
     const minutesSinceLastRun = lastAutoRunAt ? (Date.now() - lastAutoRunAt) / 60000 : Infinity;
 
