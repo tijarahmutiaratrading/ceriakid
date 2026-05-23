@@ -14,7 +14,21 @@ const MIN_GAMES_PER_BUCKET = 4;
 const DEFAULT_CAP = 30;
 const STUCK_TASK_MINUTES = 30;
 
-const BANNED_PATTERN = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|\bpohon\b|\bsepatu\b|strawberi|tampak|cantik|santai|membazir|merata-rata|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja|aktiviti pembelajaran|preferensi|guara|trojan|loker|saksofon|kueh roti|gam pita|pancung)/i;
+const BANNED_PATTERN = /(hewan|singh|bekam|\blama\b|\bbabi\b|turtle|kodok|kelinci|\bpohon\b|\bsepatu\b|strawberi|tampak|cantik|santai|membazir|merata-rata|daki|moo|woof|roar|rindu|semangat ketua|bintang di badannya|rongga hidung|terpanjang di dunia|jangan lupa|dua jenis rupa|haiwan apa|apakah nama haiwan ini|sering dibela|dua telinga panjang dan sangat comel|badan kecil dan suka berlari-lari|boleh terbang di taman|berbulu yang sering dipelihara|soalan\s*\d+|placeholder|contoh jawapan|lihat gambar|gambar di bawah|copy|salinan|umum sahaja|aktiviti pembelajaran|preferensi|guara|trojan|loker|saksofon|kueh roti|gam pita|pancung|undefined|null|n\/a|tba|tbd|xxx|\?\?\?|coming soon|akan datang|tidak diketahui|tak tahu)/i;
+
+// Detect incomplete/lazy questions (e.g. "Berapa ___?", "Apa itu...", trailing dots/dashes)
+const INCOMPLETE_PATTERN = /(\?\s*$|^\s*[?.]|_{3,}|\.{4,}|-{4,}|^\s*[a-z]\s*[?.]\s*$|^.{0,4}\?$)/i;
+
+// Detect options that are too short/lazy ("a", "b", "1", single chars)
+function hasLazyOptions(options) {
+  if (!Array.isArray(options) || options.length !== 4) return false;
+  let shortCount = 0;
+  for (const opt of options) {
+    const cleaned = String(opt || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim();
+    if (cleaned.length < 2) shortCount++;
+  }
+  return shortCount >= 2;
+}
 
 // Off-theme content keywords — content yang ada keyword ni TAK PATUT muncul dalam mini game cognitive category
 // (sebab kategori macam brain_training/memory_master patut focus kognitif, bukan general knowledge)
@@ -32,7 +46,7 @@ const OFF_THEME_KEYWORDS = {
 const MAX_MATH_NUMBER = { darjah_1: 100, darjah_2: 1000, darjah_3: 10000, darjah_4: 100000, darjah_5: 1000000, darjah_6: 10000000 };
 
 // Issues that can be safely repaired by re-generating just the bad question via LLM
-const REPAIRABLE_QUESTION_ISSUES = new Set(['weak_question', 'banned_text', 'bad_options_count', 'bad_answer_index', 'duplicate_options', 'repeat_inside_game']);
+const REPAIRABLE_QUESTION_ISSUES = new Set(['weak_question', 'banned_text', 'bad_options_count', 'bad_answer_index', 'duplicate_options', 'repeat_inside_game', 'incomplete_question', 'lazy_options', 'question_too_long']);
 // Issues that affect the whole game (require replacement, not per-question fix)
 const STRUCTURAL_ISSUES = new Set(['missing_darjah', 'too_few_questions', 'repeat_across_darjah', 'math_level_too_high']);
 
@@ -88,14 +102,18 @@ function getAllMiniText(game) {
 // Per-question audit — returns issues array for ONE question
 function auditOneQuestion(q, game, localSeen, crossSeen) {
   const issues = [];
-  const text = normalizeText(q.problem || q.question);
+  const rawText = String(q.problem || q.question || '');
+  const text = normalizeText(rawText);
   const options = Array.isArray(q.options) ? q.options.map(o => String(o || '').trim()) : [];
   const joined = [q.problem || q.question, ...options].join(' ');
   if (!text || text.length < 8) issues.push('weak_question');
+  if (text.length > 0 && text.length < 200 && INCOMPLETE_PATTERN.test(rawText)) issues.push('incomplete_question');
+  if (rawText.length > 180) issues.push('question_too_long');
   if (BANNED_PATTERN.test(joined)) issues.push('banned_text');
   if (options.length !== 4) issues.push('bad_options_count');
   if (!Number.isInteger(q.answer) || q.answer < 0 || q.answer > 3) issues.push('bad_answer_index');
   if (options.length === 4 && new Set(options.map(o => normalizeText(o))).size !== 4) issues.push('duplicate_options');
+  if (options.length === 4 && hasLazyOptions(options)) issues.push('lazy_options');
   if (localSeen.has(text)) issues.push('repeat_inside_game');
   localSeen.add(text);
   // NOTE: Jawi sengaja dikecualikan dari repeat_across_darjah check.
@@ -311,21 +329,29 @@ function tryFixMiniGameInPlace(game) {
 async function fixOneQuestion(base44, game, badQuestion, issues) {
   const subject = game.category;
   const darjahLabel = game.darjah ? game.darjah.replace('_', ' ') : (game.ageGroup === 'prasekolah' ? 'Prasekolah' : 'Sekolah Rendah');
-  const prompt = `You are an expert Malaysian KSSR/KSPK ${subject} teacher. Generate ONE replacement question for "${game.title}" (${darjahLabel}).
+  const prompt = `You are a SENIOR Malaysian KSSR/KSPK ${subject} teacher with 15+ years experience. Generate ONE high-quality replacement question for "${game.title}" (${darjahLabel}).
 
 The OLD question had these issues: ${issues.join(', ')}
 
 OLD question: ${badQuestion.problem || badQuestion.question || '(empty)'}
 OLD options: ${(badQuestion.options || []).join(' | ')}
 
-Generate a brand new question in BAHASA MELAYU that:
-- Is age-appropriate for ${darjahLabel} ${subject}
-- Has a clear, complete question text (min 10 characters, max 120)
-- Has EXACTLY 4 distinct options
-- Has exactly ONE correct answer (return its index 0-3)
-- Includes a relevant emoji that semantically matches the correct answer
-- Avoids generic phrases like "soalan X", "lihat gambar", "placeholder"
-- Is FACTUALLY CORRECT
+STRICT REQUIREMENTS — your new question MUST:
+1. Be in BAHASA MELAYU (standard, jelas, gramatis betul)
+2. Be age-appropriate for ${darjahLabel} ${subject} curriculum (KSSR/KSPK Malaysia)
+3. Have COMPLETE question text: min 15 chars, max 120 chars, ends with proper punctuation (? or .)
+4. Have EXACTLY 4 distinct options, each min 2 chars (NO single letters/numbers)
+5. Have ONE clearly correct answer — verify factual accuracy
+6. Include semantically matching emoji for the correct answer
+7. Distractors (wrong options) must be PLAUSIBLE but clearly wrong — not random
+8. NO placeholders ("___", "...", "soalan X", "contoh", "lihat gambar")
+9. NO trick questions or ambiguous wording
+10. NO repeated/synonymous options
+
+QUALITY CHECK before submitting:
+- Can a ${darjahLabel} student understand the question instantly?
+- Is the correct answer 100% factually correct?
+- Are wrong answers educational (common misconceptions)?
 
 Return JSON only.`;
 

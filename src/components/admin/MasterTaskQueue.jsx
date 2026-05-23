@@ -131,6 +131,14 @@ export default function MasterTaskQueue({ onToast }) {
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-bold text-white truncate">{task.taskName}</p>
                   <p className="text-xs text-white/45">{task.createdGames || 0}/{task.gamesCount || 0} item · {task.questionsPerGame || 0} soalan</p>
+                  {task.status === 'running' && task.gamesCount > 0 && (
+                    <div className="mt-1.5 h-1 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-blue-400 to-cyan-300 transition-all"
+                        style={{ width: `${Math.min(100, Math.round(((task.createdGames || 0) / task.gamesCount) * 100))}%` }}
+                      />
+                    </div>
+                  )}
                 </div>
                 {task.status === 'pending' && (
                   <button onClick={() => deleteTask(task)} className="p-1 text-red-300 hover:text-red-400 transition-all">

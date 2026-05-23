@@ -18,6 +18,7 @@ import MasterGeneratorHero from '@/components/admin/MasterGeneratorHero';
 import MasterGeneratorTabs from '@/components/admin/MasterGeneratorTabs';
 import PrasekolahPanel from '@/components/admin/PrasekolahPanel';
 import SekolahRendahPanel from '@/components/admin/SekolahRendahPanel';
+import GeneratorWorkflowStepper from '@/components/admin/GeneratorWorkflowStepper';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 
 const QUESTION_THRESHOLD = 20;
@@ -498,6 +499,11 @@ export default function AdminGameManager({ embedded = false }) {
                 <h2 className="font-black text-white text-xl md:text-2xl">⚙️ Konfigurasi Generation</h2>
                 <p className="text-white/60 text-xs font-semibold mt-1">Tetapkan target game dan soalan sebelum masuk queue.</p>
               </div>
+
+              <GeneratorWorkflowStepper
+                selectedCount={selectedSubjects.size}
+                hasConfig={selectedSubjects.size > 0}
+              />
               {/* Subject selector */}
               <div className="mb-5">
                 <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
