@@ -10,7 +10,6 @@ import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
 import { saveMiniGameProgress } from '@/lib/miniGameProgress';
-import { COGNITIVE_CATEGORIES, buildMiniGameFromKSSR } from '@/lib/miniGameBuilder';
 
 const glassCard = { background: 'rgba(255,255,255,0.78)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.8)', boxShadow: '0 18px 45px rgba(168,85,247,0.18)' };
 
@@ -45,21 +44,13 @@ export default function MiniGamePlayground() {
   const { user, isAuthenticated } = useAuth();
   const { selectedChild } = useSelectedChild() || {};
   const [userTier, setUserTier] = React.useState('free');
-  const [dbGame, setDbGame] = React.useState(null);
-  const [kssrGameData, setKssrGameData] = React.useState(null);
-  const [loadingGame, setLoadingGame] = React.useState(true);
-  const isCognitive = COGNITIVE_CATEGORIES.includes(categoryId);
-  const category = isCognitive ? findMiniCategory(categoryId) : findMiniGame(categoryId, gameId).category;
-  const blueprintGame = isCognitive ? null : findMiniGame(categoryId, gameId).game;
-  // For cognitive: extract variant from gameId (format: "{categoryId}-v{n}")
-  const variantNum = isCognitive ? (parseInt(gameId?.split('-v')[1]) || 1) : 1;
-  const game = isCognitive
-    ? { title: `${category.title} · Cabaran #${variantNum}`, emoji: category.emoji, gameData: kssrGameData }
-    : (dbGame || blueprintGame);
-  const gameData = game?.gameData || game || {};
-  const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 3;
-  const blueprintIndex = isCognitive ? (variantNum - 1) : Math.max(0, category.games.findIndex(item => item.id === gameId));
-  const gameIndex = categoryOffset + (dbGame ? Number(dbGame.order || 0) : blueprintIndex);
+  const [loadingGame, setLoadingGame] = React.useState(false);
+  const { category, game: blueprintGame } = findMiniGame(categoryId, gameId);
+  const game = blueprintGame;
+  const gameData = game || {};
+  const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 10;
+  const blueprintIndex = Math.max(0, category.games.findIndex(item => item.id === gameId));
+  const gameIndex = categoryOffset + blueprintIndex;
   const locked = isGameIndexLocked({ index: gameIndex, tier: userTier, isAuthenticated });
 
   React.useEffect(() => {
@@ -69,30 +60,13 @@ export default function MiniGamePlayground() {
     });
   }, [user?.email]);
 
-  React.useEffect(() => {
-    setLoadingGame(true);
-    if (isCognitive) {
-      // Build from KSSR Subject Games (template-based, clean content)
-      buildMiniGameFromKSSR(categoryId, variantNum).then(data => {
-        setKssrGameData(data);
-        setLoadingGame(false);
-      });
-      return;
-    }
-    base44.entities.Game.filter({ category: category.id }).then(games => {
-      const found = (games || []).find(item => item.id === gameId);
-      setDbGame(found || null);
-      setLoadingGame(false);
-    });
-  }, [category.id, gameId, isCognitive, categoryId, variantNum]);
-
   const normalizedGame = {
     title: game.title,
     emoji: game.emoji || category.emoji,
-    type: gameData.mode || gameData.playStyle || game.type,
+    type: game.mode,
     category: category.id,
     difficulty: game.difficulty || gameData.difficulty,
-    gameData: { ...gameData, mode: gameData.mode || gameData.playStyle || game.type },
+    gameData: { ...game, mode: game.mode },
   };
 
   return (

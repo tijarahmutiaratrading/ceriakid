@@ -8,7 +8,6 @@ import { getCategoryIllustration } from '@/lib/miniCategoryIllustrations';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
-import { COGNITIVE_CATEGORIES, getMiniGameVariants } from '@/lib/miniGameBuilder';
 
 const modeLabels = {
   balloon_pop: 'Balloon Pop', tracing: 'Finger Tracing', dragdrop: 'Drag & Drop', falling_catch: 'Catch Falling Object', stacking: 'Object Stacking', sequence: 'Sequence Arrangement', wordbuilder: 'Build Word', swipe_select: 'Swipe Selection', spin_wheel: 'Spin Wheel', picture_hunt: 'Picture Hunt', typing_challenge: 'Typing Challenge', tilematch: 'Tile Match', sorting: 'Sorting Game', mini_simulation: 'Mini Simulation', true_false: 'True / False', memory: 'Memory Card Flip', rhythm_tap: 'Rhythm Tapping', connect_dots: 'Connect The Dots', maze: 'Maze', hidden_object: 'Hidden Object', reaction_speed: 'Reaction Speed', story: 'Story Choice', coloring: 'Coloring Activity'
@@ -21,7 +20,7 @@ export default function MiniGamesList() {
   const [dbGames, setDbGames] = React.useState([]);
   const [loadingGames, setLoadingGames] = React.useState(true);
   const category = findMiniCategory(type);
-  const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 3;
+  const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 10;
 
   // Pastel squircle palette — rotate per card
   const pastelPalette = [
@@ -40,34 +39,14 @@ export default function MiniGamesList() {
     });
   }, [user?.email]);
 
-  const isCognitive = COGNITIVE_CATEGORIES.includes(category.id);
-
   React.useEffect(() => {
-    if (isCognitive) {
-      // Cognitive categories use template-based mini games — no DB fetch needed
-      setDbGames([]);
-      setLoadingGames(false);
-      return;
-    }
-    setLoadingGames(true);
-    base44.entities.Game.filter({ category: category.id }).then(games => {
-      setDbGames((games || []).filter(game =>
-        game.isPublished !== false &&
-        (game.gameData?.miniGameBlueprint === true || game.gameData?.miniGameGenerated === true)
-      ).sort((a, b) => (a.order || 0) - (b.order || 0)));
-      setLoadingGames(false);
-    });
-  }, [category.id, isCognitive]);
+    // All mini games now come from hand-crafted blueprints — instant load, no DB.
+    setDbGames([]);
+    setLoadingGames(false);
+  }, [category.id]);
 
-  // For cognitive categories → show 6 variants (template-based, instant)
-  // For other (legacy) categories → use DB games or blueprints
-  const gamesToShow = isCognitive
-    ? getMiniGameVariants(category.id, 6).map(v => ({
-        id: v.id,
-        title: v.title,
-        emoji: category.emoji,
-      }))
-    : (dbGames.length > 0 ? dbGames : category.games);
+  // Always use blueprint games (10 per category, each with 10 rounds)
+  const gamesToShow = category.games;
 
   return (
     <div className="min-h-screen font-nunito relative overflow-hidden">
