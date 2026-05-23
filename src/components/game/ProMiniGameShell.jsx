@@ -1,7 +1,43 @@
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Context untuk current round data
 export const RoundContext = React.createContext({ roundData: null, roundIdx: 0, totalRounds: 1 });
+
+// Mascot kecil — bouncing buddy
+function Mascot({ mood = 'happy' }) {
+  const face = mood === 'cheer' ? '🥳' : mood === 'wow' ? '🤩' : '🐯';
+  return (
+    <motion.div
+      animate={{ y: [0, -6, 0], rotate: [-3, 3, -3] }}
+      transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
+      className="text-4xl drop-shadow-lg select-none"
+      aria-hidden
+    >
+      {face}
+    </motion.div>
+  );
+}
+
+// Decorative floating shapes
+function FloatingBits() {
+  const bits = ['⭐', '✨', '🎈', '🌈', '☁️', '🎉'];
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      {bits.map((bit, i) => (
+        <motion.span
+          key={i}
+          className="absolute text-2xl opacity-60"
+          style={{ left: `${(i * 17 + 5) % 90}%`, top: `${(i * 23 + 8) % 70}%` }}
+          animate={{ y: [0, -12, 0], rotate: [0, 8, -8, 0] }}
+          transition={{ repeat: Infinity, duration: 3 + i * 0.4, ease: 'easeInOut', delay: i * 0.3 }}
+        >
+          {bit}
+        </motion.span>
+      ))}
+    </div>
+  );
+}
 
 export default function ProMiniGameShell({ data = {}, mode, children, onComplete }) {
   const roundsArr = Array.isArray(data.rounds) && data.rounds.length > 0 && typeof data.rounds[0] === 'object'
@@ -19,12 +55,12 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
   const instruction = roundLabel || data.instruction || data.question || data.prompt || data.title || '';
   const modeLabel = String(mode || '').replaceAll('_', ' ');
   const isLastRound = roundIdx >= totalRounds - 1;
+  const progressPct = Math.round(((roundIdx + (finished ? 1 : 0)) / Math.max(1, totalRounds)) * 100);
 
   const nextRound = () => {
     const newCompleted = completedRounds + 1;
     setCompletedRounds(newCompleted);
     if (isLastRound) {
-      // Finished all rounds — trigger save once
       if (!savedRef.current) {
         savedRef.current = true;
         setFinished(true);
@@ -49,126 +85,145 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
   return (
     <RoundContext.Provider value={{ roundData: currentRound, roundIdx, totalRounds }}>
       <div
-        className="relative overflow-hidden rounded-[2rem] p-3 shadow-2xl"
+        className="relative overflow-hidden rounded-[2.25rem] p-3 sm:p-4 shadow-2xl"
         style={{
-          background: 'linear-gradient(135deg, #8B5A3C 0%, #6B4423 50%, #5A3818 100%)',
-          border: '4px solid #4A2E14',
-          boxShadow: '0 12px 32px rgba(74, 46, 20, 0.4), inset 0 2px 8px rgba(255, 220, 180, 0.15)',
+          background:
+            'linear-gradient(135deg, #FF7AB6 0%, #A78BFA 35%, #6FC3F7 70%, #5EEAD4 100%)',
+          border: '4px solid rgba(255,255,255,0.65)',
+          boxShadow:
+            '0 20px 50px rgba(124, 58, 237, 0.35), inset 0 2px 10px rgba(255,255,255,0.5)',
         }}
       >
-        <div
-          className="absolute inset-0 opacity-30 pointer-events-none rounded-[2rem]"
-          style={{
-            backgroundImage:
-              'repeating-linear-gradient(90deg, rgba(74,46,20,0.15) 0px, rgba(74,46,20,0.15) 1px, transparent 1px, transparent 8px), repeating-linear-gradient(180deg, rgba(255,220,180,0.04) 0px, transparent 2px)',
-          }}
-        />
+        <FloatingBits />
 
-        {totalRounds > 1 && (
-          <div className="relative mb-2 flex items-center justify-center gap-2">
-            <div
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black"
-              style={{
-                background: 'linear-gradient(135deg, #FDF6E3 0%, #F5E6CC 100%)',
-                border: '2px solid #C8A878',
-                color: '#4A2E14',
-                boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.6)',
-              }}
-            >
-              🎯 Pusingan {roundIdx + 1} / {totalRounds}
+        {/* Top bar — mascot + round chip + progress */}
+        <div className="relative flex items-center gap-3 mb-3">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/85 backdrop-blur shadow-md ring-2 ring-white">
+            <Mascot mood={finished ? 'cheer' : 'happy'} />
+            <div className="leading-tight">
+              <p className="text-[10px] font-black uppercase tracking-widest text-purple-500">Mini Game</p>
+              <p className="text-sm font-black text-purple-900">Jom Main!</p>
             </div>
           </div>
-        )}
 
-        {instruction && (
-          <div
-            className="relative mb-3 rounded-[1.5rem] px-4 py-3 text-center"
-            style={{
-              background: 'linear-gradient(135deg, #FDF6E3 0%, #F5E6CC 100%)',
-              border: '2px solid #C8A878',
-              boxShadow: 'inset 0 2px 6px rgba(255,255,255,0.6), 0 4px 10px rgba(74,46,20,0.25)',
-            }}
-          >
-            {modeLabel && (
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-1" style={{ color: '#8B5A3C' }}>
-                {modeLabel}
-              </p>
-            )}
-            <p className="text-base sm:text-lg font-black leading-snug" style={{ color: '#4A2E14' }}>
-              {instruction}
-            </p>
-          </div>
-        )}
-
-        <div
-          className="relative rounded-[1.75rem] p-3"
-          style={{
-            background: 'linear-gradient(135deg, #FDF6E3 0%, #F0E2C8 100%)',
-            border: '3px solid #C8A878',
-            boxShadow: 'inset 0 2px 8px rgba(255,255,255,0.5)',
-          }}
-        >
-          {finished ? (
-            <div className="text-center py-8 px-4">
-              <div className="text-6xl mb-3">🏆</div>
-              <p className="text-2xl font-black mb-2" style={{ color: '#4A2E14' }}>Tahniah!</p>
-              <p className="font-bold mb-4" style={{ color: '#6B4423' }}>
-                Habis {completedRounds}/{totalRounds} pusingan
-              </p>
-              <div className="text-3xl mb-2">
-                {completedRounds === totalRounds ? '⭐⭐⭐' : completedRounds >= totalRounds * 0.7 ? '⭐⭐' : '⭐'}
+          {totalRounds > 1 && (
+            <div className="flex-1 flex flex-col gap-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/90 drop-shadow">Pusingan</span>
+                <span className="text-xs font-black text-white drop-shadow">
+                  {roundIdx + 1} / {totalRounds}
+                </span>
               </div>
-              <p className="text-xs font-bold" style={{ color: '#8B5A3C' }}>Progress disimpan ke Prestasi Anak ✅</p>
+              <div className="h-3 rounded-full bg-white/30 overflow-hidden ring-2 ring-white/60 shadow-inner">
+                <motion.div
+                  animate={{ width: `${progressPct}%` }}
+                  transition={{ type: 'spring', damping: 18, stiffness: 200 }}
+                  className="h-full rounded-full bg-gradient-to-r from-yellow-300 via-pink-400 to-fuchsia-500 shadow"
+                />
+              </div>
             </div>
-          ) : (
-            <div key={`${roundIdx}-${roundKey}`}>{children}</div>
           )}
         </div>
 
+        {/* Instruction bubble */}
+        {instruction && (
+          <motion.div
+            key={`inst-${roundIdx}-${roundKey}`}
+            initial={{ scale: 0.9, opacity: 0, y: -6 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            className="relative mb-3 rounded-3xl px-4 py-3 text-center bg-white/95 backdrop-blur shadow-xl ring-2 ring-white"
+          >
+            {modeLabel && (
+              <span className="inline-block text-[10px] font-black uppercase tracking-[0.18em] text-pink-500 mb-1">
+                ✨ {modeLabel}
+              </span>
+            )}
+            <p className="text-base sm:text-lg font-black leading-snug text-purple-900">
+              {instruction}
+            </p>
+          </motion.div>
+        )}
+
+        {/* Game area */}
+        <div
+          className="relative rounded-[1.75rem] p-3 sm:p-4 bg-white/85 backdrop-blur ring-2 ring-white shadow-inner min-h-[240px]"
+        >
+          <AnimatePresence mode="wait">
+            {finished ? (
+              <motion.div
+                key="finish"
+                initial={{ scale: 0.7, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.7, opacity: 0 }}
+                className="text-center py-10 px-4"
+              >
+                <motion.div
+                  animate={{ rotate: [0, -10, 10, -10, 0], scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1.4, repeat: Infinity }}
+                  className="text-7xl mb-3"
+                >
+                  🏆
+                </motion.div>
+                <p className="text-2xl font-black mb-1 text-purple-900">Yeay! Tahniah!</p>
+                <p className="font-bold mb-4 text-purple-600">
+                  Habis {completedRounds}/{totalRounds} pusingan
+                </p>
+                <div className="text-3xl mb-3">
+                  {completedRounds === totalRounds ? '⭐⭐⭐' : completedRounds >= totalRounds * 0.7 ? '⭐⭐' : '⭐'}
+                </div>
+                <p className="text-xs font-bold text-purple-500">Progress disimpan ✅</p>
+              </motion.div>
+            ) : (
+              <motion.div
+                key={`${roundIdx}-${roundKey}`}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+              >
+                {children}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Action buttons */}
         <div className="relative mt-3 flex gap-2">
           {finished ? (
-            <button
+            <motion.button
               type="button"
               onClick={playAgain}
-              className="flex-1 py-3 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-transform text-white"
+              whileTap={{ scale: 0.95 }}
+              className="flex-1 py-3 rounded-2xl font-black text-sm text-white shadow-xl ring-2 ring-white/80"
               style={{
-                background: 'linear-gradient(135deg, #8B5A3C 0%, #6B4423 100%)',
-                border: '2px solid #4A2E14',
-                boxShadow: '0 4px 10px rgba(74,46,20,0.4)',
+                background: 'linear-gradient(135deg, #F472B6 0%, #A855F7 100%)',
               }}
             >
               🔄 Main Sekali Lagi
-            </button>
+            </motion.button>
           ) : (
             <>
-              <button
+              <motion.button
                 type="button"
                 onClick={restartRound}
-                className="flex-1 py-3 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-transform"
-                style={{
-                  background: 'linear-gradient(135deg, #FDF6E3 0%, #F5E6CC 100%)',
-                  border: '2px solid #C8A878',
-                  color: '#4A2E14',
-                  boxShadow: 'inset 0 2px 6px rgba(255,255,255,0.6), 0 4px 10px rgba(74,46,20,0.25)',
-                }}
+                whileTap={{ scale: 0.95 }}
+                className="flex-1 py-3 rounded-2xl font-black text-sm bg-white text-purple-700 shadow-lg ring-2 ring-white/80"
               >
                 🔄 Ulang
-              </button>
+              </motion.button>
               {totalRounds > 1 && (
-                <button
+                <motion.button
                   type="button"
                   onClick={nextRound}
-                  className="flex-[2] py-3 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-transform text-white"
+                  whileTap={{ scale: 0.95 }}
+                  className="flex-[2] py-3 rounded-2xl font-black text-sm text-white shadow-xl ring-2 ring-white/80"
                   style={{
                     background: isLastRound
-                      ? 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
-                      : 'linear-gradient(135deg, #8B5A3C 0%, #6B4423 100%)',
-                    border: '2px solid #4A2E14',
-                    boxShadow: '0 4px 10px rgba(74,46,20,0.4)',
+                      ? 'linear-gradient(135deg, #FBBF24 0%, #F97316 100%)'
+                      : 'linear-gradient(135deg, #22D3EE 0%, #8B5CF6 100%)',
                   }}
                 >
                   {isLastRound ? '🏆 Habiskan' : `➡️ Pusingan ${roundIdx + 2}`}
-                </button>
+                </motion.button>
               )}
             </>
           )}
