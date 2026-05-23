@@ -147,7 +147,29 @@ function StackingMode({ data: rawData }) { const data = useRoundData(rawData); c
 
 function SequenceMode({ data: rawData }) { const data = useRoundData(rawData); const { feedback, showFeedback } = useMiniFeedback(); const [picked, setPicked] = useState([]); const answer = data.answer || []; const items = data.items || []; const good = picked.every((x, i) => x === answer[i]); const choose = (item) => { const ok = item === answer[picked.length]; showFeedback(ok ? 'correct' : 'wrong', ok ? 'Turutan betul!' : 'Bukan giliran itu.'); if (ok) setPicked(p => [...p, item]); }; return <div className="space-y-4"><MiniFeedback feedback={feedback} /><MiniScore score={picked.length} total={items.length} /><div className={panel}><p className="text-white font-black text-center mb-3">Susun turutan</p><div className="min-h-14 rounded-2xl bg-slate-950/75 border border-white/30 p-3 text-white font-black text-center">{picked.join(' → ') || '...'}</div></div><div className="grid grid-cols-2 gap-2">{items.filter(x => !picked.includes(x)).map(item => <button key={item} onClick={() => choose(item)} className={chip}>{item}</button>)}</div><p className={`text-center font-black ${good ? 'text-green-300' : 'text-red-300'}`}>{picked.length ? (good ? 'Bagus!' : 'Cuba semula') : ''}</p></div>; }
 
-function SwipeSelectMode({ data: rawData }) { const data = useRoundData(rawData); const { feedback, showFeedback } = useMiniFeedback(); const [idx, setIdx] = useState(0); const [score, setScore] = useState(0); const item = (data.items || [])[idx] || {}; const pick = (group) => { const ok = item.group === group; showFeedback(ok ? 'correct' : 'wrong', ok ? 'Pilihan betul!' : 'Kategori salah.'); if (ok) setScore(s => s + 1); setTimeout(() => setIdx((idx + 1) % Math.max(1, (data.items || []).length)), 450); }; return <div className="space-y-4"><MiniFeedback feedback={feedback} /><MiniScore score={score} total={(data.items || []).length} /><div className={`${panel} text-center`}><p className="text-5xl mb-3">👆</p><p className="text-white text-3xl font-black">{item.text}</p></div><div className="grid grid-cols-2 gap-3"><button onClick={() => pick('Kata Nama')} className="py-5 rounded-3xl bg-blue-400 text-white font-black">Kata Nama</button><button onClick={() => pick('Kata Kerja')} className="py-5 rounded-3xl bg-pink-400 text-white font-black">Kata Kerja</button></div></div>; }
+function SwipeSelectMode({ data: rawData }) {
+  const data = useRoundData(rawData);
+  const { feedback, showFeedback } = useMiniFeedback();
+  const [idx, setIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const items = data.items || [];
+  const item = items[idx] || {};
+  // Dynamic groups — baca dari items sebenar, bukan hardcoded.
+  // Fallback ke data.groups kalau ada, kalau tak juga, default Kata Nama / Kata Kerja.
+  const groups = useMemo(() => {
+    if (Array.isArray(data.groups) && data.groups.length >= 2) return data.groups.slice(0, 2);
+    const unique = [...new Set(items.map(it => it?.group).filter(Boolean))];
+    if (unique.length >= 2) return unique.slice(0, 2);
+    return ['Kata Nama', 'Kata Kerja'];
+  }, [items, data.groups]);
+  const pick = (group) => {
+    const ok = isSame(item.group, group);
+    showFeedback(ok ? 'correct' : 'wrong', ok ? 'Pilihan betul!' : 'Kategori salah.');
+    if (ok) setScore(s => s + 1);
+    setTimeout(() => setIdx((idx + 1) % Math.max(1, items.length)), 450);
+  };
+  return <div className="space-y-4"><MiniFeedback feedback={feedback} /><MiniScore score={score} total={items.length} /><div className={`${panel} text-center`}><p className="text-5xl mb-3">👆</p><p className="text-white text-3xl font-black">{item.text}</p></div><div className="grid grid-cols-2 gap-3"><button onClick={() => pick(groups[0])} className="py-5 rounded-3xl bg-blue-400 text-white font-black">{groups[0]}</button><button onClick={() => pick(groups[1])} className="py-5 rounded-3xl bg-pink-400 text-white font-black">{groups[1]}</button></div></div>;
+}
 
 function SpinWheelMode({ data: rawData }) { const data = useRoundData(rawData); const [spin, setSpin] = useState(0); const [choice, setChoice] = useState(''); const items = data.items || []; return <div className="space-y-4"><div className={`${panel} text-center`}><motion.div animate={{ rotate: spin }} className="mx-auto w-52 h-52 rounded-full bg-conic-gradient flex items-center justify-center text-5xl border-8 border-white/40 shadow-2xl">🎡</motion.div><p className="text-white font-black mt-4">{choice || `Padankan rima dengan ${data.target}`}</p></div><button onClick={() => { const next = items[Math.floor(Math.random() * items.length)]; setChoice(next); setSpin(s => s + 720 + Math.random() * 360); }} className={`w-full py-4 ${action}`}>Putar Roda</button></div>; }
 
