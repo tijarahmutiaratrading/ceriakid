@@ -7,8 +7,7 @@ import { gameLibrary } from '@/lib/gameLibrary';
 import EditGameModal from '@/components/admin/EditGameModal';
 import SyncAndEditModal from '@/components/admin/SyncAndEditModal';
 import SubjectCard from '@/components/admin/SubjectCard';
-import MiniGamesGenerator from '@/components/admin/MiniGamesGenerator';
-import MiniGamesManager from '@/components/admin/MiniGamesManager';
+import MiniGamesInfoPanel from '@/components/admin/MiniGamesInfoPanel';
 import MonthlyGenSettings from '@/components/admin/MonthlyGenSettings';
 import StoryKidGenerator from '@/components/admin/StoryKidGenerator';
 import StoryKidManager from '@/components/admin/StoryKidManager';
@@ -807,8 +806,7 @@ export default function AdminGameManager({ embedded = false }) {
               )}
             </div>
 
-            {miniGamesTab === 'generate' && <MiniGamesGenerator onToast={showToast} />}
-            {miniGamesTab === 'manage' && <MiniGamesManager onToast={showToast} />}
+            <MiniGamesInfoPanel />
             </motion.div>
             )}
 

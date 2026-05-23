@@ -2,7 +2,11 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const SUBJECTS = ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'bahasa_tamil', 'bahasa_mandarin'];
 const DARJAH_LEVELS = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
-const MINI_CATEGORIES = ['memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius', 'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training', 'memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
+// NOTE: Cognitive categories (memory_master, logic_puzzles, dll) sekarang TEMPLATE-BASED —
+// build on-the-fly dari KSSR Subject Games. Tidak perlu audit sebab content jamin bersih.
+// QC hanya audit legacy mini game types yang masih simpan content dalam DB.
+const COGNITIVE_CATEGORIES = ['memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius', 'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training'];
+const MINI_CATEGORIES = ['memory', 'dragdrop', 'wordbuilder', 'sorting', 'tilematch', 'story', 'physics', 'tracing'];
 const MIN_PASS_SCORE = 90;
 const MAX_DELETE_PER_RUN = 300;
 const MAX_AUTOFIX_PER_RUN = 20;
