@@ -64,7 +64,76 @@ function MemoryMode({ data: rawData }) {
     const next = [...open, idx]; setOpen(next);
     if (next.length === 2) setTimeout(() => { const ok = cards[next[0]].pairId === cards[next[1]].pairId; showFeedback(ok ? 'correct' : 'wrong', ok ? 'Padanan betul!' : 'Bukan pasangan itu.'); if (ok) setMatched(prev => [...prev, cards[next[0]].pairId]); setOpen([]); }, 600);
   };
-  return <><MiniFeedback feedback={feedback} /><MiniScore score={matched.length} total={(data.pairs || []).length} /><div className="grid grid-cols-2 gap-3">{cards.map((card, idx) => <button key={idx} onClick={() => tap(idx)} className={`min-h-24 ${panel} text-center ${open.includes(idx) || matched.includes(card.pairId) ? 'bg-white text-purple-700' : 'text-white'}`}><p className="font-black text-lg">{open.includes(idx) || matched.includes(card.pairId) ? card.text : '?'}</p></button>)}</div></>;
+
+  // Palet warna ceria untuk kad terbuka — kitar ikut pairId
+  const palettes = [
+    { bg: 'linear-gradient(135deg,#FDE68A 0%,#FCA5A5 100%)', text: '#7C2D12' },
+    { bg: 'linear-gradient(135deg,#A7F3D0 0%,#5EEAD4 100%)', text: '#064E3B' },
+    { bg: 'linear-gradient(135deg,#C7D2FE 0%,#A78BFA 100%)', text: '#312E81' },
+    { bg: 'linear-gradient(135deg,#FBCFE8 0%,#F9A8D4 100%)', text: '#831843' },
+    { bg: 'linear-gradient(135deg,#BAE6FD 0%,#7DD3FC 100%)', text: '#0C4A6E' },
+    { bg: 'linear-gradient(135deg,#FED7AA 0%,#FDBA74 100%)', text: '#7C2D12' },
+  ];
+  const backEmojis = ['🎁','🎈','⭐','🌈','✨','🎀'];
+
+  return (
+    <>
+      <MiniFeedback feedback={feedback} />
+      <MiniScore score={matched.length} total={(data.pairs || []).length} />
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {cards.map((card, idx) => {
+          const isOpen = open.includes(idx) || matched.includes(card.pairId);
+          const isMatched = matched.includes(card.pairId);
+          const palette = palettes[card.pairId % palettes.length];
+          const backEmoji = backEmojis[idx % backEmojis.length];
+          return (
+            <motion.button
+              key={idx}
+              type="button"
+              onClick={() => tap(idx)}
+              whileTap={{ scale: 0.94 }}
+              animate={isMatched ? { scale: [1, 1.08, 1], rotate: [0, 4, -4, 0] } : {}}
+              transition={{ duration: 0.5 }}
+              className="relative aspect-square rounded-3xl overflow-hidden font-black shadow-xl ring-2 ring-white/80 active:shadow-md transition-shadow"
+              style={{
+                perspective: '800px',
+                background: isOpen
+                  ? palette.bg
+                  : 'linear-gradient(135deg,#8B5CF6 0%,#EC4899 100%)',
+              }}
+            >
+              <motion.div
+                className="absolute inset-0 flex items-center justify-center"
+                animate={{ rotateY: isOpen ? 0 : 180 }}
+                transition={{ duration: 0.5 }}
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                {isOpen ? (
+                  <p
+                    className="text-xl sm:text-2xl text-center px-2 leading-tight"
+                    style={{ color: palette.text }}
+                  >
+                    {card.text}
+                  </p>
+                ) : (
+                  <span className="text-4xl drop-shadow-lg">{backEmoji}</span>
+                )}
+              </motion.div>
+              {isMatched && (
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="absolute top-1.5 right-1.5 bg-white rounded-full w-6 h-6 flex items-center justify-center text-sm shadow-md"
+                >
+                  ✅
+                </motion.div>
+              )}
+            </motion.button>
+          );
+        })}
+      </div>
+    </>
+  );
 }
 
 function DragDropMode({ data: rawData }) {
