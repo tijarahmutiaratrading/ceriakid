@@ -70,7 +70,7 @@ export default function GamesHub() {
     : MINI_GAME_CATEGORIES.filter(category => (counts[category.id] ?? 0) > 0);
 
   return (
-    <div className="min-h-screen font-nunito" style={{ background: '#FAF7FF' }}>
+    <div className="min-h-screen w-full font-nunito rounded-2xl" style={{ background: '#FAF7FF' }}>
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 pb-24 pt-20 md:pt-24">
