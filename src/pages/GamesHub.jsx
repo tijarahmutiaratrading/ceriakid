@@ -6,8 +6,6 @@ import AppHeader from '@/components/AppHeader';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { getCategoryIllustration } from '@/lib/miniCategoryIllustrations';
-import { base44 } from '@/api/base44Client';
-import { COGNITIVE_CATEGORIES } from '@/lib/miniGameBuilder';
 
 // Pastel gradient palette per category — soft, breathable
 const cardPalettes = {
@@ -25,41 +23,20 @@ const defaultPalette = { bg: 'linear-gradient(135deg, #F5E5FF 0%, #E5D4FF 100%)'
 
 export default function GamesHub() {
   const { ageGroup } = useAgeGroup() || { ageGroup: 'prasekolah' };
-  const [counts, setCounts] = React.useState({});
-  const [loadingCounts, setLoadingCounts] = React.useState(true);
 
-  React.useEffect(() => {
-    let cancelled = false;
-    const loadCounts = async () => {
-      setLoadingCounts(true);
-      try {
-        const nextCounts = {};
-        // Load counts from database only (skip hardcoded blueprints)
-        const results = await Promise.all(
-          MINI_GAME_CATEGORIES.map(category =>
-            base44.entities.Game.filter({ category: category.id }).catch(() => [])
-          )
-        );
-        if (cancelled) return;
-        results.forEach((games, index) => {
-          nextCounts[MINI_GAME_CATEGORIES[index].id] = (games || []).filter(game =>
-            game.isPublished !== false
-          ).length;
-        });
-        if (!cancelled) setCounts(nextCounts);
-      } finally {
-        if (!cancelled) setLoadingCounts(false);
-      }
-    };
-
-    loadCounts();
-    return () => { cancelled = true; };
+  // Counts come directly from hand-crafted blueprints (lib/miniGames/*.js).
+  // Each category has games.length entries — no DB fetch needed.
+  const counts = React.useMemo(() => {
+    const map = {};
+    MINI_GAME_CATEGORIES.forEach(cat => {
+      map[cat.id] = (cat.games || []).length;
+    });
+    return map;
   }, []);
+  const loadingCounts = false;
 
   const totalGames = MINI_GAME_CATEGORIES.reduce((sum, category) => sum + (counts[category.id] ?? 0), 0);
-  const visibleCategories = loadingCounts
-    ? MINI_GAME_CATEGORIES
-    : MINI_GAME_CATEGORIES.filter(category => (counts[category.id] ?? 0) > 0);
+  const visibleCategories = MINI_GAME_CATEGORIES.filter(category => (counts[category.id] ?? 0) > 0);
 
   return (
     <div className="min-h-screen w-full font-nunito rounded-2xl" style={{ background: '#FAF7FF' }}>
