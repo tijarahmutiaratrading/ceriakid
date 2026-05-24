@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, AlertTriangle, RefreshCw, Play, Loader2, Trash2, Settings, Zap } from 'lucide-react';
 import LaunchSettingsModal from '@/components/admin/LaunchSettingsModal';
+import BackgroundProgressPanel from '@/components/admin/BackgroundProgressPanel';
 
 const SUBJECT_LABELS = {
   bahasa_melayu: 'BM', english: 'English', mathematics: 'Math', science: 'Sains', jawi: 'Jawi',
@@ -309,6 +310,9 @@ export default function LaunchControlPanel() {
           </Button>
         </div>
       </motion.div>
+
+      {/* Background Progress Panel — live tracking */}
+      <BackgroundProgressPanel />
 
       {/* Section Tabs + Settings */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 flex-wrap items-center justify-between">
