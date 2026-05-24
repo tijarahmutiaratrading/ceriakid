@@ -215,8 +215,8 @@ export default function GamesList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
-        <div className="text-center">
+      <div className="min-h-screen flex items-center justify-center font-nunito">
+        <div className="text-center bg-white/20 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-2xl">
           <div className="text-6xl animate-bounce mb-4">🎓</div>
           <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
