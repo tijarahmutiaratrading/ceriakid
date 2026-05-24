@@ -17,7 +17,15 @@ import UserSidebar from '@/components/UserSidebar';
  */
 export default function AppLayout() {
   return (
-    <div className="flex min-h-screen w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 gap-4 md:gap-6 px-2 md:px-4 py-2 md:py-3">
+    <div
+      className="flex min-h-screen w-full gap-4 md:gap-6 px-2 md:px-4 py-2 md:py-3"
+      style={{
+        background: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/37dda3450_generated_image.png)',
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
+        backgroundPosition: 'center top',
+      }}
+    >
       <UserSidebar />
       <main className="flex-1 w-full overflow-x-hidden">
         <Outlet />
