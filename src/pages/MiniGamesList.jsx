@@ -35,7 +35,7 @@ export default function MiniGamesList() {
     <div
       className="min-h-screen w-full font-nunito rounded-2xl"
       style={{
-        background: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/37dda3450_generated_image.png)',
+        background: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
         backgroundSize: 'cover',
         backgroundAttachment: 'fixed',
         backgroundPosition: 'center top',

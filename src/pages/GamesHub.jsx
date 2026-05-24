@@ -17,7 +17,7 @@ const categoryGradients = {
   brain_training:   'from-pink-500 to-fuchsia-600',
 };
 
-const HERO_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/37dda3450_generated_image.png';
+const HERO_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png';
 
 export default function GamesHub() {
   const counts = React.useMemo(() => {
