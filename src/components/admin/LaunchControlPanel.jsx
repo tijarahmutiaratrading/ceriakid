@@ -151,6 +151,43 @@ export default function LaunchControlPanel() {
     addLog(`✅ AUTO-RUN ENDED`);
   };
 
+  const autoGenerateMiniGames = async () => {
+    if (!confirm('Auto-generate akan fill semua mini game categories yang belum complete. Teruskan?')) return;
+    setAutoRunning(true);
+    addLog(`🤖 MINI GAMES AUTO-GENERATE STARTED`);
+
+    try {
+      const incomplete = miniGamesProgress.rows.filter(r => r.needed > 0);
+      if (incomplete.length === 0) {
+        addLog(`✅ Semua mini games sudah complete!`);
+        setAutoRunning(false);
+        return;
+      }
+
+      for (const row of incomplete) {
+        addLog(`🎮 ${row.label} — generating ${row.needed} games...`);
+        try {
+          const res = await base44.functions.invoke('launchGenerateMiniGames', {
+            category: row.category,
+            targetCount: parseInt(miniGamesProgress.targetPerCategory) || 10,
+            dryRun: false,
+          });
+          addLog(`✅ ${row.label} — +${res.data?.generated || 0} games`);
+        } catch (e) {
+          addLog(`❌ ${row.label} error: ${e.message}`);
+        }
+        await new Promise(r => setTimeout(r, 2000));
+      }
+
+      await loadMiniGamesProgress();
+      addLog(`✅ MINI GAMES AUTO-GENERATE ENDED`);
+    } catch (error) {
+      addLog(`❌ Error: ${error?.message || 'Unknown'}`);
+    }
+
+    setAutoRunning(false);
+  };
+
   return (
     <div className="space-y-4">
       {/* Section Tabs + Settings */}
@@ -336,9 +373,12 @@ export default function LaunchControlPanel() {
                   <p className="text-2xl font-black">{miniGamesProgress.totalNeeded}</p>
                 </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-4 flex gap-2">
                 <Button onClick={loadMiniGamesProgress} disabled={loading} variant="secondary" size="sm">
                   <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
+                </Button>
+                <Button onClick={() => autoGenerateMiniGames()} disabled={autoRunning || miniGamesProgress.totalNeeded === 0} className="bg-yellow-400 hover:bg-yellow-300 text-orange-900 font-black">
+                  {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Generate</>}
                 </Button>
               </div>
             </motion.div>
