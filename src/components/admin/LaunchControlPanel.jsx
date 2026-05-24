@@ -651,10 +651,21 @@ export default function LaunchControlPanel() {
           <div className="bg-white/10 border border-white/20 rounded-2xl p-8 text-center">
             <Loader2 className="w-8 h-8 animate-spin text-white mx-auto mb-3" />
             <p className="text-white font-bold">Memuatkan progress KSSR...</p>
-            <p className="text-white/60 text-xs mt-1">Jika lama, server mungkin rate-limited. Tekan Reload selepas 10s.</p>
-            <Button onClick={() => loadProgress(true)} disabled={loading} variant="secondary" size="sm" className="mt-3">
-              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
-            </Button>
+            <p className="text-white/60 text-xs mt-1">Server mungkin rate-limited. Butang Normalize masih boleh digunakan tanpa load progress.</p>
+            <div className="mt-3 flex gap-2 justify-center flex-wrap">
+              <Button onClick={() => loadProgress(true)} disabled={loading} variant="secondary" size="sm">
+                <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
+              </Button>
+              <Button
+                onClick={normalizeBuckets}
+                disabled={autoRunning}
+                className="bg-orange-400 hover:bg-orange-300 text-orange-950 font-black"
+                size="sm"
+              >
+                {autoRunning ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Trash2 className="w-4 h-4 mr-2" />}
+                ⚖️ Normalize to 30
+              </Button>
+            </div>
           </div>
         )}
         {activeSection === 'story' && !storyProgress && (
