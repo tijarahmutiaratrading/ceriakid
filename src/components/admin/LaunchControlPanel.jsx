@@ -355,6 +355,32 @@ export default function LaunchControlPanel() {
     addLog(`⏸️ Auto-run dihentikan oleh user.`);
   };
 
+  const switchToBackgroundMode = async () => {
+    if (!confirm('Switch to Background Mode?\n\n1. Stop auto-run di tab ini\n2. Lepaskan lock\n3. Hidupkan Background server (KSSR 5min + Story 10min)\n\nSelepas ni boleh tutup browser dengan tenang ✅')) return;
+    addLog(`🔄 Switching to Background Mode...`);
+    // Step 1: stop tab loop + release lock
+    autoRunLoopRef.current = false;
+    if (lockHeartbeatRef.current) clearInterval(lockHeartbeatRef.current);
+    await releaseLock();
+    addLog(`✅ Tab auto-run stopped & lock released`);
+    // Step 2: enable background
+    try {
+      const settings = await base44.entities.QCSetting.list();
+      const payload = { backgroundLaunchEnabled: true, backgroundStoryEnabled: true };
+      if (settings.length > 0) {
+        await base44.entities.QCSetting.update(settings[0].id, payload);
+      } else {
+        await base44.entities.QCSetting.create({ intervalMinutes: 10, ...payload });
+      }
+      setBackgroundEnabled(true);
+      setBackgroundStoryEnabled(true);
+      setAutoRunning(false);
+      addLog(`🟢 Background ON — Server jalan KSSR (5 min) + Story (10 min). Browser boleh tutup!`);
+    } catch (e) {
+      addLog(`❌ Gagal hidupkan background: ${e.message}`);
+    }
+  };
+
   const autoGenerateMiniGames = async () => {
     if (!confirm('Auto-generate akan fill semua mini game categories yang belum complete. Teruskan?')) return;
     setAutoRunning(true);
@@ -513,9 +539,14 @@ export default function LaunchControlPanel() {
             </div>
             <div className="flex gap-2">
               {autoRunLock.isMine && autoRunning && (
-                <Button onClick={stopAutoRun} size="sm" variant="destructive">
-                  <Trash2 className="w-4 h-4 mr-2" /> Stop
-                </Button>
+                <>
+                  <Button onClick={switchToBackgroundMode} size="sm" className="bg-green-500 hover:bg-green-400 text-white font-bold">
+                    <Zap className="w-4 h-4 mr-2" /> Switch to Background (tutup browser OK)
+                  </Button>
+                  <Button onClick={stopAutoRun} size="sm" variant="destructive">
+                    <Trash2 className="w-4 h-4 mr-2" /> Stop
+                  </Button>
+                </>
               )}
               {(autoRunLock.isStale || !autoRunLock.isMine) && (
                 <Button onClick={forceReleaseLock} size="sm" variant="outline" className="bg-white/10 text-white border-white/30 hover:bg-white/20">
