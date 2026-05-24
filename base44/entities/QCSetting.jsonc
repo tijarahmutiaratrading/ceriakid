@@ -26,6 +26,11 @@
       "type": "number",
       "default": 30,
       "description": "Cap maksimum total story kid games"
+    },
+    "backgroundLaunchEnabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Adakah background launch generator aktif (jalan setiap 5 minit di server)"
     }
   },
   "required": [

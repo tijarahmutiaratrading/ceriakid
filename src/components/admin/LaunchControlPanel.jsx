@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, AlertTriangle, RefreshCw, Play, Loader2, Trash2, Settings } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, RefreshCw, Play, Loader2, Trash2, Settings, Zap } from 'lucide-react';
 import LaunchSettingsModal from '@/components/admin/LaunchSettingsModal';
 
 const SUBJECT_LABELS = {
@@ -25,7 +25,35 @@ export default function LaunchControlPanel() {
   const [log, setLog] = useState([]);
   const [autoRunning, setAutoRunning] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [backgroundEnabled, setBackgroundEnabled] = useState(false);
+  const [bgToggling, setBgToggling] = useState(false);
   const lastLoadRef = useRef(0);
+
+  const loadBackgroundStatus = async () => {
+    try {
+      const settings = await base44.entities.QCSetting.list();
+      setBackgroundEnabled(settings[0]?.backgroundLaunchEnabled === true);
+    } catch (e) { /* ignore */ }
+  };
+
+  const toggleBackgroundMode = async () => {
+    setBgToggling(true);
+    try {
+      const settings = await base44.entities.QCSetting.list();
+      const next = !backgroundEnabled;
+      if (settings.length > 0) {
+        await base44.entities.QCSetting.update(settings[0].id, { backgroundLaunchEnabled: next });
+      } else {
+        await base44.entities.QCSetting.create({ intervalMinutes: 10, backgroundLaunchEnabled: next });
+      }
+      setBackgroundEnabled(next);
+      addLog(next ? '🟢 Background mode ON — server akan generate setiap 5 minit' : '🔴 Background mode OFF');
+    } catch (e) {
+      addLog(`❌ Toggle error: ${e.message}`);
+    } finally {
+      setBgToggling(false);
+    }
+  };
 
   const loadProgress = async () => {
     const now = Date.now();
@@ -73,6 +101,7 @@ export default function LaunchControlPanel() {
     loadProgress();
     loadStoryProgress();
     loadMiniGamesProgress();
+    loadBackgroundStatus();
   }, []);
 
   const addLog = (msg) => setLog(prev => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...prev].slice(0, 50));
@@ -313,14 +342,29 @@ export default function LaunchControlPanel() {
                   <p className="text-white/70 text-xs">games</p>
                 </div>
               </div>
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex gap-2 flex-wrap">
                 <Button onClick={loadProgress} disabled={loading} variant="secondary" size="sm">
                   <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
                 </Button>
                 <Button onClick={autoRunAll} disabled={autoRunning || progress.totalNeeded === 0} className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-black">
-                  {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Run All</>}
+                  {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Run (Tab)</>}
+                </Button>
+                <Button
+                  onClick={toggleBackgroundMode}
+                  disabled={bgToggling}
+                  className={backgroundEnabled
+                    ? 'bg-green-400 hover:bg-green-300 text-green-900 font-black'
+                    : 'bg-white/20 hover:bg-white/30 text-white font-black border border-white/30'}
+                >
+                  {bgToggling ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Zap className="w-4 h-4 mr-2" />}
+                  Background: {backgroundEnabled ? 'ON 🟢' : 'OFF'}
                 </Button>
               </div>
+              {backgroundEnabled && (
+                <div className="mt-3 px-3 py-2 rounded-lg bg-green-500/20 border border-green-300/40 text-xs text-white">
+                  ✅ Server akan generate 1 bucket setiap 5 minit walaupun tab tertutup. Auto-stop bila semua complete.
+                </div>
+              )}
             </div>
 
             {/* Bucket table */}
