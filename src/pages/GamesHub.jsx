@@ -43,7 +43,7 @@ export default function GamesHub() {
     >
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12 pb-24 pt-20 md:pt-24">
+      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pb-24 pt-20 md:pt-24">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <Link
