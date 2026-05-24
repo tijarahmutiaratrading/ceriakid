@@ -17,6 +17,8 @@ const categoryGradients = {
   brain_training:   'from-pink-500 to-fuchsia-600',
 };
 
+const HERO_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/37dda3450_generated_image.png';
+
 export default function GamesHub() {
   const counts = React.useMemo(() => {
     const map = {};
@@ -30,7 +32,15 @@ export default function GamesHub() {
   const visibleCategories = MINI_GAME_CATEGORIES.filter(c => (counts[c.id] ?? 0) > 0);
 
   return (
-    <div className="min-h-screen w-full font-nunito bg-pattern bg-background rounded-2xl">
+    <div
+      className="min-h-screen w-full font-nunito rounded-2xl"
+      style={{
+        background: `url(${HERO_BG})`,
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
+        backgroundPosition: 'center top',
+      }}
+    >
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pb-24 pt-20 md:pt-24">
