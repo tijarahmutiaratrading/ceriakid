@@ -8,7 +8,6 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Admin only' }, { status: 403 });
     }
 
-    // Get all mini games (category is in genius categories)
     const miniGameCategories = [
       'memory_master', 'logic_puzzles', 'speed_focus', 'pattern_genius',
       'maze_adventure', 'creative_builder', 'problem_solver', 'brain_training'
@@ -16,13 +15,20 @@ Deno.serve(async (req) => {
 
     let totalDeleted = 0;
     for (const category of miniGameCategories) {
+      // Delete published and unpublished games
       const games = await base44.asServiceRole.entities.Game.filter({ category });
+      console.log(`Deleting ${games.length} games from ${category}`);
       for (const game of games) {
-        await base44.asServiceRole.entities.Game.delete(game.id);
-        totalDeleted++;
+        try {
+          await base44.asServiceRole.entities.Game.delete(game.id);
+          totalDeleted++;
+        } catch (err) {
+          console.error(`Failed to delete game ${game.id}:`, err);
+        }
       }
     }
 
+    console.log(`Total deleted: ${totalDeleted}`);
     return Response.json({
       success: true,
       message: `Deleted ${totalDeleted} mini games`,
