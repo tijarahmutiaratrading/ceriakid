@@ -37,10 +37,11 @@ export default function BackgroundProgressPanel() {
 
   useEffect(() => {
     loadAll();
-    // Auto-refresh every 30 seconds when something is enabled
+    // Auto-refresh every 2 minutes (gentle) to avoid rate limits.
+    // Background automations already run on server independently.
     const interval = setInterval(() => {
       if (kssrEnabled || storyEnabled) loadAll();
-    }, 30000);
+    }, 120000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kssrEnabled, storyEnabled]);
@@ -67,7 +68,7 @@ export default function BackgroundProgressPanel() {
             <h2 className="font-black text-white text-lg">🤖 Background Auto-Generate</h2>
             <p className="text-white/55 text-xs">
               {lastCheck ? `Last check: ${lastCheck.toLocaleTimeString()}` : 'Loading...'}
-              {anyEnabled && <span className="ml-2 text-green-300">• Auto-refresh 30s</span>}
+              {anyEnabled && <span className="ml-2 text-green-300">• Auto-refresh 2 min</span>}
             </p>
           </div>
         </div>
