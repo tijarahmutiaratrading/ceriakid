@@ -23,12 +23,29 @@ Deno.serve(async (req) => {
     const target = parseInt(body.target) || 30;
     const generateMissing = body.generateMissing !== false; // default true
 
+    // SINGLE BUCKET MODE: caller passes { ageGroup, darjah, category } to process only one bucket
+    // (avoids function timeout when processing all 35 buckets in one call)
+    const singleAgeGroup = body.ageGroup;
+    const singleDarjah = body.darjah || null;
+    const singleCategory = body.category;
+    const isSingleMode = singleAgeGroup && singleCategory;
+
+    // Build the list of buckets to process
+    let bucketsToProcess = BUCKETS;
+    if (isSingleMode) {
+      bucketsToProcess = [{
+        ageGroup: singleAgeGroup,
+        darjah: singleDarjah,
+        subjects: [singleCategory],
+      }];
+    }
+
     const report = [];
     let totalDeleted = 0;
     let totalGenerated = 0;
     let totalGenFailed = 0;
 
-    for (const b of BUCKETS) {
+    for (const b of bucketsToProcess) {
       for (const subject of b.subjects) {
         const filter = { ageGroup: b.ageGroup, category: subject, isPublished: true };
         if (b.darjah) filter.darjah = b.darjah;

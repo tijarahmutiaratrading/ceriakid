@@ -502,21 +502,60 @@ export default function LaunchControlPanel() {
     }
     setConfirmingNormalize(false);
     setAutoRunning(true);
-    addLog(`⚖️ NORMALIZE KSSR BUCKETS started (target: 30)...`);
-    try {
-      const res = await base44.functions.invoke('normalizeKSSRBuckets', { target: 30, generateMissing: true });
-      const d = res.data;
-      addLog(`✅ Normalize selesai: ${d.totalDeleted} deleted, ${d.totalGenerated} generated, ${d.totalGenFailed} failed`);
-      // Log buckets yang ada action
-      (d.report || []).filter(r => r.action !== 'ok').forEach(r => {
-        addLog(`  • ${r.bucket}: ${r.before}→${r.after} (${r.action})`);
-      });
-      await loadProgress(true);
-    } catch (e) {
-      addLog(`❌ Normalize error: ${e.message}`);
-    } finally {
-      setAutoRunning(false);
+    addLog(`⚖️ NORMALIZE KSSR BUCKETS started (target: 30, bucket-by-bucket)...`);
+
+    // Loop bucket-by-bucket to avoid function timeout
+    const ALL_BUCKETS = [];
+    const SUBJECTS = ['bahasa_melayu','english','mathematics','science','jawi'];
+    const LEVELS = [
+      { ageGroup: 'prasekolah', darjah: null },
+      { ageGroup: 'sekolah_rendah', darjah: 'darjah_1' },
+      { ageGroup: 'sekolah_rendah', darjah: 'darjah_2' },
+      { ageGroup: 'sekolah_rendah', darjah: 'darjah_3' },
+      { ageGroup: 'sekolah_rendah', darjah: 'darjah_4' },
+      { ageGroup: 'sekolah_rendah', darjah: 'darjah_5' },
+      { ageGroup: 'sekolah_rendah', darjah: 'darjah_6' },
+    ];
+    for (const lvl of LEVELS) {
+      for (const subj of SUBJECTS) {
+        ALL_BUCKETS.push({ ageGroup: lvl.ageGroup, darjah: lvl.darjah, category: subj });
+      }
     }
+
+    let totalDel = 0, totalGen = 0, totalFail = 0, processed = 0;
+    for (const b of ALL_BUCKETS) {
+      processed++;
+      const label = `${b.darjah || b.ageGroup}/${b.category}`;
+      try {
+        const res = await base44.functions.invoke('normalizeKSSRBuckets', {
+          target: 30,
+          generateMissing: true,
+          ageGroup: b.ageGroup,
+          darjah: b.darjah,
+          category: b.category,
+        });
+        const d = res.data;
+        const row = d.report?.[0];
+        if (row && row.action !== 'ok') {
+          addLog(`[${processed}/${ALL_BUCKETS.length}] ${label}: ${row.before}→${row.after} (${row.action}, +${row.generated} -${row.deleted})`);
+        } else {
+          addLog(`[${processed}/${ALL_BUCKETS.length}] ${label}: OK (${row?.before || 0})`);
+        }
+        totalDel += d.totalDeleted || 0;
+        totalGen += d.totalGenerated || 0;
+        totalFail += d.totalGenFailed || 0;
+      } catch (e) {
+        addLog(`[${processed}/${ALL_BUCKETS.length}] ❌ ${label}: ${e.message}`);
+        // Cool down on error before continuing
+        await new Promise(r => setTimeout(r, 5000));
+      }
+      // Small delay between buckets
+      await new Promise(r => setTimeout(r, 1000));
+    }
+
+    addLog(`✅ Normalize selesai: ${totalDel} deleted, ${totalGen} generated, ${totalFail} failed`);
+    await loadProgress(true);
+    setAutoRunning(false);
   };
 
   const deleteAllStoryKid = async () => {
