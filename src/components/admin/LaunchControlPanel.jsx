@@ -624,14 +624,25 @@ export default function LaunchControlPanel() {
             </button>
           ))}
         </div>
-        <Button
-          onClick={() => setShowSettingsModal(true)}
-          variant="outline"
-          size="sm"
-          className="bg-white/15 text-white hover:bg-white/25 border-white/25"
-        >
-          <Settings className="w-4 h-4 mr-2" /> Target Settings
-        </Button>
+        <div className="flex gap-2 flex-wrap">
+          <Button
+            onClick={forceReleaseLock}
+            variant="outline"
+            size="sm"
+            className="bg-red-500/20 text-white hover:bg-red-500/30 border-red-300/40"
+            title="Emergency: paksa lepas auto-run lock walaupun banner tak nampak"
+          >
+            <Unlock className="w-4 h-4 mr-2" /> Force Release Lock
+          </Button>
+          <Button
+            onClick={() => setShowSettingsModal(true)}
+            variant="outline"
+            size="sm"
+            className="bg-white/15 text-white hover:bg-white/25 border-white/25"
+          >
+            <Settings className="w-4 h-4 mr-2" /> Target Settings
+          </Button>
+        </div>
       </motion.div>
 
       {/* Settings Modal */}
