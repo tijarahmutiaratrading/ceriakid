@@ -15,9 +15,12 @@ const LEVEL_LABELS = {
 };
 
 export default function LaunchControlPanel() {
+  const [activeSection, setActiveSection] = useState('curriculum');
   const [progress, setProgress] = useState(null);
+  const [storyProgress, setStoryProgress] = useState(null);
+  const [miniGamesProgress, setMiniGamesProgress] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [working, setWorking] = useState(null); // bucket key being processed
+  const [working, setWorking] = useState(null);
   const [log, setLog] = useState([]);
   const [autoRunning, setAutoRunning] = useState(false);
   const lastLoadRef = useRef(0);
@@ -40,7 +43,35 @@ export default function LaunchControlPanel() {
     }
   };
 
-  useEffect(() => { loadProgress(); }, []);
+  const loadStoryProgress = async () => {
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('launchGetStoryProgress', {});
+      setStoryProgress(res.data);
+    } catch (error) {
+      addLog(`❌ Error: ${error?.message || 'Gagal load story progress'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMiniGamesProgress = async () => {
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('launchGetMiniGamesProgress', {});
+      setMiniGamesProgress(res.data);
+    } catch (error) {
+      addLog(`❌ Error: ${error?.message || 'Gagal load mini games progress'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadProgress();
+    loadStoryProgress();
+    loadMiniGamesProgress();
+  }, []);
 
   const addLog = (msg) => setLog(prev => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...prev].slice(0, 50));
 
@@ -104,11 +135,9 @@ export default function LaunchControlPanel() {
           addLog(`🎉 SEMUA BUCKETS COMPLETE!`);
           break;
         }
-        // Process the one with most needed first
         incomplete.sort((a, b) => b.needed - a.needed);
         const next = incomplete[0];
         await runBucket(next);
-        // Small delay between buckets
         await new Promise(r => setTimeout(r, 2000));
       } catch (error) {
         addLog(`❌ Auto-run error: ${error?.message || 'Unknown'}`);
@@ -120,101 +149,213 @@ export default function LaunchControlPanel() {
     addLog(`✅ AUTO-RUN ENDED`);
   };
 
-  if (!progress) {
-    return (
-      <div className="p-8 text-center">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto text-game-purple" />
-        <p className="mt-2 text-sm text-muted-foreground">Loading progress...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-5 text-white">
-        <h2 className="text-xl font-black">🚀 Launch Control Panel</h2>
-        <p className="text-white/80 text-sm mt-1">Target: 30 games per subjek setiap peringkat. Total: 1,050 games.</p>
-        <div className="mt-4 grid grid-cols-3 gap-3">
-          <div className="bg-white/15 rounded-xl p-3">
-            <p className="text-white/70 text-xs">Progress</p>
-            <p className="text-2xl font-black">{progress.overallPercent}%</p>
-            <p className="text-white/70 text-xs">{progress.totalExisting}/{progress.totalTarget} games</p>
-          </div>
-          <div className="bg-white/15 rounded-xl p-3">
-            <p className="text-white/70 text-xs">Buckets Complete</p>
-            <p className="text-2xl font-black">{progress.completeBuckets}/{progress.totalBuckets}</p>
-          </div>
-          <div className="bg-white/15 rounded-xl p-3">
-            <p className="text-white/70 text-xs">Still Needed</p>
-            <p className="text-2xl font-black">{progress.totalNeeded}</p>
-            <p className="text-white/70 text-xs">games</p>
-          </div>
-        </div>
-        <div className="mt-4 flex gap-2">
-          <Button onClick={loadProgress} disabled={loading} variant="secondary" size="sm">
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
-          </Button>
-          <Button onClick={autoRunAll} disabled={autoRunning || progress.totalNeeded === 0} className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-black">
-            {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Run All</>}
-          </Button>
-        </div>
-      </div>
+      {/* Section Tabs */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 flex-wrap">
+        {[
+          { key: 'curriculum', label: '📚 KSSR Curriculum' },
+          { key: 'story', label: '📖 Story Kid' },
+          { key: 'mini_games', label: '🎮 Mini Games' },
+        ].map(tab => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveSection(tab.key)}
+            className={`py-2 px-4 rounded-xl font-bold text-sm transition-all ${
+              activeSection === tab.key
+                ? 'bg-white text-game-purple shadow-lg'
+                : 'bg-white/15 text-white hover:bg-white/25'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </motion.div>
 
-      {/* Bucket table */}
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-        <div className="grid grid-cols-12 bg-gray-100 px-4 py-2 text-xs font-bold text-gray-700">
-          <div className="col-span-3">Peringkat</div>
-          <div className="col-span-2">Subjek</div>
-          <div className="col-span-2 text-center">Games</div>
-          <div className="col-span-2 text-center">Progress</div>
-          <div className="col-span-3 text-right">Aksi</div>
-        </div>
-        <div className="max-h-[60vh] overflow-y-auto">
-          {progress.rows.map((row, i) => {
-            const key = `${row.ageGroup}-${row.darjah || 'pra'}-${row.category}`;
-            const isWorking = working === key;
-            const isPurging = working === `${key}-purge`;
-            return (
-              <motion.div
-                key={key}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: i * 0.01 }}
-                className={`grid grid-cols-12 px-4 py-2.5 text-sm border-b border-gray-50 items-center ${row.status === 'complete' ? 'bg-green-50' : 'bg-white'}`}
-              >
-                <div className="col-span-3 font-semibold">{LEVEL_LABELS[row.darjah || row.ageGroup]}</div>
-                <div className="col-span-2">{SUBJECT_LABELS[row.category]}</div>
-                <div className="col-span-2 text-center font-mono">
-                  <span className={row.status === 'complete' ? 'text-green-600 font-bold' : 'text-gray-700'}>
-                    {row.count}/{row.target}
-                  </span>
+      <div className="space-y-4">
+        {/* CURRICULUM SECTION */}
+        {activeSection === 'curriculum' && progress && (
+          <>
+            {/* Header */}
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-5 text-white">
+              <h2 className="text-xl font-black">🚀 KSSR Curriculum</h2>
+              <p className="text-white/80 text-sm mt-1">Target: 30 games per subjek setiap peringkat. Total: 1,050 games.</p>
+              <div className="mt-4 grid grid-cols-3 gap-3">
+                <div className="bg-white/15 rounded-xl p-3">
+                  <p className="text-white/70 text-xs">Progress</p>
+                  <p className="text-2xl font-black">{progress.overallPercent}%</p>
+                  <p className="text-white/70 text-xs">{progress.totalExisting}/{progress.totalTarget} games</p>
                 </div>
-                <div className="col-span-2">
-                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full ${row.status === 'complete' ? 'bg-green-500' : row.percent > 50 ? 'bg-yellow-400' : 'bg-red-400'}`}
-                      style={{ width: `${row.percent}%` }}
-                    />
-                  </div>
+                <div className="bg-white/15 rounded-xl p-3">
+                  <p className="text-white/70 text-xs">Buckets Complete</p>
+                  <p className="text-2xl font-black">{progress.completeBuckets}/{progress.totalBuckets}</p>
                 </div>
-                <div className="col-span-3 flex justify-end gap-1.5">
-                  {row.status === 'complete' ? (
-                    <span className="flex items-center gap-1 text-green-600 text-xs font-bold"><CheckCircle2 className="w-4 h-4" /> Complete</span>
-                  ) : (
-                    <Button size="sm" onClick={() => runBucket(row)} disabled={isWorking || autoRunning} className="h-7 text-xs">
-                      {isWorking ? <Loader2 className="w-3 h-3 animate-spin" /> : <Play className="w-3 h-3 mr-1" />}
-                      +{Math.min(5, row.needed)}
-                    </Button>
-                  )}
-                  <Button size="sm" variant="outline" onClick={() => purgeBucket(row)} disabled={isPurging || autoRunning} className="h-7 px-2 border-red-200 text-red-600 hover:bg-red-50">
-                    {isPurging ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
-                  </Button>
+                <div className="bg-white/15 rounded-xl p-3">
+                  <p className="text-white/70 text-xs">Still Needed</p>
+                  <p className="text-2xl font-black">{progress.totalNeeded}</p>
+                  <p className="text-white/70 text-xs">games</p>
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Button onClick={loadProgress} disabled={loading} variant="secondary" size="sm">
+                  <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
+                </Button>
+                <Button onClick={autoRunAll} disabled={autoRunning || progress.totalNeeded === 0} className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-black">
+                  {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Run All</>}
+                </Button>
+              </div>
+            </div>
+
+            {/* Bucket table */}
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="grid grid-cols-12 bg-gray-100 px-4 py-2 text-xs font-bold text-gray-700">
+                <div className="col-span-3">Peringkat</div>
+                <div className="col-span-2">Subjek</div>
+                <div className="col-span-2 text-center">Games</div>
+                <div className="col-span-2 text-center">Progress</div>
+                <div className="col-span-3 text-right">Aksi</div>
+              </div>
+              <div className="max-h-[60vh] overflow-y-auto">
+                {progress.rows.map((row, i) => {
+                  const key = `${row.ageGroup}-${row.darjah || 'pra'}-${row.category}`;
+                  const isWorking = working === key;
+                  const isPurging = working === `${key}-purge`;
+                  return (
+                    <motion.div
+                      key={key}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: i * 0.01 }}
+                      className={`grid grid-cols-12 px-4 py-2.5 text-sm border-b border-gray-50 items-center ${row.status === 'complete' ? 'bg-green-50' : 'bg-white'}`}
+                    >
+                      <div className="col-span-3 font-semibold">{LEVEL_LABELS[row.darjah || row.ageGroup]}</div>
+                      <div className="col-span-2">{SUBJECT_LABELS[row.category]}</div>
+                      <div className="col-span-2 text-center font-mono">
+                        <span className={row.status === 'complete' ? 'text-green-600 font-bold' : 'text-gray-700'}>
+                          {row.count}/{row.target}
+                        </span>
+                      </div>
+                      <div className="col-span-2">
+                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full ${row.status === 'complete' ? 'bg-green-500' : row.percent > 50 ? 'bg-yellow-400' : 'bg-red-400'}`}
+                            style={{ width: `${row.percent}%` }}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-span-3 flex justify-end gap-1.5">
+                        {row.status === 'complete' ? (
+                          <span className="flex items-center gap-1 text-green-600 text-xs font-bold"><CheckCircle2 className="w-4 h-4" /> Complete</span>
+                        ) : (
+                          <Button size="sm" onClick={() => runBucket(row)} disabled={isWorking || autoRunning} className="h-7 text-xs">
+                            {isWorking ? <Loader2 className="w-3 h-3 animate-spin" /> : <Play className="w-3 h-3 mr-1" />}
+                            +{Math.min(5, row.needed)}
+                          </Button>
+                        )}
+                        <Button size="sm" variant="outline" onClick={() => purgeBucket(row)} disabled={isPurging || autoRunning} className="h-7 px-2 border-red-200 text-red-600 hover:bg-red-50">
+                          {isPurging ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+                        </Button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* STORY SECTION */}
+        {activeSection === 'story' && storyProgress && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-5 text-white">
+            <h2 className="text-xl font-black">📖 Story Kid Generation</h2>
+            <p className="text-white/80 text-sm mt-1">Target: 30 story games total.</p>
+            <div className="mt-4 grid grid-cols-3 gap-3">
+              <div className="bg-white/15 rounded-xl p-3">
+                <p className="text-white/70 text-xs">Progress</p>
+                <p className="text-2xl font-black">{storyProgress.percent}%</p>
+                <p className="text-white/70 text-xs">{storyProgress.count}/{storyProgress.target}</p>
+              </div>
+              <div className="bg-white/15 rounded-xl p-3">
+                <p className="text-white/70 text-xs">Status</p>
+                <p className="text-lg font-black">{storyProgress.status === 'complete' ? '✅ Done' : '⏳ Pending'}</p>
+              </div>
+              <div className="bg-white/15 rounded-xl p-3">
+                <p className="text-white/70 text-xs">Needed</p>
+                <p className="text-2xl font-black">{storyProgress.needed}</p>
+              </div>
+            </div>
+            <div className="mt-4 flex gap-2">
+              <Button onClick={loadStoryProgress} disabled={loading} variant="secondary" size="sm">
+                <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* MINI GAMES SECTION */}
+        {activeSection === 'mini_games' && miniGamesProgress && (
+          <>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-5 text-white">
+              <h2 className="text-xl font-black">🎮 Mini Games Generation</h2>
+              <p className="text-white/80 text-sm mt-1">Target: 10 games per category (8 categories = 80 total).</p>
+              <div className="mt-4 grid grid-cols-3 gap-3">
+                <div className="bg-white/15 rounded-xl p-3">
+                  <p className="text-white/70 text-xs">Overall Progress</p>
+                  <p className="text-2xl font-black">{miniGamesProgress.overallPercent}%</p>
+                  <p className="text-white/70 text-xs">{miniGamesProgress.totalExisting}/{miniGamesProgress.totalTarget}</p>
+                </div>
+                <div className="bg-white/15 rounded-xl p-3">
+                  <p className="text-white/70 text-xs">Categories Done</p>
+                  <p className="text-2xl font-black">{miniGamesProgress.completeBuckets}/{miniGamesProgress.totalBuckets}</p>
+                </div>
+                <div className="bg-white/15 rounded-xl p-3">
+                  <p className="text-white/70 text-xs">Still Needed</p>
+                  <p className="text-2xl font-black">{miniGamesProgress.totalNeeded}</p>
+                </div>
+              </div>
+              <div className="mt-4">
+                <Button onClick={loadMiniGamesProgress} disabled={loading} variant="secondary" size="sm">
+                  <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
+                </Button>
+              </div>
+            </motion.div>
+
+            {/* Mini Games Table */}
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="grid grid-cols-12 bg-gray-100 px-4 py-2 text-xs font-bold text-gray-700">
+                <div className="col-span-4">Kategori</div>
+                <div className="col-span-2 text-center">Games</div>
+                <div className="col-span-3 text-center">Progress</div>
+                <div className="col-span-3 text-right">Status</div>
+              </div>
+              <div className="max-h-[40vh] overflow-y-auto">
+                {miniGamesProgress.rows.map((row) => (
+                  <motion.div
+                    key={row.category}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className={`grid grid-cols-12 px-4 py-2.5 text-sm border-b border-gray-50 items-center ${row.status === 'complete' ? 'bg-green-50' : 'bg-white'}`}
+                  >
+                    <div className="col-span-4 font-semibold">{row.label}</div>
+                    <div className="col-span-2 text-center font-mono">
+                      <span className={row.status === 'complete' ? 'text-green-600 font-bold' : 'text-gray-700'}>
+                        {row.count}/{row.target}
+                      </span>
+                    </div>
+                    <div className="col-span-3">
+                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div className={`h-full ${row.status === 'complete' ? 'bg-green-500' : 'bg-amber-400'}`} style={{ width: `${row.percent}%` }} />
+                      </div>
+                    </div>
+                    <div className="col-span-3 text-right text-xs font-bold">
+                      {row.status === 'complete' ? <span className="text-green-600">✅ Complete</span> : <span className="text-amber-600">{row.needed} needed</span>}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Activity log */}
@@ -231,10 +372,9 @@ export default function LaunchControlPanel() {
           <div>
             <p className="font-bold">Nota Penting:</p>
             <ul className="mt-1 space-y-0.5 list-disc list-inside text-xs">
-              <li>Setiap "+8" akan generate 8 games guna AI premium (claude_sonnet_4_6) — quality KSSR-aligned dengan validation ketat</li>
-              <li>Setiap call ambil ~2-3 minit. Jangan tutup tab semasa "Auto-Run All"</li>
-              <li>Anggaran masa siap semua: ~30-60 minit (193 games × 8 sec rata-rata)</li>
-              <li>Anggaran kos: RM30-60 integration credits</li>
+              <li>Setiap tab ada progress tracking & reload button tersendiri</li>
+              <li>Story & Mini Games progress automatically updated setiap reload</li>
+              <li>Rate limit 12 saat antara refresh untuk curriculum tab</li>
             </ul>
           </div>
         </div>
