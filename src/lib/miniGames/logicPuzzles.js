@@ -110,7 +110,7 @@ export const logicPuzzlesGames = [
     objective: 'Asingkan buah ikut musim.',
     reward: 'Season smart',
     rounds: makeRounds([
-      { groups: ['Musim Durian','Sepanjang Tahun'], items: [{text:'Durian',group:'Musim Durian'},{text:'Pisang',group:'Sepanjang Tahun'},{text:'Mangga',group:'Musim Durian'}] },
+      { groups: ['Musim Durian','Sepanjang Tahun'], items: [{text:'Durian',group:'Musim Durian'},{text:'Pisang',group:'Sepanjang Tahun'},{text:'Mangga',group:'Sepanjang Tahun'}] },
       { groups: ['Musim','Sepanjang Tahun'], items: [{text:'Rambutan',group:'Musim'},{text:'Pisang',group:'Sepanjang Tahun'},{text:'Manggis',group:'Musim'}] },
       { groups: ['Musim','Sepanjang Tahun'], items: [{text:'Durian',group:'Musim'},{text:'Rambutan',group:'Musim'},{text:'Pisang',group:'Sepanjang Tahun'},{text:'Kelapa',group:'Sepanjang Tahun'}] },
       { groups: ['Musim','Sepanjang Tahun'], items: [{text:'Manggis',group:'Musim'},{text:'Langsat',group:'Musim'},{text:'Pisang',group:'Sepanjang Tahun'},{text:'Tembikai',group:'Sepanjang Tahun'},{text:'Mangga',group:'Musim'}] },
@@ -132,7 +132,7 @@ export const logicPuzzlesGames = [
     rounds: makeRounds([
       { statements: [{text:'Kuala Lumpur adalah ibu negara Malaysia.',answer:true},{text:'Bulan lebih besar dari Bumi.',answer:false}] },
       { statements: [{text:'Petronas Twin Towers terletak di KL.',answer:true},{text:'Pulau Pinang terletak di Sabah.',answer:false}] },
-      { statements: [{text:'Sungai Pahang adalah sungai paling panjang.',answer:true},{text:'Gunung Tahan di Kelantan.',answer:false},{text:'Malaysia ada 13 negeri.',answer:true}] },
+      { statements: [{text:'Sungai Rajang adalah sungai paling panjang di Malaysia.',answer:true},{text:'Gunung Tahan di Kelantan.',answer:false},{text:'Malaysia ada 13 negeri.',answer:true}] },
       { statements: [{text:'Air laut masin.',answer:true},{text:'Lebah membuat sarang dari batu.',answer:false},{text:'Bulan mengelilingi Bumi.',answer:true}] },
       { statements: [{text:'5 + 5 = 10',answer:true},{text:'10 - 3 = 5',answer:false},{text:'2 × 4 = 8',answer:true},{text:'9 ÷ 3 = 4',answer:false}] },
       { statements: [{text:'Bahasa rasmi Malaysia ialah Bahasa Melayu.',answer:true},{text:'Sabah dan Sarawak adalah negeri di Semenanjung.',answer:false},{text:'Lagu Negaraku adalah lagu kebangsaan.',answer:true},{text:'Hari Kebangsaan jatuh pada 1 Januari.',answer:false}] },
@@ -155,8 +155,8 @@ export const logicPuzzlesGames = [
       { groups: ['Lama','Baru'], items: [{text:'Surat',group:'Lama'},{text:'E-mel',group:'Baru'},{text:'Telegraf',group:'Lama'}] },
       { groups: ['Lama','Baru'], items: [{text:'Lampu Pelita',group:'Lama'},{text:'LED',group:'Baru'},{text:'Pen Buluh',group:'Lama'},{text:'Tablet',group:'Baru'}] },
       { groups: ['Tradisional','Moden'], items: [{text:'Kuali Besi',group:'Tradisional'},{text:'Periuk Elektrik',group:'Moden'},{text:'Ubat Herba',group:'Tradisional'},{text:'Pil',group:'Moden'},{text:'Kapal Kayu',group:'Tradisional'}] },
-      { groups: ['Pra-Merdeka','Pasca-Merdeka'], items: [{text:'Penjajahan Inggeris',group:'Pra-Merdeka'},{text:'PM Pertama',group:'Pasca-Merdeka'},{text:'Tunku Pendita',group:'Pra-Merdeka'},{text:'KLCC',group:'Pasca-Merdeka'},{text:'Komuter KTM',group:'Pasca-Merdeka'}] },
-      { groups: ['Tradisional','Moden','Kombinasi'], items: [{text:'Baju Kurung',group:'Tradisional'},{text:'Cheongsam',group:'Tradisional'},{text:'Hoodie',group:'Moden'},{text:'Baju Batik Cooperate',group:'Kombinasi'},{text:'T-Shirt Songket',group:'Kombinasi'}] },
+      { groups: ['Pra-Merdeka','Pasca-Merdeka'], items: [{text:'Penjajahan Inggeris',group:'Pra-Merdeka'},{text:'PM Pertama',group:'Pasca-Merdeka'},{text:'Era Penjajahan',group:'Pra-Merdeka'},{text:'KLCC',group:'Pasca-Merdeka'},{text:'Komuter KTM',group:'Pasca-Merdeka'}] },
+      { groups: ['Tradisional','Moden','Kombinasi'], items: [{text:'Baju Kurung',group:'Tradisional'},{text:'Cheongsam',group:'Tradisional'},{text:'Hoodie',group:'Moden'},{text:'Baju Batik Corporate',group:'Kombinasi'},{text:'T-Shirt Songket',group:'Kombinasi'}] },
       { groups: ['Lama','Baru'], items: [{text:'Kamera Filem',group:'Lama'},{text:'Telefon Bimbit',group:'Baru'},{text:'Buku Cek',group:'Lama'},{text:'E-Wallet',group:'Baru'},{text:'Kaset Tape',group:'Lama'},{text:'YouTube',group:'Baru'}] },
       { groups: ['Tradisional','Moden','Kombinasi'], items: [{text:'Wau Bulan',group:'Tradisional'},{text:'Drone',group:'Moden'},{text:'Sape',group:'Tradisional'},{text:'Synthesizer',group:'Moden'},{text:'Gamelan Elektronik',group:'Kombinasi'},{text:'Batik Cetakan',group:'Kombinasi'}] },
       { groups: ['1900-an','2000-an','2020-an'], items: [{text:'Telegraf',group:'1900-an'},{text:'Internet',group:'2000-an'},{text:'AI Assistant',group:'2020-an'},{text:'Filem Hitam Putih',group:'1900-an'},{text:'Filem 3D',group:'2000-an'},{text:'VR Game',group:'2020-an'},{text:'Mesin Taip',group:'1900-an'}] },

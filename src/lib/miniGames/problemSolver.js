@@ -19,7 +19,7 @@ export const problemSolverGames = [
       { statements: [{text:'Mata adalah deria penglihatan.',answer:true},{text:'Telinga deria perasa.',answer:false},{text:'Lidah deria rasa.',answer:true},{text:'Hidung deria bau.',answer:true},{text:'Kulit deria sentuhan.',answer:true},{text:'Otak organ pencernaan.',answer:false},{text:'Jantung mengepam darah.',answer:true}] },
       { statements: [{text:'Bumi planet ke-3 dari Matahari.',answer:true},{text:'Marikh disebut Planet Merah.',answer:true},{text:'Musytari planet terkecil.',answer:false},{text:'Pluto planet kerdil.',answer:true},{text:'Bumi ada satu bulan.',answer:true},{text:'Saturn ada gelang.',answer:true},{text:'Venus lebih sejuk dari Pluto.',answer:false},{text:'Galaksi kita Bima Sakti.',answer:true}] },
       { statements: [{text:'Manusia ada 206 tulang.',answer:true},{text:'Otot membantu kita bergerak.',answer:true},{text:'Hati membersihkan darah.',answer:true},{text:'Paru-paru bertugas mencerna.',answer:false},{text:'Sistem peredaran darah dipam jantung.',answer:true},{text:'Otak mengawal badan.',answer:true},{text:'Tulang lebih ringan dari logam.',answer:true},{text:'Otot tidak perlu nutrisi.',answer:false},{text:'Air kencing diproses ginjal.',answer:true}] },
-      { statements: [{text:'Tanah keras dari air.',answer:true},{text:'Hutan hujan ada di Malaysia.',answer:true},{text:'Gajah pemakan daging.',answer:false},{text:'Buaya reptilia.',answer:true},{text:'Penyu bertelur di pantai.',answer:true},{text:'Harimau Malaya makan rumput.',answer:false},{text:'Pokok getah hasilkan susu getah.',answer:true},{text:'Padi tumbuh di gurun.',answer:false},{text:'Lebah pollinate bunga.',answer:true},{text:'Rama-rama dulunya ulat.',answer:true}] },
+      { statements: [{text:'Tanah lebih padat daripada air.',answer:true},{text:'Hutan hujan ada di Malaysia.',answer:true},{text:'Gajah pemakan daging.',answer:false},{text:'Buaya reptilia.',answer:true},{text:'Penyu bertelur di pantai.',answer:true},{text:'Harimau Malaya makan rumput.',answer:false},{text:'Pokok getah hasilkan susu getah.',answer:true},{text:'Padi tumbuh di gurun.',answer:false},{text:'Lebah pollinate bunga.',answer:true},{text:'Rama-rama dulunya ulat.',answer:true}] },
     ]),
   },
   {
@@ -46,7 +46,7 @@ export const problemSolverGames = [
     id: 'problem-fizik',
     title: 'Fizik untuk Kanak-kanak',
     emoji: '⚙️',
-    mode: 'physics',
+    mode: 'true_false',
     objective: 'Fikir sebab dan akibat.',
     reward: 'Thinker badge',
     rounds: makeRounds([
@@ -54,7 +54,7 @@ export const problemSolverGames = [
       { statements: [{text:'Magnet menarik besi.',answer:true},{text:'Cermin pantulkan cahaya.',answer:true}] },
       { statements: [{text:'Air mengalir dari tinggi ke rendah.',answer:true},{text:'Wap naik ke atas.',answer:true},{text:'Ais lebih ringan dari air.',answer:true}] },
       { statements: [{text:'Daya geseran perlahankan kereta.',answer:true},{text:'Roda bulat lebih mudah bergerak.',answer:true},{text:'Permukaan licin tahan gerakan.',answer:false},{text:'Brek henti kereta menggunakan geseran.',answer:true}] },
-      { statements: [{text:'Cahaya bergerak lurus.',answer:true},{text:'Bunyi bergerak laju dari cahaya.',answer:false},{text:'Gema disebabkan oleh pantulan bunyi.',answer:true},{text:'Kelawar guna bunyi untuk navigasi.',answer:true},{text:'Cermin selalu pantulkan dengan tepat.',answer:true}] },
+      { statements: [{text:'Cahaya bergerak lurus.',answer:true},{text:'Bunyi bergerak laju dari cahaya.',answer:false},{text:'Gema disebabkan oleh pantulan bunyi.',answer:true},{text:'Kelawar guna bunyi untuk navigasi.',answer:true},{text:'Cermin rata pantulkan imej dengan tepat.',answer:true}] },
       { statements: [{text:'Graviti tarik objek ke bawah.',answer:true},{text:'Di angkasa lepas tiada graviti.',answer:false},{text:'Bulan ada graviti.',answer:true},{text:'Apple jatuh kerana graviti.',answer:true},{text:'Astronot terapung kerana mikrograviti.',answer:true},{text:'Berat sama dengan jisim.',answer:false}] },
       { statements: [{text:'Daya mengubah arah gerakan.',answer:true},{text:'Tolakan dan tarikan adalah daya.',answer:true},{text:'Objek diam tidak ada daya bertindak.',answer:false},{text:'Daya boleh hentikan objek bergerak.',answer:true},{text:'Daya graviti tarik ke atas.',answer:false},{text:'Magnet ada daya tarikan.',answer:true},{text:'Springs ada daya regangan.',answer:true}] },
       { statements: [{text:'Pengumpil ringankan kerja.',answer:true},{text:'Takal angkat objek berat.',answer:true},{text:'Skru bukan mesin ringkas.',answer:false},{text:'Roda dan gandar mesin ringkas.',answer:true},{text:'Satah condong jimat tenaga.',answer:true},{text:'Baji pisahkan objek.',answer:true},{text:'Mesin ringkas hanya untuk dewasa.',answer:false},{text:'Gunting ada dua bilah pengumpil.',answer:true}] },
