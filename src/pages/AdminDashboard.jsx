@@ -9,7 +9,7 @@ import AppHeader from '@/components/AppHeader';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminQuickStats from '@/components/admin/AdminQuickStats';
 import AdminStatCard from '@/components/admin/AdminStatCard';
-import AdminGameManager from '@/pages/AdminGameManager';
+
 import SystemHealthPanel from '@/components/admin/SystemHealthPanel';
 import LaunchControlPanel from '@/components/admin/LaunchControlPanel';
 import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2, Activity } from 'lucide-react';
@@ -72,22 +72,18 @@ export default function AdminDashboard() {
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('analytics');
-  const [gameManagerMounted, setGameManagerMounted] = useState(false);
   const [settingsTab, setSettingsTab] = useState('pixel');
 
   // Sync activeTab dgn URL ?tab=... (dari hamburger submenu AppHeader)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tabFromUrl = params.get('tab');
-    if (tabFromUrl && ['analytics', 'customers', 'gamemanager', 'launch', 'health', 'settings'].includes(tabFromUrl)) {
+    if (tabFromUrl && ['analytics', 'customers', 'launch', 'health', 'settings'].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
   }, [location.search]);
 
-  // Lazy mount Game Manager once user enters the tab — elak fire QC + counts API serentak masa buka admin dashboard
-  useEffect(() => {
-    if (activeTab === 'gamemanager') setGameManagerMounted(true);
-  }, [activeTab]);
+
   const [settings, setSettings] = useState(() => {
     try {
       const stored = localStorage.getItem(SETTINGS_KEY);
@@ -207,7 +203,7 @@ export default function AdminDashboard() {
   const tabs = [
     { key: 'analytics', label: '📊 Analytics', icon: <BarChart3 className="w-4 h-4" /> },
     { key: 'customers', label: '👥 Pelanggan', icon: <BarChart3 className="w-4 h-4" /> },
-    { key: 'gamemanager', label: '🎮 Game Manager', icon: <Gamepad2 className="w-4 h-4" /> },
+    { key: 'launch', label: '🚀 Launch Control', icon: <Gamepad2 className="w-4 h-4" /> },
     { key: 'health', label: '💚 System Health', icon: <Activity className="w-4 h-4" /> },
     { key: 'settings', label: '⚙️ Settings', icon: <Settings className="w-4 h-4" /> },
   ];
@@ -394,19 +390,7 @@ export default function AdminDashboard() {
         {activeTab === 'health' && <SystemHealthPanel />}
 
         {/* ═══ LAUNCH CONTROL TAB ═══ */}
-        {activeTab === 'launch' && <LaunchControlPanel />}
-
-        {/* ═══ GAME MANAGER TAB (lazy-mounted; kekal mounted lepas first visit) ═══ */}
-        {gameManagerMounted && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: activeTab === 'gamemanager' ? 1 : 0 }}
-            style={{ display: activeTab === 'gamemanager' ? 'block' : 'none' }}
-            className="-mx-3 sm:-mx-4 md:-mx-6"
-          >
-            <AdminGameManager embedded />
-          </motion.div>
-        )}
+         {activeTab === 'launch' && <LaunchControlPanel />}
 
         {/* ═══ SETTINGS TAB ═══ */}
         {activeTab === 'settings' && (
