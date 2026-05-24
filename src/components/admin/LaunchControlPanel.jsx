@@ -492,8 +492,15 @@ export default function LaunchControlPanel() {
     setAutoRunning(false);
   };
 
+  const [confirmingNormalize, setConfirmingNormalize] = useState(false);
   const normalizeBuckets = async () => {
-    if (!confirm('⚖️ NORMALIZE semua bucket KSSR ke tepat 30 games?\n\n• Bucket > 30 games: padam yang lama (keep newest 30)\n• Bucket < 30 games: auto-generate top-up\n\nProses ini ambil masa lama (boleh 10+ minit). Teruskan?')) return;
+    if (!confirmingNormalize) {
+      setConfirmingNormalize(true);
+      addLog('⚠️ Tekan sekali lagi untuk confirm Normalize (padam excess + generate kurang ke 30).');
+      setTimeout(() => setConfirmingNormalize(false), 5000);
+      return;
+    }
+    setConfirmingNormalize(false);
     setAutoRunning(true);
     addLog(`⚖️ NORMALIZE KSSR BUCKETS started (target: 30)...`);
     try {
@@ -680,11 +687,13 @@ export default function LaunchControlPanel() {
               <Button
                 onClick={normalizeBuckets}
                 disabled={autoRunning}
-                className="bg-orange-400 hover:bg-orange-300 text-orange-950 font-black"
+                className={confirmingNormalize
+                  ? 'bg-red-500 hover:bg-red-600 text-white font-black animate-pulse'
+                  : 'bg-orange-400 hover:bg-orange-300 text-orange-950 font-black'}
                 size="sm"
               >
                 {autoRunning ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Trash2 className="w-4 h-4 mr-2" />}
-                ⚖️ Normalize to 30
+                {confirmingNormalize ? 'Tekan lagi untuk confirm' : '⚖️ Normalize to 30'}
               </Button>
             </div>
           </div>
@@ -749,11 +758,13 @@ export default function LaunchControlPanel() {
                 <Button
                   onClick={normalizeBuckets}
                   disabled={autoRunning}
-                  className="bg-orange-400 hover:bg-orange-300 text-orange-950 font-black"
+                  className={confirmingNormalize
+                    ? 'bg-red-500 hover:bg-red-600 text-white font-black animate-pulse'
+                    : 'bg-orange-400 hover:bg-orange-300 text-orange-950 font-black'}
                   title="Padam excess + generate yang kurang supaya semua bucket tepat 30 games"
                 >
                   {autoRunning ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Trash2 className="w-4 h-4 mr-2" />}
-                  ⚖️ Normalize to 30
+                  {confirmingNormalize ? 'Tekan lagi untuk confirm' : '⚖️ Normalize to 30'}
                 </Button>
               </div>
             </div>
