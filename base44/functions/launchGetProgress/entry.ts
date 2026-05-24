@@ -19,7 +19,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const TARGET = 30;
+    // Read target from QCSetting (set via Target Settings modal)
+    let TARGET = 30;
+    try {
+      const settings = await base44.asServiceRole.entities.QCSetting.list();
+      if (settings.length > 0 && settings[0].subjectCap) {
+        TARGET = settings[0].subjectCap;
+      }
+    } catch (e) { /* use default */ }
+
     const rows = [];
     let totalExisting = 0;
     let totalNeeded = 0;

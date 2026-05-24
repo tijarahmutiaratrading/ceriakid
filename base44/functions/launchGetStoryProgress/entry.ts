@@ -13,7 +13,15 @@ Deno.serve(async (req) => {
       isPublished: true,
     });
 
-    const targetCount = 30;
+    // Read target from QCSetting (set via Target Settings modal)
+    let targetCount = 30;
+    try {
+      const settings = await base44.asServiceRole.entities.QCSetting.list();
+      if (settings.length > 0 && settings[0].storyKidCap) {
+        targetCount = settings[0].storyKidCap;
+      }
+    } catch (e) { /* use default */ }
+
     const totalExisting = stories.length;
     const totalNeeded = Math.max(0, targetCount - totalExisting);
     const percent = Math.round((totalExisting / targetCount) * 100);
