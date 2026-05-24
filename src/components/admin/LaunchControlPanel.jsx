@@ -188,6 +188,36 @@ export default function LaunchControlPanel() {
     setAutoRunning(false);
   };
 
+  const deleteAllMiniGames = async () => {
+    if (!confirm('⚠️ PADAM SEMUA MINI GAMES? Ini tak boleh reverse!')) return;
+    setWorking('delete-mini-games');
+    addLog(`🗑️ Deleting all mini games...`);
+    try {
+      const res = await base44.functions.invoke('deleteMiniGames', {});
+      addLog(`✅ Deleted ${res.data?.deleted || 0} mini games. Ready for fresh generation with Claude Sonnet.`);
+      await loadMiniGamesProgress();
+    } catch (e) {
+      addLog(`❌ Delete error: ${e.message}`);
+    } finally {
+      setWorking(null);
+    }
+  };
+
+  const deleteAllStoryKid = async () => {
+    if (!confirm('⚠️ PADAM SEMUA STORY KID GAMES? Ini tak boleh reverse!')) return;
+    setWorking('delete-story-kid');
+    addLog(`🗑️ Deleting all story kid games...`);
+    try {
+      const res = await base44.functions.invoke('deleteStoryKidGames', {});
+      addLog(`✅ Deleted ${res.data?.deleted || 0} story kid games. Ready for fresh generation with Claude Sonnet.`);
+      await loadStoryProgress();
+    } catch (e) {
+      addLog(`❌ Delete error: ${e.message}`);
+    } finally {
+      setWorking(null);
+    }
+  };
+
   return (
     <div className="space-y-4">
       {/* Section Tabs + Settings */}
@@ -348,6 +378,9 @@ export default function LaunchControlPanel() {
               <Button onClick={loadStoryProgress} disabled={loading} variant="secondary" size="sm">
                 <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
               </Button>
+              <Button onClick={deleteAllStoryKid} disabled={working === 'delete-story-kid'} variant="destructive" size="sm" className="ml-auto">
+                {working === 'delete-story-kid' ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Deleting...</> : <><Trash2 className="w-4 h-4 mr-2" /> Delete All</>}
+              </Button>
             </div>
           </motion.div>
         )}
@@ -379,6 +412,9 @@ export default function LaunchControlPanel() {
                 </Button>
                 <Button onClick={() => autoGenerateMiniGames()} disabled={autoRunning || miniGamesProgress.totalNeeded === 0} className="bg-yellow-400 hover:bg-yellow-300 text-orange-900 font-black">
                   {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Generate</>}
+                </Button>
+                <Button onClick={deleteAllMiniGames} disabled={working === 'delete-mini-games' || autoRunning} variant="destructive" size="sm" className="ml-auto">
+                  {working === 'delete-mini-games' ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Deleting...</> : <><Trash2 className="w-4 h-4 mr-2" /> Delete All</>}
                 </Button>
               </div>
             </motion.div>
