@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
 
     let totalDeleted = 0;
     for (const category of miniGameCategories) {
-      // Delete published and unpublished games
+      // Delete all games in these categories
       const games = await base44.asServiceRole.entities.Game.filter({ category });
       console.log(`Deleting ${games.length} games from ${category}`);
       for (const game of games) {
@@ -24,6 +24,19 @@ Deno.serve(async (req) => {
           totalDeleted++;
         } catch (err) {
           console.error(`Failed to delete game ${game.id}:`, err);
+        }
+      }
+    }
+
+    // Also delete games with miniGameBlueprint or miniGameGenerated flags in gameData
+    const allGames = await base44.asServiceRole.entities.Game.list();
+    for (const game of allGames) {
+      if (game.gameData?.miniGameBlueprint === true || game.gameData?.miniGameGenerated === true) {
+        try {
+          await base44.asServiceRole.entities.Game.delete(game.id);
+          totalDeleted++;
+        } catch (err) {
+          console.error(`Failed to delete blueprint game ${game.id}:`, err);
         }
       }
     }
