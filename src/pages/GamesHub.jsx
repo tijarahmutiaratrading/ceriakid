@@ -34,26 +34,18 @@ export default function GamesHub() {
       setLoadingCounts(true);
       try {
         const nextCounts = {};
-        const legacyCategories = MINI_GAME_CATEGORIES.filter(c => !COGNITIVE_CATEGORIES.includes(c.id));
-        for (const category of MINI_GAME_CATEGORIES) {
-          if (COGNITIVE_CATEGORIES.includes(category.id)) {
-            nextCounts[category.id] = (category.games || []).length;
-          }
-        }
-        if (legacyCategories.length > 0) {
-          const results = await Promise.all(
-            legacyCategories.map(category =>
-              base44.entities.Game.filter({ category: category.id }).catch(() => [])
-            )
-          );
-          if (cancelled) return;
-          results.forEach((games, index) => {
-            nextCounts[legacyCategories[index].id] = (games || []).filter(game =>
-              game.isPublished !== false &&
-              (game.gameData?.miniGameBlueprint === true || game.gameData?.miniGameGenerated === true)
-            ).length;
-          });
-        }
+        // Load counts from database only (skip hardcoded blueprints)
+        const results = await Promise.all(
+          MINI_GAME_CATEGORIES.map(category =>
+            base44.entities.Game.filter({ category: category.id }).catch(() => [])
+          )
+        );
+        if (cancelled) return;
+        results.forEach((games, index) => {
+          nextCounts[MINI_GAME_CATEGORIES[index].id] = (games || []).filter(game =>
+            game.isPublished !== false
+          ).length;
+        });
         if (!cancelled) setCounts(nextCounts);
       } finally {
         if (!cancelled) setLoadingCounts(false);
