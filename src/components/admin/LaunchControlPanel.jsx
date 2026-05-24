@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, AlertTriangle, RefreshCw, Play, Loader2, Trash2 } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, RefreshCw, Play, Loader2, Trash2, Settings } from 'lucide-react';
+import LaunchSettingsModal from '@/components/admin/LaunchSettingsModal';
 
 const SUBJECT_LABELS = {
   bahasa_melayu: 'BM', english: 'English', mathematics: 'Math', science: 'Sains', jawi: 'Jawi',
@@ -23,6 +24,7 @@ export default function LaunchControlPanel() {
   const [working, setWorking] = useState(null);
   const [log, setLog] = useState([]);
   const [autoRunning, setAutoRunning] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const lastLoadRef = useRef(0);
 
   const loadProgress = async () => {
@@ -151,26 +153,47 @@ export default function LaunchControlPanel() {
 
   return (
     <div className="space-y-4">
-      {/* Section Tabs */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 flex-wrap">
-        {[
-          { key: 'curriculum', label: '📚 KSSR Curriculum' },
-          { key: 'story', label: '📖 Story Kid' },
-          { key: 'mini_games', label: '🎮 Mini Games' },
-        ].map(tab => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveSection(tab.key)}
-            className={`py-2 px-4 rounded-xl font-bold text-sm transition-all ${
-              activeSection === tab.key
-                ? 'bg-white text-game-purple shadow-lg'
-                : 'bg-white/15 text-white hover:bg-white/25'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      {/* Section Tabs + Settings */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 flex-wrap items-center justify-between">
+        <div className="flex gap-2 flex-wrap">
+          {[
+            { key: 'curriculum', label: '📚 KSSR Curriculum' },
+            { key: 'story', label: '📖 Story Kid' },
+            { key: 'mini_games', label: '🎮 Mini Games' },
+          ].map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveSection(tab.key)}
+              className={`py-2 px-4 rounded-xl font-bold text-sm transition-all ${
+                activeSection === tab.key
+                  ? 'bg-white text-game-purple shadow-lg'
+                  : 'bg-white/15 text-white hover:bg-white/25'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        <Button
+          onClick={() => setShowSettingsModal(true)}
+          variant="outline"
+          size="sm"
+          className="bg-white/15 text-white hover:bg-white/25 border-white/25"
+        >
+          <Settings className="w-4 h-4 mr-2" /> Target Settings
+        </Button>
       </motion.div>
+
+      {/* Settings Modal */}
+      <LaunchSettingsModal
+        isOpen={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
+        onSave={() => {
+          loadProgress();
+          loadStoryProgress();
+          loadMiniGamesProgress();
+        }}
+      />
 
       <div className="space-y-4">
         {/* CURRICULUM SECTION */}
