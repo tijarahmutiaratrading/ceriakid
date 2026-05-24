@@ -70,99 +70,146 @@ export default function MiniGamePlayground() {
   };
 
   return (
-    <div className="min-h-screen w-full font-nunito relative overflow-hidden rounded-2xl" style={{ background: 'linear-gradient(180deg, #FFF1F8 0%, #F0E5FF 50%, #E0F0FF 100%)' }}>
-      {/* Animated playful background */}
+    <div
+      className="min-h-screen w-full font-nunito relative overflow-hidden rounded-2xl"
+      style={{
+        background: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/37dda3450_generated_image.png)',
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
+        backgroundPosition: 'center top',
+      }}
+    >
+      {/* Animated cartoon adventure background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {/* Soft sun glow */}
-        <motion.div
-          animate={{ scale: [1, 1.08, 1], opacity: [0.55, 0.8, 0.55] }}
-          transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
-          className="absolute -top-24 -right-24 w-[26rem] h-[26rem] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(255,236,150,0.85) 0%, rgba(255,200,120,0) 70%)' }}
-        />
-
-        {/* Floating clouds */}
+        {/* Floating confetti */}
         {[
-          { top: '12%', size: 'w-28 h-12', delay: 0, range: 30 },
-          { top: '28%', size: 'w-20 h-10', delay: 1.5, range: 24 },
-          { top: '62%', size: 'w-32 h-14', delay: 0.6, range: 36 },
-          { top: '80%', size: 'w-24 h-10', delay: 2.2, range: 22 },
-        ].map((cloud, i) => (
+          { left: '5%', top: '12%', color: '#FF6B9D', rot: 25 },
+          { left: '90%', top: '18%', color: '#FFD93D', rot: -15 },
+          { left: '8%', top: '40%', color: '#6BCB77', rot: 40 },
+          { left: '92%', top: '50%', color: '#4D96FF', rot: -25 },
+          { left: '6%', top: '72%', color: '#FF9F45', rot: 15 },
+          { left: '88%', top: '80%', color: '#FF6B9D', rot: -30 },
+        ].map((c, i) => (
           <motion.div
-            key={`cloud-${i}`}
-            initial={{ x: '-20%' }}
-            animate={{ x: ['-20%', '120%'] }}
-            transition={{ repeat: Infinity, duration: 22 + i * 4, ease: 'linear', delay: cloud.delay }}
-            className={`absolute ${cloud.size} bg-white/80 rounded-full blur-sm`}
-            style={{ top: cloud.top }}
+            key={`c-${i}`}
+            className="absolute w-3 h-4 rounded-sm"
+            style={{ left: c.left, top: c.top, background: c.color, transform: `rotate(${c.rot}deg)` }}
+            animate={{ y: [0, -14, 0], rotate: [c.rot, c.rot + 25, c.rot] }}
+            transition={{ repeat: Infinity, duration: 3 + i * 0.3, ease: 'easeInOut' }}
           />
         ))}
 
-        {/* Floating bubbles / sparkles */}
-        {['✨','⭐','🎈','🌈','💫','🎀','🌟','🪄'].map((bit, i) => (
-          <motion.span
-            key={`bit-${i}`}
-            className="absolute text-3xl"
-            style={{ left: `${(i * 13 + 6) % 92}%`, top: `${(i * 19 + 12) % 78}%` }}
-            animate={{ y: [0, -18, 0], rotate: [0, 12, -12, 0], opacity: [0.5, 1, 0.5] }}
-            transition={{ repeat: Infinity, duration: 4 + i * 0.5, ease: 'easeInOut', delay: i * 0.3 }}
-          >
-            {bit}
-          </motion.span>
-        ))}
-
-        {/* Bottom wave */}
-        <svg className="absolute bottom-0 left-0 w-full h-32" viewBox="0 0 1440 200" preserveAspectRatio="none">
-          <path d="M0,100 C320,160 720,40 1080,100 C1280,140 1380,100 1440,90 L1440,200 L0,200 Z" fill="rgba(255,255,255,0.55)" />
-          <path d="M0,140 C360,200 720,80 1100,140 C1300,170 1380,150 1440,140 L1440,200 L0,200 Z" fill="rgba(255,255,255,0.4)" />
-        </svg>
-
-        {/* CeriaKid mascot — waving from bottom-right */}
-        <motion.div
-          className="absolute bottom-2 right-3 sm:right-6 z-10"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
+        {/* Floating stars */}
+        {[
+          { left: '15%', top: '25%' },
+          { left: '82%', top: '35%' },
+          { left: '12%', top: '60%' },
+          { left: '85%', top: '65%' },
+        ].map((s, i) => (
           <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
-            className="relative"
+            key={`s-${i}`}
+            className="absolute text-yellow-400 text-2xl"
+            style={{ left: s.left, top: s.top, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }}
+            animate={{ scale: [1, 1.2, 1], rotate: [0, 15, 0] }}
+            transition={{ repeat: Infinity, duration: 2.5 + i * 0.4, ease: 'easeInOut' }}
           >
-            <img
-              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
-              alt="CeriaKid Mascot"
-              className="w-24 sm:w-28 h-auto rounded-3xl shadow-2xl ring-4 ring-white/80"
-            />
-            <motion.div
-              className="absolute -top-3 -left-4 bg-white px-3 py-1.5 rounded-2xl shadow-lg ring-2 ring-pink-200 text-xs font-black text-purple-700 whitespace-nowrap"
-              animate={{ rotate: [-4, 4, -4], scale: [1, 1.06, 1] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-            >
-              Jom main! 👋
-            </motion.div>
+            ⭐
           </motion.div>
-        </motion.div>
+        ))}
       </div>
       <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} />
-      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-28 md:pt-32">
+      <div className="relative max-w-lg mx-auto px-4 pb-32 pt-20 md:pt-24">
+        {/* Back button */}
         <Link
           to={`/mini-games/${category.id}`}
-          className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full font-bold text-sm text-slate-700 bg-white/90 shadow-sm hover:bg-white hover:-translate-y-0.5 active:scale-95 transition-all"
+          className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full font-bold text-sm text-slate-700 bg-white/95 shadow-md hover:bg-white hover:-translate-y-0.5 active:scale-95 transition-all"
+          style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Kembali ke {category.title}
         </Link>
 
+        {/* Game header card — cartoon adventure style */}
+        {!loadingGame && !locked && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 rounded-3xl p-4 flex items-center gap-3"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,250,235,0.95) 100%)',
+              border: '3px solid #FFB800',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+            }}
+          >
+            {/* Mini medallion */}
+            <div
+              className="flex-shrink-0 w-14 h-14"
+              style={{
+                background: 'linear-gradient(180deg, #FFB800 0%, #E89A00 100%)',
+                borderRadius: '50%',
+                padding: '4px',
+                boxShadow: '0 4px 12px rgba(255,184,0,0.4)',
+              }}
+            >
+              <div
+                className="w-full h-full flex items-center justify-center text-2xl"
+                style={{
+                  background: 'radial-gradient(circle, #7C3AED 0%, #5B21B6 100%)',
+                  borderRadius: '50%',
+                  boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.3)',
+                }}
+              >
+                <span style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>{game.emoji || category.emoji}</span>
+              </div>
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <h1 className="text-base sm:text-lg font-black text-slate-900 leading-tight line-clamp-1">
+                {game.title}
+              </h1>
+              <p className="text-xs font-bold text-amber-700 mt-0.5">
+                {category.title} · {guideByMode[game.mode] || 'Mini Game'}
+              </p>
+            </div>
+          </motion.div>
+        )}
+
         {loadingGame ? (
           <div className="flex justify-center py-10"><Loader2 className="w-7 h-7 animate-spin text-white" /></div>
         ) : locked ? (
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl bg-white p-8 text-center shadow-2xl">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-100 text-purple-700">
-              <Lock className="h-8 w-8" />
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-3xl p-8 text-center"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,250,235,0.98) 100%)',
+              border: '3px solid #FFB800',
+              boxShadow: '0 12px 32px rgba(0,0,0,0.2)',
+            }}
+          >
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full"
+                 style={{
+                   background: 'linear-gradient(180deg, #FFB800 0%, #E89A00 100%)',
+                   padding: '6px',
+                   boxShadow: '0 8px 20px rgba(255,184,0,0.4)',
+                 }}>
+              <div className="w-full h-full rounded-full flex items-center justify-center"
+                   style={{ background: 'radial-gradient(circle, #7C3AED 0%, #5B21B6 100%)' }}>
+                <Lock className="h-8 w-8 text-white" />
+              </div>
             </div>
             <p className="text-2xl font-black text-slate-900 mb-2">Mini Game Terkunci</p>
             <p className="text-slate-600 font-bold mb-5">Naik taraf pakej untuk akses mini game ini.</p>
-            <Link to="/" className="inline-flex rounded-2xl bg-purple-600 px-5 py-3 font-black text-white">Lihat Pakej</Link>
+            <Link
+              to="/"
+              className="inline-flex rounded-full px-6 py-3 font-black text-white"
+              style={{
+                background: 'linear-gradient(180deg, #C92121 0%, #8B0F0F 100%)',
+                boxShadow: '0 6px 16px rgba(201,33,33,0.4)',
+                textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+              }}
+            >
+              Lihat Pakej
+            </Link>
           </motion.div>
         ) : (
           <MiniGameModeRenderer

@@ -7,25 +7,45 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { getCategoryIllustration } from '@/lib/miniCategoryIllustrations';
 
-// Pastel gradient palette per category — soft, breathable
-const cardPalettes = {
-  memory_master:    { bg: 'linear-gradient(135deg, #FFE5F1 0%, #F5D7FF 100%)', icon: 'linear-gradient(135deg, #FFC1DE 0%, #F0AEFF 100%)' },
-  logic_puzzles:    { bg: 'linear-gradient(135deg, #FFF1D6 0%, #FFD9D9 100%)', icon: 'linear-gradient(135deg, #FFE0A8 0%, #FFB8B8 100%)' },
-  speed_focus:      { bg: 'linear-gradient(135deg, #FFE0CC 0%, #FFF1A8 100%)', icon: 'linear-gradient(135deg, #FFCAB0 0%, #FFE585 100%)' },
-  pattern_genius:   { bg: 'linear-gradient(135deg, #D6F5E5 0%, #C8EEDD 100%)', icon: 'linear-gradient(135deg, #B8E8D2 0%, #9FDDC2 100%)' },
-  maze_adventure:   { bg: 'linear-gradient(135deg, #E5DEFF 0%, #D9E5FF 100%)', icon: 'linear-gradient(135deg, #C9BEFF 0%, #B5C9FF 100%)' },
-  creative_builder: { bg: 'linear-gradient(135deg, #D6F0FF 0%, #FFE0F0 100%)', icon: 'linear-gradient(135deg, #B0DDFF 0%, #FFC1DE 100%)' },
-  problem_solver:   { bg: 'linear-gradient(135deg, #D9F0E8 0%, #E5E0FF 100%)', icon: 'linear-gradient(135deg, #B8E5D2 0%, #C9BEFF 100%)' },
-  brain_training:   { bg: 'linear-gradient(135deg, #FFE0F0 0%, #E5DEFF 100%)', icon: 'linear-gradient(135deg, #FFC1DE 0%, #C9BEFF 100%)' },
-};
+const HERO_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/37dda3450_generated_image.png';
+const MASCOT = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a960d864d_generated_image.png';
 
-const defaultPalette = { bg: 'linear-gradient(135deg, #F5E5FF 0%, #E5D4FF 100%)', icon: 'linear-gradient(135deg, #E0C8FF 0%, #CAB0FF 100%)' };
+// Vibrant medallion colors per category — bright saturated, cartoon style
+const medallionColors = {
+  memory_master:    { ring: '#FFB800', inner: '#1E3A8A', glow: 'rgba(255,184,0,0.45)' },   // gold + deep blue
+  logic_puzzles:    { ring: '#FFB800', inner: '#7C3AED', glow: 'rgba(124,58,237,0.45)' },  // gold + purple
+  speed_focus:      { ring: '#FFB800', inner: '#EF4444', glow: 'rgba(239,68,68,0.45)' },   // gold + red
+  pattern_genius:   { ring: '#FFB800', inner: '#F59E0B', glow: 'rgba(245,158,11,0.45)' },  // gold + amber
+  maze_adventure:   { ring: '#FFB800', inner: '#16A34A', glow: 'rgba(22,163,74,0.45)' },   // gold + green
+  creative_builder: { ring: '#FFB800', inner: '#0EA5E9', glow: 'rgba(14,165,233,0.45)' },  // gold + sky
+  problem_solver:   { ring: '#FFB800', inner: '#6366F1', glow: 'rgba(99,102,241,0.45)' },  // gold + indigo
+  brain_training:   { ring: '#FFB800', inner: '#DB2777', glow: 'rgba(219,39,119,0.45)' },  // gold + pink
+};
+const defaultMedallion = { ring: '#FFB800', inner: '#7C3AED', glow: 'rgba(124,58,237,0.45)' };
+
+// Confetti pieces — fixed positions, animated
+const CONFETTI = [
+  { left: '5%', top: '15%', color: '#FF6B9D', rot: 25 },
+  { left: '12%', top: '45%', color: '#FFD93D', rot: -15 },
+  { left: '88%', top: '20%', color: '#6BCB77', rot: 40 },
+  { left: '92%', top: '55%', color: '#4D96FF', rot: -25 },
+  { left: '8%', top: '75%', color: '#FF9F45', rot: 15 },
+  { left: '85%', top: '85%', color: '#FF6B9D', rot: -30 },
+  { left: '50%', top: '5%', color: '#FFD93D', rot: 10 },
+  { left: '20%', top: '92%', color: '#6BCB77', rot: -20 },
+];
+
+const STARS = [
+  { left: '15%', top: '25%' },
+  { left: '80%', top: '30%' },
+  { left: '10%', top: '60%' },
+  { left: '88%', top: '70%' },
+  { left: '45%', top: '88%' },
+];
 
 export default function GamesHub() {
   const { ageGroup } = useAgeGroup() || { ageGroup: 'prasekolah' };
 
-  // Counts come directly from hand-crafted blueprints (lib/miniGames/*.js).
-  // Each category has games.length entries — no DB fetch needed.
   const counts = React.useMemo(() => {
     const map = {};
     MINI_GAME_CATEGORIES.forEach(cat => {
@@ -39,64 +59,141 @@ export default function GamesHub() {
   const visibleCategories = MINI_GAME_CATEGORIES.filter(category => (counts[category.id] ?? 0) > 0);
 
   return (
-    <div className="min-h-screen w-full font-nunito rounded-2xl" style={{ background: '#FAF7FF' }}>
+    <div
+      className="min-h-screen w-full font-nunito rounded-2xl relative overflow-hidden"
+      style={{
+        background: `url(${HERO_BG})`,
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
+        backgroundPosition: 'center top',
+      }}
+    >
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 pb-24 pt-20 md:pt-24">
-        {/* HERO HEADER — soft pastel gradient */}
+      {/* Floating confetti & stars - ornamental */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {CONFETTI.map((c, i) => (
+          <motion.div
+            key={`c-${i}`}
+            className="absolute w-3 h-4 rounded-sm"
+            style={{ left: c.left, top: c.top, background: c.color, transform: `rotate(${c.rot}deg)` }}
+            animate={{ y: [0, -12, 0], rotate: [c.rot, c.rot + 20, c.rot] }}
+            transition={{ repeat: Infinity, duration: 3 + i * 0.3, ease: 'easeInOut' }}
+          />
+        ))}
+        {STARS.map((s, i) => (
+          <motion.div
+            key={`s-${i}`}
+            className="absolute text-yellow-400 text-2xl"
+            style={{ left: s.left, top: s.top, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }}
+            animate={{ scale: [1, 1.2, 1], rotate: [0, 15, 0] }}
+            transition={{ repeat: Infinity, duration: 2.5 + i * 0.4, ease: 'easeInOut' }}
+          >
+            ⭐
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="relative max-w-2xl mx-auto px-4 sm:px-6 pb-24 pt-20 md:pt-24">
+        {/* HERO HEADER — Adventure landscape */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative mb-5 p-5 sm:p-6 rounded-[1.75rem] overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, #FFD9EC 0%, #E0D4FF 45%, #C8E0FF 100%)',
-            boxShadow: '0 10px 30px rgba(168,85,247,0.12)',
-          }}
+          className="relative mb-6 px-4 pt-4 pb-6 sm:pt-6 sm:pb-8"
         >
-          <Link
-            to="/dashboard"
-            className="inline-flex items-center gap-2 mb-4 px-3.5 py-2 rounded-full bg-white/85 text-slate-700 font-bold text-xs sm:text-sm shadow-sm hover:bg-white transition-all"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" /> Kembali ke Dashboard
-          </Link>
+          {/* Title */}
+          <div className="text-center mb-3">
+            <h1
+              className="text-3xl sm:text-4xl font-black text-slate-900 leading-tight"
+              style={{ textShadow: '0 2px 4px rgba(255,255,255,0.6), 0 4px 12px rgba(0,0,0,0.1)' }}
+            >
+              🎮 Mini Games Hub
+            </h1>
+            <p
+              className="text-slate-800 font-black text-xl sm:text-2xl leading-tight mt-0.5"
+              style={{ textShadow: '0 2px 4px rgba(255,255,255,0.6)' }}
+            >
+              Genius Games
+            </p>
+          </div>
 
-          <div className="relative flex items-start gap-3">
-            {/* Mascot */}
-            <div className="hidden xs:block flex-shrink-0">
-              <img
-                src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
-                alt="CeriaKid"
-                className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
-                style={{ filter: 'drop-shadow(0 4px 12px rgba(168,85,247,0.25))' }}
-              />
-            </div>
+          {/* Back button + Stats + Mascot row */}
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/95 text-slate-700 font-bold text-xs sm:text-sm shadow-md hover:bg-white transition-all"
+              style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> Dashboard
+            </Link>
 
-            <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-800 leading-tight">
-                🎮 Mini Games Hub
-              </h1>
-              <p className="text-slate-700 font-black text-lg sm:text-xl leading-tight">
-                Genius Games
-              </p>
-
-              {/* Stat pill */}
-              <div className="inline-flex items-center gap-2 mt-3 px-4 py-1.5 rounded-full bg-white/80 shadow-sm">
-                <span className="text-slate-700 font-bold text-xs sm:text-sm">8 kategori</span>
-                <span className="text-slate-400">│</span>
-                <span className="text-slate-700 font-bold text-xs sm:text-sm">
-                  {loadingCounts ? 'syncing...' : `${totalGames} games`}
-                </span>
+            {/* Stat star badges */}
+            <div className="flex items-center gap-2">
+              <div
+                className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16"
+                style={{
+                  background: 'radial-gradient(circle, #FFD93D 0%, #FFB800 100%)',
+                  clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
+                  filter: 'drop-shadow(0 4px 8px rgba(255,184,0,0.5))',
+                }}
+              >
+                <div className="text-center">
+                  <div className="text-sm sm:text-base font-black text-amber-900 leading-none">8</div>
+                  <div className="text-[8px] sm:text-[9px] font-black text-amber-900 leading-none">kategori</div>
+                </div>
               </div>
-
-              <p className="text-slate-600 text-xs sm:text-sm font-medium mt-3 leading-snug">
-                Fun first: balloon pop, maze, tracing, spin wheel, catching game, coloring, rhythm tap dan banyak lagi.
-              </p>
+              <div
+                className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16"
+                style={{
+                  background: 'radial-gradient(circle, #FFD93D 0%, #FFB800 100%)',
+                  clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
+                  filter: 'drop-shadow(0 4px 8px rgba(255,184,0,0.5))',
+                }}
+              >
+                <div className="text-center">
+                  <div className="text-sm sm:text-base font-black text-amber-900 leading-none">{loadingCounts ? '...' : totalGames}</div>
+                  <div className="text-[8px] sm:text-[9px] font-black text-amber-900 leading-none">games</div>
+                </div>
+              </div>
             </div>
+          </div>
+
+          {/* Mascot centered */}
+          <motion.div
+            className="flex justify-center mb-3"
+            animate={{ y: [0, -8, 0] }}
+            transition={{ repeat: Infinity, duration: 2.8, ease: 'easeInOut' }}
+          >
+            <img
+              src={MASCOT}
+              alt="Explorer"
+              className="w-32 sm:w-40 h-auto object-contain"
+              style={{
+                filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.25))',
+                mixBlendMode: 'multiply',
+              }}
+            />
+          </motion.div>
+
+          {/* Banner scroll tagline */}
+          <div
+            className="relative mx-auto max-w-md px-5 py-2.5 text-center"
+            style={{
+              background: 'linear-gradient(180deg, #F5E6B8 0%, #E8D49A 100%)',
+              borderRadius: '8px',
+              border: '2px solid #C4A464',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.6)',
+              clipPath: 'polygon(0 0, 100% 0, 96% 50%, 100% 100%, 0 100%, 4% 50%)',
+            }}
+          >
+            <p className="text-amber-900 text-xs sm:text-sm font-bold leading-snug">
+              Fun first: balloon pop, maze, tracing, spin wheel, catching game, coloring, rhythm tap dan banyak lagi.
+            </p>
           </div>
         </motion.div>
 
-        {/* CATEGORY GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+        {/* CATEGORY MEDALLION GRID */}
+        <div className="grid grid-cols-2 gap-4 sm:gap-5 mb-6">
           {!loadingCounts && visibleCategories.length === 0 && (
             <div className="col-span-full p-6 rounded-3xl bg-white text-center shadow-sm">
               <p className="text-slate-800 font-black text-base">Tiada mini games lagi.</p>
@@ -105,66 +202,95 @@ export default function GamesHub() {
           )}
 
           {visibleCategories.map((category, idx) => {
-            const palette = cardPalettes[category.id] || defaultPalette;
+            const colors = medallionColors[category.id] || defaultMedallion;
             const count = counts[category.id] ?? 0;
             return (
               <motion.div
                 key={category.id}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.04 }}
-                whileHover={{ y: -3 }}
-                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, scale: 0.85, y: 16 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: idx * 0.06, type: 'spring', stiffness: 200 }}
+                whileHover={{ y: -6, scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
               >
-                <Link to={`/mini-games/${category.id}`} className="block h-full">
-                  <div
-                    className="relative rounded-[1.5rem] p-4 h-full overflow-hidden"
-                    style={{
-                      background: palette.bg,
-                      boxShadow: '0 6px 20px rgba(168,85,247,0.08)',
-                    }}
-                  >
-                    {/* Badge top-right */}
-                    <span className="absolute top-3 right-3 text-[11px] px-2.5 py-1 rounded-full font-black bg-white text-slate-700 shadow-sm">
-                      {loadingCounts ? <Loader2 className="w-3 h-3 animate-spin inline" /> : `${count} games`}
-                    </span>
-
-                    {/* Top row: illustration + title/objective */}
-                    <div className="flex items-start gap-3 mb-4 pr-16">
+                <Link to={`/mini-games/${category.id}`} className="block">
+                  <div className="relative">
+                    {/* Medallion shape — shield-like rounded */}
+                    <div
+                      className="relative mx-auto"
+                      style={{
+                        width: '100%',
+                        aspectRatio: '1 / 1.1',
+                        background: `linear-gradient(180deg, ${colors.ring} 0%, #E89A00 100%)`,
+                        borderRadius: '50% 50% 45% 45% / 55% 55% 45% 45%',
+                        padding: '8px',
+                        boxShadow: `0 8px 24px ${colors.glow}, 0 4px 8px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.15)`,
+                      }}
+                    >
+                      {/* Inner colored disc with illustration */}
                       <div
-                        className="flex-shrink-0 w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-2xl flex items-center justify-center overflow-hidden"
-                        style={{ background: palette.icon }}
+                        className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden"
+                        style={{
+                          background: `radial-gradient(circle at 30% 30%, ${colors.inner} 0%, ${colors.inner}DD 60%, ${colors.inner}99 100%)`,
+                          borderRadius: '50% 50% 45% 45% / 55% 55% 45% 45%',
+                          boxShadow: 'inset 0 4px 12px rgba(0,0,0,0.3), inset 0 -2px 6px rgba(255,255,255,0.15)',
+                        }}
                       >
+                        {/* Sparkle decorations inside */}
+                        <span className="absolute top-2 right-3 text-yellow-200 text-xs opacity-80">✨</span>
+                        <span className="absolute bottom-3 left-3 text-yellow-200 text-xs opacity-80">⭐</span>
+
+                        {/* Illustration */}
                         {getCategoryIllustration(category.id) ? (
                           <img
                             src={getCategoryIllustration(category.id)}
                             alt={category.title}
-                            className="w-full h-full object-contain p-1"
+                            className="w-3/5 h-3/5 object-contain"
+                            style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))' }}
                           />
                         ) : (
-                          <div className="text-4xl">{category.emoji}</div>
+                          <div className="text-5xl" style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))' }}>
+                            {category.emoji}
+                          </div>
                         )}
                       </div>
-
-                      <div className="flex-1 min-w-0 pt-0.5">
-                        <h3 className="text-slate-800 font-black text-base sm:text-lg leading-tight mb-1">
-                          {category.title}
-                        </h3>
-                        <p className="text-slate-600 text-xs sm:text-[13px] font-medium leading-snug line-clamp-2">
-                          {category.objective}
-                        </p>
-                      </div>
                     </div>
 
-                    {/* Summary row bottom */}
-                    <div className="flex items-center justify-between pt-3 border-t border-white/60">
-                      <span className="text-slate-600 text-xs sm:text-sm font-bold">
-                        10 pusingan · 3 tahap kesukaran
-                      </span>
-                      <div className="flex-shrink-0 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-sm">
-                        <Play className="w-3.5 h-3.5 text-slate-700 fill-slate-700 ml-0.5" />
-                      </div>
+                    {/* Ribbon banner with title */}
+                    <div
+                      className="absolute left-1/2 -translate-x-1/2 px-3 py-1.5 min-w-[80%]"
+                      style={{
+                        bottom: '15%',
+                        background: 'linear-gradient(180deg, #C92121 0%, #8B0F0F 100%)',
+                        clipPath: 'polygon(0 0, 100% 0, 95% 50%, 100% 100%, 0 100%, 5% 50%)',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                      }}
+                    >
+                      <p className="text-center text-white font-black text-xs sm:text-sm leading-tight whitespace-nowrap overflow-hidden text-ellipsis px-1"
+                         style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+                        {category.title}
+                      </p>
                     </div>
+
+                    {/* Play button — bottom center */}
+                    <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-9 h-9 rounded-full bg-white flex items-center justify-center"
+                         style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.25), inset 0 -2px 0 rgba(0,0,0,0.1)' }}>
+                      {loadingCounts ? (
+                        <Loader2 className="w-4 h-4 animate-spin text-slate-600" />
+                      ) : (
+                        <Play className="w-4 h-4 text-slate-800 fill-slate-800 ml-0.5" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Tagline below — on white pill for readability */}
+                  <div className="mt-4 mx-auto max-w-[90%] bg-white/95 rounded-xl px-3 py-2 shadow-md backdrop-blur-sm">
+                    <p className="text-center text-[11px] sm:text-xs font-bold text-slate-800 leading-snug line-clamp-2">
+                      {category.objective}
+                    </p>
+                    <p className="text-center text-[10px] font-black text-amber-700 mt-0.5">
+                      {count} pusingan · 3 tahap
+                    </p>
                   </div>
                 </Link>
               </motion.div>
@@ -176,9 +302,9 @@ export default function GamesHub() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="p-4 sm:p-5 rounded-2xl bg-white border-2 border-purple-100"
-          style={{ boxShadow: '0 4px 16px rgba(168,85,247,0.06)' }}
+          transition={{ delay: 0.4 }}
+          className="p-4 sm:p-5 rounded-2xl bg-white/95 border-2 border-amber-200"
+          style={{ boxShadow: '0 6px 20px rgba(0,0,0,0.12)', backdropFilter: 'blur(6px)' }}
         >
           <div className="flex items-center gap-2 mb-2">
             <Lightbulb className="w-5 h-5 text-yellow-500" fill="#FCD34D" />
