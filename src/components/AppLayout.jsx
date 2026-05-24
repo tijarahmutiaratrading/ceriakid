@@ -20,10 +20,12 @@ export default function AppLayout() {
     <div
       className="flex min-h-screen w-full gap-4 md:gap-6 px-2 md:px-4 py-2 md:py-3"
       style={{
-        background: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/37dda3450_generated_image.png)',
-        backgroundSize: 'cover',
+        backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/37dda3450_generated_image.png)',
+        backgroundSize: '100% 100%',
         backgroundAttachment: 'fixed',
-        backgroundPosition: 'center top',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        imageRendering: 'high-quality',
       }}
     >
       <UserSidebar />
