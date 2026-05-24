@@ -1,27 +1,16 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-// Mini game categories to track
+// Mini game categories — count from hand-crafted blueprints (lib/miniGames/*.js)
 const MINI_CATEGORIES = [
-  'memory_master',
-  'logic_puzzles',
-  'speed_focus',
-  'pattern_genius',
-  'maze_adventure',
-  'creative_builder',
-  'problem_solver',
-  'brain_training',
+  { id: 'memory_master', label: 'Memory Master', count: 10 },
+  { id: 'logic_puzzles', label: 'Logic Puzzles', count: 10 },
+  { id: 'speed_focus', label: 'Speed Focus', count: 10 },
+  { id: 'pattern_genius', label: 'Pattern Genius', count: 10 },
+  { id: 'maze_adventure', label: 'Maze Adventure', count: 10 },
+  { id: 'creative_builder', label: 'Creative Builder', count: 10 },
+  { id: 'problem_solver', label: 'Problem Solver', count: 10 },
+  { id: 'brain_training', label: 'Brain Training', count: 10 },
 ];
-
-const MINI_LABELS = {
-  memory_master: 'Memory Master',
-  logic_puzzles: 'Logic Puzzles',
-  speed_focus: 'Speed Focus',
-  pattern_genius: 'Pattern Genius',
-  maze_adventure: 'Maze Adventure',
-  creative_builder: 'Creative Builder',
-  problem_solver: 'Problem Solver',
-  brain_training: 'Brain Training',
-};
 
 Deno.serve(async (req) => {
   try {
@@ -32,7 +21,7 @@ Deno.serve(async (req) => {
     }
 
     // Read target from QCSetting (set via Target Settings modal)
-    let targetPerCategory = 30;
+    let targetPerCategory = 10;
     try {
       const settings = await base44.asServiceRole.entities.QCSetting.list();
       if (settings.length > 0 && settings[0].miniGameCap) {
@@ -45,20 +34,16 @@ Deno.serve(async (req) => {
     let totalNeeded = 0;
 
     for (const cat of MINI_CATEGORIES) {
-      const games = await base44.asServiceRole.entities.Game.filter({
-        category: cat,
-        isPublished: true,
-      });
-      const count = games.length;
+      const count = cat.count; // From hand-crafted blueprints
       const needed = Math.max(0, targetPerCategory - count);
-      const percent = Math.round((count / targetPerCategory) * 100);
+      const percent = Math.min(100, Math.round((count / targetPerCategory) * 100));
 
       totalExisting += count;
       totalNeeded += needed;
 
       rows.push({
-        category: cat,
-        label: MINI_LABELS[cat],
+        category: cat.id,
+        label: cat.label,
         count,
         target: targetPerCategory,
         needed,
@@ -68,11 +53,12 @@ Deno.serve(async (req) => {
     }
 
     const totalTarget = MINI_CATEGORIES.length * targetPerCategory;
-    const overallPercent = Math.round((totalExisting / totalTarget) * 100);
+    const overallPercent = Math.min(100, Math.round((totalExisting / totalTarget) * 100));
 
     return Response.json({
       success: true,
       type: 'mini_games',
+      source: 'blueprints',
       totalExisting,
       totalTarget,
       totalNeeded,
