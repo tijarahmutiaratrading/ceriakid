@@ -507,13 +507,8 @@ export default function LaunchControlPanel() {
                 <Button onClick={loadMiniGamesProgress} disabled={loading} variant="secondary" size="sm">
                   <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
                 </Button>
-                <Button onClick={() => autoGenerateMiniGames()} disabled={autoRunning || miniGamesProgress.totalNeeded === 0} className="bg-yellow-400 hover:bg-yellow-300 text-orange-900 font-black">
-                  {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Generate</>}
-                </Button>
-                <Button onClick={deleteAllMiniGames} disabled={working === 'delete-mini-games' || autoRunning} variant="destructive" size="sm" className="ml-auto">
-                  {working === 'delete-mini-games' ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Deleting...</> : <><Trash2 className="w-4 h-4 mr-2" /> Delete All</>}
-                </Button>
               </div>
+              <p className="text-white/70 text-xs mt-3">ℹ️ Mini Games adalah hand-crafted blueprints dari kod (tiada AI generation). Untuk tambah, edit fail di <code className="bg-white/15 px-1.5 py-0.5 rounded">lib/miniGames/*.js</code>.</p>
             </motion.div>
 
             {/* Mini Games Table */}
