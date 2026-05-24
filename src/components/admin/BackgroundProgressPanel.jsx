@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Zap, RefreshCw, Loader2, CheckCircle2, Clock, BookOpen, GraduationCap } from 'lucide-react';
+import { Zap, RefreshCw, Loader2, CheckCircle2, Clock, BookOpen, GraduationCap, Gamepad2 } from 'lucide-react';
 
 export default function BackgroundProgressPanel() {
   const [loading, setLoading] = useState(true);
@@ -9,21 +9,24 @@ export default function BackgroundProgressPanel() {
   const [storyEnabled, setStoryEnabled] = useState(false);
   const [kssrProgress, setKssrProgress] = useState(null);
   const [storyProgress, setStoryProgress] = useState(null);
+  const [miniProgress, setMiniProgress] = useState(null);
   const [lastCheck, setLastCheck] = useState(null);
 
   const loadAll = async () => {
     setLoading(true);
     try {
-      const [settingsRes, kssrRes, storyRes] = await Promise.all([
+      const [settingsRes, kssrRes, storyRes, miniRes] = await Promise.all([
         base44.entities.QCSetting.list(),
         base44.functions.invoke('launchGetProgress', {}),
         base44.functions.invoke('launchGetStoryProgress', {}),
+        base44.functions.invoke('launchGetMiniGamesProgress', {}),
       ]);
       const s = settingsRes[0] || {};
       setKssrEnabled(s.backgroundLaunchEnabled === true);
       setStoryEnabled(s.backgroundStoryEnabled === true);
       setKssrProgress(kssrRes.data);
       setStoryProgress(storyRes.data);
+      setMiniProgress(miniRes.data);
       setLastCheck(new Date());
     } catch (e) {
       console.error(e);
@@ -80,7 +83,7 @@ export default function BackgroundProgressPanel() {
       {loading && !kssrProgress ? (
         <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
           {/* KSSR Card */}
           <div className={`rounded-2xl p-4 border-2 ${kssrEnabled ? 'bg-green-500/10 border-green-300/40' : 'bg-white/5 border-white/10'}`}>
             <div className="flex items-center justify-between mb-3">
@@ -181,6 +184,51 @@ export default function BackgroundProgressPanel() {
                     <CheckCircle2 className="w-3 h-3" /> COMPLETE — auto-disabled
                   </div>
                 )}
+              </>
+            )}
+          </div>
+
+          {/* Mini Games Card (static blueprints — info only) */}
+          <div className="rounded-2xl p-4 border-2 bg-amber-500/10 border-amber-300/30">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Gamepad2 className="w-5 h-5 text-amber-300" />
+                <span className="text-white font-black text-sm">Mini Games</span>
+              </div>
+              <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-400/30 text-amber-200">
+                STATIC
+              </span>
+            </div>
+
+            {miniProgress && (
+              <>
+                <div className="flex items-baseline justify-between mb-2">
+                  <span className="text-3xl font-black text-white">{miniProgress.overallPercent}%</span>
+                  <span className="text-xs text-white/60">{miniProgress.totalExisting}/{miniProgress.totalTarget}</span>
+                </div>
+                <div className="h-2 bg-white/10 rounded-full overflow-hidden mb-3">
+                  <div
+                    className="h-full bg-gradient-to-r from-amber-400 to-orange-400 transition-all"
+                    style={{ width: `${miniProgress.overallPercent}%` }}
+                  />
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="bg-white/5 rounded-lg p-2">
+                    <p className="text-[10px] text-white/50 font-bold">Categories</p>
+                    <p className="text-sm font-black text-white">{miniProgress.completeBuckets}/{miniProgress.totalBuckets}</p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-2">
+                    <p className="text-[10px] text-white/50 font-bold">Needed</p>
+                    <p className="text-sm font-black text-amber-300">{miniProgress.totalNeeded}</p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-2">
+                    <p className="text-[10px] text-white/50 font-bold">Source</p>
+                    <p className="text-sm font-black text-blue-300">Code</p>
+                  </div>
+                </div>
+                <div className="mt-3 flex items-center gap-1.5 text-[11px] text-amber-200">
+                  <CheckCircle2 className="w-3 h-3" /> Hand-crafted blueprints (no AI generation)
+                </div>
               </>
             )}
           </div>
