@@ -26,13 +26,16 @@ export default function LaunchControlPanel() {
   const [autoRunning, setAutoRunning] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [backgroundEnabled, setBackgroundEnabled] = useState(false);
+  const [backgroundStoryEnabled, setBackgroundStoryEnabled] = useState(false);
   const [bgToggling, setBgToggling] = useState(false);
+  const [bgStoryToggling, setBgStoryToggling] = useState(false);
   const lastLoadRef = useRef(0);
 
   const loadBackgroundStatus = async () => {
     try {
       const settings = await base44.entities.QCSetting.list();
       setBackgroundEnabled(settings[0]?.backgroundLaunchEnabled === true);
+      setBackgroundStoryEnabled(settings[0]?.backgroundStoryEnabled === true);
     } catch (e) { /* ignore */ }
   };
 
@@ -47,11 +50,30 @@ export default function LaunchControlPanel() {
         await base44.entities.QCSetting.create({ intervalMinutes: 10, backgroundLaunchEnabled: next });
       }
       setBackgroundEnabled(next);
-      addLog(next ? '🟢 Background mode ON — server akan generate setiap 5 minit' : '🔴 Background mode OFF');
+      addLog(next ? '🟢 Background KSSR mode ON — server akan generate setiap 5 minit' : '🔴 Background KSSR mode OFF');
     } catch (e) {
       addLog(`❌ Toggle error: ${e.message}`);
     } finally {
       setBgToggling(false);
+    }
+  };
+
+  const toggleBackgroundStoryMode = async () => {
+    setBgStoryToggling(true);
+    try {
+      const settings = await base44.entities.QCSetting.list();
+      const next = !backgroundStoryEnabled;
+      if (settings.length > 0) {
+        await base44.entities.QCSetting.update(settings[0].id, { backgroundStoryEnabled: next });
+      } else {
+        await base44.entities.QCSetting.create({ intervalMinutes: 10, backgroundStoryEnabled: next });
+      }
+      setBackgroundStoryEnabled(next);
+      addLog(next ? '🟢 Background Story ON — Claude Opus 4.7 jalan setiap 10 minit' : '🔴 Background Story OFF');
+    } catch (e) {
+      addLog(`❌ Toggle error: ${e.message}`);
+    } finally {
+      setBgStoryToggling(false);
     }
   };
 
@@ -450,12 +472,27 @@ export default function LaunchControlPanel() {
                 <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
               </Button>
               <Button onClick={autoGenerateStoryKid} disabled={autoRunning || storyProgress.needed === 0} className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-black">
-                {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Generate</>}
+                {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Generate (Tab)</>}
+              </Button>
+              <Button
+                onClick={toggleBackgroundStoryMode}
+                disabled={bgStoryToggling}
+                className={backgroundStoryEnabled
+                  ? 'bg-green-400 hover:bg-green-300 text-green-900 font-black'
+                  : 'bg-white/20 hover:bg-white/30 text-white font-black border border-white/30'}
+              >
+                {bgStoryToggling ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Zap className="w-4 h-4 mr-2" />}
+                Background: {backgroundStoryEnabled ? 'ON 🟢' : 'OFF'}
               </Button>
               <Button onClick={deleteAllStoryKid} disabled={working === 'delete-story-kid'} variant="destructive" size="sm" className="ml-auto">
                 {working === 'delete-story-kid' ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Deleting...</> : <><Trash2 className="w-4 h-4 mr-2" /> Delete All</>}
               </Button>
             </div>
+            {backgroundStoryEnabled && (
+              <div className="mt-3 px-3 py-2 rounded-lg bg-green-500/20 border border-green-300/40 text-xs text-white">
+                ✅ Server akan generate Story Kid (Claude Opus 4.7) setiap 10 minit walaupun tab tertutup. Auto-stop bila target dicapai.
+              </div>
+            )}
           </motion.div>
         )}
 

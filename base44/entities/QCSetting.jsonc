@@ -31,6 +31,11 @@
       "type": "boolean",
       "default": false,
       "description": "Adakah background launch generator aktif (jalan setiap 5 minit di server)"
+    },
+    "backgroundStoryEnabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Adakah background story generator aktif (jalan setiap 10 minit di server)"
     }
   },
   "required": [
