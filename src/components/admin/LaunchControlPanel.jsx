@@ -203,6 +203,33 @@ export default function LaunchControlPanel() {
     }
   };
 
+  const autoGenerateStoryKid = async () => {
+    if (!confirm('Auto-generate Story Kid sampai cukup target? (5 cerita per batch)')) return;
+    setAutoRunning(true);
+    addLog(`🤖 STORY KID GENERATE STARTED (Claude Opus 4.7)`);
+
+    let safetyCounter = 0;
+    while (safetyCounter < 20) {
+      safetyCounter++;
+      try {
+        const res = await base44.functions.invoke('launchGenerateStoryKid', { targetCount: storyProgress.target });
+        const d = res.data;
+        addLog(`✅ Batch ${safetyCounter}: +${d.generated || 0} stories (${d.failed || 0} failed). Still needed: ${d.stillNeeded || 0}`);
+        if ((d.stillNeeded || 0) === 0) {
+          addLog(`🎉 STORY KID COMPLETE!`);
+          break;
+        }
+        await new Promise(r => setTimeout(r, 2000));
+      } catch (error) {
+        addLog(`❌ Error: ${error?.message || 'Unknown'}`);
+        break;
+      }
+    }
+
+    await loadStoryProgress();
+    setAutoRunning(false);
+  };
+
   const deleteAllStoryKid = async () => {
     if (!confirm('⚠️ PADAM SEMUA STORY KID GAMES? Ini tak boleh reverse!')) return;
     setWorking('delete-story-kid');
@@ -374,9 +401,12 @@ export default function LaunchControlPanel() {
                 <p className="text-2xl font-black">{storyProgress.needed}</p>
               </div>
             </div>
-            <div className="mt-4 flex gap-2">
+            <div className="mt-4 flex gap-2 flex-wrap">
               <Button onClick={loadStoryProgress} disabled={loading} variant="secondary" size="sm">
                 <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
+              </Button>
+              <Button onClick={autoGenerateStoryKid} disabled={autoRunning || storyProgress.needed === 0} className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-black">
+                {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Generate</>}
               </Button>
               <Button onClick={deleteAllStoryKid} disabled={working === 'delete-story-kid'} variant="destructive" size="sm" className="ml-auto">
                 {working === 'delete-story-kid' ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Deleting...</> : <><Trash2 className="w-4 h-4 mr-2" /> Delete All</>}
