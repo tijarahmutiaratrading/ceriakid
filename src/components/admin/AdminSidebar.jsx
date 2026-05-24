@@ -7,6 +7,7 @@ const ADMIN_MENU = [
   { key: 'dashboard', label: 'Dashboard', sub: 'Order & Analytics', icon: LayoutDashboard, tab: 'analytics' },
   { key: 'customers', label: 'Pelanggan', sub: 'Customer Database', icon: Users, tab: 'customers' },
   { key: 'launch', label: 'Launch Control', sub: 'Generate 30/subject', icon: Rocket, tab: 'launch' },
+  { key: 'monitor', label: 'Activity Monitor', sub: 'Apa AI buat sekarang', icon: Activity, tab: 'monitor' },
   { key: 'health', label: 'System Health', sub: 'Monitoring & Uptime', icon: Activity, tab: 'health' },
   { key: 'settings', label: 'Settings', sub: 'Payment & Pixel', icon: Settings, tab: 'settings' },
 ];
