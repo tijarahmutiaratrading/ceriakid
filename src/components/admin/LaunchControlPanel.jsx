@@ -485,6 +485,26 @@ export default function LaunchControlPanel() {
     setAutoRunning(false);
   };
 
+  const normalizeBuckets = async () => {
+    if (!confirm('⚖️ NORMALIZE semua bucket KSSR ke tepat 30 games?\n\n• Bucket > 30 games: padam yang lama (keep newest 30)\n• Bucket < 30 games: auto-generate top-up\n\nProses ini ambil masa lama (boleh 10+ minit). Teruskan?')) return;
+    setAutoRunning(true);
+    addLog(`⚖️ NORMALIZE KSSR BUCKETS started (target: 30)...`);
+    try {
+      const res = await base44.functions.invoke('normalizeKSSRBuckets', { target: 30, generateMissing: true });
+      const d = res.data;
+      addLog(`✅ Normalize selesai: ${d.totalDeleted} deleted, ${d.totalGenerated} generated, ${d.totalGenFailed} failed`);
+      // Log buckets yang ada action
+      (d.report || []).filter(r => r.action !== 'ok').forEach(r => {
+        addLog(`  • ${r.bucket}: ${r.before}→${r.after} (${r.action})`);
+      });
+      await loadProgress(true);
+    } catch (e) {
+      addLog(`❌ Normalize error: ${e.message}`);
+    } finally {
+      setAutoRunning(false);
+    }
+  };
+
   const deleteAllStoryKid = async () => {
     if (!confirm('⚠️ PADAM SEMUA STORY KID GAMES? Ini tak boleh reverse!')) return;
     setWorking('delete-story-kid');
@@ -693,6 +713,15 @@ export default function LaunchControlPanel() {
                     : (autoRunLock && !autoRunLock.isMine && !autoRunLock.isStale)
                       ? <><Lock className="w-4 h-4 mr-2" /> Locked</>
                       : <><Play className="w-4 h-4 mr-2" /> Resume Auto-Run</>}
+                </Button>
+                <Button
+                  onClick={normalizeBuckets}
+                  disabled={autoRunning}
+                  className="bg-orange-400 hover:bg-orange-300 text-orange-950 font-black"
+                  title="Padam excess + generate yang kurang supaya semua bucket tepat 30 games"
+                >
+                  {autoRunning ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Trash2 className="w-4 h-4 mr-2" />}
+                  ⚖️ Normalize to 30
                 </Button>
               </div>
             </div>
