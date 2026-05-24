@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
@@ -20,12 +20,21 @@ export default function LaunchControlPanel() {
   const [working, setWorking] = useState(null); // bucket key being processed
   const [log, setLog] = useState([]);
   const [autoRunning, setAutoRunning] = useState(false);
+  const lastLoadRef = useRef(0);
 
   const loadProgress = async () => {
+    const now = Date.now();
+    if (now - lastLoadRef.current < 12000) {
+      addLog(`⏳ Tunggu sebentar sebelum refresh lagi (rate limit protection)`);
+      return;
+    }
+    lastLoadRef.current = now;
     setLoading(true);
     try {
       const res = await base44.functions.invoke('launchGetProgress', {});
       setProgress(res.data);
+    } catch (error) {
+      addLog(`❌ Error: ${error?.message || 'Gagal load progress'}`);
     } finally {
       setLoading(false);
     }
@@ -87,20 +96,24 @@ export default function LaunchControlPanel() {
     let safetyCounter = 0;
     while (safetyCounter < 200) {
       safetyCounter++;
-      const fresh = await base44.functions.invoke('launchGetProgress', {});
-      const rows = fresh.data?.rows || [];
-      const incomplete = rows.filter(r => r.needed > 0);
-      if (incomplete.length === 0) {
-        addLog(`🎉 SEMUA BUCKETS COMPLETE!`);
+      try {
+        const fresh = await base44.functions.invoke('launchGetProgress', {});
+        const rows = fresh.data?.rows || [];
+        const incomplete = rows.filter(r => r.needed > 0);
+        if (incomplete.length === 0) {
+          addLog(`🎉 SEMUA BUCKETS COMPLETE!`);
+          break;
+        }
+        // Process the one with most needed first
+        incomplete.sort((a, b) => b.needed - a.needed);
+        const next = incomplete[0];
+        await runBucket(next);
+        // Small delay between buckets
+        await new Promise(r => setTimeout(r, 2000));
+      } catch (error) {
+        addLog(`❌ Auto-run error: ${error?.message || 'Unknown'}`);
         break;
       }
-      // Process the one with most needed first
-      incomplete.sort((a, b) => b.needed - a.needed);
-      const next = incomplete[0];
-      await runBucket(next);
-      await loadProgress();
-      // Small delay between buckets
-      await new Promise(r => setTimeout(r, 1500));
     }
 
     setAutoRunning(false);
