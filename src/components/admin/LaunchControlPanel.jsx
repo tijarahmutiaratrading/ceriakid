@@ -118,8 +118,15 @@ export default function LaunchControlPanel() {
     } catch (e) { /* ignore */ }
   };
 
+  const [confirmingForceRelease, setConfirmingForceRelease] = useState(false);
   const forceReleaseLock = async () => {
-    if (!confirm('Force release lock? Hanya gunakan jika auto-run stuck di tab lain.')) return;
+    if (!confirmingForceRelease) {
+      setConfirmingForceRelease(true);
+      addLog('⚠️ Tekan sekali lagi untuk confirm Force Release Lock.');
+      setTimeout(() => setConfirmingForceRelease(false), 5000);
+      return;
+    }
+    setConfirmingForceRelease(false);
     await releaseLock();
     addLog('🔓 Lock dilepaskan secara paksa.');
   };
@@ -629,10 +636,13 @@ export default function LaunchControlPanel() {
             onClick={forceReleaseLock}
             variant="outline"
             size="sm"
-            className="bg-red-500/20 text-white hover:bg-red-500/30 border-red-300/40"
+            className={confirmingForceRelease
+              ? 'bg-red-500 text-white hover:bg-red-600 border-red-400 animate-pulse'
+              : 'bg-red-500/20 text-white hover:bg-red-500/30 border-red-300/40'}
             title="Emergency: paksa lepas auto-run lock walaupun banner tak nampak"
           >
-            <Unlock className="w-4 h-4 mr-2" /> Force Release Lock
+            <Unlock className="w-4 h-4 mr-2" />
+            {confirmingForceRelease ? 'Tekan lagi untuk confirm' : 'Force Release Lock'}
           </Button>
           <Button
             onClick={() => setShowSettingsModal(true)}
