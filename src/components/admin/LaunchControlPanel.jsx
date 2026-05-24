@@ -28,7 +28,6 @@ export default function LaunchControlPanel() {
   const [backgroundEnabled, setBackgroundEnabled] = useState(false);
   const [backgroundStoryEnabled, setBackgroundStoryEnabled] = useState(false);
   const [bgToggling, setBgToggling] = useState(false);
-  const [bgStoryToggling, setBgStoryToggling] = useState(false);
   const lastLoadRef = useRef(0);
 
   const loadBackgroundStatus = async () => {
@@ -39,41 +38,28 @@ export default function LaunchControlPanel() {
     } catch (e) { /* ignore */ }
   };
 
-  const toggleBackgroundMode = async () => {
+  const toggleMasterBackground = async () => {
     setBgToggling(true);
     try {
       const settings = await base44.entities.QCSetting.list();
-      const next = !backgroundEnabled;
+      // ON jika SEMUA off; OFF jika MANA-MANA on
+      const anyOn = backgroundEnabled || backgroundStoryEnabled;
+      const next = !anyOn;
+      const payload = { backgroundLaunchEnabled: next, backgroundStoryEnabled: next };
       if (settings.length > 0) {
-        await base44.entities.QCSetting.update(settings[0].id, { backgroundLaunchEnabled: next });
+        await base44.entities.QCSetting.update(settings[0].id, payload);
       } else {
-        await base44.entities.QCSetting.create({ intervalMinutes: 10, backgroundLaunchEnabled: next });
+        await base44.entities.QCSetting.create({ intervalMinutes: 10, ...payload });
       }
       setBackgroundEnabled(next);
-      addLog(next ? '🟢 Background KSSR mode ON — server akan generate setiap 5 minit' : '🔴 Background KSSR mode OFF');
+      setBackgroundStoryEnabled(next);
+      addLog(next
+        ? '🟢 Background ON — KSSR (5 min) + Story Opus 4.7 (10 min) jalan di server'
+        : '🔴 Background OFF — semua auto-generation dihentikan');
     } catch (e) {
       addLog(`❌ Toggle error: ${e.message}`);
     } finally {
       setBgToggling(false);
-    }
-  };
-
-  const toggleBackgroundStoryMode = async () => {
-    setBgStoryToggling(true);
-    try {
-      const settings = await base44.entities.QCSetting.list();
-      const next = !backgroundStoryEnabled;
-      if (settings.length > 0) {
-        await base44.entities.QCSetting.update(settings[0].id, { backgroundStoryEnabled: next });
-      } else {
-        await base44.entities.QCSetting.create({ intervalMinutes: 10, backgroundStoryEnabled: next });
-      }
-      setBackgroundStoryEnabled(next);
-      addLog(next ? '🟢 Background Story ON — Claude Opus 4.7 jalan setiap 10 minit' : '🔴 Background Story OFF');
-    } catch (e) {
-      addLog(`❌ Toggle error: ${e.message}`);
-    } finally {
-      setBgStoryToggling(false);
     }
   };
 
@@ -298,6 +284,32 @@ export default function LaunchControlPanel() {
 
   return (
     <div className="space-y-4">
+      {/* Master Background Toggle — covers ALL tabs */}
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className={`rounded-2xl p-4 border-2 ${(backgroundEnabled || backgroundStoryEnabled) ? 'bg-green-500/15 border-green-300/50' : 'bg-white/10 border-white/20'}`}>
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-3">
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${(backgroundEnabled || backgroundStoryEnabled) ? 'bg-green-400' : 'bg-white/20'}`}>
+              <Zap className={`w-6 h-6 ${(backgroundEnabled || backgroundStoryEnabled) ? 'text-green-900' : 'text-white'}`} />
+            </div>
+            <div>
+              <p className="text-white font-black text-base">🤖 Master Background Auto-Generate</p>
+              <p className="text-white/70 text-xs">Server auto-generate KSSR (5 min) + Story Kid Opus 4.7 (10 min). Tab boleh tutup.</p>
+            </div>
+          </div>
+          <Button
+            onClick={toggleMasterBackground}
+            disabled={bgToggling}
+            size="lg"
+            className={(backgroundEnabled || backgroundStoryEnabled)
+              ? 'bg-green-400 hover:bg-green-300 text-green-900 font-black'
+              : 'bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-black'}
+          >
+            {bgToggling ? <Loader2 className="w-5 h-5 mr-2 animate-spin" /> : <Zap className="w-5 h-5 mr-2" />}
+            {(backgroundEnabled || backgroundStoryEnabled) ? 'Background: ON 🟢' : 'Turn ON Background'}
+          </Button>
+        </div>
+      </motion.div>
+
       {/* Section Tabs + Settings */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 flex-wrap items-center justify-between">
         <div className="flex gap-2 flex-wrap">
@@ -371,22 +383,7 @@ export default function LaunchControlPanel() {
                 <Button onClick={autoRunAll} disabled={autoRunning || progress.totalNeeded === 0} className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-black">
                   {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Run (Tab)</>}
                 </Button>
-                <Button
-                  onClick={toggleBackgroundMode}
-                  disabled={bgToggling}
-                  className={backgroundEnabled
-                    ? 'bg-green-400 hover:bg-green-300 text-green-900 font-black'
-                    : 'bg-white/20 hover:bg-white/30 text-white font-black border border-white/30'}
-                >
-                  {bgToggling ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Zap className="w-4 h-4 mr-2" />}
-                  Background: {backgroundEnabled ? 'ON 🟢' : 'OFF'}
-                </Button>
               </div>
-              {backgroundEnabled && (
-                <div className="mt-3 px-3 py-2 rounded-lg bg-green-500/20 border border-green-300/40 text-xs text-white">
-                  ✅ Server akan generate 1 bucket setiap 5 minit walaupun tab tertutup. Auto-stop bila semua complete.
-                </div>
-              )}
             </div>
 
             {/* Bucket table */}
@@ -474,25 +471,10 @@ export default function LaunchControlPanel() {
               <Button onClick={autoGenerateStoryKid} disabled={autoRunning || storyProgress.needed === 0} className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-black">
                 {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Generate (Tab)</>}
               </Button>
-              <Button
-                onClick={toggleBackgroundStoryMode}
-                disabled={bgStoryToggling}
-                className={backgroundStoryEnabled
-                  ? 'bg-green-400 hover:bg-green-300 text-green-900 font-black'
-                  : 'bg-white/20 hover:bg-white/30 text-white font-black border border-white/30'}
-              >
-                {bgStoryToggling ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Zap className="w-4 h-4 mr-2" />}
-                Background: {backgroundStoryEnabled ? 'ON 🟢' : 'OFF'}
-              </Button>
               <Button onClick={deleteAllStoryKid} disabled={working === 'delete-story-kid'} variant="destructive" size="sm" className="ml-auto">
                 {working === 'delete-story-kid' ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Deleting...</> : <><Trash2 className="w-4 h-4 mr-2" /> Delete All</>}
               </Button>
             </div>
-            {backgroundStoryEnabled && (
-              <div className="mt-3 px-3 py-2 rounded-lg bg-green-500/20 border border-green-300/40 text-xs text-white">
-                ✅ Server akan generate Story Kid (Claude Opus 4.7) setiap 10 minit walaupun tab tertutup. Auto-stop bila target dicapai.
-              </div>
-            )}
           </motion.div>
         )}
 
