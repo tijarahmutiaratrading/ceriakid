@@ -157,19 +157,37 @@ export default function LaunchControlPanel() {
     }
   };
 
-  const loadProgress = async () => {
+  // Retry wrapper untuk handle 429/500 rate limits
+  const invokeWithRetry = async (fnName, payload = {}, maxRetries = 3) => {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        return await base44.functions.invoke(fnName, payload);
+      } catch (error) {
+        const msg = error?.message || '';
+        const isRateLimit = msg.includes('429') || msg.includes('500') || msg.includes('Rate limit');
+        if (isRateLimit && attempt < maxRetries - 1) {
+          const waitMs = 2000 * Math.pow(2, attempt); // 2s, 4s, 8s
+          await new Promise(r => setTimeout(r, waitMs));
+          continue;
+        }
+        throw error;
+      }
+    }
+  };
+
+  const loadProgress = async (silent = false) => {
     const now = Date.now();
-    if (now - lastLoadRef.current < 12000) {
+    if (!silent && now - lastLoadRef.current < 12000) {
       addLog(`⏳ Tunggu sebentar sebelum refresh lagi (rate limit protection)`);
       return;
     }
     lastLoadRef.current = now;
     setLoading(true);
     try {
-      const res = await base44.functions.invoke('launchGetProgress', {});
+      const res = await invokeWithRetry('launchGetProgress', {});
       setProgress(res.data);
     } catch (error) {
-      addLog(`❌ Error: ${error?.message || 'Gagal load progress'}`);
+      addLog(`❌ KSSR progress: ${error?.message?.includes('429') || error?.message?.includes('500') ? 'Rate limited (cuba reload nanti)' : error?.message || 'Gagal'}`);
     } finally {
       setLoading(false);
     }
@@ -178,10 +196,10 @@ export default function LaunchControlPanel() {
   const loadStoryProgress = async () => {
     setLoading(true);
     try {
-      const res = await base44.functions.invoke('launchGetStoryProgress', {});
+      const res = await invokeWithRetry('launchGetStoryProgress', {});
       setStoryProgress(res.data);
     } catch (error) {
-      addLog(`❌ Error: ${error?.message || 'Gagal load story progress'}`);
+      addLog(`❌ Story progress: ${error?.message?.includes('429') || error?.message?.includes('500') ? 'Rate limited' : error?.message || 'Gagal'}`);
     } finally {
       setLoading(false);
     }
@@ -190,21 +208,28 @@ export default function LaunchControlPanel() {
   const loadMiniGamesProgress = async () => {
     setLoading(true);
     try {
-      const res = await base44.functions.invoke('launchGetMiniGamesProgress', {});
+      const res = await invokeWithRetry('launchGetMiniGamesProgress', {});
       setMiniGamesProgress(res.data);
     } catch (error) {
-      addLog(`❌ Error: ${error?.message || 'Gagal load mini games progress'}`);
+      addLog(`❌ Mini games progress: ${error?.message?.includes('429') || error?.message?.includes('500') ? 'Rate limited' : error?.message || 'Gagal'}`);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadProgress();
-    loadStoryProgress();
-    loadMiniGamesProgress();
-    loadBackgroundStatus();
-    checkAutoRunLock();
+    // Stagger initial loads supaya tak hentam server serentak (elak 429)
+    const init = async () => {
+      await loadBackgroundStatus();
+      await new Promise(r => setTimeout(r, 300));
+      await loadProgress(true);
+      await new Promise(r => setTimeout(r, 1500));
+      await loadStoryProgress();
+      await new Promise(r => setTimeout(r, 1500));
+      await loadMiniGamesProgress();
+      await checkAutoRunLock();
+    };
+    init();
     // Poll lock status every 15s so other tabs/admins see updates
     const lockPoll = setInterval(checkAutoRunLock, 15000);
     return () => clearInterval(lockPoll);
@@ -601,6 +626,36 @@ export default function LaunchControlPanel() {
       />
 
       <div className="space-y-4">
+        {/* Loading / error fallback when data not yet ready */}
+        {activeSection === 'curriculum' && !progress && (
+          <div className="bg-white/10 border border-white/20 rounded-2xl p-8 text-center">
+            <Loader2 className="w-8 h-8 animate-spin text-white mx-auto mb-3" />
+            <p className="text-white font-bold">Memuatkan progress KSSR...</p>
+            <p className="text-white/60 text-xs mt-1">Jika lama, server mungkin rate-limited. Tekan Reload selepas 10s.</p>
+            <Button onClick={() => loadProgress(true)} disabled={loading} variant="secondary" size="sm" className="mt-3">
+              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
+            </Button>
+          </div>
+        )}
+        {activeSection === 'story' && !storyProgress && (
+          <div className="bg-white/10 border border-white/20 rounded-2xl p-8 text-center">
+            <Loader2 className="w-8 h-8 animate-spin text-white mx-auto mb-3" />
+            <p className="text-white font-bold">Memuatkan Story Kid progress...</p>
+            <Button onClick={loadStoryProgress} disabled={loading} variant="secondary" size="sm" className="mt-3">
+              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
+            </Button>
+          </div>
+        )}
+        {activeSection === 'mini_games' && !miniGamesProgress && (
+          <div className="bg-white/10 border border-white/20 rounded-2xl p-8 text-center">
+            <Loader2 className="w-8 h-8 animate-spin text-white mx-auto mb-3" />
+            <p className="text-white font-bold">Memuatkan Mini Games progress...</p>
+            <Button onClick={loadMiniGamesProgress} disabled={loading} variant="secondary" size="sm" className="mt-3">
+              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
+            </Button>
+          </div>
+        )}
+
         {/* CURRICULUM SECTION */}
         {activeSection === 'curriculum' && progress && (
           <>
