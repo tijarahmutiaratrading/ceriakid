@@ -11,6 +11,7 @@ import AdminQuickStats from '@/components/admin/AdminQuickStats';
 import AdminStatCard from '@/components/admin/AdminStatCard';
 import AdminGameManager from '@/pages/AdminGameManager';
 import SystemHealthPanel from '@/components/admin/SystemHealthPanel';
+import LaunchControlPanel from '@/components/admin/LaunchControlPanel';
 import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2, Activity } from 'lucide-react';
 
 const SETTINGS_KEY = 'admin_app_settings';
@@ -78,7 +79,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tabFromUrl = params.get('tab');
-    if (tabFromUrl && ['analytics', 'customers', 'gamemanager', 'health', 'settings'].includes(tabFromUrl)) {
+    if (tabFromUrl && ['analytics', 'customers', 'gamemanager', 'launch', 'health', 'settings'].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
   }, [location.search]);
@@ -391,6 +392,9 @@ export default function AdminDashboard() {
 
         {/* ═══ SYSTEM HEALTH TAB ═══ */}
         {activeTab === 'health' && <SystemHealthPanel />}
+
+        {/* ═══ LAUNCH CONTROL TAB ═══ */}
+        {activeTab === 'launch' && <LaunchControlPanel />}
 
         {/* ═══ GAME MANAGER TAB (lazy-mounted; kekal mounted lepas first visit) ═══ */}
         {gameManagerMounted && (
