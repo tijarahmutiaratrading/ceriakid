@@ -26,7 +26,32 @@ Deno.serve(async (req) => {
       return Response.json({ success: true, skipped: true, reason: 'disabled' });
     }
 
-    // Find first incomplete bucket
+    // STEP 1: Trim excess — delete any bucket with > targetCap games (keep newest 30)
+    let totalTrimmed = 0;
+    for (const b of BUCKETS) {
+      for (const subject of b.subjects) {
+        const filter = { ageGroup: b.ageGroup, category: subject, isPublished: true };
+        if (b.darjah) filter.darjah = b.darjah;
+        const existing = await base44.asServiceRole.entities.Game.filter(filter, '-created_date');
+        if (existing.length > targetCap) {
+          const excess = existing.slice(targetCap); // older ones beyond top 30
+          console.log(`✂️ Trimming ${excess.length} excess games from ${b.ageGroup}/${b.darjah || 'pra'}/${subject}`);
+          for (const g of excess) {
+            try {
+              await base44.asServiceRole.entities.Game.delete(g.id);
+              totalTrimmed++;
+            } catch (e) {
+              console.error(`Failed to delete game ${g.id}:`, e.message);
+            }
+          }
+        }
+      }
+    }
+    if (totalTrimmed > 0) {
+      console.log(`✂️ Trimmed total ${totalTrimmed} excess games`);
+    }
+
+    // STEP 2: Find first incomplete bucket
     let targetBucket = null;
     for (const b of BUCKETS) {
       for (const subject of b.subjects) {
@@ -75,6 +100,7 @@ Deno.serve(async (req) => {
       bucket: targetBucket,
       generated,
       failed,
+      trimmed: totalTrimmed,
     });
   } catch (error) {
     console.error('backgroundLaunchGenerator error:', error);
