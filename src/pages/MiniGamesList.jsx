@@ -32,15 +32,7 @@ export default function MiniGamesList() {
   const illustration = getCategoryIllustration(category.id);
 
   return (
-    <div
-      className="min-h-screen w-full font-nunito rounded-2xl"
-      style={{
-        background: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
-        backgroundSize: 'cover',
-        backgroundAttachment: 'fixed',
-        backgroundPosition: 'center top',
-      }}
-    >
+    <div className="min-h-screen w-full font-nunito">
       <AppHeader showBack={true} backTo="/games-hub" />
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pb-24 pt-20 md:pt-24">

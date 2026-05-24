@@ -32,15 +32,7 @@ export default function GamesHub() {
   const visibleCategories = MINI_GAME_CATEGORIES.filter(c => (counts[c.id] ?? 0) > 0);
 
   return (
-    <div
-      className="min-h-screen w-full font-nunito rounded-2xl"
-      style={{
-        background: `url(${HERO_BG})`,
-        backgroundSize: 'cover',
-        backgroundAttachment: 'fixed',
-        backgroundPosition: 'center top',
-      }}
-    >
+    <div className="min-h-screen w-full font-nunito">
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pb-24 pt-20 md:pt-24">
