@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 const ADMIN_MENU = [
   { key: 'dashboard', label: 'Dashboard', sub: 'Order & Analytics', icon: LayoutDashboard, tab: 'analytics' },
   { key: 'customers', label: 'Pelanggan', sub: 'Customer Database', icon: Users, tab: 'customers' },
-  { key: 'gamemanager', label: 'Game Manager', sub: 'Generator & QC', icon: Gamepad2, tab: 'gamemanager' },
   { key: 'launch', label: 'Launch Control', sub: 'Generate 30/subject', icon: Rocket, tab: 'launch' },
   { key: 'health', label: 'System Health', sub: 'Monitoring & Uptime', icon: Activity, tab: 'health' },
   { key: 'settings', label: 'Settings', sub: 'Payment & Pixel', icon: Settings, tab: 'settings' },
