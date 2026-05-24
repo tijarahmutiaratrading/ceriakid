@@ -206,12 +206,16 @@ async function generateOneGame(base44, { ageGroup, darjah, category, topic, game
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user || user.role !== 'admin') {
-      return Response.json({ error: 'Forbidden: Admin only' }, { status: 403 });
-    }
+    const body = await req.json();
+    const { ageGroup, darjah, category, targetCount = 30, dryRun = false, internalCall = false } = body;
 
-    const { ageGroup, darjah, category, targetCount = 30, dryRun = false } = await req.json();
+    // Skip admin check for internal calls from background generator (service role context)
+    if (!internalCall) {
+      const user = await base44.auth.me();
+      if (!user || user.role !== 'admin') {
+        return Response.json({ error: 'Forbidden: Admin only' }, { status: 403 });
+      }
+    }
     if (!ageGroup || !category) {
       return Response.json({ error: 'ageGroup and category required' }, { status: 400 });
     }

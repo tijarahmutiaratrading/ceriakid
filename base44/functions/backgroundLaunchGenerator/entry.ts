@@ -89,6 +89,7 @@ Deno.serve(async (req) => {
       category: targetBucket.category,
       targetCount: targetCap,
       dryRun: false,
+      internalCall: true,
     });
 
     const generated = res?.data?.generated || 0;
