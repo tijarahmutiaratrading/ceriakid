@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, AlertTriangle, RefreshCw, Play, Loader2, Trash2, Settings, Zap } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, RefreshCw, Play, Loader2, Trash2, Settings, Zap, Lock, Unlock } from 'lucide-react';
 import LaunchSettingsModal from '@/components/admin/LaunchSettingsModal';
 import BackgroundProgressPanel from '@/components/admin/BackgroundProgressPanel';
 
@@ -29,7 +29,100 @@ export default function LaunchControlPanel() {
   const [backgroundEnabled, setBackgroundEnabled] = useState(false);
   const [backgroundStoryEnabled, setBackgroundStoryEnabled] = useState(false);
   const [bgToggling, setBgToggling] = useState(false);
+  const [autoRunLock, setAutoRunLock] = useState(null); // { lockedAt, lockedBy, currentBucket, isMine, isStale }
   const lastLoadRef = useRef(0);
+  const autoRunLoopRef = useRef(false); // marker untuk current tab
+  const lockHeartbeatRef = useRef(null);
+
+  // Lock expires after 10 minutes of no heartbeat
+  const LOCK_TIMEOUT_MS = 10 * 60 * 1000;
+
+  const checkAutoRunLock = async () => {
+    try {
+      const settings = await base44.entities.QCSetting.list();
+      const s = settings[0];
+      if (!s?.autoRunLockedAt) {
+        setAutoRunLock(null);
+        return null;
+      }
+      const lockedAt = new Date(s.autoRunLockedAt);
+      const ageMs = Date.now() - lockedAt.getTime();
+      const isStale = ageMs > LOCK_TIMEOUT_MS;
+      const me = await base44.auth.me().catch(() => null);
+      const lock = {
+        lockedAt: s.autoRunLockedAt,
+        lockedBy: s.autoRunLockedBy,
+        currentBucket: s.autoRunCurrentBucket,
+        isMine: me?.email === s.autoRunLockedBy && autoRunLoopRef.current,
+        isStale,
+        ageMinutes: Math.floor(ageMs / 60000),
+      };
+      setAutoRunLock(lock);
+      return lock;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  const acquireLock = async () => {
+    const settings = await base44.entities.QCSetting.list();
+    const s = settings[0];
+    if (s?.autoRunLockedAt) {
+      const ageMs = Date.now() - new Date(s.autoRunLockedAt).getTime();
+      if (ageMs < LOCK_TIMEOUT_MS) {
+        return { acquired: false, lockedBy: s.autoRunLockedBy };
+      }
+    }
+    const me = await base44.auth.me();
+    const now = new Date().toISOString();
+    if (s?.id) {
+      await base44.entities.QCSetting.update(s.id, {
+        autoRunLockedAt: now,
+        autoRunLockedBy: me.email,
+        autoRunCurrentBucket: '',
+      });
+    } else {
+      await base44.entities.QCSetting.create({
+        intervalMinutes: 10,
+        autoRunLockedAt: now,
+        autoRunLockedBy: me.email,
+      });
+    }
+    return { acquired: true };
+  };
+
+  const updateLockBucket = async (bucketLabel) => {
+    try {
+      const settings = await base44.entities.QCSetting.list();
+      if (settings[0]?.id) {
+        await base44.entities.QCSetting.update(settings[0].id, {
+          autoRunLockedAt: new Date().toISOString(), // heartbeat
+          autoRunCurrentBucket: bucketLabel,
+        });
+      }
+    } catch (e) { /* ignore */ }
+  };
+
+  const releaseLock = async () => {
+    try {
+      const settings = await base44.entities.QCSetting.list();
+      if (settings[0]?.id) {
+        await base44.entities.QCSetting.update(settings[0].id, {
+          autoRunLockedAt: null,
+          autoRunLockedBy: null,
+          autoRunCurrentBucket: null,
+        });
+      }
+      autoRunLoopRef.current = false;
+      setAutoRunLock(null);
+    } catch (e) { /* ignore */ }
+  };
+
+  const forceReleaseLock = async () => {
+    if (!confirm('Force release lock? Hanya gunakan jika auto-run stuck di tab lain.')) return;
+    await releaseLock();
+    addLog('🔓 Lock dilepaskan secara paksa.');
+  };
 
   const loadBackgroundStatus = async () => {
     try {
@@ -111,6 +204,10 @@ export default function LaunchControlPanel() {
     loadStoryProgress();
     loadMiniGamesProgress();
     loadBackgroundStatus();
+    checkAutoRunLock();
+    // Poll lock status every 15s so other tabs/admins see updates
+    const lockPoll = setInterval(checkAutoRunLock, 15000);
+    return () => clearInterval(lockPoll);
   }, []);
 
   const addLog = (msg) => setLog(prev => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...prev].slice(0, 50));
@@ -160,12 +257,30 @@ export default function LaunchControlPanel() {
   };
 
   const autoRunAll = async () => {
-    if (!confirm('Auto-run akan generate semua bucket yang belum complete. Akan ambil masa ~30-60 minit. Teruskan?')) return;
+    // Lock acquire
+    const acq = await acquireLock();
+    if (!acq.acquired) {
+      addLog(`🔒 Auto-run sedang aktif oleh ${acq.lockedBy}. Tunggu siap atau force-release.`);
+      await checkAutoRunLock();
+      return;
+    }
+    if (!confirm('Auto-run akan generate semua bucket yang belum complete & resume dari mana berhenti. Teruskan?')) {
+      await releaseLock();
+      return;
+    }
+    autoRunLoopRef.current = true;
     setAutoRunning(true);
-    addLog(`🤖 AUTO-RUN STARTED`);
+    addLog(`🤖 AUTO-RUN STARTED (resume from where it stopped)`);
+
+    // Heartbeat: refresh lock timestamp setiap 30s supaya tak expired
+    lockHeartbeatRef.current = setInterval(() => {
+      base44.entities.QCSetting.list().then(s => {
+        if (s[0]?.id) base44.entities.QCSetting.update(s[0].id, { autoRunLockedAt: new Date().toISOString() });
+      }).catch(() => {});
+    }, 30000);
 
     let safetyCounter = 0;
-    while (safetyCounter < 200) {
+    while (safetyCounter < 200 && autoRunLoopRef.current) {
       safetyCounter++;
       try {
         const fresh = await base44.functions.invoke('launchGetProgress', {});
@@ -177,6 +292,8 @@ export default function LaunchControlPanel() {
         }
         incomplete.sort((a, b) => b.needed - a.needed);
         const next = incomplete[0];
+        const bucketLabel = `${LEVEL_LABELS[next.darjah || next.ageGroup]} • ${SUBJECT_LABELS[next.category]}`;
+        await updateLockBucket(bucketLabel);
         await runBucket(next);
         await new Promise(r => setTimeout(r, 2000));
       } catch (error) {
@@ -185,8 +302,17 @@ export default function LaunchControlPanel() {
       }
     }
 
+    if (lockHeartbeatRef.current) clearInterval(lockHeartbeatRef.current);
+    await releaseLock();
     setAutoRunning(false);
     addLog(`✅ AUTO-RUN ENDED`);
+  };
+
+  const stopAutoRun = async () => {
+    autoRunLoopRef.current = false;
+    if (lockHeartbeatRef.current) clearInterval(lockHeartbeatRef.current);
+    await releaseLock();
+    addLog(`⏸️ Auto-run dihentikan oleh user.`);
   };
 
   const autoGenerateMiniGames = async () => {
@@ -314,6 +440,53 @@ export default function LaunchControlPanel() {
       {/* Background Progress Panel — live tracking */}
       <BackgroundProgressPanel />
 
+      {/* AUTO-RUN LOCK BANNER */}
+      {autoRunLock && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`rounded-2xl p-4 border-2 ${
+            autoRunLock.isMine
+              ? 'bg-blue-500/15 border-blue-300/50'
+              : autoRunLock.isStale
+                ? 'bg-orange-500/15 border-orange-300/50'
+                : 'bg-red-500/15 border-red-300/50'
+          }`}
+        >
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div className="flex items-center gap-3">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                autoRunLock.isMine ? 'bg-blue-400/40' : autoRunLock.isStale ? 'bg-orange-400/40' : 'bg-red-400/40'
+              }`}>
+                <Lock className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <p className="text-white font-black text-sm">
+                  {autoRunLock.isMine ? '🔵 Auto-Run aktif (tab ini)' : autoRunLock.isStale ? '🟠 Lock lama (mungkin stuck)' : '🔴 Auto-Run aktif di tempat lain'}
+                </p>
+                <p className="text-white/70 text-xs">
+                  By: <span className="font-mono">{autoRunLock.lockedBy}</span>
+                  {autoRunLock.currentBucket && <> • Sedang proses: <span className="font-bold text-yellow-300">{autoRunLock.currentBucket}</span></>}
+                  {' '}• {autoRunLock.ageMinutes} min lalu
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              {autoRunLock.isMine && autoRunning && (
+                <Button onClick={stopAutoRun} size="sm" variant="destructive">
+                  <Trash2 className="w-4 h-4 mr-2" /> Stop
+                </Button>
+              )}
+              {(autoRunLock.isStale || !autoRunLock.isMine) && (
+                <Button onClick={forceReleaseLock} size="sm" variant="outline" className="bg-white/10 text-white border-white/30 hover:bg-white/20">
+                  <Unlock className="w-4 h-4 mr-2" /> Force Release
+                </Button>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* Section Tabs + Settings */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2 flex-wrap items-center justify-between">
         <div className="flex gap-2 flex-wrap">
@@ -384,8 +557,16 @@ export default function LaunchControlPanel() {
                 <Button onClick={loadProgress} disabled={loading} variant="secondary" size="sm">
                   <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Reload
                 </Button>
-                <Button onClick={autoRunAll} disabled={autoRunning || progress.totalNeeded === 0} className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-black">
-                  {autoRunning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</> : <><Play className="w-4 h-4 mr-2" /> Auto-Run (Tab)</>}
+                <Button
+                  onClick={autoRunAll}
+                  disabled={autoRunning || progress.totalNeeded === 0 || (autoRunLock && !autoRunLock.isMine && !autoRunLock.isStale)}
+                  className="bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-black"
+                >
+                  {autoRunning
+                    ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running...</>
+                    : (autoRunLock && !autoRunLock.isMine && !autoRunLock.isStale)
+                      ? <><Lock className="w-4 h-4 mr-2" /> Locked</>
+                      : <><Play className="w-4 h-4 mr-2" /> Resume Auto-Run</>}
                 </Button>
               </div>
             </div>
@@ -566,6 +747,9 @@ export default function LaunchControlPanel() {
               <li>Setiap tab ada progress tracking & reload button tersendiri</li>
               <li>Story & Mini Games progress automatically updated setiap reload</li>
               <li>Rate limit 12 saat antara refresh untuk curriculum tab</li>
+              <li><b>Auto-Run Lock:</b> Hanya 1 tab boleh jalan auto-run pada satu masa — tab lain akan nampak status "Locked"</li>
+              <li><b>Resume:</b> Tekan "Resume Auto-Run" untuk sambung dari bucket yang belum siap (auto-detect dari database)</li>
+              <li><b>Stuck?</b> Lock auto-expire selepas 10 minit tanpa heartbeat — atau tekan "Force Release"</li>
             </ul>
           </div>
         </div>

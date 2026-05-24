@@ -36,6 +36,19 @@
       "type": "boolean",
       "default": false,
       "description": "Adakah background story generator aktif (jalan setiap 10 minit di server)"
+    },
+    "autoRunLockedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp bila auto-run loop diaktifkan. Auto-expire selepas 10 minit."
+    },
+    "autoRunLockedBy": {
+      "type": "string",
+      "description": "Email user yang start auto-run (untuk display sahaja)"
+    },
+    "autoRunCurrentBucket": {
+      "type": "string",
+      "description": "Resume indicator \u2014 bucket terakhir sedang diproses (e.g. 'darjah_3/bahasa_melayu')"
     }
   },
   "required": [
