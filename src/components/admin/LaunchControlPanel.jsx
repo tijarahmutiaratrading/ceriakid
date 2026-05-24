@@ -257,6 +257,17 @@ export default function LaunchControlPanel() {
   };
 
   const autoRunAll = async () => {
+    // Conflict check: background mode akan generate sendiri di server
+    if (backgroundEnabled) {
+      const proceed = confirm(
+        '⚠️ Background Auto-Generate ON.\n\n' +
+        'Server sudah jalan setiap 5 minit. Kalau kau run di tab ini sekali — kedua-dua akan hentam LLM API serentak & kena Rate Limit (429).\n\n' +
+        'Cadangan: Matikan Background dulu, atau hanya gunakan satu sahaja.\n\n' +
+        'Teruskan auto-run di tab ini?'
+      );
+      if (!proceed) return;
+    }
+
     // Lock acquire
     const acq = await acquireLock();
     if (!acq.acquired) {
@@ -280,6 +291,7 @@ export default function LaunchControlPanel() {
     }, 30000);
 
     let safetyCounter = 0;
+    let consecutiveRateLimit = 0;
     while (safetyCounter < 200 && autoRunLoopRef.current) {
       safetyCounter++;
       try {
@@ -294,11 +306,39 @@ export default function LaunchControlPanel() {
         const next = incomplete[0];
         const bucketLabel = `${LEVEL_LABELS[next.darjah || next.ageGroup]} • ${SUBJECT_LABELS[next.category]}`;
         await updateLockBucket(bucketLabel);
-        await runBucket(next);
-        await new Promise(r => setTimeout(r, 2000));
+        const result = await runBucket(next);
+
+        // Detect rate limit from response or status
+        if (!result || result.error) {
+          consecutiveRateLimit++;
+          const backoffSec = Math.min(60, 10 * consecutiveRateLimit);
+          addLog(`⏳ Backoff ${backoffSec}s (rate limit suspected, attempt ${consecutiveRateLimit})...`);
+          await new Promise(r => setTimeout(r, backoffSec * 1000));
+          if (consecutiveRateLimit >= 5) {
+            addLog(`🛑 5x rate limit berturut-turut — stop auto-run. Cuba lagi nanti.`);
+            break;
+          }
+        } else {
+          consecutiveRateLimit = 0;
+          // Normal delay 10s antara bucket untuk elak rate limit
+          await new Promise(r => setTimeout(r, 10000));
+        }
       } catch (error) {
-        addLog(`❌ Auto-run error: ${error?.message || 'Unknown'}`);
-        break;
+        const msg = error?.message || 'Unknown';
+        const isRateLimit = msg.includes('429') || msg.includes('500') || msg.includes('Rate limit');
+        if (isRateLimit) {
+          consecutiveRateLimit++;
+          const backoffSec = Math.min(120, 15 * consecutiveRateLimit);
+          addLog(`⏳ Rate limit hit — backoff ${backoffSec}s (attempt ${consecutiveRateLimit})`);
+          await new Promise(r => setTimeout(r, backoffSec * 1000));
+          if (consecutiveRateLimit >= 5) {
+            addLog(`🛑 5x rate limit berturut-turut — stop. Cuba lagi nanti.`);
+            break;
+          }
+        } else {
+          addLog(`❌ Auto-run error: ${msg}`);
+          break;
+        }
       }
     }
 
