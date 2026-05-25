@@ -90,7 +90,7 @@ export default function BBMGenerator() {
       </div>
 
       <div className="relative max-w-4xl mx-auto px-4 pt-24 md:pt-6 pb-32">
-        <div className="hidden md:block mb-4 print:hidden">
+        <div className="mb-4 print:hidden">
           <AIBackButton to="/dashboard" label="Kembali ke Dashboard" />
         </div>
 

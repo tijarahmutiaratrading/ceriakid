@@ -106,7 +106,7 @@ export default function AIAssistant() {
       </div>
 
       <div className="relative max-w-4xl mx-auto px-4 pt-24 md:pt-6 pb-32">
-        <div className="hidden md:block mb-4">
+        <div className="mb-4">
           <AIBackButton to="/dashboard" label="Kembali ke Dashboard" />
         </div>
 
