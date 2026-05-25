@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle2, AlertTriangle, RefreshCw, Play, Loader2, Trash2, Settings, Zap, Lock, Unlock } from 'lucide-react';
 import LaunchSettingsModal from '@/components/admin/LaunchSettingsModal';
 import BackgroundProgressPanel from '@/components/admin/BackgroundProgressPanel';
+import BackgroundTaskMonitor from '@/components/admin/BackgroundTaskMonitor';
 
 const SUBJECT_LABELS = {
   bahasa_melayu: 'BM', english: 'English', mathematics: 'Math', science: 'Sains', jawi: 'Jawi',
@@ -663,6 +664,7 @@ export default function LaunchControlPanel() {
             { key: 'curriculum', label: '📚 KSSR Curriculum' },
             { key: 'story', label: '📖 Story Kid' },
             { key: 'mini_games', label: '🎮 Mini Games' },
+            { key: 'monitor', label: '📡 Activity Monitor' },
           ].map(tab => (
             <button
               key={tab.key}
@@ -713,6 +715,9 @@ export default function LaunchControlPanel() {
       />
 
       <div className="space-y-4">
+        {/* ACTIVITY MONITOR SECTION */}
+        {activeSection === 'monitor' && <BackgroundTaskMonitor />}
+
         {/* Loading / error fallback when data not yet ready */}
         {activeSection === 'curriculum' && !progress && (
           <div className="bg-white/10 border border-white/20 rounded-2xl p-8 text-center">

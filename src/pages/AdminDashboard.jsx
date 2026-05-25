@@ -12,7 +12,6 @@ import AdminStatCard from '@/components/admin/AdminStatCard';
 
 import SystemHealthPanel from '@/components/admin/SystemHealthPanel';
 import LaunchControlPanel from '@/components/admin/LaunchControlPanel';
-import BackgroundTaskMonitor from '@/components/admin/BackgroundTaskMonitor';
 import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2, Activity } from 'lucide-react';
 
 const SETTINGS_KEY = 'admin_app_settings';
@@ -79,7 +78,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tabFromUrl = params.get('tab');
-    if (tabFromUrl && ['analytics', 'customers', 'launch', 'monitor', 'health', 'settings'].includes(tabFromUrl)) {
+    if (tabFromUrl && ['analytics', 'customers', 'launch', 'health', 'settings'].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
   }, [location.search]);
@@ -205,7 +204,6 @@ export default function AdminDashboard() {
     { key: 'analytics', label: '📊 Analytics', icon: <BarChart3 className="w-4 h-4" /> },
     { key: 'customers', label: '👥 Pelanggan', icon: <BarChart3 className="w-4 h-4" /> },
     { key: 'launch', label: '🚀 Launch Control', icon: <Gamepad2 className="w-4 h-4" /> },
-    { key: 'monitor', label: '📡 Activity Monitor', icon: <Activity className="w-4 h-4" /> },
     { key: 'health', label: '💚 System Health', icon: <Activity className="w-4 h-4" /> },
     { key: 'settings', label: '⚙️ Settings', icon: <Settings className="w-4 h-4" /> },
   ];
@@ -393,9 +391,6 @@ export default function AdminDashboard() {
 
         {/* ═══ LAUNCH CONTROL TAB ═══ */}
          {activeTab === 'launch' && <LaunchControlPanel />}
-
-        {/* ═══ ACTIVITY MONITOR TAB ═══ */}
-        {activeTab === 'monitor' && <BackgroundTaskMonitor />}
 
         {/* ═══ SETTINGS TAB ═══ */}
         {activeTab === 'settings' && (
