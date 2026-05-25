@@ -8,9 +8,11 @@ const FEATURES = [
     to: '/ai-assistant',
     icon: GraduationCap,
     title: 'Cikgu AI',
-    desc: 'Tanya apa-apa soalan pelajaran',
+    desc: 'Tanya soalan pelajaran',
     cost: '1 kredit',
-    color: 'from-amber-400 to-orange-500',
+    tone: 'from-amber-400/30 to-orange-400/20',
+    overlay: 'from-amber-950/85 via-orange-950/55 to-orange-900/30',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a2322721f_generated_image.png',
     ready: true,
   },
   {
@@ -19,7 +21,9 @@ const FEATURES = [
     title: 'Kuiz AI',
     desc: 'Soalan interaktif & adaptif',
     cost: '1 kredit',
-    color: 'from-cyan-400 to-indigo-500',
+    tone: 'from-cyan-400/30 to-indigo-400/20',
+    overlay: 'from-indigo-950/85 via-blue-950/55 to-cyan-900/30',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/993ccd47c_generated_image.png',
     ready: true,
   },
   {
@@ -28,7 +32,9 @@ const FEATURES = [
     title: 'Penjana Cerita',
     desc: 'Cerita kreatif untuk anak',
     cost: '5 kredit',
-    color: 'from-pink-400 to-rose-500',
+    tone: 'from-pink-400/30 to-rose-400/20',
+    overlay: 'from-rose-950/85 via-pink-950/55 to-pink-900/30',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/baea14b1c_generated_image.png',
     ready: true,
   },
   {
@@ -37,7 +43,9 @@ const FEATURES = [
     title: 'Penjana BBM',
     desc: 'Lembaran kerja tersuai',
     cost: '10 kredit',
-    color: 'from-violet-400 to-purple-500',
+    tone: 'from-violet-400/30 to-purple-400/20',
+    overlay: 'from-purple-950/85 via-violet-950/55 to-purple-900/30',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d528b83d1_generated_image.png',
     ready: true,
   },
 ];
@@ -53,24 +61,42 @@ export default function AIFeatureCTA() {
         Bantuan pembelajaran berkuasa AI ✨
       </h3>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {FEATURES.map((f) => {
           const Icon = f.icon;
           return (
-            <Link key={f.title} to={f.to}>
+            <Link key={f.title} to={f.to} className="block min-w-0" aria-label={`Buka ${f.title}`}>
               <motion.div
-                whileHover={{ y: -2 }}
-                className={`relative rounded-2xl p-3 bg-gradient-to-br ${f.color} text-white shadow-lg overflow-hidden h-full`}
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className={`group relative h-full min-h-[160px] overflow-hidden rounded-[1.5rem] border border-white/40 bg-gradient-to-br ${f.tone} p-3 shadow-lg shadow-purple-200/20 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.5rem)]`}
               >
-                {!f.ready && (
-                  <span className="absolute top-1.5 right-1.5 text-[8px] font-black bg-white/30 text-white px-1.5 py-0.5 rounded-full">SOON</span>
+                {f.image && (
+                  <img
+                    src={f.image}
+                    alt={f.title}
+                    className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => e.target.style.display = 'none'}
+                  />
                 )}
-                <Icon className="w-5 h-5 mb-1.5" />
-                <p className="font-black text-xs leading-tight mb-0.5">{f.title}</p>
-                <p className="text-white/80 text-[10px] font-semibold leading-snug mb-1.5">{f.desc}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-black bg-white/25 px-1.5 py-0.5 rounded-full">{f.cost}</span>
-                  {f.ready && <ArrowRight className="w-3 h-3" />}
+                <div className={`absolute inset-0 bg-gradient-to-t ${f.overlay} z-[1]`} />
+                <div className="absolute -right-6 -top-6 h-16 w-16 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30 z-[1]" />
+
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/50 ring-1 ring-white/70 flex-shrink-0">
+                      <Icon className="h-4 w-4 text-slate-800" />
+                    </div>
+                    {!f.ready && (
+                      <span className="text-[8px] font-black bg-white/30 text-white px-1.5 py-0.5 rounded-full">SOON</span>
+                    )}
+                  </div>
+                  <p className="font-black text-white text-xs leading-tight">{f.title}</p>
+                  <p className="mt-0.5 text-[10px] font-bold text-white/85 leading-snug flex-1">{f.desc}</p>
+                  <div className="mt-2 flex items-center justify-between gap-1">
+                    <span className="text-[9px] font-black bg-white/25 backdrop-blur-sm text-white px-1.5 py-0.5 rounded-full border border-white/20">{f.cost}</span>
+                    {f.ready && <ArrowRight className="w-3 h-3 text-white" />}
+                  </div>
                 </div>
               </motion.div>
             </Link>
