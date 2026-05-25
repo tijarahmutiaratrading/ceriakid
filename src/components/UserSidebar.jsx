@@ -102,7 +102,7 @@ export default function UserSidebar() {
         </div>
       )}
 
-      <nav className="flex flex-col gap-1">
+      <nav className="flex flex-col gap-1.5">
         {NAV_GROUPS.map(group => {
           const Icon = group.icon;
           const hasSubmenu = group.submenu && group.submenu.length > 0;
@@ -115,7 +115,7 @@ export default function UserSidebar() {
                 key={group.key}
                 to={group.path}
                 title={!showLabels ? group.label : undefined}
-                className={`flex items-center gap-3 rounded-2xl transition-all ${!showLabels ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} ${groupActive ? 'bg-white/20 ring-1 ring-white/30' : 'hover:bg-white/10'}`}
+                className={`flex items-center gap-3 rounded-2xl transition-all ${!showLabels ? 'justify-center px-2 py-3' : 'px-3 py-3'} ${groupActive ? 'bg-white/20 ring-1 ring-white/30' : 'hover:bg-white/10'}`}
               >
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${groupActive ? 'bg-white text-game-purple' : 'bg-white/15 text-white/85'}`}>
                   <Icon className="w-4 h-4" />
@@ -139,7 +139,7 @@ export default function UserSidebar() {
                   setExpanded(isExpanded ? null : group.key);
                 }}
                 title={!showLabels ? group.label : undefined}
-                className={`w-full flex items-center gap-3 rounded-2xl transition-all ${!showLabels ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} ${groupActive ? 'bg-white/20 ring-1 ring-white/30' : 'hover:bg-white/10'}`}
+                className={`w-full flex items-center gap-3 rounded-2xl transition-all ${!showLabels ? 'justify-center px-2 py-3' : 'px-3 py-3'} ${groupActive ? 'bg-white/20 ring-1 ring-white/30' : 'hover:bg-white/10'}`}
               >
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${groupActive ? 'bg-white text-game-purple' : 'bg-white/15 text-white/85'}`}>
                   <Icon className="w-4 h-4" />
@@ -188,7 +188,7 @@ export default function UserSidebar() {
           <Link
             to="/admin-dashboard"
             title={!showLabels ? 'Admin' : undefined}
-            className={`flex items-center gap-3 rounded-2xl transition-all ${!showLabels ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} hover:bg-white/10`}
+            className={`flex items-center gap-3 rounded-2xl transition-all ${!showLabels ? 'justify-center px-2 py-3' : 'px-3 py-3'} hover:bg-white/10`}
           >
             <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-br from-orange-400 to-pink-500 text-white flex-shrink-0">
               <Shield className="w-4 h-4" />
