@@ -49,19 +49,19 @@ export default function CreditBalanceWidget({ compact = false }) {
       className={`rounded-3xl p-5 shadow-xl ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
       style={{ background: 'linear-gradient(135deg, #4c1d95 0%, #6b21a8 50%, #831843 100%)' }}
     >
-      <div className="flex items-start justify-between gap-3 mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg flex-shrink-0">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
-          <div>
-            <p className="text-white/85 text-[10px] font-black uppercase tracking-widest">Baki Kredit AI</p>
+          <div className="min-w-0">
+            <p className="text-white/85 text-[10px] font-black uppercase tracking-widest truncate">Baki Kredit AI</p>
             <p className="text-white text-3xl font-black leading-tight">{balance}</p>
           </div>
         </div>
         <Link
           to="/buy-credits"
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white text-game-purple font-black text-xs shadow hover:shadow-lg transition-all"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white text-game-purple font-black text-xs shadow hover:shadow-lg transition-all flex-shrink-0"
         >
           <Plus className="w-3.5 h-3.5" /> Top Up
         </Link>
