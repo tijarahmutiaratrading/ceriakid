@@ -41,25 +41,28 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Sila isi semua maklumat' }, { status: 400 });
     }
 
-    // ─── Check & deduct credits (admin bypass) ───
+    // ─── Check & deduct credits (admin bypass) — refetch to mitigate races ───
     const isAdmin = user.role === 'admin';
     const credits = await base44.asServiceRole.entities.UserCredit.filter({ userEmail: user.email });
     let credit = credits[0] || null;
     let newBalance = credit?.balance || 0;
 
     if (!isAdmin) {
-      if (!credit || (credit.balance || 0) < COST_PER_BBM) {
+      const fresh = credit ? await base44.asServiceRole.entities.UserCredit.get(credit.id) : null;
+      const currentBalance = fresh?.balance || 0;
+      if (!fresh || currentBalance < COST_PER_BBM) {
         return Response.json({
           error: 'INSUFFICIENT_CREDITS',
-          balance: credit?.balance || 0,
+          balance: currentBalance,
           required: COST_PER_BBM,
         }, { status: 402 });
       }
-      newBalance = (credit.balance || 0) - COST_PER_BBM;
+      credit = fresh;
+      newBalance = currentBalance - COST_PER_BBM;
       const nowIso = new Date().toISOString();
       await base44.asServiceRole.entities.UserCredit.update(credit.id, {
         balance: newBalance,
-        totalUsed: (credit.totalUsed || 0) + COST_PER_BBM,
+        totalUsed: (fresh.totalUsed || 0) + COST_PER_BBM,
         lastUsedAt: nowIso,
       });
     }
@@ -111,11 +114,12 @@ Format jawapan dalam JSON:
         throw new Error('BBM tidak lengkap dijana');
       }
     } catch (llmErr) {
-      // Refund (only if charged)
+      // Refund (only if charged) — refetch then add back to current balance
       if (!isAdmin && credit) {
+        const latest = await base44.asServiceRole.entities.UserCredit.get(credit.id);
         await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-          balance: credit.balance,
-          totalUsed: credit.totalUsed || 0,
+          balance: (latest?.balance || 0) + COST_PER_BBM,
+          totalUsed: Math.max(0, (latest?.totalUsed || 0) - COST_PER_BBM),
         });
         await base44.asServiceRole.entities.CreditTransaction.create({
           userEmail: user.email,

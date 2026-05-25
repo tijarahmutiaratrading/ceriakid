@@ -38,25 +38,28 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Subjek dan tahap diperlukan' }, { status: 400 });
     }
 
-    // ─── Step 1: Check & deduct credits (admin bypass) ───
+    // ─── Step 1: Check & deduct credits (admin bypass) — refetch to mitigate races ───
     const isAdmin = user.role === 'admin';
     const credits = await base44.asServiceRole.entities.UserCredit.filter({ userEmail: user.email });
     let credit = credits[0] || null;
     let newBalance = credit?.balance || 0;
 
     if (!isAdmin) {
-      if (!credit || (credit.balance || 0) < COST_PER_QUIZ) {
+      const fresh = credit ? await base44.asServiceRole.entities.UserCredit.get(credit.id) : null;
+      const currentBalance = fresh?.balance || 0;
+      if (!fresh || currentBalance < COST_PER_QUIZ) {
         return Response.json({
           error: 'INSUFFICIENT_CREDITS',
-          balance: credit?.balance || 0,
+          balance: currentBalance,
           required: COST_PER_QUIZ,
         }, { status: 402 });
       }
-      newBalance = (credit.balance || 0) - COST_PER_QUIZ;
+      credit = fresh;
+      newBalance = currentBalance - COST_PER_QUIZ;
       const nowIso = new Date().toISOString();
       await base44.asServiceRole.entities.UserCredit.update(credit.id, {
         balance: newBalance,
-        totalUsed: (credit.totalUsed || 0) + COST_PER_QUIZ,
+        totalUsed: (fresh.totalUsed || 0) + COST_PER_QUIZ,
         lastUsedAt: nowIso,
       });
     }
@@ -129,11 +132,12 @@ ARAHAN KETAT:
         throw new Error('Format kuiz tidak sah');
       }
     } catch (llmErr) {
-      // Refund credit on LLM failure (only if charged)
+      // Refund credit on LLM failure (only if charged) — refetch then add back to current balance
       if (!isAdmin && credit) {
+        const latest = await base44.asServiceRole.entities.UserCredit.get(credit.id);
         await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-          balance: credit.balance,
-          totalUsed: credit.totalUsed || 0,
+          balance: (latest?.balance || 0) + COST_PER_QUIZ,
+          totalUsed: Math.max(0, (latest?.totalUsed || 0) - COST_PER_QUIZ),
         });
         await base44.asServiceRole.entities.CreditTransaction.create({
           userEmail: user.email,

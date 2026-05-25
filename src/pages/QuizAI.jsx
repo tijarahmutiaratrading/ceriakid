@@ -47,6 +47,7 @@ export default function QuizAI() {
   const [insufficientCredits, setInsufficientCredits] = useState(false);
   const [askedQuestions, setAskedQuestions] = useState([]);
   const [score, setScore] = useState({ correct: 0, total: 0 });
+  const [latestBalance, setLatestBalance] = useState(null);
 
   const generateQuiz = async () => {
     if (loading) return;
@@ -69,6 +70,12 @@ export default function QuizAI() {
       } else if (res.data?.success && res.data?.quiz) {
         setCurrentQuiz(res.data.quiz);
         setAskedQuestions(prev => [...prev, res.data.quiz.question]);
+        if (typeof res.data.newBalance === 'number') {
+          setLatestBalance(res.data.newBalance);
+          if (res.data.newBalance > 0 && res.data.newBalance <= 5) {
+            toast({ title: `⚠️ Baki kredit rendah: ${res.data.newBalance}`, description: 'Top up untuk teruskan selepas habis.' });
+          }
+        }
       } else {
         throw new Error(res.data?.error || 'Ralat tidak diketahui');
       }
