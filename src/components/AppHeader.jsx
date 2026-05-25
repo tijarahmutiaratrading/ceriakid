@@ -20,6 +20,15 @@ const MAIN_NAV = [
   { path: '/children-profiles', label: 'Profil' },
 ];
 
+// Admin dropdown — semua section control panel
+const ADMIN_DROPDOWN = [
+  { path: '/admin-dashboard?tab=analytics', label: '📊 Analytics' },
+  { path: '/admin-dashboard?tab=customers', label: '👥 Pelanggan' },
+  { path: '/admin-dashboard?tab=launch', label: '🚀 Launch Control' },
+  { path: '/admin-dashboard?tab=health', label: '💚 System Health' },
+  { path: '/admin-dashboard?tab=settings', label: '⚙️ Settings' },
+];
+
 const LANDING_NAV = [
   { path: '/', label: 'Rumah' },
   { path: '#features', label: 'Ciri-ciri', external: true },
@@ -65,10 +74,12 @@ export default function AppHeader({ title = null }) {
   const isActive = (path) =>
     path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
 
-  // Choose nav set based on auth state. Admin gets an extra "Admin" tab.
+  // Choose nav set based on auth state. Admin gets an extra "Admin" tab with dropdown.
   const baseNav = isLanding && !isAuthenticated ? LANDING_NAV : MAIN_NAV;
-  const navItems = isAdmin ? [...baseNav, { path: '/admin-dashboard', label: 'Admin' }] : baseNav;
+  const navItems = isAdmin ? [...baseNav, { path: '/admin-dashboard', label: 'Admin', isAdmin: true }] : baseNav;
   const displayTitle = title || PAGE_TITLES[location.pathname] || 'CeriaKid';
+
+  const [adminDropdownOpen, setAdminDropdownOpen] = useState(false);
 
   // Drawer menu items (full set for hamburger)
   const dashboardItems = isAuthenticated ? [{ path: '/dashboard', label: 'Dashboard' }] : [];
@@ -135,9 +146,53 @@ export default function AppHeader({ title = null }) {
                         transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                       />
                     )}
-                    <span className="relative z-10">{item.label}</span>
+                    <span className="relative z-10 flex items-center gap-1">
+                      {item.label}
+                      {item.isAdmin && <ChevronDown className="w-3 h-3" />}
+                    </span>
                   </>
                 );
+
+                // Admin item with dropdown
+                if (item.isAdmin) {
+                  return (
+                    <div key={item.path} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setAdminDropdownOpen(!adminDropdownOpen)}
+                        className={className}
+                      >
+                        {content}
+                      </button>
+                      <AnimatePresence>
+                        {adminDropdownOpen && (
+                          <>
+                            <div className="fixed inset-0 z-40" onClick={() => setAdminDropdownOpen(false)} />
+                            <motion.div
+                              initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                              transition={{ duration: 0.15 }}
+                              className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-black/85 backdrop-blur-xl ring-1 ring-white/15 shadow-2xl overflow-hidden z-50"
+                            >
+                              {ADMIN_DROPDOWN.map((sub) => (
+                                <Link
+                                  key={sub.path}
+                                  to={sub.path}
+                                  onClick={() => setAdminDropdownOpen(false)}
+                                  className="block px-4 py-2.5 text-sm font-bold text-white/90 hover:bg-white/10 hover:text-white transition-colors"
+                                >
+                                  {sub.label}
+                                </Link>
+                              ))}
+                            </motion.div>
+                          </>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                }
+
                 return item.external ? (
                   <a key={item.path} href={item.path} className={className}>
                     {content}
