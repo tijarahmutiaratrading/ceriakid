@@ -44,16 +44,16 @@ const FEATURES = [
 
 export default function AIFeatureCTA() {
   return (
-    <div className="pro-glass rounded-3xl p-5 h-full">
-      <div className="flex items-center gap-2 mb-3">
-        <Sparkles className="w-4 h-4 text-amber-300" />
-        <p className="text-amber-200 text-[10px] font-black uppercase tracking-widest">Ciri AI CeriaKid</p>
+    <div className="pro-glass rounded-2xl p-3 h-full">
+      <div className="flex items-center gap-1.5 mb-2">
+        <Sparkles className="w-3 h-3 text-amber-300" />
+        <p className="text-amber-200 text-[9px] font-black uppercase tracking-widest">Ciri AI CeriaKid</p>
       </div>
-      <h3 className="text-white text-lg md:text-xl font-black mb-4 leading-tight">
+      <h3 className="text-white text-sm md:text-base font-black mb-2.5 leading-tight">
         Bantuan pembelajaran berkuasa AI ✨
       </h3>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         {FEATURES.map((f) => {
           const Icon = f.icon;
           return (
@@ -61,27 +61,27 @@ export default function AIFeatureCTA() {
               <motion.div
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                className={`group relative h-full min-h-[160px] overflow-hidden rounded-[1.5rem] border border-white/30 bg-gradient-to-br ${f.gradient} p-4 shadow-lg shadow-purple-950/20 flex flex-col`}
+                className={`group relative h-full min-h-[110px] overflow-hidden rounded-2xl border border-white/30 bg-gradient-to-br ${f.gradient} p-2.5 shadow-md shadow-purple-950/20 flex flex-col`}
               >
-                <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
-                <div className="absolute -left-4 -bottom-4 h-16 w-16 rounded-full bg-white/10 blur-2xl" />
+                <div className="absolute -right-4 -top-4 h-14 w-14 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
+                <div className="absolute -left-3 -bottom-3 h-12 w-12 rounded-full bg-white/10 blur-2xl" />
 
                 <div className="relative z-10 flex flex-col h-full">
-                  <div className="flex items-start justify-between gap-2 mb-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/95 ring-1 ring-white/70 flex-shrink-0 shadow-lg">
-                      <Icon className="h-5 w-5 text-slate-800" />
+                  <div className="flex items-start justify-between gap-1.5 mb-2">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/95 ring-1 ring-white/70 flex-shrink-0 shadow-md">
+                      <Icon className="h-3.5 w-3.5 text-slate-800" />
                     </div>
                     {!f.ready && (
-                      <span className="text-[8px] font-black bg-white/30 text-white px-1.5 py-0.5 rounded-full">SOON</span>
+                      <span className="text-[7px] font-black bg-white/30 text-white px-1 py-0.5 rounded-full">SOON</span>
                     )}
                   </div>
-                  <p className="font-black text-white text-sm leading-tight">{f.title}</p>
-                  <p className="mt-1 text-[11px] font-bold text-white/90 leading-snug flex-1">{f.desc}</p>
-                  <div className="mt-3 flex items-center justify-between gap-1">
-                    <span className="text-[10px] font-black bg-white/95 text-slate-900 px-2 py-1 rounded-full shadow-md">{f.cost}</span>
+                  <p className="font-black text-white text-xs leading-tight">{f.title}</p>
+                  <p className="mt-0.5 text-[10px] font-bold text-white/90 leading-snug flex-1">{f.desc}</p>
+                  <div className="mt-1.5 flex items-center justify-between gap-1">
+                    <span className="text-[9px] font-black bg-white/95 text-slate-900 px-1.5 py-0.5 rounded-full shadow-sm">{f.cost}</span>
                     {f.ready && (
-                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-slate-800 shadow-md">
-                        <ArrowRight className="w-3.5 h-3.5" />
+                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white/95 text-slate-800 shadow-sm">
+                        <ArrowRight className="w-3 h-3" />
                       </div>
                     )}
                   </div>
