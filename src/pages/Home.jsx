@@ -12,6 +12,8 @@ import DailyChallenge from '@/components/home/DailyChallenge';
 import DashboardHero from '@/components/home/DashboardHero';
 import QuickAccessGrid from '@/components/home/QuickAccessGrid';
 import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
+import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
+import AIFeatureCTA from '@/components/home/AIFeatureCTA';
 import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
 import { checkAndRegisterDevice } from '@/lib/deviceManager';
 import { syncOfflineProgress } from '@/lib/offlineSyncManager';
@@ -204,6 +206,23 @@ export default function Home() {
         </motion.div>
 
         <QuickAccessGrid />
+
+        {/* Kredit AI + Ciri AI baru */}
+        {isAuthenticated && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4"
+          >
+            <div className="md:col-span-1">
+              <CreditBalanceWidget />
+            </div>
+            <div className="md:col-span-2">
+              <AIFeatureCTA />
+            </div>
+          </motion.div>
+        )}
 
         {/* New Games Coming Soon Banner — tukar COMING_SOON_DATE untuk ubah tarikh, set null untuk sembunyikan */}
         {(() => {
