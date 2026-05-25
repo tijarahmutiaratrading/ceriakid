@@ -61,7 +61,7 @@ export default function AIFeatureCTA() {
         Bantuan pembelajaran berkuasa AI ✨
       </h3>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 gap-3">
         {FEATURES.map((f) => {
           const Icon = f.icon;
           return (
