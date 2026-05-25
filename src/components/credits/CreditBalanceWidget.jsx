@@ -49,41 +49,49 @@ export default function CreditBalanceWidget({ compact = false }) {
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className={`group relative h-full min-h-[180px] overflow-hidden rounded-[1.75rem] border border-white/30 bg-gradient-to-br from-amber-500 via-orange-500 to-orange-600 p-5 shadow-lg shadow-amber-950/20 ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
+        className={`group relative h-full min-h-[180px] overflow-hidden rounded-[1.75rem] p-5 shadow-xl shadow-amber-950/10 ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
+        style={{
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10))',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          border: '1px solid rgba(255,255,255,0.35)',
+        }}
       >
-        <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
-        <div className="absolute -left-4 -bottom-4 h-20 w-20 rounded-full bg-white/10 blur-2xl" />
+        {/* Color glow accents behind glass */}
+        <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-amber-400/40 blur-3xl transition-all group-hover:bg-amber-400/60" />
+        <div className="pointer-events-none absolute -left-6 -bottom-6 h-28 w-28 rounded-full bg-orange-500/30 blur-3xl" />
+        <div className="pointer-events-none absolute right-1/3 bottom-0 h-20 w-20 rounded-full bg-pink-400/20 blur-2xl" />
 
         <div className="relative z-10 flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/50 ring-1 ring-white/70">
-              <Sparkles className="w-6 h-6 text-amber-700" />
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/40 backdrop-blur-sm border border-white/50 shadow-inner">
+              <Sparkles className="w-6 h-6 text-amber-600 drop-shadow" />
             </div>
-            <p className="text-white/90 text-[10px] font-black uppercase tracking-widest">Baki Kredit AI</p>
-            <p className="text-white text-4xl font-black leading-tight">{balance}</p>
+            <p className="text-white/95 text-[10px] font-black uppercase tracking-widest drop-shadow">Baki Kredit AI</p>
+            <p className="text-white text-4xl font-black leading-tight drop-shadow-md">{balance}</p>
           </div>
-          <div className="flex h-11 px-3 flex-shrink-0 items-center justify-center rounded-2xl bg-white/90 text-orange-600 shadow-lg shadow-white/20 hover:bg-white transition-colors gap-1.5 font-black text-xs">
+          <div className="flex h-11 px-3 flex-shrink-0 items-center justify-center rounded-2xl bg-white/90 text-orange-600 shadow-lg backdrop-blur-md border border-white/60 hover:bg-white transition-colors gap-1.5 font-black text-xs">
             <Plus className="w-3.5 h-3.5" /> Top Up
           </div>
         </div>
 
         <div className="relative z-10 mt-4 grid grid-cols-2 gap-2">
-          <div className="bg-white/15 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-white/20">
-            <p className="text-white/75 text-[10px] font-bold">Dibeli</p>
-            <p className="text-white font-black text-sm">{credits?.totalPurchased ?? 0}</p>
+          <div className="bg-white/20 backdrop-blur-md rounded-xl px-3 py-1.5 border border-white/30 shadow-sm">
+            <p className="text-white/80 text-[10px] font-bold">Dibeli</p>
+            <p className="text-white font-black text-sm drop-shadow">{credits?.totalPurchased ?? 0}</p>
           </div>
-          <div className="bg-white/15 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-white/20">
-            <p className="text-white/75 text-[10px] font-bold">Digunakan</p>
-            <p className="text-white font-black text-sm">{credits?.totalUsed ?? 0}</p>
+          <div className="bg-white/20 backdrop-blur-md rounded-xl px-3 py-1.5 border border-white/30 shadow-sm">
+            <p className="text-white/80 text-[10px] font-bold">Digunakan</p>
+            <p className="text-white font-black text-sm drop-shadow">{credits?.totalUsed ?? 0}</p>
           </div>
         </div>
 
         {isLow ? (
-          <p className="relative z-10 mt-3 text-amber-200 text-xs font-black flex items-center gap-1.5">
+          <p className="relative z-10 mt-3 text-amber-100 text-xs font-black flex items-center gap-1.5 drop-shadow">
             ⚠️ Baki rendah — top up sekarang <ArrowRight className="w-3 h-3" />
           </p>
         ) : (
-          <p className="relative z-10 mt-3 inline-flex items-center gap-1 text-xs font-black text-white">
+          <p className="relative z-10 mt-3 inline-flex items-center gap-1 text-xs font-black text-white drop-shadow">
             Tambah Kredit <ArrowRight className="h-3.5 w-3.5" />
           </p>
         )}
