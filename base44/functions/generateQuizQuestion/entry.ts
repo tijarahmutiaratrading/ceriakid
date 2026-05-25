@@ -38,25 +38,28 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Subjek dan tahap diperlukan' }, { status: 400 });
     }
 
-    // ─── Step 1: Check & deduct credits ───
+    // ─── Step 1: Check & deduct credits (admin bypass) ───
+    const isAdmin = user.role === 'admin';
     const credits = await base44.asServiceRole.entities.UserCredit.filter({ userEmail: user.email });
-    if (credits.length === 0 || (credits[0].balance || 0) < COST_PER_QUIZ) {
-      return Response.json({
-        error: 'INSUFFICIENT_CREDITS',
-        balance: credits[0]?.balance || 0,
-        required: COST_PER_QUIZ,
-      }, { status: 402 });
+    let credit = credits[0] || null;
+    let newBalance = credit?.balance || 0;
+
+    if (!isAdmin) {
+      if (!credit || (credit.balance || 0) < COST_PER_QUIZ) {
+        return Response.json({
+          error: 'INSUFFICIENT_CREDITS',
+          balance: credit?.balance || 0,
+          required: COST_PER_QUIZ,
+        }, { status: 402 });
+      }
+      newBalance = (credit.balance || 0) - COST_PER_QUIZ;
+      const nowIso = new Date().toISOString();
+      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+        balance: newBalance,
+        totalUsed: (credit.totalUsed || 0) + COST_PER_QUIZ,
+        lastUsedAt: nowIso,
+      });
     }
-
-    const credit = credits[0];
-    const newBalance = (credit.balance || 0) - COST_PER_QUIZ;
-    const nowIso = new Date().toISOString();
-
-    await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-      balance: newBalance,
-      totalUsed: (credit.totalUsed || 0) + COST_PER_QUIZ,
-      lastUsedAt: nowIso,
-    });
 
     // ─── Step 2: Build prompt ───
     const subjectLabel = SUBJECT_LABELS[subject] || 'Umum';
@@ -126,32 +129,36 @@ ARAHAN KETAT:
         throw new Error('Format kuiz tidak sah');
       }
     } catch (llmErr) {
-      // Refund credit on LLM failure
-      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-        balance: credit.balance,
-        totalUsed: credit.totalUsed || 0,
-      });
-      await base44.asServiceRole.entities.CreditTransaction.create({
-        userEmail: user.email,
-        type: 'refund',
-        amount: COST_PER_QUIZ,
-        balanceAfter: credit.balance,
-        feature: 'ai_assistant',
-        description: 'Refund — Kuiz AI gagal',
-      });
+      // Refund credit on LLM failure (only if charged)
+      if (!isAdmin && credit) {
+        await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+          balance: credit.balance,
+          totalUsed: credit.totalUsed || 0,
+        });
+        await base44.asServiceRole.entities.CreditTransaction.create({
+          userEmail: user.email,
+          type: 'refund',
+          amount: COST_PER_QUIZ,
+          balanceAfter: credit.balance,
+          feature: 'ai_assistant',
+          description: 'Refund — Kuiz AI gagal',
+        });
+      }
       return Response.json({ error: 'AI tidak dapat jana soalan. Kredit dikembalikan.', detail: llmErr.message }, { status: 500 });
     }
 
-    // ─── Step 4: Log transaction ───
-    await base44.asServiceRole.entities.CreditTransaction.create({
-      userEmail: user.email,
-      type: 'usage',
-      amount: -COST_PER_QUIZ,
-      balanceAfter: newBalance,
-      feature: 'ai_assistant',
-      description: `Kuiz AI: ${subjectLabel} (${levelLabel})${topic ? ` — ${topic}` : ''}`,
-      metadata: { subject, level, topic, difficulty, childName, mode: 'quiz_ai', model: 'gpt_5_mini' },
-    });
+    // ─── Step 4: Log transaction (skip for admin) ───
+    if (!isAdmin) {
+      await base44.asServiceRole.entities.CreditTransaction.create({
+        userEmail: user.email,
+        type: 'usage',
+        amount: -COST_PER_QUIZ,
+        balanceAfter: newBalance,
+        feature: 'ai_assistant',
+        description: `Kuiz AI: ${subjectLabel} (${levelLabel})${topic ? ` — ${topic}` : ''}`,
+        metadata: { subject, level, topic, difficulty, childName, mode: 'quiz_ai', model: 'gpt_5_mini' },
+      });
+    }
 
     return Response.json({
       success: true,

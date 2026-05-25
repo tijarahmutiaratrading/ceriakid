@@ -41,25 +41,28 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Sila isi semua maklumat' }, { status: 400 });
     }
 
-    // ─── Check & deduct credits ───
+    // ─── Check & deduct credits (admin bypass) ───
+    const isAdmin = user.role === 'admin';
     const credits = await base44.asServiceRole.entities.UserCredit.filter({ userEmail: user.email });
-    if (credits.length === 0 || (credits[0].balance || 0) < COST_PER_BBM) {
-      return Response.json({
-        error: 'INSUFFICIENT_CREDITS',
-        balance: credits[0]?.balance || 0,
-        required: COST_PER_BBM,
-      }, { status: 402 });
+    let credit = credits[0] || null;
+    let newBalance = credit?.balance || 0;
+
+    if (!isAdmin) {
+      if (!credit || (credit.balance || 0) < COST_PER_BBM) {
+        return Response.json({
+          error: 'INSUFFICIENT_CREDITS',
+          balance: credit?.balance || 0,
+          required: COST_PER_BBM,
+        }, { status: 402 });
+      }
+      newBalance = (credit.balance || 0) - COST_PER_BBM;
+      const nowIso = new Date().toISOString();
+      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+        balance: newBalance,
+        totalUsed: (credit.totalUsed || 0) + COST_PER_BBM,
+        lastUsedAt: nowIso,
+      });
     }
-
-    const credit = credits[0];
-    const newBalance = (credit.balance || 0) - COST_PER_BBM;
-    const nowIso = new Date().toISOString();
-
-    await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-      balance: newBalance,
-      totalUsed: (credit.totalUsed || 0) + COST_PER_BBM,
-      lastUsedAt: nowIso,
-    });
 
     const subjectLabel = SUBJECT_LABELS[subject] || subject;
     const levelLabel = LEVEL_LABELS[level] || level;
@@ -108,32 +111,36 @@ Format jawapan dalam JSON:
         throw new Error('BBM tidak lengkap dijana');
       }
     } catch (llmErr) {
-      // Refund
-      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-        balance: credit.balance,
-        totalUsed: credit.totalUsed || 0,
-      });
-      await base44.asServiceRole.entities.CreditTransaction.create({
-        userEmail: user.email,
-        type: 'refund',
-        amount: COST_PER_BBM,
-        balanceAfter: credit.balance,
-        feature: 'bbm_generator',
-        description: 'Refund — Penjana BBM gagal',
-      });
+      // Refund (only if charged)
+      if (!isAdmin && credit) {
+        await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+          balance: credit.balance,
+          totalUsed: credit.totalUsed || 0,
+        });
+        await base44.asServiceRole.entities.CreditTransaction.create({
+          userEmail: user.email,
+          type: 'refund',
+          amount: COST_PER_BBM,
+          balanceAfter: credit.balance,
+          feature: 'bbm_generator',
+          description: 'Refund — Penjana BBM gagal',
+        });
+      }
       return Response.json({ error: 'Gagal menjana BBM. Kredit dikembalikan.', detail: llmErr.message }, { status: 500 });
     }
 
-    // Log transaction
-    await base44.asServiceRole.entities.CreditTransaction.create({
-      userEmail: user.email,
-      type: 'usage',
-      amount: -COST_PER_BBM,
-      balanceAfter: newBalance,
-      feature: 'bbm_generator',
-      description: `BBM: ${bbmData.title}`,
-      metadata: { subject, level, type, topic, model: 'claude_sonnet_4_6' },
-    });
+    // Log transaction (skip for admin)
+    if (!isAdmin) {
+      await base44.asServiceRole.entities.CreditTransaction.create({
+        userEmail: user.email,
+        type: 'usage',
+        amount: -COST_PER_BBM,
+        balanceAfter: newBalance,
+        feature: 'bbm_generator',
+        description: `BBM: ${bbmData.title}`,
+        metadata: { subject, level, type, topic, model: 'claude_sonnet_4_6' },
+      });
+    }
 
     return Response.json({
       success: true,

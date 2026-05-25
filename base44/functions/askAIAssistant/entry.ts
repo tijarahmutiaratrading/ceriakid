@@ -32,25 +32,28 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Soalan terlalu pendek' }, { status: 400 });
     }
 
-    // ─── Step 1: Check & deduct credits ───
+    // ─── Step 1: Check & deduct credits (admin bypass) ───
+    const isAdmin = user.role === 'admin';
     const credits = await base44.asServiceRole.entities.UserCredit.filter({ userEmail: user.email });
-    if (credits.length === 0 || (credits[0].balance || 0) < COST_PER_QUESTION) {
-      return Response.json({
-        error: 'INSUFFICIENT_CREDITS',
-        balance: credits[0]?.balance || 0,
-        required: COST_PER_QUESTION,
-      }, { status: 402 });
+    let credit = credits[0] || null;
+    let newBalance = credit?.balance || 0;
+
+    if (!isAdmin) {
+      if (!credit || (credit.balance || 0) < COST_PER_QUESTION) {
+        return Response.json({
+          error: 'INSUFFICIENT_CREDITS',
+          balance: credit?.balance || 0,
+          required: COST_PER_QUESTION,
+        }, { status: 402 });
+      }
+      newBalance = (credit.balance || 0) - COST_PER_QUESTION;
+      const nowIso = new Date().toISOString();
+      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+        balance: newBalance,
+        totalUsed: (credit.totalUsed || 0) + COST_PER_QUESTION,
+        lastUsedAt: nowIso,
+      });
     }
-
-    const credit = credits[0];
-    const newBalance = (credit.balance || 0) - COST_PER_QUESTION;
-    const nowIso = new Date().toISOString();
-
-    await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-      balance: newBalance,
-      totalUsed: (credit.totalUsed || 0) + COST_PER_QUESTION,
-      lastUsedAt: nowIso,
-    });
 
     // ─── Step 2: Call LLM ───
     const subjectLabel = SUBJECT_LABELS[subject] || 'Umum';
@@ -82,32 +85,36 @@ Arahan jawapan:
       });
       answer = typeof llmResponse === 'string' ? llmResponse : (llmResponse?.text || JSON.stringify(llmResponse));
     } catch (llmErr) {
-      // Refund credit on LLM failure
-      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-        balance: credit.balance,
-        totalUsed: credit.totalUsed || 0,
-      });
-      await base44.asServiceRole.entities.CreditTransaction.create({
-        userEmail: user.email,
-        type: 'refund',
-        amount: COST_PER_QUESTION,
-        balanceAfter: credit.balance,
-        feature: 'ai_assistant',
-        description: 'Refund — AI gagal menjawab',
-      });
+      // Refund credit on LLM failure (only if charged)
+      if (!isAdmin && credit) {
+        await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+          balance: credit.balance,
+          totalUsed: credit.totalUsed || 0,
+        });
+        await base44.asServiceRole.entities.CreditTransaction.create({
+          userEmail: user.email,
+          type: 'refund',
+          amount: COST_PER_QUESTION,
+          balanceAfter: credit.balance,
+          feature: 'ai_assistant',
+          description: 'Refund — AI gagal menjawab',
+        });
+      }
       return Response.json({ error: 'AI tidak dapat menjawab. Kredit dikembalikan.', detail: llmErr.message }, { status: 500 });
     }
 
-    // ─── Step 3: Log transaction ───
-    await base44.asServiceRole.entities.CreditTransaction.create({
-      userEmail: user.email,
-      type: 'usage',
-      amount: -COST_PER_QUESTION,
-      balanceAfter: newBalance,
-      feature: 'ai_assistant',
-      description: `Soalan: ${question.substring(0, 80)}${question.length > 80 ? '...' : ''}`,
-      metadata: { subject, level, childName, model: 'gpt_5_mini' },
-    });
+    // ─── Step 3: Log transaction (skip for admin) ───
+    if (!isAdmin) {
+      await base44.asServiceRole.entities.CreditTransaction.create({
+        userEmail: user.email,
+        type: 'usage',
+        amount: -COST_PER_QUESTION,
+        balanceAfter: newBalance,
+        feature: 'ai_assistant',
+        description: `Soalan: ${question.substring(0, 80)}${question.length > 80 ? '...' : ''}`,
+        metadata: { subject, level, childName, model: 'gpt_5_mini' },
+      });
+    }
 
     return Response.json({
       success: true,

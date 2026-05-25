@@ -30,25 +30,28 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Tema cerita terlalu pendek' }, { status: 400 });
     }
 
-    // ─── Check & deduct credits ───
+    // ─── Check & deduct credits (admin bypass) ───
+    const isAdmin = user.role === 'admin';
     const credits = await base44.asServiceRole.entities.UserCredit.filter({ userEmail: user.email });
-    if (credits.length === 0 || (credits[0].balance || 0) < COST_PER_STORY) {
-      return Response.json({
-        error: 'INSUFFICIENT_CREDITS',
-        balance: credits[0]?.balance || 0,
-        required: COST_PER_STORY,
-      }, { status: 402 });
+    let credit = credits[0] || null;
+    let newBalance = credit?.balance || 0;
+
+    if (!isAdmin) {
+      if (!credit || (credit.balance || 0) < COST_PER_STORY) {
+        return Response.json({
+          error: 'INSUFFICIENT_CREDITS',
+          balance: credit?.balance || 0,
+          required: COST_PER_STORY,
+        }, { status: 402 });
+      }
+      newBalance = (credit.balance || 0) - COST_PER_STORY;
+      const nowIso = new Date().toISOString();
+      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+        balance: newBalance,
+        totalUsed: (credit.totalUsed || 0) + COST_PER_STORY,
+        lastUsedAt: nowIso,
+      });
     }
-
-    const credit = credits[0];
-    const newBalance = (credit.balance || 0) - COST_PER_STORY;
-    const nowIso = new Date().toISOString();
-
-    await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-      balance: newBalance,
-      totalUsed: (credit.totalUsed || 0) + COST_PER_STORY,
-      lastUsedAt: nowIso,
-    });
 
     // ─── Build LLM prompt ───
     const ageLabel = AGE_LABELS[ageRange] || AGE_LABELS['7-9'];
@@ -103,32 +106,36 @@ Format jawapan dalam JSON:
         throw new Error('Cerita tidak lengkap dijana');
       }
     } catch (llmErr) {
-      // Refund on failure
-      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-        balance: credit.balance,
-        totalUsed: credit.totalUsed || 0,
-      });
-      await base44.asServiceRole.entities.CreditTransaction.create({
-        userEmail: user.email,
-        type: 'refund',
-        amount: COST_PER_STORY,
-        balanceAfter: credit.balance,
-        feature: 'story_generator',
-        description: 'Refund — Penjana cerita gagal',
-      });
+      // Refund on failure (only if charged)
+      if (!isAdmin && credit) {
+        await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+          balance: credit.balance,
+          totalUsed: credit.totalUsed || 0,
+        });
+        await base44.asServiceRole.entities.CreditTransaction.create({
+          userEmail: user.email,
+          type: 'refund',
+          amount: COST_PER_STORY,
+          balanceAfter: credit.balance,
+          feature: 'story_generator',
+          description: 'Refund — Penjana cerita gagal',
+        });
+      }
       return Response.json({ error: 'Gagal menjana cerita. Kredit dikembalikan.', detail: llmErr.message }, { status: 500 });
     }
 
-    // ─── Log transaction ───
-    await base44.asServiceRole.entities.CreditTransaction.create({
-      userEmail: user.email,
-      type: 'usage',
-      amount: -COST_PER_STORY,
-      balanceAfter: newBalance,
-      feature: 'story_generator',
-      description: `Cerita: ${storyData.title}`,
-      metadata: { theme, childName, ageRange, moralLesson, length, model: 'claude_sonnet_4_6' },
-    });
+    // ─── Log transaction (skip for admin) ───
+    if (!isAdmin) {
+      await base44.asServiceRole.entities.CreditTransaction.create({
+        userEmail: user.email,
+        type: 'usage',
+        amount: -COST_PER_STORY,
+        balanceAfter: newBalance,
+        feature: 'story_generator',
+        description: `Cerita: ${storyData.title}`,
+        metadata: { theme, childName, ageRange, moralLesson, length, model: 'claude_sonnet_4_6' },
+      });
+    }
 
     return Response.json({
       success: true,
