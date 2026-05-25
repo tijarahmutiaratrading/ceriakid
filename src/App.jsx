@@ -41,6 +41,7 @@ import ChildrenProfiles from '@/pages/ChildrenProfiles';
 import StoryKid from '@/pages/StoryKid';
 import ThankYou from '@/pages/ThankYou';
 import BuyCredits from '@/pages/BuyCredits';
+import AIAssistant from '@/pages/AIAssistant';
 
 // Interactive Games
 import MemoryGame from '@/pages/games/MemoryGame';
@@ -125,6 +126,7 @@ const AuthenticatedApp = () => {
             <Route path="/challenges" element={<Challenges />} />
             <Route path="/scoreboard" element={<Scoreboard />} />
             <Route path="/buy-credits" element={<BuyCredits />} />
+            <Route path="/ai-assistant" element={<AIAssistant />} />
           </Route>
 
           {/* Game-play / fullscreen pages - NO sidebar (immersive experience) */}
