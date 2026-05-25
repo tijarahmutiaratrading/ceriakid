@@ -8,7 +8,7 @@ export const CREDIT_PACKAGES = [
     name: 'Pek Permulaan',
     credits: 50,
     bonusCredits: 0,
-    price: 5000, // RM50
+    price: 1900, // RM19
     emoji: '🌱',
     color: 'from-emerald-400 to-green-500',
     description: 'Sesuai untuk cuba ciri AI',
@@ -19,10 +19,10 @@ export const CREDIT_PACKAGES = [
     name: 'Pek Keluarga',
     credits: 110,
     bonusCredits: 15,
-    price: 10000, // RM100
+    price: 5900, // RM59
     emoji: '⭐',
     color: 'from-sky-400 to-blue-500',
-    description: 'Paling popular — jimat 12%',
+    description: 'Paling popular — jimat 22%',
     popular: true,
     perks: ['125 kredit (110 + 15 bonus)', 'Untuk 2-3 anak', 'Tahan ~1 bulan'],
   },
@@ -31,10 +31,10 @@ export const CREDIT_PACKAGES = [
     name: 'Pek Power',
     credits: 230,
     bonusCredits: 40,
-    price: 20000, // RM200
+    price: 14900, // RM149
     emoji: '👑',
     color: 'from-violet-400 to-purple-500',
-    description: 'Nilai terbaik — jimat 17%',
+    description: 'Nilai terbaik — jimat 38%',
     perks: ['270 kredit (230 + 40 bonus)', 'Untuk keluarga besar', 'Tahan ~3 bulan'],
   },
 ];
