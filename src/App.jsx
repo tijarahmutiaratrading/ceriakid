@@ -43,6 +43,7 @@ import ThankYou from '@/pages/ThankYou';
 import BuyCredits from '@/pages/BuyCredits';
 import AIAssistant from '@/pages/AIAssistant';
 import StoryGenerator from '@/pages/StoryGenerator';
+import BBMGenerator from '@/pages/BBMGenerator';
 
 // Interactive Games
 import MemoryGame from '@/pages/games/MemoryGame';
@@ -129,6 +130,7 @@ const AuthenticatedApp = () => {
             <Route path="/buy-credits" element={<BuyCredits />} />
             <Route path="/ai-assistant" element={<AIAssistant />} />
             <Route path="/story-generator" element={<StoryGenerator />} />
+            <Route path="/bbm-generator" element={<BBMGenerator />} />
           </Route>
 
           {/* Game-play / fullscreen pages - NO sidebar (immersive experience) */}

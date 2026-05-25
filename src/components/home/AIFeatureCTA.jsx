@@ -23,13 +23,13 @@ const FEATURES = [
     ready: true,
   },
   {
-    to: '/buy-credits',
+    to: '/bbm-generator',
     icon: FileText,
     title: 'Penjana BBM',
     desc: 'Lembaran kerja tersuai',
     cost: '10 kredit',
     color: 'from-violet-400 to-purple-500',
-    ready: false,
+    ready: true,
   },
 ];
 
