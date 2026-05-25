@@ -77,7 +77,7 @@ export default function BBMGenerator() {
 
   return (
     <div
-      className="relative min-h-screen rounded-3xl overflow-hidden print:bg-white print:rounded-none"
+      className="relative min-h-screen overflow-hidden print:bg-white"
       style={{ background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 35%, #4a1d6e 70%, #6b1d52 100%)' }}
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none print:hidden">
