@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Sparkles, Loader2, FileText, RefreshCw, Printer } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import AIBackButton from '@/components/ai/AIBackButton';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
 import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/use-toast';
@@ -81,11 +82,15 @@ export default function BBMGenerator() {
         <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-purple-500/35 rounded-full blur-3xl" />
       </div>
 
-      <div className="print:hidden">
+      <div className="md:hidden print:hidden">
         <AppHeader showBack={true} backTo="/dashboard" title="Penjana BBM AI" />
       </div>
 
-      <div className="relative max-w-4xl mx-auto px-4 pt-24 md:pt-8 pb-32">
+      <div className="relative max-w-4xl mx-auto px-4 pt-24 md:pt-6 pb-32">
+        <div className="hidden md:block mb-4 print:hidden">
+          <AIBackButton to="/dashboard" label="Kembali ke Dashboard" />
+        </div>
+
         <div className="print:hidden mb-4 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center shadow-lg">

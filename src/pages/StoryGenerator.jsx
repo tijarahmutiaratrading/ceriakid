@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { Sparkles, Loader2, BookOpen, RefreshCw, Printer } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import AIBackButton from '@/components/ai/AIBackButton';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
@@ -94,11 +95,15 @@ export default function StoryGenerator() {
         <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-game-pink/35 rounded-full blur-3xl" />
       </div>
 
-      <div className="print:hidden">
+      <div className="md:hidden print:hidden">
         <AppHeader showBack={true} backTo="/dashboard" title="Penjana Cerita AI" />
       </div>
 
-      <div className="relative max-w-4xl mx-auto px-4 pt-24 md:pt-8 pb-32">
+      <div className="relative max-w-4xl mx-auto px-4 pt-24 md:pt-6 pb-32">
+        <div className="hidden md:block mb-4 print:hidden">
+          <AIBackButton to="/dashboard" label="Kembali ke Dashboard" />
+        </div>
+
         {/* Header */}
         <div className="print:hidden mb-4 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">

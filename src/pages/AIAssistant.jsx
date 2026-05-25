@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Send, Sparkles, Loader2, GraduationCap, BookOpen } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import AIBackButton from '@/components/ai/AIBackButton';
 import AIChatMessage from '@/components/ai/AIChatMessage';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
 import { base44 } from '@/api/base44Client';
@@ -100,9 +101,15 @@ export default function AIAssistant() {
         <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-game-pink/35 rounded-full blur-3xl" />
       </div>
 
-      <AppHeader showBack={true} backTo="/dashboard" title="Cikgu AI" />
+      <div className="md:hidden">
+        <AppHeader showBack={true} backTo="/dashboard" title="Cikgu AI" />
+      </div>
 
-      <div className="relative max-w-4xl mx-auto px-4 pt-24 md:pt-8 pb-32">
+      <div className="relative max-w-4xl mx-auto px-4 pt-24 md:pt-6 pb-32">
+        <div className="hidden md:block mb-4">
+          <AIBackButton to="/dashboard" label="Kembali ke Dashboard" />
+        </div>
+
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
