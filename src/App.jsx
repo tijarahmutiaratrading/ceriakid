@@ -128,10 +128,12 @@ const AuthenticatedApp = () => {
             <Route path="/challenges" element={<Challenges />} />
             <Route path="/scoreboard" element={<Scoreboard />} />
             <Route path="/buy-credits" element={<BuyCredits />} />
-            <Route path="/ai-assistant" element={<AIAssistant />} />
-            <Route path="/story-generator" element={<StoryGenerator />} />
-            <Route path="/bbm-generator" element={<BBMGenerator />} />
           </Route>
+
+          {/* AI feature pages - immersive fullscreen, NO sidebar */}
+          <Route path="/ai-assistant" element={<AIAssistant />} />
+          <Route path="/story-generator" element={<StoryGenerator />} />
+          <Route path="/bbm-generator" element={<BBMGenerator />} />
 
           {/* Game-play / fullscreen pages - NO sidebar (immersive experience) */}
           <Route path="/story-kid" element={<StoryKid />} />
