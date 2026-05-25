@@ -4,8 +4,6 @@ import { motion } from 'framer-motion';
 import { Sparkles, Plus, Loader2, ArrowRight } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
-const CREDIT_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/83f08c3af_generated_image.png';
-
 export default function CreditBalanceWidget({ compact = false }) {
   const [credits, setCredits] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,16 +49,10 @@ export default function CreditBalanceWidget({ compact = false }) {
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className={`group relative h-full min-h-[180px] overflow-hidden rounded-[1.75rem] border border-white/40 bg-gradient-to-br from-amber-400/30 to-orange-400/20 p-5 shadow-lg shadow-amber-200/20 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.75rem)] ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
+        className={`group relative h-full min-h-[180px] overflow-hidden rounded-[1.75rem] border border-white/30 bg-gradient-to-br from-amber-500 via-orange-500 to-orange-600 p-5 shadow-lg shadow-amber-950/20 ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
       >
-        <img
-          src={CREDIT_BG}
-          alt="Kredit AI"
-          className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-110 transition-transform duration-500"
-          onError={(e) => e.target.style.display = 'none'}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-amber-950/85 via-orange-950/55 to-orange-900/30 z-[1]" />
-        <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30 z-[1]" />
+        <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
+        <div className="absolute -left-4 -bottom-4 h-20 w-20 rounded-full bg-white/10 blur-2xl" />
 
         <div className="relative z-10 flex items-start justify-between gap-3">
           <div className="min-w-0">
