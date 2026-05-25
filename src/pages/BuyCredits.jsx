@@ -13,7 +13,6 @@ export default function BuyCredits() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [busyPkg, setBusyPkg] = useState(null);
-  const [phone, setPhone] = useState('');
   const [statusBanner, setStatusBanner] = useState(null);
 
   // Detect ?status=success|failed from Chip redirect
@@ -33,10 +32,6 @@ export default function BuyCredits() {
       toast({ title: 'Sila log masuk dahulu', variant: 'destructive' });
       return;
     }
-    if (!phone || phone.length < 9) {
-      toast({ title: 'Masukkan nombor telefon dahulu', description: 'Diperlukan untuk pembayaran Chip.', variant: 'destructive' });
-      return;
-    }
 
     setBusyPkg(pkg.id);
     try {
@@ -44,7 +39,7 @@ export default function BuyCredits() {
         packageId: pkg.id,
         email: user.email,
         name: user.full_name || user.email,
-        phone,
+        phone: user.phone || '0000000000',
       });
       if (res.data?.checkoutUrl) {
         window.location.href = res.data.checkoutUrl;
@@ -95,18 +90,6 @@ export default function BuyCredits() {
         <div className="mb-6 max-w-md mx-auto">
           <CreditBalanceWidget />
         </div>
-
-        {/* Phone input */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 max-w-md mx-auto pro-glass rounded-2xl p-4">
-          <label className="block text-white text-xs font-black mb-2">📱 Nombor Telefon (untuk pembayaran)</label>
-          <input
-            type="tel"
-            value={phone}
-            onChange={e => setPhone(e.target.value)}
-            placeholder="Contoh: 0123456789"
-            className="w-full bg-white/15 border border-white/25 rounded-xl px-4 py-2.5 text-white placeholder-white/40 text-sm font-bold focus:outline-none focus:border-white/55"
-          />
-        </motion.div>
 
         {/* Packages grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
