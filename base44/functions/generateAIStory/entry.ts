@@ -89,7 +89,7 @@ Format jawapan dalam JSON:
     try {
       const llmResponse = await base44.integrations.Core.InvokeLLM({
         prompt,
-        model: 'claude_sonnet_4_6',
+        model: 'gpt_5_4',
         response_json_schema: {
           type: 'object',
           properties: {
@@ -101,11 +101,14 @@ Format jawapan dalam JSON:
           required: ['title', 'story', 'moralSummary'],
         },
       });
+      console.log('LLM response keys:', Object.keys(llmResponse || {}));
       storyData = llmResponse;
       if (!storyData?.title || !storyData?.story) {
+        console.error('Incomplete story response:', JSON.stringify(llmResponse).substring(0, 500));
         throw new Error('Cerita tidak lengkap dijana');
       }
     } catch (llmErr) {
+      console.error('LLM error:', llmErr.message);
       // Refund on failure (only if charged)
       if (!isAdmin && credit) {
         await base44.asServiceRole.entities.UserCredit.update(credit.id, {
@@ -133,7 +136,7 @@ Format jawapan dalam JSON:
         balanceAfter: newBalance,
         feature: 'story_generator',
         description: `Cerita: ${storyData.title}`,
-        metadata: { theme, childName, ageRange, moralLesson, length, model: 'claude_sonnet_4_6' },
+        metadata: { theme, childName, ageRange, moralLesson, length, model: 'gpt_5_4' },
       });
     }
 

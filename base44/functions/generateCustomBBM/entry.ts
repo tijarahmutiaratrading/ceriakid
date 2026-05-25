@@ -95,7 +95,7 @@ Format jawapan dalam JSON:
     try {
       const llmResponse = await base44.integrations.Core.InvokeLLM({
         prompt,
-        model: 'claude_sonnet_4_6',
+        model: 'gpt_5_4',
         response_json_schema: {
           type: 'object',
           properties: {
@@ -138,7 +138,7 @@ Format jawapan dalam JSON:
         balanceAfter: newBalance,
         feature: 'bbm_generator',
         description: `BBM: ${bbmData.title}`,
-        metadata: { subject, level, type, topic, model: 'claude_sonnet_4_6' },
+        metadata: { subject, level, type, topic, model: 'gpt_5_4' },
       });
     }
 
