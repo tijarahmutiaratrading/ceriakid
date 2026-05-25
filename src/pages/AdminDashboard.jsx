@@ -6,6 +6,7 @@ import { Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook
 import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import AppHeader from '@/components/AppHeader';
+import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminQuickStats from '@/components/admin/AdminQuickStats';
 import AdminStatCard from '@/components/admin/AdminStatCard';
 
@@ -229,23 +230,15 @@ export default function AdminDashboard() {
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-24 pb-32">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-24 md:pt-8 pb-32 lg:flex lg:gap-6">
+          <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} user={user} />
           <main className="flex-1 min-w-0 space-y-4 md:space-y-5">
-        {/* Admin section tab bar (replaces sidebar — sync dgn URL ?tab=) */}
-        <div className="pro-glass rounded-2xl p-1.5 flex gap-1 overflow-x-auto">
-          {tabs.map(t => (
-            <button
-              key={t.key}
-              onClick={() => setActiveTab(t.key)}
-              className={`flex-1 min-w-fit py-2 px-3 rounded-xl text-xs font-black whitespace-nowrap transition-all flex items-center justify-center gap-1.5 ${
-                activeTab === t.key
-                  ? 'bg-white text-game-purple shadow'
-                  : 'text-white/85 hover:bg-white/15'
-              }`}
-            >
-              {t.icon}<span>{t.label.replace(/^[^\s]+\s/, '')}</span>
-            </button>
-          ))}
+        {/* Mobile tab pill (shows current section) */}
+        <div className="lg:hidden pro-glass rounded-2xl px-3 py-2 flex items-center justify-between gap-2">
+          <p className="text-white/65 text-[10px] font-black uppercase tracking-widest">Section</p>
+          <p className="text-white text-sm font-black truncate">
+            {tabs.find(t => t.key === activeTab)?.label || 'Dashboard'}
+          </p>
         </div>
 
         {/* Page header */}
