@@ -8,42 +8,42 @@ export const CREDIT_PACKAGES = [
     name: 'Pek Permulaan',
     credits: 50,
     bonusCredits: 0,
-    price: 1000, // RM10
+    price: 5000, // RM50
     emoji: '🌱',
     color: 'from-emerald-400 to-green-500',
     description: 'Sesuai untuk cuba ciri AI',
-    perks: ['~50 soalan AI', '~10 cerita kreatif', '~5 lembaran kerja'],
+    perks: ['~50 soalan AI', '~6 cerita kreatif', '~3 lembaran kerja'],
   },
   {
     id: 'family',
     name: 'Pek Keluarga',
-    credits: 150,
-    bonusCredits: 30,
-    price: 2500, // RM25
+    credits: 110,
+    bonusCredits: 15,
+    price: 10000, // RM100
     emoji: '⭐',
     color: 'from-sky-400 to-blue-500',
-    description: 'Paling popular — jimat 20%',
+    description: 'Paling popular — jimat 12%',
     popular: true,
-    perks: ['180 kredit (150 + 30 bonus)', 'Untuk 2-3 anak', 'Tahan ~1 bulan'],
+    perks: ['125 kredit (110 + 15 bonus)', 'Untuk 2-3 anak', 'Tahan ~1 bulan'],
   },
   {
     id: 'power',
     name: 'Pek Power',
-    credits: 500,
-    bonusCredits: 150,
-    price: 7500, // RM75
+    credits: 230,
+    bonusCredits: 40,
+    price: 20000, // RM200
     emoji: '👑',
     color: 'from-violet-400 to-purple-500',
-    description: 'Nilai terbaik — jimat 35%',
-    perks: ['650 kredit (500 + 150 bonus)', 'Untuk keluarga besar', 'Tahan ~3 bulan'],
+    description: 'Nilai terbaik — jimat 17%',
+    perks: ['270 kredit (230 + 40 bonus)', 'Untuk keluarga besar', 'Tahan ~3 bulan'],
   },
 ];
 
 // Harga kredit setiap ciri AI (dikurangkan dari baki user)
 export const CREDIT_COSTS = {
   ai_assistant: 1,        // 1 kredit per soalan
-  story_generator: 5,     // 5 kredit per cerita
-  bbm_generator: 10,      // 10 kredit per BBM
+  story_generator: 8,     // 8 kredit per cerita (model gpt_5_4 mahal)
+  bbm_generator: 15,      // 15 kredit per BBM (model gpt_5_4 + content panjang)
   quiz_ai: 1,             // 1 kredit per soalan kuiz
 };
 

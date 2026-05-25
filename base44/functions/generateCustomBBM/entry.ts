@@ -1,6 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-const COST_PER_BBM = 10;
+const COST_PER_BBM = 15;
 
 const SUBJECT_LABELS = {
   bahasa_melayu: 'Bahasa Melayu',

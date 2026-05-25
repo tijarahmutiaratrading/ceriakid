@@ -2,9 +2,9 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 // Pakej kredit (sync dengan lib/creditPackages.js)
 const CREDIT_PACKAGES = {
-  starter: { credits: 50,  bonus: 0,   price: 1000, label: 'Pek Permulaan — 50 kredit' },
-  family:  { credits: 150, bonus: 30,  price: 2500, label: 'Pek Keluarga — 180 kredit' },
-  power:   { credits: 500, bonus: 150, price: 7500, label: 'Pek Power — 650 kredit' },
+  starter: { credits: 50,  bonus: 0,   price: 5000,  label: 'Pek Permulaan — 50 kredit' },
+  family:  { credits: 110, bonus: 15,  price: 10000, label: 'Pek Keluarga — 125 kredit' },
+  power:   { credits: 230, bonus: 40,  price: 20000, label: 'Pek Power — 270 kredit' },
 };
 
 Deno.serve(async (req) => {

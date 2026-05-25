@@ -1,6 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-const COST_PER_STORY = 5;
+const COST_PER_STORY = 8;
 
 const AGE_LABELS = {
   '4-6': 'kanak-kanak Prasekolah (4-6 tahun)',
