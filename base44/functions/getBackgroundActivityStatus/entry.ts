@@ -100,13 +100,26 @@ Deno.serve(async (req) => {
       miniExisting += count;
     }
 
-    // === 5. GAMETASK QUEUE ===
-    const [pendingTasks, runningTasks, completedTasks, failedTasks] = await Promise.all([
-      base44.asServiceRole.entities.GameTask.filter({ status: 'pending' }, '-created_date', 500),
-      base44.asServiceRole.entities.GameTask.filter({ status: 'running' }, '-created_date', 100),
-      base44.asServiceRole.entities.GameTask.filter({ status: 'completed' }, '-created_date', 50),
-      base44.asServiceRole.entities.GameTask.filter({ status: 'failed' }, '-created_date', 50),
-    ]);
+    // === 5. RECENT GAME CREATION ACTIVITY ===
+    // Background generators (backgroundLaunchGenerator, backgroundStoryGenerator) create
+    // games DIRECTLY without using GameTask queue. So we measure real activity by looking
+    // at recently created Game records.
+    const nowMs = Date.now();
+    const recentGames = await base44.asServiceRole.entities.Game.list('-created_date', 50);
+    const createdLast5Min = recentGames.filter(g => nowMs - new Date(g.created_date).getTime() < 5 * 60 * 1000).length;
+    const createdLast15Min = recentGames.filter(g => nowMs - new Date(g.created_date).getTime() < 15 * 60 * 1000).length;
+    const createdLastHour = recentGames.filter(g => nowMs - new Date(g.created_date).getTime() < 60 * 60 * 1000).length;
+    const lastGameCreatedAt = recentGames[0]?.created_date || null;
+
+    // Latest 8 games as activity feed
+    const recentActivity = recentGames.slice(0, 8).map(g => ({
+      id: g.id,
+      title: g.title,
+      ageGroup: g.ageGroup,
+      darjah: g.darjah,
+      category: g.category,
+      createdAt: g.created_date,
+    }));
 
     // === 6. RECENT QC LOGS (last 10) ===
     const recentQcLogs = await base44.asServiceRole.entities.QCLog.list('-runAt', 10);
@@ -158,33 +171,13 @@ Deno.serve(async (req) => {
         rows: miniRows,
       },
 
-      // Task queue
-      tasks: {
-        pending: pendingTasks.length,
-        running: runningTasks.length,
-        completed: completedTasks.length,
-        failed: failedTasks.length,
-        runningList: runningTasks.slice(0, 5).map(t => ({
-          id: t.id,
-          taskName: t.taskName,
-          subject: t.subject,
-          ageGroup: t.ageGroup,
-          darjah: t.darjah,
-          gamesCount: t.gamesCount,
-          createdGames: t.createdGames,
-          startedAt: t.startedAt,
-        })),
-        recentCompleted: completedTasks.slice(0, 5).map(t => ({
-          id: t.id,
-          taskName: t.taskName,
-          createdGames: t.createdGames,
-          completedAt: t.completedAt,
-        })),
-        recentFailed: failedTasks.slice(0, 5).map(t => ({
-          id: t.id,
-          taskName: t.taskName,
-          errorMessage: t.errorMessage,
-        })),
+      // Real-time game creation activity (replaces stale GameTask queue)
+      activity: {
+        createdLast5Min,
+        createdLast15Min,
+        createdLastHour,
+        lastGameCreatedAt,
+        recent: recentActivity,
       },
 
       // QC activity log

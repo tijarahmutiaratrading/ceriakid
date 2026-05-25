@@ -2,20 +2,31 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import {
-  RefreshCw, Loader2, CheckCircle2, AlertTriangle, Clock,
-  BookOpen, GraduationCap, Gamepad2, Activity, Zap,
+  RefreshCw, Loader2, CheckCircle2, AlertTriangle,
+  BookOpen, GraduationCap, Gamepad2, Activity, Sparkles,
 } from 'lucide-react';
 
 function timeAgo(iso) {
   if (!iso) return '—';
   const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'baru sahaja';
+  const secs = Math.floor(diff / 1000);
+  if (secs < 60) return `${secs}s lalu`;
+  const mins = Math.floor(secs / 60);
   if (mins < 60) return `${mins} min lalu`;
   const hrs = Math.floor(mins / 60);
   if (hrs < 24) return `${hrs}j lalu`;
   return `${Math.floor(hrs / 24)} hari lalu`;
 }
+
+const SUBJECT_LABEL = {
+  bahasa_melayu: 'BM', english: 'English', mathematics: 'Math',
+  science: 'Sains', jawi: 'Jawi', story: 'Story',
+};
+const LEVEL_LABEL = {
+  prasekolah: 'Prasekolah',
+  darjah_1: 'D1', darjah_2: 'D2', darjah_3: 'D3',
+  darjah_4: 'D4', darjah_5: 'D5', darjah_6: 'D6',
+};
 
 function ProgressCard({ icon: Icon, title, accent, current, target, percent, enabled, interval, status, extra }) {
   const accents = {
@@ -53,17 +64,15 @@ function ProgressCard({ icon: Icon, title, accent, current, target, percent, ena
   );
 }
 
-function StatPill({ icon: Icon, label, value, color }) {
+function StatPill({ label, value, color, sub }) {
   const colors = {
     amber: 'text-amber-300', sky: 'text-sky-300', emerald: 'text-emerald-300', rose: 'text-rose-300',
   };
   return (
     <div className="rounded-xl p-3 bg-white/5 ring-1 ring-white/10">
-      <div className="flex items-center gap-1.5 mb-1">
-        <Icon className={`w-3.5 h-3.5 ${colors[color]}`} />
-        <span className="text-[10px] font-black text-white/65 uppercase tracking-wider">{label}</span>
-      </div>
+      <p className="text-[10px] font-black text-white/65 uppercase tracking-wider mb-1">{label}</p>
       <p className={`text-2xl font-black ${colors[color]}`}>{value}</p>
+      {sub && <p className="text-[10px] text-white/50 mt-0.5">{sub}</p>}
     </div>
   );
 }
@@ -97,7 +106,7 @@ export default function LaunchOverview() {
 
   useEffect(() => {
     if (!autoRefresh) return;
-    const interval = setInterval(fetch, 60000); // gentle 60s
+    const interval = setInterval(fetch, 60000);
     return () => clearInterval(interval);
   }, [autoRefresh, fetch]);
 
@@ -120,7 +129,8 @@ export default function LaunchOverview() {
     );
   }
 
-  const { system, kssr, story, miniGames, tasks } = data;
+  const { system, kssr, story, miniGames, activity } = data;
+  const isHot = activity.createdLast5Min > 0;
 
   return (
     <div className="space-y-4">
@@ -191,74 +201,53 @@ export default function LaunchOverview() {
         />
       </motion.div>
 
-      {/* Task Queue Stats */}
+      {/* Live Activity Stats — based on REAL Game creation */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <StatPill icon={Clock} label="Pending" value={tasks.pending} color="amber" />
-        <StatPill icon={Loader2} label="Running" value={tasks.running} color="sky" />
-        <StatPill icon={CheckCircle2} label="Completed" value={tasks.completed} color="emerald" />
-        <StatPill icon={AlertTriangle} label="Failed" value={tasks.failed} color="rose" />
+        <div className={`rounded-xl p-3 ring-1 ${isHot ? 'bg-emerald-500/20 ring-emerald-400/40' : 'bg-white/5 ring-white/10'}`}>
+          <p className={`text-[10px] font-black uppercase tracking-wider mb-1 ${isHot ? 'text-emerald-200' : 'text-white/65'}`}>
+            {isHot ? '🔥 Live' : 'Last 5 min'}
+          </p>
+          <p className={`text-2xl font-black ${isHot ? 'text-emerald-300' : 'text-white/60'}`}>{activity.createdLast5Min}</p>
+          <p className="text-[10px] text-white/50 mt-0.5">games created</p>
+        </div>
+        <StatPill label="Last 15 min" value={activity.createdLast15Min} color="sky" sub="games" />
+        <StatPill label="Last 1 jam" value={activity.createdLastHour} color="amber" sub="games" />
+        <StatPill
+          label="Latest"
+          value={activity.lastGameCreatedAt ? timeAgo(activity.lastGameCreatedAt) : '—'}
+          color="emerald"
+          sub="last game"
+        />
       </motion.div>
 
-      {/* Running Tasks */}
-      {tasks.runningList?.length > 0 && (
+      {/* Recent activity feed */}
+      {activity.recent?.length > 0 && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-2xl p-4">
           <h3 className="text-white font-black text-sm mb-3 flex items-center gap-2">
-            <Loader2 className="w-4 h-4 text-sky-300 animate-spin" /> Sedang Berjalan
+            <Sparkles className="w-4 h-4 text-emerald-300" /> Games Terkini Dicipta
           </h3>
-          <div className="space-y-2">
-            {tasks.runningList.map(t => (
-              <div key={t.id} className="rounded-lg p-2.5 bg-sky-500/10 ring-1 ring-sky-400/25 flex items-center justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="text-white font-bold text-xs truncate">{t.taskName}</p>
-                  <p className="text-[10px] text-white/65">started {timeAgo(t.startedAt)}</p>
+          <div className="space-y-1.5">
+            {activity.recent.map(g => {
+              const lvl = LEVEL_LABEL[g.darjah || g.ageGroup] || g.ageGroup;
+              const subj = SUBJECT_LABEL[g.category] || g.category;
+              return (
+                <div key={g.id} className="rounded-lg p-2.5 bg-emerald-500/5 ring-1 ring-emerald-400/15 flex items-center justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-white font-bold text-xs truncate">{g.title}</p>
+                    <p className="text-[10px] text-white/60">{lvl} · {subj}</p>
+                  </div>
+                  <span className="text-[10px] font-black text-emerald-200 bg-emerald-500/15 px-2 py-0.5 rounded-full whitespace-nowrap">
+                    {timeAgo(g.createdAt)}
+                  </span>
                 </div>
-                <span className="text-[10px] font-black text-sky-200 bg-sky-500/20 px-2 py-0.5 rounded-full whitespace-nowrap">
-                  {t.createdGames || 0}/{t.gamesCount}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
+          <p className="text-[10px] text-white/45 mt-3 text-center">
+            ℹ️ Background generator create games terus ke DB (tiada queue system) — ini activity sebenar.
+          </p>
         </motion.div>
       )}
-
-      {/* Recent Completed + Failed */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-2xl p-4">
-          <h3 className="text-white font-black text-sm mb-3 flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-300" /> Terkini Berjaya
-          </h3>
-          {tasks.recentCompleted?.length === 0 ? (
-            <p className="text-white/55 text-xs">Tiada task.</p>
-          ) : (
-            <div className="space-y-1.5">
-              {tasks.recentCompleted.map(t => (
-                <div key={t.id} className="rounded-lg p-2 bg-emerald-500/10 ring-1 ring-emerald-400/20">
-                  <p className="text-white font-bold text-xs truncate">{t.taskName}</p>
-                  <p className="text-[10px] text-white/60">{t.createdGames || 0} games · {timeAgo(t.completedAt)}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-2xl p-4">
-          <h3 className="text-white font-black text-sm mb-3 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-rose-300" /> Tasks Gagal
-          </h3>
-          {tasks.recentFailed?.length === 0 ? (
-            <p className="text-white/55 text-xs">Tiada — bagus! 🎉</p>
-          ) : (
-            <div className="space-y-1.5">
-              {tasks.recentFailed.map(t => (
-                <div key={t.id} className="rounded-lg p-2 bg-rose-500/10 ring-1 ring-rose-400/20">
-                  <p className="text-white font-bold text-xs truncate">{t.taskName}</p>
-                  <p className="text-[10px] text-rose-200 truncate" title={t.errorMessage}>{t.errorMessage || 'Unknown'}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </motion.div>
-      </div>
     </div>
   );
 }
