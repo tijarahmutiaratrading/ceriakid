@@ -46,7 +46,8 @@ export default function CreditBalanceWidget({ compact = false }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`pro-glass rounded-3xl p-5 ${isLow ? 'ring-2 ring-amber-300/50' : ''}`}
+      className={`rounded-3xl p-5 shadow-xl ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
+      style={{ background: 'linear-gradient(135deg, #4c1d95 0%, #6b21a8 50%, #831843 100%)' }}
     >
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-center gap-3">
@@ -54,7 +55,7 @@ export default function CreditBalanceWidget({ compact = false }) {
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-white/70 text-[10px] font-black uppercase tracking-widest">Baki Kredit AI</p>
+            <p className="text-white/85 text-[10px] font-black uppercase tracking-widest">Baki Kredit AI</p>
             <p className="text-white text-3xl font-black leading-tight">{balance}</p>
           </div>
         </div>
@@ -67,12 +68,12 @@ export default function CreditBalanceWidget({ compact = false }) {
       </div>
 
       <div className="grid grid-cols-2 gap-2 text-xs">
-        <div className="bg-white/10 rounded-xl px-3 py-2">
-          <p className="text-white/60 font-bold">Dibeli</p>
+        <div className="bg-white/15 rounded-xl px-3 py-2">
+          <p className="text-white/80 font-bold">Dibeli</p>
           <p className="text-white font-black">{credits?.totalPurchased ?? 0}</p>
         </div>
-        <div className="bg-white/10 rounded-xl px-3 py-2">
-          <p className="text-white/60 font-bold">Digunakan</p>
+        <div className="bg-white/15 rounded-xl px-3 py-2">
+          <p className="text-white/80 font-bold">Digunakan</p>
           <p className="text-white font-black">{credits?.totalUsed ?? 0}</p>
         </div>
       </div>
