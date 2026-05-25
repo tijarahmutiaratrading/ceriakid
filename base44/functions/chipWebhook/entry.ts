@@ -92,6 +92,70 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing reference' }, { status: 400 });
     }
 
+    // ─── CREDIT PURCHASE: reference = "credit__email__packageId__totalCredits__timestamp" ───
+    if (reference.startsWith('credit__')) {
+      const creditParts = reference.split('__');
+      if (creditParts.length < 5) {
+        console.error('Invalid credit reference format:', reference);
+        return Response.json({ error: 'Invalid credit reference' }, { status: 400 });
+      }
+      const creditUserEmail = creditParts[1];
+      const packageId = creditParts[2];
+      const totalCredits = parseInt(creditParts[3], 10);
+
+      if (!creditUserEmail || !totalCredits || totalCredits <= 0) {
+        console.error('Invalid credit data:', { creditUserEmail, totalCredits });
+        return Response.json({ error: 'Invalid credit data' }, { status: 400 });
+      }
+
+      // Idempotency check — kalau dah ada transaction dengan referenceId yang sama, skip
+      const existingTx = await base44.asServiceRole.entities.CreditTransaction.filter({
+        referenceId: purchaseId,
+      });
+      if (existingTx.length > 0) {
+        console.log(`Credit purchase already processed: ${purchaseId}`);
+        return Response.json({ received: true, alreadyProcessed: true });
+      }
+
+      // Tambah kredit terus (inline — tak panggil fungsi addCredits sebab webhook unauthenticated)
+      const existingCredit = await base44.asServiceRole.entities.UserCredit.filter({ userEmail: creditUserEmail });
+      const nowIso = new Date().toISOString();
+      let newBalance;
+      if (existingCredit.length === 0) {
+        const created = await base44.asServiceRole.entities.UserCredit.create({
+          userEmail: creditUserEmail,
+          balance: totalCredits,
+          totalPurchased: totalCredits,
+          totalUsed: 0,
+          lastTopUpAt: nowIso,
+        });
+        newBalance = created.balance;
+      } else {
+        const c = existingCredit[0];
+        newBalance = (c.balance || 0) + totalCredits;
+        await base44.asServiceRole.entities.UserCredit.update(c.id, {
+          balance: newBalance,
+          totalPurchased: (c.totalPurchased || 0) + totalCredits,
+          lastTopUpAt: nowIso,
+        });
+      }
+
+      await base44.asServiceRole.entities.CreditTransaction.create({
+        userEmail: creditUserEmail,
+        type: 'purchase',
+        amount: totalCredits,
+        balanceAfter: newBalance,
+        feature: 'top_up',
+        description: `Pembelian pakej ${packageId} — ${totalCredits} kredit`,
+        referenceId: purchaseId,
+        metadata: { packageId, chipPurchaseId: purchaseId },
+      });
+
+      console.log(`Credit purchase activated: ${creditUserEmail} +${totalCredits} (pkg=${packageId})`);
+      return Response.json({ received: true, creditActivated: true, credits: totalCredits });
+    }
+    // ─── END CREDIT PURCHASE ───
+
     // Parse reference: "userEmail__tier__timestamp"
     const parts = reference.split('__');
     if (parts.length < 3) {
