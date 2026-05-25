@@ -14,13 +14,13 @@ const FEATURES = [
     ready: true,
   },
   {
-    to: '/buy-credits',
+    to: '/story-generator',
     icon: BookOpen,
     title: 'Penjana Cerita',
     desc: 'Cerita kreatif untuk anak',
     cost: '5 kredit',
     color: 'from-pink-400 to-rose-500',
-    ready: false,
+    ready: true,
   },
   {
     to: '/buy-credits',
