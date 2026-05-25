@@ -69,7 +69,7 @@ export default function AIFeatureCTA() {
               <motion.div
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                className={`group relative h-full min-h-[160px] overflow-hidden rounded-[1.5rem] border border-white/40 bg-gradient-to-br ${f.tone} p-3 shadow-lg shadow-purple-200/20 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.5rem)]`}
+                className={`group relative h-full min-h-[210px] overflow-hidden rounded-[1.5rem] border border-white/40 bg-gradient-to-br ${f.tone} p-4 shadow-lg shadow-purple-200/20 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.5rem)] flex flex-col`}
               >
                 {f.image && (
                   <img
@@ -79,23 +79,29 @@ export default function AIFeatureCTA() {
                     onError={(e) => e.target.style.display = 'none'}
                   />
                 )}
-                <div className={`absolute inset-0 bg-gradient-to-t ${f.overlay} z-[1]`} />
+                {/* Stronger overlay for guaranteed text contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/25 z-[1]" />
+                <div className={`absolute inset-0 bg-gradient-to-t ${f.overlay} opacity-70 z-[1]`} />
                 <div className="absolute -right-6 -top-6 h-16 w-16 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30 z-[1]" />
 
                 <div className="relative z-10 flex flex-col h-full">
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/50 ring-1 ring-white/70 flex-shrink-0">
-                      <Icon className="h-4 w-4 text-slate-800" />
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/95 ring-1 ring-white/70 flex-shrink-0 shadow-lg">
+                      <Icon className="h-5 w-5 text-slate-800" />
                     </div>
                     {!f.ready && (
                       <span className="text-[8px] font-black bg-white/30 text-white px-1.5 py-0.5 rounded-full">SOON</span>
                     )}
                   </div>
-                  <p className="font-black text-white text-xs leading-tight">{f.title}</p>
-                  <p className="mt-0.5 text-[10px] font-bold text-white/85 leading-snug flex-1">{f.desc}</p>
-                  <div className="mt-2 flex items-center justify-between gap-1">
-                    <span className="text-[9px] font-black bg-white/25 backdrop-blur-sm text-white px-1.5 py-0.5 rounded-full border border-white/20">{f.cost}</span>
-                    {f.ready && <ArrowRight className="w-3 h-3 text-white" />}
+                  <p className="font-black text-white text-sm leading-tight drop-shadow-md">{f.title}</p>
+                  <p className="mt-1 text-[11px] font-bold text-white/95 leading-snug flex-1 drop-shadow-md">{f.desc}</p>
+                  <div className="mt-3 flex items-center justify-between gap-1">
+                    <span className="text-[10px] font-black bg-white/95 text-slate-900 px-2 py-1 rounded-full shadow-md">{f.cost}</span>
+                    {f.ready && (
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-slate-800 shadow-md">
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>
