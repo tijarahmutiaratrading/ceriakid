@@ -10,8 +10,9 @@ Deno.serve(async (req) => {
     }
 
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
-    if (!RESEND_API_KEY) {
-      return Response.json({ error: 'RESEND_API_KEY not configured' }, { status: 500 });
+    const RESEND_FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL');
+    if (!RESEND_API_KEY || !RESEND_FROM_EMAIL) {
+      return Response.json({ error: 'RESEND_API_KEY/RESEND_FROM_EMAIL not configured' }, { status: 500 });
     }
 
     // Get all users with active subscriptions (not free)
@@ -106,7 +107,7 @@ Deno.serve(async (req) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'noreply@ceriakid.com',
+            from: RESEND_FROM_EMAIL,
             ...email,
           }),
         });

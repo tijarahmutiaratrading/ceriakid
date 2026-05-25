@@ -17,12 +17,30 @@ Deno.serve(async (req) => {
       }
     }
 
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+    const RESEND_FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL');
+    if (!RESEND_API_KEY || !RESEND_FROM_EMAIL) {
+      return Response.json({ error: 'RESEND_API_KEY/RESEND_FROM_EMAIL not configured' }, { status: 500 });
+    }
+
     const subs = await base44.asServiceRole.entities.UserSubscription.list('-created_date', 1000);
     const now = Date.now();
     const REMINDER_DAYS = [30, 14, 7, 1];
 
     let expiredCount = 0;
     let remindersSent = 0;
+
+    const sendEmail = async (to, subject, html) => {
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from: RESEND_FROM_EMAIL, to, subject, html }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(`Resend ${res.status}: ${JSON.stringify(err)}`);
+      }
+    };
 
     for (const sub of subs) {
       if (!sub.currentPeriodEnd || sub.tier === 'free') continue;
@@ -39,11 +57,7 @@ Deno.serve(async (req) => {
 
         if (!sentReminders.includes('expired')) {
           try {
-            await base44.asServiceRole.integrations.Core.SendEmail({
-              to: sub.email,
-              subject: '🔒 Langganan CeriaKid Anda Telah Tamat',
-              body: buildExpiredEmail(sub),
-            });
+            await sendEmail(sub.email, '🔒 Langganan CeriaKid Anda Telah Tamat', buildExpiredEmail(sub));
             sentReminders.push('expired');
             remindersSent++;
           } catch (e) { console.error(`Email failed for ${sub.email}:`, e.message); }
@@ -55,11 +69,7 @@ Deno.serve(async (req) => {
         for (const milestone of REMINDER_DAYS) {
           if (daysLeft <= milestone && !sentReminders.includes(`day_${milestone}`)) {
             try {
-              await base44.asServiceRole.integrations.Core.SendEmail({
-                to: sub.email,
-                subject: `⏳ ${daysLeft} hari lagi — Perbaharui langganan CeriaKid`,
-                body: buildReminderEmail(sub, daysLeft),
-              });
+              await sendEmail(sub.email, `⏳ ${daysLeft} hari lagi — Perbaharui langganan CeriaKid`, buildReminderEmail(sub, daysLeft));
               sentReminders.push(`day_${milestone}`);
               remindersSent++;
             } catch (e) { console.error(`Email failed for ${sub.email}:`, e.message); }

@@ -69,14 +69,33 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Invalid notification type' }, { status: 400 });
     }
 
-    // Send via email (using Base44 SendEmail integration)
+    // Send via Resend
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+    const RESEND_FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL');
+    if (!RESEND_API_KEY || !RESEND_FROM_EMAIL) {
+      return Response.json({ error: 'RESEND_API_KEY/RESEND_FROM_EMAIL not configured' }, { status: 500 });
+    }
+
     try {
-      await base44.integrations.Core.SendEmail({
-        to: parentEmail,
-        subject: template.subject,
-        body: template.body,
-        from_name: 'CeriaKid',
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: RESEND_FROM_EMAIL,
+          to: parentEmail,
+          subject: template.subject,
+          html: template.body,
+        }),
       });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        console.error('Resend send failed:', errData);
+        return Response.json({
+          success: true,
+          warning: 'Notification queued but email delivery failed',
+        });
+      }
 
       return Response.json({
         success: true,
@@ -84,7 +103,6 @@ Deno.serve(async (req) => {
       });
     } catch (emailError) {
       console.error('Email send failed:', emailError);
-      // Don't fail the whole function if email fails
       return Response.json({
         success: true,
         warning: 'Notification queued but email delivery failed',
