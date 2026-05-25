@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { CheckCircle2, AlertTriangle, XCircle, RefreshCw, Activity, Globe, CreditCard, Webhook, BarChart3, Sparkles, Database, Users as UsersIcon, ListChecks } from 'lucide-react';
+import SupabaseSyncCard from './SupabaseSyncCard';
 
 const STATUS_CONFIG = {
   healthy:  { color: 'emerald', label: 'STABLE',   icon: CheckCircle2, ringClass: 'ring-emerald-300/40', textClass: 'text-emerald-200', bgClass: 'bg-emerald-400/15', badgeClass: 'bg-emerald-400 text-emerald-950' },
@@ -202,6 +203,9 @@ export default function SystemHealthPanel() {
           </div>
         )}
       </motion.div>
+
+      {/* SUPABASE SYNC STATUS */}
+      <SupabaseSyncCard />
 
       {/* HISTORY */}
       {history.length > 1 && (
