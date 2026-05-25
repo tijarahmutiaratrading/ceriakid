@@ -45,7 +45,7 @@ export default function CategoryCard({ category, gameCount, idx }) {
                 {gameCount} <span className="text-white/90">Game</span>
               </p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-white/40 to-white/20 text-white shadow-lg hover:shadow-xl ring-1 ring-white/40 backdrop-blur-lg transition-all group-hover:translate-x-1.5 group-hover:scale-110 font-black text-lg">→</div>
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-white/40 to-white/20 text-white shadow-lg hover:shadow-xl ring-1 ring-white/40 backdrop-blur-lg transition-all group-hover:translate-x-1.5 group-hover:scale-110 font-black text-xl leading-none pb-0.5">→</div>
           </div>
         </div>
       </motion.div>
