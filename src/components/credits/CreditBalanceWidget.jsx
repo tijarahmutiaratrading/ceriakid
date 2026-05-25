@@ -46,9 +46,14 @@ export default function CreditBalanceWidget({ compact = false }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`rounded-3xl p-5 shadow-xl ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
-      style={{ background: 'linear-gradient(135deg, #4c1d95 0%, #6b21a8 50%, #831843 100%)' }}
+      className={`relative rounded-3xl p-5 shadow-xl overflow-hidden ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
+      style={{
+        backgroundImage: `linear-gradient(135deg, rgba(76, 29, 149, 0.85) 0%, rgba(107, 33, 168, 0.8) 50%, rgba(131, 24, 67, 0.85) 100%), url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/64310c310_generated_image.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
     >
+      <div className="relative z-10">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg flex-shrink-0">
@@ -83,6 +88,7 @@ export default function CreditBalanceWidget({ compact = false }) {
           ⚠️ Baki rendah — top up untuk terus guna AI
         </p>
       )}
+      </div>
     </motion.div>
   );
 }
