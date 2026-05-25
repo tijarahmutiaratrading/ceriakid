@@ -38,14 +38,13 @@ export default function CategoryCard({ category, gameCount, idx }) {
             <h3 className="font-black text-lg sm:text-xl md:text-2xl text-white leading-tight break-words drop-shadow-md">{config.label}</h3>
           </div>
 
-          <div className="flex items-end justify-between gap-3">
+          <div className="flex items-end justify-start gap-3">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-black shadow-xl shadow-black/20 ring-1 ring-white/40 bg-gradient-to-br from-white/35 to-white/15 backdrop-blur-lg hover:from-white/45 hover:to-white/25 transition-all">
               <span className="text-base">🎮</span>
               <p className="text-xs text-white whitespace-nowrap leading-none font-bold">
                 {gameCount} <span className="text-white/90">Game</span>
               </p>
             </div>
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-white/40 to-white/20 text-white shadow-lg hover:shadow-xl ring-1 ring-white/40 backdrop-blur-lg transition-all group-hover:translate-x-1.5 group-hover:scale-110 font-black text-xl leading-none pb-0.5">→</div>
           </div>
         </div>
       </motion.div>
