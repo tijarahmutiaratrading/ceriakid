@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { GraduationCap, Sparkles, ArrowRight, BookOpen, FileText } from 'lucide-react';
+import { GraduationCap, Sparkles, ArrowRight, BookOpen, FileText, Brain } from 'lucide-react';
 
 const FEATURES = [
   {
@@ -11,6 +11,15 @@ const FEATURES = [
     desc: 'Tanya apa-apa soalan pelajaran',
     cost: '1 kredit',
     color: 'from-amber-400 to-orange-500',
+    ready: true,
+  },
+  {
+    to: '/quiz-ai',
+    icon: Brain,
+    title: 'Kuiz AI',
+    desc: 'Soalan interaktif & adaptif',
+    cost: '1 kredit',
+    color: 'from-cyan-400 to-indigo-500',
     ready: true,
   },
   {
@@ -44,7 +53,7 @@ export default function AIFeatureCTA() {
         Bantuan pembelajaran berkuasa AI ✨
       </h3>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {FEATURES.map((f) => {
           const Icon = f.icon;
           return (

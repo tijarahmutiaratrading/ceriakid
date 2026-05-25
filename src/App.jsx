@@ -44,6 +44,7 @@ import BuyCredits from '@/pages/BuyCredits';
 import AIAssistant from '@/pages/AIAssistant';
 import StoryGenerator from '@/pages/StoryGenerator';
 import BBMGenerator from '@/pages/BBMGenerator';
+import QuizAI from '@/pages/QuizAI';
 
 // Interactive Games
 import MemoryGame from '@/pages/games/MemoryGame';
@@ -134,6 +135,7 @@ const AuthenticatedApp = () => {
           <Route path="/ai-assistant" element={<AIAssistant />} />
           <Route path="/story-generator" element={<StoryGenerator />} />
           <Route path="/bbm-generator" element={<BBMGenerator />} />
+          <Route path="/quiz-ai" element={<QuizAI />} />
 
           {/* Game-play / fullscreen pages - NO sidebar (immersive experience) */}
           <Route path="/story-kid" element={<StoryKid />} />

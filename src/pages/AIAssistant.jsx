@@ -31,19 +31,17 @@ const LEVELS = [
 ];
 
 const SUGGESTIONS = [
-  { text: '🎯 Bagi saya 5 soalan kuiz', isQuiz: true },
-  { text: '📚 Kuiz saya tentang topik ini', isQuiz: true },
-  { text: '✏️ Latih saya dengan soalan', isQuiz: true },
-  { text: 'Apa itu pendaraban?', isQuiz: false },
-  { text: 'Bagaimana tumbuhan membesar?', isQuiz: false },
-  { text: 'Kenapa langit berwarna biru?', isQuiz: false },
+  'Apa itu pendaraban?',
+  'Bagaimana tumbuhan membesar?',
+  'Kenapa langit berwarna biru?',
+  'Beza kata nama dan kata kerja?',
 ];
 
 export default function AIAssistant() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [messages, setMessages] = useState([
-    { role: 'ai', content: 'Hai! Saya Cikgu AI 🎓 Tanya saya apa-apa soalan, atau minta saya **jana soalan kuiz** untuk latih kamu! ✨\n\nContoh: _"Bagi saya 5 soalan matematik"_ atau _"Kuiz saya tentang haiwan"_' },
+    { role: 'ai', content: 'Hai! Saya Cikgu AI 🎓 Tanya saya apa-apa soalan tentang pelajaran sekolah. Saya sedia membantu! ✨' },
   ]);
   const [input, setInput] = useState('');
   const [subject, setSubject] = useState('general');
@@ -60,17 +58,10 @@ export default function AIAssistant() {
     const question = (overrideQuestion ?? input).trim();
     if (!question || loading) return;
 
-    const updatedMessages = [...messages, { role: 'user', content: question }];
-    setMessages(updatedMessages);
+    setMessages(prev => [...prev, { role: 'user', content: question }]);
     setInput('');
     setLoading(true);
     setInsufficientCredits(false);
-
-    // Last 6 messages for context (exclude system intro)
-    const history = updatedMessages.slice(1).slice(-6).map(m => ({
-      role: m.role,
-      content: typeof m.content === 'string' ? m.content : '',
-    }));
 
     try {
       const res = await base44.functions.invoke('askAIAssistant', {
@@ -78,7 +69,6 @@ export default function AIAssistant() {
         subject,
         level,
         childName: user?.full_name?.split(' ')[0] || '',
-        history,
       });
 
       if (res.data?.error === 'INSUFFICIENT_CREDITS') {
@@ -88,11 +78,7 @@ export default function AIAssistant() {
           content: `⚠️ **Kredit tidak mencukupi!**\n\nBaki anda: **${res.data.balance} kredit**\nDiperlukan: **${res.data.required} kredit**\n\nSila top up untuk terus bertanya.`,
         }]);
       } else if (res.data?.success) {
-        setMessages(prev => [...prev, {
-          role: 'ai',
-          content: res.data.answer,
-          quiz: res.data.quiz || null,
-        }]);
+        setMessages(prev => [...prev, { role: 'ai', content: res.data.answer }]);
       } else {
         throw new Error(res.data?.error || 'Ralat tidak diketahui');
       }
@@ -106,20 +92,6 @@ export default function AIAssistant() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleQuizAnswered = (result) => {
-    // Append student's answer as a user message (no credit charge — just local echo)
-    const feedbackMsg = result.isCorrect
-      ? `✅ Saya pilih: "${result.selectedText}" — Betul!`
-      : `❌ Saya pilih: "${result.selectedText}" — Jawapan betul: "${result.correctText}"`;
-    setMessages(prev => [...prev, { role: 'user', content: feedbackMsg }]);
-    // Auto-trigger Cikgu AI follow-up (charges 1 credit — natural conversation)
-    setTimeout(() => {
-      handleAsk(result.isCorrect
-        ? 'Saya jawab betul! Bagi soalan lagi yang lebih mencabar.'
-        : 'Saya jawab salah. Boleh terangkan, kemudian bagi soalan serupa untuk saya cuba lagi?');
-    }, 600);
   };
 
   return (
@@ -195,15 +167,7 @@ export default function AIAssistant() {
           ref={scrollRef}
           className="pro-glass rounded-3xl p-4 mb-3 h-[55vh] overflow-y-auto space-y-3"
         >
-          {messages.map((m, i) => (
-            <AIChatMessage
-              key={i}
-              role={m.role}
-              content={m.content}
-              quiz={m.quiz}
-              onQuizAnswered={handleQuizAnswered}
-            />
-          ))}
+          {messages.map((m, i) => <AIChatMessage key={i} role={m.role} content={m.content} />)}
           {loading && (
             <div className="flex items-center gap-2 text-white/80 text-xs px-3 py-2">
               <Loader2 className="w-4 h-4 animate-spin" /> Cikgu AI sedang berfikir...
@@ -231,14 +195,10 @@ export default function AIAssistant() {
               {SUGGESTIONS.map((s, i) => (
                 <button
                   key={i}
-                  onClick={() => handleAsk(s.text)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                    s.isQuiz
-                      ? 'bg-gradient-to-r from-amber-400/30 to-orange-500/30 hover:from-amber-400/50 hover:to-orange-500/50 text-amber-100 border border-amber-300/40'
-                      : 'bg-white/10 hover:bg-white/20 text-white'
-                  }`}
+                  onClick={() => handleAsk(s)}
+                  className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-all"
                 >
-                  {s.text}
+                  {s}
                 </button>
               ))}
             </div>

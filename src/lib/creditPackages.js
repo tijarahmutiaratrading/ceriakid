@@ -44,6 +44,7 @@ export const CREDIT_COSTS = {
   ai_assistant: 1,        // 1 kredit per soalan
   story_generator: 5,     // 5 kredit per cerita
   bbm_generator: 10,      // 10 kredit per BBM
+  quiz_ai: 1,             // 1 kredit per soalan kuiz
 };
 
 export function getPackageById(id) {

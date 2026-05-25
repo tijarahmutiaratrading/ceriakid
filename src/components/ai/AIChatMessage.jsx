@@ -2,9 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { GraduationCap, User } from 'lucide-react';
-import QuizChoiceCard from '@/components/ai/QuizChoiceCard';
 
-export default function AIChatMessage({ role, content, quiz, onQuizAnswered, timestamp }) {
+export default function AIChatMessage({ role, content, timestamp }) {
   const isUser = role === 'user';
   return (
     <motion.div
@@ -25,11 +24,6 @@ export default function AIChatMessage({ role, content, quiz, onQuizAnswered, tim
             </div>
           )}
         </div>
-        {quiz && !isUser && (
-          <div className="w-full mt-2">
-            <QuizChoiceCard quiz={quiz} onAnswered={onQuizAnswered} />
-          </div>
-        )}
         {timestamp && <p className="text-[10px] text-white/50 mt-1 px-2">{timestamp}</p>}
       </div>
     </motion.div>
