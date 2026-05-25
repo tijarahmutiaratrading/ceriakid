@@ -88,7 +88,7 @@ export default function BuyCredits() {
 
         {/* Current balance */}
         <div className="mb-6 max-w-md mx-auto">
-          <CreditBalanceWidget />
+          <CreditBalanceWidget variant="glass" />
         </div>
 
         {/* Packages grid */}

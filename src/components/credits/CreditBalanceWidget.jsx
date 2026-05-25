@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Sparkles, Plus, Loader2, ArrowRight } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
-export default function CreditBalanceWidget({ compact = false }) {
+export default function CreditBalanceWidget({ compact = false, variant = 'solid' }) {
   const [credits, setCredits] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -49,10 +49,29 @@ export default function CreditBalanceWidget({ compact = false }) {
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className={`group relative h-full min-h-[180px] overflow-hidden rounded-[1.75rem] border border-white/30 bg-gradient-to-br from-amber-500 via-orange-500 to-orange-600 p-5 shadow-lg shadow-amber-950/20 ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
+        className={`group relative h-full min-h-[180px] overflow-hidden rounded-[1.75rem] p-5 shadow-xl ${
+          variant === 'glass'
+            ? 'border border-white/35 shadow-amber-950/10'
+            : 'border border-white/30 bg-gradient-to-br from-amber-500 via-orange-500 to-orange-600 shadow-amber-950/20'
+        } ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
+        style={variant === 'glass' ? {
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10))',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+        } : undefined}
       >
-        <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
-        <div className="pointer-events-none absolute -left-4 -bottom-4 h-20 w-20 rounded-full bg-white/10 blur-2xl" />
+        {variant === 'glass' ? (
+          <>
+            <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-amber-400/40 blur-3xl transition-all group-hover:bg-amber-400/60" />
+            <div className="pointer-events-none absolute -left-6 -bottom-6 h-28 w-28 rounded-full bg-orange-500/30 blur-3xl" />
+            <div className="pointer-events-none absolute right-1/3 bottom-0 h-20 w-20 rounded-full bg-pink-400/20 blur-2xl" />
+          </>
+        ) : (
+          <>
+            <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
+            <div className="pointer-events-none absolute -left-4 -bottom-4 h-20 w-20 rounded-full bg-white/10 blur-2xl" />
+          </>
+        )}
 
         <div className="relative z-10 flex items-start justify-between gap-3">
           <div className="min-w-0">
