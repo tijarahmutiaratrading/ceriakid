@@ -65,8 +65,9 @@ export default function AppHeader({ title = null }) {
   const isActive = (path) =>
     path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
 
-  // Choose nav set based on auth state
-  const navItems = isLanding && !isAuthenticated ? LANDING_NAV : MAIN_NAV;
+  // Choose nav set based on auth state. Admin gets an extra "Admin" tab.
+  const baseNav = isLanding && !isAuthenticated ? LANDING_NAV : MAIN_NAV;
+  const navItems = isAdmin ? [...baseNav, { path: '/admin-dashboard', label: 'Admin' }] : baseNav;
   const displayTitle = title || PAGE_TITLES[location.pathname] || 'CeriaKid';
 
   // Drawer menu items (full set for hamburger)
