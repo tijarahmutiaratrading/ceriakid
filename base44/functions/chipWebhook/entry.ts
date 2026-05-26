@@ -209,7 +209,60 @@ Deno.serve(async (req) => {
 
     console.log(`Subscription activated: ${userEmail} → ${tier} until ${expiryDate.toISOString()}`);
 
-    return Response.json({ received: true, activated: true });
+    // ─── BONUS WELCOME CREDITS ikut tier ───
+    // Asas: 5 | Standard: 20 | Keluarga: 50
+    const WELCOME_CREDITS = { asas: 5, standard: 20, keluarga: 50 };
+    const bonusAmount = WELCOME_CREDITS[tier] || 0;
+
+    if (bonusAmount > 0) {
+      // Idempotency — guna purchaseId sebagai referenceId, prefix "welcome__" supaya
+      // tak conflict dengan credit purchase. Skip kalau dah ada transaction sama.
+      const welcomeRefId = `welcome__${purchaseId}`;
+      const existingBonus = await base44.asServiceRole.entities.CreditTransaction.filter({
+        referenceId: welcomeRefId,
+      });
+
+      if (existingBonus.length === 0) {
+        const existingCredit = await base44.asServiceRole.entities.UserCredit.filter({ userEmail });
+        const nowIso = new Date().toISOString();
+        let bonusNewBalance;
+        if (existingCredit.length === 0) {
+          const created = await base44.asServiceRole.entities.UserCredit.create({
+            userEmail,
+            balance: bonusAmount,
+            totalPurchased: 0,
+            totalUsed: 0,
+            lastTopUpAt: nowIso,
+          });
+          bonusNewBalance = created.balance;
+        } else {
+          const c = existingCredit[0];
+          bonusNewBalance = (c.balance || 0) + bonusAmount;
+          await base44.asServiceRole.entities.UserCredit.update(c.id, {
+            balance: bonusNewBalance,
+            lastTopUpAt: nowIso,
+          });
+        }
+
+        await base44.asServiceRole.entities.CreditTransaction.create({
+          userEmail,
+          type: 'bonus',
+          amount: bonusAmount,
+          balanceAfter: bonusNewBalance,
+          feature: 'bonus',
+          description: `🎁 Bonus selamat datang — pelan ${tier} (${bonusAmount} kredit AI percuma)`,
+          referenceId: welcomeRefId,
+          metadata: { tier, chipPurchaseId: purchaseId, source: 'subscription_welcome_bonus' },
+        });
+
+        console.log(`Welcome bonus awarded: ${userEmail} +${bonusAmount} kredit (tier=${tier})`);
+      } else {
+        console.log(`Welcome bonus already awarded for ${purchaseId}, skipping`);
+      }
+    }
+    // ─── END BONUS CREDITS ───
+
+    return Response.json({ received: true, activated: true, welcomeCredits: bonusAmount });
 
   } catch (error) {
     console.error('Chip webhook error:', error);
