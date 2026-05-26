@@ -272,7 +272,44 @@ export default function AppPreviewShowcase() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-yellow-200/30 blur-3xl pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto">
 
-        {/* Heading */}
+        {/* Intro — Perkenalkan CeriaKid */}
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 backdrop-blur-md mb-5">
+            <span>✅</span>
+            <span className="text-emerald-700 text-xs sm:text-sm font-bold">SOLUSI SCREEN TIME BERFAEDAH</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight mb-4">
+            Perkenalkan CeriaKid —{' '}
+            <span className="bg-gradient-to-r from-orange-600 via-pink-500 to-red-500 bg-clip-text text-transparent">latihan harian yang anak suka</span>
+          </h2>
+          <p className="text-slate-600 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
+            Permainan edukatif berasaskan topik sekolah Malaysia. Anak rasa macam main game, ibu bapa pula nampak perkembangan pembelajaran.
+          </p>
+        </motion.div>
+
+        {/* 3 feature cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
+          {[
+            { icon: '🎮', title: 'Latihan Rasa Macam Game', desc: 'Soalan pendek, warna ceria dan feedback segera bantu anak kekal fokus tanpa rasa terbeban.' },
+            { icon: '📊', title: 'Ibu Bapa Boleh Pantau', desc: 'Lihat markah, percubaan dan topik yang anak perlukan lebih latihan melalui dashboard.' },
+            { icon: '📲', title: 'Sesuai Untuk Rutin Harian', desc: 'Gunakan 5–10 minit sehari di rumah, dalam kereta atau bila anak ada masa lapang.' },
+          ].map((f, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="relative rounded-3xl p-6 sm:p-7 bg-white shadow-xl shadow-orange-100 border border-orange-100 hover:shadow-2xl hover:-translate-y-1 transition-all"
+            >
+              <div className="text-5xl mb-4">{f.icon}</div>
+              <h3 className="font-black text-slate-900 text-lg mb-2">{f.title}</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">{f.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Showcase heading */}
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-14">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-400/30 backdrop-blur-md mb-5">
             <span>👀</span>

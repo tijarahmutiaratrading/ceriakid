@@ -360,40 +360,10 @@ export default function Landing() {
         </motion.div>
       </SectionWrapper>
 
-      {/* ── SOLUTION / FEATURES ── */}
-      <SectionWrapper
-        id="features"
-        badge="SOLUSI SCREEN TIME BERFAEDAH"
-        badgeIcon="✅"
-        title="Perkenalkan CeriaKid —"
-        titleAccent="latihan harian yang anak suka"
-        subtitle="Permainan edukatif berasaskan topik sekolah Malaysia. Anak rasa macam main game, ibu bapa pula nampak perkembangan pembelajaran."
-        variant="bright"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {[
-            { icon: '🎮', title: 'Latihan Rasa Macam Game', desc: 'Soalan pendek, warna ceria dan feedback segera bantu anak kekal fokus tanpa rasa terbeban.' },
-            { icon: '📊', title: 'Ibu Bapa Boleh Pantau', desc: 'Lihat markah, percubaan dan topik yang anak perlukan lebih latihan melalui dashboard.' },
-            { icon: '📲', title: 'Sesuai Untuk Rutin Harian', desc: 'Gunakan 5–10 minit sehari di rumah, dalam kereta atau bila anak ada masa lapang.' },
-          ].map((f, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="relative rounded-3xl p-6 sm:p-7 bg-white shadow-xl shadow-emerald-100 border border-emerald-100 hover:shadow-2xl hover:-translate-y-1 transition-all"
-            >
-              <div className="text-5xl mb-4">{f.icon}</div>
-              <h3 className="font-black text-slate-900 text-lg mb-2">{f.title}</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">{f.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </SectionWrapper>
-
-      {/* ── APP PREVIEW SHOWCASE ── */}
-      <AppPreviewShowcase />
+      {/* ── SOLUTION + APP PREVIEW SHOWCASE (combined) ── */}
+      <div id="features">
+        <AppPreviewShowcase />
+      </div>
 
       {/* ── SUBJECTS ── */}
       <SectionWrapper
