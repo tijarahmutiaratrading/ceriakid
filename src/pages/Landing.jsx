@@ -524,104 +524,71 @@ export default function Landing() {
         </div>
       </SectionWrapper>
 
-      {/* ── PRICING ── */}
-      <section id="pricing" className="relative overflow-hidden py-16 md:py-24 px-5 sm:px-8 bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950">
-        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-purple-500/15 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(168,85,247,0.12),transparent_60%)] pointer-events-none" />
-        <div className="relative z-10 max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-300/30 backdrop-blur-md mb-5">
-              <span>💎</span>
-              <span className="text-yellow-200 text-xs sm:text-sm font-bold">PELAN TAHUNAN MESRA BAJET</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.1] text-white tracking-tight mb-4">
-              Pilih pelan{' '}
-              <span className="bg-gradient-to-r from-yellow-300 via-amber-300 to-yellow-200 bg-clip-text text-transparent">
-                yang sesuai
-              </span>
-            </h2>
-            <p className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
-              Pilih pelan yang sesuai untuk umur anak. Semua pelan tahunan dan mesra bajet keluarga.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
-            {tiers.map((tier, i) =>
-            <motion.div
-              key={tier.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className={`rounded-3xl p-6 relative border-2 transition-all ${
-              tier.highlighted ?
-              'border-yellow-200/80 shadow-2xl shadow-yellow-950/30 md:scale-105' :
-              'border-white/20 shadow-md hover:border-white/40'}`}
-              style={tier.highlighted ? 
-                { background: 'linear-gradient(135deg, rgba(251,191,36,0.98), rgba(245,158,11,0.96), rgba(217,119,6,0.94))', backdropFilter: 'blur(20px)' } :
-                { background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }
-              }
-              >
-              
-                {tier.savings &&
-                <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-white text-orange-700 border border-white' : 'bg-white/15 text-white border border-white/20'}`}>
-                   💰 {tier.savings}
-                 </div>
-                }
-
-                <h3 className={`text-2xl font-black mb-2 ${tier.highlighted ? 'text-slate-950' : 'text-white'}`}>{tier.nameMY}</h3>
-
-                <div className="flex items-baseline gap-1 mb-0.5">
-                 <span className={`text-3xl font-black ${tier.highlighted ? 'text-slate-950' : 'text-yellow-300'}`}>RM{tier.priceMYR}</span>
-                 <span className={`text-sm font-bold ${tier.highlighted ? 'text-slate-800' : 'text-white/60'}`}>{tier.period}</span>
-                </div>
-                <p className={`text-xs font-bold mb-6 ${tier.highlighted ? 'text-slate-800' : 'text-white/50'}`}>
-                 ≈ RM{tier.perMonth}/bulan
-                </p>
-
-                <motion.button
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => handleTierSelect(tier.name)}
-                className={`w-full py-3.5 rounded-2xl font-black text-base mb-6 shadow-md transition-all ${
-                tier.highlighted ? 'bg-slate-950 text-yellow-200 hover:bg-slate-900 shadow-slate-950/30' : 'bg-orange-600 text-white hover:bg-orange-700'} ${
-                selectedTierForCheckout === tier.name ? 'ring-4 ring-yellow-300' : ''}`}>
-                
-                  {tier.cta}
-                </motion.button>
-
-                <div className="space-y-2.5">
-                  {tier.features.map((f, j) =>
-                <div key={j} className={`flex items-center gap-2 text-sm font-semibold ${tier.highlighted ? 'text-slate-900' : 'text-white'}`}>
-                      <Check className={`w-4 h-4 flex-shrink-0 ${tier.highlighted ? 'text-green-700' : 'text-green-400'}`} /> {f}
-                    </div>
-                )}
-                  {tier.noFeatures.map((f, j) =>
-                <div key={j} className={`flex items-center gap-2 text-sm font-semibold opacity-40 ${tier.highlighted ? 'text-slate-950' : 'text-white'}`}>
-                      <span className="w-4 flex-shrink-0">✕</span> {f}
-                    </div>
-                )}
-                </div>
-              </motion.div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CHECKOUT FORM ── */}
+      {/* ── PRICING + CHECKOUT (combined) ── */}
       <SectionWrapper
+        id="pricing"
         badge="LANGKAH TERAKHIR"
         badgeIcon="🔒"
-        title="Daftar &"
+        title="Pilih pelan &"
         titleAccent="aktifkan akaun"
-        subtitle="Isi maklumat ringkas untuk teruskan pembayaran FPX yang selamat."
+        subtitle="Pilih pelan yang sesuai untuk umur anak, kemudian isi maklumat untuk teruskan pembayaran FPX yang selamat."
         variant="sky"
       >
+        {/* Pricing tiers */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
+          {tiers.map((tier, i) =>
+          <motion.div
+            key={tier.name}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className={`rounded-3xl p-6 relative border-2 transition-all ${
+            tier.highlighted ?
+            'border-amber-400 shadow-2xl shadow-amber-200/50 md:scale-105 bg-gradient-to-br from-amber-50 to-orange-50' :
+            'border-blue-100 shadow-md hover:border-blue-300 bg-white'}`}
+            >
+              {tier.savings &&
+              <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-amber-500 text-white' : 'bg-blue-100 text-blue-700'}`}>
+                 💰 {tier.savings}
+               </div>
+              }
+
+              <h3 className="text-2xl font-black mb-2 text-slate-900">{tier.nameMY}</h3>
+
+              <div className="flex items-baseline gap-1 mb-0.5">
+               <span className="text-3xl font-black text-slate-900">RM{tier.priceMYR}</span>
+               <span className="text-sm font-bold text-slate-600">{tier.period}</span>
+              </div>
+              <p className="text-xs font-bold mb-6 text-slate-500">
+               ≈ RM{tier.perMonth}/bulan
+              </p>
+
+              <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => handleTierSelect(tier.name)}
+              className={`w-full py-3.5 rounded-2xl font-black text-base mb-6 shadow-md transition-all ${
+              tier.highlighted ? 'bg-slate-900 text-amber-200 hover:bg-slate-800' : 'bg-orange-600 text-white hover:bg-orange-700'} ${
+              selectedTierForCheckout === tier.name ? 'ring-4 ring-amber-400' : ''}`}>
+                {tier.cta}
+              </motion.button>
+
+              <div className="space-y-2.5">
+                {tier.features.map((f, j) =>
+              <div key={j} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <Check className="w-4 h-4 flex-shrink-0 text-green-600" /> {f}
+                  </div>
+              )}
+                {tier.noFeatures.map((f, j) =>
+              <div key={j} className="flex items-center gap-2 text-sm font-semibold opacity-40 text-slate-700">
+                    <span className="w-4 flex-shrink-0">✕</span> {f}
+                  </div>
+              )}
+              </div>
+            </motion.div>
+          )}
+        </div>
+
         <motion.div
           id="checkout-form"
           initial={{ opacity: 0, y: 30 }}
