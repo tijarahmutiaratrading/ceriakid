@@ -246,10 +246,11 @@ export default function Landing() {
       </nav>
 
       {/* ── HERO — Apple Fitness Style (sama macam Dashboard) ── */}
-      <section className="relative w-full overflow-hidden pt-20 sm:pt-24 pb-10 sm:pb-14">
+      <section className="relative w-full overflow-hidden pt-20 sm:pt-24 pb-10 sm:pb-14 bg-gradient-to-b from-sky-50 via-rose-50 to-amber-50">
         {/* Decorative glow blobs */}
-        <div className="absolute top-20 -left-20 w-96 h-96 rounded-full bg-pink-500/20 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 -right-20 w-96 h-96 rounded-full bg-orange-500/20 blur-3xl pointer-events-none" />
+        <div className="absolute top-20 -left-20 w-96 h-96 rounded-full bg-pink-300/40 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 -right-20 w-96 h-96 rounded-full bg-orange-300/40 blur-3xl pointer-events-none" />
+        <div className="absolute top-40 right-1/3 w-72 h-72 rounded-full bg-sky-300/30 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
           <LandingHeroCarousel
@@ -269,7 +270,7 @@ export default function Landing() {
               { icon: '🔒', text: 'Selamat untuk anak' },
               { icon: '🎓', text: 'KSPK + KSSR' },
             ].map((pill) => (
-              <div key={pill.text} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/10 border border-white/15 backdrop-blur-md text-white/90 text-xs sm:text-sm font-bold">
+              <div key={pill.text} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/80 border border-white shadow-sm backdrop-blur-md text-slate-800 text-xs sm:text-sm font-bold">
                 <span>{pill.icon}</span> {pill.text}
               </div>
             ))}
@@ -282,14 +283,14 @@ export default function Landing() {
           >
             <div className="flex -space-x-2">
               {avatars.map((src, i) => (
-                <img key={i} src={src} alt="" className="w-8 h-8 rounded-full border-2 border-purple-900 object-cover" />
+                <img key={i} src={src} alt="" className="w-8 h-8 rounded-full border-2 border-white shadow object-cover" />
               ))}
             </div>
             <div className="text-left">
               <div className="flex gap-0.5 mb-0.5">
-                {[...Array(5)].map((_, i) => <span key={i} className="text-yellow-300 text-sm">★</span>)}
+                {[...Array(5)].map((_, i) => <span key={i} className="text-amber-500 text-sm">★</span>)}
               </div>
-              <p className="text-white/70 text-xs font-bold">Rating ibu bapa <span className="text-white">4.9/5</span></p>
+              <p className="text-slate-700 text-xs font-bold">Rating ibu bapa <span className="text-slate-900">4.9/5</span></p>
             </div>
           </motion.div>
         </div>
