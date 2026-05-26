@@ -5,7 +5,6 @@ import { LayoutGrid } from 'lucide-react';
 
 const ADMIN_MENU = [
   { key: 'analytics', label: 'Dashboard' },
-  { key: 'customers', label: 'Pelanggan' },
   { key: 'launch', label: 'Launch' },
   { key: 'health', label: 'Health' },
   { key: 'settings', label: 'Settings' },

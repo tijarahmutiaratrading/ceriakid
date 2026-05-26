@@ -15,14 +15,6 @@ const SLIDES = [
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/092310156_generated_image.png',
   },
   {
-    tagline: 'JUALAN & PELANGGAN',
-    title: 'Database Pelanggan',
-    meta: 'Senarai langganan & status pembayaran',
-    cta: 'Buka Pelanggan',
-    ctaTab: 'customers',
-    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3932e4bfd_generated_image.png',
-  },
-  {
     tagline: 'KESIHATAN SISTEM',
     title: 'System Health',
     meta: 'Status server, database & background workers',

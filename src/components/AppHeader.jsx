@@ -113,7 +113,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           label: 'Admin Dashboard',
           submenu: [
             { path: '/admin-dashboard?tab=analytics', label: 'Analytics' },
-            { path: '/admin-dashboard?tab=customers', label: 'Pelanggan' },
             { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager' },
             { path: '/admin-dashboard?tab=health', label: 'System Health' },
             { path: '/admin-dashboard?tab=settings', label: 'Settings' },
