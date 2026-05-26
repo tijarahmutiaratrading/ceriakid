@@ -7,7 +7,7 @@ import { useAuth } from '@/lib/AuthContext';
 import PricingCheckout from '@/components/PricingCheckout';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
-import HeroCarousel from '@/components/landing/HeroCarousel';
+import LandingHeroCarousel from '@/components/landing/LandingHeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
 import LandingAISection from '@/components/landing/LandingAISection';
 
@@ -245,134 +245,22 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* ── HERO — Modern Clean Design ── */}
-      <section className="relative w-full overflow-hidden pt-24 sm:pt-28 pb-12 sm:pb-16">
-        {/* Soft gradient background */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #1E1B4B 0%, #312E81 40%, #4C1D95 100%)' }} />
-
+      {/* ── HERO — Apple Fitness Style (sama macam Dashboard) ── */}
+      <section className="relative w-full overflow-hidden pt-20 sm:pt-24 pb-10 sm:pb-14 bg-gradient-to-b from-slate-950 via-indigo-950 to-purple-950">
         {/* Decorative glow blobs */}
         <div className="absolute top-20 -left-20 w-96 h-96 rounded-full bg-pink-500/20 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 -right-20 w-96 h-96 rounded-full bg-orange-500/20 blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-purple-500/10 blur-3xl pointer-events-none" />
 
-        {/* Content */}
-        <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-
-            {/* LEFT: Text content */}
-            <div className="text-center lg:text-left">
-              {/* Top badge */}
-              <motion.div
-                initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6"
-              >
-                <span className="text-base">🇲🇾</span>
-                <span className="text-white/90 text-xs sm:text-sm font-bold">Untuk anak-anak Malaysia • KSPK + KSSR</span>
-              </motion.div>
-
-              {/* Headline */}
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
-                className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] text-white tracking-tight mb-5"
-              >
-                Anak belajar<br />
-                <span className="bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
-                  sambil main game
-                </span>{' '}
-                yang berfaedah
-              </motion.h1>
-
-              {/* Subheadline */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}
-                className="text-base sm:text-lg text-white/75 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0"
-              >
-                7 subjek utama dalam satu app — BM, English, Matematik, Sains, Jawi, Tamil & Mandarin. Anak rasa main game, ibu bapa pantau prestasi.
-              </motion.p>
-
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}
-                className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-8"
-              >
-                <motion.button
-                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                  onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-                  className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full font-black text-white text-base shadow-2xl"
-                  style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)', boxShadow: '0 10px 30px rgba(234,88,12,0.5)' }}
-                >
-                  🎮 Cuba Sekarang
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                  onClick={scrollToPricing}
-                  className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full font-black text-white/90 text-base bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-colors"
-                >
-                  Lihat Harga <ArrowRight className="w-4 h-4" />
-                </motion.button>
-              </motion.div>
-
-              {/* Trust row */}
-              <motion.div
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-                className="flex items-center gap-5 justify-center lg:justify-start"
-              >
-                <div className="flex -space-x-2">
-                  {avatars.map((src, i) => (
-                    <img key={i} src={src} alt="" className="w-8 h-8 rounded-full border-2 border-purple-900 object-cover" />
-                  ))}
-                </div>
-                <div className="text-left">
-                  <div className="flex gap-0.5 mb-0.5">
-                    {[...Array(5)].map((_, i) => <span key={i} className="text-yellow-300 text-sm">★</span>)}
-                  </div>
-                  <p className="text-white/70 text-xs font-bold">Rating ibu bapa <span className="text-white">4.9/5</span></p>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* RIGHT: Carousel inside floating frame */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, type: 'spring', damping: 20 }}
-              className="relative"
-            >
-              {/* Glow behind carousel */}
-              <div className="absolute -inset-4 bg-gradient-to-br from-orange-400/30 via-pink-400/20 to-purple-400/30 rounded-[2.5rem] blur-2xl pointer-events-none" />
-
-              <div className="relative rounded-[2rem] p-2 bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
-                <HeroCarousel />
-              </div>
-
-              {/* Floating stat chips */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}
-                className="hidden sm:flex absolute -left-4 top-6 items-center gap-2 px-3 py-2 rounded-2xl bg-white shadow-xl"
-              >
-                <span className="text-xl">🎯</span>
-                <div>
-                  <p className="text-[10px] font-bold text-slate-500 leading-none">Selari dengan</p>
-                  <p className="text-xs font-black text-slate-900 leading-tight">KSPK + KSSR</p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }}
-                className="hidden sm:flex absolute -right-3 bottom-8 items-center gap-2 px-3 py-2 rounded-2xl bg-white shadow-xl"
-              >
-                <span className="text-xl">🏆</span>
-                <div>
-                  <p className="text-[10px] font-bold text-slate-500 leading-none">200+ permainan</p>
-                  <p className="text-xs font-black text-slate-900 leading-tight">Tanpa iklan</p>
-                </div>
-              </motion.div>
-            </motion.div>
-
-          </div>
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+          <LandingHeroCarousel
+            onCTAClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
+            onPricingClick={scrollToPricing}
+          />
 
           {/* Feature pills row */}
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-            className="mt-12 flex flex-wrap justify-center gap-2 sm:gap-3"
+            className="mt-8 sm:mt-10 flex flex-wrap justify-center gap-2 sm:gap-3"
           >
             {[
               { icon: '✅', text: 'Tanpa iklan' },
@@ -385,6 +273,24 @@ export default function Landing() {
                 <span>{pill.icon}</span> {pill.text}
               </div>
             ))}
+          </motion.div>
+
+          {/* Trust row */}
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+            className="mt-6 flex items-center gap-4 justify-center"
+          >
+            <div className="flex -space-x-2">
+              {avatars.map((src, i) => (
+                <img key={i} src={src} alt="" className="w-8 h-8 rounded-full border-2 border-purple-900 object-cover" />
+              ))}
+            </div>
+            <div className="text-left">
+              <div className="flex gap-0.5 mb-0.5">
+                {[...Array(5)].map((_, i) => <span key={i} className="text-yellow-300 text-sm">★</span>)}
+              </div>
+              <p className="text-white/70 text-xs font-bold">Rating ibu bapa <span className="text-white">4.9/5</span></p>
+            </div>
           </motion.div>
         </div>
       </section>
