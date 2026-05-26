@@ -96,14 +96,16 @@ export default function BBMGenerator() {
 
         <div className="print:hidden mb-4 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center shadow-lg">
-              <FileText className="w-6 h-6 text-white" />
-            </div>
+            <img
+              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/bdb2702f2_generated_image.png"
+              alt="Cikgu Daniel"
+              className="w-14 h-14 rounded-2xl object-cover ring-2 ring-white/40 shadow-lg bg-gradient-to-br from-violet-400 to-purple-500"
+            />
             <div>
               <p className="text-violet-300 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> Penjana BBM
+                <Sparkles className="w-3 h-3" /> Bersama Cikgu Daniel
               </p>
-              <h1 className="text-xl md:text-2xl font-black text-white">Bahan Bantu Mengajar AI</h1>
+              <h1 className="text-xl md:text-2xl font-black text-white">Penjana BBM AI</h1>
             </div>
           </div>
           <CreditBalanceWidget compact />
