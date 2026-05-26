@@ -10,10 +10,6 @@ import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import HeroCarousel from '@/components/landing/HeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
 import LandingAISection from '@/components/landing/LandingAISection';
-import MobileStickyCTA from '@/components/landing/MobileStickyCTA';
-import TransformationSection from '@/components/landing/TransformationSection';
-import GuaranteeBadge from '@/components/landing/GuaranteeBadge';
-import UrgencyBanner from '@/components/landing/UrgencyBanner';
 
 
 // Testimoni ibu bapa pengguna CeriaKid
@@ -120,9 +116,6 @@ export default function Landing() {
   return (
     <div className="min-h-screen font-nunito relative overflow-hidden bg-slate-950">
       <div className="relative">
-
-      {/* ── URGENCY BANNER (top) ── */}
-      <UrgencyBanner />
 
       {/* ── PAYMENT STATUS BANNER ── */}
       <AnimatePresence>
@@ -271,41 +264,31 @@ export default function Landing() {
               {/* Top badge */}
               <motion.div
                 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/15 border border-amber-300/40 backdrop-blur-md mb-5"
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6"
               >
                 <span className="text-base">🇲🇾</span>
-                <span className="text-amber-100 text-xs sm:text-sm font-bold">Untuk anak Malaysia • KSPK + KSSR • 5,000+ keluarga</span>
+                <span className="text-white/90 text-xs sm:text-sm font-bold">Untuk anak-anak Malaysia • KSPK + KSSR</span>
               </motion.div>
 
-              {/* Headline — emotional hook */}
+              {/* Headline */}
               <motion.h1
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
-                className="text-[2.25rem] leading-[1.05] sm:text-5xl md:text-6xl font-black text-white tracking-tight mb-5"
+                className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] text-white tracking-tight mb-5"
               >
-                Anak{' '}
+                Anak belajar<br />
                 <span className="bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
-                  tak nak belajar?
-                </span><br />
-                Dia akan minta sendiri.
+                  sambil main game
+                </span>{' '}
+                yang berfaedah
               </motion.h1>
 
-              {/* Subheadline — emotional + benefit */}
+              {/* Subheadline */}
               <motion.p
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}
-                className="text-base sm:text-lg text-white/80 leading-relaxed mb-6 max-w-lg mx-auto lg:mx-0"
+                className="text-base sm:text-lg text-white/75 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0"
               >
-                CeriaKid ubah pembelajaran jadi <span className="text-white font-bold">game yang anak suka</span> — 7 subjek KSPK/KSSR, 15 minit sehari, hasil yang ibu bapa nampak.
+                7 subjek utama dalam satu app — BM, English, Matematik, Sains, Jawi, Tamil & Mandarin. Anak rasa main game, ibu bapa pantau prestasi.
               </motion.p>
-
-              {/* Mini value props — quick scan */}
-              <motion.div
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}
-                className="flex flex-wrap gap-x-4 gap-y-1.5 justify-center lg:justify-start mb-7 text-sm text-white/85 font-semibold"
-              >
-                <span className="inline-flex items-center gap-1.5">✅ Tanpa iklan</span>
-                <span className="inline-flex items-center gap-1.5">✅ Refund 7 hari</span>
-                <span className="inline-flex items-center gap-1.5">✅ Dari RM4.08/bulan</span>
-              </motion.div>
 
               {/* CTAs */}
               <motion.div
@@ -314,18 +297,18 @@ export default function Landing() {
               >
                 <motion.button
                   whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                  onClick={scrollToPricing}
+                  onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
                   className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full font-black text-white text-base shadow-2xl"
                   style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)', boxShadow: '0 10px 30px rgba(234,88,12,0.5)' }}
                 >
-                  🎮 Mulakan Sekarang <ArrowRight className="w-4 h-4" />
+                  🎮 Cuba Sekarang
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                  onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
+                  onClick={scrollToPricing}
                   className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full font-black text-white/90 text-base bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-colors"
                 >
-                  Log Masuk
+                  Lihat Harga <ArrowRight className="w-4 h-4" />
                 </motion.button>
               </motion.div>
 
@@ -436,9 +419,6 @@ export default function Landing() {
       </section>
 
       <TrustedMarquee />
-
-      {/* ── TRANSFORMATION SECTION (Before vs After — emotional) ── */}
-      <TransformationSection />
 
       {/* ── PROBLEM SECTION ── */}
       <SectionWrapper
@@ -687,16 +667,10 @@ export default function Landing() {
                 yang sesuai
               </span>
             </h2>
-            <p className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed mb-2">
+            <p className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
               Pilih pelan yang sesuai untuk umur anak. Semua pelan tahunan dan mesra bajet keluarga.
             </p>
-            <p className="text-emerald-300 text-sm font-black mt-3">
-              💰 vs Tuisyen RM300/bulan = RM3,600/tahun. CeriaKid jimat sehingga 95%!
-            </p>
           </motion.div>
-
-          {/* Money-back guarantee */}
-          <GuaranteeBadge />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
             {tiers.map((tier, i) =>
@@ -876,11 +850,8 @@ export default function Landing() {
         </div>
       </SectionWrapper>
 
-      {/* ── MOBILE STICKY CTA ── */}
-      <MobileStickyCTA onCTAClick={scrollToPricing} />
-
       {/* ── FOOTER ── */}
-      <footer className="text-white py-5 pb-24 md:pb-6 text-center md:py-6 relative bg-slate-950 border-t border-white/10">
+      <footer className="text-white py-5 text-center md:py-6 relative bg-slate-950 border-t border-white/10">
         <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
         <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
         <div className="flex justify-center gap-6 text-xs text-white/60">
