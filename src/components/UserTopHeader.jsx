@@ -3,13 +3,18 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users, Palette, BookOpen, UserCircle, BarChart3, Settings,
-  UserPlus, Trophy, ChevronDown, Shield, LogOut, MessageCircle
+  UserPlus, Trophy, ChevronDown, Shield, LogOut, MessageCircle, Home
 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 const NAV_GROUPS = [
+  {
+    key: 'landing',
+    label: 'Landing',
+    path: '/',
+  },
   {
     key: 'dashboard',
     label: 'Dashboard',
@@ -58,7 +63,10 @@ export default function UserTopHeader() {
   const isVisible = useScrollDirection();
 
   const isAdmin = user?.role === 'admin';
-  const isActive = (path) => location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname === path || location.pathname.startsWith(path);
+  };
 
   useEffect(() => {
     const handleClickOutside = (e) => {

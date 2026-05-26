@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LayoutGrid } from 'lucide-react';
+import { LayoutGrid, Home } from 'lucide-react';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 const ADMIN_MENU = [
@@ -27,6 +27,16 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
           boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
         }}
       >
+        {/* Landing page */}
+        <Link
+          to="/"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black text-slate-700 hover:text-slate-900 hover:bg-white/50 transition-all"
+          title="Lihat Landing Page"
+        >
+          <Home className="w-3.5 h-3.5" />
+          <span>Landing</span>
+        </Link>
+
         {/* Switch ke user dashboard */}
         <Link
           to="/dashboard"
