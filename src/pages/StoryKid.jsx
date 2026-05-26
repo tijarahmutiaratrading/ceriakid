@@ -252,8 +252,8 @@ export default function StoryKid() {
             <AnimatePresence mode="wait">
               <motion.div key={sceneIndex} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} className="max-w-3xl mx-auto rounded-[2rem] bg-white/90 backdrop-blur-2xl p-3 sm:p-4 shadow-2xl shadow-purple-950/25 border border-white/70">
                 <div className="relative h-[21rem] sm:h-[27rem] rounded-[1.5rem] bg-gradient-to-br from-yellow-100 to-pink-100 overflow-hidden mb-5 shadow-xl ring-4 ring-white/50">
-                  {scene.imageUrl || story.cover ? (
-                    <img src={scene.imageUrl || story.cover} alt={scene.text} className="w-full h-full object-cover" />
+                  {scene.imageUrl ? (
+                    <img src={scene.imageUrl} alt={scene.text} className="w-full h-full object-cover" />
                   ) : (
                     <StorySlideVisual visual={scene.slideVisual} emoji={scene.image || story.emoji} title={story.title} />
                   )}
