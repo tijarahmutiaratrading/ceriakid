@@ -136,24 +136,24 @@ export default function LandingAISection() {
         initial={{ opacity: 0, scale: 0.96 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
-        className="mt-7 rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-emerald-500/15 via-yellow-400/15 to-orange-500/15 border-2 border-yellow-300/30 backdrop-blur-md"
+        className="mt-7 rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-slate-900 via-purple-950 to-slate-900 border-2 border-yellow-300/50 shadow-2xl shadow-yellow-500/20"
       >
         <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-          <div className="text-5xl flex-shrink-0">🎁</div>
+          <div className="text-5xl flex-shrink-0 drop-shadow-lg">🎁</div>
           <div className="flex-1">
-            <p className="text-yellow-200 text-[10px] sm:text-xs font-black uppercase tracking-widest mb-1">
-              BONUS PERCUMA UNTUK PELAN KELUARGA
+            <p className="text-yellow-300 text-[10px] sm:text-xs font-black uppercase tracking-widest mb-1.5">
+              ✨ BONUS PERCUMA UNTUK PELAN KELUARGA
             </p>
-            <h4 className="text-white font-black text-lg sm:text-xl leading-tight mb-1">
-              Dapat <span className="text-yellow-300">50 kredit AI PERCUMA</span> bila langgan pelan Keluarga!
+            <h4 className="text-white font-black text-lg sm:text-xl leading-tight mb-1.5">
+              Dapat <span className="bg-yellow-300 text-slate-900 px-2 py-0.5 rounded-lg inline-block">50 kredit AI PERCUMA</span> bila langgan pelan Keluarga!
             </h4>
-            <p className="text-white/75 text-xs sm:text-sm">
+            <p className="text-white/85 text-xs sm:text-sm">
               Cuba Cikgu Firdaus, jana cerita, atau buat lembaran kerja — tanpa kos tambahan dalam minggu pertama. ✨
             </p>
           </div>
           <a
             href="#pricing"
-            className="flex-shrink-0 inline-flex items-center gap-1.5 px-5 py-3 rounded-full bg-yellow-300 hover:bg-yellow-200 text-orange-900 font-black text-sm shadow-lg transition-all"
+            className="flex-shrink-0 inline-flex items-center gap-1.5 px-5 py-3 rounded-full bg-yellow-300 hover:bg-yellow-200 text-slate-900 font-black text-sm shadow-lg shadow-yellow-500/40 transition-all"
           >
             Tuntut Sekarang <ArrowRight className="w-4 h-4" />
           </a>
