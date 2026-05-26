@@ -212,32 +212,32 @@ export default function Landing() {
       {/* Mobile */}
       <nav className={`md:hidden fixed top-2 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div
-          className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-2xl shadow-black/50 flex items-center justify-between gap-3"
+          className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-lg shadow-slate-900/10 flex items-center justify-between gap-3"
           style={{
-            background: 'rgba(15, 10, 30, 0.45)',
-            backdropFilter: 'blur(24px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-            border: '1px solid rgba(255,255,255,0.18)',
+            background: 'rgba(255, 255, 255, 0.55)',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            border: '1px solid rgba(255,255,255,0.7)',
           }}
         >
           <div className="flex items-center gap-2 min-w-0">
             <img
               src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
               alt="CeriaKid"
-              className="h-9 w-9 rounded-full object-cover ring-1 ring-white/20 flex-shrink-0"
+              className="h-9 w-9 rounded-full object-cover ring-1 ring-white/60 flex-shrink-0"
             />
-            <span className="font-black text-white text-base truncate">CeriaKid</span>
+            <span className="font-black text-slate-900 text-base truncate">CeriaKid</span>
           </div>
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-            className="px-4 py-2 rounded-full font-black text-sm text-white whitespace-nowrap flex-shrink-0 transition-all hover:bg-white/25"
+            className="px-4 py-2 rounded-full font-black text-sm text-slate-900 whitespace-nowrap flex-shrink-0 transition-all hover:bg-white"
             style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.08))',
-              backdropFilter: 'blur(20px) saturate(200%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(200%)',
-              border: '1px solid rgba(255,255,255,0.35)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 16px rgba(0,0,0,0.2)',
+              background: 'rgba(255,255,255,0.75)',
+              backdropFilter: 'blur(16px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+              border: '1px solid rgba(255,255,255,0.9)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.9), 0 2px 8px rgba(0,0,0,0.06)',
             }}
           >
             {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
