@@ -171,18 +171,19 @@ export default function Landing() {
         className={`hidden md:flex fixed top-3 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
       >
         <nav
-          className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-2xl shadow-black/50"
+          className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-xl shadow-black/20"
           style={{
-            background: 'rgba(15, 10, 30, 0.35)',
-            backdropFilter: 'blur(24px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-            border: '1px solid rgba(255,255,255,0.18)',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            border: '1px solid rgba(255,255,255,0.6)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
           }}
         >
           <img
             src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
             alt="CeriaKid"
-            className="h-8 w-8 rounded-full object-cover ml-1 mr-2 ring-1 ring-white/20"
+            className="h-8 w-8 rounded-full object-cover ml-1 mr-2 ring-1 ring-white/60 shadow-sm"
           />
           {[
             { href: '#features', label: 'Ciri-ciri' },
@@ -194,7 +195,7 @@ export default function Landing() {
             <a
               key={item.href}
               href={item.href}
-              className="relative px-4 py-1.5 rounded-full font-black text-sm text-white/85 hover:text-white hover:bg-white/5 transition-colors"
+              className="relative px-4 py-1.5 rounded-full font-black text-sm text-slate-800 hover:text-slate-900 hover:bg-white/50 transition-colors"
             >
               {item.label}
             </a>
@@ -212,21 +213,22 @@ export default function Landing() {
       {/* Mobile */}
       <nav className={`md:hidden fixed top-2 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
         <div
-          className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-lg shadow-black/30 flex items-center justify-between gap-3"
+          className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-xl shadow-black/15 flex items-center justify-between gap-3"
           style={{
-            background: 'rgba(15, 10, 30, 0.55)',
-            backdropFilter: 'blur(22px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(22px) saturate(180%)',
-            border: '1px solid rgba(255,255,255,0.15)',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3))',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            border: '1px solid rgba(255,255,255,0.6)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
           }}
         >
           <div className="flex items-center gap-2 min-w-0">
             <img
               src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
               alt="CeriaKid"
-              className="h-9 w-9 rounded-full object-cover ring-1 ring-white/25 flex-shrink-0"
+              className="h-9 w-9 rounded-full object-cover ring-1 ring-white/60 flex-shrink-0 shadow-sm"
             />
-            <span className="font-black text-white text-base truncate">CeriaKid</span>
+            <span className="font-black text-slate-900 text-base truncate">CeriaKid</span>
           </div>
           <motion.button
             whileTap={{ scale: 0.96 }}
