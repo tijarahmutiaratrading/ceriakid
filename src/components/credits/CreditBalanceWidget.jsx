@@ -44,66 +44,54 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
 
   if (variant === 'glass') {
     return (
-      <Link to="/buy-credits" className="block">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          whileHover={{ y: -2 }}
-          whileTap={{ scale: 0.99 }}
-          className={`group relative overflow-hidden rounded-2xl p-5 bg-slate-900/50 backdrop-blur-md border transition-colors ${
-            isLow ? 'border-amber-300/60 ring-2 ring-amber-300/40' : 'border-white/20 hover:border-white/30'
-          }`}
-        >
-          {/* subtle glow accents */}
-          <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-amber-400/15 blur-3xl" />
-          <div className="pointer-events-none absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-orange-500/10 blur-3xl" />
-
-          {/* Top row: label + Top Up CTA */}
-          <div className="relative z-10 flex items-center justify-between gap-3 mb-4">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg shadow-amber-500/30">
-                <Sparkles className="w-5 h-5 text-white drop-shadow" />
-              </div>
-              <div>
-                <p className="text-white/60 text-[10px] font-black uppercase tracking-[0.15em] leading-none">Baki Kredit AI</p>
-                <p className="text-white/90 text-[11px] font-bold mt-0.5">Akses ciri AI premium</p>
-              </div>
-            </div>
-            <div className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-md shadow-amber-500/30 hover:shadow-amber-500/50 transition-all font-black text-[11px]">
-              <Plus className="w-3 h-3" /> Top Up
-            </div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="pro-glass rounded-3xl p-5"
+      >
+        {/* Header — match "Kos Setiap Ciri AI" style */}
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-amber-300" />
+            <h2 className="text-white font-black text-base">Baki Kredit AI</h2>
           </div>
+          <Link
+            to="/buy-credits"
+            className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-md shadow-amber-500/30 hover:shadow-amber-500/50 transition-all font-black text-[11px]"
+          >
+            <Plus className="w-3 h-3" /> Top Up
+          </Link>
+        </div>
 
-          {/* Balance — hero number */}
-          <div className="relative z-10 flex items-baseline gap-2 mb-4">
-            <p className="text-white text-5xl font-black leading-none drop-shadow tracking-tight">{balance}</p>
-            <p className="text-white/50 text-sm font-black">kredit</p>
+        {/* Inner cards — slate-900/50 black tiles like the AI feature costs */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
+            <p className="text-2xl">💎</p>
+            <p className="text-white font-black text-sm mt-1">Baki Semasa</p>
+            <p className="text-amber-300 text-xs font-black">{balance} kredit</p>
           </div>
-
-          {/* Stats row */}
-          <div className="relative z-10 grid grid-cols-2 gap-2 mb-3">
-            <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-2">
-              <p className="text-white/50 text-[10px] font-black uppercase tracking-wider">Dibeli</p>
-              <p className="text-white font-black text-base mt-0.5">{credits?.totalPurchased ?? 0}</p>
-            </div>
-            <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-2">
-              <p className="text-white/50 text-[10px] font-black uppercase tracking-wider">Digunakan</p>
-              <p className="text-white font-black text-base mt-0.5">{credits?.totalUsed ?? 0}</p>
-            </div>
+          <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
+            <p className="text-2xl">🛒</p>
+            <p className="text-white font-black text-sm mt-1">Dibeli</p>
+            <p className="text-amber-300 text-xs font-black">{credits?.totalPurchased ?? 0} kredit</p>
           </div>
+          <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
+            <p className="text-2xl">⚡</p>
+            <p className="text-white font-black text-sm mt-1">Digunakan</p>
+            <p className="text-amber-300 text-xs font-black">{credits?.totalUsed ?? 0} kredit</p>
+          </div>
+        </div>
 
-          {/* Footer status */}
-          {isLow ? (
-            <p className="relative z-10 text-amber-300 text-xs font-black flex items-center gap-1.5">
-              ⚠️ Baki rendah — top up sekarang <ArrowRight className="w-3 h-3" />
-            </p>
-          ) : (
-            <p className="relative z-10 inline-flex items-center gap-1 text-xs font-bold text-white/70 group-hover:text-white transition-colors">
-              Tambah Kredit <ArrowRight className="h-3.5 w-3.5" />
-            </p>
-          )}
-        </motion.div>
-      </Link>
+        {isLow ? (
+          <p className="text-amber-300 text-xs font-black mt-4 flex items-center gap-1.5">
+            ⚠️ Baki rendah — top up sekarang untuk teruskan guna ciri AI.
+          </p>
+        ) : (
+          <p className="text-white text-xs font-bold mt-4">
+            💡 Kredit tidak luput. Boleh dipakai bila-bila masa.
+          </p>
+        )}
+      </motion.div>
     );
   }
 
