@@ -49,16 +49,11 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className={`group relative h-full min-h-[180px] overflow-hidden rounded-[1.75rem] p-5 shadow-xl ${
+        className={`group relative h-full min-h-[180px] overflow-hidden rounded-3xl p-5 ${
           variant === 'glass'
-            ? 'border border-white/35 shadow-amber-950/10'
-            : 'border border-white/30 bg-gradient-to-br from-amber-500 via-orange-500 to-orange-600 shadow-amber-950/20'
+            ? 'pro-glass'
+            : 'border border-white/30 bg-gradient-to-br from-amber-500 via-orange-500 to-orange-600 shadow-xl shadow-amber-950/20'
         } ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
-        style={variant === 'glass' ? {
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10))',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-        } : undefined}
       >
         {variant === 'glass' ? (
           <>
