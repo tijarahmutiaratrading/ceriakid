@@ -83,7 +83,7 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
         </div>
 
         {isLow ? (
-          <p className="text-amber-300 text-xs font-black mt-4 flex items-center gap-1.5">
+          <p className="text-white text-xs font-black mt-4 flex items-center gap-1.5">
             ⚠️ Baki rendah — top up sekarang untuk teruskan guna ciri AI.
           </p>
         ) : (
