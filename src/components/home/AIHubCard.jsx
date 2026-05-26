@@ -65,33 +65,24 @@ export default function AIHubCard() {
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[1.75rem] p-4 md:p-8 lg:p-10 shadow-xl border border-white/30 ${
+      className={`relative overflow-hidden rounded-[1.75rem] p-4 md:p-8 lg:p-12 md:min-h-[420px] lg:min-h-[480px] shadow-xl border border-white/30 bg-gradient-to-br from-yellow-400 via-orange-400 to-pink-400 ${
         isLow ? 'ring-2 ring-amber-300/70' : ''
       }`}
     >
-      {/* Background image */}
-      <img
-        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f515a351e_generated_image.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 w-full h-full object-cover"
-      />
-      {/* Color overlay for readability */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-950/55 via-fuchsia-900/40 to-amber-900/45" />
-
-      {/* Decorative blobs */}
-      <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-amber-400/40 blur-3xl" />
-      <div className="pointer-events-none absolute -left-6 -bottom-6 h-28 w-28 rounded-full bg-purple-500/30 blur-3xl" />
-      <div className="pointer-events-none absolute right-1/3 bottom-0 h-20 w-20 rounded-full bg-pink-400/20 blur-2xl" />
+      {/* Decorative blobs (match coming-soon vibe) */}
+      <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/30 blur-3xl" />
+      <div className="pointer-events-none absolute -left-6 -bottom-6 h-32 w-32 rounded-full bg-pink-300/40 blur-3xl" />
+      <div className="pointer-events-none absolute right-1/3 bottom-0 h-24 w-24 rounded-full bg-yellow-200/40 blur-2xl" />
+      <div className="pointer-events-none absolute top-3 right-3 text-lg sm:text-2xl animate-bounce">✨</div>
 
       {/* TOP ROW: Credit balance + Top Up */}
       <div className="relative z-10 flex items-center justify-between gap-3 mb-4">
         <Link to="/buy-credits" className="flex items-center gap-3 min-w-0 flex-1">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/40 backdrop-blur-sm border border-white/50 shadow-inner flex-shrink-0">
-            <Sparkles className="w-6 h-6 text-amber-300 drop-shadow" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/95 backdrop-blur-sm border border-white/60 shadow-inner flex-shrink-0">
+            <Sparkles className="w-6 h-6 text-orange-500 drop-shadow" />
           </div>
           <div className="min-w-0">
-            <p className="text-amber-300 text-[9px] font-black uppercase tracking-widest drop-shadow">Baki Kredit AI</p>
+            <p className="text-white text-[9px] font-black uppercase tracking-widest drop-shadow">Baki Kredit AI</p>
             {loading ? (
               <div className="flex items-center gap-1.5 text-white/90">
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -128,10 +119,10 @@ export default function AIHubCard() {
       )}
 
       {/* DIVIDER label */}
-      <div className="relative z-10 flex items-center gap-2 mb-3">
-        <Sparkles className="w-3 h-3 text-amber-300" />
-        <p className="text-amber-300 text-[9px] font-black uppercase tracking-widest drop-shadow">Ciri AI CeriaKid</p>
-        <div className="h-px flex-1 bg-gradient-to-r from-white/40 to-transparent" />
+      <div className="relative z-10 flex items-center gap-2 mb-3 md:mb-5">
+        <Sparkles className="w-3 h-3 text-white" />
+        <p className="text-white text-[9px] font-black uppercase tracking-widest drop-shadow">Ciri AI CeriaKid</p>
+        <div className="h-px flex-1 bg-gradient-to-r from-white/60 to-transparent" />
       </div>
 
       {/* AI Features Grid */}
@@ -143,7 +134,7 @@ export default function AIHubCard() {
               <motion.div
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                className={`group relative h-full min-h-[110px] overflow-hidden rounded-2xl border border-white/30 bg-gradient-to-br ${f.gradient} p-2.5 shadow-md shadow-purple-950/20 flex flex-col`}
+                className={`group relative h-full min-h-[110px] md:min-h-[200px] lg:min-h-[240px] overflow-hidden rounded-2xl border border-white/30 bg-gradient-to-br ${f.gradient} p-2.5 md:p-4 shadow-md shadow-purple-950/20 flex flex-col`}
               >
                 <div className="absolute -right-4 -top-4 h-14 w-14 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
                 <div className="absolute -left-3 -bottom-3 h-12 w-12 rounded-full bg-white/10 blur-2xl" />
