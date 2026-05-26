@@ -12,7 +12,7 @@ const FEATURES = [
     desc: 'Tutor peribadi anak',
     cost: '1 kredit',
     bg: 'from-orange-100 via-orange-50 to-amber-100',
-    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/923e87785_generated_image.png',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/61dba1f3a_generated_image.png',
   },
   {
     to: '/quiz-ai',
@@ -30,7 +30,7 @@ const FEATURES = [
     desc: 'Penjana cerita',
     cost: '5 kredit',
     bg: 'from-rose-100 via-pink-50 to-pink-100',
-    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/83e11f7f6_generated_image.png',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d2061d998_generated_image.png',
   },
   {
     to: '/bbm-generator',
@@ -39,7 +39,7 @@ const FEATURES = [
     desc: 'Penjana BBM',
     cost: '10 kredit',
     bg: 'from-violet-100 via-purple-50 to-purple-100',
-    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8c2146d49_generated_image.png',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4c8ddef8e_generated_image.png',
   },
 ];
 

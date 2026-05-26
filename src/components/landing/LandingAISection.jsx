@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 import { Sparkles, GraduationCap, BookOpen, FileText, Brain, ArrowRight } from 'lucide-react';
 import SectionWrapper from '@/components/landing/SectionWrapper';
 
-const CIKGU_AVATAR = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/923e87785_generated_image.png';
+const CIKGU_AVATAR = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/61dba1f3a_generated_image.png';
 
 const AI_FEATURES = [
   {
     icon: GraduationCap,
     title: 'Cikgu Firdaus',
     persona: 'Tutor Peribadi',
-    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/923e87785_generated_image.png',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/61dba1f3a_generated_image.png',
     desc: 'Tutor peribadi AI yang sentiasa sedia jawab soalan anak — Matematik, Sains, BM, English, Jawi.',
     cost: '1 kredit / soalan',
     gradient: 'from-amber-500 via-orange-500 to-orange-600',
@@ -30,7 +30,7 @@ const AI_FEATURES = [
     icon: BookOpen,
     title: 'Cikgu Mira',
     persona: 'Penjana Cerita',
-    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/83e11f7f6_generated_image.png',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d2061d998_generated_image.png',
     desc: 'Cerita kreatif & berunsur pendidikan untuk anak. Tulis tema, AI jana cerita penuh.',
     cost: '5 kredit / cerita',
     gradient: 'from-pink-500 via-rose-500 to-rose-600',
@@ -40,7 +40,7 @@ const AI_FEATURES = [
     icon: FileText,
     title: 'Cikgu Daniel',
     persona: 'Penjana BBM',
-    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8c2146d49_generated_image.png',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4c8ddef8e_generated_image.png',
     desc: 'Lembaran kerja & latihan tersuai mengikut subjek dan tahap anak. Cetak & guna.',
     cost: '10 kredit / lembaran',
     gradient: 'from-violet-500 via-purple-500 to-purple-600',
