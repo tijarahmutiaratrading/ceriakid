@@ -130,10 +130,8 @@ const AuthenticatedApp = () => {
             <Route path="/challenges" element={<Challenges />} />
             <Route path="/scoreboard" element={<Scoreboard />} />
             <Route path="/buy-credits" element={<BuyCredits />} />
+            <Route path="/syllabus" element={<Syllabus />} />
           </Route>
-
-          {/* Syllabus reference page - fullscreen immersive, NO sidebar */}
-          <Route path="/syllabus" element={<Syllabus />} />
 
           {/* AI feature pages - immersive fullscreen, NO sidebar */}
           <Route path="/ai-assistant" element={<AIAssistant />} />
