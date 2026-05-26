@@ -17,25 +17,25 @@ export const CREDIT_PACKAGES = [
   {
     id: 'family',
     name: 'Pek Keluarga',
-    credits: 110,
-    bonusCredits: 15,
-    price: 5900, // RM59
+    credits: 140,
+    bonusCredits: 25,
+    price: 5900, // RM59 — 165 kredit total = RM0.36/credit (jimat 5% berbanding Starter)
     emoji: '⭐',
     color: 'from-sky-400 to-blue-500',
-    description: 'Paling popular — jimat 22%',
+    description: 'Paling popular — jimat 5%',
     popular: true,
-    perks: ['125 kredit (110 + 15 bonus)', '~125 soalan AI / Kuiz', '~25 cerita · ~15 BBM'],
+    perks: ['165 kredit (140 + 25 bonus)', '~165 soalan AI / Kuiz', '~33 cerita · ~20 BBM'],
   },
   {
     id: 'power',
     name: 'Pek Power',
-    credits: 230,
-    bonusCredits: 40,
-    price: 14900, // RM149
+    credits: 380,
+    bonusCredits: 70,
+    price: 14900, // RM149 — 450 kredit total = RM0.33/credit (jimat 13% berbanding Starter)
     emoji: '👑',
     color: 'from-violet-400 to-purple-500',
-    description: 'Nilai terbaik — jimat 38%',
-    perks: ['270 kredit (230 + 40 bonus)', '~270 soalan AI / Kuiz', '~54 cerita · ~33 BBM'],
+    description: 'Nilai terbaik — jimat 13%',
+    perks: ['450 kredit (380 + 70 bonus)', '~450 soalan AI / Kuiz', '~90 cerita · ~56 BBM'],
   },
 ];
 

@@ -3,9 +3,9 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 // Tier config — MESTI SYNC dengan lib/affiliateTiers.js (no local imports allowed)
 const TIER_CONFIG = [
   { key: 'bronze',   min: 0,   max: 9,        subRate: 20, credRate: 15 },
-  { key: 'silver',   min: 10,  max: 29,       subRate: 23, credRate: 17 },
-  { key: 'gold',     min: 30,  max: 99,       subRate: 26, credRate: 19 },
-  { key: 'platinum', min: 100, max: Infinity, subRate: 30, credRate: 22 },
+  { key: 'silver',   min: 10,  max: 29,       subRate: 22, credRate: 17 },
+  { key: 'gold',     min: 30,  max: 99,       subRate: 24, credRate: 18 },
+  { key: 'platinum', min: 100, max: Infinity, subRate: 25, credRate: 20 },
 ];
 
 function calculateTier(totalReferrals) {
