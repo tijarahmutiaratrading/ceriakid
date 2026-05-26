@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, Plus, Loader2, ArrowRight, GraduationCap, BookOpen, FileText, Brain } from 'lucide-react';
+import { Plus, Loader2, ArrowRight, GraduationCap, BookOpen, FileText, Brain } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 const FEATURES = [
@@ -11,7 +11,7 @@ const FEATURES = [
     title: 'Cikgu Firdaus',
     desc: 'Tutor peribadi anak',
     cost: '1 kredit',
-    gradient: 'from-amber-500 via-orange-500 to-orange-600',
+    bg: 'from-orange-100 via-orange-50 to-amber-100',
     avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fc07612a5_generated_image.png',
   },
   {
@@ -20,7 +20,7 @@ const FEATURES = [
     title: 'Cikgu Aina',
     desc: 'Kuiz adaptif',
     cost: '1 kredit',
-    gradient: 'from-cyan-500 via-blue-500 to-indigo-600',
+    bg: 'from-sky-100 via-blue-50 to-cyan-100',
     avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/164185e71_generated_image.png',
   },
   {
@@ -29,7 +29,7 @@ const FEATURES = [
     title: 'Cikgu Mira',
     desc: 'Penjana cerita',
     cost: '5 kredit',
-    gradient: 'from-pink-500 via-rose-500 to-rose-600',
+    bg: 'from-rose-100 via-pink-50 to-pink-100',
     avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/ed05d7aec_generated_image.png',
   },
   {
@@ -38,7 +38,7 @@ const FEATURES = [
     title: 'Cikgu Daniel',
     desc: 'Penjana BBM',
     cost: '10 kredit',
-    gradient: 'from-violet-500 via-purple-500 to-purple-600',
+    bg: 'from-violet-100 via-purple-50 to-purple-100',
     avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/bdb2702f2_generated_image.png',
   },
 ];
@@ -65,102 +65,98 @@ export default function AIHubCard() {
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[1.75rem] p-4 md:p-8 lg:p-12 md:min-h-[420px] lg:min-h-[480px] shadow-xl border border-white/30 bg-gradient-to-br from-yellow-400 via-orange-400 to-pink-400 ${
-        isLow ? 'ring-2 ring-amber-300/70' : ''
-      }`}
+      className="relative overflow-hidden rounded-[2rem] p-6 md:p-10 lg:p-12 shadow-xl border border-white/60"
+      style={{
+        background: 'linear-gradient(135deg, #fef3e7 0%, #fde8d4 30%, #fce7f3 70%, #fbcfe8 100%)',
+      }}
     >
-      {/* Decorative blobs (match coming-soon vibe) */}
-      <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/30 blur-3xl" />
-      <div className="pointer-events-none absolute -left-6 -bottom-6 h-32 w-32 rounded-full bg-pink-300/40 blur-3xl" />
-      <div className="pointer-events-none absolute right-1/3 bottom-0 h-24 w-24 rounded-full bg-yellow-200/40 blur-2xl" />
-      <div className="pointer-events-none absolute top-3 right-3 text-lg sm:text-2xl animate-bounce">✨</div>
+      {/* Decorative sparkles */}
+      <div className="pointer-events-none absolute top-4 left-4 text-2xl md:text-3xl opacity-80">✨</div>
+      <div className="pointer-events-none absolute top-6 right-6 text-2xl md:text-3xl opacity-80">✨</div>
+      <div className="pointer-events-none absolute bottom-6 left-6 text-xl md:text-2xl opacity-70">✨</div>
+      <div className="pointer-events-none absolute top-1/2 right-12 text-xl md:text-2xl opacity-60 hidden md:block">🎓</div>
 
-      {/* TOP ROW: Credit balance + Top Up */}
-      <div className="relative z-10 flex items-center justify-between gap-3 mb-4">
-        <Link to="/buy-credits" className="flex items-center gap-3 min-w-0 flex-1">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/95 backdrop-blur-sm border border-white/60 shadow-inner flex-shrink-0">
-            <Sparkles className="w-6 h-6 text-orange-500 drop-shadow" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-white text-[9px] font-black uppercase tracking-widest drop-shadow">Baki Kredit AI</p>
+      {/* TOP ROW: Big credit card (left) + Top Up + status (right) */}
+      <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6 mb-6 md:mb-10">
+        {/* Big white credit card */}
+        <Link to="/buy-credits" className="block w-full md:w-auto md:flex-1 md:max-w-md">
+          <motion.div
+            whileHover={{ scale: 1.02, y: -2 }}
+            className="bg-white rounded-3xl p-5 md:p-6 shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-white/80"
+          >
+            <p className="text-slate-900 font-black text-sm md:text-base tracking-wide mb-1">BAKI KREDIT AI</p>
             {loading ? (
-              <div className="flex items-center gap-1.5 text-white/90">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-xs font-bold">Memuat...</span>
+              <div className="flex items-center gap-2 my-1">
+                <Loader2 className="w-6 h-6 animate-spin text-slate-400" />
               </div>
             ) : (
-              <div className="flex items-baseline gap-2">
-                <p className="text-white text-3xl md:text-4xl font-black leading-none drop-shadow-lg">{balance}</p>
-                <span className="text-white/85 text-[10px] font-bold">
-                  {credits?.totalUsed ?? 0} digunakan
-                </span>
-              </div>
+              <p className="text-slate-900 text-5xl md:text-6xl font-black leading-none my-1">{balance}</p>
             )}
-          </div>
-        </Link>
-        <Link to="/buy-credits">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-white/95 text-orange-600 font-black text-xs shadow-lg backdrop-blur-md border border-white/60 hover:bg-white transition-colors flex-shrink-0"
-          >
-            <Plus className="w-3.5 h-3.5" /> Top Up
+            <p className="text-slate-500 text-sm md:text-base font-semibold mt-2">
+              {credits?.totalUsed ?? 0} digunakan
+            </p>
           </motion.div>
         </Link>
-      </div>
 
-      {/* Low balance warning */}
-      {isLow && (
-        <div className="relative z-10 mb-3 px-3 py-1.5 rounded-xl bg-amber-500/90 border border-amber-600/60">
-          <p className="text-white text-[11px] font-black flex items-center gap-1.5">
-            ⚠️ Baki rendah — top up sekarang <ArrowRight className="w-3 h-3" />
-          </p>
+        {/* Top Up + Status */}
+        <div className="flex items-center gap-3 md:gap-4 flex-wrap">
+          <Link to="/buy-credits">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-1.5 px-5 py-2.5 md:px-6 md:py-3 rounded-2xl bg-white text-slate-900 font-black text-sm md:text-base shadow-[0_6px_20px_rgba(0,0,0,0.08)] border border-white/80 hover:shadow-lg transition-all"
+            >
+              <Plus className="w-4 h-4" /> Top Up
+            </motion.div>
+          </Link>
+          {isLow && (
+            <p className="text-slate-600 font-semibold text-sm md:text-base flex items-center gap-1">
+              Baki rendah — top up sekarang <ArrowRight className="w-4 h-4" />
+            </p>
+          )}
         </div>
-      )}
-
-      {/* DIVIDER label */}
-      <div className="relative z-10 flex items-center gap-2 mb-3 md:mb-5">
-        <Sparkles className="w-3 h-3 text-white" />
-        <p className="text-white text-[9px] font-black uppercase tracking-widest drop-shadow">Ciri AI CeriaKid</p>
-        <div className="h-px flex-1 bg-gradient-to-r from-white/60 to-transparent" />
       </div>
 
-      {/* AI Features Grid */}
-      <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-2">
+      {/* Section title */}
+      <h2 className="relative z-10 text-slate-900 font-black text-2xl md:text-3xl tracking-wide mb-5 md:mb-7">
+        CIRI AI CERIAKID
+      </h2>
+
+      {/* AI Features Grid - 2x2 */}
+      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-5">
         {FEATURES.map((f) => {
           const Icon = f.icon;
           return (
             <Link key={f.title} to={f.to} className="block min-w-0" aria-label={`Buka ${f.title}`}>
               <motion.div
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                className={`group relative h-full min-h-[110px] md:min-h-[200px] lg:min-h-[240px] overflow-hidden rounded-2xl border border-white/30 bg-gradient-to-br ${f.gradient} p-2.5 md:p-4 shadow-md shadow-purple-950/20 flex flex-col`}
+                whileHover={{ scale: 1.02, y: -3 }}
+                whileTap={{ scale: 0.98 }}
+                className={`group relative h-full overflow-hidden rounded-3xl bg-gradient-to-br ${f.bg} p-4 md:p-5 shadow-[0_6px_24px_rgba(0,0,0,0.06)] border border-white/60 flex items-center gap-3 md:gap-4`}
               >
-                <div className="absolute -right-4 -top-4 h-14 w-14 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
-                <div className="absolute -left-3 -bottom-3 h-12 w-12 rounded-full bg-white/10 blur-2xl" />
+                {/* Avatar */}
+                {f.avatar ? (
+                  <img
+                    src={f.avatar}
+                    alt={f.title}
+                    className="h-16 w-16 md:h-20 md:w-20 rounded-2xl object-cover flex-shrink-0 shadow-md ring-2 ring-white/80"
+                  />
+                ) : (
+                  <div className="flex h-16 w-16 md:h-20 md:w-20 items-center justify-center rounded-2xl bg-white ring-2 ring-white/80 flex-shrink-0 shadow-md">
+                    <Icon className="h-8 w-8 text-slate-700" />
+                  </div>
+                )}
 
-                <div className="relative z-10 flex flex-col h-full">
-                  <div className="flex items-start justify-between gap-1.5 mb-2">
-                    {f.avatar ? (
-                      <img
-                        src={f.avatar}
-                        alt={f.title}
-                        className="h-9 w-9 rounded-full object-cover ring-2 ring-white/90 flex-shrink-0 shadow-md"
-                      />
-                    ) : (
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/95 ring-1 ring-white/70 flex-shrink-0 shadow-md">
-                        <Icon className="h-4.5 w-4.5 text-slate-800" />
-                      </div>
-                    )}
-                  </div>
-                  <p className="font-black text-white text-xs leading-tight">{f.title}</p>
-                  <p className="mt-0.5 text-[10px] font-bold text-white/90 leading-snug flex-1">{f.desc}</p>
-                  <div className="mt-1.5 flex items-center justify-between gap-1">
-                    <span className="text-[9px] font-black bg-white/95 text-slate-900 px-1.5 py-0.5 rounded-full shadow-sm">{f.cost}</span>
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white/95 text-slate-800 shadow-sm">
-                      <ArrowRight className="w-3 h-3" />
-                    </div>
-                  </div>
+                {/* Text */}
+                <div className="flex-1 min-w-0">
+                  <p className="font-black text-slate-700 text-xs md:text-sm leading-tight flex items-center gap-1">
+                    <span className="text-base">👤</span> {f.title} -
+                  </p>
+                  <p className="font-black text-slate-900 text-base md:text-lg leading-tight mt-0.5">
+                    {f.desc}
+                  </p>
+                  <span className="inline-block mt-2 md:mt-3 text-xs md:text-sm font-bold bg-white/80 text-slate-700 px-3 py-1 rounded-full shadow-sm">
+                    {f.cost}
+                  </span>
                 </div>
               </motion.div>
             </Link>
