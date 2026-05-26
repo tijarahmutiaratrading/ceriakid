@@ -103,6 +103,13 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
             { path: '/challenges', label: 'Cabaran' },
           ],
         },
+        {
+          path: '/group-sokongan',
+          label: 'Sokongan',
+          submenu: [
+            { path: '/contact', label: 'Hubungi Kami' },
+          ],
+        },
       ];
     }
 
