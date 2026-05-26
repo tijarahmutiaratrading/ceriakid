@@ -58,7 +58,7 @@ const tiers = [
   priceMYR: '99',
   perMonth: '8.25',
   period: '/tahun',
-  features: ['100 game boleh dimainkan', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sehingga 2 peranti 📱📱'],
+  features: ['100 game boleh dimainkan', '🎁 20 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sehingga 2 peranti 📱📱'],
   noFeatures: ['Sehingga 4 anak'],
   cta: 'Pilih Standard',
   highlighted: false
