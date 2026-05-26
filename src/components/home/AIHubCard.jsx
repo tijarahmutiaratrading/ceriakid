@@ -65,24 +65,19 @@ export default function AIHubCard() {
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[1.75rem] p-4 md:p-7 lg:p-8 shadow-xl border border-white/30 ${
+      className={`relative overflow-hidden rounded-[1.75rem] p-4 md:p-8 lg:p-10 shadow-xl border border-white/30 ${
         isLow ? 'ring-2 ring-amber-300/70' : ''
       }`}
     >
-      {/* Background: 4 cikgu collage */}
-      <div className="pointer-events-none absolute inset-0 grid grid-cols-2 grid-rows-2">
-        {FEATURES.map((f) => (
-          <img
-            key={f.title}
-            src={f.avatar}
-            alt=""
-            aria-hidden="true"
-            className="w-full h-full object-cover"
-          />
-        ))}
-      </div>
+      {/* Background image */}
+      <img
+        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f515a351e_generated_image.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 w-full h-full object-cover"
+      />
       {/* Color overlay for readability */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-950/75 via-fuchsia-900/70 to-amber-900/70 backdrop-blur-[2px]" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-950/55 via-fuchsia-900/40 to-amber-900/45" />
 
       {/* Decorative blobs */}
       <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-amber-400/40 blur-3xl" />
