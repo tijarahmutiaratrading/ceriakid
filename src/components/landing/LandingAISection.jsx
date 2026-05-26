@@ -71,28 +71,32 @@ export default function LandingAISection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
               whileHover={{ y: -4, scale: 1.02 }}
-              className={`group relative overflow-hidden rounded-3xl p-5 bg-gradient-to-br ${f.gradient} shadow-xl ${f.glow}`}
+              className={`group relative overflow-hidden rounded-3xl shadow-xl ${f.glow} aspect-[3/4]`}
             >
-              <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-white/20 blur-2xl pointer-events-none group-hover:bg-white/30 transition-all" />
-              <div className="absolute -left-3 -bottom-3 h-16 w-16 rounded-full bg-white/10 blur-2xl pointer-events-none" />
-              <div className="relative">
-                {/* Avatar + icon badge */}
-                <div className="relative mb-3 inline-block">
-                  <img
-                    src={f.avatar}
-                    alt={f.title}
-                    className="h-16 w-16 rounded-2xl object-cover ring-2 ring-white/80 shadow-lg"
-                  />
-                  <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-xl bg-white ring-2 ring-white shadow-md">
-                    <Icon className="h-3.5 w-3.5 text-slate-800" />
-                  </div>
-                </div>
+              {/* Full cover avatar */}
+              <img
+                src={f.avatar}
+                alt={f.title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              {/* Dark gradient overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none" />
+
+              {/* Icon badge top-right */}
+              <div className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/95 backdrop-blur-md shadow-lg">
+                <Icon className="h-4 w-4 text-slate-800" />
+              </div>
+
+              {/* Cost badge top-left */}
+              <span className="absolute top-3 left-3 text-[10px] font-black bg-white/95 text-slate-900 px-2.5 py-1 rounded-full shadow-md">
+                {f.cost}
+              </span>
+
+              {/* Text content bottom */}
+              <div className="absolute inset-x-0 bottom-0 p-4">
                 <p className="text-white/80 text-[10px] font-black uppercase tracking-wider mb-0.5">{f.persona}</p>
-                <h4 className="font-black text-white text-lg leading-tight mb-1.5">{f.title}</h4>
-                <p className="text-white/90 text-xs leading-relaxed mb-3 min-h-[3rem]">{f.desc}</p>
-                <span className="inline-block text-[10px] font-black bg-white/95 text-slate-900 px-2.5 py-1 rounded-full shadow-sm">
-                  {f.cost}
-                </span>
+                <h4 className="font-black text-white text-lg leading-tight mb-1.5 drop-shadow-lg">{f.title}</h4>
+                <p className="text-white/90 text-xs leading-relaxed">{f.desc}</p>
               </div>
             </motion.div>
           );
