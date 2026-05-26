@@ -35,9 +35,10 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
       ref={navRef}
       className="hidden md:flex sticky top-3 z-40 mx-3 mt-3 rounded-3xl shadow-2xl shadow-black/30 px-3 py-2 items-center gap-2"
       style={{
-        background: 'rgba(15, 10, 30, 0.55)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
+        background: 'rgba(15, 10, 30, 0.35)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        border: '1px solid rgba(255,255,255,0.18)',
       }}
     >
       {/* Logo + Admin badge */}
