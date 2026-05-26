@@ -7,11 +7,12 @@ const FEATURES = [
   {
     to: '/ai-assistant',
     icon: GraduationCap,
-    title: 'Cikgu AI',
-    desc: 'Tanya soalan pelajaran',
+    title: 'Cikgu Firdaus',
+    desc: 'Tutor peribadi untuk anak',
     cost: '1 kredit',
     gradient: 'from-amber-500 via-orange-500 to-orange-600',
     ready: true,
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fc07612a5_generated_image.png',
   },
   {
     to: '/quiz-ai',
@@ -68,9 +69,17 @@ export default function AIFeatureCTA() {
 
                 <div className="relative z-10 flex flex-col h-full">
                   <div className="flex items-start justify-between gap-1.5 mb-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/95 ring-1 ring-white/70 flex-shrink-0 shadow-md">
-                      <Icon className="h-3.5 w-3.5 text-slate-800" />
-                    </div>
+                    {f.avatar ? (
+                      <img
+                        src={f.avatar}
+                        alt={f.title}
+                        className="h-9 w-9 rounded-full object-cover ring-2 ring-white/90 flex-shrink-0 shadow-md"
+                      />
+                    ) : (
+                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/95 ring-1 ring-white/70 flex-shrink-0 shadow-md">
+                        <Icon className="h-3.5 w-3.5 text-slate-800" />
+                      </div>
+                    )}
                     {!f.ready && (
                       <span className="text-[7px] font-black bg-white/30 text-white px-1 py-0.5 rounded-full">SOON</span>
                     )}

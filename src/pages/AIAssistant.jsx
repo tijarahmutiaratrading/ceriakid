@@ -41,7 +41,7 @@ export default function AIAssistant() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [messages, setMessages] = useState([
-    { role: 'ai', content: 'Hai! Saya Cikgu AI 🎓 Tanya saya apa-apa soalan tentang pelajaran sekolah. Saya sedia membantu! ✨' },
+    { role: 'ai', content: 'Assalamualaikum dan hai! Saya **Cikgu Firdaus** 👨‍🏫 Sedia membantu anak-anak belajar dengan cara yang mudah dan menyeronokkan. Tanya saya apa-apa soalan pelajaran — Matematik, Sains, BM, English atau Jawi. Mari kita belajar bersama! ✨' },
   ]);
   const [input, setInput] = useState('');
   const [subject, setSubject] = useState('general');
@@ -102,7 +102,7 @@ export default function AIAssistant() {
       </div>
 
       <div className="md:hidden">
-        <AppHeader showBack={true} backTo="/dashboard" title="Cikgu AI" />
+        <AppHeader showBack={true} backTo="/dashboard" title="Cikgu Firdaus" />
       </div>
 
       <div className="relative max-w-4xl mx-auto px-4 pt-24 md:pt-6 pb-32">
@@ -113,14 +113,20 @@ export default function AIAssistant() {
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
-              <GraduationCap className="w-6 h-6 text-white" />
+            <div className="relative">
+              <img
+                src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fc07612a5_generated_image.png"
+                alt="Cikgu Firdaus"
+                className="w-14 h-14 rounded-2xl object-cover shadow-lg ring-2 ring-amber-300/60"
+              />
+              <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 ring-2 ring-purple-900" title="Online" />
             </div>
             <div>
               <p className="text-amber-300 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> Pembantu AI
+                <Sparkles className="w-3 h-3" /> Tutor Peribadi Anak
               </p>
-              <h1 className="text-xl md:text-2xl font-black text-white">Cikgu AI</h1>
+              <h1 className="text-xl md:text-2xl font-black text-white">Cikgu Firdaus 👨‍🏫</h1>
+              <p className="text-white/60 text-[10px] font-semibold">Sedia membantu · Pakar pelajaran sekolah</p>
             </div>
           </div>
           <CreditBalanceWidget compact />
@@ -170,7 +176,7 @@ export default function AIAssistant() {
           {messages.map((m, i) => <AIChatMessage key={i} role={m.role} content={m.content} />)}
           {loading && (
             <div className="flex items-center gap-2 text-white/80 text-xs px-3 py-2">
-              <Loader2 className="w-4 h-4 animate-spin" /> Cikgu AI sedang berfikir...
+              <Loader2 className="w-4 h-4 animate-spin" /> Cikgu Firdaus sedang berfikir...
             </div>
           )}
         </div>
