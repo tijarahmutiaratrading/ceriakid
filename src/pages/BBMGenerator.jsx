@@ -76,15 +76,7 @@ export default function BBMGenerator() {
   const handleReset = () => setBbm(null);
 
   return (
-    <div
-      className="relative min-h-screen overflow-hidden print:bg-white"
-      style={{ background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 35%, #4a1d6e 70%, #6b1d52 100%)' }}
-    >
-      <div className="absolute inset-0 overflow-hidden pointer-events-none print:hidden">
-        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] bg-violet-500/40 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-purple-500/35 rounded-full blur-3xl" />
-      </div>
-
+    <div className="relative min-h-screen print:bg-white">
       <div className="md:hidden print:hidden">
         <AppHeader showBack={true} backTo="/dashboard" title="Penjana BBM AI" />
       </div>
@@ -102,10 +94,10 @@ export default function BBMGenerator() {
               className="w-14 h-14 rounded-2xl object-cover ring-2 ring-white/40 shadow-lg bg-gradient-to-br from-violet-400 to-purple-500"
             />
             <div>
-              <p className="text-violet-300 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+              <p className="text-violet-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> Bersama Cikgu Daniel
               </p>
-              <h1 className="text-xl md:text-2xl font-black text-white">Penjana BBM AI</h1>
+              <h1 className="text-xl md:text-2xl font-black text-slate-900">Penjana BBM AI</h1>
             </div>
           </div>
           <CreditBalanceWidget compact />
@@ -132,13 +124,13 @@ export default function BBMGenerator() {
             </div>
           </motion.div>
         ) : (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pro-glass rounded-3xl p-5 md:p-6 space-y-4">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-3xl p-5 md:p-6 space-y-4">
             {/* Subject */}
             <div>
-              <label className="block text-white text-xs font-black mb-2">📚 Subjek</label>
+              <label className="block text-slate-700 text-xs font-black mb-2">📚 Subjek</label>
               <div className="flex gap-1.5 flex-wrap">
                 {SUBJECTS.map(s => (
-                  <button key={s.value} onClick={() => setSubject(s.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1 ${subject === s.value ? 'bg-white text-game-purple shadow' : 'bg-white/15 text-white hover:bg-white/25'}`}>
+                  <button key={s.value} onClick={() => setSubject(s.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1 ${subject === s.value ? 'bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                     <span>{s.emoji}</span> {s.label}
                   </button>
                 ))}
@@ -147,10 +139,10 @@ export default function BBMGenerator() {
 
             {/* Level */}
             <div>
-              <label className="block text-white text-xs font-black mb-2">🎓 Tahap</label>
+              <label className="block text-slate-700 text-xs font-black mb-2">🎓 Tahap</label>
               <div className="flex gap-1.5 flex-wrap">
                 {LEVELS.map(l => (
-                  <button key={l.value} onClick={() => setLevel(l.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all ${level === l.value ? 'bg-white text-game-purple shadow' : 'bg-white/15 text-white hover:bg-white/25'}`}>
+                  <button key={l.value} onClick={() => setLevel(l.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all ${level === l.value ? 'bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                     {l.label}
                   </button>
                 ))}
@@ -159,13 +151,13 @@ export default function BBMGenerator() {
 
             {/* Type */}
             <div>
-              <label className="block text-white text-xs font-black mb-2">📄 Jenis BBM</label>
+              <label className="block text-slate-700 text-xs font-black mb-2">📄 Jenis BBM</label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {TYPES.map(t => (
                   <button
                     key={t.value}
                     onClick={() => setType(t.value)}
-                    className={`p-3 rounded-2xl text-left transition-all border-2 ${type === t.value ? 'bg-white text-game-purple border-white shadow' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+                    className={`p-3 rounded-2xl text-left transition-all border-2 ${type === t.value ? 'bg-gradient-to-br from-violet-500 to-purple-600 text-white border-violet-600 shadow' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
                   >
                     <p className="text-xl mb-0.5">{t.emoji}</p>
                     <p className="font-black text-xs">{t.label}</p>
@@ -177,20 +169,20 @@ export default function BBMGenerator() {
 
             {/* Topic */}
             <div>
-              <label className="block text-white text-xs font-black mb-2">🎯 Tajuk / Topik *</label>
+              <label className="block text-slate-700 text-xs font-black mb-2">🎯 Tajuk / Topik *</label>
               <input
                 type="text"
                 value={topic}
                 onChange={e => setTopic(e.target.value)}
                 placeholder="Contoh: Pecahan Wajar, Sistem Suria, Kata Kerja"
-                className="w-full bg-white/15 border border-white/25 rounded-xl px-4 py-3 text-white placeholder-white/40 text-sm font-semibold focus:outline-none focus:border-white/55"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 text-sm font-semibold focus:outline-none focus:bg-white focus:border-violet-400"
               />
             </div>
 
             {insufficient && (
-              <div className="bg-amber-400/20 border-2 border-amber-300/50 rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
-                <p className="text-amber-200 text-xs font-bold">⚠️ Kredit tidak mencukupi</p>
-                <Link to="/buy-credits" className="px-3 py-1.5 rounded-xl bg-amber-300 text-amber-950 font-black text-xs hover:bg-amber-200 transition-all">
+              <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
+                <p className="text-amber-800 text-xs font-bold">⚠️ Kredit tidak mencukupi</p>
+                <Link to="/buy-credits" className="px-3 py-1.5 rounded-xl bg-amber-500 text-white font-black text-xs hover:bg-amber-600 transition-all">
                   Top Up →
                 </Link>
               </div>
@@ -203,7 +195,7 @@ export default function BBMGenerator() {
             >
               {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Sedang menjana BBM...</> : <><Sparkles className="w-5 h-5" /> Jana BBM ({CREDIT_COSTS.bbm_generator} kredit)</>}
             </button>
-            <p className="text-center text-white/50 text-[10px] font-semibold">
+            <p className="text-center text-slate-500 text-[10px] font-semibold">
               💡 BBM dijana selaras dengan sukatan KSSR/KSPK
             </p>
           </motion.div>

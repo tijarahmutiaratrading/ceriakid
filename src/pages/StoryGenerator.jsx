@@ -89,12 +89,7 @@ export default function StoryGenerator() {
   const handleReset = () => setStory(null);
 
   return (
-    <div className="relative min-h-screen overflow-hidden print:bg-white" style={{ background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 35%, #4a1d6e 70%, #6b1d52 100%)' }}>
-      <div className="absolute inset-0 overflow-hidden pointer-events-none print:hidden">
-        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] bg-game-purple/40 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-game-pink/35 rounded-full blur-3xl" />
-      </div>
-
+    <div className="relative min-h-screen print:bg-white">
       <div className="md:hidden print:hidden">
         <AppHeader showBack={true} backTo="/dashboard" title="Penjana Cerita AI" />
       </div>
@@ -113,10 +108,10 @@ export default function StoryGenerator() {
               className="w-14 h-14 rounded-2xl object-cover ring-2 ring-white/40 shadow-lg bg-gradient-to-br from-pink-400 to-rose-500"
             />
             <div>
-              <p className="text-pink-300 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+              <p className="text-pink-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> Bersama Cikgu Mira
               </p>
-              <h1 className="text-xl md:text-2xl font-black text-white">Penjana Cerita AI</h1>
+              <h1 className="text-xl md:text-2xl font-black text-slate-900">Penjana Cerita AI</h1>
             </div>
           </div>
           <CreditBalanceWidget compact />
@@ -144,19 +139,19 @@ export default function StoryGenerator() {
           </motion.div>
         ) : (
           // Form
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pro-glass rounded-3xl p-5 md:p-6 space-y-4">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-3xl p-5 md:p-6 space-y-4">
             <div>
-              <label className="block text-white text-xs font-black mb-2">📝 Tema Cerita *</label>
+              <label className="block text-slate-700 text-xs font-black mb-2">📝 Tema Cerita *</label>
               <input
                 type="text"
                 value={theme}
                 onChange={e => setTheme(e.target.value)}
                 placeholder="Contoh: Arnab pintar menyelamatkan hutan"
-                className="w-full bg-white/15 border border-white/25 rounded-xl px-4 py-3 text-white placeholder-white/40 text-sm font-semibold focus:outline-none focus:border-white/55"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 text-sm font-semibold focus:outline-none focus:bg-white focus:border-pink-400"
               />
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {THEME_SUGGESTIONS.map((s, i) => (
-                  <button key={i} onClick={() => setTheme(s.replace(/[\s🌳🤖⚔️🐠🔍]+$/, '').trim())} className="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold transition-all">
+                  <button key={i} onClick={() => setTheme(s.replace(/[\s🌳🤖⚔️🐠🔍]+$/, '').trim())} className="px-2.5 py-1 rounded-full bg-pink-50 hover:bg-pink-100 text-pink-700 text-[11px] font-semibold transition-all border border-pink-200">
                     {s}
                   </button>
                 ))}
@@ -164,21 +159,21 @@ export default function StoryGenerator() {
             </div>
 
             <div>
-              <label className="block text-white text-xs font-black mb-2">👤 Nama Watak Utama (pilihan)</label>
+              <label className="block text-slate-700 text-xs font-black mb-2">👤 Nama Watak Utama (pilihan)</label>
               <input
                 type="text"
                 value={childName}
                 onChange={e => setChildName(e.target.value)}
                 placeholder="Contoh: Aisyah / Aiman"
-                className="w-full bg-white/15 border border-white/25 rounded-xl px-4 py-3 text-white placeholder-white/40 text-sm font-semibold focus:outline-none focus:border-white/55"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 text-sm font-semibold focus:outline-none focus:bg-white focus:border-pink-400"
               />
             </div>
 
             <div>
-              <label className="block text-white text-xs font-black mb-2">🎂 Umur Pembaca</label>
+              <label className="block text-slate-700 text-xs font-black mb-2">🎂 Umur Pembaca</label>
               <div className="flex gap-1.5 flex-wrap">
                 {AGE_OPTIONS.map(o => (
-                  <button key={o.value} onClick={() => setAgeRange(o.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all ${ageRange === o.value ? 'bg-white text-game-purple shadow' : 'bg-white/15 text-white hover:bg-white/25'}`}>
+                  <button key={o.value} onClick={() => setAgeRange(o.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all ${ageRange === o.value ? 'bg-gradient-to-br from-pink-500 to-rose-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                     {o.label}
                   </button>
                 ))}
@@ -186,10 +181,10 @@ export default function StoryGenerator() {
             </div>
 
             <div>
-              <label className="block text-white text-xs font-black mb-2">💝 Pengajaran Moral</label>
+              <label className="block text-slate-700 text-xs font-black mb-2">💝 Pengajaran Moral</label>
               <div className="flex gap-1.5 flex-wrap">
                 {MORAL_OPTIONS.map(o => (
-                  <button key={o.value} onClick={() => setMoralLesson(o.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all ${moralLesson === o.value ? 'bg-white text-game-purple shadow' : 'bg-white/15 text-white hover:bg-white/25'}`}>
+                  <button key={o.value} onClick={() => setMoralLesson(o.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all ${moralLesson === o.value ? 'bg-gradient-to-br from-pink-500 to-rose-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                     {o.label}
                   </button>
                 ))}
@@ -197,10 +192,10 @@ export default function StoryGenerator() {
             </div>
 
             <div>
-              <label className="block text-white text-xs font-black mb-2">📏 Panjang Cerita</label>
+              <label className="block text-slate-700 text-xs font-black mb-2">📏 Panjang Cerita</label>
               <div className="flex gap-1.5">
                 {LENGTH_OPTIONS.map(o => (
-                  <button key={o.value} onClick={() => setLength(o.value)} className={`flex-1 px-3 py-1.5 rounded-xl text-xs font-black transition-all ${length === o.value ? 'bg-white text-game-purple shadow' : 'bg-white/15 text-white hover:bg-white/25'}`}>
+                  <button key={o.value} onClick={() => setLength(o.value)} className={`flex-1 px-3 py-1.5 rounded-xl text-xs font-black transition-all ${length === o.value ? 'bg-gradient-to-br from-pink-500 to-rose-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                     {o.label}
                   </button>
                 ))}
@@ -208,9 +203,9 @@ export default function StoryGenerator() {
             </div>
 
             {insufficient && (
-              <div className="bg-amber-400/20 border-2 border-amber-300/50 rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
-                <p className="text-amber-200 text-xs font-bold">⚠️ Kredit tidak mencukupi</p>
-                <Link to="/buy-credits" className="px-3 py-1.5 rounded-xl bg-amber-300 text-amber-950 font-black text-xs hover:bg-amber-200 transition-all">
+              <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
+                <p className="text-amber-800 text-xs font-bold">⚠️ Kredit tidak mencukupi</p>
+                <Link to="/buy-credits" className="px-3 py-1.5 rounded-xl bg-amber-500 text-white font-black text-xs hover:bg-amber-600 transition-all">
                   Top Up →
                 </Link>
               </div>
@@ -223,7 +218,7 @@ export default function StoryGenerator() {
             >
               {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Sedang mencipta cerita...</> : <><Sparkles className="w-5 h-5" /> Jana Cerita ({CREDIT_COSTS.story_generator} kredit)</>}
             </button>
-            <p className="text-center text-white/50 text-[10px] font-semibold">
+            <p className="text-center text-slate-500 text-[10px] font-semibold">
               💡 Cerita unik dijana AI khas untuk anak anda
             </p>
           </motion.div>

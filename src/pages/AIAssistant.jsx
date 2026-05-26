@@ -95,12 +95,7 @@ export default function AIAssistant() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 35%, #4a1d6e 70%, #6b1d52 100%)' }}>
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] bg-game-purple/40 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-game-pink/35 rounded-full blur-3xl" />
-      </div>
-
+    <div className="relative min-h-screen">
       <div className="md:hidden">
         <AppHeader showBack={true} backTo="/dashboard" title="Cikgu Firdaus" />
       </div>
@@ -122,27 +117,27 @@ export default function AIAssistant() {
               <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 ring-2 ring-purple-900" title="Online" />
             </div>
             <div>
-              <p className="text-amber-300 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+              <p className="text-amber-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> Tutor Peribadi Anak
               </p>
-              <h1 className="text-xl md:text-2xl font-black text-white">Cikgu Firdaus 👨‍🏫</h1>
-              <p className="text-white/60 text-[10px] font-semibold">Sedia membantu · Pakar pelajaran sekolah</p>
+              <h1 className="text-xl md:text-2xl font-black text-slate-900">Cikgu Firdaus 👨‍🏫</h1>
+              <p className="text-slate-600 text-[10px] font-semibold">Sedia membantu · Pakar pelajaran sekolah</p>
             </div>
           </div>
           <CreditBalanceWidget compact />
         </motion.div>
 
         {/* Filters */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pro-glass rounded-2xl p-3 mb-3 space-y-3">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-2xl p-3 mb-3 space-y-3">
           <div>
-            <p className="text-white/70 text-[10px] font-black uppercase tracking-widest mb-1.5">Subjek</p>
+            <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-1.5">Subjek</p>
             <div className="flex gap-1.5 overflow-x-auto pb-1">
               {SUBJECTS.map(s => (
                 <button
                   key={s.value}
                   onClick={() => setSubject(s.value)}
                   className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-black transition-all ${
-                    subject === s.value ? 'bg-white text-game-purple shadow' : 'bg-white/15 text-white hover:bg-white/25'
+                    subject === s.value ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
                 >
                   {s.emoji} {s.label}
@@ -151,14 +146,14 @@ export default function AIAssistant() {
             </div>
           </div>
           <div>
-            <p className="text-white/70 text-[10px] font-black uppercase tracking-widest mb-1.5">Tahap</p>
+            <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-1.5">Tahap</p>
             <div className="flex gap-1.5 overflow-x-auto pb-1">
               {LEVELS.map(l => (
                 <button
                   key={l.value}
                   onClick={() => setLevel(l.value)}
                   className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-black transition-all ${
-                    level === l.value ? 'bg-white text-game-purple shadow' : 'bg-white/15 text-white hover:bg-white/25'
+                    level === l.value ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
                 >
                   {l.label}
@@ -171,11 +166,11 @@ export default function AIAssistant() {
         {/* Chat */}
         <div
           ref={scrollRef}
-          className="pro-glass rounded-3xl p-4 mb-3 h-[55vh] overflow-y-auto space-y-3"
+          className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-3xl p-4 mb-3 h-[55vh] overflow-y-auto space-y-3"
         >
           {messages.map((m, i) => <AIChatMessage key={i} role={m.role} content={m.content} />)}
           {loading && (
-            <div className="flex items-center gap-2 text-white/80 text-xs px-3 py-2">
+            <div className="flex items-center gap-2 text-slate-600 text-xs px-3 py-2">
               <Loader2 className="w-4 h-4 animate-spin" /> Cikgu Firdaus sedang berfikir...
             </div>
           )}
@@ -183,9 +178,9 @@ export default function AIAssistant() {
 
         {/* Insufficient credits banner */}
         {insufficientCredits && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 bg-amber-400/20 border-2 border-amber-300/50 rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
-            <p className="text-amber-200 text-xs font-bold">⚠️ Kredit habis — sila top up untuk teruskan</p>
-            <Link to="/buy-credits" className="px-3 py-1.5 rounded-xl bg-amber-300 text-amber-950 font-black text-xs hover:bg-amber-200 transition-all">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 bg-amber-50 border-2 border-amber-300 rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
+            <p className="text-amber-800 text-xs font-bold">⚠️ Kredit habis — sila top up untuk teruskan</p>
+            <Link to="/buy-credits" className="px-3 py-1.5 rounded-xl bg-amber-500 text-white font-black text-xs hover:bg-amber-600 transition-all">
               Top Up Sekarang →
             </Link>
           </motion.div>
@@ -194,7 +189,7 @@ export default function AIAssistant() {
         {/* Suggestions (kalau messages baru sahaja mula) */}
         {messages.length === 1 && (
           <div className="mb-3">
-            <p className="text-white/60 text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1">
+            <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1">
               <BookOpen className="w-3 h-3" /> Cuba tanya
             </p>
             <div className="flex flex-wrap gap-2">
@@ -202,7 +197,7 @@ export default function AIAssistant() {
                 <button
                   key={i}
                   onClick={() => handleAsk(s)}
-                  className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-all"
+                  className="px-3 py-1.5 rounded-full bg-white/80 border border-slate-200 hover:bg-white text-slate-700 text-xs font-semibold transition-all shadow-sm"
                 >
                   {s}
                 </button>
@@ -212,7 +207,7 @@ export default function AIAssistant() {
         )}
 
         {/* Input */}
-        <div className="pro-glass rounded-2xl p-2 flex items-center gap-2">
+        <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-2 flex items-center gap-2">
           <input
             type="text"
             value={input}
@@ -220,7 +215,7 @@ export default function AIAssistant() {
             onKeyDown={e => e.key === 'Enter' && handleAsk()}
             placeholder="Tanya saya apa-apa..."
             disabled={loading}
-            className="flex-1 bg-transparent text-white placeholder-white/40 text-sm font-semibold px-3 py-2 focus:outline-none"
+            className="flex-1 bg-transparent text-slate-900 placeholder-slate-400 text-sm font-semibold px-3 py-2 focus:outline-none"
           />
           <button
             onClick={() => handleAsk()}
@@ -231,7 +226,7 @@ export default function AIAssistant() {
             <span className="hidden sm:inline">Hantar</span>
           </button>
         </div>
-        <p className="text-center text-white/50 text-[10px] mt-2 font-semibold">
+        <p className="text-center text-slate-500 text-[10px] mt-2 font-semibold">
           💰 {CREDIT_COSTS.ai_assistant} kredit setiap soalan
         </p>
       </div>

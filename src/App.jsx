@@ -131,13 +131,11 @@ const AuthenticatedApp = () => {
             <Route path="/scoreboard" element={<Scoreboard />} />
             <Route path="/buy-credits" element={<BuyCredits />} />
             <Route path="/syllabus" element={<Syllabus />} />
+            <Route path="/ai-assistant" element={<AIAssistant />} />
+            <Route path="/story-generator" element={<StoryGenerator />} />
+            <Route path="/bbm-generator" element={<BBMGenerator />} />
+            <Route path="/quiz-ai" element={<QuizAI />} />
           </Route>
-
-          {/* AI feature pages - immersive fullscreen, NO sidebar */}
-          <Route path="/ai-assistant" element={<AIAssistant />} />
-          <Route path="/story-generator" element={<StoryGenerator />} />
-          <Route path="/bbm-generator" element={<BBMGenerator />} />
-          <Route path="/quiz-ai" element={<QuizAI />} />
 
           {/* Game-play / fullscreen pages - NO sidebar (immersive experience) */}
           <Route path="/story-kid" element={<StoryKid />} />
