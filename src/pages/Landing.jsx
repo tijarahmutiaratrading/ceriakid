@@ -231,13 +231,7 @@ export default function Landing() {
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-            className="px-4 py-2 rounded-full font-black text-sm text-white whitespace-nowrap flex-shrink-0 transition-all hover:bg-white/15"
-            style={{
-              background: 'rgba(255,255,255,0.12)',
-              backdropFilter: 'blur(16px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(16px) saturate(180%)',
-              border: '1px solid rgba(255,255,255,0.2)',
-            }}
+            className="px-4 py-2 rounded-full font-black text-sm bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 hover:bg-amber-200 whitespace-nowrap flex-shrink-0 transition-colors"
           >
             {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
           </motion.button>
