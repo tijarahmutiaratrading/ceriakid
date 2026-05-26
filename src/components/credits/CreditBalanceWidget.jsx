@@ -52,7 +52,11 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
         {/* Header — match "Kos Setiap Ciri AI" style */}
         <div className="flex items-center justify-between gap-3 mb-3">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-300" />
+            <img
+              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
+              alt="CeriaKid"
+              className="w-6 h-6 rounded-full object-cover ring-1 ring-white/30"
+            />
             <h2 className="text-white font-black text-base">Baki Kredit AI</h2>
           </div>
           <Link
