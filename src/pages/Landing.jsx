@@ -297,9 +297,9 @@ export default function Landing() {
       </section>
 
       {/* ── STATS STRIP ── */}
-      <section className="relative overflow-hidden py-10 md:py-14 px-5 sm:px-8 bg-gradient-to-br from-slate-950 via-indigo-950 to-purple-950 border-y border-white/5">
-        <div className="absolute top-0 -left-20 w-80 h-80 rounded-full bg-pink-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 -right-20 w-80 h-80 rounded-full bg-orange-500/10 blur-3xl pointer-events-none" />
+      <section className="relative overflow-hidden py-10 md:py-14 px-5 sm:px-8 bg-gradient-to-br from-sky-50 via-rose-50 to-amber-50 border-y border-white/40">
+        <div className="absolute top-0 -left-20 w-80 h-80 rounded-full bg-pink-300/40 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 -right-20 w-80 h-80 rounded-full bg-orange-300/40 blur-3xl pointer-events-none" />
         <div className="relative z-10 max-w-5xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {[
@@ -314,11 +314,11 @@ export default function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
-                className="rounded-2xl p-4 md:p-5 bg-white/5 backdrop-blur-md border border-white/10 text-center"
+                className="rounded-2xl p-4 md:p-5 bg-white/80 backdrop-blur-md border border-white shadow-md text-center"
               >
                 <div className="text-2xl md:text-3xl mb-2">{stat.icon}</div>
-                <div className="text-2xl md:text-4xl font-black bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent leading-none">{stat.num}</div>
-                <div className="text-white/60 text-xs md:text-sm font-bold mt-2">{stat.label}</div>
+                <div className="text-2xl md:text-4xl font-black bg-gradient-to-r from-orange-500 via-pink-500 to-amber-500 bg-clip-text text-transparent leading-none">{stat.num}</div>
+                <div className="text-slate-700 text-xs md:text-sm font-bold mt-2">{stat.label}</div>
               </motion.div>
             ))}
           </div>
