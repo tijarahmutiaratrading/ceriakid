@@ -212,7 +212,7 @@ export default function Landing() {
       {/* Mobile */}
       <nav className={`md:hidden fixed top-0 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div
-          className="max-w-md mx-auto w-full px-2 py-1.5 rounded-full shadow-2xl shadow-black/50 flex items-center justify-between gap-1.5"
+          className="max-w-md mx-auto w-full px-3 py-2.5 rounded-3xl shadow-2xl shadow-black/50"
           style={{
             background: 'rgba(15, 10, 30, 0.45)',
             backdropFilter: 'blur(24px) saturate(180%)',
@@ -220,30 +220,39 @@ export default function Landing() {
             border: '1px solid rgba(255,255,255,0.18)',
           }}
         >
-          <img
-            src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
-            alt="CeriaKid"
-            className="h-7 w-7 rounded-full object-cover ring-1 ring-white/20 flex-shrink-0"
-          />
-          <a
-            href="#ai"
-            className="px-2.5 py-1.5 rounded-full font-black text-[11px] text-white/90 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
-          >
-            Cikgu AI
-          </a>
-          <a
-            href="#pricing"
-            className="px-2.5 py-1.5 rounded-full font-black text-[11px] text-white/90 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
-          >
-            Order Now
-          </a>
-          <motion.button
-            whileTap={{ scale: 0.96 }}
-            onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-            className="px-2.5 py-1.5 rounded-full font-black text-[11px] bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 flex-shrink-0 whitespace-nowrap"
-          >
-            {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
-          </motion.button>
+          {/* Row 1: logo + login button */}
+          <div className="flex items-center justify-between mb-2">
+            <img
+              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
+              alt="CeriaKid"
+              className="h-9 w-9 rounded-full object-cover ring-1 ring-white/20"
+            />
+            <motion.button
+              whileTap={{ scale: 0.96 }}
+              onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
+              className="px-4 py-2 rounded-full font-black text-sm bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 whitespace-nowrap"
+            >
+              {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
+            </motion.button>
+          </div>
+          {/* Row 2: menu links centered */}
+          <div className="flex items-center justify-center gap-1 flex-wrap">
+            {[
+              { href: '#features', label: 'Ciri-ciri' },
+              { href: '#ai', label: 'Cikgu AI' },
+              { href: '#testimonials', label: 'Testimoni' },
+              { href: '#pricing', label: 'Order Now' },
+              { href: '#faq', label: 'FAQ' },
+            ].map(item => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="px-2.5 py-1.5 rounded-full font-black text-xs text-white/85 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
         </div>
       </nav>
 
