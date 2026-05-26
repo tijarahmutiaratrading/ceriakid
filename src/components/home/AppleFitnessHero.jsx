@@ -11,8 +11,8 @@ const SLIDES = [
     meta: '200+ Permainan • Semua Subjek',
     cta: 'Mula Sekarang',
     ctaLink: '/games-hub',
-    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/98cf1f885_generated_image.png',
-    objectPos: 'center 30%',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/092310156_generated_image.png',
+    objectPos: 'center center',
   },
   {
     tagline: 'AKTIVITI HARI INI',
@@ -20,8 +20,8 @@ const SLIDES = [
     meta: 'Dapatkan ganjaran bintang setiap hari',
     cta: 'Lihat Cabaran',
     ctaLink: '/challenges',
-    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d1137d39a_generated_image.png',
-    objectPos: 'center 25%',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3932e4bfd_generated_image.png',
+    objectPos: 'center center',
   },
   {
     tagline: 'CIRI AI BAHARU',
@@ -29,8 +29,8 @@ const SLIDES = [
     meta: 'Tutor peribadi 24/7 untuk anak anda',
     cta: 'Tanya Cikgu',
     ctaLink: '/ai-assistant',
-    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&q=80',
-    objectPos: 'center 35%',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/05975c0fa_generated_image.png',
+    objectPos: 'center center',
   },
   {
     tagline: 'STORY KID',
@@ -38,8 +38,8 @@ const SLIDES = [
     meta: 'Cerita bergambar interaktif setiap hari',
     cta: 'Baca Sekarang',
     ctaLink: '/story-kid',
-    image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=1600&q=80',
-    objectPos: 'center 40%',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/618a93e8d_generated_image.png',
+    objectPos: 'center center',
   },
 ];
 
@@ -87,21 +87,25 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
         </motion.div>
       </AnimatePresence>
 
-      {/* Greeting badge top-left — clickable */}
+      {/* Greeting top-left — big avatar + name beside */}
       <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
         <button
           type="button"
           onClick={() => setMenuOpen(!menuOpen)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-xl ring-1 ring-white/15 hover:bg-black/55 hover:ring-white/30 transition-all"
+          className="flex items-center gap-3 group"
         >
           {avatarUrl ? (
-            <img src={avatarUrl} alt="Avatar" className="w-6 h-6 rounded-full object-cover" />
+            <img
+              src={avatarUrl}
+              alt="Avatar"
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover ring-2 ring-white/40 group-hover:ring-white/70 shadow-xl transition-all"
+            />
           ) : (
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-300 to-purple-400 flex items-center justify-center text-white font-black text-[10px]">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-cyan-300 to-purple-400 flex items-center justify-center text-white font-black text-2xl ring-2 ring-white/40 group-hover:ring-white/70 shadow-xl transition-all">
               {firstName.charAt(0).toUpperCase()}
             </div>
           )}
-          <p className="text-white font-black text-xs">Hai, {firstName} 👋</p>
+          <p className="text-white font-black text-sm sm:text-base drop-shadow-lg">Hai, {firstName} 👋</p>
         </button>
 
         <AnimatePresence>
@@ -113,7 +117,7 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -6, scale: 0.96 }}
                 transition={{ duration: 0.15 }}
-                className="absolute top-full left-0 mt-2 min-w-[14rem] rounded-2xl p-2 shadow-2xl z-20"
+                className="absolute top-full left-0 mt-3 min-w-[14rem] rounded-2xl p-2 shadow-2xl z-20"
                 style={{
                   background: 'rgba(20, 14, 38, 0.92)',
                   backdropFilter: 'blur(28px) saturate(180%)',
