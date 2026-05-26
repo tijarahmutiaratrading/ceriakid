@@ -24,7 +24,7 @@ export default function AppLayout() {
         }}
       />
       <UserTopHeader />
-      <main className="w-full overflow-x-hidden md:pt-20">
+      <main className="w-full overflow-x-hidden md:pt-14">
         <Outlet />
       </main>
     </div>
