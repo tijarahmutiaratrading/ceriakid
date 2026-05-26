@@ -10,7 +10,7 @@ const SLIDES = [
     title: 'Anak belajar sambil main game',
     meta: '7 subjek • KSPK + KSSR • Tanpa iklan',
     cta: '🎮 Cuba Sekarang',
-    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/092310156_generated_image.png',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d31933bee_generated_image.png',
     objectPos: 'center center',
   },
   {
@@ -18,7 +18,7 @@ const SLIDES = [
     title: 'Cikgu Firdaus AI',
     meta: 'Tutor peribadi untuk anak anda — sentiasa sedia',
     cta: '🎮 Cuba Sekarang',
-    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/05975c0fa_generated_image.png',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9ecc9da00_generated_image.png',
     objectPos: 'center center',
   },
   {
@@ -26,7 +26,7 @@ const SLIDES = [
     title: 'Belajar setiap hari',
     meta: 'Streak harian + ganjaran bintang untuk motivasi anak',
     cta: '🎮 Cuba Sekarang',
-    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3932e4bfd_generated_image.png',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/07f21ecbd_generated_image.png',
     objectPos: 'center center',
   },
   {
@@ -34,7 +34,7 @@ const SLIDES = [
     title: 'Dunia Cerita Interaktif',
     meta: 'Cerita bergambar AI yang anak boleh pilih sendiri',
     cta: '🎮 Cuba Sekarang',
-    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/618a93e8d_generated_image.png',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/ec73f3d02_generated_image.png',
     objectPos: 'center center',
   },
 ];
@@ -52,33 +52,43 @@ export default function LandingHeroCarousel({ onCTAClick, onPricingClick }) {
   }, []);
 
   return (
-    <div className="relative w-full rounded-[1.75rem] sm:rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[4/5] sm:aspect-[16/10] md:aspect-[16/8]">
-      {/* Slides — render all, fade between with opacity (no scale to avoid edge gaps) */}
+    <div className="relative w-full rounded-[1.75rem] sm:rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[3/4] sm:aspect-[16/10] md:aspect-[16/8] bg-slate-900">
+      {/* Slides — render all, fade between with opacity */}
       {SLIDES.map((s, i) => (
-        <motion.div
+        <img
           key={i}
-          initial={false}
-          animate={{ opacity: i === index ? 1 : 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="absolute inset-0"
-          style={{ pointerEvents: 'none' }}
-        >
-          <img
-            src={s.image}
-            alt={s.title}
-            className="block absolute inset-0 w-full h-full object-cover"
-            style={{ objectPosition: s.objectPos }}
-          />
-          {/* Dark gradient overlay */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 35%, rgba(0,0,0,0.15) 70%, rgba(0,0,0,0) 100%), linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.55) 100%)',
-            }}
-          />
-        </motion.div>
+          src={s.image}
+          alt={s.title}
+          className="pointer-events-none transition-opacity duration-700"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: s.objectPos,
+            opacity: i === index ? 1 : 0,
+          }}
+          loading={i === 0 ? 'eager' : 'lazy'}
+        />
       ))}
+
+      {/* Dark gradient overlay — stronger on mobile bottom for content readability */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.85) 100%)',
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none hidden sm:block"
+        style={{
+          background:
+            'linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 35%, rgba(0,0,0,0.15) 70%, rgba(0,0,0,0) 100%)',
+        }}
+      />
 
       {/* Top-left Malaysia badge */}
       <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
