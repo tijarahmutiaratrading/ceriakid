@@ -29,8 +29,8 @@ const defaultSettings = {
 function FieldGroup({ label, hint, children }) {
   return (
     <div className="mb-5">
-      <label className="block text-sm font-black text-white mb-1.5">{label}</label>
-      {hint && <p className="text-xs text-white/70 mb-2.5">{hint}</p>}
+      <label className="block text-sm font-black text-slate-800 mb-1.5">{label}</label>
+      {hint && <p className="text-xs text-slate-600 mb-2.5">{hint}</p>}
       {children}
     </div>
   );
@@ -45,9 +45,9 @@ function SecretInput({ value, onChange, placeholder }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full border border-white/25 rounded-xl px-4 py-3 pr-12 text-sm font-mono bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/55 focus:bg-white/15 transition-all"
+        className="w-full border border-slate-300 rounded-xl px-4 py-3 pr-12 text-sm font-mono bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
       />
-      <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white">
+      <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700">
         {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
       </button>
     </div>
@@ -61,7 +61,7 @@ function TextInput({ value, onChange, placeholder }) {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full border border-white/25 rounded-xl px-4 py-3 text-sm font-mono bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/55 focus:bg-white/15 transition-all"
+      className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm font-mono bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
     />
   );
 }
@@ -223,11 +223,11 @@ export default function AdminDashboard() {
   const activeCount = subscriptions.filter(s => s.status === 'active').length;
 
   return (
-    <div className="min-h-screen relative overflow-hidden text-foreground" style={{ background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 35%, #4a1d6e 70%, #6b1d52 100%)' }}>
+    <div className="min-h-screen relative overflow-hidden text-foreground" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #eef2ff 35%, #fce7f3 70%, #fef3c7 100%)' }}>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] bg-game-purple/40 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-game-pink/35 rounded-full blur-3xl" />
-        <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] bg-game-blue/30 rounded-full blur-3xl" />
+        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] bg-violet-300/30 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-pink-300/30 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] bg-sky-300/30 rounded-full blur-3xl" />
       </div>
 
       <div className="md:hidden">
@@ -240,8 +240,8 @@ export default function AdminDashboard() {
           <main className="min-w-0 space-y-4 md:space-y-5">
         {/* Mobile tab pill (shows current section) */}
         <div className="lg:hidden pro-glass rounded-2xl px-3 py-2 flex items-center justify-between gap-2">
-          <p className="text-white/65 text-[10px] font-black uppercase tracking-widest">Section</p>
-          <p className="text-white text-sm font-black truncate">
+          <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Section</p>
+          <p className="text-slate-900 text-sm font-black truncate">
             {tabs.find(t => t.key === activeTab)?.label || 'Dashboard'}
           </p>
         </div>
@@ -251,10 +251,10 @@ export default function AdminDashboard() {
 
         {/* Action bar */}
         <div className="flex flex-wrap items-center justify-end gap-2">
-          <button type="button" onClick={loadData} className="rounded-xl bg-white/15 hover:bg-white/25 px-3 py-2 text-xs font-black text-white transition-all flex items-center gap-1.5 ring-1 ring-white/20">
+          <button type="button" onClick={loadData} className="rounded-xl bg-white/80 hover:bg-white px-3 py-2 text-xs font-black text-slate-800 transition-all flex items-center gap-1.5 ring-1 ring-slate-300 shadow-sm">
             <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <button type="button" onClick={handleClearCache} disabled={clearingCache} className="rounded-xl bg-white/15 hover:bg-white/25 px-3 py-2 text-xs font-black text-white transition-all disabled:opacity-60 flex items-center gap-1.5 ring-1 ring-white/20">
+          <button type="button" onClick={handleClearCache} disabled={clearingCache} className="rounded-xl bg-white/80 hover:bg-white px-3 py-2 text-xs font-black text-slate-800 transition-all disabled:opacity-60 flex items-center gap-1.5 ring-1 ring-slate-300 shadow-sm">
             <RefreshCw className={`w-3.5 h-3.5 ${clearingCache ? 'animate-spin' : ''}`} /> Cache
           </button>
         </div>
@@ -288,8 +288,8 @@ export default function AdminDashboard() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="pro-glass rounded-3xl p-5">
               <div className="flex items-end justify-between mb-4">
                 <div>
-                  <h2 className="text-lg md:text-xl font-black text-white">💳 Jualan Mengikut Pelan</h2>
-                  <p className="text-white/85 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
+                  <h2 className="text-lg md:text-xl font-black text-slate-900">💳 Jualan Mengikut Pelan</h2>
+                  <p className="text-slate-600 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
@@ -321,25 +321,25 @@ export default function AdminDashboard() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="pro-glass rounded-3xl p-5">
               <div className="flex items-end justify-between mb-4 flex-wrap gap-3">
                 <div>
-                  <h2 className="text-lg md:text-xl font-black text-white">📋 Database Pelanggan</h2>
-                  <p className="text-white/85 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
+                  <h2 className="text-lg md:text-xl font-black text-slate-900">📋 Database Pelanggan</h2>
+                  <p className="text-slate-600 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
                 </div>
                 <span className="text-xs font-black text-purple-900 bg-amber-300 px-3 py-1.5 rounded-full ring-1 ring-amber-200">{subscriptions.length} pelanggan</span>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[720px] text-sm">
                   <thead>
-                    <tr className="border-b border-white/20">
-                      <th className="text-left py-3 px-4 font-black text-white/90 text-xs uppercase tracking-wider">Email</th>
-                      <th className="text-left py-3 px-4 font-black text-white/90 text-xs uppercase tracking-wider">Paket</th>
-                      <th className="text-left py-3 px-4 font-black text-white/90 text-xs uppercase tracking-wider">Status</th>
-                      <th className="text-left py-3 px-4 font-black text-white/90 text-xs uppercase tracking-wider">Tarikh</th>
+                    <tr className="border-b border-slate-200">
+                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Email</th>
+                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Paket</th>
+                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Status</th>
+                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Tarikh</th>
                     </tr>
                   </thead>
                   <tbody>
                     {subscriptions.map((sub) => (
-                      <tr key={sub.id} className="border-b border-white/10 hover:bg-white/10 transition-colors">
-                        <td className="py-3 px-4 text-xs text-white font-semibold">{sub.email}</td>
+                      <tr key={sub.id} className="border-b border-slate-100 hover:bg-white/60 transition-colors">
+                        <td className="py-3 px-4 text-xs text-slate-800 font-semibold">{sub.email}</td>
                         <td className="py-3 px-4 whitespace-nowrap">
                           <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
                             sub.tier === 'free' ? 'bg-gray-300 text-gray-900' :
@@ -366,12 +366,12 @@ export default function AdminDashboard() {
                              '✕ Batal'}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-xs text-white/80 font-semibold whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
+                        <td className="py-3 px-4 text-xs text-slate-600 font-semibold whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
                       </tr>
                     ))}
                     {subscriptions.length === 0 && (
                       <tr>
-                        <td colSpan={4} className="py-12 text-center text-white/70 font-semibold">Tiada pelanggan lagi.</td>
+                        <td colSpan={4} className="py-12 text-center text-slate-500 font-semibold">Tiada pelanggan lagi.</td>
                       </tr>
                     )}
                   </tbody>
@@ -396,7 +396,7 @@ export default function AdminDashboard() {
                 <button
                   key={tab.key}
                   onClick={() => setSettingsTab(tab.key)}
-                  className={`flex-1 py-2.5 px-3 rounded-xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-white text-game-purple shadow' : 'text-white/85 hover:bg-white/15'}`}
+                  className={`flex-1 py-2.5 px-3 rounded-xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-slate-900 text-white shadow' : 'text-slate-700 hover:bg-white/70'}`}
                 >
                   {tab.icon}<span className="hidden sm:inline">{tab.label}</span><span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                 </button>
@@ -411,8 +411,8 @@ export default function AdminDashboard() {
                     <Facebook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg">Meta / Facebook Pixel</h2>
-                    <p className="text-xs text-white/85 font-semibold">Untuk tracking FB Ads & conversion events</p>
+                    <h2 className="font-black text-slate-900 text-lg">Meta / Facebook Pixel</h2>
+                    <p className="text-xs text-slate-600 font-semibold">Untuk tracking FB Ads & conversion events</p>
                   </div>
                 </div>
 
@@ -424,8 +424,8 @@ export default function AdminDashboard() {
                   <SecretInput value={settings.fb_access_token} onChange={v => set('fb_access_token', v)} placeholder="EAABsbCS1iHg..." />
                 </FieldGroup>
 
-                <div className="mt-6 rounded-xl p-4 text-sm" style={{ background: 'rgba(59,130,246,0.1)', border: '2px solid rgba(59,130,246,0.3)', color: 'rgba(219,234,254,1)' }}>
-                  <p className="font-black mb-1 text-blue-300">📌 Cara pasang Pixel ID:</p>
+                <div className="mt-6 rounded-xl p-4 text-sm bg-blue-50 border-2 border-blue-200 text-blue-900">
+                  <p className="font-black mb-1 text-blue-700">📌 Cara pasang Pixel ID:</p>
                   <ol className="list-decimal list-inside space-y-1 text-xs leading-relaxed">
                     <li>Pergi ke <strong>Meta Business Suite → Events Manager</strong></li>
                     <li>Klik <strong>Connect Data Source → Web</strong></li>
@@ -444,8 +444,8 @@ export default function AdminDashboard() {
                     <CreditCard className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg">Chip Payment Gateway</h2>
-                    <p className="text-xs text-white/85 font-semibold">FPX, kad kredit & e-wallet Malaysia</p>
+                    <h2 className="font-black text-slate-900 text-lg">Chip Payment Gateway</h2>
+                    <p className="text-xs text-slate-600 font-semibold">FPX, kad kredit & e-wallet Malaysia</p>
                   </div>
                 </div>
 
@@ -470,7 +470,7 @@ export default function AdminDashboard() {
                 </FieldGroup>
 
                 {loadingSecrets && (
-                  <p className="text-xs text-white/70 mb-3">⏳ Memuat credentials dari server...</p>
+                  <p className="text-xs text-slate-600 mb-3">⏳ Memuat credentials dari server...</p>
                 )}
 
                 <FieldGroup label="Brand ID" hint="✅ Auto-loaded dari server. Edit untuk update.">
@@ -481,8 +481,8 @@ export default function AdminDashboard() {
                   <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="sk_live_..." />
                 </FieldGroup>
 
-                <div className="mt-6 rounded-xl p-4 text-sm" style={{ background: 'rgba(34,197,94,0.1)', border: '2px solid rgba(34,197,94,0.3)', color: 'rgba(220,252,231,1)' }}>
-                  <p className="font-black mb-1 text-green-300">📌 Cara dapatkan Chip credentials:</p>
+                <div className="mt-6 rounded-xl p-4 text-sm bg-green-50 border-2 border-green-200 text-green-900">
+                  <p className="font-black mb-1 text-green-700">📌 Cara dapatkan Chip credentials:</p>
                   <ol className="list-decimal list-inside space-y-1 text-xs leading-relaxed">
                     <li>Log in ke <strong>merchant.chip-in.asia</strong></li>
                     <li>Pergi ke <strong>Settings → Brand</strong> untuk Brand ID</li>
@@ -501,8 +501,8 @@ export default function AdminDashboard() {
                     <Webhook className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="font-black text-white text-lg">Webhook Settings</h2>
-                    <p className="text-xs text-white/85 font-semibold">Untuk receive payment callbacks dari Chip</p>
+                    <h2 className="font-black text-slate-900 text-lg">Webhook Settings</h2>
+                    <p className="text-xs text-slate-600 font-semibold">Untuk receive payment callbacks dari Chip</p>
                   </div>
                 </div>
 
@@ -511,10 +511,10 @@ export default function AdminDashboard() {
                 </FieldGroup>
 
                 <div className="mt-2 mb-5">
-                  <label className="block text-sm font-black text-white mb-1">Webhook URL Anda</label>
-                  <p className="text-xs text-white/70 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
+                  <label className="block text-sm font-black text-slate-800 mb-1">Webhook URL Anda</label>
+                  <p className="text-xs text-slate-600 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
                   <div className="flex gap-2">
-                    <div className="flex-1 bg-white/10 border-2 border-dashed border-white/25 rounded-xl px-3 py-3 text-xs font-mono text-white/85 break-all overflow-x-auto">
+                    <div className="flex-1 bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl px-3 py-3 text-xs font-mono text-slate-700 break-all overflow-x-auto">
                       {window.location.origin}/api/webhook/chip
                     </div>
                     <button
@@ -522,19 +522,19 @@ export default function AdminDashboard() {
                         navigator.clipboard.writeText(`${window.location.origin}/api/webhook/chip`);
                         toast({ title: '📋 URL disalin!', description: 'Paste dalam Chip Dashboard.' });
                       }}
-                      className="px-4 py-2 bg-white/15 hover:bg-white/25 text-white rounded-xl font-bold text-xs transition-all ring-1 ring-white/25"
+                      className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-xs transition-all"
                     >
                       Copy
                     </button>
                   </div>
                 </div>
 
-                <div className="rounded-xl p-4 text-sm" style={{ background: 'rgba(168,85,247,0.1)', border: '2px solid rgba(168,85,247,0.3)', color: 'rgba(243,232,255,1)' }}>
-                  <p className="font-black mb-1 text-purple-300">📌 Events yang perlu didaftarkan:</p>
+                <div className="rounded-xl p-4 text-sm bg-purple-50 border-2 border-purple-200 text-purple-900">
+                  <p className="font-black mb-1 text-purple-700">📌 Events yang perlu didaftarkan:</p>
                   <div className="space-y-1 text-xs">
                     {['payment.paid', 'payment.pending', 'payment.expired', 'payment.cancelled'].map(event => (
                       <div key={event} className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
+                        <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
                         <code className="font-mono">{event}</code>
                       </div>
                     ))}
@@ -564,7 +564,7 @@ export default function AdminDashboard() {
                   <><Save className="w-5 h-5" /> Simpan Tetapan</>
                 )}
               </motion.button>
-              <p className="text-center text-xs text-white/85 mt-4 font-semibold">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
+              <p className="text-center text-xs text-slate-600 mt-4 font-semibold">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
             </motion.div>
           </>
         )}
