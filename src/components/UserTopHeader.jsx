@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 const NAV_GROUPS = [
   {
@@ -54,6 +55,7 @@ export default function UserTopHeader() {
   const [openMenu, setOpenMenu] = useState(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navRef = useRef(null);
+  const isVisible = useScrollDirection();
 
   const isAdmin = user?.role === 'admin';
   const isActive = (path) => location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
@@ -77,22 +79,23 @@ export default function UserTopHeader() {
   return (
     <header
       ref={navRef}
-      className="hidden md:flex fixed top-6 left-0 right-0 z-50 justify-center px-4 pointer-events-none"
+      className={`hidden md:flex fixed top-6 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
     >
-      {/* Center: Floating pill nav (Apple Fitness style) */}
+      {/* Center: Floating pill nav (Apple Fitness style — glossy light) */}
       <nav
-        className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-2xl shadow-black/50"
+        className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-xl shadow-black/20"
         style={{
-          background: 'rgba(15, 10, 30, 0.35)',
-          backdropFilter: 'blur(24px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-          border: '1px solid rgba(255,255,255,0.18)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          border: '1px solid rgba(255,255,255,0.6)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
         }}
       >
         {isAdmin && (
           <Link
             to="/admin-dashboard"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black text-amber-300 hover:text-amber-200 hover:bg-white/5 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-all"
             title="Tukar ke Admin Panel"
           >
             <Shield className="w-3.5 h-3.5" />
@@ -111,13 +114,13 @@ export default function UserTopHeader() {
                 key={group.key}
                 to={group.path}
                 className={`relative px-4 py-1.5 rounded-full font-black text-sm transition-colors ${
-                  showActive ? 'text-amber-300' : 'text-white/85 hover:text-white'
+                  showActive ? 'text-white' : 'text-slate-800 hover:text-slate-900'
                 }`}
               >
                 {showActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full bg-black/45 ring-1 ring-white/10"
+                    className="absolute inset-0 rounded-full bg-slate-900 ring-1 ring-white/20"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -132,13 +135,13 @@ export default function UserTopHeader() {
                 type="button"
                 onClick={() => setOpenMenu(isOpen ? null : group.key)}
                 className={`relative flex items-center gap-1 px-4 py-1.5 rounded-full font-black text-sm transition-colors ${
-                  showActive ? 'text-amber-300' : 'text-white/85 hover:text-white'
+                  showActive ? 'text-white' : 'text-slate-800 hover:text-slate-900'
                 }`}
               >
                 {showActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full bg-black/45 ring-1 ring-white/10"
+                    className="absolute inset-0 rounded-full bg-slate-900 ring-1 ring-white/20"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
