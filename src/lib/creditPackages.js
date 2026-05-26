@@ -12,7 +12,7 @@ export const CREDIT_PACKAGES = [
     emoji: '🌱',
     color: 'from-emerald-400 to-green-500',
     description: 'Sesuai untuk cuba ciri AI',
-    perks: ['~50 soalan AI / Kuiz', '~16 cerita kreatif', '~10 lembaran kerja BBM'],
+    perks: ['~50 soalan AI / Kuiz', '~10 cerita kreatif', '~6 lembaran kerja BBM'],
   },
   {
     id: 'family',
@@ -24,7 +24,7 @@ export const CREDIT_PACKAGES = [
     color: 'from-sky-400 to-blue-500',
     description: 'Paling popular — jimat 22%',
     popular: true,
-    perks: ['125 kredit (110 + 15 bonus)', '~125 soalan AI / Kuiz', '~41 cerita · ~25 BBM'],
+    perks: ['125 kredit (110 + 15 bonus)', '~125 soalan AI / Kuiz', '~25 cerita · ~15 BBM'],
   },
   {
     id: 'power',
@@ -35,16 +35,16 @@ export const CREDIT_PACKAGES = [
     emoji: '👑',
     color: 'from-violet-400 to-purple-500',
     description: 'Nilai terbaik — jimat 38%',
-    perks: ['270 kredit (230 + 40 bonus)', '~270 soalan AI / Kuiz', '~90 cerita · ~54 BBM'],
+    perks: ['270 kredit (230 + 40 bonus)', '~270 soalan AI / Kuiz', '~54 cerita · ~33 BBM'],
   },
 ];
 
 // Harga kredit setiap ciri AI (dikurangkan dari baki user)
 export const CREDIT_COSTS = {
-  ai_assistant: 1,        // 1 kredit per soalan
-  story_generator: 3,     // 3 kredit per cerita
-  bbm_generator: 5,       // 5 kredit per BBM
-  quiz_ai: 1,             // 1 kredit per soalan kuiz
+  ai_assistant: 1,        // 1 kredit per soalan (gpt-4o-mini)
+  story_generator: 5,     // 5 kredit per cerita (gpt_5_4, margin ~13x)
+  bbm_generator: 8,       // 8 kredit per BBM (gpt_5_4, margin ~13x)
+  quiz_ai: 1,             // 1 kredit per soalan kuiz (gpt-4o-mini)
 };
 
 export function getPackageById(id) {
