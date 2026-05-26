@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, CheckCircle2, XCircle, Info } from 'lucide-react';
+import { Sparkles, CheckCircle2, XCircle, Info, ArrowLeft } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
 import CreditPackageCard from '@/components/credits/CreditPackageCard';
@@ -58,6 +59,14 @@ export default function BuyCredits() {
       <AppHeader showBack={true} backTo="/dashboard" title="Beli Kredit AI" />
 
       <div className="relative max-w-6xl mx-auto px-4 pt-24 md:pt-8 pb-32">
+        {/* Back button */}
+        <Link
+          to="/dashboard"
+          className="hidden md:inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/20 text-white/90 hover:text-white hover:bg-slate-900/70 font-black text-sm transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
+        </Link>
+
         {/* Status banner */}
         {statusBanner && (
           <motion.div
