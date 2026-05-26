@@ -70,18 +70,15 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
         {/* Inner cards — slate-900/50 black tiles like the AI feature costs */}
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
-            <p className="text-2xl">💎</p>
-            <p className="text-white font-black text-sm mt-1">Baki Semasa</p>
+            <p className="text-white font-black text-sm">Baki Semasa</p>
             <p className="text-amber-300 text-xs font-black">{balance} kredit</p>
           </div>
           <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
-            <p className="text-2xl">🛒</p>
-            <p className="text-white font-black text-sm mt-1">Dibeli</p>
+            <p className="text-white font-black text-sm">Dibeli</p>
             <p className="text-amber-300 text-xs font-black">{credits?.totalPurchased ?? 0} kredit</p>
           </div>
           <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
-            <p className="text-2xl">⚡</p>
-            <p className="text-white font-black text-sm mt-1">Digunakan</p>
+            <p className="text-white font-black text-sm">Digunakan</p>
             <p className="text-amber-300 text-xs font-black">{credits?.totalUsed ?? 0} kredit</p>
           </div>
         </div>
