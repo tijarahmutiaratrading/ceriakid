@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Loader2, LayoutDashboard, Home } from 'lucide-react';
@@ -11,45 +11,74 @@ const tierLabels = {
   keluarga: 'Keluarga',
 };
 
+const TIER_VALUES = { asas: 49, standard: 99, keluarga: 199 };
+
 export default function ThankYou() {
   const { user, refreshAuth } = useAuth();
   const [status, setStatus] = useState('checking');
   const [tier, setTier] = useState(new URLSearchParams(window.location.search).get('tier') || '');
+  const pollRef = useRef(null);
+  const pollAttempts = useRef(0);
 
   useEffect(() => {
-    const checkSubscription = async () => {
-      if (!user?.email) return;
-      const subs = await base44.entities.UserSubscription.filter({ email: user.email });
-      const active = subs?.find(sub => sub.status === 'active');
-      if (active) {
-        const activeTier = active.tier || tier;
-        setTier(activeTier);
-        setStatus('active');
-        refreshAuth?.();
+    // Fire Purchase pixel — uses URL tier param so we don't wait for webhook/auth.
+    // Dedupe via sessionStorage so refresh doesn't double-fire.
+    const urlTier = new URLSearchParams(window.location.search).get('tier');
+    if (urlTier && TIER_VALUES[urlTier] && typeof window !== 'undefined' && window.fbq) {
+      const dedupeKey = `purchase_fired_${urlTier}_${window.location.search}`;
+      if (!sessionStorage.getItem(dedupeKey)) {
+        const eventID = `purchase_${urlTier}_${Date.now()}`;
+        window.fbq('track', 'Purchase', {
+          currency: 'MYR',
+          value: TIER_VALUES[urlTier],
+          content_name: tierLabels[urlTier] || urlTier,
+          content_ids: [urlTier],
+          content_type: 'product',
+        }, { eventID });
+        sessionStorage.setItem(dedupeKey, '1');
+      }
+    }
+  }, []);
 
-        // Fire Purchase pixel — only after subscription confirmed active.
-        // Use subscription ID as eventID to dedupe across refreshes.
-        const eventID = `purchase_${active.id}`;
-        const alreadyFired = localStorage.getItem(`pixel_fired_${eventID}`);
-        if (!alreadyFired && window.fbq) {
-          const value = activeTier === 'asas' ? 49 : activeTier === 'standard' ? 99 : activeTier === 'keluarga' ? 199 : 0;
-          window.fbq('track', 'Purchase', {
-            currency: 'MYR',
-            value: value,
-            content_name: tierLabels[activeTier] || activeTier || 'CeriaKid Plan',
-            content_ids: [activeTier],
-            content_type: 'product',
-          }, { eventID });
-          localStorage.setItem(`pixel_fired_${eventID}`, '1');
+  useEffect(() => {
+    // Poll subscription status — webhook may take 5-30 seconds.
+    // Retry every 3s up to 10 times (~30s total) before giving up.
+    const checkSubscription = async () => {
+      if (!user?.email) return false;
+      try {
+        const subs = await base44.entities.UserSubscription.filter({ email: user.email });
+        const active = subs?.find(sub => sub.status === 'active');
+        if (active) {
+          const activeTier = active.tier || tier;
+          setTier(activeTier);
+          setStatus('active');
+          refreshAuth?.();
+          return true;
         }
-      } else {
+      } catch (e) {
+        // ignore — will retry
+      }
+      return false;
+    };
+
+    const poll = async () => {
+      const done = await checkSubscription();
+      pollAttempts.current += 1;
+      if (done) {
+        if (pollRef.current) clearInterval(pollRef.current);
+        return;
+      }
+      if (pollAttempts.current >= 10) {
+        if (pollRef.current) clearInterval(pollRef.current);
         setStatus('pending');
       }
     };
 
-    checkSubscription();
-    const timer = setTimeout(checkSubscription, 4000);
-    return () => clearTimeout(timer);
+    poll();
+    pollRef.current = setInterval(poll, 3000);
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
   }, [user?.email]);
 
   return (

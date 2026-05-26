@@ -4,18 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check, CheckCircle, XCircle, Menu, X } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
-import { trackPixelEvent } from '@/lib/pixel';
-import AppHeader from '@/components/AppHeader';
-import InteractiveGameDemo from '@/components/landing/InteractiveGameDemo';
 import PricingCheckout from '@/components/PricingCheckout';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import HeroCarousel from '@/components/landing/HeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
 import LandingAISection from '@/components/landing/LandingAISection';
-
-// Tier values for FB Pixel Purchase event
-const TIER_VALUES = { asas: 49, standard: 99, keluarga: 199 };
 
 
 // Testimoni ibu bapa pengguna CeriaKid
@@ -80,24 +74,13 @@ export default function Landing() {
   const [paymentStatus, setPaymentStatus] = useState(null); // 'success' | 'failed' | null
   const lastScrollY = useRef(0);
 
-  // Detect payment return from Chip
+  // Detect payment FAILURE return from Chip.
+  // NOTE: Successful payments redirect to /thank-you (see chipCheckout). Purchase pixel
+  // is fired there once subscription is confirmed active — NOT here.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const payment = params.get('payment');
-    const tier = params.get('tier');
-    if (payment === 'success') {
-      setPaymentStatus('success');
-      // Fire FB Pixel Purchase event so FB Ads optimize for paying customers
-      const value = TIER_VALUES[tier] || 0;
-      trackPixelEvent('Purchase', {
-        currency: 'MYR',
-        value,
-        content_name: tier || 'subscription',
-        content_type: 'product',
-      });
-      // Clean URL
-      window.history.replaceState({}, '', '/');
-    } else if (payment === 'failed') {
+    if (payment === 'failed') {
       setPaymentStatus('failed');
       window.history.replaceState({}, '', '/');
     }
