@@ -24,13 +24,14 @@ export default function Contact() {
             </div>
           </a>
 
-          <a href="https://wa.me/60123456789" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-5 bg-green-50 rounded-2xl border-2 border-green-100 hover:bg-green-100 transition-all">
+          <a href="https://wa.me/60177844120" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-5 bg-green-50 rounded-2xl border-2 border-green-100 hover:bg-green-100 transition-all">
             <div className="w-12 h-12 rounded-2xl bg-green-500 text-white flex items-center justify-center flex-shrink-0">
               <MessageCircle className="w-6 h-6" />
             </div>
             <div>
               <p className="font-black text-slate-900">WhatsApp</p>
-              <p className="text-sm text-slate-600">Lebih pantas untuk soalan pendek</p>
+              <p className="text-sm text-slate-600">017-784 4120</p>
+              <p className="text-xs text-slate-500 mt-1">Lebih pantas untuk soalan pendek</p>
             </div>
           </a>
         </div>
