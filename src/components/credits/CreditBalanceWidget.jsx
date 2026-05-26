@@ -55,7 +55,7 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
             : 'border border-white/30 bg-gradient-to-br from-amber-500 via-orange-500 to-orange-600 shadow-amber-950/20'
         } ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
         style={variant === 'glass' ? {
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10))',
+          background: 'linear-gradient(135deg, rgba(30,15,60,0.55), rgba(60,20,90,0.65))',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
         } : undefined}

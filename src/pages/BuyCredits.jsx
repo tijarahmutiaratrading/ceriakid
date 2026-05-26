@@ -105,23 +105,23 @@ export default function BuyCredits() {
             <h2 className="text-white font-black text-base">Kos Setiap Ciri AI</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="bg-white/10 rounded-2xl p-3">
+            <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
               <p className="text-2xl">🎓</p>
               <p className="text-white font-black text-sm mt-1">Pembantu Pembelajaran</p>
-              <p className="text-amber-300 text-xs font-bold">{CREDIT_COSTS.ai_assistant} kredit / soalan</p>
+              <p className="text-amber-300 text-xs font-black">{CREDIT_COSTS.ai_assistant} kredit / soalan</p>
             </div>
-            <div className="bg-white/10 rounded-2xl p-3">
+            <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
               <p className="text-2xl">📖</p>
               <p className="text-white font-black text-sm mt-1">Penjana Cerita</p>
-              <p className="text-amber-300 text-xs font-bold">{CREDIT_COSTS.story_generator} kredit / cerita</p>
+              <p className="text-amber-300 text-xs font-black">{CREDIT_COSTS.story_generator} kredit / cerita</p>
             </div>
-            <div className="bg-white/10 rounded-2xl p-3">
+            <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
               <p className="text-2xl">📝</p>
               <p className="text-white font-black text-sm mt-1">Penjana BBM</p>
-              <p className="text-amber-300 text-xs font-bold">{CREDIT_COSTS.bbm_generator} kredit / BBM</p>
+              <p className="text-amber-300 text-xs font-black">{CREDIT_COSTS.bbm_generator} kredit / BBM</p>
             </div>
           </div>
-          <p className="text-white/60 text-[11px] mt-4">
+          <p className="text-white text-xs font-bold mt-4">
             💡 Kredit tidak luput. Boleh dipakai bila-bila masa.
           </p>
         </motion.div>
