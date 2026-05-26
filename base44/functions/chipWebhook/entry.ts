@@ -1,5 +1,17 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
+// Tier config — MESTI SYNC dengan lib/affiliateTiers.js (no local imports allowed)
+const TIER_CONFIG = [
+  { key: 'bronze',   min: 0,   max: 9,        subRate: 20, credRate: 15 },
+  { key: 'silver',   min: 10,  max: 29,       subRate: 23, credRate: 17 },
+  { key: 'gold',     min: 30,  max: 99,       subRate: 26, credRate: 19 },
+  { key: 'platinum', min: 100, max: Infinity, subRate: 30, credRate: 22 },
+];
+
+function calculateTier(totalReferrals) {
+  return TIER_CONFIG.find(t => totalReferrals >= t.min && totalReferrals <= t.max) || TIER_CONFIG[0];
+}
+
 // Helper untuk track komisen affiliate. Reference format akhir: "...__ref_CODE"
 async function trackAffiliateCommission(base44, {
   referralCode, referredEmail, purchaseType, purchaseDetail, purchaseAmountMYR, chipPurchaseId,
@@ -27,6 +39,7 @@ async function trackAffiliateCommission(base44, {
       return;
     }
 
+    // Guna rate yang tersimpan pada affiliate (admin boleh override secara manual)
     const rate = purchaseType === 'subscription'
       ? (affiliate.commissionRateSubscription || 20)
       : (affiliate.commissionRateCredit || 15);
@@ -45,11 +58,34 @@ async function trackAffiliateCommission(base44, {
       chipPurchaseId,
     });
 
-    await base44.asServiceRole.entities.Affiliate.update(affiliate.id, {
-      totalReferrals: (affiliate.totalReferrals || 0) + 1,
+    // ─── AUTO-UPGRADE TIER ───
+    // Kira tier baru berdasarkan totalReferrals + 1
+    const newTotalReferrals = (affiliate.totalReferrals || 0) + 1;
+    const newTier = calculateTier(newTotalReferrals);
+    const currentTier = affiliate.tier || 'bronze';
+
+    const updateData = {
+      totalReferrals: newTotalReferrals,
       totalEarned: (affiliate.totalEarned || 0) + commissionMYR,
       pendingBalance: (affiliate.pendingBalance || 0) + commissionMYR,
-    });
+    };
+
+    // Hanya update tier & rate kalau tier berubah (naik level)
+    // Tak tukar rate kalau admin dah override (e.g., rate lebih tinggi dari tier default)
+    if (newTier.key !== currentTier) {
+      updateData.tier = newTier.key;
+      // Update rate hanya kalau current rate sama dengan tier lama (tiada manual override)
+      const oldTier = TIER_CONFIG.find(t => t.key === currentTier) || TIER_CONFIG[0];
+      if ((affiliate.commissionRateSubscription || 20) === oldTier.subRate) {
+        updateData.commissionRateSubscription = newTier.subRate;
+      }
+      if ((affiliate.commissionRateCredit || 15) === oldTier.credRate) {
+        updateData.commissionRateCredit = newTier.credRate;
+      }
+      console.log(`🎉 Tier upgrade: ${affiliate.userEmail} ${currentTier} → ${newTier.key} (${newTotalReferrals} referrals)`);
+    }
+
+    await base44.asServiceRole.entities.Affiliate.update(affiliate.id, updateData);
 
     console.log(`Affiliate commission tracked: ${affiliate.userEmail} +RM${commissionMYR} from ${referredEmail}`);
   } catch (err) {

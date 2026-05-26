@@ -48,8 +48,8 @@ export default function AffiliateRegisterForm({ onSuccess }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
         {[
-          { icon: DollarSign, title: '20% Komisen', desc: 'Untuk langganan' },
-          { icon: Sparkles, title: '15% Komisen', desc: 'Untuk kredit AI' },
+          { icon: DollarSign, title: '20-30% Komisen', desc: 'Subscription' },
+          { icon: Sparkles, title: '15-22% Komisen', desc: 'Kredit AI' },
           { icon: Users, title: 'Tanpa Had', desc: 'Refer seramai mungkin' },
         ].map(b => (
           <div key={b.title} className="rounded-2xl p-4 bg-white border-2 border-purple-100 text-center shadow-sm">
@@ -59,6 +59,35 @@ export default function AffiliateRegisterForm({ onSuccess }) {
           </div>
         ))}
       </div>
+
+      {/* Tier system preview */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="rounded-3xl p-5 mb-6 bg-gradient-to-br from-slate-900 to-purple-900 text-white shadow-xl"
+      >
+        <div className="flex items-center gap-2 mb-3">
+          <Sparkles className="w-5 h-5 text-amber-300" />
+          <p className="font-black text-amber-300 text-sm uppercase tracking-wider">Sistem Tier — Naik Level, Naik Komisen</p>
+        </div>
+        <div className="grid grid-cols-4 gap-2">
+          {[
+            { emoji: '🥉', name: 'Bronze', refs: '0-9', sub: '20%', cred: '15%' },
+            { emoji: '🥈', name: 'Silver', refs: '10-29', sub: '23%', cred: '17%' },
+            { emoji: '🥇', name: 'Gold', refs: '30-99', sub: '26%', cred: '19%' },
+            { emoji: '💎', name: 'Platinum', refs: '100+', sub: '30%', cred: '22%' },
+          ].map(t => (
+            <div key={t.name} className="text-center p-2 rounded-xl bg-white/10 border border-white/20">
+              <div className="text-2xl mb-0.5">{t.emoji}</div>
+              <p className="text-xs font-black">{t.name}</p>
+              <p className="text-[10px] text-white/70">{t.refs} ref</p>
+              <p className="text-[10px] text-amber-300 font-bold mt-1">{t.sub}/{t.cred}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-white/70 mt-3 text-center">Auto-upgrade bila capai jumlah rujukan. Lifetime — tak reset!</p>
+      </motion.div>
 
       <motion.form
         initial={{ opacity: 0, y: 20 }}

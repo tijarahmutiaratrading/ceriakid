@@ -38,6 +38,7 @@ Deno.serve(async (req) => {
       phone,
       referralCode: code,
       status: 'active',
+      tier: 'bronze',
       commissionRateSubscription: 20,
       commissionRateCredit: 15,
       totalReferrals: 0,

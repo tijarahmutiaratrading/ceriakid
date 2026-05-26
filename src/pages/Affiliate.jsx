@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import AffiliateRegisterForm from '@/components/affiliate/AffiliateRegisterForm';
 import AffiliateStatsGrid from '@/components/affiliate/AffiliateStatsGrid';
+import AffiliateTierCard from '@/components/affiliate/AffiliateTierCard';
 import AffiliateReferralList from '@/components/affiliate/AffiliateReferralList';
 import AffiliatePayoutList from '@/components/affiliate/AffiliatePayoutList';
 import AffiliateBankForm from '@/components/affiliate/AffiliateBankForm';
@@ -84,7 +85,8 @@ export default function AffiliatePage() {
           <span className="text-sm font-black tracking-wider opacity-90">PROGRAM AFFILIATE</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-black mb-2">Dapatkan Komisen 💰</h1>
-        <p className="text-white/90 mb-6">Share link rujukan anda. Dapat <strong>{affiliate.commissionRateSubscription}%</strong> komisen untuk langganan, <strong>{affiliate.commissionRateCredit}%</strong> untuk kredit AI.</p>
+        <p className="text-white/90 mb-2">Share link rujukan anda. Dapat <strong>{affiliate.commissionRateSubscription}%</strong> komisen untuk langganan, <strong>{affiliate.commissionRateCredit}%</strong> untuk kredit AI.</p>
+        <p className="text-white/80 text-sm mb-6">🚀 Naik tier untuk komisen lebih tinggi — sehingga <strong>30%</strong> untuk Platinum!</p>
 
         <div className="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/30">
           <Label className="text-xs font-bold text-white/85 mb-1.5 block">LINK RUJUKAN ANDA</Label>
@@ -99,6 +101,9 @@ export default function AffiliatePage() {
           <p className="text-xs text-white/85 mt-2">Kod anda: <strong className="bg-white/25 px-2 py-0.5 rounded">{affiliate.referralCode}</strong></p>
         </div>
       </motion.div>
+
+      {/* Tier card — papar tier semasa & progress ke next level */}
+      <AffiliateTierCard affiliate={affiliate} />
 
       {/* Stats */}
       <AffiliateStatsGrid affiliate={affiliate} />

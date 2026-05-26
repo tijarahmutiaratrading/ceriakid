@@ -27,6 +27,17 @@
       ],
       "default": "active"
     },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "bronze",
+        "silver",
+        "gold",
+        "platinum"
+      ],
+      "default": "bronze",
+      "description": "Tier affiliate berdasarkan jumlah rujukan lifetime"
+    },
     "commissionRateSubscription": {
       "type": "number",
       "default": 20,

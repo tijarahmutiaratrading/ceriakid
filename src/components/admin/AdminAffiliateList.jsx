@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/use-toast';
+import { calculateTier, getTierByKey } from '@/lib/affiliateTiers';
 
 const STATUS_COLOR = {
   active: 'bg-emerald-100 text-emerald-700',
@@ -56,6 +57,7 @@ export default function AdminAffiliateList({ affiliates, onRefresh }) {
           <tr className="text-left">
             <th className="px-3 py-3 font-black text-slate-700">Nama / Email</th>
             <th className="px-3 py-3 font-black text-slate-700">Kod</th>
+            <th className="px-3 py-3 font-black text-slate-700">Tier</th>
             <th className="px-3 py-3 font-black text-slate-700">Rate %</th>
             <th className="px-3 py-3 font-black text-slate-700">Rujukan</th>
             <th className="px-3 py-3 font-black text-slate-700">Pendapatan</th>
@@ -72,6 +74,17 @@ export default function AdminAffiliateList({ affiliates, onRefresh }) {
                 {a.joinedAt && <p className="text-[10px] text-slate-400">Sertai: {format(new Date(a.joinedAt), 'd MMM yy')}</p>}
               </td>
               <td className="px-3 py-3"><code className="bg-purple-50 text-purple-700 px-2 py-1 rounded font-bold text-xs">{a.referralCode}</code></td>
+              <td className="px-3 py-3">
+                {(() => {
+                  const tier = a.tier ? getTierByKey(a.tier) : calculateTier(a.totalReferrals || 0);
+                  return (
+                    <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full ${tier.bgLight} ${tier.textColor} text-xs font-black`}>
+                      <span>{tier.emoji}</span>
+                      <span>{tier.name}</span>
+                    </div>
+                  );
+                })()}
+              </td>
               <td className="px-3 py-3">
                 {editing === a.id ? (
                   <div className="space-y-1">
