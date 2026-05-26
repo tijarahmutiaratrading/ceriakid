@@ -59,55 +59,6 @@ export default function LandingAISection() {
       subtitle="CeriaKid bawa teknologi AI terkini untuk bantu anak faham pelajaran dengan lebih mendalam. Tanya soalan, jana cerita, buat latihan — semua dalam satu app."
       variant="sky"
     >
-      {/* Cikgu Firdaus Hero Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="relative overflow-hidden rounded-3xl mb-6 p-6 sm:p-8 bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 shadow-2xl shadow-orange-500/30"
-      >
-        <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-white/15 blur-3xl pointer-events-none" />
-        <div className="absolute -left-10 -bottom-10 h-40 w-40 rounded-full bg-white/10 blur-3xl pointer-events-none" />
-        <div className="relative flex flex-col md:flex-row items-center gap-6">
-          <motion.div
-            initial={{ scale: 0.8, rotate: -8 }}
-            whileInView={{ scale: 1, rotate: 0 }}
-            viewport={{ once: true }}
-            transition={{ type: 'spring', damping: 15 }}
-            className="relative flex-shrink-0"
-          >
-            <div className="absolute inset-0 bg-white/30 blur-2xl rounded-full" />
-            <img
-              src={CIKGU_AVATAR}
-              alt="Cikgu Firdaus"
-              className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-3xl object-cover ring-4 ring-white/80 shadow-2xl"
-            />
-            <span className="absolute -bottom-2 -right-2 px-2.5 py-1 rounded-full bg-emerald-500 text-white text-[10px] font-black ring-2 ring-white shadow-lg">
-              ● ONLINE 24/7
-            </span>
-          </motion.div>
-          <div className="flex-1 text-center md:text-left">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 border border-white/40 backdrop-blur-md mb-2">
-              <Sparkles className="w-3 h-3 text-white" />
-              <span className="text-white text-[10px] sm:text-xs font-black uppercase tracking-wider">Tutor AI Peribadi</span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight mb-2">
-              Jumpa <span className="bg-white text-orange-600 px-2 rounded-lg inline-block">Cikgu Firdaus</span> 👨‍🏫
-            </h3>
-            <p className="text-white/95 text-sm sm:text-base leading-relaxed mb-3 font-semibold">
-              "Adik ada soalan? Tanya je Cikgu — Matematik, Sains, BM, English… Cikgu akan terangkan dengan cara yang mudah faham!"
-            </p>
-            <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-              {['🇲🇾 Bahasa Melayu', '⚡ Jawapan segera', '🎯 Ikut umur anak', '💯 Sabar & mesra'].map(tag => (
-                <span key={tag} className="text-[10px] sm:text-xs font-bold bg-white/25 backdrop-blur-md text-white px-2.5 py-1 rounded-full border border-white/30">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
       {/* 4 AI features grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {AI_FEATURES.map((f, i) => {
