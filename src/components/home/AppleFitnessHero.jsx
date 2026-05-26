@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, LogOut, Settings } from 'lucide-react';
 
 // Apple Fitness style hero carousel — full-bleed image, dark gradient, bottom-left content, CTA pill
 const SLIDES = [
@@ -43,8 +43,9 @@ const SLIDES = [
   },
 ];
 
-export default function AppleFitnessHero({ user, avatarUrl }) {
+export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
   const [index, setIndex] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
   const slide = SLIDES[index];
 
   // Auto-advance every 6s
@@ -86,16 +87,64 @@ export default function AppleFitnessHero({ user, avatarUrl }) {
         </motion.div>
       </AnimatePresence>
 
-      {/* Greeting badge top-left */}
-      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-xl ring-1 ring-white/15">
-        {avatarUrl ? (
-          <img src={avatarUrl} alt="Avatar" className="w-6 h-6 rounded-full object-cover" />
-        ) : (
-          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-300 to-purple-400 flex items-center justify-center text-white font-black text-[10px]">
-            {firstName.charAt(0).toUpperCase()}
-          </div>
-        )}
-        <p className="text-white font-black text-xs">Hai, {firstName} 👋</p>
+      {/* Greeting badge top-left — clickable */}
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
+        <button
+          type="button"
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-xl ring-1 ring-white/15 hover:bg-black/55 hover:ring-white/30 transition-all"
+        >
+          {avatarUrl ? (
+            <img src={avatarUrl} alt="Avatar" className="w-6 h-6 rounded-full object-cover" />
+          ) : (
+            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-300 to-purple-400 flex items-center justify-center text-white font-black text-[10px]">
+              {firstName.charAt(0).toUpperCase()}
+            </div>
+          )}
+          <p className="text-white font-black text-xs">Hai, {firstName} 👋</p>
+        </button>
+
+        <AnimatePresence>
+          {menuOpen && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+              <motion.div
+                initial={{ opacity: 0, y: -6, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -6, scale: 0.96 }}
+                transition={{ duration: 0.15 }}
+                className="absolute top-full left-0 mt-2 min-w-[14rem] rounded-2xl p-2 shadow-2xl z-20"
+                style={{
+                  background: 'rgba(20, 14, 38, 0.92)',
+                  backdropFilter: 'blur(28px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                }}
+              >
+                <div className="px-3 py-2.5 border-b border-white/10 mb-1">
+                  <p className="font-black text-xs text-white truncate">{user?.full_name || 'User'}</p>
+                  <p className="text-[10px] text-white/65 truncate">{user?.email}</p>
+                </div>
+                <Link
+                  to="/settings"
+                  onClick={() => setMenuOpen(false)}
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold text-xs text-white/85 hover:bg-white/10 hover:text-white transition-all"
+                >
+                  <Settings className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span>Tetapan</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => { setMenuOpen(false); onLogout?.(); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold text-xs text-white/85 hover:bg-white/10 hover:text-red-300 transition-all"
+                >
+                  <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span>Log Keluar</span>
+                </button>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Content bottom-left */}

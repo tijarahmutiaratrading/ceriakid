@@ -20,7 +20,7 @@ import { base44 } from '@/api/base44Client';
 
 export default function Home() {
   const authContext = useAuth();
-  const { isAuthenticated, user, isLoadingAuth } = authContext || {};
+  const { isAuthenticated, user, isLoadingAuth, logout } = authContext || {};
   const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
   const { lang } = useLang();
   const safeAgeGroup = ageGroup || 'prasekolah';
@@ -94,7 +94,7 @@ export default function Home() {
 
       <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-8 lg:px-8 pb-40 pt-20 md:pt-8 space-y-8 md:space-y-10">
 
-      {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl} />}
+      {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl} onLogout={logout} />}
 
       {isAuthenticated && user?.email && <SubscriptionExpiryBanner userEmail={user.email} />}
 
