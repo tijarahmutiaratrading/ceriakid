@@ -168,7 +168,7 @@ export default function Landing() {
       {/* ── NAVBAR — Floating pill (Apple Fitness style, sama macam UserTopHeader) ── */}
       {/* Desktop */}
       <header
-        className={`hidden md:flex fixed top-4 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[140%]'}`}
+        className={`hidden md:flex fixed top-2 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[140%]'}`}
       >
         <nav
           className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-2xl shadow-black/50"
