@@ -210,7 +210,7 @@ export default function Landing() {
       </header>
 
       {/* Mobile */}
-      <nav className={`md:hidden fixed top-0 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <nav className={`md:hidden fixed top-2 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div
           className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-2xl shadow-black/50 flex items-center justify-between gap-3"
           style={{
