@@ -95,10 +95,10 @@ export default function LandingHeroCarousel({ onCTAClick, onPricingClick, fullSc
       />
 
       {/* Top-left Malaysia badge — pushed down to avoid floating navbar */}
-      <div className="absolute top-20 left-4 sm:top-24 sm:left-6 z-20">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/25 backdrop-blur-md shadow-lg">
-          <span className="text-base">🇲🇾</span>
-          <span className="text-white text-[10px] sm:text-xs font-black tracking-wide">Untuk anak Malaysia</span>
+      <div className="absolute top-24 left-3 sm:top-24 sm:left-6 z-20">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-white/15 border border-white/25 backdrop-blur-md shadow-lg">
+          <span className="text-xs sm:text-base">🇲🇾</span>
+          <span className="text-white text-[9px] sm:text-xs font-black tracking-wide">Untuk anak Malaysia</span>
         </div>
       </div>
 
