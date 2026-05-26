@@ -293,15 +293,9 @@ export default function Landing() {
               <p className="text-slate-700 text-xs font-bold">Rating ibu bapa <span className="text-slate-900">4.9/5</span></p>
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      {/* ── STATS STRIP ── */}
-      <section className="relative overflow-hidden py-10 md:py-14 px-5 sm:px-8 bg-gradient-to-br from-sky-50 via-rose-50 to-amber-50 border-y border-white/40">
-        <div className="absolute top-0 -left-20 w-80 h-80 rounded-full bg-pink-300/40 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 -right-20 w-80 h-80 rounded-full bg-orange-300/40 blur-3xl pointer-events-none" />
-        <div className="relative z-10 max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          {/* Stats grid — digabungkan dalam hero */}
+          <div className="mt-10 md:mt-12 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {[
               { num: '7+', label: 'Subjek Utama', icon: '📚' },
               { num: '2', label: 'Peringkat Umur', icon: '🎯' },
