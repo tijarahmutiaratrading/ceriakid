@@ -6,6 +6,7 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { trackPageView } from '@/lib/pixel';
 import PageNotFound from './lib/PageNotFound';
+import { captureReferralFromUrl } from '@/lib/referralTracker';
 import AppLayout from '@/components/AppLayout';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -46,6 +47,7 @@ import StoryGenerator from '@/pages/StoryGenerator';
 import BBMGenerator from '@/pages/BBMGenerator';
 import QuizAI from '@/pages/QuizAI';
 import Syllabus from '@/pages/Syllabus';
+import Affiliate from '@/pages/Affiliate';
 
 // Interactive Games
 import MemoryGame from '@/pages/games/MemoryGame';
@@ -64,7 +66,9 @@ const PixelPageViewTracker = () => {
   const location = useLocation();
   useEffect(() => {
     trackPageView();
-  }, [location.pathname]);
+    // Capture referral code dari URL bila page bertukar (?ref=CODE)
+    captureReferralFromUrl();
+  }, [location.pathname, location.search]);
   return null;
 };
 
@@ -135,6 +139,7 @@ const AuthenticatedApp = () => {
             <Route path="/story-generator" element={<StoryGenerator />} />
             <Route path="/bbm-generator" element={<BBMGenerator />} />
             <Route path="/quiz-ai" element={<QuizAI />} />
+            <Route path="/affiliate" element={<Affiliate />} />
           </Route>
 
           {/* Game-play / fullscreen pages - NO sidebar (immersive experience) */}

@@ -9,6 +9,7 @@ import { CREDIT_PACKAGES, CREDIT_COSTS } from '@/lib/creditPackages';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import { getStoredReferralCode } from '@/lib/referralTracker';
 
 export default function BuyCredits() {
   const { user } = useAuth();
@@ -41,6 +42,7 @@ export default function BuyCredits() {
         email: user.email,
         name: user.full_name || user.email,
         phone: user.phone || '0000000000',
+        referralCode: getStoredReferralCode(),
       });
       if (res.data?.checkoutUrl) {
         window.location.href = res.data.checkoutUrl;

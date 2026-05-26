@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check, CheckCircle, XCircle, Menu, X } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
+import { captureReferralFromUrl } from '@/lib/referralTracker';
 import PricingCheckout from '@/components/PricingCheckout';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
@@ -78,6 +79,9 @@ export default function Landing() {
   // NOTE: Successful payments redirect to /thank-you (see chipCheckout). Purchase pixel
   // is fired there once subscription is confirmed active — NOT here.
   useEffect(() => {
+    // Capture referral code dari URL (?ref=CODE) untuk simpan dalam localStorage
+    captureReferralFromUrl();
+
     const params = new URLSearchParams(window.location.search);
     const payment = params.get('payment');
     if (payment === 'failed') {

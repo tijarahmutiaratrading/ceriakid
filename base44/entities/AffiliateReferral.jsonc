@@ -1,0 +1,67 @@
+{
+  "name": "AffiliateReferral",
+  "type": "object",
+  "properties": {
+    "affiliateEmail": {
+      "type": "string",
+      "description": "Email affiliate yang dapat komisen"
+    },
+    "referralCode": {
+      "type": "string",
+      "description": "Kod rujukan yang digunakan"
+    },
+    "referredEmail": {
+      "type": "string",
+      "description": "Email pengguna yang dirujuk"
+    },
+    "purchaseType": {
+      "type": "string",
+      "enum": [
+        "subscription",
+        "credit"
+      ],
+      "description": "Jenis pembelian"
+    },
+    "purchaseDetail": {
+      "type": "string",
+      "description": "Cth: 'keluarga', 'family', 'power'"
+    },
+    "purchaseAmountMYR": {
+      "type": "number",
+      "description": "Jumlah pembelian (RM)"
+    },
+    "commissionRate": {
+      "type": "number",
+      "description": "Peratus komisen pada masa transaksi"
+    },
+    "commissionMYR": {
+      "type": "number",
+      "description": "Jumlah komisen (RM)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "paid",
+        "rejected"
+      ],
+      "default": "approved",
+      "description": "Status komisen"
+    },
+    "chipPurchaseId": {
+      "type": "string",
+      "description": "ID Chip purchase untuk idempotency"
+    },
+    "payoutId": {
+      "type": "string",
+      "description": "ID payout bila sudah dibayar"
+    }
+  },
+  "required": [
+    "affiliateEmail",
+    "referredEmail",
+    "purchaseType",
+    "commissionMYR"
+  ]
+}

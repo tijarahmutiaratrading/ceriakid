@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users, Palette, BookOpen, UserCircle, BarChart3, Settings,
-  UserPlus, Trophy, ChevronDown, Shield, LogOut, MessageCircle, Home
+  UserPlus, Trophy, ChevronDown, Shield, LogOut, MessageCircle, Home, Share2
 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
@@ -44,6 +44,11 @@ const NAV_GROUPS = [
       { path: '/friends', label: 'Kawan', icon: UserPlus },
       { path: '/challenges', label: 'Cabaran', icon: Trophy },
     ],
+  },
+  {
+    key: 'affiliate',
+    label: '💰 Affiliate',
+    path: '/affiliate',
   },
   {
     key: 'sokongan',

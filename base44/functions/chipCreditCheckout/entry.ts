@@ -16,10 +16,19 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { packageId, email, name, phone } = await req.json();
+    const { packageId, email, name, phone, referralCode } = await req.json();
 
     if (!packageId || !email || !name || !phone) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    // Validate referral code
+    let validReferralCode = '';
+    if (referralCode) {
+      const aff = await base44.asServiceRole.entities.Affiliate.filter({ referralCode: referralCode.toUpperCase().trim() });
+      if (aff.length > 0 && aff[0].status === 'active' && aff[0].userEmail !== user.email) {
+        validReferralCode = aff[0].referralCode;
+      }
     }
 
     const pkg = CREDIT_PACKAGES[packageId];
@@ -39,7 +48,8 @@ Deno.serve(async (req) => {
 
     // Reference format: "credit__userEmail__packageId__totalCredits__timestamp"
     // Webhook akan parse format ni untuk tahu ini pembelian kredit
-    const reference = `credit__${user.email}__${packageId}__${totalCredits}__${Date.now()}`;
+    const baseRef = `credit__${user.email}__${packageId}__${totalCredits}__${Date.now()}`;
+    const reference = validReferralCode ? `${baseRef}__ref_${validReferralCode}` : baseRef;
 
     const purchaseData = {
       purchase: {

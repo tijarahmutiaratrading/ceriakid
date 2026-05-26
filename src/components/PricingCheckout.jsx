@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { trackPixelEvent } from '@/lib/pixel';
+import { getStoredReferralCode } from '@/lib/referralTracker';
 
 const TIER_VALUES = {
   asas: 49,
@@ -89,7 +90,8 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
         tier: formData.selectedTier,
         email: formData.email,
         name: formData.name,
-        phone: formData.phone
+        phone: formData.phone,
+        referralCode: getStoredReferralCode(),
       });
 
       if (response.data?.checkoutUrl) {
@@ -188,6 +190,12 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple" />
         
       </div>
+
+      {getStoredReferralCode() && (
+        <div className="rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2 text-xs font-bold text-emerald-700 flex items-center gap-2">
+          🎁 Anda dirujuk oleh kod: <code className="bg-white px-2 py-0.5 rounded">{getStoredReferralCode()}</code>
+        </div>
+      )}
 
       {error && <p className="text-red-500 text-sm font-bold">{error}</p>}
 

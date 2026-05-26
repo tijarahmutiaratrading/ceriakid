@@ -1,5 +1,69 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
+// Helper untuk track komisen affiliate. Reference format akhir: "...__ref_CODE"
+async function trackAffiliateCommission(base44, {
+  referralCode, referredEmail, purchaseType, purchaseDetail, purchaseAmountMYR, chipPurchaseId,
+}) {
+  try {
+    if (!referralCode) return;
+
+    // Idempotency — sudah ada entry untuk purchaseId ini?
+    const existingRef = await base44.asServiceRole.entities.AffiliateReferral.filter({ chipPurchaseId });
+    if (existingRef.length > 0) {
+      console.log(`Affiliate commission already tracked for ${chipPurchaseId}`);
+      return;
+    }
+
+    const aff = await base44.asServiceRole.entities.Affiliate.filter({ referralCode });
+    if (aff.length === 0 || aff[0].status !== 'active') {
+      console.log(`Affiliate not found / inactive for code ${referralCode}`);
+      return;
+    }
+    const affiliate = aff[0];
+
+    // Tak boleh refer diri sendiri
+    if (affiliate.userEmail === referredEmail) {
+      console.log(`Self-referral blocked for ${referredEmail}`);
+      return;
+    }
+
+    const rate = purchaseType === 'subscription'
+      ? (affiliate.commissionRateSubscription || 20)
+      : (affiliate.commissionRateCredit || 15);
+    const commissionMYR = Math.round((purchaseAmountMYR * rate / 100) * 100) / 100;
+
+    await base44.asServiceRole.entities.AffiliateReferral.create({
+      affiliateEmail: affiliate.userEmail,
+      referralCode,
+      referredEmail,
+      purchaseType,
+      purchaseDetail,
+      purchaseAmountMYR,
+      commissionRate: rate,
+      commissionMYR,
+      status: 'approved',
+      chipPurchaseId,
+    });
+
+    await base44.asServiceRole.entities.Affiliate.update(affiliate.id, {
+      totalReferrals: (affiliate.totalReferrals || 0) + 1,
+      totalEarned: (affiliate.totalEarned || 0) + commissionMYR,
+      pendingBalance: (affiliate.pendingBalance || 0) + commissionMYR,
+    });
+
+    console.log(`Affiliate commission tracked: ${affiliate.userEmail} +RM${commissionMYR} from ${referredEmail}`);
+  } catch (err) {
+    console.error('trackAffiliateCommission error:', err);
+  }
+}
+
+// Extract referral code dari reference string. Format: "...__ref_CODE"
+function extractReferralCode(reference) {
+  if (!reference) return '';
+  const match = reference.match(/__ref_([A-Z0-9]+)$/);
+  return match ? match[1] : '';
+}
+
 // Chip payment webhook — aktivkan subscription bila payment berjaya
 Deno.serve(async (req) => {
   if (req.method !== 'POST') {
@@ -152,6 +216,21 @@ Deno.serve(async (req) => {
       });
 
       console.log(`Credit purchase activated: ${creditUserEmail} +${totalCredits} (pkg=${packageId})`);
+
+      // ─── AFFILIATE COMMISSION (credit purchase) ───
+      const creditRefCode = extractReferralCode(reference);
+      if (creditRefCode) {
+        const priceMYR = (verifiedPurchase.purchase?.total || 0) / 100;
+        await trackAffiliateCommission(base44, {
+          referralCode: creditRefCode,
+          referredEmail: creditUserEmail,
+          purchaseType: 'credit',
+          purchaseDetail: packageId,
+          purchaseAmountMYR: priceMYR,
+          chipPurchaseId: purchaseId,
+        });
+      }
+
       return Response.json({ received: true, creditActivated: true, credits: totalCredits });
     }
     // ─── END CREDIT PURCHASE ───
@@ -261,6 +340,21 @@ Deno.serve(async (req) => {
       }
     }
     // ─── END BONUS CREDITS ───
+
+    // ─── AFFILIATE COMMISSION (subscription) ───
+    const subRefCode = extractReferralCode(reference);
+    if (subRefCode) {
+      const subPricing = { asas: 49, standard: 99, keluarga: 199 };
+      const priceMYR = subPricing[tier] || 0;
+      await trackAffiliateCommission(base44, {
+        referralCode: subRefCode,
+        referredEmail: userEmail,
+        purchaseType: 'subscription',
+        purchaseDetail: tier,
+        purchaseAmountMYR: priceMYR,
+        chipPurchaseId: purchaseId,
+      });
+    }
 
     return Response.json({ received: true, activated: true, welcomeCredits: bonusAmount });
 

@@ -9,10 +9,19 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { tier, email, name, phone, isUpgrade } = await req.json();
+    const { tier, email, name, phone, isUpgrade, referralCode } = await req.json();
 
     if (!tier || !email || !name || !phone) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    // Validate referral code (jika ada) — tak boleh refer diri sendiri
+    let validReferralCode = '';
+    if (referralCode) {
+      const aff = await base44.asServiceRole.entities.Affiliate.filter({ referralCode: referralCode.toUpperCase().trim() });
+      if (aff.length > 0 && aff[0].status === 'active' && aff[0].userEmail !== user.email) {
+        validReferralCode = aff[0].referralCode;
+      }
     }
 
     // Tier pricing — yearly plans (MYR to sen)
@@ -79,7 +88,9 @@ Deno.serve(async (req) => {
       failure_redirect: `${origin}/?payment=failed`,
       success_callback: `https://api.base44.com/api/apps/${Deno.env.get('BASE44_APP_ID')}/functions/chipWebhook`,
       send_receipt: true,
-      reference: `${user.email}__${tier}__${Date.now()}`,
+      reference: validReferralCode
+        ? `${user.email}__${tier}__${Date.now()}__ref_${validReferralCode}`
+        : `${user.email}__${tier}__${Date.now()}`,
     };
 
     const response = await fetch('https://gate.chip-in.asia/api/v1/purchases/', {

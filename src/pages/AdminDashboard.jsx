@@ -13,7 +13,8 @@ import AdminStatCard from '@/components/admin/AdminStatCard';
 
 import SystemHealthPanel from '@/components/admin/SystemHealthPanel';
 import LaunchControlPanel from '@/components/admin/LaunchControlPanel';
-import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2, Activity } from 'lucide-react';
+import AdminAffiliatePanel from '@/components/admin/AdminAffiliatePanel';
+import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2, Activity, Share2 } from 'lucide-react';
 
 const SETTINGS_KEY = 'admin_app_settings';
 
@@ -82,7 +83,7 @@ export default function AdminDashboard() {
     // 'customers' tab dah merge ke 'analytics' — redirect untuk backward compat
     if (tabFromUrl === 'customers') {
       setActiveTab('analytics');
-    } else if (tabFromUrl && ['analytics', 'launch', 'health', 'settings'].includes(tabFromUrl)) {
+    } else if (tabFromUrl && ['analytics', 'launch', 'health', 'affiliate', 'settings'].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
   }, [location.search]);
@@ -208,6 +209,7 @@ export default function AdminDashboard() {
     { key: 'analytics', label: '📊 Analytics', icon: <BarChart3 className="w-4 h-4" /> },
     { key: 'launch', label: '🚀 Launch Control', icon: <Gamepad2 className="w-4 h-4" /> },
     { key: 'health', label: '💚 System Health', icon: <Activity className="w-4 h-4" /> },
+    { key: 'affiliate', label: '🤝 Affiliate', icon: <Share2 className="w-4 h-4" /> },
     { key: 'settings', label: '⚙️ Settings', icon: <Settings className="w-4 h-4" /> },
   ];
 
@@ -386,6 +388,9 @@ export default function AdminDashboard() {
 
         {/* ═══ LAUNCH CONTROL TAB ═══ */}
          {activeTab === 'launch' && <LaunchControlPanel />}
+
+        {/* ═══ AFFILIATE TAB ═══ */}
+        {activeTab === 'affiliate' && <AdminAffiliatePanel />}
 
         {/* ═══ SETTINGS TAB ═══ */}
         {activeTab === 'settings' && (

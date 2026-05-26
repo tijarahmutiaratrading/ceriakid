@@ -1,0 +1,55 @@
+{
+  "name": "AffiliatePayout",
+  "type": "object",
+  "properties": {
+    "affiliateEmail": {
+      "type": "string"
+    },
+    "amountMYR": {
+      "type": "number",
+      "description": "Jumlah payout (RM)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "requested",
+        "processing",
+        "completed",
+        "rejected"
+      ],
+      "default": "requested"
+    },
+    "bankName": {
+      "type": "string"
+    },
+    "bankAccountNumber": {
+      "type": "string"
+    },
+    "bankAccountHolder": {
+      "type": "string"
+    },
+    "requestedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "processedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "transactionRef": {
+      "type": "string",
+      "description": "Rujukan bank transfer / cek"
+    },
+    "adminNote": {
+      "type": "string"
+    },
+    "referralCount": {
+      "type": "number",
+      "description": "Bilangan rujukan dalam payout ini"
+    }
+  },
+  "required": [
+    "affiliateEmail",
+    "amountMYR"
+  ]
+}

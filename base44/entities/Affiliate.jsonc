@@ -1,0 +1,81 @@
+{
+  "name": "Affiliate",
+  "type": "object",
+  "properties": {
+    "userEmail": {
+      "type": "string",
+      "description": "Email user yang jadi affiliate"
+    },
+    "fullName": {
+      "type": "string",
+      "description": "Nama penuh affiliate"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Nombor telefon untuk dihubungi"
+    },
+    "referralCode": {
+      "type": "string",
+      "description": "Kod unik untuk share (cth: SITI2026)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended",
+        "pending"
+      ],
+      "default": "active"
+    },
+    "commissionRateSubscription": {
+      "type": "number",
+      "default": 20,
+      "description": "Peratus komisen untuk subscription (%)"
+    },
+    "commissionRateCredit": {
+      "type": "number",
+      "default": 15,
+      "description": "Peratus komisen untuk credit top-up (%)"
+    },
+    "totalReferrals": {
+      "type": "number",
+      "default": 0,
+      "description": "Bilangan rujukan yang berjaya"
+    },
+    "totalEarned": {
+      "type": "number",
+      "default": 0,
+      "description": "Jumlah komisen diperoleh (RM)"
+    },
+    "totalPaidOut": {
+      "type": "number",
+      "default": 0,
+      "description": "Jumlah komisen yang sudah dibayar (RM)"
+    },
+    "pendingBalance": {
+      "type": "number",
+      "default": 0,
+      "description": "Baki komisen menunggu payout (RM)"
+    },
+    "bankName": {
+      "type": "string",
+      "description": "Nama bank untuk payout"
+    },
+    "bankAccountNumber": {
+      "type": "string",
+      "description": "Nombor akaun bank"
+    },
+    "bankAccountHolder": {
+      "type": "string",
+      "description": "Nama pemegang akaun"
+    },
+    "joinedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "userEmail",
+    "referralCode"
+  ]
+}
