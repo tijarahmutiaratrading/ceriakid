@@ -68,12 +68,17 @@ export default function AIHubCard() {
       className={`relative overflow-hidden rounded-[1.75rem] p-4 md:p-5 shadow-xl border border-white/30 ${
         isLow ? 'ring-2 ring-amber-300/70' : ''
       }`}
-      style={{
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10))',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-      }}
     >
+      {/* Background image */}
+      <img
+        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 w-full h-full object-cover"
+      />
+      {/* Color overlay for readability */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-900/70 via-fuchsia-800/60 to-orange-700/60" />
+
       {/* Decorative blobs */}
       <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-amber-400/40 blur-3xl" />
       <div className="pointer-events-none absolute -left-6 -bottom-6 h-28 w-28 rounded-full bg-purple-500/30 blur-3xl" />
@@ -86,16 +91,16 @@ export default function AIHubCard() {
             <Sparkles className="w-6 h-6 text-amber-300 drop-shadow" />
           </div>
           <div className="min-w-0">
-            <p className="text-orange-700 text-[9px] font-black uppercase tracking-widest">Baki Kredit AI</p>
+            <p className="text-amber-300 text-[9px] font-black uppercase tracking-widest drop-shadow">Baki Kredit AI</p>
             {loading ? (
-              <div className="flex items-center gap-1.5 text-slate-700">
+              <div className="flex items-center gap-1.5 text-white/90">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 <span className="text-xs font-bold">Memuat...</span>
               </div>
             ) : (
               <div className="flex items-baseline gap-2">
-                <p className="text-slate-900 text-3xl md:text-4xl font-black leading-none">{balance}</p>
-                <span className="text-slate-700 text-[10px] font-bold">
+                <p className="text-white text-3xl md:text-4xl font-black leading-none drop-shadow-lg">{balance}</p>
+                <span className="text-white/85 text-[10px] font-bold">
                   {credits?.totalUsed ?? 0} digunakan
                 </span>
               </div>
@@ -124,9 +129,9 @@ export default function AIHubCard() {
 
       {/* DIVIDER label */}
       <div className="relative z-10 flex items-center gap-2 mb-3">
-        <Sparkles className="w-3 h-3 text-orange-600" />
-        <p className="text-orange-700 text-[9px] font-black uppercase tracking-widest">Ciri AI CeriaKid</p>
-        <div className="h-px flex-1 bg-gradient-to-r from-slate-400/30 to-transparent" />
+        <Sparkles className="w-3 h-3 text-amber-300" />
+        <p className="text-amber-300 text-[9px] font-black uppercase tracking-widest drop-shadow">Ciri AI CeriaKid</p>
+        <div className="h-px flex-1 bg-gradient-to-r from-white/40 to-transparent" />
       </div>
 
       {/* AI Features Grid */}
