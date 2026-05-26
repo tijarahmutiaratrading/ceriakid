@@ -165,10 +165,10 @@ export default function Landing() {
 
 
 
-      {/* ── NAVBAR — Floating pill, absolute so it sits ONLY on top of hero ── */}
+      {/* ── NAVBAR — Floating pill, fixed with auto hide/show on scroll ── */}
       {/* Desktop */}
       <header
-        className="hidden md:flex absolute top-3 left-0 right-0 z-50 justify-center px-4 pointer-events-none"
+        className={`hidden md:flex fixed top-3 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
       >
         <nav
           className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-2xl shadow-black/50"
@@ -210,7 +210,7 @@ export default function Landing() {
       </header>
 
       {/* Mobile */}
-      <nav className="md:hidden absolute top-2 left-0 right-0 z-50 px-3 py-3">
+      <nav className={`md:hidden fixed top-2 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
         <div
           className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-lg shadow-black/30 flex items-center justify-between gap-3"
           style={{
