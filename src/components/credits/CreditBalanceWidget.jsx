@@ -42,6 +42,71 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
     );
   }
 
+  if (variant === 'glass') {
+    return (
+      <Link to="/buy-credits" className="block">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{ y: -2 }}
+          whileTap={{ scale: 0.99 }}
+          className={`group relative overflow-hidden rounded-2xl p-5 bg-slate-900/50 backdrop-blur-md border transition-colors ${
+            isLow ? 'border-amber-300/60 ring-2 ring-amber-300/40' : 'border-white/20 hover:border-white/30'
+          }`}
+        >
+          {/* subtle glow accents */}
+          <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-amber-400/15 blur-3xl" />
+          <div className="pointer-events-none absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-orange-500/10 blur-3xl" />
+
+          {/* Top row: label + Top Up CTA */}
+          <div className="relative z-10 flex items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg shadow-amber-500/30">
+                <Sparkles className="w-5 h-5 text-white drop-shadow" />
+              </div>
+              <div>
+                <p className="text-white/60 text-[10px] font-black uppercase tracking-[0.15em] leading-none">Baki Kredit AI</p>
+                <p className="text-white/90 text-[11px] font-bold mt-0.5">Akses ciri AI premium</p>
+              </div>
+            </div>
+            <div className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-md shadow-amber-500/30 hover:shadow-amber-500/50 transition-all font-black text-[11px]">
+              <Plus className="w-3 h-3" /> Top Up
+            </div>
+          </div>
+
+          {/* Balance — hero number */}
+          <div className="relative z-10 flex items-baseline gap-2 mb-4">
+            <p className="text-white text-5xl font-black leading-none drop-shadow tracking-tight">{balance}</p>
+            <p className="text-white/50 text-sm font-black">kredit</p>
+          </div>
+
+          {/* Stats row */}
+          <div className="relative z-10 grid grid-cols-2 gap-2 mb-3">
+            <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-2">
+              <p className="text-white/50 text-[10px] font-black uppercase tracking-wider">Dibeli</p>
+              <p className="text-white font-black text-base mt-0.5">{credits?.totalPurchased ?? 0}</p>
+            </div>
+            <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-2">
+              <p className="text-white/50 text-[10px] font-black uppercase tracking-wider">Digunakan</p>
+              <p className="text-white font-black text-base mt-0.5">{credits?.totalUsed ?? 0}</p>
+            </div>
+          </div>
+
+          {/* Footer status */}
+          {isLow ? (
+            <p className="relative z-10 text-amber-300 text-xs font-black flex items-center gap-1.5">
+              ⚠️ Baki rendah — top up sekarang <ArrowRight className="w-3 h-3" />
+            </p>
+          ) : (
+            <p className="relative z-10 inline-flex items-center gap-1 text-xs font-bold text-white/70 group-hover:text-white transition-colors">
+              Tambah Kredit <ArrowRight className="h-3.5 w-3.5" />
+            </p>
+          )}
+        </motion.div>
+      </Link>
+    );
+  }
+
   return (
     <Link to="/buy-credits" className="block">
       <motion.div
@@ -49,24 +114,10 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className={`group relative h-full min-h-[180px] overflow-hidden rounded-2xl p-5 ${
-          variant === 'glass'
-            ? 'bg-slate-900/50 backdrop-blur-md border border-white/20'
-            : 'border border-white/30 bg-gradient-to-br from-amber-500 via-orange-500 to-orange-600 shadow-xl shadow-amber-950/20'
-        } ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
+        className={`group relative h-full min-h-[180px] overflow-hidden rounded-2xl p-5 border border-white/30 bg-gradient-to-br from-amber-500 via-orange-500 to-orange-600 shadow-xl shadow-amber-950/20 ${isLow ? 'ring-2 ring-amber-300/70' : ''}`}
       >
-        {variant === 'glass' ? (
-          <>
-            <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-amber-400/40 blur-3xl transition-all group-hover:bg-amber-400/60" />
-            <div className="pointer-events-none absolute -left-6 -bottom-6 h-28 w-28 rounded-full bg-orange-500/30 blur-3xl" />
-            <div className="pointer-events-none absolute right-1/3 bottom-0 h-20 w-20 rounded-full bg-pink-400/20 blur-2xl" />
-          </>
-        ) : (
-          <>
-            <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
-            <div className="pointer-events-none absolute -left-4 -bottom-4 h-20 w-20 rounded-full bg-white/10 blur-2xl" />
-          </>
-        )}
+        <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl transition-all group-hover:bg-white/30" />
+        <div className="pointer-events-none absolute -left-4 -bottom-4 h-20 w-20 rounded-full bg-white/10 blur-2xl" />
 
         <div className="relative z-10 flex items-start justify-between gap-3">
           <div className="min-w-0">
