@@ -62,9 +62,9 @@ export default function BuyCredits() {
         {/* Back button */}
         <Link
           to="/dashboard"
-          className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/20 text-white/90 hover:text-white hover:bg-slate-900/70 font-black text-sm transition-colors"
+          className="inline-flex items-center gap-2 mb-4 px-3.5 py-2 rounded-full bg-white text-slate-700 font-bold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all"
         >
-          <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
+          <ArrowLeft className="w-3.5 h-3.5" /> Dashboard
         </Link>
 
         {/* Status banner */}
