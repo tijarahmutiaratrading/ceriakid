@@ -83,16 +83,16 @@ export default function AIHubCard() {
             <Sparkles className="w-6 h-6 text-amber-300 drop-shadow" />
           </div>
           <div className="min-w-0">
-            <p className="text-amber-200 text-[9px] font-black uppercase tracking-widest drop-shadow">Baki Kredit AI</p>
+            <p className="text-orange-700 text-[9px] font-black uppercase tracking-widest">Baki Kredit AI</p>
             {loading ? (
-              <div className="flex items-center gap-1.5 text-white/80">
+              <div className="flex items-center gap-1.5 text-slate-700">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 <span className="text-xs font-bold">Memuat...</span>
               </div>
             ) : (
               <div className="flex items-baseline gap-2">
-                <p className="text-white text-3xl md:text-4xl font-black leading-none drop-shadow-md">{balance}</p>
-                <span className="text-white/70 text-[10px] font-bold">
+                <p className="text-slate-900 text-3xl md:text-4xl font-black leading-none">{balance}</p>
+                <span className="text-slate-700 text-[10px] font-bold">
                   {credits?.totalUsed ?? 0} digunakan
                 </span>
               </div>
@@ -112,8 +112,8 @@ export default function AIHubCard() {
 
       {/* Low balance warning */}
       {isLow && (
-        <div className="relative z-10 mb-3 px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-300/40">
-          <p className="text-amber-100 text-[11px] font-black flex items-center gap-1.5 drop-shadow">
+        <div className="relative z-10 mb-3 px-3 py-1.5 rounded-xl bg-amber-500/90 border border-amber-600/60">
+          <p className="text-white text-[11px] font-black flex items-center gap-1.5">
             ⚠️ Baki rendah — top up sekarang <ArrowRight className="w-3 h-3" />
           </p>
         </div>
@@ -121,9 +121,9 @@ export default function AIHubCard() {
 
       {/* DIVIDER label */}
       <div className="relative z-10 flex items-center gap-2 mb-3">
-        <Sparkles className="w-3 h-3 text-amber-300" />
-        <p className="text-amber-200 text-[9px] font-black uppercase tracking-widest">Ciri AI CeriaKid</p>
-        <div className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" />
+        <Sparkles className="w-3 h-3 text-orange-600" />
+        <p className="text-orange-700 text-[9px] font-black uppercase tracking-widest">Ciri AI CeriaKid</p>
+        <div className="h-px flex-1 bg-gradient-to-r from-slate-400/30 to-transparent" />
       </div>
 
       {/* AI Features Grid */}
