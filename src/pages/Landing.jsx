@@ -186,8 +186,9 @@ export default function Landing() {
           />
           {[
             { href: '#features', label: 'Ciri-ciri' },
-            { href: '#ai', label: '✨ Cikgu AI' },
+            { href: '#ai', label: 'Cikgu AI' },
             { href: '#testimonials', label: 'Testimoni' },
+            { href: '#pricing', label: 'Order Now' },
             { href: '#faq', label: 'FAQ' },
           ].map(item => (
             <a
@@ -198,16 +199,10 @@ export default function Landing() {
               {item.label}
             </a>
           ))}
-          <a
-            href="#pricing"
-            className="ml-1 px-4 py-1.5 rounded-full font-black text-sm bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-lg shadow-orange-500/40 hover:from-orange-400 hover:to-pink-400 transition-colors"
-          >
-            🔥 Order Now
-          </a>
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-            className="px-4 py-1.5 rounded-full font-black text-sm bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 hover:bg-amber-200 transition-colors"
+            className="ml-1 px-4 py-1.5 rounded-full font-black text-sm bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 hover:bg-amber-200 transition-colors"
           >
             {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
           </motion.button>
@@ -234,13 +229,13 @@ export default function Landing() {
             href="#ai"
             className="px-2.5 py-1.5 rounded-full font-black text-[11px] text-white/90 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
           >
-            ✨ Cikgu AI
+            Cikgu AI
           </a>
           <a
             href="#pricing"
-            className="px-2.5 py-1.5 rounded-full font-black text-[11px] bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-lg shadow-orange-500/40 whitespace-nowrap flex-shrink-0"
+            className="px-2.5 py-1.5 rounded-full font-black text-[11px] text-white/90 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
           >
-            🔥 Order
+            Order Now
           </a>
           <motion.button
             whileTap={{ scale: 0.96 }}
