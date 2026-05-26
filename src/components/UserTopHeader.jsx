@@ -172,18 +172,19 @@ export default function UserTopHeader() {
           );
         })}
 
-        {isAdmin && (
-          <Link
-            to="/admin-dashboard"
-            className="flex items-center gap-2 px-3 py-2 rounded-xl font-black text-sm text-white/85 hover:bg-white/10 hover:text-white transition-all"
-          >
-            <div className="w-6 h-6 rounded-lg flex items-center justify-center bg-gradient-to-br from-orange-400 to-pink-500 text-white">
-              <Shield className="w-3.5 h-3.5" />
-            </div>
-            <span>Admin</span>
-          </Link>
-        )}
       </nav>
+
+      {/* Switch to admin dashboard (admin only) */}
+      {isAdmin && (
+        <Link
+          to="/admin-dashboard"
+          className="flex items-center gap-2 px-3 py-2 rounded-xl font-black text-sm bg-gradient-to-br from-orange-400 to-pink-500 text-white shadow-md hover:shadow-lg transition-all flex-shrink-0"
+          title="Tukar ke Admin Panel"
+        >
+          <Shield className="w-4 h-4" />
+          <span className="hidden lg:inline">Admin</span>
+        </Link>
+      )}
 
       {/* User menu */}
       {user && (
