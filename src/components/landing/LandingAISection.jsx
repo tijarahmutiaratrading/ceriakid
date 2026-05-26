@@ -9,15 +9,18 @@ const AI_FEATURES = [
   {
     icon: GraduationCap,
     title: 'Cikgu Firdaus',
+    persona: 'Tutor Peribadi',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fc07612a5_generated_image.png',
     desc: 'Tutor peribadi AI yang sentiasa sedia jawab soalan anak — Matematik, Sains, BM, English, Jawi.',
     cost: '1 kredit / soalan',
     gradient: 'from-amber-500 via-orange-500 to-orange-600',
     glow: 'shadow-orange-500/30',
-    persona: true,
   },
   {
     icon: Brain,
-    title: 'Kuiz AI Adaptif',
+    title: 'Cikgu Aina',
+    persona: 'Kuiz AI Adaptif',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e997c6e39_generated_image.png',
     desc: 'Soalan interaktif yang adapt ikut tahap anak. Semakin main, semakin pandai.',
     cost: '1 kredit / soalan',
     gradient: 'from-cyan-500 via-blue-500 to-indigo-600',
@@ -25,7 +28,9 @@ const AI_FEATURES = [
   },
   {
     icon: BookOpen,
-    title: 'Penjana Cerita',
+    title: 'Cikgu Mira',
+    persona: 'Penjana Cerita',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png',
     desc: 'Cerita kreatif & berunsur pendidikan untuk anak. Tulis tema, AI jana cerita penuh.',
     cost: '5 kredit / cerita',
     gradient: 'from-pink-500 via-rose-500 to-rose-600',
@@ -33,7 +38,9 @@ const AI_FEATURES = [
   },
   {
     icon: FileText,
-    title: 'Penjana BBM',
+    title: 'Cikgu Hakim',
+    persona: 'Penjana BBM',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/512f26c46_generated_image.png',
     desc: 'Lembaran kerja & latihan tersuai mengikut subjek dan tahap anak. Cetak & guna.',
     cost: '10 kredit / lembaran',
     gradient: 'from-violet-500 via-purple-500 to-purple-600',
@@ -118,9 +125,18 @@ export default function LandingAISection() {
               <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-white/20 blur-2xl pointer-events-none group-hover:bg-white/30 transition-all" />
               <div className="absolute -left-3 -bottom-3 h-16 w-16 rounded-full bg-white/10 blur-2xl pointer-events-none" />
               <div className="relative">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/95 ring-2 ring-white/70 shadow-lg mb-3">
-                  <Icon className="h-5 w-5 text-slate-800" />
+                {/* Avatar + icon badge */}
+                <div className="relative mb-3 inline-block">
+                  <img
+                    src={f.avatar}
+                    alt={f.title}
+                    className="h-16 w-16 rounded-2xl object-cover ring-2 ring-white/80 shadow-lg"
+                  />
+                  <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-xl bg-white ring-2 ring-white shadow-md">
+                    <Icon className="h-3.5 w-3.5 text-slate-800" />
+                  </div>
                 </div>
+                <p className="text-white/80 text-[10px] font-black uppercase tracking-wider mb-0.5">{f.persona}</p>
                 <h4 className="font-black text-white text-lg leading-tight mb-1.5">{f.title}</h4>
                 <p className="text-white/90 text-xs leading-relaxed mb-3 min-h-[3rem]">{f.desc}</p>
                 <span className="inline-block text-[10px] font-black bg-white/95 text-slate-900 px-2.5 py-1 rounded-full shadow-sm">
