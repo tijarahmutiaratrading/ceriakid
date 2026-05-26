@@ -52,22 +52,22 @@ export default function LandingHeroCarousel({ onCTAClick, onPricingClick }) {
   }, []);
 
   return (
-    <div className="relative w-full rounded-[1.75rem] sm:rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[4/5] sm:aspect-[16/10] md:aspect-[16/8] max-h-[600px]">
-      {/* Slides */}
-      <AnimatePresence mode="sync">
+    <div className="relative w-full rounded-[1.75rem] sm:rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[4/5] sm:aspect-[16/10] md:aspect-[16/8]">
+      {/* Slides — render all, fade between with opacity (no scale to avoid edge gaps) */}
+      {SLIDES.map((s, i) => (
         <motion.div
-          key={index}
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
+          key={i}
+          initial={false}
+          animate={{ opacity: i === index ? 1 : 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="absolute inset-0"
+          style={{ pointerEvents: 'none' }}
         >
           <img
-            src={slide.image}
-            alt={slide.title}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectPosition: slide.objectPos }}
+            src={s.image}
+            alt={s.title}
+            className="block absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: s.objectPos }}
           />
           {/* Dark gradient overlay */}
           <div
@@ -78,7 +78,7 @@ export default function LandingHeroCarousel({ onCTAClick, onPricingClick }) {
             }}
           />
         </motion.div>
-      </AnimatePresence>
+      ))}
 
       {/* Top-left Malaysia badge */}
       <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
