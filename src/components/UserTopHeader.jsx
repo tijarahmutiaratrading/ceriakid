@@ -77,7 +77,7 @@ export default function UserTopHeader() {
   return (
     <header
       ref={navRef}
-      className="hidden md:flex fixed top-3 left-0 right-0 z-50 justify-center px-4 pointer-events-none"
+      className="hidden md:flex fixed top-6 left-0 right-0 z-50 justify-center px-4 pointer-events-none"
     >
       {/* Center: Floating pill nav (Apple Fitness style) */}
       <nav
