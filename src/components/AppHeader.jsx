@@ -162,27 +162,14 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
            className={`max-w-[52rem] mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] ring-1 ${isPlayingGame ? 'ring-white/25 shadow-2xl shadow-slate-950/25' : 'pro-glass ring-white/20'}`}
            style={isPlayingGame ? { background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.82))', backdropFilter: 'blur(22px)' } : undefined}
          >
-           <div className="flex items-center gap-1.5">
-             <motion.button
-               type="button"
-               onClick={() => setIsOpen(!isOpen)}
-               whileTap={{ scale: 0.95 }}
-               className="px-3.5 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-lg hover:bg-white/95 transition-colors"
-             >
-               {isOpen ? 'Tutup' : 'Menu'}
-             </motion.button>
-             {shouldShowBack && (
-               <motion.button
-                 type="button"
-                 onClick={() => navigate(-1)}
-                 whileTap={{ scale: 0.95 }}
-                 aria-label="Kembali"
-                 className="w-10 h-10 flex items-center justify-center rounded-full bg-purple-100 text-game-purple shadow-md hover:bg-purple-200 transition-colors"
-               >
-                 <ArrowLeft className="w-5 h-5" />
-               </motion.button>
-             )}
-           </div>
+           <motion.button
+             type="button"
+             onClick={() => setIsOpen(!isOpen)}
+             whileTap={{ scale: 0.95 }}
+             className="px-3.5 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-lg hover:bg-white/95 transition-colors"
+           >
+             {isOpen ? 'Tutup' : 'Menu'}
+           </motion.button>
 
            <div className="min-w-0 text-center px-1">
              <p className="text-white/55 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] leading-none">CeriaKid</p>
