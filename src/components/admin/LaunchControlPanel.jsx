@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Zap, Loader2, Settings, LayoutDashboard, Wrench } from 'lucide-react';
+import { Zap, Loader2, Settings, LayoutDashboard, Wrench, Activity } from 'lucide-react';
 import LaunchSettingsModal from '@/components/admin/LaunchSettingsModal';
 import LaunchOverview from '@/components/admin/LaunchOverview';
 import LaunchManualControl from '@/components/admin/LaunchManualControl';
+import BackgroundActivityPanel from '@/components/admin/BackgroundActivityPanel';
 
 export default function LaunchControlPanel() {
   const [tab, setTab] = useState('overview');
@@ -94,15 +95,23 @@ export default function LaunchControlPanel() {
       <div className="pro-glass flex gap-2 p-1.5 rounded-2xl">
         <button
           onClick={() => setTab('overview')}
-          className={`flex-1 py-2.5 px-4 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-1.5 ${
             tab === 'overview' ? 'bg-white text-game-purple shadow' : 'text-white/80 hover:bg-white/15'
           }`}
         >
           <LayoutDashboard className="w-4 h-4" /> Overview
         </button>
         <button
+          onClick={() => setTab('activity')}
+          className={`flex-1 py-2.5 px-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-1.5 ${
+            tab === 'activity' ? 'bg-white text-game-purple shadow' : 'text-white/80 hover:bg-white/15'
+          }`}
+        >
+          <Activity className="w-4 h-4" /> Live Activity
+        </button>
+        <button
           onClick={() => setTab('manual')}
-          className={`flex-1 py-2.5 px-4 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-1.5 ${
             tab === 'manual' ? 'bg-white text-game-purple shadow' : 'text-white/80 hover:bg-white/15'
           }`}
         >
@@ -112,6 +121,7 @@ export default function LaunchControlPanel() {
 
       {/* Tab content */}
       {tab === 'overview' && <LaunchOverview />}
+      {tab === 'activity' && <BackgroundActivityPanel />}
       {tab === 'manual' && <LaunchManualControl />}
 
       {/* Settings modal */}
