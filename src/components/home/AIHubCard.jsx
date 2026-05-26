@@ -84,15 +84,15 @@ export default function AIHubCard() {
             whileHover={{ scale: 1.02, y: -2 }}
             className="bg-white rounded-3xl p-5 md:p-6 shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-white/80"
           >
-            <p className="text-slate-900 font-black text-sm md:text-base tracking-wide mb-1">BAKI KREDIT AI</p>
+            <p className="text-slate-900 font-black text-xs md:text-sm tracking-wide mb-1">BAKI KREDIT AI</p>
             {loading ? (
               <div className="flex items-center gap-2 my-1">
                 <Loader2 className="w-6 h-6 animate-spin text-slate-400" />
               </div>
             ) : (
-              <p className="text-slate-900 text-5xl md:text-6xl font-black leading-none my-1">{balance}</p>
+              <p className="text-slate-900 text-4xl md:text-5xl font-black leading-none my-1">{balance}</p>
             )}
-            <p className="text-slate-500 text-sm md:text-base font-semibold mt-2">
+            <p className="text-slate-600 text-xs md:text-sm font-bold mt-2">
               {credits?.totalUsed ?? 0} digunakan
             </p>
           </motion.div>
@@ -104,21 +104,21 @@ export default function AIHubCard() {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-1.5 px-5 py-2.5 md:px-6 md:py-3 rounded-2xl bg-white text-slate-900 font-black text-sm md:text-base shadow-[0_6px_20px_rgba(0,0,0,0.08)] border border-white/80 hover:shadow-lg transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 rounded-full bg-white text-slate-900 font-black text-xs md:text-sm shadow-[0_6px_20px_rgba(0,0,0,0.08)] border border-white/80 hover:shadow-lg transition-all"
             >
               <Plus className="w-4 h-4" /> Top Up
             </motion.div>
           </Link>
           {isLow && (
-            <p className="text-slate-600 font-semibold text-sm md:text-base flex items-center gap-1">
-              Baki rendah — top up sekarang <ArrowRight className="w-4 h-4" />
+            <p className="text-slate-700 font-bold text-xs md:text-sm flex items-center gap-1">
+              Baki rendah — top up sekarang <ArrowRight className="w-3.5 h-3.5" />
             </p>
           )}
         </div>
       </div>
 
       {/* Section title */}
-      <h2 className="relative z-10 text-slate-900 font-black text-2xl md:text-3xl tracking-wide mb-5 md:mb-7">
+      <h2 className="relative z-10 text-slate-900 font-black text-lg md:text-xl tracking-wide mb-4 md:mb-5">
         CIRI AI CERIAKID
       </h2>
 
@@ -148,13 +148,13 @@ export default function AIHubCard() {
 
                 {/* Text */}
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-slate-700 text-xs md:text-sm leading-tight flex items-center gap-1">
-                    <span className="text-base">👤</span> {f.title} -
+                  <p className="font-black text-slate-700 text-[11px] md:text-xs leading-tight">
+                    {f.title}
                   </p>
-                  <p className="font-black text-slate-900 text-base md:text-lg leading-tight mt-0.5">
+                  <p className="font-black text-slate-900 text-sm md:text-base leading-tight mt-0.5">
                     {f.desc}
                   </p>
-                  <span className="inline-block mt-2 md:mt-3 text-xs md:text-sm font-bold bg-white/80 text-slate-700 px-3 py-1 rounded-full shadow-sm">
+                  <span className="inline-block mt-2 text-[10px] md:text-xs font-black bg-white/80 text-slate-700 px-2.5 py-1 rounded-full shadow-sm">
                     {f.cost}
                   </span>
                 </div>
