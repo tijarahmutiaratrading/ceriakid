@@ -71,13 +71,13 @@ export default function AIHubCard() {
     >
       {/* Background image */}
       <img
-        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png"
+        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8dc570008_generated_image.png"
         alt=""
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 w-full h-full object-cover"
       />
       {/* Color overlay for readability */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-900/70 via-fuchsia-800/60 to-orange-700/60" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-950/50 via-fuchsia-900/40 to-amber-900/40" />
 
       {/* Decorative blobs */}
       <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-amber-400/40 blur-3xl" />
