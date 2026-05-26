@@ -441,8 +441,9 @@ export default function Landing() {
         </div>
       </SectionWrapper>
 
-      {/* ── HOW IT WORKS ── */}
+      {/* ── HOW IT WORKS + TESTIMONIALS (combined) ── */}
       <SectionWrapper
+        id="testimonials"
         badge="MUDAH UNTUK MULA"
         badgeIcon="🚀"
         title="Mulakan dalam"
@@ -473,42 +474,53 @@ export default function Landing() {
             </motion.div>
           ))}
         </div>
-      </SectionWrapper>
 
-      {/* ── TESTIMONIALS ── */}
-      <SectionWrapper
-        id="testimonials"
-        badge="⭐ ULASAN IBU BAPA"
-        badgeIcon="💬"
-        title="Apa kata"
-        titleAccent="ibu bapa kami"
-        subtitle="Maklum balas sebenar daripada ibu bapa yang menggunakan CeriaKid untuk anak-anak mereka 👇"
-        variant="vibrant"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
-              className="rounded-3xl p-6 bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex gap-1 mb-3">{[...Array(t.stars)].map((_, j) => <span key={j} className="text-yellow-300">★</span>)}</div>
-                <p className="text-white/85 mb-4 leading-relaxed text-sm">"{t.quote}"</p>
-                <div className="inline-block bg-green-500/15 text-green-200 border border-green-300/30 text-xs font-black px-3 py-1 rounded-full mb-4">✅ {t.highlight}</div>
-              </div>
-              <div className="flex items-center gap-3 pt-3 border-t border-white/10">
-                <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-white/20" />
+        {/* Testimonials sub-section */}
+        <div className="mt-16 md:mt-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-400/30 backdrop-blur-md mb-4">
+              <span>💬</span>
+              <span className="text-orange-700 text-xs sm:text-sm font-bold">⭐ ULASAN IBU BAPA</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black leading-[1.1] tracking-tight mb-3 text-slate-900">
+              Apa kata{' '}
+              <span className="bg-gradient-to-r from-orange-600 via-pink-500 to-red-500 bg-clip-text text-transparent">ibu bapa kami</span>
+            </h3>
+            <p className="text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Maklum balas sebenar daripada ibu bapa yang menggunakan CeriaKid untuk anak-anak mereka 👇
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                className="rounded-3xl p-6 bg-white shadow-xl shadow-orange-100 border border-orange-100 hover:shadow-2xl hover:-translate-y-1 transition-all flex flex-col justify-between"
+              >
                 <div>
-                  <p className="font-black text-white text-sm">{t.name}</p>
-                  <p className="text-xs text-white/55">{t.location}</p>
+                  <div className="flex gap-1 mb-3">{[...Array(t.stars)].map((_, j) => <span key={j} className="text-amber-500">★</span>)}</div>
+                  <p className="text-slate-700 mb-4 leading-relaxed text-sm">"{t.quote}"</p>
+                  <div className="inline-block bg-green-100 text-green-700 border border-green-200 text-xs font-black px-3 py-1 rounded-full mb-4">✅ {t.highlight}</div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+                <div className="flex items-center gap-3 pt-3 border-t border-orange-100">
+                  <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-orange-100" />
+                  <div>
+                    <p className="font-black text-slate-900 text-sm">{t.name}</p>
+                    <p className="text-xs text-slate-500">{t.location}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </SectionWrapper>
 
