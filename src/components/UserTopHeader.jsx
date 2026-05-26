@@ -76,10 +76,10 @@ export default function UserTopHeader() {
       <nav
         className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-2xl shadow-black/50"
         style={{
-          background: 'rgba(15, 10, 30, 0.85)',
-          backdropFilter: 'blur(32px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
-          border: '1px solid rgba(255,255,255,0.15)',
+          background: 'rgba(15, 10, 30, 0.35)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          border: '1px solid rgba(255,255,255,0.18)',
         }}
       >
         {isAdmin && (
