@@ -80,7 +80,7 @@ export default function LandingAISection() {
                 <img
                   src={f.avatar}
                   alt={f.title}
-                  className="h-20 w-20 rounded-full object-cover mb-3"
+                  className="h-20 w-20 rounded-full object-cover bg-white mb-3 ring-4 ring-white/90 shadow-lg"
                 />
                 <p className="text-white/80 text-[10px] font-black uppercase tracking-wider mb-0.5">{f.persona}</p>
                 <h4 className="font-black text-white text-lg leading-tight mb-1.5">{f.title}</h4>
