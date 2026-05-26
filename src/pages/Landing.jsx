@@ -224,16 +224,7 @@ export default function Landing() {
             alt="CeriaKid"
             className="h-8 w-8 rounded-full object-cover ring-1 ring-white/20 flex-shrink-0"
           />
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setMenuOpen(o => !o)}
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-full font-black text-white/90 text-sm hover:bg-white/10 transition-colors"
-            aria-expanded={menuOpen}
-            aria-label="Menu"
-          >
-            {menuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-            <span>Menu</span>
-          </motion.button>
+          <span className="flex-1 text-center text-white font-black text-sm tracking-tight">CeriaKid</span>
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
@@ -242,42 +233,6 @@ export default function Landing() {
             {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
           </motion.button>
         </div>
-
-        {/* Mobile: Collapsible menu */}
-        <AnimatePresence initial={false}>
-          {menuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-              className="max-w-md mx-auto mt-2 rounded-2xl p-2 shadow-2xl"
-              style={{
-                background: 'rgba(20, 14, 38, 0.92)',
-                backdropFilter: 'blur(28px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-                border: '1px solid rgba(255,255,255,0.12)',
-              }}
-            >
-              {[
-                { href: '#features', label: 'Ciri-ciri', icon: '⚙️' },
-                { href: '#testimonials', label: 'Testimoni', icon: '💬' },
-                { href: '#pricing', label: 'Harga', icon: '💰' },
-                { href: '#faq', label: 'FAQ', icon: '❓' },
-              ].map(item => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-between px-4 py-3 rounded-xl font-bold text-sm text-white/85 hover:bg-white/10 hover:text-white transition-all"
-                >
-                  <span>{item.label}</span>
-                  <span>{item.icon}</span>
-                </a>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </nav>
 
       {/* ── HERO — Modern Clean Design ── */}
