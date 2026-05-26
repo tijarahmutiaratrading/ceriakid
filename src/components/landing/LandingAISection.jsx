@@ -76,16 +76,13 @@ export default function LandingAISection() {
               <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-white/20 blur-2xl pointer-events-none group-hover:bg-white/30 transition-all" />
               <div className="absolute -left-3 -bottom-3 h-16 w-16 rounded-full bg-white/10 blur-2xl pointer-events-none" />
               <div className="relative">
-                {/* Avatar + icon badge */}
+                {/* Avatar */}
                 <div className="relative mb-3 inline-block">
                   <img
                     src={f.avatar}
                     alt={f.title}
                     className="h-16 w-16 rounded-2xl object-cover ring-2 ring-white/80 shadow-lg"
                   />
-                  <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-xl bg-white ring-2 ring-white shadow-md">
-                    <Icon className="h-3.5 w-3.5 text-slate-800" />
-                  </div>
                 </div>
                 <p className="text-white/80 text-[10px] font-black uppercase tracking-wider mb-0.5">{f.persona}</p>
                 <h4 className="font-black text-white text-lg leading-tight mb-1.5">{f.title}</h4>
