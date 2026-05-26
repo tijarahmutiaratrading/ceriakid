@@ -165,10 +165,10 @@ export default function Landing() {
 
 
 
-      {/* ── NAVBAR — Floating pill (Apple Fitness style, sama macam UserTopHeader) ── */}
+      {/* ── NAVBAR — Floating pill, absolute so it sits ONLY on top of hero ── */}
       {/* Desktop */}
       <header
-        className={`hidden md:flex fixed top-2 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[140%]'}`}
+        className="hidden md:flex absolute top-3 left-0 right-0 z-50 justify-center px-4 pointer-events-none"
       >
         <nav
           className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-2xl shadow-black/50"
@@ -210,7 +210,7 @@ export default function Landing() {
       </header>
 
       {/* Mobile */}
-      <nav className={`md:hidden fixed top-2 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <nav className="md:hidden absolute top-2 left-0 right-0 z-50 px-3 py-3">
         <div
           className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-lg shadow-black/30 flex items-center justify-between gap-3"
           style={{
@@ -238,14 +238,14 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* ── HERO — Apple Fitness Style (sama macam Dashboard) ── */}
-      <section className="relative w-full overflow-hidden pt-24 sm:pt-28 pb-10 sm:pb-14 bg-gradient-to-b from-sky-50 via-rose-50 to-amber-50">
+      {/* ── HERO — Full bleed, no outer padding/gap ── */}
+      <section className="relative w-full overflow-hidden pt-20 sm:pt-24 pb-10 sm:pb-14 bg-gradient-to-b from-sky-50 via-rose-50 to-amber-50">
         {/* Decorative glow blobs */}
         <div className="absolute top-20 -left-20 w-96 h-96 rounded-full bg-pink-300/40 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 -right-20 w-96 h-96 rounded-full bg-orange-300/40 blur-3xl pointer-events-none" />
         <div className="absolute top-40 right-1/3 w-72 h-72 rounded-full bg-sky-300/30 blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="relative z-10 w-full px-3 sm:px-4">
           <LandingHeroCarousel
             onCTAClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
             onPricingClick={scrollToPricing}
