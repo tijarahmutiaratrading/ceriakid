@@ -96,7 +96,7 @@ export default function BuyCredits() {
         </motion.div>
 
         {/* Current balance */}
-        <div className="mb-6 max-w-md mx-auto">
+        <div className="mb-6">
           <CreditBalanceWidget variant="glass" />
         </div>
 
