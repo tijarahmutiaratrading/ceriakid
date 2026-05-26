@@ -65,7 +65,10 @@ export default function AffiliatePage() {
   }
 
   const { affiliate, referrals, payouts } = data;
-  const referralLink = `${window.location.origin}/?ref=${affiliate.referralCode}`;
+  // Always use production domain for shareable referral links (not sandbox/preview URLs)
+  const isProd = typeof window !== 'undefined' && /ceriakid\.com/i.test(window.location.hostname);
+  const baseUrl = isProd ? window.location.origin : 'https://ceriakid.com';
+  const referralLink = `${baseUrl}/?ref=${affiliate.referralCode}`;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-pink-50/30">
