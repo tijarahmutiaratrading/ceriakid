@@ -405,47 +405,41 @@ export default function Landing() {
             </motion.div>
           ))}
         </div>
-
-        {/* Combined: Lebih mudah untuk anak */}
-        <div className="mt-16 pt-12 border-t border-white/10">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/25 backdrop-blur-md mb-4">
-              <span>🚀</span>
-              <span className="text-xs sm:text-sm font-bold text-white">SEMUA DALAM SATU APP</span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black leading-[1.1] tracking-tight text-white mb-3">
-              Lebih mudah untuk anak,{' '}
-              <span className="bg-gradient-to-r from-yellow-200 via-pink-200 to-violet-200 bg-clip-text text-transparent">lebih senang untuk ibu bapa</span>
-            </h3>
-            <p className="text-sm sm:text-base text-white/75 max-w-2xl mx-auto leading-relaxed">
-              Gabungan game interaktif, dashboard ibu bapa, dan kandungan KSPK/KSSR dalam satu pengalaman.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { icon: '🎮', title: 'Game Engine', desc: 'Soalan interaktif pelbagai format untuk subjek utama.' },
-              { icon: '📊', title: 'Parent Analytics', desc: 'Pantau skor, progress, streak dan prestasi anak.' },
-              { icon: '🔒', title: 'Pembelajaran Selamat', desc: 'Pengalaman tanpa iklan dan lebih terkawal untuk kanak-kanak.' },
-            ].map((item, i) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="rounded-2xl p-5 bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all"
-              >
-                <div className="text-3xl mb-2">{item.icon}</div>
-                <h4 className="font-black text-base mb-1.5 text-white">{item.title}</h4>
-                <p className="text-white/70 text-sm leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
       </SectionWrapper>
 
       {/* ── AI FEATURES ── */}
       <LandingAISection />
+
+      {/* ── INVESTOR WOW ── */}
+      <SectionWrapper
+        badge="SEMUA DALAM SATU APP"
+        badgeIcon="🚀"
+        title="Lebih mudah untuk anak,"
+        titleAccent="lebih senang untuk ibu bapa"
+        subtitle="CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSPK/KSSR dan progress tracking dalam satu pengalaman yang mudah digunakan."
+        variant="sky"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {[
+            { icon: '🎮', title: 'Game Engine', desc: 'Soalan interaktif pelbagai format untuk subjek utama.' },
+            { icon: '📊', title: 'Parent Analytics', desc: 'Pantau skor, progress, streak dan prestasi anak.' },
+            { icon: '🔒', title: 'Pembelajaran Selamat', desc: 'Pengalaman tanpa iklan dan lebih terkawal untuk kanak-kanak.' },
+          ].map((item, i) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="rounded-3xl p-6 bg-white shadow-xl shadow-blue-100 border border-blue-100 hover:shadow-2xl hover:-translate-y-1 transition-all"
+            >
+              <div className="text-4xl mb-3">{item.icon}</div>
+              <h3 className="font-black text-lg mb-2 text-slate-900">{item.title}</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </SectionWrapper>
 
       {/* ── HOW IT WORKS ── */}
       <SectionWrapper
