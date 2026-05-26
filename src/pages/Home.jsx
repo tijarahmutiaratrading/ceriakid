@@ -9,7 +9,7 @@ import { t } from '@/lib/i18n';
 import AppHeader from '@/components/AppHeader';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
-import DashboardHero from '@/components/home/DashboardHero';
+import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import QuickAccessGrid from '@/components/home/QuickAccessGrid';
 import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
 import AIHubCard from '@/components/home/AIHubCard';
@@ -94,7 +94,7 @@ export default function Home() {
 
       <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-8 lg:px-8 pb-40 pt-20 md:pt-8 space-y-8 md:space-y-10">
 
-      {isAuthenticated && <DashboardHero user={user} avatarUrl={homeAvatarUrl} lang={lang} />}
+      {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl} />}
 
       {isAuthenticated && user?.email && <SubscriptionExpiryBanner userEmail={user.email} />}
 
