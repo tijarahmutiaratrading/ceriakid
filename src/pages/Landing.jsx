@@ -246,7 +246,7 @@ export default function Landing() {
       </nav>
 
       {/* ── HERO — Apple Fitness Style (sama macam Dashboard) ── */}
-      <section className="relative w-full overflow-hidden pt-28 sm:pt-32 pb-10 sm:pb-14 bg-gradient-to-b from-sky-50 via-rose-50 to-amber-50">
+      <section className="relative w-full overflow-hidden pt-24 sm:pt-28 pb-10 sm:pb-14 bg-gradient-to-b from-sky-50 via-rose-50 to-amber-50">
         {/* Decorative glow blobs */}
         <div className="absolute top-20 -left-20 w-96 h-96 rounded-full bg-pink-300/40 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 -right-20 w-96 h-96 rounded-full bg-orange-300/40 blur-3xl pointer-events-none" />
