@@ -231,12 +231,13 @@ export default function Landing() {
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-            className="px-4 py-2 rounded-full font-black text-sm text-white whitespace-nowrap flex-shrink-0 transition-colors hover:bg-white/15"
+            className="px-4 py-2 rounded-full font-black text-sm text-white whitespace-nowrap flex-shrink-0 transition-all hover:bg-white/25"
             style={{
-              background: 'rgba(255,255,255,0.08)',
-              backdropFilter: 'blur(16px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(16px) saturate(180%)',
-              border: '1px solid rgba(255,255,255,0.22)',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.08))',
+              backdropFilter: 'blur(20px) saturate(200%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(200%)',
+              border: '1px solid rgba(255,255,255,0.35)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 16px rgba(0,0,0,0.2)',
             }}
           >
             {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
