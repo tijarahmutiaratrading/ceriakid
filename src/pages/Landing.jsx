@@ -316,10 +316,13 @@ export default function Landing() {
               </motion.div>
             ))}
           </div>
+
+          {/* Trusted marquee — digabungkan dalam hero */}
+          <div className="mt-10 md:mt-12">
+            <TrustedMarquee />
+          </div>
         </div>
       </section>
-
-      <TrustedMarquee />
 
       {/* ── PROBLEM SECTION ── */}
       <SectionWrapper

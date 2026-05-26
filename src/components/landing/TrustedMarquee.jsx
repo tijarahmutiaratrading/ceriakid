@@ -14,31 +14,31 @@ export default function TrustedMarquee() {
   const items = [...TRUST_ITEMS, ...TRUST_ITEMS];
 
   return (
-    <section className="py-8 md:py-10 overflow-hidden border-y border-yellow-200/30 bg-gradient-to-r from-yellow-100/95 via-orange-100/95 to-pink-100/95 backdrop-blur-xl">
-      <div className="max-w-6xl mx-auto px-4 text-center mb-5">
-        <p className="text-orange-600/80 text-xs font-black uppercase tracking-[0.22em] mb-2">Dipaparkan & dipercayai oleh</p>
-        <h2 className="text-2xl md:text-3xl font-black text-slate-900">Dipercayai 5,000+ Keluarga Malaysia 🇲🇾</h2>
+    <div className="overflow-hidden">
+      <div className="text-center mb-4">
+        <p className="text-orange-600/80 text-[10px] sm:text-xs font-black uppercase tracking-[0.22em] mb-1.5">Dipaparkan & dipercayai oleh</p>
+        <h2 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900">Dipercayai 5,000+ Keluarga Malaysia 🇲🇾</h2>
       </div>
 
       <div className="relative">
-        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-28 bg-gradient-to-r from-yellow-100 to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-28 bg-gradient-to-l from-pink-100 to-transparent z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-r from-amber-50 to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-l from-amber-50 to-transparent z-10" />
 
         <motion.div
-          className="flex gap-3 md:gap-4 w-max"
+          className="flex gap-2.5 md:gap-3 w-max"
           animate={{ x: ['0%', '-50%'] }}
           transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
         >
           {items.map((item, index) => (
             <div
               key={`${item}-${index}`}
-              className="shrink-0 rounded-full border border-orange-200/70 bg-white/80 px-5 md:px-7 py-3 text-sm md:text-base font-black text-slate-800 shadow-xl shadow-orange-200/30 backdrop-blur-xl"
+              className="shrink-0 rounded-full border border-white bg-white/80 px-4 md:px-5 py-2 text-xs md:text-sm font-black text-slate-800 shadow-md backdrop-blur-xl"
             >
               {item}
             </div>
           ))}
         </motion.div>
       </div>
-    </section>
+    </div>
   );
 }
