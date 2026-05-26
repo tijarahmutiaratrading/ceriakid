@@ -62,7 +62,7 @@ export default function BuyCredits() {
         {/* Back button */}
         <Link
           to="/dashboard"
-          className="inline-flex items-center gap-2 mb-4 px-3.5 py-2 rounded-full bg-white text-slate-700 font-bold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all"
+          className="inline-flex items-center gap-2 mb-4 ml-4 sm:ml-6 px-3.5 py-2 rounded-full bg-white text-slate-700 font-bold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Dashboard
         </Link>
