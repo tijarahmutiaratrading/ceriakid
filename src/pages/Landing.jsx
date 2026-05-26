@@ -186,8 +186,8 @@ export default function Landing() {
           />
           {[
             { href: '#features', label: 'Ciri-ciri' },
+            { href: '#ai', label: '✨ Cikgu AI' },
             { href: '#testimonials', label: 'Testimoni' },
-            { href: '#pricing', label: 'Harga' },
             { href: '#faq', label: 'FAQ' },
           ].map(item => (
             <a
@@ -198,10 +198,16 @@ export default function Landing() {
               {item.label}
             </a>
           ))}
+          <a
+            href="#pricing"
+            className="ml-1 px-4 py-1.5 rounded-full font-black text-sm bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-lg shadow-orange-500/40 hover:from-orange-400 hover:to-pink-400 transition-colors"
+          >
+            🔥 Order Now
+          </a>
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-            className="ml-1 px-4 py-1.5 rounded-full font-black text-sm bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 hover:bg-amber-200 transition-colors"
+            className="px-4 py-1.5 rounded-full font-black text-sm bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 hover:bg-amber-200 transition-colors"
           >
             {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
           </motion.button>
@@ -211,7 +217,7 @@ export default function Landing() {
       {/* Mobile */}
       <nav className={`md:hidden fixed top-0 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div
-          className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-2xl shadow-black/50 flex items-center justify-between gap-2"
+          className="max-w-md mx-auto w-full px-2 py-1.5 rounded-full shadow-2xl shadow-black/50 flex items-center justify-between gap-1.5"
           style={{
             background: 'rgba(15, 10, 30, 0.45)',
             backdropFilter: 'blur(24px) saturate(180%)',
@@ -222,13 +228,24 @@ export default function Landing() {
           <img
             src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
             alt="CeriaKid"
-            className="h-8 w-8 rounded-full object-cover ring-1 ring-white/20 flex-shrink-0"
+            className="h-7 w-7 rounded-full object-cover ring-1 ring-white/20 flex-shrink-0"
           />
-          <span className="flex-1 text-center text-white font-black text-sm tracking-tight">CeriaKid</span>
+          <a
+            href="#ai"
+            className="px-2.5 py-1.5 rounded-full font-black text-[11px] text-white/90 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
+          >
+            ✨ Cikgu AI
+          </a>
+          <a
+            href="#pricing"
+            className="px-2.5 py-1.5 rounded-full font-black text-[11px] bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-lg shadow-orange-500/40 whitespace-nowrap flex-shrink-0"
+          >
+            🔥 Order
+          </a>
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-            className="px-3.5 py-1.5 rounded-full font-black text-xs bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 flex-shrink-0"
+            className="px-2.5 py-1.5 rounded-full font-black text-[11px] bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 flex-shrink-0 whitespace-nowrap"
           >
             {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
           </motion.button>

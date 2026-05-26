@@ -44,6 +44,7 @@ const AI_FEATURES = [
 export default function LandingAISection() {
   return (
     <SectionWrapper
+      id="ai"
       badge="BANTUAN PEMBELAJARAN BERKUASA AI"
       badgeIcon="✨"
       title="Bukan sekadar game —"
