@@ -165,90 +165,119 @@ export default function Landing() {
 
 
 
-      {/* ── NAVBAR ── */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="max-w-md sm:max-w-4xl mx-auto w-full px-4 py-3 rounded-3xl shadow-2xl border border-white/30" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))', backdropFilter: 'blur(12px)', boxShadow: '0 8px 32px rgba(31, 16, 92, 0.2)' }}>
-          {/* Top row: Logo + Centered nav + CTA/Menu */}
-          <div className="flex items-center justify-between sm:gap-6">
-            {/* Logo */}
-            <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 rounded-xl shadow flex-shrink-0" />
-            
-            {/* Desktop: centered text links */}
-            <div className="hidden sm:flex items-center gap-6 flex-1 justify-center">
-              <a href="#features" className="text-white/80 hover:text-white font-bold text-sm transition-colors">
-                Ciri-ciri
-              </a>
-              <a href="#testimonials" className="text-white/80 hover:text-white font-bold text-sm transition-colors">
-                Testimoni
-              </a>
-              <a href="#pricing" className="text-white/80 hover:text-white font-bold text-sm transition-colors">
-                Harga
-              </a>
-              <a href="#faq" className="text-white/80 hover:text-white font-bold text-sm transition-colors">
-                FAQ
-              </a>
-            </div>
-
-            {/* Desktop: CTA button */}
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-              className="hidden sm:flex px-5 py-2 rounded-full font-black text-white text-sm shadow-lg flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg, #A855F7, #EC4899)' }}
+      {/* ── NAVBAR — Floating pill (Apple Fitness style, sama macam UserTopHeader) ── */}
+      {/* Desktop */}
+      <header
+        className={`hidden md:flex fixed top-4 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[140%]'}`}
+      >
+        <nav
+          className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-2xl shadow-black/50"
+          style={{
+            background: 'rgba(15, 10, 30, 0.35)',
+            backdropFilter: 'blur(24px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+            border: '1px solid rgba(255,255,255,0.18)',
+          }}
+        >
+          <img
+            src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
+            alt="CeriaKid"
+            className="h-8 w-8 rounded-full object-cover ml-1 mr-2 ring-1 ring-white/20"
+          />
+          {[
+            { href: '#features', label: 'Ciri-ciri' },
+            { href: '#testimonials', label: 'Testimoni' },
+            { href: '#pricing', label: 'Harga' },
+            { href: '#faq', label: 'FAQ' },
+          ].map(item => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="relative px-4 py-1.5 rounded-full font-black text-sm text-white/85 hover:text-white hover:bg-white/5 transition-colors"
             >
-              {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
-            </motion.button>
+              {item.label}
+            </a>
+          ))}
+          <motion.button
+            whileTap={{ scale: 0.96 }}
+            onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
+            className="ml-1 px-4 py-1.5 rounded-full font-black text-sm bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 hover:bg-amber-200 transition-colors"
+          >
+            {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
+          </motion.button>
+        </nav>
+      </header>
 
-            {/* Mobile: hamburger menu */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setMenuOpen(o => !o)}
-              className="sm:hidden flex items-center gap-2 px-4 py-2 rounded-full font-black text-white text-sm shadow-lg"
-              style={{ background: 'linear-gradient(135deg, #A855F7, #EC4899)' }}
-              aria-expanded={menuOpen}
-              aria-label="Menu"
-            >
-              {menuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-              <span>Menu</span>
-            </motion.button>
-          </div>
-
-          {/* Mobile: Collapsible menu */}
-          <AnimatePresence initial={false}>
-            {menuOpen && (
-              <motion.div
-                initial={{ height: 0, opacity: 0, marginTop: 0 }}
-                animate={{ height: 'auto', opacity: 1, marginTop: 12 }}
-                exit={{ height: 0, opacity: 0, marginTop: 0 }}
-                transition={{ duration: 0.25 }}
-                className="overflow-hidden sm:hidden"
-              >
-                <div className="grid grid-cols-2 gap-2">
-                  <a onClick={() => setMenuOpen(false)} href="#features" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-purple-50 border-2 border-purple-200 text-purple-700 font-black text-sm hover:bg-purple-100 hover:scale-105 transition-all">
-                    Ciri-ciri <span>⚙️</span>
-                  </a>
-                  <a onClick={() => setMenuOpen(false)} href="#testimonials" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-pink-50 border-2 border-pink-200 text-pink-700 font-black text-sm hover:bg-pink-100 hover:scale-105 transition-all">
-                    Testimoni <span>💬</span>
-                  </a>
-                  <a onClick={() => setMenuOpen(false)} href="#pricing" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-amber-50 border-2 border-amber-200 text-amber-700 font-black text-sm hover:bg-amber-100 hover:scale-105 transition-all">
-                    Harga <span>💰</span>
-                  </a>
-                  <a onClick={() => setMenuOpen(false)} href="#faq" className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-blue-50 border-2 border-blue-200 text-blue-700 font-black text-sm hover:bg-blue-100 hover:scale-105 transition-all">
-                    FAQ <span>❓</span>
-                  </a>
-                </div>
-                <motion.button
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => { setMenuOpen(false); isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard'); }}
-                  className="w-full mt-2 py-3 rounded-full font-black text-white text-sm shadow-lg"
-                  style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)' }}
-                >
-                  {isAuthenticated ? '📊 Dashboard' : '🔓 Log Masuk'}
-                </motion.button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+      {/* Mobile */}
+      <nav className={`md:hidden fixed top-0 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div
+          className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-2xl shadow-black/50 flex items-center justify-between gap-2"
+          style={{
+            background: 'rgba(15, 10, 30, 0.45)',
+            backdropFilter: 'blur(24px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+            border: '1px solid rgba(255,255,255,0.18)',
+          }}
+        >
+          <img
+            src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
+            alt="CeriaKid"
+            className="h-8 w-8 rounded-full object-cover ring-1 ring-white/20 flex-shrink-0"
+          />
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setMenuOpen(o => !o)}
+            className="flex items-center gap-1.5 px-4 py-1.5 rounded-full font-black text-white/90 text-sm hover:bg-white/10 transition-colors"
+            aria-expanded={menuOpen}
+            aria-label="Menu"
+          >
+            {menuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            <span>Menu</span>
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.96 }}
+            onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
+            className="px-3.5 py-1.5 rounded-full font-black text-xs bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 flex-shrink-0"
+          >
+            {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
+          </motion.button>
         </div>
+
+        {/* Mobile: Collapsible menu */}
+        <AnimatePresence initial={false}>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="max-w-md mx-auto mt-2 rounded-2xl p-2 shadow-2xl"
+              style={{
+                background: 'rgba(20, 14, 38, 0.92)',
+                backdropFilter: 'blur(28px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+                border: '1px solid rgba(255,255,255,0.12)',
+              }}
+            >
+              {[
+                { href: '#features', label: 'Ciri-ciri', icon: '⚙️' },
+                { href: '#testimonials', label: 'Testimoni', icon: '💬' },
+                { href: '#pricing', label: 'Harga', icon: '💰' },
+                { href: '#faq', label: 'FAQ', icon: '❓' },
+              ].map(item => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center justify-between px-4 py-3 rounded-xl font-bold text-sm text-white/85 hover:bg-white/10 hover:text-white transition-all"
+                >
+                  <span>{item.label}</span>
+                  <span>{item.icon}</span>
+                </a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* ── HERO — Modern Clean Design ── */}
