@@ -70,16 +70,16 @@ export default function UserTopHeader() {
   return (
     <header
       ref={navRef}
-      className="hidden md:flex sticky top-4 z-40 mt-4 justify-center px-4"
+      className="hidden md:flex fixed top-4 left-0 right-0 z-50 justify-center px-4 pointer-events-none"
     >
       {/* Center: Floating pill nav (Apple Fitness style) */}
       <nav
-        className="flex items-center gap-1 px-2 py-1.5 rounded-full shadow-2xl shadow-black/40"
+        className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-2xl shadow-black/50"
         style={{
-          background: 'rgba(20, 14, 38, 0.55)',
-          backdropFilter: 'blur(28px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          background: 'rgba(15, 10, 30, 0.85)',
+          backdropFilter: 'blur(32px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+          border: '1px solid rgba(255,255,255,0.15)',
         }}
       >
         {isAdmin && (

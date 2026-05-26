@@ -19,7 +19,7 @@ export default function AppLayout() {
       }}
     >
       <UserTopHeader />
-      <main className="w-full overflow-x-hidden">
+      <main className="w-full overflow-x-hidden md:pt-20">
         <Outlet />
       </main>
     </div>
