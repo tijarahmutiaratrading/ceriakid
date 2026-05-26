@@ -12,6 +12,7 @@ import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import HeroCarousel from '@/components/landing/HeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
+import LandingAISection from '@/components/landing/LandingAISection';
 
 // Tier values for FB Pixel Purchase event
 const TIER_VALUES = { asas: 49, standard: 99, keluarga: 199 };
@@ -46,7 +47,7 @@ const tiers = [
   perMonth: '16.58',
   period: '/tahun',
   savings: 'PALING POPULAR',
-  features: ['200 game semua peringkat boleh dimainkan', 'Semua subjek', 'Prasekolah & Sekolah Rendah', 'Tiada game dikunci 🔓', 'Sehingga 4 profil anak', 'Boleh guna offline 📲', 'Sokongan prioriti', 'Sehingga 4 peranti 📱📱📱📱'],
+  features: ['200 game semua peringkat boleh dimainkan', '🎁 50 KREDIT AI PERCUMA (Cikgu Firdaus + Penjana Cerita)', 'Semua subjek', 'Prasekolah & Sekolah Rendah', 'Tiada game dikunci 🔓', 'Sehingga 4 profil anak', 'Boleh guna offline 📲', 'Sokongan prioriti', 'Sehingga 4 peranti 📱📱📱📱'],
   noFeatures: [],
   cta: '🔥 Pilih Keluarga',
   highlighted: true
@@ -561,6 +562,9 @@ export default function Landing() {
           ))}
         </div>
       </SectionWrapper>
+
+      {/* ── AI FEATURES ── */}
+      <LandingAISection />
 
       {/* ── INVESTOR WOW ── */}
       <SectionWrapper
