@@ -56,13 +56,13 @@ export default function BuyCredits() {
   return (
     <div className="min-h-screen relative overflow-hidden">
 
-      <AppHeader showBack={true} backTo="/dashboard" title="Beli Kredit AI" />
+      <AppHeader showBack={false} title="Beli Kredit AI" />
 
       <div className="relative max-w-6xl mx-auto px-4 pt-24 md:pt-8 pb-32">
         {/* Back button */}
         <Link
           to="/dashboard"
-          className="hidden md:inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/20 text-white/90 hover:text-white hover:bg-slate-900/70 font-black text-sm transition-colors"
+          className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/20 text-white/90 hover:text-white hover:bg-slate-900/70 font-black text-sm transition-colors"
         >
           <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
         </Link>
