@@ -1,17 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Gamepad2, Palette, BookOpen } from 'lucide-react';
+import { ArrowRight, Gamepad2, Palette, BookOpen, BookMarked } from 'lucide-react';
 
 const actions = [
   { to: '/games-hub', icon: Gamepad2, emoji: '🎮', title: 'Game Hub', subtitle: 'Permainan interaktif', tone: 'from-violet-400/30 to-blue-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c313ca888_generated_image.png' },
   { to: '/drawing', icon: Palette, emoji: '🎨', title: 'Studio Lukisan', subtitle: 'Lukis bebas & tracing', tone: 'from-pink-400/30 to-orange-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1bf081296_generated_image.png' },
   { to: '/story-kid', icon: BookOpen, emoji: '📖', title: 'Story Kid', subtitle: 'Cerita interaktif', tone: 'from-yellow-300/30 to-pink-400/20', featured: true, image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/71823ab6e_generated_image.png' },
+  { to: '/syllabus', icon: BookMarked, emoji: '📚', title: 'Silibus KSPK/KSSR', subtitle: 'Rujukan rasmi KPM', tone: 'from-amber-400/30 to-orange-400/20' },
 ];
 
 export default function QuickAccessGrid() {
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="grid grid-cols-1 gap-3 sm:grid-cols-3 md:gap-4">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4">
       {actions.map((item) => {
         const Icon = item.icon;
         return (
