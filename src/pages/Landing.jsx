@@ -685,10 +685,10 @@ export default function Landing() {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
               onClick={scrollToPricing}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-black text-white text-base sm:text-lg shadow-2xl"
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 sm:px-7 sm:py-3.5 rounded-full font-black text-white text-sm sm:text-base shadow-2xl"
               style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)', boxShadow: '0 10px 30px rgba(234,88,12,0.5)' }}
             >
-              🎮 Pilih Pelan Sekarang <ArrowRight className="w-5 h-5" />
+              🎮 Pilih Pelan Sekarang <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
             <p className="text-white/60 text-sm mt-4">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Tanpa iklan &nbsp;•&nbsp; ✅ Dashboard ibu bapa</p>
           </div>
