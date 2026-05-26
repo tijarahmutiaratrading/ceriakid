@@ -238,19 +238,24 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* ── HERO — Full bleed, no outer padding/gap ── */}
-      <section className="relative w-full overflow-hidden pt-20 sm:pt-24 pb-10 sm:pb-14 bg-gradient-to-b from-sky-50 via-rose-50 to-amber-50">
-        {/* Decorative glow blobs */}
-        <div className="absolute top-20 -left-20 w-96 h-96 rounded-full bg-pink-300/40 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 -right-20 w-96 h-96 rounded-full bg-orange-300/40 blur-3xl pointer-events-none" />
-        <div className="absolute top-40 right-1/3 w-72 h-72 rounded-full bg-sky-300/30 blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 w-full px-3 sm:px-4">
+      {/* ── HERO — Edge-to-edge full screen carousel ── */}
+      <section className="relative w-full overflow-hidden">
+        {/* Full screen carousel — no padding, no rounded corners */}
+        <div className="relative w-full h-screen">
           <LandingHeroCarousel
             onCTAClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
             onPricingClick={scrollToPricing}
+            fullScreen
           />
+        </div>
 
+        {/* Secondary content below the full hero — with normal padding */}
+        <div className="relative bg-gradient-to-b from-sky-50 via-rose-50 to-amber-50 pt-10 sm:pt-14 pb-10 sm:pb-14">
+          <div className="absolute top-20 -left-20 w-96 h-96 rounded-full bg-pink-300/40 blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 -right-20 w-96 h-96 rounded-full bg-orange-300/40 blur-3xl pointer-events-none" />
+          <div className="absolute top-40 right-1/3 w-72 h-72 rounded-full bg-sky-300/30 blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
           {/* Feature pills row */}
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
@@ -313,6 +318,7 @@ export default function Landing() {
           {/* Trusted marquee — digabungkan dalam hero */}
           <div className="mt-10 md:mt-12">
             <TrustedMarquee />
+          </div>
           </div>
         </div>
       </section>

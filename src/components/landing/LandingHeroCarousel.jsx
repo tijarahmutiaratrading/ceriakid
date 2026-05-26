@@ -39,7 +39,7 @@ const SLIDES = [
   },
 ];
 
-export default function LandingHeroCarousel({ onCTAClick, onPricingClick }) {
+export default function LandingHeroCarousel({ onCTAClick, onPricingClick, fullScreen = false }) {
   const [index, setIndex] = useState(0);
   const slide = SLIDES[index];
 
@@ -51,8 +51,12 @@ export default function LandingHeroCarousel({ onCTAClick, onPricingClick }) {
     return () => clearInterval(timer);
   }, []);
 
+  const containerClass = fullScreen
+    ? 'relative w-full h-full overflow-hidden bg-slate-900'
+    : 'relative w-full rounded-[1.75rem] sm:rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[3/4] sm:aspect-[16/10] md:aspect-[16/8] bg-slate-900';
+
   return (
-    <div className="relative w-full rounded-[1.75rem] sm:rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[3/4] sm:aspect-[16/10] md:aspect-[16/8] bg-slate-900">
+    <div className={containerClass}>
       {/* Slides — render all, fade between with opacity */}
       {SLIDES.map((s, i) => (
         <img
