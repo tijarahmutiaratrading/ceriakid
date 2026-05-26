@@ -113,7 +113,7 @@ export default function BuyCredits() {
             <Info className="w-4 h-4 text-blue-300" />
             <h2 className="text-white font-black text-base">Kos Setiap Ciri AI</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
               <p className="text-2xl">🎓</p>
               <p className="text-white font-black text-sm mt-1">Pembantu Pembelajaran</p>
@@ -128,6 +128,11 @@ export default function BuyCredits() {
               <p className="text-2xl">📝</p>
               <p className="text-white font-black text-sm mt-1">Penjana BBM</p>
               <p className="text-amber-300 text-xs font-black">{CREDIT_COSTS.bbm_generator} kredit / BBM</p>
+            </div>
+            <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
+              <p className="text-2xl">🧠</p>
+              <p className="text-white font-black text-sm mt-1">Kuiz AI</p>
+              <p className="text-amber-300 text-xs font-black">{CREDIT_COSTS.quiz_ai} kredit / soalan</p>
             </div>
           </div>
           <p className="text-white text-xs font-bold mt-4">
