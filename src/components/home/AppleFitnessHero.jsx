@@ -12,7 +12,7 @@ const SLIDES = [
     cta: 'Mula Sekarang',
     ctaLink: '/games-hub',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/092310156_generated_image.png',
-    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8ee0e60f8_generated_image.png',
+    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0489544af_generated_image.png',
     objectPos: 'center center',
   },
   {
@@ -22,7 +22,7 @@ const SLIDES = [
     cta: 'Lihat Cabaran',
     ctaLink: '/challenges',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3932e4bfd_generated_image.png',
-    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/155f89228_generated_image.png',
+    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d17cc3032_generated_image.png',
     objectPos: 'center center',
   },
   {
@@ -32,7 +32,7 @@ const SLIDES = [
     cta: 'Tanya Cikgu',
     ctaLink: '/ai-assistant',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/05975c0fa_generated_image.png',
-    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a20ae1bdf_generated_image.png',
+    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/59c957095_generated_image.png',
     objectPos: 'center center',
   },
   {
@@ -42,7 +42,7 @@ const SLIDES = [
     cta: 'Baca Sekarang',
     ctaLink: '/story-kid',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/618a93e8d_generated_image.png',
-    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8aa809c08_generated_image.png',
+    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6eec87858_generated_image.png',
     objectPos: 'center center',
   },
 ];
@@ -63,7 +63,7 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
   const firstName = (user?.full_name || '').split(' ')[0] || 'Kawan';
 
   return (
-    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[3/4] sm:aspect-[16/8] md:aspect-[16/7] max-h-[640px] sm:max-h-[560px]">
+    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[4/5] sm:aspect-[16/8] md:aspect-[16/7] max-h-[520px] sm:max-h-[560px]">
       {/* Slides */}
       <AnimatePresence mode="sync">
         <motion.div
