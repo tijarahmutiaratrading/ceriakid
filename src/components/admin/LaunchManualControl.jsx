@@ -136,13 +136,13 @@ export default function LaunchManualControl() {
             key={t.key}
             onClick={() => setSection(t.key)}
             className={`flex-1 py-2 px-3 rounded-lg font-black text-xs transition-all ${
-              section === t.key ? 'bg-white text-game-purple shadow' : 'text-white/80 hover:bg-white/15'
+              section === t.key ? 'bg-slate-900 text-white shadow' : 'text-slate-700 hover:bg-white/70'
             }`}
           >
             {t.label}
           </button>
         ))}
-        <button onClick={loadAll} disabled={loading} className="px-3 rounded-lg bg-white/10 hover:bg-white/20 text-white">
+        <button onClick={loadAll} disabled={loading} className="px-3 rounded-lg bg-white/70 hover:bg-white text-slate-700 ring-1 ring-slate-300">
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
         </button>
       </div>
