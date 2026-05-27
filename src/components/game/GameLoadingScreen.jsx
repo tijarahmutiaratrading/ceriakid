@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 export default function GameLoadingScreen({ message = 'Menyediakan permainan...' }) {
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center relative overflow-hidden p-4"
+      className="fixed inset-0 z-[9999] w-screen h-screen flex items-center justify-center overflow-hidden p-4"
       style={{ background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)' }}
     >
       {/* Glow orbs */}
