@@ -19,7 +19,7 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
     <header className={`hidden md:flex fixed top-4 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
       {/* Floating pill nav (Apple Fitness style — glossy light) */}
       <nav
-        className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-xl shadow-black/20"
+        className="pointer-events-auto flex items-center gap-0.5 px-1.5 py-1.5 rounded-full shadow-xl shadow-black/20 max-w-[calc(100vw-2rem)]"
         style={{
           background: 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
           backdropFilter: 'blur(20px) saturate(180%)',
@@ -31,21 +31,21 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
         {/* Landing page */}
         <Link
           to="/"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black text-slate-700 hover:text-slate-900 hover:bg-white/50 transition-all"
+          className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] lg:text-xs font-black text-slate-700 hover:text-slate-900 hover:bg-white/50 transition-all whitespace-nowrap"
           title="Lihat Landing Page"
         >
           <Home className="w-3.5 h-3.5" />
-          <span>Landing</span>
+          <span className="hidden lg:inline">Landing</span>
         </Link>
 
         {/* Switch ke user dashboard */}
         <Link
           to="/dashboard"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-all"
+          className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] lg:text-xs font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-all whitespace-nowrap"
           title="Tukar ke Dashboard Pengguna"
         >
           <LayoutGrid className="w-3.5 h-3.5" />
-          <span>Pengguna</span>
+          <span className="hidden lg:inline">Pengguna</span>
         </Link>
 
         {/* Admin tabs */}
@@ -56,7 +56,7 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
               key={item.key}
               type="button"
               onClick={() => setActiveTab(item.key)}
-              className={`relative px-4 py-1.5 rounded-full font-black text-sm transition-colors ${
+              className={`relative px-3 lg:px-4 py-1.5 rounded-full font-black text-xs lg:text-sm transition-colors whitespace-nowrap ${
                 active ? 'text-white' : 'text-slate-800 hover:text-slate-900'
               }`}
             >
