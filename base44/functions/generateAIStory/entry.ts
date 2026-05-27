@@ -144,9 +144,28 @@ Format jawapan dalam JSON:
       });
     }
 
+    // Auto-save story ke library user — tak block respons kalau gagal
+    let savedId = null;
+    try {
+      const saved = await base44.entities.AIStory.create({
+        title: storyData.title,
+        emoji: storyData.emoji || '📖',
+        story: storyData.story,
+        moralSummary: storyData.moralSummary || '',
+        theme,
+        childName: childName || '',
+        ageRange,
+        moralLesson,
+        length,
+      });
+      savedId = saved?.id;
+    } catch (saveErr) {
+      console.error('Failed to save story to library:', saveErr.message);
+    }
+
     return Response.json({
       success: true,
-      story: storyData,
+      story: { ...storyData, id: savedId },
       newBalance,
       creditsUsed: COST_PER_STORY,
     });

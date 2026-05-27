@@ -5,6 +5,8 @@ import { Sparkles, Loader2, FileText, RefreshCw, Printer } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import AIBackButton from '@/components/ai/AIBackButton';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
+import MyBBMLibrary from '@/components/ai/MyBBMLibrary';
+import { Library } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/use-toast';
 import { CREDIT_COSTS } from '@/lib/creditPackages';
@@ -46,6 +48,8 @@ export default function BBMGenerator() {
   const [loading, setLoading] = useState(false);
   const [bbm, setBbm] = useState(null);
   const [insufficient, setInsufficient] = useState(false);
+  const [activeTab, setActiveTab] = useState('generate'); // 'generate' | 'library'
+  const [libraryRefresh, setLibraryRefresh] = useState(0);
 
   const handleGenerate = async () => {
     if (!topic.trim() || topic.trim().length < 3) {
@@ -61,6 +65,7 @@ export default function BBMGenerator() {
         toast({ title: 'Kredit tidak mencukupi', description: `Diperlukan ${res.data.required} kredit`, variant: 'destructive' });
       } else if (res.data?.success) {
         setBbm(res.data.bbm);
+        setLibraryRefresh(k => k + 1);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         throw new Error(res.data?.error || 'Gagal menjana');
@@ -103,7 +108,29 @@ export default function BBMGenerator() {
           <CreditBalanceWidget compact />
         </div>
 
-        {bbm ? (
+        {/* Tab switcher */}
+        <div className="print:hidden bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-2xl p-1.5 mb-4 grid grid-cols-2 gap-1.5">
+          <button
+            onClick={() => { setActiveTab('generate'); setBbm(null); }}
+            className={`py-2.5 rounded-xl font-black text-sm flex items-center justify-center gap-2 transition-all ${
+              activeTab === 'generate' ? 'bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow' : 'text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <Sparkles className="w-4 h-4" /> Jana BBM
+          </button>
+          <button
+            onClick={() => setActiveTab('library')}
+            className={`py-2.5 rounded-xl font-black text-sm flex items-center justify-center gap-2 transition-all ${
+              activeTab === 'library' ? 'bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow' : 'text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <Library className="w-4 h-4" /> Koleksi Saya
+          </button>
+        </div>
+
+        {activeTab === 'library' ? (
+          <MyBBMLibrary refreshKey={libraryRefresh} />
+        ) : bbm ? (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl p-6 md:p-10 shadow-2xl print:shadow-none print:rounded-none print:p-0">
             <div className="text-center mb-4 print:mb-2">
               <p className="text-5xl mb-2">{bbm.emoji || '📄'}</p>

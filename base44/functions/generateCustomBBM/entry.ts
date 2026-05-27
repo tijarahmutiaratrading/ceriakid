@@ -146,9 +146,29 @@ Format jawapan dalam JSON:
       });
     }
 
+    // Auto-save BBM ke library user — tak block respons kalau gagal
+    let savedId = null;
+    try {
+      const saved = await base44.entities.BBMResource.create({
+        title: bbmData.title,
+        emoji: bbmData.emoji || '📄',
+        htmlContent: bbmData.htmlContent,
+        subject,
+        level,
+        type,
+        description: `Topik: ${topic}`,
+        tags: [subjectLabel, levelLabel, topic],
+        tier: 'free',
+        isPublished: false,
+      });
+      savedId = saved?.id;
+    } catch (saveErr) {
+      console.error('Failed to save BBM to library:', saveErr.message);
+    }
+
     return Response.json({
       success: true,
-      bbm: bbmData,
+      bbm: { ...bbmData, id: savedId },
       newBalance,
       creditsUsed: COST_PER_BBM,
     });

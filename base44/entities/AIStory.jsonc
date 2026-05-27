@@ -1,0 +1,55 @@
+{
+  "name": "AIStory",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Tajuk cerita"
+    },
+    "emoji": {
+      "type": "string",
+      "description": "Emoji utama untuk cerita"
+    },
+    "story": {
+      "type": "string",
+      "description": "Kandungan penuh cerita (markdown)"
+    },
+    "moralSummary": {
+      "type": "string",
+      "description": "Ringkasan pengajaran moral"
+    },
+    "theme": {
+      "type": "string",
+      "description": "Tema input dari user"
+    },
+    "childName": {
+      "type": "string",
+      "description": "Nama watak utama"
+    },
+    "ageRange": {
+      "type": "string",
+      "enum": [
+        "4-6",
+        "7-9",
+        "10-12"
+      ],
+      "description": "Umur sasaran pembaca"
+    },
+    "moralLesson": {
+      "type": "string",
+      "description": "Pengajaran moral yang dipilih"
+    },
+    "length": {
+      "type": "string",
+      "enum": [
+        "short",
+        "medium",
+        "long"
+      ]
+    }
+  },
+  "required": [
+    "title",
+    "story"
+  ]
+}

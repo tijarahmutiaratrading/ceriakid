@@ -6,6 +6,8 @@ import { Sparkles, Loader2, BookOpen, RefreshCw, Printer } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import AIBackButton from '@/components/ai/AIBackButton';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
+import MyStoryLibrary from '@/components/ai/MyStoryLibrary';
+import { Library } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
@@ -53,6 +55,8 @@ export default function StoryGenerator() {
   const [loading, setLoading] = useState(false);
   const [story, setStory] = useState(null);
   const [insufficient, setInsufficient] = useState(false);
+  const [activeTab, setActiveTab] = useState('generate'); // 'generate' | 'library'
+  const [libraryRefresh, setLibraryRefresh] = useState(0);
 
   const handleGenerate = async () => {
     if (!theme.trim() || theme.trim().length < 3) {
@@ -74,6 +78,7 @@ export default function StoryGenerator() {
         toast({ title: 'Kredit tidak mencukupi', description: `Diperlukan ${res.data.required} kredit`, variant: 'destructive' });
       } else if (res.data?.success) {
         setStory(res.data.story);
+        setLibraryRefresh(k => k + 1);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         throw new Error(res.data?.error || 'Gagal menjana');
@@ -117,8 +122,30 @@ export default function StoryGenerator() {
           <CreditBalanceWidget compact />
         </div>
 
+        {/* Tab switcher */}
+        <div className="print:hidden bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-2xl p-1.5 mb-4 grid grid-cols-2 gap-1.5">
+          <button
+            onClick={() => { setActiveTab('generate'); setStory(null); }}
+            className={`py-2.5 rounded-xl font-black text-sm flex items-center justify-center gap-2 transition-all ${
+              activeTab === 'generate' ? 'bg-gradient-to-br from-pink-500 to-rose-600 text-white shadow' : 'text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <Sparkles className="w-4 h-4" /> Jana Cerita
+          </button>
+          <button
+            onClick={() => setActiveTab('library')}
+            className={`py-2.5 rounded-xl font-black text-sm flex items-center justify-center gap-2 transition-all ${
+              activeTab === 'library' ? 'bg-gradient-to-br from-pink-500 to-rose-600 text-white shadow' : 'text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <Library className="w-4 h-4" /> Koleksi Saya
+          </button>
+        </div>
+
         {/* Story result */}
-        {story ? (
+        {activeTab === 'library' ? (
+          <MyStoryLibrary refreshKey={libraryRefresh} />
+        ) : story ? (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl p-6 md:p-8 shadow-2xl mb-4 print:shadow-none print:rounded-none">
             <div className="text-center mb-6">
               <p className="text-6xl mb-3">{story.emoji || '📖'}</p>
