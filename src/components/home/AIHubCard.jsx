@@ -21,7 +21,7 @@ const FEATURES = [
     desc: 'Kuiz adaptif',
     cost: '1 kredit',
     bg: 'from-sky-100 via-blue-50 to-cyan-100',
-    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/49507dc3a_generated_image.png',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f87200da4_generated_image.png',
   },
   {
     to: '/story-generator',
