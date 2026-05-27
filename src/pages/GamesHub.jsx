@@ -34,65 +34,44 @@ export default function GamesHub() {
   const visibleCategories = MINI_GAME_CATEGORIES.filter(c => (counts[c.id] ?? 0) > 0);
 
   return (
-    <div
-      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative"
-      style={{
-        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)',
-      }}
-    >
-      {/* Floating sparkles & stars */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
+      {/* Floating sparkles for playful vibe (di atas background AppLayout) */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-28 left-6 text-2xl text-white/30 animate-float">✨</div>
-        <div className="absolute top-40 right-10 text-xl text-yellow-300/50 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
-        <div className="absolute top-1/3 left-1/4 text-lg text-pink-300/40 animate-float" style={{ animationDelay: '2s' }}>💫</div>
-        <div className="absolute top-1/2 right-8 text-2xl text-cyan-300/40 animate-float" style={{ animationDelay: '2.6s' }}>✨</div>
-        <div className="absolute bottom-40 left-10 text-xl text-yellow-300/50 animate-float" style={{ animationDelay: '3.5s' }}>⭐</div>
-        <div className="absolute bottom-1/3 right-1/4 text-lg text-white/30 animate-float" style={{ animationDelay: '4.2s' }}>✨</div>
-        <div className="absolute top-2/3 left-12 text-xl text-pink-300/40 animate-float" style={{ animationDelay: '5s' }}>💫</div>
-      </div>
-
-      {/* Glow orbs */}
-      <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full opacity-40 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }} />
-      <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full opacity-30 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }} />
-      <div className="fixed top-1/2 right-0 w-72 h-72 rounded-full opacity-25 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #fbbf24 0%, transparent 70%)' }} />
-
-      {/* Mascot trio */}
-      <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0 opacity-90">
-        <MiniGameMascot size={260} />
-      </div>
-      <div className="md:hidden fixed -bottom-2 -right-3 z-0 opacity-80">
-        <MiniGameMascot size={140} />
+        <div className="absolute top-28 left-6 text-2xl text-purple-400/40 animate-float">✨</div>
+        <div className="absolute top-40 right-10 text-xl text-yellow-400/50 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
+        <div className="absolute top-1/3 left-1/4 text-lg text-pink-400/40 animate-float" style={{ animationDelay: '2s' }}>💫</div>
+        <div className="absolute top-1/2 right-8 text-2xl text-cyan-400/40 animate-float" style={{ animationDelay: '2.6s' }}>✨</div>
+        <div className="absolute bottom-40 left-10 text-xl text-yellow-400/50 animate-float" style={{ animationDelay: '3.5s' }}>⭐</div>
+        <div className="absolute bottom-1/3 right-1/4 text-lg text-purple-400/40 animate-float" style={{ animationDelay: '4.2s' }}>✨</div>
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
-        {/* Back button — glass on gradient */}
+        {/* Back button */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <Link
             to="/dashboard"
-            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-white transition-all hover:scale-[1.02]"
+            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-slate-700 transition-all hover:scale-[1.02]"
             style={{
-              background: 'rgba(255,255,255,0.15)',
+              background: 'rgba(255,255,255,0.9)',
               backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.25)',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+              border: '1px solid rgba(0,0,0,0.05)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
             }}
           >
             <ArrowLeft className="w-4 h-4" /> Kembali
           </Link>
         </motion.div>
 
-        {/* Playful hero — vibrant glass card */}
+        {/* Playful hero — vibrant gradient */}
         <motion.section
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 rounded-[2rem] p-5 sm:p-6 relative overflow-hidden"
           style={{
-            background: 'rgba(255,255,255,0.12)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255,255,255,0.25)',
-            boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
+            background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)',
+            boxShadow: '0 20px 50px rgba(168,85,247,0.4), 0 8px 20px rgba(0,0,0,0.15)',
           }}
         >
           {/* Decorative bouncing emojis in hero */}
