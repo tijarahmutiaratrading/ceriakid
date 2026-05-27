@@ -137,68 +137,71 @@ export default function StoryKid() {
   const resetStory = () => { setSceneIndex(0); setStars(0); };
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900">
+      {/* Pixar-style background image */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b16329ff6_generated_image.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+      {/* Subtle white scrim for legibility — Apple style */}
+      <div aria-hidden="true" className="fixed inset-0 -z-10 pointer-events-none bg-gradient-to-b from-white/40 via-white/55 to-white/70" />
+      {/* Soft ambient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
-        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
+        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-pink-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
+        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-purple-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-yellow-200/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
       </div>
 
       {!story && <AppHeader showBack={true} backTo="/dashboard" />}
 
       <div className={`relative w-full ${story && sceneIndex < (story?.scenes?.length || 0) ? '' : 'max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-28 pt-20 md:pt-24'} overflow-x-hidden`}>
         {!story && (
-          <Link to="/dashboard" className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full bg-white/95 text-purple-700 font-black text-sm shadow-xl shadow-purple-950/15 hover:bg-white hover:scale-105 transition-all">
+          <Link to="/dashboard" className="inline-flex items-center gap-2 mb-5 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md text-slate-700 font-semibold text-sm ring-1 ring-black/5 hover:bg-white hover:scale-[1.02] transition-all shadow-sm">
             <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
           </Link>
         )}
 
         {!story ? (
           <>
+            {/* Apple-style hero — clean, minimal, premium */}
             <motion.section
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-7 rounded-[2.5rem] p-5 sm:p-6 bg-white/18 backdrop-blur-2xl shadow-2xl shadow-purple-950/20 overflow-hidden relative isolate"
-              style={{
-                borderRadius: '2.5rem',
-                clipPath: 'inset(0 round 2.5rem)',
-                WebkitMaskImage: '-webkit-radial-gradient(white, black)',
-              }}
+              className="mb-8"
             >
-              <div className="absolute -top-16 -right-10 w-44 h-44 bg-yellow-200/30 rounded-full blur-2xl" />
-              <div className="absolute -bottom-20 -left-12 w-56 h-56 bg-pink-200/30 rounded-full blur-2xl" />
-              <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[1.7rem] bg-white/30 flex items-center justify-center text-4xl sm:text-5xl shadow-inner border border-white/30 flex-shrink-0">📖</div>
-                  <div className="min-w-0">
-                    <p className="text-white/70 text-xs font-black uppercase tracking-[0.22em] mb-1">Interactive Storytime</p>
-                    <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight">Story Kid</h1>
-                    <p className="text-white/75 text-sm font-semibold mt-1 max-w-2xl">Pilih cerita, baca bersama anak dan kumpul bintang melalui pilihan yang baik.</p>
-                  </div>
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
+                <div className="min-w-0">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-purple-600 mb-2">Interactive Storytime</p>
+                  <h1 className="text-4xl sm:text-5xl font-black leading-[1.05] tracking-tight text-slate-900">Story Kid</h1>
+                  <p className="text-slate-600 text-base font-medium mt-2 max-w-lg">Pilih cerita, baca bersama anak dan kumpul bintang melalui pilihan yang baik.</p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="rounded-2xl bg-white/18 border border-white/25 px-3 py-3">
-                    <p className="text-white font-black text-lg">{stories.length}</p>
-                    <p className="text-white/60 text-[11px] font-bold">Cerita</p>
-                  </div>
-                  <div className="rounded-2xl bg-white/18 border border-white/25 px-3 py-3">
-                    <p className="text-white font-black text-lg">⭐</p>
-                    <p className="text-white/60 text-[11px] font-bold">Bintang</p>
-                  </div>
-                  <div className="rounded-2xl bg-white/18 border border-white/25 px-3 py-3">
-                    <p className="text-white font-black text-lg">🎨</p>
-                    <p className="text-white/60 text-[11px] font-bold">Kartun</p>
-                  </div>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { top: stories.length, bottom: 'Cerita' },
+                    { top: '⭐', bottom: 'Bintang' },
+                    { top: '🎨', bottom: 'Pixar' },
+                  ].map((badge, i) => (
+                    <div key={i} className="px-3.5 py-2 rounded-2xl bg-white/85 backdrop-blur-md ring-1 ring-black/5 text-center min-w-[78px]" style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
+                      <p className="font-bold text-sm leading-tight text-slate-900">{badge.top}</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider mt-0.5 text-slate-400">{badge.bottom}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </motion.section>
 
             {stories.length === 0 ? (
-              <div className="rounded-[2rem] p-8 text-center bg-white shadow-xl">
+              <div className="rounded-[2rem] p-10 text-center bg-white/90 backdrop-blur-xl shadow-xl ring-1 ring-black/5">
                 <p className="text-6xl mb-4">📭</p>
-                <h2 className="text-purple-700 font-black text-2xl mb-2">Belum ada Story Kid</h2>
-                <p className="text-purple-500 text-sm font-semibold">Cerita yang dipadam di management tidak akan muncul di sini.</p>
+                <h2 className="text-slate-900 font-black text-2xl mb-2">Belum ada Story Kid</h2>
+                <p className="text-slate-500 text-sm font-medium">Cerita yang dipadam di management tidak akan muncul di sini.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -208,43 +211,64 @@ export default function StoryKid() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.04 }}
-                    whileTap={{ scale: 0.96 }}
+                    whileTap={{ scale: 0.97 }}
                     onClick={() => { setSelected(idx); resetStory(); }}
-                    className="group text-left rounded-[2rem] bg-white/18 border border-white/35 backdrop-blur-2xl p-3 shadow-2xl shadow-purple-950/15 hover:bg-white/25 hover:-translate-y-1 transition-all overflow-hidden"
+                    className="group text-left rounded-[2rem] bg-white/90 backdrop-blur-xl ring-1 ring-black/5 p-3 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all overflow-hidden"
                   >
-                    <div className="h-48 rounded-[1.5rem] overflow-hidden mb-4 ring-4 ring-white/25 shadow-xl group-hover:ring-white/45 transition-all">
+                    <div className="h-52 rounded-[1.5rem] overflow-hidden mb-4 ring-1 ring-black/5 bg-slate-100">
                       {item.cover ? (
-                        <img src={item.cover} alt={item.title} className="w-full h-full object-cover" />
+                        <img src={item.cover} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       ) : (
                         <StorySlideVisual visual={item.scenes?.[0]?.slideVisual} emoji={item.emoji} compact />
                       )}
                     </div>
-                    <div className="flex items-start gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-white/25 border border-white/30 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner">{item.emoji}</div>
-                      <div className="min-w-0">
-                        <h2 className="text-white font-black text-xl leading-tight drop-shadow-sm">{item.title}</h2>
-                        <p className="text-white/70 text-sm font-semibold mt-1 line-clamp-2">{item.moral}</p>
+                    <div className="flex items-start gap-3 px-2">
+                      <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center text-2xl flex-shrink-0 ring-1 ring-black/5">{item.emoji}</div>
+                      <div className="min-w-0 flex-1">
+                        <h2 className="text-slate-900 font-black text-lg leading-tight">{item.title}</h2>
+                        <p className="text-slate-500 text-xs font-medium mt-1 line-clamp-2">{item.moral}</p>
                       </div>
                     </div>
-                    <div className="mt-4 py-3 rounded-2xl bg-white text-purple-600 text-center font-black shadow-lg group-hover:shadow-xl transition-all">Baca Cerita →</div>
+                    <div className="mt-4 mx-1 py-3 rounded-2xl bg-slate-900 text-white text-center font-bold text-sm shadow-md group-hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5">
+                      Baca Cerita <ChevronRight className="w-4 h-4" />
+                    </div>
                   </motion.button>
                 ))}
               </div>
             )}
           </>
         ) : sceneIndex >= story.scenes.length ? (
-          <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
-            <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} className="max-w-xl w-full rounded-[2rem] bg-white/95 backdrop-blur-2xl p-7 text-center shadow-2xl shadow-purple-950/20 border border-white/70">
-              <div className="text-7xl mb-4">🏆</div>
-              <h2 className="text-3xl font-black text-purple-700 mb-2">Cerita Selesai!</h2>
-              <p className="text-yellow-500 font-black text-2xl mb-4">{stars} ⭐ dikumpul</p>
-              <div className="rounded-3xl bg-purple-50 p-5 mb-5">
-                <p className="text-purple-400 text-xs font-black uppercase tracking-wider mb-2">Moral cerita</p>
-                <p className="text-purple-700 text-lg font-black">{story.moral}</p>
+          <div
+            className="fixed inset-0 z-40 flex items-center justify-center p-4"
+            style={{
+              backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b16329ff6_generated_image.png)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-white/50 via-white/65 to-white/80 backdrop-blur-sm" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              className="relative max-w-xl w-full rounded-[2rem] bg-white/95 backdrop-blur-2xl p-7 text-center shadow-2xl ring-1 ring-black/5"
+            >
+              <div className="text-7xl mb-3">🏆</div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-purple-600 mb-1">Tahniah!</p>
+              <h2 className="text-3xl font-black text-slate-900 mb-3 tracking-tight">Cerita Selesai</h2>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-100 text-yellow-700 font-black text-lg mb-5 ring-1 ring-yellow-200">
+                <Star className="w-5 h-5 fill-yellow-500 text-yellow-500" /> {stars} bintang dikumpul
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <button onClick={resetStory} className="py-3.5 rounded-2xl bg-purple-600 text-white font-black flex items-center justify-center gap-2 shadow-lg"><RotateCcw className="w-4 h-4" /> Baca Semula</button>
-                <button onClick={() => setSelected(null)} className="py-3.5 rounded-2xl bg-yellow-300 text-yellow-900 font-black shadow-lg">Cerita Lain</button>
+              <div className="rounded-2xl bg-slate-50 p-5 mb-6 ring-1 ring-black/5">
+                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.18em] mb-2">Moral cerita</p>
+                <p className="text-slate-900 text-base font-bold leading-relaxed">{story.moral}</p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <button onClick={resetStory} className="py-3.5 rounded-2xl bg-slate-100 text-slate-800 font-bold text-sm hover:bg-slate-200 transition-all flex items-center justify-center gap-2">
+                  <RotateCcw className="w-4 h-4" /> Baca Semula
+                </button>
+                <button onClick={() => setSelected(null)} className="py-3.5 rounded-2xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-all">
+                  Cerita Lain
+                </button>
               </div>
             </motion.div>
           </div>
