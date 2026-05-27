@@ -108,11 +108,16 @@ export default function StoryKid() {
 
   useEffect(() => {
     const loadStories = async () => {
-      const dbStories = await base44.entities.Game.filter({ type: 'story_adventure', category: 'story', ageGroup: 'prasekolah', isPublished: true }, 'order');
-      const storyKidStories = dbStories
-        .filter(game => game.gameData?.storyKid && game.gameData?.scenes?.length)
-        .map(formatDatabaseStory);
-      setStories(storyKidStories);
+      try {
+        const dbStories = await base44.entities.Game.filter({ type: 'story_adventure', category: 'story', ageGroup: 'prasekolah', isPublished: true }, 'order');
+        const storyKidStories = dbStories
+          .filter(game => game.gameData?.storyKid && game.gameData?.scenes?.length)
+          .map(formatDatabaseStory);
+        // Fallback ke SAMPLE_STORIES kalau database kosong
+        setStories(storyKidStories.length > 0 ? storyKidStories : SAMPLE_STORIES);
+      } catch (e) {
+        setStories(SAMPLE_STORIES);
+      }
     };
 
     loadStories();
