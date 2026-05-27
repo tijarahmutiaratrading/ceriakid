@@ -12,6 +12,7 @@ const SLIDES = [
     cta: 'Mula Sekarang',
     ctaLink: '/games-hub',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/092310156_generated_image.png',
+    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8ee0e60f8_generated_image.png',
     objectPos: 'center center',
   },
   {
@@ -21,6 +22,7 @@ const SLIDES = [
     cta: 'Lihat Cabaran',
     ctaLink: '/challenges',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3932e4bfd_generated_image.png',
+    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/155f89228_generated_image.png',
     objectPos: 'center center',
   },
   {
@@ -30,6 +32,7 @@ const SLIDES = [
     cta: 'Tanya Cikgu',
     ctaLink: '/ai-assistant',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/05975c0fa_generated_image.png',
+    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a20ae1bdf_generated_image.png',
     objectPos: 'center center',
   },
   {
@@ -39,6 +42,7 @@ const SLIDES = [
     cta: 'Baca Sekarang',
     ctaLink: '/story-kid',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/618a93e8d_generated_image.png',
+    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8aa809c08_generated_image.png',
     objectPos: 'center center',
   },
 ];
@@ -59,7 +63,7 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
   const firstName = (user?.full_name || '').split(' ')[0] || 'Kawan';
 
   return (
-    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[16/10] sm:aspect-[16/8] md:aspect-[16/7] max-h-[560px]">
+    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[3/4] sm:aspect-[16/8] md:aspect-[16/7] max-h-[640px] sm:max-h-[560px]">
       {/* Slides */}
       <AnimatePresence mode="sync">
         <motion.div
@@ -70,15 +74,30 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="absolute inset-0"
         >
+          {/* Mobile portrait image */}
+          <img
+            src={slide.imageMobile || slide.image}
+            alt={slide.title}
+            className="absolute inset-0 w-full h-full object-cover sm:hidden"
+            style={{ objectPosition: slide.objectPos }}
+          />
+          {/* Desktop landscape image */}
           <img
             src={slide.image}
             alt={slide.title}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover hidden sm:block"
             style={{ objectPosition: slide.objectPos }}
           />
-          {/* Dark gradient overlay — left-to-right + bottom for readability */}
+          {/* Dark gradient overlay — different for mobile (bottom-heavy) vs desktop (left-heavy) */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 sm:hidden"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.5) 65%, rgba(0,0,0,0.9) 100%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 hidden sm:block"
             style={{
               background:
                 'linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 35%, rgba(0,0,0,0.15) 70%, rgba(0,0,0,0) 100%), linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 100%)',
