@@ -595,13 +595,20 @@ export default function DrawingStudio() {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
+        // Shape detection: kalau ada sudut tajam (segitiga, segiempat, bintang)
+        // guna straight lineTo. Hanya shape rounded (bulatan, hati) guna smoothing.
+        const isAngularShape = ['△', '□', '★'].includes(shape.letter);
         const tracePath = (stroke) => {
           ctx.beginPath();
           const p0 = stroke[0];
           ctx.moveTo(p0[0] * scaleX, p0[1] * scaleY);
-          if (stroke.length === 2) {
-            ctx.lineTo(stroke[1][0] * scaleX, stroke[1][1] * scaleY);
+          if (isAngularShape || stroke.length <= 2) {
+            // Straight lines untuk sudut tajam
+            for (let j = 1; j < stroke.length; j++) {
+              ctx.lineTo(stroke[j][0] * scaleX, stroke[j][1] * scaleY);
+            }
           } else {
+            // Smooth curves untuk bulatan/hati
             for (let j = 1; j < stroke.length - 1; j++) {
               const cx = stroke[j][0] * scaleX;
               const cy = stroke[j][1] * scaleY;
