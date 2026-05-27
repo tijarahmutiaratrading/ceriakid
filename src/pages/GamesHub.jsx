@@ -3,9 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ChevronRight, Sparkles, Star, Zap } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
-import MiniGameMascot from '@/components/game/MiniGameMascot';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
-import { getCategoryIllustration } from '@/lib/miniCategoryIllustrations';
 
 // Playful vibrant gradients per category — kuat, ceria, anak-anak suka
 const categoryThemes = {
@@ -156,7 +154,6 @@ export default function GamesHub() {
             {visibleCategories.map((category, idx) => {
               const theme = categoryThemes[category.id] || defaultTheme;
               const count = counts[category.id] ?? 0;
-              const illustration = getCategoryIllustration(category.id);
 
               return (
                 <motion.div
@@ -186,29 +183,49 @@ export default function GamesHub() {
                         ✨
                       </motion.div>
 
-                      {/* Vibrant illustration tile */}
+                      {/* Playful emoji tile — big animated emoji on vibrant gradient */}
                       <div className={`relative h-44 rounded-[1.5rem] overflow-hidden bg-gradient-to-br ${theme.gradient}`}>
-                        {/* Pattern overlay */}
-                        <div className="absolute inset-0 opacity-20" style={{
+                        {/* Soft pattern overlay */}
+                        <div className="absolute inset-0 opacity-25" style={{
                           backgroundImage: 'radial-gradient(circle at 20% 30%, white 0%, transparent 40%), radial-gradient(circle at 80% 70%, white 0%, transparent 40%)',
                         }} />
 
-                        {illustration ? (
-                          <img
-                            src={illustration}
-                            alt={category.title}
-                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          />
-                        ) : (
-                          <motion.div
-                            animate={{ scale: [1, 1.05, 1], rotate: [0, 3, -3, 0] }}
-                            transition={{ duration: 4, repeat: Infinity }}
-                            className="absolute inset-0 flex items-center justify-center text-7xl"
-                            style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))' }}
-                          >
-                            {theme.emoji}
-                          </motion.div>
-                        )}
+                        {/* Floating mini emojis ambience */}
+                        <motion.div
+                          animate={{ y: [0, -8, 0], rotate: [0, 8, 0] }}
+                          transition={{ duration: 3, repeat: Infinity, delay: idx * 0.3 }}
+                          className="absolute top-4 right-12 text-2xl opacity-60"
+                        >
+                          ✨
+                        </motion.div>
+                        <motion.div
+                          animate={{ y: [0, 6, 0], rotate: [0, -8, 0] }}
+                          transition={{ duration: 3.5, repeat: Infinity, delay: idx * 0.4 }}
+                          className="absolute bottom-12 left-6 text-xl opacity-50"
+                        >
+                          ⭐
+                        </motion.div>
+                        <motion.div
+                          animate={{ y: [0, -5, 0] }}
+                          transition={{ duration: 2.8, repeat: Infinity, delay: idx * 0.5 }}
+                          className="absolute top-16 left-10 text-lg opacity-40"
+                        >
+                          💫
+                        </motion.div>
+
+                        {/* BIG bouncy emoji — playful center piece */}
+                        <motion.div
+                          animate={{
+                            scale: [1, 1.12, 1],
+                            rotate: [0, 6, -6, 0],
+                            y: [0, -6, 0],
+                          }}
+                          transition={{ duration: 3, repeat: Infinity, delay: idx * 0.2 }}
+                          className="absolute inset-0 flex items-center justify-center text-8xl group-hover:scale-110 transition-transform duration-500"
+                          style={{ filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.35))' }}
+                        >
+                          {theme.emoji}
+                        </motion.div>
 
                         {/* Count badge — playful pill */}
                         <div
