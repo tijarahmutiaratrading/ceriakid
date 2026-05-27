@@ -7,7 +7,7 @@ const VOLUME = 0.35;
 
 // Royalty-free kids song dari Pixabay (no attribution required)
 // "Happy Kids" / cheerful sing-along untuk story time
-const MUSIC_URL = 'https://cdn.pixabay.com/audio/2023/06/19/audio_4c4e4ee9d8.mp3';
+const MUSIC_URL = 'https://media.base44.com/files/public/69f1c132ffcd7c660466eec5/4e3ebdaf9_UpbeatEventTripbyInfractionNoCopyrightMusicNeverLeave.mp3';
 
 export default function StoryAudioPlayer({ autoPlay = true }) {
   const audioRef = useRef(null);
