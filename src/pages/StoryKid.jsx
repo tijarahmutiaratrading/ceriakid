@@ -276,9 +276,24 @@ export default function StoryKid() {
           <div className="fixed inset-0 z-40 bg-black overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div key={sceneIndex} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} className="absolute inset-0">
-                {/* Fullscreen image */}
+                {/* Fullscreen image — with subtle 3D Ken Burns motion */}
                 {scene.imageUrl ? (
-                  <img src={scene.imageUrl} alt={scene.text} className="absolute inset-0 w-full h-full object-cover" />
+                  <motion.img
+                    src={scene.imageUrl}
+                    alt={scene.text}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    initial={{ scale: 1.08, x: 0, y: 0 }}
+                    animate={{
+                      scale: [1.08, 1.18, 1.12, 1.08],
+                      x: [0, -12, 8, 0],
+                      y: [0, 6, -8, 0],
+                    }}
+                    transition={{
+                      duration: 18,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    }}
+                  />
                 ) : (
                   <div className="absolute inset-0">
                     <StorySlideVisual visual={scene.slideVisual} emoji={scene.image || story.emoji} title={story.title} />
