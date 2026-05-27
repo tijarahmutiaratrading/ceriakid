@@ -144,12 +144,26 @@ Format jawapan dalam JSON:
       });
     }
 
+    // ─── Generate Pixar 3D cover image — same style as Story Kid ───
+    let coverImage = '';
+    try {
+      const heroDesc = childName?.trim()
+        ? `a cheerful Malaysian child named ${childName.trim()}`
+        : `a cheerful Malaysian child`;
+      const imagePrompt = `${heroDesc}, story theme: "${theme}". Style: 3D Pixar-style render, soft cinematic lighting, vibrant colors, friendly cartoon, kid-friendly, high quality, depth of field, no text, no words. Show the main character and key elements of the story in a heartwarming scene.`;
+      const imageRes = await base44.integrations.Core.GenerateImage({ prompt: imagePrompt });
+      coverImage = imageRes?.url || '';
+    } catch (imgErr) {
+      console.error('Cover image gen failed:', imgErr.message);
+    }
+
     // Auto-save story ke library user — tak block respons kalau gagal
     let savedId = null;
     try {
       const saved = await base44.entities.AIStory.create({
         title: storyData.title,
         emoji: storyData.emoji || '📖',
+        coverImage,
         story: storyData.story,
         moralSummary: storyData.moralSummary || '',
         theme,
@@ -165,7 +179,7 @@ Format jawapan dalam JSON:
 
     return Response.json({
       success: true,
-      story: { ...storyData, id: savedId },
+      story: { ...storyData, coverImage, id: savedId },
       newBalance,
       creditsUsed: COST_PER_STORY,
     });

@@ -94,7 +94,11 @@ export default function MyStoryLibrary({ refreshKey = 0 }) {
             onClick={() => setSelected(item)}
             className="bg-white border border-slate-200 rounded-2xl p-3 shadow-sm hover:shadow-md cursor-pointer transition-all flex items-start gap-3 group"
           >
-            <div className="text-3xl flex-shrink-0">{item.emoji || '📖'}</div>
+            {item.coverImage ? (
+              <img src={item.coverImage} alt={item.title} className="w-16 h-16 rounded-xl object-cover flex-shrink-0 ring-1 ring-slate-200" />
+            ) : (
+              <div className="text-3xl flex-shrink-0">{item.emoji || '📖'}</div>
+            )}
             <div className="flex-1 min-w-0">
               <p className="font-black text-slate-900 text-sm leading-tight line-clamp-2">{item.title}</p>
               {item.moralSummary && (
@@ -160,8 +164,13 @@ export default function MyStoryLibrary({ refreshKey = 0 }) {
               </div>
               {/* Content */}
               <div className="overflow-y-auto p-6 md:p-8 print:overflow-visible">
+                {selected.coverImage && (
+                  <div className="mb-6 rounded-2xl overflow-hidden shadow-xl print:shadow-none">
+                    <img src={selected.coverImage} alt={selected.title} className="w-full h-auto object-cover" />
+                  </div>
+                )}
                 <div className="text-center mb-6">
-                  <p className="text-5xl mb-2">{selected.emoji || '📖'}</p>
+                  {!selected.coverImage && <p className="text-5xl mb-2">{selected.emoji || '📖'}</p>}
                   <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-1">{selected.title}</h2>
                   {selected.moralSummary && (
                     <p className="text-sm text-gray-500 italic">{selected.moralSummary}</p>

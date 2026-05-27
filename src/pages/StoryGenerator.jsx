@@ -147,8 +147,13 @@ export default function StoryGenerator() {
           <MyStoryLibrary refreshKey={libraryRefresh} />
         ) : story ? (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl p-6 md:p-8 shadow-2xl mb-4 print:shadow-none print:rounded-none">
+            {story.coverImage && (
+              <div className="mb-6 rounded-2xl overflow-hidden shadow-xl print:shadow-none">
+                <img src={story.coverImage} alt={story.title} className="w-full h-auto object-cover" />
+              </div>
+            )}
             <div className="text-center mb-6">
-              <p className="text-6xl mb-3">{story.emoji || '📖'}</p>
+              {!story.coverImage && <p className="text-6xl mb-3">{story.emoji || '📖'}</p>}
               <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">{story.title}</h2>
               <p className="text-sm text-gray-500 italic">{story.moralSummary}</p>
             </div>
