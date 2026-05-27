@@ -275,7 +275,7 @@ export default function StoryKid() {
         ) : (
           <div className="fixed inset-0 z-40 bg-black overflow-hidden">
             {/* Persistent audio player — sejajar dalam top bar, tidak remount bila scene tukar */}
-            <div className="absolute top-3 sm:top-4 right-[5.5rem] sm:right-[6.5rem] z-[60] h-11 flex items-center">
+            <div className="absolute top-3 sm:top-4 right-[4.5rem] sm:right-[5rem] z-[60] h-11 flex items-center">
               <StoryAudioPlayer autoPlay={!!story} />
             </div>
             <AnimatePresence mode="wait">
@@ -309,7 +309,7 @@ export default function StoryKid() {
                 <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/85 via-black/60 to-transparent pointer-events-none" />
 
                 {/* Top bar — back + title + progress + stars + music */}
-                <div className="absolute top-0 left-0 right-0 p-3 sm:p-4 flex items-center gap-3 sm:gap-4 z-10">
+                <div className="absolute top-0 left-0 right-0 p-3 sm:p-4 flex items-center gap-2 sm:gap-3 z-10">
                   <button onClick={() => setSelected(null)} className="w-11 h-11 rounded-2xl bg-white/95 text-purple-700 font-black shadow-lg flex items-center justify-center flex-shrink-0">←</button>
                   <div className="flex-1 min-w-0 rounded-2xl bg-black/40 backdrop-blur-md px-3 py-2 border border-white/20">
                     <h1 className="text-white font-black text-sm sm:text-base truncate drop-shadow">{story.title}</h1>
@@ -317,8 +317,8 @@ export default function StoryKid() {
                       <div className="h-full bg-gradient-to-r from-yellow-300 to-pink-400 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
                     </div>
                   </div>
-                  {/* Spacer for persistent audio player rendered outside AnimatePresence */}
-                  <div className="w-11 h-11 flex-shrink-0" aria-hidden="true" />
+                  {/* Spacer for persistent audio player rendered outside AnimatePresence — extra width for gap */}
+                  <div className="w-14 h-11 flex-shrink-0" aria-hidden="true" />
                   <div className="px-3 py-2 rounded-2xl bg-yellow-300 text-yellow-950 font-black text-sm shadow-lg flex-shrink-0">{stars} ⭐</div>
                 </div>
 
