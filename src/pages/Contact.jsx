@@ -4,7 +4,7 @@ import { ArrowLeft, Mail, MessageCircle } from 'lucide-react';
 
 export default function Contact() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-12 px-4">
+    <div className="min-h-screen py-12 px-4">
       <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 md:p-10 shadow-2xl">
         <Link to="/" className="inline-flex items-center gap-2 text-game-purple font-bold mb-6 hover:underline">
           <ArrowLeft className="w-4 h-4" /> Kembali ke Laman Utama
