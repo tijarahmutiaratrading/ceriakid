@@ -347,7 +347,7 @@ export default function StoryKid() {
                       <span className="absolute top-1 right-1 text-amber-700/60 text-[9px]">✦</span>
                       <span className="absolute bottom-1 left-1 text-amber-700/60 text-[9px]">✦</span>
                       <span className="absolute bottom-1 right-1 text-amber-700/60 text-[9px]">✦</span>
-                      <p className="text-amber-950 text-sm sm:text-base font-bold text-center leading-snug" style={{ fontFamily: 'Georgia, serif' }}>
+                      <p className="text-amber-950 text-base sm:text-lg font-bold text-center leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
                         {scene.text}
                       </p>
                     </motion.div>
