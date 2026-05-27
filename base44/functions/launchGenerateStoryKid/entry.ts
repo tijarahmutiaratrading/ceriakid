@@ -24,38 +24,44 @@ const STORY_THEMES = [
   { theme: 'cerita Hari Raya', moral: 'Maaf-memaafkan itu mulia', emoji: '🌙' },
 ];
 
-const STORY_IMAGES = [
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f57f9479f_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0a97ddf90_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3ff2b9379_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fdbdb4e85_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f4b720a6a_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3c03de7fd_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/44f9e58a4_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d52325143_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/7055e89d0_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/32fd99f2b_generated_image.png',
+// Character pool — nama + jantina + Pixar-style appearance description lock
+const CHARACTERS = [
+  { name: 'Aina', gender: 'girl', look: 'a cheerful 5-year-old Malay girl with short black hair in two small pigtails, big brown eyes, wearing a yellow t-shirt and pink shorts' },
+  { name: 'Ali', gender: 'boy', look: 'a brave 5-year-old Malay boy with short black hair, big brown eyes, wearing a blue t-shirt and grey shorts' },
+  { name: 'Sara', gender: 'girl', look: 'a kind 5-year-old Malay girl with long black hair tied in a high ponytail, wearing a green dress' },
+  { name: 'Aiman', gender: 'boy', look: 'a curious 5-year-old Malay boy with short messy black hair, wearing a red t-shirt and blue jeans' },
+  { name: 'Nia', gender: 'girl', look: 'an adventurous 5-year-old Malay girl with curly black hair, wearing a purple t-shirt and white skirt' },
+  { name: 'Bobo', gender: 'boy', look: 'a playful 5-year-old Malay boy with short spiky black hair, wearing an orange hoodie and brown shorts' },
+  { name: 'Lisa', gender: 'girl', look: 'a smart 5-year-old Malay girl with shoulder-length black hair and round glasses, wearing a teal shirt and beige pants' },
+  { name: 'Danish', gender: 'boy', look: 'a friendly 5-year-old Malay boy with neat short black hair, wearing a white polo shirt and dark blue shorts' },
 ];
 
-function buildPrompt({ theme, moral, emoji }) {
+function pickCharacter(themeIdx) {
+  return CHARACTERS[themeIdx % CHARACTERS.length];
+}
+
+function buildPrompt({ theme, moral, emoji }, character) {
   return `You are a Malaysian children's story writer creating an interactive story for kids ages 4-6 (Prasekolah).
 
 STORY THEME: ${theme}
 MORAL LESSON: ${moral}
 ICON: ${emoji}
+MAIN CHARACTER: ${character.name} (a ${character.gender})
 
 REQUIREMENTS:
 1. Write entirely in BAHASA MELAYU. No English mixing.
 2. Use simple, short sentences suitable for kids ages 4-6.
-3. Create 9 scenes total, each with text + 1-2 choice options.
-4. Each scene's text MUST be 1-2 short sentences (max 15 words).
-5. Each choice should be 2-5 words only.
-6. Mark the GOOD/CORRECT choice with star: true. Bad choice has no star.
-7. Most scenes should have 2 choices. The LAST scene (scene 9) has only 1 choice: { text: "Tamat cerita", next: "end", star: true }.
-8. The "next" field shows which scene to go to next (0-8 for scenes, "end" to finish).
-9. Good choices progress story forward (next: currentIndex+1). Bad choices either repeat or skip with consequences.
-10. Use a Malaysian child character (e.g., Ali, Aina, Sara, Bobo, Nia, Aiman, Lisa, etc.) — pick one suitable.
-11. The story must teach the moral lesson naturally.
+3. The main character MUST be named "${character.name}" — use this name consistently in every scene.
+4. Use correct pronouns: ${character.name} is a ${character.gender}.
+5. Create 9 scenes total, each with text + 1-2 choice options.
+6. Each scene's text MUST be 1-2 short sentences (max 15 words).
+7. Each choice should be 2-5 words only.
+8. Mark the GOOD/CORRECT choice with star: true. Bad choice has no star.
+9. Most scenes should have 2 choices. The LAST scene (scene 9) has only 1 choice: { text: "Tamat cerita", next: "end", star: true }.
+10. The "next" field shows which scene to go to next (0-8 for scenes, "end" to finish).
+11. Good choices progress story forward (next: currentIndex+1). Bad choices either repeat or skip with consequences.
+12. The story must teach the moral lesson naturally.
+13. For each scene, also provide a brief visual description in English (5-15 words) under "visualHint" — describing what's happening in the scene visually (location, action, mood). Do NOT mention the character's appearance — only describe the scene/action. This will be used to generate illustrations.
 
 Return ONLY valid JSON in this exact format:
 {
@@ -63,10 +69,9 @@ Return ONLY valid JSON in this exact format:
   "emoji": "${emoji}",
   "moral": "${moral}",
   "scenes": [
-    { "text": "Scene 1 description...", "choices": [{ "text": "Good choice", "next": 1, "star": true }, { "text": "Bad choice", "next": 2 }] },
-    { "text": "Scene 2...", "choices": [{ "text": "...", "next": 3, "star": true }, { "text": "...", "next": 2 }] },
+    { "text": "Scene 1 description...", "visualHint": "english visual description of action/scene only", "choices": [{ "text": "Good choice", "next": 1, "star": true }, { "text": "Bad choice", "next": 2 }] },
     ...
-    { "text": "Scene 9 happy ending...", "choices": [{ "text": "Tamat cerita", "next": "end", "star": true }] }
+    { "text": "Scene 9 happy ending...", "visualHint": "english visual description", "choices": [{ "text": "Tamat cerita", "next": "end", "star": true }] }
   ]
 }`;
 }
@@ -82,8 +87,8 @@ function validateStory(story) {
   return errors;
 }
 
-async function generateOneStory(base44, themeObj) {
-  const prompt = buildPrompt(themeObj);
+async function generateOneStory(base44, themeObj, character) {
+  const prompt = buildPrompt(themeObj, character);
   let attempt = 0;
   while (attempt < 2) {
     attempt++;
@@ -103,6 +108,7 @@ async function generateOneStory(base44, themeObj) {
                 type: 'object',
                 properties: {
                   text: { type: 'string' },
+                  visualHint: { type: 'string' },
                   choices: {
                     type: 'array',
                     items: {
@@ -141,6 +147,24 @@ async function generateOneStory(base44, themeObj) {
   return { ok: false };
 }
 
+// Generate Pixar-style image for a scene
+async function generateSceneImage(base44, character, visualHint, isCover = false) {
+  const baseStyle = '3D Pixar-style render, soft cinematic lighting, vibrant colors, friendly cartoon, kid-friendly, high quality, depth of field, no text, no words';
+  const characterDesc = `Main character: ${character.look}.`;
+  const sceneDesc = isCover
+    ? `Scene: portrait of ${character.name} smiling, ${visualHint}`
+    : `Scene: ${visualHint}`;
+  const prompt = `${characterDesc} ${sceneDesc}. Style: ${baseStyle}.`;
+
+  try {
+    const result = await base44.integrations.Core.GenerateImage({ prompt });
+    return result?.url || '';
+  } catch (e) {
+    console.log('Image gen failed:', e.message);
+    return '';
+  }
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -168,49 +192,63 @@ Deno.serve(async (req) => {
       !Array.from(existingTitles).some(et => et.includes(t.theme.split(' ')[0]))
     );
 
-    // Limit batch size — 5 stories per call (timeout safety)
-    const batchSize = Math.min(needed, 5, remainingThemes.length);
+    // Image generation is heavy — process 1 story per call (10 images each)
+    const batchSize = Math.min(needed, 1, remainingThemes.length);
     let inserted = 0;
     let failed = 0;
 
     for (let i = 0; i < batchSize; i++) {
       const themeObj = remainingThemes[i];
-      const result = await generateOneStory(base44, themeObj);
+      const themeIdx = existing.length + i; // rotate character across all stories
+      const character = pickCharacter(themeIdx);
+      const result = await generateOneStory(base44, themeObj, character);
 
-      if (result.ok) {
-        const s = result.story;
-        // Attach images to scenes (rotate through STORY_IMAGES)
-        const scenesWithImages = s.scenes.map((scene, idx) => ({
-          ...scene,
-          imageUrl: STORY_IMAGES[idx % STORY_IMAGES.length],
-          image: s.emoji || themeObj.emoji,
-        }));
-
-        await base44.asServiceRole.entities.Game.create({
-          title: s.title,
-          description: s.moral || themeObj.moral,
-          type: 'story_adventure',
-          category: 'story',
-          ageGroup: 'prasekolah',
-          difficulty: 'easy',
-          tier: 'free',
-          emoji: s.emoji || themeObj.emoji,
-          totalQuestions: s.scenes.length,
-          gameData: {
-            storyKid: true,
-            cover: STORY_IMAGES[i % STORY_IMAGES.length],
-            moral: s.moral || themeObj.moral,
-            scenes: scenesWithImages,
-          },
-          isPublished: true,
-          status: 'ready',
-          order: existing.length + i + 1,
-          monthTag: '2026-05',
-        });
-        inserted++;
-      } else {
+      if (!result.ok) {
         failed++;
+        continue;
       }
+
+      const s = result.story;
+
+      // Generate cover image
+      const coverHint = s.scenes[0]?.visualHint || themeObj.theme;
+      const coverUrl = await generateSceneImage(base44, character, coverHint, true);
+
+      // Generate image for each scene (parallel for speed)
+      const scenePromises = s.scenes.map((scene) =>
+        generateSceneImage(base44, character, scene.visualHint || themeObj.theme, false)
+      );
+      const sceneUrls = await Promise.all(scenePromises);
+
+      const scenesWithImages = s.scenes.map((scene, idx) => ({
+        ...scene,
+        imageUrl: sceneUrls[idx] || coverUrl,
+        image: s.emoji || themeObj.emoji,
+      }));
+
+      await base44.asServiceRole.entities.Game.create({
+        title: s.title,
+        description: s.moral || themeObj.moral,
+        type: 'story_adventure',
+        category: 'story',
+        ageGroup: 'prasekolah',
+        difficulty: 'easy',
+        tier: 'free',
+        emoji: s.emoji || themeObj.emoji,
+        totalQuestions: s.scenes.length,
+        gameData: {
+          storyKid: true,
+          cover: coverUrl || sceneUrls[0] || '',
+          moral: s.moral || themeObj.moral,
+          character: { name: character.name, gender: character.gender },
+          scenes: scenesWithImages,
+        },
+        isPublished: true,
+        status: 'ready',
+        order: existing.length + i + 1,
+        monthTag: '2026-05',
+      });
+      inserted++;
     }
 
     const stillNeeded = needed - inserted;
@@ -221,7 +259,7 @@ Deno.serve(async (req) => {
       failed,
       stillNeeded,
       message: stillNeeded > 0
-        ? `✅ Generated ${inserted}/${batchSize}. Run again to continue (${stillNeeded} more needed).`
+        ? `✅ Generated ${inserted}/${batchSize} dengan 10 Pixar images. Run again to continue (${stillNeeded} more needed).`
         : `✅ Story Kid complete dengan ${existing.length + inserted} stories.`,
     });
   } catch (error) {
