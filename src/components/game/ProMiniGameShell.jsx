@@ -57,24 +57,18 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
   const isLastRound = roundIdx >= totalRounds - 1;
   const progressPct = Math.round(((roundIdx + (progress.isComplete ? 1 : 0)) / Math.max(1, totalRounds)) * 100);
 
-  // Callback for mode components to report progress
-  const handleProgress = React.useCallback((next) => {
-    setProgress(next);
-    if (next.isComplete && !completedRef.current) {
-      completedRef.current = true;
-      fireRoundConfetti();
-      triggerHaptic([30, 60, 30]);
-      playSound('correct');
-      setScorePopTrigger(t => t + 1);
-      setStreak(s => s + 1);
-    }
-  }, []);
+  // Ref-based versions so auto-advance timer can access fresh values
+  const roundIdxRef = React.useRef(0);
+  const scoreRef = React.useRef(0);
+  const isLastRoundRef = React.useRef(false);
+  React.useEffect(() => { roundIdxRef.current = roundIdx; }, [roundIdx]);
+  React.useEffect(() => { scoreRef.current = score; }, [score]);
+  React.useEffect(() => { isLastRoundRef.current = isLastRound; }, [isLastRound]);
 
-  const nextRound = () => {
-    if (!progress.isComplete) return; // safety guard
-    const newScore = score + 1;
+  const advanceToNext = React.useCallback(() => {
+    const newScore = scoreRef.current + 1;
     setScore(newScore);
-    if (isLastRound) {
+    if (isLastRoundRef.current) {
       setFinished(true);
       fireFinalCelebration();
       triggerHaptic([50, 100, 50, 100, 200]);
@@ -88,6 +82,28 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
       setProgress({ current: 0, total: 1, isComplete: false });
       completedRef.current = false;
     }
+  }, [onComplete, totalRounds]);
+
+  // Callback for mode components to report progress
+  const handleProgress = React.useCallback((next) => {
+    setProgress(next);
+    if (next.isComplete && !completedRef.current) {
+      completedRef.current = true;
+      fireRoundConfetti();
+      triggerHaptic([30, 60, 30]);
+      playSound('correct');
+      setScorePopTrigger(t => t + 1);
+      setStreak(s => s + 1);
+      // Auto-advance ke pusingan seterusnya selepas 1.6s (cukup untuk confetti + reaksi)
+      setTimeout(() => {
+        if (completedRef.current) advanceToNext();
+      }, 1600);
+    }
+  }, [advanceToNext]);
+
+  const nextRound = () => {
+    if (!progress.isComplete) return; // safety guard
+    advanceToNext();
   };
 
   const restartRound = () => {
@@ -325,7 +341,7 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
                       : 'none',
                   }}
                 >
-                  {!progress.isComplete ? '⏳ Siapkan dulu' : isLastRound ? '🏆 Habiskan' : `➡️ Pusingan ${roundIdx + 2}`}
+                  {!progress.isComplete ? '⏳ Siapkan dulu' : isLastRound ? '🏆 Habiskan' : '⚡ Seterusnya...'}
                 </motion.button>
               )}
             </>
