@@ -1003,11 +1003,9 @@ export default function DrawingStudio() {
         // GUARD: stroke kena dalam slot aktif sahaja (tak boleh skip slot)
         if (slotIdx !== currentLetterIndex) return;
 
-        // For text characters (A-Z, 0-9) — rendered as single fillText, jadi 1 strok cukup.
-        // For non-text shapes (bulatan, hati) — kena ikut bilangan strokes dalam definition.
-        const char = selectedShape.letter || '';
-        const isTextChar = /^[A-Za-z0-9]$/.test(char);
-        const requiredStrokes = isTextChar ? 1 : selectedShape.strokes.length;
+        // 1 strok cukup untuk complete satu slot — sama untuk huruf, nombor, dan shape.
+        // Ini lebih natural untuk anak-anak: satu cubaan = satu kemajuan.
+        const requiredStrokes = 1;
 
         // Increment stroke count for active slot
         const newCounts = [...letterStrokeCounts];
