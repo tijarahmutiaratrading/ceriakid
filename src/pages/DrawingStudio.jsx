@@ -8,7 +8,7 @@ import AppHeader from '@/components/AppHeader';
 import SparkleTrail from '@/components/drawing/SparkleTrail';
 import TracingCelebration from '@/components/drawing/TracingCelebration';
 import MyArtGallery from '@/components/drawing/MyArtGallery';
-import { StickyNotePanel, DoodleLabel, WoodFrame, ParchmentScroll, WoodButton } from '@/components/drawing/SketchbookFrames';
+import { ApplePanel, AppleSectionLabel, AppleButton } from '@/components/drawing/ApplePanel';
 import { saveArtwork } from '@/lib/drawingGallery';
 import {
   playDrawTick,
@@ -852,19 +852,16 @@ export default function DrawingStudio() {
 
   return (
     <div
-      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative"
+      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900"
       style={{
-        backgroundColor: '#fef3c7',
-        backgroundImage: `radial-gradient(at 12% 18%, rgba(251, 191, 36, 0.18) 0px, transparent 50%), radial-gradient(at 88% 82%, rgba(249, 115, 22, 0.12) 0px, transparent 50%), radial-gradient(at 50% 50%, rgba(253, 230, 138, 0.4) 0px, transparent 70%), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.42 0 0 0 0 0.25 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")`,
+        background: 'linear-gradient(180deg, #f5f5f7 0%, #fafafa 40%, #ffffff 100%)',
       }}
     >
-      {/* Floating doodle decorations — sparse, organic */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full text-amber-700/30">
-        <div className="absolute top-32 left-4 text-2xl rotate-12 animate-float">✨</div>
-        <div className="absolute top-44 right-8 text-xl -rotate-12 animate-float" style={{ animationDelay: '1.5s' }}>⭐</div>
-        <div className="absolute top-1/2 left-2 text-2xl rotate-6 animate-float" style={{ animationDelay: '3s' }}>✏️</div>
-        <div className="absolute bottom-40 right-4 text-2xl -rotate-12 animate-float" style={{ animationDelay: '2s' }}>🖍️</div>
-        <div className="absolute bottom-20 left-6 text-xl rotate-12 animate-float" style={{ animationDelay: '4s' }}>🎨</div>
+      {/* Subtle Apple-style ambient color blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
+        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-40" style={{ background: 'radial-gradient(circle, #c7d2fe 0%, transparent 70%)' }} />
+        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(circle, #fbcfe8 0%, transparent 70%)' }} />
+        <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(circle, #bae6fd 0%, transparent 70%)' }} />
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
@@ -886,53 +883,32 @@ export default function DrawingStudio() {
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate('/dashboard')}
-          className="inline-flex items-center gap-2 mb-5 px-4 py-2 rounded-full font-black text-sm transition-all"
-          style={{ color: '#78350f', fontFamily: 'var(--font-nunito)' }}
+          className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full font-semibold text-sm text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all"
         >
-          <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
+          <ArrowLeft className="w-4 h-4" /> Dashboard
         </motion.button>
 
         <motion.section
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center gap-4 min-w-0">
-              <div
-                className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl flex-shrink-0 relative"
-                style={{
-                  background: 'linear-gradient(135deg, #92400e 0%, #78350f 100%)',
-                  boxShadow: '0 6px 14px rgba(120, 60, 20, 0.35), inset 0 2px 4px rgba(255,220,180,0.25), inset 0 -3px 6px rgba(0,0,0,0.3)',
-                  border: '3px solid #5c3a1e',
-                }}
-              >
-                <span className="drop-shadow-md">🎨</span>
-              </div>
-              <div className="min-w-0">
-                <p className="text-amber-700 text-xs font-black uppercase tracking-[0.22em] mb-1">✨ Creative Studio</p>
-                <h1 className="text-3xl sm:text-4xl font-black leading-tight" style={{ color: '#5c3a1e' }}>Studio Lukisan</h1>
-                <p className="text-amber-800/80 text-sm font-semibold mt-1 max-w-md">Lukis bebas, surih huruf, atau warnakan gambar comel — semua dalam satu tempat.</p>
-              </div>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-600 mb-2">Creative Studio</p>
+              <h1 className="text-4xl sm:text-5xl font-black leading-[1.05] tracking-tight text-slate-900">Studio Lukisan</h1>
+              <p className="text-slate-500 text-base font-medium mt-2 max-w-lg">Lukis bebas, surih huruf, atau warnakan gambar — semua dalam satu tempat.</p>
             </div>
 
             <div className="flex flex-wrap gap-2">
               {[
-                { top: mode === 'draw' ? 'Lukis Bebas' : mode === 'trace' ? 'Tracing' : 'Mewarna', bottom: 'MODE AKTIF', bg: '#fef3c7', border: '#f59e0b' },
-                { top: stickerMode ? `${stickerMode} Sticker` : tool.label, bottom: 'ALAT', bg: '#fce7f3', border: '#ec4899' },
-                { top: `${history.length} langkah`, bottom: 'BOLEH UNDO', bg: '#e5e7eb', border: '#9ca3af' },
+                { top: mode === 'draw' ? 'Lukis Bebas' : mode === 'trace' ? 'Tracing' : 'Mewarna', bottom: 'Mode' },
+                { top: stickerMode ? `Sticker ${stickerMode}` : tool.label, bottom: 'Alat' },
+                { top: `${history.length}`, bottom: 'Undo' },
               ].map((badge, i) => (
-                <div
-                  key={i}
-                  className="px-3 py-2 rounded-full text-center min-w-[80px]"
-                  style={{
-                    backgroundColor: badge.bg,
-                    border: `2.5px solid ${badge.border}`,
-                    boxShadow: '0 3px 8px rgba(120, 80, 40, 0.18), inset 0 1px 2px rgba(255,255,255,0.5)',
-                  }}
-                >
-                  <p className="font-black text-xs leading-tight" style={{ color: '#5c3a1e' }}>{badge.top}</p>
-                  <p className="text-[9px] font-black uppercase tracking-wider mt-0.5" style={{ color: badge.border }}>{badge.bottom}</p>
+                <div key={i} className="px-3.5 py-2 rounded-2xl bg-white/80 backdrop-blur-md ring-1 ring-black/5 text-center min-w-[78px]" style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
+                  <p className="font-bold text-sm leading-tight text-slate-900">{badge.top}</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider mt-0.5 text-slate-400">{badge.bottom}</p>
                 </div>
               ))}
             </div>
@@ -946,56 +922,48 @@ export default function DrawingStudio() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <WoodFrame
-              title={
-                <div>
-                  <p className="text-amber-100/70 text-[10px] font-black uppercase tracking-[0.22em]">Kanvas Aktif</p>
-                  <p className="text-amber-50 font-black text-base truncate" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+            <ApplePanel tight className="!p-3 sm:!p-4">
+              {/* Canvas header bar */}
+              <div className="flex items-center justify-between gap-3 px-2 pb-3">
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">Kanvas Aktif</p>
+                  <p className="text-slate-900 font-bold text-base truncate">
                     {mode === 'draw' ? `${tool.emoji} ${tool.label}` : mode === 'trace' ? `✏️ ${selectedShape.label}` : `🖍️ ${selectedColoringPage.label}`}
                   </p>
                 </div>
-              }
-              headerActions={
-                <>
-                  <button onClick={toggleSound} className="p-2 rounded-full bg-amber-100/15 hover:bg-amber-100/30 text-amber-50 transition-all" title={soundOn ? 'Matikan bunyi' : 'Hidupkan bunyi'}>
+                <div className="flex items-center gap-1">
+                  <button onClick={toggleSound} className="p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-all" title={soundOn ? 'Matikan bunyi' : 'Hidupkan bunyi'}>
                     {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
                   </button>
-                  <button onClick={() => { setGalleryOpen(true); playButtonTap(); }} className="p-2 rounded-full bg-amber-100/15 hover:bg-amber-100/30 text-amber-50 transition-all" title="Kerja Saya">
+                  <button onClick={() => { setGalleryOpen(true); playButtonTap(); }} className="p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-all" title="Kerja Saya">
                     <Images className="w-4 h-4" />
                   </button>
-                  <button onClick={undo} disabled={history.length === 0} className="p-2 rounded-full bg-amber-100/15 hover:bg-amber-100/30 text-amber-50 disabled:opacity-40 transition-all" title="Undo">
+                  <button onClick={undo} disabled={history.length === 0} className="p-2 rounded-full hover:bg-slate-100 text-slate-600 disabled:opacity-30 transition-all" title="Undo">
                     <Undo2 className="w-4 h-4" />
                   </button>
-                  <button onClick={handleClear} className="p-2 rounded-full bg-red-500/40 hover:bg-red-500/60 text-amber-50 transition-all" title="Kosongkan">
+                  <button onClick={handleClear} className="p-2 rounded-full hover:bg-red-50 text-red-500 transition-all" title="Kosongkan">
                     <Trash2 className="w-4 h-4" />
                   </button>
-                  <button onClick={() => setIsFullscreen(true)} className="p-2 rounded-full bg-amber-900/40 hover:bg-amber-900/60 text-amber-50 transition-all" title="Fullscreen">
+                  <button onClick={() => setIsFullscreen(true)} className="p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-all" title="Fullscreen">
                     <Maximize2 className="w-4 h-4" />
                   </button>
-                </>
-              }
-            >
-              <div
-                className="relative rounded-2xl overflow-hidden"
-                style={{
-                  border: '4px solid #f97316',
-                  boxShadow: 'inset 0 0 0 2px #fef3c7, 0 2px 8px rgba(0,0,0,0.2)',
-                }}
-              >
+                </div>
+              </div>
+
+              <div className="relative rounded-2xl overflow-hidden ring-1 ring-black/5" style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.6), 0 1px 3px rgba(0,0,0,0.04)' }}>
                 <div className="absolute left-3 top-3 z-10 flex items-center gap-2 flex-wrap pointer-events-none">
-                  <div className="px-3 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5"
-                       style={{ backgroundColor: '#fef9e7', color: '#5c3a1e', border: '2px solid #d4a574', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                  <div className="px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 bg-white/90 backdrop-blur-md text-slate-700 ring-1 ring-black/5 shadow-sm">
                     {stickerMode ? <span>Sticker {stickerMode}</span> : (
                       <>
-                        <span className="inline-block rounded-full" style={{ width: 12, height: 12, backgroundColor: tool.id === 'eraser' ? '#fff9f0' : color, border: tool.id === 'eraser' ? '2px dashed #cbd5e1' : '2px solid rgba(0,0,0,0.2)' }} />
+                        <span className="inline-block rounded-full" style={{ width: 12, height: 12, backgroundColor: tool.id === 'eraser' ? '#fff9f0' : color, border: tool.id === 'eraser' ? '1.5px dashed #cbd5e1' : '1.5px solid rgba(0,0,0,0.15)' }} />
                         <span>{brushSize.label}</span>
                       </>
                     )}
                   </div>
                   {mode === 'trace' && (
                     <>
-                      <div className="px-3 py-1.5 rounded-full text-xs font-black" style={{ backgroundColor: '#92400e', color: '#fef3c7' }}>{userStrokes.length}/{selectedShape.strokes.length} strok</div>
-                      <div className="px-3 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5" style={{ backgroundColor: '#fef9e7', color: '#5c3a1e', border: '2px solid #d4a574' }}>
+                      <div className="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900/85 backdrop-blur-md text-white shadow-sm">{userStrokes.length}/{selectedShape.strokes.length} strok</div>
+                      <div className="px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 bg-white/90 backdrop-blur-md text-slate-700 ring-1 ring-black/5 shadow-sm">
                         <span className="inline-block w-3 h-3 rounded-full bg-green-500 ring-2 ring-white" /> Mula
                         <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white ml-1" /> Akhir
                       </div>
@@ -1012,30 +980,19 @@ export default function DrawingStudio() {
                   style={{ backgroundColor: '#fff9f0', cursor: stickerMode ? 'pointer' : 'crosshair' }}
                 />
               </div>
-
-              {/* Crayon tool decorations below canvas */}
-              <div className="flex items-end justify-center gap-3 sm:gap-5 px-4 pt-3 pb-1 text-3xl sm:text-4xl pointer-events-none select-none">
-                <span className="rotate-[-12deg]">✏️</span>
-                <span className="rotate-[8deg]">🖌️</span>
-                <span className="rotate-[-6deg]">🖍️</span>
-                <span className="rotate-[14deg]">🖍️</span>
-                <span className="rotate-[-4deg]">🧽</span>
-              </div>
-            </WoodFrame>
+            </ApplePanel>
 
             {/* Mobile actions row */}
             <div className="grid grid-cols-3 gap-2 mt-3 sm:hidden">
-              <button onClick={undo} disabled={history.length === 0} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm disabled:opacity-40"
-                style={{ backgroundColor: '#fef9e7', color: '#5c3a1e', border: '2px solid #d4a574', boxShadow: '0 2px 4px rgba(120,80,40,0.2)' }}>
+              <button onClick={undo} disabled={history.length === 0} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold text-sm text-slate-700 bg-white ring-1 ring-black/5 shadow-sm disabled:opacity-40">
                 <Undo2 className="w-4 h-4" /> Undo
               </button>
-              <button onClick={handleClear} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm"
-                style={{ backgroundColor: '#fecaca', color: '#7f1d1d', border: '2px solid #ef4444', boxShadow: '0 2px 4px rgba(120,80,40,0.2)' }}>
+              <button onClick={handleClear} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold text-sm text-red-600 bg-red-50 ring-1 ring-red-100">
                 <Trash2 className="w-4 h-4" /> Kosong
               </button>
-              <WoodButton onClick={downloadCanvas} className="!py-3 flex items-center justify-center gap-2">
+              <AppleButton onClick={downloadCanvas} className="!py-3">
                 <Download className="w-4 h-4" /> Simpan
-              </WoodButton>
+              </AppleButton>
             </div>
           </motion.section>
 
@@ -1045,39 +1002,27 @@ export default function DrawingStudio() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
           >
-            <StickyNotePanel>
-              <DoodleLabel accent="#92400e">AKTIVITI KREATIF — Pilih aktiviti</DoodleLabel>
-              <div className="grid grid-cols-3 gap-3">
-                {MODES.map((m, i) => {
+            <ApplePanel>
+              <AppleSectionLabel>Aktiviti Kreatif</AppleSectionLabel>
+              <div className="grid grid-cols-3 gap-2">
+                {MODES.map((m) => {
                   const icons = { draw: '🎨', trace: '✏️', color: '🖍️' };
                   const labelMap = { draw: 'Lukis Bebas', trace: 'Tracing', color: 'Mewarna' };
-                  const labelText = labelMap[m.id] || m.label;
-                  const rotations = ['-1.5deg', '0.8deg', '-0.5deg'];
+                  const isActive = mode === m.id;
                   return (
                     <motion.button
                       key={m.id}
-                      whileTap={{ scale: 0.94 }}
+                      whileTap={{ scale: 0.96 }}
                       onClick={() => setMode(m.id)}
-                      className="relative p-3 transition-all"
-                      style={{
-                        transform: `rotate(${rotations[i]})`,
-                        backgroundColor: '#fefce8',
-                        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='nn'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.65 0 0 0 0 0.5 0 0 0 0 0.25 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23nn)'/></svg>")`,
-                        border: mode === m.id ? '3px solid #f97316' : '2px solid #d4a574',
-                        borderRadius: '8px',
-                        boxShadow: mode === m.id
-                          ? '0 6px 14px rgba(249, 115, 22, 0.3), inset 0 0 0 2px rgba(254, 215, 170, 0.4)'
-                          : '0 3px 8px rgba(120, 80, 40, 0.2)',
-                      }}
+                      className={`relative py-4 px-3 rounded-2xl transition-all flex flex-col items-center gap-1 ${isActive ? 'bg-slate-900 text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
                     >
-                      <div className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#dc2626', boxShadow: '0 1px 2px rgba(0,0,0,0.3)' }} />
-                      <div className="text-4xl mb-1 leading-none">{icons[m.id]}</div>
-                      <p className="font-black text-sm" style={{ color: '#5c3a1e', fontFamily: 'cursive, var(--font-nunito)' }}>{labelText}</p>
+                      <div className="text-3xl leading-none">{icons[m.id]}</div>
+                      <p className="font-semibold text-sm">{labelMap[m.id]}</p>
                     </motion.button>
                   );
                 })}
               </div>
-            </StickyNotePanel>
+            </ApplePanel>
           </motion.section>
 
           <AnimatePresence mode="wait">
@@ -1088,62 +1033,57 @@ export default function DrawingStudio() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                 >
-                <StickyNotePanel>
-                  <DoodleLabel accent="#92400e">TRACING — {selectedShape.label}</DoodleLabel>
+                <ApplePanel>
+                  <AppleSectionLabel>Tracing — {selectedShape.label}</AppleSectionLabel>
 
-                  <p className="text-amber-800 text-xs font-black uppercase tracking-wider mb-2">Kategori</p>
-                  <div className="grid grid-cols-2 gap-2 mb-4">
-                    {TRACING_CATEGORIES.map(category => (
-                      <motion.button
-                        key={category.id}
-                        whileTap={{ scale: 0.92 }}
-                        onClick={() => {
-                          setSelectedTracingCategory(category.id);
-                          setSelectedShape(category.shapes[0]);
-                        }}
-                        className="px-3 py-2.5 rounded-xl font-black text-xs transition-all"
-                        style={{
-                          backgroundColor: selectedTracingCategory === category.id ? '#fef3c7' : '#fffbeb',
-                          color: '#5c3a1e',
-                          border: selectedTracingCategory === category.id ? '2.5px solid #f97316' : '2px solid #d4a574',
-                          boxShadow: selectedTracingCategory === category.id ? '0 3px 6px rgba(249,115,22,0.25)' : '0 2px 3px rgba(120,80,40,0.15)',
-                        }}
-                      >
-                        {category.label}
-                      </motion.button>
-                    ))}
+                  <p className="text-xs font-semibold text-slate-500 mb-2">Kategori</p>
+                  <div className="grid grid-cols-2 gap-1.5 mb-4">
+                    {TRACING_CATEGORIES.map(category => {
+                      const active = selectedTracingCategory === category.id;
+                      return (
+                        <motion.button
+                          key={category.id}
+                          whileTap={{ scale: 0.96 }}
+                          onClick={() => {
+                            setSelectedTracingCategory(category.id);
+                            setSelectedShape(category.shapes[0]);
+                          }}
+                          className={`px-3 py-2.5 rounded-xl font-semibold text-xs transition-all ${active ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                        >
+                          {category.label}
+                        </motion.button>
+                      );
+                    })}
                   </div>
 
-                  <p className="text-amber-800 text-xs font-black uppercase tracking-wider mb-2">Item latihan</p>
-                  <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-2 pr-1">
-                    {tracingShapes.map(s => (
-                      <motion.button
-                        key={s.label}
-                        whileTap={{ scale: 0.92 }}
-                        onClick={() => setSelectedShape(s)}
-                        className="px-3 py-2.5 rounded-xl font-bold text-xs transition-all"
-                        style={{
-                          backgroundColor: selectedShape.label === s.label ? '#fef3c7' : '#fffbeb',
-                          color: '#5c3a1e',
-                          border: selectedShape.label === s.label ? '2.5px solid #f97316' : '2px solid #d4a574',
-                        }}
-                      >
-                        {s.label}
-                      </motion.button>
-                    ))}
+                  <p className="text-xs font-semibold text-slate-500 mb-2">Item latihan</p>
+                  <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-1.5 pr-1">
+                    {tracingShapes.map(s => {
+                      const active = selectedShape.label === s.label;
+                      return (
+                        <motion.button
+                          key={s.label}
+                          whileTap={{ scale: 0.96 }}
+                          onClick={() => setSelectedShape(s)}
+                          className={`px-3 py-2.5 rounded-xl font-medium text-xs transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                        >
+                          {s.label}
+                        </motion.button>
+                      );
+                    })}
                   </div>
 
-                  <div className="mt-4 rounded-xl p-3" style={{ backgroundColor: '#fffbeb', border: '2px dashed #d4a574' }}>
+                  <div className="mt-4 rounded-2xl p-3 bg-slate-50 ring-1 ring-black/5">
                     {tracingDone ? (
                       <div className="text-center">
-                        <p className="font-black text-base" style={{ color: '#5c3a1e' }}>{tracingAccuracy >= 70 ? `🌟 Hebat! ${tracingAccuracy}%` : `💪 Cuba lagi! ${tracingAccuracy}%`}</p>
-                        <button onClick={resetTracing} className="mt-2 px-4 py-2 rounded-full text-xs font-black" style={{ backgroundColor: '#f97316', color: 'white' }}>Reset Tracing</button>
+                        <p className="font-bold text-base text-slate-900">{tracingAccuracy >= 70 ? `🌟 Hebat! ${tracingAccuracy}%` : `💪 Cuba lagi! ${tracingAccuracy}%`}</p>
+                        <AppleButton onClick={resetTracing} variant="accent" className="mt-2 !px-4 !py-1.5 !text-xs">Reset Tracing</AppleButton>
                       </div>
                     ) : (
-                      <p className="text-xs font-bold" style={{ color: '#78350f' }}>📝 Ikuti laluan putus-putus. Progress: {userStrokes.length}/{selectedShape.strokes.length} strok.</p>
+                      <p className="text-xs font-medium text-slate-600">📝 Ikuti laluan putus-putus. Progress: <span className="font-bold text-slate-900">{userStrokes.length}/{selectedShape.strokes.length}</span> strok.</p>
                     )}
                   </div>
-                </StickyNotePanel>
+                </ApplePanel>
                 </motion.section>
               ) : (
                 <motion.section
@@ -1154,144 +1094,133 @@ export default function DrawingStudio() {
                   className="space-y-4"
                 >
                   {mode === 'color' && (
-                    <StickyNotePanel>
-                      <DoodleLabel accent="#92400e">AKTIVITI MEWARNA — {selectedColoringPage.label}</DoodleLabel>
-                      <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-2 pr-1">
-                        {COLORING_PAGES.map(page => (
-                          <motion.button
-                            key={page.id}
-                            whileTap={{ scale: 0.92 }}
-                            onClick={() => setSelectedColoringPage(page)}
-                            className="px-3 py-2.5 rounded-xl font-bold text-xs transition-all"
-                            style={{
-                              backgroundColor: selectedColoringPage.id === page.id ? '#fef3c7' : '#fffbeb',
-                              color: '#5c3a1e',
-                              border: selectedColoringPage.id === page.id ? '2.5px solid #f97316' : '2px solid #d4a574',
-                            }}
-                          >
-                            {page.label}
-                          </motion.button>
-                        ))}
+                    <ApplePanel>
+                      <AppleSectionLabel>Aktiviti Mewarna — {selectedColoringPage.label}</AppleSectionLabel>
+                      <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-1.5 pr-1">
+                        {COLORING_PAGES.map(page => {
+                          const active = selectedColoringPage.id === page.id;
+                          return (
+                            <motion.button
+                              key={page.id}
+                              whileTap={{ scale: 0.96 }}
+                              onClick={() => setSelectedColoringPage(page)}
+                              className={`px-3 py-2.5 rounded-xl font-medium text-xs transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                            >
+                              {page.label}
+                            </motion.button>
+                          );
+                        })}
                       </div>
-                    </StickyNotePanel>
+                    </ApplePanel>
                   )}
 
                   {/* TOOLS + BRUSH SIZE + SAVE in one row */}
                   <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3">
-                    {/* ALAT LUKISAN */}
-                    <StickyNotePanel rotate={-0.5}>
-                      <DoodleLabel accent="#92400e">{mode === 'color' ? 'ALAT MEWARNA' : 'ALAT LUKISAN'}</DoodleLabel>
-                      <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5">
-                        {TOOLS.map(t => (
-                          <motion.button
-                            key={t.id}
-                            whileTap={{ scale: 0.88 }}
-                            onClick={() => { setTool(t); setStickerMode(null); }}
-                            className="aspect-square rounded-xl flex items-center justify-center text-2xl transition-all relative"
-                            style={{
-                              backgroundColor: tool.id === t.id && !stickerMode ? '#fef3c7' : 'transparent',
-                              border: tool.id === t.id && !stickerMode ? '2.5px solid #f97316' : '2px dashed transparent',
-                            }}
-                            title={t.label}
-                          >
-                            {t.emoji}
-                          </motion.button>
-                        ))}
+                    {/* ALAT */}
+                    <ApplePanel>
+                      <AppleSectionLabel>{mode === 'color' ? 'Alat Mewarna' : 'Alat Lukisan'}</AppleSectionLabel>
+                      <div className="grid grid-cols-5 gap-1.5">
+                        {TOOLS.map(t => {
+                          const active = tool.id === t.id && !stickerMode;
+                          return (
+                            <motion.button
+                              key={t.id}
+                              whileTap={{ scale: 0.92 }}
+                              onClick={() => { setTool(t); setStickerMode(null); }}
+                              className={`aspect-square rounded-2xl flex items-center justify-center text-2xl transition-all ${active ? 'bg-slate-900 shadow-md' : 'bg-slate-50 hover:bg-slate-100'}`}
+                              title={t.label}
+                            >
+                              <span className={active ? 'grayscale-0' : ''}>{t.emoji}</span>
+                            </motion.button>
+                          );
+                        })}
                       </div>
-                    </StickyNotePanel>
+                    </ApplePanel>
 
                     {/* SAIZ BRUSH */}
-                    <StickyNotePanel rotate={0.5}>
-                      <DoodleLabel accent="#92400e">SAIZ BRUSH</DoodleLabel>
-                      <div className="grid grid-cols-4 gap-1">
-                        {BRUSH_SIZES.map(s => (
-                          <motion.button
-                            key={s.id}
-                            whileTap={{ scale: 0.88 }}
-                            onClick={() => setBrushSize(s)}
-                            className="flex flex-col items-center justify-center gap-1 py-2 rounded-xl transition-all"
-                            style={{
-                              backgroundColor: brushSize.id === s.id ? '#fef3c7' : 'transparent',
-                              border: brushSize.id === s.id ? '2.5px solid #f97316' : '2px solid transparent',
-                            }}
-                          >
-                            <span className="rounded-full border-2 border-amber-900" style={{ width: s.dot, height: s.dot, backgroundColor: brushSize.id === s.id ? '#f97316' : 'transparent' }} />
-                            <span className="text-[9px] font-black" style={{ color: '#5c3a1e' }}>{s.label}</span>
-                          </motion.button>
-                        ))}
+                    <ApplePanel>
+                      <AppleSectionLabel>Saiz Brush</AppleSectionLabel>
+                      <div className="grid grid-cols-4 gap-1.5">
+                        {BRUSH_SIZES.map(s => {
+                          const active = brushSize.id === s.id;
+                          return (
+                            <motion.button
+                              key={s.id}
+                              whileTap={{ scale: 0.92 }}
+                              onClick={() => setBrushSize(s)}
+                              className={`flex flex-col items-center justify-center gap-1 py-2.5 rounded-2xl transition-all ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                            >
+                              <span className="rounded-full" style={{ width: s.dot, height: s.dot, backgroundColor: active ? '#ffffff' : '#94a3b8' }} />
+                              <span className="text-[10px] font-semibold">{s.label}</span>
+                            </motion.button>
+                          );
+                        })}
                       </div>
-                    </StickyNotePanel>
+                    </ApplePanel>
 
                     {/* SAVE BUTTON */}
                     <div className="hidden sm:flex items-center justify-center">
-                      <WoodButton onClick={downloadCanvas} className="!px-6 !py-4 text-base">
-                        <span className="flex items-center gap-2"><Download className="w-4 h-4" /> Simpan</span>
-                      </WoodButton>
+                      <AppleButton onClick={downloadCanvas} className="!px-6 !py-4 !text-base">
+                        <Download className="w-4 h-4" /> Simpan
+                      </AppleButton>
                     </div>
                   </div>
 
                   {tool.id !== 'eraser' && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {/* PALET WARNA */}
-                      <StickyNotePanel rotate={-0.5}>
-                        <DoodleLabel accent="#92400e">PALET WARNA</DoodleLabel>
+                      <ApplePanel>
+                        <AppleSectionLabel>Palet Warna</AppleSectionLabel>
                         <div className="grid grid-cols-6 gap-2">
-                          {COLORS.map(c => (
-                            <motion.button
-                              key={c}
-                              whileTap={{ scale: 0.85 }}
-                              onClick={() => { setColor(c); setStickerMode(null); }}
-                              className="aspect-square rounded-full transition-all"
-                              style={{
-                                backgroundColor: c,
-                                border: color === c ? '3px solid #f97316' : '2px solid #78350f',
-                                boxShadow: color === c
-                                  ? '0 0 0 2px #fef3c7, 0 3px 8px rgba(249,115,22,0.4)'
-                                  : '0 2px 4px rgba(120,80,40,0.25), inset 0 -2px 4px rgba(0,0,0,0.2)',
-                              }}
-                              aria-label={`Warna ${c}`}
-                            />
-                          ))}
+                          {COLORS.map(c => {
+                            const active = color === c;
+                            return (
+                              <motion.button
+                                key={c}
+                                whileTap={{ scale: 0.88 }}
+                                onClick={() => { setColor(c); setStickerMode(null); }}
+                                className="aspect-square rounded-full transition-all"
+                                style={{
+                                  backgroundColor: c,
+                                  boxShadow: active
+                                    ? '0 0 0 2.5px #ffffff, 0 0 0 5px #0f172a, 0 4px 12px rgba(15,23,42,0.18)'
+                                    : '0 1px 2px rgba(0,0,0,0.08), inset 0 -1px 2px rgba(0,0,0,0.08)',
+                                }}
+                                aria-label={`Warna ${c}`}
+                              />
+                            );
+                          })}
                         </div>
-                        <div
-                          className="flex items-center gap-2 mt-3 rounded-lg p-2"
-                          style={{
-                            backgroundColor: '#fef9e7',
-                            border: '2px solid #d4a574',
-                            boxShadow: 'inset 0 1px 2px rgba(120,80,40,0.1)',
-                          }}
-                        >
-                          <input type="color" value={color} onChange={e => { setColor(e.target.value); setStickerMode(null); }} className="w-8 h-8 rounded-lg cursor-pointer border-2" style={{ borderColor: '#78350f' }} />
+                        <div className="flex items-center gap-2 mt-3 rounded-2xl p-2.5 bg-slate-50 ring-1 ring-black/5">
+                          <input type="color" value={color} onChange={e => { setColor(e.target.value); setStickerMode(null); }} className="w-9 h-9 rounded-lg cursor-pointer border-0 bg-transparent" />
                           <div className="flex-1 min-w-0">
-                            <p className="font-black text-xs" style={{ color: '#5c3a1e' }}>Warna custom</p>
-                            <p className="text-[10px] font-bold" style={{ color: '#92400e' }}>Pilih warna lain ikut kreativiti anak</p>
+                            <p className="font-semibold text-xs text-slate-900">Warna custom</p>
+                            <p className="text-[10px] text-slate-500">Pilih mana-mana warna kegemaran</p>
                           </div>
-                          <div className="w-7 h-7 rounded-full border-2" style={{ backgroundColor: color, borderColor: '#78350f' }} />
+                          <div className="w-7 h-7 rounded-full ring-1 ring-black/10" style={{ backgroundColor: color }} />
                         </div>
-                      </StickyNotePanel>
+                      </ApplePanel>
 
                       {/* TAMPAL STICKER */}
-                      <StickyNotePanel rotate={0.5}>
-                        <DoodleLabel accent="#92400e">TAMPAL STICKER</DoodleLabel>
-                        <p className="text-[10px] font-bold mb-2" style={{ color: '#92400e' }}>Tekan satu sticker, kemudian tap canvas untuk tampal!</p>
+                      <ApplePanel>
+                        <AppleSectionLabel>Tampal Sticker</AppleSectionLabel>
+                        <p className="text-[11px] text-slate-500 mb-2">Tekan satu sticker, kemudian tap canvas untuk tampal.</p>
                         <div className="grid grid-cols-6 gap-2">
-                          {STICKERS.map(s => (
-                            <motion.button
-                              key={s}
-                              whileTap={{ scale: 0.85 }}
-                              onClick={() => setStickerMode(stickerMode === s ? null : s)}
-                              className="aspect-square rounded-xl text-2xl transition-all flex items-center justify-center"
-                              style={{
-                                backgroundColor: stickerMode === s ? '#fef3c7' : 'transparent',
-                                border: stickerMode === s ? '2.5px solid #f97316' : '2px dashed #d4a574',
-                                boxShadow: stickerMode === s ? '0 3px 6px rgba(249,115,22,0.3)' : 'none',
-                              }}
-                            >
-                              {s}
-                            </motion.button>
-                          ))}
+                          {STICKERS.map(s => {
+                            const active = stickerMode === s;
+                            return (
+                              <motion.button
+                                key={s}
+                                whileTap={{ scale: 0.88 }}
+                                onClick={() => setStickerMode(stickerMode === s ? null : s)}
+                                className={`aspect-square rounded-2xl text-2xl transition-all flex items-center justify-center ${active ? 'bg-slate-900 shadow-md' : 'bg-slate-50 hover:bg-slate-100'}`}
+                              >
+                                {s}
+                              </motion.button>
+                            );
+                          })}
                         </div>
-                      </StickyNotePanel>
+                      </ApplePanel>
                     </div>
                   )}
                 </motion.section>
@@ -1304,20 +1233,19 @@ export default function DrawingStudio() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25 }}
             >
-              <ParchmentScroll>
+              <ApplePanel>
                 <div className="flex items-start gap-3">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-black text-base mb-1 uppercase tracking-wider" style={{ color: '#5c3a1e' }}>Panduan Untuk Anak</h3>
-                    <p className="text-sm font-bold leading-relaxed" style={{ color: '#78350f' }}>
+                    <AppleSectionLabel accent="💡">Panduan Untuk Anak</AppleSectionLabel>
+                    <p className="text-sm font-medium leading-relaxed text-slate-700">
                       {mode === 'draw' ? '😊 Pilih warna, pilih saiz brush, kemudian lukis di atas kanvas putih. Cuba tampal sticker untuk hiasan!' : mode === 'trace' ? '✏️ Ikuti garisan putus-putus dari awal ke hujung. Selesaikan semua strok untuk dapat bintang!' : '🖍️ Pilih gambar, pilih warna, dan warnakan ruang kosong. Tiada salah — bebas berkreatif!'}
                     </p>
-                    <p className="text-[11px] font-bold mt-2 pt-2" style={{ color: '#92400e', borderTop: '1px dashed #c89968' }}>
+                    <p className="text-[11px] font-medium text-slate-400 mt-3 pt-3 border-t border-slate-100">
                       Untuk ibu bapa: aktiviti ini melatih kawalan motor halus &amp; kreativiti.
                     </p>
                   </div>
-                  <div className="text-3xl flex-shrink-0">💡</div>
                 </div>
-              </ParchmentScroll>
+              </ApplePanel>
             </motion.section>
         </div>
 
