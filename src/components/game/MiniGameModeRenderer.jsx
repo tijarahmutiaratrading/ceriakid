@@ -551,11 +551,19 @@ function SequenceMode() {
   const answer = roundData?.answer || [];
   const items = roundData?.items || [];
   const [picked, setPicked] = useState([]);
+  const [showHint, setShowHint] = useState(true);
   const complete = picked.length === answer.length && picked.every((x, i) => x === answer[i]);
 
   useEffect(() => {
     reportProgress({ current: picked.length, total: answer.length, isComplete: complete });
   }, [picked.length, complete, answer.length]);
+
+  // Auto-hide corak selepas 4 saat — supaya anak kena ingat
+  useEffect(() => {
+    setShowHint(true);
+    const t = setTimeout(() => setShowHint(false), 4000);
+    return () => clearTimeout(t);
+  }, [answer.join('|')]);
 
   const choose = (item) => {
     const ok = item === answer[picked.length];
@@ -567,14 +575,77 @@ function SequenceMode() {
     <div className="space-y-3">
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={picked.length} total={answer.length} />
+
+      {/* CORAK SASARAN — ingat ini! */}
       <div className={panel}>
-        <p className="text-purple-500 text-[10px] font-black uppercase text-center mb-2">Susunan sekarang</p>
-        <div className="min-h-14 rounded-xl bg-white ring-2 ring-purple-100 p-3 text-purple-900 font-black text-center text-lg">{picked.join(' → ') || '_'}</div>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-purple-500 text-[10px] font-black uppercase">
+            {showHint ? '👀 Ingat corak ini' : '🧠 Pilih ikut ingatan'}
+          </p>
+          <button
+            type="button"
+            onClick={() => setShowHint(s => !s)}
+            className="text-[10px] font-black uppercase px-2 py-1 rounded-full bg-white text-purple-600 ring-1 ring-purple-200 active:scale-95"
+          >
+            {showHint ? '🙈 Sorok' : '👁️ Tengok'}
+          </button>
+        </div>
+        <div className="min-h-14 rounded-xl bg-white ring-2 ring-purple-100 p-3 flex flex-wrap items-center justify-center gap-2">
+          {showHint ? (
+            answer.map((step, i) => (
+              <React.Fragment key={i}>
+                <motion.span
+                  initial={{ scale: 0, rotate: -10 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: i * 0.15 }}
+                  className="inline-flex items-center justify-center min-w-[2.5rem] h-10 px-3 rounded-xl bg-gradient-to-br from-yellow-300 to-orange-300 text-orange-900 font-black text-lg ring-2 ring-white shadow-sm"
+                >
+                  {step}
+                </motion.span>
+                {i < answer.length - 1 && <span className="text-purple-400 font-black">→</span>}
+              </React.Fragment>
+            ))
+          ) : (
+            <div className="flex gap-2">
+              {answer.map((_, i) => (
+                <span key={i} className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-purple-100 text-purple-400 font-black text-xl">?</span>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-      <div className="grid grid-cols-2 gap-2">
-        {items.filter(x => !picked.includes(x)).map(item => (
-          <button key={item} onClick={() => choose(item)} className={chip}>{item}</button>
-        ))}
+
+      {/* SUSUNAN ANAK */}
+      <div className={panel}>
+        <p className="text-purple-500 text-[10px] font-black uppercase text-center mb-2">
+          Susunan kamu ({picked.length}/{answer.length})
+        </p>
+        <div className="min-h-14 rounded-xl bg-white ring-2 ring-purple-100 p-3 flex flex-wrap items-center justify-center gap-2">
+          {picked.length === 0 ? (
+            <p className="text-purple-300 font-black text-sm">Tekan pilihan di bawah →</p>
+          ) : (
+            picked.map((step, i) => (
+              <React.Fragment key={i}>
+                <span className="inline-flex items-center justify-center min-w-[2.5rem] h-10 px-3 rounded-xl bg-gradient-to-br from-green-300 to-emerald-400 text-green-900 font-black text-lg ring-2 ring-white shadow-sm">
+                  {step}
+                </span>
+                {i < picked.length - 1 && <span className="text-purple-400 font-black">→</span>}
+              </React.Fragment>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* PILIHAN */}
+      <div>
+        <p className="text-white/80 text-xs font-black uppercase tracking-wider text-center mb-2">
+          Giliran {picked.length + 1} — pilih satu
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          {items.filter(x => !picked.includes(x)).map(item => (
+            <button key={item} onClick={() => choose(item)} className={chip + ' text-lg py-4'}>{item}</button>
+          ))}
+        </div>
       </div>
     </div>
   );
