@@ -353,7 +353,7 @@ export default function StoryKid() {
                     </motion.div>
 
                     {/* Choices — gaya butang kayu dongeng dengan warna bertukar-tukar */}
-                    <div className="grid gap-1.5 sm:gap-2 sm:grid-cols-2">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center">
                       {scene.choices.map((choice, idx) => {
                         const palettes = [
                           { bg: 'linear-gradient(180deg, #FBBF24 0%, #D97706 100%)', border: '#92400E', text: '#FFFBEB' },
@@ -371,7 +371,7 @@ export default function StoryKid() {
                             whileTap={{ scale: 0.96, y: 2 }}
                             whileHover={{ y: -2 }}
                             onClick={() => choose(choice)}
-                            className="w-full px-3 py-2.5 sm:px-3.5 sm:py-3 rounded-xl font-bold flex items-center justify-between gap-2 transition-all text-sm sm:text-base"
+                            className="px-3 py-2.5 sm:px-3.5 sm:py-3 rounded-xl font-bold inline-flex items-center gap-2 transition-all text-sm sm:text-base"
                             style={{
                               background: palette.bg,
                               border: `2px solid ${palette.border}`,
