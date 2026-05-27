@@ -328,32 +328,32 @@ export default function StoryKid() {
                 </div>
 
                 {/* Bottom: text + choices overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-5 z-10 max-h-[60vh] overflow-y-auto">
-                  <div className="max-w-3xl mx-auto">
+                <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 z-10 max-h-[50vh] overflow-y-auto">
+                  <div className="max-w-2xl mx-auto">
                     {/* Text card — gaya buku cerita / parchment cream */}
                     <motion.div
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.2 }}
-                      className="relative rounded-[1.5rem] px-5 py-4 sm:px-6 sm:py-5 mb-3"
+                      className="relative rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3 mb-2"
                       style={{
                         background: 'linear-gradient(180deg, #FFF8E7 0%, #FCEBC8 100%)',
-                        border: '3px solid #C8956A',
-                        boxShadow: '0 12px 30px rgba(0,0,0,0.4), inset 0 0 0 2px #FFF8E7, inset 0 0 24px rgba(200,149,106,0.15)',
+                        border: '2px solid #C8956A',
+                        boxShadow: '0 8px 20px rgba(0,0,0,0.35), inset 0 0 0 1px #FFF8E7',
                       }}
                     >
                       {/* Sudut hiasan kecil */}
-                      <span className="absolute top-1.5 left-1.5 text-amber-700/60 text-xs">✦</span>
-                      <span className="absolute top-1.5 right-1.5 text-amber-700/60 text-xs">✦</span>
-                      <span className="absolute bottom-1.5 left-1.5 text-amber-700/60 text-xs">✦</span>
-                      <span className="absolute bottom-1.5 right-1.5 text-amber-700/60 text-xs">✦</span>
-                      <p className="text-amber-950 text-base sm:text-xl font-black text-center leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
+                      <span className="absolute top-1 left-1 text-amber-700/60 text-[9px]">✦</span>
+                      <span className="absolute top-1 right-1 text-amber-700/60 text-[9px]">✦</span>
+                      <span className="absolute bottom-1 left-1 text-amber-700/60 text-[9px]">✦</span>
+                      <span className="absolute bottom-1 right-1 text-amber-700/60 text-[9px]">✦</span>
+                      <p className="text-amber-950 text-xs sm:text-sm font-bold text-center leading-snug" style={{ fontFamily: 'Georgia, serif' }}>
                         {scene.text}
                       </p>
                     </motion.div>
 
                     {/* Choices — gaya butang kayu dongeng dengan warna bertukar-tukar */}
-                    <div className="grid gap-2.5 sm:gap-3 sm:grid-cols-2">
+                    <div className="grid gap-1.5 sm:gap-2 sm:grid-cols-2">
                       {scene.choices.map((choice, idx) => {
                         const palettes = [
                           { bg: 'linear-gradient(180deg, #FBBF24 0%, #D97706 100%)', border: '#92400E', text: '#FFFBEB' },
@@ -369,19 +369,19 @@ export default function StoryKid() {
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.3 + idx * 0.08 }}
                             whileTap={{ scale: 0.96, y: 2 }}
-                            whileHover={{ y: -3 }}
+                            whileHover={{ y: -2 }}
                             onClick={() => choose(choice)}
-                            className="w-full p-3.5 sm:p-4 rounded-2xl font-black flex items-center justify-between gap-3 transition-all text-sm sm:text-base"
+                            className="w-full px-2.5 py-2 sm:px-3 sm:py-2.5 rounded-xl font-bold flex items-center justify-between gap-2 transition-all text-xs sm:text-sm"
                             style={{
                               background: palette.bg,
-                              border: `3px solid ${palette.border}`,
+                              border: `2px solid ${palette.border}`,
                               color: palette.text,
-                              boxShadow: `0 6px 0 ${palette.border}, 0 12px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.3)`,
+                              boxShadow: `0 4px 0 ${palette.border}, 0 8px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3)`,
                               textShadow: '0 1px 2px rgba(0,0,0,0.4)',
                             }}
                           >
-                            <span className="text-left">{choice.text}</span>
-                            <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/30 flex items-center justify-center flex-shrink-0 text-lg" style={{ border: `2px solid ${palette.border}` }}>→</span>
+                            <span className="text-left leading-tight">{choice.text}</span>
+                            <span className="w-6 h-6 rounded-lg bg-white/30 flex items-center justify-center flex-shrink-0 text-sm" style={{ border: `1.5px solid ${palette.border}` }}>→</span>
                           </motion.button>
                         );
                       })}
