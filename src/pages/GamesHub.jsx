@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ChevronRight, Sparkles, Star, Zap } from 'lucide-react';
-import AppHeader from '@/components/AppHeader';
 import HoppingBunnies from '@/components/game/HoppingBunny';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 
@@ -58,8 +57,6 @@ export default function GamesHub() {
         <div className="absolute bottom-40 left-10 text-xl text-yellow-300/60 animate-float" style={{ animationDelay: '3.5s' }}>⭐</div>
         <div className="absolute bottom-1/3 right-1/4 text-lg text-purple-300/50 animate-float" style={{ animationDelay: '4.2s' }}>✨</div>
       </div>
-
-      <AppHeader showBack={true} backTo="/dashboard" />
 
       {/* 🐰 Arnab mascot melompat-lompat di background */}
       <HoppingBunnies />
