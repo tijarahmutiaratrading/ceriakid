@@ -8,6 +8,7 @@ import AppHeader from '@/components/AppHeader';
 import SparkleTrail from '@/components/drawing/SparkleTrail';
 import TracingCelebration from '@/components/drawing/TracingCelebration';
 import MyArtGallery from '@/components/drawing/MyArtGallery';
+import { StickyNotePanel, DoodleLabel, WoodFrame, ParchmentScroll, WoodButton } from '@/components/drawing/SketchbookFrames';
 import { saveArtwork } from '@/lib/drawingGallery';
 import {
   playDrawTick,
@@ -804,11 +805,20 @@ export default function DrawingStudio() {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
-        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
+    <div
+      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative"
+      style={{
+        backgroundColor: '#fef3c7',
+        backgroundImage: `radial-gradient(at 12% 18%, rgba(251, 191, 36, 0.18) 0px, transparent 50%), radial-gradient(at 88% 82%, rgba(249, 115, 22, 0.12) 0px, transparent 50%), radial-gradient(at 50% 50%, rgba(253, 230, 138, 0.4) 0px, transparent 70%), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.42 0 0 0 0 0.25 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")`,
+      }}
+    >
+      {/* Floating doodle decorations — sparse, organic */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full text-amber-700/30">
+        <div className="absolute top-32 left-4 text-2xl rotate-12 animate-float">✨</div>
+        <div className="absolute top-44 right-8 text-xl -rotate-12 animate-float" style={{ animationDelay: '1.5s' }}>⭐</div>
+        <div className="absolute top-1/2 left-2 text-2xl rotate-6 animate-float" style={{ animationDelay: '3s' }}>✏️</div>
+        <div className="absolute bottom-40 right-4 text-2xl -rotate-12 animate-float" style={{ animationDelay: '2s' }}>🖍️</div>
+        <div className="absolute bottom-20 left-6 text-xl rotate-12 animate-float" style={{ animationDelay: '4s' }}>🎨</div>
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
@@ -830,7 +840,8 @@ export default function DrawingStudio() {
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate('/dashboard')}
-          className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full bg-white/95 text-purple-700 font-black text-sm shadow-xl shadow-purple-950/15 hover:bg-white transition-all"
+          className="inline-flex items-center gap-2 mb-5 px-4 py-2 rounded-full font-black text-sm transition-all"
+          style={{ color: '#78350f', fontFamily: 'var(--font-nunito)' }}
         >
           <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
         </motion.button>
@@ -838,310 +849,107 @@ export default function DrawingStudio() {
         <motion.section
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-5 rounded-[2rem] p-5 sm:p-6 bg-white/18 border border-white/35 backdrop-blur-2xl shadow-2xl shadow-purple-950/20"
+          className="mb-6"
         >
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-4 min-w-0">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[1.7rem] bg-gradient-to-br from-yellow-300 via-pink-400 to-purple-500 flex items-center justify-center text-4xl sm:text-5xl shadow-xl ring-4 ring-white/40 flex-shrink-0">🎨</div>
+              <div
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl flex-shrink-0 relative"
+                style={{
+                  background: 'linear-gradient(135deg, #92400e 0%, #78350f 100%)',
+                  boxShadow: '0 6px 14px rgba(120, 60, 20, 0.35), inset 0 2px 4px rgba(255,220,180,0.25), inset 0 -3px 6px rgba(0,0,0,0.3)',
+                  border: '3px solid #5c3a1e',
+                }}
+              >
+                <span className="drop-shadow-md">🎨</span>
+              </div>
               <div className="min-w-0">
-                <p className="text-white/80 text-xs font-black uppercase tracking-[0.22em] mb-1">✨ Creative Studio</p>
-                <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight drop-shadow-lg">Studio Lukisan</h1>
-                <p className="text-white/85 text-sm font-semibold mt-1">Lukis bebas, surih huruf, atau warnakan gambar comel — semua dalam satu tempat.</p>
+                <p className="text-amber-700 text-xs font-black uppercase tracking-[0.22em] mb-1">✨ Creative Studio</p>
+                <h1 className="text-3xl sm:text-4xl font-black leading-tight" style={{ color: '#5c3a1e' }}>Studio Lukisan</h1>
+                <p className="text-amber-800/80 text-sm font-semibold mt-1 max-w-md">Lukis bebas, surih huruf, atau warnakan gambar comel — semua dalam satu tempat.</p>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-2">
-              <div className="rounded-2xl bg-white px-4 py-2.5 shadow-lg">
-                <p className="text-purple-600 font-black text-base leading-tight">{mode === 'draw' ? '🎨 Lukis Bebas' : mode === 'trace' ? '✏️ Tracing' : '🖍️ Mewarna'}</p>
-                <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Mode Aktif</p>
-              </div>
-              <div className="rounded-2xl bg-white/25 border border-white/40 px-4 py-2.5">
-                <p className="text-white font-black text-base leading-tight">{stickerMode ? `${stickerMode} Sticker` : tool.emoji + ' ' + tool.label}</p>
-                <p className="text-white/70 text-[10px] font-bold uppercase tracking-wider">Alat</p>
-              </div>
-              <div className="rounded-2xl bg-white/25 border border-white/40 px-4 py-2.5">
-                <p className="text-white font-black text-base leading-tight">{history.length} <span className="text-xs">langkah</span></p>
-                <p className="text-white/70 text-[10px] font-bold uppercase tracking-wider">Boleh Undo</p>
-              </div>
+              {[
+                { top: mode === 'draw' ? 'Lukis Bebas' : mode === 'trace' ? 'Tracing' : 'Mewarna', bottom: 'MODE AKTIF', bg: '#fef3c7', border: '#f59e0b' },
+                { top: stickerMode ? `${stickerMode} Sticker` : tool.label, bottom: 'ALAT', bg: '#fce7f3', border: '#ec4899' },
+                { top: `${history.length} langkah`, bottom: 'BOLEH UNDO', bg: '#e5e7eb', border: '#9ca3af' },
+              ].map((badge, i) => (
+                <div
+                  key={i}
+                  className="px-3 py-2 rounded-full text-center min-w-[80px]"
+                  style={{
+                    backgroundColor: badge.bg,
+                    border: `2.5px solid ${badge.border}`,
+                    boxShadow: '0 3px 8px rgba(120, 80, 40, 0.18), inset 0 1px 2px rgba(255,255,255,0.5)',
+                  }}
+                >
+                  <p className="font-black text-xs leading-tight" style={{ color: '#5c3a1e' }}>{badge.top}</p>
+                  <p className="text-[9px] font-black uppercase tracking-wider mt-0.5" style={{ color: badge.border }}>{badge.bottom}</p>
+                </div>
+              ))}
             </div>
           </div>
         </motion.section>
 
-        <div className="grid lg:grid-cols-[360px_1fr] gap-5 items-start">
-          <motion.aside
-            initial={{ opacity: 0, x: -18 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.05 }}
-            className="space-y-4 lg:sticky lg:top-28 order-2 lg:order-1"
-          >
-            <section
-              className="relative isolate overflow-hidden rounded-[2.5rem] p-4 bg-white/20 border border-white/35 backdrop-blur-2xl shadow-2xl shadow-purple-950/20"
-              style={{
-                borderRadius: '2.5rem',
-                clipPath: 'inset(0 round 2.5rem)',
-                WebkitMaskImage: '-webkit-radial-gradient(white, black)',
-              }}
-            >
-              <div className="absolute -top-10 -right-8 w-28 h-28 bg-yellow-200/25 rounded-full blur-2xl" />
-              <div className="absolute -bottom-12 -left-8 w-32 h-32 bg-pink-300/25 rounded-full blur-2xl" />
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-11 h-11 rounded-2xl bg-white/25 border border-white/30 flex items-center justify-center text-2xl shadow-inner">✨</div>
-                  <div>
-                    <p className="text-white/60 text-[11px] font-black uppercase tracking-[0.2em]">Aktiviti kreatif</p>
-                    <h2 className="text-white font-black text-lg leading-tight">Pilih aktiviti</h2>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 p-1.5 rounded-[1.5rem] bg-white/14 border border-white/20 shadow-inner">
-                  {MODES.map(m => (
-                    <motion.button
-                      key={m.id}
-                      whileTap={{ scale: 0.94 }}
-                      onClick={() => setMode(m.id)}
-                      className={`min-h-[4.2rem] px-2 py-3 rounded-[1.15rem] font-black text-xs sm:text-sm transition-all ${mode === m.id ? 'bg-white text-purple-600 shadow-xl shadow-purple-950/15 ring-2 ring-white/70' : 'text-white/90 hover:bg-white/18'}`}
-                    >
-                      <span className="block leading-tight">{m.label}</span>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            <AnimatePresence mode="wait">
-              {mode === 'trace' ? (
-                <motion.section
-                  key="trace-panel"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="rounded-[2rem] p-4 bg-white/18 border border-white/35 backdrop-blur-2xl shadow-xl shadow-purple-950/15"
-                >
-                  <div className="flex items-center justify-between gap-3 mb-3">
-                    <div>
-                      <p className="text-white/70 text-xs font-black uppercase tracking-wider">Tracing</p>
-                      <h2 className="text-white font-black text-lg">{selectedShape.label}</h2>
-                    </div>
-                    <div className="w-12 h-12 rounded-2xl bg-white/25 border border-white/25 flex items-center justify-center text-2xl">{selectedShape.letter}</div>
-                  </div>
-
-                  <p className="text-white/75 text-xs font-bold mb-2">Kategori</p>
-                  <div className="grid grid-cols-2 gap-2 mb-4">
-                    {TRACING_CATEGORIES.map(category => (
-                      <motion.button
-                        key={category.id}
-                        whileTap={{ scale: 0.92 }}
-                        onClick={() => {
-                          setSelectedTracingCategory(category.id);
-                          setSelectedShape(category.shapes[0]);
-                        }}
-                        className={`px-3 py-2.5 rounded-2xl font-black text-xs transition-all ${selectedTracingCategory === category.id ? 'bg-white text-purple-600 shadow-lg' : 'bg-white/15 text-white border border-white/20'}`}
-                      >
-                        {category.label}
-                      </motion.button>
-                    ))}
-                  </div>
-
-                  <p className="text-white/75 text-xs font-bold mb-2">Item latihan</p>
-                  <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-2 pr-1">
-                    {tracingShapes.map(s => (
-                      <motion.button
-                        key={s.label}
-                        whileTap={{ scale: 0.92 }}
-                        onClick={() => setSelectedShape(s)}
-                        className={`px-3 py-2.5 rounded-2xl font-bold text-xs transition-all ${selectedShape.label === s.label ? 'bg-white text-purple-600 shadow-lg' : 'bg-white/15 text-white border border-white/20'}`}
-                      >
-                        {s.label}
-                      </motion.button>
-                    ))}
-                  </div>
-
-                  <div className="mt-4 rounded-2xl bg-white/12 border border-white/18 p-3">
-                    {tracingDone ? (
-                      <div className="text-center">
-                        <p className="text-white font-black text-base">{tracingAccuracy >= 70 ? `🌟 Hebat! ${tracingAccuracy}%` : `💪 Cuba lagi! ${tracingAccuracy}%`}</p>
-                        <button onClick={resetTracing} className="mt-2 px-4 py-2 bg-white text-purple-600 rounded-full text-xs font-black shadow">Reset Tracing</button>
-                      </div>
-                    ) : (
-                      <p className="text-white/75 text-xs font-semibold">📝 Ikuti laluan putus-putus. Progress: {userStrokes.length}/{selectedShape.strokes.length} strok.</p>
-                    )}
-                  </div>
-                </motion.section>
-              ) : (
-                <motion.section
-                  key="draw-panel"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="rounded-[2rem] p-4 bg-white/18 border border-white/35 backdrop-blur-2xl shadow-xl shadow-purple-950/15"
-                >
-                  {mode === 'color' && (
-                    <div className="mb-4">
-                      <div className="flex items-center justify-between gap-3 mb-3">
-                        <div>
-                          <p className="text-white/70 text-xs font-black uppercase tracking-wider">Aktiviti mewarna</p>
-                          <h2 className="text-white font-black text-lg">{selectedColoringPage.label}</h2>
-                        </div>
-                        <div className="w-12 h-12 rounded-2xl bg-white/25 border border-white/25 flex items-center justify-center text-2xl">{selectedColoringPage.emoji}</div>
-                      </div>
-                      <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-2 pr-1">
-                        {COLORING_PAGES.map(page => (
-                          <motion.button
-                            key={page.id}
-                            whileTap={{ scale: 0.92 }}
-                            onClick={() => setSelectedColoringPage(page)}
-                            className={`px-3 py-2.5 rounded-2xl font-bold text-xs transition-all ${selectedColoringPage.id === page.id ? 'bg-white text-purple-600 shadow-lg' : 'bg-white/15 text-white border border-white/20'}`}
-                          >
-                            {page.label}
-                          </motion.button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-3">{mode === 'color' ? 'Alat mewarna' : 'Alat lukisan'}</p>
-                  <div className="grid grid-cols-2 gap-2 mb-4">
-                    {TOOLS.map(t => (
-                      <motion.button
-                        key={t.id}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => { setTool(t); setStickerMode(null); }}
-                        className={`flex items-center gap-3 px-3 py-3 rounded-2xl transition-all ${tool.id === t.id && !stickerMode ? 'bg-white text-purple-600 shadow-lg ring-2 ring-yellow-300' : 'bg-white/15 text-white border border-white/20'}`}
-                      >
-                        <span className="text-2xl">{t.emoji}</span>
-                        <span className="text-xs font-black text-left leading-tight">
-                          {t.label}
-                          <span className="block text-[10px] font-bold opacity-70">{t.hint}</span>
-                        </span>
-                      </motion.button>
-                    ))}
-                  </div>
-
-                  <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-3">Saiz brush</p>
-                  <div className="grid grid-cols-4 gap-2 mb-4">
-                    {BRUSH_SIZES.map(s => (
-                      <motion.button
-                        key={s.id}
-                        whileTap={{ scale: 0.88 }}
-                        onClick={() => setBrushSize(s)}
-                        className={`flex flex-col items-center justify-center gap-1 py-2.5 rounded-2xl transition-all ${brushSize.id === s.id ? 'bg-white shadow-lg ring-2 ring-yellow-300' : 'bg-white/15 border border-white/20'}`}
-                        title={s.label}
-                      >
-                        <span className="rounded-full" style={{ width: s.dot, height: s.dot, backgroundColor: brushSize.id === s.id ? '#7c3aed' : '#fff' }} />
-                        <span className={`text-[10px] font-black ${brushSize.id === s.id ? 'text-purple-700' : 'text-white/80'}`}>{s.label}</span>
-                      </motion.button>
-                    ))}
-                  </div>
-
-                  {tool.id !== 'eraser' && (
-                    <>
-                      <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-3">Palet warna</p>
-                      <div className="grid grid-cols-6 gap-2">
-                        {COLORS.map(c => (
-                          <motion.button
-                            key={c}
-                            whileTap={{ scale: 0.85 }}
-                            onClick={() => { setColor(c); setStickerMode(null); }}
-                            className="h-11 rounded-2xl border-4 transition-all"
-                            style={{
-                              backgroundColor: c,
-                              borderColor: color === c ? '#ffffff' : 'rgba(255,255,255,0.15)',
-                              boxShadow: color === c ? '0 0 0 3px rgba(253,224,71,0.9), 0 4px 14px rgba(0,0,0,0.2)' : '0 1px 4px rgba(0,0,0,0.16)',
-                            }}
-                            aria-label={`Warna ${c}`}
-                          />
-                        ))}
-                      </div>
-                      <div className="flex items-center gap-3 mt-3 rounded-2xl bg-white/12 border border-white/18 p-3">
-                        <input type="color" value={color} onChange={e => { setColor(e.target.value); setStickerMode(null); }} className="w-11 h-11 rounded-2xl cursor-pointer border-2 border-white/30" />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-white font-black text-sm">Warna custom</p>
-                          <p className="text-white/55 text-xs font-semibold">Pilih warna lain ikut kreativiti anak.</p>
-                        </div>
-                        <div className="w-10 h-10 rounded-2xl border-2 border-white/40" style={{ backgroundColor: color }} />
-                      </div>
-
-                      <p className="text-white/70 text-xs font-black uppercase tracking-wider mt-4 mb-2">Tampal Sticker</p>
-                      <p className="text-white/55 text-[11px] font-semibold mb-2">Tekan satu sticker, kemudian tap kanvas untuk tampal.</p>
-                      <div className="grid grid-cols-6 gap-2">
-                        {STICKERS.map(s => (
-                          <motion.button
-                            key={s}
-                            whileTap={{ scale: 0.85 }}
-                            onClick={() => setStickerMode(stickerMode === s ? null : s)}
-                            className={`h-11 rounded-2xl text-2xl transition-all ${stickerMode === s ? 'bg-yellow-300 ring-2 ring-white shadow-lg' : 'bg-white/15 border border-white/20'}`}
-                          >
-                            {s}
-                          </motion.button>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </motion.section>
-              )}
-            </AnimatePresence>
-
-            <section className="rounded-[2rem] p-4 bg-gradient-to-br from-yellow-300/30 to-pink-300/20 border border-white/40 backdrop-blur-2xl shadow-xl">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-2xl">💡</span>
-                <p className="text-white text-xs font-black uppercase tracking-wider">Panduan Untuk Anak</p>
-              </div>
-              <p className="text-white text-sm font-bold leading-relaxed">
-                {mode === 'draw' ? '🎨 Pilih warna, pilih saiz brush, kemudian lukis di kanvas putih. Cuba tampal sticker untuk hiasan!' : mode === 'trace' ? '✏️ Ikuti garisan putus-putus dari awal ke hujung. Selesaikan semua strok untuk dapat bintang!' : '🖍️ Pilih gambar, pilih warna, dan warnakan ruang kosong. Tiada salah — bebas berkreatif!'}
-              </p>
-              <p className="text-white/70 text-[11px] font-bold mt-2 pt-2 border-t border-white/20">
-                Untuk ibu bapa: aktiviti ini melatih kawalan motor halus & kreativiti.
-              </p>
-            </section>
-          </motion.aside>
-
+        <div className="space-y-5">
+          {/* CANVAS — wood frame */}
           <motion.section
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="order-1 lg:order-2 rounded-[2rem] overflow-hidden bg-white/18 border border-white/35 backdrop-blur-2xl shadow-2xl shadow-purple-950/25"
           >
-            <div className="flex items-center justify-between gap-3 p-4 border-b border-white/15">
-              <div className="min-w-0">
-                <p className="text-white/60 text-xs font-black uppercase tracking-wider">Kanvas aktif</p>
-                <h2 className="text-white font-black text-lg truncate">{mode === 'draw' ? `${tool.emoji} ${tool.label}` : mode === 'trace' ? `✏️ ${selectedShape.label}` : `🖍️ ${selectedColoringPage.label}`}</h2>
-              </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <button onClick={toggleSound} className="p-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white transition-all" title={soundOn ? 'Matikan bunyi' : 'Hidupkan bunyi'}>
-                  {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-                </button>
-                <button onClick={() => { setGalleryOpen(true); playButtonTap(); }} className="p-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white transition-all" title="Kerja Saya">
-                  <Images className="w-4 h-4" />
-                </button>
-                <button onClick={undo} disabled={history.length === 0} className="p-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white disabled:opacity-40 transition-all" title="Undo">
-                  <Undo2 className="w-4 h-4" />
-                </button>
-                <button onClick={handleClear} className="p-2.5 rounded-2xl bg-red-500/35 hover:bg-red-500/50 text-white transition-all" title="Kosongkan">
-                  <Trash2 className="w-4 h-4" />
-                </button>
-                <button onClick={downloadCanvas} className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white text-purple-600 font-black shadow-lg transition-all" title="Simpan">
-                  <Download className="w-4 h-4" /> Simpan
-                </button>
-                <button onClick={() => setIsFullscreen(true)} className="p-2.5 rounded-2xl bg-black/25 hover:bg-black/40 text-white transition-all" title="Fullscreen">
-                  <Maximize2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            <div className="p-3 sm:p-5">
-              <div className="relative rounded-[1.75rem] overflow-hidden bg-white shadow-2xl shadow-purple-950/20 ring-4 ring-white/25">
-                <div className="absolute left-3 top-3 z-10 flex items-center gap-2 flex-wrap">
-                  <div className="px-3 py-1.5 rounded-full bg-white text-purple-700 text-xs font-black shadow-lg flex items-center gap-1.5">
+            <WoodFrame
+              title={
+                <div>
+                  <p className="text-amber-100/70 text-[10px] font-black uppercase tracking-[0.22em]">Kanvas Aktif</p>
+                  <p className="text-amber-50 font-black text-base truncate" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                    {mode === 'draw' ? `${tool.emoji} ${tool.label}` : mode === 'trace' ? `✏️ ${selectedShape.label}` : `🖍️ ${selectedColoringPage.label}`}
+                  </p>
+                </div>
+              }
+              headerActions={
+                <>
+                  <button onClick={toggleSound} className="p-2 rounded-full bg-amber-100/15 hover:bg-amber-100/30 text-amber-50 transition-all" title={soundOn ? 'Matikan bunyi' : 'Hidupkan bunyi'}>
+                    {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                  </button>
+                  <button onClick={() => { setGalleryOpen(true); playButtonTap(); }} className="p-2 rounded-full bg-amber-100/15 hover:bg-amber-100/30 text-amber-50 transition-all" title="Kerja Saya">
+                    <Images className="w-4 h-4" />
+                  </button>
+                  <button onClick={undo} disabled={history.length === 0} className="p-2 rounded-full bg-amber-100/15 hover:bg-amber-100/30 text-amber-50 disabled:opacity-40 transition-all" title="Undo">
+                    <Undo2 className="w-4 h-4" />
+                  </button>
+                  <button onClick={handleClear} className="p-2 rounded-full bg-red-500/40 hover:bg-red-500/60 text-amber-50 transition-all" title="Kosongkan">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => setIsFullscreen(true)} className="p-2 rounded-full bg-amber-900/40 hover:bg-amber-900/60 text-amber-50 transition-all" title="Fullscreen">
+                    <Maximize2 className="w-4 h-4" />
+                  </button>
+                </>
+              }
+            >
+              <div
+                className="relative rounded-2xl overflow-hidden"
+                style={{
+                  border: '4px solid #f97316',
+                  boxShadow: 'inset 0 0 0 2px #fef3c7, 0 2px 8px rgba(0,0,0,0.2)',
+                }}
+              >
+                <div className="absolute left-3 top-3 z-10 flex items-center gap-2 flex-wrap pointer-events-none">
+                  <div className="px-3 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5"
+                       style={{ backgroundColor: '#fef9e7', color: '#5c3a1e', border: '2px solid #d4a574', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
                     {stickerMode ? <span>Sticker {stickerMode}</span> : (
                       <>
-                        <span className="inline-block rounded-full" style={{ width: 12, height: 12, backgroundColor: tool.id === 'eraser' ? '#fff9f0' : color, border: tool.id === 'eraser' ? '2px dashed #cbd5e1' : '2px solid rgba(0,0,0,0.1)' }} />
+                        <span className="inline-block rounded-full" style={{ width: 12, height: 12, backgroundColor: tool.id === 'eraser' ? '#fff9f0' : color, border: tool.id === 'eraser' ? '2px dashed #cbd5e1' : '2px solid rgba(0,0,0,0.2)' }} />
                         <span>{brushSize.label}</span>
                       </>
                     )}
                   </div>
                   {mode === 'trace' && (
                     <>
-                      <div className="px-3 py-1.5 rounded-full bg-purple-600 text-white text-xs font-black shadow-lg">{userStrokes.length}/{selectedShape.strokes.length} strok</div>
-                      <div className="px-3 py-1.5 rounded-full bg-white text-slate-700 text-xs font-black shadow-lg flex items-center gap-1.5">
+                      <div className="px-3 py-1.5 rounded-full text-xs font-black" style={{ backgroundColor: '#92400e', color: '#fef3c7' }}>{userStrokes.length}/{selectedShape.strokes.length} strok</div>
+                      <div className="px-3 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5" style={{ backgroundColor: '#fef9e7', color: '#5c3a1e', border: '2px solid #d4a574' }}>
                         <span className="inline-block w-3 h-3 rounded-full bg-green-500 ring-2 ring-white" /> Mula
                         <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white ml-1" /> Akhir
                       </div>
@@ -1158,20 +966,313 @@ export default function DrawingStudio() {
                   style={{ backgroundColor: '#fff9f0', cursor: stickerMode ? 'pointer' : 'crosshair' }}
                 />
               </div>
-            </div>
 
-            <div className="grid grid-cols-3 gap-2 p-4 pt-0 sm:hidden">
-              <motion.button whileTap={{ scale: 0.92 }} onClick={undo} disabled={history.length === 0} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-white text-sm disabled:opacity-40 bg-white/15 border border-white/20">
+              {/* Crayon tool decorations below canvas */}
+              <div className="flex items-end justify-center gap-3 sm:gap-5 px-4 pt-3 pb-1 text-3xl sm:text-4xl pointer-events-none select-none">
+                <span className="rotate-[-12deg]">✏️</span>
+                <span className="rotate-[8deg]">🖌️</span>
+                <span className="rotate-[-6deg]">🖍️</span>
+                <span className="rotate-[14deg]">🖍️</span>
+                <span className="rotate-[-4deg]">🧽</span>
+              </div>
+            </WoodFrame>
+
+            {/* Mobile actions row */}
+            <div className="grid grid-cols-3 gap-2 mt-3 sm:hidden">
+              <button onClick={undo} disabled={history.length === 0} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm disabled:opacity-40"
+                style={{ backgroundColor: '#fef9e7', color: '#5c3a1e', border: '2px solid #d4a574', boxShadow: '0 2px 4px rgba(120,80,40,0.2)' }}>
                 <Undo2 className="w-4 h-4" /> Undo
-              </motion.button>
-              <motion.button whileTap={{ scale: 0.92 }} onClick={handleClear} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-white text-sm bg-red-500/35 border border-red-300/30">
+              </button>
+              <button onClick={handleClear} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm"
+                style={{ backgroundColor: '#fecaca', color: '#7f1d1d', border: '2px solid #ef4444', boxShadow: '0 2px 4px rgba(120,80,40,0.2)' }}>
                 <Trash2 className="w-4 h-4" /> Kosong
-              </motion.button>
-              <motion.button whileTap={{ scale: 0.92 }} onClick={downloadCanvas} className="flex items-center justify-center gap-2 py-3 bg-white text-purple-600 rounded-2xl font-black shadow-lg text-sm">
+              </button>
+              <WoodButton onClick={downloadCanvas} className="!py-3 flex items-center justify-center gap-2">
                 <Download className="w-4 h-4" /> Simpan
-              </motion.button>
+              </WoodButton>
             </div>
           </motion.section>
+
+          {/* AKTIVITI KREATIF — sticky-note panel */}
+          <motion.section
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            <StickyNotePanel>
+              <DoodleLabel accent="#92400e">AKTIVITI KREATIF — Pilih aktiviti</DoodleLabel>
+              <div className="grid grid-cols-3 gap-3">
+                {MODES.map((m, i) => {
+                  const icons = { draw: '🎨', trace: '✏️', color: '🖍️' };
+                  const labelMap = { draw: 'Lukis Bebas', trace: 'Tracing', color: 'Mewarna' };
+                  const labelText = labelMap[m.id] || m.label;
+                  const rotations = ['-1.5deg', '0.8deg', '-0.5deg'];
+                  return (
+                    <motion.button
+                      key={m.id}
+                      whileTap={{ scale: 0.94 }}
+                      onClick={() => setMode(m.id)}
+                      className="relative p-3 transition-all"
+                      style={{
+                        transform: `rotate(${rotations[i]})`,
+                        backgroundColor: '#fefce8',
+                        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='nn'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.65 0 0 0 0 0.5 0 0 0 0 0.25 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23nn)'/></svg>")`,
+                        border: mode === m.id ? '3px solid #f97316' : '2px solid #d4a574',
+                        borderRadius: '8px',
+                        boxShadow: mode === m.id
+                          ? '0 6px 14px rgba(249, 115, 22, 0.3), inset 0 0 0 2px rgba(254, 215, 170, 0.4)'
+                          : '0 3px 8px rgba(120, 80, 40, 0.2)',
+                      }}
+                    >
+                      <div className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#dc2626', boxShadow: '0 1px 2px rgba(0,0,0,0.3)' }} />
+                      <div className="text-4xl mb-1 leading-none">{icons[m.id]}</div>
+                      <p className="font-black text-sm" style={{ color: '#5c3a1e', fontFamily: 'cursive, var(--font-nunito)' }}>{labelText}</p>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </StickyNotePanel>
+          </motion.section>
+
+          <AnimatePresence mode="wait">
+              {mode === 'trace' ? (
+                <motion.section
+                  key="trace-panel"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                >
+                <StickyNotePanel>
+                  <DoodleLabel accent="#92400e">TRACING — {selectedShape.label}</DoodleLabel>
+
+                  <p className="text-amber-800 text-xs font-black uppercase tracking-wider mb-2">Kategori</p>
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    {TRACING_CATEGORIES.map(category => (
+                      <motion.button
+                        key={category.id}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={() => {
+                          setSelectedTracingCategory(category.id);
+                          setSelectedShape(category.shapes[0]);
+                        }}
+                        className="px-3 py-2.5 rounded-xl font-black text-xs transition-all"
+                        style={{
+                          backgroundColor: selectedTracingCategory === category.id ? '#fef3c7' : '#fffbeb',
+                          color: '#5c3a1e',
+                          border: selectedTracingCategory === category.id ? '2.5px solid #f97316' : '2px solid #d4a574',
+                          boxShadow: selectedTracingCategory === category.id ? '0 3px 6px rgba(249,115,22,0.25)' : '0 2px 3px rgba(120,80,40,0.15)',
+                        }}
+                      >
+                        {category.label}
+                      </motion.button>
+                    ))}
+                  </div>
+
+                  <p className="text-amber-800 text-xs font-black uppercase tracking-wider mb-2">Item latihan</p>
+                  <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-2 pr-1">
+                    {tracingShapes.map(s => (
+                      <motion.button
+                        key={s.label}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={() => setSelectedShape(s)}
+                        className="px-3 py-2.5 rounded-xl font-bold text-xs transition-all"
+                        style={{
+                          backgroundColor: selectedShape.label === s.label ? '#fef3c7' : '#fffbeb',
+                          color: '#5c3a1e',
+                          border: selectedShape.label === s.label ? '2.5px solid #f97316' : '2px solid #d4a574',
+                        }}
+                      >
+                        {s.label}
+                      </motion.button>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 rounded-xl p-3" style={{ backgroundColor: '#fffbeb', border: '2px dashed #d4a574' }}>
+                    {tracingDone ? (
+                      <div className="text-center">
+                        <p className="font-black text-base" style={{ color: '#5c3a1e' }}>{tracingAccuracy >= 70 ? `🌟 Hebat! ${tracingAccuracy}%` : `💪 Cuba lagi! ${tracingAccuracy}%`}</p>
+                        <button onClick={resetTracing} className="mt-2 px-4 py-2 rounded-full text-xs font-black" style={{ backgroundColor: '#f97316', color: 'white' }}>Reset Tracing</button>
+                      </div>
+                    ) : (
+                      <p className="text-xs font-bold" style={{ color: '#78350f' }}>📝 Ikuti laluan putus-putus. Progress: {userStrokes.length}/{selectedShape.strokes.length} strok.</p>
+                    )}
+                  </div>
+                </StickyNotePanel>
+                </motion.section>
+              ) : (
+                <motion.section
+                  key="draw-panel"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="space-y-4"
+                >
+                  {mode === 'color' && (
+                    <StickyNotePanel>
+                      <DoodleLabel accent="#92400e">AKTIVITI MEWARNA — {selectedColoringPage.label}</DoodleLabel>
+                      <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-2 pr-1">
+                        {COLORING_PAGES.map(page => (
+                          <motion.button
+                            key={page.id}
+                            whileTap={{ scale: 0.92 }}
+                            onClick={() => setSelectedColoringPage(page)}
+                            className="px-3 py-2.5 rounded-xl font-bold text-xs transition-all"
+                            style={{
+                              backgroundColor: selectedColoringPage.id === page.id ? '#fef3c7' : '#fffbeb',
+                              color: '#5c3a1e',
+                              border: selectedColoringPage.id === page.id ? '2.5px solid #f97316' : '2px solid #d4a574',
+                            }}
+                          >
+                            {page.label}
+                          </motion.button>
+                        ))}
+                      </div>
+                    </StickyNotePanel>
+                  )}
+
+                  {/* TOOLS + BRUSH SIZE + SAVE in one row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3">
+                    {/* ALAT LUKISAN */}
+                    <StickyNotePanel rotate={-0.5}>
+                      <DoodleLabel accent="#92400e">{mode === 'color' ? 'ALAT MEWARNA' : 'ALAT LUKISAN'}</DoodleLabel>
+                      <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5">
+                        {TOOLS.map(t => (
+                          <motion.button
+                            key={t.id}
+                            whileTap={{ scale: 0.88 }}
+                            onClick={() => { setTool(t); setStickerMode(null); }}
+                            className="aspect-square rounded-xl flex items-center justify-center text-2xl transition-all relative"
+                            style={{
+                              backgroundColor: tool.id === t.id && !stickerMode ? '#fef3c7' : 'transparent',
+                              border: tool.id === t.id && !stickerMode ? '2.5px solid #f97316' : '2px dashed transparent',
+                            }}
+                            title={t.label}
+                          >
+                            {t.emoji}
+                          </motion.button>
+                        ))}
+                      </div>
+                    </StickyNotePanel>
+
+                    {/* SAIZ BRUSH */}
+                    <StickyNotePanel rotate={0.5}>
+                      <DoodleLabel accent="#92400e">SAIZ BRUSH</DoodleLabel>
+                      <div className="grid grid-cols-4 gap-1">
+                        {BRUSH_SIZES.map(s => (
+                          <motion.button
+                            key={s.id}
+                            whileTap={{ scale: 0.88 }}
+                            onClick={() => setBrushSize(s)}
+                            className="flex flex-col items-center justify-center gap-1 py-2 rounded-xl transition-all"
+                            style={{
+                              backgroundColor: brushSize.id === s.id ? '#fef3c7' : 'transparent',
+                              border: brushSize.id === s.id ? '2.5px solid #f97316' : '2px solid transparent',
+                            }}
+                          >
+                            <span className="rounded-full border-2 border-amber-900" style={{ width: s.dot, height: s.dot, backgroundColor: brushSize.id === s.id ? '#f97316' : 'transparent' }} />
+                            <span className="text-[9px] font-black" style={{ color: '#5c3a1e' }}>{s.label}</span>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </StickyNotePanel>
+
+                    {/* SAVE BUTTON */}
+                    <div className="hidden sm:flex items-center justify-center">
+                      <WoodButton onClick={downloadCanvas} className="!px-6 !py-4 text-base">
+                        <span className="flex items-center gap-2"><Download className="w-4 h-4" /> Simpan</span>
+                      </WoodButton>
+                    </div>
+                  </div>
+
+                  {tool.id !== 'eraser' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {/* PALET WARNA */}
+                      <StickyNotePanel rotate={-0.5}>
+                        <DoodleLabel accent="#92400e">PALET WARNA</DoodleLabel>
+                        <div className="grid grid-cols-6 gap-2">
+                          {COLORS.map(c => (
+                            <motion.button
+                              key={c}
+                              whileTap={{ scale: 0.85 }}
+                              onClick={() => { setColor(c); setStickerMode(null); }}
+                              className="aspect-square rounded-full transition-all"
+                              style={{
+                                backgroundColor: c,
+                                border: color === c ? '3px solid #f97316' : '2px solid #78350f',
+                                boxShadow: color === c
+                                  ? '0 0 0 2px #fef3c7, 0 3px 8px rgba(249,115,22,0.4)'
+                                  : '0 2px 4px rgba(120,80,40,0.25), inset 0 -2px 4px rgba(0,0,0,0.2)',
+                              }}
+                              aria-label={`Warna ${c}`}
+                            />
+                          ))}
+                        </div>
+                        <div
+                          className="flex items-center gap-2 mt-3 rounded-lg p-2"
+                          style={{
+                            backgroundColor: '#fef9e7',
+                            border: '2px solid #d4a574',
+                            boxShadow: 'inset 0 1px 2px rgba(120,80,40,0.1)',
+                          }}
+                        >
+                          <input type="color" value={color} onChange={e => { setColor(e.target.value); setStickerMode(null); }} className="w-8 h-8 rounded-lg cursor-pointer border-2" style={{ borderColor: '#78350f' }} />
+                          <div className="flex-1 min-w-0">
+                            <p className="font-black text-xs" style={{ color: '#5c3a1e' }}>Warna custom</p>
+                            <p className="text-[10px] font-bold" style={{ color: '#92400e' }}>Pilih warna lain ikut kreativiti anak</p>
+                          </div>
+                          <div className="w-7 h-7 rounded-full border-2" style={{ backgroundColor: color, borderColor: '#78350f' }} />
+                        </div>
+                      </StickyNotePanel>
+
+                      {/* TAMPAL STICKER */}
+                      <StickyNotePanel rotate={0.5}>
+                        <DoodleLabel accent="#92400e">TAMPAL STICKER</DoodleLabel>
+                        <p className="text-[10px] font-bold mb-2" style={{ color: '#92400e' }}>Tekan satu sticker, kemudian tap canvas untuk tampal!</p>
+                        <div className="grid grid-cols-6 gap-2">
+                          {STICKERS.map(s => (
+                            <motion.button
+                              key={s}
+                              whileTap={{ scale: 0.85 }}
+                              onClick={() => setStickerMode(stickerMode === s ? null : s)}
+                              className="aspect-square rounded-xl text-2xl transition-all flex items-center justify-center"
+                              style={{
+                                backgroundColor: stickerMode === s ? '#fef3c7' : 'transparent',
+                                border: stickerMode === s ? '2.5px solid #f97316' : '2px dashed #d4a574',
+                                boxShadow: stickerMode === s ? '0 3px 6px rgba(249,115,22,0.3)' : 'none',
+                              }}
+                            >
+                              {s}
+                            </motion.button>
+                          ))}
+                        </div>
+                      </StickyNotePanel>
+                    </div>
+                  )}
+                </motion.section>
+              )}
+            </AnimatePresence>
+
+            {/* PANDUAN UNTUK ANAK — parchment scroll */}
+            <motion.section
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+            >
+              <ParchmentScroll>
+                <div className="flex items-start gap-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-black text-base mb-1 uppercase tracking-wider" style={{ color: '#5c3a1e' }}>Panduan Untuk Anak</h3>
+                    <p className="text-sm font-bold leading-relaxed" style={{ color: '#78350f' }}>
+                      {mode === 'draw' ? '😊 Pilih warna, pilih saiz brush, kemudian lukis di atas kanvas putih. Cuba tampal sticker untuk hiasan!' : mode === 'trace' ? '✏️ Ikuti garisan putus-putus dari awal ke hujung. Selesaikan semua strok untuk dapat bintang!' : '🖍️ Pilih gambar, pilih warna, dan warnakan ruang kosong. Tiada salah — bebas berkreatif!'}
+                    </p>
+                    <p className="text-[11px] font-bold mt-2 pt-2" style={{ color: '#92400e', borderTop: '1px dashed #c89968' }}>
+                      Untuk ibu bapa: aktiviti ini melatih kawalan motor halus &amp; kreativiti.
+                    </p>
+                  </div>
+                  <div className="text-3xl flex-shrink-0">💡</div>
+                </div>
+              </ParchmentScroll>
+            </motion.section>
         </div>
 
         <SparkleTrail enabled={isDrawing && !stickerMode && mode !== 'trace'} />
