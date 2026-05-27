@@ -329,24 +329,16 @@ export default function StoryKid() {
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.2 }}
-                      className="relative rounded-[1.5rem] px-4 py-3 sm:px-5 sm:py-4 mb-3 overflow-hidden"
+                      className="rounded-[1.5rem] px-4 py-3 sm:px-5 sm:py-4 mb-3"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.28) 100%)',
+                        background: 'rgba(255,255,255,0.18)',
                         backdropFilter: 'blur(28px) saturate(180%)',
                         WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-                        border: '1px solid rgba(255,255,255,0.45)',
-                        boxShadow: '0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(255,255,255,0.1)',
+                        border: '1px solid rgba(255,255,255,0.3)',
+                        boxShadow: '0 20px 50px rgba(0,0,0,0.35)',
                       }}
                     >
-                      {/* Glossy highlight shimmer di atas */}
-                      <div
-                        aria-hidden="true"
-                        className="absolute top-0 left-0 right-0 h-1/2 pointer-events-none rounded-t-[1.5rem]"
-                        style={{
-                          background: 'linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 100%)',
-                        }}
-                      />
-                      <p className="relative text-white text-base sm:text-xl font-black text-center leading-relaxed" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3)' }}>{scene.text}</p>
+                      <p className="text-white text-base sm:text-xl font-black text-center leading-relaxed" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3)' }}>{scene.text}</p>
                     </motion.div>
                     <div className="grid gap-2.5 sm:gap-3 sm:grid-cols-2">
                       {scene.choices.map((choice, idx) => (
@@ -358,7 +350,15 @@ export default function StoryKid() {
                           whileTap={{ scale: 0.96 }}
                           whileHover={{ y: -2 }}
                           onClick={() => choose(choice)}
-                          className="w-full p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black shadow-2xl shadow-purple-950/40 flex items-center justify-between gap-3 border border-white/30 hover:from-purple-600 hover:to-pink-600 transition-all text-sm sm:text-base"
+                          className="w-full p-3.5 sm:p-4 rounded-2xl text-white font-black flex items-center justify-between gap-3 transition-all text-sm sm:text-base"
+                          style={{
+                            background: 'rgba(255,255,255,0.18)',
+                            backdropFilter: 'blur(28px) saturate(180%)',
+                            WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            boxShadow: '0 20px 50px rgba(0,0,0,0.35)',
+                            textShadow: '0 2px 8px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3)',
+                          }}
                         >
                           <span className="text-left">{choice.text}</span>
                           <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-white/25 flex items-center justify-center flex-shrink-0">→</span>
