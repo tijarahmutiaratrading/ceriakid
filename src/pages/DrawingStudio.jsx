@@ -281,8 +281,9 @@ export default function DrawingStudio() {
         const dx = (w - dw) / 2;
         const dy = (h - dh) / 2;
         ctx.save();
-        // Multiply so user's coloring shows through behind the lines
-        ctx.globalCompositeOperation = 'multiply';
+        // 'darken' keeps black outlines on top but doesn't darken white/empty areas
+        // (unlike 'multiply' which can tint transparent regions when image has off-white pixels)
+        ctx.globalCompositeOperation = 'darken';
         ctx.drawImage(img, dx, dy, dw, dh);
         ctx.restore();
       };
