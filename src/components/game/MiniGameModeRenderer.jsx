@@ -271,36 +271,54 @@ function SortingMode() {
 function TileMatchMode() {
   const { reportProgress, roundData } = useGameProgress();
   const { feedback, showFeedback } = useMiniFeedback();
-  const tiles = useMemo(() => roundData?.tiles || [], [roundData]);
-  // Map: pair index → tile pair (i, i+1) are pair
+  // Shuffle jubin sekali sahaja supaya anak tak nampak pasangan bersebelahan
+  const tiles = useMemo(() => {
+    const raw = roundData?.tiles || [];
+    const withPair = raw.map((tile, idx) => ({ tile, pairId: Math.floor(idx / 2) }));
+    return [...withPair].sort(() => Math.random() - 0.5);
+  }, [roundData]);
   const [selected, setSelected] = useState([]);
   const [gone, setGone] = useState([]);
   const totalPairs = Math.floor(tiles.length / 2);
-  const pairKey = (idx) => Math.floor(idx / 2);
 
   useEffect(() => {
     reportProgress({ current: gone.length, total: totalPairs, isComplete: gone.length >= totalPairs });
   }, [gone.length, totalPairs]);
 
   const tap = (idx) => {
-    if (gone.includes(pairKey(idx)) || selected.includes(idx)) return;
+    if (gone.includes(tiles[idx].pairId) || selected.includes(idx) || selected.length === 2) return;
     const next = [...selected, idx]; setSelected(next);
     if (next.length === 2) setTimeout(() => {
-      const ok = pairKey(next[0]) === pairKey(next[1]);
-      showFeedback(ok ? 'correct' : 'wrong', ok ? 'Tile sepadan!' : 'Belum padan.');
-      if (ok) setGone(prev => [...prev, pairKey(idx)]);
+      const ok = tiles[next[0]].pairId === tiles[next[1]].pairId;
+      showFeedback(ok ? 'correct' : 'wrong', ok ? 'Pasangan sepadan!' : 'Bukan pasangan.');
+      if (ok) setGone(prev => [...prev, tiles[next[0]].pairId]);
       setSelected([]);
-    }, 500);
+    }, 600);
   };
 
   return (
     <>
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={gone.length} total={totalPairs} />
+      <div className={`${panel} text-center`}>
+        <p className="text-purple-700 font-black text-sm">Cari 2 jubin yang sepadan</p>
+        <p className="text-purple-400 text-[10px] font-bold mt-0.5">Tekan 2 jubin satu demi satu</p>
+      </div>
       <div className="grid grid-cols-2 gap-2">
-        {tiles.map((tile, idx) => (
-          <button key={idx} onClick={() => tap(idx)} className={`min-h-16 ${action} ${selected.includes(idx) ? 'ring-4 ring-yellow-400 scale-105' : ''} ${gone.includes(pairKey(idx)) ? 'opacity-25' : ''}`}>{tile}</button>
-        ))}
+        {tiles.map((t, idx) => {
+          const isSelected = selected.includes(idx);
+          const isGone = gone.includes(t.pairId);
+          return (
+            <button
+              key={idx}
+              onClick={() => tap(idx)}
+              disabled={isGone}
+              className={`min-h-16 ${action} ${isSelected ? 'ring-4 ring-yellow-400 scale-105 bg-yellow-50' : ''} ${isGone ? 'opacity-25 line-through' : ''}`}
+            >
+              {t.tile}
+            </button>
+          );
+        })}
       </div>
     </>
   );
@@ -397,6 +415,7 @@ function TracingMode() {
   const letter = letters[0];
   const totalDots = 12;
   const [marks, setMarks] = useState([]);
+  const nextDot = marks.length;
 
   useEffect(() => {
     reportProgress({ current: marks.length, total: totalDots, isComplete: marks.length >= totalDots });
@@ -406,15 +425,41 @@ function TracingMode() {
     <div className="space-y-3">
       <MiniProgress current={marks.length} total={totalDots} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-500 text-[10px] font-black uppercase mb-1">Surih ini</p>
-        <div className="rounded-2xl bg-white py-6 text-8xl font-black text-purple-700 ring-2 ring-purple-100">{letter}</div>
+        <p className="text-purple-500 text-[10px] font-black uppercase mb-1">Surih huruf ini</p>
+        <div className="rounded-2xl bg-white py-6 text-8xl font-black text-purple-700 ring-2 ring-purple-100 relative">
+          <span style={{ opacity: 0.25 }}>{letter}</span>
+          <span className="absolute inset-0 flex items-center justify-center" style={{ opacity: Math.min(1, marks.length / totalDots) }}>
+            <span className="text-purple-700">{letter}</span>
+          </span>
+        </div>
+        <p className="text-purple-600 text-xs font-black mt-2">
+          Tap titik bernombor mengikut turutan ({marks.length}/{totalDots})
+        </p>
       </div>
       <div className="grid grid-cols-6 gap-1.5">
-        {Array.from({ length: totalDots }).map((_, i) => (
-          <button key={i} onClick={() => setMarks(prev => prev.includes(i) ? prev : [...prev, i])} className={`aspect-square rounded-xl ring-2 transition-all ${marks.includes(i) ? 'bg-gradient-to-br from-yellow-300 to-orange-300 ring-orange-400 scale-110' : 'bg-white ring-purple-100'}`}>
-            {marks.includes(i) && <span className="text-lg">✓</span>}
-          </button>
-        ))}
+        {Array.from({ length: totalDots }).map((_, i) => {
+          const done = marks.includes(i);
+          const isNext = i === nextDot;
+          return (
+            <button
+              key={i}
+              onClick={() => {
+                if (i !== nextDot) return; // kena ikut turutan
+                setMarks(prev => [...prev, i]);
+              }}
+              disabled={done || !isNext}
+              className={`aspect-square rounded-xl ring-2 transition-all flex items-center justify-center font-black text-sm ${
+                done
+                  ? 'bg-gradient-to-br from-green-300 to-emerald-400 ring-green-400 text-white'
+                  : isNext
+                    ? 'bg-yellow-100 ring-yellow-400 text-orange-700 scale-110 animate-pulse'
+                    : 'bg-white ring-purple-100 text-purple-300'
+              }`}
+            >
+              {done ? '✓' : i + 1}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -457,10 +502,13 @@ function BalloonPopMode() {
             whileTap={{ scale: 0.2, rotate: 20 }}
             transition={{ repeat: Infinity, duration: 3 + i * 0.4 }}
             onClick={() => pop(item, i)}
-            className="absolute top-0 text-5xl"
+            className="absolute top-0 flex flex-col items-center"
             style={{ left: `${8 + (i * 17) % 80}%` }}
           >
-            🎈<span className="absolute inset-0 flex items-center justify-center text-sm font-black text-white pb-2 pointer-events-none drop-shadow-lg">{getItemText(item)}</span>
+            <span className="text-5xl leading-none">🎈</span>
+            <span className="-mt-7 px-2 py-0.5 rounded-full bg-white text-purple-900 text-xs font-black ring-2 ring-purple-200 shadow-sm pointer-events-none whitespace-nowrap">
+              {getItemText(item)}
+            </span>
           </motion.button>
         ))}
       </div>
@@ -838,20 +886,52 @@ function RhythmTapMode() {
   const { reportProgress, roundData } = useGameProgress();
   const items = roundData?.items || [];
   const [beat, setBeat] = useState(0);
+  const isDone = beat >= items.length;
 
   useEffect(() => {
-    reportProgress({ current: beat, total: items.length, isComplete: beat >= items.length });
-  }, [beat, items.length]);
+    reportProgress({ current: beat, total: items.length, isComplete: isDone });
+  }, [beat, items.length, isDone]);
 
   return (
     <div className="space-y-3">
       <MiniProgress current={beat} total={items.length} />
       <div className={`${panel} text-center`}>
-        <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ repeat: Infinity, duration: 0.8 }} className="text-6xl mb-2">🥁</motion.div>
-        <p className="text-purple-900 text-3xl font-black">{items[beat] || '✓'}</p>
-        <p className="text-purple-500 text-xs font-bold mt-2">Tekan butang ikut corak ({beat}/{items.length})</p>
+        <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ repeat: Infinity, duration: 0.8 }} className="text-5xl mb-2">🥁</motion.div>
+        <p className="text-purple-500 text-[10px] font-black uppercase mb-2">Baca & tap satu demi satu</p>
+
+        {/* Tunjuk semua items dengan highlight pada beat semasa */}
+        <div className="flex flex-wrap justify-center gap-2 mb-2">
+          {items.map((it, i) => (
+            <span
+              key={i}
+              className={`inline-flex items-center justify-center min-w-[2.5rem] h-10 px-3 rounded-xl font-black text-base ring-2 transition-all ${
+                i < beat
+                  ? 'bg-gradient-to-br from-green-300 to-emerald-400 text-white ring-green-400'
+                  : i === beat
+                    ? 'bg-gradient-to-br from-yellow-300 to-orange-300 text-orange-900 ring-orange-400 scale-110 animate-pulse'
+                    : 'bg-white text-purple-400 ring-purple-100'
+              }`}
+            >
+              {it}
+            </span>
+          ))}
+        </div>
+
+        {!isDone ? (
+          <p className="text-purple-700 text-sm font-black">
+            Sekarang sebut: <span className="text-orange-600">"{items[beat]}"</span>
+          </p>
+        ) : (
+          <p className="text-green-600 text-sm font-black">🎉 Habis semua rentak!</p>
+        )}
       </div>
-      <button onClick={() => setBeat(b => Math.min(items.length, b + 1))} disabled={beat >= items.length} className={`w-full py-5 ${action} disabled:opacity-50 text-lg`}>👆 Tap Rentak</button>
+      <button
+        onClick={() => setBeat(b => Math.min(items.length, b + 1))}
+        disabled={isDone}
+        className={`w-full py-5 ${action} disabled:opacity-50 text-lg`}
+      >
+        {isDone ? '✓ Selesai' : `👆 Tap untuk "${items[beat]}"`}
+      </button>
     </div>
   );
 }
