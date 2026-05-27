@@ -5,9 +5,9 @@ import { CheckCircle2, AlertTriangle, XCircle, RefreshCw, Activity, Globe, Credi
 import SupabaseSyncCard from './SupabaseSyncCard';
 
 const STATUS_CONFIG = {
-  healthy:  { color: 'emerald', label: 'STABLE',   icon: CheckCircle2, ringClass: 'ring-emerald-300/40', textClass: 'text-emerald-200', bgClass: 'bg-emerald-400/15', badgeClass: 'bg-emerald-400 text-emerald-950' },
-  warning:  { color: 'amber',   label: 'WARNING',  icon: AlertTriangle, ringClass: 'ring-amber-300/40', textClass: 'text-amber-100', bgClass: 'bg-amber-400/15', badgeClass: 'bg-amber-300 text-amber-950' },
-  critical: { color: 'rose',    label: 'CRITICAL', icon: XCircle, ringClass: 'ring-rose-300/40', textClass: 'text-rose-100', bgClass: 'bg-rose-400/15', badgeClass: 'bg-rose-400 text-rose-950' },
+  healthy:  { color: 'emerald', label: 'STABLE',   icon: CheckCircle2, ringClass: 'ring-emerald-300', textClass: 'text-emerald-600', bgClass: 'bg-emerald-100', badgeClass: 'bg-emerald-500 text-white' },
+  warning:  { color: 'amber',   label: 'WARNING',  icon: AlertTriangle, ringClass: 'ring-amber-300', textClass: 'text-amber-600', bgClass: 'bg-amber-100', badgeClass: 'bg-amber-500 text-white' },
+  critical: { color: 'rose',    label: 'CRITICAL', icon: XCircle, ringClass: 'ring-rose-300', textClass: 'text-rose-600', bgClass: 'bg-rose-100', badgeClass: 'bg-rose-500 text-white' },
 };
 
 const CHECK_ICONS = {
@@ -77,8 +77,8 @@ export default function SystemHealthPanel() {
   if (initLoading) {
     return (
       <div className="pro-glass rounded-3xl p-12 text-center">
-        <div className="w-8 h-8 border-4 border-white/40 border-t-white rounded-full animate-spin mx-auto" />
-        <p className="text-white/70 text-sm font-bold mt-3">Memuatkan sistem health...</p>
+        <div className="w-8 h-8 border-4 border-slate-300 border-t-violet-500 rounded-full animate-spin mx-auto" />
+        <p className="text-slate-600 text-sm font-bold mt-3">Memuatkan sistem health...</p>
       </div>
     );
   }
@@ -105,12 +105,12 @@ export default function SystemHealthPanel() {
               <StatusIcon className={`w-9 h-9 md:w-11 md:h-11 ${STATUS_CONFIG[status].textClass}`} />
             </div>
             <div className="min-w-0">
-              <p className="text-white/65 text-[10px] md:text-[11px] font-black uppercase tracking-[0.18em] mb-1">STATUS SISTEM SEMASA</p>
-              <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight capitalize leading-none">
+              <p className="text-slate-500 text-[10px] md:text-[11px] font-black uppercase tracking-[0.18em] mb-1">STATUS SISTEM SEMASA</p>
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight capitalize leading-none">
                 {status === 'healthy' ? 'Healthy' : status === 'warning' ? 'Warning' : 'Critical'}
               </h2>
               {latestLog && (
-                <p className="text-white/65 text-xs md:text-sm font-semibold mt-2 flex items-center gap-2">
+                <p className="text-slate-600 text-xs md:text-sm font-semibold mt-2 flex items-center gap-2">
                   <Activity className="w-3.5 h-3.5" />
                   Audit terakhir: {new Date(latestLog.runAt).toLocaleString('ms-MY', { dateStyle: 'medium', timeStyle: 'short' })}
                 </p>
@@ -119,16 +119,16 @@ export default function SystemHealthPanel() {
           </div>
           <div className="grid grid-cols-3 gap-3 md:gap-4 text-center">
             <div>
-              <p className="text-2xl md:text-3xl font-black text-white">{latestLog?.totalChecks ?? '–'}</p>
-              <p className="text-white/55 text-[10px] md:text-xs font-bold uppercase tracking-wider mt-1">Checks Run</p>
+              <p className="text-2xl md:text-3xl font-black text-slate-900">{latestLog?.totalChecks ?? '–'}</p>
+              <p className="text-slate-500 text-[10px] md:text-xs font-bold uppercase tracking-wider mt-1">Checks Run</p>
             </div>
             <div>
-              <p className="text-2xl md:text-3xl font-black text-rose-300">{latestLog?.criticalCount ?? '–'}</p>
-              <p className="text-white/55 text-[10px] md:text-xs font-bold uppercase tracking-wider mt-1">Issues</p>
+              <p className="text-2xl md:text-3xl font-black text-rose-600">{latestLog?.criticalCount ?? '–'}</p>
+              <p className="text-slate-500 text-[10px] md:text-xs font-bold uppercase tracking-wider mt-1">Issues</p>
             </div>
             <div>
-              <p className="text-2xl md:text-3xl font-black text-white">{latestLog?.durationMs ?? '–'}<span className="text-base text-white/55">ms</span></p>
-              <p className="text-white/55 text-[10px] md:text-xs font-bold uppercase tracking-wider mt-1">Duration</p>
+              <p className="text-2xl md:text-3xl font-black text-slate-900">{latestLog?.durationMs ?? '–'}<span className="text-base text-slate-500">ms</span></p>
+              <p className="text-slate-500 text-[10px] md:text-xs font-bold uppercase tracking-wider mt-1">Duration</p>
             </div>
           </div>
         </div>
@@ -137,14 +137,14 @@ export default function SystemHealthPanel() {
       {/* STAT TILES */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         {[
-          { label: 'Uptime 24j', value: uptime24h !== null ? `${uptime24h}%` : '–', color: 'text-emerald-300' },
-          { label: 'Audit Runs', value: history.length, color: 'text-sky-300' },
-          { label: 'Healthy', value: latestLog?.healthyCount ?? '–', color: 'text-emerald-300' },
-          { label: 'Warning', value: latestLog?.warningCount ?? '–', color: 'text-amber-300' },
+          { label: 'Uptime 24j', value: uptime24h !== null ? `${uptime24h}%` : '–', color: 'text-emerald-600' },
+          { label: 'Audit Runs', value: history.length, color: 'text-sky-600' },
+          { label: 'Healthy', value: latestLog?.healthyCount ?? '–', color: 'text-emerald-600' },
+          { label: 'Warning', value: latestLog?.warningCount ?? '–', color: 'text-amber-600' },
         ].map((stat, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="pro-glass rounded-2xl p-4">
             <p className={`text-2xl md:text-3xl font-black ${stat.color}`}>{stat.value}</p>
-            <p className="text-white/55 text-[10px] md:text-xs font-bold uppercase tracking-wider mt-1">{stat.label}</p>
+            <p className="text-slate-500 text-[10px] md:text-xs font-bold uppercase tracking-wider mt-1">{stat.label}</p>
           </motion.div>
         ))}
       </div>
@@ -153,45 +153,45 @@ export default function SystemHealthPanel() {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="pro-glass rounded-3xl p-5">
         <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
           <div>
-            <h3 className="text-white font-black text-lg">Apa Yang Auditor Check</h3>
-            <p className="text-white/55 text-xs">{checks.length} checks dijalankan setiap audit run</p>
+            <h3 className="text-slate-900 font-black text-lg">Apa Yang Auditor Check</h3>
+            <p className="text-slate-500 text-xs">{checks.length} checks dijalankan setiap audit run</p>
           </div>
-          <button onClick={runCheck} disabled={loading} className="px-4 py-2.5 rounded-xl bg-white text-game-purple font-black text-sm flex items-center gap-2 shadow-lg disabled:opacity-60 hover:bg-white/95 transition-colors">
+          <button onClick={runCheck} disabled={loading} className="px-4 py-2.5 rounded-xl bg-slate-900 text-white font-black text-sm flex items-center gap-2 shadow-lg disabled:opacity-60 hover:bg-slate-800 transition-colors">
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             {loading ? 'Auditing...' : 'Run Audit Sekarang'}
           </button>
         </div>
 
         {checks.length === 0 ? (
-          <div className="text-center py-12 rounded-2xl bg-white/5 border border-white/10">
-            <Activity className="w-8 h-8 text-white/40 mx-auto mb-2" />
-            <p className="text-white/70 font-bold text-sm">Belum ada audit. Klik "Run Audit Sekarang" untuk mula.</p>
+          <div className="text-center py-12 rounded-2xl bg-slate-50 border border-slate-200">
+            <Activity className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+            <p className="text-slate-600 font-bold text-sm">Belum ada audit. Klik "Run Audit Sekarang" untuk mula.</p>
           </div>
         ) : (
           <div className="space-y-5">
             {Object.entries(grouped).map(([category, items]) => (
               <div key={category}>
-                <p className="text-white/55 text-[10px] font-black uppercase tracking-[0.18em] mb-2 pl-1">{category}</p>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.18em] mb-2 pl-1">{category}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {items.map((c) => {
                     const cfg = STATUS_CONFIG[c.status] || STATUS_CONFIG.healthy;
                     const Icon = CHECK_ICONS[c.key] || Activity;
                     return (
-                      <div key={c.key} className={`rounded-2xl p-4 bg-white/5 border border-white/10 hover:border-white/25 transition-colors`}>
+                      <div key={c.key} className={`rounded-2xl p-4 bg-white border border-slate-200 hover:border-slate-300 transition-colors shadow-sm`}>
                         <div className="flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                            <Icon className="w-5 h-5 text-white/85" />
+                          <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
+                            <Icon className="w-5 h-5 text-slate-700" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-2 mb-1">
-                              <p className="text-white font-black text-sm leading-tight truncate">{c.label}</p>
+                              <p className="text-slate-900 font-black text-sm leading-tight truncate">{c.label}</p>
                               <span className={`flex-shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black ${cfg.badgeClass}`}>
                                 <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
                                 {cfg.label}
                               </span>
                             </div>
-                            <p className="text-white/65 text-xs leading-snug">{c.message}</p>
-                            {c.value && <p className="text-white/40 text-[11px] font-mono mt-1.5">{c.value}</p>}
+                            <p className="text-slate-600 text-xs leading-snug">{c.message}</p>
+                            {c.value && <p className="text-slate-400 text-[11px] font-mono mt-1.5">{c.value}</p>}
                           </div>
                         </div>
                       </div>
@@ -210,22 +210,22 @@ export default function SystemHealthPanel() {
       {/* HISTORY */}
       {history.length > 1 && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="pro-glass rounded-3xl p-5">
-          <h3 className="text-white font-black text-lg mb-3">📜 Sejarah Audit</h3>
+          <h3 className="text-slate-900 font-black text-lg mb-3">📜 Sejarah Audit</h3>
           <div className="space-y-2 max-h-72 overflow-y-auto">
             {history.slice(0, 20).map((log) => {
               const cfg = STATUS_CONFIG[log.overallStatus] || STATUS_CONFIG.healthy;
               return (
-                <div key={log.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10">
+                <div key={log.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white border border-slate-200">
                   <span className={`flex-shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black ${cfg.badgeClass}`}>
                     {cfg.label}
                   </span>
-                  <p className="text-white/85 text-xs font-bold flex-1 truncate">
+                  <p className="text-slate-800 text-xs font-bold flex-1 truncate">
                     {new Date(log.runAt).toLocaleString('ms-MY', { dateStyle: 'short', timeStyle: 'short' })}
                   </p>
-                  <p className="text-white/55 text-[11px] font-semibold flex-shrink-0">
+                  <p className="text-slate-500 text-[11px] font-semibold flex-shrink-0">
                     {log.healthyCount}✓ · {log.warningCount}⚠ · {log.criticalCount}✕
                   </p>
-                  <p className="text-white/40 text-[11px] font-mono flex-shrink-0">{log.durationMs}ms</p>
+                  <p className="text-slate-400 text-[11px] font-mono flex-shrink-0">{log.durationMs}ms</p>
                 </div>
               );
             })}
