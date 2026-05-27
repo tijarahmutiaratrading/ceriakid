@@ -229,6 +229,23 @@ export default function DrawingStudio() {
     if (next) playButtonTap();
   };
 
+  // Capture fullscreen canvas BEFORE React unmounts the portal, then exit.
+  // This is critical: by the time the useEffect for isFullscreen runs,
+  // fsCanvasRef.current is already null because the portal has unmounted.
+  const exitFullscreen = () => {
+    const fs = fsCanvasRef.current;
+    if (fs && fs.width > 0 && fs.height > 0) {
+      try {
+        const snap = document.createElement('canvas');
+        snap.width = fs.width;
+        snap.height = fs.height;
+        snap.getContext('2d').drawImage(fs, 0, 0);
+        transitionSnapshotRef.current = snap;
+      } catch { /* keep existing snapshot */ }
+    }
+    setIsFullscreen(false);
+  };
+
   // Active canvas ref — points to whichever canvas is currently active
   const activeCanvasRef = isFullscreen ? fsCanvasRef : canvasRef;
   const getCanvas = () => activeCanvasRef.current;
@@ -592,17 +609,9 @@ export default function DrawingStudio() {
         // Keep snapshot until we exit fullscreen so it can be re-used
       });
     } else {
-      // Capture fullscreen drawing BEFORE the portal unmounts
-      const fs = fsCanvasRef.current;
-      if (fs && fs.width > 0 && fs.height > 0) {
-        try {
-          const snap = document.createElement('canvas');
-          snap.width = fs.width;
-          snap.height = fs.height;
-          snap.getContext('2d').drawImage(fs, 0, 0);
-          transitionSnapshotRef.current = snap;
-        } catch { /* keep existing snapshot */ }
-      }
+      // Note: snapshot was already captured synchronously in the close button's
+      // onClick handler (see exitFullscreen()) — by the time this effect runs,
+      // the portal has already unmounted and fsCanvasRef.current is null.
       // Restore to normal canvas across multiple frames to outlast the
       // ResizeObserver call that fires when the normal canvas becomes visible.
       const restore = () => {
@@ -1406,7 +1415,7 @@ export default function DrawingStudio() {
                   <span className="hidden sm:inline">Simpan</span>
                 </button>
                 <button
-                  onClick={() => setIsFullscreen(false)}
+                  onClick={exitFullscreen}
                   className="p-2 rounded-full bg-white text-slate-700 ring-1 ring-black/5 hover:bg-slate-50 transition-all"
                   title="Keluar fullscreen"
                 >
