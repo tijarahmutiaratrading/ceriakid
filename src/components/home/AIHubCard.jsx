@@ -70,6 +70,16 @@ export default function AIHubCard() {
         background: 'linear-gradient(135deg, #fef3e7 0%, #fde8d4 30%, #fce7f3 70%, #fbcfe8 100%)',
       }}
     >
+      {/* AI-generated background image (very soft, faded) */}
+      <img
+        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2b08b3dee_generated_image.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity z-0"
+      />
+      {/* White-to-transparent overlay supaya teks tetap clear */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 via-white/20 to-white/30 z-0" />
+
       {/* Decorative sparkles */}
       <div className="pointer-events-none absolute top-4 left-4 text-2xl md:text-3xl opacity-80">✨</div>
       <div className="pointer-events-none absolute top-6 right-6 text-2xl md:text-3xl opacity-80">✨</div>
