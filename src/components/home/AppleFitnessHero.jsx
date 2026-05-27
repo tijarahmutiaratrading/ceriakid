@@ -59,46 +59,36 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
   const firstName = (user?.full_name || '').split(' ')[0] || 'Kawan';
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-slate-900">
-      {/* Slides — render all, fade between with opacity (matches landing) */}
-      {SLIDES.map((s, i) => (
-        <img
-          key={i}
-          src={s.image}
-          alt={s.title}
-          className="pointer-events-none transition-opacity duration-700"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: s.objectPos,
-            opacity: i === index ? 1 : 0,
-          }}
-          loading="eager"
-        />
-      ))}
+    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[16/10] sm:aspect-[16/8] md:aspect-[16/7] max-h-[560px]">
+      {/* Slides */}
+      <AnimatePresence mode="sync">
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="absolute inset-0"
+        >
+          <img
+            src={slide.image}
+            alt={slide.title}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: slide.objectPos }}
+          />
+          {/* Dark gradient overlay — left-to-right + bottom for readability */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 35%, rgba(0,0,0,0.15) 70%, rgba(0,0,0,0) 100%), linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 100%)',
+            }}
+          />
+        </motion.div>
+      </AnimatePresence>
 
-      {/* Dark gradient overlay — stronger on mobile bottom for content readability */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.85) 100%)',
-        }}
-      />
-      <div
-        className="absolute inset-0 pointer-events-none hidden sm:block"
-        style={{
-          background:
-            'linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 35%, rgba(0,0,0,0.15) 70%, rgba(0,0,0,0) 100%)',
-        }}
-      />
-
-      {/* Greeting top-left — pushed down to clear floating navbar */}
-      <div className="absolute top-20 left-4 sm:top-24 sm:left-6 z-20">
+      {/* Greeting top-left — big avatar + name beside */}
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
         <button
           type="button"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -174,10 +164,10 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
             <p className="text-[#D4FF3D] font-black text-[10px] sm:text-xs tracking-[0.2em] mb-2 drop-shadow-lg">
               {slide.tagline}
             </p>
-            <h1 className="text-white font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.05] mb-3 drop-shadow-2xl tracking-tight">
+            <h1 className="text-white font-black text-2xl sm:text-4xl md:text-5xl leading-tight mb-2 drop-shadow-2xl">
               {slide.title}
             </h1>
-            <p className="text-white/85 text-xs sm:text-sm md:text-base font-bold mb-5 sm:mb-6 drop-shadow-md max-w-md">
+            <p className="text-white/80 text-xs sm:text-sm font-bold mb-5 drop-shadow-md">
               {slide.meta}
             </p>
             <Link to={slide.ctaLink}>
