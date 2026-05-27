@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Send, Sparkles, Loader2, GraduationCap, BookOpen } from 'lucide-react';
+import { Send, Sparkles, Loader2, GraduationCap, BookOpen, MessageCircle, Plus, Library } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import AIBackButton from '@/components/ai/AIBackButton';
 import AIChatMessage from '@/components/ai/AIChatMessage';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
+import MyChatLibrary from '@/components/ai/MyChatLibrary';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
@@ -48,17 +49,52 @@ export default function AIAssistant() {
   const [level, setLevel] = useState('darjah_3');
   const [loading, setLoading] = useState(false);
   const [insufficientCredits, setInsufficientCredits] = useState(false);
+  const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'library'
+  const [conversationId, setConversationId] = useState(null);
+  const [libraryRefresh, setLibraryRefresh] = useState(0);
   const scrollRef = useRef(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, loading]);
 
+  const persistConversation = async (allMessages, firstQuestion) => {
+    // Auto-save / update conversation di background — tak block UI
+    try {
+      const userMsgs = allMessages.filter(m => m.role === 'user');
+      const aiMsgs = allMessages.filter(m => m.role === 'ai');
+      // skip kalau belum ada user message lagi (hanya greeting)
+      if (userMsgs.length === 0) return;
+
+      const title = (firstQuestion || userMsgs[0]?.content || 'Perbualan').slice(0, 80);
+      const payload = {
+        title,
+        agent: 'cikgu_firdaus',
+        subject,
+        level,
+        messages: allMessages.map(m => ({ role: m.role, content: m.content, timestamp: new Date().toISOString() })),
+        messageCount: allMessages.length,
+        lastMessageAt: new Date().toISOString(),
+      };
+
+      if (conversationId) {
+        await base44.entities.ChatConversation.update(conversationId, payload);
+      } else {
+        const created = await base44.entities.ChatConversation.create(payload);
+        if (created?.id) setConversationId(created.id);
+      }
+      setLibraryRefresh(k => k + 1);
+    } catch (err) {
+      console.error('Persist conversation failed:', err);
+    }
+  };
+
   const handleAsk = async (overrideQuestion) => {
     const question = (overrideQuestion ?? input).trim();
     if (!question || loading) return;
 
-    setMessages(prev => [...prev, { role: 'user', content: question }]);
+    const afterUser = [...messages, { role: 'user', content: question }];
+    setMessages(afterUser);
     setInput('');
     setLoading(true);
     setInsufficientCredits(false);
@@ -71,17 +107,23 @@ export default function AIAssistant() {
         childName: user?.full_name?.split(' ')[0] || '',
       });
 
+      let finalMessages = afterUser;
       if (res.data?.error === 'INSUFFICIENT_CREDITS') {
         setInsufficientCredits(true);
-        setMessages(prev => [...prev, {
+        finalMessages = [...afterUser, {
           role: 'ai',
           content: `⚠️ **Kredit tidak mencukupi!**\n\nBaki anda: **${res.data.balance} kredit**\nDiperlukan: **${res.data.required} kredit**\n\nSila top up untuk terus bertanya.`,
-        }]);
+        }];
+        setMessages(finalMessages);
       } else if (res.data?.success) {
-        setMessages(prev => [...prev, { role: 'ai', content: res.data.answer }]);
+        finalMessages = [...afterUser, { role: 'ai', content: res.data.answer }];
+        setMessages(finalMessages);
       } else {
         throw new Error(res.data?.error || 'Ralat tidak diketahui');
       }
+
+      // Persist (success or insufficient — masih log percubaan supaya tak hilang)
+      persistConversation(finalMessages, question);
     } catch (e) {
       const msg = e?.response?.data?.error || e.message;
       if (msg?.includes('INSUFFICIENT')) {
@@ -92,6 +134,23 @@ export default function AIAssistant() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleNewChat = () => {
+    setMessages([
+      { role: 'ai', content: 'Assalamualaikum dan hai! Saya **Cikgu Firdaus** 👨‍🏫 Sedia membantu anak-anak belajar dengan cara yang mudah dan menyeronokkan. Tanya saya apa-apa soalan pelajaran — Matematik, Sains, BM, English atau Jawi. Mari kita belajar bersama! ✨' },
+    ]);
+    setConversationId(null);
+    setInsufficientCredits(false);
+    setActiveTab('chat');
+  };
+
+  const handleResumeChat = (conv) => {
+    setMessages(conv.messages || []);
+    setConversationId(conv.id);
+    if (conv.subject) setSubject(conv.subject);
+    if (conv.level) setLevel(conv.level);
+    setActiveTab('chat');
   };
 
   return (
@@ -126,6 +185,37 @@ export default function AIAssistant() {
           </div>
           <CreditBalanceWidget compact />
         </motion.div>
+
+        {/* Tab switcher + New chat */}
+        <div className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-2xl p-1.5 mb-3 grid grid-cols-3 gap-1.5">
+          <button
+            onClick={() => setActiveTab('chat')}
+            className={`py-2.5 rounded-xl font-black text-xs flex items-center justify-center gap-1.5 transition-all ${
+              activeTab === 'chat' ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow' : 'text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <MessageCircle className="w-4 h-4" /> Chat
+          </button>
+          <button
+            onClick={() => setActiveTab('library')}
+            className={`py-2.5 rounded-xl font-black text-xs flex items-center justify-center gap-1.5 transition-all ${
+              activeTab === 'library' ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow' : 'text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <Library className="w-4 h-4" /> Sejarah
+          </button>
+          <button
+            onClick={handleNewChat}
+            className="py-2.5 rounded-xl font-black text-xs flex items-center justify-center gap-1.5 transition-all bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+          >
+            <Plus className="w-4 h-4" /> Baharu
+          </button>
+        </div>
+
+        {activeTab === 'library' ? (
+          <MyChatLibrary refreshKey={libraryRefresh} onResume={handleResumeChat} />
+        ) : (
+        <>
 
         {/* Filters */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-2xl p-3 mb-3 space-y-3">
@@ -229,6 +319,8 @@ export default function AIAssistant() {
         <p className="text-center text-slate-500 text-[10px] mt-2 font-semibold">
           💰 {CREDIT_COSTS.ai_assistant} kredit setiap soalan
         </p>
+        </>
+        )}
       </div>
     </div>
   );

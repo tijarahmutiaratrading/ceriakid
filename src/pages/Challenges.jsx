@@ -128,20 +128,20 @@ export default function Challenges() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-5 p-5 rounded-3xl flex items-center justify-between"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
         >
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">⚡</div>
+            <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl shadow-inner flex-shrink-0 ring-1 ring-white/20">⚡</div>
             <div>
-              <h1 className="text-2xl font-black text-white leading-tight">Cabar Kawan</h1>
-              <p className="text-white/70 text-xs font-semibold mt-0.5">{challenges.length} cabaran aktif</p>
+              <h1 className="text-2xl font-black text-white leading-tight drop-shadow">Cabar Kawan</h1>
+              <p className="text-white/80 text-xs font-semibold mt-0.5">{challenges.length} cabaran aktif</p>
             </div>
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowForm(!showForm)}
-            className="w-12 h-12 rounded-2xl bg-white/25 hover:bg-white/35 flex items-center justify-center transition-all"
+            className="w-12 h-12 rounded-2xl bg-white/15 hover:bg-white/25 flex items-center justify-center transition-all ring-1 ring-white/20"
           >
             {showForm ? <X className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
           </motion.button>
@@ -156,25 +156,25 @@ export default function Challenges() {
               exit={{ opacity: 0, height: 0, y: -10 }}
               transition={{ duration: 0.25 }}
               className="mb-5 rounded-3xl p-5 overflow-hidden"
-              style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+              style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
             >
-              <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-4">🎯 Cabaran Baru</p>
+              <p className="text-white/90 text-xs font-black uppercase tracking-wider mb-4">🎯 Cabaran Baru</p>
 
               {/* Friend Email */}
               <div className="mb-3">
-                <p className="text-white/70 text-xs font-bold mb-1.5">Email Kawan</p>
+                <p className="text-white/80 text-xs font-bold mb-1.5">Email Kawan</p>
                 <input
                   type="email"
                   value={friendEmail}
                   onChange={e => setFriendEmail(e.target.value)}
                   placeholder="email@kawan.com"
-                  className="w-full rounded-2xl px-4 py-3 text-sm font-semibold bg-white/20 text-white placeholder-white/40 border border-white/30 focus:outline-none focus:border-white/60"
+                  className="w-full rounded-2xl px-4 py-3 text-sm font-semibold bg-white/10 text-white placeholder-white/50 border border-white/25 focus:outline-none focus:border-white/60"
                 />
               </div>
 
               {/* Category Selection */}
               <div className="mb-4">
-                <p className="text-white/70 text-xs font-bold mb-2">Pilih Subjek</p>
+                <p className="text-white/80 text-xs font-bold mb-2">Pilih Subjek</p>
                 <div className="grid grid-cols-2 gap-2">
                   {Object.entries(categoryLabels).map(([cat, { label, emoji }]) => (
                     <motion.button
@@ -183,8 +183,8 @@ export default function Challenges() {
                       onClick={() => setSelectedCategory(cat)}
                       className={`rounded-2xl py-3 px-3 font-bold text-sm flex items-center gap-2 transition-all ${
                         selectedCategory === cat
-                          ? 'bg-white text-purple-600 shadow-lg'
-                          : 'bg-white/20 text-white border border-white/30 hover:bg-white/30'
+                          ? 'bg-white text-purple-700 shadow-lg'
+                          : 'bg-white/10 text-white border border-white/25 hover:bg-white/20'
                       }`}
                     >
                       <span>{emoji}</span>
@@ -217,18 +217,18 @@ export default function Challenges() {
 
         {/* Challenges List */}
         <div>
-          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3 px-1">🏆 Senarai Cabaran</p>
+          <p className="text-white/90 text-xs font-black uppercase tracking-wider mb-3 px-1 drop-shadow">🏆 Senarai Cabaran</p>
 
           {challenges.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="rounded-3xl p-10 text-center"
-              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+              style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
             >
               <p className="text-5xl mb-4">⚡</p>
-              <p className="text-white font-black text-lg mb-2">Belum ada cabaran</p>
-              <p className="text-white/70 text-sm">Tekan + untuk cabar kawan anda bermain!</p>
+              <p className="text-white font-black text-lg mb-2 drop-shadow">Belum ada cabaran</p>
+              <p className="text-white/80 text-sm">Tekan + untuk cabar kawan anda bermain!</p>
             </motion.div>
           ) : (
             <div className="space-y-3">
@@ -244,17 +244,17 @@ export default function Challenges() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
                     className="rounded-2xl p-4"
-                    style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+                    style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.78), rgba(88,28,135,0.7))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
                   >
                     {/* Top Row */}
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl">
+                        <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-xl ring-1 ring-white/20">
                           {cat?.emoji || '🎮'}
                         </div>
                         <div>
                           <p className="font-black text-white text-sm">{cat?.label || challenge.gameCategory}</p>
-                          <p className="text-white/60 text-xs">
+                          <p className="text-white/70 text-xs">
                             {isCreator ? `→ ${challenge.opponent}` : `← ${challenge.createdBy}`}
                           </p>
                         </div>
@@ -277,26 +277,26 @@ export default function Challenges() {
 
                     {/* Score Row (if completed or active) */}
                     {(challenge.status === 'completed' || challenge.status === 'active') && (
-                      <div className="flex items-center gap-3 mt-2 pt-3 border-t border-white/20">
+                      <div className="flex items-center gap-3 mt-2 pt-3 border-t border-white/15">
                         <div className="flex-1 text-center">
-                          <p className="text-white/60 text-xs mb-0.5">
+                          <p className="text-white/70 text-xs mb-0.5">
                             {isCreator ? 'Anda' : challenge.createdBy.split('@')[0]}
                           </p>
                           <p className="text-white font-black text-xl">{challenge.creatorScore ?? 0}</p>
-                          <p className="text-white/40 text-xs">pts</p>
+                          <p className="text-white/50 text-xs">pts</p>
                         </div>
-                        <div className="text-white/40 font-black text-sm">VS</div>
+                        <div className="text-white/50 font-black text-sm">VS</div>
                         <div className="flex-1 text-center">
-                          <p className="text-white/60 text-xs mb-0.5">
+                          <p className="text-white/70 text-xs mb-0.5">
                             {isCreator ? challenge.opponent.split('@')[0] : 'Anda'}
                           </p>
                           <p className="text-white font-black text-xl">{challenge.opponentScore ?? 0}</p>
-                          <p className="text-white/40 text-xs">pts</p>
+                          <p className="text-white/50 text-xs">pts</p>
                         </div>
                         {challenge.status === 'completed' && challenge.winnerEmail && (
                           <div className="text-center">
-                            <Trophy className={`w-5 h-5 mx-auto ${challenge.winnerEmail === user.email ? 'text-yellow-300' : 'text-white/30'}`} />
-                            <p className={`text-xs font-bold mt-0.5 ${challenge.winnerEmail === user.email ? 'text-yellow-300' : 'text-white/40'}`}>
+                            <Trophy className={`w-5 h-5 mx-auto ${challenge.winnerEmail === user.email ? 'text-yellow-300' : 'text-white/40'}`} />
+                            <p className={`text-xs font-bold mt-0.5 ${challenge.winnerEmail === user.email ? 'text-yellow-300' : 'text-white/50'}`}>
                               {challenge.winnerEmail === user.email ? 'Menang!' : 'Kalah'}
                             </p>
                           </div>
@@ -306,7 +306,7 @@ export default function Challenges() {
 
                     {/* Due date */}
                     {challenge.dueDate && challenge.status !== 'completed' && (
-                      <p className="text-white/40 text-xs mt-2">
+                      <p className="text-white/60 text-xs mt-2">
                         Tamat: {new Date(challenge.dueDate).toLocaleDateString('ms-MY')}
                       </p>
                     )}

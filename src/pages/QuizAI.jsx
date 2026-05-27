@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Brain, Sparkles, Loader2, RefreshCw, Trophy, ArrowRight, Zap } from 'lucide-react';
+import { Brain, Sparkles, Loader2, RefreshCw, Trophy, ArrowRight, Zap, Library } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import AIBackButton from '@/components/ai/AIBackButton';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
 import QuizQuestionCard from '@/components/ai/QuizQuestionCard';
+import MyQuizLibrary from '@/components/ai/MyQuizLibrary';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
@@ -48,6 +49,8 @@ export default function QuizAI() {
   const [askedQuestions, setAskedQuestions] = useState([]);
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const [latestBalance, setLatestBalance] = useState(null);
+  const [activeTab, setActiveTab] = useState('play'); // 'play' | 'library'
+  const [libraryRefresh, setLibraryRefresh] = useState(0);
 
   const generateQuiz = async () => {
     if (loading) return;
@@ -87,11 +90,31 @@ export default function QuizAI() {
     }
   };
 
-  const handleAnswered = ({ isCorrect }) => {
+  const handleAnswered = ({ isCorrect, selectedIndex }) => {
     setScore(prev => ({
       correct: prev.correct + (isCorrect ? 1 : 0),
       total: prev.total + 1,
     }));
+    // Auto-save ke library — fire & forget, tak block UI
+    if (currentQuiz) {
+      base44.functions.invoke('saveQuizAnswer', {
+        question: currentQuiz.question,
+        choices: currentQuiz.choices,
+        correctIndex: currentQuiz.correctIndex,
+        userAnswerIndex: selectedIndex,
+        isCorrect,
+        explanation: currentQuiz.explanation,
+        hint: currentQuiz.hint,
+        encouragement: currentQuiz.encouragement,
+        emoji: currentQuiz.emoji,
+        subject,
+        level,
+        difficulty,
+        topic: topic.trim() || '',
+      }).then(() => {
+        setLibraryRefresh(k => k + 1);
+      }).catch(err => console.error('Save quiz answer failed:', err));
+    }
   };
 
   const handleReset = () => {
@@ -130,6 +153,31 @@ export default function QuizAI() {
           </div>
           <CreditBalanceWidget compact />
         </motion.div>
+
+        {/* Tab switcher */}
+        <div className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-2xl p-1.5 mb-4 grid grid-cols-2 gap-1.5">
+          <button
+            onClick={() => setActiveTab('play')}
+            className={`py-2.5 rounded-xl font-black text-sm flex items-center justify-center gap-2 transition-all ${
+              activeTab === 'play' ? 'bg-gradient-to-br from-cyan-500 to-indigo-600 text-white shadow' : 'text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <Zap className="w-4 h-4" /> Main Kuiz
+          </button>
+          <button
+            onClick={() => setActiveTab('library')}
+            className={`py-2.5 rounded-xl font-black text-sm flex items-center justify-center gap-2 transition-all ${
+              activeTab === 'library' ? 'bg-gradient-to-br from-cyan-500 to-indigo-600 text-white shadow' : 'text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <Library className="w-4 h-4" /> Sejarah Soalan
+          </button>
+        </div>
+
+        {activeTab === 'library' ? (
+          <MyQuizLibrary refreshKey={libraryRefresh} />
+        ) : (
+        <>
 
         {/* Score badge (kalau dah main) */}
         {score.total > 0 && (
@@ -278,6 +326,8 @@ export default function QuizAI() {
               Top Up Sekarang →
             </Link>
           </motion.div>
+        )}
+        </>
         )}
       </div>
     </div>

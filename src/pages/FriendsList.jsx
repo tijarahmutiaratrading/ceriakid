@@ -162,12 +162,12 @@ export default function FriendsList() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-5 p-5 rounded-3xl flex items-center gap-4"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
         >
-          <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">👥</div>
+          <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl shadow-inner flex-shrink-0 ring-1 ring-white/20">👥</div>
           <div>
-            <h1 className="text-2xl font-black text-white leading-tight">Kawan-Kawan</h1>
-            <p className="text-white/70 text-xs font-semibold mt-0.5">{friends.length} kawan berdaftar</p>
+            <h1 className="text-2xl font-black text-white leading-tight drop-shadow">Kawan-Kawan</h1>
+            <p className="text-white/80 text-xs font-semibold mt-0.5">{friends.length} kawan berdaftar</p>
           </div>
         </motion.div>
 
@@ -177,14 +177,14 @@ export default function FriendsList() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="mb-5 rounded-3xl p-5"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
         >
-          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
+          <p className="text-white/90 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
 
           {/* Code Display */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex-1 rounded-2xl py-4 text-center" style={{ background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.4)' }}>
-              <p className="text-4xl font-black text-white tracking-widest">{inviteCode}</p>
+            <div className="flex-1 rounded-2xl py-4 text-center" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)' }}>
+              <p className="text-4xl font-black text-white tracking-widest drop-shadow">{inviteCode}</p>
             </div>
             <motion.button
               whileTap={{ scale: 0.9 }}
@@ -218,9 +218,9 @@ export default function FriendsList() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12 }}
           className="mb-5 rounded-3xl p-5"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
         >
-          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
+          <p className="text-white/90 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
           <div className="flex gap-2">
             <input
               type="text"
@@ -228,7 +228,7 @@ export default function FriendsList() {
               value={inputCode}
               onChange={e => setInputCode(e.target.value.toUpperCase())}
               maxLength={6}
-              className="flex-1 rounded-2xl px-4 py-3 bg-white/20 text-white placeholder-white/40 font-black text-lg tracking-widest border border-white/30 outline-none focus:border-white/60 uppercase"
+              className="flex-1 rounded-2xl px-4 py-3 bg-white/10 text-white placeholder-white/50 font-black text-lg tracking-widest border border-white/25 outline-none focus:border-white/60 uppercase"
             />
             <motion.button
               whileTap={{ scale: 0.95 }}
@@ -256,16 +256,16 @@ export default function FriendsList() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3 px-1">👤 Senarai Kawan</p>
+          <p className="text-white/90 text-xs font-black uppercase tracking-wider mb-3 px-1 drop-shadow">👤 Senarai Kawan</p>
 
           {friends.length === 0 ? (
             <div
               className="rounded-3xl p-10 text-center"
-              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+              style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
             >
               <p className="text-5xl mb-4">🤷</p>
-              <p className="text-white font-black text-lg mb-2">Belum ada kawan</p>
-              <p className="text-white/70 text-sm">Kongsi kod undangan anda untuk bermain bersama kawan-kawan!</p>
+              <p className="text-white font-black text-lg mb-2 drop-shadow">Belum ada kawan</p>
+              <p className="text-white/80 text-sm">Kongsi kod undangan anda untuk bermain bersama kawan-kawan!</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -278,13 +278,13 @@ export default function FriendsList() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ delay: idx * 0.05 }}
                     className="rounded-2xl p-4 flex items-center justify-between"
-                    style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+                    style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.78), rgba(88,28,135,0.7))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-white/25 flex items-center justify-center text-2xl">👤</div>
+                      <div className="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-2xl ring-1 ring-white/20">👤</div>
                       <div>
                         <p className="font-black text-white text-sm">{friend.friendEmail}</p>
-                        <p className="text-white/60 text-xs">
+                        <p className="text-white/70 text-xs">
                           Ditambah {friend.acceptedDate ? new Date(friend.acceptedDate).toLocaleDateString('ms-MY') : '-'}
                         </p>
                       </div>

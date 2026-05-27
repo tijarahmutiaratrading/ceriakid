@@ -130,13 +130,13 @@ export default function ChildrenProfiles() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-5 p-5 rounded-3xl flex items-center justify-between"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
         >
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner">👨‍👩‍👧‍👦</div>
+            <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl shadow-inner ring-1 ring-white/20">👨‍👩‍👧‍👦</div>
             <div>
-              <h1 className="text-2xl font-black text-white">Profil Anak</h1>
-              <p className="text-white/70 text-xs font-semibold">{children.length}/{MAX_CHILDREN} anak terdaftar</p>
+              <h1 className="text-2xl font-black text-white drop-shadow">Profil Anak</h1>
+              <p className="text-white/80 text-xs font-semibold">{children.length}/{MAX_CHILDREN} anak terdaftar</p>
             </div>
           </div>
           {children.length < MAX_CHILDREN && !showForm ? (
@@ -174,19 +174,19 @@ export default function ChildrenProfiles() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               className="mb-5 rounded-3xl p-5"
-              style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+              style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
             >
-              <p className="text-white font-black text-sm mb-4">{editingId ? '✏️ Ubah Profil Anak' : '➕ Tambah Anak Baru'}</p>
+              <p className="text-white font-black text-sm mb-4 drop-shadow">{editingId ? '✏️ Ubah Profil Anak' : '➕ Tambah Anak Baru'}</p>
 
               <input
                 type="text"
                 placeholder="Nama anak..."
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl bg-white/30 border border-white/40 text-white placeholder-white/60 font-semibold focus:outline-none focus:bg-white/40 mb-3 text-sm"
+                className="w-full px-4 py-3 rounded-2xl bg-white/10 border border-white/25 text-white placeholder-white/50 font-semibold focus:outline-none focus:bg-white/15 focus:border-white/60 mb-3 text-sm"
               />
 
-              <p className="text-white/80 text-xs font-bold mb-2">Peringkat Umur</p>
+              <p className="text-white/85 text-xs font-bold mb-2">Peringkat Umur</p>
               <div className="grid grid-cols-2 gap-3 mb-4">
                 {AGE_OPTIONS.map(opt => (
                   <motion.button
@@ -195,13 +195,13 @@ export default function ChildrenProfiles() {
                     onClick={() => setFormData({ ...formData, ageGroup: opt.value })}
                     className={`py-3 rounded-2xl font-bold text-sm flex flex-col items-center gap-1 transition-all ${
                       formData.ageGroup === opt.value
-                        ? 'bg-white text-purple-600 shadow-lg'
-                        : 'bg-white/20 text-white border border-white/30'
+                        ? 'bg-white text-purple-700 shadow-lg'
+                        : 'bg-white/10 text-white border border-white/25'
                     }`}
                   >
                     <span className="text-2xl">{opt.emoji}</span>
                     <span>{opt.label}</span>
-                    <span className={`text-xs ${formData.ageGroup === opt.value ? 'text-purple-400' : 'text-white/60'}`}>{opt.sub}</span>
+                    <span className={`text-xs ${formData.ageGroup === opt.value ? 'text-purple-500' : 'text-white/70'}`}>{opt.sub}</span>
                   </motion.button>
                 ))}
               </div>
@@ -210,7 +210,7 @@ export default function ChildrenProfiles() {
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={editingId ? handleUpdateChild : handleAddChild}
-                  className="flex-1 bg-white text-purple-600 rounded-2xl py-3 font-black flex items-center justify-center gap-2 shadow-lg text-sm"
+                  className="flex-1 bg-white text-purple-700 rounded-2xl py-3 font-black flex items-center justify-center gap-2 shadow-lg text-sm"
                 >
                   <Save className="w-4 h-4" />
                   {editingId ? 'Simpan' : 'Tambah Anak'}
@@ -218,7 +218,7 @@ export default function ChildrenProfiles() {
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={handleCancel}
-                  className="px-4 bg-white/20 text-white rounded-2xl py-3 font-black flex items-center justify-center border border-white/30"
+                  className="px-4 bg-white/10 text-white rounded-2xl py-3 font-black flex items-center justify-center border border-white/25"
                 >
                   <X className="w-4 h-4" />
                 </motion.button>
@@ -234,11 +234,11 @@ export default function ChildrenProfiles() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="rounded-3xl p-10 text-center"
-              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+              style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
             >
               <div className="text-6xl mb-3">👶</div>
-              <p className="text-white font-black text-lg mb-1">Belum ada anak terdaftar</p>
-              <p className="text-white/70 text-sm">Tekan "Tambah" untuk daftar profil anak pertama!</p>
+              <p className="text-white font-black text-lg mb-1 drop-shadow">Belum ada anak terdaftar</p>
+              <p className="text-white/80 text-sm">Tekan "Tambah" untuk daftar profil anak pertama!</p>
             </motion.div>
           ) : (
             children.map((child, idx) => (
@@ -248,10 +248,10 @@ export default function ChildrenProfiles() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.06 }}
                 className="rounded-3xl p-4 flex items-center gap-4"
-                style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+                style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.78), rgba(88,28,135,0.7))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
               >
                 {/* Avatar */}
-                <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner">
+                <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner ring-1 ring-white/20">
                   {AVATARS[idx % AVATARS.length]}
                 </div>
 
@@ -260,7 +260,7 @@ export default function ChildrenProfiles() {
                   <p className="text-white font-black text-base leading-tight">{child.name}</p>
                   <div className="flex items-center gap-1.5 mt-1">
                     <span className="text-sm">{child.ageGroup === 'prasekolah' ? '🎨' : '📚'}</span>
-                    <span className="text-white/70 text-xs font-semibold">
+                    <span className="text-white/80 text-xs font-semibold">
                       {child.ageGroup === 'prasekolah' ? 'Prasekolah · 4–6 thn' : 'Sekolah Rendah · 7–12 thn'}
                     </span>
                   </div>
@@ -271,7 +271,7 @@ export default function ChildrenProfiles() {
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleEdit(child)}
-                    className="w-9 h-9 bg-white/20 text-white rounded-xl flex items-center justify-center hover:bg-white/30 transition-all border border-white/30"
+                    className="w-9 h-9 bg-white/10 text-white rounded-xl flex items-center justify-center hover:bg-white/20 transition-all border border-white/25"
                   >
                     <Edit2 className="w-4 h-4" />
                   </motion.button>
@@ -295,13 +295,13 @@ export default function ChildrenProfiles() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
             className="mt-4 rounded-2xl p-4"
-            style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)' }}
+            style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.78), rgba(88,28,135,0.7))', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.18)' }}
           >
-            <div className="flex justify-between text-white/80 text-xs font-bold mb-2">
+            <div className="flex justify-between text-white/90 text-xs font-bold mb-2">
               <span>Kapasiti Profil</span>
               <span>{children.length}/{MAX_CHILDREN}</span>
             </div>
-            <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+            <div className="h-2 bg-white/15 rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(children.length / MAX_CHILDREN) * 100}%` }}
