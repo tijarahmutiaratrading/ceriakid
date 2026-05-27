@@ -73,6 +73,10 @@ export default function UserTopHeader() {
     return location.pathname === path || location.pathname.startsWith(path);
   };
 
+  // Auto-detect halaman background gelap — pill jadi dark glass + text putih
+  const DARK_BG_PATHS = ['/games-hub', '/mini-games', '/story-kid', '/play/'];
+  const isDarkBg = DARK_BG_PATHS.some(p => location.pathname.startsWith(p));
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (navRef.current && !navRef.current.contains(e.target)) {
@@ -94,21 +98,29 @@ export default function UserTopHeader() {
       ref={navRef}
       className={`hidden md:flex fixed top-6 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
     >
-      {/* Center: Floating pill nav (Apple Fitness style — glossy light) */}
+      {/* Center: Floating pill nav (Apple Fitness style — adaptive glass) */}
       <nav
         className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-xl shadow-black/20"
         style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
+          background: isDarkBg
+            ? 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(30,41,59,0.45))'
+            : 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
           backdropFilter: 'blur(20px) saturate(180%)',
           WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-          border: '1px solid rgba(255,255,255,0.6)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
+          border: isDarkBg ? '1px solid rgba(255,255,255,0.18)' : '1px solid rgba(255,255,255,0.6)',
+          boxShadow: isDarkBg
+            ? '0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15)'
+            : '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
         }}
       >
         {isAdmin && (
           <Link
             to="/admin-dashboard"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-all"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black transition-all ${
+              isDarkBg
+                ? 'text-amber-300 hover:text-amber-200 hover:bg-white/15'
+                : 'text-amber-700 hover:text-amber-900 hover:bg-white/50'
+            }`}
             title="Tukar ke Admin Panel"
           >
             <Shield className="w-3.5 h-3.5" />
@@ -127,13 +139,15 @@ export default function UserTopHeader() {
                 key={group.key}
                 to={group.path}
                 className={`relative px-4 py-1.5 rounded-full font-black text-sm transition-colors ${
-                  showActive ? 'text-white' : 'text-slate-800 hover:text-slate-900'
+                  showActive
+                    ? (isDarkBg ? 'text-slate-900' : 'text-white')
+                    : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
                 }`}
               >
                 {showActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full bg-slate-900 ring-1 ring-white/20"
+                    className={`absolute inset-0 rounded-full ring-1 ${isDarkBg ? 'bg-white ring-black/10' : 'bg-slate-900 ring-white/20'}`}
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -148,13 +162,15 @@ export default function UserTopHeader() {
                 type="button"
                 onClick={() => setOpenMenu(isOpen ? null : group.key)}
                 className={`relative flex items-center gap-1 px-4 py-1.5 rounded-full font-black text-sm transition-colors ${
-                  showActive ? 'text-white' : 'text-slate-800 hover:text-slate-900'
+                  showActive
+                    ? (isDarkBg ? 'text-slate-900' : 'text-white')
+                    : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
                 }`}
               >
                 {showActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full bg-slate-900 ring-1 ring-white/20"
+                    className={`absolute inset-0 rounded-full ring-1 ${isDarkBg ? 'bg-white ring-black/10' : 'bg-slate-900 ring-white/20'}`}
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
