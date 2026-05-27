@@ -12,7 +12,16 @@ const CATEGORY_MAP = {
   bahasa_tamil: 'bahasa_tamil',
   bahasa_mandarin: 'bahasa_mandarin',
   jawi: 'jawi',
+  // KAFA — Kelas Agama Fardhu Ain (Premium only)
+  kafa_quran_jawi: 'kafa_quran_jawi',
+  kafa_ulum_syariah: 'kafa_ulum_syariah',
+  kafa_sirah: 'kafa_sirah',
+  kafa_adab: 'kafa_adab',
+  kafa_bahasa_arab: 'kafa_bahasa_arab',
 };
+
+// KAFA hanya untuk sekolah_rendah (tidak ditunjukkan dalam prasekolah)
+const KAFA_CATEGORIES = ['kafa_quran_jawi', 'kafa_ulum_syariah', 'kafa_sirah', 'kafa_adab', 'kafa_bahasa_arab'];
 
 export default function CategoryGrid() {
   const { ageGroup } = useAgeGroup();
@@ -61,7 +70,14 @@ export default function CategoryGrid() {
     return () => clearInterval(interval);
   }, [ageGroup]);
 
-  const categories = Object.keys(CATEGORY_MAP).filter(category => ageGroup === 'sekolah_rendah' || category !== 'jawi');
+  const categories = Object.keys(CATEGORY_MAP).filter(category => {
+    // Prasekolah: tiada jawi & KAFA (KAFA bermula peringkat sekolah rendah)
+    if (ageGroup !== 'sekolah_rendah') {
+      if (category === 'jawi') return false;
+      if (KAFA_CATEGORIES.includes(category)) return false;
+    }
+    return true;
+  });
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">

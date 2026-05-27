@@ -11,11 +11,20 @@ const categoryConfigs = {
   worksheet: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/5e14e4531_generated_image.png', label: 'Worksheet', color: 'from-orange-300 to-amber-400', accentBg: 'bg-orange-100/30' },
   bahasa_tamil: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1dac8b0f4_generated_image.png', label: 'Bahasa Tamil', color: 'from-orange-300 to-red-400', accentBg: 'bg-orange-100/30' },
   bahasa_mandarin: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/477e24964_generated_image.png', label: 'Bahasa Mandarin', color: 'from-red-300 to-pink-400', accentBg: 'bg-red-100/30' },
+  // KAFA — Kelas Agama Fardhu Ain (Premium)
+  kafa_quran_jawi:   { emoji: '📖', label: 'KAFA · Al-Quran & Jawi',  color: 'from-emerald-400 to-teal-500', accentBg: 'bg-emerald-100/30', isPremium: true },
+  kafa_ulum_syariah: { emoji: '🕌', label: 'KAFA · Ulum Syariah',     color: 'from-teal-400 to-cyan-500',    accentBg: 'bg-teal-100/30',    isPremium: true },
+  kafa_sirah:        { emoji: '🌙', label: 'KAFA · Sirah Nabawiyah',  color: 'from-indigo-400 to-violet-500', accentBg: 'bg-indigo-100/30', isPremium: true },
+  kafa_adab:         { emoji: '🤲', label: 'KAFA · Adab Islamiah',    color: 'from-rose-400 to-pink-500',    accentBg: 'bg-rose-100/30',    isPremium: true },
+  kafa_bahasa_arab:  { emoji: '🔤', label: 'KAFA · Bahasa Arab',      color: 'from-amber-500 to-orange-500', accentBg: 'bg-amber-100/30',   isPremium: true },
 };
 
 export default function CategoryCard({ category, gameCount, idx }) {
   const config = categoryConfigs[category];
-  
+  if (!config) return null;
+
+  const hasImage = Boolean(config.image);
+
   return (
     <Link to={`/games/${category}`}>
       <motion.div
@@ -26,8 +35,29 @@ export default function CategoryCard({ category, gameCount, idx }) {
         whileTap={{ scale: 0.96 }}
         className="rounded-[2rem] overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative border border-white/50 shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 transition-shadow transform-gpu [clip-path:inset(0_round_2rem)]"
         >
-        {/* Background Image - FULL VISIBLE */}
-        <img src={config.image} alt={config.label} className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-110 transition-transform duration-500" onError={(e) => e.target.style.display = 'none'} />
+        {/* Background — Image OR gradient (untuk KAFA yang takde image) */}
+        {hasImage ? (
+          <img src={config.image} alt={config.label} className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-110 transition-transform duration-500" onError={(e) => e.target.style.display = 'none'} />
+        ) : (
+          <div className={`absolute inset-0 bg-gradient-to-br ${config.color} z-0`}>
+            {/* Islamic geometric pattern overlay untuk KAFA */}
+            <div className="absolute inset-0 opacity-20" style={{
+              backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.3) 0%, transparent 40%)'
+            }} />
+            {config.emoji && (
+              <div className="absolute right-4 top-4 text-7xl sm:text-8xl opacity-30 group-hover:opacity-50 transition-opacity">
+                {config.emoji}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Premium badge for KAFA */}
+        {config.isPremium && (
+          <div className="absolute top-3 left-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-400 text-amber-950 text-[10px] font-black shadow-md">
+            ⭐ PREMIUM
+          </div>
+        )}
 
         {/* Dark gradient only at bottom for text legibility */}
         <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/75 via-black/35 to-transparent z-[1]" />

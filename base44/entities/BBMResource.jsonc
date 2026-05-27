@@ -25,9 +25,14 @@
         "sejarah",
         "rbt",
         "pjk",
-        "seni"
+        "seni",
+        "kafa_quran_jawi",
+        "kafa_ulum_syariah",
+        "kafa_sirah",
+        "kafa_adab",
+        "kafa_bahasa_arab"
       ],
-      "description": "Subjek Prasekolah dan Sekolah Rendah"
+      "description": "Subjek Prasekolah dan Sekolah Rendah (termasuk KAFA - Kelas Agama Fardhu Ain)"
     },
     "level": {
       "type": "string",
@@ -102,7 +107,7 @@
         "premium"
       ],
       "default": "free",
-      "description": "Free atau premium"
+      "description": "Free atau premium. KAFA BBM kena default premium."
     },
     "downloadCount": {
       "type": "number",

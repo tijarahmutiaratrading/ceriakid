@@ -64,9 +64,14 @@
         "maze_adventure",
         "creative_builder",
         "problem_solver",
-        "brain_training"
+        "brain_training",
+        "kafa_quran_jawi",
+        "kafa_ulum_syariah",
+        "kafa_sirah",
+        "kafa_adab",
+        "kafa_bahasa_arab"
       ],
-      "description": "Subject category or genius mini game category"
+      "description": "Subject category or genius mini game category. KAFA categories (kafa_*) are premium-only Islamic studies content."
     },
     "ageGroup": {
       "type": "string",
@@ -105,7 +110,7 @@
         "pro"
       ],
       "default": "free",
-      "description": "Subscription tier required"
+      "description": "Subscription tier required. All KAFA games must be set to premium."
     },
     "emoji": {
       "type": "string",
