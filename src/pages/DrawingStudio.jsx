@@ -1066,13 +1066,23 @@ export default function DrawingStudio() {
       }
     }
 
-    // Bila eraser digunakan dalam mode coloring, redraw line art atas
-    // supaya guide gambar tak terpadam (eraser hanya buang warna user).
+    // Bila eraser digunakan dalam mode coloring, kita perlu:
+    // 1. Isi semula background (#fff9f0) di kawasan yang dipadam (sebab destination-out
+    //    buat pixel jadi transparent — kalau biar, area tu nampak gelap/lutsinar)
+    // 2. Redraw line art atas supaya guide gambar penuh kembali
     if (mode === 'color' && tool.id === 'eraser' && selectedColoringPage) {
       const canvas = getCanvas();
       const ctx = getCtx();
       if (canvas && ctx) {
         const { w, h } = getLogicalSize(canvas);
+        ctx.save();
+        // destination-over = lukis di BELAKANG pixel sedia ada.
+        // Jadi line art (yang tinggal) tak terjejas, dan area transparent diisi cream.
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = '#fff9f0';
+        ctx.fillRect(0, 0, w, h);
+        ctx.restore();
+        // Redraw line art (akan guna 'darken' dari dalam drawColoringGuide)
         drawColoringGuide(ctx, w, h, selectedColoringPage);
       }
     }
