@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Lock, Loader2, Sparkles } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
-import CikguMascot from '@/components/game/CikguMascot';
+import MiniGameMascot from '@/components/game/MiniGameMascot';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
 import { findMiniGame, findMiniCategory, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { useAuth } from '@/lib/AuthContext';
@@ -89,12 +89,12 @@ export default function MiniGamePlayground() {
       <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full opacity-30 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }} />
       <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full opacity-25 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }} />
 
-      {/* Family mascot — Ibu, Kakak, Adik */}
+      {/* Mini Game mascot — Panda, Kucing, Arnab */}
       <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
-        <CikguMascot size={300} />
+        <MiniGameMascot size={300} />
       </div>
       <div className="md:hidden fixed bottom-2 -right-2 z-0 opacity-90">
-        <CikguMascot size={150} />
+        <MiniGameMascot size={150} />
       </div>
 
       <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} />
