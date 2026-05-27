@@ -36,7 +36,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
             transition={{ delay: i * 0.05 }}
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: disabled ? 1 : 1.05 }}
-            onClick={() => !disabled && onAnswer(i)}
+            onClick={(e) => !disabled && onAnswer(i, e)}
             disabled={disabled}
             className={`clay-button min-h-14 rounded-2xl py-4 px-3 font-bold text-center transition-all text-sm sm:text-base break-words ${
               showFeedback && selectedIdx === i

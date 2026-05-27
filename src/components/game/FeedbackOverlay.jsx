@@ -2,24 +2,29 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
-export default function FeedbackOverlay({ isCorrect, show, message, onDone }) {
+export default function FeedbackOverlay({ isCorrect, show, message, onDone, combo = 0, comboMessage = null }) {
   useEffect(() => {
     if (show && isCorrect) {
-      confetti({
-        particleCount: 80,
-        spread: 60,
-        origin: { y: 0.7 },
-        colors: ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#8b5cf6'],
-      });
+      const particleCount = combo >= 5 ? 140 : combo >= 3 ? 100 : 80;
+      const colors = combo >= 5
+        ? ['#f59e0b', '#ef4444', '#ec4899', '#a855f7', '#facc15']
+        : ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#8b5cf6'];
+      confetti({ particleCount, spread: 70, origin: { y: 0.7 }, colors });
+      // Extra side bursts for big combos
+      if (combo >= 5) {
+        setTimeout(() => confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors }), 150);
+        setTimeout(() => confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors }), 200);
+      }
     }
-  }, [show, isCorrect]);
+  }, [show, isCorrect, combo]);
 
   useEffect(() => {
     if (show) {
-      const timer = setTimeout(onDone, isCorrect ? 1200 : 1000);
+      const duration = comboMessage ? 1500 : isCorrect ? 1100 : 950;
+      const timer = setTimeout(onDone, duration);
       return () => clearTimeout(timer);
     }
-  }, [show, isCorrect, onDone]);
+  }, [show, isCorrect, onDone, comboMessage]);
 
   return (
     <AnimatePresence>
@@ -80,6 +85,20 @@ export default function FeedbackOverlay({ isCorrect, show, message, onDone }) {
                     ⭐
                   </motion.span>
                 ))}
+              </motion.div>
+            )}
+
+            {/* Combo banner — appears only on milestone streaks */}
+            {isCorrect && comboMessage && (
+              <motion.div
+                initial={{ scale: 0, y: 20, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                transition={{ delay: 0.7, type: 'spring', damping: 10, stiffness: 250 }}
+                className="mt-4 inline-block px-5 py-2 rounded-full bg-gradient-to-r from-orange-500 via-pink-500 to-rose-500 shadow-lg border-2 border-white"
+              >
+                <p className={`font-black text-white drop-shadow ${comboMessage.size === 'mega' ? 'text-2xl' : comboMessage.size === 'large' ? 'text-xl' : 'text-base'}`}>
+                  {comboMessage.msg}
+                </p>
               </motion.div>
             )}
           </motion.div>

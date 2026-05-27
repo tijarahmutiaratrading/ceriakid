@@ -19,6 +19,9 @@ import ProgressBar from '@/components/game/ProgressBar';
 import AchievementBadges from '@/components/game/AchievementBadges';
 import QuestionRenderer from '@/components/game/QuestionRenderer';
 import { playSound } from '@/lib/soundManager';
+import { playCorrectReward, playGentleWrong, playComboFanfare, playVictory, getComboMessage, haptic } from '@/lib/gameRewards';
+import StreakIndicator from '@/components/game/StreakIndicator';
+import AnswerBurst, { triggerAnswerBurst } from '@/components/game/AnswerBurst';
 import { checkAchievements, calculateStreak } from '@/lib/achievementManager';
 import { queueGameProgress, syncOfflineProgress } from '@/lib/offlineSyncManager';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
@@ -97,6 +100,9 @@ export default function GamePlayer() {
     startTime: Date.now(),
     showTracing: false,
     unlockedBadges: [],
+    streak: 0,
+    bestStreak: 0,
+    comboMessage: null,
   });
 
   // Save progress after game finishes — only trigger on `finished` becoming true, not on selectedChild change
@@ -118,7 +124,7 @@ export default function GamePlayer() {
     return shuffled.slice(0, Math.min(limit, shuffled.length));
   }, [game, questionSeed]);
 
-  const handleAnswer = useCallback((answer) => {
+  const handleAnswer = useCallback((answer, event) => {
     if (state.showFeedback || !questions[state.currentQ]) return;
 
     const currentQuestion = questions[state.currentQ];
@@ -127,7 +133,6 @@ export default function GamePlayer() {
     // Check answer based on question type
     if (['multiple_choice', 'true_false', 'yes_no'].includes(currentQuestion.type) || !currentQuestion.type) {
       correct = answer === currentQuestion.answer;
-      console.log(`[Answer Check] Selected: ${answer} (${currentQuestion.options?.[answer]}), Correct: ${currentQuestion.answer} (${currentQuestion.options?.[currentQuestion.answer]}), Match: ${correct}`);
     } else if (['short_answer', 'fill_blank'].includes(currentQuestion.type)) {
       const answerText = String(answer).toLowerCase().trim();
       const correctText = String(currentQuestion.answer).toLowerCase().trim();
@@ -140,15 +145,30 @@ export default function GamePlayer() {
       correct = String(answer).toLowerCase() === String(currentQuestion.answer).toLowerCase();
     }
 
+    // Trigger burst at tap location (fallback to centre if no event)
+    const burstX = event?.clientX ?? window.innerWidth / 2;
+    const burstY = event?.clientY ?? window.innerHeight / 2;
+    triggerAnswerBurst(burstX, burstY, correct ? 'correct' : 'wrong');
+
+    const newStreak = correct ? state.streak + 1 : 0;
+    const comboMsg = correct ? getComboMessage(newStreak) : null;
+    const isMilestone = correct && (newStreak === 3 || newStreak === 5 || newStreak === 7 || newStreak === 10);
+
     if (correct) {
-      playSound('correct');
+      playCorrectReward(newStreak);
+      if (isMilestone) {
+        setTimeout(() => playComboFanfare(newStreak), 200);
+      }
+      const particleCount = newStreak >= 5 ? 90 : 60;
       confetti({
-        particleCount: 60,
-        spread: 50,
-        colors: ['#f59e0b', '#ec4899', '#3b82f6', '#10b981'],
+        particleCount,
+        spread: 55,
+        colors: newStreak >= 5
+          ? ['#f59e0b', '#ef4444', '#ec4899', '#a855f7', '#facc15']
+          : ['#f59e0b', '#ec4899', '#3b82f6', '#10b981'],
       });
     } else {
-      playSound('wrong');
+      playGentleWrong();
     }
 
     setState(prev => ({
@@ -158,8 +178,11 @@ export default function GamePlayer() {
       feedbackMsg: correct ? '✨ Jawapan Betul!' : '💪 Cuba Lagi!',
       score: correct ? prev.score + 1 : prev.score,
       selectedIdx: answer,
+      streak: newStreak,
+      bestStreak: Math.max(prev.bestStreak, newStreak),
+      comboMessage: comboMsg,
     }));
-  }, [state.showFeedback, state.currentQ, questions]);
+  }, [state.showFeedback, state.currentQ, state.streak, questions]);
 
   const handleFeedbackDone = useCallback(() => {
     setState(prev => {
@@ -172,6 +195,8 @@ export default function GamePlayer() {
           questions.length,
           stars
         );
+        // Big satisfying victory cue on game completion
+        setTimeout(() => playVictory(), 100);
         return { ...prev, finished: true, showFeedback: false };
       }
       return {
@@ -194,35 +219,30 @@ export default function GamePlayer() {
     }
   }, [state.currentQ]);
 
+  const resetState = () => ({
+    currentQ: 0,
+    score: 0,
+    showFeedback: false,
+    isCorrect: false,
+    feedbackMsg: '',
+    finished: false,
+    selectedIdx: null,
+    showTracing: false,
+    unlockedBadges: [],
+    streak: 0,
+    bestStreak: 0,
+    comboMessage: null,
+  });
+
   const handlePlayAgain = () => {
     savedRef.current = false;
-    setState({
-      currentQ: 0,
-      score: 0,
-      showFeedback: false,
-      isCorrect: false,
-      feedbackMsg: '',
-      finished: false,
-      selectedIdx: null,
-      showTracing: false,
-      unlockedBadges: [],
-    });
+    setState(resetState());
   };
 
   const handleGenerateNew = () => {
     savedRef.current = false;
     setQuestionSeed(s => s + 1); // triggers shuffle
-    setState({
-      currentQ: 0,
-      score: 0,
-      showFeedback: false,
-      isCorrect: false,
-      feedbackMsg: '',
-      finished: false,
-      selectedIdx: null,
-      showTracing: false,
-      unlockedBadges: [],
-    });
+    setState(resetState());
   };
 
 
@@ -459,7 +479,9 @@ export default function GamePlayer() {
             />
           )}
         </div>
-        <FeedbackOverlay show={state.showFeedback} isCorrect={state.isCorrect} message={state.feedbackMsg} onDone={handleFeedbackDone} />
+        <FeedbackOverlay show={state.showFeedback} isCorrect={state.isCorrect} message={state.feedbackMsg} onDone={handleFeedbackDone} combo={state.streak} comboMessage={state.comboMessage} />
+        <StreakIndicator streak={state.streak} />
+        <AnswerBurst />
       </div>
     );
   }
@@ -575,7 +597,12 @@ export default function GamePlayer() {
         isCorrect={state.isCorrect}
         message={state.feedbackMsg}
         onDone={handleFeedbackDone}
+        combo={state.streak}
+        comboMessage={state.comboMessage}
       />
+
+      <StreakIndicator streak={state.streak} />
+      <AnswerBurst />
 
       <AchievementBadges badges={state.unlockedBadges} />
     </div>
