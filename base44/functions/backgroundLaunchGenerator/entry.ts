@@ -11,6 +11,13 @@ const BUCKETS = [
   { ageGroup: 'sekolah_rendah', darjah: 'darjah_6', subjects: ['bahasa_melayu','english','mathematics','science','jawi'] },
 ];
 
+// KAFA buckets — 7 subjek UPKK JAKIM × 6 darjah. Cap kecil dulu (10 per bucket).
+const KAFA_SUBJECTS = ['kafa_quran','kafa_jawi','kafa_akidah','kafa_ibadah','kafa_sirah','kafa_adab','kafa_bahasa_arab'];
+const KAFA_BUCKETS = ['darjah_1','darjah_2','darjah_3','darjah_4','darjah_5','darjah_6'].map(d => ({
+  ageGroup: 'sekolah_rendah', darjah: d, subjects: KAFA_SUBJECTS,
+}));
+const KAFA_TARGET_CAP = 10;
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -51,43 +58,68 @@ Deno.serve(async (req) => {
       console.log(`✂️ Trimmed total ${totalTrimmed} excess games`);
     }
 
-    // STEP 2: Find first incomplete bucket
+    // STEP 2a: Find first incomplete bucket — KAFA dulu (priority), sebab cap kecil & quick win
     let targetBucket = null;
-    for (const b of BUCKETS) {
+    let bucketCap = targetCap;
+    for (const b of KAFA_BUCKETS) {
       for (const subject of b.subjects) {
-        const filter = { ageGroup: b.ageGroup, category: subject, isPublished: true };
-        if (b.darjah) filter.darjah = b.darjah;
-        const existing = await base44.asServiceRole.entities.Game.filter(filter);
-        if (existing.length < targetCap) {
+        const existing = await base44.asServiceRole.entities.Game.filter({
+          ageGroup: b.ageGroup, darjah: b.darjah, category: subject, isPublished: true,
+        });
+        if (existing.length < KAFA_TARGET_CAP) {
           targetBucket = {
             ageGroup: b.ageGroup,
             darjah: b.darjah,
             category: subject,
             count: existing.length,
-            needed: targetCap - existing.length,
+            needed: KAFA_TARGET_CAP - existing.length,
           };
+          bucketCap = KAFA_TARGET_CAP;
           break;
         }
       }
       if (targetBucket) break;
     }
 
+    // STEP 2b: Kalau KAFA dah cukup, baru sambung KSSR biasa
     if (!targetBucket) {
-      console.log('🎉 All KSSR buckets complete! Auto-disabling background mode.');
+      for (const b of BUCKETS) {
+        for (const subject of b.subjects) {
+          const filter = { ageGroup: b.ageGroup, category: subject, isPublished: true };
+          if (b.darjah) filter.darjah = b.darjah;
+          const existing = await base44.asServiceRole.entities.Game.filter(filter);
+          if (existing.length < targetCap) {
+            targetBucket = {
+              ageGroup: b.ageGroup,
+              darjah: b.darjah,
+              category: subject,
+              count: existing.length,
+              needed: targetCap - existing.length,
+            };
+            bucketCap = targetCap;
+            break;
+          }
+        }
+        if (targetBucket) break;
+      }
+    }
+
+    if (!targetBucket) {
+      console.log('🎉 All KSSR + KAFA buckets complete! Auto-disabling background mode.');
       if (setting?.id) {
         await base44.asServiceRole.entities.QCSetting.update(setting.id, { backgroundLaunchEnabled: false });
       }
       return Response.json({ success: true, allComplete: true });
     }
 
-    console.log(`🚀 Background generating: ${targetBucket.ageGroup}/${targetBucket.darjah || 'pra'}/${targetBucket.category} (${targetBucket.count}/${targetCap})`);
+    console.log(`🚀 Background generating: ${targetBucket.ageGroup}/${targetBucket.darjah || 'pra'}/${targetBucket.category} (${targetBucket.count}/${bucketCap})`);
 
     // Call existing launchGenerateBatch function
     const res = await base44.asServiceRole.functions.invoke('launchGenerateBatch', {
       ageGroup: targetBucket.ageGroup,
       darjah: targetBucket.darjah,
       category: targetBucket.category,
-      targetCount: targetCap,
+      targetCount: bucketCap,
       dryRun: false,
       internalCall: true,
     });
