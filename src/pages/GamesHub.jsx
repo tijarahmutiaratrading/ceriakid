@@ -33,14 +33,22 @@ export default function GamesHub() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
-      {/* Floating sparkles for playful vibe (di atas background AppLayout) */}
+      {/* Purple gradient background — tutup AppLayout background */}
+      <div
+        className="fixed inset-0 pointer-events-none -z-10"
+        style={{
+          background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #6b21a8 100%)',
+        }}
+      />
+
+      {/* Floating sparkles for playful vibe */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-28 left-6 text-2xl text-purple-400/40 animate-float">✨</div>
-        <div className="absolute top-40 right-10 text-xl text-yellow-400/50 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
-        <div className="absolute top-1/3 left-1/4 text-lg text-pink-400/40 animate-float" style={{ animationDelay: '2s' }}>💫</div>
-        <div className="absolute top-1/2 right-8 text-2xl text-cyan-400/40 animate-float" style={{ animationDelay: '2.6s' }}>✨</div>
-        <div className="absolute bottom-40 left-10 text-xl text-yellow-400/50 animate-float" style={{ animationDelay: '3.5s' }}>⭐</div>
-        <div className="absolute bottom-1/3 right-1/4 text-lg text-purple-400/40 animate-float" style={{ animationDelay: '4.2s' }}>✨</div>
+        <div className="absolute top-28 left-6 text-2xl text-white/40 animate-float">✨</div>
+        <div className="absolute top-40 right-10 text-xl text-yellow-300/60 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
+        <div className="absolute top-1/3 left-1/4 text-lg text-pink-300/50 animate-float" style={{ animationDelay: '2s' }}>💫</div>
+        <div className="absolute top-1/2 right-8 text-2xl text-cyan-300/50 animate-float" style={{ animationDelay: '2.6s' }}>✨</div>
+        <div className="absolute bottom-40 left-10 text-xl text-yellow-300/60 animate-float" style={{ animationDelay: '3.5s' }}>⭐</div>
+        <div className="absolute bottom-1/3 right-1/4 text-lg text-purple-300/50 animate-float" style={{ animationDelay: '4.2s' }}>✨</div>
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
