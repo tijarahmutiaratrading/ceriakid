@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, RotateCcw, Star, BookOpen, Sparkles, Trophy, ChevronRight } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import StorySlideVisual from '@/components/story/StorySlideVisual';
+import StoryAudioPlayer from '@/components/story/StoryAudioPlayer';
 import { base44 } from '@/api/base44Client';
 
 const SAMPLE_STORIES = [
@@ -144,6 +145,8 @@ export default function StoryKid() {
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
+
+      <StoryAudioPlayer autoPlay={!!story} />
 
       <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-28 pt-20 md:pt-24 overflow-x-hidden">
         <Link to="/dashboard" className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full bg-white/95 text-purple-700 font-black text-sm shadow-xl shadow-purple-950/15 hover:bg-white hover:scale-105 transition-all">
