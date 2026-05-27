@@ -8,7 +8,7 @@ import { useSafeLocation } from '@/hooks/useSafeLocation';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 
-export default function AppHeader({ showBack = null, backTo = '/', title = null }) {
+export default function AppHeader({ showBack = null, backTo = '/', title = null, theme = 'auto' }) {
   const [isOpen, setIsOpen] = useState(false);
   const [navVisible, setNavVisible] = useState(true);
   const [expandedSubmenu, setExpandedSubmenu] = useState(null);
@@ -21,6 +21,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
   const isLanding = location.pathname === '/' || location.pathname === '/landing';
   const isPlayingGame = location.pathname.startsWith('/play/');
   const lastScrollY = React.useRef(0);
+
+  // Dynamic theme: 'dark' = pill gelap utk background terang | 'light' = pill cerah utk background gelap
+  // 'auto' = ikut isPlayingGame (default lama)
+  const resolvedTheme = theme === 'auto' ? (isPlayingGame ? 'dark' : 'light') : theme;
+  const isDarkPill = resolvedTheme === 'dark';
   
   // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
@@ -169,8 +174,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
       {/* Top Header */}
        <nav className="md:hidden fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
          <div
-           className={`max-w-[52rem] mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] ring-1 ${isPlayingGame ? 'ring-white/25 shadow-2xl shadow-slate-950/25' : 'pro-glass ring-white/20'}`}
-           style={isPlayingGame ? { background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.82))', backdropFilter: 'blur(22px)' } : undefined}
+           className={`max-w-[52rem] mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] ring-1 ${isDarkPill ? 'ring-white/25 shadow-2xl shadow-slate-950/25' : 'pro-glass ring-white/20'}`}
+           style={isDarkPill ? { background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.82))', backdropFilter: 'blur(22px)' } : undefined}
          >
            <motion.button
              type="button"
@@ -182,17 +187,17 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
            </motion.button>
 
            <div className="min-w-0 text-center px-1">
-             <p className="text-white/55 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] leading-none">CeriaKid</p>
-             <p className="text-white font-black text-sm sm:text-base truncate leading-tight mt-1">{displayTitle}</p>
+             <p className={`${isDarkPill ? 'text-white/55' : 'text-slate-500'} text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] leading-none`}>CeriaKid</p>
+             <p className={`${isDarkPill ? 'text-white' : 'text-slate-900'} font-black text-sm sm:text-base truncate leading-tight mt-1`}>{displayTitle}</p>
            </div>
 
            <div className="flex items-center gap-2 justify-end">
              <Link to={isAuthenticated ? "/settings" : "/"} className="flex items-center justify-end" title={isAuthenticated ? 'Tetapan Profil' : 'CeriaKid'}>
                {isAuthenticated ? (
                  headerAvatarUrl ? (
-                   <img src={headerAvatarUrl} alt="Avatar" className="w-10 h-10 rounded-full object-cover cursor-pointer shadow-lg ring-2 ring-white/60" />
+                   <img src={headerAvatarUrl} alt="Avatar" className={`w-10 h-10 rounded-full object-cover cursor-pointer shadow-lg ring-2 ${isDarkPill ? 'ring-white/60' : 'ring-purple-200'}`} />
                  ) : (
-                   <div className="w-10 h-10 rounded-full bg-white/25 border-2 border-white/50 flex items-center justify-center text-xl cursor-pointer shadow-lg">🐱</div>
+                   <div className={`w-10 h-10 rounded-full ${isDarkPill ? 'bg-white/25 border-white/50' : 'bg-purple-100 border-purple-200'} border-2 flex items-center justify-center text-xl cursor-pointer shadow-lg`}>🐱</div>
                  )
                ) : (
                  <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-2xl cursor-pointer shadow-lg ring-1 ring-white/40" />
