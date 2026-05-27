@@ -71,8 +71,8 @@ export default function AffiliatePage() {
   const referralLink = `${baseUrl}/?ref=${affiliate.referralCode}`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-pink-50/30">
-      <div className="p-4 sm:p-6 max-w-6xl mx-auto">
+    <div className="min-h-screen">
+      <div className="p-4 sm:p-6 max-w-6xl mx-auto pt-20 md:pt-8">
         {/* Hero with referral link & quick share */}
         <AffiliateHero affiliate={affiliate} referralLink={referralLink} />
 
