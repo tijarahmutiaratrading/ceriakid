@@ -32,12 +32,19 @@ export default function GamesHub() {
   const visibleCategories = MINI_GAME_CATEGORIES.filter(c => (counts[c.id] ?? 0) > 0);
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
-      {/* Purple gradient background — tutup AppLayout background */}
+    <div
+      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative"
+      style={{
+        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #6b21a8 100%)',
+      }}
+    >
+      {/* Extra fixed purple layer to ensure full coverage on scroll */}
       <div
-        className="fixed inset-0 pointer-events-none -z-10"
+        aria-hidden="true"
+        className="fixed inset-0 pointer-events-none"
         style={{
           background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #6b21a8 100%)',
+          zIndex: 0,
         }}
       />
 
@@ -53,7 +60,7 @@ export default function GamesHub() {
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
         {/* Back button */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <Link
