@@ -265,7 +265,7 @@ export default function StoryKid() {
                 <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/70 to-transparent pointer-events-none" />
                 <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/85 via-black/60 to-transparent pointer-events-none" />
 
-                {/* Top bar — back + title + progress + stars */}
+                {/* Top bar — back + title + progress + stars + music */}
                 <div className="absolute top-0 left-0 right-0 p-3 sm:p-4 flex items-center gap-2 sm:gap-3 z-10">
                   <button onClick={() => setSelected(null)} className="w-11 h-11 rounded-2xl bg-white/95 text-purple-700 font-black shadow-lg flex items-center justify-center flex-shrink-0">←</button>
                   <div className="flex-1 min-w-0 rounded-2xl bg-black/40 backdrop-blur-md px-3 py-2 border border-white/20">
@@ -274,17 +274,13 @@ export default function StoryKid() {
                       <div className="h-full bg-gradient-to-r from-yellow-300 to-pink-400 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
                     </div>
                   </div>
+                  <div className="flex-shrink-0"><StoryAudioPlayer autoPlay={!!story} /></div>
                   <div className="px-3 py-2 rounded-2xl bg-yellow-300 text-yellow-950 font-black text-sm shadow-lg flex-shrink-0">{stars} ⭐</div>
                 </div>
 
                 {/* Page counter */}
                 <div className="absolute top-20 left-3 sm:left-4 z-10 px-3 py-1.5 rounded-full bg-white/90 text-purple-700 text-xs font-black shadow">
                   Halaman {Math.min(sceneIndex + 1, story.scenes.length)} / {story.scenes.length}
-                </div>
-
-                {/* Music player — floating in canvas */}
-                <div className="absolute top-20 right-3 sm:right-4 z-10">
-                  <StoryAudioPlayer autoPlay={!!story} />
                 </div>
 
                 {/* Bottom: text + choices overlay */}
