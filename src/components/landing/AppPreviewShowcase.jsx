@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { base44 } from '@/api/base44Client';
 
 // ── GAME SAMPLE ──
 function GameSample() {
@@ -231,6 +232,57 @@ function ProgressPreview() {
   );
 }
 
+// ── SUBJECT GAMES GRID — live counts from DB ──
+const SUBJECTS = [
+  { icon: '🇲🇾', name: 'Bahasa Melayu', category: 'bahasa_melayu', color: 'from-blue-500 to-cyan-400' },
+  { icon: '🇬🇧', name: 'English', category: 'english', color: 'from-green-500 to-emerald-400' },
+  { icon: '🔢', name: 'Matematik', category: 'mathematics', color: 'from-purple-500 to-violet-400' },
+  { icon: '🧪', name: 'Sains', category: 'science', color: 'from-orange-500 to-amber-400' },
+  { icon: '🕌', name: 'Jawi', category: 'jawi', color: 'from-teal-500 to-cyan-400' },
+  { icon: '🏮', name: 'Mandarin', category: 'bahasa_mandarin', color: 'from-red-500 to-orange-400' },
+];
+
+function SubjectGamesGrid() {
+  const [counts, setCounts] = useState({});
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const results = await Promise.all(
+          SUBJECTS.map(s =>
+            base44.entities.Game.filter({ category: s.category, isPublished: true })
+              .then(games => [s.category, games.length])
+              .catch(() => [s.category, 0])
+          )
+        );
+        if (mounted) setCounts(Object.fromEntries(results));
+      } catch (_) {}
+    })();
+    return () => { mounted = false; };
+  }, []);
+
+  return (
+    <div>
+      <p className="font-black text-slate-800 text-sm mb-3 text-center">📚 Games Subjek (KSPK + KSSR)</p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        {SUBJECTS.map(s => {
+          const n = counts[s.category];
+          return (
+            <div key={s.name} className={`rounded-2xl p-3 bg-gradient-to-br ${s.color} text-white shadow`}>
+              <div className="text-2xl mb-1">{s.icon}</div>
+              <p className="font-black text-sm leading-tight">{s.name}</p>
+              <p className="text-white/80 text-xs mt-0.5">
+                {n === undefined ? '…' : `${n} game${n === 1 ? '' : 's'}`}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ── SECTION WRAPPER ──
 function Section({ number, badge, badgeColor, title, desc, children }) {
   return (
@@ -341,25 +393,7 @@ export default function AppPreviewShowcase() {
           desc="7 subjek utama ikut KSPK + KSSR, ditambah dengan Mini Games seru untuk latih kemahiran berfikir."
         >
           <div className="space-y-5">
-            <div>
-              <p className="font-black text-slate-800 text-sm mb-3 text-center">📚 Games Subjek (KSPK + KSSR)</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {[
-                  { icon: '🇲🇾', name: 'Bahasa Melayu', games: 42, color: 'from-blue-500 to-cyan-400' },
-                  { icon: '🇬🇧', name: 'English', games: 38, color: 'from-green-500 to-emerald-400' },
-                  { icon: '🔢', name: 'Matematik', games: 45, color: 'from-purple-500 to-violet-400' },
-                  { icon: '🧪', name: 'Sains', games: 30, color: 'from-orange-500 to-amber-400' },
-                  { icon: '🕌', name: 'Jawi', games: 25, color: 'from-teal-500 to-cyan-400' },
-                  { icon: '🏮', name: 'Mandarin', games: 20, color: 'from-red-500 to-orange-400' },
-                ].map(s => (
-                  <div key={s.name} className={`rounded-2xl p-3 bg-gradient-to-br ${s.color} text-white shadow`}>
-                    <div className="text-2xl mb-1">{s.icon}</div>
-                    <p className="font-black text-sm leading-tight">{s.name}</p>
-                    <p className="text-white/80 text-xs mt-0.5">{s.games}+ games</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <SubjectGamesGrid />
             <div>
               <p className="font-black text-slate-800 text-sm mb-3 text-center">🎮 Mini Games (Genius Hub)</p>
               <div className="grid grid-cols-2 gap-2">
