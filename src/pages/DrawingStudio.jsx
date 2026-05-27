@@ -446,8 +446,10 @@ export default function DrawingStudio() {
     ctx.fillStyle = '#fff9f0';
     ctx.fillRect(0, 0, w, h);
     if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape, currentLetterIndex);
-    if (mode === 'color' && selectedColoringPage) drawColoringGuide(ctx, w, h, selectedColoringPage);
-  }, [mode, selectedShape, selectedColoringPage, currentLetterIndex]);
+    // NOTE: Line art coloring TIDAK dilukis pada canvas. Ia rendered sebagai
+    // <img> overlay (pointer-events:none) di atas canvas — supaya pemadam
+    // hanya buang warna user, tak terjejas line art.
+  }, [mode, selectedShape, currentLetterIndex]);
 
   // Workbook-style: render 1 row × LETTERS_PER_ROW letters dengan baseline guides
   // Slot 0 = solid example (contoh), slots 1..N = dotted for tracing
@@ -1066,26 +1068,6 @@ export default function DrawingStudio() {
       }
     }
 
-    // Bila eraser digunakan dalam mode coloring, kita perlu:
-    // 1. Isi semula background (#fff9f0) di kawasan yang dipadam (sebab destination-out
-    //    buat pixel jadi transparent — kalau biar, area tu nampak gelap/lutsinar)
-    // 2. Redraw line art atas supaya guide gambar penuh kembali
-    if (mode === 'color' && tool.id === 'eraser' && selectedColoringPage) {
-      const canvas = getCanvas();
-      const ctx = getCtx();
-      if (canvas && ctx) {
-        const { w, h } = getLogicalSize(canvas);
-        ctx.save();
-        // destination-over = lukis di BELAKANG pixel sedia ada.
-        // Jadi line art (yang tinggal) tak terjejas, dan area transparent diisi cream.
-        ctx.globalCompositeOperation = 'destination-over';
-        ctx.fillStyle = '#fff9f0';
-        ctx.fillRect(0, 0, w, h);
-        ctx.restore();
-        // Redraw line art (akan guna 'darken' dari dalam drawColoringGuide)
-        drawColoringGuide(ctx, w, h, selectedColoringPage);
-      }
-    }
   };
 
   const downloadCanvas = () => {
@@ -1262,6 +1244,19 @@ export default function DrawingStudio() {
                   className="w-full touch-none block"
                   style={{ backgroundColor: '#fff9f0', cursor: stickerMode ? 'pointer' : 'crosshair' }}
                 />
+                {/* Line art overlay untuk mode mewarna — pointer-events:none supaya canvas
+                    di bawah masih boleh terima input. mix-blend:darken kekalkan outline
+                    hitam crisp dan biar warna user kelihatan. */}
+                {mode === 'color' && selectedColoringPage?.imageUrl && (
+                  <img
+                    src={selectedColoringPage.imageUrl}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full pointer-events-none select-none"
+                    style={{ objectFit: 'contain', mixBlendMode: 'darken' }}
+                    draggable={false}
+                  />
+                )}
               </div>
             </ApplePanel>
 
@@ -1734,14 +1729,26 @@ export default function DrawingStudio() {
               </div>
             </div>
 
-            <canvas
-              ref={fsCanvasRef}
-              onPointerDown={startDraw}
-              onPointerMove={draw}
-              onPointerUp={endDraw}
-              onPointerLeave={endDraw}
-              style={{ flex: 1, width: '100%', touchAction: 'none', cursor: stickerMode ? 'pointer' : 'crosshair', display: 'block', backgroundColor: '#fff9f0', position: 'relative', zIndex: 1 }}
-            />
+            <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+              <canvas
+                ref={fsCanvasRef}
+                onPointerDown={startDraw}
+                onPointerMove={draw}
+                onPointerUp={endDraw}
+                onPointerLeave={endDraw}
+                style={{ width: '100%', height: '100%', touchAction: 'none', cursor: stickerMode ? 'pointer' : 'crosshair', display: 'block', backgroundColor: '#fff9f0', position: 'absolute', inset: 0, zIndex: 1 }}
+              />
+              {/* Fullscreen line art overlay — sama macam normal canvas */}
+              {mode === 'color' && selectedColoringPage?.imageUrl && (
+                <img
+                  src={selectedColoringPage.imageUrl}
+                  alt=""
+                  aria-hidden="true"
+                  draggable={false}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', pointerEvents: 'none', userSelect: 'none', mixBlendMode: 'darken', zIndex: 2 }}
+                />
+              )}
+            </div>
           </div>,
           document.body
         )}
