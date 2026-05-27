@@ -92,9 +92,10 @@ export default function Home() {
 
       <AppHeader />
 
-      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pb-40 pt-20 md:pt-8 space-y-8 md:space-y-10">
-
+      {/* Full-bleed hero — edge-to-edge, full viewport height (matches landing) */}
       {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl} onLogout={logout} />}
+
+      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pb-40 pt-10 md:pt-12 space-y-8 md:space-y-10">
 
       {isAuthenticated && user?.email && <SubscriptionExpiryBanner userEmail={user.email} />}
 
