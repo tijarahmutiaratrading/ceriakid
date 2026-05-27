@@ -195,10 +195,10 @@ export default function ParentDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="rounded-3xl p-10 text-center"
-            style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+            style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
           >
             <p className="text-5xl mb-4">🎮</p>
-            <p className="text-white font-black text-lg mb-2">Belum ada data</p>
+            <p className="text-white font-black text-lg mb-2 drop-shadow">Belum ada data</p>
             <p className="text-white/90 text-sm mb-5">Biarkan anak bermain permainan untuk melihat prestasi mereka di sini</p>
             <Link to="/dashboard">
               <motion.button
@@ -234,20 +234,20 @@ export default function ParentDashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.1 }}
                   className="rounded-3xl p-5 space-y-4"
-                  style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+                  style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
                 >
                   {/* Child Header */}
-                  <div className="flex items-center justify-between pb-4 border-b border-white/20">
+                  <div className="flex items-center justify-between pb-4 border-b border-white/15">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-white/25 flex items-center justify-center text-2xl">🌟</div>
+                      <div className="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-2xl ring-1 ring-white/20">🌟</div>
                       <div>
-                        <h2 className="text-xl font-black text-white">{childName}</h2>
+                        <h2 className="text-xl font-black text-white drop-shadow">{childName}</h2>
                         <p className="text-white/90 text-sm font-bold">{totalGames} permainan dimainkan</p>
                       </div>
                     </div>
                     <div className="text-right">
                       <p className="text-white/90 text-xs font-bold">Rata-rata</p>
-                      <p className="text-white font-black text-2xl">{avgStars}<span className="text-sm text-yellow-300">★</span></p>
+                      <p className="text-white font-black text-2xl drop-shadow">{avgStars}<span className="text-sm text-yellow-300">★</span></p>
                     </div>
                   </div>
 
@@ -258,7 +258,7 @@ export default function ParentDashboard() {
                       { label: 'Bintang', value: totalStars, emoji: '⭐' },
                       { label: 'Subjek', value: weakSubjects.length, emoji: '📚' },
                     ].map((stat, i) => (
-                      <div key={i} className="rounded-2xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.18)' }}>
+                      <div key={i} className="rounded-2xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}>
                         <p className="text-xl mb-1">{stat.emoji}</p>
                         <p className="text-white font-black text-lg leading-none">{stat.value}</p>
                         <p className="text-white/90 text-xs font-bold mt-1">{stat.label}</p>
@@ -279,7 +279,7 @@ export default function ParentDashboard() {
                             </span>
                             <span className="text-white/90 text-xs font-bold">{subject.totalPlayed} games · {Math.round(percentage)}%</span>
                           </div>
-                          <div className="w-full bg-white/20 rounded-full h-3 overflow-hidden">
+                          <div className="w-full bg-white/15 rounded-full h-3 overflow-hidden">
                             <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: `${percentage}%` }}
@@ -297,7 +297,7 @@ export default function ParentDashboard() {
                   </div>
 
                   {/* Subject Breakdown */}
-                  <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.15)' }}>
+                  <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
                     <SubjectBreakdown progress={games} />
                   </div>
 
@@ -323,7 +323,7 @@ export default function ParentDashboard() {
                   )}
 
                   {/* Share Buttons */}
-                  <div className="pt-2 border-t border-white/20 space-y-2">
+                  <div className="pt-2 border-t border-white/15 space-y-2">
                     <p className="text-white text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
                       <Share2 className="w-3 h-3" /> Kongsi Pencapaian
                     </p>
