@@ -91,10 +91,10 @@ export default function DailyChallenge({ ageGroup }) {
             {completed ? <CheckCircle2 className="w-5 h-5 text-yellow-200" /> : <Zap className="w-5 h-5 text-yellow-200" />}
             <span className="font-black text-sm tracking-wide">{completed ? 'CABARAN SELESAI ✓' : 'CABARAN HARIAN'}</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-black mb-1" style={{ textShadow: '0 2px 6px rgba(0,0,0,0.35)' }}>
+          <h3 className="text-xl sm:text-2xl font-black mb-1">
             {categoryEmojis[challenge.gameCategory]} {completed ? 'Syabas, Hebat!' : 'Mainkan & Menang'}
           </h3>
-          <p className="text-white text-sm font-bold mb-4" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>
+          <p className="text-white text-sm font-bold mb-4">
             {completed
               ? `Anda dah selesaikan cabaran hari ini. Datang balik esok untuk cabaran baru! 🌟`
               : `Selesaikan cabaran hari ini untuk +${challenge.bonusReward} bonus poin! ⭐`}
