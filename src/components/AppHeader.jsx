@@ -97,7 +97,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
         },
         {
           path: '/group-cikgu-ai',
-          label: '🤖 Cikgu AI',
+          label: 'Cikgu AI',
           submenu: [
             { path: '/ai-assistant', label: 'Cikgu Firdaus — Tutor' },
             { path: '/quiz-ai', label: 'Cikgu Aina — Kuiz' },
