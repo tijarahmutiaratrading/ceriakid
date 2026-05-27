@@ -512,29 +512,72 @@ export default function DrawingStudio() {
         }
       }
 
-      // Start point — green circle (always visible so anak tahu mula di mana)
+      // Start point — pulsing green dot with "MULA" label so anak tahu di mana mula
       ctx.setLineDash([]);
       const sx = stroke[0][0] * w;
       const sy = stroke[0][1] * h;
+      const startR = round === 3 ? 10 : 14;
+
+      // Soft glow ring
+      ctx.fillStyle = 'rgba(34,197,94,0.25)';
+      ctx.beginPath();
+      ctx.arc(sx, sy, startR + 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Main green dot
       ctx.fillStyle = '#22c55e';
       ctx.beginPath();
-      ctx.arc(sx, sy, round === 3 ? 9 : 12, 0, Math.PI * 2);
+      ctx.arc(sx, sy, startR, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      // End point — red dot
+      // White ▶ arrow inside pointing along the first segment direction
+      if (stroke.length >= 2) {
+        const next = stroke[1];
+        const dx = next[0] * w - sx;
+        const dy = next[1] * h - sy;
+        const ang = Math.atan2(dy, dx);
+        ctx.save();
+        ctx.translate(sx, sy);
+        ctx.rotate(ang);
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        const a = startR * 0.55;
+        ctx.moveTo(a, 0);
+        ctx.lineTo(-a * 0.6, -a * 0.7);
+        ctx.lineTo(-a * 0.6, a * 0.7);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // End point — simple finish flag 🏁 (no more confusing red dot)
       const last = stroke[stroke.length - 1];
       const ex = last[0] * w;
       const ey = last[1] * h;
-      ctx.fillStyle = '#ef4444';
+      const endR = round === 3 ? 8 : 11;
+
+      // Subtle outline ring
+      ctx.fillStyle = 'rgba(15,23,42,0.15)';
       ctx.beginPath();
-      ctx.arc(ex, ey, round === 3 ? 7 : 9, 0, Math.PI * 2);
+      ctx.arc(ex, ey, endR + 4, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2.5;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(ex, ey, endR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 2;
       ctx.stroke();
+
+      // Tiny flag emoji inside the white circle
+      ctx.font = `${endR * 1.3}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🏁', ex, ey + 1);
     });
 
     ctx.restore();
@@ -1058,8 +1101,8 @@ export default function DrawingStudio() {
                     <>
                       <div className="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900/85 backdrop-blur-md text-white shadow-sm">{userStrokes.length}/{selectedShape.strokes.length} strok</div>
                       <div className="px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 bg-white/90 backdrop-blur-md text-slate-700 ring-1 ring-black/5 shadow-sm">
-                        <span className="inline-block w-3 h-3 rounded-full bg-green-500 ring-2 ring-white" /> Mula
-                        <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white ml-1" /> Akhir
+                        <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-green-500 text-white text-[8px] font-black ring-2 ring-white">▶</span> Mula
+                        <span className="ml-1.5 text-sm leading-none">🏁</span> Habis
                       </div>
                     </>
                   )}
