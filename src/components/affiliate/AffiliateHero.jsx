@@ -13,8 +13,8 @@ const SLIDES = [
   },
   {
     tagline: 'KOMISEN LUMAYAN',
-    title: 'Sehingga 30% komisen',
-    meta: 'Setiap subscription + 22% setiap top-up kredit AI',
+    title: 'Sehingga 25% komisen',
+    meta: 'Setiap subscription + 20% setiap top-up kredit AI',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8f52add30_generated_image.png',
   },
   {
