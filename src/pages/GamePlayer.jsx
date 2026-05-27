@@ -18,6 +18,7 @@ import AudioPlayer from '@/components/audio/AudioPlayer';
 import ProgressBar from '@/components/game/ProgressBar';
 import AchievementBadges from '@/components/game/AchievementBadges';
 import QuestionRenderer from '@/components/game/QuestionRenderer';
+import CikguMascot from '@/components/game/CikguMascot';
 import { playSound } from '@/lib/soundManager';
 import { playCorrectReward, playGentleWrong, playComboFanfare, playVictory, getComboMessage, haptic } from '@/lib/gameRewards';
 import StreakIndicator from '@/components/game/StreakIndicator';
@@ -507,27 +508,13 @@ export default function GamePlayer() {
       <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full opacity-30 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }} />
       <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full opacity-25 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }} />
 
-      {/* Cikgu Firdaus mascot — waving from bottom-left */}
-      <motion.img
-        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8cd9be94d_generated_image.png"
-        alt="Cikgu Firdaus"
-        className="hidden md:block fixed bottom-0 left-2 lg:left-6 w-48 lg:w-64 pointer-events-none select-none z-0"
-        style={{ filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.35))' }}
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0, rotate: [0, -3, 3, -3, 0] }}
-        transition={{ opacity: { duration: 0.6 }, y: { duration: 0.6 }, rotate: { duration: 2.5, repeat: Infinity, repeatDelay: 1.5, ease: 'easeInOut' } }}
-      />
-
-      {/* Mobile — smaller mascot peeking from right */}
-      <motion.img
-        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8cd9be94d_generated_image.png"
-        alt="Cikgu Firdaus"
-        className="md:hidden fixed bottom-0 -right-4 w-28 pointer-events-none select-none z-0 opacity-90"
-        style={{ filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.3))' }}
-        initial={{ opacity: 0, x: 40 }}
-        animate={{ opacity: 0.9, x: 0, rotate: [0, -4, 4, -4, 0] }}
-        transition={{ opacity: { duration: 0.6 }, x: { duration: 0.6 }, rotate: { duration: 2.5, repeat: Infinity, repeatDelay: 1.5, ease: 'easeInOut' } }}
-      />
+      {/* Cikgu Firdaus SVG mascot — waving */}
+      <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
+        <CikguMascot size={220} />
+      </div>
+      <div className="md:hidden fixed bottom-2 -right-4 z-0 opacity-90">
+        <CikguMascot size={110} />
+      </div>
 
       <AppHeader showBack={true} backTo={`/games/${category}`} />
       <div className="relative max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
