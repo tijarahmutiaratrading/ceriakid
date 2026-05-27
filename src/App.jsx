@@ -48,6 +48,7 @@ import BBMGenerator from '@/pages/BBMGenerator';
 import QuizAI from '@/pages/QuizAI';
 import Syllabus from '@/pages/Syllabus';
 import Affiliate from '@/pages/Affiliate';
+import KafaHub from '@/pages/KafaHub';
 
 // Interactive Games
 import MemoryGame from '@/pages/games/MemoryGame';
@@ -127,6 +128,7 @@ const AuthenticatedApp = () => {
             <Route path="/settings" element={<ClientDashboard />} />
             <Route path="/children-profiles" element={<ChildrenProfiles />} />
             <Route path="/games-hub" element={<GamesHub />} />
+            <Route path="/kafa" element={<KafaHub />} />
             <Route path="/games/:category" element={<GamesList />} />
             <Route path="/mini-games/:type" element={<MiniGamesList />} />
             <Route path="/parent-dashboard" element={<ParentDashboard />} />

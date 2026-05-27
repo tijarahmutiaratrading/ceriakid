@@ -11,12 +11,8 @@ const categoryConfigs = {
   worksheet: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/5e14e4531_generated_image.png', label: 'Worksheet', color: 'from-orange-300 to-amber-400', accentBg: 'bg-orange-100/30' },
   bahasa_tamil: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1dac8b0f4_generated_image.png', label: 'Bahasa Tamil', color: 'from-orange-300 to-red-400', accentBg: 'bg-orange-100/30' },
   bahasa_mandarin: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/477e24964_generated_image.png', label: 'Bahasa Mandarin', color: 'from-red-300 to-pink-400', accentBg: 'bg-red-100/30' },
-  // KAFA — Kelas Agama Fardhu Ain (akses ikut tier biasa, sama macam subjek lain)
-  kafa_quran_jawi:   { emoji: '📖', label: 'KAFA · Al-Quran & Jawi',  color: 'from-emerald-400 to-teal-500', accentBg: 'bg-emerald-100/30' },
-  kafa_ulum_syariah: { emoji: '🕌', label: 'KAFA · Ulum Syariah',     color: 'from-teal-400 to-cyan-500',    accentBg: 'bg-teal-100/30' },
-  kafa_sirah:        { emoji: '🌙', label: 'KAFA · Sirah Nabawiyah',  color: 'from-indigo-400 to-violet-500', accentBg: 'bg-indigo-100/30' },
-  kafa_adab:         { emoji: '🤲', label: 'KAFA · Adab Islamiah',    color: 'from-rose-400 to-pink-500',    accentBg: 'bg-rose-100/30' },
-  kafa_bahasa_arab:  { emoji: '🔤', label: 'KAFA · Bahasa Arab',      color: 'from-amber-500 to-orange-500', accentBg: 'bg-amber-100/30' },
+  // KAFA — single hub card (klik → /kafa, dalam tu pecah jadi 7 subjek UPKK)
+  kafa: { emoji: '🕌', label: 'KAFA', subtitle: 'Kelas Agama Fardhu Ain · 7 Subjek UPKK', color: 'from-emerald-500 via-teal-500 to-indigo-600', accentBg: 'bg-emerald-100/30' },
 };
 
 export default function CategoryCard({ category, gameCount, idx }) {
@@ -24,9 +20,10 @@ export default function CategoryCard({ category, gameCount, idx }) {
   if (!config) return null;
 
   const hasImage = Boolean(config.image);
+  const linkTo = category === 'kafa' ? '/kafa' : `/games/${category}`;
 
   return (
-    <Link to={`/games/${category}`}>
+    <Link to={linkTo}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -59,6 +56,9 @@ export default function CategoryCard({ category, gameCount, idx }) {
         <div className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-between">
           <div>
             <h3 className="font-black text-lg sm:text-xl md:text-2xl text-white leading-tight break-words drop-shadow-md">{config.label}</h3>
+            {config.subtitle && (
+              <p className="text-white/85 text-xs sm:text-sm font-bold mt-1 drop-shadow-md leading-snug">{config.subtitle}</p>
+            )}
           </div>
 
           <div className="flex items-end justify-start gap-3">

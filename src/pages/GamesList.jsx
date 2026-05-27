@@ -13,7 +13,27 @@ import { ArrowLeft } from 'lucide-react';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
 
+const KAFA_LABELS = {
+  kafa_quran: 'KAFA · Al-Quran & Hafazan',
+  kafa_jawi: 'KAFA · Jawi & Khat',
+  kafa_akidah: 'KAFA · Akidah',
+  kafa_ibadah: 'KAFA · Ibadah & Fekah',
+  kafa_sirah: 'KAFA · Sirah Nabawiyah',
+  kafa_adab: 'KAFA · Adab & Akhlak',
+  kafa_bahasa_arab: 'KAFA · Bahasa Arab',
+};
+const KAFA_EMOJIS = {
+  kafa_quran: '📖',
+  kafa_jawi: '✍️',
+  kafa_akidah: '☪️',
+  kafa_ibadah: '🕌',
+  kafa_sirah: '🌙',
+  kafa_adab: '🤲',
+  kafa_bahasa_arab: '🔤',
+};
+
 const getCategoryLabel = (category, lang) => {
+  if (KAFA_LABELS[category]) return KAFA_LABELS[category];
   const labels = {
     bm: {
       bahasa_melayu: 'Bahasa Melayu',
@@ -60,6 +80,7 @@ const getCategoryLabel = (category, lang) => {
 };
 
 const getCategoryEmoji = (category) => {
+  if (KAFA_EMOJIS[category]) return KAFA_EMOJIS[category];
   const emojis = {
     bahasa_melayu: '🇲🇾',
     english: '🇬🇧',
@@ -296,8 +317,8 @@ export default function GamesList() {
 
           {/* Content */}
           <div className="relative z-10">
-            <Link to="/dashboard" className="inline-flex items-center gap-2 text-white/95 text-xs font-black mb-4 drop-shadow-md">
-              <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
+            <Link to={category?.startsWith('kafa_') ? '/kafa' : '/dashboard'} className="inline-flex items-center gap-2 text-white/95 text-xs font-black mb-4 drop-shadow-md">
+              <ArrowLeft className="w-4 h-4" /> {category?.startsWith('kafa_') ? 'Kembali ke KAFA' : 'Kembali ke kategori'}
             </Link>
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-white/25 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center text-3xl shadow-lg flex-shrink-0">

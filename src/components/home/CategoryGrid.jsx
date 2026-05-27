@@ -12,16 +12,12 @@ const CATEGORY_MAP = {
   bahasa_tamil: 'bahasa_tamil',
   bahasa_mandarin: 'bahasa_mandarin',
   jawi: 'jawi',
-  // KAFA — Kelas Agama Fardhu Ain (Premium only)
-  kafa_quran_jawi: 'kafa_quran_jawi',
-  kafa_ulum_syariah: 'kafa_ulum_syariah',
-  kafa_sirah: 'kafa_sirah',
-  kafa_adab: 'kafa_adab',
-  kafa_bahasa_arab: 'kafa_bahasa_arab',
+  // KAFA — single hub card (klik → /kafa, dalam tu pecah jadi 7 subjek UPKK)
+  kafa: 'kafa',
 };
 
-// KAFA hanya untuk sekolah_rendah (tidak ditunjukkan dalam prasekolah)
-const KAFA_CATEGORIES = ['kafa_quran_jawi', 'kafa_ulum_syariah', 'kafa_sirah', 'kafa_adab', 'kafa_bahasa_arab'];
+// 7 subjek sebenar KAFA — guna untuk kira total games dalam hub card
+const KAFA_SUBJECTS = ['kafa_quran', 'kafa_jawi', 'kafa_akidah', 'kafa_ibadah', 'kafa_sirah', 'kafa_adab', 'kafa_bahasa_arab'];
 
 export default function CategoryGrid() {
   const { ageGroup } = useAgeGroup();
@@ -37,15 +33,21 @@ export default function CategoryGrid() {
       // Group by category
       const grouped = {};
       Object.keys(CATEGORY_MAP).forEach(cat => { grouped[cat] = []; });
-      
+      grouped.kafa = []; // aggregate bucket untuk 7 KAFA subjek
+
       dbGames.forEach(g => {
         if (grouped[g.category]) {
           grouped[g.category].push(g);
+        }
+        // Aggregate semua KAFA subjek ke dalam 1 "kafa" bucket untuk hub card
+        if (KAFA_SUBJECTS.includes(g.category)) {
+          grouped.kafa.push(g);
         }
       });
 
       const fallbackGames = getGamesByAge(ageGroup);
       Object.keys(CATEGORY_MAP).forEach(cat => {
+        if (cat === 'kafa') return; // skip kafa — agg dari DB sahaja
         if ((grouped[cat]?.length || 0) === 0 && (fallbackGames[cat]?.length || 0) > 0) {
           grouped[cat] = fallbackGames[cat];
         }
@@ -74,7 +76,7 @@ export default function CategoryGrid() {
     // Prasekolah: tiada jawi & KAFA (KAFA bermula peringkat sekolah rendah)
     if (ageGroup !== 'sekolah_rendah') {
       if (category === 'jawi') return false;
-      if (KAFA_CATEGORIES.includes(category)) return false;
+      if (category === 'kafa') return false;
     }
     return true;
   });
