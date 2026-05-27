@@ -108,10 +108,6 @@ export default function KafaHub() {
                 )}
                 {/* Color tint overlay for theme consistency */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${subject.color} opacity-40 z-[1]`} />
-                {/* Emoji decoration */}
-                <div className="absolute right-4 top-4 text-6xl sm:text-7xl opacity-40 group-hover:opacity-70 transition-opacity z-[2] drop-shadow-lg">
-                  {subject.emoji}
-                </div>
                 {/* Bottom gradient for text legibility */}
                 <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/45 to-transparent z-[3]" />
                 <div className="relative z-10 p-4 sm:p-5 h-full min-h-[150px] sm:min-h-[180px] flex flex-col justify-between">
