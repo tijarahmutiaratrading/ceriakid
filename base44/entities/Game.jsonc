@@ -71,7 +71,7 @@
         "kafa_adab",
         "kafa_bahasa_arab"
       ],
-      "description": "Subject category or genius mini game category. KAFA categories (kafa_*) are premium-only Islamic studies content."
+      "description": "Subject category or genius mini game category. Includes KAFA (Kelas Agama Fardhu Ain) Islamic studies categories."
     },
     "ageGroup": {
       "type": "string",
@@ -110,7 +110,7 @@
         "pro"
       ],
       "default": "free",
-      "description": "Subscription tier required. All KAFA games must be set to premium."
+      "description": "Subscription tier required"
     },
     "emoji": {
       "type": "string",

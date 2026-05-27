@@ -107,7 +107,7 @@
         "premium"
       ],
       "default": "free",
-      "description": "Free atau premium. KAFA BBM kena default premium."
+      "description": "Free atau premium"
     },
     "downloadCount": {
       "type": "number",
@@ -120,7 +120,7 @@
     },
     "order": {
       "type": "number",
-      "description": "Susunan paparan"
+      "description": "Display order"
     }
   },
   "required": [

@@ -11,12 +11,12 @@ const categoryConfigs = {
   worksheet: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/5e14e4531_generated_image.png', label: 'Worksheet', color: 'from-orange-300 to-amber-400', accentBg: 'bg-orange-100/30' },
   bahasa_tamil: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1dac8b0f4_generated_image.png', label: 'Bahasa Tamil', color: 'from-orange-300 to-red-400', accentBg: 'bg-orange-100/30' },
   bahasa_mandarin: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/477e24964_generated_image.png', label: 'Bahasa Mandarin', color: 'from-red-300 to-pink-400', accentBg: 'bg-red-100/30' },
-  // KAFA — Kelas Agama Fardhu Ain (Premium)
-  kafa_quran_jawi:   { emoji: '📖', label: 'KAFA · Al-Quran & Jawi',  color: 'from-emerald-400 to-teal-500', accentBg: 'bg-emerald-100/30', isPremium: true },
-  kafa_ulum_syariah: { emoji: '🕌', label: 'KAFA · Ulum Syariah',     color: 'from-teal-400 to-cyan-500',    accentBg: 'bg-teal-100/30',    isPremium: true },
-  kafa_sirah:        { emoji: '🌙', label: 'KAFA · Sirah Nabawiyah',  color: 'from-indigo-400 to-violet-500', accentBg: 'bg-indigo-100/30', isPremium: true },
-  kafa_adab:         { emoji: '🤲', label: 'KAFA · Adab Islamiah',    color: 'from-rose-400 to-pink-500',    accentBg: 'bg-rose-100/30',    isPremium: true },
-  kafa_bahasa_arab:  { emoji: '🔤', label: 'KAFA · Bahasa Arab',      color: 'from-amber-500 to-orange-500', accentBg: 'bg-amber-100/30',   isPremium: true },
+  // KAFA — Kelas Agama Fardhu Ain (akses ikut tier biasa, sama macam subjek lain)
+  kafa_quran_jawi:   { emoji: '📖', label: 'KAFA · Al-Quran & Jawi',  color: 'from-emerald-400 to-teal-500', accentBg: 'bg-emerald-100/30' },
+  kafa_ulum_syariah: { emoji: '🕌', label: 'KAFA · Ulum Syariah',     color: 'from-teal-400 to-cyan-500',    accentBg: 'bg-teal-100/30' },
+  kafa_sirah:        { emoji: '🌙', label: 'KAFA · Sirah Nabawiyah',  color: 'from-indigo-400 to-violet-500', accentBg: 'bg-indigo-100/30' },
+  kafa_adab:         { emoji: '🤲', label: 'KAFA · Adab Islamiah',    color: 'from-rose-400 to-pink-500',    accentBg: 'bg-rose-100/30' },
+  kafa_bahasa_arab:  { emoji: '🔤', label: 'KAFA · Bahasa Arab',      color: 'from-amber-500 to-orange-500', accentBg: 'bg-amber-100/30' },
 };
 
 export default function CategoryCard({ category, gameCount, idx }) {
@@ -49,13 +49,6 @@ export default function CategoryCard({ category, gameCount, idx }) {
                 {config.emoji}
               </div>
             )}
-          </div>
-        )}
-
-        {/* Premium badge for KAFA */}
-        {config.isPremium && (
-          <div className="absolute top-3 left-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-400 text-amber-950 text-[10px] font-black shadow-md">
-            ⭐ PREMIUM
           </div>
         )}
 
