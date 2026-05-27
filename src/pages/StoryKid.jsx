@@ -274,8 +274,8 @@ export default function StoryKid() {
           </div>
         ) : (
           <div className="fixed inset-0 z-40 bg-black overflow-hidden">
-            {/* Persistent audio player — sejajar dalam top bar, tidak remount bila scene tukar */}
-            <div className="absolute top-3 sm:top-4 right-[4.5rem] sm:right-[5rem] z-[60] h-11 flex items-center">
+            {/* Persistent audio player — duduk tepat antara title bar dan bintang (kira dari kanan: padding 12-16 + bintang ~70px + gap) */}
+            <div className="absolute top-3 sm:top-4 right-[5.5rem] sm:right-24 z-[60] h-11 flex items-center">
               <StoryAudioPlayer autoPlay={!!story} />
             </div>
             <AnimatePresence mode="wait">
