@@ -906,10 +906,21 @@ export default function DrawingStudio() {
     if (mode === 'trace') setCurrentStroke([pt]);
 
     const lw = effectiveLineWidth();
-    ctx.beginPath();
-    ctx.arc(pt.x, pt.y, lw / 2, 0, Math.PI * 2);
-    ctx.fillStyle = tool.id === 'eraser' ? '#fff9f0' : color;
-    ctx.fill();
+    ctx.save();
+    if (tool.id === 'eraser') {
+      // Padam pixel sahaja (bukan tindih warna) — supaya line art coloring kekal
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, lw / 2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,0,0,1)';
+      ctx.fill();
+    } else {
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, lw / 2, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+    ctx.restore();
   };
 
   const draw = (e) => {
@@ -942,16 +953,24 @@ export default function DrawingStudio() {
     // Quadratic smoothing — draw to the midpoint with a curve through lastPoint
     const midX = (lastPoint.x + pt.x) / 2;
     const midY = (lastPoint.y + pt.y) / 2;
+    ctx.save();
+    if (tool.id === 'eraser') {
+      // destination-out = buang pixel sahaja, tak tindih warna background.
+      // Ini bermaksud line art coloring tak akan terpadam.
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.strokeStyle = 'rgba(0,0,0,1)';
+    } else {
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = tool.opacity;
+    }
     ctx.beginPath();
     ctx.moveTo(lastPoint.x, lastPoint.y);
     ctx.quadraticCurveTo(lastPoint.x, lastPoint.y, midX, midY);
-    ctx.strokeStyle = tool.id === 'eraser' ? '#fff9f0' : color;
     ctx.lineWidth = lw;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.globalAlpha = tool.opacity;
     ctx.stroke();
-    ctx.globalAlpha = 1;
+    ctx.restore();
 
     // Crayon texture — tiny offset specks for a more tactile feel
     if (tool.id === 'crayon') {
@@ -1047,8 +1066,16 @@ export default function DrawingStudio() {
       }
     }
 
-    // Note: jangan redraw coloring guide di sini — ia akan tindih garis user
-    // dan jadi "double line". Guide sudah dilukis sekali masa init, jadi cukup.
+    // Bila eraser digunakan dalam mode coloring, redraw line art atas
+    // supaya guide gambar tak terpadam (eraser hanya buang warna user).
+    if (mode === 'color' && tool.id === 'eraser' && selectedColoringPage) {
+      const canvas = getCanvas();
+      const ctx = getCtx();
+      if (canvas && ctx) {
+        const { w, h } = getLogicalSize(canvas);
+        drawColoringGuide(ctx, w, h, selectedColoringPage);
+      }
+    }
   };
 
   const downloadCanvas = () => {
