@@ -74,7 +74,7 @@ export default function LandingHeroCarousel({ onCTAClick, onPricingClick, fullSc
             objectPosition: s.objectPos,
             opacity: i === index ? 1 : 0,
           }}
-          loading={i === 0 ? 'eager' : 'lazy'}
+          loading="eager"
         />
       ))}
 
