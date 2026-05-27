@@ -97,14 +97,14 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
     <>
       <audio ref={audioRef} src={currentTrack.url} loop preload="auto" />
 
-      <div className="fixed bottom-4 right-4 z-40">
+      <div className="relative z-40">
         <AnimatePresence>
           {expanded && (
             <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              initial={{ opacity: 0, y: -10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="mb-3 w-64 rounded-3xl p-4 bg-white/95 backdrop-blur-xl shadow-2xl border border-white/60"
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              className="absolute top-full right-0 mt-2 w-64 rounded-3xl p-4 bg-white/95 backdrop-blur-xl shadow-2xl border border-white/60"
             >
               <div className="flex items-center justify-between mb-3">
                 <p className="text-purple-800 font-black text-sm flex items-center gap-1.5">
@@ -159,19 +159,19 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
         <motion.button
           whileTap={{ scale: 0.92 }}
           onClick={() => setExpanded(e => !e)}
-          className="relative w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-2xl shadow-purple-950/40 flex items-center justify-center border-2 border-white/40"
+          className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg flex items-center justify-center border-2 border-white/40"
         >
           {isPlaying ? (
-            <Music className="w-6 h-6 animate-pulse" />
+            <Music className="w-5 h-5 animate-pulse" />
           ) : (
-            <Music className="w-6 h-6 opacity-70" />
+            <Music className="w-5 h-5 opacity-70" />
           )}
           <button
             onClick={(e) => { e.stopPropagation(); toggle(); }}
-            className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-white text-purple-700 shadow-lg flex items-center justify-center border border-purple-200"
+            className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-white text-purple-700 shadow-md flex items-center justify-center border border-purple-200"
             title={isPlaying ? 'Pause' : 'Play'}
           >
-            {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3 ml-0.5" />}
+            {isPlaying ? <Pause className="w-2.5 h-2.5" /> : <Play className="w-2.5 h-2.5 ml-0.5" />}
           </button>
         </motion.button>
       </div>
