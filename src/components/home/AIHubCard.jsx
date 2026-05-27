@@ -65,7 +65,7 @@ export default function AIHubCard() {
 
   return (
     <div
-      className="relative overflow-hidden rounded-[2rem] p-6 md:p-10 lg:p-12 shadow-xl border border-white/60"
+      className="relative overflow-hidden rounded-[1.75rem] p-4 md:p-6 lg:p-7 shadow-xl border border-white/60"
       style={{
         background: 'linear-gradient(135deg, #fef3e7 0%, #fde8d4 30%, #fce7f3 70%, #fbcfe8 100%)',
       }}
@@ -87,22 +87,22 @@ export default function AIHubCard() {
       <div className="pointer-events-none absolute top-1/2 right-12 text-xl md:text-2xl opacity-60 hidden md:block">🎓</div>
 
       {/* TOP ROW: Big credit card (left) + Top Up + status (right) */}
-      <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6 mb-6 md:mb-10">
+      <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4 mb-4 md:mb-6">
         {/* Big white credit card */}
         <Link to="/buy-credits" className="block w-full md:w-auto md:flex-1 md:max-w-md">
           <motion.div
             whileHover={{ scale: 1.02, y: -2 }}
-            className="bg-white rounded-3xl p-5 md:p-6 shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-white/80"
+            className="bg-white rounded-2xl p-3.5 md:p-4 shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-white/80"
           >
-            <p className="text-slate-900 font-black text-xs md:text-sm tracking-wide mb-1">BAKI KREDIT AI</p>
+            <p className="text-slate-900 font-black text-[10px] md:text-xs tracking-wide mb-0.5">BAKI KREDIT AI</p>
             {loading ? (
               <div className="flex items-center gap-2 my-1">
-                <Loader2 className="w-6 h-6 animate-spin text-slate-400" />
+                <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
               </div>
             ) : (
-              <p className="text-slate-900 text-4xl md:text-5xl font-black leading-none my-1">{balance}</p>
+              <p className="text-slate-900 text-3xl md:text-4xl font-black leading-none my-0.5">{balance}</p>
             )}
-            <p className="text-slate-600 text-xs md:text-sm font-bold mt-2">
+            <p className="text-slate-600 text-[11px] md:text-xs font-bold mt-1">
               {credits?.totalUsed ?? 0} digunakan
             </p>
           </motion.div>
@@ -128,12 +128,12 @@ export default function AIHubCard() {
       </div>
 
       {/* Section title */}
-      <h2 className="relative z-10 text-slate-900 font-black text-lg md:text-xl tracking-wide mb-4 md:mb-5">
+      <h2 className="relative z-10 text-slate-900 font-black text-base md:text-lg tracking-wide mb-3 md:mb-4">
         CIRI AI CERIAKID
       </h2>
 
       {/* AI Features Grid - 2x2 */}
-      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-5">
+      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-2.5 md:gap-3">
         {FEATURES.map((f) => {
           const Icon = f.icon;
           return (
@@ -141,30 +141,30 @@ export default function AIHubCard() {
               <motion.div
                 whileHover={{ scale: 1.02, y: -3 }}
                 whileTap={{ scale: 0.98 }}
-                className={`group relative h-full overflow-hidden rounded-3xl bg-gradient-to-br ${f.bg} p-4 md:p-5 shadow-[0_6px_24px_rgba(0,0,0,0.06)] border border-white/60 flex items-center gap-3 md:gap-4`}
+                className={`group relative h-full overflow-hidden rounded-2xl bg-gradient-to-br ${f.bg} p-3 md:p-3.5 shadow-[0_6px_24px_rgba(0,0,0,0.06)] border border-white/60 flex items-center gap-2.5 md:gap-3`}
               >
                 {/* Avatar */}
                 {f.avatar ? (
                   <img
                     src={f.avatar}
                     alt={f.title}
-                    className="h-16 w-16 md:h-20 md:w-20 rounded-2xl object-cover flex-shrink-0 shadow-md ring-2 ring-white/80"
+                    className="h-12 w-12 md:h-14 md:w-14 rounded-xl object-cover flex-shrink-0 shadow-md ring-2 ring-white/80"
                   />
                 ) : (
-                  <div className="flex h-16 w-16 md:h-20 md:w-20 items-center justify-center rounded-2xl bg-white ring-2 ring-white/80 flex-shrink-0 shadow-md">
-                    <Icon className="h-8 w-8 text-slate-700" />
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-xl bg-white ring-2 ring-white/80 flex-shrink-0 shadow-md">
+                    <Icon className="h-6 w-6 text-slate-700" />
                   </div>
                 )}
 
                 {/* Text */}
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-slate-700 text-[11px] md:text-xs leading-tight">
+                  <p className="font-black text-slate-700 text-[10px] md:text-[11px] leading-tight">
                     {f.title}
                   </p>
-                  <p className="font-black text-slate-900 text-sm md:text-base leading-tight mt-0.5">
+                  <p className="font-black text-slate-900 text-xs md:text-sm leading-tight mt-0.5">
                     {f.desc}
                   </p>
-                  <span className="inline-block mt-2 text-[10px] md:text-xs font-black bg-white/80 text-slate-700 px-2.5 py-1 rounded-full shadow-sm">
+                  <span className="inline-block mt-1.5 text-[9px] md:text-[10px] font-black bg-white/80 text-slate-700 px-2 py-0.5 rounded-full shadow-sm">
                     {f.cost}
                   </span>
                 </div>
