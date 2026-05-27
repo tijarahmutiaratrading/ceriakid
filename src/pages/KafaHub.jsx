@@ -8,13 +8,13 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 
 // 7 subjek KAFA UPKK rasmi JAKIM — Darjah 1 hingga 6
 const KAFA_SUBJECTS = [
-  { key: 'kafa_quran',       emoji: '📖', label: 'Al-Quran & Hafazan',  desc: 'Bacaan, tajwid asas, hafazan surah',     color: 'from-emerald-400 to-teal-500' },
-  { key: 'kafa_jawi',        emoji: '✍️', label: 'Jawi & Khat',          desc: 'Tulisan Jawi rasmi DBP, khat naskhi',   color: 'from-purple-400 to-indigo-500' },
-  { key: 'kafa_akidah',      emoji: '☪️', label: 'Akidah',               desc: 'Rukun iman, sifat Allah, kepercayaan',  color: 'from-teal-400 to-cyan-500' },
-  { key: 'kafa_ibadah',      emoji: '🕌', label: 'Ibadah & Fekah',       desc: 'Solat, wuduk, puasa, zakat, haji',      color: 'from-blue-400 to-sky-500' },
-  { key: 'kafa_sirah',       emoji: '🌙', label: 'Sirah Nabawiyah',      desc: 'Sejarah Nabi & para sahabat',           color: 'from-indigo-400 to-violet-500' },
-  { key: 'kafa_adab',        emoji: '🤲', label: 'Adab & Akhlak',        desc: 'Akhlak Islamiah & adab harian',         color: 'from-rose-400 to-pink-500' },
-  { key: 'kafa_bahasa_arab', emoji: '🔤', label: 'Bahasa Arab',          desc: 'Kosa kata & ayat mudah',                color: 'from-amber-500 to-orange-500' },
+  { key: 'kafa_quran',       emoji: '📖', label: 'Al-Quran & Hafazan',  desc: 'Bacaan, tajwid asas, hafazan surah',     color: 'from-emerald-400 to-teal-500',  bgImage: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/87a679cc1_generated_image.png' },
+  { key: 'kafa_jawi',        emoji: '✍️', label: 'Jawi & Khat',          desc: 'Tulisan Jawi rasmi DBP, khat naskhi',   color: 'from-purple-400 to-indigo-500', bgImage: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d0b540b54_generated_image.png' },
+  { key: 'kafa_akidah',      emoji: '☪️', label: 'Akidah',               desc: 'Rukun iman, sifat Allah, kepercayaan',  color: 'from-teal-400 to-cyan-500',     bgImage: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c62e76171_generated_image.png' },
+  { key: 'kafa_ibadah',      emoji: '🕌', label: 'Ibadah & Fekah',       desc: 'Solat, wuduk, puasa, zakat, haji',      color: 'from-blue-400 to-sky-500',      bgImage: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fdc3130ab_generated_image.png' },
+  { key: 'kafa_sirah',       emoji: '🌙', label: 'Sirah Nabawiyah',      desc: 'Sejarah Nabi & para sahabat',           color: 'from-indigo-400 to-violet-500', bgImage: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b641b349b_generated_image.png' },
+  { key: 'kafa_adab',        emoji: '🤲', label: 'Adab & Akhlak',        desc: 'Akhlak Islamiah & adab harian',         color: 'from-rose-400 to-pink-500',     bgImage: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4e4edbc96_generated_image.png' },
+  { key: 'kafa_bahasa_arab', emoji: '🔤', label: 'Bahasa Arab',          desc: 'Kosa kata & ayat mudah',                color: 'from-amber-500 to-orange-500',  bgImage: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/7b5dc1406_generated_image.png' },
 ];
 
 export default function KafaHub() {
@@ -97,16 +97,24 @@ export default function KafaHub() {
                 whileTap={{ scale: 0.96 }}
                 className="rounded-3xl overflow-hidden cursor-pointer h-full min-h-[150px] sm:min-h-[180px] group relative border border-white/50 shadow-lg shadow-black/10 hover:shadow-xl transition-shadow"
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${subject.color}`}>
-                  <div className="absolute inset-0 opacity-20" style={{
-                    backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.3) 0%, transparent 40%)'
-                  }} />
-                  <div className="absolute right-4 top-4 text-6xl sm:text-7xl opacity-30 group-hover:opacity-50 transition-opacity">
-                    {subject.emoji}
-                  </div>
+                {/* AI-generated background image */}
+                {subject.bgImage && (
+                  <img
+                    src={subject.bgImage}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                )}
+                {/* Color tint overlay for theme consistency */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${subject.color} opacity-40 z-[1]`} />
+                {/* Emoji decoration */}
+                <div className="absolute right-4 top-4 text-6xl sm:text-7xl opacity-40 group-hover:opacity-70 transition-opacity z-[2] drop-shadow-lg">
+                  {subject.emoji}
                 </div>
-                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/75 via-black/35 to-transparent z-[1]" />
-                <div className="relative z-10 p-4 sm:p-5 h-full flex flex-col justify-between">
+                {/* Bottom gradient for text legibility */}
+                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/45 to-transparent z-[3]" />
+                <div className="relative z-10 p-4 sm:p-5 h-full min-h-[150px] sm:min-h-[180px] flex flex-col justify-between">
                   <div>
                     <h3 className="font-black text-lg sm:text-xl text-white leading-tight drop-shadow-md">{subject.label}</h3>
                     <p className="text-white/85 text-xs font-semibold mt-1 drop-shadow-md line-clamp-2">{subject.desc}</p>
