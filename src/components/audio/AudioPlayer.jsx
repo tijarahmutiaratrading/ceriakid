@@ -44,11 +44,18 @@ export default function AudioPlayer({ text, language = 'ms-MY', autoplay = false
     <button
       onClick={handlePlayAudio}
       disabled={isSpeaking}
-      className={`flex items-center justify-center gap-2 px-5 py-3 sm:px-4 sm:py-2 rounded-lg font-semibold transition-all text-sm sm:text-base ${
-        isSpeaking
-          ? 'bg-blue-500 text-white scale-105'
-          : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
-      } disabled:opacity-75 active:scale-95`}
+      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-black text-white text-sm transition-all active:scale-95 disabled:opacity-75"
+      style={{
+        background: isSpeaking
+          ? 'linear-gradient(135deg, #06b6d4, #3b82f6)'
+          : 'linear-gradient(135deg, rgba(59,130,246,0.35), rgba(6,182,212,0.35))',
+        backdropFilter: 'blur(12px)',
+        border: '1.5px solid rgba(255,255,255,0.4)',
+        boxShadow: isSpeaking
+          ? '0 6px 20px rgba(6,182,212,0.6), inset 0 1px 1px rgba(255,255,255,0.4)'
+          : '0 4px 14px rgba(59,130,246,0.4), inset 0 1px 1px rgba(255,255,255,0.3)',
+        textShadow: '0 1px 4px rgba(0,0,0,0.3)',
+      }}
     >
       {isSpeaking ? (
         <>
@@ -58,7 +65,7 @@ export default function AudioPlayer({ text, language = 'ms-MY', autoplay = false
       ) : (
         <>
           <Volume2 className="w-4 h-4" />
-          🔊 Dengar
+          Dengar
         </>
       )}
     </button>

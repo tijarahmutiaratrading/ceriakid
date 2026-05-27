@@ -26,31 +26,61 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
 
   // Multiple Choice & True/False
   if (['multiple_choice', 'true_false', 'yes_no'].includes(type)) {
+    // Vibrant glow palette — cycles through 4 colors per button
+    const glowPalette = [
+      { glow: 'rgba(251,191,36,0.6)', bg: 'rgba(251,191,36,0.18)' },   // yellow
+      { glow: 'rgba(236,72,153,0.6)', bg: 'rgba(236,72,153,0.18)' },   // pink
+      { glow: 'rgba(59,130,246,0.6)', bg: 'rgba(59,130,246,0.18)' },   // blue
+      { glow: 'rgba(34,197,94,0.6)', bg: 'rgba(34,197,94,0.18)' },     // green
+    ];
+
     return (
-      <div className="grid grid-cols-2 gap-2 sm:gap-3">
-        {question.options?.map((option, i) => (
-          <motion.button
-            key={`opt-${i}`}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.05 }}
-            whileTap={{ scale: 0.9 }}
-            whileHover={{ scale: disabled ? 1 : 1.05 }}
-            onClick={(e) => !disabled && onAnswer(i, e)}
-            disabled={disabled}
-            className={`clay-button min-h-14 rounded-2xl py-4 px-3 font-bold text-center transition-all text-sm sm:text-base break-words ${
-              showFeedback && selectedIdx === i
-                ? isCorrect
-                  ? 'bg-green-200 ring-2 ring-green-500'
-                  : 'bg-red-200 ring-2 ring-red-500'
-                : showFeedback && i === question.answer
-                  ? 'bg-green-100 ring-2 ring-green-400' // highlight correct answer when wrong
-                  : ''
-            }`}
-          >
-            {typeof option === 'string' ? option : option?.label ?? String(option)}
-          </motion.button>
-        ))}
+      <div className="grid grid-cols-2 gap-3">
+        {question.options?.map((option, i) => {
+          const p = glowPalette[i % glowPalette.length];
+          const isSelected = showFeedback && selectedIdx === i;
+          const isCorrectAnswer = showFeedback && i === question.answer;
+          let bg = `linear-gradient(135deg, ${p.bg}, rgba(255,255,255,0.08))`;
+          let boxShadow = `0 8px 24px ${p.glow}, inset 0 1px 1px rgba(255,255,255,0.3)`;
+          let border = '2px solid rgba(255,255,255,0.3)';
+
+          if (isSelected && isCorrect) {
+            bg = 'linear-gradient(135deg, rgba(34,197,94,0.45), rgba(34,197,94,0.25))';
+            boxShadow = '0 0 0 3px #22c55e, 0 8px 28px rgba(34,197,94,0.7), inset 0 1px 1px rgba(255,255,255,0.4)';
+            border = '2px solid #22c55e';
+          } else if (isSelected && !isCorrect) {
+            bg = 'linear-gradient(135deg, rgba(239,68,68,0.45), rgba(239,68,68,0.25))';
+            boxShadow = '0 0 0 3px #ef4444, 0 8px 28px rgba(239,68,68,0.7), inset 0 1px 1px rgba(255,255,255,0.4)';
+            border = '2px solid #ef4444';
+          } else if (isCorrectAnswer) {
+            bg = 'linear-gradient(135deg, rgba(34,197,94,0.35), rgba(34,197,94,0.18))';
+            boxShadow = '0 0 0 2px rgba(34,197,94,0.7), 0 6px 22px rgba(34,197,94,0.55)';
+            border = '2px solid rgba(34,197,94,0.7)';
+          }
+
+          return (
+            <motion.button
+              key={`opt-${i}`}
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.06 }}
+              whileTap={{ scale: 0.92 }}
+              whileHover={{ scale: disabled ? 1 : 1.04, y: disabled ? 0 : -2 }}
+              onClick={(e) => !disabled && onAnswer(i, e)}
+              disabled={disabled}
+              className="min-h-16 rounded-3xl py-4 px-3 font-black text-center transition-all text-sm sm:text-base break-words text-white"
+              style={{
+                background: bg,
+                backdropFilter: 'blur(16px)',
+                border,
+                boxShadow,
+                textShadow: '0 2px 6px rgba(0,0,0,0.35)',
+              }}
+            >
+              {typeof option === 'string' ? option : option?.label ?? String(option)}
+            </motion.button>
+          );
+        })}
       </div>
     );
   }
@@ -66,14 +96,24 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
           onKeyPress={(e) => e.key === 'Enter' && !disabled && handleTextSubmit()}
           placeholder="Taip jawapan..."
           disabled={disabled}
-          className="flex-1 px-4 py-3 rounded-2xl border-2 border-gray-300 focus:border-game-purple outline-none text-center font-bold"
+          className="flex-1 px-4 py-3 rounded-2xl outline-none text-center font-black text-white placeholder:text-white/40"
+          style={{
+            background: 'rgba(255,255,255,0.15)',
+            backdropFilter: 'blur(12px)',
+            border: '2px solid rgba(255,255,255,0.3)',
+            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.15)',
+          }}
         />
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleTextSubmit}
           disabled={disabled || !textInput.trim()}
-          className="px-6 py-3 bg-game-purple text-white rounded-2xl font-bold hover:shadow-lg disabled:opacity-50"
+          className="px-6 py-3 rounded-2xl font-black text-white disabled:opacity-50"
+          style={{
+            background: 'linear-gradient(135deg, #fbbf24, #ec4899)',
+            boxShadow: '0 6px 20px rgba(236,72,153,0.5), inset 0 1px 1px rgba(255,255,255,0.4)',
+          }}
         >
           ✓
         </motion.button>

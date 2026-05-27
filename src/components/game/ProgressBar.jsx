@@ -9,34 +9,53 @@ export default function ProgressBar({ current, total, score }) {
     'Hampir selesai! 🎯',
     'Langkah akhir! 🏁',
   ];
-  
-  const messageIndex = Math.floor((current / total) * messages.length);
-  
+
+  const messageIndex = Math.min(messages.length - 1, Math.floor((current / total) * messages.length));
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       className="mb-6"
     >
-      <div className="flex justify-between items-center mb-2">
-        <span className="font-black text-gray-700">Soalan {current} daripada {total}</span>
-        <span className="text-sm font-bold text-game-orange">⭐ {score}/{total}</span>
+      <div className="flex justify-between items-center mb-2 px-1">
+        <span className="font-black text-white/90 text-sm" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
+          Soalan {current} / {total}
+        </span>
+        <span className="text-sm font-black text-yellow-300 flex items-center gap-1" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
+          ⭐ {score}/{total}
+        </span>
       </div>
-      
-      <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+
+      <div
+        className="w-full rounded-full h-3.5 overflow-hidden relative"
+        style={{
+          background: 'rgba(255,255,255,0.12)',
+          backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(255,255,255,0.2)',
+          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)',
+        }}
+      >
         <motion.div
-          className="h-full bg-gradient-to-r from-game-orange to-game-pink rounded-full"
+          className="h-full rounded-full relative"
+          style={{
+            background: 'linear-gradient(90deg, #fbbf24, #ec4899, #8b5cf6)',
+            boxShadow: '0 0 12px rgba(236,72,153,0.5), inset 0 1px 1px rgba(255,255,255,0.4)',
+          }}
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-        />
+        >
+          <div className="absolute inset-0 rounded-full opacity-50" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.4), transparent)' }} />
+        </motion.div>
       </div>
-      
+
       <motion.p
         key={messageIndex}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center text-sm font-bold text-game-purple mt-2"
+        className="text-center text-sm font-black text-yellow-300 mt-2"
+        style={{ textShadow: '0 1px 6px rgba(0,0,0,0.35)' }}
       >
         {messages[messageIndex]}
       </motion.p>

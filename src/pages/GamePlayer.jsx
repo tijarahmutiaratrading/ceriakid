@@ -487,23 +487,57 @@ export default function GamePlayer() {
   }
 
   return (
-    <div className="min-h-screen bg-pattern">
-      <AppHeader showBack={true} backTo={`/games/${category}`} />
-      <div className="max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
+    <div
+      className="min-h-screen w-full overflow-x-hidden relative"
+      style={{
+        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)',
+      }}
+    >
+      {/* Floating sparkle decorations */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-32 left-6 text-2xl text-white/30 animate-float">✨</div>
+        <div className="absolute top-44 right-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
+        <div className="absolute top-1/2 left-4 text-2xl text-pink-300/40 animate-float" style={{ animationDelay: '2.4s' }}>💫</div>
+        <div className="absolute bottom-40 right-6 text-2xl text-cyan-300/35 animate-float" style={{ animationDelay: '3.1s' }}>✨</div>
+        <div className="absolute bottom-24 left-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '4s' }}>⭐</div>
+        <div className="absolute top-1/3 right-1/4 text-lg text-white/25 animate-float" style={{ animationDelay: '1.7s' }}>✨</div>
+      </div>
 
-         <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
+      {/* Glow orbs */}
+      <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full opacity-30 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }} />
+      <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full opacity-25 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }} />
+
+      <AppHeader showBack={true} backTo={`/games/${category}`} />
+      <div className="relative max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
+
+         <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full font-black text-sm transition-all"
+           style={{
+             background: 'rgba(255,255,255,0.15)',
+             backdropFilter: 'blur(12px)',
+             border: '1px solid rgba(255,255,255,0.25)',
+             color: 'white',
+             boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+           }}
+         >
            <ArrowLeft className="w-4 h-4" />
            Kembali ke Subjek
          </Link>
 
          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-game-purple">
-             {game.difficulty === 'hard' && <Zap className="w-3 h-3 sm:w-4 sm:h-4" />}
-             <span className="capitalize px-2.5 py-1 text-xs sm:text-sm bg-game-purple/10 rounded-full whitespace-nowrap">
+           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold">
+             {game.difficulty === 'hard' && <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-300" />}
+             <span className="capitalize px-3 py-1.5 text-xs sm:text-sm rounded-full whitespace-nowrap"
+               style={{
+                 background: 'rgba(255,255,255,0.18)',
+                 backdropFilter: 'blur(12px)',
+                 border: '1px solid rgba(255,255,255,0.3)',
+                 color: 'white',
+               }}
+             >
                {game.difficulty === 'easy' ? '🟢 Senang' : game.difficulty === 'medium' ? '🟡 Sedang' : '🔴 Susah'}
              </span>
            </div>
-           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-gray-600">
+           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-white/80">
              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
              {game.totalQuestions || 20} soalan
            </div>
@@ -521,13 +555,24 @@ export default function GamePlayer() {
         {/* Progress Bar with encouraging messages */}
         <ProgressBar current={state.currentQ + 1} total={questions.length} score={state.score} />
 
-        {/* Question Display - Adaptive based on game type */}
+        {/* Question Display - glass card with vibrant gradient border */}
          <motion.div
            key={state.currentQ}
-           initial={{ opacity: 0, x: 50 }}
-           animate={{ opacity: 1, x: 0 }}
-           className="rounded-3xl p-4 md:p-6 text-center mb-6"
-           style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
+           initial={{ opacity: 0, y: 30, scale: 0.95 }}
+           animate={{ opacity: 1, y: 0, scale: 1 }}
+           className="rounded-3xl p-[2px] mb-6 relative"
+           style={{
+             background: 'linear-gradient(135deg, #fbbf24, #ec4899, #8b5cf6, #06b6d4)',
+             boxShadow: '0 20px 60px rgba(0,0,0,0.3), 0 0 40px rgba(236,72,153,0.25)',
+           }}
+         >
+         <div
+           className="rounded-3xl p-5 md:p-7 text-center relative overflow-hidden"
+           style={{
+             background: 'linear-gradient(135deg, rgba(49,46,129,0.85), rgba(124,58,237,0.75), rgba(190,24,93,0.85))',
+             backdropFilter: 'blur(24px)',
+             boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.25)',
+           }}
          >
 
 
@@ -538,34 +583,56 @@ export default function GamePlayer() {
 
           {/* Letter/Number Display */}
           {currentQuestion.letter && (
-            <div className="text-4xl sm:text-6xl font-black text-game-purple mb-2">
+            <div className="text-5xl sm:text-7xl font-black mb-2"
+              style={{
+                background: 'linear-gradient(135deg, #fbbf24, #ec4899)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0 4px 12px rgba(236,72,153,0.4))',
+              }}
+            >
               {currentQuestion.letter}
             </div>
           )}
 
           {currentQuestion.word && (
-            <p className="text-lg sm:text-2xl font-bold text-gray-700">
+            <p className="text-lg sm:text-2xl font-bold text-white/95">
               {currentQuestion.word}
             </p>
           )}
 
           {/* Generic question text — covers all DB game formats */}
            {currentQuestion.question && (
-             <p className={`font-bold text-gray-800 mb-2 ${currentQuestion.question.length > 60 ? 'text-xs sm:text-base' : 'text-sm sm:text-xl'}`}>
+             <p className={`font-black mb-2 ${currentQuestion.question.length > 60 ? 'text-sm sm:text-lg' : 'text-base sm:text-2xl'}`}
+               style={{
+                 color: '#ffffff',
+                 textShadow: '0 2px 8px rgba(0,0,0,0.45)',
+                 WebkitTextFillColor: '#ffffff',
+               }}
+             >
                {currentQuestion.question}
              </p>
            )}
 
            {/* Text Question (math, multiple choice) */}
            {currentQuestion.problem && (
-             <div className={`font-black text-game-purple ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}>
+             <div className={`font-black ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}
+               style={{
+                 background: 'linear-gradient(135deg, #fbbf24, #ec4899)',
+                 WebkitBackgroundClip: 'text',
+                 WebkitTextFillColor: 'transparent',
+                 filter: 'drop-shadow(0 4px 12px rgba(236,72,153,0.4))',
+               }}
+             >
                {currentQuestion.problem}
              </div>
            )}
 
            {/* Question label based on game type */}
            {currentQuestion.image && !currentQuestion.problem && !currentQuestion.question && (
-             <p className="text-base sm:text-lg font-bold text-gray-700 mt-2">
+             <p className="text-base sm:text-lg font-bold text-white/90 mt-2"
+               style={{ textShadow: '0 2px 6px rgba(0,0,0,0.3)' }}
+             >
                {game.type === 'counting' ? 'Berapakah ini?' : 'Apakah ini?'}
              </p>
            )}
@@ -579,6 +646,7 @@ export default function GamePlayer() {
                />
              </div>
            )}
+          </div>
           </motion.div>
 
         {/* Dynamic Question Renderer */}
