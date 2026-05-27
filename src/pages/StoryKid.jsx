@@ -328,7 +328,7 @@ export default function StoryKid() {
                 </div>
 
                 {/* Bottom: text + choices overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 z-10 max-h-[50vh] overflow-y-auto">
+                <div className="absolute bottom-6 sm:bottom-10 left-0 right-0 p-2 sm:p-3 z-10 max-h-[50vh] overflow-y-auto">
                   <div className="max-w-2xl mx-auto">
                     {/* Text card — gaya buku cerita / parchment cream */}
                     <motion.div
