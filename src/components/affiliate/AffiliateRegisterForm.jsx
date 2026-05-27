@@ -9,14 +9,14 @@ import { useToast } from '@/components/ui/use-toast';
 
 const TIER_PREVIEW = [
   { emoji: '🥉', name: 'Bronze', refs: '0-9', sub: '20%', cred: '15%', color: 'from-orange-400 to-amber-500' },
-  { emoji: '🥈', name: 'Silver', refs: '10-29', sub: '23%', cred: '17%', color: 'from-slate-300 to-slate-400' },
-  { emoji: '🥇', name: 'Gold', refs: '30-99', sub: '26%', cred: '19%', color: 'from-yellow-400 to-amber-500' },
-  { emoji: '💎', name: 'Platinum', refs: '100+', sub: '30%', cred: '22%', color: 'from-cyan-400 to-blue-500' },
+  { emoji: '🥈', name: 'Silver', refs: '10-29', sub: '22%', cred: '17%', color: 'from-slate-300 to-slate-400' },
+  { emoji: '🥇', name: 'Gold', refs: '30-99', sub: '24%', cred: '18%', color: 'from-yellow-400 to-amber-500' },
+  { emoji: '💎', name: 'Platinum', refs: '100+', sub: '25%', cred: '20%', color: 'from-cyan-400 to-blue-500' },
 ];
 
 const BENEFITS = [
-  { icon: DollarSign, title: '20-30%', subtitle: 'Komisen Subscription', color: 'from-emerald-500 to-green-400' },
-  { icon: Sparkles, title: '15-22%', subtitle: 'Komisen Kredit AI', color: 'from-purple-500 to-pink-400' },
+  { icon: DollarSign, title: '20-25%', subtitle: 'Komisen Subscription', color: 'from-emerald-500 to-green-400' },
+  { icon: Sparkles, title: '15-20%', subtitle: 'Komisen Kredit AI', color: 'from-purple-500 to-pink-400' },
   { icon: TrendingUp, title: 'Lifetime', subtitle: 'Tier tak reset', color: 'from-amber-500 to-orange-400' },
   { icon: Wallet, title: 'Auto', subtitle: 'Bayaran ke bank', color: 'from-blue-500 to-cyan-400' },
 ];
@@ -86,7 +86,7 @@ export default function AffiliateRegisterForm({ onSuccess }) {
               <br />dengan share CeriaKid
             </h1>
             <p className="text-white/75 text-sm sm:text-lg max-w-xl mx-auto leading-relaxed">
-              Dapat sehingga <strong className="text-amber-300">30% komisen</strong> setiap kali kawan/keluarga anda langgan atau beli kredit AI. Lifetime — tak ada had!
+              Dapat sehingga <strong className="text-amber-300">25% komisen</strong> setiap kali kawan/keluarga anda langgan atau beli kredit AI. Lifetime — tak ada had!
             </p>
           </div>
         </motion.div>

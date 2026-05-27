@@ -42,7 +42,7 @@ const AI_FEATURES = [
     persona: 'Penjana BBM',
     avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4c8ddef8e_generated_image.png',
     desc: 'Lembaran kerja & latihan tersuai mengikut subjek dan tahap anak. Cetak & guna.',
-    cost: '10 kredit / lembaran',
+    cost: '8 kredit / lembaran',
     gradient: 'from-violet-500 via-purple-500 to-purple-600',
     glow: 'shadow-purple-500/30',
   },
