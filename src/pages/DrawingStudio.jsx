@@ -505,22 +505,17 @@ export default function DrawingStudio() {
       }
       ctx.stroke();
 
-      // Start point — green circle with number
+      // Start point — green circle (no number)
       ctx.setLineDash([]);
       const sx = stroke[0][0] * w;
       const sy = stroke[0][1] * h;
       ctx.fillStyle = '#22c55e';
       ctx.beginPath();
-      ctx.arc(sx, sy, 16, 0, Math.PI * 2);
+      ctx.arc(sx, sy, 12, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = 3;
       ctx.stroke();
-      ctx.fillStyle = '#ffffff';
-      ctx.font = `900 18px "Nunito", system-ui, sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(String(strokeIdx + 1), sx, sy);
 
       // End point — red dot
       const last = stroke[stroke.length - 1];
