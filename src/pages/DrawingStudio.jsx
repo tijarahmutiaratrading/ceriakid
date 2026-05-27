@@ -554,108 +554,115 @@ export default function DrawingStudio() {
         ctx.fillRect(sideMargin + slotW * i, topY, slotW, letterH);
       }
 
-      // Render the letter scaled to fit this cell
-      // The shape.strokes are normalized 0..1 in a square. Map to this cell.
+      // Render the letter/number using canvas fillText — guna font Nunito bold
+      // supaya huruf nampak sempurna macam buku latihan sebenar.
+      // Untuk shape (bulatan, hati, dll) yang bukan huruf, fallback ke stroke paths.
       ctx.save();
       ctx.translate(cellLeft, cellTop);
-      const scaleX = letterW;
-      const scaleY = letterH * 0.9;
 
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
+      const char = shape.letter || '';
+      const isTextChar = /^[A-Za-z0-9]$/.test(char);
 
-      // Helper: trace a stroke with smooth curves (quadratic through midpoints).
-      // Strokes with 2 points stay as straight lines; 3+ points get rounded.
-      const tracePath = (stroke) => {
-        ctx.beginPath();
-        const p0 = stroke[0];
-        ctx.moveTo(p0[0] * scaleX, p0[1] * scaleY);
-        if (stroke.length === 2) {
-          ctx.lineTo(stroke[1][0] * scaleX, stroke[1][1] * scaleY);
+      if (isTextChar) {
+        // Font-based rendering — huruf & nombor
+        const fontSize = letterH * 0.78;
+        ctx.font = `900 ${fontSize}px "Nunito", system-ui, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'alphabetic';
+        const x = letterW / 2;
+        const y = letterH * 0.88; // sit on baseline
+
+        if (isExample) {
+          ctx.fillStyle = '#7c3aed';
+          ctx.fillText(char, x, y);
+        } else if (isDone) {
+          ctx.fillStyle = 'rgba(124,58,237,0.22)';
+          ctx.fillText(char, x, y);
         } else {
-          for (let j = 1; j < stroke.length - 1; j++) {
-            const cx = stroke[j][0] * scaleX;
-            const cy = stroke[j][1] * scaleY;
-            const nx = (stroke[j][0] + stroke[j + 1][0]) / 2 * scaleX;
-            const ny = (stroke[j][1] + stroke[j + 1][1]) / 2 * scaleY;
-            ctx.quadraticCurveTo(cx, cy, nx, ny);
-          }
-          const last = stroke[stroke.length - 1];
-          ctx.lineTo(last[0] * scaleX, last[1] * scaleY);
-        }
-      };
+          // Tracing slot — outline + dashed stroke
+          const alpha = isActive ? 0.7 : 0.32;
+          const lw = isActive ? 3 : 2.5;
 
-      if (isExample) {
-        // Solid example — thick purple, full opacity (contoh untuk anak ikut)
-        shape.strokes.forEach((stroke) => {
-          ctx.strokeStyle = '#7c3aed';
-          ctx.lineWidth = 7;
-          ctx.setLineDash([]);
-          tracePath(stroke);
-          ctx.stroke();
-        });
-      } else if (isDone) {
-        // Completed — show faded purple "ghost" so anak nampak progress
-        shape.strokes.forEach((stroke) => {
-          ctx.strokeStyle = 'rgba(124,58,237,0.25)';
-          ctx.lineWidth = 4;
-          ctx.setLineDash([]);
-          tracePath(stroke);
-          ctx.stroke();
-        });
-      } else {
-        // Tracing slot — dashed outline, more prominent on active slot
-        const alpha = isActive ? 0.65 : 0.28;
-        const lw = isActive ? 5 : 4;
-
-        shape.strokes.forEach((stroke) => {
-          // Soft halo for active slot only
+          // Soft halo for active
           if (isActive) {
-            ctx.strokeStyle = 'rgba(196,181,253,0.4)';
-            ctx.lineWidth = 14;
+            ctx.save();
+            ctx.strokeStyle = 'rgba(196,181,253,0.35)';
+            ctx.lineWidth = 10;
+            ctx.lineJoin = 'round';
+            ctx.setLineDash([]);
+            ctx.strokeText(char, x, y);
+            ctx.restore();
+          }
+
+          // Dashed outline
+          ctx.strokeStyle = `rgba(124,58,237,${alpha})`;
+          ctx.lineWidth = lw;
+          ctx.lineJoin = 'round';
+          ctx.setLineDash([6, 5]);
+          ctx.strokeText(char, x, y);
+          ctx.setLineDash([]);
+        }
+      } else {
+        // Non-text shapes (bulatan, segitiga, hati, dll) — guna stroke paths
+        const scaleX = letterW;
+        const scaleY = letterH * 0.9;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        const tracePath = (stroke) => {
+          ctx.beginPath();
+          const p0 = stroke[0];
+          ctx.moveTo(p0[0] * scaleX, p0[1] * scaleY);
+          if (stroke.length === 2) {
+            ctx.lineTo(stroke[1][0] * scaleX, stroke[1][1] * scaleY);
+          } else {
+            for (let j = 1; j < stroke.length - 1; j++) {
+              const cx = stroke[j][0] * scaleX;
+              const cy = stroke[j][1] * scaleY;
+              const nx = (stroke[j][0] + stroke[j + 1][0]) / 2 * scaleX;
+              const ny = (stroke[j][1] + stroke[j + 1][1]) / 2 * scaleY;
+              ctx.quadraticCurveTo(cx, cy, nx, ny);
+            }
+            const last = stroke[stroke.length - 1];
+            ctx.lineTo(last[0] * scaleX, last[1] * scaleY);
+          }
+        };
+
+        if (isExample) {
+          shape.strokes.forEach((stroke) => {
+            ctx.strokeStyle = '#7c3aed';
+            ctx.lineWidth = 7;
             ctx.setLineDash([]);
             tracePath(stroke);
             ctx.stroke();
-          }
-
-          // Dashed path
-          ctx.strokeStyle = `rgba(124,58,237,${alpha})`;
-          ctx.lineWidth = lw;
-          ctx.setLineDash([8, 6]);
-          tracePath(stroke);
-          ctx.stroke();
-
-          // Start arrow — only on active slot so tak terlalu busy
-          if (isActive && stroke.length >= 2) {
+          });
+        } else if (isDone) {
+          shape.strokes.forEach((stroke) => {
+            ctx.strokeStyle = 'rgba(124,58,237,0.25)';
+            ctx.lineWidth = 4;
             ctx.setLineDash([]);
-            const sx = stroke[0][0] * scaleX;
-            const sy = stroke[0][1] * scaleY;
-            ctx.fillStyle = '#22c55e';
-            ctx.beginPath();
-            ctx.arc(sx, sy, 7, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 2;
+            tracePath(stroke);
             ctx.stroke();
-
-            const next = stroke[1];
-            const dx = next[0] * scaleX - sx;
-            const dy = next[1] * scaleY - sy;
-            const ang = Math.atan2(dy, dx);
-            ctx.save();
-            ctx.translate(sx, sy);
-            ctx.rotate(ang);
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            const a = 4;
-            ctx.moveTo(a, 0);
-            ctx.lineTo(-a * 0.6, -a * 0.7);
-            ctx.lineTo(-a * 0.6, a * 0.7);
-            ctx.closePath();
-            ctx.fill();
-            ctx.restore();
-          }
-        });
+          });
+        } else {
+          const alpha = isActive ? 0.65 : 0.28;
+          const lw = isActive ? 5 : 4;
+          shape.strokes.forEach((stroke) => {
+            if (isActive) {
+              ctx.strokeStyle = 'rgba(196,181,253,0.4)';
+              ctx.lineWidth = 14;
+              ctx.setLineDash([]);
+              tracePath(stroke);
+              ctx.stroke();
+            }
+            ctx.strokeStyle = `rgba(124,58,237,${alpha})`;
+            ctx.lineWidth = lw;
+            ctx.setLineDash([8, 6]);
+            tracePath(stroke);
+            ctx.stroke();
+          });
+          ctx.setLineDash([]);
+        }
       }
 
       ctx.restore();
