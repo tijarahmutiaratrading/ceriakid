@@ -92,11 +92,11 @@ export default function UserTopHeader() {
   return (
     <header
       ref={navRef}
-      className={`hidden md:flex fixed top-6 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
+      className={`hidden md:flex fixed top-3 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
     >
       {/* Center: Floating pill nav (Apple Fitness style — glossy light) */}
       <nav
-        className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-xl shadow-black/20"
+        className="pointer-events-auto flex items-center gap-0.5 px-1.5 py-1 rounded-full shadow-xl shadow-black/20"
         style={{
           background: 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
           backdropFilter: 'blur(20px) saturate(180%)',
@@ -108,10 +108,10 @@ export default function UserTopHeader() {
         {isAdmin && (
           <Link
             to="/admin-dashboard"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-all"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-all"
             title="Tukar ke Admin Panel"
           >
-            <Shield className="w-3.5 h-3.5" />
+            <Shield className="w-3 h-3" />
             <span>Admin</span>
           </Link>
         )}
@@ -126,7 +126,7 @@ export default function UserTopHeader() {
               <Link
                 key={group.key}
                 to={group.path}
-                className={`relative px-4 py-1.5 rounded-full font-black text-sm transition-colors ${
+                className={`relative px-3 py-1 rounded-full font-black text-[11px] transition-colors ${
                   showActive ? 'text-white' : 'text-slate-800 hover:text-slate-900'
                 }`}
               >
@@ -147,7 +147,7 @@ export default function UserTopHeader() {
               <button
                 type="button"
                 onClick={() => setOpenMenu(isOpen ? null : group.key)}
-                className={`relative flex items-center gap-1 px-4 py-1.5 rounded-full font-black text-sm transition-colors ${
+                className={`relative flex items-center gap-0.5 px-3 py-1 rounded-full font-black text-[11px] transition-colors ${
                   showActive ? 'text-white' : 'text-slate-800 hover:text-slate-900'
                 }`}
               >
@@ -159,7 +159,7 @@ export default function UserTopHeader() {
                   />
                 )}
                 <span className="relative">{group.label}</span>
-                <ChevronDown className={`relative w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`relative w-2.5 h-2.5 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
               </button>
 
               <AnimatePresence>
