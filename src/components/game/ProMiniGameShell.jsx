@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import confetti from 'canvas-confetti';
+import { ScorePop, StreakBadge, fireRoundConfetti, fireFinalCelebration, triggerHaptic } from './SatisfyingEffects';
+import { playSound } from '@/lib/soundManager';
 
 // Context — RoundContext carries roundData AND onProgress callback (set by shell)
 export const RoundContext = React.createContext({ roundData: null, roundIdx: 0, totalRounds: 1, onProgress: () => {} });
@@ -33,12 +34,6 @@ const MODE_INSTRUCTIONS = {
   coloring: 'Tap setiap gambar untuk warnakannya.',
 };
 
-function fireConfetti() {
-  try {
-    confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 }, colors: ['#F472B6', '#A855F7', '#FBBF24', '#22D3EE'] });
-  } catch (e) { /* ignore */ }
-}
-
 export default function ProMiniGameShell({ data = {}, mode, children, onComplete }) {
   const roundsArr = Array.isArray(data.rounds) && data.rounds.length > 0 && typeof data.rounds[0] === 'object'
     ? data.rounds
@@ -48,6 +43,8 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
   const [roundIdx, setRoundIdx] = React.useState(0);
   const [roundKey, setRoundKey] = React.useState(0);
   const [score, setScore] = React.useState(0);
+  const [streak, setStreak] = React.useState(0);
+  const [scorePopTrigger, setScorePopTrigger] = React.useState(0);
   const [finished, setFinished] = React.useState(false);
 
   // Per-round progress (reported by mode component)
@@ -65,7 +62,11 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
     setProgress(next);
     if (next.isComplete && !completedRef.current) {
       completedRef.current = true;
-      fireConfetti();
+      fireRoundConfetti();
+      triggerHaptic([30, 60, 30]);
+      playSound('correct');
+      setScorePopTrigger(t => t + 1);
+      setStreak(s => s + 1);
     }
   }, []);
 
@@ -75,8 +76,13 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
     setScore(newScore);
     if (isLastRound) {
       setFinished(true);
+      fireFinalCelebration();
+      triggerHaptic([50, 100, 50, 100, 200]);
+      playSound('complete');
       if (typeof onComplete === 'function') onComplete({ score: newScore, total: totalRounds });
     } else {
+      triggerHaptic(20);
+      playSound('click');
       setRoundIdx((i) => i + 1);
       setRoundKey((k) => k + 1);
       setProgress({ current: 0, total: 1, isComplete: false });
@@ -85,15 +91,19 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
   };
 
   const restartRound = () => {
+    triggerHaptic(15);
     setRoundKey((k) => k + 1);
     setProgress({ current: 0, total: 1, isComplete: false });
     completedRef.current = false;
+    setStreak(0);
   };
 
   const playAgain = () => {
+    triggerHaptic(20);
     setRoundIdx(0);
     setRoundKey((k) => k + 1);
     setScore(0);
+    setStreak(0);
     setFinished(false);
     setProgress({ current: 0, total: 1, isComplete: false });
     completedRef.current = false;
@@ -103,58 +113,72 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
 
   return (
     <RoundContext.Provider value={{ roundData: currentRound, roundIdx, totalRounds, onProgress: handleProgress }}>
+      {/* Floating score pop — outside game area for max visibility */}
+      <ScorePop trigger={scorePopTrigger} />
+
       <div
-        className="relative overflow-hidden rounded-[2rem] p-3 sm:p-4 shadow-2xl"
+        className="relative overflow-hidden rounded-[2rem] p-3 sm:p-4"
         style={{
-          background: 'linear-gradient(160deg, #FFE0EC 0%, #E5DCFF 50%, #D6F0FF 100%)',
-          border: '3px solid rgba(255,255,255,0.85)',
-          boxShadow: '0 18px 45px rgba(168, 85, 247, 0.18)',
+          background: 'rgba(255,255,255,0.95)',
+          backdropFilter: 'blur(24px)',
+          border: '1px solid rgba(0,0,0,0.04)',
+          boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 50px rgba(15,23,42,0.10)',
         }}
       >
-        {/* Top bar — compact, focus on progress */}
+        {/* Top bar — Apple-clean with streak badge */}
         <div className="flex items-center gap-3 mb-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 shadow ring-2 ring-white">
+          <div className="relative flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-50 ring-1 ring-black/5">
             <span className="text-lg">{data.emoji || '🎮'}</span>
             <div className="leading-tight">
-              <p className="text-[9px] font-black uppercase tracking-wider text-purple-400">Pusingan</p>
-              <p className="text-xs font-black text-purple-900">{roundIdx + 1}/{totalRounds}</p>
+              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400">Pusingan</p>
+              <p className="text-xs font-black text-slate-900">{roundIdx + 1}/{totalRounds}</p>
             </div>
+            <StreakBadge streak={streak} />
           </div>
 
           <div className="flex-1 flex flex-col gap-1">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-purple-500">Skor</span>
-              <span className="text-xs font-black text-purple-700">{score}/{totalRounds} ⭐</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">Skor</span>
+              <motion.span
+                key={score}
+                initial={{ scale: 1.4, color: '#FBBF24' }}
+                animate={{ scale: 1, color: '#0F172A' }}
+                transition={{ duration: 0.4 }}
+                className="text-xs font-black"
+              >
+                {score}/{totalRounds} ⭐
+              </motion.span>
             </div>
-            <div className="h-2.5 rounded-full bg-white/60 overflow-hidden ring-1 ring-white shadow-inner">
+            <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
               <motion.div
                 animate={{ width: `${progressPct}%` }}
                 transition={{ type: 'spring', damping: 18, stiffness: 200 }}
-                className="h-full rounded-full bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400"
+                className="h-full rounded-full"
+                style={{ background: 'linear-gradient(90deg, #F472B6 0%, #A855F7 50%, #22D3EE 100%)' }}
               />
             </div>
           </div>
         </div>
 
-        {/* Instruction — specific & helpful */}
+        {/* Instruction — Apple-style soft card */}
         <motion.div
           key={`inst-${roundIdx}-${roundKey}`}
           initial={{ scale: 0.96, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="mb-3 rounded-2xl px-4 py-2.5 text-center bg-white/95 shadow-md ring-1 ring-purple-100"
+          className="mb-3 rounded-2xl px-4 py-2.5 text-center bg-slate-50 ring-1 ring-black/5"
         >
           {roundLabel && (
-            <span className="inline-block text-[9px] font-black uppercase tracking-widest text-pink-500 mb-0.5">
+            <span className="inline-block text-[9px] font-bold uppercase tracking-[0.2em] text-purple-500 mb-0.5">
               {roundLabel}
             </span>
           )}
-          <p className="text-sm sm:text-base font-black leading-snug text-purple-900">
+          <p className="text-sm sm:text-base font-bold leading-snug text-slate-800">
             {modeInstruction}
           </p>
         </motion.div>
 
-        {/* Game area — light, harmonic with shell */}
-        <div className="relative rounded-3xl p-3 sm:p-4 bg-white/85 ring-2 ring-white shadow-inner min-h-[260px]">
+        {/* Game area — clean white with soft inner */}
+        <div className="relative rounded-3xl p-3 sm:p-4 bg-white ring-1 ring-black/5 min-h-[260px]" style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.6)' }}>
           <AnimatePresence mode="wait">
             {finished ? (
               <motion.div
@@ -167,17 +191,51 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
                   animate={{ rotate: [0, -10, 10, -10, 0], scale: [1, 1.18, 1] }}
                   transition={{ duration: 1.4, repeat: Infinity }}
                   className="text-7xl mb-3"
+                  style={{ filter: 'drop-shadow(0 8px 24px rgba(251,191,36,0.4))' }}
                 >
                   🏆
                 </motion.div>
-                <p className="text-2xl font-black mb-1 text-purple-900">Yeay! Tahniah!</p>
-                <p className="font-bold mb-3 text-purple-600">
+                <motion.p
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-3xl font-black mb-1 text-slate-900 tracking-tight"
+                >
+                  Yeay! Tahniah!
+                </motion.p>
+                <motion.p
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="font-bold mb-4 text-slate-500"
+                >
                   Lengkap {score}/{totalRounds} pusingan
-                </p>
-                <div className="text-3xl mb-2 tracking-wider">
-                  {'⭐'.repeat(Math.max(stars, 1))}{'☆'.repeat(3 - Math.max(stars, 1))}
+                </motion.p>
+                <div className="flex justify-center gap-1.5 mb-3">
+                  {[0, 1, 2].map((i) => {
+                    const earned = i < Math.max(stars, 1);
+                    return (
+                      <motion.span
+                        key={i}
+                        initial={{ scale: 0, rotate: -180, opacity: 0 }}
+                        animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                        transition={{ delay: 0.4 + i * 0.15, type: 'spring', damping: 10, stiffness: 200 }}
+                        className="text-4xl"
+                        style={earned ? { filter: 'drop-shadow(0 4px 12px rgba(251,191,36,0.5))' } : { opacity: 0.25 }}
+                      >
+                        {earned ? '⭐' : '☆'}
+                      </motion.span>
+                    );
+                  })}
                 </div>
-                <p className="text-xs font-bold text-purple-500">Progress disimpan ✅</p>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.9 }}
+                  className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 ring-1 ring-emerald-100"
+                >
+                  ✓ Progress disimpan
+                </motion.p>
               </motion.div>
             ) : (
               // KEY trick: roundIdx + roundKey gives full unmount/remount per round
@@ -192,30 +250,45 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
             )}
           </AnimatePresence>
 
-          {/* Round complete badge */}
+          {/* Round complete badge — bigger, more satisfying */}
           <AnimatePresence>
             {progress.isComplete && !finished && (
               <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
+                initial={{ scale: 0, opacity: 0, y: -10 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0, opacity: 0 }}
-                className="absolute top-2 right-2 px-3 py-1 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 text-white text-[10px] font-black shadow-lg ring-2 ring-white"
+                transition={{ type: 'spring', damping: 14, stiffness: 280 }}
+                className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-white text-[11px] font-black shadow-lg flex items-center gap-1"
+                style={{
+                  background: 'linear-gradient(135deg, #34D399 0%, #10B981 100%)',
+                  boxShadow: '0 4px 14px rgba(16,185,129,0.4), 0 0 0 2px white',
+                }}
               >
-                ✓ Selesai!
+                <motion.span
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 0.6 }}
+                >
+                  ✓
+                </motion.span>
+                Selesai!
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Action buttons */}
+        {/* Action buttons — Apple pill style */}
         <div className="mt-3 flex gap-2">
           {finished ? (
             <motion.button
               type="button"
               onClick={playAgain}
-              whileTap={{ scale: 0.95 }}
-              className="flex-1 py-3 rounded-2xl font-black text-sm text-white shadow-xl ring-2 ring-white/80"
-              style={{ background: 'linear-gradient(135deg, #F472B6 0%, #A855F7 100%)' }}
+              whileTap={{ scale: 0.96 }}
+              whileHover={{ y: -2 }}
+              className="flex-1 py-3.5 rounded-2xl font-bold text-sm text-white shadow-lg transition-all"
+              style={{
+                background: 'linear-gradient(135deg, #A855F7 0%, #EC4899 100%)',
+                boxShadow: '0 8px 20px rgba(168,85,247,0.35)',
+              }}
             >
               🔄 Main Sekali Lagi
             </motion.button>
@@ -224,8 +297,8 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
               <motion.button
                 type="button"
                 onClick={restartRound}
-                whileTap={{ scale: 0.95 }}
-                className="flex-1 py-3 rounded-2xl font-black text-sm bg-white text-purple-700 shadow-md ring-2 ring-purple-100"
+                whileTap={{ scale: 0.96 }}
+                className="flex-1 py-3 rounded-2xl font-bold text-sm bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
               >
                 🔄 Ulang
               </motion.button>
@@ -234,14 +307,22 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
                   type="button"
                   onClick={nextRound}
                   disabled={!progress.isComplete}
-                  whileTap={progress.isComplete ? { scale: 0.95 } : {}}
-                  className={`flex-[2] py-3 rounded-2xl font-black text-sm text-white shadow-xl ring-2 ring-white/80 transition-all ${progress.isComplete ? '' : 'opacity-40 cursor-not-allowed'}`}
+                  whileTap={progress.isComplete ? { scale: 0.96 } : {}}
+                  whileHover={progress.isComplete ? { y: -2 } : {}}
+                  animate={progress.isComplete ? { scale: [1, 1.02, 1] } : {}}
+                  transition={progress.isComplete ? { duration: 1.2, repeat: Infinity } : {}}
+                  className={`flex-[2] py-3 rounded-2xl font-bold text-sm text-white transition-all ${progress.isComplete ? '' : 'opacity-40 cursor-not-allowed'}`}
                   style={{
                     background: !progress.isComplete
-                      ? 'linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)'
+                      ? '#94A3B8'
                       : isLastRound
                         ? 'linear-gradient(135deg, #FBBF24 0%, #F97316 100%)'
-                        : 'linear-gradient(135deg, #22D3EE 0%, #8B5CF6 100%)',
+                        : 'linear-gradient(135deg, #0F172A 0%, #334155 100%)',
+                    boxShadow: progress.isComplete
+                      ? isLastRound
+                        ? '0 8px 20px rgba(251,191,36,0.4)'
+                        : '0 8px 20px rgba(15,23,42,0.25)'
+                      : 'none',
                   }}
                 >
                   {!progress.isComplete ? '⏳ Siapkan dulu' : isLastRound ? '🏆 Habiskan' : `➡️ Pusingan ${roundIdx + 2}`}
