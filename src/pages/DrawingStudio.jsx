@@ -806,14 +806,8 @@ export default function DrawingStudio() {
       }
     }
 
-    if (mode === 'color') {
-      const ctx = getCtx();
-      const canvas = getCanvas();
-      if (ctx && canvas) {
-        const { w, h } = getLogicalSize(canvas);
-        drawColoringGuide(ctx, w, h, selectedColoringPage);
-      }
-    }
+    // Note: jangan redraw coloring guide di sini — ia akan tindih garis user
+    // dan jadi "double line". Guide sudah dilukis sekali masa init, jadi cukup.
   };
 
   const downloadCanvas = () => {
