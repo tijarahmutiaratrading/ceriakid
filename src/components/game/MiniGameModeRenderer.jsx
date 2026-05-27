@@ -741,9 +741,9 @@ function SwipeSelectMode() {
     <div className="space-y-3">
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={idx} total={items.length} />
-      <div className={`${panel} text-center min-h-32`}>
-        <p className="text-5xl mb-2">👆</p>
-        <p className="text-purple-900 text-3xl font-black">{item.text}</p>
+      <div className={`${panel} text-center min-h-32 flex flex-col items-center justify-center`}>
+        <p className="text-purple-500 text-[10px] font-black uppercase mb-2">Item</p>
+        <p className="text-purple-900 text-4xl font-black">{item.text}</p>
       </div>
       <div className={`grid gap-2 ${groups.length <= 2 ? 'grid-cols-2' : 'grid-cols-2'}`}>
         {groups.map((g, i) => (
