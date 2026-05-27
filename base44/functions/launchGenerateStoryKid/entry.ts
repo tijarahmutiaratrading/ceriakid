@@ -186,19 +186,31 @@ Deno.serve(async (req) => {
       return Response.json({ success: true, message: `Already has ${existing.length} stories`, generated: 0 });
     }
 
-    // Pick themes not yet used (rough check by theme keyword)
-    const existingTitles = new Set(existing.map(g => (g.title || '').toLowerCase()));
-    const remainingThemes = STORY_THEMES.filter(t =>
-      !Array.from(existingTitles).some(et => et.includes(t.theme.split(' ')[0]))
-    );
+    // Track tema yang dah dijana berdasarkan themeKey dalam gameData (reliable).
+    // Fallback: kira berapa kali setiap tema muncul (count map), kemudian pilih
+    // tema dengan count paling rendah → guarantee rotation merata.
+    const themeCounts = new Map(STORY_THEMES.map(t => [t.theme, 0]));
+    existing.forEach(g => {
+      const key = g.gameData?.themeKey;
+      if (key && themeCounts.has(key)) {
+        themeCounts.set(key, themeCounts.get(key) + 1);
+      }
+    });
+
+    // Sort tema ikut count paling rendah dulu (yang belum dijana akan dipilih dulu)
+    const sortedThemes = [...STORY_THEMES].sort((a, b) => {
+      const ca = themeCounts.get(a.theme) || 0;
+      const cb = themeCounts.get(b.theme) || 0;
+      return ca - cb;
+    });
 
     // Image generation is heavy — process 1 story per call (10 images each)
-    const batchSize = Math.min(needed, 1, remainingThemes.length);
+    const batchSize = Math.min(needed, 1);
     let inserted = 0;
     let failed = 0;
 
     for (let i = 0; i < batchSize; i++) {
-      const themeObj = remainingThemes[i];
+      const themeObj = sortedThemes[i];
       const themeIdx = existing.length + i; // rotate character across all stories
       const character = pickCharacter(themeIdx);
       const result = await generateOneStory(base44, themeObj, character);
@@ -238,6 +250,7 @@ Deno.serve(async (req) => {
         totalQuestions: s.scenes.length,
         gameData: {
           storyKid: true,
+          themeKey: themeObj.theme,
           cover: coverUrl || sceneUrls[0] || '',
           moral: s.moral || themeObj.moral,
           character: { name: character.name, gender: character.gender },
