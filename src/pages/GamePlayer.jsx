@@ -560,20 +560,14 @@ export default function GamePlayer() {
            key={state.currentQ}
            initial={{ opacity: 0, y: 30, scale: 0.95 }}
            animate={{ opacity: 1, y: 0, scale: 1 }}
-           className="rounded-3xl p-[2px] mb-6 relative"
+           className="rounded-3xl mb-6 relative overflow-hidden"
            style={{
-             background: 'linear-gradient(135deg, #fbbf24, #ec4899, #8b5cf6, #06b6d4)',
-             boxShadow: '0 20px 60px rgba(0,0,0,0.3), 0 0 40px rgba(236,72,153,0.25)',
+             background: 'rgba(255,255,255,0.12)',
+             backdropFilter: 'blur(20px)',
+             border: '1px solid rgba(255,255,255,0.2)',
            }}
          >
-         <div
-           className="rounded-3xl p-5 md:p-7 text-center relative overflow-hidden"
-           style={{
-             background: 'linear-gradient(135deg, rgba(49,46,129,0.85), rgba(124,58,237,0.75), rgba(190,24,93,0.85))',
-             backdropFilter: 'blur(24px)',
-             boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.25)',
-           }}
-         >
+         <div className="rounded-3xl p-5 md:p-7 text-center relative">
 
 
           {/* Picture Quiz — image only */}
@@ -583,56 +577,34 @@ export default function GamePlayer() {
 
           {/* Letter/Number Display */}
           {currentQuestion.letter && (
-            <div className="text-5xl sm:text-7xl font-black mb-2"
-              style={{
-                background: 'linear-gradient(135deg, #fbbf24, #ec4899)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                filter: 'drop-shadow(0 4px 12px rgba(236,72,153,0.4))',
-              }}
-            >
+            <div className="text-5xl sm:text-7xl font-black mb-2 text-white">
               {currentQuestion.letter}
             </div>
           )}
 
           {currentQuestion.word && (
-            <p className="text-lg sm:text-2xl font-bold text-white/95">
+            <p className="text-lg sm:text-2xl font-bold text-white">
               {currentQuestion.word}
             </p>
           )}
 
           {/* Generic question text — covers all DB game formats */}
            {currentQuestion.question && (
-             <p className={`font-black mb-2 ${currentQuestion.question.length > 60 ? 'text-sm sm:text-lg' : 'text-base sm:text-2xl'}`}
-               style={{
-                 color: '#ffffff',
-                 textShadow: '0 2px 8px rgba(0,0,0,0.45)',
-                 WebkitTextFillColor: '#ffffff',
-               }}
-             >
+             <p className={`font-black mb-2 text-white ${currentQuestion.question.length > 60 ? 'text-sm sm:text-lg' : 'text-base sm:text-2xl'}`}>
                {currentQuestion.question}
              </p>
            )}
 
            {/* Text Question (math, multiple choice) */}
            {currentQuestion.problem && (
-             <div className={`font-black ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}
-               style={{
-                 background: 'linear-gradient(135deg, #fbbf24, #ec4899)',
-                 WebkitBackgroundClip: 'text',
-                 WebkitTextFillColor: 'transparent',
-                 filter: 'drop-shadow(0 4px 12px rgba(236,72,153,0.4))',
-               }}
-             >
+             <div className={`font-black text-white ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}>
                {currentQuestion.problem}
              </div>
            )}
 
            {/* Question label based on game type */}
            {currentQuestion.image && !currentQuestion.problem && !currentQuestion.question && (
-             <p className="text-base sm:text-lg font-bold text-white/90 mt-2"
-               style={{ textShadow: '0 2px 6px rgba(0,0,0,0.3)' }}
-             >
+             <p className="text-base sm:text-lg font-bold text-white mt-2">
                {game.type === 'counting' ? 'Berapakah ini?' : 'Apakah ini?'}
              </p>
            )}
