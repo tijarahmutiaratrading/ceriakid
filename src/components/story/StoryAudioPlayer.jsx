@@ -3,46 +3,14 @@ import { motion } from 'framer-motion';
 import { Volume2, VolumeX, Music } from 'lucide-react';
 
 const STORAGE_KEY = 'storyKidAudio';
-const VOLUME = 0.08;
+const VOLUME = 0.35;
 
-// Melodi lullaby relax & playful — tempo perlahan, ala music box / Twinkle-style
-// C5=523.25, D5=587.33, E5=659.25, F5=698.46, G5=783.99, A5=880, B5=987.77, C6=1046.50
-const MELODY = [
-  // Phrase 1 — naik lembut
-  { freq: 523.25, dur: 0.5 },  // C5
-  { freq: 523.25, dur: 0.5 },  // C5
-  { freq: 783.99, dur: 0.5 },  // G5
-  { freq: 783.99, dur: 0.5 },  // G5
-  { freq: 880.00, dur: 0.5 },  // A5
-  { freq: 880.00, dur: 0.5 },  // A5
-  { freq: 783.99, dur: 0.9 },  // G5 (hold)
-  { freq: 0, dur: 0.25 },
-
-  // Phrase 2 — turun manis
-  { freq: 698.46, dur: 0.5 },  // F5
-  { freq: 698.46, dur: 0.5 },  // F5
-  { freq: 659.25, dur: 0.5 },  // E5
-  { freq: 659.25, dur: 0.5 },  // E5
-  { freq: 587.33, dur: 0.5 },  // D5
-  { freq: 587.33, dur: 0.5 },  // D5
-  { freq: 523.25, dur: 0.9 },  // C5 (resolve)
-  { freq: 0, dur: 0.4 },
-
-  // Phrase 3 — playful sparkle tinggi
-  { freq: 783.99, dur: 0.4 },  // G5
-  { freq: 783.99, dur: 0.4 },  // G5
-  { freq: 698.46, dur: 0.4 },  // F5
-  { freq: 659.25, dur: 0.4 },  // E5
-  { freq: 587.33, dur: 0.4 },  // D5
-  { freq: 523.25, dur: 0.8 },  // C5 (rest gentle)
-  { freq: 0, dur: 0.6 },       // long rest sebelum loop — bagi rilek
-];
+// Royalty-free kids song dari Pixabay (no attribution required)
+// "Happy Kids" / cheerful sing-along untuk story time
+const MUSIC_URL = 'https://cdn.pixabay.com/audio/2023/06/19/audio_4c4e4ee9d8.mp3';
 
 export default function StoryAudioPlayer({ autoPlay = true }) {
-  const ctxRef = useRef(null);
-  const gainRef = useRef(null);
-  const timeoutRef = useRef(null);
-  const stoppedRef = useRef(false);
+  const audioRef = useRef(null);
   const [muted, setMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [needsTap, setNeedsTap] = useState(false);
@@ -62,95 +30,33 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
     } catch (e) { /* ignore */ }
   }, [muted]);
 
-  // Apply mute via gain node
-  useEffect(() => {
-    if (gainRef.current && ctxRef.current) {
-      gainRef.current.gain.setTargetAtTime(muted ? 0 : VOLUME, ctxRef.current.currentTime, 0.05);
-    }
-  }, [muted]);
-
-  const playNote = (freq, dur, startTime) => {
-    const ctx = ctxRef.current;
-    if (!ctx || freq === 0) return;
-
-    const osc = ctx.createOscillator();
-    const noteGain = ctx.createGain();
-
-    // Triangle wave — lembut macam music box / lullaby
-    osc.type = 'triangle';
-    osc.frequency.value = freq;
-
-    // Soft bell-like envelope — naik cepat, fade panjang (relax)
-    noteGain.gain.setValueAtTime(0, startTime);
-    noteGain.gain.linearRampToValueAtTime(1, startTime + 0.06);
-    noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + dur);
-
-    osc.connect(noteGain);
-    noteGain.connect(gainRef.current);
-    osc.start(startTime);
-    osc.stop(startTime + dur + 0.05);
-  };
-
-  const playMelodyLoop = () => {
-    if (stoppedRef.current) return;
-    const ctx = ctxRef.current;
-    if (!ctx) return;
-
-    let cursor = ctx.currentTime + 0.05;
-    MELODY.forEach(({ freq, dur }) => {
-      playNote(freq, dur, cursor);
-      cursor += dur;
-    });
-
-    // Schedule next loop
-    const totalDur = MELODY.reduce((s, n) => s + n.dur, 0);
-    timeoutRef.current = setTimeout(playMelodyLoop, totalDur * 1000);
-  };
-
-  const startAudio = async () => {
-    try {
-      if (!ctxRef.current) {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (!Ctx) return false;
-        ctxRef.current = new Ctx();
-        gainRef.current = ctxRef.current.createGain();
-        gainRef.current.gain.value = muted ? 0 : VOLUME;
-        gainRef.current.connect(ctxRef.current.destination);
-      }
-
-      // Resume context (often suspended sampai user interact)
-      if (ctxRef.current.state === 'suspended') {
-        await ctxRef.current.resume();
-      }
-
-      if (ctxRef.current.state === 'running') {
-        stoppedRef.current = false;
-        setIsPlaying(true);
-        setNeedsTap(false);
-        playMelodyLoop();
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
-  };
-
-  // Autoplay logic — cuba terus, kalau gagal tunggu user click
+  // Setup audio element sekali sahaja
   useEffect(() => {
     if (!autoPlay) return;
 
-    let cancelled = false;
+    const audio = new Audio(MUSIC_URL);
+    audio.loop = true;
+    audio.volume = muted ? 0 : VOLUME;
+    audio.preload = 'auto';
+    audioRef.current = audio;
 
-    const tryStart = async () => {
-      const ok = await startAudio();
-      if (!ok && !cancelled) {
+    const tryPlay = async () => {
+      try {
+        await audio.play();
+        setIsPlaying(true);
+        setNeedsTap(false);
+      } catch (e) {
+        // Autoplay blocked — tunggu user interact
         setNeedsTap(true);
         const onInteract = async () => {
           window.removeEventListener('click', onInteract);
           window.removeEventListener('touchstart', onInteract);
           window.removeEventListener('keydown', onInteract);
-          await startAudio();
+          try {
+            await audio.play();
+            setIsPlaying(true);
+            setNeedsTap(false);
+          } catch (e2) { /* ignore */ }
         };
         window.addEventListener('click', onInteract, { once: true });
         window.addEventListener('touchstart', onInteract, { once: true });
@@ -158,31 +64,33 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
       }
     };
 
-    tryStart();
+    tryPlay();
 
     return () => {
-      cancelled = true;
-      stoppedRef.current = true;
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      if (ctxRef.current) {
-        try { ctxRef.current.close(); } catch (e) { /* ignore */ }
-        ctxRef.current = null;
-        gainRef.current = null;
-      }
+      audio.pause();
+      audio.src = '';
+      audioRef.current = null;
       setIsPlaying(false);
     };
-  }, [autoPlay]);
+  }, [autoPlay]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Apply mute via volume
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = muted ? 0 : VOLUME;
+    }
+  }, [muted]);
 
   const toggleMute = async () => {
     const next = !muted;
     setMuted(next);
 
-    // Bila unmute, pastikan audio context aktif
-    if (!next && ctxRef.current?.state === 'suspended') {
-      await ctxRef.current.resume();
-    }
-    if (!next && !ctxRef.current) {
-      await startAudio();
+    // Bila unmute, pastikan audio main
+    if (!next && audioRef.current && audioRef.current.paused) {
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+      } catch (e) { /* ignore */ }
     }
   };
 
