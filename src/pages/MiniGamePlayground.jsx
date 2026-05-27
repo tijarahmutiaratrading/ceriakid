@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Lock, Loader2, Sparkles } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import CikguMascot from '@/components/game/CikguMascot';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
 import { findMiniGame, findMiniCategory, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { useAuth } from '@/lib/AuthContext';
@@ -68,61 +69,91 @@ export default function MiniGamePlayground() {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900">
-      {/* Soft Apple-clean background */}
-      <div aria-hidden="true" className="fixed inset-0 -z-10 pointer-events-none bg-gradient-to-b from-slate-50 via-white to-slate-50" />
-      {/* Subtle ambient color orbs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-48 -right-40 md:-top-72 md:-right-72 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-purple-200/30 rounded-full filter blur-3xl animate-float" />
-        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-48 w-[260px] h-[260px] md:w-[440px] md:h-[440px] bg-blue-200/25 rounded-full filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[300px] h-[300px] md:w-[560px] md:h-[560px] bg-pink-200/20 rounded-full filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
+    <div
+      className="min-h-screen w-full overflow-x-hidden relative font-nunito"
+      style={{
+        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)',
+      }}
+    >
+      {/* Floating sparkle decorations */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-32 left-6 text-2xl text-white/30 animate-float">✨</div>
+        <div className="absolute top-44 right-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
+        <div className="absolute top-1/2 left-4 text-2xl text-pink-300/40 animate-float" style={{ animationDelay: '2.4s' }}>💫</div>
+        <div className="absolute bottom-40 right-6 text-2xl text-cyan-300/35 animate-float" style={{ animationDelay: '3.1s' }}>✨</div>
+        <div className="absolute bottom-24 left-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '4s' }}>⭐</div>
+        <div className="absolute top-1/3 right-1/4 text-lg text-white/25 animate-float" style={{ animationDelay: '1.7s' }}>✨</div>
+      </div>
+
+      {/* Glow orbs */}
+      <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full opacity-30 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }} />
+      <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full opacity-25 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }} />
+
+      {/* Family mascot — Ibu, Kakak, Adik */}
+      <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
+        <CikguMascot size={300} />
+      </div>
+      <div className="md:hidden fixed bottom-2 -right-2 z-0 opacity-90">
+        <CikguMascot size={150} />
       </div>
 
       <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} />
 
       <div className="relative max-w-lg mx-auto px-4 sm:px-6 pb-32 pt-20 md:pt-24">
-        {/* Back button — Apple ghost */}
+        {/* Back button — glass on gradient */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <Link
             to={`/mini-games/${category.id}`}
-            className="inline-flex items-center gap-2 mb-5 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md text-slate-700 font-semibold text-sm ring-1 ring-black/5 hover:bg-white hover:scale-[1.02] transition-all shadow-sm"
+            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-white transition-all hover:scale-[1.02]"
+            style={{
+              background: 'rgba(255,255,255,0.15)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255,255,255,0.25)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+            }}
           >
             <ArrowLeft className="w-4 h-4" /> {category.title}
           </Link>
         </motion.div>
 
-        {/* Game header — Apple-style clean card */}
+        {/* Game header — glass card */}
         {!loadingGame && !locked && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-5 rounded-3xl p-4 bg-white/95 backdrop-blur-xl ring-1 ring-black/5"
-            style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 12px 32px rgba(15,23,42,0.06)' }}
+            className="mb-5 rounded-3xl p-4"
+            style={{
+              background: 'rgba(255,255,255,0.12)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+            }}
           >
             <div className="flex items-center gap-3">
-              {/* Icon tile — soft tinted square (Apple style) */}
+              {/* Icon tile — vibrant glass */}
               <div
                 className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(168,85,247,0.12) 0%, rgba(236,72,153,0.12) 100%)',
-                  boxShadow: 'inset 0 0 0 1px rgba(168,85,247,0.15)',
+                  background: 'linear-gradient(135deg, rgba(236,72,153,0.35) 0%, rgba(168,85,247,0.35) 100%)',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)',
                 }}
               >
                 {game.emoji || category.emoji}
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-purple-600 mb-0.5 flex items-center gap-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-yellow-200 mb-0.5 flex items-center gap-1">
                   <Sparkles className="w-3 h-3" />
                   {category.title}
                 </p>
-                <h1 className="text-base sm:text-lg font-black text-slate-900 leading-tight tracking-tight line-clamp-1">
+                <h1 className="text-base sm:text-lg font-black text-white leading-tight tracking-tight line-clamp-1">
                   {game.title}
                 </h1>
               </div>
             </div>
 
-            <p className="text-xs font-medium text-slate-500 leading-relaxed mt-3 pl-1">
+            <p className="text-xs font-medium text-white/75 leading-relaxed mt-3 pl-1">
               {guideByMode[game.mode] || 'Mini Game'}
             </p>
           </motion.div>
@@ -136,7 +167,13 @@ export default function MiniGamePlayground() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-[2rem] p-8 text-center bg-white/95 backdrop-blur-xl ring-1 ring-black/5 shadow-xl"
+            className="rounded-[2rem] p-8 text-center"
+            style={{
+              background: 'rgba(255,255,255,0.95)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.3)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+            }}
           >
             <div
               className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl"
