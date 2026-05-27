@@ -12,7 +12,7 @@ const categoryConfigs = {
   bahasa_tamil: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1dac8b0f4_generated_image.png', label: 'Bahasa Tamil', color: 'from-orange-300 to-red-400', accentBg: 'bg-orange-100/30' },
   bahasa_mandarin: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/477e24964_generated_image.png', label: 'Bahasa Mandarin', color: 'from-red-300 to-pink-400', accentBg: 'bg-red-100/30' },
   // KAFA — single hub card (klik → /kafa, dalam tu pecah jadi 7 subjek UPKK)
-  kafa: { emoji: '🕌', label: 'KAFA', subtitle: 'Kelas Agama Fardhu Ain · 7 Subjek UPKK', color: 'from-emerald-500 via-teal-500 to-indigo-600', accentBg: 'bg-emerald-100/30' },
+  kafa: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/35db5430c_generated_image.png', emoji: '🕌', label: 'KAFA', subtitle: 'Kelas Agama Fardhu Ain · 7 Subjek UPKK', color: 'from-emerald-500 via-teal-500 to-indigo-600', accentBg: 'bg-emerald-100/30' },
 };
 
 export default function CategoryCard({ category, gameCount, idx }) {
