@@ -851,17 +851,23 @@ export default function DrawingStudio() {
   };
 
   return (
-    <div
-      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900"
-      style={{
-        background: 'linear-gradient(180deg, #f5f5f7 0%, #fafafa 40%, #ffffff 100%)',
-      }}
-    >
-      {/* Subtle Apple-style ambient color blobs */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900">
+      {/* Dashboard background image layer */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+      {/* Floating orbs to match dashboard */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-40" style={{ background: 'radial-gradient(circle, #c7d2fe 0%, transparent 70%)' }} />
-        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(circle, #fbcfe8 0%, transparent 70%)' }} />
-        <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(circle, #bae6fd 0%, transparent 70%)' }} />
+        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
+        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
