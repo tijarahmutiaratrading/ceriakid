@@ -579,8 +579,14 @@ export default function DrawingStudio() {
           ctx.fillStyle = 'rgba(124,58,237,0.22)';
           ctx.fillText(char, x, y);
         } else {
-          ctx.fillStyle = isActive ? 'rgba(124,58,237,0.55)' : 'rgba(124,58,237,0.25)';
-          ctx.fillText(char, x, y);
+          // Tracing slot — dashed outline supaya anak ikut garisan putus-putus
+          ctx.strokeStyle = isActive ? 'rgba(124,58,237,0.75)' : 'rgba(124,58,237,0.35)';
+          ctx.lineWidth = isActive ? 2.5 : 2;
+          ctx.lineJoin = 'round';
+          ctx.lineCap = 'round';
+          ctx.setLineDash([6, 5]);
+          ctx.strokeText(char, x, y);
+          ctx.setLineDash([]);
         }
       } else {
         // Non-text shapes (bulatan, segitiga, hati, dll) — guna stroke paths
