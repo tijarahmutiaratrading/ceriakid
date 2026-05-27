@@ -67,22 +67,22 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
           </Link>
         </div>
 
-        {/* Inner cards — high contrast: muted label + big white value */}
+        {/* Inner cards — white tiles with black labels for max contrast */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-slate-900/70 backdrop-blur-md border border-white/15 rounded-2xl p-3">
-            <p className="text-white/60 text-[10px] font-bold uppercase tracking-wider">Baki Semasa</p>
-            <p className="text-white text-2xl font-black leading-tight mt-1">{balance}</p>
-            <p className="text-white/50 text-[10px] font-semibold">kredit</p>
+          <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
+            <p className="text-slate-900 text-[10px] font-bold uppercase tracking-wider">Baki Semasa</p>
+            <p className="text-slate-900 text-2xl font-black leading-tight mt-1">{balance}</p>
+            <p className="text-slate-600 text-[10px] font-semibold">kredit</p>
           </div>
-          <div className="bg-slate-900/70 backdrop-blur-md border border-white/15 rounded-2xl p-3">
-            <p className="text-white/60 text-[10px] font-bold uppercase tracking-wider">Dibeli</p>
-            <p className="text-white text-2xl font-black leading-tight mt-1">{credits?.totalPurchased ?? 0}</p>
-            <p className="text-white/50 text-[10px] font-semibold">kredit</p>
+          <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
+            <p className="text-slate-900 text-[10px] font-bold uppercase tracking-wider">Dibeli</p>
+            <p className="text-slate-900 text-2xl font-black leading-tight mt-1">{credits?.totalPurchased ?? 0}</p>
+            <p className="text-slate-600 text-[10px] font-semibold">kredit</p>
           </div>
-          <div className="bg-slate-900/70 backdrop-blur-md border border-white/15 rounded-2xl p-3">
-            <p className="text-white/60 text-[10px] font-bold uppercase tracking-wider">Digunakan</p>
-            <p className="text-white text-2xl font-black leading-tight mt-1">{credits?.totalUsed ?? 0}</p>
-            <p className="text-white/50 text-[10px] font-semibold">kredit</p>
+          <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
+            <p className="text-slate-900 text-[10px] font-bold uppercase tracking-wider">Digunakan</p>
+            <p className="text-slate-900 text-2xl font-black leading-tight mt-1">{credits?.totalUsed ?? 0}</p>
+            <p className="text-slate-600 text-[10px] font-semibold">kredit</p>
           </div>
         </div>
 
