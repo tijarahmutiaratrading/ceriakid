@@ -2,9 +2,24 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Trash2, Download, Undo2, Maximize2, Minimize2, ArrowLeft } from 'lucide-react';
+import { Trash2, Download, Undo2, Maximize2, Minimize2, ArrowLeft, Volume2, VolumeX, Images } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import AppHeader from '@/components/AppHeader';
+import SparkleTrail from '@/components/drawing/SparkleTrail';
+import TracingCelebration from '@/components/drawing/TracingCelebration';
+import MyArtGallery from '@/components/drawing/MyArtGallery';
+import { saveArtwork } from '@/lib/drawingGallery';
+import {
+  playDrawTick,
+  playStamp,
+  playUndo,
+  playClear,
+  playSaved,
+  playTadaa,
+  playButtonTap,
+  setDrawingSoundEnabled,
+  isDrawingSoundEnabled,
+} from '@/lib/drawingAudio';
 
 const COLORS = [
   '#1a1a1a', '#ef4444', '#f97316', '#eab308',
@@ -193,6 +208,20 @@ export default function DrawingStudio() {
   const [brushSize, setBrushSize] = useState(BRUSH_SIZES[1]);
   const [stickerMode, setStickerMode] = useState(null);
   const [showSavedToast, setShowSavedToast] = useState(false);
+  const [soundOn, setSoundOn] = useState(isDrawingSoundEnabled());
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [celebration, setCelebration] = useState({ open: false, accuracy: 0 });
+
+  // Velocity tracking for organic line width (pencil/brush feel)
+  const lastPointTime = useRef(0);
+  const smoothWidth = useRef(0);
+
+  const toggleSound = () => {
+    const next = !soundOn;
+    setSoundOn(next);
+    setDrawingSoundEnabled(next);
+    if (next) playButtonTap();
+  };
 
   // Active canvas ref — points to whichever canvas is currently active
   const activeCanvasRef = isFullscreen ? fsCanvasRef : canvasRef;
@@ -568,6 +597,12 @@ export default function DrawingStudio() {
     ctx.putImageData(prev, 0, 0);
     ctx.restore();
     setHistory(h => h.slice(0, -1));
+    playUndo();
+  };
+
+  const handleClear = () => {
+    initCanvas();
+    playClear();
   };
 
   const getPoint = (e, canvas) => {
@@ -612,12 +647,15 @@ export default function DrawingStudio() {
     // Sticker stamping mode — single tap drops emoji
     if (stickerMode && mode !== 'trace') {
       stampSticker(pt, stickerMode);
+      playStamp();
       return;
     }
 
     saveToHistory();
     setIsDrawing(true);
     setLastPoint(pt);
+    lastPointTime.current = performance.now();
+    smoothWidth.current = effectiveLineWidth();
     if (mode === 'trace') setCurrentStroke([pt]);
 
     const lw = effectiveLineWidth();
@@ -634,20 +672,63 @@ export default function DrawingStudio() {
     const ctx = getCtx();
     if (!ctx || !canvas) return;
     const pt = getPoint(e, canvas);
+    if (!lastPoint) { setLastPoint(pt); return; }
 
+    // Velocity-aware width — slower stroke = thicker line (pencil/brush feel).
+    // Eraser & marker keep flat width for predictability.
+    const baseLw = effectiveLineWidth();
+    let lw = baseLw;
+    if (tool.id === 'pencil' || tool.id === 'brush' || tool.id === 'crayon') {
+      const now = performance.now();
+      const dt = Math.max(1, now - lastPointTime.current);
+      const dist = Math.hypot(pt.x - lastPoint.x, pt.y - lastPoint.y);
+      const velocity = dist / dt; // px/ms
+      // map velocity → width factor (slow≈1.15, fast≈0.65)
+      const factor = Math.max(0.6, Math.min(1.2, 1.2 - velocity * 0.4));
+      const targetLw = baseLw * factor;
+      // smooth so width doesn't jitter frame to frame
+      smoothWidth.current = smoothWidth.current * 0.7 + targetLw * 0.3;
+      lw = smoothWidth.current;
+      lastPointTime.current = now;
+    }
+
+    // Quadratic smoothing — draw to the midpoint with a curve through lastPoint
+    const midX = (lastPoint.x + pt.x) / 2;
+    const midY = (lastPoint.y + pt.y) / 2;
     ctx.beginPath();
     ctx.moveTo(lastPoint.x, lastPoint.y);
-    ctx.lineTo(pt.x, pt.y);
+    ctx.quadraticCurveTo(lastPoint.x, lastPoint.y, midX, midY);
     ctx.strokeStyle = tool.id === 'eraser' ? '#fff9f0' : color;
-    ctx.lineWidth = effectiveLineWidth();
+    ctx.lineWidth = lw;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.globalAlpha = tool.opacity;
     ctx.stroke();
     ctx.globalAlpha = 1;
 
+    // Crayon texture — tiny offset specks for a more tactile feel
+    if (tool.id === 'crayon') {
+      ctx.save();
+      ctx.globalAlpha = 0.25;
+      ctx.fillStyle = color;
+      for (let i = 0; i < 3; i++) {
+        const ox = (Math.random() - 0.5) * lw * 0.9;
+        const oy = (Math.random() - 0.5) * lw * 0.9;
+        ctx.beginPath();
+        ctx.arc(midX + ox, midY + oy, lw * 0.18, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
     setLastPoint(pt);
     if (mode === 'trace') setCurrentStroke(prev => [...prev, pt]);
+
+    // Satisfying soft tone while drawing — throttled inside playDrawTick
+    if (tool.id !== 'eraser') {
+      const canvasH = getLogicalSize(canvas).h || 1;
+      playDrawTick(pt.y / canvasH, color);
+    }
   };
 
   const endDraw = (e) => {
@@ -666,8 +747,10 @@ export default function DrawingStudio() {
         const acc = Math.min(98, 70 + Math.floor(Math.random() * 28));
         setTracingAccuracy(acc);
         setTracingDone(true);
+        setCelebration({ open: true, accuracy: acc });
         if (acc >= 70) {
-          confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 }, colors: ['#8b5cf6', '#ec4899', '#f97316'] });
+          confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 }, colors: ['#fbbf24', '#8b5cf6', '#ec4899', '#f97316', '#22c55e'] });
+          playTadaa();
         }
       }
     }
@@ -685,12 +768,22 @@ export default function DrawingStudio() {
   const downloadCanvas = () => {
     const canvas = getCanvas();
     if (!canvas) return;
+    const dataUrl = canvas.toDataURL('image/png');
+    // Save to localStorage gallery so the child can revisit their work
+    const titleByMode = mode === 'trace'
+      ? `Tracing ${selectedShape.label}`
+      : mode === 'color'
+      ? `Mewarna ${selectedColoringPage.label}`
+      : 'Lukisan bebas';
+    try { saveArtwork({ dataUrl, title: titleByMode, mode }); } catch { /* gallery is best-effort */ }
+    // Also offer device download
     const link = document.createElement('a');
     link.download = `lukisan-saya-${Date.now()}.png`;
-    link.href = canvas.toDataURL('image/png');
+    link.href = dataUrl;
     link.click();
     setShowSavedToast(true);
-    confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 }, colors: ['#fbbf24', '#ec4899', '#8b5cf6'] });
+    confetti({ particleCount: 90, spread: 80, origin: { y: 0.7 }, colors: ['#fbbf24', '#ec4899', '#8b5cf6', '#22c55e', '#3b82f6'] });
+    playSaved();
     setTimeout(() => setShowSavedToast(false), 2200);
   };
 
@@ -1010,10 +1103,16 @@ export default function DrawingStudio() {
                 <h2 className="text-white font-black text-lg truncate">{mode === 'draw' ? `${tool.emoji} ${tool.label}` : mode === 'trace' ? `✏️ ${selectedShape.label}` : `🖍️ ${selectedColoringPage.label}`}</h2>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
+                <button onClick={toggleSound} className="p-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white transition-all" title={soundOn ? 'Matikan bunyi' : 'Hidupkan bunyi'}>
+                  {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                </button>
+                <button onClick={() => { setGalleryOpen(true); playButtonTap(); }} className="p-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white transition-all" title="Kerja Saya">
+                  <Images className="w-4 h-4" />
+                </button>
                 <button onClick={undo} disabled={history.length === 0} className="p-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white disabled:opacity-40 transition-all" title="Undo">
                   <Undo2 className="w-4 h-4" />
                 </button>
-                <button onClick={initCanvas} className="p-2.5 rounded-2xl bg-red-500/35 hover:bg-red-500/50 text-white transition-all" title="Kosongkan">
+                <button onClick={handleClear} className="p-2.5 rounded-2xl bg-red-500/35 hover:bg-red-500/50 text-white transition-all" title="Kosongkan">
                   <Trash2 className="w-4 h-4" />
                 </button>
                 <button onClick={downloadCanvas} className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white text-purple-600 font-black shadow-lg transition-all" title="Simpan">
@@ -1062,7 +1161,7 @@ export default function DrawingStudio() {
               <motion.button whileTap={{ scale: 0.92 }} onClick={undo} disabled={history.length === 0} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-white text-sm disabled:opacity-40 bg-white/15 border border-white/20">
                 <Undo2 className="w-4 h-4" /> Undo
               </motion.button>
-              <motion.button whileTap={{ scale: 0.92 }} onClick={initCanvas} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-white text-sm bg-red-500/35 border border-red-300/30">
+              <motion.button whileTap={{ scale: 0.92 }} onClick={handleClear} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-white text-sm bg-red-500/35 border border-red-300/30">
                 <Trash2 className="w-4 h-4" /> Kosong
               </motion.button>
               <motion.button whileTap={{ scale: 0.92 }} onClick={downloadCanvas} className="flex items-center justify-center gap-2 py-3 bg-white text-purple-600 rounded-2xl font-black shadow-lg text-sm">
@@ -1071,6 +1170,26 @@ export default function DrawingStudio() {
             </div>
           </motion.section>
         </div>
+
+        <SparkleTrail enabled={isDrawing && !stickerMode && mode !== 'trace'} />
+
+        <TracingCelebration
+          open={celebration.open}
+          accuracy={celebration.accuracy}
+          shapeLabel={selectedShape.label}
+          onReplay={() => { setCelebration({ open: false, accuracy: 0 }); resetTracing(); playButtonTap(); }}
+          onNext={() => {
+            const list = tracingShapes;
+            const idx = list.findIndex(s => s.label === selectedShape.label);
+            const nextShape = list[(idx + 1) % list.length];
+            setSelectedShape(nextShape);
+            setCelebration({ open: false, accuracy: 0 });
+            playButtonTap();
+          }}
+          onClose={() => setCelebration({ open: false, accuracy: 0 })}
+        />
+
+        <MyArtGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} />
 
         {isFullscreen && createPortal(
           <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'linear-gradient(135deg, #312e81 0%, #581c87 50%, #831843 100%)', display: 'flex', flexDirection: 'column' }}>
@@ -1120,7 +1239,7 @@ export default function DrawingStudio() {
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button onClick={undo} disabled={history.length === 0} className="p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white disabled:opacity-40 transition-all"><Undo2 className="w-4 h-4" /></button>
-                <button onClick={initCanvas} className="p-2 rounded-xl bg-red-500/40 hover:bg-red-500/60 text-white transition-all"><Trash2 className="w-4 h-4" /></button>
+                <button onClick={handleClear} className="p-2 rounded-xl bg-red-500/40 hover:bg-red-500/60 text-white transition-all"><Trash2 className="w-4 h-4" /></button>
                 <button onClick={downloadCanvas} className="p-2 rounded-xl bg-white text-purple-600 shadow transition-all"><Download className="w-4 h-4" /></button>
                 <button onClick={() => setIsFullscreen(false)} className="p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white transition-all"><Minimize2 className="w-4 h-4" /></button>
               </div>
