@@ -17,7 +17,7 @@ const FEATURES = [
   {
     to: '/quiz-ai',
     icon: Brain,
-    title: 'Cikgu Aina',
+    title: 'Cikgu Rosie',
     desc: 'Kuiz adaptif',
     cost: '1 kredit',
     bg: 'from-sky-100 via-blue-50 to-cyan-100',

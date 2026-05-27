@@ -18,7 +18,7 @@ const AI_FEATURES = [
   },
   {
     icon: Brain,
-    title: 'Cikgu Aina',
+    title: 'Cikgu Rosie',
     persona: 'Kuiz AI Adaptif',
     avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/49507dc3a_generated_image.png',
     desc: 'Soalan interaktif yang adapt ikut tahap anak. Semakin main, semakin pandai.',

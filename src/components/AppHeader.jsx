@@ -100,7 +100,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           label: 'Cikgu AI',
           submenu: [
             { path: '/ai-assistant', label: 'Cikgu Firdaus — Tutor' },
-            { path: '/quiz-ai', label: 'Cikgu Aina — Kuiz' },
+            { path: '/quiz-ai', label: 'Cikgu Rosie — Kuiz' },
             { path: '/story-generator', label: 'Cikgu Mira — Cerita' },
             { path: '/bbm-generator', label: 'Cikgu Daniel — BBM' },
           ],

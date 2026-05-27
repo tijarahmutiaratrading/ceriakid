@@ -118,12 +118,12 @@ export default function QuizAI() {
           <div className="flex items-center gap-3">
             <img
               src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/49507dc3a_generated_image.png"
-              alt="Cikgu Aina"
+              alt="Cikgu Rosie"
               className="w-14 h-14 rounded-2xl object-cover ring-2 ring-white/40 shadow-lg bg-gradient-to-br from-cyan-400 to-indigo-500"
             />
             <div>
               <p className="text-cyan-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> Bersama Cikgu Aina
+                <Sparkles className="w-3 h-3" /> Bersama Cikgu Rosie
               </p>
               <h1 className="text-xl md:text-2xl font-black text-slate-900">Kuiz AI</h1>
             </div>
