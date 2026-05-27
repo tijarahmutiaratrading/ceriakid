@@ -117,7 +117,7 @@ export default function QuizAI() {
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
             <img
-              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/811b6df2e_generated_image.png"
+              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4347879e0_generated_image.png"
               alt="Cikgu Rosie"
               className="w-14 h-14 rounded-2xl object-cover ring-2 ring-white/40 shadow-lg bg-gradient-to-br from-cyan-400 to-indigo-500"
             />
