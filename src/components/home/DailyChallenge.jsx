@@ -76,7 +76,7 @@ export default function DailyChallenge({ ageGroup }) {
 
   const gradientClass = completed
     ? 'from-emerald-400/85 via-teal-400/75 to-cyan-400/70 shadow-emerald-300/30'
-    : 'from-orange-400/85 via-pink-400/75 to-rose-400/70 shadow-pink-300/30';
+    : 'from-yellow-400/90 via-amber-400/80 to-pink-400/80 shadow-pink-300/30';
 
   return (
     <motion.div
