@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ChevronRight, Sparkles, Star, Zap } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import HoppingBunnies from '@/components/game/HoppingBunny';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 
 // Playful vibrant gradients per category — kuat, ceria, anak-anak suka
@@ -59,6 +60,9 @@ export default function GamesHub() {
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
+
+      {/* 🐰 Arnab mascot melompat-lompat di background */}
+      <HoppingBunnies />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
         {/* Back button */}
