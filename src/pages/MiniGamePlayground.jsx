@@ -43,6 +43,7 @@ export default function MiniGamePlayground() {
   const { user, isAuthenticated } = useAuth();
   const { selectedChild } = useSelectedChild() || {};
   const [userTier, setUserTier] = React.useState('free');
+  const [tierLoaded, setTierLoaded] = React.useState(false);
   const [loadingGame, setLoadingGame] = React.useState(false);
   const { category, game: blueprintGame } = findMiniGame(categoryId, gameId);
   const game = blueprintGame;
@@ -50,14 +51,19 @@ export default function MiniGamePlayground() {
   const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 10;
   const blueprintIndex = Math.max(0, category.games.findIndex(item => item.id === gameId));
   const gameIndex = categoryOffset + blueprintIndex;
-  const locked = isGameIndexLocked({ index: gameIndex, tier: userTier, isAuthenticated });
+  const locked = tierLoaded && isGameIndexLocked({ index: gameIndex, tier: userTier, isAuthenticated });
 
   React.useEffect(() => {
-    if (!user?.email) return;
+    if (!user?.email) {
+      // Guest user — tetap kira "loaded" supaya boleh check locked status
+      if (isAuthenticated === false) setTierLoaded(true);
+      return;
+    }
     base44.entities.UserSubscription.filter({ email: user.email }).then(subs => {
       setUserTier(getActiveTier(subs?.[0]));
-    });
-  }, [user?.email]);
+      setTierLoaded(true);
+    }).catch(() => setTierLoaded(true));
+  }, [user?.email, isAuthenticated]);
 
   const normalizedGame = {
     title: game.title,
@@ -159,9 +165,9 @@ export default function MiniGamePlayground() {
           </motion.div>
         )}
 
-        {loadingGame ? (
+        {loadingGame || !tierLoaded ? (
           <div className="flex justify-center py-10">
-            <Loader2 className="w-7 h-7 animate-spin text-purple-500" />
+            <Loader2 className="w-7 h-7 animate-spin text-white/80" />
           </div>
         ) : locked ? (
           <motion.div
