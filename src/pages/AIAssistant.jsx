@@ -110,7 +110,7 @@ export default function AIAssistant() {
           <div className="flex items-center gap-3">
             <div className="relative">
               <img
-                src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fc07612a5_generated_image.png"
+                src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/61dba1f3a_generated_image.png"
                 alt="Cikgu Firdaus"
                 className="w-14 h-14 rounded-2xl object-cover shadow-lg ring-2 ring-amber-300/60"
               />

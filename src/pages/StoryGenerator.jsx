@@ -103,7 +103,7 @@ export default function StoryGenerator() {
         <div className="print:hidden mb-4 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
             <img
-              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/ed05d7aec_generated_image.png"
+              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d2061d998_generated_image.png"
               alt="Cikgu Mira"
               className="w-14 h-14 rounded-2xl object-cover ring-2 ring-white/40 shadow-lg bg-gradient-to-br from-pink-400 to-rose-500"
             />

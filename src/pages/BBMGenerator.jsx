@@ -89,7 +89,7 @@ export default function BBMGenerator() {
         <div className="print:hidden mb-4 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
             <img
-              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/bdb2702f2_generated_image.png"
+              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4c8ddef8e_generated_image.png"
               alt="Cikgu Daniel"
               className="w-14 h-14 rounded-2xl object-cover ring-2 ring-white/40 shadow-lg bg-gradient-to-br from-violet-400 to-purple-500"
             />
