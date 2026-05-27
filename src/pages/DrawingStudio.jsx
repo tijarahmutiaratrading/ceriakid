@@ -217,6 +217,11 @@ export default function DrawingStudio() {
   const lastPointTime = useRef(0);
   const smoothWidth = useRef(0);
 
+  // Snapshot of drawing taken just before entering/exiting fullscreen so we can
+  // reliably restore it after the layout/canvas remount finishes. This survives
+  // ResizeObserver firing on the normal canvas (which would otherwise wipe it).
+  const transitionSnapshotRef = useRef(null);
+
   const toggleSound = () => {
     const next = !soundOn;
     setSoundOn(next);
@@ -512,9 +517,13 @@ export default function DrawingStudio() {
       const cssH = Math.round(cssW * (3 / 4));
       // Skip if size unchanged (avoid wiping the drawing on every micro-resize)
       if (canvas._cssW === cssW && canvas._cssH === cssH) return;
-      // Snapshot existing content (if any) so we can restore after resize
+      // Prefer a freshly-captured transition snapshot (when exiting fullscreen)
+      // over the current canvas pixels, since this observer may fire BEFORE the
+      // fullscreen sync effect copies the drawing back.
       let snapshot = null;
-      if (canvas.width > 0 && canvas.height > 0) {
+      if (transitionSnapshotRef.current) {
+        snapshot = transitionSnapshotRef.current;
+      } else if (canvas.width > 0 && canvas.height > 0) {
         try {
           snapshot = document.createElement('canvas');
           snapshot.width = canvas.width;
@@ -528,6 +537,9 @@ export default function DrawingStudio() {
       canvas.style.height = cssH + 'px';
       setupHiDPICanvas(canvas, cssW, cssH);
       const ctx = canvas.getContext('2d');
+      // Paint base background first so transparent drawings don't show through
+      ctx.fillStyle = '#fff9f0';
+      ctx.fillRect(0, 0, cssW, cssH);
       if (snapshot) {
         ctx.drawImage(snapshot, 0, 0, cssW, cssH);
       } else {
@@ -546,38 +558,72 @@ export default function DrawingStudio() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Fullscreen setup + sync drawings between normal ↔ fullscreen
+  // Fullscreen setup + sync drawings between normal ↔ fullscreen.
+  // Critical: we capture a snapshot of the SOURCE canvas BEFORE the fullscreen
+  // element mounts/unmounts, because by the time the rAF callback runs the
+  // source canvas may already be remounted or wiped by a ResizeObserver.
   useEffect(() => {
     if (isFullscreen) {
+      // Snapshot the normal canvas right now (its bitmap is still intact)
+      const src = canvasRef.current;
+      if (src && src.width > 0 && src.height > 0) {
+        try {
+          const snap = document.createElement('canvas');
+          snap.width = src.width;
+          snap.height = src.height;
+          snap.getContext('2d').drawImage(src, 0, 0);
+          transitionSnapshotRef.current = snap;
+        } catch { transitionSnapshotRef.current = null; }
+      }
       requestAnimationFrame(() => {
-        const src = canvasRef.current;
         const dst = fsCanvasRef.current;
-        if (!src || !dst) return;
-        // Size fullscreen canvas to its parent (the flex container)
+        if (!dst) return;
         const parent = dst.parentElement;
         const parentRect = parent.getBoundingClientRect();
         const cssW = Math.round(parentRect.width);
         const cssH = Math.round(parentRect.height);
         setupHiDPICanvas(dst, cssW, cssH);
         const ctx = dst.getContext('2d');
-        const srcSize = getLogicalSize(src);
-        // Paint base + copy normal canvas content scaled to fullscreen logical size
         ctx.fillStyle = '#fff9f0';
         ctx.fillRect(0, 0, cssW, cssH);
-        if (srcSize.w && srcSize.h) {
-          ctx.drawImage(src, 0, 0, cssW, cssH);
-        }
+        const snap = transitionSnapshotRef.current;
+        if (snap) ctx.drawImage(snap, 0, 0, cssW, cssH);
+        // Keep snapshot until we exit fullscreen so it can be re-used
       });
     } else {
-      requestAnimationFrame(() => {
-        const src = fsCanvasRef.current;
+      // Capture fullscreen drawing BEFORE the portal unmounts
+      const fs = fsCanvasRef.current;
+      if (fs && fs.width > 0 && fs.height > 0) {
+        try {
+          const snap = document.createElement('canvas');
+          snap.width = fs.width;
+          snap.height = fs.height;
+          snap.getContext('2d').drawImage(fs, 0, 0);
+          transitionSnapshotRef.current = snap;
+        } catch { /* keep existing snapshot */ }
+      }
+      // Restore to normal canvas across multiple frames to outlast the
+      // ResizeObserver call that fires when the normal canvas becomes visible.
+      const restore = () => {
         const dst = canvasRef.current;
-        if (!src || !dst) return;
+        const snap = transitionSnapshotRef.current;
+        if (!dst || !snap) return;
         const dstSize = getLogicalSize(dst);
+        if (!dstSize.w || !dstSize.h) return;
         const ctx = dst.getContext('2d');
         ctx.fillStyle = '#fff9f0';
         ctx.fillRect(0, 0, dstSize.w, dstSize.h);
-        ctx.drawImage(src, 0, 0, dstSize.w, dstSize.h);
+        ctx.drawImage(snap, 0, 0, dstSize.w, dstSize.h);
+      };
+      requestAnimationFrame(() => {
+        restore();
+        // Second pass after layout settles — ResizeObserver may have wiped the
+        // first restore. setupNormal also reads transitionSnapshotRef.current.
+        requestAnimationFrame(() => {
+          restore();
+          // Free the snapshot a bit later so any late ResizeObserver still finds it
+          setTimeout(() => { transitionSnapshotRef.current = null; }, 400);
+        });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
