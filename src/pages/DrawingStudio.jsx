@@ -564,13 +564,13 @@ export default function DrawingStudio() {
       const isTextChar = /^[A-Za-z0-9]$/.test(char);
 
       if (isTextChar) {
-        // Font-based rendering — huruf & nombor
+        // Font-based rendering — single line, font biasa (tak bold)
         const fontSize = letterH * 0.78;
-        ctx.font = `900 ${fontSize}px "Nunito", system-ui, sans-serif`;
+        ctx.font = `400 ${fontSize}px "Nunito", system-ui, sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'alphabetic';
         const x = letterW / 2;
-        const y = letterH * 0.88; // sit on baseline
+        const y = letterH * 0.88;
 
         if (isExample) {
           ctx.fillStyle = '#7c3aed';
@@ -579,28 +579,8 @@ export default function DrawingStudio() {
           ctx.fillStyle = 'rgba(124,58,237,0.22)';
           ctx.fillText(char, x, y);
         } else {
-          // Tracing slot — outline + dashed stroke
-          const alpha = isActive ? 0.7 : 0.32;
-          const lw = isActive ? 3 : 2.5;
-
-          // Soft halo for active
-          if (isActive) {
-            ctx.save();
-            ctx.strokeStyle = 'rgba(196,181,253,0.35)';
-            ctx.lineWidth = 10;
-            ctx.lineJoin = 'round';
-            ctx.setLineDash([]);
-            ctx.strokeText(char, x, y);
-            ctx.restore();
-          }
-
-          // Dashed outline
-          ctx.strokeStyle = `rgba(124,58,237,${alpha})`;
-          ctx.lineWidth = lw;
-          ctx.lineJoin = 'round';
-          ctx.setLineDash([6, 5]);
-          ctx.strokeText(char, x, y);
-          ctx.setLineDash([]);
+          ctx.fillStyle = isActive ? 'rgba(124,58,237,0.55)' : 'rgba(124,58,237,0.25)';
+          ctx.fillText(char, x, y);
         }
       } else {
         // Non-text shapes (bulatan, segitiga, hati, dll) — guna stroke paths
