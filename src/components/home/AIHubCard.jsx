@@ -158,13 +158,13 @@ export default function AIHubCard() {
 
                 {/* Text */}
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-slate-700 text-[10px] md:text-[11px] leading-tight">
+                  <p className="font-black text-slate-700 text-xs md:text-sm leading-tight">
                     {f.title}
                   </p>
-                  <p className="font-black text-slate-900 text-xs md:text-sm leading-tight mt-0.5">
+                  <p className="font-black text-slate-900 text-sm md:text-base leading-tight mt-0.5">
                     {f.desc}
                   </p>
-                  <span className="inline-block mt-1.5 text-[9px] md:text-[10px] font-black bg-white/80 text-slate-700 px-2 py-0.5 rounded-full shadow-sm">
+                  <span className="inline-block mt-1.5 text-[10px] md:text-xs font-black bg-white/80 text-slate-700 px-2 py-0.5 rounded-full shadow-sm">
                     {f.cost}
                   </span>
                 </div>
