@@ -509,7 +509,7 @@ export default function GamePlayer() {
 
       {/* Cikgu Firdaus mascot — waving from bottom-left */}
       <motion.img
-        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9b53e7092_generated_image.png"
+        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8cd9be94d_generated_image.png"
         alt="Cikgu Firdaus"
         className="hidden md:block fixed bottom-0 left-2 lg:left-6 w-48 lg:w-64 pointer-events-none select-none z-0"
         style={{ filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.35))' }}
@@ -520,7 +520,7 @@ export default function GamePlayer() {
 
       {/* Mobile — smaller mascot peeking from right */}
       <motion.img
-        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9b53e7092_generated_image.png"
+        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8cd9be94d_generated_image.png"
         alt="Cikgu Firdaus"
         className="md:hidden fixed bottom-0 -right-4 w-28 pointer-events-none select-none z-0 opacity-90"
         style={{ filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.3))' }}
