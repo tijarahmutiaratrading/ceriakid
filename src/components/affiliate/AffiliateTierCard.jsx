@@ -90,25 +90,27 @@ export default function AffiliateTierCard({ affiliate }) {
         {/* All tiers preview */}
         <div className="border-t border-slate-100 pt-3 mt-3">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Semua Tier</p>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             {TIERS.map(tier => {
               const isCurrent = tier.key === currentTier.key;
               const isPast = TIERS.findIndex(t => t.key === tier.key) < TIERS.findIndex(t => t.key === currentTier.key);
               return (
                 <div
                   key={tier.key}
-                  className={`text-center p-2 rounded-xl border-2 transition-all ${
+                  className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all ${
                     isCurrent
-                      ? `${tier.bgLight} border-current ${tier.textColor} scale-105 shadow-md`
+                      ? `${tier.bgLight} border-current ${tier.textColor} scale-[1.02] shadow-md`
                       : isPast
-                        ? 'bg-emerald-50 border-emerald-200 opacity-70'
-                        : 'bg-slate-50 border-slate-200 opacity-50'
+                        ? 'bg-emerald-50 border-emerald-200 opacity-80'
+                        : 'bg-slate-50 border-slate-200 opacity-60'
                   }`}
                 >
-                  <div className="text-2xl mb-0.5">{tier.emoji}</div>
-                  <p className="text-[10px] font-black">{tier.name}</p>
-                  <p className="text-[9px] opacity-75">{tier.subscriptionRate}%/{tier.creditRate}%</p>
-                  <p className="text-[9px] opacity-60 mt-0.5">{tier.minReferrals}+ ref</p>
+                  <div className="text-4xl flex-shrink-0">{tier.emoji}</div>
+                  <div className="min-w-0 flex-1 text-left">
+                    <p className="text-sm font-black truncate">{tier.name}</p>
+                    <p className="text-xs opacity-80 font-bold">{tier.subscriptionRate}% sub · {tier.creditRate}% kredit</p>
+                    <p className="text-[11px] opacity-70 mt-0.5">{tier.minReferrals}+ rujukan</p>
+                  </div>
                 </div>
               );
             })}
