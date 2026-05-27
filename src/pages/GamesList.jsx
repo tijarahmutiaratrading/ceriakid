@@ -9,6 +9,7 @@ import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
 import GameListCard from '@/components/game/GameListCard';
 import AppHeader from '@/components/AppHeader';
+import GameLoadingScreen from '@/components/game/GameLoadingScreen';
 import { ArrowLeft } from 'lucide-react';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
@@ -235,14 +236,7 @@ export default function GamesList() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center font-nunito">
-        <div className="text-center bg-white/20 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-2xl">
-          <div className="text-6xl animate-bounce mb-4">🎓</div>
-          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
-        </div>
-      </div>
-    );
+    return <GameLoadingScreen message="Memuatkan senarai permainan..." />;
   }
 
   return (
