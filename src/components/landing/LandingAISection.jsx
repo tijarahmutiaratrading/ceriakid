@@ -20,7 +20,7 @@ const AI_FEATURES = [
     icon: Brain,
     title: 'Cikgu Rosie',
     persona: 'Kuiz AI Adaptif',
-    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f87200da4_generated_image.png',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/811b6df2e_generated_image.png',
     desc: 'Soalan interaktif yang adapt ikut tahap anak. Semakin main, semakin pandai.',
     cost: '1 kredit / soalan',
     gradient: 'from-cyan-500 via-blue-500 to-indigo-600',
