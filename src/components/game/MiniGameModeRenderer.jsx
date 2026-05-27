@@ -350,7 +350,7 @@ function StoryMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={done ? scenes.length : sceneIdx} total={scenes.length} />
       <div className={`${panel} text-center`}>
-        <p className="text-5xl mb-2">📖</p>
+        <p className="text-5xl mb-2">{scene.emoji || guessSceneEmoji(scene.text)}</p>
         <p className="text-purple-900 text-base font-black leading-relaxed">{scene.text}</p>
       </div>
       <div className="space-y-2">
@@ -1082,3 +1082,34 @@ function getItemText(item) { return typeof item === 'object' && item !== null ? 
 function getItemGroup(item) { return typeof item === 'object' && item !== null ? (item.group ?? item.category ?? item.type ?? '') : ''; }
 function getItemValue(item) { return typeof item === 'object' && item !== null ? (item.value ?? item.answer ?? item.target ?? item.text ?? item.label ?? '') : item; }
 function isSame(a, b) { return normalize(a) === normalize(b); }
+
+// Pilih emoji ikut keyword dalam ayat soalan story mode
+function guessSceneEmoji(text = '') {
+  const t = String(text).toLowerCase();
+  const map = [
+    [['protein', 'daging', 'ikan', 'ayam', 'telur'], '🍗'],
+    [['makan', 'makanan', 'sarapan', 'tengah hari', 'malam'], '🍽️'],
+    [['buah', 'sayur', 'vitamin'], '🥗'],
+    [['air', 'minum'], '💧'],
+    [['gigi', 'berus'], '🪥'],
+    [['mandi', 'bersih', 'sabun'], '🧼'],
+    [['tidur', 'rehat'], '😴'],
+    [['sekolah', 'belajar', 'cikgu', 'kelas'], '🏫'],
+    [['buku', 'baca'], '📚'],
+    [['kawan', 'rakan', 'sahabat'], '🤝'],
+    [['ibu', 'bapa', 'keluarga', 'mak', 'ayah'], '👨‍👩‍👧'],
+    [['sampah', 'kitar'], '♻️'],
+    [['solat', 'sembahyang', 'doa'], '🕌'],
+    [['jalan', 'lintas', 'lampu'], '🚦'],
+    [['duit', 'wang', 'beli', 'kedai'], '💰'],
+    [['hewan', 'haiwan', 'kucing', 'anjing'], '🐾'],
+    [['marah', 'sedih', 'gembira', 'perasaan'], '😊'],
+    [['sukan', 'lari', 'main'], '⚽'],
+    [['tangan', 'cuci'], '🧴'],
+    [['hujan', 'cuaca', 'panas'], '🌦️'],
+  ];
+  for (const [keywords, emoji] of map) {
+    if (keywords.some(k => t.includes(k))) return emoji;
+  }
+  return '🤔';
+}
