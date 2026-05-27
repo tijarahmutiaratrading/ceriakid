@@ -3,34 +3,39 @@ import { motion } from 'framer-motion';
 import { Volume2, VolumeX, Music } from 'lucide-react';
 
 const STORAGE_KEY = 'storyKidAudio';
-const VOLUME = 0.12;
+const VOLUME = 0.08;
 
-// Melodi playful & bouncy — tempo cepat, major scale, ala kartun ceria
+// Melodi lullaby relax & playful — tempo perlahan, ala music box / Twinkle-style
 // C5=523.25, D5=587.33, E5=659.25, F5=698.46, G5=783.99, A5=880, B5=987.77, C6=1046.50
 const MELODY = [
-  { freq: 523.25, dur: 0.18 }, // C5 — bouncy
-  { freq: 659.25, dur: 0.18 }, // E5
-  { freq: 783.99, dur: 0.18 }, // G5
-  { freq: 1046.50, dur: 0.22 }, // C6 — high jump!
-  { freq: 783.99, dur: 0.18 }, // G5
-  { freq: 880.00, dur: 0.18 }, // A5
-  { freq: 783.99, dur: 0.30 }, // G5 (hold)
-  { freq: 0, dur: 0.10 },      // tiny rest
-  { freq: 659.25, dur: 0.18 }, // E5
-  { freq: 783.99, dur: 0.18 }, // G5
-  { freq: 880.00, dur: 0.18 }, // A5
-  { freq: 783.99, dur: 0.18 }, // G5
-  { freq: 659.25, dur: 0.18 }, // E5
-  { freq: 587.33, dur: 0.18 }, // D5
-  { freq: 523.25, dur: 0.30 }, // C5 (hold)
-  { freq: 0, dur: 0.15 },      // rest
-  { freq: 659.25, dur: 0.15 }, // E5 — skipping
-  { freq: 659.25, dur: 0.15 }, // E5
-  { freq: 783.99, dur: 0.20 }, // G5
-  { freq: 1046.50, dur: 0.25 }, // C6 — happy peak!
-  { freq: 880.00, dur: 0.18 }, // A5
-  { freq: 783.99, dur: 0.40 }, // G5 (long resolve)
-  { freq: 0, dur: 0.25 },      // rest sebelum loop
+  // Phrase 1 — naik lembut
+  { freq: 523.25, dur: 0.5 },  // C5
+  { freq: 523.25, dur: 0.5 },  // C5
+  { freq: 783.99, dur: 0.5 },  // G5
+  { freq: 783.99, dur: 0.5 },  // G5
+  { freq: 880.00, dur: 0.5 },  // A5
+  { freq: 880.00, dur: 0.5 },  // A5
+  { freq: 783.99, dur: 0.9 },  // G5 (hold)
+  { freq: 0, dur: 0.25 },
+
+  // Phrase 2 — turun manis
+  { freq: 698.46, dur: 0.5 },  // F5
+  { freq: 698.46, dur: 0.5 },  // F5
+  { freq: 659.25, dur: 0.5 },  // E5
+  { freq: 659.25, dur: 0.5 },  // E5
+  { freq: 587.33, dur: 0.5 },  // D5
+  { freq: 587.33, dur: 0.5 },  // D5
+  { freq: 523.25, dur: 0.9 },  // C5 (resolve)
+  { freq: 0, dur: 0.4 },
+
+  // Phrase 3 — playful sparkle tinggi
+  { freq: 783.99, dur: 0.4 },  // G5
+  { freq: 783.99, dur: 0.4 },  // G5
+  { freq: 698.46, dur: 0.4 },  // F5
+  { freq: 659.25, dur: 0.4 },  // E5
+  { freq: 587.33, dur: 0.4 },  // D5
+  { freq: 523.25, dur: 0.8 },  // C5 (rest gentle)
+  { freq: 0, dur: 0.6 },       // long rest sebelum loop — bagi rilek
 ];
 
 export default function StoryAudioPlayer({ autoPlay = true }) {
@@ -71,19 +76,19 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
     const osc = ctx.createOscillator();
     const noteGain = ctx.createGain();
 
-    osc.type = 'sine';
+    // Triangle wave — lembut macam music box / lullaby
+    osc.type = 'triangle';
     osc.frequency.value = freq;
 
-    // Soft envelope — fade in/out untuk elak click sounds
+    // Soft bell-like envelope — naik cepat, fade panjang (relax)
     noteGain.gain.setValueAtTime(0, startTime);
-    noteGain.gain.linearRampToValueAtTime(1, startTime + 0.04);
-    noteGain.gain.linearRampToValueAtTime(1, startTime + dur - 0.08);
-    noteGain.gain.linearRampToValueAtTime(0, startTime + dur);
+    noteGain.gain.linearRampToValueAtTime(1, startTime + 0.06);
+    noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + dur);
 
     osc.connect(noteGain);
     noteGain.connect(gainRef.current);
     osc.start(startTime);
-    osc.stop(startTime + dur);
+    osc.stop(startTime + dur + 0.05);
   };
 
   const playMelodyLoop = () => {
