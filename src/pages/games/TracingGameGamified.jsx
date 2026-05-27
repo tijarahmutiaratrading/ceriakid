@@ -43,21 +43,37 @@ function LegacyTracingGameGamified() {
     ctx.strokeText(currentLetter, 40, 140);
   };
 
+  // Get point from mouse OR touch event, mapped to canvas coords
+  const getPoint = (e) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * (canvas.width / rect.width),
+      y: (clientY - rect.top) * (canvas.height / rect.height),
+    };
+  };
+
   const startDrawing = (e) => {
+    e.preventDefault();
     setIsDrawing(true);
     const ctx = canvasRef.current.getContext('2d');
+    const pt = getPoint(e);
     ctx.beginPath();
-    ctx.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+    ctx.moveTo(pt.x, pt.y);
   };
 
   const draw = (e) => {
     if (!isDrawing) return;
+    e.preventDefault();
     const ctx = canvasRef.current.getContext('2d');
     ctx.strokeStyle = '#7c3aed';
     ctx.lineWidth = 5;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+    const pt = getPoint(e);
+    ctx.lineTo(pt.x, pt.y);
     ctx.stroke();
   };
 
@@ -157,7 +173,8 @@ function LegacyTracingGameGamified() {
               <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-3">Lukis huruf: <span className="text-white text-lg">{currentLetter}</span></p>
               <canvas ref={canvasRef} width={300} height={180}
                 onMouseDown={startDrawing} onMouseMove={draw} onMouseUp={stopDrawing} onMouseLeave={stopDrawing}
-                className="rounded-2xl cursor-crosshair mx-auto border-2 border-white/30 bg-gray-50" />
+                onTouchStart={startDrawing} onTouchMove={draw} onTouchEnd={stopDrawing} onTouchCancel={stopDrawing}
+                className="rounded-2xl cursor-crosshair mx-auto border-2 border-white/30 bg-gray-50 touch-none w-full max-w-[300px]" />
             </div>
 
             {accuracy > 0 && (

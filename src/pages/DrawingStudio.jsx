@@ -982,22 +982,39 @@ export default function DrawingStudio() {
       setUserStrokes(newStrokes);
       setCurrentStroke([]);
 
-      // Detect which letter slot this stroke was drawn in (by avg x position)
+      // Detect which letter slot this stroke was drawn in (majority of points, not avg)
+      // This is more reliable kalau anak strok melintasi sempadan slot
       if (canvas) {
         const { w } = getLogicalSize(canvas);
-        const avgX = currentStroke.reduce((s, p) => s + p.x, 0) / currentStroke.length;
         const sideMargin = w * 0.04;
         const slotW = (w - sideMargin * 2) / LETTERS_PER_ROW;
-        const slotIdx = Math.max(0, Math.min(LETTERS_PER_ROW - 1, Math.floor((avgX - sideMargin) / slotW)));
 
-        // Increment stroke count for that slot
+        // Count points per slot — majority wins
+        const slotVotes = Array(LETTERS_PER_ROW).fill(0);
+        currentStroke.forEach((p) => {
+          const idx = Math.max(0, Math.min(LETTERS_PER_ROW - 1, Math.floor((p.x - sideMargin) / slotW)));
+          slotVotes[idx]++;
+        });
+        const slotIdx = slotVotes.indexOf(Math.max(...slotVotes));
+
+        // GUARD: slot 0 = contoh (jangan ambil kira)
+        if (slotIdx === 0) return;
+
+        // GUARD: stroke kena dalam slot aktif sahaja (tak boleh skip slot)
+        if (slotIdx !== currentLetterIndex) return;
+
+        // For text characters (A-Z, 0-9) — rendered as single fillText, jadi 1 strok cukup.
+        // For non-text shapes (bulatan, hati) — kena ikut bilangan strokes dalam definition.
+        const char = selectedShape.letter || '';
+        const isTextChar = /^[A-Za-z0-9]$/.test(char);
+        const requiredStrokes = isTextChar ? 1 : selectedShape.strokes.length;
+
+        // Increment stroke count for active slot
         const newCounts = [...letterStrokeCounts];
         newCounts[slotIdx] = (newCounts[slotIdx] || 0) + 1;
         setLetterStrokeCounts(newCounts);
 
-        // If this is the active slot and user has done enough strokes → mark complete + advance
-        const requiredStrokes = selectedShape.strokes.length;
-        if (slotIdx === currentLetterIndex && newCounts[slotIdx] >= requiredStrokes) {
+        if (newCounts[slotIdx] >= requiredStrokes) {
           saveMasteryRow(selectedShape.label);
           setMastery(loadMastery());
           playStamp();
@@ -1005,8 +1022,11 @@ export default function DrawingStudio() {
 
           const isLastSlot = currentLetterIndex >= LETTERS_PER_ROW - 1;
           if (isLastSlot) {
-            // Whole row done — big celebration!
-            const acc = Math.min(98, 80 + Math.floor(Math.random() * 18));
+            // Whole row done — calculate real accuracy from total strokes vs ideal
+            const totalStrokes = newCounts.reduce((s, n) => s + n, 0);
+            const idealStrokes = requiredStrokes * (LETTERS_PER_ROW - 1); // slot 1..N
+            const ratio = Math.min(1, idealStrokes / Math.max(totalStrokes, 1));
+            const acc = Math.max(75, Math.min(99, Math.round(ratio * 99)));
             setTracingAccuracy(acc);
             setTracingDone(true);
             setCelebration({ open: true, accuracy: acc });
