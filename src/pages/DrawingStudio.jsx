@@ -1276,65 +1276,157 @@ export default function DrawingStudio() {
         <MyArtGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} />
 
         {isFullscreen && createPortal(
-          <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'linear-gradient(135deg, #312e81 0%, #581c87 50%, #831843 100%)', display: 'flex', flexDirection: 'column' }}>
-            <div className="flex items-center gap-2 px-4 py-3 flex-shrink-0 overflow-x-auto" style={{ background: 'rgba(0,0,0,0.25)' }}>
-              <div className="flex gap-2 overflow-x-auto flex-1 min-w-0">
+          <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'linear-gradient(180deg, #f5f5f7 0%, #fafafa 40%, #ffffff 100%)', display: 'flex', flexDirection: 'column' }}>
+            {/* Ambient color blobs — match main page aesthetic */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-40" style={{ background: 'radial-gradient(circle, #c7d2fe 0%, transparent 70%)' }} />
+              <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(circle, #fbcfe8 0%, transparent 70%)' }} />
+              <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(circle, #bae6fd 0%, transparent 70%)' }} />
+            </div>
+
+            {/* Premium glass toolbar */}
+            <div
+              className="relative flex items-center gap-3 px-4 sm:px-6 py-3 flex-shrink-0 border-b border-black/[0.04]"
+              style={{
+                background: 'rgba(255,255,255,0.72)',
+                backdropFilter: 'blur(24px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+                boxShadow: '0 1px 0 rgba(255,255,255,0.6) inset, 0 1px 2px rgba(15,23,42,0.04)',
+              }}
+            >
+              <div className="flex gap-2 overflow-x-auto flex-1 min-w-0 items-center scrollbar-thin">
                 {(mode === 'draw' || mode === 'color') && (
                   <>
-                    {TOOLS.map(t => (
-                      <button key={t.id} onClick={() => setTool(t)} className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-bold transition-all ${tool.id === t.id ? 'bg-white text-purple-600 shadow' : 'bg-white/20 text-white'}`}>
-                        <span>{t.emoji}</span><span className="hidden sm:inline">{t.label}</span>
-                      </button>
-                    ))}
+                    {TOOLS.map(t => {
+                      const active = tool.id === t.id;
+                      return (
+                        <button
+                          key={t.id}
+                          onClick={() => setTool(t)}
+                          className={`flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-semibold transition-all ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-700 ring-1 ring-black/5 hover:bg-slate-50'}`}
+                        >
+                          <span className="text-base leading-none">{t.emoji}</span>
+                          <span className="hidden sm:inline">{t.label}</span>
+                        </button>
+                      );
+                    })}
                     {tool.id !== 'eraser' && (
-                      <div className="flex gap-1.5 items-center ml-2 pl-2 border-l border-white/30">
-                        {COLORS.map(c => (
-                          <button key={c} onClick={() => setColor(c)} className="w-7 h-7 rounded-full border-2 flex-shrink-0 transition-all" style={{ backgroundColor: c, borderColor: color === c ? '#fff' : 'transparent' }} />
-                        ))}
-                        <input type="color" value={color} onChange={e => setColor(e.target.value)} className="w-7 h-7 rounded-full cursor-pointer border-2 border-white/30 flex-shrink-0" />
+                      <div className="flex gap-1.5 items-center ml-2 pl-3 border-l border-black/10">
+                        {COLORS.map(c => {
+                          const active = color === c;
+                          return (
+                            <button
+                              key={c}
+                              onClick={() => setColor(c)}
+                              className="w-7 h-7 rounded-full flex-shrink-0 transition-transform hover:scale-110"
+                              style={{
+                                backgroundColor: c,
+                                boxShadow: active
+                                  ? '0 0 0 2px #ffffff, 0 0 0 4px #0f172a'
+                                  : '0 1px 2px rgba(0,0,0,0.08), inset 0 -1px 2px rgba(0,0,0,0.08)',
+                              }}
+                            />
+                          );
+                        })}
+                        <input
+                          type="color"
+                          value={color}
+                          onChange={e => setColor(e.target.value)}
+                          className="w-7 h-7 rounded-full cursor-pointer border border-black/10 flex-shrink-0 bg-transparent"
+                          title="Warna custom"
+                        />
                       </div>
                     )}
                   </>
                 )}
                 {mode === 'color' && (
-                  <>
-                    {COLORING_PAGES.map(page => (
-                      <button key={page.id} onClick={() => setSelectedColoringPage(page)} className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedColoringPage.id === page.id ? 'bg-white text-purple-600' : 'bg-white/20 text-white'}`}>
-                        {page.label}
-                      </button>
-                    ))}
-                  </>
+                  <div className="flex gap-1.5 ml-2 pl-3 border-l border-black/10">
+                    {COLORING_PAGES.map(page => {
+                      const active = selectedColoringPage.id === page.id;
+                      return (
+                        <button
+                          key={page.id}
+                          onClick={() => setSelectedColoringPage(page)}
+                          className={`flex-shrink-0 px-3 py-2 rounded-full text-xs font-semibold transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                        >
+                          {page.label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 )}
                 {mode === 'trace' && (
                   <>
-                    {TRACING_CATEGORIES.map(category => (
-                      <button key={category.id} onClick={() => { setSelectedTracingCategory(category.id); setSelectedShape(category.shapes[0]); }} className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedTracingCategory === category.id ? 'bg-white text-purple-600' : 'bg-white/20 text-white'}`}>
-                        {category.label}
-                      </button>
-                    ))}
-                    <span className="w-px bg-white/30 mx-1 flex-shrink-0" />
-                    {tracingShapes.map(s => (
-                      <button key={s.label} onClick={() => setSelectedShape(s)} className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedShape.label === s.label ? 'bg-white text-purple-600' : 'bg-white/20 text-white'}`}>
-                        {s.label}
-                      </button>
-                    ))}
+                    {TRACING_CATEGORIES.map(category => {
+                      const active = selectedTracingCategory === category.id;
+                      return (
+                        <button
+                          key={category.id}
+                          onClick={() => { setSelectedTracingCategory(category.id); setSelectedShape(category.shapes[0]); }}
+                          className={`flex-shrink-0 px-3 py-2 rounded-full text-xs font-semibold transition-all ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-700 ring-1 ring-black/5 hover:bg-slate-50'}`}
+                        >
+                          {category.label}
+                        </button>
+                      );
+                    })}
+                    <span className="w-px h-6 bg-black/10 mx-1 flex-shrink-0" />
+                    {tracingShapes.map(s => {
+                      const active = selectedShape.label === s.label;
+                      return (
+                        <button
+                          key={s.label}
+                          onClick={() => setSelectedShape(s)}
+                          className={`flex-shrink-0 px-3 py-2 rounded-full text-xs font-semibold transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                        >
+                          {s.label}
+                        </button>
+                      );
+                    })}
                   </>
                 )}
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <button onClick={undo} disabled={history.length === 0} className="p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white disabled:opacity-40 transition-all"><Undo2 className="w-4 h-4" /></button>
-                <button onClick={handleClear} className="p-2 rounded-xl bg-red-500/40 hover:bg-red-500/60 text-white transition-all"><Trash2 className="w-4 h-4" /></button>
-                <button onClick={downloadCanvas} className="p-2 rounded-xl bg-white text-purple-600 shadow transition-all"><Download className="w-4 h-4" /></button>
-                <button onClick={() => setIsFullscreen(false)} className="p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white transition-all"><Minimize2 className="w-4 h-4" /></button>
+
+              <div className="flex items-center gap-1.5 flex-shrink-0 pl-2 border-l border-black/10">
+                <button
+                  onClick={undo}
+                  disabled={history.length === 0}
+                  className="p-2 rounded-full bg-white text-slate-700 ring-1 ring-black/5 hover:bg-slate-50 disabled:opacity-30 disabled:hover:bg-white transition-all"
+                  title="Undo"
+                >
+                  <Undo2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={handleClear}
+                  className="p-2 rounded-full bg-red-50 text-red-600 ring-1 ring-red-100 hover:bg-red-100 transition-all"
+                  title="Kosongkan"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={downloadCanvas}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-slate-900 text-white text-sm font-semibold shadow-md hover:bg-slate-800 transition-all"
+                  title="Simpan"
+                >
+                  <Download className="w-4 h-4" />
+                  <span className="hidden sm:inline">Simpan</span>
+                </button>
+                <button
+                  onClick={() => setIsFullscreen(false)}
+                  className="p-2 rounded-full bg-white text-slate-700 ring-1 ring-black/5 hover:bg-slate-50 transition-all"
+                  title="Keluar fullscreen"
+                >
+                  <Minimize2 className="w-4 h-4" />
+                </button>
               </div>
             </div>
+
             <canvas
               ref={fsCanvasRef}
               onPointerDown={startDraw}
               onPointerMove={draw}
               onPointerUp={endDraw}
               onPointerLeave={endDraw}
-              style={{ flex: 1, width: '100%', touchAction: 'none', cursor: stickerMode ? 'pointer' : 'crosshair', display: 'block', backgroundColor: '#fff9f0' }}
+              style={{ flex: 1, width: '100%', touchAction: 'none', cursor: stickerMode ? 'pointer' : 'crosshair', display: 'block', backgroundColor: '#fff9f0', position: 'relative', zIndex: 1 }}
             />
           </div>,
           document.body
