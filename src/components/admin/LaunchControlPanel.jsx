@@ -56,12 +56,12 @@ export default function LaunchControlPanel() {
       >
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-3">
-            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${anyOn ? 'bg-emerald-400' : 'bg-white/15'}`}>
+            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${anyOn ? 'bg-emerald-400' : 'bg-slate-900'}`}>
               <Zap className={`w-6 h-6 ${anyOn ? 'text-emerald-950' : 'text-white'}`} />
             </div>
             <div>
-              <p className="text-white font-black text-base">Background Auto-Generate</p>
-              <p className="text-white/70 text-xs">
+              <p className="text-slate-900 font-black text-base">Background Auto-Generate</p>
+              <p className="text-slate-600 text-xs">
                 {anyOn
                   ? '🟢 Server jalan: KSSR (5 min) + Story Opus 4.7 (10 min). Browser boleh tutup.'
                   : 'Server akan auto-generate content untuk launch tanpa kena buka browser.'}
@@ -73,7 +73,7 @@ export default function LaunchControlPanel() {
               onClick={() => setShowSettings(true)}
               variant="outline"
               size="sm"
-              className="bg-white/10 text-white hover:bg-white/20 border-white/25"
+              className="bg-white text-slate-800 hover:bg-slate-50 border-slate-300"
             >
               <Settings className="w-4 h-4 mr-1.5" /> Targets
             </Button>
@@ -96,7 +96,7 @@ export default function LaunchControlPanel() {
         <button
           onClick={() => setTab('overview')}
           className={`flex-1 py-2.5 px-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-1.5 ${
-            tab === 'overview' ? 'bg-white text-game-purple shadow' : 'text-white/80 hover:bg-white/15'
+            tab === 'overview' ? 'bg-slate-900 text-white shadow' : 'text-slate-700 hover:bg-white/70'
           }`}
         >
           <LayoutDashboard className="w-4 h-4" /> Overview
@@ -104,7 +104,7 @@ export default function LaunchControlPanel() {
         <button
           onClick={() => setTab('activity')}
           className={`flex-1 py-2.5 px-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-1.5 ${
-            tab === 'activity' ? 'bg-white text-game-purple shadow' : 'text-white/80 hover:bg-white/15'
+            tab === 'activity' ? 'bg-slate-900 text-white shadow' : 'text-slate-700 hover:bg-white/70'
           }`}
         >
           <Activity className="w-4 h-4" /> Live Activity
@@ -112,7 +112,7 @@ export default function LaunchControlPanel() {
         <button
           onClick={() => setTab('manual')}
           className={`flex-1 py-2.5 px-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-1.5 ${
-            tab === 'manual' ? 'bg-white text-game-purple shadow' : 'text-white/80 hover:bg-white/15'
+            tab === 'manual' ? 'bg-slate-900 text-white shadow' : 'text-slate-700 hover:bg-white/70'
           }`}
         >
           <Wrench className="w-4 h-4" /> Manual Control
