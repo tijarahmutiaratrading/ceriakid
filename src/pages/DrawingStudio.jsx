@@ -487,7 +487,10 @@ export default function DrawingStudio() {
         if (mode === 'color' && selectedColoringPage.id === p.id) {
           const ctx = getCtx();
           const canvas = getCanvas();
-          if (ctx && canvas) clearCanvas(ctx, canvas.width, canvas.height);
+          if (ctx && canvas) {
+            const { w, h } = getLogicalSize(canvas);
+            clearCanvas(ctx, w, h);
+          }
         }
       }).catch(() => {});
     });
