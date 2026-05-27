@@ -57,10 +57,12 @@ export default function BuyCredits() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Dark gradient overlay untuk readability atas background terang */}
+      <div className="pointer-events-none fixed inset-0 bg-gradient-to-b from-slate-900/55 via-purple-900/40 to-slate-900/55 -z-0" />
 
       <AppHeader showBack={false} title="Beli Kredit AI" />
 
-      <div className="relative max-w-6xl mx-auto px-4 pt-24 md:pt-8 pb-32">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 pt-24 md:pt-8 pb-32">
         {/* Back button */}
         <Link
           to="/dashboard"
