@@ -217,37 +217,6 @@ export default function Home() {
           </motion.div>
         )}
 
-        {/* New Games Coming Soon Banner — tukar COMING_SOON_DATE untuk ubah tarikh, set null untuk sembunyikan */}
-        {(() => {
-          const COMING_SOON_DATE = '1 Julai 2026';
-          const HIDE_AFTER = new Date('2026-07-01');
-          if (!COMING_SOON_DATE || new Date() >= HIDE_AFTER) return null;
-          return (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.16 }}
-              className="mb-6"
-              >
-              <motion.div
-                whileHover={{ scale: 1.02, y: -3 }}
-                className="p-4 sm:p-6 rounded-3xl flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 relative overflow-hidden bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400 shadow-lg"
-              >
-                <div className="absolute top-2 right-2 sm:top-3 sm:right-4 text-lg sm:text-2xl animate-bounce">✨</div>
-                <div className="text-4xl sm:text-5xl flex-shrink-0">🎉</div>
-                <div className="flex-1">
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
-                    <p className="text-white font-black text-sm sm:text-base">Permainan Baru Akan Datang!</p>
-                    <span className="inline-block px-3 py-1 bg-white text-orange-600 text-xs font-black rounded-full w-fit">{COMING_SOON_DATE}</span>
-                  </div>
-                  <p className="text-white font-bold text-xs sm:text-sm">Games baru untuk semua subjek akan dilancarkan pada {COMING_SOON_DATE} 🚀</p>
-                </div>
-              </motion.div>
-            </motion.div>
-          );
-        })()}
-
-
         {/* Daily Challenge */}
         {isAuthenticated && (
           <motion.div
