@@ -67,19 +67,22 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
           </Link>
         </div>
 
-        {/* Inner cards — slate-900/50 black tiles like the AI feature costs */}
+        {/* Inner cards — high contrast: muted label + big white value */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
-            <p className="text-white font-black text-sm">Baki Semasa</p>
-            <p className="text-amber-300 text-xs font-black">{balance} kredit</p>
+          <div className="bg-slate-900/70 backdrop-blur-md border border-white/15 rounded-2xl p-3">
+            <p className="text-white/60 text-[10px] font-bold uppercase tracking-wider">Baki Semasa</p>
+            <p className="text-white text-2xl font-black leading-tight mt-1">{balance}</p>
+            <p className="text-white/50 text-[10px] font-semibold">kredit</p>
           </div>
-          <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
-            <p className="text-white font-black text-sm">Dibeli</p>
-            <p className="text-amber-300 text-xs font-black">{credits?.totalPurchased ?? 0} kredit</p>
+          <div className="bg-slate-900/70 backdrop-blur-md border border-white/15 rounded-2xl p-3">
+            <p className="text-white/60 text-[10px] font-bold uppercase tracking-wider">Dibeli</p>
+            <p className="text-white text-2xl font-black leading-tight mt-1">{credits?.totalPurchased ?? 0}</p>
+            <p className="text-white/50 text-[10px] font-semibold">kredit</p>
           </div>
-          <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
-            <p className="text-white font-black text-sm">Digunakan</p>
-            <p className="text-amber-300 text-xs font-black">{credits?.totalUsed ?? 0} kredit</p>
+          <div className="bg-slate-900/70 backdrop-blur-md border border-white/15 rounded-2xl p-3">
+            <p className="text-white/60 text-[10px] font-bold uppercase tracking-wider">Digunakan</p>
+            <p className="text-white text-2xl font-black leading-tight mt-1">{credits?.totalUsed ?? 0}</p>
+            <p className="text-white/50 text-[10px] font-semibold">kredit</p>
           </div>
         </div>
 
