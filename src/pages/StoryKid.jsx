@@ -144,14 +144,14 @@ export default function StoryKid() {
         <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
       </div>
 
-      <AppHeader showBack={true} backTo="/dashboard" />
+      {!story && <AppHeader showBack={true} backTo="/dashboard" />}
 
-      <StoryAudioPlayer autoPlay={!!story} />
-
-      <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-28 pt-20 md:pt-24 overflow-x-hidden">
-        <Link to="/dashboard" className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full bg-white/95 text-purple-700 font-black text-sm shadow-xl shadow-purple-950/15 hover:bg-white hover:scale-105 transition-all">
-          <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
-        </Link>
+      <div className={`relative w-full ${story && sceneIndex < (story?.scenes?.length || 0) ? '' : 'max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-28 pt-20 md:pt-24'} overflow-x-hidden`}>
+        {!story && (
+          <Link to="/dashboard" className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full bg-white/95 text-purple-700 font-black text-sm shadow-xl shadow-purple-950/15 hover:bg-white hover:scale-105 transition-all">
+            <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
+          </Link>
+        )}
 
         {!story ? (
           <>
@@ -233,54 +233,93 @@ export default function StoryKid() {
             )}
           </>
         ) : sceneIndex >= story.scenes.length ? (
-          <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} className="max-w-xl mx-auto rounded-[2rem] bg-white/90 backdrop-blur-2xl p-7 text-center shadow-2xl shadow-purple-950/20 border border-white/70">
-            <div className="text-7xl mb-4">🏆</div>
-            <h2 className="text-3xl font-black text-purple-700 mb-2">Cerita Selesai!</h2>
-            <p className="text-yellow-500 font-black text-2xl mb-4">{stars} ⭐ dikumpul</p>
-            <div className="rounded-3xl bg-purple-50 p-5 mb-5">
-              <p className="text-purple-400 text-xs font-black uppercase tracking-wider mb-2">Moral cerita</p>
-              <p className="text-purple-700 text-lg font-black">{story.moral}</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button onClick={resetStory} className="py-3.5 rounded-2xl bg-purple-600 text-white font-black flex items-center justify-center gap-2 shadow-lg"><RotateCcw className="w-4 h-4" /> Baca Semula</button>
-              <button onClick={() => setSelected(null)} className="py-3.5 rounded-2xl bg-yellow-300 text-yellow-900 font-black shadow-lg">Cerita Lain</button>
-            </div>
-          </motion.div>
-        ) : (
-          <>
-            <div className="max-w-3xl mx-auto mb-4 rounded-[2rem] bg-white/90 backdrop-blur-2xl p-4 shadow-2xl shadow-purple-950/15 border border-white/70 flex items-center gap-3">
-              <button onClick={() => setSelected(null)} className="w-11 h-11 rounded-2xl bg-purple-100 text-purple-700 font-black">←</button>
-              <div className="flex-1 min-w-0">
-                <h1 className="text-purple-700 font-black text-lg truncate">{story.title}</h1>
-                <div className="h-3 bg-purple-100 rounded-full mt-2 overflow-hidden"><div className="h-full bg-gradient-to-r from-yellow-300 to-pink-400 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} /></div>
+          <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+            <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} className="max-w-xl w-full rounded-[2rem] bg-white/95 backdrop-blur-2xl p-7 text-center shadow-2xl shadow-purple-950/20 border border-white/70">
+              <div className="text-7xl mb-4">🏆</div>
+              <h2 className="text-3xl font-black text-purple-700 mb-2">Cerita Selesai!</h2>
+              <p className="text-yellow-500 font-black text-2xl mb-4">{stars} ⭐ dikumpul</p>
+              <div className="rounded-3xl bg-purple-50 p-5 mb-5">
+                <p className="text-purple-400 text-xs font-black uppercase tracking-wider mb-2">Moral cerita</p>
+                <p className="text-purple-700 text-lg font-black">{story.moral}</p>
               </div>
-              <div className="px-3 py-2 rounded-2xl bg-yellow-300 text-yellow-950 font-black">{stars} ⭐</div>
-            </div>
-
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button onClick={resetStory} className="py-3.5 rounded-2xl bg-purple-600 text-white font-black flex items-center justify-center gap-2 shadow-lg"><RotateCcw className="w-4 h-4" /> Baca Semula</button>
+                <button onClick={() => setSelected(null)} className="py-3.5 rounded-2xl bg-yellow-300 text-yellow-900 font-black shadow-lg">Cerita Lain</button>
+              </div>
+            </motion.div>
+          </div>
+        ) : (
+          <div className="fixed inset-0 z-40 bg-black overflow-hidden">
             <AnimatePresence mode="wait">
-              <motion.div key={sceneIndex} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} className="max-w-3xl mx-auto rounded-[2rem] bg-white/90 backdrop-blur-2xl p-3 sm:p-4 shadow-2xl shadow-purple-950/25 border border-white/70">
-                <div className="relative h-[21rem] sm:h-[27rem] rounded-[1.5rem] bg-gradient-to-br from-yellow-100 to-pink-100 overflow-hidden mb-5 shadow-xl ring-4 ring-white/50">
-                  {scene.imageUrl ? (
-                    <img src={scene.imageUrl} alt={scene.text} className="w-full h-full object-cover" />
-                  ) : (
+              <motion.div key={sceneIndex} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} className="absolute inset-0">
+                {/* Fullscreen image */}
+                {scene.imageUrl ? (
+                  <img src={scene.imageUrl} alt={scene.text} className="absolute inset-0 w-full h-full object-cover" />
+                ) : (
+                  <div className="absolute inset-0">
                     <StorySlideVisual visual={scene.slideVisual} emoji={scene.image || story.emoji} title={story.title} />
-                  )}
-                  <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-white/90 text-purple-700 text-xs font-black shadow">Halaman {Math.min(sceneIndex + 1, story.scenes.length)} / {story.scenes.length}</div>
+                  </div>
+                )}
+
+                {/* Dark gradient overlays for readability */}
+                <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/70 to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/85 via-black/60 to-transparent pointer-events-none" />
+
+                {/* Top bar — back + title + progress + stars */}
+                <div className="absolute top-0 left-0 right-0 p-3 sm:p-4 flex items-center gap-2 sm:gap-3 z-10">
+                  <button onClick={() => setSelected(null)} className="w-11 h-11 rounded-2xl bg-white/95 text-purple-700 font-black shadow-lg flex items-center justify-center flex-shrink-0">←</button>
+                  <div className="flex-1 min-w-0 rounded-2xl bg-black/40 backdrop-blur-md px-3 py-2 border border-white/20">
+                    <h1 className="text-white font-black text-sm sm:text-base truncate drop-shadow">{story.title}</h1>
+                    <div className="h-1.5 bg-white/20 rounded-full mt-1.5 overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-yellow-300 to-pink-400 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
+                    </div>
+                  </div>
+                  <div className="px-3 py-2 rounded-2xl bg-yellow-300 text-yellow-950 font-black text-sm shadow-lg flex-shrink-0">{stars} ⭐</div>
                 </div>
-                <div className="rounded-[1.5rem] bg-purple-50/80 border border-purple-100 px-4 py-4 mb-5">
-                  <p className="text-purple-800 text-xl sm:text-2xl font-black text-center leading-relaxed">{scene.text}</p>
+
+                {/* Page counter */}
+                <div className="absolute top-20 left-3 sm:left-4 z-10 px-3 py-1.5 rounded-full bg-white/90 text-purple-700 text-xs font-black shadow">
+                  Halaman {Math.min(sceneIndex + 1, story.scenes.length)} / {story.scenes.length}
                 </div>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {scene.choices.map((choice, idx) => (
-                    <motion.button key={idx} whileTap={{ scale: 0.96 }} whileHover={{ y: -2 }} onClick={() => choose(choice)} className="w-full p-4 rounded-3xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black shadow-lg shadow-purple-950/15 flex items-center justify-between gap-3 border border-white/20 hover:from-purple-600 hover:to-pink-600 transition-all">
-                      <span>{choice.text}</span>
-                      <span className="w-9 h-9 rounded-2xl bg-white/20 flex items-center justify-center">→</span>
-                    </motion.button>
-                  ))}
+
+                {/* Music player — floating in canvas */}
+                <div className="absolute top-20 right-3 sm:right-4 z-10">
+                  <StoryAudioPlayer autoPlay={!!story} />
+                </div>
+
+                {/* Bottom: text + choices overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-5 z-10 max-h-[60vh] overflow-y-auto">
+                  <div className="max-w-3xl mx-auto">
+                    <motion.div
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="rounded-[1.5rem] bg-white/95 backdrop-blur-xl border border-white/70 px-4 py-3 sm:px-5 sm:py-4 mb-3 shadow-2xl"
+                    >
+                      <p className="text-purple-800 text-base sm:text-xl font-black text-center leading-relaxed">{scene.text}</p>
+                    </motion.div>
+                    <div className="grid gap-2.5 sm:gap-3 sm:grid-cols-2">
+                      {scene.choices.map((choice, idx) => (
+                        <motion.button
+                          key={idx}
+                          initial={{ y: 20, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: 0.3 + idx * 0.08 }}
+                          whileTap={{ scale: 0.96 }}
+                          whileHover={{ y: -2 }}
+                          onClick={() => choose(choice)}
+                          className="w-full p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black shadow-2xl shadow-purple-950/40 flex items-center justify-between gap-3 border border-white/30 hover:from-purple-600 hover:to-pink-600 transition-all text-sm sm:text-base"
+                        >
+                          <span className="text-left">{choice.text}</span>
+                          <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-white/25 flex items-center justify-center flex-shrink-0">→</span>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             </AnimatePresence>
-          </>
+          </div>
         )}
       </div>
     </div>
