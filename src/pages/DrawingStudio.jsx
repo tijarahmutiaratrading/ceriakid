@@ -117,6 +117,21 @@ const TRACING_CATEGORIES = [
 
 const TRACING_SHAPES = TRACING_CATEGORIES.flatMap(category => category.shapes);
 
+const TOTAL_ROUNDS = 3;
+const MASTERY_KEY = 'tracing-mastery-v1';
+
+const loadMastery = () => {
+  try { return JSON.parse(localStorage.getItem(MASTERY_KEY) || '{}'); } catch { return {}; }
+};
+const saveMasteryRound = (shapeLabel) => {
+  try {
+    const m = loadMastery();
+    m[shapeLabel] = Math.min(TOTAL_ROUNDS, (m[shapeLabel] || 0) + 1);
+    localStorage.setItem(MASTERY_KEY, JSON.stringify(m));
+    return m[shapeLabel];
+  } catch { return 0; }
+};
+
 const makeOval = (cx, cy, rx, ry, steps = 36, start = 0, end = Math.PI * 2) =>
   Array.from({ length: steps + 1 }, (_, i) => {
     const angle = start + ((end - start) * i) / steps;
@@ -234,6 +249,8 @@ export default function DrawingStudio() {
   const [soundOn, setSoundOn] = useState(isDrawingSoundEnabled());
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [celebration, setCelebration] = useState({ open: false, accuracy: 0 });
+  const [currentRound, setCurrentRound] = useState(1); // 1..TOTAL_ROUNDS — progressive fading per round
+  const [mastery, setMastery] = useState(() => loadMastery()); // { shapeLabel: roundsCompleted }
 
   // Velocity tracking for organic line width (pencil/brush feel)
   const lastPointTime = useRef(0);
@@ -426,59 +443,82 @@ export default function DrawingStudio() {
     ctx.restore();
     ctx.fillStyle = '#fff9f0';
     ctx.fillRect(0, 0, w, h);
-    if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape);
+    if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape, currentRound);
     if (mode === 'color' && selectedColoringPage) drawColoringGuide(ctx, w, h, selectedColoringPage);
-  }, [mode, selectedShape, selectedColoringPage]);
+  }, [mode, selectedShape, selectedColoringPage, currentRound]);
 
-  const drawTracingGuide = (ctx, w, h, shape) => {
+  // Progressive fading: round 1 = full guide, round 2 = lighter/thinner, round 3 = dots only
+  const drawTracingGuide = (ctx, w, h, shape, round = 1) => {
     ctx.save();
 
+    // Round-based intensity — fades the guide so anak naik level dari "ikut garis" → "tulis sendiri"
+    const bgAlpha = round === 1 ? 0.10 : round === 2 ? 0.05 : 0.02;
+    const outlineAlpha = round === 1 ? 0.22 : round === 2 ? 0.12 : 0.06;
+    const haloAlpha = round === 1 ? 0.45 : round === 2 ? 0.22 : 0;
+    const dashAlpha = round === 1 ? 0.75 : round === 2 ? 0.45 : 0;
+    const haloWidth = round === 1 ? 24 : 16;
+    const dashWidth = round === 1 ? 4 : round === 2 ? 3 : 2;
+    const dashPattern = round === 1 ? [14, 10] : round === 2 ? [10, 14] : [3, 18];
+
     // 1) Soft background hint — large faded letter/shape behind everything
-    ctx.fillStyle = 'rgba(139,92,246,0.10)';
+    ctx.fillStyle = `rgba(139,92,246,${bgAlpha})`;
     ctx.font = `900 ${Math.min(w, h) * 0.62}px "Nunito", system-ui, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(shape.letter, w / 2, h / 2);
 
     // 2) Outlined letter stroke (subtle) for extra guidance
-    ctx.strokeStyle = 'rgba(139,92,246,0.22)';
+    ctx.strokeStyle = `rgba(139,92,246,${outlineAlpha})`;
     ctx.lineWidth = 3;
     ctx.strokeText(shape.letter, w / 2, h / 2);
 
-    // 3) Chunky dashed path strokes — clear, kid-friendly
+    // 3) Chunky dashed path strokes — clear, kid-friendly (fades per round)
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    shape.strokes.forEach((stroke, strokeIdx) => {
-      // Outer halo for visibility
-      ctx.strokeStyle = 'rgba(196,181,253,0.45)';
-      ctx.lineWidth = 24;
-      ctx.setLineDash([]);
-      ctx.beginPath();
-      ctx.moveTo(stroke[0][0] * w, stroke[0][1] * h);
-      for (let i = 1; i < stroke.length; i++) {
-        ctx.lineTo(stroke[i][0] * w, stroke[i][1] * h);
+    shape.strokes.forEach((stroke) => {
+      // Outer halo for visibility (skip on round 3 — anak hampir tulis sendiri)
+      if (haloAlpha > 0) {
+        ctx.strokeStyle = `rgba(196,181,253,${haloAlpha})`;
+        ctx.lineWidth = haloWidth;
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.moveTo(stroke[0][0] * w, stroke[0][1] * h);
+        for (let i = 1; i < stroke.length; i++) {
+          ctx.lineTo(stroke[i][0] * w, stroke[i][1] * h);
+        }
+        ctx.stroke();
       }
-      ctx.stroke();
 
-      // Dashed inner guide
-      ctx.strokeStyle = 'rgba(124,58,237,0.75)';
-      ctx.lineWidth = 4;
-      ctx.setLineDash([14, 10]);
-      ctx.beginPath();
-      ctx.moveTo(stroke[0][0] * w, stroke[0][1] * h);
-      for (let i = 1; i < stroke.length; i++) {
-        ctx.lineTo(stroke[i][0] * w, stroke[i][1] * h);
+      // Dashed inner guide (round 3 = sparse dots only)
+      if (dashAlpha > 0) {
+        ctx.strokeStyle = `rgba(124,58,237,${dashAlpha})`;
+        ctx.lineWidth = dashWidth;
+        ctx.setLineDash(dashPattern);
+        ctx.beginPath();
+        ctx.moveTo(stroke[0][0] * w, stroke[0][1] * h);
+        for (let i = 1; i < stroke.length; i++) {
+          ctx.lineTo(stroke[i][0] * w, stroke[i][1] * h);
+        }
+        ctx.stroke();
+      } else {
+        // Round 3 — just tiny dots along the path so anak masih ada hint minima
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(124,58,237,0.35)';
+        for (let i = 0; i < stroke.length; i++) {
+          ctx.beginPath();
+          ctx.arc(stroke[i][0] * w, stroke[i][1] * h, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
-      ctx.stroke();
 
-      // Start point — green circle (no number)
+      // Start point — green circle (always visible so anak tahu mula di mana)
       ctx.setLineDash([]);
       const sx = stroke[0][0] * w;
       const sy = stroke[0][1] * h;
       ctx.fillStyle = '#22c55e';
       ctx.beginPath();
-      ctx.arc(sx, sy, 12, 0, Math.PI * 2);
+      ctx.arc(sx, sy, round === 3 ? 9 : 12, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = 3;
@@ -490,7 +530,7 @@ export default function DrawingStudio() {
       const ey = last[1] * h;
       ctx.fillStyle = '#ef4444';
       ctx.beginPath();
-      ctx.arc(ex, ey, 9, 0, Math.PI * 2);
+      ctx.arc(ex, ey, round === 3 ? 7 : 9, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = 2.5;
@@ -519,6 +559,11 @@ export default function DrawingStudio() {
   useEffect(() => {
     initCanvas();
   }, [mode, selectedShape, selectedColoringPage, initCanvas]);
+
+  // Reset round to 1 whenever user picks a different shape
+  useEffect(() => {
+    setCurrentRound(1);
+  }, [selectedShape.label]);
 
   // Preload all coloring page images on mount, and re-init canvas once the current one loads
   useEffect(() => {
@@ -819,15 +864,37 @@ export default function DrawingStudio() {
       setUserStrokes(newStrokes);
       setCurrentStroke([]);
 
-      // Check if enough coverage
+      // Check if enough coverage — round complete
       if (newStrokes.length >= selectedShape.strokes.length) {
         const acc = Math.min(98, 70 + Math.floor(Math.random() * 28));
         setTracingAccuracy(acc);
         setTracingDone(true);
-        setCelebration({ open: true, accuracy: acc });
+
+        // Save mastery progress (1 round = +1 mastery point, max TOTAL_ROUNDS)
         if (acc >= 70) {
-          confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 }, colors: ['#fbbf24', '#8b5cf6', '#ec4899', '#f97316', '#22c55e'] });
-          playTadaa();
+          saveMasteryRound(selectedShape.label);
+          setMastery(loadMastery());
+        }
+
+        const isFinalRound = currentRound >= TOTAL_ROUNDS;
+        if (isFinalRound) {
+          // Full mastery achieved — big celebration
+          setCelebration({ open: true, accuracy: acc });
+          if (acc >= 70) {
+            confetti({ particleCount: 160, spread: 80, origin: { y: 0.6 }, colors: ['#fbbf24', '#8b5cf6', '#ec4899', '#f97316', '#22c55e'] });
+            playTadaa();
+          }
+        } else if (acc >= 70) {
+          // Mid-round success — auto advance ke round seterusnya selepas short delay
+          confetti({ particleCount: 60, spread: 50, origin: { y: 0.6 }, colors: ['#fbbf24', '#22c55e'] });
+          playStamp();
+          setTimeout(() => {
+            setCurrentRound(r => Math.min(TOTAL_ROUNDS, r + 1));
+            setUserStrokes([]);
+            setCurrentStroke([]);
+            setTracingAccuracy(null);
+            setTracingDone(false);
+          }, 1400);
         }
       }
     }
@@ -1083,31 +1150,62 @@ export default function DrawingStudio() {
                     })}
                   </div>
 
-                  <p className="text-xs font-semibold text-slate-500 mb-2">Item latihan</p>
+                  <p className="text-xs font-semibold text-slate-500 mb-2">Item latihan <span className="text-slate-400 font-normal">— ⭐ = dah mahir</span></p>
                   <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-1.5 pr-1">
                     {tracingShapes.map(s => {
                       const active = selectedShape.label === s.label;
+                      const stars = mastery[s.label] || 0;
                       return (
                         <motion.button
                           key={s.label}
                           whileTap={{ scale: 0.96 }}
                           onClick={() => setSelectedShape(s)}
-                          className={`px-3 py-2.5 rounded-xl font-medium text-xs transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                          className={`px-3 py-2.5 rounded-xl font-medium text-xs transition-all flex items-center justify-between gap-1 ${active ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
                         >
-                          {s.label}
+                          <span className="truncate">{s.label}</span>
+                          {stars > 0 && (
+                            <span className={`text-[10px] font-bold flex-shrink-0 ${active ? 'text-yellow-200' : 'text-yellow-500'}`}>
+                              {'⭐'.repeat(stars)}
+                            </span>
+                          )}
                         </motion.button>
                       );
                     })}
                   </div>
 
-                  <div className="mt-4 rounded-2xl p-3 bg-slate-50 ring-1 ring-black/5">
+                  {/* Round progress indicator — 3x repeat dengan progressive fading */}
+                  <div className="mt-4 rounded-2xl p-3 bg-gradient-to-br from-purple-50 to-blue-50 ring-1 ring-purple-100">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-bold text-purple-900">🔁 Latihan Ulangan</p>
+                      <p className="text-xs font-black text-purple-700">Round {currentRound}/{TOTAL_ROUNDS}</p>
+                    </div>
+                    <div className="flex gap-1.5">
+                      {Array.from({ length: TOTAL_ROUNDS }).map((_, i) => {
+                        const done = i + 1 < currentRound;
+                        const active = i + 1 === currentRound;
+                        return (
+                          <div
+                            key={i}
+                            className={`flex-1 h-2 rounded-full transition-all ${done ? 'bg-green-500' : active ? 'bg-purple-500' : 'bg-slate-200'}`}
+                          />
+                        );
+                      })}
+                    </div>
+                    <p className="text-[10px] font-medium text-slate-600 mt-2">
+                      {currentRound === 1 && '✏️ Round 1: Ikut garis penuh — jelas & mudah'}
+                      {currentRound === 2 && '🌫️ Round 2: Garis lebih nipis — cuba sendiri sikit'}
+                      {currentRound === 3 && '⭐ Round 3: Titik-titik je — tulis sendiri!'}
+                    </p>
+                  </div>
+
+                  <div className="mt-3 rounded-2xl p-3 bg-slate-50 ring-1 ring-black/5">
                     {tracingDone ? (
                       <div className="text-center">
-                        <p className="font-bold text-base text-slate-900">{tracingAccuracy >= 70 ? `🌟 Hebat! ${tracingAccuracy}%` : `💪 Cuba lagi! ${tracingAccuracy}%`}</p>
-                        <AppleButton onClick={resetTracing} variant="accent" className="mt-2 !px-4 !py-1.5 !text-xs">Reset Tracing</AppleButton>
+                        <p className="font-bold text-base text-slate-900">{tracingAccuracy >= 70 ? `🌟 Round ${currentRound} siap! ${tracingAccuracy}%` : `💪 Cuba lagi! ${tracingAccuracy}%`}</p>
+                        <AppleButton onClick={resetTracing} variant="accent" className="mt-2 !px-4 !py-1.5 !text-xs">Reset Round Ini</AppleButton>
                       </div>
                     ) : (
-                      <p className="text-xs font-medium text-slate-600">📝 Ikuti laluan putus-putus. Progress: <span className="font-bold text-slate-900">{userStrokes.length}/{selectedShape.strokes.length}</span> strok.</p>
+                      <p className="text-xs font-medium text-slate-600">📝 Ikuti laluan. Progress: <span className="font-bold text-slate-900">{userStrokes.length}/{selectedShape.strokes.length}</span> strok.</p>
                     )}
                   </div>
                 </ApplePanel>
@@ -1282,12 +1380,13 @@ export default function DrawingStudio() {
           open={celebration.open}
           accuracy={celebration.accuracy}
           shapeLabel={selectedShape.label}
-          onReplay={() => { setCelebration({ open: false, accuracy: 0 }); resetTracing(); playButtonTap(); }}
+          onReplay={() => { setCelebration({ open: false, accuracy: 0 }); setCurrentRound(1); resetTracing(); playButtonTap(); }}
           onNext={() => {
             const list = tracingShapes;
             const idx = list.findIndex(s => s.label === selectedShape.label);
             const nextShape = list[(idx + 1) % list.length];
             setSelectedShape(nextShape);
+            setCurrentRound(1);
             setCelebration({ open: false, accuracy: 0 });
             playButtonTap();
           }}
