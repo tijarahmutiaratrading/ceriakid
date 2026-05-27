@@ -96,6 +96,16 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null 
           ],
         },
         {
+          path: '/group-cikgu-ai',
+          label: '🤖 Cikgu AI',
+          submenu: [
+            { path: '/ai-assistant', label: 'Cikgu Firdaus — Tutor' },
+            { path: '/quiz-ai', label: 'Cikgu Aina — Kuiz' },
+            { path: '/story-generator', label: 'Cikgu Mira — Cerita' },
+            { path: '/bbm-generator', label: 'Cikgu Daniel — BBM' },
+          ],
+        },
+        {
           path: '/group-sosial',
           label: 'Sosial',
           submenu: [
