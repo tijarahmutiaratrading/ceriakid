@@ -100,11 +100,15 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
       onClick={toggleMute}
       animate={needsTap ? { scale: [1, 1.1, 1] } : {}}
       transition={needsTap ? { duration: 1.2, repeat: Infinity } : {}}
-      className={`relative w-11 h-11 rounded-2xl text-white shadow-lg flex items-center justify-center border-2 border-white/40 ${
-        muted
-          ? 'bg-gradient-to-br from-slate-500 to-slate-700'
-          : 'bg-gradient-to-br from-purple-500 to-pink-500'
-      }`}
+      className="relative w-11 h-11 rounded-2xl text-white shadow-lg flex items-center justify-center border border-white/40"
+      style={{
+        background: muted
+          ? 'linear-gradient(135deg, rgba(71,85,105,0.55), rgba(30,41,59,0.45))'
+          : 'linear-gradient(135deg, rgba(168,85,247,0.45), rgba(236,72,153,0.40))',
+        backdropFilter: 'blur(18px)',
+        WebkitBackdropFilter: 'blur(18px)',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.35)',
+      }}
       title={needsTap ? 'Tap untuk hidupkan muzik' : (muted ? 'Hidupkan muzik' : 'Senyapkan muzik')}
     >
       {muted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
