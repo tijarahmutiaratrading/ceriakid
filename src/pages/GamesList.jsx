@@ -236,70 +236,110 @@ export default function GamesList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center font-nunito bg-gradient-to-b from-[#f5f5f7] via-[#fafafa] to-white">
-        <div className="text-center">
-          <div className="text-5xl animate-bounce mb-3">🎓</div>
-          <div className="w-7 h-7 border-[3px] border-slate-300 border-t-slate-900 rounded-full animate-spin mx-auto"></div>
+      <div className="min-h-screen flex items-center justify-center font-nunito">
+        <div className="text-center bg-white/20 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-2xl">
+          <div className="text-6xl animate-bounce mb-4">🎓</div>
+          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900"
-      style={{ background: 'linear-gradient(180deg, #f5f5f7 0%, #fafafa 40%, #ffffff 100%)' }}
-    >
-      {/* Subtle Apple-style ambient color blobs */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
+      {/* Floating orbs background — match dashboard */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-40" style={{ background: 'radial-gradient(circle, #c7d2fe 0%, transparent 70%)' }} />
-        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(circle, #fbcfe8 0%, transparent 70%)' }} />
-        <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(circle, #bae6fd 0%, transparent 70%)' }} />
+        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
+        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-24 md:pt-28 overflow-x-hidden">
+      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24 overflow-x-hidden">
 
-        {/* Back link */}
-        <Link
-          to={category?.startsWith('kafa_') ? '/kafa' : '/dashboard'}
-          className="inline-flex items-center gap-2 mb-5 px-3 py-1.5 rounded-full font-semibold text-sm text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all"
-        >
-          <ArrowLeft className="w-4 h-4" /> {category?.startsWith('kafa_') ? 'Kembali ke KAFA' : 'Kembali ke kategori'}
-        </Link>
-
-        {/* Header — clean Apple style */}
-        <motion.section
-          initial={{ opacity: 0, y: -8 }}
+        {/* Header Card with Background Image */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
+          className="relative isolate overflow-hidden mb-5 p-5 rounded-3xl shadow-2xl border border-white/30 transform-gpu [clip-path:inset(0_round_1.5rem)] min-h-[180px]"
         >
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-600 mb-2">Subjek</p>
-          <div className="flex items-end justify-between gap-4">
-            <div className="min-w-0 flex items-center gap-4">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white ring-1 ring-black/5 shadow-sm flex items-center justify-center text-3xl sm:text-4xl flex-shrink-0">
+          {/* Background image */}
+          {CATEGORY_BG_IMAGES[category] && (
+            <img
+              src={CATEGORY_BG_IMAGES[category]}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover z-0"
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+          )}
+          {/* Animated floating emojis based on subject */}
+          <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none">
+            {(CATEGORY_ANIMATIONS[category] || ['✨', '⭐', '🎈']).map((emoji, i) => {
+              const items = CATEGORY_ANIMATIONS[category] || ['✨', '⭐', '🎈'];
+              const total = items.length;
+              const leftPct = 8 + (i * (84 / Math.max(total - 1, 1)));
+              const topPct = 15 + ((i * 37) % 65);
+              const duration = 4 + (i % 3);
+              const delay = (i * 0.4) % 2;
+              const size = 26 + (i % 3) * 8;
+              return (
+                <motion.span
+                  key={`${category}-${i}`}
+                  className="absolute select-none drop-shadow-lg"
+                  style={{
+                    left: `${leftPct}%`,
+                    top: `${topPct}%`,
+                    fontSize: `${size}px`,
+                    filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))',
+                  }}
+                  animate={{
+                    y: [0, -14, 0, -8, 0],
+                    x: [0, 6, 0, -4, 0],
+                    rotate: [0, 12, -8, 6, 0],
+                    scale: [1, 1.12, 1, 1.06, 1],
+                  }}
+                  transition={{
+                    duration,
+                    delay,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                >
+                  {emoji}
+                </motion.span>
+              );
+            })}
+          </div>
+
+          {/* Gradient overlay for text legibility */}
+          <div className="absolute inset-0 z-[2] bg-gradient-to-br from-purple-900/25 via-transparent to-pink-700/20" />
+          <div className="absolute inset-x-0 bottom-0 h-2/3 z-[2] bg-gradient-to-t from-black/65 via-black/25 to-transparent" />
+
+          {/* Content */}
+          <div className="relative z-10">
+            <Link to={category?.startsWith('kafa_') ? '/kafa' : '/dashboard'} className="inline-flex items-center gap-2 text-white/95 text-xs font-black mb-4 drop-shadow-md">
+              <ArrowLeft className="w-4 h-4" /> {category?.startsWith('kafa_') ? 'Kembali ke KAFA' : 'Kembali ke kategori'}
+            </Link>
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-white/25 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center text-3xl shadow-lg flex-shrink-0">
                 {getCategoryEmoji(category)}
               </div>
-              <div className="min-w-0">
-                <h1 className="text-3xl sm:text-4xl font-black leading-[1.05] tracking-tight text-slate-900 truncate">
-                  {getCategoryLabel(category, lang)}
-                </h1>
-                <p className="text-slate-500 text-sm font-medium mt-1.5">
-                  {games.length} {t('games', lang)} · {t('selectForPlay', lang)}
-                </p>
+              <div>
+                <h1 className="text-2xl font-black text-white leading-tight drop-shadow-lg tracking-tight">{getCategoryLabel(category, lang)}</h1>
+                <p className="text-white text-sm font-bold mt-1 drop-shadow-md">🎮 {games.length} {t('games', lang)} · {t('selectForPlay', lang)}</p>
               </div>
             </div>
           </div>
-        </motion.section>
+        </motion.div>
 
-        {/* Darjah Tabs - Only for Sekolah Rendah */}
+        {/* Darjah Tabs - Only for Sekolah Rendah — Apple pill style on glass */}
         {hasDarjah && (
           <motion.div
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-5"
           >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400 mb-2 px-1">{t('selectDarjah', lang)}</p>
+            <p className="text-white text-[11px] font-black uppercase tracking-[0.18em] mb-2 px-1 drop-shadow-sm">{t('selectDarjah', lang)}</p>
             <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
               {availableDarjah.map(d => {
                 const active = selectedDarjah === d;
@@ -311,13 +351,13 @@ export default function GamesList() {
                     onClick={() => setSelectedDarjah(d)}
                     className={`flex-shrink-0 min-h-10 px-4 py-2 rounded-full font-semibold text-sm transition-all inline-flex items-center gap-2 ${
                       active
-                        ? 'bg-slate-900 text-white shadow-md'
-                        : 'bg-white text-slate-700 ring-1 ring-black/5 hover:bg-slate-50'
+                        ? 'bg-white text-slate-900 shadow-lg'
+                        : 'bg-white/15 text-white ring-1 ring-white/30 hover:bg-white/25 backdrop-blur-md'
                     }`}
                   >
                     {DARJAH_LABELS[d] || `Darjah ${d}`}
                     <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-                      active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
+                      active ? 'bg-slate-100 text-slate-600' : 'bg-white/25 text-white'
                     }`}>
                       {count}
                     </span>
@@ -333,16 +373,16 @@ export default function GamesList() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-3xl p-12 text-center bg-white ring-1 ring-black/5"
-            style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(15,23,42,0.06)' }}
+            className="rounded-3xl p-12 text-center"
+            style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
           >
             <p className="text-5xl mb-4">🚀</p>
-            <p className="text-xl font-bold text-slate-900 mb-2 tracking-tight">{t('newGamesComingSoon', lang)}</p>
-            <p className="text-slate-500 text-sm font-medium mb-6">{t('gamesBeingPrepared', lang)}</p>
+            <p className="text-xl font-black text-white mb-2 tracking-tight drop-shadow-md">{t('newGamesComingSoon', lang)}</p>
+            <p className="text-white/90 text-sm font-bold mb-6 drop-shadow-sm">{t('gamesBeingPrepared', lang)}</p>
             <Link to="/">
               <motion.button
                 whileTap={{ scale: 0.97 }}
-                className="px-6 py-3 bg-slate-900 text-white rounded-full font-semibold text-sm shadow-sm"
+                className="px-6 py-3 bg-white text-slate-900 rounded-full font-bold text-sm shadow-lg"
               >
                 ← {t('backToHome', lang)}
               </motion.button>
