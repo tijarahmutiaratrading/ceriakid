@@ -329,9 +329,24 @@ export default function StoryKid() {
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.2 }}
-                      className="rounded-[1.5rem] bg-white/95 backdrop-blur-xl border border-white/70 px-4 py-3 sm:px-5 sm:py-4 mb-3 shadow-2xl"
+                      className="relative rounded-[1.5rem] px-4 py-3 sm:px-5 sm:py-4 mb-3 overflow-hidden"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.28) 100%)',
+                        backdropFilter: 'blur(28px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+                        border: '1px solid rgba(255,255,255,0.45)',
+                        boxShadow: '0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(255,255,255,0.1)',
+                      }}
                     >
-                      <p className="text-purple-800 text-base sm:text-xl font-black text-center leading-relaxed">{scene.text}</p>
+                      {/* Glossy highlight shimmer di atas */}
+                      <div
+                        aria-hidden="true"
+                        className="absolute top-0 left-0 right-0 h-1/2 pointer-events-none rounded-t-[1.5rem]"
+                        style={{
+                          background: 'linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 100%)',
+                        }}
+                      />
+                      <p className="relative text-white text-base sm:text-xl font-black text-center leading-relaxed" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3)' }}>{scene.text}</p>
                     </motion.div>
                     <div className="grid gap-2.5 sm:gap-3 sm:grid-cols-2">
                       {scene.choices.map((choice, idx) => (

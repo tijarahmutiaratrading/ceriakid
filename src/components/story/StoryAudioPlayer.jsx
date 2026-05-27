@@ -5,21 +5,32 @@ import { Volume2, VolumeX, Music } from 'lucide-react';
 const STORAGE_KEY = 'storyKidAudio';
 const VOLUME = 0.12;
 
-// Melodi lullaby ceria — frekuensi nota dalam Hz (C major scale)
-// C4=261.63, D4=293.66, E4=329.63, F4=349.23, G4=392, A4=440, B4=493.88, C5=523.25
+// Melodi playful & bouncy — tempo cepat, major scale, ala kartun ceria
+// C5=523.25, D5=587.33, E5=659.25, F5=698.46, G5=783.99, A5=880, B5=987.77, C6=1046.50
 const MELODY = [
-  { freq: 392.00, dur: 0.4 }, // G
-  { freq: 440.00, dur: 0.4 }, // A
-  { freq: 523.25, dur: 0.5 }, // C5
-  { freq: 440.00, dur: 0.4 }, // A
-  { freq: 392.00, dur: 0.4 }, // G
-  { freq: 349.23, dur: 0.5 }, // F
-  { freq: 329.63, dur: 0.4 }, // E
-  { freq: 293.66, dur: 0.4 }, // D
-  { freq: 329.63, dur: 0.5 }, // E
-  { freq: 349.23, dur: 0.4 }, // F
-  { freq: 392.00, dur: 0.6 }, // G (longer)
-  { freq: 0, dur: 0.3 },      // rest
+  { freq: 523.25, dur: 0.18 }, // C5 — bouncy
+  { freq: 659.25, dur: 0.18 }, // E5
+  { freq: 783.99, dur: 0.18 }, // G5
+  { freq: 1046.50, dur: 0.22 }, // C6 — high jump!
+  { freq: 783.99, dur: 0.18 }, // G5
+  { freq: 880.00, dur: 0.18 }, // A5
+  { freq: 783.99, dur: 0.30 }, // G5 (hold)
+  { freq: 0, dur: 0.10 },      // tiny rest
+  { freq: 659.25, dur: 0.18 }, // E5
+  { freq: 783.99, dur: 0.18 }, // G5
+  { freq: 880.00, dur: 0.18 }, // A5
+  { freq: 783.99, dur: 0.18 }, // G5
+  { freq: 659.25, dur: 0.18 }, // E5
+  { freq: 587.33, dur: 0.18 }, // D5
+  { freq: 523.25, dur: 0.30 }, // C5 (hold)
+  { freq: 0, dur: 0.15 },      // rest
+  { freq: 659.25, dur: 0.15 }, // E5 — skipping
+  { freq: 659.25, dur: 0.15 }, // E5
+  { freq: 783.99, dur: 0.20 }, // G5
+  { freq: 1046.50, dur: 0.25 }, // C6 — happy peak!
+  { freq: 880.00, dur: 0.18 }, // A5
+  { freq: 783.99, dur: 0.40 }, // G5 (long resolve)
+  { freq: 0, dur: 0.25 },      // rest sebelum loop
 ];
 
 export default function StoryAudioPlayer({ autoPlay = true }) {
