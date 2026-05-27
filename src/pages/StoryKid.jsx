@@ -347,7 +347,7 @@ export default function StoryKid() {
                       <span className="absolute top-1 right-1 text-amber-700/60 text-[9px]">✦</span>
                       <span className="absolute bottom-1 left-1 text-amber-700/60 text-[9px]">✦</span>
                       <span className="absolute bottom-1 right-1 text-amber-700/60 text-[9px]">✦</span>
-                      <p className="text-amber-950 text-xs sm:text-sm font-bold text-center leading-snug" style={{ fontFamily: 'Georgia, serif' }}>
+                      <p className="text-amber-950 text-sm sm:text-base font-bold text-center leading-snug" style={{ fontFamily: 'Georgia, serif' }}>
                         {scene.text}
                       </p>
                     </motion.div>
@@ -371,7 +371,7 @@ export default function StoryKid() {
                             whileTap={{ scale: 0.96, y: 2 }}
                             whileHover={{ y: -2 }}
                             onClick={() => choose(choice)}
-                            className="w-full px-2.5 py-2 sm:px-3 sm:py-2.5 rounded-xl font-bold flex items-center justify-between gap-2 transition-all text-xs sm:text-sm"
+                            className="w-full px-3 py-2.5 sm:px-3.5 sm:py-3 rounded-xl font-bold flex items-center justify-between gap-2 transition-all text-sm sm:text-base"
                             style={{
                               background: palette.bg,
                               border: `2px solid ${palette.border}`,
@@ -381,7 +381,7 @@ export default function StoryKid() {
                             }}
                           >
                             <span className="text-left leading-tight">{choice.text}</span>
-                            <span className="w-6 h-6 rounded-lg bg-white/30 flex items-center justify-center flex-shrink-0 text-sm" style={{ border: `1.5px solid ${palette.border}` }}>→</span>
+                            <span className="w-7 h-7 rounded-lg bg-white/30 flex items-center justify-center flex-shrink-0 text-base" style={{ border: `1.5px solid ${palette.border}` }}>→</span>
                           </motion.button>
                         );
                       })}
