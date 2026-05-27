@@ -1,0 +1,37 @@
+{
+  "name": "PushSubscription",
+  "type": "object",
+  "properties": {
+    "userEmail": {
+      "type": "string",
+      "description": "Email admin yang subscribe"
+    },
+    "endpoint": {
+      "type": "string",
+      "description": "Push service endpoint URL (unik)"
+    },
+    "p256dh": {
+      "type": "string",
+      "description": "Public key untuk encryption"
+    },
+    "auth": {
+      "type": "string",
+      "description": "Auth secret untuk encryption"
+    },
+    "deviceLabel": {
+      "type": "string",
+      "description": "Label untuk identify device (e.g. Chrome on Windows)"
+    },
+    "isAdmin": {
+      "type": "boolean",
+      "default": true,
+      "description": "Adakah subscription ini untuk admin notification"
+    }
+  },
+  "required": [
+    "userEmail",
+    "endpoint",
+    "p256dh",
+    "auth"
+  ]
+}

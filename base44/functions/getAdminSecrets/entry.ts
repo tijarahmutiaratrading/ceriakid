@@ -19,6 +19,7 @@ Deno.serve(async (req) => {
       chip_webhook_secret: Deno.env.get('CHIP_WEBHOOK_SECRET') || '',
       fb_pixel_id: Deno.env.get('FB_PIXEL_ID') || '',
       fb_access_token: Deno.env.get('FB_ACCESS_TOKEN') || '',
+      vapid_public_key: Deno.env.get('VAPID_PUBLIC_KEY') || '',
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

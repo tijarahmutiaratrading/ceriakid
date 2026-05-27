@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
-import { Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, RefreshCw } from 'lucide-react';
+import { Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, RefreshCw, Bell } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import AppHeader from '@/components/AppHeader';
@@ -14,6 +14,7 @@ import AdminStatCard from '@/components/admin/AdminStatCard';
 import SystemHealthPanel from '@/components/admin/SystemHealthPanel';
 import LaunchControlPanel from '@/components/admin/LaunchControlPanel';
 import AdminAffiliatePanel from '@/components/admin/AdminAffiliatePanel';
+import PushNotificationPanel from '@/components/admin/PushNotificationPanel';
 import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2, Activity, Share2 } from 'lucide-react';
 
 const SETTINGS_KEY = 'admin_app_settings';
@@ -217,6 +218,7 @@ export default function AdminDashboard() {
     { key: 'pixel', label: 'Facebook Pixel', icon: <Facebook className="w-4 h-4" /> },
     { key: 'chip', label: 'Chip Payment', icon: <CreditCard className="w-4 h-4" /> },
     { key: 'webhook', label: 'Webhook', icon: <Webhook className="w-4 h-4" /> },
+    { key: 'push', label: 'Notifications', icon: <Bell className="w-4 h-4" /> },
   ];
 
   const paidCount = tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga;
@@ -547,6 +549,9 @@ export default function AdminDashboard() {
                 </div>
               </motion.div>
             )}
+
+            {/* Push Notifications */}
+            {settingsTab === 'push' && <PushNotificationPanel />}
 
             {/* Save Button */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>

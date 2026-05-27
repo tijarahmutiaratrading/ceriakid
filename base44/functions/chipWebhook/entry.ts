@@ -93,6 +93,20 @@ async function trackAffiliateCommission(base44, {
   }
 }
 
+// Hantar push notification ke semua admin subscribers. Fire-and-forget — failure tak break webhook.
+async function notifyAdmins(base44, { title, body, url }) {
+  try {
+    await base44.asServiceRole.functions.invoke('sendPushNotification', {
+      title,
+      body,
+      url: url || '/admin-dashboard?tab=analytics',
+      tag: 'order-notif',
+    });
+  } catch (err) {
+    console.error('notifyAdmins failed:', err);
+  }
+}
+
 // Extract referral code dari reference string. Format: "...__ref_CODE"
 function extractReferralCode(reference) {
   if (!reference) return '';
@@ -253,6 +267,13 @@ Deno.serve(async (req) => {
 
       console.log(`Credit purchase activated: ${creditUserEmail} +${totalCredits} (pkg=${packageId})`);
 
+      // Push notification to admins — credit top-up
+      const creditPriceMYR = (verifiedPurchase.purchase?.total || 0) / 100;
+      await notifyAdmins(base44, {
+        title: '💰 Credit Top-Up Baru!',
+        body: `${creditUserEmail} beli ${totalCredits} kredit (${packageId}) — RM${creditPriceMYR.toFixed(2)}`,
+      });
+
       // ─── AFFILIATE COMMISSION (credit purchase) ───
       const creditRefCode = extractReferralCode(reference);
       if (creditRefCode) {
@@ -324,6 +345,14 @@ Deno.serve(async (req) => {
 
     console.log(`Subscription activated: ${userEmail} → ${tier} until ${expiryDate.toISOString()}`);
 
+    // Push notification to admins — new subscription
+    const subPricing = { asas: 49, standard: 99, keluarga: 199 };
+    const subPriceMYR = subPricing[tier] || 0;
+    await notifyAdmins(base44, {
+      title: '🎉 Subscription Baru!',
+      body: `${userEmail} langgan pelan ${tier.toUpperCase()} — RM${subPriceMYR}`,
+    });
+
     // ─── BONUS WELCOME CREDITS ikut tier ───
     // Asas: 5 | Standard: 20 | Keluarga: 50
     const WELCOME_CREDITS = { asas: 5, standard: 20, keluarga: 50 };
@@ -380,8 +409,7 @@ Deno.serve(async (req) => {
     // ─── AFFILIATE COMMISSION (subscription) ───
     const subRefCode = extractReferralCode(reference);
     if (subRefCode) {
-      const subPricing = { asas: 49, standard: 99, keluarga: 199 };
-      const priceMYR = subPricing[tier] || 0;
+      const priceMYR = subPriceMYR;
       await trackAffiliateCommission(base44, {
         referralCode: subRefCode,
         referredEmail: userEmail,
