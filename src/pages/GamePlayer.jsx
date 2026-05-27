@@ -19,6 +19,7 @@ import ProgressBar from '@/components/game/ProgressBar';
 import AchievementBadges from '@/components/game/AchievementBadges';
 import QuestionRenderer from '@/components/game/QuestionRenderer';
 import CikguMascot from '@/components/game/CikguMascot';
+import GameLoadingScreen from '@/components/game/GameLoadingScreen';
 import { playSound } from '@/lib/soundManager';
 import { playCorrectReward, playGentleWrong, playComboFanfare, playVictory, getComboMessage, haptic } from '@/lib/gameRewards';
 import StreakIndicator from '@/components/game/StreakIndicator';
@@ -362,14 +363,7 @@ export default function GamePlayer() {
   };
 
   if (!gameLoaded) {
-    return (
-      <div className="min-h-screen bg-pattern flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-5xl animate-bounce mb-4">🎮</div>
-          <div className="w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full animate-spin mx-auto" />
-        </div>
-      </div>
-    );
+    return <GameLoadingScreen message="Menyediakan permainan untuk anda..." />;
   }
 
   if (accessDenied) {
