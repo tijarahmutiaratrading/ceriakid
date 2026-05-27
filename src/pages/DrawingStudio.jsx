@@ -117,16 +117,17 @@ const TRACING_CATEGORIES = [
 
 const TRACING_SHAPES = TRACING_CATEGORIES.flatMap(category => category.shapes);
 
-const TOTAL_ROUNDS = 3;
+// Workbook-style tracing: 1 row × 5 letters per screen (macam buku latihan sekolah)
+const LETTERS_PER_ROW = 5;
 const MASTERY_KEY = 'tracing-mastery-v1';
 
 const loadMastery = () => {
   try { return JSON.parse(localStorage.getItem(MASTERY_KEY) || '{}'); } catch { return {}; }
 };
-const saveMasteryRound = (shapeLabel) => {
+const saveMasteryRow = (shapeLabel) => {
   try {
     const m = loadMastery();
-    m[shapeLabel] = Math.min(TOTAL_ROUNDS, (m[shapeLabel] || 0) + 1);
+    m[shapeLabel] = Math.min(LETTERS_PER_ROW, (m[shapeLabel] || 0) + 1);
     localStorage.setItem(MASTERY_KEY, JSON.stringify(m));
     return m[shapeLabel];
   } catch { return 0; }
@@ -249,8 +250,9 @@ export default function DrawingStudio() {
   const [soundOn, setSoundOn] = useState(isDrawingSoundEnabled());
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [celebration, setCelebration] = useState({ open: false, accuracy: 0 });
-  const [currentRound, setCurrentRound] = useState(1); // 1..TOTAL_ROUNDS — progressive fading per round
-  const [mastery, setMastery] = useState(() => loadMastery()); // { shapeLabel: roundsCompleted }
+  const [currentLetterIndex, setCurrentLetterIndex] = useState(0); // 0..LETTERS_PER_ROW-1 — current letter in the row
+  const [letterStrokeCounts, setLetterStrokeCounts] = useState(Array(LETTERS_PER_ROW).fill(0)); // strokes done per letter slot
+  const [mastery, setMastery] = useState(() => loadMastery()); // { shapeLabel: lettersCompleted }
 
   // Velocity tracking for organic line width (pencil/brush feel)
   const lastPointTime = useRef(0);
@@ -443,142 +445,216 @@ export default function DrawingStudio() {
     ctx.restore();
     ctx.fillStyle = '#fff9f0';
     ctx.fillRect(0, 0, w, h);
-    if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape, currentRound);
+    if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape, currentLetterIndex);
     if (mode === 'color' && selectedColoringPage) drawColoringGuide(ctx, w, h, selectedColoringPage);
-  }, [mode, selectedShape, selectedColoringPage, currentRound]);
+  }, [mode, selectedShape, selectedColoringPage, currentLetterIndex]);
 
-  // Progressive fading: round 1 = full guide, round 2 = lighter/thinner, round 3 = dots only
-  const drawTracingGuide = (ctx, w, h, shape, round = 1) => {
+  // Workbook-style: render 1 row × LETTERS_PER_ROW letters dengan baseline guides
+  // Slot 0 = solid example (contoh), slots 1..N = dotted for tracing
+  // activeIndex = letter slot anak tengah trace sekarang (highlighted)
+  const drawTracingGuide = (ctx, w, h, shape, activeIndex = 1) => {
     ctx.save();
 
-    // Round-based intensity — fades the guide so anak naik level dari "ikut garis" → "tulis sendiri"
-    const bgAlpha = round === 1 ? 0.10 : round === 2 ? 0.05 : 0.02;
-    const outlineAlpha = round === 1 ? 0.22 : round === 2 ? 0.12 : 0.06;
-    const haloAlpha = round === 1 ? 0.45 : round === 2 ? 0.22 : 0;
-    const dashAlpha = round === 1 ? 0.75 : round === 2 ? 0.45 : 0;
-    const haloWidth = round === 1 ? 24 : 16;
-    const dashWidth = round === 1 ? 4 : round === 2 ? 3 : 2;
-    const dashPattern = round === 1 ? [14, 10] : round === 2 ? [10, 14] : [3, 18];
+    // Layout — 1 row of letters with workbook-style 4-line ruling
+    const sideMargin = w * 0.04;
+    const topMargin = h * 0.18;
+    const bottomMargin = h * 0.18;
+    const rowH = h - topMargin - bottomMargin;
+    const slotW = (w - sideMargin * 2) / LETTERS_PER_ROW;
 
-    // 1) Soft background hint — large faded letter/shape behind everything
-    ctx.fillStyle = `rgba(139,92,246,${bgAlpha})`;
-    ctx.font = `900 ${Math.min(w, h) * 0.62}px "Nunito", system-ui, sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(shape.letter, w / 2, h / 2);
+    // 4-line workbook ruling (top → ascender → baseline → descender)
+    const topY = topMargin;
+    const midY = topMargin + rowH * 0.3;       // ascender line (dotted)
+    const baseY = topMargin + rowH * 0.85;     // baseline (solid red)
+    const bottomY = topMargin + rowH;          // descender line
 
-    // 2) Outlined letter stroke (subtle) for extra guidance
-    ctx.strokeStyle = `rgba(139,92,246,${outlineAlpha})`;
-    ctx.lineWidth = 3;
-    ctx.strokeText(shape.letter, w / 2, h / 2);
+    // Draw the 4 horizontal lines across the full row
+    ctx.lineCap = 'butt';
+    ctx.lineJoin = 'miter';
 
-    // 3) Chunky dashed path strokes — clear, kid-friendly (fades per round)
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+    // Top boundary
+    ctx.strokeStyle = 'rgba(148,163,184,0.5)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(sideMargin, topY);
+    ctx.lineTo(w - sideMargin, topY);
+    ctx.stroke();
 
-    shape.strokes.forEach((stroke) => {
-      // Outer halo for visibility (skip on round 3 — anak hampir tulis sendiri)
-      if (haloAlpha > 0) {
-        ctx.strokeStyle = `rgba(196,181,253,${haloAlpha})`;
-        ctx.lineWidth = haloWidth;
-        ctx.setLineDash([]);
-        ctx.beginPath();
-        ctx.moveTo(stroke[0][0] * w, stroke[0][1] * h);
-        for (let i = 1; i < stroke.length; i++) {
-          ctx.lineTo(stroke[i][0] * w, stroke[i][1] * h);
-        }
-        ctx.stroke();
-      }
+    // Middle dotted (x-height guide)
+    ctx.strokeStyle = 'rgba(148,163,184,0.7)';
+    ctx.lineWidth = 1.2;
+    ctx.setLineDash([6, 6]);
+    ctx.beginPath();
+    ctx.moveTo(sideMargin, midY);
+    ctx.lineTo(w - sideMargin, midY);
+    ctx.stroke();
 
-      // Dashed inner guide (round 3 = sparse dots only)
-      if (dashAlpha > 0) {
-        ctx.strokeStyle = `rgba(124,58,237,${dashAlpha})`;
-        ctx.lineWidth = dashWidth;
-        ctx.setLineDash(dashPattern);
-        ctx.beginPath();
-        ctx.moveTo(stroke[0][0] * w, stroke[0][1] * h);
-        for (let i = 1; i < stroke.length; i++) {
-          ctx.lineTo(stroke[i][0] * w, stroke[i][1] * h);
-        }
-        ctx.stroke();
-      } else {
-        // Round 3 — just tiny dots along the path so anak masih ada hint minima
-        ctx.setLineDash([]);
-        ctx.fillStyle = 'rgba(124,58,237,0.35)';
-        for (let i = 0; i < stroke.length; i++) {
-          ctx.beginPath();
-          ctx.arc(stroke[i][0] * w, stroke[i][1] * h, 2.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
+    // Baseline (solid red — paling penting, anak letak huruf duduk atas garis ni)
+    ctx.strokeStyle = 'rgba(239,68,68,0.55)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(sideMargin, baseY);
+    ctx.lineTo(w - sideMargin, baseY);
+    ctx.stroke();
 
-      // Start point — pulsing green dot with "MULA" label so anak tahu di mana mula
-      ctx.setLineDash([]);
-      const sx = stroke[0][0] * w;
-      const sy = stroke[0][1] * h;
-      const startR = round === 3 ? 10 : 14;
+    // Bottom boundary
+    ctx.strokeStyle = 'rgba(148,163,184,0.5)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(sideMargin, bottomY);
+    ctx.lineTo(w - sideMargin, bottomY);
+    ctx.stroke();
 
-      // Soft glow ring
-      ctx.fillStyle = 'rgba(34,197,94,0.25)';
+    // Vertical light separators between letter slots
+    ctx.strokeStyle = 'rgba(203,213,225,0.35)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 5]);
+    for (let i = 1; i < LETTERS_PER_ROW; i++) {
+      const x = sideMargin + slotW * i;
       ctx.beginPath();
-      ctx.arc(sx, sy, startR + 6, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Main green dot
-      ctx.fillStyle = '#22c55e';
-      ctx.beginPath();
-      ctx.arc(sx, sy, startR, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 3;
+      ctx.moveTo(x, topY);
+      ctx.lineTo(x, bottomY);
       ctx.stroke();
+    }
+    ctx.setLineDash([]);
 
-      // White ▶ arrow inside pointing along the first segment direction
-      if (stroke.length >= 2) {
-        const next = stroke[1];
-        const dx = next[0] * w - sx;
-        const dy = next[1] * h - sy;
-        const ang = Math.atan2(dy, dx);
-        ctx.save();
-        ctx.translate(sx, sy);
-        ctx.rotate(ang);
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        const a = startR * 0.55;
-        ctx.moveTo(a, 0);
-        ctx.lineTo(-a * 0.6, -a * 0.7);
-        ctx.lineTo(-a * 0.6, a * 0.7);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      }
+    // Letter cell box: top = topY, bottom = baseY, x-height between midY and baseY
+    // We render the letter so it sits ON the baseline. Letter height ≈ baseY - topY.
+    const letterH = baseY - topY;
+    const letterW = slotW * 0.78; // a bit of horizontal padding per cell
 
-      // End point — simple finish flag 🏁 (no more confusing red dot)
-      const last = stroke[stroke.length - 1];
-      const ex = last[0] * w;
-      const ey = last[1] * h;
-      const endR = round === 3 ? 8 : 11;
+    // Draw each letter slot
+    for (let i = 0; i < LETTERS_PER_ROW; i++) {
+      const cx = sideMargin + slotW * i + slotW / 2;
+      const cellLeft = cx - letterW / 2;
+      const cellTop = topY + letterH * 0.05;
 
-      // Subtle outline ring
-      ctx.fillStyle = 'rgba(15,23,42,0.15)';
+      const isExample = i === 0;
+      const isActive = i === activeIndex;
+      const isDone = i < activeIndex && !isExample;
+
+      // Slot number badge (top-right corner)
+      ctx.save();
+      ctx.fillStyle = isExample ? 'rgba(34,197,94,0.9)' : isActive ? 'rgba(59,130,246,0.95)' : isDone ? 'rgba(148,163,184,0.7)' : 'rgba(203,213,225,0.7)';
       ctx.beginPath();
-      ctx.arc(ex, ey, endR + 4, 0, Math.PI * 2);
+      ctx.arc(cx + slotW * 0.36, topY - 8, 9, 0, Math.PI * 2);
       ctx.fill();
-
       ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.arc(ex, ey, endR, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#0f172a';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Tiny flag emoji inside the white circle
-      ctx.font = `${endR * 1.3}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+      ctx.font = '700 11px "Nunito", system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('🏁', ex, ey + 1);
-    });
+      ctx.fillText(isExample ? '★' : isDone ? '✓' : String(i), cx + slotW * 0.36, topY - 8);
+      ctx.restore();
+
+      // Highlight active slot with soft background
+      if (isActive) {
+        ctx.fillStyle = 'rgba(59,130,246,0.06)';
+        ctx.fillRect(sideMargin + slotW * i, topY, slotW, letterH);
+      }
+
+      // Render the letter scaled to fit this cell
+      // The shape.strokes are normalized 0..1 in a square. Map to this cell.
+      ctx.save();
+      ctx.translate(cellLeft, cellTop);
+      const scaleX = letterW;
+      const scaleY = letterH * 0.9;
+
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      if (isExample) {
+        // Solid example — thick purple, full opacity (contoh untuk anak ikut)
+        shape.strokes.forEach((stroke) => {
+          ctx.strokeStyle = '#7c3aed';
+          ctx.lineWidth = 7;
+          ctx.setLineDash([]);
+          ctx.beginPath();
+          ctx.moveTo(stroke[0][0] * scaleX, stroke[0][1] * scaleY);
+          for (let j = 1; j < stroke.length; j++) {
+            ctx.lineTo(stroke[j][0] * scaleX, stroke[j][1] * scaleY);
+          }
+          ctx.stroke();
+        });
+      } else if (isDone) {
+        // Completed — show faded purple "ghost" so anak nampak progress
+        shape.strokes.forEach((stroke) => {
+          ctx.strokeStyle = 'rgba(124,58,237,0.25)';
+          ctx.lineWidth = 4;
+          ctx.setLineDash([]);
+          ctx.beginPath();
+          ctx.moveTo(stroke[0][0] * scaleX, stroke[0][1] * scaleY);
+          for (let j = 1; j < stroke.length; j++) {
+            ctx.lineTo(stroke[j][0] * scaleX, stroke[j][1] * scaleY);
+          }
+          ctx.stroke();
+        });
+      } else {
+        // Tracing slot — dashed outline, more prominent on active slot
+        const alpha = isActive ? 0.65 : 0.28;
+        const lw = isActive ? 5 : 4;
+
+        shape.strokes.forEach((stroke) => {
+          // Soft halo for active slot only
+          if (isActive) {
+            ctx.strokeStyle = 'rgba(196,181,253,0.4)';
+            ctx.lineWidth = 14;
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            ctx.moveTo(stroke[0][0] * scaleX, stroke[0][1] * scaleY);
+            for (let j = 1; j < stroke.length; j++) {
+              ctx.lineTo(stroke[j][0] * scaleX, stroke[j][1] * scaleY);
+            }
+            ctx.stroke();
+          }
+
+          // Dashed path
+          ctx.strokeStyle = `rgba(124,58,237,${alpha})`;
+          ctx.lineWidth = lw;
+          ctx.setLineDash([8, 6]);
+          ctx.beginPath();
+          ctx.moveTo(stroke[0][0] * scaleX, stroke[0][1] * scaleY);
+          for (let j = 1; j < stroke.length; j++) {
+            ctx.lineTo(stroke[j][0] * scaleX, stroke[j][1] * scaleY);
+          }
+          ctx.stroke();
+
+          // Start arrow — only on active slot so tak terlalu busy
+          if (isActive && stroke.length >= 2) {
+            ctx.setLineDash([]);
+            const sx = stroke[0][0] * scaleX;
+            const sy = stroke[0][1] * scaleY;
+            ctx.fillStyle = '#22c55e';
+            ctx.beginPath();
+            ctx.arc(sx, sy, 7, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            const next = stroke[1];
+            const dx = next[0] * scaleX - sx;
+            const dy = next[1] * scaleY - sy;
+            const ang = Math.atan2(dy, dx);
+            ctx.save();
+            ctx.translate(sx, sy);
+            ctx.rotate(ang);
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            const a = 4;
+            ctx.moveTo(a, 0);
+            ctx.lineTo(-a * 0.6, -a * 0.7);
+            ctx.lineTo(-a * 0.6, a * 0.7);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+          }
+        });
+      }
+
+      ctx.restore();
+    }
 
     ctx.restore();
   };
@@ -603,9 +679,10 @@ export default function DrawingStudio() {
     initCanvas();
   }, [mode, selectedShape, selectedColoringPage, initCanvas]);
 
-  // Reset round to 1 whenever user picks a different shape
+  // Reset workbook row whenever user picks a different letter
   useEffect(() => {
-    setCurrentRound(1);
+    setCurrentLetterIndex(1); // start at slot 1 (slot 0 is the solid example)
+    setLetterStrokeCounts(Array(LETTERS_PER_ROW).fill(0));
   }, [selectedShape.label]);
 
   // Preload all coloring page images on mount, and re-init canvas once the current one loads
@@ -907,37 +984,42 @@ export default function DrawingStudio() {
       setUserStrokes(newStrokes);
       setCurrentStroke([]);
 
-      // Check if enough coverage — round complete
-      if (newStrokes.length >= selectedShape.strokes.length) {
-        const acc = Math.min(98, 70 + Math.floor(Math.random() * 28));
-        setTracingAccuracy(acc);
-        setTracingDone(true);
+      // Detect which letter slot this stroke was drawn in (by avg x position)
+      if (canvas) {
+        const { w } = getLogicalSize(canvas);
+        const avgX = currentStroke.reduce((s, p) => s + p.x, 0) / currentStroke.length;
+        const sideMargin = w * 0.04;
+        const slotW = (w - sideMargin * 2) / LETTERS_PER_ROW;
+        const slotIdx = Math.max(0, Math.min(LETTERS_PER_ROW - 1, Math.floor((avgX - sideMargin) / slotW)));
 
-        // Save mastery progress (1 round = +1 mastery point, max TOTAL_ROUNDS)
-        if (acc >= 70) {
-          saveMasteryRound(selectedShape.label);
+        // Increment stroke count for that slot
+        const newCounts = [...letterStrokeCounts];
+        newCounts[slotIdx] = (newCounts[slotIdx] || 0) + 1;
+        setLetterStrokeCounts(newCounts);
+
+        // If this is the active slot and user has done enough strokes → mark complete + advance
+        const requiredStrokes = selectedShape.strokes.length;
+        if (slotIdx === currentLetterIndex && newCounts[slotIdx] >= requiredStrokes) {
+          saveMasteryRow(selectedShape.label);
           setMastery(loadMastery());
-        }
+          playStamp();
+          confetti({ particleCount: 40, spread: 40, origin: { y: 0.55, x: (sideMargin + slotW * slotIdx + slotW / 2) / w }, colors: ['#fbbf24', '#22c55e'] });
 
-        const isFinalRound = currentRound >= TOTAL_ROUNDS;
-        if (isFinalRound) {
-          // Full mastery achieved — big celebration
-          setCelebration({ open: true, accuracy: acc });
-          if (acc >= 70) {
+          const isLastSlot = currentLetterIndex >= LETTERS_PER_ROW - 1;
+          if (isLastSlot) {
+            // Whole row done — big celebration!
+            const acc = Math.min(98, 80 + Math.floor(Math.random() * 18));
+            setTracingAccuracy(acc);
+            setTracingDone(true);
+            setCelebration({ open: true, accuracy: acc });
             confetti({ particleCount: 160, spread: 80, origin: { y: 0.6 }, colors: ['#fbbf24', '#8b5cf6', '#ec4899', '#f97316', '#22c55e'] });
             playTadaa();
+          } else {
+            // Advance to next slot after short delay
+            setTimeout(() => {
+              setCurrentLetterIndex(idx => idx + 1);
+            }, 700);
           }
-        } else if (acc >= 70) {
-          // Mid-round success — auto advance ke round seterusnya selepas short delay
-          confetti({ particleCount: 60, spread: 50, origin: { y: 0.6 }, colors: ['#fbbf24', '#22c55e'] });
-          playStamp();
-          setTimeout(() => {
-            setCurrentRound(r => Math.min(TOTAL_ROUNDS, r + 1));
-            setUserStrokes([]);
-            setCurrentStroke([]);
-            setTracingAccuracy(null);
-            setTracingDone(false);
-          }, 1400);
         }
       }
     }
@@ -973,6 +1055,8 @@ export default function DrawingStudio() {
     setCurrentStroke([]);
     setTracingAccuracy(null);
     setTracingDone(false);
+    setCurrentLetterIndex(1);
+    setLetterStrokeCounts(Array(LETTERS_PER_ROW).fill(0));
     const ctx = getCtx();
     const canvas = getCanvas();
     if (ctx && canvas) {
@@ -1099,10 +1183,12 @@ export default function DrawingStudio() {
                   </div>
                   {mode === 'trace' && (
                     <>
-                      <div className="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900/85 backdrop-blur-md text-white shadow-sm">{userStrokes.length}/{selectedShape.strokes.length} strok</div>
+                      <div className="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900/85 backdrop-blur-md text-white shadow-sm">
+                        Huruf {currentLetterIndex}/{LETTERS_PER_ROW - 1}
+                      </div>
                       <div className="px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 bg-white/90 backdrop-blur-md text-slate-700 ring-1 ring-black/5 shadow-sm">
-                        <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-green-500 text-white text-[8px] font-black ring-2 ring-white">▶</span> Mula
-                        <span className="ml-1.5 text-sm leading-none">🏁</span> Habis
+                        <span className="text-yellow-500">★</span> Contoh
+                        <span className="ml-1.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-blue-500 text-white text-[8px] font-black">▶</span> Latih
                       </div>
                     </>
                   )}
@@ -1216,39 +1302,45 @@ export default function DrawingStudio() {
                     })}
                   </div>
 
-                  {/* Round progress indicator — 3x repeat dengan progressive fading */}
+                  {/* Workbook row progress — anak trace 4 huruf (slot 1-4), slot 0 = contoh */}
                   <div className="mt-4 rounded-2xl p-3 bg-gradient-to-br from-purple-50 to-blue-50 ring-1 ring-purple-100">
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-xs font-bold text-purple-900">🔁 Latihan Ulangan</p>
-                      <p className="text-xs font-black text-purple-700">Round {currentRound}/{TOTAL_ROUNDS}</p>
+                      <p className="text-xs font-bold text-purple-900">📖 Buku Latihan</p>
+                      <p className="text-xs font-black text-purple-700">{Math.max(0, currentLetterIndex - 1)}/{LETTERS_PER_ROW - 1} siap</p>
                     </div>
                     <div className="flex gap-1.5">
-                      {Array.from({ length: TOTAL_ROUNDS }).map((_, i) => {
-                        const done = i + 1 < currentRound;
-                        const active = i + 1 === currentRound;
+                      {Array.from({ length: LETTERS_PER_ROW }).map((_, i) => {
+                        const isExample = i === 0;
+                        const isDone = !isExample && i < currentLetterIndex;
+                        const isActive = !isExample && i === currentLetterIndex;
                         return (
                           <div
                             key={i}
-                            className={`flex-1 h-2 rounded-full transition-all ${done ? 'bg-green-500' : active ? 'bg-purple-500' : 'bg-slate-200'}`}
-                          />
+                            className={`flex-1 h-7 rounded-md flex items-center justify-center text-[10px] font-black transition-all ${
+                              isExample ? 'bg-green-500 text-white' :
+                              isDone ? 'bg-green-400 text-white' :
+                              isActive ? 'bg-blue-500 text-white animate-pulse' :
+                              'bg-slate-200 text-slate-500'
+                            }`}
+                          >
+                            {isExample ? '★' : isDone ? '✓' : i}
+                          </div>
                         );
                       })}
                     </div>
                     <p className="text-[10px] font-medium text-slate-600 mt-2">
-                      {currentRound === 1 && '✏️ Round 1: Ikut garis penuh — jelas & mudah'}
-                      {currentRound === 2 && '🌫️ Round 2: Garis lebih nipis — cuba sendiri sikit'}
-                      {currentRound === 3 && '⭐ Round 3: Titik-titik je — tulis sendiri!'}
+                      ★ = contoh (jangan trace) &nbsp;•&nbsp; Trace huruf bertanda 🔵 dari kiri ke kanan
                     </p>
                   </div>
 
                   <div className="mt-3 rounded-2xl p-3 bg-slate-50 ring-1 ring-black/5">
                     {tracingDone ? (
                       <div className="text-center">
-                        <p className="font-bold text-base text-slate-900">{tracingAccuracy >= 70 ? `🌟 Round ${currentRound} siap! ${tracingAccuracy}%` : `💪 Cuba lagi! ${tracingAccuracy}%`}</p>
-                        <AppleButton onClick={resetTracing} variant="accent" className="mt-2 !px-4 !py-1.5 !text-xs">Reset Round Ini</AppleButton>
+                        <p className="font-bold text-base text-slate-900">🌟 Satu baris siap! Ketepatan {tracingAccuracy}%</p>
+                        <AppleButton onClick={resetTracing} variant="accent" className="mt-2 !px-4 !py-1.5 !text-xs">Latih Sekali Lagi</AppleButton>
                       </div>
                     ) : (
-                      <p className="text-xs font-medium text-slate-600">📝 Ikuti laluan. Progress: <span className="font-bold text-slate-900">{userStrokes.length}/{selectedShape.strokes.length}</span> strok.</p>
+                      <p className="text-xs font-medium text-slate-600">📝 Trace huruf <span className="font-black text-blue-600">#{currentLetterIndex}</span> sekarang. Tinggal {LETTERS_PER_ROW - currentLetterIndex} huruf lagi!</p>
                     )}
                   </div>
                 </ApplePanel>
@@ -1423,13 +1515,12 @@ export default function DrawingStudio() {
           open={celebration.open}
           accuracy={celebration.accuracy}
           shapeLabel={selectedShape.label}
-          onReplay={() => { setCelebration({ open: false, accuracy: 0 }); setCurrentRound(1); resetTracing(); playButtonTap(); }}
+          onReplay={() => { setCelebration({ open: false, accuracy: 0 }); resetTracing(); playButtonTap(); }}
           onNext={() => {
             const list = tracingShapes;
             const idx = list.findIndex(s => s.label === selectedShape.label);
             const nextShape = list[(idx + 1) % list.length];
             setSelectedShape(nextShape);
-            setCurrentRound(1);
             setCelebration({ open: false, accuracy: 0 });
             playButtonTap();
           }}
