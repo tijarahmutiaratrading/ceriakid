@@ -274,6 +274,10 @@ export default function StoryKid() {
           </div>
         ) : (
           <div className="fixed inset-0 z-40 bg-black overflow-hidden">
+            {/* Audio player — outside AnimatePresence so it doesn't remount/restart on scene change */}
+            <div className="fixed top-3 sm:top-4 right-[5.5rem] sm:right-24 z-[60]">
+              <StoryAudioPlayer autoPlay={!!story} />
+            </div>
             <AnimatePresence mode="wait">
               <motion.div key={sceneIndex} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} className="absolute inset-0">
                 {/* Fullscreen image — with subtle 3D Ken Burns motion */}
@@ -313,7 +317,8 @@ export default function StoryKid() {
                       <div className="h-full bg-gradient-to-r from-yellow-300 to-pink-400 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
                     </div>
                   </div>
-                  <div className="flex-shrink-0"><StoryAudioPlayer autoPlay={!!story} /></div>
+                  {/* Audio player placeholder — actual player rendered outside AnimatePresence to avoid remount */}
+                  <div className="w-11 h-11 flex-shrink-0" />
                   <div className="px-3 py-2 rounded-2xl bg-yellow-300 text-yellow-950 font-black text-sm shadow-lg flex-shrink-0">{stars} ⭐</div>
                 </div>
 
