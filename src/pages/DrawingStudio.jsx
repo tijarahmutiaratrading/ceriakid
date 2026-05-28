@@ -1142,11 +1142,11 @@ export default function DrawingStudio() {
         )}
       </AnimatePresence>
 
-      <main className="relative max-w-6xl mx-auto px-4 sm:px-6 pb-28 pt-28">
+      <main className="relative max-w-6xl mx-auto px-4 sm:px-6 pb-28 pt-20 md:pt-8">
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate('/dashboard')}
-          className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full font-semibold text-sm text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all"
+          className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full font-semibold text-sm text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all"
         >
           <ArrowLeft className="w-4 h-4" /> Dashboard
         </motion.button>
