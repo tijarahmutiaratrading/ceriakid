@@ -57,7 +57,7 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
               alt="CeriaKid"
               className="w-6 h-6 rounded-full object-cover ring-1 ring-white/30"
             />
-            <h2 className="text-white font-black text-base">Baki Kredit AI</h2>
+            <h2 className="text-slate-900 font-black text-base">Baki Kredit AI</h2>
           </div>
           <Link
             to="/buy-credits"
