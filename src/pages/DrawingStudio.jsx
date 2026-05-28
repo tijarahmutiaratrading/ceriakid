@@ -1410,18 +1410,24 @@ export default function DrawingStudio() {
                 >
                   {mode === 'color' && (
                     <ApplePanel>
-                      <AppleSectionLabel>Aktiviti Mewarna — {selectedColoringPage.label}</AppleSectionLabel>
-                      <div className="max-h-52 overflow-y-auto grid grid-cols-2 gap-1.5 pr-1">
+                      <div className="flex items-center justify-between mb-3">
+                        <AppleSectionLabel>Pilih Gambar</AppleSectionLabel>
+                        <span className="text-[10px] font-bold text-slate-400">{COLORING_PAGES.length} pilihan</span>
+                      </div>
+                      <div className="max-h-72 overflow-y-auto grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 pr-1">
                         {COLORING_PAGES.map(page => {
                           const active = selectedColoringPage.id === page.id;
+                          // Buang emoji dari label supaya nama bersih
+                          const cleanLabel = page.label.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').trim();
                           return (
                             <motion.button
                               key={page.id}
-                              whileTap={{ scale: 0.96 }}
+                              whileTap={{ scale: 0.94 }}
                               onClick={() => setSelectedColoringPage(page)}
-                              className={`px-3 py-2.5 rounded-xl font-medium text-xs transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                              className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${active ? 'bg-blue-500 text-white shadow-md ring-2 ring-blue-300' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
                             >
-                              {page.label}
+                              <span className="text-3xl leading-none">{page.emoji}</span>
+                              <span className="text-[10px] font-semibold truncate w-full text-center">{cleanLabel}</span>
                             </motion.button>
                           );
                         })}
