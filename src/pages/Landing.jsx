@@ -304,7 +304,7 @@ export default function Landing() {
               key={item.href}
               href={item.href}
               className={`relative px-3 py-1.5 rounded-full font-black text-sm hover:bg-white/30 transition-colors duration-300 ${
-                navTheme === 'light' ? 'text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]' : 'text-slate-900'
+                navTheme === 'light' ? 'text-white' : 'text-slate-900'
               }`}
             >
               {item.label}
