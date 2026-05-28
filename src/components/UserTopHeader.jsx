@@ -11,11 +11,6 @@ import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 const NAV_GROUPS = [
   {
-    key: 'landing',
-    label: 'Landing',
-    path: '/',
-  },
-  {
     key: 'dashboard',
     label: 'Dashboard',
     path: '/dashboard',
