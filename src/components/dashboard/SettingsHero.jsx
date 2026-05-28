@@ -77,11 +77,11 @@ export default function SettingsHero({ user, avatarUrl, userTier, saving, onAvat
               <img
                 src={avatarUrl}
                 alt="Avatar"
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover ring-4 ring-white/40 shadow-2xl"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover ring-2 ring-white/40 shadow-xl"
               />
             ) : (
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/30 ring-4 ring-white/40 shadow-2xl flex items-center justify-center text-5xl">
-                🐱
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-cyan-300 to-purple-400 ring-2 ring-white/40 shadow-xl flex items-center justify-center text-4xl text-white font-black">
+                {(user?.full_name || 'U').charAt(0).toUpperCase()}
               </div>
             )}
             <label className="absolute -bottom-1 -right-1 w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-orange-600 transition-colors ring-2 ring-black/40">
