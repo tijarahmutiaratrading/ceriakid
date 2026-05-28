@@ -20,6 +20,8 @@ const TIER_LABEL = {
 };
 
 const APP_URL = 'https://ceriakid.com';
+const WHATSAPP_NUMBER = '60177844120'; // 017-784 4120
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Salam, saya perlukan bantuan dengan akaun CeriaKid saya.')}`;
 
 function buildSubscriptionEmail({ tier, bonusCredits }) {
   const tierName = TIER_LABEL[tier] || tier;
@@ -52,12 +54,22 @@ function buildSubscriptionEmail({ tier, bonusCredits }) {
           ${bonusLine}
         </td></tr>
 
+        <!-- IMPORTANT NOTICE -->
+        <tr><td style="padding:0 24px 20px;">
+          <div style="background:#fef3c7;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;">
+            <p style="margin:0;color:#78350f;font-size:14px;font-weight:700;">⚠️ PENTING — Sila baca dulu</p>
+            <p style="margin:6px 0 0;color:#92400e;font-size:13px;line-height:1.6;">
+              Anda <strong>perlu daftar akaun dulu</strong> di CeriaKid sebelum boleh login. Pastikan guna <strong>email yang SAMA</strong> dengan email anda beli pelan tadi, supaya subscription auto-aktif.
+            </p>
+          </div>
+        </td></tr>
+
         <!-- CTA Login -->
         <tr><td style="padding:0 24px 24px;text-align:center;">
-          <a href="${APP_URL}/dashboard" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;text-decoration:none;font-weight:700;border-radius:12px;font-size:16px;">
-            🚀 Mula Sekarang
+          <a href="${APP_URL}" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;text-decoration:none;font-weight:700;border-radius:12px;font-size:16px;">
+            🚀 Daftar / Login Sekarang
           </a>
-          <p style="margin:12px 0 0;color:#94a3b8;font-size:13px;">Login guna email yang sama dengan pendaftaran</p>
+          <p style="margin:12px 0 0;color:#94a3b8;font-size:13px;">Klik butang <strong>"Dashboard"</strong> di header untuk daftar/login</p>
         </td></tr>
 
         <!-- Quick Start Guide -->
@@ -67,8 +79,8 @@ function buildSubscriptionEmail({ tier, bonusCredits }) {
 
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
               <tr><td style="padding:8px 0;">
-                <p style="margin:0;color:#1e293b;font-size:15px;font-weight:700;">1️⃣ Login ke Dashboard</p>
-                <p style="margin:4px 0 0;color:#64748b;font-size:14px;line-height:1.5;">Pergi ke <a href="${APP_URL}/dashboard" style="color:#a855f7;font-weight:600;">${APP_URL}/dashboard</a> dan login guna email anda.</p>
+                <p style="margin:0;color:#1e293b;font-size:15px;font-weight:700;">1️⃣ Daftar Akaun Dulu</p>
+                <p style="margin:4px 0 0;color:#64748b;font-size:14px;line-height:1.5;">Pergi ke <a href="${APP_URL}" style="color:#a855f7;font-weight:600;">${APP_URL}</a> → klik butang <strong>"Dashboard"</strong> di header → page <strong>Daftar/Login</strong> akan muncul. Daftar guna <strong>email yang sama</strong> dengan email pembelian, set password, dan verify email anda. Lepas tu barulah boleh login.</p>
               </td></tr>
 
               <tr><td style="padding:8px 0;">
@@ -104,8 +116,10 @@ function buildSubscriptionEmail({ tier, bonusCredits }) {
 
         <!-- Support -->
         <tr><td style="padding:0 24px 28px;text-align:center;">
-          <p style="margin:0 0 8px;color:#64748b;font-size:14px;">Ada soalan? Kami sedia membantu!</p>
-          <a href="${APP_URL}/contact" style="color:#a855f7;font-weight:600;text-decoration:none;font-size:14px;">📩 Hubungi Sokongan</a>
+          <p style="margin:0 0 12px;color:#64748b;font-size:14px;">Ada soalan? Kami sedia membantu — WhatsApp terus!</p>
+          <a href="${WHATSAPP_URL}" style="display:inline-block;padding:12px 24px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;border-radius:10px;font-size:15px;">
+            💬 WhatsApp: 017-784 4120
+          </a>
         </td></tr>
 
         <!-- Footer -->
@@ -153,9 +167,17 @@ function buildCreditEmail({ credits }) {
           </ul>
         </td></tr>
 
-        <tr><td style="padding:0 24px 28px;text-align:center;">
+        <tr><td style="padding:0 24px 20px;text-align:center;">
           <a href="${APP_URL}/dashboard" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;text-decoration:none;font-weight:700;border-radius:12px;font-size:16px;">
             🚀 Mula Guna Sekarang
+          </a>
+        </td></tr>
+
+        <!-- Support -->
+        <tr><td style="padding:0 24px 24px;text-align:center;">
+          <p style="margin:0 0 12px;color:#64748b;font-size:14px;">Ada soalan? WhatsApp kami terus!</p>
+          <a href="${WHATSAPP_URL}" style="display:inline-block;padding:12px 24px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;border-radius:10px;font-size:15px;">
+            💬 WhatsApp: 017-784 4120
           </a>
         </td></tr>
 
