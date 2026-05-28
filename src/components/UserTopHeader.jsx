@@ -93,7 +93,7 @@ export default function UserTopHeader() {
     >
       {/* Center: Floating pill nav (Apple Fitness style — adaptive glass) */}
       <nav
-        className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-xl shadow-black/20"
+        className="pointer-events-auto flex items-center gap-0 px-1.5 py-1.5 rounded-full shadow-xl shadow-black/20"
         style={{
           background: isDarkBg
             ? 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(30,41,59,0.45))'
@@ -131,7 +131,7 @@ export default function UserTopHeader() {
               <Link
                 key={group.key}
                 to={group.path}
-                className={`relative px-4 py-1.5 rounded-full font-black text-sm transition-colors ${
+                className={`relative px-3 py-1.5 rounded-full font-black text-sm transition-colors ${
                   showActive
                     ? (isDarkBg ? 'text-slate-900' : 'text-white')
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
@@ -154,7 +154,7 @@ export default function UserTopHeader() {
               <button
                 type="button"
                 onClick={() => setOpenMenu(isOpen ? null : group.key)}
-                className={`relative flex items-center gap-1 px-4 py-1.5 rounded-full font-black text-sm transition-colors ${
+                className={`relative flex items-center gap-1 px-3 py-1.5 rounded-full font-black text-sm transition-colors ${
                   showActive
                     ? (isDarkBg ? 'text-slate-900' : 'text-white')
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
