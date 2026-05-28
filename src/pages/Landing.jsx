@@ -173,20 +173,22 @@ export default function Landing() {
     };
 
     const detectTheme = () => {
-      // Sample 5 titik dalam baris nav (y ~ 40px untuk desktop, ~ 30px untuk mobile)
-      const y = window.innerWidth >= 768 ? 50 : 35;
-      const xs = [0.2, 0.35, 0.5, 0.65, 0.8].map(p => Math.round(window.innerWidth * p));
+      // Sample titik JAUH di bawah nav pill (skip nav area entirely).
+      // Nav pill berada y ~ 5-60px, jadi kita sample y = 120px untuk dapat section content sebenar di belakang.
+      const y = window.innerWidth >= 768 ? 130 : 110;
+      const xs = [0.15, 0.3, 0.5, 0.7, 0.85].map(p => Math.round(window.innerWidth * p));
       let darkCount = 0;
       let lightCount = 0;
       xs.forEach(x => {
-        // Sembunyikan nav sementara supaya elementFromPoint return element belakang.
-        // Senang & lebih reliable: nav ada pointer-events on inner; outer wrapper is pointer-events-none.
-        // Tapi inner pill memang block — jadi guna document.elementsFromPoint untuk dapat element kedua.
         const stack = document.elementsFromPoint(x, y);
-        const bgEl = stack.find(el => !el.closest('header[data-landing-nav]') && !el.closest('nav[data-landing-nav-mobile]'));
+        // Skip semua element berkaitan nav (header/nav wrapper, pill, links, buttons dalamnya)
+        const bgEl = stack.find(el =>
+          !el.closest('[data-landing-nav]') &&
+          !el.closest('[data-landing-nav-mobile]')
+        );
         if (!bgEl) return;
         const c = getEffectiveBg(bgEl);
-        // Relative luminance (WCAG)
+        // Relative luminance (WCAG) — 0 (gelap) hingga 1 (cerah)
         const lum = (0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b) / 255;
         if (lum < 0.5) darkCount++;
         else lightCount++;
