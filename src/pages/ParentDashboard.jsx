@@ -132,16 +132,12 @@ export default function ParentDashboard() {
 
   return (
     <div className="min-h-screen font-nunito relative">
-      {/* Single fixed background — Pixar 3D style */}
+      {/* Single fixed background — soft pastel gradient (not too dark) */}
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10"
         style={{
-          backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c31c61f2c_generated_image.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
+          background: 'linear-gradient(135deg, #2d2a4a 0%, #3d3567 30%, #4a3d7a 60%, #5b4585 100%)',
         }}
       />
       <AppHeader showBack={true} backTo="/dashboard" />
