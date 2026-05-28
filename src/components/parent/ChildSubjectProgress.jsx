@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { BookOpen } from 'lucide-react';
+import SectionCardHeader from '@/components/ui/SectionCardHeader';
 
 const categoryLabels = {
   bahasa_melayu: 'Bahasa Melayu',
@@ -52,7 +54,7 @@ export default function ChildSubjectProgress({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4"
+      className="rounded-3xl p-4 space-y-4"
       style={{
         background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
         backdropFilter: 'blur(22px) saturate(150%)',
@@ -60,9 +62,12 @@ export default function ChildSubjectProgress({ games }) {
         boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
       }}
     >
-      <p className="text-white text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-2">
-        📚 Prestasi Per Subjek
-      </p>
+      <SectionCardHeader
+        icon={BookOpen}
+        title="Prestasi Per Subjek"
+        subtitle="Markah & purata bintang setiap subjek"
+        gradient="from-emerald-400 to-teal-500"
+      />
 
       <div className="space-y-3">
         {subjects.map((s, i) => {

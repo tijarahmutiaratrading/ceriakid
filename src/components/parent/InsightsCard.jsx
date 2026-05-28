@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Flame, TrendingUp, Clock, Award } from 'lucide-react';
+import { Flame, TrendingUp, Clock, Award, Zap } from 'lucide-react';
+import SectionCardHeader from '@/components/ui/SectionCardHeader';
 
 const categoryLabels = {
   bahasa_melayu: 'Bahasa Melayu',
@@ -76,7 +77,7 @@ export default function InsightsCard({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4"
+      className="rounded-3xl p-4 space-y-3"
       style={{
         background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
         backdropFilter: 'blur(22px) saturate(150%)',
@@ -84,9 +85,12 @@ export default function InsightsCard({ games }) {
         boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
       }}
     >
-      <p className="text-white text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-2">
-        ⚡ Trend & Insights
-      </p>
+      <SectionCardHeader
+        icon={Zap}
+        title="Trend & Insights"
+        subtitle="Aktiviti & prestasi terkini"
+        gradient="from-yellow-400 to-orange-500"
+      />
       <div className="grid grid-cols-2 gap-2">
         {insights.map((ins, i) => (
           <motion.div

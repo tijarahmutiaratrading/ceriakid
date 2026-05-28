@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, BarChart3 } from 'lucide-react';
+import SectionCardHeader from '@/components/ui/SectionCardHeader';
 
 /**
  * 7-day activity sparkline — counts games played per day for last 7 days.
@@ -70,7 +71,7 @@ export default function ActivitySparkline({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4"
+      className="rounded-3xl p-4 space-y-3"
       style={{
         background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
         backdropFilter: 'blur(22px) saturate(150%)',
@@ -78,15 +79,18 @@ export default function ActivitySparkline({ games }) {
         boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
       }}
     >
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-white text-xs font-black uppercase tracking-wider flex items-center gap-2">
-          📈 Aktiviti 7 Hari
-        </p>
-        <div className={`flex items-center gap-1.5 ${trendColor}`}>
-          <TrendIcon className="w-3.5 h-3.5" />
-          <span className="text-[10px] font-black uppercase tracking-wide">{trendLabel}</span>
-        </div>
-      </div>
+      <SectionCardHeader
+        icon={BarChart3}
+        title="Aktiviti 7 Hari"
+        subtitle="Bilangan sesi bermain harian"
+        gradient="from-purple-400 to-fuchsia-500"
+        right={
+          <div className={`flex items-center gap-1.5 ${trendColor} flex-shrink-0`}>
+            <TrendIcon className="w-3.5 h-3.5" />
+            <span className="text-[10px] font-black uppercase tracking-wide">{trendLabel}</span>
+          </div>
+        }
+      />
 
       <div className="flex items-end justify-between gap-1.5 h-20 mb-2">
         {data.days.map((d, i) => {
