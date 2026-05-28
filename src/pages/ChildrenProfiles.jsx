@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit2, Trash2, Save, X, TrendingUp, Star, Gamepad2, ChevronRight, Sparkles } from 'lucide-react';
+import { Plus, Edit2, Trash2, Save, X, TrendingUp, Star, Gamepad2, ChevronRight, Sparkles, Camera, Upload, Loader2 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
@@ -25,8 +25,12 @@ export default function ChildrenProfiles() {
   const [editingId, setEditingId] = useState(null);
   const [userTier, setUserTier] = useState('free');
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ name: '', ageGroup: 'prasekolah' });
+  const [formData, setFormData] = useState({ name: '', ageGroup: 'prasekolah', avatarUrl: '' });
   const [error, setError] = useState('');
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [uploadingForChildId, setUploadingForChildId] = useState(null);
+  const formFileInputRef = useRef(null);
+  const cardFileInputRef = useRef(null);
 
   const MAX_CHILDREN = getTierLimit(userTier, 'children');
 
@@ -74,24 +78,62 @@ export default function ChildrenProfiles() {
   const handleAddChild = async () => {
     if (children.length >= MAX_CHILDREN) { setError(`Maksimum ${MAX_CHILDREN} anak`); return; }
     if (!formData.name.trim()) { setError('Sila masukkan nama anak'); return; }
-    const newChild = { id: Date.now(), name: formData.name.trim(), ageGroup: formData.ageGroup, createdAt: new Date().toISOString() };
+    const newChild = { id: Date.now(), name: formData.name.trim(), ageGroup: formData.ageGroup, avatarUrl: formData.avatarUrl || '', createdAt: new Date().toISOString() };
     const updated = [...children, newChild];
     setChildren(updated);
     await saveChildren(updated);
-    setFormData({ name: '', ageGroup: 'prasekolah' });
+    setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' });
     setShowForm(false);
     setError('');
   };
 
   const handleUpdateChild = async () => {
     if (!formData.name.trim()) { setError('Sila masukkan nama anak'); return; }
-    const updated = children.map(c => c.id === editingId ? { ...c, name: formData.name.trim(), ageGroup: formData.ageGroup } : c);
+    const updated = children.map(c => c.id === editingId ? { ...c, name: formData.name.trim(), ageGroup: formData.ageGroup, avatarUrl: formData.avatarUrl || '' } : c);
     setChildren(updated);
     await saveChildren(updated);
     setEditingId(null);
     setShowForm(false);
-    setFormData({ name: '', ageGroup: 'prasekolah' });
+    setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' });
     setError('');
+  };
+
+  // Upload avatar untuk form (anak baru / sedang edit)
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { setError('Saiz gambar terlalu besar (maks 5MB)'); return; }
+    setUploadingAvatar(true);
+    setError('');
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setFormData(prev => ({ ...prev, avatarUrl: file_url }));
+    } catch (err) {
+      setError('Gagal muat naik gambar. Cuba lagi.');
+    } finally {
+      setUploadingAvatar(false);
+      if (formFileInputRef.current) formFileInputRef.current.value = '';
+    }
+  };
+
+  // Upload avatar terus dari card (tukar gambar tanpa buka form)
+  const handleCardAvatarUpload = async (e, childId) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { setError('Saiz gambar terlalu besar (maks 5MB)'); return; }
+    setUploadingForChildId(childId);
+    setError('');
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const updated = children.map(c => c.id === childId ? { ...c, avatarUrl: file_url } : c);
+      setChildren(updated);
+      await saveChildren(updated);
+    } catch (err) {
+      setError('Gagal muat naik gambar. Cuba lagi.');
+    } finally {
+      setUploadingForChildId(null);
+      if (cardFileInputRef.current) cardFileInputRef.current.value = '';
+    }
   };
 
   const handleDeleteChild = async (id) => {
@@ -105,14 +147,14 @@ export default function ChildrenProfiles() {
 
   const handleEdit = (child) => {
     setEditingId(child.id);
-    setFormData({ name: child.name, ageGroup: child.ageGroup });
+    setFormData({ name: child.name, ageGroup: child.ageGroup, avatarUrl: child.avatarUrl || '' });
     setShowForm(true);
   };
 
   const handleCancel = () => {
     setEditingId(null);
     setShowForm(false);
-    setFormData({ name: '', ageGroup: 'prasekolah' });
+    setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' });
     setError('');
   };
 
@@ -200,6 +242,15 @@ export default function ChildrenProfiles() {
             ) : null}
           </div>
 
+          {/* Hidden file input untuk card upload (re-used antara semua card) */}
+          <input
+            type="file"
+            ref={cardFileInputRef}
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => uploadingForChildId && handleCardAvatarUpload(e, uploadingForChildId)}
+          />
+
           {/* Mini family stats — only when ada anak */}
           {children.length > 0 && (
             <div className="grid grid-cols-3 gap-2">
@@ -239,6 +290,48 @@ export default function ChildrenProfiles() {
               style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
             >
               <p className="text-white font-black text-sm mb-4 drop-shadow">{editingId ? '✏️ Ubah Profil Anak' : '➕ Tambah Anak Baru'}</p>
+
+              {/* Avatar uploader */}
+              <div className="flex flex-col items-center mb-4">
+                <div className="relative">
+                  <div className="w-24 h-24 rounded-3xl bg-white/15 flex items-center justify-center text-5xl shadow-inner ring-2 ring-white/30 overflow-hidden">
+                    {formData.avatarUrl ? (
+                      <img src={formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                    ) : (
+                      <span>👶</span>
+                    )}
+                  </div>
+                  <motion.button
+                    type="button"
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => formFileInputRef.current?.click()}
+                    disabled={uploadingAvatar}
+                    className="absolute -bottom-1 -right-1 w-9 h-9 rounded-full bg-white text-purple-700 flex items-center justify-center shadow-lg ring-2 ring-purple-300 disabled:opacity-60"
+                    title="Muat naik gambar"
+                  >
+                    {uploadingAvatar ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
+                  </motion.button>
+                </div>
+                <input
+                  type="file"
+                  ref={formFileInputRef}
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarUpload}
+                />
+                <p className="text-white/70 text-[10px] font-bold mt-2 uppercase tracking-wider">
+                  {formData.avatarUrl ? 'Tekan kamera untuk tukar' : 'Tekan kamera untuk muat naik'}
+                </p>
+                {formData.avatarUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, avatarUrl: '' })}
+                    className="text-red-300 text-[10px] font-bold mt-1 hover:text-red-200"
+                  >
+                    Buang gambar
+                  </button>
+                )}
+              </div>
 
               <input
                 type="text"
@@ -317,8 +410,26 @@ export default function ChildrenProfiles() {
                 >
                   {/* Top row: avatar + info + actions */}
                   <div className="flex items-start gap-3">
-                    <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner ring-1 ring-white/20">
-                      {AVATARS[idx % AVATARS.length]}
+                    <div className="relative flex-shrink-0">
+                      <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl shadow-inner ring-1 ring-white/20 overflow-hidden">
+                        {child.avatarUrl ? (
+                          <img src={child.avatarUrl} alt={child.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <span>{AVATARS[idx % AVATARS.length]}</span>
+                        )}
+                      </div>
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => {
+                          setUploadingForChildId(child.id);
+                          setTimeout(() => cardFileInputRef.current?.click(), 0);
+                        }}
+                        disabled={uploadingForChildId === child.id}
+                        className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white text-purple-700 flex items-center justify-center shadow-md ring-2 ring-purple-300 disabled:opacity-60"
+                        title="Tukar gambar"
+                      >
+                        {uploadingForChildId === child.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Camera className="w-3 h-3" />}
+                      </motion.button>
                     </div>
 
                     <div className="flex-1 min-w-0">
