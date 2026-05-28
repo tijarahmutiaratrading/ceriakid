@@ -167,6 +167,18 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
         </div>
       </div>
 
+      {/* Name */}
+      <div>
+        <label className="block text-sm font-bold mb-2 text-slate-800">Nama Penuh</label>
+        <input
+          type="text"
+          placeholder="Nama penuh anda"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple" />
+        
+      </div>
+
       {/* Email */}
       <div>
         <label className="block text-sm font-bold mb-2 text-slate-800">Email</label>
@@ -175,18 +187,6 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
           placeholder="email@example.com"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple" />
-        
-      </div>
-
-      {/* Name */}
-      <div>
-        <label className="block text-sm font-bold mb-2 text-slate-800">Nama Ibu Bapa</label>
-        <input
-          type="text"
-          placeholder="Nama anda"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple" />
         
       </div>
