@@ -56,69 +56,68 @@ export default function SettingsHero({ user, avatarUrl, userTier, saving, onAvat
         }}
       />
 
-      {/* Top-left tagline */}
-      <div className="absolute top-5 left-5 sm:top-7 sm:left-8 z-10">
-        <p className="text-[#D4FF3D] font-black text-[10px] sm:text-xs tracking-[0.2em] drop-shadow-lg">
-          TETAPAN AKAUN
-        </p>
-      </div>
-
-      {/* Content bottom-left */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="absolute inset-x-0 bottom-0 z-10 p-5 sm:p-8 md:p-10"
-      >
-        <div className="flex items-end gap-4">
+      {/* Top-left: Avatar + nama + tier chip (sama macam hero dashboard) */}
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
+        <div className="flex items-center gap-3">
           {/* Avatar with upload */}
           <div className="relative flex-shrink-0">
             {avatarUrl && avatarUrl.includes('http') ? (
               <img
                 src={avatarUrl}
                 alt="Avatar"
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover ring-2 ring-white/40 shadow-xl"
+                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover ring-2 ring-white/40 shadow-xl"
               />
             ) : (
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-cyan-300 to-purple-400 ring-2 ring-white/40 shadow-xl flex items-center justify-center text-4xl text-white font-black">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-cyan-300 to-purple-400 ring-2 ring-white/40 shadow-xl flex items-center justify-center text-2xl text-white font-black">
                 {(user?.full_name || 'U').charAt(0).toUpperCase()}
               </div>
             )}
-            <label className="absolute -bottom-1 -right-1 w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-orange-600 transition-colors ring-2 ring-black/40">
+            <label className="absolute -bottom-0.5 -right-0.5 w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-orange-600 transition-colors ring-2 ring-black/40">
               <input type="file" accept="image/*" onChange={onAvatarUpload} disabled={saving} className="hidden" />
-              {saving ? <Loader className="w-4 h-4 text-white animate-spin" /> : <Upload className="w-4 h-4 text-white" />}
+              {saving ? <Loader className="w-3 h-3 text-white animate-spin" /> : <Upload className="w-3 h-3 text-white" />}
             </label>
           </div>
 
-          {/* Name + chip */}
-          <div className="min-w-0 flex-1 pb-1">
-            <h1 className="text-white font-black text-xl sm:text-3xl md:text-4xl leading-tight drop-shadow-2xl truncate">
+          {/* Name + tier chip */}
+          <div className="flex flex-col items-start gap-1.5">
+            <p className="text-white font-black text-sm sm:text-base drop-shadow-lg truncate max-w-[200px] sm:max-w-none">
               {user?.full_name || 'Pengguna'}
-            </h1>
-            <p className="text-white/80 text-xs sm:text-sm font-bold mt-1 drop-shadow-md truncate">
-              {user?.email}
             </p>
-
-            {/* Tier chip */}
-            <div className="mt-2.5 flex items-center gap-1.5 flex-wrap">
-              <div
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/30 shadow-md"
-                style={{
-                  background: 'rgba(255,255,255,0.18)',
-                  backdropFilter: 'blur(14px)',
-                  WebkitBackdropFilter: 'blur(14px)',
-                }}
-              >
-                {isFree ? (
-                  <Sparkles className="w-3.5 h-3.5 text-white" />
-                ) : (
-                  <Crown className="w-3.5 h-3.5 text-yellow-300" />
-                )}
-                <span className="text-white font-black text-xs drop-shadow">{tierLabel}</span>
-              </div>
+            <div
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/30 shadow-md shadow-black/5"
+              style={{
+                background: 'rgba(255,255,255,0.18)',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+              }}
+            >
+              {isFree ? (
+                <Sparkles className="w-3 h-3 text-white flex-shrink-0" />
+              ) : (
+                <Crown className="w-3 h-3 text-yellow-300 flex-shrink-0" />
+              )}
+              <span className="text-white font-black text-[10px] drop-shadow leading-none">{tierLabel}</span>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Bottom-left: tagline + title */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="absolute inset-0 z-10 flex flex-col justify-end p-5 sm:p-8 md:p-10 max-w-2xl"
+      >
+        <p className="text-[#D4FF3D] font-black text-[10px] sm:text-xs tracking-[0.2em] mb-2 drop-shadow-lg">
+          TETAPAN AKAUN
+        </p>
+        <h1 className="text-white font-black text-2xl sm:text-4xl md:text-5xl leading-tight mb-2 drop-shadow-2xl">
+          Profil Saya
+        </h1>
+        <p className="text-white/80 text-xs sm:text-sm font-bold drop-shadow-md truncate">
+          {user?.email}
+        </p>
       </motion.div>
     </div>
   );
