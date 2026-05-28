@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import webpush from 'npm:web-push@3.6.7';
 
 // Tier config — MESTI SYNC dengan lib/affiliateTiers.js (no local imports allowed)
 const TIER_CONFIG = [
@@ -93,26 +94,151 @@ async function trackAffiliateCommission(base44, {
   }
 }
 
-// Hantar push notification ke semua admin subscribers. Fire-and-forget — failure tak break webhook.
-async function notifyAdmins(base44, { title, body, url }) {
+// ═══════════════════════════════════════════════════════════════════════════
+// INLINE PUSH + EMAIL HELPERS
+// CRITICAL: We do NOT call other functions via base44.asServiceRole.functions.invoke()
+// because cross-function-invoke from webhook context returns 403 in Base44.
+// Instead we call Resend API and web-push library DIRECTLY here. Verified working.
+// ═══════════════════════════════════════════════════════════════════════════
+
+const APP_URL = 'https://ceriakid.com';
+const WHATSAPP_URL = 'https://wa.me/60177844120?text=' + encodeURIComponent('Salam, saya perlukan bantuan dengan akaun CeriaKid saya.');
+const TIER_LABEL = { asas: 'Asas', standard: 'Standard', keluarga: 'Keluarga' };
+
+function buildSubscriptionEmailHTML(tier, bonusCredits) {
+  const tierName = TIER_LABEL[tier] || tier;
+  const bonusLine = bonusCredits > 0
+    ? `<p style="margin:0 0 12px;color:#475569"><strong>🎁 Bonus selamat datang:</strong> Anda dapat <strong>${bonusCredits} kredit AI percuma</strong>!</p>`
+    : '';
+  return {
+    subject: `🎉 Selamat datang ke CeriaKid — Pelan ${tierName} anda dah aktif!`,
+    html: `<!DOCTYPE html><html lang="ms"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;padding:24px 0;"><tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+<tr><td style="background:linear-gradient(135deg,#a855f7,#ec4899);padding:32px 24px;text-align:center;">
+<h1 style="margin:0;color:#fff;font-size:28px;font-weight:900;">🎉 Tahniah!</h1>
+<p style="margin:8px 0 0;color:rgba(255,255,255,0.95);font-size:16px;">Pelan <strong>${tierName}</strong> anda dah aktif</p></td></tr>
+<tr><td style="padding:28px 24px;">
+<p style="margin:0 0 16px;color:#1e293b;font-size:16px;">Hai! 👋</p>
+<p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.6;">Terima kasih sebab langgan CeriaKid. Subscription anda dah aktif untuk <strong>1 tahun penuh</strong>.</p>
+${bonusLine}</td></tr>
+<tr><td style="padding:0 24px 20px;"><div style="background:#fef3c7;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;">
+<p style="margin:0;color:#78350f;font-size:14px;font-weight:700;">⚠️ PENTING — Sila baca dulu</p>
+<p style="margin:6px 0 0;color:#92400e;font-size:13px;line-height:1.6;">Anda <strong>perlu daftar akaun dulu</strong> di CeriaKid sebelum boleh login. Pastikan guna <strong>email yang SAMA</strong> dengan email anda beli pelan tadi.</p>
+</div></td></tr>
+<tr><td style="padding:0 24px 24px;text-align:center;">
+<a href="${APP_URL}" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;text-decoration:none;font-weight:700;border-radius:12px;font-size:16px;">🚀 Daftar / Login Sekarang</a>
+</td></tr>
+<tr><td style="padding:0 24px 28px;text-align:center;"><p style="margin:0 0 12px;color:#64748b;font-size:14px;">Ada soalan? WhatsApp kami!</p>
+<a href="${WHATSAPP_URL}" style="display:inline-block;padding:12px 24px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;border-radius:10px;font-size:15px;">💬 WhatsApp: 017-784 4120</a></td></tr>
+<tr><td style="background:#f8fafc;padding:20px 24px;text-align:center;border-top:1px solid #e2e8f0;">
+<p style="margin:0;color:#94a3b8;font-size:12px;">© CeriaKid — Platform Pembelajaran Interaktif</p></td></tr>
+</table></td></tr></table></body></html>`,
+  };
+}
+
+function buildCreditEmailHTML(credits) {
+  return {
+    subject: `💰 ${credits} kredit AI dah masuk akaun anda!`,
+    html: `<!DOCTYPE html><html lang="ms"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;padding:24px 0;"><tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+<tr><td style="background:linear-gradient(135deg,#f59e0b,#ef4444);padding:32px 24px;text-align:center;">
+<h1 style="margin:0;color:#fff;font-size:28px;font-weight:900;">💰 Kredit Dah Masuk!</h1>
+<p style="margin:8px 0 0;color:rgba(255,255,255,0.95);font-size:18px;font-weight:700;">+${credits} Kredit AI</p></td></tr>
+<tr><td style="padding:28px 24px;"><p style="margin:0 0 16px;color:#1e293b;font-size:16px;">Hai! 👋</p>
+<p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.6;">Terima kasih! <strong>${credits} kredit AI</strong> dah ditambah ke akaun anda. Gunakan untuk Cikgu Firdaus, Penjana Cerita, Penjana BBM & Kuiz AI.</p></td></tr>
+<tr><td style="padding:0 24px 24px;text-align:center;">
+<a href="${APP_URL}/dashboard" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;text-decoration:none;font-weight:700;border-radius:12px;font-size:16px;">🚀 Mula Guna Sekarang</a></td></tr>
+<tr><td style="padding:0 24px 24px;text-align:center;"><p style="margin:0 0 12px;color:#64748b;font-size:14px;">Ada soalan? WhatsApp kami!</p>
+<a href="${WHATSAPP_URL}" style="display:inline-block;padding:12px 24px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;border-radius:10px;font-size:15px;">💬 WhatsApp: 017-784 4120</a></td></tr>
+<tr><td style="background:#f8fafc;padding:20px 24px;text-align:center;border-top:1px solid #e2e8f0;">
+<p style="margin:0;color:#94a3b8;font-size:12px;">© CeriaKid</p></td></tr>
+</table></td></tr></table></body></html>`,
+  };
+}
+
+// Hantar welcome email TERUS via Resend API. Fire-and-forget — failure tak break webhook.
+async function sendWelcomeEmailSafe(base44, payload) {
   try {
-    await base44.asServiceRole.functions.invoke('sendPushNotification', {
-      title,
-      body,
-      url: url || '/admin-dashboard?tab=analytics',
-      tag: 'order-notif',
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+    const RESEND_FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL');
+    if (!RESEND_API_KEY || !RESEND_FROM_EMAIL) {
+      console.error('Resend not configured — email skipped');
+      return;
+    }
+
+    const content = payload.type === 'credit'
+      ? buildCreditEmailHTML(payload.credits)
+      : buildSubscriptionEmailHTML(payload.tier, payload.bonusCredits || 0);
+
+    const from = RESEND_FROM_EMAIL.includes('<') ? RESEND_FROM_EMAIL : `CeriaKid <${RESEND_FROM_EMAIL}>`;
+
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from, to: payload.to, subject: content.subject, html: content.html }),
     });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) {
+      console.log(`Welcome email sent (${payload.type}) to ${payload.to} — id=${data.id}`);
+    } else {
+      console.error(`Resend failed (${res.status}):`, JSON.stringify(data));
+    }
   } catch (err) {
-    console.error('notifyAdmins failed:', err);
+    console.error('sendWelcomeEmail failed:', err?.message || err);
   }
 }
 
-// Hantar welcome email kepada customer baru. Fire-and-forget — failure tak break webhook.
-async function sendWelcomeEmailSafe(base44, payload) {
+// Hantar push notification TERUS via web-push library. Fire-and-forget.
+async function notifyAdmins(base44, { title, body, url }) {
   try {
-    await base44.asServiceRole.functions.invoke('sendWelcomeEmail', payload);
+    const publicKey = Deno.env.get('VAPID_PUBLIC_KEY');
+    const privateKey = Deno.env.get('VAPID_PRIVATE_KEY');
+    if (!publicKey || !privateKey) {
+      console.error('VAPID not configured — push skipped');
+      return;
+    }
+    let subject = Deno.env.get('VAPID_SUBJECT') || 'mailto:admin@ceriakid.com';
+    subject = subject.trim();
+    if (!subject.startsWith('mailto:') && !subject.startsWith('http')) subject = `mailto:${subject}`;
+    webpush.setVapidDetails(subject, publicKey, privateKey);
+
+    const subs = await base44.asServiceRole.entities.PushSubscription.filter({ isAdmin: true });
+    if (subs.length === 0) {
+      console.log('No admin push subscribers');
+      return;
+    }
+
+    const notifPayload = JSON.stringify({
+      title, body,
+      url: url || '/admin-dashboard?tab=analytics',
+      tag: 'order-notif',
+    });
+
+    let sent = 0, failed = 0;
+    const deadEndpoints = [];
+    await Promise.all(subs.map(async (sub) => {
+      try {
+        await webpush.sendNotification(
+          { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
+          notifPayload
+        );
+        sent++;
+      } catch (err) {
+        failed++;
+        if (err.statusCode === 410 || err.statusCode === 404) deadEndpoints.push(sub.id);
+      }
+    }));
+    // Cleanup dead endpoints
+    for (const id of deadEndpoints) {
+      try { await base44.asServiceRole.entities.PushSubscription.delete(id); } catch (_) {}
+    }
+    console.log(`Push sent: ${sent}/${subs.length}, failed=${failed}, cleaned=${deadEndpoints.length}`);
   } catch (err) {
-    console.error('sendWelcomeEmail failed:', err);
+    console.error('notifyAdmins failed:', err?.message || err);
   }
 }
 
