@@ -398,25 +398,9 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <FieldGroup label="Environment">
-                  <div className="flex gap-3">
-                    {['production', 'sandbox'].map(env => (
-                      <button
-                        key={env}
-                        onClick={() => set('chip_environment', env)}
-                        className={`flex-1 py-2.5 rounded-xl font-bold text-sm border-2 transition-all capitalize ${
-                          settings.chip_environment === env
-                            ? env === 'production'
-                              ? 'bg-green-500 text-white border-green-500'
-                              : 'bg-yellow-400 text-gray-900 border-yellow-400'
-                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
-                        }`}
-                      >
-                        {env === 'production' ? '🟢 Production' : '🟡 Sandbox'}
-                      </button>
-                    ))}
-                  </div>
-                </FieldGroup>
+                <div className="rounded-xl p-4 bg-green-50 border-2 border-green-200">
+                  <p className="text-xs font-bold text-green-700">🟢 Production Mode — Live payments via Chip</p>
+                </div>
 
                 {loadingSecrets && (
                   <p className="text-xs text-slate-600 mb-3">⏳ Memuat credentials dari server...</p>
