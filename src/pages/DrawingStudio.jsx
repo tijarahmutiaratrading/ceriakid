@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Trash2, Download, Undo2, Maximize2, Minimize2, ArrowLeft, Volume2, VolumeX, Images } from 'lucide-react';
+import { Trash2, Download, Undo2, Maximize2, Minimize2, ArrowLeft, Images } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import AppHeader from '@/components/AppHeader';
 import SparkleTrail from '@/components/drawing/SparkleTrail';
@@ -10,6 +10,7 @@ import TracingCelebration from '@/components/drawing/TracingCelebration';
 import MyArtGallery from '@/components/drawing/MyArtGallery';
 import { ApplePanel, AppleSectionLabel, AppleButton } from '@/components/drawing/ApplePanel';
 import CanvasFloatingToolbar from '@/components/drawing/CanvasFloatingToolbar';
+import StoryAudioPlayer from '@/components/story/StoryAudioPlayer';
 import { saveArtwork } from '@/lib/drawingGallery';
 import {
   playDrawTick,
@@ -19,8 +20,6 @@ import {
   playSaved,
   playTadaa,
   playButtonTap,
-  setDrawingSoundEnabled,
-  isDrawingSoundEnabled,
 } from '@/lib/drawingAudio';
 
 const COLORS = [
@@ -248,7 +247,6 @@ export default function DrawingStudio() {
   const [brushSize, setBrushSize] = useState(BRUSH_SIZES[1]);
   const [stickerMode, setStickerMode] = useState(null);
   const [showSavedToast, setShowSavedToast] = useState(false);
-  const [soundOn, setSoundOn] = useState(isDrawingSoundEnabled());
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [celebration, setCelebration] = useState({ open: false, accuracy: 0 });
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0); // 0..LETTERS_PER_ROW-1 — current letter in the row
@@ -263,13 +261,6 @@ export default function DrawingStudio() {
   // reliably restore it after the layout/canvas remount finishes. This survives
   // ResizeObserver firing on the normal canvas (which would otherwise wipe it).
   const transitionSnapshotRef = useRef(null);
-
-  const toggleSound = () => {
-    const next = !soundOn;
-    setSoundOn(next);
-    setDrawingSoundEnabled(next);
-    if (next) playButtonTap();
-  };
 
   // Capture fullscreen canvas BEFORE React unmounts the portal, then exit.
   // This is critical: by the time the useEffect for isFullscreen runs,
@@ -1197,10 +1188,10 @@ export default function DrawingStudio() {
                     {mode === 'draw' ? `${tool.emoji} ${tool.label}` : mode === 'trace' ? `✏️ ${selectedShape.label}` : `🖍️ ${selectedColoringPage.label}`}
                   </p>
                 </div>
-                <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
-                  <button onClick={toggleSound} className="p-1.5 sm:p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-all" title={soundOn ? 'Matikan bunyi' : 'Hidupkan bunyi'}>
-                    {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-                  </button>
+                <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
+                  <div className="scale-90 sm:scale-100 origin-right">
+                    <StoryAudioPlayer autoPlay />
+                  </div>
                   <button onClick={() => { setGalleryOpen(true); playButtonTap(); }} className="p-1.5 sm:p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-all" title="Kerja Saya">
                     <Images className="w-4 h-4" />
                   </button>
@@ -1520,8 +1511,9 @@ export default function DrawingStudio() {
               <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(circle, #bae6fd 0%, transparent 70%)' }} />
             </div>
 
-            {/* Top-right floating: minimize button + (for trace/color) category picker trigger */}
+            {/* Top-right floating: audio player + minimize button */}
             <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
+              <StoryAudioPlayer autoPlay />
               <button
                 onClick={exitFullscreen}
                 title="Keluar fullscreen"
