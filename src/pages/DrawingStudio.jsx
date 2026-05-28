@@ -1552,8 +1552,8 @@ export default function DrawingStudio() {
                 />
               )}
 
-              {/* Floating toolbar — sticky di bawah canvas (draw & color modes) */}
-              {(mode === 'draw' || mode === 'color') && (
+              {/* Floating toolbar — sama macam main canvas */}
+              {mode !== 'trace' && (
                 <div className="absolute left-1/2 -translate-x-1/2 bottom-5 z-20">
                   <CanvasFloatingToolbar
                     tools={TOOLS}
@@ -1575,97 +1575,6 @@ export default function DrawingStudio() {
                     canUndo={history.length > 0}
                   />
                 </div>
-              )}
-
-              {/* Floating category/shape picker untuk trace + color modes */}
-              {mode === 'color' && (
-                <div className="absolute left-1/2 -translate-x-1/2 top-4 z-20 max-w-[92vw]">
-                  <div
-                    className="flex gap-1.5 overflow-x-auto px-2 py-1.5 rounded-full scrollbar-hide"
-                    style={{
-                      background: 'rgba(255,255,255,0.96)',
-                      backdropFilter: 'blur(20px) saturate(180%)',
-                      boxShadow: '0 8px 24px rgba(15,23,42,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
-                    }}
-                  >
-                    {COLORING_PAGES.map(page => {
-                      const active = selectedColoringPage.id === page.id;
-                      return (
-                        <button
-                          key={page.id}
-                          onClick={() => setSelectedColoringPage(page)}
-                          className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'text-slate-700 hover:bg-slate-100'}`}
-                        >
-                          {page.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {mode === 'trace' && (
-                <>
-                  <div className="absolute left-1/2 -translate-x-1/2 top-4 z-20 max-w-[92vw]">
-                    <div
-                      className="flex gap-1.5 overflow-x-auto px-2 py-1.5 rounded-full scrollbar-hide"
-                      style={{
-                        background: 'rgba(255,255,255,0.96)',
-                        backdropFilter: 'blur(20px) saturate(180%)',
-                        boxShadow: '0 8px 24px rgba(15,23,42,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
-                      }}
-                    >
-                      {TRACING_CATEGORIES.map(category => {
-                        const active = selectedTracingCategory === category.id;
-                        return (
-                          <button
-                            key={category.id}
-                            onClick={() => { setSelectedTracingCategory(category.id); setSelectedShape(category.shapes[0]); }}
-                            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${active ? 'bg-slate-900 text-white shadow-md' : 'text-slate-700 hover:bg-slate-100'}`}
-                          >
-                            {category.label}
-                          </button>
-                        );
-                      })}
-                      <span className="w-px h-5 bg-black/10 self-center mx-1 flex-shrink-0" />
-                      {tracingShapes.map(s => {
-                        const active = selectedShape.label === s.label;
-                        return (
-                          <button
-                            key={s.label}
-                            onClick={() => setSelectedShape(s)}
-                            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'text-slate-700 hover:bg-slate-100'}`}
-                          >
-                            {s.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Tracing actions — floating pill di bawah */}
-                  <div className="absolute left-1/2 -translate-x-1/2 bottom-5 z-20">
-                    <div
-                      className="flex items-center gap-1 px-1.5 py-1.5 rounded-full"
-                      style={{
-                        background: 'rgba(255,255,255,0.96)',
-                        backdropFilter: 'blur(20px) saturate(180%)',
-                        boxShadow: '0 8px 24px rgba(15,23,42,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
-                      }}
-                    >
-                      <button onClick={undo} disabled={history.length === 0} title="Undo" className="w-10 h-10 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 disabled:opacity-30 transition">
-                        <Undo2 className="w-4 h-4" />
-                      </button>
-                      <button onClick={handleClear} title="Kosongkan" className="w-10 h-10 rounded-full flex items-center justify-center text-red-600 hover:bg-red-50 transition">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                      <button onClick={downloadCanvas} title="Simpan" className="h-10 px-4 rounded-full inline-flex items-center gap-1.5 bg-slate-900 text-white font-bold text-sm shadow-md hover:bg-slate-800 transition">
-                        <Download className="w-4 h-4" />
-                        <span className="hidden sm:inline">Simpan</span>
-                      </button>
-                    </div>
-                  </div>
-                </>
               )}
             </div>
           </div>,
