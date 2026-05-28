@@ -82,18 +82,14 @@ export default function ChildProfileCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: idx * 0.08, type: 'spring', stiffness: 220 }}
-      whileHover={{ y: -3 }}
-      className="rounded-3xl relative overflow-hidden group"
+      whileHover={{ y: -3, scale: 1.01 }}
+      className="rounded-3xl relative overflow-hidden group transition-all"
       style={{
-        background: 'linear-gradient(135deg, rgba(15,23,42,0.92), rgba(88,28,135,0.85), rgba(190,24,93,0.7))',
-        backdropFilter: 'blur(22px)',
-        border: '1px solid rgba(255,255,255,0.2)',
-        boxShadow: '0 20px 60px -10px rgba(31, 16, 92, 0.4)',
+        background: 'rgba(255,255,255,0.06)',
+        backdropFilter: 'blur(14px)',
+        border: '2px dashed rgba(255,255,255,0.35)',
       }}
     >
-      {/* Decorative glow */}
-      <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-fuchsia-400/20 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-16 -left-10 w-40 h-40 rounded-full bg-cyan-400/15 blur-3xl pointer-events-none" />
 
       {/* Leader crown */}
       {isLeader && (
