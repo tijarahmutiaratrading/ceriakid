@@ -75,7 +75,7 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
           phone: editPhone.trim()
         });
         toast({ title: '✅ Info dikemas kini', description: 'Nama dan no telefon telah disimpan.' });
-        onUpdate?.();
+        await onUpdate?.();
         setEditMode(false);
       } else {
         toast({ title: '❌ Pelanggan tidak dijumpai', variant: 'destructive' });
