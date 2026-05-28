@@ -13,7 +13,16 @@ const AGE_OPTIONS = [
   { value: 'sekolah_rendah', label: 'Sekolah Rendah', sub: '7–12 tahun', emoji: '📚' },
 ];
 
-const AVATARS = ['🐱', '🐶', '🐸', '🦊', '🐼', '🐨', '🦁', '🐯'];
+const AVATARS = [
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3df7477bd_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a716e8427_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/cc2c8d491_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8a9bbc813_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1255ecf00_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/208266350_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fcff737ee_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/980a2e0ce_generated_image.png',
+];
 
 export default function ChildrenProfiles() {
   const { user } = useAuth();
@@ -401,11 +410,11 @@ export default function ChildrenProfiles() {
                   <div className="flex items-start gap-3">
                     <div className="relative flex-shrink-0">
                       <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl shadow-inner ring-1 ring-white/20 overflow-hidden">
-                        {child.avatarUrl ? (
-                          <img src={child.avatarUrl} alt={child.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <span>{AVATARS[idx % AVATARS.length]}</span>
-                        )}
+                        <img
+                          src={child.avatarUrl || AVATARS[idx % AVATARS.length]}
+                          alt={child.name}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                       <motion.button
                         whileTap={{ scale: 0.9 }}
