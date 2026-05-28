@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Undo2, Trash2, Palette, Sparkles, Brush, Ruler } from 'lucide-react';
+import CustomColorPicker from './CustomColorPicker';
 
 /**
  * Pro floating toolbar overlay untuk canvas Drawing Studio.
@@ -158,18 +159,8 @@ export default function CanvasFloatingToolbar({
                     );
                   })}
                 </div>
-                <div className="flex items-center gap-2 mt-3 rounded-2xl p-2.5 bg-gradient-to-br from-purple-50 to-pink-50 ring-1 ring-purple-100">
-                  <input
-                    type="color"
-                    value={color}
-                    onChange={(e) => onColorChange(e.target.value)}
-                    className="w-10 h-10 rounded-xl cursor-pointer border-0 bg-transparent"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-xs text-slate-900">Warna Custom</p>
-                    <p className="text-[10px] text-slate-500 font-medium">Pilih sebarang warna</p>
-                  </div>
-                  <div className="w-8 h-8 rounded-full ring-2 ring-white shadow-md" style={{ backgroundColor: color }} />
+                <div className="mt-3">
+                  <CustomColorPicker color={color} onChange={onColorChange} />
                 </div>
               </Popover>
             }
