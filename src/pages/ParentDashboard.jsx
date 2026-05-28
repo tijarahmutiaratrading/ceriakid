@@ -120,43 +120,9 @@ export default function ParentDashboard() {
   const avgStarsAll = totalGamesAll > 0 ? (totalStarsAll / totalGamesAll).toFixed(1) : '0.0';
 
   return (
-    <div className="min-h-screen font-nunito relative overflow-hidden">
-      {/* Custom background — deeper gradient gives white cards proper contrast */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          zIndex: 0,
-          background: 'linear-gradient(135deg, #4c1d95 0%, #6d28d9 30%, #be185d 65%, #db2777 100%)',
-        }}
-      />
-
-      {/* Subtle floating orbs — low opacity for depth without affecting contrast */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
-        <motion.div
-          animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -top-40 -right-40 w-[28rem] h-[28rem] rounded-full bg-fuchsia-400/20 blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, -25, 0], y: [0, 20, 0] }}
-          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/3 -left-32 w-[24rem] h-[24rem] rounded-full bg-indigo-400/20 blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, 20, 0], y: [0, -15, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-20 right-10 w-[26rem] h-[26rem] rounded-full bg-pink-400/15 blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, -15, 0], y: [0, 15, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-2/3 left-1/4 w-[20rem] h-[20rem] rounded-full bg-violet-400/15 blur-3xl"
-        />
-      </div>
-
-      <AppHeader showBack={true} backTo="/dashboard" theme="dark" />
-      <div className="relative max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
+    <div className="min-h-screen font-nunito">
+      <AppHeader showBack={true} backTo="/dashboard" />
+      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
 
         {/* 1. Family Hero — overall snapshot */}
         <ParentHeroCard
