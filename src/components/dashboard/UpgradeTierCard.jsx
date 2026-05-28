@@ -4,9 +4,10 @@ import { base44 } from '@/api/base44Client';
 import { Crown, Check, Loader, ArrowUp, CheckCircle2 } from 'lucide-react';
 
 // Tier hierarchy — used to determine which packages are upgrades vs current/lower
+// Note: premium & pro adalah tier admin/legacy — dianggap setara dengan keluarga (tertinggi)
 const TIER_ORDER = ['free', 'asas', 'standard', 'keluarga', 'premium', 'pro'];
 
-const TIER_PRICES = { free: 0, asas: 49, standard: 99, keluarga: 199, premium: 199, pro: 299 };
+const TIER_PRICES = { free: 0, asas: 49, standard: 99, keluarga: 199, premium: 199, pro: 199 };
 
 // Semua pakej yang boleh ditunjuk (free tak masuk sebab tu bukan pakej "naik taraf")
 const ALL_TIERS = {
@@ -32,13 +33,6 @@ const ALL_TIERS = {
     features: ['200 game (tiada kunci)', 'Sehingga 4 anak', '4 peranti', 'Sokongan prioriti'],
     popular: true,
   },
-  pro: {
-    name: 'pro',
-    nameMY: '💎 Pro',
-    priceMYR: 299,
-    color: 'from-amber-400 via-orange-500 to-pink-500',
-    features: ['Semua ciri Keluarga', 'Akses penuh AI', 'Sokongan utama 24/7', 'Akses awal ciri baharu'],
-  },
 };
 
 const TIER_LABEL = {
@@ -46,8 +40,8 @@ const TIER_LABEL = {
   asas: '🌱 Asas',
   standard: '⭐ Standard',
   keluarga: '👑 Keluarga',
-  premium: '⭐ Premium',
-  pro: '💎 Pro',
+  premium: '👑 Keluarga',
+  pro: '👑 Keluarga',
 };
 
 export default function UpgradeTierCard({ currentTier, user }) {
@@ -56,8 +50,9 @@ export default function UpgradeTierCard({ currentTier, user }) {
   const [confirmTier, setConfirmTier] = useState(null);
 
   const currentIdx = TIER_ORDER.indexOf(currentTier);
-  const allTierKeys = Object.keys(ALL_TIERS); // ['asas','standard','keluarga','pro']
-  const isOnTopTier = currentTier === 'pro';
+  const allTierKeys = Object.keys(ALL_TIERS); // ['asas','standard','keluarga']
+  // pro/premium/keluarga semua dianggap di pakej tertinggi (Keluarga)
+  const isOnTopTier = ['keluarga', 'premium', 'pro'].includes(currentTier);
   const currentLabel = TIER_LABEL[currentTier] || '🆓 Percuma';
 
   const handleUpgrade = async (tierName) => {
@@ -120,9 +115,10 @@ export default function UpgradeTierCard({ currentTier, user }) {
         {allTierKeys.map((tierKey) => {
           const tier = ALL_TIERS[tierKey];
           const tierIdx = TIER_ORDER.indexOf(tierKey);
-          const isCurrent = tierKey === currentTier;
-          const isLower = tierIdx <= currentIdx;
-          const isUpgrade = tierIdx > currentIdx;
+          // Kalau user pro/premium → tunjuk keluarga sebagai "current"
+          const isCurrent = tierKey === currentTier || (isOnTopTier && tierKey === 'keluarga');
+          const isLower = tierIdx <= currentIdx && !isCurrent;
+          const isUpgrade = tierIdx > currentIdx && !isCurrent;
           const isProcessing = upgrading === tierKey;
 
           const currentPrice = TIER_PRICES[currentTier] || 0;
