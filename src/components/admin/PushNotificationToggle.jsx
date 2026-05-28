@@ -86,11 +86,23 @@ export default function PushNotificationToggle({ vapidPublicKey }) {
       });
 
       const subJson = sub.toJSON();
-      await base44.functions.invoke('subscribeToPush', {
+      console.log('[Push] Subscription created:', subJson);
+
+      if (!subJson.endpoint || !subJson.keys?.p256dh || !subJson.keys?.auth) {
+        throw new Error('Subscription incomplete — endpoint atau keys hilang');
+      }
+
+      const saveRes = await base44.functions.invoke('subscribeToPush', {
         endpoint: subJson.endpoint,
         keys: subJson.keys,
         deviceLabel: detectDevice(),
       });
+      console.log('[Push] Server save response:', saveRes);
+
+      if (!saveRes?.data?.success) {
+        const errMsg = saveRes?.data?.error || 'Server tolak subscription';
+        throw new Error(errMsg);
+      }
 
       setSubscribed(true);
       toast({ title: '✅ Notification diaktifkan!', description: 'Anda akan terima notifikasi bila ada order baru.' });
