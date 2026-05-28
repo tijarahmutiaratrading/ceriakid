@@ -207,11 +207,7 @@ export default function ClientDashboard() {
             <div className="h-1 w-8 bg-gradient-to-r from-cyan-300 to-pink-300 rounded-full" />
             <p className="text-white/80 text-xs font-black uppercase tracking-wider">📱 Device Berdaftar</p>
           </div>
-          <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-            <div className="p-4">
-              <ManageDevices userEmail={user?.email} tier={userTier} />
-            </div>
-          </div>
+          <ManageDevices userEmail={user?.email} tier={userTier} />
         </motion.div>
 
         {/* Offline Mode — parent-friendly guide & sync status */}

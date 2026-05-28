@@ -36,21 +36,21 @@ export default function ManageDevices({ userEmail, tier }) {
   }
 
   return (
-    <div className="bg-white/40 backdrop-blur-xl rounded-2xl p-5 border-2 border-white/30 shadow-xl">
+    <div className="rounded-3xl p-5 shadow-lg" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-purple-600" />
-          <h3 className="font-black text-gray-900">Device Berdaftar</h3>
+          <Shield className="w-5 h-5 text-purple-300" />
+          <h3 className="font-black text-white">Device Berdaftar</h3>
         </div>
         <span className={`px-3 py-1 rounded-full text-xs font-black ${
-          devices.length >= limit ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'
+          devices.length >= limit ? 'bg-red-500/25 text-red-200 border border-red-300/40' : 'bg-green-500/25 text-green-200 border border-green-300/40'
         }`}>
           {devices.length} / {limit} device
         </span>
       </div>
 
       {devices.length === 0 ? (
-        <p className="text-gray-400 text-sm text-center py-4">Tiada device berdaftar</p>
+        <p className="text-white/60 text-sm text-center py-4">Tiada device berdaftar</p>
       ) : (
         <div className="space-y-3">
           {devices.map((device) => {
@@ -61,21 +61,21 @@ export default function ManageDevices({ userEmail, tier }) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`flex items-start gap-3 justify-between rounded-xl p-3 border ${
-                  isCurrent ? 'bg-purple-50 border-purple-200' : 'bg-gray-50 border-gray-100'
+                  isCurrent ? 'bg-purple-500/20 border-purple-300/40' : 'bg-white/5 border-white/10'
                 }`}
               >
                 <div className="flex items-start gap-3 min-w-0">
-                  <Smartphone className={`w-5 h-5 ${isCurrent ? 'text-purple-600' : 'text-gray-400'}`} />
+                  <Smartphone className={`w-5 h-5 ${isCurrent ? 'text-purple-300' : 'text-white/50'}`} />
                   <div className="min-w-0">
-                    <p className="font-bold text-gray-800 text-sm flex flex-wrap items-center gap-2 break-words">
+                    <p className="font-bold text-white text-sm flex flex-wrap items-center gap-2 break-words">
                       {device.deviceName}
                       {isCurrent && (
-                        <span className="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-black">
+                        <span className="text-xs bg-purple-500/30 text-purple-100 px-2 py-0.5 rounded-full font-black border border-purple-300/40">
                           Device Ini
                         </span>
                       )}
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-white/55">
                       Terakhir: {device.lastSeen ? format(new Date(device.lastSeen), 'dd MMM yyyy, HH:mm') : '-'}
                     </p>
                   </div>
@@ -83,7 +83,7 @@ export default function ManageDevices({ userEmail, tier }) {
                 {!isCurrent && (
                   <button
                     onClick={() => handleRemove(device)}
-                    className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                    className="p-2 text-red-300 hover:text-red-200 hover:bg-red-500/15 rounded-xl transition-all"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -94,8 +94,8 @@ export default function ManageDevices({ userEmail, tier }) {
         </div>
       )}
 
-      <p className="text-xs text-gray-900 mt-4 text-center">
-        Pakej <span className="font-bold capitalize">{tier}</span> — maksimum {limit} device
+      <p className="text-xs text-white/70 mt-4 text-center">
+        Pakej <span className="font-bold capitalize text-white">{tier}</span> — maksimum {limit} device
       </p>
     </div>
   );
