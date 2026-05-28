@@ -49,10 +49,11 @@ export default function CanvasFloatingToolbar({
       <div
         className="flex items-stretch gap-1 p-1.5 rounded-[1.75rem]"
         style={{
-          background: 'linear-gradient(180deg, rgba(30,41,59,0.95), rgba(15,23,42,0.95))',
-          backdropFilter: 'blur(24px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.08) inset, 0 0 0 1px rgba(255,255,255,0.08)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.35))',
+          backdropFilter: 'blur(28px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(28px) saturate(200%)',
+          boxShadow: '0 20px 50px rgba(15,23,42,0.18), 0 1px 0 rgba(255,255,255,0.9) inset, 0 0 0 1px rgba(255,255,255,0.6)',
+          border: '1px solid rgba(255,255,255,0.5)',
         }}
       >
         {/* TOOL */}
@@ -87,7 +88,7 @@ export default function CanvasFloatingToolbar({
             </Popover>
           }
         >
-          <div className="flex items-center justify-center w-7 h-7 rounded-xl bg-white/10 ring-1 ring-white/10">
+          <div className="flex items-center justify-center w-7 h-7 rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
             <span className="text-lg leading-none">{tool.emoji}</span>
           </div>
         </ProToolButton>
@@ -122,8 +123,8 @@ export default function CanvasFloatingToolbar({
             </Popover>
           }
         >
-          <div className="flex items-center justify-center w-7 h-7 rounded-xl bg-white/10 ring-1 ring-white/10">
-            <span className="inline-block rounded-full bg-white" style={{ width: Math.min(brushSize.dot, 16), height: Math.min(brushSize.dot, 16) }} />
+          <div className="flex items-center justify-center w-7 h-7 rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
+            <span className="inline-block rounded-full bg-slate-800" style={{ width: Math.min(brushSize.dot, 16), height: Math.min(brushSize.dot, 16) }} />
           </div>
         </ProToolButton>
 
@@ -166,10 +167,10 @@ export default function CanvasFloatingToolbar({
             }
           >
             <div
-              className="w-7 h-7 rounded-xl ring-1 ring-white/20"
+              className="w-7 h-7 rounded-xl ring-2 ring-white/90 shadow-md"
               style={{
                 backgroundColor: colorSwatch,
-                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.2)',
+                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.12), 0 2px 4px rgba(15,23,42,0.15)',
               }}
             />
           </ProToolButton>
@@ -206,14 +207,14 @@ export default function CanvasFloatingToolbar({
               </Popover>
             }
           >
-            <div className="flex items-center justify-center w-7 h-7 rounded-xl bg-white/10 ring-1 ring-white/10">
+            <div className="flex items-center justify-center w-7 h-7 rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
               <span className="text-lg leading-none">{stickerMode || '✨'}</span>
             </div>
           </ProToolButton>
         )}
 
         {/* DIVIDER */}
-        <div className="self-center w-px h-8 bg-white/15 mx-0.5" />
+        <div className="self-center w-px h-8 bg-slate-900/10 mx-0.5" />
 
         {/* ACTIONS */}
         <ActionButton onClick={onUndo} disabled={!canUndo} label="Undo">
@@ -250,11 +251,11 @@ function ProToolButton({ active, isActive, onClick, label, icon, children, popov
         onClick={onClick}
         title={label}
         className={`group relative flex flex-col items-center justify-center gap-0.5 w-14 sm:w-16 h-12 rounded-2xl transition ${
-          active ? 'bg-white/15 ring-1 ring-white/25' : 'hover:bg-white/8'
+          active ? 'bg-white/70 ring-1 ring-slate-900/10 shadow-sm' : 'hover:bg-white/50'
         }`}
       >
         {children}
-        <span className={`flex items-center gap-0.5 text-[9px] font-bold leading-none mt-0.5 ${isActive ? 'text-white' : 'text-white/60'}`}>
+        <span className={`flex items-center gap-0.5 text-[9px] font-bold leading-none mt-0.5 ${isActive ? 'text-slate-900' : 'text-slate-500'}`}>
           <span className="opacity-70">{icon}</span>
           <span className="truncate max-w-[3rem]">{label}</span>
         </span>
@@ -272,7 +273,7 @@ function ActionButton({ onClick, disabled, label, danger, children }) {
       disabled={disabled}
       title={label}
       className={`flex flex-col items-center justify-center gap-0.5 w-12 sm:w-14 h-12 rounded-2xl transition disabled:opacity-25 disabled:cursor-not-allowed ${
-        danger ? 'text-red-300 hover:bg-red-500/15 hover:text-red-200' : 'text-white/85 hover:bg-white/10 hover:text-white'
+        danger ? 'text-red-500 hover:bg-red-500/10 hover:text-red-600' : 'text-slate-700 hover:bg-white/50 hover:text-slate-900'
       }`}
     >
       {children}
