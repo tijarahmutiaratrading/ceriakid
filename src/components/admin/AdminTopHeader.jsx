@@ -16,10 +16,10 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
   const isVisible = useScrollDirection();
 
   return (
-    <header className={`hidden md:flex fixed top-4 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
+    <header className={`hidden md:flex fixed top-3 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
       {/* Floating pill nav (Apple Fitness style — glossy light) */}
       <nav
-        className="pointer-events-auto flex items-center gap-0.5 px-1.5 py-1.5 rounded-full shadow-xl shadow-black/20 max-w-[calc(100vw-2rem)]"
+        className="pointer-events-auto flex items-center gap-0 px-1.5 py-1.5 rounded-full shadow-xl shadow-black/20 max-w-[calc(100vw-2rem)]"
         style={{
           background: 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
           backdropFilter: 'blur(20px) saturate(180%)',
@@ -28,24 +28,29 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
           boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
         }}
       >
+        <img
+          src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
+          alt="CeriaKid"
+          className="h-8 w-8 rounded-full object-cover ml-1 mr-2 ring-1 ring-white/60 shadow-sm"
+        />
         {/* Landing page */}
         <Link
           to="/"
-          className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] lg:text-xs font-black text-slate-700 hover:text-slate-900 hover:bg-white/50 transition-all whitespace-nowrap"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-black text-slate-800 hover:text-slate-900 hover:bg-white/50 transition-colors whitespace-nowrap"
           title="Lihat Landing Page"
         >
           <Home className="w-3.5 h-3.5" />
-          <span className="hidden lg:inline">Landing</span>
+          <span>Landing</span>
         </Link>
 
         {/* Switch ke user dashboard */}
         <Link
           to="/dashboard"
-          className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] lg:text-xs font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-all whitespace-nowrap"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-colors whitespace-nowrap"
           title="Tukar ke Dashboard Pengguna"
         >
           <LayoutGrid className="w-3.5 h-3.5" />
-          <span className="hidden lg:inline">Pengguna</span>
+          <span>Pengguna</span>
         </Link>
 
         {/* Admin tabs */}
@@ -56,7 +61,7 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
               key={item.key}
               type="button"
               onClick={() => setActiveTab(item.key)}
-              className={`relative px-3 lg:px-4 py-1.5 rounded-full font-black text-xs lg:text-sm transition-colors whitespace-nowrap ${
+              className={`relative px-3 py-1.5 rounded-full font-black text-sm transition-colors whitespace-nowrap ${
                 active ? 'text-white' : 'text-slate-800 hover:text-slate-900'
               }`}
             >

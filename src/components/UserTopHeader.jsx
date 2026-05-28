@@ -89,7 +89,7 @@ export default function UserTopHeader() {
   return (
     <header
       ref={navRef}
-      className={`hidden md:flex fixed top-6 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
+      className={`hidden md:flex fixed top-3 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
     >
       {/* Center: Floating pill nav (Apple Fitness style — adaptive glass) */}
       <nav
@@ -106,10 +106,15 @@ export default function UserTopHeader() {
             : '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
         }}
       >
+        <img
+          src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
+          alt="CeriaKid"
+          className="h-8 w-8 rounded-full object-cover ml-1 mr-2 ring-1 ring-white/60 shadow-sm"
+        />
         {isAdmin && (
           <Link
             to="/admin-dashboard"
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-black transition-all ${
               isDarkBg
                 ? 'text-amber-300 hover:text-amber-200 hover:bg-white/15'
                 : 'text-amber-700 hover:text-amber-900 hover:bg-white/50'
