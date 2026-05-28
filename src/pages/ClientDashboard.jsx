@@ -110,17 +110,13 @@ export default function ClientDashboard() {
           <PersonalInfoCard user={user} />
         </motion.div>
 
-        {/* Langganan, Jantina & Naik Taraf — gabungan dalam satu card */}
+        {/* Langganan & Naik Taraf */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
           className="mb-4"
         >
-          <div className="flex items-center gap-2 mb-3 px-1">
-            <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-orange-400 rounded-full" />
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider">💎 Langganan & Pakej</p>
-          </div>
           <UpgradeTierCard currentTier={userTier} user={user} gender={gender} onGenderChange={setGender} />
         </motion.div>
 
@@ -131,10 +127,6 @@ export default function ClientDashboard() {
           transition={{ delay: 0.2 }}
           className="mb-5"
         >
-          <div className="flex items-center gap-2 mb-3 px-1">
-            <div className="h-1 w-8 bg-gradient-to-r from-cyan-300 to-pink-300 rounded-full" />
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider">📱 Device Berdaftar</p>
-          </div>
           <ManageDevices userEmail={user?.email} tier={userTier} />
         </motion.div>
 
@@ -146,10 +138,6 @@ export default function ClientDashboard() {
             transition={{ delay: 0.22 }}
             className="mb-5"
           >
-            <div className="flex items-center gap-2 mb-3 px-1">
-              <div className="h-1 w-8 bg-gradient-to-r from-emerald-300 to-cyan-400 rounded-full" />
-              <p className="text-white/80 text-xs font-black uppercase tracking-wider">📡 Mode Offline</p>
-            </div>
             <OfflineModeCard />
           </motion.div>
         )}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Wifi, WifiOff, RefreshCw, Info, CheckCircle2, Clock, Download } from 'lucide-react';
+import { Wifi, WifiOff, RefreshCw, Info, CheckCircle2, Clock, Download, Radio } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { getSyncQueue, syncOfflineProgress, getLastSyncTime } from '@/lib/offlineSyncManager';
@@ -63,10 +63,21 @@ export default function OfflineModeCard() {
 
   return (
     <>
-      <div className="rounded-3xl overflow-hidden shadow-xl p-5" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+      <div className="rounded-3xl overflow-hidden shadow-xl p-5 space-y-4" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+
+        {/* Header dalam card */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-lg flex-shrink-0">
+            <Radio className="w-5 h-5 text-white" strokeWidth={3} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-white font-black text-base leading-tight">Mode Offline</p>
+            <p className="text-white/70 text-xs font-semibold">Main game tanpa internet & sync auto</p>
+          </div>
+        </div>
 
         {/* Status row */}
-        <div className="flex items-center justify-between gap-3 mb-4">
+        <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${isOnline ? 'bg-emerald-500/25 border border-emerald-400/40' : 'bg-orange-500/25 border border-orange-400/40'}`}>
               {isOnline ? <Wifi className="w-5 h-5 text-emerald-300" /> : <WifiOff className="w-5 h-5 text-orange-300" />}
@@ -91,7 +102,7 @@ export default function OfflineModeCard() {
         </div>
 
         {/* Stats grid */}
-        <div className="grid grid-cols-3 gap-2 mb-4">
+        <div className="grid grid-cols-3 gap-2">
           {/* PWA install status */}
           <div className="rounded-xl p-2.5 text-center" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
             <Download className={`w-4 h-4 mx-auto mb-1 ${isPWA ? 'text-emerald-300' : 'text-white/50'}`} />
@@ -120,7 +131,7 @@ export default function OfflineModeCard() {
             whileTap={{ scale: 0.97 }}
             onClick={handleSyncNow}
             disabled={!isOnline || syncing}
-            className="w-full mb-3 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-black text-xs flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
+            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-black text-xs flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${syncing ? 'animate-spin' : ''}`} />
             {syncing ? 'Sedang Sync...' : `Sync ${pendingCount} Progress Sekarang`}

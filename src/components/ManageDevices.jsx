@@ -36,16 +36,20 @@ export default function ManageDevices({ userEmail, tier }) {
   }
 
   return (
-    <div className="rounded-3xl p-5 shadow-lg" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-        <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-purple-300" />
-          <h3 className="font-black text-white">Device Berdaftar</h3>
+    <div className="rounded-3xl p-5 shadow-lg space-y-4" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+      {/* Header dalam card */}
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-400 to-pink-400 flex items-center justify-center shadow-lg flex-shrink-0">
+          <Shield className="w-5 h-5 text-white" strokeWidth={3} />
         </div>
-        <span className={`px-3 py-1 rounded-full text-xs font-black ${
+        <div className="flex-1 min-w-0">
+          <p className="text-white font-black text-base leading-tight">Device Berdaftar</p>
+          <p className="text-white/70 text-xs font-semibold">Urus peranti yang log masuk akaun</p>
+        </div>
+        <span className={`px-2.5 py-1 rounded-full text-[11px] font-black flex-shrink-0 ${
           devices.length >= limit ? 'bg-red-500/25 text-red-200 border border-red-300/40' : 'bg-green-500/25 text-green-200 border border-green-300/40'
         }`}>
-          {devices.length} / {limit} device
+          {devices.length} / {limit}
         </span>
       </div>
 
