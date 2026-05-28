@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, LogOut, Settings } from 'lucide-react';
+import { ArrowRight, LogOut, Settings, Sparkles, Crown, AlertCircle } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
+
+const TIER_LABELS = {
+  free: 'Percuma',
+  asas: 'Asas',
+  standard: 'Standard',
+  keluarga: 'Keluarga',
+  premium: 'Premium',
+  pro: 'Pro',
+};
 
 // Apple Fitness style hero carousel — full-bleed image, dark gradient, bottom-left content, CTA pill
 const SLIDES = [
@@ -50,6 +60,8 @@ const SLIDES = [
 export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
   const [index, setIndex] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [subscription, setSubscription] = useState(null);
+  const [credits, setCredits] = useState(0);
   const slide = SLIDES[index];
 
   // Auto-advance every 6s
@@ -60,7 +72,46 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
     return () => clearInterval(timer);
   }, []);
 
+  // Fetch subscription + credits
+  useEffect(() => {
+    if (!user?.email) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const [subs, creditData] = await Promise.all([
+          base44.entities.UserSubscription.filter({ email: user.email }).catch(() => []),
+          base44.entities.UserCredit.filter({ userEmail: user.email }).catch(() => []),
+        ]);
+        if (cancelled) return;
+        setSubscription(subs?.[0] || null);
+        setCredits(creditData?.[0]?.balance || 0);
+      } catch (err) {
+        console.error('Failed to load hero stats:', err);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [user?.email]);
+
   const firstName = (user?.full_name || '').split(' ')[0] || 'Kawan';
+
+  // Compute subscription status
+  const tier = subscription?.tier || 'free';
+  const tierLabel = TIER_LABELS[tier] || 'Percuma';
+  const expiryDate = subscription?.currentPeriodEnd ? new Date(subscription.currentPeriodEnd) : null;
+  const isExpired = expiryDate && expiryDate < new Date();
+  const daysLeft = expiryDate ? Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24)) : null;
+  const isExpiringSoon = daysLeft !== null && daysLeft > 0 && daysLeft <= 7;
+  const expiryText = !expiryDate || tier === 'free'
+    ? null
+    : isExpired
+      ? 'Tamat tempoh'
+      : daysLeft === 0
+        ? 'Tamat hari ini'
+        : daysLeft === 1
+          ? 'Tamat esok'
+          : daysLeft <= 30
+            ? `${daysLeft} hari lagi`
+            : expiryDate.toLocaleDateString('ms-MY', { day: 'numeric', month: 'short', year: 'numeric' });
 
   return (
     <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[4/5] sm:aspect-[16/8] md:aspect-[16/7] max-h-[520px] sm:max-h-[560px]">
@@ -168,6 +219,55 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
             </>
           )}
         </AnimatePresence>
+      </div>
+
+      {/* Quick stats pill — top right (subscription + credits) */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 flex flex-col items-end gap-2">
+        {/* Subscription pill */}
+        <Link to="/settings" className="block">
+          <motion.div
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-md shadow-lg transition-all ${
+              isExpired
+                ? 'bg-red-500/85 border border-red-300/50'
+                : isExpiringSoon
+                  ? 'bg-amber-500/85 border border-amber-200/50'
+                  : tier === 'free'
+                    ? 'bg-white/20 border border-white/30'
+                    : 'bg-gradient-to-r from-purple-500/85 to-pink-500/85 border border-white/30'
+            }`}
+          >
+            {isExpired || isExpiringSoon ? (
+              <AlertCircle className="w-3.5 h-3.5 text-white flex-shrink-0" />
+            ) : tier === 'free' ? (
+              <Sparkles className="w-3.5 h-3.5 text-white flex-shrink-0" />
+            ) : (
+              <Crown className="w-3.5 h-3.5 text-yellow-200 flex-shrink-0" />
+            )}
+            <div className="flex flex-col items-start leading-tight">
+              <span className="text-white font-black text-[10px] sm:text-[11px] drop-shadow">{tierLabel}</span>
+              {expiryText && (
+                <span className="text-white/85 text-[9px] sm:text-[10px] font-bold drop-shadow">{expiryText}</span>
+              )}
+            </div>
+          </motion.div>
+        </Link>
+
+        {/* Credits pill */}
+        <Link to="/buy-credits" className="block">
+          <motion.div
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-400/85 to-blue-500/85 backdrop-blur-md shadow-lg border border-white/30"
+          >
+            <span className="text-base leading-none">💎</span>
+            <div className="flex flex-col items-start leading-tight">
+              <span className="text-white font-black text-[10px] sm:text-[11px] drop-shadow">{credits.toLocaleString()}</span>
+              <span className="text-white/85 text-[9px] sm:text-[10px] font-bold drop-shadow">Kredit AI</span>
+            </div>
+          </motion.div>
+        </Link>
       </div>
 
       {/* Content bottom-left */}
