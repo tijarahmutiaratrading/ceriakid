@@ -21,6 +21,10 @@
     "avatarUrl": {
       "type": "string",
       "description": "Uploaded profile avatar image URL"
+    },
+    "phone": {
+      "type": "string",
+      "description": "User phone number"
     }
   }
 }
