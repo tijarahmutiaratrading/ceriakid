@@ -83,6 +83,23 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
+      {/* Dashboard-only background image (was previously in AppLayout) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: -1,
+          backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
       {/* Floating orbs background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
         <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
