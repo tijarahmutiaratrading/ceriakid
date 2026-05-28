@@ -81,7 +81,7 @@ export default function UpgradeTierCard({ currentTier, user }) {
   };
 
   return (
-    <div className="rounded-3xl p-5 space-y-4" style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.4)' }}>
+    <div className="rounded-3xl p-5 space-y-4" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.2)' }}>
       <div className="flex items-center gap-2">
         <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg">
           <ArrowUp className="w-5 h-5 text-white" strokeWidth={3} />
