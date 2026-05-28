@@ -37,12 +37,10 @@ export default function PersonalInfoCard({ user }) {
 
   return (
     <div
-      className="rounded-3xl p-5 md:p-6 border border-white/20 shadow-2xl shadow-purple-950/30 relative isolate overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))', backdropFilter: 'blur(26px)' }}
+      className="rounded-3xl p-5 space-y-4"
+      style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.2)' }}
     >
-      <div className="absolute -top-16 -right-10 w-44 h-44 bg-yellow-200/20 rounded-full blur-2xl pointer-events-none" />
-      <div className="absolute -bottom-20 -left-12 w-56 h-56 bg-pink-200/20 rounded-full blur-2xl pointer-events-none" />
-      <div className="space-y-4 relative">
+      <div className="space-y-4">
         {/* Nama Penuh */}
         <div>
           <label className="flex items-center gap-1.5 text-white/80 text-xs font-black uppercase tracking-wider mb-2">
