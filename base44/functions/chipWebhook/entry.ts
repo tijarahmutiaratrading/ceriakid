@@ -107,6 +107,15 @@ async function notifyAdmins(base44, { title, body, url }) {
   }
 }
 
+// Hantar welcome email kepada customer baru. Fire-and-forget — failure tak break webhook.
+async function sendWelcomeEmailSafe(base44, payload) {
+  try {
+    await base44.asServiceRole.functions.invoke('sendWelcomeEmail', payload);
+  } catch (err) {
+    console.error('sendWelcomeEmail failed:', err);
+  }
+}
+
 // Extract referral code dari reference string. Format: "...__ref_CODE"
 function extractReferralCode(reference) {
   if (!reference) return '';
@@ -274,6 +283,13 @@ Deno.serve(async (req) => {
         body: `${creditUserEmail} beli ${totalCredits} kredit (${packageId}) — RM${creditPriceMYR.toFixed(2)}`,
       });
 
+      // Welcome email — credit purchase
+      await sendWelcomeEmailSafe(base44, {
+        to: creditUserEmail,
+        type: 'credit',
+        credits: totalCredits,
+      });
+
       // ─── AFFILIATE COMMISSION (credit purchase) ───
       const creditRefCode = extractReferralCode(reference);
       if (creditRefCode) {
@@ -351,6 +367,15 @@ Deno.serve(async (req) => {
     await notifyAdmins(base44, {
       title: '🎉 Subscription Baru!',
       body: `${userEmail} langgan pelan ${tier.toUpperCase()} — RM${subPriceMYR}`,
+    });
+
+    // Welcome email — subscription (include bonus credits info)
+    const welcomeBonus = { asas: 5, standard: 20, keluarga: 50 }[tier] || 0;
+    await sendWelcomeEmailSafe(base44, {
+      to: userEmail,
+      type: 'subscription',
+      tier,
+      bonusCredits: welcomeBonus,
     });
 
     // ─── BONUS WELCOME CREDITS ikut tier ───
