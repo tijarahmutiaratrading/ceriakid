@@ -100,23 +100,23 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
       onClick={toggleMute}
       animate={needsTap ? { scale: [1, 1.1, 1] } : {}}
       transition={needsTap ? { duration: 1.2, repeat: Infinity } : {}}
-      className="relative w-11 h-11 rounded-2xl text-white flex items-center justify-center border border-white/25"
+      className="relative w-10 h-10 rounded-full text-slate-700 flex items-center justify-center ring-1 ring-black/5 hover:bg-white transition"
       style={{
-        background: 'rgba(255,255,255,0.12)',
-        backdropFilter: 'blur(20px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(160%)',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.25)',
+        background: 'rgba(255,255,255,0.95)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
       }}
       title={needsTap ? 'Tap untuk hidupkan muzik' : (muted ? 'Hidupkan muzik' : 'Senyapkan muzik')}
     >
-      {muted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+      {muted ? <VolumeX className="w-4 h-4" strokeWidth={2.5} /> : <Volume2 className="w-4 h-4" strokeWidth={2.5} />}
 
       {/* Playing pulse */}
       {isPlaying && !muted && (
         <motion.span
-          animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
+          animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0, 0.4] }}
           transition={{ duration: 1.5, repeat: Infinity }}
-          className="absolute inset-0 rounded-2xl bg-pink-400/40 pointer-events-none"
+          className="absolute inset-0 rounded-full bg-pink-400/30 pointer-events-none"
         />
       )}
 
