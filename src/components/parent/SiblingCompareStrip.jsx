@@ -60,7 +60,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
       </div>
 
       {/* Cards */}
-      <div className="flex gap-2.5 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
+      <div className="flex gap-2.5 overflow-x-auto overflow-y-visible pb-2 pt-3 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
         {stats.map((c, i) => {
           const isActive = c.name === selectedChild;
           const isLeader = c.name === leaderName;
