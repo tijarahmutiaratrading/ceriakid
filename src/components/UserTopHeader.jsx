@@ -74,7 +74,7 @@ export default function UserTopHeader() {
   };
 
   // Auto-detect halaman background gelap — pill jadi dark glass + text putih
-  const DARK_BG_PATHS = ['/games-hub', '/mini-games', '/story-kid', '/play/'];
+  const DARK_BG_PATHS = ['/games-hub', '/mini-games', '/story-kid', '/play/', '/parent-dashboard', '/children-profiles'];
   const isDarkBg = DARK_BG_PATHS.some(p => location.pathname.startsWith(p));
 
   useEffect(() => {
