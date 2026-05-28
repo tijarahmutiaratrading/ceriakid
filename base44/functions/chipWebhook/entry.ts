@@ -469,14 +469,48 @@ Deno.serve(async (req) => {
 
     // Find existing subscription (use already fetched)
     const existing = verifyExisting;
+    const currentSub = existing[0];
+
+    // ─── DOWNGRADE PROTECTION (webhook level) ───
+    // Kalau user dah ada subscription aktif yang LEBIH TINGGI atau period yang LEBIH JAUH,
+    // JANGAN tukar tier ke lebih rendah / pendekkan expiry. Ini melindungi user dari
+    // race condition, replay attack, atau bug front-end.
+    const TIER_RANK = { free: 0, asas: 1, standard: 2, keluarga: 3, premium: 2, pro: 3 };
+    let finalTier = tier;
+    let finalPeriodStart = now.toISOString();
+    let finalPeriodEnd = expiryDate.toISOString();
+
+    if (currentSub && currentSub.status === 'active' && currentSub.tier && currentSub.tier !== 'free') {
+      const currentRank = TIER_RANK[currentSub.tier] ?? 0;
+      const newRank = TIER_RANK[tier] ?? 0;
+      const currentEnd = currentSub.currentPeriodEnd ? new Date(currentSub.currentPeriodEnd) : null;
+      const stillValid = currentEnd && currentEnd > now;
+
+      if (stillValid) {
+        // Kekalkan tier yang LEBIH TINGGI
+        if (currentRank > newRank) {
+          finalTier = currentSub.tier;
+          console.warn(`Downgrade blocked: ${userEmail} sudah ada ${currentSub.tier}, payment untuk ${tier} diterima tapi tier dikekalkan`);
+        }
+        // Kekalkan period start asal kalau current masih lebih awal (preserve original start)
+        if (currentSub.currentPeriodStart) {
+          finalPeriodStart = currentSub.currentPeriodStart;
+        }
+        // Kekalkan expiry yang LEBIH JAUH (jangan pendekkan)
+        if (currentEnd > expiryDate) {
+          finalPeriodEnd = currentSub.currentPeriodEnd;
+        }
+      }
+    }
+    // ─── END DOWNGRADE PROTECTION ───
 
     const subData = {
       email: userEmail,
-      tier: tier,
+      tier: finalTier,
       status: 'active',
       stripeCustomerId: purchaseId, // storing Chip purchase ID
-      currentPeriodStart: now.toISOString(),
-      currentPeriodEnd: expiryDate.toISOString(),
+      currentPeriodStart: finalPeriodStart,
+      currentPeriodEnd: finalPeriodEnd,
     };
 
     if (existing.length > 0) {
@@ -485,7 +519,7 @@ Deno.serve(async (req) => {
       await base44.asServiceRole.entities.UserSubscription.create(subData);
     }
 
-    console.log(`Subscription activated: ${userEmail} → ${tier} until ${expiryDate.toISOString()}`);
+    console.log(`Subscription activated: ${userEmail} → ${finalTier} until ${finalPeriodEnd}`);
 
     // Push notification to admins — new subscription
     const subPricing = { asas: 49, standard: 99, keluarga: 199 };

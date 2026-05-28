@@ -31,28 +31,47 @@ Deno.serve(async (req) => {
       keluarga: { amount: 19900, label: 'Keluarga — RM199/tahun' },
     };
 
-    const TIER_ORDER = ['free', 'asas', 'standard', 'keluarga'];
+    // Rank merangkumi legacy tiers (premium, pro) supaya user lama tak boleh downgrade
+    const TIER_RANK = { free: 0, asas: 1, standard: 2, premium: 2, keluarga: 3, pro: 3 };
+    const rankOf = (t) => TIER_RANK[t] ?? 0;
 
     if (!pricing[tier]) {
       return Response.json({ error: 'Invalid tier' }, { status: 400 });
     }
 
+    // ─── DOWNGRADE PROTECTION ───
+    // Kalau user dah ada active subscription pada tier yang LEBIH TINGGI atau SAMA
+    // dan belum expired, halang checkout. User mesti tunggu expiry atau hubungi support.
+    const existingSubCheck = await base44.asServiceRole.entities.UserSubscription.filter({ email: user.email });
+    const currentSub = existingSubCheck[0];
+    if (currentSub && currentSub.status === 'active' && currentSub.tier !== 'free') {
+      const stillValid = currentSub.currentPeriodEnd && new Date(currentSub.currentPeriodEnd) > new Date();
+      if (stillValid) {
+        const currentRank = rankOf(currentSub.tier);
+        const newRank = rankOf(tier);
+        if (newRank <= currentRank) {
+          return Response.json({
+            error: 'DOWNGRADE_BLOCKED',
+            message: `Anda sudah ada pelan ${currentSub.tier.toUpperCase()} yang aktif sehingga ${new Date(currentSub.currentPeriodEnd).toLocaleDateString('ms-MY')}. Tidak boleh tukar ke pelan ${tier.toUpperCase()} (sama atau lebih rendah). Sila tunggu tamat tempoh atau hubungi sokongan.`,
+            currentTier: currentSub.tier,
+            requestedTier: tier,
+            currentPeriodEnd: currentSub.currentPeriodEnd,
+          }, { status: 400 });
+        }
+      }
+    }
+    // ─── END DOWNGRADE PROTECTION ───
+
     // Pro-rata upgrade: charge only the gap (newPrice − oldPrice)
     let chargeAmount = pricing[tier].amount;
     let chargeLabel = pricing[tier].label;
 
-    if (isUpgrade) {
-      const existingSub = await base44.asServiceRole.entities.UserSubscription.filter({ email: user.email });
-      const current = existingSub[0];
-      if (current && current.status === 'active' && pricing[current.tier]) {
-        const currentIdx = TIER_ORDER.indexOf(current.tier);
-        const newIdx = TIER_ORDER.indexOf(tier);
-        if (newIdx > currentIdx) {
-          const gap = pricing[tier].amount - pricing[current.tier].amount;
-          if (gap > 0) {
-            chargeAmount = gap;
-            chargeLabel = `Naik Taraf ${current.tier.toUpperCase()} → ${tier.toUpperCase()} (RM${(gap / 100).toFixed(0)})`;
-          }
+    if (isUpgrade && currentSub && currentSub.status === 'active' && pricing[currentSub.tier]) {
+      if (rankOf(tier) > rankOf(currentSub.tier)) {
+        const gap = pricing[tier].amount - pricing[currentSub.tier].amount;
+        if (gap > 0) {
+          chargeAmount = gap;
+          chargeLabel = `Naik Taraf ${currentSub.tier.toUpperCase()} → ${tier.toUpperCase()} (RM${(gap / 100).toFixed(0)})`;
         }
       }
     }
@@ -110,26 +129,24 @@ Deno.serve(async (req) => {
     }
 
     // Store pending subscription intent
-    const existing = await base44.asServiceRole.entities.UserSubscription.filter({ email: user.email });
     const expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
-    const current = existing[0];
     // Don't overwrite an ACTIVE paid subscription with an incomplete one — user is
     // probably upgrading and we should keep them as paid until webhook confirms.
-    const hasActivePaid = current && current.status === 'active' && current.tier !== 'free';
+    const hasActivePaid = currentSub && currentSub.status === 'active' && currentSub.tier !== 'free';
 
     const subData = {
       email: user.email,
-      tier: hasActivePaid ? current.tier : tier,
+      tier: hasActivePaid ? currentSub.tier : tier,
       status: hasActivePaid ? 'active' : 'incomplete',
-      currentPeriodStart: hasActivePaid ? current.currentPeriodStart : new Date().toISOString(),
-      currentPeriodEnd: hasActivePaid ? current.currentPeriodEnd : expiryDate.toISOString(),
+      currentPeriodStart: hasActivePaid ? currentSub.currentPeriodStart : new Date().toISOString(),
+      currentPeriodEnd: hasActivePaid ? currentSub.currentPeriodEnd : expiryDate.toISOString(),
       stripeCustomerId: data.id, // store latest Chip purchase ID for webhook matching
     };
 
-    if (current) {
-      await base44.asServiceRole.entities.UserSubscription.update(current.id, subData);
+    if (currentSub) {
+      await base44.asServiceRole.entities.UserSubscription.update(currentSub.id, subData);
     } else {
       await base44.asServiceRole.entities.UserSubscription.create(subData);
     }
