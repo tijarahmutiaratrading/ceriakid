@@ -172,7 +172,7 @@ export default function ParentDashboard() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       className="rounded-3xl p-8 text-center"
-                      style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+                      style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.8))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
                     >
                       <p className="text-5xl mb-3">🎮</p>
                       <p className="text-white font-black text-base mb-2">{selectedChild} belum mula bermain</p>
