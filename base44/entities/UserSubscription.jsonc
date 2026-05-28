@@ -92,6 +92,36 @@
       "type": "boolean",
       "default": false,
       "description": "Whether abandoned cart reminder email has been sent for incomplete subscription"
+    },
+    "abandonedReminderStatus": {
+      "type": "string",
+      "enum": [
+        "not_sent",
+        "sent",
+        "delivered",
+        "failed",
+        "recovered"
+      ],
+      "default": "not_sent",
+      "description": "Status delivery abandoned cart reminder: not_sent (belum hantar), sent (dah hantar via Resend), delivered (Resend confirm delivered), failed (hantar gagal), recovered (user dah bayar lepas reminder)"
+    },
+    "abandonedReminderSentAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp bila abandoned cart reminder dihantar"
+    },
+    "abandonedReminderMessageId": {
+      "type": "string",
+      "description": "Resend message ID untuk track delivery status"
+    },
+    "abandonedReminderError": {
+      "type": "string",
+      "description": "Error message kalau hantar gagal"
+    },
+    "recoveredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp bila user complete payment lepas dapat abandoned cart reminder"
     }
   },
   "required": [

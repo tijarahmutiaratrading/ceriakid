@@ -3,6 +3,12 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 // Hantar reminder email kepada user yang start checkout tapi tak siap bayar.
 // Trigger: subscription status='incomplete' yang dah lebih 2 jam tapi belum 24 jam.
 // Maksimum 1 reminder per user — tracking via `abandonedReminderSent` flag.
+//
+// Tracking detail dalam database (untuk admin dashboard):
+//   - abandonedReminderStatus: 'not_sent' → 'sent' / 'failed' → 'recovered' (kalau user bayar selepas itu)
+//   - abandonedReminderSentAt: timestamp ISO
+//   - abandonedReminderMessageId: Resend message ID
+//   - abandonedReminderError: error message kalau gagal
 
 const APP_URL = 'https://ceriakid.com';
 const WHATSAPP_URL = 'https://wa.me/60177844120?text=' + encodeURIComponent('Salam, saya nak teruskan pembelian CeriaKid');
@@ -61,7 +67,7 @@ Deno.serve(async (req) => {
     const twoHoursAgo = now - 2 * 60 * 60 * 1000;
     const oneDayAgo = now - 24 * 60 * 60 * 1000;
 
-    let sent = 0, skipped = 0;
+    let sent = 0, failed = 0, skipped = 0;
     const from = RESEND_FROM_EMAIL.includes('<') ? RESEND_FROM_EMAIL : `CeriaKid <${RESEND_FROM_EMAIL}>`;
 
     for (const sub of subs) {
@@ -71,21 +77,50 @@ Deno.serve(async (req) => {
       if (updated > twoHoursAgo || updated < oneDayAgo) { skipped++; continue; }
 
       const content = buildEmail(sub.tier);
-      const res = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from, to: sub.email, subject: content.subject, html: content.html }),
-      });
-      if (res.ok) {
-        await base44.asServiceRole.entities.UserSubscription.update(sub.id, { abandonedReminderSent: true });
-        sent++;
-        console.log(`Abandoned cart reminder sent: ${sub.email} (tier=${sub.tier})`);
-      } else {
-        console.error(`Failed to send to ${sub.email}:`, await res.text());
+      const nowIso = new Date().toISOString();
+      try {
+        const res = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ from, to: sub.email, subject: content.subject, html: content.html }),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data?.id) {
+          await base44.asServiceRole.entities.UserSubscription.update(sub.id, {
+            abandonedReminderSent: true,
+            abandonedReminderStatus: 'sent',
+            abandonedReminderSentAt: nowIso,
+            abandonedReminderMessageId: data.id,
+            abandonedReminderError: '',
+          });
+          sent++;
+          console.log(`✅ Abandoned cart reminder sent: ${sub.email} (tier=${sub.tier}, msgId=${data.id})`);
+        } else {
+          const errMsg = data?.message || data?.error || `HTTP ${res.status}`;
+          await base44.asServiceRole.entities.UserSubscription.update(sub.id, {
+            abandonedReminderSent: true, // tandai sent supaya tak retry berulang kali
+            abandonedReminderStatus: 'failed',
+            abandonedReminderSentAt: nowIso,
+            abandonedReminderError: String(errMsg).substring(0, 500),
+          });
+          failed++;
+          console.error(`❌ Failed to send to ${sub.email}: ${errMsg}`);
+        }
+      } catch (err) {
+        await base44.asServiceRole.entities.UserSubscription.update(sub.id, {
+          abandonedReminderSent: true,
+          abandonedReminderStatus: 'failed',
+          abandonedReminderSentAt: nowIso,
+          abandonedReminderError: String(err?.message || err).substring(0, 500),
+        });
+        failed++;
+        console.error(`❌ Exception sending to ${sub.email}:`, err?.message || err);
       }
     }
 
-    return Response.json({ sent, skipped, total: subs.length });
+    console.log(`Abandoned cart job done — sent: ${sent}, failed: ${failed}, skipped: ${skipped}, total: ${subs.length}`);
+    return Response.json({ sent, failed, skipped, total: subs.length });
   } catch (error) {
     console.error('sendAbandonedCartReminders error:', error);
     return Response.json({ error: error.message }, { status: 500 });

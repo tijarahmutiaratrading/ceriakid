@@ -21,6 +21,14 @@ const STATUS_LABELS = {
   canceled: { label: '✕ Batal', cls: 'bg-rose-300 text-rose-950' },
 };
 
+const RECOVERY_LABELS = {
+  not_sent: { label: '—', cls: 'bg-slate-100 text-slate-500', short: '—' },
+  sent: { label: '📧 Hantar', cls: 'bg-blue-200 text-blue-900', short: '📧 Hantar' },
+  delivered: { label: '✓ Delivered', cls: 'bg-cyan-200 text-cyan-900', short: '✓ Delivered' },
+  failed: { label: '⚠ Gagal', cls: 'bg-red-200 text-red-900', short: '⚠ Gagal' },
+  recovered: { label: '🎉 Recovered', cls: 'bg-emerald-400 text-emerald-950', short: '🎉 Recovered' },
+};
+
 function StatBubble({ icon: Icon, label, value, accent }) {
   return (
     <div className={`rounded-2xl p-3 ${accent}`}>
@@ -43,6 +51,7 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
 
   const tier = TIER_LABELS[customer.tier] || TIER_LABELS.free;
   const status = STATUS_LABELS[customer.status] || STATUS_LABELS.canceled;
+  const recovery = RECOVERY_LABELS[customer.abandonedReminderStatus] || RECOVERY_LABELS.not_sent;
   const endDate = customer.currentPeriodEnd ? new Date(customer.currentPeriodEnd) : null;
   const isExpired = endDate && endDate < new Date();
   const daysLeft = endDate ? Math.ceil((endDate - new Date()) / (1000 * 60 * 60 * 24)) : null;
@@ -137,12 +146,17 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
             <span className="text-slate-400">—</span>
           )}
         </td>
+        <td className="py-3 px-3 whitespace-nowrap text-center">
+          <span className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-[10px] font-black ${recovery.cls}`} title={customer.abandonedReminderSentAt ? `Hantar: ${new Date(customer.abandonedReminderSentAt).toLocaleString('ms-MY')}` : ''}>
+            {recovery.short}
+          </span>
+        </td>
       </tr>
 
       <AnimatePresence>
         {expanded && (
           <tr>
-            <td colSpan={9} className="p-0">
+            <td colSpan={10} className="p-0">
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
@@ -281,6 +295,55 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
                     </div>
                   </div>
 
+                  {/* Abandoned Cart Recovery Detail */}
+                  {customer.abandonedReminderStatus && customer.abandonedReminderStatus !== 'not_sent' && (
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-4 ring-1 ring-amber-200">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Mail className="w-4 h-4 text-amber-600" />
+                        <p className="text-xs font-black text-slate-800">Abandoned Cart Recovery</p>
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-black ${recovery.cls}`}>
+                          {recovery.label}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div>
+                          <p className="text-[10px] text-slate-500 font-black uppercase">Hantar pada</p>
+                          <p className="text-xs font-bold text-slate-800">
+                            {customer.abandonedReminderSentAt
+                              ? new Date(customer.abandonedReminderSentAt).toLocaleString('ms-MY', { dateStyle: 'short', timeStyle: 'short' })
+                              : '—'}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-slate-500 font-black uppercase">Status</p>
+                          <p className="text-xs font-black text-slate-900">{recovery.label}</p>
+                        </div>
+                        {customer.recoveredAt && (
+                          <div>
+                            <p className="text-[10px] text-slate-500 font-black uppercase">Recovered pada</p>
+                            <p className="text-xs font-black text-emerald-700">
+                              {new Date(customer.recoveredAt).toLocaleString('ms-MY', { dateStyle: 'short', timeStyle: 'short' })}
+                            </p>
+                          </div>
+                        )}
+                        {customer.abandonedReminderMessageId && (
+                          <div className="col-span-2 md:col-span-1">
+                            <p className="text-[10px] text-slate-500 font-black uppercase">Resend ID</p>
+                            <p className="text-[10px] font-mono text-slate-700 truncate" title={customer.abandonedReminderMessageId}>
+                              {customer.abandonedReminderMessageId}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                      {customer.abandonedReminderError && (
+                        <div className="mt-3 p-2.5 rounded-lg bg-red-50 border border-red-200">
+                          <p className="text-[10px] text-red-700 font-black uppercase mb-0.5">Error</p>
+                          <p className="text-[11px] text-red-800 font-mono break-all">{customer.abandonedReminderError}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {/* Affiliate Detail */}
                   {customer.affiliate && (
                     <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl p-4 ring-1 ring-emerald-200">
@@ -402,6 +465,11 @@ export default function CustomerDatabaseTable() {
           createdDate: sub.created_date,
           currentPeriodEnd: sub.currentPeriodEnd || null,
           currentPeriodStart: sub.currentPeriodStart || null,
+          abandonedReminderStatus: sub.abandonedReminderStatus || 'not_sent',
+          abandonedReminderSentAt: sub.abandonedReminderSentAt || null,
+          abandonedReminderMessageId: sub.abandonedReminderMessageId || null,
+          abandonedReminderError: sub.abandonedReminderError || null,
+          recoveredAt: sub.recoveredAt || null,
           childrenCount: Array.isArray(sub.children) ? sub.children.length : 0,
           children: Array.isArray(sub.children) ? sub.children.map(c => ({ name: c.name, ageGroup: c.ageGroup })) : [],
           deviceCount: userDevices.length,
@@ -506,6 +574,7 @@ export default function CustomerDatabaseTable() {
                 <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider">Kredit</th>
                 <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider">Affiliate</th>
                 <th className="text-left py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider"><Calendar className="w-3.5 h-3.5 inline mr-1" />Tarikh Tamat</th>
+                <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider"><Mail className="w-3.5 h-3.5 inline mr-1" />Recovery</th>
               </tr>
             </thead>
             <tbody>
@@ -520,7 +589,7 @@ export default function CustomerDatabaseTable() {
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="py-12 text-center text-slate-500 font-semibold">
+                  <td colSpan={10} className="py-12 text-center text-slate-500 font-semibold">
                     {customers.length === 0 ? 'Tiada pelanggan lagi.' : 'Tiada pelanggan sepadan dengan tapisan.'}
                   </td>
                 </tr>

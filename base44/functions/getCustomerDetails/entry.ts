@@ -75,6 +75,12 @@ Deno.serve(async (req) => {
         createdDate: sub.created_date,
         currentPeriodEnd: sub.currentPeriodEnd || null,
         currentPeriodStart: sub.currentPeriodStart || null,
+        // Abandoned cart recovery tracking
+        abandonedReminderStatus: sub.abandonedReminderStatus || 'not_sent',
+        abandonedReminderSentAt: sub.abandonedReminderSentAt || null,
+        abandonedReminderMessageId: sub.abandonedReminderMessageId || null,
+        abandonedReminderError: sub.abandonedReminderError || null,
+        recoveredAt: sub.recoveredAt || null,
         // Children
         childrenCount: Array.isArray(sub.children) ? sub.children.length : 0,
         children: Array.isArray(sub.children) ? sub.children.map(c => ({

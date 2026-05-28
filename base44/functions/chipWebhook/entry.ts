@@ -574,6 +574,14 @@ Deno.serve(async (req) => {
       currentPeriodEnd: finalPeriodEnd,
     };
 
+    // Kalau user ni sebelum ni dah dapat abandoned cart reminder & sekarang baru bayar
+    // → tandai sebagai 'recovered' supaya admin boleh track ROI campaign
+    if (existing.length > 0 && existing[0].abandonedReminderSent && existing[0].abandonedReminderStatus !== 'recovered') {
+      subData.abandonedReminderStatus = 'recovered';
+      subData.recoveredAt = new Date().toISOString();
+      console.log(`🎉 Abandoned cart RECOVERED: ${userEmail} (tier=${finalTier})`);
+    }
+
     if (existing.length > 0) {
       await base44.asServiceRole.entities.UserSubscription.update(existing[0].id, subData);
     } else {
