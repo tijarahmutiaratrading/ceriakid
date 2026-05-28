@@ -1,56 +1,117 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Zap, Star, Target } from 'lucide-react';
-
-const HERO_BG = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/dc153cf03_generated_image.png';
+import { Trophy, Zap, Star, Target, Sparkles } from 'lucide-react';
 
 export default function ParentHeroCard({ totalChildren, totalGames, totalStars, avgStars }) {
   const stats = [
-    { icon: Trophy, label: 'Anak Aktif', value: totalChildren, color: 'from-yellow-300 to-orange-400' },
-    { icon: Zap, label: 'Games', value: totalGames, color: 'from-cyan-300 to-blue-400' },
-    { icon: Star, label: 'Bintang', value: totalStars, color: 'from-pink-300 to-rose-400' },
-    { icon: Target, label: 'Purata', value: `${avgStars}⭐`, color: 'from-emerald-300 to-teal-400' },
+    { icon: Trophy, label: 'Anak Aktif', value: totalChildren, gradient: 'from-yellow-400 to-orange-500', glow: 'shadow-yellow-500/40' },
+    { icon: Zap, label: 'Games', value: totalGames, gradient: 'from-cyan-400 to-blue-500', glow: 'shadow-cyan-500/40' },
+    { icon: Star, label: 'Bintang', value: totalStars, gradient: 'from-pink-400 to-rose-500', glow: 'shadow-pink-500/40' },
+    { icon: Target, label: 'Purata', value: `${avgStars}⭐`, gradient: 'from-emerald-400 to-teal-500', glow: 'shadow-emerald-500/40' },
   ];
 
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative isolate overflow-hidden rounded-[2rem] border border-white/30 shadow-2xl shadow-purple-950/40 mb-5 transform-gpu [clip-path:inset(0_round_2rem)] min-h-[240px]"
+      className="relative isolate overflow-hidden rounded-[2rem] mb-5 transform-gpu"
+      style={{
+        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 35%, #d946ef 70%, #ec4899 100%)',
+        boxShadow: '0 30px 80px -20px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(255,255,255,0.1) inset',
+      }}
     >
-      <img
-        src={HERO_BG}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        onError={(e) => { e.target.style.display = 'none'; }}
-      />
-      <div className="absolute inset-0 z-[1] bg-gradient-to-br from-purple-900/55 via-fuchsia-800/40 to-pink-700/60" />
-      <div className="absolute inset-x-0 bottom-0 h-2/3 z-[1] bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+      {/* Decorative glass orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{ x: [0, 20, 0], y: [0, -10, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/20 blur-3xl"
+        />
+        <motion.div
+          animate={{ x: [0, -15, 0], y: [0, 15, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-cyan-300/25 blur-3xl"
+        />
+        <motion.div
+          animate={{ x: [0, 10, 0], y: [0, 8, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-1/2 left-1/3 w-40 h-40 rounded-full bg-yellow-300/20 blur-3xl"
+        />
+      </div>
 
-      <div className="relative z-10 p-5 md:p-6">
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-14 h-14 rounded-2xl bg-white/25 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center text-3xl shadow-lg flex-shrink-0">📊</div>
-          <div>
-            <p className="text-white/80 text-[11px] font-black uppercase tracking-[0.2em]">Parent Dashboard</p>
-            <h1 className="text-2xl md:text-3xl font-black text-white leading-tight drop-shadow-lg">Prestasi Anak Anda</h1>
-            <p className="text-white/90 text-xs font-bold mt-0.5 drop-shadow-md">Pantau perkembangan & motivasi belajar</p>
+      {/* Grid pattern overlay — adds depth */}
+      <div
+        className="absolute inset-0 opacity-[0.08] pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+          backgroundSize: '24px 24px',
+        }}
+      />
+
+      {/* Floating sparkles */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+        className="absolute top-4 right-4 text-yellow-200/50"
+      >
+        <Sparkles className="w-8 h-8" />
+      </motion.div>
+
+      <div className="relative z-10 p-5 sm:p-6 md:p-7">
+        {/* Header */}
+        <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-6">
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+            className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl flex-shrink-0"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15))',
+              backdropFilter: 'blur(20px)',
+              border: '1.5px solid rgba(255,255,255,0.4)',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.5)',
+            }}
+          >
+            📊
+          </motion.div>
+          <div className="min-w-0 flex-1">
+            <p className="text-white/85 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.22em] leading-none">Parent Dashboard</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight mt-1.5 drop-shadow-md">
+              Prestasi Anak
+            </h1>
+            <p className="text-white/85 text-xs sm:text-sm font-semibold mt-1 drop-shadow">
+              Pantau perkembangan & beri motivasi
+            </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-2">
+        {/* Stats grid — true glass tiles */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
           {stats.map((s, i) => (
             <motion.div
               key={s.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + i * 0.05 }}
-              className="rounded-2xl p-2.5 bg-white/20 backdrop-blur-md border border-white/30 text-center"
+              initial={{ opacity: 0, y: 15, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.15 + i * 0.07, type: 'spring', stiffness: 200 }}
+              whileHover={{ y: -2, scale: 1.02 }}
+              className="relative rounded-2xl p-3 sm:p-3.5 overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1))',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.35)',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.4)',
+              }}
             >
-              <div className={`w-7 h-7 rounded-xl mx-auto mb-1 bg-gradient-to-br ${s.color} flex items-center justify-center shadow-md`}>
-                <s.icon className="w-3.5 h-3.5 text-white" />
+              {/* Icon */}
+              <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl mb-2 bg-gradient-to-br ${s.gradient} flex items-center justify-center shadow-lg ${s.glow}`}>
+                <s.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white drop-shadow" />
               </div>
-              <p className="text-white font-black text-base leading-none">{s.value}</p>
-              <p className="text-white/80 text-[10px] font-bold mt-0.5 truncate">{s.label}</p>
+              {/* Value */}
+              <p className="text-white font-black text-xl sm:text-2xl leading-none drop-shadow">{s.value}</p>
+              <p className="text-white/85 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider mt-1 truncate">{s.label}</p>
+
+              {/* Subtle inner highlight */}
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
             </motion.div>
           ))}
         </div>
