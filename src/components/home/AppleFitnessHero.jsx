@@ -178,41 +178,47 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
           <div className="flex flex-col items-start gap-1.5">
             <p className="text-white font-black text-sm sm:text-base drop-shadow-lg">Hai, {firstName} 👋</p>
 
-            {/* Stats row: Subscription + Credits */}
+            {/* Stats row: Subscription + Credits — glass glossy */}
             <div className="flex items-center gap-1.5 flex-wrap">
               {/* Subscription chip */}
               <div
-                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full backdrop-blur-md shadow-md border ${
-                  isExpired
-                    ? 'bg-red-500/90 border-red-200/60'
-                    : isExpiringSoon
-                      ? 'bg-amber-500/90 border-amber-200/60'
-                      : tier === 'free'
-                        ? 'bg-white/20 border-white/30'
-                        : 'bg-gradient-to-r from-purple-500/85 to-pink-500/85 border-white/30'
-                }`}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/40 shadow-lg shadow-black/10 relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.12))',
+                  backdropFilter: 'blur(14px)',
+                  WebkitBackdropFilter: 'blur(14px)',
+                }}
               >
+                <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/35 to-transparent pointer-events-none" />
                 {isExpired || isExpiringSoon ? (
-                  <AlertCircle className="w-3 h-3 text-white flex-shrink-0" />
+                  <AlertCircle className="w-3 h-3 text-white flex-shrink-0 relative" />
                 ) : tier === 'free' ? (
-                  <Sparkles className="w-3 h-3 text-white flex-shrink-0" />
+                  <Sparkles className="w-3 h-3 text-white flex-shrink-0 relative" />
                 ) : (
-                  <Crown className="w-3 h-3 text-yellow-200 flex-shrink-0" />
+                  <Crown className="w-3 h-3 text-white flex-shrink-0 relative" />
                 )}
-                <span className="text-white font-black text-[10px] drop-shadow leading-none">{tierLabel}</span>
+                <span className="text-white font-black text-[10px] drop-shadow leading-none relative">{tierLabel}</span>
                 {expiryText && (
                   <>
-                    <span className="text-white/50 text-[9px] leading-none">•</span>
-                    <span className="text-white/95 text-[10px] font-bold drop-shadow leading-none">{expiryText}</span>
+                    <span className="text-white/50 text-[9px] leading-none relative">•</span>
+                    <span className="text-white/95 text-[10px] font-bold drop-shadow leading-none relative">{expiryText}</span>
                   </>
                 )}
               </div>
 
               {/* Credits chip */}
-              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-cyan-400/90 to-blue-500/90 backdrop-blur-md shadow-md border border-white/30">
-                <span className="text-[11px] leading-none">💎</span>
-                <span className="text-white font-black text-[10px] drop-shadow leading-none">{credits.toLocaleString()}</span>
-                <span className="text-white/90 text-[10px] font-bold drop-shadow leading-none">kredit</span>
+              <div
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/40 shadow-lg shadow-black/10 relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.12))',
+                  backdropFilter: 'blur(14px)',
+                  WebkitBackdropFilter: 'blur(14px)',
+                }}
+              >
+                <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/35 to-transparent pointer-events-none" />
+                <span className="text-[11px] leading-none relative">💎</span>
+                <span className="text-white font-black text-[10px] drop-shadow leading-none relative">{credits.toLocaleString()}</span>
+                <span className="text-white/90 text-[10px] font-bold drop-shadow leading-none relative">kredit</span>
               </div>
             </div>
           </div>
