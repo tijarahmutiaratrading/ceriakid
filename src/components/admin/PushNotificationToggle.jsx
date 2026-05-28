@@ -180,6 +180,7 @@ export default function PushNotificationToggle({ vapidPublicKey }) {
       <div className="flex flex-wrap gap-2">
         {!subscribed ? (
           <motion.button
+            type="button"
             whileTap={{ scale: 0.97 }}
             onClick={handleSubscribe}
             disabled={busy}
@@ -191,6 +192,7 @@ export default function PushNotificationToggle({ vapidPublicKey }) {
         ) : (
           <>
             <motion.button
+              type="button"
               whileTap={{ scale: 0.97 }}
               onClick={handleTest}
               disabled={testing}
@@ -200,6 +202,7 @@ export default function PushNotificationToggle({ vapidPublicKey }) {
               Hantar Test
             </motion.button>
             <motion.button
+              type="button"
               whileTap={{ scale: 0.97 }}
               onClick={handleUnsubscribe}
               disabled={busy}

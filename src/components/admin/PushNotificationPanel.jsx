@@ -75,6 +75,7 @@ export default function PushNotificationPanel() {
               <p className="text-xs">Klik butang di bawah untuk generate keys, kemudian copy ke secrets app.</p>
             </div>
             <motion.button
+              type="button"
               whileTap={{ scale: 0.97 }}
               onClick={handleGenerate}
               disabled={generating}
@@ -91,7 +92,7 @@ export default function PushNotificationPanel() {
             <div className="rounded-xl p-4 bg-slate-900 text-white">
               <div className="flex items-center justify-between mb-2">
                 <p className="text-xs font-black uppercase tracking-wider text-amber-400">VAPID_PUBLIC_KEY</p>
-                <button onClick={() => copy(generated.publicKey, 'Public key')} className="text-xs px-2 py-1 bg-white/10 hover:bg-white/20 rounded-lg flex items-center gap-1">
+                <button type="button" onClick={() => copy(generated.publicKey, 'Public key')} className="text-xs px-2 py-1 bg-white/10 hover:bg-white/20 rounded-lg flex items-center gap-1">
                   <Copy className="w-3 h-3" /> Copy
                 </button>
               </div>
@@ -100,7 +101,7 @@ export default function PushNotificationPanel() {
             <div className="rounded-xl p-4 bg-slate-900 text-white">
               <div className="flex items-center justify-between mb-2">
                 <p className="text-xs font-black uppercase tracking-wider text-amber-400">VAPID_PRIVATE_KEY</p>
-                <button onClick={() => copy(generated.privateKey, 'Private key')} className="text-xs px-2 py-1 bg-white/10 hover:bg-white/20 rounded-lg flex items-center gap-1">
+                <button type="button" onClick={() => copy(generated.privateKey, 'Private key')} className="text-xs px-2 py-1 bg-white/10 hover:bg-white/20 rounded-lg flex items-center gap-1">
                   <Copy className="w-3 h-3" /> Copy
                 </button>
               </div>

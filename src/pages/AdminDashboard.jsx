@@ -260,7 +260,7 @@ export default function AdminDashboard() {
           <button type="button" onClick={loadData} className="rounded-xl bg-white/80 hover:bg-white px-3 py-2 text-xs font-black text-slate-800 transition-all flex items-center gap-1.5 ring-1 ring-slate-300 shadow-sm">
             <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <button type="button" onClick={handleClearCache} disabled={clearingCache} className="rounded-xl bg-white/80 hover:bg-white px-3 py-2 text-xs font-black text-slate-800 transition-all disabled:opacity-60 flex items-center gap-1.5 ring-1 ring-slate-300 shadow-sm">
+          <button type="button" onClick={handleClearCache} disabled={clearingCache} className="rounded-xl bg-white/80 hover:bg-white px-3 py-2 text-xs font-black text-slate-800 transition-all disabled:opacity-60 flex items-center gap-1.5 ring-1 ring-slate-300 shadow-sm" title="Reload app dengan cache baru — gunakan kalau ada bug aneh">
             <RefreshCw className={`w-3.5 h-3.5 ${clearingCache ? 'animate-spin' : ''}`} /> Cache
           </button>
         </div>
@@ -344,6 +344,7 @@ export default function AdminDashboard() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="pro-glass flex gap-2 p-1.5 rounded-2xl overflow-x-auto">
               {settingsTabs.map(tab => (
                 <button
+                  type="button"
                   key={tab.key}
                   onClick={() => setSettingsTab(tab.key)}
                   className={`flex-1 py-2.5 px-3 rounded-xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-slate-900 text-white shadow' : 'text-slate-700 hover:bg-white/70'}`}
@@ -452,6 +453,7 @@ export default function AdminDashboard() {
                       https://ceriakid.com/functions/chipWebhook
                     </div>
                     <button
+                      type="button"
                       onClick={() => {
                         const url = 'https://ceriakid.com/functions/chipWebhook';
                         navigator.clipboard.writeText(url);
