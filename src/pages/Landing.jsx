@@ -112,6 +112,9 @@ export default function Landing() {
   const [navVisible, setNavVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null); // 'success' | 'failed' | null
+  // navTheme: 'light' = text putih (untuk background gelap), 'dark' = text gelap (untuk background cerah).
+  // Auto-detect ikut section di belakang nav semasa scroll.
+  const [navTheme, setNavTheme] = useState('dark');
   const lastScrollY = useRef(0);
   const { stats } = useGameStats();
   const tiers = buildTiers(stats);
@@ -145,6 +148,65 @@ export default function Landing() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Auto-detect background warna di belakang nav (sample 5 titik berlainan)
+  // Kira luminance, kalau majoriti gelap → text putih ('light'), sebaliknya text gelap ('dark').
+  useEffect(() => {
+    const parseColor = (str) => {
+      const m = str.match(/rgba?\(([^)]+)\)/);
+      if (!m) return null;
+      const [r, g, b, a = 1] = m[1].split(',').map(Number);
+      return { r, g, b, a };
+    };
+
+    const getEffectiveBg = (el) => {
+      let node = el;
+      while (node && node !== document.body) {
+        const bg = getComputedStyle(node).backgroundColor;
+        const c = parseColor(bg);
+        if (c && c.a > 0.5) return c;
+        node = node.parentElement;
+      }
+      // Fallback — body bg
+      return parseColor(getComputedStyle(document.body).backgroundColor) || { r: 255, g: 255, b: 255 };
+    };
+
+    const detectTheme = () => {
+      // Sample 5 titik dalam baris nav (y ~ 40px untuk desktop, ~ 30px untuk mobile)
+      const y = window.innerWidth >= 768 ? 50 : 35;
+      const xs = [0.2, 0.35, 0.5, 0.65, 0.8].map(p => Math.round(window.innerWidth * p));
+      let darkCount = 0;
+      let lightCount = 0;
+      xs.forEach(x => {
+        // Sembunyikan nav sementara supaya elementFromPoint return element belakang.
+        // Senang & lebih reliable: nav ada pointer-events on inner; outer wrapper is pointer-events-none.
+        // Tapi inner pill memang block — jadi guna document.elementsFromPoint untuk dapat element kedua.
+        const stack = document.elementsFromPoint(x, y);
+        const bgEl = stack.find(el => !el.closest('header[data-landing-nav]') && !el.closest('nav[data-landing-nav-mobile]'));
+        if (!bgEl) return;
+        const c = getEffectiveBg(bgEl);
+        // Relative luminance (WCAG)
+        const lum = (0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b) / 255;
+        if (lum < 0.55) darkCount++;
+        else lightCount++;
+      });
+      setNavTheme(darkCount > lightCount ? 'light' : 'dark');
+    };
+
+    let raf = null;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => { detectTheme(); raf = null; });
+    };
+    detectTheme();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', detectTheme);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', detectTheme);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
 
 
@@ -213,6 +275,7 @@ export default function Landing() {
       {/* ── NAVBAR — Floating pill, fixed with auto hide/show on scroll ── */}
       {/* Desktop */}
       <header
+        data-landing-nav
         className={`hidden md:flex fixed top-5 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
       >
         <nav
@@ -240,8 +303,9 @@ export default function Landing() {
             <a
               key={item.href}
               href={item.href}
-              className="relative px-3 py-1.5 rounded-full font-black text-sm hover:bg-white/30 transition-colors"
-              style={{ color: '#ffffff', mixBlendMode: 'difference' }}
+              className={`relative px-3 py-1.5 rounded-full font-black text-sm hover:bg-white/30 transition-colors duration-300 ${
+                navTheme === 'light' ? 'text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]' : 'text-slate-900'
+              }`}
             >
               {item.label}
             </a>
@@ -257,7 +321,7 @@ export default function Landing() {
       </header>
 
       {/* Mobile */}
-      <nav className={`md:hidden fixed top-2 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
+      <nav data-landing-nav-mobile className={`md:hidden fixed top-2 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
         <div
           className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-xl shadow-black/15 flex items-center justify-between gap-3"
           style={{
