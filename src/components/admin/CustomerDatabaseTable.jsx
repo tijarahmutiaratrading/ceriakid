@@ -438,6 +438,8 @@ export default function CustomerDatabaseTable() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return customers.filter(c => {
+      // Sembunyi tier "free" — kita hanya ada 3 pakej berbayar
+      if (c.tier === 'free') return false;
       if (tierFilter !== 'all' && c.tier !== tierFilter) return false;
       if (!q) return true;
       return (
@@ -474,7 +476,7 @@ export default function CustomerDatabaseTable() {
           />
         </div>
         <div className="flex gap-1 bg-white rounded-xl p-1 ring-1 ring-slate-200">
-          {['all', 'free', 'asas', 'standard', 'keluarga'].map(t => (
+          {['all', 'asas', 'standard', 'keluarga'].map(t => (
             <button
               key={t}
               onClick={() => setTierFilter(t)}
