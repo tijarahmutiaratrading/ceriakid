@@ -131,15 +131,18 @@ export default function ParentDashboard() {
   const avgStarsAll = totalGamesAll > 0 ? (totalStarsAll / totalGamesAll).toFixed(1) : '0.0';
 
   return (
-    <div
-      className="min-h-screen font-nunito relative"
-      style={{
-        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0a6521ac4_generated_image.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}
-    >
+    <div className="min-h-screen font-nunito relative">
+      {/* Single fixed background layer */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 -z-10"
+        style={{
+          backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0a6521ac4_generated_image.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
       <AppHeader showBack={true} backTo="/dashboard" />
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-6 relative z-10">
 
