@@ -17,7 +17,7 @@ const ALL_TIERS = {
     priceMYR: 49,
     color: 'from-green-400 to-emerald-500',
     features: [
-      '50 game boleh dimainkan',
+      '50 game setiap subjek',
       '🎁 5 kredit AI percuma',
       'Semua subjek',
       'Prasekolah & Sekolah Rendah',
@@ -32,7 +32,7 @@ const ALL_TIERS = {
     priceMYR: 99,
     color: 'from-blue-400 to-indigo-500',
     features: [
-      '100 game boleh dimainkan',
+      '100 game setiap subjek',
       '🎁 20 kredit AI percuma',
       'Semua subjek',
       'Prasekolah & Sekolah Rendah',
@@ -47,7 +47,7 @@ const ALL_TIERS = {
     priceMYR: 199,
     color: 'from-purple-500 to-pink-500',
     features: [
-      '200 game (tiada kunci) 🔓',
+      'Akses penuh 1000+ game 🔓',
       '🎁 50 kredit AI percuma',
       'Sehingga 4 profil anak',
       'Semua subjek',
