@@ -9,6 +9,7 @@ import AppHeader from '@/components/AppHeader';
 import { getActiveTier, getTierLimit } from '@/lib/tierAccess';
 import ChildProfileCard from '@/components/children/ChildProfileCard';
 import AddChildCard from '@/components/children/AddChildCard';
+import FamilyHeroCard from '@/components/children/FamilyHeroCard';
 
 const AGE_OPTIONS = [
   { value: 'prasekolah', label: 'Prasekolah', sub: '4–6 tahun', emoji: '🎨' },
@@ -202,156 +203,24 @@ export default function ChildrenProfiles() {
 
       <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8">
 
-        {/* PREMIUM HERO — family stats with leader spotlight */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6 rounded-[2rem] relative overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, #4f46e5 0%, #8b5cf6 30%, #d946ef 65%, #ec4899 100%)',
-            boxShadow: '0 30px 80px -20px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(255,255,255,0.1) inset',
-          }}
-        >
-          {/* Animated background orbs */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <motion.div
-              animate={{ x: [0, 20, 0], y: [0, -10, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -top-20 -right-16 w-64 h-64 rounded-full bg-white/20 blur-3xl"
-            />
-            <motion.div
-              animate={{ x: [0, -15, 0], y: [0, 15, 0] }}
-              transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-cyan-300/25 blur-3xl"
-            />
-          </div>
+        {/* PREMIUM HERO — extracted to FamilyHeroCard component */}
+        <FamilyHeroCard
+          children={children}
+          maxCount={MAX_CHILDREN}
+          familyStats={familyStats}
+          leaderName={leaderName}
+          showForm={showForm}
+          onAddClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' }); }}
+        />
 
-          {/* Grid pattern */}
-          <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-            backgroundSize: '24px 24px',
-          }} />
-
-          {/* Floating sparkle */}
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            className="absolute top-4 right-4 text-yellow-200/50"
-          >
-            <Sparkles className="w-8 h-8" />
-          </motion.div>
-
-          <div className="relative z-10 p-5 sm:p-6 md:p-7">
-            {/* Header */}
-            <div className="flex items-start justify-between gap-3 mb-5">
-              <div className="flex items-center gap-3 min-w-0 flex-1">
-                <motion.div
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl flex-shrink-0"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15))',
-                    backdropFilter: 'blur(20px)',
-                    border: '1.5px solid rgba(255,255,255,0.4)',
-                    boxShadow: '0 8px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.5)',
-                  }}
-                >
-                  👨‍👩‍👧‍👦
-                </motion.div>
-                <div className="min-w-0">
-                  <p className="text-white/85 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.22em] leading-none">Family Hub</p>
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight mt-1.5 drop-shadow-md">
-                    Profil Anak
-                  </h1>
-                  <p className="text-white/85 text-xs sm:text-sm font-semibold mt-1 drop-shadow flex items-center gap-1.5">
-                    <Users className="w-3 h-3" /> {children.length}/{MAX_CHILDREN} anak terdaftar
-                  </p>
-                </div>
-              </div>
-
-              {children.length < MAX_CHILDREN && !showForm && (
-                <motion.button
-                  whileHover={{ scale: 1.03, y: -1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' }); }}
-                  className="hidden sm:flex items-center gap-2 bg-white text-purple-700 rounded-2xl px-4 py-2.5 font-black text-sm shadow-xl hover:shadow-2xl transition-all flex-shrink-0"
-                >
-                  <Plus className="w-4 h-4" /> Tambah Anak
-                </motion.button>
-              )}
-            </div>
-
-            {/* Hidden file input */}
-            <input
-              type="file"
-              ref={cardFileInputRef}
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => uploadingForChildId && handleCardAvatarUpload(e, uploadingForChildId)}
-            />
-
-            {/* Leader spotlight banner — when ada leader */}
-            {leaderName && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 }}
-                className="mb-3 flex items-center gap-2.5 px-3 py-2 rounded-2xl bg-gradient-to-r from-yellow-400/30 to-amber-500/20 border border-yellow-300/40 backdrop-blur"
-              >
-                <Trophy className="w-4 h-4 text-yellow-200 flex-shrink-0" />
-                <p className="text-yellow-100 text-xs font-black">
-                  🏆 <span className="text-white">{leaderName}</span> sedang memimpin keluarga!
-                </p>
-              </motion.div>
-            )}
-
-            {/* Premium stats grid */}
-            {children.length > 0 && (
-              <div className="grid grid-cols-4 gap-2 sm:gap-3">
-                {[
-                  { label: 'Anak', value: children.length, emoji: '👶', gradient: 'from-cyan-400 to-blue-500', glow: 'shadow-cyan-500/40' },
-                  { label: 'Games', value: familyStats.totalGames, emoji: '🎮', gradient: 'from-purple-400 to-fuchsia-500', glow: 'shadow-purple-500/40' },
-                  { label: 'Bintang', value: familyStats.totalStars, emoji: '⭐', gradient: 'from-yellow-400 to-orange-500', glow: 'shadow-yellow-500/40' },
-                  { label: 'Perfect', value: familyStats.totalPerfect, emoji: '🏆', gradient: 'from-emerald-400 to-teal-500', glow: 'shadow-emerald-500/40' },
-                ].map((s, i) => (
-                  <motion.div
-                    key={s.label}
-                    initial={{ opacity: 0, y: 15, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ delay: 0.15 + i * 0.07, type: 'spring', stiffness: 200 }}
-                    whileHover={{ y: -2, scale: 1.02 }}
-                    className="relative rounded-2xl p-3 overflow-hidden"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1))',
-                      backdropFilter: 'blur(20px)',
-                      border: '1px solid rgba(255,255,255,0.35)',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.4)',
-                    }}
-                  >
-                    <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl mb-2 bg-gradient-to-br ${s.gradient} flex items-center justify-center shadow-lg ${s.glow} text-base sm:text-lg`}>
-                      {s.emoji}
-                    </div>
-                    <p className="text-white font-black text-lg sm:text-2xl leading-none drop-shadow">{s.value}</p>
-                    <p className="text-white/85 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider mt-1 truncate">{s.label}</p>
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-                  </motion.div>
-                ))}
-              </div>
-            )}
-
-            {/* Mobile add button — full width below stats */}
-            {children.length < MAX_CHILDREN && !showForm && (
-              <motion.button
-                whileTap={{ scale: 0.97 }}
-                onClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' }); }}
-                className="sm:hidden mt-3 w-full flex items-center justify-center gap-2 bg-white text-purple-700 rounded-2xl px-4 py-3 font-black text-sm shadow-xl"
-              >
-                <Plus className="w-4 h-4" /> Tambah Anak Baru
-              </motion.button>
-            )}
-          </div>
-        </motion.div>
+        {/* Hidden file input for card avatar uploads */}
+        <input
+          type="file"
+          ref={cardFileInputRef}
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => uploadingForChildId && handleCardAvatarUpload(e, uploadingForChildId)}
+        />
 
         {/* Error */}
         <AnimatePresence>
@@ -523,30 +392,6 @@ export default function ChildrenProfiles() {
               />
             )}
           </div>
-        )}
-
-        {/* Capacity bar */}
-        {children.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="mt-4 rounded-2xl p-4"
-            style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.78), rgba(88,28,135,0.7))', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.18)' }}
-          >
-            <div className="flex justify-between text-white/90 text-xs font-bold mb-2">
-              <span>Kapasiti Profil</span>
-              <span>{children.length}/{MAX_CHILDREN}</span>
-            </div>
-            <div className="h-2 bg-white/15 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${(children.length / MAX_CHILDREN) * 100}%` }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="h-full bg-white rounded-full"
-              />
-            </div>
-          </motion.div>
         )}
 
       </div>
