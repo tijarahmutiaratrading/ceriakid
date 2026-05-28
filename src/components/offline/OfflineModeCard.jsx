@@ -63,7 +63,7 @@ export default function OfflineModeCard() {
 
   return (
     <>
-      <div className="rounded-3xl overflow-hidden shadow-xl p-5" style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(49,16,90,0.78))', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.15)' }}>
+      <div className="rounded-3xl overflow-hidden shadow-xl p-5" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
 
         {/* Status row */}
         <div className="flex items-center justify-between gap-3 mb-4">

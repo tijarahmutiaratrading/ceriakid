@@ -140,7 +140,7 @@ export default function ClientDashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="mb-4 mt-6 md:mt-8 rounded-3xl p-4 md:p-5 shadow-lg"
-          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.18)' }}
+          style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.2)' }}
         >
           <div className="flex items-center gap-2 mb-4">
             <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-pink-300 rounded-full" />
@@ -207,7 +207,7 @@ export default function ClientDashboard() {
             <div className="h-1 w-8 bg-gradient-to-r from-cyan-300 to-pink-300 rounded-full" />
             <p className="text-white/80 text-xs font-black uppercase tracking-wider">📱 Device Berdaftar</p>
           </div>
-          <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}>
+          <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
             <div className="p-4">
               <ManageDevices userEmail={user?.email} tier={userTier} />
             </div>
