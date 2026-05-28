@@ -31,6 +31,7 @@ const buildTiers = (stats) => {
   const standardGames = stats?.accessibleByTier?.standard;
   const keluargaGames = stats?.accessibleByTier?.keluarga;
 
+  // Susunan: Asas → Standard → Keluarga (murah ke mahal, Keluarga ditandakan POPULAR)
   return [
     {
       name: 'asas',
@@ -48,8 +49,29 @@ const buildTiers = (stats) => {
         'Kemas kini mingguan',
         '1 peranti sahaja 📱',
       ],
-      noFeatures: ['Sehingga 4 anak'],
+      noFeatures: ['Sehingga 4 profil anak (1 anak sahaja)'],
       cta: 'Mulakan Sekarang',
+      highlighted: false,
+    },
+    {
+      name: 'standard',
+      nameMY: '⭐ Standard',
+      priceMYR: '99',
+      perMonth: '8.25',
+      period: '/tahun',
+      features: [
+        standardGames ? `${fmt(standardGames)} game (100/subjek)` : '100 game/subjek',
+        '🎁 20 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)',
+        'Semua subjek',
+        'Prasekolah & Sekolah Rendah boleh akses',
+        'Game selepas had dikunci 🔒',
+        'Tanpa iklan',
+        'Boleh guna offline 📲',
+        'Kemas kini mingguan',
+        'Sehingga 2 peranti 📱📱',
+      ],
+      noFeatures: ['Sehingga 4 profil anak (1 anak sahaja)'],
+      cta: 'Pilih Standard',
       highlighted: false,
     },
     {
@@ -73,27 +95,6 @@ const buildTiers = (stats) => {
       noFeatures: [],
       cta: '🔥 Pilih Keluarga',
       highlighted: true,
-    },
-    {
-      name: 'standard',
-      nameMY: '⭐ Standard',
-      priceMYR: '99',
-      perMonth: '8.25',
-      period: '/tahun',
-      features: [
-        standardGames ? `${fmt(standardGames)} game (100/subjek)` : '100 game/subjek',
-        '🎁 20 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)',
-        'Semua subjek',
-        'Prasekolah & Sekolah Rendah boleh akses',
-        'Game selepas had dikunci 🔒',
-        'Tanpa iklan',
-        'Boleh guna offline 📲',
-        'Kemas kini mingguan',
-        'Sehingga 2 peranti 📱📱',
-      ],
-      noFeatures: ['Sehingga 4 anak'],
-      cta: 'Pilih Standard',
-      highlighted: false,
     },
   ];
 };
@@ -693,7 +694,7 @@ export default function Landing() {
             { q: 'Apakah peranti yang disokong?', a: 'Semua jenis smartphone, tablet, dan komputer. iOS, Android, dan browser. Boleh download untuk guna offline.' },
             { q: 'Bagaimana langganan berfungsi?', a: 'CeriaKid menggunakan pelan tahunan. Anda boleh semak status langganan dan maklumat akaun di bahagian tetapan selepas mendaftar.' },
             { q: 'Adakah ikut standard pembelajaran Malaysia?', a: 'Ya — Prasekolah disusun ikut KSPK (Kurikulum Standard Prasekolah Kebangsaan), manakala Sekolah Rendah ikut KSSR (Kurikulum Standard Sekolah Rendah) Darjah 1–6.' },
-            { q: 'Berapa anak boleh guna?', a: 'Pelan Asas untuk Prasekolah (1 anak), Standard untuk Sekolah Rendah (1 anak). Pelan Keluarga untuk kedua-dua peringkat dengan sehingga 4 profil anak — jimat lebih!' },
+            { q: 'Berapa anak boleh guna?', a: 'Pelan Asas & Standard menyokong 1 profil anak (boleh akses Prasekolah & Sekolah Rendah). Pelan Keluarga membenarkan sehingga 4 profil anak berasingan — sesuai untuk keluarga ramai anak.' },
             { q: 'Macam mana nak mula?', a: 'Pilih pelan, isikan maklumat, bayar melalui FPX, dan anak terus boleh mula belajar dalam masa 2 minit!' },
           ].map((faq, i) => (
             <motion.div

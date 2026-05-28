@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { trackPixelEvent } from '@/lib/pixel';
 import { getStoredReferralCode } from '@/lib/referralTracker';
+import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
 const TIER_VALUES = {
   asas: 49,
@@ -11,33 +12,44 @@ const TIER_VALUES = {
   keluarga: 199,
 };
 
-const TIERS = [
-{
-  name: 'asas',
-  nameMY: '🌱 Asas',
-  priceMYR: '49',
-  perMonth: '4.08',
-  description: 'Semua subjek • Prasekolah & Sekolah Rendah • 50 game'
-},
-{
-  name: 'standard',
-  nameMY: '⭐ Standard',
-  priceMYR: '99',
-  perMonth: '8.25',
-  description: 'Semua subjek • Prasekolah & Sekolah Rendah • 100 game'
-},
-{
-  name: 'keluarga',
-  nameMY: '👑 Keluarga',
-  priceMYR: '199',
-  perMonth: '16.58',
-  description: 'Semua subjek • Semua peringkat • 4 profil anak',
-  badge: 'PALING POPULAR'
-}];
+// Bina tier descriptions dengan game count real-time
+const buildTiers = (stats) => {
+  const fmt = formatGameCount;
+  const asasGames = stats?.accessibleByTier?.asas;
+  const standardGames = stats?.accessibleByTier?.standard;
+  const keluargaGames = stats?.accessibleByTier?.keluarga;
+
+  return [
+    {
+      name: 'asas',
+      nameMY: '🌱 Asas',
+      priceMYR: '49',
+      perMonth: '4.08',
+      description: asasGames ? `Semua subjek • ${fmt(asasGames)} game • 1 anak` : 'Semua subjek • 50/subjek • 1 anak'
+    },
+    {
+      name: 'standard',
+      nameMY: '⭐ Standard',
+      priceMYR: '99',
+      perMonth: '8.25',
+      description: standardGames ? `Semua subjek • ${fmt(standardGames)} game • 1 anak` : 'Semua subjek • 100/subjek • 1 anak'
+    },
+    {
+      name: 'keluarga',
+      nameMY: '👑 Keluarga',
+      priceMYR: '199',
+      perMonth: '16.58',
+      description: keluargaGames ? `Akses penuh ${fmt(keluargaGames)} game • 4 profil anak` : 'Akses penuh semua game • 4 profil anak',
+      badge: 'PALING POPULAR'
+    }
+  ];
+};
 
 
 export default function PricingCheckout({ onClose, selectedTier: initialTier, onTierChange }) {
   const { isAuthenticated, user } = useAuth();
+  const { stats } = useGameStats();
+  const TIERS = buildTiers(stats);
   const [formData, setFormData] = useState({
     email: '',
     name: '',
