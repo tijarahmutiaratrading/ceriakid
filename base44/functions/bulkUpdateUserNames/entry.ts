@@ -22,7 +22,13 @@ Deno.serve(async (req) => {
           await base44.asServiceRole.entities.User.update(users[0].id, { full_name });
           results.push({ email, success: true });
         } else {
-          results.push({ email, success: false, error: 'User not found' });
+          // Try to create User record if doesn't exist
+          try {
+            await base44.asServiceRole.entities.User.create({ email, full_name });
+            results.push({ email, success: true, created: true });
+          } catch {
+            results.push({ email, success: false, error: 'User not found and cannot create' });
+          }
         }
       } catch (err) {
         results.push({ email, success: false, error: err.message });
