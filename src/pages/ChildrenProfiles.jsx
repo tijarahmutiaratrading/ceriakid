@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, Save, X, TrendingUp, Star, Gamepad2, ChevronRight, Sparkles } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
+import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AppHeader from '@/components/AppHeader';
 import { getActiveTier, getTierLimit } from '@/lib/tierAccess';
 
@@ -16,7 +17,10 @@ const AVATARS = ['🐱', '🐶', '🐸', '🦊', '🐼', '🐨', '🦁', '🐯']
 
 export default function ChildrenProfiles() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { refreshChildren, setSelectedChild } = useSelectedChild() || {};
   const [children, setChildren] = useState([]);
+  const [progressByChild, setProgressByChild] = useState({});
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [userTier, setUserTier] = useState('free');
@@ -28,19 +32,29 @@ export default function ChildrenProfiles() {
 
   useEffect(() => {
     if (user) {
-      loadChildren();
-      base44.entities.UserSubscription.filter({ email: user.email }).then(subs => {
-        setUserTier(getActiveTier(subs?.[0]));
-      });
+      loadData();
     }
   }, [user]);
 
-  const loadChildren = async () => {
+  const loadData = async () => {
     try {
-      const subscriptions = await base44.entities.UserSubscription.filter({ email: user.email });
-      setChildren(subscriptions[0]?.children || []);
+      const [subs, progressData] = await Promise.all([
+        base44.entities.UserSubscription.filter({ email: user.email }),
+        base44.entities.ChildGameProgress.filter({ userEmail: user.email }).catch(() => []),
+      ]);
+      setChildren(subs[0]?.children || []);
+      setUserTier(getActiveTier(subs?.[0]));
+
+      // Group progress by childName
+      const grouped = {};
+      (progressData || []).forEach(p => {
+        if (!grouped[p.childName]) grouped[p.childName] = [];
+        grouped[p.childName].push(p);
+      });
+      setProgressByChild(grouped);
     } catch (err) {
       setChildren([]);
+      setProgressByChild({});
     } finally {
       setLoading(false);
     }
@@ -51,15 +65,16 @@ export default function ChildrenProfiles() {
     if (subscriptions[0]) {
       await base44.entities.UserSubscription.update(subscriptions[0].id, { children: updatedChildren });
     } else {
-      // Create subscription record if doesn't exist
       await base44.entities.UserSubscription.create({ email: user.email, tier: 'free', status: 'active', children: updatedChildren });
     }
+    // Refresh global context supaya semua page (Prestasi, Dashboard) sync
+    if (refreshChildren) await refreshChildren();
   };
 
   const handleAddChild = async () => {
     if (children.length >= MAX_CHILDREN) { setError(`Maksimum ${MAX_CHILDREN} anak`); return; }
     if (!formData.name.trim()) { setError('Sila masukkan nama anak'); return; }
-    const newChild = { id: Date.now(), name: formData.name, ageGroup: formData.ageGroup, createdAt: new Date().toISOString() };
+    const newChild = { id: Date.now(), name: formData.name.trim(), ageGroup: formData.ageGroup, createdAt: new Date().toISOString() };
     const updated = [...children, newChild];
     setChildren(updated);
     await saveChildren(updated);
@@ -70,7 +85,7 @@ export default function ChildrenProfiles() {
 
   const handleUpdateChild = async () => {
     if (!formData.name.trim()) { setError('Sila masukkan nama anak'); return; }
-    const updated = children.map(c => c.id === editingId ? { ...c, name: formData.name, ageGroup: formData.ageGroup } : c);
+    const updated = children.map(c => c.id === editingId ? { ...c, name: formData.name.trim(), ageGroup: formData.ageGroup } : c);
     setChildren(updated);
     await saveChildren(updated);
     setEditingId(null);
@@ -101,6 +116,27 @@ export default function ChildrenProfiles() {
     setError('');
   };
 
+  const openChildPerformance = (child) => {
+    if (setSelectedChild) setSelectedChild(child);
+    navigate('/parent-dashboard');
+  };
+
+  // Compute stats per child
+  const computeChildStats = (childName) => {
+    const games = progressByChild[childName] || [];
+    const totalGames = games.length;
+    const totalStars = games.reduce((sum, g) => sum + (g.bestStars || 0), 0);
+    const avgStars = totalGames > 0 ? (totalStars / totalGames).toFixed(1) : '0.0';
+    return { totalGames, totalStars, avgStars };
+  };
+
+  // Overall family stats
+  const familyStats = useMemo(() => {
+    const allGames = Object.values(progressByChild).flat();
+    const totalStars = allGames.reduce((sum, g) => sum + (g.bestStars || 0), 0);
+    return { totalGames: allGames.length, totalStars };
+  }, [progressByChild]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center font-nunito">
@@ -125,35 +161,61 @@ export default function ChildrenProfiles() {
 
       <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8">
 
-        {/* Header */}
+        {/* Hero Header — premium gradient with family stats */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-5 p-5 rounded-3xl flex items-center justify-between"
-          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+          className="mb-5 p-6 rounded-3xl relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.85), rgba(190,24,93,0.75))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
         >
-          <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl shadow-inner ring-1 ring-white/20">👨‍👩‍👧‍👦</div>
-            <div>
-              <h1 className="text-2xl font-black text-white drop-shadow">Profil Anak</h1>
-              <p className="text-white/80 text-xs font-semibold">{children.length}/{MAX_CHILDREN} anak terdaftar</p>
-            </div>
+          {/* Decorative sparkle */}
+          <div className="absolute top-3 right-3 text-yellow-300/40">
+            <Sparkles className="w-12 h-12" />
           </div>
-          {children.length < MAX_CHILDREN && !showForm ? (
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah' }); }}
-              className="flex items-center gap-2 bg-white text-purple-600 rounded-2xl px-4 py-2.5 font-black text-sm shadow-lg"
-            >
-              <Plus className="w-4 h-4" /> Tambah
-            </motion.button>
-          ) : children.length >= MAX_CHILDREN && !['keluarga', 'pro'].includes(userTier) ? (
-            <Link to="/">
-              <motion.button whileTap={{ scale: 0.95 }} className="flex items-center gap-2 bg-yellow-400 text-yellow-900 rounded-2xl px-3 py-2 font-black text-xs shadow-lg">
-                👑 Naik Taraf
+
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl shadow-inner ring-1 ring-white/20 flex-shrink-0">👨‍👩‍👧‍👦</div>
+              <div className="min-w-0">
+                <p className="text-white/70 text-[10px] font-black uppercase tracking-[0.18em] leading-none">Family Hub</p>
+                <h1 className="text-2xl font-black text-white drop-shadow mt-1 truncate">Profil Anak</h1>
+                <p className="text-white/80 text-xs font-semibold mt-0.5">{children.length}/{MAX_CHILDREN} anak terdaftar</p>
+              </div>
+            </div>
+
+            {children.length < MAX_CHILDREN && !showForm ? (
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah' }); }}
+                className="flex items-center gap-2 bg-white text-purple-600 rounded-2xl px-4 py-2.5 font-black text-sm shadow-lg flex-shrink-0"
+              >
+                <Plus className="w-4 h-4" /> Tambah
               </motion.button>
-            </Link>
-          ) : null}
+            ) : children.length >= MAX_CHILDREN && !['keluarga', 'pro'].includes(userTier) ? (
+              <Link to="/" className="flex-shrink-0">
+                <motion.button whileTap={{ scale: 0.95 }} className="flex items-center gap-2 bg-yellow-400 text-yellow-900 rounded-2xl px-3 py-2 font-black text-xs shadow-lg">
+                  👑 Naik Taraf
+                </motion.button>
+              </Link>
+            ) : null}
+          </div>
+
+          {/* Mini family stats — only when ada anak */}
+          {children.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { label: 'Anak', value: children.length, emoji: '👶' },
+                { label: 'Permainan', value: familyStats.totalGames, emoji: '🎮' },
+                { label: 'Bintang', value: familyStats.totalStars, emoji: '⭐' },
+              ].map((s, i) => (
+                <div key={i} className="rounded-2xl p-2.5 text-center backdrop-blur" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                  <p className="text-lg leading-none">{s.emoji}</p>
+                  <p className="text-white font-black text-lg leading-tight mt-1">{s.value}</p>
+                  <p className="text-white/80 text-[10px] font-bold uppercase tracking-wider mt-0.5">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </motion.div>
 
         {/* Error */}
@@ -227,13 +289,13 @@ export default function ChildrenProfiles() {
           )}
         </AnimatePresence>
 
-        {/* Children List */}
-        <div className="space-y-3">
+        {/* Children List — premium cards with progress preview */}
+        <div className="grid sm:grid-cols-2 gap-3">
           {children.length === 0 ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="rounded-3xl p-10 text-center"
+              className="sm:col-span-2 rounded-3xl p-10 text-center"
               style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
             >
               <div className="text-6xl mb-3">👶</div>
@@ -241,50 +303,93 @@ export default function ChildrenProfiles() {
               <p className="text-white/80 text-sm">Tekan "Tambah" untuk daftar profil anak pertama!</p>
             </motion.div>
           ) : (
-            children.map((child, idx) => (
-              <motion.div
-                key={child.id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.06 }}
-                className="rounded-3xl p-4 flex items-center gap-4"
-                style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.78), rgba(88,28,135,0.7))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
-              >
-                {/* Avatar */}
-                <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner ring-1 ring-white/20">
-                  {AVATARS[idx % AVATARS.length]}
-                </div>
+            children.map((child, idx) => {
+              const stats = computeChildStats(child.name);
+              const hasPlayed = stats.totalGames > 0;
+              return (
+                <motion.div
+                  key={child.id}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.06 }}
+                  className="rounded-3xl p-4 flex flex-col gap-3 relative overflow-hidden group"
+                  style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.82), rgba(88,28,135,0.74))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+                >
+                  {/* Top row: avatar + info + actions */}
+                  <div className="flex items-start gap-3">
+                    <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner ring-1 ring-white/20">
+                      {AVATARS[idx % AVATARS.length]}
+                    </div>
 
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <p className="text-white font-black text-base leading-tight">{child.name}</p>
-                  <div className="flex items-center gap-1.5 mt-1">
-                    <span className="text-sm">{child.ageGroup === 'prasekolah' ? '🎨' : '📚'}</span>
-                    <span className="text-white/80 text-xs font-semibold">
-                      {child.ageGroup === 'prasekolah' ? 'Prasekolah · 4–6 thn' : 'Sekolah Rendah · 7–12 thn'}
-                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white font-black text-base leading-tight truncate">{child.name}</p>
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <span className="text-sm">{child.ageGroup === 'prasekolah' ? '🎨' : '📚'}</span>
+                        <span className="text-white/80 text-xs font-semibold truncate">
+                          {child.ageGroup === 'prasekolah' ? 'Prasekolah · 4–6 thn' : 'Sekolah Rendah · 7–12 thn'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-1.5 flex-shrink-0">
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => handleEdit(child)}
+                        className="w-9 h-9 bg-white/10 text-white rounded-xl flex items-center justify-center hover:bg-white/20 transition-all border border-white/25"
+                        title="Edit"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </motion.button>
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => handleDeleteChild(child.id)}
+                        className="w-9 h-9 bg-red-500/30 text-white rounded-xl flex items-center justify-center hover:bg-red-500/50 transition-all border border-red-300/30"
+                        title="Padam"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </motion.button>
+                    </div>
                   </div>
-                </div>
 
-                {/* Actions */}
-                <div className="flex gap-2 flex-shrink-0">
+                  {/* Stats preview — synced dari ChildGameProgress */}
+                  <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-white/10">
+                    <div className="rounded-xl p-2 text-center" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                      <Gamepad2 className="w-3.5 h-3.5 text-cyan-300 mx-auto mb-0.5" />
+                      <p className="text-white font-black text-sm leading-none">{stats.totalGames}</p>
+                      <p className="text-white/70 text-[9px] font-bold uppercase tracking-wider mt-0.5">Main</p>
+                    </div>
+                    <div className="rounded-xl p-2 text-center" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                      <Star className="w-3.5 h-3.5 text-yellow-300 mx-auto mb-0.5 fill-yellow-300" />
+                      <p className="text-white font-black text-sm leading-none">{stats.totalStars}</p>
+                      <p className="text-white/70 text-[9px] font-bold uppercase tracking-wider mt-0.5">Bintang</p>
+                    </div>
+                    <div className="rounded-xl p-2 text-center" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                      <TrendingUp className="w-3.5 h-3.5 text-emerald-300 mx-auto mb-0.5" />
+                      <p className="text-white font-black text-sm leading-none">{stats.avgStars}</p>
+                      <p className="text-white/70 text-[9px] font-bold uppercase tracking-wider mt-0.5">Purata</p>
+                    </div>
+                  </div>
+
+                  {/* CTA — Lihat Prestasi */}
                   <motion.button
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => handleEdit(child)}
-                    className="w-9 h-9 bg-white/10 text-white rounded-xl flex items-center justify-center hover:bg-white/20 transition-all border border-white/25"
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => openChildPerformance(child)}
+                    className={`w-full rounded-2xl py-2.5 font-black text-xs flex items-center justify-center gap-1.5 transition-all ${
+                      hasPlayed
+                        ? 'bg-white text-purple-700 shadow-lg hover:shadow-xl'
+                        : 'bg-white/15 text-white border border-white/25 hover:bg-white/25'
+                    }`}
                   >
-                    <Edit2 className="w-4 h-4" />
+                    {hasPlayed ? (
+                      <>Lihat Prestasi <ChevronRight className="w-3.5 h-3.5" /></>
+                    ) : (
+                      <>Belum main game · Mula main <ChevronRight className="w-3.5 h-3.5" /></>
+                    )}
                   </motion.button>
-                  <motion.button
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => handleDeleteChild(child.id)}
-                    className="w-9 h-9 bg-red-500/30 text-white rounded-xl flex items-center justify-center hover:bg-red-500/50 transition-all border border-red-300/30"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))
+                </motion.div>
+              );
+            })
           )}
         </div>
 

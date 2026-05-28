@@ -32,13 +32,18 @@ export function SelectedChildProvider({ children }) {
       const subscriptions = await base44.entities.UserSubscription.filter({
         email: user.email
       });
-      
-      if (subscriptions[0]?.children) {
-        setChildrenList(subscriptions[0].children);
-        // Auto-select first child if exists
-        if (subscriptions[0].children.length > 0 && !selectedChild) {
-          setSelectedChild(subscriptions[0].children[0]);
+
+      const list = subscriptions[0]?.children || [];
+      setChildrenList(list);
+
+      // Auto-select first child if none selected, OR re-sync if current selected was removed
+      if (list.length > 0) {
+        const stillExists = selectedChild && list.find(c => c.id === selectedChild.id);
+        if (!stillExists) {
+          setSelectedChild(list[0]);
         }
+      } else {
+        setSelectedChild(null);
       }
     } catch (err) {
       console.error('Error loading children:', err);
@@ -48,13 +53,18 @@ export function SelectedChildProvider({ children }) {
     }
   };
 
+  const refreshChildren = async () => {
+    if (user?.email) await loadChildren();
+  };
+
   return (
     <SelectedChildContext.Provider
       value={{
         selectedChild,
         setSelectedChild,
         childrenList,
-        loading
+        loading,
+        refreshChildren
       }}
     >
       {children}

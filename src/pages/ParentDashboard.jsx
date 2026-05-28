@@ -28,8 +28,9 @@ const categoryLabels = {
 export default function ParentDashboard() {
   const { user, isAuthenticated, isLoadingAuth, navigateToLogin } = useAuth();
   const { ageGroup } = useAgeGroup();
-  const { selectedChild: contextChild } = useSelectedChild();
+  const { selectedChild: contextChild, childrenList, setSelectedChild: setContextChild } = useSelectedChild() || {};
   const [childrenData, setChildrenData] = useState({});
+  const [registeredChildren, setRegisteredChildren] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedChild, setSelectedChild] = useState(null);
 
@@ -53,14 +54,20 @@ export default function ParentDashboard() {
     }
   }, [user]);
 
+  // Sync registered children from context (kemas kini bila ChildrenProfiles tambah/edit/padam)
+  useEffect(() => {
+    if (Array.isArray(childrenList)) setRegisteredChildren(childrenList);
+  }, [childrenList]);
+
   const loadChildrenProgress = async () => {
     try {
-      const progressData = await base44.entities.ChildGameProgress.filter({
-        userEmail: user.email,
-      }) || [];
+      const [progressData, subs] = await Promise.all([
+        base44.entities.ChildGameProgress.filter({ userEmail: user.email }).catch(() => []),
+        base44.entities.UserSubscription.filter({ email: user.email }).catch(() => []),
+      ]);
 
       const grouped = {};
-      progressData.forEach(progress => {
+      (progressData || []).forEach(progress => {
         if (!grouped[progress.childName]) {
           grouped[progress.childName] = [];
         }
@@ -68,10 +75,12 @@ export default function ParentDashboard() {
       });
 
       setChildrenData(grouped);
-      
+      setRegisteredChildren(subs[0]?.children || []);
+
       // Set first child as selected if not already set
-      if (Object.keys(grouped).length > 0 && !selectedChild) {
-        setSelectedChild(Object.keys(grouped)[0]);
+      const firstChild = subs[0]?.children?.[0]?.name || Object.keys(grouped)[0];
+      if (firstChild && !selectedChild) {
+        setSelectedChild(firstChild);
       }
     } catch (error) {
       console.error('Failed to load progress:', error);
@@ -79,6 +88,12 @@ export default function ParentDashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSelectChild = (name) => {
+    setSelectedChild(name);
+    const childObj = registeredChildren.find(c => c.name === name);
+    if (childObj && setContextChild) setContextChild(childObj);
   };
 
   const analyzeWeakSubjects = (games) => {
@@ -151,7 +166,12 @@ export default function ParentDashboard() {
     );
   }
 
-  const totalChildren = Object.keys(childrenData).length;
+  // Total anak = anak terdaftar (subscription) ATAU yang ada progress (fallback)
+  const allChildNames = Array.from(new Set([
+    ...registeredChildren.map(c => c.name),
+    ...Object.keys(childrenData),
+  ]));
+  const totalChildren = allChildNames.length;
 
   return (
     <div className="min-h-screen font-nunito relative overflow-hidden">
@@ -181,15 +201,48 @@ export default function ParentDashboard() {
           );
         })()}
 
+        {/* Child Selector Chips — sync dengan ChildrenProfiles */}
+        {totalChildren > 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 rounded-3xl p-3 flex gap-2 overflow-x-auto"
+            style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.78), rgba(88,28,135,0.7))', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.18)' }}
+          >
+            {allChildNames.map((name) => {
+              const isActive = selectedChild === name;
+              const childObj = registeredChildren.find(c => c.name === name);
+              const emoji = childObj?.ageGroup === 'sekolah_rendah' ? '📚' : '🎨';
+              const gameCount = (childrenData[name] || []).length;
+              return (
+                <motion.button
+                  key={name}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleSelectChild(name)}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-sm whitespace-nowrap transition-all flex-shrink-0 ${
+                    isActive ? 'bg-white text-purple-700 shadow-lg' : 'bg-white/10 text-white border border-white/25 hover:bg-white/20'
+                  }`}
+                >
+                  <span className="text-base">{emoji}</span>
+                  <span>{name}</span>
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${isActive ? 'bg-purple-100 text-purple-700' : 'bg-white/20 text-white/80'}`}>
+                    {gameCount}
+                  </span>
+                </motion.button>
+              );
+            })}
+          </motion.div>
+        )}
+
         {/* Insights & Recent Activity (combined view across all children) */}
-        {totalChildren > 0 && (
+        {totalChildren > 0 && Object.keys(childrenData).length > 0 && (
           <div className="grid lg:grid-cols-2 gap-4 mb-1">
             <InsightsCard games={Object.values(childrenData).flat()} />
             <RecentActivity games={Object.values(childrenData).flat()} />
           </div>
         )}
 
-        {/* Empty state */}
+        {/* Empty state — no children registered at all */}
         {totalChildren === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -220,9 +273,44 @@ export default function ParentDashboard() {
               </div>
             )}
 
-            {Object.entries(childrenData).map(([childName, games], idx) => {
-              const weakSubjects = analyzeWeakSubjects(games);
+            {allChildNames.map((childName, idx) => {
+              const games = childrenData[childName] || [];
               const totalGames = games.length;
+
+              // Anak terdaftar tapi belum main game
+              if (totalGames === 0) {
+                const childObj = registeredChildren.find(c => c.name === childName);
+                const emoji = childObj?.ageGroup === 'sekolah_rendah' ? '📚' : '🎨';
+                return (
+                  <motion.div
+                    key={childName}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="rounded-3xl p-5"
+                    style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-2xl ring-1 ring-white/20">{emoji}</div>
+                      <div className="flex-1 min-w-0">
+                        <h2 className="text-xl font-black text-white drop-shadow truncate">{childName}</h2>
+                        <p className="text-white/80 text-xs font-bold">{childObj?.ageGroup === 'sekolah_rendah' ? 'Sekolah Rendah' : 'Prasekolah'} · Belum main</p>
+                      </div>
+                    </div>
+                    <div className="rounded-2xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                      <p className="text-3xl mb-2">🎮</p>
+                      <p className="text-white font-bold text-sm mb-3">{childName} belum mula bermain</p>
+                      <Link to="/dashboard">
+                        <motion.button whileTap={{ scale: 0.95 }} className="bg-white text-purple-700 rounded-full px-5 py-2 font-black text-xs shadow-lg">
+                          Mula Main Game
+                        </motion.button>
+                      </Link>
+                    </div>
+                  </motion.div>
+                );
+              }
+
+              const weakSubjects = analyzeWeakSubjects(games);
               const totalStars = games.reduce((sum, g) => sum + (g.bestStars || 0), 0);
               const avgStars = (totalStars / totalGames).toFixed(1);
               const categoryEmojis = { bahasa_melayu: '🇲🇾', english: '🇬🇧', mathematics: '🔢', science: '🧪', jawi: '🕌', bahasa_tamil: '🌺', bahasa_mandarin: '🏮' };
