@@ -94,7 +94,7 @@ export default function ManageDevices({ userEmail, tier }) {
         </div>
       )}
 
-      <p className="text-xs text-gray-400 mt-4 text-center">
+      <p className="text-xs text-gray-900 mt-4 text-center">
         Pakej <span className="font-bold capitalize">{tier}</span> — maksimum {limit} device
       </p>
     </div>
