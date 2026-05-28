@@ -116,25 +116,25 @@ export default function BuyCredits() {
             <h2 className="text-slate-900 font-black text-base">Kos Setiap Ciri AI</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
+            <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
               <p className="text-2xl">🎓</p>
-              <p className="text-white font-black text-sm mt-1">Pembantu Pembelajaran</p>
-              <p className="text-amber-300 text-xs font-black">{CREDIT_COSTS.ai_assistant} kredit / soalan</p>
+              <p className="text-slate-900 font-black text-sm mt-1">Pembantu Pembelajaran</p>
+              <p className="text-slate-700 text-xs font-black">{CREDIT_COSTS.ai_assistant} kredit / soalan</p>
             </div>
-            <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
+            <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
               <p className="text-2xl">📖</p>
-              <p className="text-white font-black text-sm mt-1">Penjana Cerita</p>
-              <p className="text-amber-300 text-xs font-black">{CREDIT_COSTS.story_generator} kredit / cerita</p>
+              <p className="text-slate-900 font-black text-sm mt-1">Penjana Cerita</p>
+              <p className="text-slate-700 text-xs font-black">{CREDIT_COSTS.story_generator} kredit / cerita</p>
             </div>
-            <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
+            <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
               <p className="text-2xl">📝</p>
-              <p className="text-white font-black text-sm mt-1">Penjana BBM</p>
-              <p className="text-amber-300 text-xs font-black">{CREDIT_COSTS.bbm_generator} kredit / BBM</p>
+              <p className="text-slate-900 font-black text-sm mt-1">Penjana BBM</p>
+              <p className="text-slate-700 text-xs font-black">{CREDIT_COSTS.bbm_generator} kredit / BBM</p>
             </div>
-            <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
+            <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
               <p className="text-2xl">🧠</p>
-              <p className="text-white font-black text-sm mt-1">Kuiz AI</p>
-              <p className="text-amber-300 text-xs font-black">{CREDIT_COSTS.quiz_ai} kredit / soalan</p>
+              <p className="text-slate-900 font-black text-sm mt-1">Kuiz AI</p>
+              <p className="text-slate-700 text-xs font-black">{CREDIT_COSTS.quiz_ai} kredit / soalan</p>
             </div>
           </div>
           <p className="text-slate-900 text-xs font-bold mt-4">
