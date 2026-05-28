@@ -47,7 +47,7 @@ export default function AdminHero({ setActiveTab }) {
   const avatarUrl = user?.avatarUrl;
 
   return (
-    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[16/10] sm:aspect-[16/8] md:aspect-[16/7] max-h-[560px]">
+    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40 aspect-[4/3] sm:aspect-[16/8] md:aspect-[16/7] max-h-[560px]">
       {/* Slides */}
       <AnimatePresence mode="sync">
         <motion.div
