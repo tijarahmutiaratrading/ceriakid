@@ -37,6 +37,7 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
   const [copied, setCopied] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editName, setEditName] = useState(customer.fullName || '');
+  const [editPhone, setEditPhone] = useState(customer.phone || '');
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
 
@@ -59,7 +60,7 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
     }
   };
 
-  const handleSaveName = async (e) => {
+  const handleSave = async (e) => {
     e.stopPropagation();
     if (!editName.trim()) {
       toast({ title: '⚠️ Nama kosong', description: 'Sila masukkan nama.', variant: 'destructive' });
@@ -69,8 +70,11 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
     try {
       const user = await base44.entities.User.filter({ email: customer.email });
       if (user.length > 0) {
-        await base44.entities.User.update(user[0].id, { full_name: editName.trim() });
-        toast({ title: '✅ Nama dikemas kini', description: `Nama pelanggan ditukar ke "${editName.trim()}".` });
+        await base44.entities.User.update(user[0].id, { 
+          full_name: editName.trim(),
+          phone: editPhone.trim()
+        });
+        toast({ title: '✅ Info dikemas kini', description: 'Nama dan no telefon telah disimpan.' });
         onUpdate?.();
         setEditMode(false);
       } else {
@@ -165,10 +169,10 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
                       </div>
                       {editMode ? (
                         <div className="flex gap-1 flex-shrink-0">
-                          <button onClick={handleSaveName} disabled={saving} className="p-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg disabled:opacity-60 flex items-center">
+                          <button onClick={handleSave} disabled={saving} className="p-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg disabled:opacity-60 flex items-center">
                             {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
                           </button>
-                          <button onClick={() => { setEditMode(false); setEditName(customer.fullName || ''); }} className="p-1.5 bg-slate-300 hover:bg-slate-400 text-slate-900 rounded-lg">
+                          <button onClick={() => { setEditMode(false); setEditName(customer.fullName || ''); setEditPhone(customer.phone || ''); }} className="p-1.5 bg-slate-300 hover:bg-slate-400 text-slate-900 rounded-lg">
                             <X className="w-3.5 h-3.5" />
                           </button>
                         </div>
@@ -186,12 +190,23 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-violet-600 flex-shrink-0" />
-                      <div className="min-w-0">
-                        <p className="text-[10px] font-black uppercase text-slate-500">No. Telefon</p>
-                        <p className="text-sm font-bold text-slate-800 truncate">{customer.phone || '—'}</p>
-                      </div>
-                    </div>
+                       <Phone className="w-4 h-4 text-violet-600 flex-shrink-0" />
+                       <div className="min-w-0 flex-1">
+                         <p className="text-[10px] font-black uppercase text-slate-500">No. Telefon</p>
+                         {editMode ? (
+                           <input
+                             type="text"
+                             value={editPhone}
+                             onChange={(e) => setEditPhone(e.target.value)}
+                             onClick={(e) => e.stopPropagation()}
+                             placeholder="e.g. 0123456789"
+                             className="w-full text-sm font-black text-slate-900 bg-violet-50 border-2 border-violet-300 rounded-lg px-2 py-1"
+                           />
+                         ) : (
+                           <p className="text-sm font-bold text-slate-800 truncate">{customer.phone || '—'}</p>
+                         )}
+                       </div>
+                     </div>
                   </div>
 
                   {/* Quick stats grid */}
