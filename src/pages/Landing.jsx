@@ -30,7 +30,7 @@ const tiers = [
   priceMYR: '49',
   perMonth: '4.08',
   period: '/tahun',
-  features: ['50 game setiap subjek', '🎁 5 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', '1 peranti sahaja 📱'],
+  features: ['~300 game (50/subjek)', '🎁 5 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', '1 peranti sahaja 📱'],
   noFeatures: ['Sehingga 4 anak'],
   cta: 'Mulakan Sekarang',
   highlighted: false
@@ -42,7 +42,7 @@ const tiers = [
   perMonth: '16.58',
   period: '/tahun',
   savings: 'PALING POPULAR',
-  features: ['Akses penuh 1000+ game 🔓', '🎁 50 KREDIT AI PERCUMA (Cikgu Firdaus + Penjana Cerita)', 'Semua subjek', 'Prasekolah & Sekolah Rendah', 'Tiada game dikunci 🔓', 'Sehingga 4 profil anak', 'Boleh guna offline 📲', 'Sokongan prioriti', 'Sehingga 4 peranti 📱📱📱📱'],
+  features: ['Akses penuh semua game 🔓', '🎁 50 KREDIT AI PERCUMA (Cikgu Firdaus + Penjana Cerita)', 'Semua subjek', 'Prasekolah & Sekolah Rendah', 'Tiada game dikunci 🔓', 'Sehingga 4 profil anak', 'Boleh guna offline 📲', 'Sokongan prioriti', 'Sehingga 4 peranti 📱📱📱📱'],
   noFeatures: [],
   cta: '🔥 Pilih Keluarga',
   highlighted: true
@@ -53,7 +53,7 @@ const tiers = [
   priceMYR: '99',
   perMonth: '8.25',
   period: '/tahun',
-  features: ['100 game setiap subjek', '🎁 20 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sehingga 2 peranti 📱📱'],
+  features: ['~600 game (100/subjek)', '🎁 20 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sehingga 2 peranti 📱📱'],
   noFeatures: ['Sehingga 4 anak'],
   cta: 'Pilih Standard',
   highlighted: false
