@@ -42,8 +42,8 @@ export default function MascotBackdrop() {
             <rect x="18" y="92" width="34" height="40" fill="#1e3a8a" rx="2" />
             <rect x="33" y="92" width="3" height="40" fill="#0f1f4a" />
             {/* arms (extended to hold hands) */}
-            <path d="M16 55 Q5 75 12 100" stroke="#fcd7b6" strokeWidth="7" fill="none" strokeLinecap="round" />
-            <path d="M54 55 Q65 70 70 100" stroke="#fcd7b6" strokeWidth="7" fill="none" strokeLinecap="round" />
+            <path d="M16 55 L8 120" stroke="#fcd7b6" strokeWidth="7" fill="none" strokeLinecap="round" />
+            <path d="M54 55 L70 120" stroke="#fcd7b6" strokeWidth="7" fill="none" strokeLinecap="round" />
           </g>
 
           {/* ===== BOY ===== */}
@@ -63,8 +63,8 @@ export default function MascotBackdrop() {
             <rect x="15" y="75" width="30" height="28" fill="#dc2626" rx="2" />
             <rect x="28" y="75" width="3" height="28" fill="#991b1b" />
             {/* arms */}
-            <path d="M14 50 Q4 65 8 78" stroke="#fcd7b6" strokeWidth="6" fill="none" strokeLinecap="round" />
-            <path d="M46 50 Q56 65 52 78" stroke="#fcd7b6" strokeWidth="6" fill="none" strokeLinecap="round" />
+            <path d="M14 50 L6 110" stroke="#fcd7b6" strokeWidth="6" fill="none" strokeLinecap="round" />
+            <path d="M46 50 L54 110" stroke="#fcd7b6" strokeWidth="6" fill="none" strokeLinecap="round" />
           </g>
 
           {/* ===== TODDLER (middle, shortest) ===== */}
@@ -82,8 +82,8 @@ export default function MascotBackdrop() {
             <path d="M12 52 Q12 45 20 43 L36 43 Q44 45 44 52 L44 85 L12 85 Z" fill="#22d3ee" />
             <circle cx="28" cy="65" r="1.8" fill="#0e7490" />
             {/* arms */}
-            <path d="M12 56 Q3 68 5 80" stroke="#fcd7b6" strokeWidth="5.5" fill="none" strokeLinecap="round" />
-            <path d="M44 56 Q53 68 51 80" stroke="#fcd7b6" strokeWidth="5.5" fill="none" strokeLinecap="round" />
+            <path d="M12 56 L3 105" stroke="#fcd7b6" strokeWidth="5.5" fill="none" strokeLinecap="round" />
+            <path d="M44 56 L53 105" stroke="#fcd7b6" strokeWidth="5.5" fill="none" strokeLinecap="round" />
           </g>
 
           {/* ===== GIRL ===== */}
@@ -108,8 +108,8 @@ export default function MascotBackdrop() {
             {/* dress */}
             <path d="M14 47 Q14 40 22 38 L38 38 Q46 40 46 47 L52 105 L8 105 Z" fill="#a855f7" />
             {/* arms */}
-            <path d="M14 52 Q4 65 8 78" stroke="#fcd7b6" strokeWidth="6" fill="none" strokeLinecap="round" />
-            <path d="M46 52 Q56 65 52 78" stroke="#fcd7b6" strokeWidth="6" fill="none" strokeLinecap="round" />
+            <path d="M14 52 L6 110" stroke="#fcd7b6" strokeWidth="6" fill="none" strokeLinecap="round" />
+            <path d="M46 52 L54 110" stroke="#fcd7b6" strokeWidth="6" fill="none" strokeLinecap="round" />
           </g>
 
           {/* ===== MOM (rightmost) ===== */}
@@ -128,8 +128,8 @@ export default function MascotBackdrop() {
             {/* collar */}
             <path d="M29 40 L35 46 L41 40" fill="#be185d" />
             {/* arms */}
-            <path d="M16 55 Q5 75 12 100" stroke="#fcd7b6" strokeWidth="7" fill="none" strokeLinecap="round" />
-            <path d="M54 55 Q65 70 70 100" stroke="#fcd7b6" strokeWidth="7" fill="none" strokeLinecap="round" />
+            <path d="M16 55 L8 120" stroke="#fcd7b6" strokeWidth="7" fill="none" strokeLinecap="round" />
+            <path d="M54 55 L70 120" stroke="#fcd7b6" strokeWidth="7" fill="none" strokeLinecap="round" />
           </g>
 
           {/* ===== Ground line / shadow ===== */}
