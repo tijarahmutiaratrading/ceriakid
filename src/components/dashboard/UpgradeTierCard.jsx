@@ -76,7 +76,7 @@ const TIER_LABEL = {
   pro: '👑 Keluarga',
 };
 
-export default function UpgradeTierCard({ currentTier, user }) {
+export default function UpgradeTierCard({ currentTier, user, gender, onGenderChange }) {
   const [upgrading, setUpgrading] = useState(null); // tier name yang sedang diproses
   const [error, setError] = useState('');
   const [confirmTier, setConfirmTier] = useState(null);
@@ -176,6 +176,37 @@ export default function UpgradeTierCard({ currentTier, user }) {
           </div>
         </div>
       ) : null}
+
+      {/* Jantina picker — papar hanya kalau parent component pass gender props */}
+      {onGenderChange && (
+        <div className="rounded-2xl p-3 bg-white/8 border border-white/15">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-base">👤</span>
+            <p className="text-white/80 text-[11px] font-black uppercase tracking-wider">Jantina</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { value: 'male', label: 'Lelaki', emoji: '👨' },
+              { value: 'female', label: 'Perempuan', emoji: '👩' },
+            ].map((option) => (
+              <motion.button
+                key={option.value}
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                onClick={() => onGenderChange(option.value)}
+                className={`py-2.5 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-1.5 ${
+                  gender === option.value
+                    ? 'bg-white text-purple-600 shadow-lg'
+                    : 'bg-white/15 text-white border border-white/25 hover:bg-white/20'
+                }`}
+              >
+                <span className="text-base">{option.emoji}</span>
+                {option.label}
+              </motion.button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {isOnTopTier && (
         <div className="rounded-2xl p-3 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 border border-yellow-300/40 flex items-center gap-2">

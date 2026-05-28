@@ -133,52 +133,18 @@ export default function ClientDashboard() {
           </div>
         </motion.div>
 
-        {/* Gender Picker */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-4 mt-6 md:mt-8 rounded-3xl p-4 md:p-5 shadow-lg"
-          style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.2)' }}
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-pink-300 rounded-full" />
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider">👤 Jantina</p>
-          </div>
-          <div className="grid grid-cols-2 gap-2 md:gap-3">
-            {[
-              { value: 'male', label: 'Lelaki', emoji: '👨' },
-              { value: 'female', label: 'Perempuan', emoji: '👩' },
-            ].map((option) => (
-              <motion.button
-                key={option.value}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setGender(option.value)}
-                className={`py-3 md:py-4 rounded-2xl font-bold transition-all text-xs md:text-sm flex flex-col items-center gap-1 ${
-                  gender === option.value
-                    ? 'bg-white text-purple-600 shadow-xl'
-                    : 'bg-white/20 text-white border border-white/30'
-                }`}
-              >
-                <span className="text-2xl">{option.emoji}</span>
-                {option.label}
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Langganan & Naik Taraf — gabungan dalam satu card */}
+        {/* Langganan, Jantina & Naik Taraf — gabungan dalam satu card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="mb-4"
+          className="mb-4 mt-6 md:mt-8"
         >
           <div className="flex items-center gap-2 mb-3 px-1">
             <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-orange-400 rounded-full" />
             <p className="text-white/80 text-xs font-black uppercase tracking-wider">💎 Langganan & Pakej</p>
           </div>
-          <UpgradeTierCard currentTier={userTier} user={user} />
+          <UpgradeTierCard currentTier={userTier} user={user} gender={gender} onGenderChange={setGender} />
         </motion.div>
 
         {/* Manage Devices */}
