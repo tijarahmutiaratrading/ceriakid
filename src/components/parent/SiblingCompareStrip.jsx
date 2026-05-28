@@ -30,11 +30,8 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
       animate={{ opacity: 1, y: 0 }}
       className="rounded-3xl p-5 mb-4 mt-4 relative overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08))',
-        backdropFilter: 'blur(24px) saturate(150%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(150%)',
-        border: '1px solid rgba(255,255,255,0.25)',
-        boxShadow: '0 12px 36px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.35)',
+        background: 'linear-gradient(135deg, #4c1d95 0%, #7c3aed 50%, #db2777 100%)',
+        boxShadow: '0 20px 50px -15px rgba(124, 58, 237, 0.5), 0 0 0 1px rgba(255,255,255,0.12) inset',
       }}
     >
       {/* Soft glow accent */}

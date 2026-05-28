@@ -28,8 +28,11 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4"
-      style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+      className="rounded-3xl p-4 relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
+        boxShadow: '0 20px 50px -15px rgba(139, 92, 246, 0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
+      }}
     >
       <div className="flex items-center gap-3 mb-4">
         {child?.avatarUrl ? (

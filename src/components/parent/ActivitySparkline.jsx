@@ -70,8 +70,11 @@ export default function ActivitySparkline({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4"
-      style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+      className="rounded-3xl p-4 relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%)',
+        boxShadow: '0 20px 50px -15px rgba(124, 58, 237, 0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
+      }}
     >
       <div className="flex items-center justify-between mb-3">
         <p className="text-white text-xs font-black uppercase tracking-wider flex items-center gap-2">

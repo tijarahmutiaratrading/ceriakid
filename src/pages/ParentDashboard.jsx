@@ -154,8 +154,11 @@ export default function ParentDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-3xl p-10 text-center"
-            style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+            className="rounded-3xl p-10 text-center relative overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #4c1d95 0%, #7c3aed 50%, #db2777 100%)',
+              boxShadow: '0 20px 50px -15px rgba(124, 58, 237, 0.5), 0 0 0 1px rgba(255,255,255,0.12) inset',
+            }}
           >
             <p className="text-5xl mb-4">👨‍👩‍👧‍👦</p>
             <p className="text-white font-black text-lg mb-2 drop-shadow">Belum ada profil anak</p>
@@ -199,8 +202,11 @@ export default function ParentDashboard() {
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="rounded-3xl p-8 text-center"
-                      style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+                      className="rounded-3xl p-8 text-center relative overflow-hidden"
+                      style={{
+                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
+                        boxShadow: '0 20px 50px -15px rgba(139, 92, 246, 0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
+                      }}
                     >
                       <p className="text-5xl mb-3">🎮</p>
                       <p className="text-white font-black text-base mb-2">{selectedChild} belum mula bermain</p>

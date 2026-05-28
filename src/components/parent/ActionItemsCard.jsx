@@ -117,8 +117,11 @@ export default function ActionItemsCard({ childName, games }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4"
-      style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+      className="rounded-3xl p-4 relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #d946ef 100%)',
+        boxShadow: '0 20px 50px -15px rgba(168, 85, 247, 0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
+      }}
     >
       <p className="text-white text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-2">
         🎯 Apa Patut Buat Seterusnya
