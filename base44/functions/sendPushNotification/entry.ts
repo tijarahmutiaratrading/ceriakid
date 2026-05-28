@@ -33,10 +33,17 @@ Deno.serve(async (req) => {
 
     const publicKey = Deno.env.get('VAPID_PUBLIC_KEY');
     const privateKey = Deno.env.get('VAPID_PRIVATE_KEY');
-    const subject = Deno.env.get('VAPID_SUBJECT') || 'mailto:admin@ceriakid.com';
+    let subject = Deno.env.get('VAPID_SUBJECT') || 'mailto:admin@ceriakid.com';
 
     if (!publicKey || !privateKey) {
       return Response.json({ error: 'VAPID keys not configured. Run generateVapidKeys and set secrets.' }, { status: 500 });
+    }
+
+    // web-push library requires subject to be a valid URL (mailto: or https://).
+    // Auto-fix common mistake: plain email → prepend mailto:
+    subject = subject.trim();
+    if (!subject.startsWith('mailto:') && !subject.startsWith('http://') && !subject.startsWith('https://')) {
+      subject = `mailto:${subject}`;
     }
 
     webpush.setVapidDetails(subject, publicKey, privateKey);
