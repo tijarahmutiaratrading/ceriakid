@@ -221,7 +221,7 @@ export default function StoryKid() {
                         <p className="text-slate-500 text-xs font-medium mt-1 line-clamp-2">{item.moral}</p>
                       </div>
                     </div>
-                    <div className="mt-4 mx-1 py-3 rounded-2xl bg-slate-900 text-white text-center font-bold text-sm shadow-md group-hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5">
+                    <div className="mt-4 mx-1 py-3 rounded-2xl bg-orange-500 text-white text-center font-bold text-sm shadow-md group-hover:bg-orange-600 transition-all flex items-center justify-center gap-1.5">
                       Baca Cerita <ChevronRight className="w-4 h-4" />
                     </div>
                   </motion.button>
