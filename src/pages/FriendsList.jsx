@@ -146,13 +146,6 @@ export default function FriendsList() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
-      {/* Floating orbs background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
-        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
-      </div>
-
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24 overflow-x-hidden">

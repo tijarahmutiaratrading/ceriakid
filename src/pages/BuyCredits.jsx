@@ -76,17 +76,22 @@ export default function BuyCredits() {
             animate={{ opacity: 1, y: 0 }}
             className={`mb-5 rounded-2xl p-4 flex items-start gap-3 ${
               statusBanner.kind === 'success'
-                ? 'bg-green-500/20 border-2 border-green-300/50'
-                : 'bg-red-500/20 border-2 border-red-300/50'
+                ? 'bg-green-50 border-2 border-green-300'
+                : 'bg-red-50 border-2 border-red-300'
             }`}
           >
-            {statusBanner.kind === 'success' ? <CheckCircle2 className="w-5 h-5 text-green-300 flex-shrink-0 mt-0.5" /> : <XCircle className="w-5 h-5 text-red-300 flex-shrink-0 mt-0.5" />}
-            <p className="text-white font-bold text-sm">{statusBanner.msg}</p>
+            {statusBanner.kind === 'success' ? <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" /> : <XCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />}
+            <p className="text-slate-900 font-bold text-sm">{statusBanner.msg}</p>
           </motion.div>
         )}
 
         {/* Hero */}
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-6 rounded-3xl p-6"
+          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.18)' }}
+        >
           <div className="inline-flex items-center gap-2 bg-amber-400/20 px-3 py-1.5 rounded-full mb-3">
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
             <span className="text-amber-200 text-[11px] font-black uppercase tracking-widest">Kredit AI CeriaKid</span>

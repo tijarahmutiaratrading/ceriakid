@@ -44,13 +44,6 @@ export default function Scoreboard() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
-      {/* Floating orbs background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
-        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
-      </div>
-
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24 overflow-x-hidden">
@@ -60,7 +53,7 @@ export default function Scoreboard() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-5 p-5 rounded-3xl flex items-center justify-between"
-          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
         >
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">🏆</div>
@@ -85,7 +78,7 @@ export default function Scoreboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="rounded-3xl p-10 text-center"
-            style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+            style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
           >
             <div className="text-5xl mb-4">🎮</div>
             <p className="text-white font-black text-lg mb-2">{t('noScores')}</p>
@@ -99,7 +92,7 @@ export default function Scoreboard() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.05 }}
               className="rounded-3xl p-6 text-center mb-5"
-              style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
+              style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
             >
               <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2">{t('totalStars')}</p>
               <div className="flex items-center justify-center gap-3">
@@ -120,7 +113,7 @@ export default function Scoreboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.08 }}
                     className="rounded-2xl p-4"
-                    style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+                    style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.78), rgba(88,28,135,0.7))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
                   >
                     <div className="text-2xl mb-2">{gameInfo.emoji}</div>
                     <p className="text-white/70 text-xs font-bold mb-1">
@@ -153,7 +146,7 @@ export default function Scoreboard() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.04 }}
                       className="rounded-2xl px-4 py-3 flex items-center gap-3"
-                      style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
+                      style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.78), rgba(88,28,135,0.7))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
                     >
                       <span className="text-2xl">{gameInfo.emoji}</span>
                       <div className="flex-1">

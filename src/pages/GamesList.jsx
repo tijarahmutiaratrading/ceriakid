@@ -241,13 +241,6 @@ export default function GamesList() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
-      {/* Floating orbs background — match dashboard */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
-        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
-      </div>
-
       <AppHeader showBack={true} backTo="/dashboard" />
       <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24 overflow-x-hidden">
 
@@ -333,7 +326,7 @@ export default function GamesList() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-5"
           >
-            <p className="text-white text-[11px] font-black uppercase tracking-[0.18em] mb-2 px-1 drop-shadow-sm">{t('selectDarjah', lang)}</p>
+            <p className="text-slate-700 text-[11px] font-black uppercase tracking-[0.18em] mb-2 px-1">{t('selectDarjah', lang)}</p>
             <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
               {availableDarjah.map(d => {
                 const active = selectedDarjah === d;
@@ -345,13 +338,13 @@ export default function GamesList() {
                     onClick={() => setSelectedDarjah(d)}
                     className={`flex-shrink-0 min-h-10 px-4 py-2 rounded-full font-semibold text-sm transition-all inline-flex items-center gap-2 ${
                       active
-                        ? 'bg-white text-slate-900 shadow-lg'
-                        : 'bg-white/15 text-white ring-1 ring-white/30 hover:bg-white/25 backdrop-blur-md'
+                        ? 'bg-gradient-to-br from-purple-600 to-pink-600 text-white shadow-lg'
+                        : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50 shadow-sm'
                     }`}
                   >
                     {DARJAH_LABELS[d] || `Darjah ${d}`}
                     <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-                      active ? 'bg-slate-100 text-slate-600' : 'bg-white/25 text-white'
+                      active ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-600'
                     }`}>
                       {count}
                     </span>
@@ -368,7 +361,7 @@ export default function GamesList() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             className="rounded-3xl p-12 text-center"
-            style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.35)' }}
+            style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
           >
             <p className="text-5xl mb-4">🚀</p>
             <p className="text-xl font-black text-white mb-2 tracking-tight drop-shadow-md">{t('newGamesComingSoon', lang)}</p>

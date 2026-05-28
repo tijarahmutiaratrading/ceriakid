@@ -12,7 +12,7 @@ import UserTopHeader from '@/components/UserTopHeader';
 export default function AppLayout() {
   return (
     <>
-      {/* Default premium dark background for authenticated pages.
+      {/* Clean Apple-style white background for authenticated pages.
           Home (dashboard) renders its own image on top of this. */}
       <div
         aria-hidden="true"
@@ -25,9 +25,9 @@ export default function AppLayout() {
           bottom: 0,
           zIndex: -2,
           background:
-            'radial-gradient(ellipse at top left, rgba(124, 58, 237, 0.35), transparent 55%),' +
-            'radial-gradient(ellipse at bottom right, rgba(219, 39, 119, 0.28), transparent 55%),' +
-            'linear-gradient(160deg, #0b1020 0%, #1a0b2e 40%, #2a0f3d 70%, #1f0a2b 100%)',
+            'radial-gradient(ellipse at top right, rgba(168, 85, 247, 0.06), transparent 60%),' +
+            'radial-gradient(ellipse at bottom left, rgba(236, 72, 153, 0.05), transparent 60%),' +
+            'linear-gradient(180deg, #ffffff 0%, #fafafa 50%, #f5f5f7 100%)',
         }}
       />
       <div className="min-h-screen w-full relative">

@@ -79,13 +79,6 @@ export default function ClientDashboard() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
-      {/* Floating orbs background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
-        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
-      </div>
-
       <AppHeader />
 
       <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-5">
@@ -94,8 +87,8 @@ export default function ClientDashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 md:mb-6 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-purple-950/20 border border-white/40 relative isolate"
-          style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(26px)', clipPath: 'inset(0 round 2.5rem)' }}
+          className="mb-4 md:mb-6 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-purple-950/30 border border-white/20 relative isolate"
+          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))', backdropFilter: 'blur(26px)', clipPath: 'inset(0 round 2.5rem)' }}
         >
           <div className="absolute -top-16 -right-10 w-44 h-44 bg-yellow-200/30 rounded-full blur-2xl" />
           <div className="absolute -bottom-20 -left-12 w-56 h-56 bg-pink-200/30 rounded-full blur-2xl" />
@@ -146,7 +139,7 @@ export default function ClientDashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="mb-4 mt-6 md:mt-8 rounded-3xl p-4 md:p-5 shadow-lg"
-          style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.4)' }}
+          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.18)' }}
         >
           <div className="flex items-center gap-2 mb-4">
             <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-pink-300 rounded-full" />
@@ -213,7 +206,7 @@ export default function ClientDashboard() {
             <div className="h-1 w-8 bg-gradient-to-r from-cyan-300 to-pink-300 rounded-full" />
             <p className="text-white/80 text-xs font-black uppercase tracking-wider">📱 Device Berdaftar</p>
           </div>
-          <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.4)' }}>
+          <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.18)' }}>
             <div className="p-4">
               <ManageDevices userEmail={user?.email} tier={userTier} />
             </div>
