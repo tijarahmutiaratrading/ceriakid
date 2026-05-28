@@ -137,7 +137,7 @@ export default function BuyCredits() {
               <p className="text-amber-300 text-xs font-black">{CREDIT_COSTS.quiz_ai} kredit / soalan</p>
             </div>
           </div>
-          <p className="text-white text-xs font-bold mt-4">
+          <p className="text-slate-900 text-xs font-bold mt-4">
             💡 Kredit tidak luput. Boleh dipakai bila-bila masa.
           </p>
         </motion.div>
