@@ -9,6 +9,7 @@ import AppHeader from '@/components/AppHeader';
 import { getDefaultAvatar } from '@/lib/avatarGenerator';
 import UpgradeTierCard from '@/components/dashboard/UpgradeTierCard';
 import PersonalInfoCard from '@/components/dashboard/PersonalInfoCard';
+import SettingsHero from '@/components/dashboard/SettingsHero';
 import ManageDevices from '@/components/ManageDevices';
 import OfflineModeCard from '@/components/offline/OfflineModeCard';
 
@@ -84,54 +85,19 @@ export default function ClientDashboard() {
 
       <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-5">
 
-        {/* Hero Profile Card */}
+        {/* Hero Profile — Apple Fitness style (sama macam dashboard) */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 md:mb-6 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-purple-950/30 border border-white/20 relative isolate"
-          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))', backdropFilter: 'blur(26px)', clipPath: 'inset(0 round 2.5rem)' }}
+          className="mb-4 md:mb-6"
         >
-          <div className="absolute -top-16 -right-10 w-44 h-44 bg-yellow-200/30 rounded-full blur-2xl" />
-          <div className="absolute -bottom-20 -left-12 w-56 h-56 bg-pink-200/30 rounded-full blur-2xl" />
-          {/* Avatar overlapping strip */}
-          <div className="relative px-4 md:px-6 pb-4 md:pb-6 pt-4 md:pt-6">
-            <div className="flex items-end gap-4 mb-6">
-              <div className="relative">
-                {avatarUrl && avatarUrl.includes('http') ? (
-                  <img src={avatarUrl} alt="Avatar" className="w-24 h-24 rounded-2xl object-cover border-4 border-white shadow-xl" />
-                ) : (
-                  <div className="w-24 h-24 rounded-2xl bg-white/40 border-4 border-white shadow-xl flex items-center justify-center text-5xl">🐱</div>
-                )}
-                <label className="absolute -bottom-1 -right-1 w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-orange-600 transition-colors z-10">
-                  <input type="file" accept="image/*" onChange={handleAvatarUpload} disabled={saving} className="hidden" />
-                  {saving ? <Loader className="w-4 h-4 text-white animate-spin" /> : <Upload className="w-4 h-4 text-white" />}
-                </label>
-              </div>
-              <div className="mb-1">
-                <p className="text-white font-black text-xl leading-tight">{user?.full_name || 'Pengguna'}</p>
-                <p className="text-white/70 text-xs font-semibold">{user?.email}</p>
-              </div>
-            </div>
-
-            {/* Account info row */}
-            <div className="grid grid-cols-2 gap-2 md:gap-3">
-              {[
-                { icon: Mail, label: 'E-mel', value: user?.email },
-                { icon: Calendar, label: 'Ahli Sejak', value: user?.created_date ? new Date(user.created_date).toLocaleDateString('ms-MY') : '-' },
-              ].map((item, i) => {
-                const Icon = item.icon;
-                return (
-                  <div key={i} className="bg-white/20 rounded-2xl p-3">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <Icon className="w-3.5 h-3.5 text-white/70" />
-                      <p className="text-white/70 text-xs font-bold">{item.label}</p>
-                    </div>
-                    <p className="text-white font-black text-xs truncate">{item.value}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <SettingsHero
+            user={user}
+            avatarUrl={avatarUrl}
+            userTier={userTier}
+            saving={saving}
+            onAvatarUpload={handleAvatarUpload}
+          />
         </motion.div>
 
         {/* Maklumat Peribadi — edit nama & no. telefon */}
