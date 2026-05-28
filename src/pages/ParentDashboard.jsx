@@ -16,6 +16,7 @@ import ActionItemsCard from '@/components/parent/ActionItemsCard';
 import ChildSnapshotCard from '@/components/parent/ChildSnapshotCard';
 import ChildSubjectProgress from '@/components/parent/ChildSubjectProgress';
 import ShareSheet from '@/components/parent/ShareSheet';
+import MascotBackdrop from '@/components/parent/MascotBackdrop';
 
 export default function ParentDashboard() {
   const { user, isAuthenticated, isLoadingAuth, navigateToLogin, logout } = useAuth();
@@ -143,6 +144,8 @@ export default function ParentDashboard() {
           backgroundRepeat: 'no-repeat',
         }}
       />
+      {/* Floating cartoon mascots overlay */}
+      <MascotBackdrop />
       <AppHeader showBack={true} backTo="/dashboard" />
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-6 relative z-10">
 
