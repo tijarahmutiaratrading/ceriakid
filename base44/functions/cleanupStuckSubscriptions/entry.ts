@@ -15,13 +15,19 @@ Deno.serve(async (req) => {
     for (const sub of allSubs) {
       if (sub.status !== 'incomplete') continue;
       const updatedAt = new Date(sub.updated_date || sub.created_date).getTime();
-      if (updatedAt < cutoff) {
-        await base44.asServiceRole.entities.UserSubscription.update(sub.id, {
-          status: 'canceled',
-          tier: 'free',
-        });
-        cleaned++;
-      }
+      if (updatedAt >= cutoff) continue;
+
+      // SAFETY: jangan downgrade user yang dah ada paid subscription aktif.
+      // Kalau currentPeriodEnd masih dalam masa depan, ini bermakna mereka tengah
+      // upgrade dari paid plan — bukan first-time signup yang stuck. Kekalkan tier.
+      const periodEnd = sub.currentPeriodEnd ? new Date(sub.currentPeriodEnd).getTime() : 0;
+      const stillActive = periodEnd > Date.now();
+      const updateData = stillActive
+        ? { status: 'active' } // restore to active — payment failed but old plan still valid
+        : { status: 'canceled', tier: 'free' };
+
+      await base44.asServiceRole.entities.UserSubscription.update(sub.id, updateData);
+      cleaned++;
     }
 
     return Response.json({ success: true, cleaned, message: `Cleaned ${cleaned} stuck incomplete subscriptions` });

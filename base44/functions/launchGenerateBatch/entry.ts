@@ -351,7 +351,7 @@ Deno.serve(async (req) => {
           isPublished: true,
           status: 'ready',
           order: gameIndex + 1,
-          monthTag: '2026-05',
+          monthTag: new Date().toISOString().slice(0, 7), // YYYY-MM auto, bukan hardcoded
         });
         inserted++;
       } else {
