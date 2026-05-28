@@ -482,29 +482,32 @@ export default function AdminDashboard() {
             {/* Push Notifications */}
             {settingsTab === 'push' && <PushNotificationPanel />}
 
-            {/* Save Button */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={handleSave}
-                disabled={saving}
-                className={`w-full py-3 md:py-4 rounded-2xl font-black text-sm md:text-lg flex items-center justify-center gap-3 shadow-lg transition-all ${
-                  saved
-                    ? 'bg-gradient-to-r from-green-400 to-emerald-600 text-white'
-                    : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
-                }`}
-              >
-                {saving ? (
-                  <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> Menyimpan...</>
-                ) : saved ? (
-                  <><CheckCircle className="w-5 h-5" /> Tersimpan!</>
-                ) : (
-                  <><Save className="w-5 h-5" /> Simpan Tetapan</>
-                )}
-              </motion.button>
-              <p className="text-center text-xs text-slate-600 mt-4 font-semibold">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
-            </motion.div>
+            {/* Save Button — sembunyi di tab Push sebab panel push ada save sendiri */}
+            {settingsTab !== 'push' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleSave}
+                  disabled={saving}
+                  className={`w-full py-3 md:py-4 rounded-2xl font-black text-sm md:text-lg flex items-center justify-center gap-3 shadow-lg transition-all ${
+                    saved
+                      ? 'bg-gradient-to-r from-green-400 to-emerald-600 text-white'
+                      : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
+                  }`}
+                >
+                  {saving ? (
+                    <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> Menyimpan...</>
+                  ) : saved ? (
+                    <><CheckCircle className="w-5 h-5" /> Tersimpan!</>
+                  ) : (
+                    <><Save className="w-5 h-5" /> Simpan Tetapan</>
+                  )}
+                </motion.button>
+                <p className="text-center text-xs text-slate-600 mt-4 font-semibold">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
+              </motion.div>
+            )}
           </>
         )}
           </main>
