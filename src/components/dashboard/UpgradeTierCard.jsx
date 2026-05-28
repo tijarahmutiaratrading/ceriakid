@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Crown, Check, Loader, ArrowUp, CheckCircle2 } from 'lucide-react';
+import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
 // Tier hierarchy — used to determine which packages are upgrades vs current/lower
 // Note: premium & pro adalah tier admin/legacy — dianggap setara dengan keluarga (tertinggi)
@@ -10,53 +11,61 @@ const TIER_ORDER = ['free', 'asas', 'standard', 'keluarga', 'premium', 'pro'];
 const TIER_PRICES = { free: 0, asas: 49, standard: 99, keluarga: 199, premium: 199, pro: 199 };
 
 // Semua pakej yang boleh ditunjuk (free tak masuk sebab tu bukan pakej "naik taraf")
-const ALL_TIERS = {
-  asas: {
-    name: 'asas',
-    nameMY: '🌱 Asas',
-    priceMYR: 49,
-    color: 'from-green-400 to-emerald-500',
-    features: [
-      '~300 game (50/subjek)',
-      '🎁 5 kredit AI percuma',
-      'Semua subjek (BM, English, Math, Sains, Jawi, Tamil, Mandarin)',
-      'Prasekolah & Sekolah Rendah',
-      'Tanpa iklan',
-      'Boleh guna offline 📲',
-      '1 peranti sahaja',
-    ],
-  },
-  standard: {
-    name: 'standard',
-    nameMY: '⭐ Standard',
-    priceMYR: 99,
-    color: 'from-blue-400 to-indigo-500',
-    features: [
-      '~600 game (100/subjek)',
-      '🎁 20 kredit AI percuma',
-      'Semua subjek',
-      'Prasekolah & Sekolah Rendah',
-      'Tanpa iklan',
-      'Boleh guna offline 📲',
-      'Sehingga 2 peranti',
-    ],
-  },
-  keluarga: {
-    name: 'keluarga',
-    nameMY: '👑 Keluarga',
-    priceMYR: 199,
-    color: 'from-purple-500 to-pink-500',
-    features: [
-      'Akses penuh semua game 🔓',
-      '🎁 50 kredit AI percuma',
-      'Sehingga 4 profil anak',
-      'Semua subjek',
-      'Boleh guna offline 📲',
-      'Sokongan prioriti',
-      'Sehingga 4 peranti',
-    ],
-    popular: true,
-  },
+// gameLabel adalah dinamik — dijana dari real-time game stats (lihat buildTiers di bawah)
+const buildTiers = (stats) => {
+  const fmt = (n) => formatGameCount(n);
+  const asasCount = stats?.accessibleByTier?.asas;
+  const standardCount = stats?.accessibleByTier?.standard;
+  const keluargaCount = stats?.accessibleByTier?.keluarga;
+
+  return {
+    asas: {
+      name: 'asas',
+      nameMY: '🌱 Asas',
+      priceMYR: 49,
+      color: 'from-green-400 to-emerald-500',
+      features: [
+        asasCount ? `${fmt(asasCount)} game (50/subjek)` : '50 game/subjek',
+        '🎁 5 kredit AI percuma',
+        'Semua subjek (BM, English, Math, Sains, Jawi, Tamil, Mandarin)',
+        'Prasekolah & Sekolah Rendah',
+        'Tanpa iklan',
+        'Boleh guna offline 📲',
+        '1 peranti sahaja',
+      ],
+    },
+    standard: {
+      name: 'standard',
+      nameMY: '⭐ Standard',
+      priceMYR: 99,
+      color: 'from-blue-400 to-indigo-500',
+      features: [
+        standardCount ? `${fmt(standardCount)} game (100/subjek)` : '100 game/subjek',
+        '🎁 20 kredit AI percuma',
+        'Semua subjek',
+        'Prasekolah & Sekolah Rendah',
+        'Tanpa iklan',
+        'Boleh guna offline 📲',
+        'Sehingga 2 peranti',
+      ],
+    },
+    keluarga: {
+      name: 'keluarga',
+      nameMY: '👑 Keluarga',
+      priceMYR: 199,
+      color: 'from-purple-500 to-pink-500',
+      features: [
+        keluargaCount ? `Akses penuh ${fmt(keluargaCount)} game 🔓` : 'Akses penuh semua game 🔓',
+        '🎁 50 kredit AI percuma',
+        'Sehingga 4 profil anak',
+        'Semua subjek',
+        'Boleh guna offline 📲',
+        'Sokongan prioriti',
+        'Sehingga 4 peranti',
+      ],
+      popular: true,
+    },
+  };
 };
 
 const TIER_LABEL = {
@@ -72,6 +81,10 @@ export default function UpgradeTierCard({ currentTier, user }) {
   const [upgrading, setUpgrading] = useState(null); // tier name yang sedang diproses
   const [error, setError] = useState('');
   const [confirmTier, setConfirmTier] = useState(null);
+  const { stats } = useGameStats();
+
+  // Auto-generate tier features dengan real-time game count
+  const ALL_TIERS = buildTiers(stats);
 
   const currentIdx = TIER_ORDER.indexOf(currentTier);
   const allTierKeys = Object.keys(ALL_TIERS); // ['asas','standard','keluarga']

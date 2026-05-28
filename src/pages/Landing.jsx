@@ -11,6 +11,7 @@ import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import LandingHeroCarousel from '@/components/landing/LandingHeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
 import LandingAISection from '@/components/landing/LandingAISection';
+import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
 
 // Testimoni ibu bapa pengguna CeriaKid
@@ -23,41 +24,80 @@ const testimonials = [
 { name: 'Puan Roslina Hassan', location: 'Kota Bharu, Kelantan', quote: 'Subjek Jawi dan Bahasa Melayu memang lengkap. Anak saya 5 tahun dah mula kenal huruf Jawi dengan cara yang menyeronokkan.', stars: 5, avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png', highlight: 'Jawi lengkap' }];
 
 
-const tiers = [
-{
-  name: 'asas',
-  nameMY: '🌱 Asas',
-  priceMYR: '49',
-  perMonth: '4.08',
-  period: '/tahun',
-  features: ['~300 game (50/subjek)', '🎁 5 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', '1 peranti sahaja 📱'],
-  noFeatures: ['Sehingga 4 anak'],
-  cta: 'Mulakan Sekarang',
-  highlighted: false
-},
-{
-  name: 'keluarga',
-  nameMY: '👑 Keluarga',
-  priceMYR: '199',
-  perMonth: '16.58',
-  period: '/tahun',
-  savings: 'PALING POPULAR',
-  features: ['Akses penuh semua game 🔓', '🎁 50 KREDIT AI PERCUMA (Cikgu Firdaus + Penjana Cerita)', 'Semua subjek', 'Prasekolah & Sekolah Rendah', 'Tiada game dikunci 🔓', 'Sehingga 4 profil anak', 'Boleh guna offline 📲', 'Sokongan prioriti', 'Sehingga 4 peranti 📱📱📱📱'],
-  noFeatures: [],
-  cta: '🔥 Pilih Keluarga',
-  highlighted: true
-},
-{
-  name: 'standard',
-  nameMY: '⭐ Standard',
-  priceMYR: '99',
-  perMonth: '8.25',
-  period: '/tahun',
-  features: ['~600 game (100/subjek)', '🎁 20 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)', 'Semua subjek', 'Prasekolah & Sekolah Rendah boleh akses', 'Game selepas had dikunci 🔒', 'Tanpa iklan', 'Boleh guna offline 📲', 'Kemas kini mingguan', 'Sehingga 2 peranti 📱📱'],
-  noFeatures: ['Sehingga 4 anak'],
-  cta: 'Pilih Standard',
-  highlighted: false
-}];
+// Tiers dijana dinamik dari real-time game stats (lihat buildTiers)
+const buildTiers = (stats) => {
+  const fmt = formatGameCount;
+  const asasGames = stats?.accessibleByTier?.asas;
+  const standardGames = stats?.accessibleByTier?.standard;
+  const keluargaGames = stats?.accessibleByTier?.keluarga;
+
+  return [
+    {
+      name: 'asas',
+      nameMY: '🌱 Asas',
+      priceMYR: '49',
+      perMonth: '4.08',
+      period: '/tahun',
+      features: [
+        asasGames ? `${fmt(asasGames)} game (50/subjek)` : '50 game/subjek',
+        '🎁 5 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)',
+        'Semua subjek',
+        'Prasekolah & Sekolah Rendah boleh akses',
+        'Game selepas had dikunci 🔒',
+        'Tanpa iklan',
+        'Boleh guna offline 📲',
+        'Kemas kini mingguan',
+        '1 peranti sahaja 📱',
+      ],
+      noFeatures: ['Sehingga 4 anak'],
+      cta: 'Mulakan Sekarang',
+      highlighted: false,
+    },
+    {
+      name: 'keluarga',
+      nameMY: '👑 Keluarga',
+      priceMYR: '199',
+      perMonth: '16.58',
+      period: '/tahun',
+      savings: 'PALING POPULAR',
+      features: [
+        keluargaGames ? `Akses penuh ${fmt(keluargaGames)} game 🔓` : 'Akses penuh semua game 🔓',
+        '🎁 50 KREDIT AI PERCUMA (Cikgu Firdaus + Penjana Cerita)',
+        'Semua subjek',
+        'Prasekolah & Sekolah Rendah',
+        'Tiada game dikunci 🔓',
+        'Sehingga 4 profil anak',
+        'Boleh guna offline 📲',
+        'Sokongan prioriti',
+        'Sehingga 4 peranti 📱📱📱📱',
+      ],
+      noFeatures: [],
+      cta: '🔥 Pilih Keluarga',
+      highlighted: true,
+    },
+    {
+      name: 'standard',
+      nameMY: '⭐ Standard',
+      priceMYR: '99',
+      perMonth: '8.25',
+      period: '/tahun',
+      features: [
+        standardGames ? `${fmt(standardGames)} game (100/subjek)` : '100 game/subjek',
+        '🎁 20 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)',
+        'Semua subjek',
+        'Prasekolah & Sekolah Rendah boleh akses',
+        'Game selepas had dikunci 🔒',
+        'Tanpa iklan',
+        'Boleh guna offline 📲',
+        'Kemas kini mingguan',
+        'Sehingga 2 peranti 📱📱',
+      ],
+      noFeatures: ['Sehingga 4 anak'],
+      cta: 'Pilih Standard',
+      highlighted: false,
+    },
+  ];
+};
 
 
 const avatars = [
@@ -74,6 +114,8 @@ export default function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null); // 'success' | 'failed' | null
   const lastScrollY = useRef(0);
+  const { stats } = useGameStats();
+  const tiers = buildTiers(stats);
 
   // Detect payment FAILURE return from Chip.
   // NOTE: Successful payments redirect to /thank-you (see chipCheckout). Purchase pixel
