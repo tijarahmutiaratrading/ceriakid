@@ -85,9 +85,10 @@ export default function ChildProfileCard({
       whileHover={{ y: -3, scale: 1.01 }}
       className="rounded-3xl relative overflow-hidden group transition-all"
       style={{
-        background: 'rgba(255,255,255,0.06)',
-        backdropFilter: 'blur(14px)',
-        border: '2px dashed rgba(255,255,255,0.35)',
+        background: 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(49,16,90,0.55))',
+        backdropFilter: 'blur(18px)',
+        border: '2px dashed rgba(255,255,255,0.3)',
+        boxShadow: '0 12px 40px -10px rgba(15,23,42,0.5)',
       }}
     >
 
