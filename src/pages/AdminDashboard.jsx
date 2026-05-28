@@ -217,6 +217,7 @@ export default function AdminDashboard() {
 
   const settingsTabs = [
     { key: 'pixel', label: 'Facebook Pixel', icon: <Facebook className="w-4 h-4" /> },
+    { key: 'chip', label: 'Chip Payment', icon: <CreditCard className="w-4 h-4" /> },
     { key: 'webhook', label: 'Webhook', icon: <Webhook className="w-4 h-4" /> },
     { key: 'push', label: 'Notifications', icon: <Bell className="w-4 h-4" /> },
   ];
@@ -384,7 +385,62 @@ export default function AdminDashboard() {
               </motion.div>
             )}
 
+            {/* Chip Payment */}
+            {settingsTab === 'chip' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5 md:p-7">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-md">
+                    <CreditCard className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="font-black text-slate-900 text-lg">Chip Payment Gateway</h2>
+                    <p className="text-xs text-slate-600 font-semibold">FPX, kad kredit & e-wallet Malaysia</p>
+                  </div>
+                </div>
 
+                <FieldGroup label="Environment">
+                  <div className="flex gap-3">
+                    {['production', 'sandbox'].map(env => (
+                      <button
+                        key={env}
+                        onClick={() => set('chip_environment', env)}
+                        className={`flex-1 py-2.5 rounded-xl font-bold text-sm border-2 transition-all capitalize ${
+                          settings.chip_environment === env
+                            ? env === 'production'
+                              ? 'bg-green-500 text-white border-green-500'
+                              : 'bg-yellow-400 text-gray-900 border-yellow-400'
+                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
+                        }`}
+                      >
+                        {env === 'production' ? '🟢 Production' : '🟡 Sandbox'}
+                      </button>
+                    ))}
+                  </div>
+                </FieldGroup>
+
+                {loadingSecrets && (
+                  <p className="text-xs text-slate-600 mb-3">⏳ Memuat credentials dari server...</p>
+                )}
+
+                <FieldGroup label="Brand ID" hint="✅ Auto-loaded dari server. Edit untuk update.">
+                  <TextInput value={settings.chip_brand_id} onChange={v => set('chip_brand_id', v)} placeholder="abc12345-abcd-1234-abcd-abc123456789" />
+                </FieldGroup>
+
+                <FieldGroup label="API Key (Secret Key)" hint="✅ Auto-loaded dari server. Edit untuk update.">
+                  <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="sk_live_..." />
+                </FieldGroup>
+
+                <div className="mt-6 rounded-xl p-4 text-sm bg-green-50 border-2 border-green-200 text-green-900">
+                  <p className="font-black mb-1 text-green-700">📌 Cara dapatkan Chip credentials:</p>
+                  <ol className="list-decimal list-inside space-y-1 text-xs leading-relaxed">
+                    <li>Log in ke <strong>merchant.chip-in.asia</strong></li>
+                    <li>Pergi ke <strong>Settings → Brand</strong> untuk Brand ID</li>
+                    <li>Pergi ke <strong>Settings → API Keys</strong> untuk Secret Key</li>
+                    <li>Guna Sandbox dulu untuk testing</li>
+                  </ol>
+                </div>
+              </motion.div>
+            )}
 
             {/* Webhook */}
             {settingsTab === 'webhook' && (
