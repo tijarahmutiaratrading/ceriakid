@@ -113,7 +113,7 @@ export default function BuyCredits() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pro-glass rounded-3xl p-5">
           <div className="flex items-center gap-2 mb-3">
             <Info className="w-4 h-4 text-blue-300" />
-            <h2 className="text-white font-black text-base">Kos Setiap Ciri AI</h2>
+            <h2 className="text-slate-900 font-black text-base">Kos Setiap Ciri AI</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="bg-slate-900/50 backdrop-blur-md border border-white/20 rounded-2xl p-3">
