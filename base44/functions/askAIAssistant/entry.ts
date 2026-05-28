@@ -86,7 +86,7 @@ Jawab sekarang!`;
     try {
       const llmResponse = await base44.integrations.Core.InvokeLLM({
         prompt,
-        model: 'gemini_3_flash',
+        model: 'gpt_5_mini',
       });
       answer = typeof llmResponse === 'string' ? llmResponse : (llmResponse?.text || JSON.stringify(llmResponse));
     } catch (llmErr) {
@@ -117,7 +117,7 @@ Jawab sekarang!`;
       balanceAfter: newBalance,
       feature: 'ai_assistant',
       description: `Soalan: ${question.substring(0, 80)}${question.length > 80 ? '...' : ''}`,
-      metadata: { subject, level, childName, model: 'gemini_3_flash' },
+      metadata: { subject, level, childName, model: 'gpt_5_mini' },
     }).catch(() => {}); // fire-and-forget, jangan block response
 
     return Response.json({
