@@ -464,11 +464,12 @@ export default function AdminDashboard() {
                   <p className="text-xs text-slate-600 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
                   <div className="flex gap-2">
                     <div className="flex-1 bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl px-3 py-3 text-xs font-mono text-slate-700 break-all overflow-x-auto">
-                      {window.location.origin}/api/webhook/chip
+                      https://app.base44.com/functions/69f1c132ffcd7c660466eec5/chipWebhook
                     </div>
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText(`${window.location.origin}/api/webhook/chip`);
+                        const url = 'https://app.base44.com/functions/69f1c132ffcd7c660466eec5/chipWebhook';
+                        navigator.clipboard.writeText(url);
                         toast({ title: '📋 URL disalin!', description: 'Paste dalam Chip Dashboard.' });
                       }}
                       className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-xs transition-all"
@@ -476,6 +477,7 @@ export default function AdminDashboard() {
                       Copy
                     </button>
                   </div>
+                  <p className="text-[11px] text-amber-700 mt-2 font-semibold">⚠️ Pastikan URL ni yang di-set dalam Chip Dashboard. Kalau tersilap, webhook tak akan trigger dan subscription customer akan stuck di status "incomplete".</p>
                 </div>
 
                 <div className="rounded-xl p-4 text-sm bg-purple-50 border-2 border-purple-200 text-purple-900">
