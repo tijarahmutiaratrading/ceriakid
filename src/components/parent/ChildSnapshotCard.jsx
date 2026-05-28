@@ -28,15 +28,12 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 relative overflow-hidden isolate"
+      className="rounded-3xl p-4 relative overflow-hidden"
       style={{
-        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/13046f20a_generated_image.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
         boxShadow: '0 20px 50px -15px rgba(139, 92, 246, 0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
       }}
     >
-      <div className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(135deg, rgba(76,29,149,0.78) 0%, rgba(124,58,237,0.7) 50%, rgba(219,39,119,0.78) 100%)' }} />
       <div className="flex items-center gap-3 mb-4">
         {child?.avatarUrl ? (
           <img src={child.avatarUrl} alt={child.name} className="w-14 h-14 rounded-2xl object-cover ring-2 ring-white/40 shadow-lg flex-shrink-0" />

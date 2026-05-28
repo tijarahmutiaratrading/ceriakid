@@ -38,15 +38,12 @@ export default function RecentActivity({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 relative overflow-hidden isolate"
+      className="rounded-3xl p-4 relative overflow-hidden"
       style={{
-        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2612f0ef9_generated_image.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        background: 'linear-gradient(135deg, #4338ca 0%, #7e22ce 50%, #be185d 100%)',
         boxShadow: '0 20px 50px -15px rgba(126, 34, 206, 0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
       }}
     >
-      <div className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(135deg, rgba(67,56,202,0.82) 0%, rgba(126,34,206,0.72) 50%, rgba(190,24,93,0.8) 100%)' }} />
       <p className="text-white text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-2">
         🕒 Aktiviti Terkini
       </p>

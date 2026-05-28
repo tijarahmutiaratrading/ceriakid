@@ -28,15 +28,12 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-5 mb-4 mt-4 relative overflow-hidden isolate"
+      className="rounded-3xl p-5 mb-4 mt-4 relative overflow-hidden"
       style={{
-        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0ac2ef5c8_generated_image.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        background: 'linear-gradient(135deg, #4c1d95 0%, #7c3aed 50%, #db2777 100%)',
         boxShadow: '0 20px 50px -15px rgba(124, 58, 237, 0.5), 0 0 0 1px rgba(255,255,255,0.12) inset',
       }}
     >
-      <div className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(135deg, rgba(76,29,149,0.82) 0%, rgba(124,58,237,0.72) 50%, rgba(219,39,119,0.82) 100%)' }} />
       {/* Soft glow accent */}
       <div className="absolute -top-20 -right-10 w-48 h-48 rounded-full bg-fuchsia-400/15 blur-3xl pointer-events-none" />
 
