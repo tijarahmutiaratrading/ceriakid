@@ -1,16 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { Loader2, BookOpen, Trash2, Printer, X, Calendar } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import LibraryFilterBar from '@/components/ai/LibraryFilterBar';
+import LoadMoreButton from '@/components/ai/LoadMoreButton';
+
+const PAGE_SIZE = 20;
 
 const AGE_LABELS = {
   '4-6': 'Prasekolah',
   '7-9': 'Darjah 1-3',
   '10-12': 'Darjah 4-6',
 };
+
+const AGE_OPTIONS = Object.entries(AGE_LABELS).map(([value, label]) => ({ value, label }));
 
 const MORAL_LABELS = {
   kejujuran: 'Kejujuran',
@@ -23,12 +29,28 @@ const MORAL_LABELS = {
   sabar: 'Kesabaran',
 };
 
+
+const MORAL_OPTIONS = [
+  { value: 'kejujuran', label: 'Kejujuran' },
+  { value: 'persahabatan', label: 'Persahabatan' },
+  { value: 'keberanian', label: 'Keberanian' },
+  { value: 'kasih_sayang', label: 'Kasih Sayang' },
+  { value: 'kerajinan', label: 'Kerajinan' },
+  { value: 'tolong_menolong', label: 'Tolong-Menolong' },
+  { value: 'menghormati', label: 'Menghormati' },
+  { value: 'sabar', label: 'Kesabaran' },
+];
+
 export default function MyStoryLibrary({ refreshKey = 0 }) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
+  const [search, setSearch] = useState('');
+  const [ageFilter, setAgeFilter] = useState('all');
+  const [moralFilter, setMoralFilter] = useState('all');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const load = async () => {
     if (!user?.email) return;
@@ -64,6 +86,24 @@ export default function MyStoryLibrary({ refreshKey = 0 }) {
 
   const handlePrint = () => window.print();
 
+  const filteredItems = useMemo(() => {
+    const s = search.trim().toLowerCase();
+    return items.filter(it => {
+      if (ageFilter !== 'all' && it.ageRange !== ageFilter) return false;
+      if (moralFilter !== 'all' && it.moralLesson !== moralFilter) return false;
+      if (s) {
+        const blob = `${it.title || ''} ${it.theme || ''} ${it.moralSummary || ''}`.toLowerCase();
+        if (!blob.includes(s)) return false;
+      }
+      return true;
+    });
+  }, [items, search, ageFilter, moralFilter]);
+
+  const visibleItems = filteredItems.slice(0, visibleCount);
+  const remaining = filteredItems.length - visibleItems.length;
+
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [search, ageFilter, moralFilter]);
+
   if (loading) {
     return (
       <div className="bg-white/80 backdrop-blur-md border border-slate-200 rounded-3xl p-8 text-center">
@@ -85,8 +125,23 @@ export default function MyStoryLibrary({ refreshKey = 0 }) {
 
   return (
     <>
+      <LibraryFilterBar
+        search={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Cari cerita..."
+        totalCount={filteredItems.length}
+        filters={[
+          { key: 'age', label: 'Umur', value: ageFilter, options: AGE_OPTIONS },
+          { key: 'moral', label: 'Moral', value: moralFilter, options: MORAL_OPTIONS },
+        ]}
+        onFilterChange={(key, val) => {
+          if (key === 'age') setAgeFilter(val);
+          if (key === 'moral') setMoralFilter(val);
+        }}
+      />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {items.map(item => (
+        {visibleItems.map(item => (
           <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 10 }}
@@ -129,6 +184,12 @@ export default function MyStoryLibrary({ refreshKey = 0 }) {
           </motion.div>
         ))}
       </div>
+
+      <LoadMoreButton
+        onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
+        remaining={remaining}
+        color="pink"
+      />
 
       {/* Reader modal */}
       <AnimatePresence>

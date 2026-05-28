@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Brain, Trash2, X, Calendar, CheckCircle2, XCircle } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import LibraryFilterBar from '@/components/ai/LibraryFilterBar';
+import LoadMoreButton from '@/components/ai/LoadMoreButton';
+
+const PAGE_SIZE = 20;
 
 const SUBJECT_LABELS = {
   bahasa_melayu: 'BM',
@@ -13,6 +17,13 @@ const SUBJECT_LABELS = {
   jawi: 'Jawi',
   general: 'Umum',
 };
+
+const SUBJECT_OPTIONS = Object.entries(SUBJECT_LABELS).map(([value, label]) => ({ value, label }));
+
+const STATUS_OPTIONS = [
+  { value: 'correct', label: 'Betul' },
+  { value: 'wrong', label: 'Salah' },
+];
 
 const LEVEL_LABELS = {
   prasekolah: 'Prasekolah',
@@ -30,6 +41,10 @@ export default function MyQuizLibrary({ refreshKey = 0 }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
+  const [search, setSearch] = useState('');
+  const [subjectFilter, setSubjectFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const load = async () => {
     if (!user?.email) return;
@@ -63,6 +78,28 @@ export default function MyQuizLibrary({ refreshKey = 0 }) {
     }
   };
 
+  const totalCorrect = items.filter(x => x.isCorrect).length;
+  const accuracy = items.length > 0 ? Math.round((totalCorrect / items.length) * 100) : 0;
+
+  const filteredItems = useMemo(() => {
+    const s = search.trim().toLowerCase();
+    return items.filter(it => {
+      if (subjectFilter !== 'all' && it.subject !== subjectFilter) return false;
+      if (statusFilter === 'correct' && !it.isCorrect) return false;
+      if (statusFilter === 'wrong' && it.isCorrect) return false;
+      if (s) {
+        const blob = `${it.question || ''} ${it.topic || ''}`.toLowerCase();
+        if (!blob.includes(s)) return false;
+      }
+      return true;
+    });
+  }, [items, search, subjectFilter, statusFilter]);
+
+  const visibleItems = filteredItems.slice(0, visibleCount);
+  const remaining = filteredItems.length - visibleItems.length;
+
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [search, subjectFilter, statusFilter]);
+
   if (loading) {
     return (
       <div className="bg-white/80 backdrop-blur-md border border-slate-200 rounded-3xl p-8 text-center">
@@ -82,9 +119,6 @@ export default function MyQuizLibrary({ refreshKey = 0 }) {
     );
   }
 
-  const totalCorrect = items.filter(x => x.isCorrect).length;
-  const accuracy = items.length > 0 ? Math.round((totalCorrect / items.length) * 100) : 0;
-
   return (
     <>
       {/* Stats summary */}
@@ -103,8 +137,23 @@ export default function MyQuizLibrary({ refreshKey = 0 }) {
         </div>
       </div>
 
+      <LibraryFilterBar
+        search={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Cari soalan atau topik..."
+        totalCount={filteredItems.length}
+        filters={[
+          { key: 'subject', label: 'Subjek', value: subjectFilter, options: SUBJECT_OPTIONS },
+          { key: 'status', label: 'Status', value: statusFilter, options: STATUS_OPTIONS },
+        ]}
+        onFilterChange={(key, val) => {
+          if (key === 'subject') setSubjectFilter(val);
+          if (key === 'status') setStatusFilter(val);
+        }}
+      />
+
       <div className="space-y-2">
-        {items.map(item => (
+        {visibleItems.map(item => (
           <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 6 }}
@@ -152,6 +201,12 @@ export default function MyQuizLibrary({ refreshKey = 0 }) {
           </motion.div>
         ))}
       </div>
+
+      <LoadMoreButton
+        onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
+        remaining={remaining}
+        color="cyan"
+      />
 
       {/* Detail modal */}
       <AnimatePresence>

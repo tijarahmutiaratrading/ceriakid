@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, FileText, Trash2, Printer, X, Calendar } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import LibraryFilterBar from '@/components/ai/LibraryFilterBar';
+import LoadMoreButton from '@/components/ai/LoadMoreButton';
+
+const PAGE_SIZE = 20;
 
 const SUBJECT_LABELS = {
   bahasa_melayu: 'Bahasa Melayu',
@@ -25,12 +29,19 @@ const LEVEL_LABELS = {
   darjah_6: 'Darjah 6',
 };
 
+const SUBJECT_OPTIONS = Object.entries(SUBJECT_LABELS).map(([value, label]) => ({ value, label }));
+const LEVEL_OPTIONS = Object.entries(LEVEL_LABELS).map(([value, label]) => ({ value, label }));
+
 export default function MyBBMLibrary({ refreshKey = 0 }) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
+  const [search, setSearch] = useState('');
+  const [subjectFilter, setSubjectFilter] = useState('all');
+  const [levelFilter, setLevelFilter] = useState('all');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const load = async () => {
     if (!user?.email) return;
@@ -66,6 +77,24 @@ export default function MyBBMLibrary({ refreshKey = 0 }) {
 
   const handlePrint = () => window.print();
 
+  const filteredItems = useMemo(() => {
+    const s = search.trim().toLowerCase();
+    return items.filter(it => {
+      if (subjectFilter !== 'all' && it.subject !== subjectFilter) return false;
+      if (levelFilter !== 'all' && it.level !== levelFilter) return false;
+      if (s) {
+        const blob = `${it.title || ''} ${it.description || ''}`.toLowerCase();
+        if (!blob.includes(s)) return false;
+      }
+      return true;
+    });
+  }, [items, search, subjectFilter, levelFilter]);
+
+  const visibleItems = filteredItems.slice(0, visibleCount);
+  const remaining = filteredItems.length - visibleItems.length;
+
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [search, subjectFilter, levelFilter]);
+
   if (loading) {
     return (
       <div className="bg-white/80 backdrop-blur-md border border-slate-200 rounded-3xl p-8 text-center">
@@ -87,8 +116,23 @@ export default function MyBBMLibrary({ refreshKey = 0 }) {
 
   return (
     <>
+      <LibraryFilterBar
+        search={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Cari BBM..."
+        totalCount={filteredItems.length}
+        filters={[
+          { key: 'subject', label: 'Subjek', value: subjectFilter, options: SUBJECT_OPTIONS },
+          { key: 'level', label: 'Tahap', value: levelFilter, options: LEVEL_OPTIONS },
+        ]}
+        onFilterChange={(key, val) => {
+          if (key === 'subject') setSubjectFilter(val);
+          if (key === 'level') setLevelFilter(val);
+        }}
+      />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {items.map(item => (
+        {visibleItems.map(item => (
           <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 10 }}
@@ -122,6 +166,12 @@ export default function MyBBMLibrary({ refreshKey = 0 }) {
           </motion.div>
         ))}
       </div>
+
+      <LoadMoreButton
+        onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
+        remaining={remaining}
+        color="violet"
+      />
 
       {/* Reader modal */}
       <AnimatePresence>

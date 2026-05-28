@@ -1,10 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, MessageCircle, Trash2, X, Calendar, ArrowRight } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import AIChatMessage from '@/components/ai/AIChatMessage';
+import LibraryFilterBar from '@/components/ai/LibraryFilterBar';
+import LoadMoreButton from '@/components/ai/LoadMoreButton';
+
+const PAGE_SIZE = 20;
+
+const SUBJECT_OPTIONS = [
+  { value: 'bahasa_melayu', label: 'BM' },
+  { value: 'english', label: 'English' },
+  { value: 'mathematics', label: 'Matematik' },
+  { value: 'science', label: 'Sains' },
+  { value: 'jawi', label: 'Jawi' },
+  { value: 'general', label: 'Umum' },
+];
 
 export default function MyChatLibrary({ refreshKey = 0, onResume }) {
   const { user } = useAuth();
@@ -12,6 +25,9 @@ export default function MyChatLibrary({ refreshKey = 0, onResume }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
+  const [search, setSearch] = useState('');
+  const [subjectFilter, setSubjectFilter] = useState('all');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const load = async () => {
     if (!user?.email) return;
@@ -50,6 +66,21 @@ export default function MyChatLibrary({ refreshKey = 0, onResume }) {
     onResume?.(conv);
   };
 
+  const filteredItems = useMemo(() => {
+    const s = search.trim().toLowerCase();
+    return items.filter(conv => {
+      if (subjectFilter !== 'all' && conv.subject !== subjectFilter) return false;
+      if (s && !(conv.title || '').toLowerCase().includes(s)) return false;
+      return true;
+    });
+  }, [items, search, subjectFilter]);
+
+  const visibleItems = filteredItems.slice(0, visibleCount);
+  const remaining = filteredItems.length - visibleItems.length;
+
+  // Reset pagination bila filter/search berubah
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [search, subjectFilter]);
+
   if (loading) {
     return (
       <div className="bg-white/80 backdrop-blur-md border border-slate-200 rounded-3xl p-8 text-center">
@@ -71,8 +102,21 @@ export default function MyChatLibrary({ refreshKey = 0, onResume }) {
 
   return (
     <>
+      <LibraryFilterBar
+        search={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Cari perbualan..."
+        totalCount={filteredItems.length}
+        filters={[
+          { key: 'subject', label: 'Subjek', value: subjectFilter, options: SUBJECT_OPTIONS },
+        ]}
+        onFilterChange={(key, val) => {
+          if (key === 'subject') setSubjectFilter(val);
+        }}
+      />
+
       <div className="space-y-2">
-        {items.map(conv => (
+        {visibleItems.map(conv => (
           <motion.div
             key={conv.id}
             initial={{ opacity: 0, y: 6 }}
@@ -104,6 +148,12 @@ export default function MyChatLibrary({ refreshKey = 0, onResume }) {
           </motion.div>
         ))}
       </div>
+
+      <LoadMoreButton
+        onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
+        remaining={remaining}
+        color="amber"
+      />
 
       {/* Detail modal */}
       <AnimatePresence>
