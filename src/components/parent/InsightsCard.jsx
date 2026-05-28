@@ -76,13 +76,13 @@ export default function InsightsCard({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 mb-4"
+      className="rounded-3xl p-4"
       style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
     >
       <p className="text-white text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-2">
         ⚡ Trend & Insights
       </p>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 gap-2">
         {insights.map((ins, i) => (
           <motion.div
             key={ins.label}

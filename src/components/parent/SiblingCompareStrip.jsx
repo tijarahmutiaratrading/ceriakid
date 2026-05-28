@@ -27,7 +27,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 mb-4"
+      className="rounded-3xl p-4 mb-4 mt-4"
       style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
     >
       <div className="flex items-center justify-between mb-3">

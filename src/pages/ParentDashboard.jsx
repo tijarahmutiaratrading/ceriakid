@@ -155,7 +155,7 @@ export default function ParentDashboard() {
         />
       </div>
 
-      <AppHeader showBack={true} backTo="/dashboard" />
+      <AppHeader showBack={true} backTo="/dashboard" theme="dark" />
       <div className="relative max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
 
         {/* 1. Family Hero — overall snapshot */}

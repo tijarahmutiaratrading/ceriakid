@@ -14,7 +14,7 @@ export default function ParentHeroCard({ totalChildren, totalGames, totalStars, 
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative isolate overflow-hidden rounded-[2rem] mb-5 transform-gpu"
+      className="relative isolate overflow-hidden rounded-[2rem] transform-gpu"
       style={{
         background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 35%, #d946ef 70%, #ec4899 100%)',
         boxShadow: '0 30px 80px -20px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(255,255,255,0.1) inset',
