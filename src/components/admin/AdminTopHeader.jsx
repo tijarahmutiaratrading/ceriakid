@@ -28,19 +28,12 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
           boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
         }}
       >
-        <img
-          src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
-          alt="CeriaKid"
-          className="h-8 w-8 rounded-full object-cover ml-1 mr-2 ring-1 ring-white/60 shadow-sm"
-        />
-        {/* Landing page */}
-        <Link
-          to="/"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-black text-slate-800 hover:text-slate-900 hover:bg-white/50 transition-colors whitespace-nowrap"
-          title="Lihat Landing Page"
-        >
-          <Home className="w-3.5 h-3.5" />
-          <span>Landing</span>
+        <Link to="/" title="Ke Landing Page" className="flex-shrink-0">
+          <img
+            src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png"
+            alt="CeriaKid"
+            className="h-8 w-8 rounded-full object-cover ml-1 mr-2 ring-1 ring-white/60 shadow-sm hover:ring-amber-300 transition-all"
+          />
         </Link>
 
         {/* Switch ke user dashboard */}
