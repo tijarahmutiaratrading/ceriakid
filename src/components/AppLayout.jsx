@@ -12,8 +12,7 @@ import UserTopHeader from '@/components/UserTopHeader';
 export default function AppLayout() {
   return (
     <>
-      {/* Clean Apple-style white background for authenticated pages.
-          Home (dashboard) renders its own image on top of this. */}
+      {/* Shared dashboard background image — applied to all authenticated pages */}
       <div
         aria-hidden="true"
         className="pointer-events-none"
@@ -24,10 +23,10 @@ export default function AppLayout() {
           right: 0,
           bottom: 0,
           zIndex: -2,
-          background:
-            'radial-gradient(ellipse at top right, rgba(168, 85, 247, 0.06), transparent 60%),' +
-            'radial-gradient(ellipse at bottom left, rgba(236, 72, 153, 0.05), transparent 60%),' +
-            'linear-gradient(180deg, #ffffff 0%, #fafafa 50%, #f5f5f7 100%)',
+          backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
       />
       <div className="min-h-screen w-full relative">
