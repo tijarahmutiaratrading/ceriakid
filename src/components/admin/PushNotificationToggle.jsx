@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, BellOff, Loader2, CheckCircle2, AlertCircle, Send, ShoppingCart, Coins } from 'lucide-react';
+import { Bell, BellOff, Loader2, CheckCircle2, AlertCircle, Send } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -47,7 +47,6 @@ export default function PushNotificationToggle({ vapidPublicKey }) {
   const [subscribed, setSubscribed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [testing, setTesting] = useState(false);
-  const [fakingType, setFakingType] = useState(null); // 'subscription' | 'credit' | null
 
   useEffect(() => {
     if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) {
@@ -134,23 +133,6 @@ export default function PushNotificationToggle({ vapidPublicKey }) {
     }
   };
 
-  const handleFakeOrder = async (type) => {
-    setFakingType(type);
-    try {
-      const res = await base44.functions.invoke('simulateFakeOrder', { type });
-      const data = res?.data || {};
-      const pushData = data.pushResult || {};
-      toast({
-        title: `🛒 Fake ${type} order!`,
-        description: `Push: ${pushData.sent || 0} sent, ${pushData.failed || 0} failed`,
-      });
-    } catch (err) {
-      toast({ title: '❌ Gagal simulate', description: err.message, variant: 'destructive' });
-    } finally {
-      setFakingType(null);
-    }
-  };
-
   const handleTest = async () => {
     setTesting(true);
     try {
@@ -230,31 +212,7 @@ export default function PushNotificationToggle({ vapidPublicKey }) {
         )}
       </div>
 
-      {subscribed && (
-        <div className="mt-3 pt-3 border-t border-indigo-200">
-          <p className="text-[11px] font-bold text-slate-600 mb-2 uppercase tracking-wide">🧪 Simulasi Order (untuk test)</p>
-          <div className="flex flex-wrap gap-2">
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={() => handleFakeOrder('subscription')}
-              disabled={fakingType !== null}
-              className="flex-1 min-w-[140px] py-2.5 px-3 rounded-xl bg-purple-100 text-purple-800 font-black text-xs hover:bg-purple-200 disabled:opacity-60 flex items-center justify-center gap-2"
-            >
-              {fakingType === 'subscription' ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingCart className="w-4 h-4" />}
-              Fake Subscription
-            </motion.button>
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={() => handleFakeOrder('credit')}
-              disabled={fakingType !== null}
-              className="flex-1 min-w-[140px] py-2.5 px-3 rounded-xl bg-amber-100 text-amber-800 font-black text-xs hover:bg-amber-200 disabled:opacity-60 flex items-center justify-center gap-2"
-            >
-              {fakingType === 'credit' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Coins className="w-4 h-4" />}
-              Fake Credit Top-Up
-            </motion.button>
-          </div>
-        </div>
-      )}
+
 
       {permission === 'denied' && (
         <div className="mt-3 text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg p-2 font-semibold flex items-start gap-2">
