@@ -1450,10 +1450,11 @@ export default function DrawingStudio() {
                               key={t.id}
                               whileTap={{ scale: 0.92 }}
                               onClick={() => { setTool(t); setStickerMode(null); }}
-                              className={`aspect-square rounded-2xl flex items-center justify-center text-2xl transition-all ${active ? 'bg-slate-900 shadow-md' : 'bg-slate-50 hover:bg-slate-100'}`}
+                              className={`aspect-square rounded-2xl flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 transition-all ${active ? 'bg-slate-900 shadow-md' : 'bg-slate-50 hover:bg-slate-100'}`}
                               title={t.label}
                             >
-                              <span className={active ? 'grayscale-0' : ''}>{t.emoji}</span>
+                              <span className="text-xl leading-none">{t.emoji}</span>
+                              <span className={`text-[9px] font-bold leading-tight truncate w-full text-center ${active ? 'text-white' : 'text-slate-600'}`}>{t.label}</span>
                             </motion.button>
                           );
                         })}
