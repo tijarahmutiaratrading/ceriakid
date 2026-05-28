@@ -40,6 +40,17 @@ export default function PersonalInfoCard({ user }) {
       className="rounded-3xl p-5 space-y-4"
       style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.2)' }}
     >
+      {/* Header dalam card */}
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+          <User className="w-5 h-5 text-white" strokeWidth={3} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-white font-black text-base leading-tight">Maklumat Peribadi</p>
+          <p className="text-white/70 text-xs font-semibold">Nama, telefon & e-mel akaun anda</p>
+        </div>
+      </div>
+
       <div className="space-y-4">
         {/* Nama Penuh */}
         <div>
