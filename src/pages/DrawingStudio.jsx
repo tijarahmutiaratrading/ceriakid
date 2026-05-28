@@ -720,8 +720,10 @@ export default function DrawingStudio() {
     const setupNormal = () => {
       const rect = canvas.getBoundingClientRect();
       const cssW = Math.max(320, Math.round(rect.width || 720));
-      // maintain 4:3 aspect ratio
-      const cssH = Math.round(cssW * (3 / 4));
+      // Mobile: lebih tinggi (4:5) supaya kanvas panjang ke bawah & senang lukis.
+      // Desktop: kekal 4:3 untuk landscape feel.
+      const isMobile = window.innerWidth < 640;
+      const cssH = Math.round(cssW * (isMobile ? (5 / 4) : (3 / 4)));
       // Skip if size unchanged (avoid wiping the drawing on every micro-resize)
       if (canvas._cssW === cssW && canvas._cssH === cssH) return;
       // Prefer a freshly-captured transition snapshot (when exiting fullscreen)
