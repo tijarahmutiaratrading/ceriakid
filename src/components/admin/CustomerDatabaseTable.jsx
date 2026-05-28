@@ -68,20 +68,21 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
     }
     setSaving(true);
     try {
-      const user = await base44.entities.User.filter({ email: customer.email });
-      if (user.length > 0) {
-        await base44.entities.User.update(user[0].id, { 
-          full_name: editName.trim(),
-          phone: editPhone.trim()
-        });
+      const res = await base44.functions.invoke('adminUpdateUser', {
+        email: customer.email,
+        fullName: editName.trim(),
+        phone: editPhone.trim(),
+      });
+      if (res?.data?.success) {
         toast({ title: '✅ Info dikemas kini', description: 'Nama dan no telefon telah disimpan.' });
         await onUpdate?.();
         setEditMode(false);
       } else {
-        toast({ title: '❌ Pelanggan tidak dijumpai', variant: 'destructive' });
+        const errMsg = res?.data?.error || 'Gagal kemaskini';
+        toast({ title: '❌ Gagal', description: errMsg, variant: 'destructive' });
       }
     } catch (err) {
-      toast({ title: '❌ Gagal kemaskini', description: err.message, variant: 'destructive' });
+      toast({ title: '❌ Gagal kemaskini', description: err?.response?.data?.error || err.message, variant: 'destructive' });
     } finally {
       setSaving(false);
     }
