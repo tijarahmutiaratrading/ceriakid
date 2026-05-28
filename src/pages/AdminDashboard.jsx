@@ -166,15 +166,16 @@ export default function AdminDashboard() {
     );
   }
 
+  // Revenue dikira berdasarkan 3 pakej berbayar sahaja (asas/standard/keluarga)
+  // Legacy tier "pro/premium/free" diabaikan dari revenue & breakdown
   const totalRevenue = subscriptions
-    .filter(s => s.status === 'active' && s.tier !== 'free')
+    .filter(s => s.status === 'active' && ['asas', 'standard', 'keluarga'].includes(s.tier))
     .reduce((sum, s) => {
       const price = s.tier === 'asas' ? 49 : s.tier === 'standard' ? 99 : s.tier === 'keluarga' ? 199 : 0;
       return sum + price;
     }, 0);
 
   const tierBreakdown = {
-    free: subscriptions.filter(s => s.tier === 'free').length,
     asas: subscriptions.filter(s => s.tier === 'asas').length,
     standard: subscriptions.filter(s => s.tier === 'standard').length,
     keluarga: subscriptions.filter(s => s.tier === 'keluarga').length,

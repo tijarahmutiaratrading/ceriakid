@@ -25,6 +25,10 @@
     "phone": {
       "type": "string",
       "description": "User phone number"
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Admin-editable display name (overrides full_name in admin views)"
     }
   }
 }

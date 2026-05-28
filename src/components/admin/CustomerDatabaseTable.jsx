@@ -395,7 +395,7 @@ export default function CustomerDatabaseTable() {
         return {
           id: sub.id,
           email: sub.email,
-          fullName: u?.full_name || '',
+          fullName: u?.displayName || u?.full_name || '',
           phone: u?.phone || '',
           tier: sub.tier || 'free',
           status: sub.status || 'active',
