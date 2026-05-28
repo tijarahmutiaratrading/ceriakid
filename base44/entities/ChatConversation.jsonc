@@ -1,0 +1,59 @@
+{
+  "name": "ChatConversation",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Tajuk ringkas perbualan (biasanya soalan pertama user)"
+    },
+    "agent": {
+      "type": "string",
+      "default": "cikgu_firdaus",
+      "description": "AI agent identifier (e.g. cikgu_firdaus)"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Subjek terakhir digunakan (bahasa_melayu, mathematics, etc.)"
+    },
+    "level": {
+      "type": "string",
+      "description": "Tahap terakhir (prasekolah, darjah_1, etc.)"
+    },
+    "messages": {
+      "type": "array",
+      "description": "Senarai mesej dalam perbualan",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "ai"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "messageCount": {
+      "type": "number",
+      "default": 0,
+      "description": "Jumlah mesej dalam perbualan"
+    },
+    "lastMessageAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Tarikh mesej terakhir untuk sorting"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

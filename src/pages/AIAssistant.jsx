@@ -118,6 +118,12 @@ export default function AIAssistant() {
       } else if (res.data?.success) {
         finalMessages = [...afterUser, { role: 'ai', content: res.data.answer }];
         setMessages(finalMessages);
+        // Notify CreditBalanceWidget supaya auto-refresh (event-based, no extra fetch)
+        if (typeof res.data.newBalance === 'number') {
+          window.dispatchEvent(new CustomEvent('credit-updated', {
+            detail: { newBalance: res.data.newBalance, amountUsed: res.data.creditsUsed || 1 },
+          }));
+        }
       } else {
         throw new Error(res.data?.error || 'Ralat tidak diketahui');
       }

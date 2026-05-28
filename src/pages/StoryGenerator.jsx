@@ -79,6 +79,12 @@ export default function StoryGenerator() {
       } else if (res.data?.success) {
         setStory(res.data.story);
         setLibraryRefresh(k => k + 1);
+        // Notify CreditBalanceWidget supaya auto-refresh
+        if (typeof res.data.newBalance === 'number') {
+          window.dispatchEvent(new CustomEvent('credit-updated', {
+            detail: { newBalance: res.data.newBalance, amountUsed: res.data.creditsUsed || 5 },
+          }));
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         throw new Error(res.data?.error || 'Gagal menjana');

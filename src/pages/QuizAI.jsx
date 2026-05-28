@@ -75,6 +75,10 @@ export default function QuizAI() {
         setAskedQuestions(prev => [...prev, res.data.quiz.question]);
         if (typeof res.data.newBalance === 'number') {
           setLatestBalance(res.data.newBalance);
+          // Notify CreditBalanceWidget supaya auto-refresh
+          window.dispatchEvent(new CustomEvent('credit-updated', {
+            detail: { newBalance: res.data.newBalance, amountUsed: res.data.creditsUsed || 1 },
+          }));
           if (res.data.newBalance > 0 && res.data.newBalance <= 5) {
             toast({ title: `⚠️ Baki kredit rendah: ${res.data.newBalance}`, description: 'Top up untuk teruskan selepas habis.' });
           }

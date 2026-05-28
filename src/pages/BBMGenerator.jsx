@@ -66,6 +66,12 @@ export default function BBMGenerator() {
       } else if (res.data?.success) {
         setBbm(res.data.bbm);
         setLibraryRefresh(k => k + 1);
+        // Notify CreditBalanceWidget supaya auto-refresh
+        if (typeof res.data.newBalance === 'number') {
+          window.dispatchEvent(new CustomEvent('credit-updated', {
+            detail: { newBalance: res.data.newBalance, amountUsed: res.data.creditsUsed || 8 },
+          }));
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         throw new Error(res.data?.error || 'Gagal menjana');

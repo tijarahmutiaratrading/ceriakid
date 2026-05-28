@@ -19,7 +19,25 @@ export default function CreditBalanceWidget({ compact = false, variant = 'solid'
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+    // Auto-refresh bila ada feature AI yang potong/tambah kredit
+    const onUpdate = (e) => {
+      // Kalau event ada newBalance, terus update tanpa fetch (lebih responsif)
+      if (typeof e?.detail?.newBalance === 'number') {
+        setCredits(prev => ({
+          ...(prev || {}),
+          balance: e.detail.newBalance,
+          totalUsed: (prev?.totalUsed ?? 0) + (e.detail.amountUsed || 0),
+        }));
+      } else {
+        // Fallback — refetch dari backend
+        load();
+      }
+    };
+    window.addEventListener('credit-updated', onUpdate);
+    return () => window.removeEventListener('credit-updated', onUpdate);
+  }, []);
 
   if (loading) {
     return (
