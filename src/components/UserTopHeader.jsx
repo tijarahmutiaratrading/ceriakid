@@ -133,14 +133,15 @@ export default function UserTopHeader() {
                 to={group.path}
                 className={`relative px-3 py-1.5 rounded-full font-black text-sm transition-colors ${
                   showActive
-                    ? (isDarkBg ? 'text-slate-900' : 'text-white')
+                    ? 'text-white'
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
                 }`}
               >
                 {showActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className={`absolute inset-0 rounded-full ring-1 ${isDarkBg ? 'bg-white ring-black/10' : 'bg-slate-900 ring-white/20'}`}
+                    className="absolute inset-0 rounded-full ring-1 ring-orange-300/40 shadow-lg shadow-orange-500/30"
+                    style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)' }}
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -156,14 +157,15 @@ export default function UserTopHeader() {
                 onClick={() => setOpenMenu(isOpen ? null : group.key)}
                 className={`relative flex items-center gap-1 px-3 py-1.5 rounded-full font-black text-sm transition-colors ${
                   showActive
-                    ? (isDarkBg ? 'text-slate-900' : 'text-white')
+                    ? 'text-white'
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
                 }`}
               >
                 {showActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className={`absolute inset-0 rounded-full ring-1 ${isDarkBg ? 'bg-white ring-black/10' : 'bg-slate-900 ring-white/20'}`}
+                    className="absolute inset-0 rounded-full ring-1 ring-orange-300/40 shadow-lg shadow-orange-500/30"
+                    style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)' }}
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
