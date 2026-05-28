@@ -17,6 +17,7 @@ import InstallAppGuide from '@/components/home/InstallAppGuide';
 import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
 import { checkAndRegisterDevice } from '@/lib/deviceManager';
 import { syncOfflineProgress } from '@/lib/offlineSyncManager';
+import { hasActiveSubscription } from '@/lib/tierAccess';
 import { base44 } from '@/api/base44Client';
 
 export default function Home() {
@@ -46,7 +47,8 @@ export default function Home() {
     }
   }, [isLoadingAuth, isAuthenticated]);
 
-  // Check device registration once user is known
+  // Check subscription + device registration once user is known.
+  // Paywall: if no active paid subscription, redirect to landing pricing.
   React.useEffect(() => {
     if (!isAuthenticated || !user?.email) return;
     let cancelled = false;
@@ -54,8 +56,14 @@ export default function Home() {
       try {
         const subs = await base44.entities.UserSubscription.filter({ email: user.email });
         const sub = subs?.[0];
-        const isExpired = sub?.currentPeriodEnd && new Date(sub.currentPeriodEnd) < new Date();
-        const tier = (sub && !isExpired) ? (sub.tier || 'free') : 'free';
+
+        // No active paid subscription → kick to landing pricing
+        if (!hasActiveSubscription(sub)) {
+          if (!cancelled) window.location.href = '/#pricing';
+          return;
+        }
+
+        const tier = sub.tier;
         const result = await checkAndRegisterDevice(user.email, tier);
         if (cancelled) return;
         setDeviceCheck({ status: result.allowed ? 'allowed' : 'blocked', devices: result.devices, tier });
@@ -64,7 +72,7 @@ export default function Home() {
         }
       } catch (err) {
         console.error('Device check failed:', err);
-        if (!cancelled) setDeviceCheck({ status: 'allowed', devices: [], tier: 'free' });
+        if (!cancelled) setDeviceCheck({ status: 'allowed', devices: [], tier: 'asas' });
       }
     })();
     return () => { cancelled = true; };
