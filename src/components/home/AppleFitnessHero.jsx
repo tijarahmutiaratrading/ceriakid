@@ -178,11 +178,12 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
           <div className="flex flex-col items-start gap-1.5">
             <p className="text-white font-black text-sm sm:text-base drop-shadow-lg">Hai, {firstName} 👋</p>
 
-            {/* Stats row: Subscription + Credits — glass */}
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {/* Subscription chip */}
-              <div
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/30 shadow-md shadow-black/5"
+            {/* Stats row: Subscription + Credits — glass (tappable) */}
+            <div className="flex items-center gap-1.5 flex-wrap" onClick={(e) => e.stopPropagation()}>
+              {/* Subscription chip — go to upgrade page */}
+              <Link
+                to="/settings"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/30 shadow-md shadow-black/5 hover:bg-white/25 active:scale-95 transition-all"
                 style={{
                   background: 'rgba(255,255,255,0.18)',
                   backdropFilter: 'blur(14px)',
@@ -203,11 +204,12 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
                     <span className="text-white/95 text-[10px] font-bold drop-shadow leading-none">{expiryText}</span>
                   </>
                 )}
-              </div>
+              </Link>
 
-              {/* Credits chip */}
-              <div
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/30 shadow-md shadow-black/5"
+              {/* Credits chip — go to top-up page */}
+              <Link
+                to="/buy-credits"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/30 shadow-md shadow-black/5 hover:bg-white/25 active:scale-95 transition-all"
                 style={{
                   background: 'rgba(255,255,255,0.18)',
                   backdropFilter: 'blur(14px)',
@@ -217,7 +219,7 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
                 <span className="text-[11px] leading-none">💎</span>
                 <span className="text-white font-black text-[10px] drop-shadow leading-none">{credits.toLocaleString()}</span>
                 <span className="text-white/90 text-[10px] font-bold drop-shadow leading-none">kredit</span>
-              </div>
+              </Link>
             </div>
           </div>
         </button>
