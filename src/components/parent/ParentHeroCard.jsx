@@ -16,10 +16,14 @@ export default function ParentHeroCard({ totalChildren, totalGames, totalStars, 
       animate={{ opacity: 1, y: 0 }}
       className="relative isolate overflow-hidden rounded-[2rem] transform-gpu"
       style={{
-        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 35%, #d946ef 70%, #ec4899 100%)',
+        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/788948efc_generated_image.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         boxShadow: '0 30px 80px -20px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(255,255,255,0.1) inset',
       }}
     >
+      {/* Color overlay to maintain brand identity and text legibility */}
+      <div className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.78) 0%, rgba(139,92,246,0.7) 35%, rgba(217,70,239,0.72) 70%, rgba(236,72,153,0.78) 100%)' }} />
       {/* Decorative glass orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div

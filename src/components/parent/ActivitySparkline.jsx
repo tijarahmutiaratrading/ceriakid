@@ -70,12 +70,15 @@ export default function ActivitySparkline({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 relative overflow-hidden"
+      className="rounded-3xl p-4 relative overflow-hidden isolate"
       style={{
-        background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%)',
+        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/38cb8d9b7_generated_image.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         boxShadow: '0 20px 50px -15px rgba(124, 58, 237, 0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
       }}
     >
+      <div className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(135deg, rgba(79,70,229,0.8) 0%, rgba(124,58,237,0.7) 50%, rgba(219,39,119,0.8) 100%)' }} />
       <div className="flex items-center justify-between mb-3">
         <p className="text-white text-xs font-black uppercase tracking-wider flex items-center gap-2">
           📈 Aktiviti 7 Hari

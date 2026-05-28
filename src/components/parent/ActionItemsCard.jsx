@@ -117,12 +117,15 @@ export default function ActionItemsCard({ childName, games }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 relative overflow-hidden"
+      className="rounded-3xl p-4 relative overflow-hidden isolate"
       style={{
-        background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #d946ef 100%)',
+        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6eef35d90_generated_image.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         boxShadow: '0 20px 50px -15px rgba(168, 85, 247, 0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
       }}
     >
+      <div className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(135deg, rgba(91,33,182,0.8) 0%, rgba(147,51,234,0.72) 50%, rgba(219,39,119,0.78) 100%)' }} />
       <p className="text-white text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-2">
         🎯 Apa Patut Buat Seterusnya
       </p>
