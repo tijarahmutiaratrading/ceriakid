@@ -175,7 +175,7 @@ export default function Landing() {
         className={`hidden md:flex fixed top-3 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
       >
         <nav
-          className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full shadow-xl shadow-black/20"
+          className="pointer-events-auto flex items-center gap-0 px-1.5 py-1.5 rounded-full shadow-xl shadow-black/20"
           style={{
             background: 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
             backdropFilter: 'blur(20px) saturate(180%)',
@@ -199,7 +199,7 @@ export default function Landing() {
             <a
               key={item.href}
               href={item.href}
-              className="relative px-4 py-1.5 rounded-full font-black text-sm text-slate-800 hover:text-slate-900 hover:bg-white/50 transition-colors"
+              className="relative px-3 py-1.5 rounded-full font-black text-sm text-slate-800 hover:text-slate-900 hover:bg-white/50 transition-colors"
             >
               {item.label}
             </a>
@@ -207,7 +207,7 @@ export default function Landing() {
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={() => isAuthenticated ? navigate('/dashboard') : base44.auth.redirectToLogin('/dashboard')}
-            className="ml-1 px-4 py-1.5 rounded-full font-black text-sm bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 hover:bg-amber-200 transition-colors"
+            className="ml-1 px-3 py-1.5 rounded-full font-black text-sm bg-amber-300 text-slate-900 shadow-lg shadow-amber-400/30 hover:bg-amber-200 transition-colors"
           >
             {isAuthenticated ? 'Dashboard' : 'Log Masuk'}
           </motion.button>
