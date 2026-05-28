@@ -84,6 +84,22 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setIsLoadingAuth(false);
       setAuthChecked(true);
+
+      // Fire Pixel CompleteRegistration event ONCE per user (track new signups).
+      // Detect "new user" via localStorage flag — kalau dah ada, skip (existing user login).
+      try {
+        if (currentUser?.email && typeof window !== 'undefined' && window.fbq) {
+          const flagKey = `pixel_registration_fired_${currentUser.email}`;
+          if (!localStorage.getItem(flagKey)) {
+            const eventID = `CompleteRegistration_${currentUser.email}_${Date.now()}`;
+            window.fbq('track', 'CompleteRegistration', {
+              content_name: 'ceriakid_signup',
+              status: true,
+            }, { eventID });
+            localStorage.setItem(flagKey, '1');
+          }
+        }
+      } catch { /* silent — pixel optional */ }
     } catch (error) {
       console.error('User auth check failed:', error);
       setIsLoadingAuth(false);

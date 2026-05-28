@@ -82,6 +82,16 @@
         "type": "string"
       },
       "default": []
+    },
+    "fbTracking": {
+      "type": "object",
+      "description": "Facebook Pixel/CAPI tracking data captured at checkout for server-side event dedup",
+      "additionalProperties": true
+    },
+    "abandonedReminderSent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether abandoned cart reminder email has been sent for incomplete subscription"
     }
   },
   "required": [

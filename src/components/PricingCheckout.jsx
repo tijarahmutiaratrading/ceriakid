@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { trackPixelEvent } from '@/lib/pixel';
+import { genEventID, getFbCookies } from '@/lib/fbTracking';
 import { getStoredReferralCode } from '@/lib/referralTracker';
 import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
@@ -58,6 +59,14 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [leadFired, setLeadFired] = useState(false);
+
+  // Fire `Lead` event sekali bila user mula isi form (focus on email/name/phone)
+  const fireLeadOnce = () => {
+    if (leadFired) return;
+    setLeadFired(true);
+    trackPixelEvent('Lead', { content_name: 'pricing_form_started', currency: 'MYR' }, genEventID('Lead'));
+  };
 
   // Sync when parent changes the selected tier (via pricing card buttons)
   useEffect(() => {
@@ -85,16 +94,27 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
       return;
     }
 
-    if (!formData.email.trim()) {setError('Sila masukkan email');return;}
-    if (!formData.name.trim()) {setError('Sila masukkan nama');return;}
-    if (!formData.phone.trim()) {setError('Sila masukkan nombor telefon');return;}
+    // Strict validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[+0-9\s-]{8,15}$/;
+    if (!formData.email.trim() || !emailRegex.test(formData.email.trim())) { setError('Email tidak sah'); return; }
+    if (!formData.name.trim() || formData.name.trim().length < 2) { setError('Sila masukkan nama penuh'); return; }
+    if (!formData.phone.trim() || !phoneRegex.test(formData.phone.trim())) { setError('Nombor telefon tidak sah'); return; }
 
     setLoading(true);
+
+    // Fire InitiateCheckout SELEPAS validation pass (bukan sebelum)
+    const checkoutEventID = genEventID('InitiateCheckout');
     trackPixelEvent('InitiateCheckout', {
       currency: 'MYR',
       value: TIER_VALUES[formData.selectedTier] || 0,
       content_name: formData.selectedTier,
-    });
+      content_ids: [formData.selectedTier],
+      content_type: 'product',
+    }, checkoutEventID);
+
+    // Capture fbp/fbc cookies untuk CAPI server-side backup
+    const { fbp, fbc } = getFbCookies();
 
     try {
 
@@ -104,6 +124,9 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
         name: formData.name,
         phone: formData.phone,
         referralCode: getStoredReferralCode(),
+        fbp,
+        fbc,
+        checkoutEventID,
       });
 
       if (response.data?.checkoutUrl) {
@@ -175,6 +198,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
           placeholder="Nama penuh anda"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onFocus={fireLeadOnce}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple" />
         
       </div>
@@ -187,6 +211,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
           placeholder="email@example.com"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          onFocus={fireLeadOnce}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple" />
         
       </div>
@@ -199,6 +224,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
           placeholder="01234567890"
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          onFocus={fireLeadOnce}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-game-purple" />
         
       </div>

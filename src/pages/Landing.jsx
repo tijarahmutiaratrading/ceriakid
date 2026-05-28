@@ -5,12 +5,16 @@ import { ArrowRight, Check, CheckCircle, XCircle, Menu, X } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { captureReferralFromUrl } from '@/lib/referralTracker';
+import { trackPixelEvent } from '@/lib/pixel';
+import { genEventID } from '@/lib/fbTracking';
 import PricingCheckout from '@/components/PricingCheckout';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import LandingHeroCarousel from '@/components/landing/LandingHeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
 import LandingAISection from '@/components/landing/LandingAISection';
+import ExitIntentPopup from '@/components/landing/ExitIntentPopup';
+import LiveSocialProof from '@/components/landing/LiveSocialProof';
 import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
 
@@ -148,6 +152,28 @@ export default function Landing() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // ViewContent event — fire bila pricing section visible (depth scroll signal)
+  useEffect(() => {
+    let fired = false;
+    const observer = new IntersectionObserver((entries) => {
+      if (fired) return;
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          fired = true;
+          trackPixelEvent('ViewContent', {
+            content_name: 'pricing_section',
+            content_category: 'subscription_plans',
+            currency: 'MYR',
+          }, genEventID('ViewContent'));
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    const target = document.getElementById('pricing');
+    if (target) observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
+
 
 
   const scrollToPricing = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
@@ -161,6 +187,11 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen font-nunito relative overflow-hidden bg-slate-950">
+      {/* Exit-intent popup — auto-trigger bila user nak tinggalkan page */}
+      <ExitIntentPopup onCTA={scrollToPricing} />
+      {/* Live social proof toast — rotate at bottom-left, desktop only */}
+      <LiveSocialProof />
+
       <div className="relative">
 
       {/* ── PAYMENT STATUS BANNER ── */}

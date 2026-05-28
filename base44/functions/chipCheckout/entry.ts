@@ -9,10 +9,27 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { tier, email, name, phone, isUpgrade, referralCode } = await req.json();
+    const { tier, email, name, phone, isUpgrade, referralCode, fbp, fbc, checkoutEventID } = await req.json();
 
     if (!tier || !email || !name || !phone) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    // Strict validation server-side
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[+0-9\s-]{8,15}$/;
+    if (!emailRegex.test(email.trim())) return Response.json({ error: 'Invalid email format' }, { status: 400 });
+    if (!phoneRegex.test(phone.trim())) return Response.json({ error: 'Invalid phone format' }, { status: 400 });
+    if (name.trim().length < 2) return Response.json({ error: 'Name too short' }, { status: 400 });
+
+    // Rate limit — block same email more than 5 attempts/min
+    const oneMinAgo = new Date(Date.now() - 60_000).toISOString();
+    const recentAttempts = await base44.asServiceRole.entities.UserSubscription.filter({
+      email: user.email,
+    });
+    const recent = (recentAttempts || []).filter(s => s.updated_date && s.updated_date > oneMinAgo);
+    if (recent.length > 5) {
+      return Response.json({ error: 'Too many attempts, please wait a moment' }, { status: 429 });
     }
 
     // Validate referral code (jika ada) — tak boleh refer diri sendiri
@@ -143,6 +160,15 @@ Deno.serve(async (req) => {
       currentPeriodStart: hasActivePaid ? currentSub.currentPeriodStart : new Date().toISOString(),
       currentPeriodEnd: hasActivePaid ? currentSub.currentPeriodEnd : expiryDate.toISOString(),
       stripeCustomerId: data.id, // store latest Chip purchase ID for webhook matching
+      // Tracking data untuk CAPI server-side selepas webhook confirm payment
+      fbTracking: {
+        fbp: fbp || null,
+        fbc: fbc || null,
+        eventID: checkoutEventID || null,
+        phone: phone,
+        ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || null,
+        userAgent: req.headers.get('user-agent') || null,
+      },
     };
 
     if (currentSub) {

@@ -22,6 +22,13 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    // Strict validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[+0-9\s-]{8,15}$/;
+    if (!emailRegex.test(email.trim())) return Response.json({ error: 'Invalid email format' }, { status: 400 });
+    if (!phoneRegex.test(phone.trim())) return Response.json({ error: 'Invalid phone format' }, { status: 400 });
+    if (name.trim().length < 2) return Response.json({ error: 'Name too short' }, { status: 400 });
+
     // Validate referral code
     let validReferralCode = '';
     if (referralCode) {

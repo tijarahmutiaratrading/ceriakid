@@ -27,7 +27,13 @@
     <!-- Theme Color -->
     <meta name="theme-color" content="#8b5cf6" />
 
-    <!-- Meta Pixel Code -->
+    <!-- Preconnect untuk speed up Pixel & external resources -->
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+    <link rel="preconnect" href="https://www.facebook.com" crossorigin />
+    <link rel="dns-prefetch" href="https://media.base44.com" />
+  </head>
+  <body>
+    <!-- Meta Pixel — pindah ke body bottom supaya tak block render -->
     <script>
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -40,9 +46,6 @@
       fbq('init', '364206716624609');
       fbq('track', 'PageView');
     </script>
-    <!-- End Meta Pixel Code -->
-  </head>
-  <body>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=364206716624609&ev=PageView&noscript=1" alt="" /></noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

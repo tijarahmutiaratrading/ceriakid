@@ -1,58 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-
-// Cache di module level supaya semua component share data yang sama
-// dan tak perlu fetch ulang dalam sesi yang sama.
-let cachedStats = null;
-let inFlight = null;
 
 /**
  * Hook untuk dapatkan game stats real-time dari database.
- * Auto-update kalau ada game baru ditambah.
+ * Cache 10 minit — landing page tak perlu fetch berulang kali.
  *
  * Returns:
- *   - totalGames: total semua game published (e.g. 1621)
- *   - accessibleByTier: { asas, standard, keluarga } — game accessible per tier
+ *   - stats.totalGames: total semua game published
+ *   - stats.accessibleByTier: { asas, standard, keluarga }
  *   - loading: true masa fetch first time
  */
 export function useGameStats() {
-  const [stats, setStats] = useState(cachedStats);
-  const [loading, setLoading] = useState(!cachedStats);
+  const { data, isLoading } = useQuery({
+    queryKey: ['public-game-stats'],
+    queryFn: async () => {
+      const res = await base44.functions.invoke('getPublicGameStats', {});
+      return res?.data?.success ? res.data : null;
+    },
+    staleTime: 10 * 60 * 1000, // 10 minit fresh
+    gcTime: 30 * 60 * 1000,    // 30 minit dalam cache
+    retry: 1,
+  });
 
-  useEffect(() => {
-    if (cachedStats) return;
-
-    // Single in-flight request — kalau ada banyak component fetch sekali,
-    // share Promise yang sama
-    if (!inFlight) {
-      inFlight = base44.functions.invoke('getPublicGameStats', {})
-        .then((res) => {
-          const data = res?.data;
-          if (data?.success) {
-            cachedStats = data;
-            return data;
-          }
-          return null;
-        })
-        .catch((err) => {
-          console.error('Failed to fetch game stats:', err);
-          return null;
-        })
-        .finally(() => {
-          // Allow retry on next mount
-          setTimeout(() => { inFlight = null; }, 5000);
-        });
-    }
-
-    inFlight.then((data) => {
-      if (data) {
-        setStats(data);
-      }
-      setLoading(false);
-    });
-  }, []);
-
-  return { stats, loading };
+  return { stats: data, loading: isLoading };
 }
 
 /**

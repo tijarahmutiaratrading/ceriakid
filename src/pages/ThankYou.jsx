@@ -55,6 +55,9 @@ export default function ThankYou() {
   // SKIP untuk:
   //   - Upgrade pakej (params.upgrade === '1') — bukan customer baru, tak relevan untuk ads tracking
   //   - Beli kredit (type === 'credit') — bukan subscription, tak relevan untuk Purchase event
+  //
+  // CAPI server-side juga fire dengan eventID YANG SAMA dari fbTracking (stored
+  // di UserSubscription semasa checkout) supaya Meta auto-dedup.
   useEffect(() => {
     const isUpgrade = params.get('upgrade') === '1';
     if (isCredit || isUpgrade) return;
@@ -62,16 +65,31 @@ export default function ThankYou() {
     if (typeof window === 'undefined' || !window.fbq) return;
     const dedupeKey = `purchase_fired_${urlTier}_${window.location.search}`;
     if (sessionStorage.getItem(dedupeKey)) return;
-    const eventID = `purchase_${urlTier}_${Date.now()}`;
-    window.fbq('track', 'Purchase', {
-      currency: 'MYR',
-      value: TIER_VALUES[urlTier],
-      content_name: tierLabels[urlTier] || urlTier,
-      content_ids: [urlTier],
-      content_type: 'product',
-    }, { eventID });
-    sessionStorage.setItem(dedupeKey, '1');
-  }, [urlTier, isCredit]);
+
+    (async () => {
+      // Deterministic eventID dari purchaseId — CAPI server-side juga guna
+      // formula sama supaya Meta auto-dedup browser vs server event.
+      let eventID = `purchase_${urlTier}_${Date.now()}`;
+      try {
+        if (user?.email) {
+          const subs = await base44.entities.UserSubscription.filter({ email: user.email });
+          const sub = subs?.find(s => s.status === 'active');
+          if (sub?.stripeCustomerId) {
+            eventID = `Purchase_${sub.stripeCustomerId}`;
+          }
+        }
+      } catch { /* fallback to generated eventID */ }
+
+      window.fbq('track', 'Purchase', {
+        currency: 'MYR',
+        value: TIER_VALUES[urlTier],
+        content_name: tierLabels[urlTier] || urlTier,
+        content_ids: [urlTier],
+        content_type: 'product',
+      }, { eventID });
+      sessionStorage.setItem(dedupeKey, '1');
+    })();
+  }, [urlTier, isCredit, user?.email]);
 
   // Poll subscription status — webhook may take 5-30 seconds.
   useEffect(() => {

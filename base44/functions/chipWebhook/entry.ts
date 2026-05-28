@@ -242,6 +242,67 @@ async function notifyAdmins(base44, { title, body, url }) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// FACEBOOK CONVERSIONS API (CAPI) — inline
+// Server-side backup untuk Pixel Purchase event. Critical untuk iOS 14.5+ users
+// dan ad-blocker users yang block browser pixel. eventID share dengan browser
+// untuk dedup di Meta side.
+// ═══════════════════════════════════════════════════════════════════════════
+
+async function sha256HexFb(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(text).toLowerCase().trim()));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function sendFbCapiPurchase({ email, phone, value, tier, eventID, fbp, fbc, ip, userAgent }) {
+  try {
+    const PIXEL_ID = Deno.env.get('FB_PIXEL_ID');
+    const ACCESS_TOKEN = Deno.env.get('FB_ACCESS_TOKEN');
+    if (!PIXEL_ID || !ACCESS_TOKEN) {
+      console.log('FB CAPI not configured — skip');
+      return;
+    }
+
+    const userData = {};
+    if (email) userData.em = [await sha256HexFb(email)];
+    if (phone) userData.ph = [await sha256HexFb(String(phone).replace(/\D/g, ''))];
+    if (ip) userData.client_ip_address = ip;
+    if (userAgent) userData.client_user_agent = userAgent;
+    if (fbp) userData.fbp = fbp;
+    if (fbc) userData.fbc = fbc;
+
+    const eventData = {
+      event_name: 'Purchase',
+      event_time: Math.floor(Date.now() / 1000),
+      event_id: eventID || `Purchase_${Date.now()}`, // dedup dengan browser pixel
+      action_source: 'website',
+      event_source_url: 'https://ceriakid.com/thank-you',
+      user_data: userData,
+      custom_data: {
+        currency: 'MYR',
+        value: value,
+        content_name: tier,
+        content_ids: [tier],
+        content_type: 'product',
+      },
+    };
+
+    const res = await fetch(`https://graph.facebook.com/v19.0/${PIXEL_ID}/events`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: [eventData], access_token: ACCESS_TOKEN }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      console.log(`FB CAPI Purchase sent (tier=${tier}, value=RM${value}, eventID=${eventData.event_id}) fbtrace=${data.fbtrace_id}`);
+    } else {
+      console.error('FB CAPI Purchase failed:', JSON.stringify(data));
+    }
+  } catch (err) {
+    console.error('sendFbCapiPurchase error:', err?.message || err);
+  }
+}
+
 // Extract referral code dari reference string. Format: "...__ref_CODE"
 function extractReferralCode(reference) {
   if (!reference) return '';
@@ -602,6 +663,31 @@ Deno.serve(async (req) => {
         purchaseDetail: tier,
         purchaseAmountMYR: priceMYR,
         chipPurchaseId: purchaseId,
+      });
+    }
+
+    // ─── FACEBOOK CAPI Purchase event (server-side backup pixel) ───
+    // Skip kalau ini upgrade existing paid sub (preserve as upgrade — tak fire Purchase
+    // sebab browser pixel pun skip upgrade). Detect by checking if previous tier was paid.
+    const wasUpgrade = currentSub && currentSub.tier && currentSub.tier !== 'free'
+      && currentSub.status === 'active' && currentSub.currentPeriodEnd
+      && new Date(currentSub.currentPeriodEnd) > new Date();
+
+    if (!wasUpgrade) {
+      const tracking = currentSub?.fbTracking || {};
+      // Deterministic eventID dari purchaseId — frontend Pixel guna formula sama
+      // supaya Meta auto-dedup browser vs CAPI event.
+      const purchaseEventID = `Purchase_${purchaseId}`;
+      await sendFbCapiPurchase({
+        email: userEmail,
+        phone: tracking.phone,
+        value: subPriceMYR,
+        tier: tier,
+        eventID: purchaseEventID,
+        fbp: tracking.fbp,
+        fbc: tracking.fbc,
+        ip: tracking.ip,
+        userAgent: tracking.userAgent,
       });
     }
 
