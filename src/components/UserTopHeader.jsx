@@ -47,7 +47,7 @@ const NAV_GROUPS = [
   },
   {
     key: 'affiliate',
-    label: '💰 Affiliate',
+    label: 'Affiliate',
     path: '/affiliate',
   },
 ];
