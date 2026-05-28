@@ -240,7 +240,8 @@ export default function Landing() {
             <a
               key={item.href}
               href={item.href}
-              className="relative px-3 py-1.5 rounded-full font-black text-sm text-slate-800 hover:text-slate-900 hover:bg-white/50 transition-colors"
+              className="relative px-3 py-1.5 rounded-full font-black text-sm hover:bg-white/30 transition-colors"
+              style={{ color: '#ffffff', mixBlendMode: 'difference' }}
             >
               {item.label}
             </a>
