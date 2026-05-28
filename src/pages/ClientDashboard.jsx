@@ -7,7 +7,6 @@ import { base44 } from '@/api/base44Client';
 import { Upload, Loader, User, Mail, Calendar, Shield, Smartphone, Crown, CheckCircle } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { getDefaultAvatar } from '@/lib/avatarGenerator';
-import SubscriptionWidget from '@/components/dashboard/SubscriptionWidget';
 import UpgradeTierCard from '@/components/dashboard/UpgradeTierCard';
 import ManageDevices from '@/components/ManageDevices';
 import OfflineModeCard from '@/components/offline/OfflineModeCard';
@@ -168,7 +167,7 @@ export default function ClientDashboard() {
           </div>
         </motion.div>
 
-        {/* Subscription */}
+        {/* Langganan & Naik Taraf — gabungan dalam satu card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -176,22 +175,8 @@ export default function ClientDashboard() {
           className="mb-4"
         >
           <div className="flex items-center gap-2 mb-3 px-1">
-            <div className="h-1 w-8 bg-gradient-to-r from-purple-300 to-pink-300 rounded-full" />
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider">💎 Langganan Saya</p>
-          </div>
-          <SubscriptionWidget userEmail={user?.email} />
-        </motion.div>
-
-        {/* Upgrade Tier */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.18 }}
-          className="mb-4"
-        >
-          <div className="flex items-center gap-2 mb-3 px-1">
             <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-orange-400 rounded-full" />
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider">🚀 Naik Taraf</p>
+            <p className="text-white/80 text-xs font-black uppercase tracking-wider">💎 Langganan & Pakej</p>
           </div>
           <UpgradeTierCard currentTier={userTier} user={user} />
         </motion.div>

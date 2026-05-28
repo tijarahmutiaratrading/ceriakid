@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Crown, Check, Loader, ArrowUp, CheckCircle2 } from 'lucide-react';
+import { Crown, Check, Loader, ArrowUp, CheckCircle2, Calendar, Clock, AlertCircle } from 'lucide-react';
 import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
 // Tier hierarchy — used to determine which packages are upgrades vs current/lower
@@ -80,7 +80,27 @@ export default function UpgradeTierCard({ currentTier, user }) {
   const [upgrading, setUpgrading] = useState(null); // tier name yang sedang diproses
   const [error, setError] = useState('');
   const [confirmTier, setConfirmTier] = useState(null);
+  const [subscription, setSubscription] = useState(null);
   const { stats } = useGameStats();
+
+  // Load subscription details (status + tarikh tamat)
+  useEffect(() => {
+    if (!user?.email) return;
+    base44.entities.UserSubscription.filter({ email: user.email })
+      .then((data) => setSubscription(data?.[0] || null))
+      .catch(() => setSubscription(null));
+  }, [user?.email]);
+
+  const endDate = subscription?.currentPeriodEnd ? new Date(subscription.currentPeriodEnd) : null;
+  const isExpired = endDate && endDate < new Date();
+  const daysRemaining = endDate ? Math.max(Math.ceil((endDate - new Date()) / (1000 * 60 * 60 * 24)), 0) : null;
+  const statusLabel = isExpired
+    ? '⚠️ Langganan Tamat'
+    : subscription?.status === 'active'
+      ? '✅ Aktif'
+      : subscription?.status === 'incomplete'
+        ? '⏳ Menunggu Bayaran'
+        : currentTier === 'free' ? '🆓 Akaun Percuma' : '❌ Tidak Aktif';
 
   // Auto-generate tier features dengan real-time game count
   const ALL_TIERS = buildTiers(stats);
@@ -124,12 +144,38 @@ export default function UpgradeTierCard({ currentTier, user }) {
           <ArrowUp className="w-5 h-5 text-white" strokeWidth={3} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-white font-black text-base leading-tight">Semua Pakej</p>
+          <p className="text-white font-black text-base leading-tight">Langganan & Pakej</p>
           <p className="text-white/70 text-xs font-semibold">
             Pakej anda sekarang: <span className="text-yellow-300 font-black">{currentLabel}</span>
           </p>
         </div>
       </div>
+
+      {/* Status langganan semasa — papar untuk semua kecuali free tanpa tarikh */}
+      {(subscription?.tier && subscription.tier !== 'free') || isExpired ? (
+        <div className={`rounded-2xl p-3 border ${isExpired ? 'bg-red-500/15 border-red-300/40' : 'bg-white/10 border-white/20'}`}>
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              {isExpired ? <AlertCircle className="w-4 h-4 text-red-300" /> : <CheckCircle2 className="w-4 h-4 text-green-300" strokeWidth={3} />}
+              <span className="text-white font-black text-xs">{statusLabel}</span>
+            </div>
+            {endDate && (
+              <div className="flex items-center gap-3 text-[11px] font-bold">
+                <span className="flex items-center gap-1 text-white/85">
+                  <Calendar className="w-3 h-3" />
+                  {endDate.toLocaleDateString('ms-MY')}
+                </span>
+                {!isExpired && daysRemaining !== null && (
+                  <span className={`flex items-center gap-1 ${daysRemaining <= 7 ? 'text-yellow-200' : 'text-white/85'}`}>
+                    <Clock className="w-3 h-3" />
+                    {daysRemaining} hari lagi
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      ) : null}
 
       {isOnTopTier && (
         <div className="rounded-2xl p-3 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 border border-yellow-300/40 flex items-center gap-2">
