@@ -1110,16 +1110,23 @@ export default function DrawingStudio() {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900">
-      {/* Dashboard background image layer */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900" style={{ background: 'linear-gradient(180deg, #fde68a 0%, #fbbf24 30%, #f59e0b 60%, #d97706 100%)' }}>
+      {/* Dashboard background image layer — fixed supaya kekal bila scroll */}
       <div
         aria-hidden="true"
-        className="fixed inset-0 -z-10 pointer-events-none"
         style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: -10,
+          pointerEvents: 'none',
           backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
         }}
       />
       {/* Floating orbs to match dashboard */}
