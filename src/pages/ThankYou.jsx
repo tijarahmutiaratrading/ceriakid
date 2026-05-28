@@ -51,9 +51,14 @@ export default function ThankYou() {
     }
   }, []);
 
-  // Pixel tracking — subscription purchase
+  // Pixel Purchase event — HANYA fire untuk pembelian pakej pertama (subscription baru).
+  // SKIP untuk:
+  //   - Upgrade pakej (params.upgrade === '1') — bukan customer baru, tak relevan untuk ads tracking
+  //   - Beli kredit (type === 'credit') — bukan subscription, tak relevan untuk Purchase event
   useEffect(() => {
-    if (isCredit || !urlTier || !TIER_VALUES[urlTier]) return;
+    const isUpgrade = params.get('upgrade') === '1';
+    if (isCredit || isUpgrade) return;
+    if (!urlTier || !TIER_VALUES[urlTier]) return;
     if (typeof window === 'undefined' || !window.fbq) return;
     const dedupeKey = `purchase_fired_${urlTier}_${window.location.search}`;
     if (sessionStorage.getItem(dedupeKey)) return;
