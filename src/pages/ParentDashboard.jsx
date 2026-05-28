@@ -6,6 +6,7 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
+import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import SmartRecommendations from '@/components/dashboard/SmartRecommendations';
 import ParentHeroCard from '@/components/parent/ParentHeroCard';
 import InsightsCard from '@/components/parent/InsightsCard';
@@ -131,17 +132,22 @@ export default function ParentDashboard() {
   const avgStarsAll = totalGamesAll > 0 ? (totalStarsAll / totalGamesAll).toFixed(1) : '0.0';
 
   return (
-    <div className="min-h-screen font-nunito relative">
-      {/* Single fixed background — soft pastel gradient (not too dark) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 -z-10"
-        style={{
-          background: 'linear-gradient(135deg, #2d2a4a 0%, #3d3567 30%, #4a3d7a 60%, #5b4585 100%)',
-        }}
-      />
+    <div
+      className="min-h-screen font-nunito relative"
+      style={{
+        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0a6521ac4_generated_image.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
       <AppHeader showBack={true} backTo="/dashboard" />
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-6 relative z-10">
+
+        {/* Apple Fitness style hero */}
+        {isAuthenticated && (
+          <AppleFitnessHero user={user} avatarUrl={heroAvatarUrl} onLogout={logout} />
+        )}
 
         {/* 1. Family Hero — overall snapshot */}
         <ParentHeroCard
