@@ -15,6 +15,7 @@ import SystemHealthPanel from '@/components/admin/SystemHealthPanel';
 import LaunchControlPanel from '@/components/admin/LaunchControlPanel';
 import AdminAffiliatePanel from '@/components/admin/AdminAffiliatePanel';
 import PushNotificationPanel from '@/components/admin/PushNotificationPanel';
+import CustomerDatabaseTable from '@/components/admin/CustomerDatabaseTable';
 import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2, Activity, Share2 } from 'lucide-react';
 
 const SETTINGS_KEY = 'admin_app_settings';
@@ -321,67 +322,8 @@ export default function AdminDashboard() {
               </div>
             </motion.div>
 
-            {/* Database Pelanggan (digabungkan ke Dashboard) */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="pro-glass rounded-3xl p-5">
-              <div className="flex items-end justify-between mb-4 flex-wrap gap-3">
-                <div>
-                  <h2 className="text-lg md:text-xl font-black text-slate-900">📋 Database Pelanggan</h2>
-                  <p className="text-slate-600 text-xs font-semibold">Senarai pelanggan terkini dan status langganan</p>
-                </div>
-                <span className="text-xs font-black text-purple-900 bg-amber-300 px-3 py-1.5 rounded-full ring-1 ring-amber-200">{subscriptions.length} pelanggan</span>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[720px] text-sm">
-                  <thead>
-                    <tr className="border-b border-slate-200">
-                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Email</th>
-                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Paket</th>
-                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Status</th>
-                      <th className="text-left py-3 px-4 font-black text-slate-700 text-xs uppercase tracking-wider">Tarikh</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {subscriptions.map((sub) => (
-                      <tr key={sub.id} className="border-b border-slate-100 hover:bg-white/60 transition-colors">
-                        <td className="py-3 px-4 text-xs text-slate-800 font-semibold">{sub.email}</td>
-                        <td className="py-3 px-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
-                            sub.tier === 'free' ? 'bg-gray-300 text-gray-900' :
-                            sub.tier === 'asas' ? 'bg-emerald-300 text-emerald-950' :
-                            sub.tier === 'standard' ? 'bg-sky-300 text-sky-950' :
-                            sub.tier === 'pro' ? 'bg-rose-300 text-rose-950' :
-                            'bg-violet-300 text-violet-950'
-                          }`}>
-                            {sub.tier === 'free' ? 'Percuma' : sub.tier === 'asas' ? 'Asas' : sub.tier === 'standard' ? 'Standard' : sub.tier === 'pro' ? 'Pro' : 'Keluarga'}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-black shadow-sm ${
-                            sub.status === 'active' ? 'bg-emerald-300 text-emerald-950' :
-                            sub.status === 'trial' ? 'bg-sky-300 text-sky-950' :
-                            sub.status === 'incomplete' ? 'bg-amber-300 text-amber-950' :
-                            sub.status === 'past_due' ? 'bg-orange-300 text-orange-950' :
-                            'bg-rose-300 text-rose-950'
-                          }`}>
-                            {sub.status === 'active' ? '✓ Aktif' :
-                             sub.status === 'trial' ? '⏳ Trial' :
-                             sub.status === 'incomplete' ? '⏸ Pending' :
-                             sub.status === 'past_due' ? '⚠ Lewat' :
-                             '✕ Batal'}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-xs text-slate-600 font-semibold whitespace-nowrap">{new Date(sub.created_date).toLocaleDateString('ms-MY')}</td>
-                      </tr>
-                    ))}
-                    {subscriptions.length === 0 && (
-                      <tr>
-                        <td colSpan={4} className="py-12 text-center text-slate-500 font-semibold">Tiada pelanggan lagi.</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </motion.div>
+            {/* Database Pelanggan — full detail (klik row untuk expand) */}
+            <CustomerDatabaseTable />
           </>
         )}
 
