@@ -41,31 +41,28 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Sila isi semua maklumat' }, { status: 400 });
     }
 
-    // ─── Check & deduct credits (admin bypass) — refetch to mitigate races ───
-    const isAdmin = user.role === 'admin';
+    // ─── Check & deduct credits (semua user termasuk admin) ───
     const credits = await base44.asServiceRole.entities.UserCredit.filter({ userEmail: user.email });
     let credit = credits[0] || null;
     let newBalance = credit?.balance || 0;
 
-    if (!isAdmin) {
-      const fresh = credit ? await base44.asServiceRole.entities.UserCredit.get(credit.id) : null;
-      const currentBalance = fresh?.balance || 0;
-      if (!fresh || currentBalance < COST_PER_BBM) {
-        return Response.json({
-          error: 'INSUFFICIENT_CREDITS',
-          balance: currentBalance,
-          required: COST_PER_BBM,
-        }, { status: 402 });
-      }
-      credit = fresh;
-      newBalance = currentBalance - COST_PER_BBM;
-      const nowIso = new Date().toISOString();
-      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-        balance: newBalance,
-        totalUsed: (fresh.totalUsed || 0) + COST_PER_BBM,
-        lastUsedAt: nowIso,
-      });
+    const fresh = credit ? await base44.asServiceRole.entities.UserCredit.get(credit.id) : null;
+    const currentBalance = fresh?.balance || 0;
+    if (!fresh || currentBalance < COST_PER_BBM) {
+      return Response.json({
+        error: 'INSUFFICIENT_CREDITS',
+        balance: currentBalance,
+        required: COST_PER_BBM,
+      }, { status: 402 });
     }
+    credit = fresh;
+    newBalance = currentBalance - COST_PER_BBM;
+    const nowIso = new Date().toISOString();
+    await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+      balance: newBalance,
+      totalUsed: (fresh.totalUsed || 0) + COST_PER_BBM,
+      lastUsedAt: nowIso,
+    });
 
     const subjectLabel = SUBJECT_LABELS[subject] || subject;
     const levelLabel = LEVEL_LABELS[level] || level;
@@ -114,8 +111,8 @@ Format jawapan dalam JSON:
         throw new Error('BBM tidak lengkap dijana');
       }
     } catch (llmErr) {
-      // Refund (only if charged) — refetch then add back to current balance
-      if (!isAdmin && credit) {
+      // Refund on failure
+      if (credit) {
         const latest = await base44.asServiceRole.entities.UserCredit.get(credit.id);
         await base44.asServiceRole.entities.UserCredit.update(credit.id, {
           balance: (latest?.balance || 0) + COST_PER_BBM,
@@ -133,18 +130,16 @@ Format jawapan dalam JSON:
       return Response.json({ error: 'Gagal menjana BBM. Kredit dikembalikan.', detail: llmErr.message }, { status: 500 });
     }
 
-    // Log transaction (skip for admin)
-    if (!isAdmin) {
-      await base44.asServiceRole.entities.CreditTransaction.create({
-        userEmail: user.email,
-        type: 'usage',
-        amount: -COST_PER_BBM,
-        balanceAfter: newBalance,
-        feature: 'bbm_generator',
-        description: `BBM: ${bbmData.title}`,
-        metadata: { subject, level, type, topic, model: 'gpt_5_4' },
-      });
-    }
+    // Log transaction
+    await base44.asServiceRole.entities.CreditTransaction.create({
+      userEmail: user.email,
+      type: 'usage',
+      amount: -COST_PER_BBM,
+      balanceAfter: newBalance,
+      feature: 'bbm_generator',
+      description: `BBM: ${bbmData.title}`,
+      metadata: { subject, level, type, topic, model: 'gpt_5_4' },
+    });
 
     // Auto-save BBM ke library user — tak block respons kalau gagal
     let savedId = null;

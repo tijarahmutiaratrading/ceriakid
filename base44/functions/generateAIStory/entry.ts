@@ -30,31 +30,28 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Tema cerita terlalu pendek' }, { status: 400 });
     }
 
-    // ─── Check & deduct credits (admin bypass) — refetch to mitigate races ───
-    const isAdmin = user.role === 'admin';
+    // ─── Check & deduct credits (semua user termasuk admin) ───
     const credits = await base44.asServiceRole.entities.UserCredit.filter({ userEmail: user.email });
     let credit = credits[0] || null;
     let newBalance = credit?.balance || 0;
 
-    if (!isAdmin) {
-      const fresh = credit ? await base44.asServiceRole.entities.UserCredit.get(credit.id) : null;
-      const currentBalance = fresh?.balance || 0;
-      if (!fresh || currentBalance < COST_PER_STORY) {
-        return Response.json({
-          error: 'INSUFFICIENT_CREDITS',
-          balance: currentBalance,
-          required: COST_PER_STORY,
-        }, { status: 402 });
-      }
-      credit = fresh;
-      newBalance = currentBalance - COST_PER_STORY;
-      const nowIso = new Date().toISOString();
-      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
-        balance: newBalance,
-        totalUsed: (fresh.totalUsed || 0) + COST_PER_STORY,
-        lastUsedAt: nowIso,
-      });
+    const fresh = credit ? await base44.asServiceRole.entities.UserCredit.get(credit.id) : null;
+    const currentBalance = fresh?.balance || 0;
+    if (!fresh || currentBalance < COST_PER_STORY) {
+      return Response.json({
+        error: 'INSUFFICIENT_CREDITS',
+        balance: currentBalance,
+        required: COST_PER_STORY,
+      }, { status: 402 });
     }
+    credit = fresh;
+    newBalance = currentBalance - COST_PER_STORY;
+    const nowIso = new Date().toISOString();
+    await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+      balance: newBalance,
+      totalUsed: (fresh.totalUsed || 0) + COST_PER_STORY,
+      lastUsedAt: nowIso,
+    });
 
     // ─── Build LLM prompt ───
     const ageLabel = AGE_LABELS[ageRange] || AGE_LABELS['7-9'];
@@ -112,8 +109,8 @@ Format jawapan dalam JSON:
       }
     } catch (llmErr) {
       console.error('LLM error:', llmErr.message);
-      // Refund on failure (only if charged) — refetch then add back to current balance
-      if (!isAdmin && credit) {
+      // Refund on failure
+      if (credit) {
         const latest = await base44.asServiceRole.entities.UserCredit.get(credit.id);
         await base44.asServiceRole.entities.UserCredit.update(credit.id, {
           balance: (latest?.balance || 0) + COST_PER_STORY,
@@ -131,18 +128,16 @@ Format jawapan dalam JSON:
       return Response.json({ error: 'Gagal menjana cerita. Kredit dikembalikan.', detail: llmErr.message }, { status: 500 });
     }
 
-    // ─── Log transaction (skip for admin) ───
-    if (!isAdmin) {
-      await base44.asServiceRole.entities.CreditTransaction.create({
-        userEmail: user.email,
-        type: 'usage',
-        amount: -COST_PER_STORY,
-        balanceAfter: newBalance,
-        feature: 'story_generator',
-        description: `Cerita: ${storyData.title}`,
-        metadata: { theme, childName, ageRange, moralLesson, length, model: 'gpt_5_4' },
-      });
-    }
+    // ─── Log transaction ───
+    await base44.asServiceRole.entities.CreditTransaction.create({
+      userEmail: user.email,
+      type: 'usage',
+      amount: -COST_PER_STORY,
+      balanceAfter: newBalance,
+      feature: 'story_generator',
+      description: `Cerita: ${storyData.title}`,
+      metadata: { theme, childName, ageRange, moralLesson, length, model: 'gpt_5_4' },
+    });
 
     // ─── Generate Pixar 3D cover image — same style as Story Kid ───
     let coverImage = '';
