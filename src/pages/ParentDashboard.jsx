@@ -6,7 +6,6 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
-import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import SmartRecommendations from '@/components/dashboard/SmartRecommendations';
 import ParentHeroCard from '@/components/parent/ParentHeroCard';
 import InsightsCard from '@/components/parent/InsightsCard';
@@ -143,11 +142,6 @@ export default function ParentDashboard() {
     >
       <AppHeader showBack={true} backTo="/dashboard" />
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-6 relative z-10">
-
-        {/* Apple Fitness style hero */}
-        {isAuthenticated && (
-          <AppleFitnessHero user={user} avatarUrl={heroAvatarUrl} onLogout={logout} />
-        )}
 
         {/* 1. Family Hero — overall snapshot */}
         <ParentHeroCard
