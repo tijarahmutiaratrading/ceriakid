@@ -513,10 +513,10 @@ export default function ChildrenProfiles() {
               />
             ))}
 
-            {/* Add child / upgrade card inline with children grid */}
-            {!showForm && (
+            {/* Add child card — only show when ada slot kosong */}
+            {!showForm && children.length < MAX_CHILDREN && (
               <AddChildCard
-                canAdd={children.length < MAX_CHILDREN}
+                canAdd={true}
                 currentCount={children.length}
                 maxCount={MAX_CHILDREN}
                 onAdd={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' }); }}
