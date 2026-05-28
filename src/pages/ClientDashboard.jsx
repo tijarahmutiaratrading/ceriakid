@@ -100,31 +100,18 @@ export default function ClientDashboard() {
           />
         </motion.div>
 
-        {/* Maklumat Peribadi — edit nama & no. telefon */}
+        {/* Akaun & Langganan — gabungan dalam satu seksyen */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mb-4 mt-6 md:mt-8"
+          className="mb-4 mt-6 md:mt-8 space-y-4"
         >
           <div className="flex items-center gap-2 mb-3 px-1">
             <div className="h-1 w-8 bg-gradient-to-r from-orange-300 to-pink-400 rounded-full" />
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider">👤 Maklumat Peribadi</p>
+            <p className="text-white/80 text-xs font-black uppercase tracking-wider">👤 Akaun & Langganan</p>
           </div>
           <PersonalInfoCard user={user} />
-        </motion.div>
-
-        {/* Langganan, Jantina & Naik Taraf — gabungan dalam satu card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="mb-4"
-        >
-          <div className="flex items-center gap-2 mb-3 px-1">
-            <div className="h-1 w-8 bg-gradient-to-r from-yellow-300 to-orange-400 rounded-full" />
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider">💎 Langganan & Pakej</p>
-          </div>
           <UpgradeTierCard currentTier={userTier} user={user} gender={gender} onGenderChange={setGender} />
         </motion.div>
 
