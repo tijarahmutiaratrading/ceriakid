@@ -103,17 +103,6 @@ export default function ParentDashboard() {
     ? (selectedGames.reduce((s, g) => s + (g.bestStars || 0), 0) / selectedTotalGames).toFixed(1)
     : '0.0';
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center font-nunito">
-        <div className="text-center">
-          <div className="text-6xl animate-bounce mb-4">📊</div>
-          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
-        </div>
-      </div>
-    );
-  }
-
   // Overall family stats
   const totalGamesAll = allGames.length;
   const totalStarsAll = allGames.reduce((s, g) => s + (g.bestStars || 0), 0);
