@@ -4,9 +4,10 @@ import { base44 } from '@/api/base44Client';
 import { Crown, Check, X, Loader, ArrowUp } from 'lucide-react';
 
 // Tier hierarchy — used to filter what's shown as an upgrade option
-const TIER_ORDER = ['free', 'asas', 'standard', 'keluarga'];
+// Pro & premium adalah tier admin/legacy tertinggi — tiada upgrade lagi atas tu
+const TIER_ORDER = ['free', 'asas', 'standard', 'keluarga', 'premium', 'pro'];
 
-const TIER_PRICES = { free: 0, asas: 49, standard: 99, keluarga: 199 };
+const TIER_PRICES = { free: 0, asas: 49, standard: 99, keluarga: 199, premium: 199, pro: 299 };
 
 const UPGRADE_TIERS = {
   asas: {
