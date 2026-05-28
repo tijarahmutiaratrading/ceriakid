@@ -188,7 +188,7 @@ export default function Landing() {
         const c = getEffectiveBg(bgEl);
         // Relative luminance (WCAG)
         const lum = (0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b) / 255;
-        if (lum < 0.55) darkCount++;
+        if (lum < 0.7) darkCount++;
         else lightCount++;
       });
       setNavTheme(darkCount > lightCount ? 'light' : 'dark');
