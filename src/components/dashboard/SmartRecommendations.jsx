@@ -64,35 +64,35 @@ export default function SmartRecommendations({ userEmail, childName, ageGroup })
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 mb-6 border-2 border-amber-200">
-      <div className="flex items-center gap-2 mb-4">
-        <AlertCircle className="w-5 h-5 text-orange-600" />
-        <h3 className="font-black text-gray-900">Mata Pelajaran Perlu Bantuan</h3>
+    <div className="rounded-3xl p-4" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)', boxShadow: '0 12px 40px -10px rgba(15,23,42,0.5)' }}>
+      <div className="flex items-center gap-2 mb-3">
+        <AlertCircle className="w-4 h-4 text-orange-300" />
+        <h3 className="text-white text-xs font-black uppercase tracking-wider">Perlu Bantuan</h3>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {recommendations.map((rec, i) => (
           <motion.div
             key={rec.category}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="bg-orange-50 rounded-xl p-4 border-l-4 border-orange-400"
+            className="rounded-2xl p-3 bg-white/8 border border-white/15 border-l-4 border-l-orange-400/70"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-bold text-gray-900">{categoryEmojis[rec.category]}</p>
-                <p className="text-sm text-gray-600">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="font-black text-white text-sm truncate">{categoryEmojis[rec.category]}</p>
+                <p className="text-[11px] text-white/70 font-semibold mt-0.5">
                   Purata {rec.avgStars.toFixed(1)}/3 bintang — cuba lebih banyak
                 </p>
               </div>
-              <TrendingUp className="w-5 h-5 text-orange-600" />
+              <TrendingUp className="w-4 h-4 text-orange-300 flex-shrink-0" />
             </div>
           </motion.div>
         ))}
       </div>
 
-      <p className="text-xs text-gray-500 mt-4">
+      <p className="text-[10px] text-white/55 mt-3 font-semibold">
         💡 Tip: Latihan lebih banyak dalam subjek ini untuk meningkatkan markah
       </p>
     </div>

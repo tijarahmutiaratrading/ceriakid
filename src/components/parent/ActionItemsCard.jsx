@@ -118,7 +118,7 @@ export default function ActionItemsCard({ childName, games }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className="rounded-3xl p-4"
-      style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(49,16,90,0.55))', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.18)', boxShadow: '0 12px 40px -10px rgba(15,23,42,0.5)' }}
+      style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)', boxShadow: '0 12px 40px -10px rgba(15,23,42,0.5)' }}
     >
       <p className="text-white text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-2">
         🎯 Apa Patut Buat Seterusnya
