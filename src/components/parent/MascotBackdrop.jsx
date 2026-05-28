@@ -10,12 +10,12 @@ export default function MascotBackdrop() {
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 bottom-0 -z-[5] flex justify-center overflow-hidden">
       <motion.div
-        className="w-full max-w-3xl px-4"
+        className="w-full max-w-4xl px-4"
         style={{ opacity: 0.55, filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.3))' }}
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <svg viewBox="0 0 600 200" className="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 600 200" className="w-full h-auto scale-125" className="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
           {/* ===== Connecting hands line (held hands) ===== */}
           <path
             d="M 95 130 Q 145 122 195 128 Q 245 132 295 130 Q 345 128 395 132 Q 445 128 495 130"
