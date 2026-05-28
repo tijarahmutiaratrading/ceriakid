@@ -179,17 +179,6 @@ export default function ChildrenProfiles() {
     return { totalGames: allGames.length, totalStars };
   }, [progressByChild]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center font-nunito">
-        <div className="text-center">
-          <div className="text-6xl animate-bounce mb-4">👶</div>
-          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
       {/* Floating orbs background */}
