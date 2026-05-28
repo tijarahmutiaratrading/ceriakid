@@ -9,6 +9,7 @@ import SparkleTrail from '@/components/drawing/SparkleTrail';
 import TracingCelebration from '@/components/drawing/TracingCelebration';
 import MyArtGallery from '@/components/drawing/MyArtGallery';
 import { ApplePanel, AppleSectionLabel, AppleButton } from '@/components/drawing/ApplePanel';
+import CanvasFloatingToolbar from '@/components/drawing/CanvasFloatingToolbar';
 import { saveArtwork } from '@/lib/drawingGallery';
 import {
   playDrawTick,
@@ -1253,21 +1254,48 @@ export default function DrawingStudio() {
                     draggable={false}
                   />
                 )}
+
+                {/* FLOATING TOOLBAR — anchored di bawah canvas, semua tool dalam reach */}
+                {mode !== 'trace' && (
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-3 z-20">
+                    <CanvasFloatingToolbar
+                      tools={TOOLS}
+                      brushSizes={BRUSH_SIZES}
+                      colors={COLORS}
+                      stickers={STICKERS}
+                      tool={tool}
+                      brushSize={brushSize}
+                      color={color}
+                      stickerMode={stickerMode}
+                      showStickers={mode === 'draw'}
+                      onToolChange={(t) => { setTool(t); setStickerMode(null); }}
+                      onSizeChange={setBrushSize}
+                      onColorChange={(c) => { setColor(c); setStickerMode(null); }}
+                      onStickerToggle={(s) => setStickerMode(stickerMode === s ? null : s)}
+                      onUndo={undo}
+                      onClear={handleClear}
+                      onSave={downloadCanvas}
+                      canUndo={history.length > 0}
+                    />
+                  </div>
+                )}
               </div>
             </ApplePanel>
 
-            {/* Mobile actions row */}
-            <div className="grid grid-cols-3 gap-2 mt-3 sm:hidden">
-              <button onClick={undo} disabled={history.length === 0} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold text-sm text-slate-700 bg-white ring-1 ring-black/5 shadow-sm disabled:opacity-40">
-                <Undo2 className="w-4 h-4" /> Undo
-              </button>
-              <button onClick={handleClear} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold text-sm text-red-600 bg-red-50 ring-1 ring-red-100">
-                <Trash2 className="w-4 h-4" /> Kosong
-              </button>
-              <AppleButton onClick={downloadCanvas} className="!py-3">
-                <Download className="w-4 h-4" /> Simpan
-              </AppleButton>
-            </div>
+            {/* Tracing mode — simple action row (no floating toolbar) */}
+            {mode === 'trace' && (
+              <div className="grid grid-cols-3 gap-2 mt-3">
+                <button onClick={undo} disabled={history.length === 0} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold text-sm text-slate-700 bg-white ring-1 ring-black/5 shadow-sm disabled:opacity-40">
+                  <Undo2 className="w-4 h-4" /> Undo
+                </button>
+                <button onClick={handleClear} className="flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold text-sm text-red-600 bg-red-50 ring-1 ring-red-100">
+                  <Trash2 className="w-4 h-4" /> Kosong
+                </button>
+                <AppleButton onClick={downloadCanvas} className="!py-3">
+                  <Download className="w-4 h-4" /> Simpan
+                </AppleButton>
+              </div>
+            )}
           </motion.section>
 
           {/* AKTIVITI KREATIF — sticky-note panel */}
@@ -1437,116 +1465,6 @@ export default function DrawingStudio() {
                     </ApplePanel>
                   )}
 
-                  {/* TOOLS + BRUSH SIZE + SAVE in one row */}
-                  <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3">
-                    {/* ALAT */}
-                    <ApplePanel>
-                      <AppleSectionLabel>{mode === 'color' ? 'Alat Mewarna' : 'Alat Lukisan'}</AppleSectionLabel>
-                      <div className="grid grid-cols-5 gap-1.5">
-                        {TOOLS.map(t => {
-                          const active = tool.id === t.id && !stickerMode;
-                          return (
-                            <motion.button
-                              key={t.id}
-                              whileTap={{ scale: 0.92 }}
-                              onClick={() => { setTool(t); setStickerMode(null); }}
-                              className={`aspect-square rounded-2xl flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 transition-all ${active ? 'bg-slate-900 shadow-md' : 'bg-slate-50 hover:bg-slate-100'}`}
-                              title={t.label}
-                            >
-                              <span className="text-xl leading-none">{t.emoji}</span>
-                              <span className={`text-[9px] font-bold leading-tight truncate w-full text-center ${active ? 'text-white' : 'text-slate-600'}`}>{t.label}</span>
-                            </motion.button>
-                          );
-                        })}
-                      </div>
-                    </ApplePanel>
-
-                    {/* SAIZ BRUSH */}
-                    <ApplePanel>
-                      <AppleSectionLabel>Saiz Brush</AppleSectionLabel>
-                      <div className="grid grid-cols-4 gap-1.5">
-                        {BRUSH_SIZES.map(s => {
-                          const active = brushSize.id === s.id;
-                          return (
-                            <motion.button
-                              key={s.id}
-                              whileTap={{ scale: 0.92 }}
-                              onClick={() => setBrushSize(s)}
-                              className={`flex flex-col items-center justify-center gap-1 py-2.5 rounded-2xl transition-all ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
-                            >
-                              <span className="rounded-full" style={{ width: s.dot, height: s.dot, backgroundColor: active ? '#ffffff' : '#94a3b8' }} />
-                              <span className="text-[10px] font-semibold">{s.label}</span>
-                            </motion.button>
-                          );
-                        })}
-                      </div>
-                    </ApplePanel>
-
-                    {/* SAVE BUTTON */}
-                    <div className="hidden sm:flex items-center justify-center">
-                      <AppleButton onClick={downloadCanvas} className="!px-6 !py-4 !text-base">
-                        <Download className="w-4 h-4" /> Simpan
-                      </AppleButton>
-                    </div>
-                  </div>
-
-                  {tool.id !== 'eraser' && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {/* PALET WARNA */}
-                      <ApplePanel>
-                        <AppleSectionLabel>Palet Warna</AppleSectionLabel>
-                        <div className="grid grid-cols-6 gap-2">
-                          {COLORS.map(c => {
-                            const active = color === c;
-                            return (
-                              <motion.button
-                                key={c}
-                                whileTap={{ scale: 0.88 }}
-                                onClick={() => { setColor(c); setStickerMode(null); }}
-                                className="aspect-square rounded-full transition-all"
-                                style={{
-                                  backgroundColor: c,
-                                  boxShadow: active
-                                    ? '0 0 0 2.5px #ffffff, 0 0 0 5px #0f172a, 0 4px 12px rgba(15,23,42,0.18)'
-                                    : '0 1px 2px rgba(0,0,0,0.08), inset 0 -1px 2px rgba(0,0,0,0.08)',
-                                }}
-                                aria-label={`Warna ${c}`}
-                              />
-                            );
-                          })}
-                        </div>
-                        <div className="flex items-center gap-2 mt-3 rounded-2xl p-2.5 bg-slate-50 ring-1 ring-black/5">
-                          <input type="color" value={color} onChange={e => { setColor(e.target.value); setStickerMode(null); }} className="w-9 h-9 rounded-lg cursor-pointer border-0 bg-transparent" />
-                          <div className="flex-1 min-w-0">
-                            <p className="font-semibold text-xs text-slate-900">Warna custom</p>
-                            <p className="text-[10px] text-slate-500">Pilih mana-mana warna kegemaran</p>
-                          </div>
-                          <div className="w-7 h-7 rounded-full ring-1 ring-black/10" style={{ backgroundColor: color }} />
-                        </div>
-                      </ApplePanel>
-
-                      {/* TAMPAL STICKER */}
-                      <ApplePanel>
-                        <AppleSectionLabel>Tampal Sticker</AppleSectionLabel>
-                        <p className="text-[11px] text-slate-500 mb-2">Tekan satu sticker, kemudian tap canvas untuk tampal.</p>
-                        <div className="grid grid-cols-6 gap-2">
-                          {STICKERS.map(s => {
-                            const active = stickerMode === s;
-                            return (
-                              <motion.button
-                                key={s}
-                                whileTap={{ scale: 0.88 }}
-                                onClick={() => setStickerMode(stickerMode === s ? null : s)}
-                                className={`aspect-square rounded-2xl text-2xl transition-all flex items-center justify-center ${active ? 'bg-slate-900 shadow-md' : 'bg-slate-50 hover:bg-slate-100'}`}
-                              >
-                                {s}
-                              </motion.button>
-                            );
-                          })}
-                        </div>
-                      </ApplePanel>
-                    </div>
-                  )}
                 </motion.section>
               )}
             </AnimatePresence>
