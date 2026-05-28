@@ -1520,140 +1520,16 @@ export default function DrawingStudio() {
               <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(circle, #bae6fd 0%, transparent 70%)' }} />
             </div>
 
-            {/* Premium glass toolbar */}
-            <div
-              className="relative flex items-center gap-3 px-4 sm:px-6 py-3 flex-shrink-0 border-b border-black/[0.04]"
-              style={{
-                background: 'rgba(255,255,255,0.72)',
-                backdropFilter: 'blur(24px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-                boxShadow: '0 1px 0 rgba(255,255,255,0.6) inset, 0 1px 2px rgba(15,23,42,0.04)',
-              }}
-            >
-              <div className="flex gap-2 overflow-x-auto flex-1 min-w-0 items-center scrollbar-thin">
-                {(mode === 'draw' || mode === 'color') && (
-                  <>
-                    {TOOLS.map(t => {
-                      const active = tool.id === t.id;
-                      return (
-                        <button
-                          key={t.id}
-                          onClick={() => setTool(t)}
-                          className={`flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-semibold transition-all ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-700 ring-1 ring-black/5 hover:bg-slate-50'}`}
-                        >
-                          <span className="text-base leading-none">{t.emoji}</span>
-                          <span className="hidden sm:inline">{t.label}</span>
-                        </button>
-                      );
-                    })}
-                    {tool.id !== 'eraser' && (
-                      <div className="flex gap-1.5 items-center ml-2 pl-3 border-l border-black/10">
-                        {COLORS.map(c => {
-                          const active = color === c;
-                          return (
-                            <button
-                              key={c}
-                              onClick={() => setColor(c)}
-                              className="w-7 h-7 rounded-full flex-shrink-0 transition-transform hover:scale-110"
-                              style={{
-                                backgroundColor: c,
-                                boxShadow: active
-                                  ? '0 0 0 2px #ffffff, 0 0 0 4px #0f172a'
-                                  : '0 1px 2px rgba(0,0,0,0.08), inset 0 -1px 2px rgba(0,0,0,0.08)',
-                              }}
-                            />
-                          );
-                        })}
-                        <input
-                          type="color"
-                          value={color}
-                          onChange={e => setColor(e.target.value)}
-                          className="w-7 h-7 rounded-full cursor-pointer border border-black/10 flex-shrink-0 bg-transparent"
-                          title="Warna custom"
-                        />
-                      </div>
-                    )}
-                  </>
-                )}
-                {mode === 'color' && (
-                  <div className="flex gap-1.5 ml-2 pl-3 border-l border-black/10">
-                    {COLORING_PAGES.map(page => {
-                      const active = selectedColoringPage.id === page.id;
-                      return (
-                        <button
-                          key={page.id}
-                          onClick={() => setSelectedColoringPage(page)}
-                          className={`flex-shrink-0 px-3 py-2 rounded-full text-xs font-semibold transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
-                        >
-                          {page.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-                {mode === 'trace' && (
-                  <>
-                    {TRACING_CATEGORIES.map(category => {
-                      const active = selectedTracingCategory === category.id;
-                      return (
-                        <button
-                          key={category.id}
-                          onClick={() => { setSelectedTracingCategory(category.id); setSelectedShape(category.shapes[0]); }}
-                          className={`flex-shrink-0 px-3 py-2 rounded-full text-xs font-semibold transition-all ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-700 ring-1 ring-black/5 hover:bg-slate-50'}`}
-                        >
-                          {category.label}
-                        </button>
-                      );
-                    })}
-                    <span className="w-px h-6 bg-black/10 mx-1 flex-shrink-0" />
-                    {tracingShapes.map(s => {
-                      const active = selectedShape.label === s.label;
-                      return (
-                        <button
-                          key={s.label}
-                          onClick={() => setSelectedShape(s)}
-                          className={`flex-shrink-0 px-3 py-2 rounded-full text-xs font-semibold transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
-                        >
-                          {s.label}
-                        </button>
-                      );
-                    })}
-                  </>
-                )}
-              </div>
-
-              <div className="flex items-center gap-1.5 flex-shrink-0 pl-2 border-l border-black/10">
-                <button
-                  onClick={undo}
-                  disabled={history.length === 0}
-                  className="p-2 rounded-full bg-white text-slate-700 ring-1 ring-black/5 hover:bg-slate-50 disabled:opacity-30 disabled:hover:bg-white transition-all"
-                  title="Undo"
-                >
-                  <Undo2 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={handleClear}
-                  className="p-2 rounded-full bg-red-50 text-red-600 ring-1 ring-red-100 hover:bg-red-100 transition-all"
-                  title="Kosongkan"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={downloadCanvas}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-slate-900 text-white text-sm font-semibold shadow-md hover:bg-slate-800 transition-all"
-                  title="Simpan"
-                >
-                  <Download className="w-4 h-4" />
-                  <span className="hidden sm:inline">Simpan</span>
-                </button>
-                <button
-                  onClick={exitFullscreen}
-                  className="p-2 rounded-full bg-white text-slate-700 ring-1 ring-black/5 hover:bg-slate-50 transition-all"
-                  title="Keluar fullscreen"
-                >
-                  <Minimize2 className="w-4 h-4" />
-                </button>
-              </div>
+            {/* Top-right floating: minimize button + (for trace/color) category picker trigger */}
+            <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
+              <button
+                onClick={exitFullscreen}
+                title="Keluar fullscreen"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/95 text-slate-700 shadow-lg ring-1 ring-black/5 hover:bg-white transition"
+                style={{ backdropFilter: 'blur(20px) saturate(180%)' }}
+              >
+                <Minimize2 className="w-4 h-4" />
+              </button>
             </div>
 
             <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
@@ -1674,6 +1550,122 @@ export default function DrawingStudio() {
                   draggable={false}
                   style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', pointerEvents: 'none', userSelect: 'none', mixBlendMode: 'darken', zIndex: 2 }}
                 />
+              )}
+
+              {/* Floating toolbar — sticky di bawah canvas (draw & color modes) */}
+              {(mode === 'draw' || mode === 'color') && (
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-5 z-20">
+                  <CanvasFloatingToolbar
+                    tools={TOOLS}
+                    brushSizes={BRUSH_SIZES}
+                    colors={COLORS}
+                    stickers={STICKERS}
+                    tool={tool}
+                    brushSize={brushSize}
+                    color={color}
+                    stickerMode={stickerMode}
+                    showStickers={mode === 'draw'}
+                    onToolChange={(t) => { setTool(t); setStickerMode(null); }}
+                    onSizeChange={setBrushSize}
+                    onColorChange={(c) => { setColor(c); setStickerMode(null); }}
+                    onStickerToggle={(s) => setStickerMode(stickerMode === s ? null : s)}
+                    onUndo={undo}
+                    onClear={handleClear}
+                    onSave={downloadCanvas}
+                    canUndo={history.length > 0}
+                  />
+                </div>
+              )}
+
+              {/* Floating category/shape picker untuk trace + color modes */}
+              {mode === 'color' && (
+                <div className="absolute left-1/2 -translate-x-1/2 top-4 z-20 max-w-[92vw]">
+                  <div
+                    className="flex gap-1.5 overflow-x-auto px-2 py-1.5 rounded-full scrollbar-hide"
+                    style={{
+                      background: 'rgba(255,255,255,0.96)',
+                      backdropFilter: 'blur(20px) saturate(180%)',
+                      boxShadow: '0 8px 24px rgba(15,23,42,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
+                    }}
+                  >
+                    {COLORING_PAGES.map(page => {
+                      const active = selectedColoringPage.id === page.id;
+                      return (
+                        <button
+                          key={page.id}
+                          onClick={() => setSelectedColoringPage(page)}
+                          className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'text-slate-700 hover:bg-slate-100'}`}
+                        >
+                          {page.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {mode === 'trace' && (
+                <>
+                  <div className="absolute left-1/2 -translate-x-1/2 top-4 z-20 max-w-[92vw]">
+                    <div
+                      className="flex gap-1.5 overflow-x-auto px-2 py-1.5 rounded-full scrollbar-hide"
+                      style={{
+                        background: 'rgba(255,255,255,0.96)',
+                        backdropFilter: 'blur(20px) saturate(180%)',
+                        boxShadow: '0 8px 24px rgba(15,23,42,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
+                      }}
+                    >
+                      {TRACING_CATEGORIES.map(category => {
+                        const active = selectedTracingCategory === category.id;
+                        return (
+                          <button
+                            key={category.id}
+                            onClick={() => { setSelectedTracingCategory(category.id); setSelectedShape(category.shapes[0]); }}
+                            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${active ? 'bg-slate-900 text-white shadow-md' : 'text-slate-700 hover:bg-slate-100'}`}
+                          >
+                            {category.label}
+                          </button>
+                        );
+                      })}
+                      <span className="w-px h-5 bg-black/10 self-center mx-1 flex-shrink-0" />
+                      {tracingShapes.map(s => {
+                        const active = selectedShape.label === s.label;
+                        return (
+                          <button
+                            key={s.label}
+                            onClick={() => setSelectedShape(s)}
+                            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${active ? 'bg-blue-500 text-white shadow-sm' : 'text-slate-700 hover:bg-slate-100'}`}
+                          >
+                            {s.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Tracing actions — floating pill di bawah */}
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-5 z-20">
+                    <div
+                      className="flex items-center gap-1 px-1.5 py-1.5 rounded-full"
+                      style={{
+                        background: 'rgba(255,255,255,0.96)',
+                        backdropFilter: 'blur(20px) saturate(180%)',
+                        boxShadow: '0 8px 24px rgba(15,23,42,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
+                      }}
+                    >
+                      <button onClick={undo} disabled={history.length === 0} title="Undo" className="w-10 h-10 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 disabled:opacity-30 transition">
+                        <Undo2 className="w-4 h-4" />
+                      </button>
+                      <button onClick={handleClear} title="Kosongkan" className="w-10 h-10 rounded-full flex items-center justify-center text-red-600 hover:bg-red-50 transition">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                      <button onClick={downloadCanvas} title="Simpan" className="h-10 px-4 rounded-full inline-flex items-center gap-1.5 bg-slate-900 text-white font-bold text-sm shadow-md hover:bg-slate-800 transition">
+                        <Download className="w-4 h-4" />
+                        <span className="hidden sm:inline">Simpan</span>
+                      </button>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           </div>,
