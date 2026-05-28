@@ -1,0 +1,73 @@
+{
+  "name": "QuizHistory",
+  "type": "object",
+  "properties": {
+    "question": {
+      "type": "string",
+      "description": "Soalan kuiz yang dijana AI"
+    },
+    "choices": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Pilihan jawapan (4 pilihan A-D)"
+    },
+    "correctIndex": {
+      "type": "number",
+      "description": "Index pilihan jawapan yang betul (0-3)"
+    },
+    "userAnswerIndex": {
+      "type": "number",
+      "description": "Index pilihan yang dipilih oleh user"
+    },
+    "isCorrect": {
+      "type": "boolean",
+      "default": false,
+      "description": "Sama ada user menjawab dengan betul"
+    },
+    "explanation": {
+      "type": "string",
+      "description": "Penerangan kenapa jawapan ini betul"
+    },
+    "hint": {
+      "type": "string",
+      "description": "Petua untuk membantu user"
+    },
+    "encouragement": {
+      "type": "string",
+      "description": "Mesej galakan dari Cikgu AI"
+    },
+    "emoji": {
+      "type": "string",
+      "default": "\u2753",
+      "description": "Emoji untuk soalan"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Subjek (mathematics, bahasa_melayu, english, science, jawi, general)"
+    },
+    "level": {
+      "type": "string",
+      "description": "Tahap pelajar (prasekolah, darjah_1-6)"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard"
+      ],
+      "default": "medium",
+      "description": "Tahap kesukaran soalan"
+    },
+    "topic": {
+      "type": "string",
+      "description": "Topik khusus jika dinyatakan user"
+    }
+  },
+  "required": [
+    "question",
+    "choices"
+  ]
+}
