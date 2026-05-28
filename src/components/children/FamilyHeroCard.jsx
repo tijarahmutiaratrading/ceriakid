@@ -70,7 +70,7 @@ export default function FamilyHeroCard({
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-              className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl flex-shrink-0 relative"
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center flex-shrink-0 relative"
               style={{
                 background: 'linear-gradient(135deg, rgba(168,85,247,0.4), rgba(236,72,153,0.3))',
                 backdropFilter: 'blur(20px)',
@@ -78,7 +78,36 @@ export default function FamilyHeroCard({
                 boxShadow: '0 8px 24px rgba(168,85,247,0.3), inset 0 1px 0 rgba(255,255,255,0.25)',
               }}
             >
-              👨‍👩‍👧‍👦
+              <svg viewBox="0 0 64 64" className="w-9 h-9 sm:w-11 sm:h-11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="famParent" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#fde68a" />
+                    <stop offset="100%" stopColor="#fb923c" />
+                  </linearGradient>
+                  <linearGradient id="famKid" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#a5f3fc" />
+                    <stop offset="100%" stopColor="#60a5fa" />
+                  </linearGradient>
+                  <linearGradient id="famKid2" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#fbcfe8" />
+                    <stop offset="100%" stopColor="#f472b6" />
+                  </linearGradient>
+                </defs>
+                {/* Parent left (taller) */}
+                <circle cx="20" cy="20" r="6" fill="url(#famParent)" />
+                <path d="M10 44c0-5.5 4.5-10 10-10s10 4.5 10 10v6H10v-6z" fill="url(#famParent)" />
+                {/* Parent right */}
+                <circle cx="44" cy="20" r="6" fill="url(#famParent)" opacity="0.85" />
+                <path d="M34 44c0-5.5 4.5-10 10-10s10 4.5 10 10v6H34v-6z" fill="url(#famParent)" opacity="0.85" />
+                {/* Kid 1 (front-left) */}
+                <circle cx="26" cy="34" r="4.5" fill="url(#famKid)" />
+                <path d="M19 52c0-3.9 3.1-7 7-7s7 3.1 7 7v3H19v-3z" fill="url(#famKid)" />
+                {/* Kid 2 (front-right) */}
+                <circle cx="38" cy="34" r="4.5" fill="url(#famKid2)" />
+                <path d="M31 52c0-3.9 3.1-7 7-7s7 3.1 7 7v3H31v-3z" fill="url(#famKid2)" />
+                {/* Heart on top */}
+                <path d="M32 10c-1.5-2.5-5.5-2.5-5.5 1 0 2.5 2.75 4.5 5.5 6.5 2.75-2 5.5-4 5.5-6.5 0-3.5-4-3.5-5.5-1z" fill="#fff" opacity="0.95" />
+              </svg>
               <Sparkles className="absolute -top-1 -right-1 w-3.5 h-3.5 text-yellow-300" />
             </motion.div>
             <div className="min-w-0">
