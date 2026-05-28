@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { CheckCircle, Loader2, LayoutDashboard, Home, Sparkles, Coins, GraduationCap } from 'lucide-react';
+import { CheckCircle, Loader2, LayoutDashboard, Home, Sparkles, Coins, GraduationCap, RefreshCw } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
@@ -106,7 +106,8 @@ export default function ThankYou() {
         if (pollRef.current) clearInterval(pollRef.current);
         return;
       }
-      if (pollAttempts.current >= 10) {
+      // 20 attempts × 3s = 60 saat. Chip webhook kadang-kadang lambat sampai 45s.
+      if (pollAttempts.current >= 20) {
         if (pollRef.current) clearInterval(pollRef.current);
         setStatus('pending');
       }
@@ -171,7 +172,37 @@ export default function ThankYou() {
             </p>
           )}
           {status === 'pending' && (
-            <p className="text-yellow-100 font-bold">Pembayaran diterima. Jika akses belum aktif, tunggu sebentar dan refresh dashboard.</p>
+            <div className="space-y-3">
+              <p className="text-yellow-100 font-bold">Pembayaran diterima. Aktivasi sedang diproses — kadang-kadang ambil masa sehingga 1 minit.</p>
+              <button
+                onClick={() => {
+                  pollAttempts.current = 0;
+                  setStatus('checking');
+                  if (pollRef.current) clearInterval(pollRef.current);
+                  const retry = async () => {
+                    if (!user?.email) return;
+                    const subs = await base44.entities.UserSubscription.filter({ email: user.email });
+                    const active = subs?.find(s => s.status === 'active');
+                    if (active) {
+                      setTier(active.tier || tier);
+                      setStatus('active');
+                      refreshAuth?.();
+                    } else {
+                      pollAttempts.current += 1;
+                      if (pollAttempts.current >= 20) {
+                        if (pollRef.current) clearInterval(pollRef.current);
+                        setStatus('pending');
+                      }
+                    }
+                  };
+                  retry();
+                  pollRef.current = setInterval(retry, 3000);
+                }}
+                className="inline-flex items-center gap-2 rounded-xl bg-white/15 hover:bg-white/25 px-4 py-2 text-sm font-black text-white transition-colors"
+              >
+                <RefreshCw className="h-4 w-4" /> Semak Semula
+              </button>
+            </div>
           )}
         </div>
 

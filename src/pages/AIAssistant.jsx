@@ -67,12 +67,21 @@ export default function AIAssistant() {
       if (userMsgs.length === 0) return;
 
       const title = (firstQuestion || userMsgs[0]?.content || 'Perbualan').slice(0, 80);
+
+      // Auto-trim: simpan greeting + 80 messages terakhir kalau > 100 messages.
+      // Cegah payload melebihi 200KB limit Base44 entity.
+      let toSave = allMessages;
+      if (allMessages.length > 100) {
+        const greeting = allMessages[0]; // assume first is AI greeting
+        toSave = [greeting, ...allMessages.slice(-80)];
+      }
+
       const payload = {
         title,
         agent: 'cikgu_firdaus',
         subject,
         level,
-        messages: allMessages.map(m => ({ role: m.role, content: m.content, timestamp: new Date().toISOString() })),
+        messages: toSave.map(m => ({ role: m.role, content: m.content, timestamp: new Date().toISOString() })),
         messageCount: allMessages.length,
         lastMessageAt: new Date().toISOString(),
       };
