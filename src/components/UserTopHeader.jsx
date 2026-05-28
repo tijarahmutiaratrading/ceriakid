@@ -50,13 +50,6 @@ const NAV_GROUPS = [
     label: '💰 Affiliate',
     path: '/affiliate',
   },
-  {
-    key: 'sokongan',
-    label: 'Sokongan',
-    submenu: [
-      { path: '/contact', label: 'Hubungi Kami', icon: MessageCircle },
-    ],
-  },
 ];
 
 export default function UserTopHeader() {
