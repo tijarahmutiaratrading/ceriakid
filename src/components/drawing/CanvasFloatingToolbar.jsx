@@ -47,16 +47,41 @@ export default function CanvasFloatingToolbar({
   return (
     <div ref={rootRef} className="relative">
       <div
-        className="flex items-stretch gap-1 p-1.5 rounded-[1.75rem]"
+        className="relative flex items-stretch gap-1 p-1.5 rounded-[1.75rem] overflow-hidden"
         style={{
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.35))',
-          backdropFilter: 'blur(28px) saturate(200%)',
-          WebkitBackdropFilter: 'blur(28px) saturate(200%)',
-          boxShadow: '0 20px 50px rgba(15,23,42,0.18), 0 1px 0 rgba(255,255,255,0.9) inset, 0 0 0 1px rgba(255,255,255,0.6)',
-          border: '1px solid rgba(255,255,255,0.5)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.5) 45%, rgba(255,255,255,0.35) 100%)',
+          backdropFilter: 'blur(32px) saturate(220%)',
+          WebkitBackdropFilter: 'blur(32px) saturate(220%)',
+          boxShadow: '0 24px 60px rgba(15,23,42,0.22), 0 8px 20px rgba(15,23,42,0.1), 0 2px 0 rgba(255,255,255,0.95) inset, 0 -1px 0 rgba(15,23,42,0.04) inset, 0 0 0 1px rgba(255,255,255,0.7)',
+          border: '1px solid rgba(255,255,255,0.6)',
         }}
       >
+        {/* Glossy top highlight */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-[1.75rem]"
+          style={{
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.1) 60%, transparent 100%)',
+          }}
+        />
+        {/* Specular sheen across the top */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 left-[8%] right-[8%] h-px"
+          style={{
+            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.95) 50%, transparent 100%)',
+          }}
+        />
+        {/* Subtle bottom inner shadow for depth */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 rounded-b-[1.75rem]"
+          style={{
+            background: 'linear-gradient(0deg, rgba(15,23,42,0.06) 0%, transparent 100%)',
+          }}
+        />
         {/* TOOL */}
+        <div className="relative z-10 flex items-stretch gap-1 w-full">
         <ProToolButton
           active={openPopover === 'tool'}
           isActive={!stickerMode}
@@ -238,6 +263,7 @@ export default function CanvasFloatingToolbar({
           <Download className="w-4 h-4" strokeWidth={2.8} />
           <span className="hidden sm:inline">Simpan</span>
         </button>
+        </div>
       </div>
     </div>
   );
