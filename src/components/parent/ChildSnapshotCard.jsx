@@ -29,7 +29,7 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className="rounded-3xl p-4"
-      style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.8))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+      style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(49,16,90,0.55))', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.18)', boxShadow: '0 12px 40px -10px rgba(15,23,42,0.5)' }}
     >
       <div className="flex items-center gap-3 mb-4">
         {child?.avatarUrl ? (

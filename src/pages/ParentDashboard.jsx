@@ -127,7 +127,7 @@ export default function ParentDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="rounded-3xl p-10 text-center"
-            style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+            style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(49,16,90,0.55))', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.18)', boxShadow: '0 12px 40px -10px rgba(15,23,42,0.5)' }}
           >
             <p className="text-5xl mb-4">👨‍👩‍👧‍👦</p>
             <p className="text-white font-black text-lg mb-2 drop-shadow">Belum ada profil anak</p>
@@ -172,7 +172,7 @@ export default function ParentDashboard() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       className="rounded-3xl p-8 text-center"
-                      style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.8))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+                      style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(49,16,90,0.55))', backdropFilter: 'blur(18px)', border: '1px solid rgba(255,255,255,0.18)', boxShadow: '0 12px 40px -10px rgba(15,23,42,0.5)' }}
                     >
                       <p className="text-5xl mb-3">🎮</p>
                       <p className="text-white font-black text-base mb-2">{selectedChild} belum mula bermain</p>
