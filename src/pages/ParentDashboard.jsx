@@ -131,9 +131,17 @@ export default function ParentDashboard() {
   const avgStarsAll = totalGamesAll > 0 ? (totalStarsAll / totalGamesAll).toFixed(1) : '0.0';
 
   return (
-    <div className="min-h-screen font-nunito">
+    <div
+      className="min-h-screen font-nunito relative"
+      style={{
+        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0a6521ac4_generated_image.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-6">
+      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-6 relative z-10">
 
         {/* 1. Family Hero — overall snapshot */}
         <ParentHeroCard
