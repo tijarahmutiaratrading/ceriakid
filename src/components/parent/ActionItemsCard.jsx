@@ -122,7 +122,6 @@ export default function ActionItemsCard({ childName, games }) {
         background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
         backdropFilter: 'blur(22px) saturate(150%)',
         WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-        border: '1px solid rgba(255,255,255,0.18)',
         boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
       }}
     >
