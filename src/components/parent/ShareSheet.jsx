@@ -44,8 +44,14 @@ export default function ShareSheet({ childName, totalGames, avgStars }) {
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={() => setOpen(!open)}
-        className="w-full text-white rounded-2xl min-h-12 py-3 font-black text-sm transition-all flex items-center justify-center gap-2 hover:bg-white/10"
-        style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}
+        className="w-full text-white rounded-2xl min-h-12 py-3 font-black text-sm transition-all flex items-center justify-center gap-2 hover:brightness-110"
+        style={{
+          background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
+          backdropFilter: 'blur(22px) saturate(150%)',
+          WebkitBackdropFilter: 'blur(22px) saturate(150%)',
+          border: '1px solid rgba(255,255,255,0.18)',
+          boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+        }}
       >
         <Share2 className="w-4 h-4" />
         Kongsi Pencapaian {childName}

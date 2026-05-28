@@ -64,7 +64,13 @@ export default function SmartRecommendations({ userEmail, childName, ageGroup })
   };
 
   return (
-    <div className="rounded-3xl p-4" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)', boxShadow: '0 12px 40px -10px rgba(15,23,42,0.5)' }}>
+    <div className="rounded-3xl p-4" style={{
+      background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
+      backdropFilter: 'blur(22px) saturate(150%)',
+      WebkitBackdropFilter: 'blur(22px) saturate(150%)',
+      border: '1px solid rgba(255,255,255,0.18)',
+      boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+    }}>
       <div className="flex items-center gap-2 mb-3">
         <AlertCircle className="w-4 h-4 text-orange-300" />
         <h3 className="text-white text-xs font-black uppercase tracking-wider">Perlu Bantuan</h3>

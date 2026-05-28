@@ -77,7 +77,13 @@ export default function InsightsCard({ games }) {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       className="rounded-3xl p-4"
-      style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)', boxShadow: '0 12px 40px -10px rgba(15,23,42,0.5)' }}
+      style={{
+        background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
+        backdropFilter: 'blur(22px) saturate(150%)',
+        WebkitBackdropFilter: 'blur(22px) saturate(150%)',
+        border: '1px solid rgba(255,255,255,0.18)',
+        boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+      }}
     >
       <p className="text-white text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-2">
         ⚡ Trend & Insights
