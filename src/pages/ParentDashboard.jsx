@@ -138,7 +138,7 @@ export default function ParentDashboard() {
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10"
         style={{
-          background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 25%, #fbcfe8 55%, #c7d2fe 85%, #a5b4fc 100%)',
+          background: 'linear-gradient(135deg, #2d2a4a 0%, #3d3567 30%, #4a3d7a 60%, #5b4585 100%)',
         }}
       />
       {/* Floating cartoon mascots overlay */}
