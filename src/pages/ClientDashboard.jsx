@@ -10,7 +10,6 @@ import { getDefaultAvatar } from '@/lib/avatarGenerator';
 import SubscriptionWidget from '@/components/dashboard/SubscriptionWidget';
 import UpgradeTierCard from '@/components/dashboard/UpgradeTierCard';
 import ManageDevices from '@/components/ManageDevices';
-import OfflineModeCard from '@/components/offline/OfflineModeCard';
 
 const TIER_CONFIG = {
   free:      { label: 'Percuma',  emoji: '🆓', color: 'from-gray-400 to-gray-500' },
@@ -207,25 +206,11 @@ export default function ClientDashboard() {
             <div className="h-1 w-8 bg-gradient-to-r from-cyan-300 to-pink-300 rounded-full" />
             <p className="text-white/80 text-xs font-black uppercase tracking-wider">📱 Device Berdaftar</p>
           </div>
-          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(49,16,90,0.78))', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.15)' }}>
+          <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}>
             <div className="p-4">
               <ManageDevices userEmail={user?.email} tier={userTier} />
             </div>
           </div>
-        </motion.div>
-
-        {/* Offline Mode — parent-friendly guide & sync status */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.22 }}
-          className="mb-5"
-        >
-          <div className="flex items-center gap-2 mb-3 px-1">
-            <div className="h-1 w-8 bg-gradient-to-r from-emerald-300 to-cyan-400 rounded-full" />
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider">📡 Mode Offline</p>
-          </div>
-          <OfflineModeCard />
         </motion.div>
 
         {/* Save Button */}
