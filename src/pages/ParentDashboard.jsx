@@ -133,15 +133,12 @@ export default function ParentDashboard() {
 
   return (
     <div className="min-h-screen font-nunito relative">
-      {/* Single fixed background layer */}
+      {/* Single fixed background — soft pastel gradient (not too dark) */}
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10"
         style={{
-          backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0a6521ac4_generated_image.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 25%, #fbcfe8 55%, #c7d2fe 85%, #a5b4fc 100%)',
         }}
       />
       {/* Floating cartoon mascots overlay */}
