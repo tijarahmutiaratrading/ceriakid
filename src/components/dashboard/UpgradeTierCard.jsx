@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Crown, Check, X, Loader, ArrowUp } from 'lucide-react';
+import { Crown, Check, Loader, ArrowUp, CheckCircle2 } from 'lucide-react';
 
-// Tier hierarchy — used to filter what's shown as an upgrade option
-// Pro & premium adalah tier admin/legacy tertinggi — tiada upgrade lagi atas tu
+// Tier hierarchy — used to determine which packages are upgrades vs current/lower
 const TIER_ORDER = ['free', 'asas', 'standard', 'keluarga', 'premium', 'pro'];
 
 const TIER_PRICES = { free: 0, asas: 49, standard: 99, keluarga: 199, premium: 199, pro: 299 };
 
-const UPGRADE_TIERS = {
+// Semua pakej yang boleh ditunjuk (free tak masuk sebab tu bukan pakej "naik taraf")
+const ALL_TIERS = {
   asas: {
     name: 'asas',
     nameMY: '🌱 Asas',
@@ -32,6 +32,22 @@ const UPGRADE_TIERS = {
     features: ['200 game (tiada kunci)', 'Sehingga 4 anak', '4 peranti', 'Sokongan prioriti'],
     popular: true,
   },
+  pro: {
+    name: 'pro',
+    nameMY: '💎 Pro',
+    priceMYR: 299,
+    color: 'from-amber-400 via-orange-500 to-pink-500',
+    features: ['Semua ciri Keluarga', 'Akses penuh AI', 'Sokongan utama 24/7', 'Akses awal ciri baharu'],
+  },
+};
+
+const TIER_LABEL = {
+  free: '🆓 Percuma',
+  asas: '🌱 Asas',
+  standard: '⭐ Standard',
+  keluarga: '👑 Keluarga',
+  premium: '⭐ Premium',
+  pro: '💎 Pro',
 };
 
 export default function UpgradeTierCard({ currentTier, user }) {
@@ -40,20 +56,9 @@ export default function UpgradeTierCard({ currentTier, user }) {
   const [confirmTier, setConfirmTier] = useState(null);
 
   const currentIdx = TIER_ORDER.indexOf(currentTier);
-  const upgradeOptions = TIER_ORDER
-    .slice(currentIdx + 1)
-    .filter((t) => UPGRADE_TIERS[t]);
-
-  // Tiada tier lebih tinggi — user dah di tier tertinggi
-  if (upgradeOptions.length === 0) {
-    return (
-      <div className="rounded-3xl p-5 text-center" style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.4)' }}>
-        <div className="text-4xl mb-2">🏆</div>
-        <p className="text-white font-black text-base">Anda di pelan tertinggi!</p>
-        <p className="text-white/70 text-xs font-semibold mt-1">Terima kasih kerana menyokong CeriaKid 💜</p>
-      </div>
-    );
-  }
+  const allTierKeys = Object.keys(ALL_TIERS); // ['asas','standard','keluarga','pro']
+  const isOnTopTier = currentTier === 'pro';
+  const currentLabel = TIER_LABEL[currentTier] || '🆓 Percuma';
 
   const handleUpgrade = async (tierName) => {
     setError('');
@@ -83,15 +88,27 @@ export default function UpgradeTierCard({ currentTier, user }) {
 
   return (
     <div className="rounded-3xl p-5 space-y-4" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-      <div className="flex items-center gap-2">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg flex-shrink-0">
           <ArrowUp className="w-5 h-5 text-white" strokeWidth={3} />
         </div>
-        <div>
-          <p className="text-white font-black text-base leading-tight">Naik Taraf Pelan</p>
-          <p className="text-white/70 text-xs font-semibold">Tukar ke pelan lebih besar bila-bila masa</p>
+        <div className="flex-1 min-w-0">
+          <p className="text-white font-black text-base leading-tight">Semua Pakej</p>
+          <p className="text-white/70 text-xs font-semibold">
+            Pakej anda sekarang: <span className="text-yellow-300 font-black">{currentLabel}</span>
+          </p>
         </div>
       </div>
+
+      {isOnTopTier && (
+        <div className="rounded-2xl p-3 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 border border-yellow-300/40 flex items-center gap-2">
+          <span className="text-2xl">🏆</span>
+          <div>
+            <p className="text-white font-black text-sm">Anda di pelan tertinggi!</p>
+            <p className="text-white/80 text-xs font-semibold">Terima kasih kerana menyokong CeriaKid 💜</p>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="rounded-2xl p-3 bg-red-500/20 border border-red-300/40 text-white text-xs font-semibold">
@@ -100,39 +117,63 @@ export default function UpgradeTierCard({ currentTier, user }) {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {upgradeOptions.map((tierKey) => {
-          const tier = UPGRADE_TIERS[tierKey];
+        {allTierKeys.map((tierKey) => {
+          const tier = ALL_TIERS[tierKey];
+          const tierIdx = TIER_ORDER.indexOf(tierKey);
+          const isCurrent = tierKey === currentTier;
+          const isLower = tierIdx <= currentIdx;
+          const isUpgrade = tierIdx > currentIdx;
           const isProcessing = upgrading === tierKey;
+
           const currentPrice = TIER_PRICES[currentTier] || 0;
           const proRataPrice = Math.max(tier.priceMYR - currentPrice, 0);
-          const savings = currentPrice;
+          const savings = isUpgrade ? currentPrice : 0;
+
           return (
             <motion.div
               key={tier.name}
-              whileHover={{ y: -2 }}
-              className={`relative rounded-2xl p-4 bg-gradient-to-br ${tier.color} shadow-lg overflow-hidden ${tier.popular ? 'ring-2 ring-yellow-300' : ''}`}
+              whileHover={isUpgrade ? { y: -2 } : {}}
+              className={`relative rounded-2xl p-4 bg-gradient-to-br ${tier.color} shadow-lg overflow-hidden ${
+                isCurrent ? 'ring-4 ring-yellow-300 ring-offset-2 ring-offset-slate-900/40' : tier.popular ? 'ring-2 ring-yellow-300' : ''
+              } ${isLower && !isCurrent ? 'opacity-60' : ''}`}
             >
-              {tier.popular && (
+              {isCurrent && (
+                <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-yellow-300 text-yellow-950 text-[10px] font-black shadow flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" strokeWidth={3} /> AKTIF
+                </span>
+              )}
+              {!isCurrent && tier.popular && (
                 <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-yellow-300 text-yellow-950 text-[10px] font-black shadow">
                   POPULAR
                 </span>
               )}
               <p className="font-black text-white text-lg leading-tight">{tier.nameMY}</p>
 
-              {/* Pro-rata price display */}
-              <div className="flex items-baseline gap-1 mt-1">
-                <span className="text-2xl font-black text-white">RM{proRataPrice}</span>
-                <span className="text-white/80 text-xs font-bold">sahaja</span>
-              </div>
-              {savings > 0 && (
-                <div className="flex items-center gap-1.5 mt-1 mb-2">
-                  <span className="text-white/70 text-[11px] font-bold line-through">RM{tier.priceMYR}</span>
-                  <span className="px-1.5 py-0.5 rounded-md bg-yellow-300 text-yellow-950 text-[10px] font-black">
-                    Jimat RM{savings}
-                  </span>
-                </div>
+              {/* Price display — pro-rata for upgrades, full price for current/lower */}
+              {isUpgrade ? (
+                <>
+                  <div className="flex items-baseline gap-1 mt-1">
+                    <span className="text-2xl font-black text-white">RM{proRataPrice}</span>
+                    <span className="text-white/80 text-xs font-bold">sahaja</span>
+                  </div>
+                  {savings > 0 && (
+                    <div className="flex items-center gap-1.5 mt-1 mb-2">
+                      <span className="text-white/70 text-[11px] font-bold line-through">RM{tier.priceMYR}</span>
+                      <span className="px-1.5 py-0.5 rounded-md bg-yellow-300 text-yellow-950 text-[10px] font-black">
+                        Jimat RM{savings}
+                      </span>
+                    </div>
+                  )}
+                  <p className="text-white/80 text-[11px] font-bold mb-3">Bayar gap sahaja • 1 tahun penuh</p>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-baseline gap-1 mt-1 mb-3">
+                    <span className="text-2xl font-black text-white">RM{tier.priceMYR}</span>
+                    <span className="text-white/80 text-xs font-bold">/ tahun</span>
+                  </div>
+                </>
               )}
-              <p className="text-white/80 text-[11px] font-bold mb-3">Bayar gap sahaja • 1 tahun penuh</p>
 
               <ul className="space-y-1.5 mb-4">
                 {tier.features.map((f, i) => (
@@ -143,26 +184,38 @@ export default function UpgradeTierCard({ currentTier, user }) {
                 ))}
               </ul>
 
-              <motion.button
-                whileTap={{ scale: 0.96 }}
-                disabled={isProcessing || upgrading !== null}
-                onClick={() => setConfirmTier({ ...tier, proRataPrice, savings })}
-                className="w-full py-2.5 rounded-xl bg-white text-slate-900 font-black text-sm shadow-md hover:bg-yellow-50 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-              >
-                {isProcessing ? (
-                  <><Loader className="w-4 h-4 animate-spin" /> Memproses...</>
-                ) : (
-                  <><Crown className="w-4 h-4" /> Naik Taraf</>
-                )}
-              </motion.button>
+              {isCurrent ? (
+                <div className="w-full py-2.5 rounded-xl bg-white/90 text-slate-900 font-black text-sm shadow-md flex items-center justify-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-green-600" strokeWidth={3} /> Pakej Anda
+                </div>
+              ) : isLower ? (
+                <div className="w-full py-2.5 rounded-xl bg-white/20 text-white/80 font-black text-sm flex items-center justify-center gap-2">
+                  Pakej Rendah
+                </div>
+              ) : (
+                <motion.button
+                  whileTap={{ scale: 0.96 }}
+                  disabled={isProcessing || upgrading !== null}
+                  onClick={() => setConfirmTier({ ...tier, proRataPrice, savings })}
+                  className="w-full py-2.5 rounded-xl bg-white text-slate-900 font-black text-sm shadow-md hover:bg-yellow-50 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isProcessing ? (
+                    <><Loader className="w-4 h-4 animate-spin" /> Memproses...</>
+                  ) : (
+                    <><Crown className="w-4 h-4" /> Naik Taraf</>
+                  )}
+                </motion.button>
+              )}
             </motion.div>
           );
         })}
       </div>
 
-      <p className="text-white/60 text-[11px] text-center leading-relaxed">
-        💡 Pro-rata: anda hanya bayar perbezaan harga. Tier baru aktif 1 tahun penuh sebaik bayaran berjaya.
-      </p>
+      {!isOnTopTier && (
+        <p className="text-white/60 text-[11px] text-center leading-relaxed">
+          💡 Pro-rata: anda hanya bayar perbezaan harga. Tier baru aktif 1 tahun penuh sebaik bayaran berjaya.
+        </p>
+      )}
 
       {/* Confirmation modal */}
       <AnimatePresence>
