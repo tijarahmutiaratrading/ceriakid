@@ -70,7 +70,7 @@ export default function AddChildCard({ canAdd, onAdd, currentCount, maxCount }) 
         </motion.div>
         <div className="text-center">
           <p className="text-white font-black text-base drop-shadow">Naik Taraf untuk lagi anak</p>
-          <p className="text-yellow-100 text-xs font-semibold mt-1">Pelan Keluarga = sehingga 5 anak</p>
+          <p className="text-yellow-100 text-xs font-semibold mt-1">Pelan Keluarga = sehingga 4 anak</p>
         </div>
         <div className="px-4 py-2 rounded-full bg-yellow-400 text-yellow-900 font-black text-xs shadow-lg">
           👑 Lihat Pelan
