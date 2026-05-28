@@ -21,10 +21,13 @@ export default function ThankYou() {
   const pollAttempts = useRef(0);
 
   useEffect(() => {
-    // Fire Purchase pixel — uses URL tier param so we don't wait for webhook/auth.
-    // Dedupe via sessionStorage so refresh doesn't double-fire.
-    const urlTier = new URLSearchParams(window.location.search).get('tier');
-    if (urlTier && TIER_VALUES[urlTier] && typeof window !== 'undefined' && window.fbq) {
+    // Fire Purchase pixel HANYA untuk pembelian pakej baru.
+    // SKIP untuk upgrade (?upgrade=1) — pixel tak detect upgrade pakej.
+    // Beli kredit pula redirect ke /buy-credits (bukan page ini) jadi memang tak fire.
+    const params = new URLSearchParams(window.location.search);
+    const urlTier = params.get('tier');
+    const isUpgrade = params.get('upgrade') === '1';
+    if (!isUpgrade && urlTier && TIER_VALUES[urlTier] && typeof window !== 'undefined' && window.fbq) {
       const dedupeKey = `purchase_fired_${urlTier}_${window.location.search}`;
       if (!sessionStorage.getItem(dedupeKey)) {
         const eventID = `purchase_${urlTier}_${Date.now()}`;
