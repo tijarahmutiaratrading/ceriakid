@@ -14,13 +14,18 @@ Deno.serve(async (req) => {
 
     // Pull all relevant data in parallel via service role (admin scope)
     const sr = base44.asServiceRole;
-    const [subscriptions, credits, devices, affiliates, referrals] = await Promise.all([
+    const [subscriptions, credits, devices, affiliates, referrals, users] = await Promise.all([
       sr.entities.UserSubscription.list('-created_date', 500),
       sr.entities.UserCredit.list('-updated_date', 500),
       sr.entities.RegisteredDevice.list('-lastSeen', 1000),
       sr.entities.Affiliate.list('-created_date', 500),
       sr.entities.AffiliateReferral.list('-created_date', 1000),
+      sr.entities.User.list('-created_date', 500),
     ]);
+
+    // Index users by email
+    const userByEmail = new Map();
+    users.forEach(u => { if (u.email) userByEmail.set(u.email.toLowerCase(), u); });
 
     // Index by email for fast lookup
     const creditByEmail = new Map();
@@ -55,6 +60,7 @@ Deno.serve(async (req) => {
       const credit = creditByEmail.get(emailKey);
       const userDevices = devicesByEmail.get(emailKey) || [];
       const affiliate = affiliateByEmail.get(emailKey);
+      const userInfo = userByEmail.get(emailKey);
       const liveReferralCount = affiliate
         ? (referralCountByAffiliate.get(emailKey) || 0)
         : 0;
@@ -62,6 +68,8 @@ Deno.serve(async (req) => {
       return {
         id: sub.id,
         email: sub.email,
+        fullName: userInfo?.full_name || '',
+        phone: userInfo?.phone || '',
         tier: sub.tier || 'free',
         status: sub.status || 'active',
         createdDate: sub.created_date,

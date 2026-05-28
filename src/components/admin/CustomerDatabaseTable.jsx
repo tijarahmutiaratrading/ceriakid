@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check } from 'lucide-react';
+import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check, User as UserIcon, Phone, Mail } from 'lucide-react';
 
 const TIER_LABELS = {
   free: { label: 'Percuma', cls: 'bg-gray-300 text-gray-900' },
@@ -62,7 +62,11 @@ function CustomerRow({ customer, expanded, onToggle }) {
         <td className="py-3 px-3 whitespace-nowrap">
           {expanded ? <ChevronDown className="w-4 h-4 text-slate-500" /> : <ChevronRight className="w-4 h-4 text-slate-500" />}
         </td>
-        <td className="py-3 px-3 text-xs text-slate-800 font-semibold max-w-[200px] truncate">{customer.email}</td>
+        <td className="py-3 px-3 max-w-[220px]">
+          <div className="text-xs font-black text-slate-900 truncate">{customer.fullName || <span className="italic font-semibold text-slate-400">Tiada nama</span>}</div>
+          <div className="text-[10px] text-slate-500 font-semibold truncate">{customer.email}</div>
+          {customer.phone && <div className="text-[10px] text-slate-600 font-semibold truncate">📞 {customer.phone}</div>}
+        </td>
         <td className="py-3 px-3 whitespace-nowrap">
           <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-[11px] font-black shadow-sm ${tier.cls}`}>
             {tier.label}
@@ -111,6 +115,31 @@ function CustomerRow({ customer, expanded, onToggle }) {
                 className="overflow-hidden bg-gradient-to-br from-violet-50 to-pink-50"
               >
                 <div className="p-5 space-y-4">
+                  {/* Personal info header */}
+                  <div className="bg-white/80 rounded-2xl p-4 ring-1 ring-violet-100 grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div className="flex items-center gap-2">
+                      <UserIcon className="w-4 h-4 text-violet-600 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-black uppercase text-slate-500">Nama Penuh</p>
+                        <p className="text-sm font-black text-slate-900 truncate">{customer.fullName || '—'}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-violet-600 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-black uppercase text-slate-500">Email</p>
+                        <p className="text-sm font-bold text-slate-800 truncate">{customer.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-violet-600 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-black uppercase text-slate-500">No. Telefon</p>
+                        <p className="text-sm font-bold text-slate-800 truncate">{customer.phone || '—'}</p>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Quick stats grid */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <StatBubble icon={Baby} label="Anak" value={customer.childrenCount} accent="bg-pink-100 text-pink-900" />
@@ -264,13 +293,17 @@ export default function CustomerDatabaseTable() {
 
       // Fallback: query entities directly from frontend (admin can see all via RLS)
       try {
-        const [subs, credits, devices, affiliates, referrals] = await Promise.all([
+        const [subs, credits, devices, affiliates, referrals, allUsers] = await Promise.all([
           base44.entities.UserSubscription.list('-created_date', 500),
           base44.entities.UserCredit.list('-updated_date', 500),
           base44.entities.RegisteredDevice.list('-lastSeen', 1000),
           base44.entities.Affiliate.list('-created_date', 500),
           base44.entities.AffiliateReferral.list('-created_date', 1000),
+          base44.entities.User.list('-created_date', 500),
         ]);
+
+        const userByEmail = new Map();
+        allUsers.forEach(u => { if (u.email) userByEmail.set(u.email.toLowerCase(), u); });
 
         const creditByEmail = new Map();
         credits.forEach(c => { if (c.userEmail) creditByEmail.set(c.userEmail.toLowerCase(), c); });
@@ -298,9 +331,12 @@ export default function CustomerDatabaseTable() {
           const credit = creditByEmail.get(k);
           const userDevices = devicesByEmail.get(k) || [];
           const aff = affiliateByEmail.get(k);
+          const u = userByEmail.get(k);
           return {
             id: sub.id,
             email: sub.email,
+            fullName: u?.full_name || '',
+            phone: u?.phone || '',
             tier: sub.tier || 'free',
             status: sub.status || 'active',
             createdDate: sub.created_date,
@@ -397,7 +433,7 @@ export default function CustomerDatabaseTable() {
             <thead>
               <tr className="border-b border-slate-200">
                 <th className="w-8"></th>
-                <th className="text-left py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider">Email</th>
+                <th className="text-left py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider">Pelanggan</th>
                 <th className="text-left py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider">Paket</th>
                 <th className="text-left py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider">Status</th>
                 <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider">Anak</th>
