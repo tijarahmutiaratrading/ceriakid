@@ -6,7 +6,6 @@ import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
-import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import SmartRecommendations from '@/components/dashboard/SmartRecommendations';
 import ParentHeroCard from '@/components/parent/ParentHeroCard';
 import InsightsCard from '@/components/parent/InsightsCard';
@@ -19,20 +18,9 @@ import ChildSubjectProgress from '@/components/parent/ChildSubjectProgress';
 import ShareSheet from '@/components/parent/ShareSheet';
 
 export default function ParentDashboard() {
-  const { user, isAuthenticated, isLoadingAuth, navigateToLogin, logout } = useAuth();
+  const { user, isAuthenticated, isLoadingAuth, navigateToLogin } = useAuth();
   const { ageGroup } = useAgeGroup();
   const { selectedChild: contextChild, childrenList, setSelectedChild: setContextChild } = useSelectedChild() || {};
-  const [heroAvatarUrl, setHeroAvatarUrl] = useState(user?.avatarUrl || '');
-
-  useEffect(() => {
-    setHeroAvatarUrl(user?.avatarUrl || '');
-  }, [user?.avatarUrl]);
-
-  useEffect(() => {
-    const handleAvatarUpdated = (event) => setHeroAvatarUrl(event.detail?.avatarUrl || '');
-    window.addEventListener('avatar-updated', handleAvatarUpdated);
-    return () => window.removeEventListener('avatar-updated', handleAvatarUpdated);
-  }, []);
   const [childrenData, setChildrenData] = useState({});
   const [leaderboards, setLeaderboards] = useState([]);
   const [registeredChildren, setRegisteredChildren] = useState([]);
@@ -132,22 +120,9 @@ export default function ParentDashboard() {
   const avgStarsAll = totalGamesAll > 0 ? (totalStarsAll / totalGamesAll).toFixed(1) : '0.0';
 
   return (
-    <div
-      className="min-h-screen font-nunito relative"
-      style={{
-        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0a6521ac4_generated_image.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}
-    >
+    <div className="min-h-screen font-nunito">
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-6 relative z-10">
-
-        {/* Apple Fitness style hero */}
-        {isAuthenticated && (
-          <AppleFitnessHero user={user} avatarUrl={heroAvatarUrl} onLogout={logout} />
-        )}
+      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
 
         {/* 1. Family Hero — overall snapshot */}
         <ParentHeroCard
@@ -162,11 +137,8 @@ export default function ParentDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-3xl p-10 text-center relative overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, #4c1d95 0%, #7c3aed 50%, #db2777 100%)',
-              boxShadow: '0 20px 50px -15px rgba(124, 58, 237, 0.5), 0 0 0 1px rgba(255,255,255,0.12) inset',
-            }}
+            className="rounded-3xl p-10 text-center"
+            style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
           >
             <p className="text-5xl mb-4">👨‍👩‍👧‍👦</p>
             <p className="text-white font-black text-lg mb-2 drop-shadow">Belum ada profil anak</p>
@@ -210,11 +182,8 @@ export default function ParentDashboard() {
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="rounded-3xl p-8 text-center relative overflow-hidden"
-                      style={{
-                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
-                        boxShadow: '0 20px 50px -15px rgba(139, 92, 246, 0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
-                      }}
+                      className="rounded-3xl p-8 text-center"
+                      style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.3)' }}
                     >
                       <p className="text-5xl mb-3">🎮</p>
                       <p className="text-white font-black text-base mb-2">{selectedChild} belum mula bermain</p>
