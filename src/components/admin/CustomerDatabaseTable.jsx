@@ -250,10 +250,90 @@ export default function CustomerDatabaseTable() {
   const [expandedId, setExpandedId] = useState(null);
 
   useEffect(() => {
-    base44.functions.invoke('getCustomerDetails', {})
-      .then(res => setCustomers(res?.data?.customers || []))
-      .catch(err => console.error('Failed to load customer details:', err))
-      .finally(() => setLoading(false));
+    const loadData = async () => {
+      try {
+        // Try the optimized backend function first
+        const res = await base44.functions.invoke('getCustomerDetails', {});
+        if (res?.data?.customers) {
+          setCustomers(res.data.customers);
+          return;
+        }
+      } catch (err) {
+        console.warn('getCustomerDetails function unavailable, falling back to direct entity queries:', err?.message);
+      }
+
+      // Fallback: query entities directly from frontend (admin can see all via RLS)
+      try {
+        const [subs, credits, devices, affiliates, referrals] = await Promise.all([
+          base44.entities.UserSubscription.list('-created_date', 500),
+          base44.entities.UserCredit.list('-updated_date', 500),
+          base44.entities.RegisteredDevice.list('-lastSeen', 1000),
+          base44.entities.Affiliate.list('-created_date', 500),
+          base44.entities.AffiliateReferral.list('-created_date', 1000),
+        ]);
+
+        const creditByEmail = new Map();
+        credits.forEach(c => { if (c.userEmail) creditByEmail.set(c.userEmail.toLowerCase(), c); });
+
+        const devicesByEmail = new Map();
+        devices.forEach(d => {
+          if (!d.userEmail) return;
+          const k = d.userEmail.toLowerCase();
+          if (!devicesByEmail.has(k)) devicesByEmail.set(k, []);
+          devicesByEmail.get(k).push({ id: d.id, deviceName: d.deviceName, lastSeen: d.lastSeen });
+        });
+
+        const affiliateByEmail = new Map();
+        affiliates.forEach(a => { if (a.userEmail) affiliateByEmail.set(a.userEmail.toLowerCase(), a); });
+
+        const referralCount = new Map();
+        referrals.forEach(r => {
+          if (!r.affiliateEmail) return;
+          const k = r.affiliateEmail.toLowerCase();
+          referralCount.set(k, (referralCount.get(k) || 0) + 1);
+        });
+
+        const enriched = subs.map(sub => {
+          const k = (sub.email || '').toLowerCase();
+          const credit = creditByEmail.get(k);
+          const userDevices = devicesByEmail.get(k) || [];
+          const aff = affiliateByEmail.get(k);
+          return {
+            id: sub.id,
+            email: sub.email,
+            tier: sub.tier || 'free',
+            status: sub.status || 'active',
+            createdDate: sub.created_date,
+            currentPeriodEnd: sub.currentPeriodEnd || null,
+            currentPeriodStart: sub.currentPeriodStart || null,
+            childrenCount: Array.isArray(sub.children) ? sub.children.length : 0,
+            children: Array.isArray(sub.children) ? sub.children.map(c => ({ name: c.name, ageGroup: c.ageGroup })) : [],
+            deviceCount: userDevices.length,
+            devices: userDevices,
+            creditBalance: credit?.balance || 0,
+            creditTotalPurchased: credit?.totalPurchased || 0,
+            creditTotalUsed: credit?.totalUsed || 0,
+            affiliate: aff ? {
+              referralCode: aff.referralCode,
+              status: aff.status || 'active',
+              tier: aff.tier || 'bronze',
+              totalReferrals: referralCount.get(k) || 0,
+              totalEarned: aff.totalEarned || 0,
+              pendingBalance: aff.pendingBalance || 0,
+              isActive: aff.status === 'active',
+            } : null,
+          };
+        });
+
+        setCustomers(enriched);
+      } catch (err) {
+        console.error('Failed to load customer details (fallback):', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData().finally(() => setLoading(false));
   }, []);
 
   const filtered = useMemo(() => {
