@@ -13,6 +13,7 @@ import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import QuickAccessGrid from '@/components/home/QuickAccessGrid';
 import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
 import AIHubCard from '@/components/home/AIHubCard';
+import InstallAppGuide from '@/components/home/InstallAppGuide';
 import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
 import { checkAndRegisterDevice } from '@/lib/deviceManager';
 import { syncOfflineProgress } from '@/lib/offlineSyncManager';
@@ -97,6 +98,8 @@ export default function Home() {
       {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl} onLogout={logout} />}
 
       {isAuthenticated && user?.email && <SubscriptionExpiryBanner userEmail={user.email} />}
+
+      {isAuthenticated && <InstallAppGuide />}
 
         {/* Not logged in welcome */}
         {!isAuthenticated && (
