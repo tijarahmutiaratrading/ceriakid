@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check, User as UserIcon, Phone, Mail } from 'lucide-react';
+import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check, User as UserIcon, Phone, Mail, Edit2, X, Save, Loader2 } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 
 const TIER_LABELS = {
   free: { label: 'Percuma', cls: 'bg-gray-300 text-gray-900' },
@@ -32,8 +33,13 @@ function StatBubble({ icon: Icon, label, value, accent }) {
   );
 }
 
-function CustomerRow({ customer, expanded, onToggle }) {
+function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
   const [copied, setCopied] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editName, setEditName] = useState(customer.fullName || '');
+  const [saving, setSaving] = useState(false);
+  const { toast } = useToast();
+
   const tier = TIER_LABELS[customer.tier] || TIER_LABELS.free;
   const status = STATUS_LABELS[customer.status] || STATUS_LABELS.canceled;
   const endDate = customer.currentPeriodEnd ? new Date(customer.currentPeriodEnd) : null;
@@ -50,6 +56,30 @@ function CustomerRow({ customer, expanded, onToggle }) {
       navigator.clipboard.writeText(referralLink);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
+    }
+  };
+
+  const handleSaveName = async (e) => {
+    e.stopPropagation();
+    if (!editName.trim()) {
+      toast({ title: '⚠️ Nama kosong', description: 'Sila masukkan nama.', variant: 'destructive' });
+      return;
+    }
+    setSaving(true);
+    try {
+      const user = await base44.entities.User.filter({ email: customer.email });
+      if (user.length > 0) {
+        await base44.entities.User.update(user[0].id, { full_name: editName.trim() });
+        toast({ title: '✅ Nama dikemas kini', description: `Nama pelanggan ditukar ke "${editName.trim()}".` });
+        onUpdate?.();
+        setEditMode(false);
+      } else {
+        toast({ title: '❌ Pelanggan tidak dijumpai', variant: 'destructive' });
+      }
+    } catch (err) {
+      toast({ title: '❌ Gagal kemaskini', description: err.message, variant: 'destructive' });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -115,14 +145,38 @@ function CustomerRow({ customer, expanded, onToggle }) {
                 className="overflow-hidden bg-gradient-to-br from-violet-50 to-pink-50"
               >
                 <div className="p-5 space-y-4">
-                  {/* Personal info header */}
+                  {/* Personal info header — dengan edit option */}
                   <div className="bg-white/80 rounded-2xl p-4 ring-1 ring-violet-100 grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div className="flex items-center gap-2">
                       <UserIcon className="w-4 h-4 text-violet-600 flex-shrink-0" />
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <p className="text-[10px] font-black uppercase text-slate-500">Nama Penuh</p>
-                        <p className="text-sm font-black text-slate-900 truncate">{customer.fullName || '—'}</p>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full text-sm font-black text-slate-900 bg-violet-50 border-2 border-violet-300 rounded-lg px-2 py-1"
+                          />
+                        ) : (
+                          <p className="text-sm font-black text-slate-900 truncate">{customer.fullName || '—'}</p>
+                        )}
                       </div>
+                      {editMode ? (
+                        <div className="flex gap-1 flex-shrink-0">
+                          <button onClick={handleSaveName} disabled={saving} className="p-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg disabled:opacity-60 flex items-center">
+                            {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                          </button>
+                          <button onClick={() => { setEditMode(false); setEditName(customer.fullName || ''); }} className="p-1.5 bg-slate-300 hover:bg-slate-400 text-slate-900 rounded-lg">
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button onClick={(e) => { e.stopPropagation(); setEditMode(true); }} className="p-1.5 bg-violet-100 hover:bg-violet-200 text-violet-700 rounded-lg flex-shrink-0">
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
                       <Mail className="w-4 h-4 text-violet-600 flex-shrink-0" />
@@ -278,98 +332,91 @@ export default function CustomerDatabaseTable() {
   const [tierFilter, setTierFilter] = useState('all');
   const [expandedId, setExpandedId] = useState(null);
 
+  const refreshData = async () => {
+    try {
+      const res = await base44.functions.invoke('getCustomerDetails', {});
+      if (res?.data?.customers) {
+        setCustomers(res.data.customers);
+        return;
+      }
+    } catch (err) {
+      console.warn('getCustomerDetails error:', err?.message);
+    }
+    try {
+      const [subs, credits, devices, affiliates, referrals, allUsers] = await Promise.all([
+        base44.entities.UserSubscription.list('-created_date', 500),
+        base44.entities.UserCredit.list('-updated_date', 500),
+        base44.entities.RegisteredDevice.list('-lastSeen', 1000),
+        base44.entities.Affiliate.list('-created_date', 500),
+        base44.entities.AffiliateReferral.list('-created_date', 1000),
+        base44.entities.User.list('-created_date', 500),
+      ]);
+      const userByEmail = new Map();
+      allUsers.forEach(u => { if (u.email) userByEmail.set(u.email.toLowerCase(), u); });
+      const creditByEmail = new Map();
+      credits.forEach(c => { if (c.userEmail) creditByEmail.set(c.userEmail.toLowerCase(), c); });
+      const devicesByEmail = new Map();
+      devices.forEach(d => {
+        if (!d.userEmail) return;
+        const k = d.userEmail.toLowerCase();
+        if (!devicesByEmail.has(k)) devicesByEmail.set(k, []);
+        devicesByEmail.get(k).push({ id: d.id, deviceName: d.deviceName, lastSeen: d.lastSeen });
+      });
+      const affiliateByEmail = new Map();
+      affiliates.forEach(a => { if (a.userEmail) affiliateByEmail.set(a.userEmail.toLowerCase(), a); });
+      const referralCount = new Map();
+      referrals.forEach(r => {
+        if (!r.affiliateEmail) return;
+        const k = r.affiliateEmail.toLowerCase();
+        referralCount.set(k, (referralCount.get(k) || 0) + 1);
+      });
+      const enriched = subs.map(sub => {
+        const k = (sub.email || '').toLowerCase();
+        const credit = creditByEmail.get(k);
+        const userDevices = devicesByEmail.get(k) || [];
+        const aff = affiliateByEmail.get(k);
+        const u = userByEmail.get(k);
+        return {
+          id: sub.id,
+          email: sub.email,
+          fullName: u?.full_name || '',
+          phone: u?.phone || '',
+          tier: sub.tier || 'free',
+          status: sub.status || 'active',
+          createdDate: sub.created_date,
+          currentPeriodEnd: sub.currentPeriodEnd || null,
+          currentPeriodStart: sub.currentPeriodStart || null,
+          childrenCount: Array.isArray(sub.children) ? sub.children.length : 0,
+          children: Array.isArray(sub.children) ? sub.children.map(c => ({ name: c.name, ageGroup: c.ageGroup })) : [],
+          deviceCount: userDevices.length,
+          devices: userDevices,
+          creditBalance: credit?.balance || 0,
+          creditTotalPurchased: credit?.totalPurchased || 0,
+          creditTotalUsed: credit?.totalUsed || 0,
+          affiliate: aff ? {
+            referralCode: aff.referralCode,
+            status: aff.status || 'active',
+            tier: aff.tier || 'bronze',
+            totalReferrals: referralCount.get(k) || 0,
+            totalEarned: aff.totalEarned || 0,
+            pendingBalance: aff.pendingBalance || 0,
+            isActive: aff.status === 'active',
+          } : null,
+        };
+      });
+      setCustomers(enriched);
+    } catch (err) {
+      console.error('Failed to load customer details:', err);
+    }
+  };
+
   useEffect(() => {
     const loadData = async () => {
-      try {
-        // Try the optimized backend function first
-        const res = await base44.functions.invoke('getCustomerDetails', {});
-        if (res?.data?.customers) {
-          setCustomers(res.data.customers);
-          return;
-        }
-      } catch (err) {
-        console.warn('getCustomerDetails function unavailable, falling back to direct entity queries:', err?.message);
-      }
-
-      // Fallback: query entities directly from frontend (admin can see all via RLS)
-      try {
-        const [subs, credits, devices, affiliates, referrals, allUsers] = await Promise.all([
-          base44.entities.UserSubscription.list('-created_date', 500),
-          base44.entities.UserCredit.list('-updated_date', 500),
-          base44.entities.RegisteredDevice.list('-lastSeen', 1000),
-          base44.entities.Affiliate.list('-created_date', 500),
-          base44.entities.AffiliateReferral.list('-created_date', 1000),
-          base44.entities.User.list('-created_date', 500),
-        ]);
-
-        const userByEmail = new Map();
-        allUsers.forEach(u => { if (u.email) userByEmail.set(u.email.toLowerCase(), u); });
-
-        const creditByEmail = new Map();
-        credits.forEach(c => { if (c.userEmail) creditByEmail.set(c.userEmail.toLowerCase(), c); });
-
-        const devicesByEmail = new Map();
-        devices.forEach(d => {
-          if (!d.userEmail) return;
-          const k = d.userEmail.toLowerCase();
-          if (!devicesByEmail.has(k)) devicesByEmail.set(k, []);
-          devicesByEmail.get(k).push({ id: d.id, deviceName: d.deviceName, lastSeen: d.lastSeen });
-        });
-
-        const affiliateByEmail = new Map();
-        affiliates.forEach(a => { if (a.userEmail) affiliateByEmail.set(a.userEmail.toLowerCase(), a); });
-
-        const referralCount = new Map();
-        referrals.forEach(r => {
-          if (!r.affiliateEmail) return;
-          const k = r.affiliateEmail.toLowerCase();
-          referralCount.set(k, (referralCount.get(k) || 0) + 1);
-        });
-
-        const enriched = subs.map(sub => {
-          const k = (sub.email || '').toLowerCase();
-          const credit = creditByEmail.get(k);
-          const userDevices = devicesByEmail.get(k) || [];
-          const aff = affiliateByEmail.get(k);
-          const u = userByEmail.get(k);
-          return {
-            id: sub.id,
-            email: sub.email,
-            fullName: u?.full_name || '',
-            phone: u?.phone || '',
-            tier: sub.tier || 'free',
-            status: sub.status || 'active',
-            createdDate: sub.created_date,
-            currentPeriodEnd: sub.currentPeriodEnd || null,
-            currentPeriodStart: sub.currentPeriodStart || null,
-            childrenCount: Array.isArray(sub.children) ? sub.children.length : 0,
-            children: Array.isArray(sub.children) ? sub.children.map(c => ({ name: c.name, ageGroup: c.ageGroup })) : [],
-            deviceCount: userDevices.length,
-            devices: userDevices,
-            creditBalance: credit?.balance || 0,
-            creditTotalPurchased: credit?.totalPurchased || 0,
-            creditTotalUsed: credit?.totalUsed || 0,
-            affiliate: aff ? {
-              referralCode: aff.referralCode,
-              status: aff.status || 'active',
-              tier: aff.tier || 'bronze',
-              totalReferrals: referralCount.get(k) || 0,
-              totalEarned: aff.totalEarned || 0,
-              pendingBalance: aff.pendingBalance || 0,
-              isActive: aff.status === 'active',
-            } : null,
-          };
-        });
-
-        setCustomers(enriched);
-      } catch (err) {
-        console.error('Failed to load customer details (fallback):', err);
-      } finally {
-        setLoading(false);
-      }
+      await refreshData();
+      setLoading(false);
     };
 
-    loadData().finally(() => setLoading(false));
+    loadData();
   }, []);
 
   const filtered = useMemo(() => {
@@ -450,6 +497,7 @@ export default function CustomerDatabaseTable() {
                   customer={c}
                   expanded={expandedId === c.id}
                   onToggle={() => setExpandedId(expandedId === c.id ? null : c.id)}
+                  onUpdate={refreshData}
                 />
               ))}
               {filtered.length === 0 && (
