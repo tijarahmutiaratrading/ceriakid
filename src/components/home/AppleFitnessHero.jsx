@@ -175,7 +175,47 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
               {firstName.charAt(0).toUpperCase()}
             </div>
           )}
-          <p className="text-white font-black text-sm sm:text-base drop-shadow-lg">Hai, {firstName} 👋</p>
+          <div className="flex flex-col items-start gap-1.5">
+            <p className="text-white font-black text-sm sm:text-base drop-shadow-lg">Hai, {firstName} 👋</p>
+
+            {/* Stats row: Subscription + Credits */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {/* Subscription chip */}
+              <div
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full backdrop-blur-md shadow-md border ${
+                  isExpired
+                    ? 'bg-red-500/90 border-red-200/60'
+                    : isExpiringSoon
+                      ? 'bg-amber-500/90 border-amber-200/60'
+                      : tier === 'free'
+                        ? 'bg-white/20 border-white/30'
+                        : 'bg-gradient-to-r from-purple-500/85 to-pink-500/85 border-white/30'
+                }`}
+              >
+                {isExpired || isExpiringSoon ? (
+                  <AlertCircle className="w-3 h-3 text-white flex-shrink-0" />
+                ) : tier === 'free' ? (
+                  <Sparkles className="w-3 h-3 text-white flex-shrink-0" />
+                ) : (
+                  <Crown className="w-3 h-3 text-yellow-200 flex-shrink-0" />
+                )}
+                <span className="text-white font-black text-[10px] drop-shadow leading-none">{tierLabel}</span>
+                {expiryText && (
+                  <>
+                    <span className="text-white/50 text-[9px] leading-none">•</span>
+                    <span className="text-white/95 text-[10px] font-bold drop-shadow leading-none">{expiryText}</span>
+                  </>
+                )}
+              </div>
+
+              {/* Credits chip */}
+              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-cyan-400/90 to-blue-500/90 backdrop-blur-md shadow-md border border-white/30">
+                <span className="text-[11px] leading-none">💎</span>
+                <span className="text-white font-black text-[10px] drop-shadow leading-none">{credits.toLocaleString()}</span>
+                <span className="text-white/90 text-[10px] font-bold drop-shadow leading-none">kredit</span>
+              </div>
+            </div>
+          </div>
         </button>
 
         <AnimatePresence>
@@ -219,55 +259,6 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
             </>
           )}
         </AnimatePresence>
-      </div>
-
-      {/* Quick stats pill — top right (subscription + credits) */}
-      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 flex flex-col items-end gap-2">
-        {/* Subscription pill */}
-        <Link to="/settings" className="block">
-          <motion.div
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-md shadow-lg transition-all ${
-              isExpired
-                ? 'bg-red-500/85 border border-red-300/50'
-                : isExpiringSoon
-                  ? 'bg-amber-500/85 border border-amber-200/50'
-                  : tier === 'free'
-                    ? 'bg-white/20 border border-white/30'
-                    : 'bg-gradient-to-r from-purple-500/85 to-pink-500/85 border border-white/30'
-            }`}
-          >
-            {isExpired || isExpiringSoon ? (
-              <AlertCircle className="w-3.5 h-3.5 text-white flex-shrink-0" />
-            ) : tier === 'free' ? (
-              <Sparkles className="w-3.5 h-3.5 text-white flex-shrink-0" />
-            ) : (
-              <Crown className="w-3.5 h-3.5 text-yellow-200 flex-shrink-0" />
-            )}
-            <div className="flex flex-col items-start leading-tight">
-              <span className="text-white font-black text-[10px] sm:text-[11px] drop-shadow">{tierLabel}</span>
-              {expiryText && (
-                <span className="text-white/85 text-[9px] sm:text-[10px] font-bold drop-shadow">{expiryText}</span>
-              )}
-            </div>
-          </motion.div>
-        </Link>
-
-        {/* Credits pill */}
-        <Link to="/buy-credits" className="block">
-          <motion.div
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-400/85 to-blue-500/85 backdrop-blur-md shadow-lg border border-white/30"
-          >
-            <span className="text-base leading-none">💎</span>
-            <div className="flex flex-col items-start leading-tight">
-              <span className="text-white font-black text-[10px] sm:text-[11px] drop-shadow">{credits.toLocaleString()}</span>
-              <span className="text-white/85 text-[9px] sm:text-[10px] font-bold drop-shadow">Kredit AI</span>
-            </div>
-          </motion.div>
-        </Link>
       </div>
 
       {/* Content bottom-left */}
