@@ -63,9 +63,9 @@ export default function CanvasFloatingToolbar({
           icon={<Brush className="w-3 h-3" />}
           popoverOpen={openPopover === 'tool'}
           popover={
-            <Popover>
-              <PopoverHeader icon={<Brush className="w-3 h-3" />}>Pilih Alat</PopoverHeader>
-              <div className="grid grid-cols-5 gap-1.5">
+            <Popover wide>
+              <PopoverHeader icon={<Brush className="w-3 h-3" />}>Pilih Alat ({tools.length})</PopoverHeader>
+              <div className="grid grid-cols-4 gap-1.5">
                 {tools.map((t) => {
                   const active = tool.id === t.id && !stickerMode;
                   return (
@@ -73,15 +73,16 @@ export default function CanvasFloatingToolbar({
                       key={t.id}
                       type="button"
                       onClick={() => { onToolChange(t); setOpenPopover(null); }}
-                      className={`relative aspect-square rounded-2xl flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 transition ${active ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+                      className={`relative aspect-square rounded-2xl flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 transition ${active ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg scale-105' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:scale-105'}`}
                       title={t.hint}
                     >
                       <span className="text-2xl leading-none">{t.emoji}</span>
-                      <span className="text-[9px] font-bold leading-tight">{t.label}</span>
+                      <span className="text-[9px] font-bold leading-tight text-center">{t.label}</span>
                     </button>
                   );
                 })}
               </div>
+              <p className="text-[10px] text-slate-400 font-medium mt-2 text-center">{tool.hint}</p>
             </Popover>
           }
         >
@@ -298,14 +299,14 @@ function PopoverHeader({ icon, children }) {
   );
 }
 
-function Popover({ children }) {
+function Popover({ children, wide = false }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 8, scale: 0.96 }}
       transition={{ duration: 0.14 }}
-      className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 z-30 w-[min(88vw,340px)] p-3 rounded-2xl"
+      className={`absolute left-1/2 -translate-x-1/2 bottom-full mb-3 z-30 ${wide ? 'w-[min(92vw,380px)]' : 'w-[min(88vw,340px)]'} p-3 rounded-2xl`}
       style={{
         background: 'rgba(255,255,255,0.98)',
         backdropFilter: 'blur(20px) saturate(180%)',

@@ -26,6 +26,8 @@ const COLORS = [
   '#1a1a1a', '#ef4444', '#f97316', '#eab308',
   '#22c55e', '#14b8a6', '#3b82f6', '#8b5cf6',
   '#ec4899', '#f5a8c4', '#78350f', '#ffffff',
+  '#06b6d4', '#a855f7', '#10b981', '#fde047',
+  '#fb923c', '#64748b',
 ];
 
 // Tool presets — lineWidth is "default", users boleh adjust via BRUSH_SIZES
@@ -34,6 +36,12 @@ const TOOLS = [
   { id: 'brush', emoji: '🖌️', label: 'Berus', lineWidth: 18, opacity: 0.75, hint: 'Sapuan lembut' },
   { id: 'marker', emoji: '🖊️', label: 'Marker', lineWidth: 10, opacity: 1, hint: 'Garis tebal jelas' },
   { id: 'crayon', emoji: '🖍️', label: 'Krayon', lineWidth: 14, opacity: 0.85, hint: 'Macam krayon sebenar' },
+  { id: 'highlighter', emoji: '🖍', label: 'Highlight', lineWidth: 22, opacity: 0.4, hint: 'Sapuan tembus terang' },
+  { id: 'spray', emoji: '💨', label: 'Spray', lineWidth: 20, opacity: 0.5, hint: 'Spray bertaburan' },
+  { id: 'glitter', emoji: '✨', label: 'Glitter', lineWidth: 12, opacity: 1, hint: 'Berkilauan warna-warni' },
+  { id: 'rainbow', emoji: '🌈', label: 'Pelangi', lineWidth: 14, opacity: 0.95, hint: 'Warna berubah-ubah' },
+  { id: 'calligraphy', emoji: '🖋️', label: 'Kaligrafi', lineWidth: 16, opacity: 1, hint: 'Nipis & tebal pintar' },
+  { id: 'neon', emoji: '⚡', label: 'Neon', lineWidth: 10, opacity: 1, hint: 'Glow bercahaya' },
   { id: 'eraser', emoji: '🧽', label: 'Pemadam', lineWidth: 28, opacity: 1, hint: 'Padam silap' },
 ];
 
@@ -932,7 +940,7 @@ export default function DrawingStudio() {
     // Eraser & marker keep flat width for predictability.
     const baseLw = effectiveLineWidth();
     let lw = baseLw;
-    if (tool.id === 'pencil' || tool.id === 'brush' || tool.id === 'crayon') {
+    if (tool.id === 'pencil' || tool.id === 'brush' || tool.id === 'crayon' || tool.id === 'neon') {
       const now = performance.now();
       const dt = Math.max(1, now - lastPointTime.current);
       const dist = Math.hypot(pt.x - lastPoint.x, pt.y - lastPoint.y);
@@ -949,23 +957,108 @@ export default function DrawingStudio() {
     // Quadratic smoothing — draw to the midpoint with a curve through lastPoint
     const midX = (lastPoint.x + pt.x) / 2;
     const midY = (lastPoint.y + pt.y) / 2;
+
+    // === SPECIAL TOOL BEHAVIOURS ===
+    if (tool.id === 'spray') {
+      // Spray = banyak titik kecil bertaburan dalam radius
+      ctx.save();
+      ctx.fillStyle = color;
+      ctx.globalAlpha = tool.opacity;
+      const density = Math.max(8, Math.floor(lw * 0.8));
+      for (let i = 0; i < density; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const r = Math.random() * lw * 0.8;
+        const px = pt.x + Math.cos(angle) * r;
+        const py = pt.y + Math.sin(angle) * r;
+        ctx.beginPath();
+        ctx.arc(px, py, Math.random() * 1.5 + 0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+      setLastPoint(pt);
+      if (mode === 'trace') setCurrentStroke(prev => [...prev, pt]);
+      return;
+    }
+
+    if (tool.id === 'glitter') {
+      // Glitter = titik warna-warni rawak + sparkle stars
+      const glitterColors = ['#fbbf24', '#ec4899', '#8b5cf6', '#06b6d4', '#22c55e', '#f97316'];
+      ctx.save();
+      const count = Math.max(4, Math.floor(lw * 0.4));
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const r = Math.random() * lw * 0.6;
+        const px = midX + Math.cos(angle) * r;
+        const py = midY + Math.sin(angle) * r;
+        ctx.fillStyle = glitterColors[Math.floor(Math.random() * glitterColors.length)];
+        ctx.globalAlpha = 0.6 + Math.random() * 0.4;
+        ctx.beginPath();
+        ctx.arc(px, py, Math.random() * 2 + 1, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+      setLastPoint(pt);
+      if (mode === 'trace') setCurrentStroke(prev => [...prev, pt]);
+      return;
+    }
+
     ctx.save();
     if (tool.id === 'eraser') {
       // destination-out = buang pixel sahaja, tak tindih warna background.
-      // Ini bermaksud line art coloring tak akan terpadam.
       ctx.globalCompositeOperation = 'destination-out';
       ctx.strokeStyle = 'rgba(0,0,0,1)';
+    } else if (tool.id === 'highlighter') {
+      // Highlighter = mode multiply supaya warna tindih jadi terang
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = tool.opacity;
+    } else if (tool.id === 'rainbow') {
+      // Rainbow = warna berubah ikut posisi
+      const hue = (performance.now() / 10) % 360;
+      ctx.strokeStyle = `hsl(${hue}, 85%, 55%)`;
+      ctx.globalAlpha = tool.opacity;
+    } else if (tool.id === 'neon') {
+      // Neon = glow effect dengan shadow
+      ctx.strokeStyle = color;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = lw * 1.2;
+      ctx.globalAlpha = tool.opacity;
     } else {
       ctx.strokeStyle = color;
       ctx.globalAlpha = tool.opacity;
     }
+
+    // Calligraphy = lineWidth ikut velocity (lambat = tebal, laju = nipis) lebih dramatic
+    let actualLw = lw;
+    if (tool.id === 'calligraphy') {
+      const dx = pt.x - lastPoint.x;
+      const dy = pt.y - lastPoint.y;
+      const dist = Math.hypot(dx, dy);
+      // Combine velocity & direction angle for pen-tip simulation
+      const angle = Math.atan2(dy, dx);
+      const angleFactor = Math.abs(Math.cos(angle - Math.PI / 4)) * 0.8 + 0.4;
+      actualLw = lw * angleFactor * Math.max(0.5, Math.min(1.8, 1.6 - dist * 0.04));
+    }
+
     ctx.beginPath();
     ctx.moveTo(lastPoint.x, lastPoint.y);
     ctx.quadraticCurveTo(lastPoint.x, lastPoint.y, midX, midY);
-    ctx.lineWidth = lw;
-    ctx.lineCap = 'round';
+    ctx.lineWidth = actualLw;
+    ctx.lineCap = tool.id === 'highlighter' ? 'butt' : 'round';
     ctx.lineJoin = 'round';
     ctx.stroke();
+
+    // Neon = double-stroke untuk inner glow yang lebih bright
+    if (tool.id === 'neon') {
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = '#ffffff';
+      ctx.globalAlpha = 0.9;
+      ctx.lineWidth = Math.max(1, lw * 0.35);
+      ctx.beginPath();
+      ctx.moveTo(lastPoint.x, lastPoint.y);
+      ctx.quadraticCurveTo(lastPoint.x, lastPoint.y, midX, midY);
+      ctx.stroke();
+    }
     ctx.restore();
 
     // Crayon texture — tiny offset specks for a more tactile feel
