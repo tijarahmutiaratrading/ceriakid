@@ -206,7 +206,7 @@ export default function ClientDashboard() {
             <div className="h-1 w-8 bg-gradient-to-r from-cyan-300 to-pink-300 rounded-full" />
             <p className="text-white/80 text-xs font-black uppercase tracking-wider">📱 Device Berdaftar</p>
           </div>
-          <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.18)' }}>
+          <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}>
             <div className="p-4">
               <ManageDevices userEmail={user?.email} tier={userTier} />
             </div>
