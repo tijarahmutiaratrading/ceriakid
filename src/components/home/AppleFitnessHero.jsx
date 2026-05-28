@@ -178,47 +178,45 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
           <div className="flex flex-col items-start gap-1.5">
             <p className="text-white font-black text-sm sm:text-base drop-shadow-lg">Hai, {firstName} 👋</p>
 
-            {/* Stats row: Subscription + Credits — glass glossy */}
+            {/* Stats row: Subscription + Credits — glass */}
             <div className="flex items-center gap-1.5 flex-wrap">
               {/* Subscription chip */}
               <div
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/40 shadow-lg shadow-black/10 relative overflow-hidden"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/30 shadow-md shadow-black/5"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.12))',
+                  background: 'rgba(255,255,255,0.18)',
                   backdropFilter: 'blur(14px)',
                   WebkitBackdropFilter: 'blur(14px)',
                 }}
               >
-                <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/35 to-transparent pointer-events-none" />
                 {isExpired || isExpiringSoon ? (
-                  <AlertCircle className="w-3 h-3 text-white flex-shrink-0 relative" />
+                  <AlertCircle className="w-3 h-3 text-white flex-shrink-0" />
                 ) : tier === 'free' ? (
-                  <Sparkles className="w-3 h-3 text-white flex-shrink-0 relative" />
+                  <Sparkles className="w-3 h-3 text-white flex-shrink-0" />
                 ) : (
-                  <Crown className="w-3 h-3 text-white flex-shrink-0 relative" />
+                  <Crown className="w-3 h-3 text-white flex-shrink-0" />
                 )}
-                <span className="text-white font-black text-[10px] drop-shadow leading-none relative">{tierLabel}</span>
+                <span className="text-white font-black text-[10px] drop-shadow leading-none">{tierLabel}</span>
                 {expiryText && (
                   <>
-                    <span className="text-white/50 text-[9px] leading-none relative">•</span>
-                    <span className="text-white/95 text-[10px] font-bold drop-shadow leading-none relative">{expiryText}</span>
+                    <span className="text-white/50 text-[9px] leading-none">•</span>
+                    <span className="text-white/95 text-[10px] font-bold drop-shadow leading-none">{expiryText}</span>
                   </>
                 )}
               </div>
 
               {/* Credits chip */}
               <div
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/40 shadow-lg shadow-black/10 relative overflow-hidden"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/30 shadow-md shadow-black/5"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.12))',
+                  background: 'rgba(255,255,255,0.18)',
                   backdropFilter: 'blur(14px)',
                   WebkitBackdropFilter: 'blur(14px)',
                 }}
               >
-                <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/35 to-transparent pointer-events-none" />
-                <span className="text-[11px] leading-none relative">💎</span>
-                <span className="text-white font-black text-[10px] drop-shadow leading-none relative">{credits.toLocaleString()}</span>
-                <span className="text-white/90 text-[10px] font-bold drop-shadow leading-none relative">kredit</span>
+                <span className="text-[11px] leading-none">💎</span>
+                <span className="text-white font-black text-[10px] drop-shadow leading-none">{credits.toLocaleString()}</span>
+                <span className="text-white/90 text-[10px] font-bold drop-shadow leading-none">kredit</span>
               </div>
             </div>
           </div>
