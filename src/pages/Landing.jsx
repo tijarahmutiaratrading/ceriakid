@@ -45,7 +45,6 @@ const buildTiers = (stats) => {
         'Prasekolah & Sekolah Rendah boleh akses',
         'Game selepas had dikunci 🔒',
         'Tanpa iklan',
-        'Boleh guna offline 📲',
         'Kemas kini mingguan',
         '1 peranti sahaja 📱',
       ],

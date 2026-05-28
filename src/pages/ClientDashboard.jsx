@@ -210,19 +210,21 @@ export default function ClientDashboard() {
           <ManageDevices userEmail={user?.email} tier={userTier} />
         </motion.div>
 
-        {/* Offline Mode — parent-friendly guide & sync status */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.22 }}
-          className="mb-5"
-        >
-          <div className="flex items-center gap-2 mb-3 px-1">
-            <div className="h-1 w-8 bg-gradient-to-r from-emerald-300 to-cyan-400 rounded-full" />
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider">📡 Mode Offline</p>
-          </div>
-          <OfflineModeCard />
-        </motion.div>
+        {/* Offline Mode — hanya untuk Standard, Keluarga (+ legacy premium/pro) */}
+        {['standard', 'keluarga', 'premium', 'pro'].includes(userTier) && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.22 }}
+            className="mb-5"
+          >
+            <div className="flex items-center gap-2 mb-3 px-1">
+              <div className="h-1 w-8 bg-gradient-to-r from-emerald-300 to-cyan-400 rounded-full" />
+              <p className="text-white/80 text-xs font-black uppercase tracking-wider">📡 Mode Offline</p>
+            </div>
+            <OfflineModeCard />
+          </motion.div>
+        )}
 
         {/* Save Button */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>

@@ -30,7 +30,6 @@ const buildTiers = (stats) => {
         'Semua subjek (BM, English, Math, Sains, Jawi, Tamil, Mandarin)',
         'Prasekolah & Sekolah Rendah',
         'Tanpa iklan',
-        'Boleh guna offline 📲',
         '1 peranti sahaja',
       ],
     },
