@@ -16,8 +16,11 @@ export default function ParentHeroCard({ totalChildren, totalGames, totalStars, 
       animate={{ opacity: 1, y: 0 }}
       className="relative isolate overflow-hidden rounded-[2rem] transform-gpu"
       style={{
-        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 35%, #d946ef 70%, #ec4899 100%)',
-        boxShadow: '0 30px 80px -20px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(255,255,255,0.1) inset',
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06))',
+        backdropFilter: 'blur(28px) saturate(160%)',
+        WebkitBackdropFilter: 'blur(28px) saturate(160%)',
+        border: '1px solid rgba(255,255,255,0.25)',
+        boxShadow: '0 30px 80px -20px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
       }}
     >
       {/* Decorative glass orbs */}

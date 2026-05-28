@@ -135,7 +135,7 @@ export default function ParentDashboard() {
     <div
       className="min-h-screen font-nunito relative"
       style={{
-        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/cd60df340_generated_image.png')",
+        backgroundImage: "url('https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0a6521ac4_generated_image.png')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',

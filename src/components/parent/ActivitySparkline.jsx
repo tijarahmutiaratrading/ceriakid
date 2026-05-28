@@ -72,8 +72,11 @@ export default function ActivitySparkline({ games }) {
       animate={{ opacity: 1, y: 0 }}
       className="rounded-3xl p-4 relative overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%)',
-        boxShadow: '0 20px 50px -15px rgba(124, 58, 237, 0.45), 0 0 0 1px rgba(255,255,255,0.12) inset',
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06))',
+        backdropFilter: 'blur(24px) saturate(160%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+        border: '1px solid rgba(255,255,255,0.22)',
+        boxShadow: '0 12px 36px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3)',
       }}
     >
       <div className="flex items-center justify-between mb-3">
