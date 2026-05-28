@@ -230,8 +230,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -320, opacity: 0 }}
             transition={{ type: 'spring', damping: 22, stiffness: 280 }}
-            className="fixed left-3 right-3 sm:right-auto top-20 bottom-3 z-50 sm:w-80 flex flex-col rounded-3xl overflow-hidden shadow-2xl border border-white/15"
-            style={{ background: 'linear-gradient(160deg, rgba(15,23,42,0.95), rgba(88,28,135,0.92), rgba(190,24,93,0.85))', backdropFilter: 'blur(24px)' }}
+            className="fixed left-3 right-3 sm:right-auto top-20 bottom-3 z-50 sm:w-80 flex flex-col rounded-3xl overflow-hidden shadow-2xl border border-white/20"
+            style={{ background: 'linear-gradient(160deg, rgba(71,85,105,0.78), rgba(51,65,85,0.72), rgba(71,85,105,0.78))', backdropFilter: 'blur(28px) saturate(160%)', WebkitBackdropFilter: 'blur(28px) saturate(160%)' }}
           >
             {/* Header with User Profile */}
             {isAuthenticated && user ? (
