@@ -1146,7 +1146,7 @@ export default function DrawingStudio() {
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate('/dashboard')}
-          className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full font-semibold text-sm text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all"
+          className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full font-bold text-sm text-slate-700 bg-white/90 backdrop-blur-md ring-1 ring-black/5 shadow-md hover:bg-white hover:text-slate-900 transition-all"
         >
           <ArrowLeft className="w-4 h-4" /> Dashboard
         </motion.button>
