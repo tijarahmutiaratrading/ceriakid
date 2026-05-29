@@ -170,7 +170,11 @@ export default function FriendsList() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-5 p-5 rounded-3xl flex items-center gap-4 bg-white shadow-xl border border-white/60"
         >
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-3xl shadow-lg flex-shrink-0">👥</div>
+          <img
+            src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6edd6aa29_generated_image.png"
+            alt="Kawan-kawan"
+            className="w-14 h-14 rounded-2xl object-cover shadow-lg flex-shrink-0 ring-2 ring-white"
+          />
           <div>
             <h1 className="text-2xl font-black text-slate-800 leading-tight">Kawan-Kawan</h1>
             <p className="text-slate-600 text-xs font-semibold mt-0.5">{friends.length} kawan berdaftar</p>
