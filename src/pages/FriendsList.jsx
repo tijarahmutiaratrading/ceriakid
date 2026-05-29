@@ -258,22 +258,23 @@ export default function FriendsList() {
           )}
         </motion.div>
 
-        {/* Friends List */}
+        {/* Friends List — dalam satu card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
+          className="rounded-3xl p-5 bg-white shadow-xl border border-white/60"
         >
-          <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-3 px-1">👤 Senarai Kawan</p>
+          <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-4">👤 Senarai Kawan</p>
 
           {friends.length === 0 ? (
-            <div className="rounded-3xl p-10 text-center bg-white shadow-xl border border-white/60">
+            <div className="py-8 text-center">
               <p className="text-5xl mb-4">🤷</p>
               <p className="text-slate-800 font-black text-lg mb-2">Belum ada kawan</p>
               <p className="text-slate-600 text-sm">Kongsi kod undangan anda untuk bermain bersama kawan-kawan!</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               <AnimatePresence>
                 {friends.map((friend, idx) => (
                   <motion.div
@@ -282,10 +283,10 @@ export default function FriendsList() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="rounded-2xl p-4 flex items-center justify-between bg-white shadow-lg border border-white/60"
+                    className="rounded-2xl p-3.5 flex items-center justify-between bg-purple-50/60 border border-purple-100"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-2xl shadow-md">👤</div>
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-2xl shadow-md flex-shrink-0">👤</div>
                       <div>
                         <p className="font-black text-slate-800 text-sm">{friend.friendEmail}</p>
                         <p className="text-slate-500 text-xs">
@@ -296,7 +297,7 @@ export default function FriendsList() {
                     <motion.button
                       whileTap={{ scale: 0.9 }}
                       onClick={() => removeFriend(friend.id)}
-                      className="w-10 h-10 rounded-xl flex items-center justify-center bg-red-100 hover:bg-red-200 transition-all"
+                      className="w-10 h-10 rounded-xl flex items-center justify-center bg-red-100 hover:bg-red-200 transition-all flex-shrink-0"
                     >
                       <Trash2 className="w-4 h-4 text-red-600" />
                     </motion.button>
