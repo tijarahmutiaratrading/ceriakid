@@ -1156,20 +1156,19 @@ export default function DrawingStudio() {
         const bboxH = maxY - minY;
         const bboxW = maxX - minX;
 
-        // Anggaran saiz huruf sebenar dalam cell
+        // Anggaran saiz huruf sebenar dalam cell — longgar sikit supaya
+        // anak tak frust. Kalau cover ~half huruf dah cukup untuk advance.
         const letterCellW = slotW * 0.78;
         const expectedH = letterH * 0.78;
-        const expectedW = letterCellW * 0.7;
 
-        // Huruf yang nipis (I, J, 1) tak perlukan lebar penuh
+        // Huruf nipis (I, J, 1) tak perlukan lebar penuh
         const isThinChar = ['I', 'J', '1', 'i', 'j', 'l'].includes(selectedShape.letter);
-        const minWidth = isThinChar ? letterCellW * 0.1 : expectedW * 0.65;
-        const minHeight = expectedH * 0.7;
-        // Path length perlu cukup panjang — anggaran ikut jenis huruf
-        const minPath = expectedH * 1.2;
+        const minWidth = isThinChar ? letterCellW * 0.08 : letterCellW * 0.35;
+        const minHeight = expectedH * 0.5;
+        const minPath = expectedH * 0.7;
 
         if (bboxH < minHeight || bboxW < minWidth || totalDist < minPath) {
-          // Belum cukup cover huruf — biar anak sambung trace, jangan reward lagi
+          // Belum cukup cover huruf — biar anak sambung trace, jangan advance lagi
           return;
         }
 
