@@ -55,18 +55,22 @@ export default function FamilyHeroCard({
       <div className="absolute top-1/2 right-1/3 text-xl opacity-30">💖</div>
 
       <div className="relative flex items-start gap-4 mb-5">
-        {/* Bunny mascot */}
+        {/* Pixar 3D family mascot */}
         <motion.div
           animate={{ y: [0, -6, 0] }}
           transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center text-5xl sm:text-6xl flex-shrink-0 relative"
+          className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl overflow-hidden flex-shrink-0 relative"
           style={{
             background: 'rgba(255,255,255,0.7)',
             boxShadow: '0 6px 0 rgba(244, 114, 182, 0.3), 0 8px 20px rgba(0,0,0,0.05)',
           }}
         >
-          👨‍👩‍👧‍👦
-          <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-yellow-500" />
+          <img
+            src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fd0f2ba5f_generated_image.png"
+            alt="Keluarga"
+            className="w-full h-full object-cover"
+          />
+          <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-yellow-500 drop-shadow" />
         </motion.div>
 
         <div className="flex-1 min-w-0 pt-1">
