@@ -1229,7 +1229,7 @@ export default function DrawingStudio() {
         )}
       </AnimatePresence>
 
-      <main className="relative max-w-6xl mx-auto px-4 sm:px-6 pb-28 pt-4">
+      <main className="relative max-w-6xl mx-auto px-4 sm:px-6 pb-28 pt-20 sm:pt-4">
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate('/dashboard')}

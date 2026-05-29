@@ -152,7 +152,7 @@ export default function StoryKid() {
 
       {!story && <AppHeader showBack={true} backTo="/dashboard" />}
 
-      <div className={`relative w-full ${story && sceneIndex < (story?.scenes?.length || 0) ? '' : 'max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-28 pt-4'} overflow-x-hidden`}>
+      <div className={`relative w-full ${story && sceneIndex < (story?.scenes?.length || 0) ? '' : 'max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-28 pt-20 sm:pt-4'} overflow-x-hidden`}>
         {!story && (
           <Link to="/dashboard" className="inline-flex items-center gap-2 mb-5 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md text-slate-700 font-semibold text-sm ring-1 ring-black/5 hover:bg-white hover:scale-[1.02] transition-all shadow-sm">
             <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
