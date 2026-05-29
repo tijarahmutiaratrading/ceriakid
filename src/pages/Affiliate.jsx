@@ -72,7 +72,7 @@ export default function AffiliatePage() {
 
   return (
     <div className="min-h-screen">
-      <div className="p-4 sm:p-6 max-w-6xl mx-auto pt-20 md:pt-8">
+      <div className="p-4 sm:p-6 max-w-6xl mx-auto">
         {/* Hero with referral link & quick share */}
         <AffiliateHero affiliate={affiliate} referralLink={referralLink} />
 
