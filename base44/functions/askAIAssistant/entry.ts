@@ -32,29 +32,54 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Soalan terlalu pendek' }, { status: 400 });
     }
 
-    // ─── Step 1: Check & deduct credits (semua user termasuk admin) ───
+    // ─── Step 1: Deduct credits dengan race condition protection ───
+    // Strategy: read → deduct → verify. Kalau verify gagal (balance jadi negative
+    // sebab race condition dengan request lain), refund + return error.
     const credits = await base44.asServiceRole.entities.UserCredit.filter({ userEmail: user.email });
     let credit = credits[0] || null;
-    let newBalance = credit?.balance || 0;
+    if (!credit || (credit.balance || 0) < COST_PER_QUESTION) {
+      return Response.json({
+        error: 'INSUFFICIENT_CREDITS',
+        balance: credit?.balance || 0,
+        required: COST_PER_QUESTION,
+      }, { status: 402 });
+    }
 
-    // Refetch latest balance just before deduction (mitigates double-click race)
-    const fresh = credit ? await base44.asServiceRole.entities.UserCredit.get(credit.id) : null;
+    // Refetch latest just before deduction
+    const fresh = await base44.asServiceRole.entities.UserCredit.get(credit.id);
     const currentBalance = fresh?.balance || 0;
-    if (!fresh || currentBalance < COST_PER_QUESTION) {
+    if (currentBalance < COST_PER_QUESTION) {
       return Response.json({
         error: 'INSUFFICIENT_CREDITS',
         balance: currentBalance,
         required: COST_PER_QUESTION,
       }, { status: 402 });
     }
+
     credit = fresh;
-    newBalance = currentBalance - COST_PER_QUESTION;
+    const newBalance = currentBalance - COST_PER_QUESTION;
     const nowIso = new Date().toISOString();
     await base44.asServiceRole.entities.UserCredit.update(credit.id, {
       balance: newBalance,
       totalUsed: (fresh.totalUsed || 0) + COST_PER_QUESTION,
       lastUsedAt: nowIso,
     });
+
+    // Verify post-update — kalau balance jadi negative, race condition berlaku.
+    // Refund segera dan tolak request.
+    const verify = await base44.asServiceRole.entities.UserCredit.get(credit.id);
+    if ((verify?.balance ?? 0) < 0) {
+      await base44.asServiceRole.entities.UserCredit.update(credit.id, {
+        balance: 0,
+        totalUsed: Math.max(0, (verify?.totalUsed || 0) - COST_PER_QUESTION),
+      });
+      return Response.json({
+        error: 'INSUFFICIENT_CREDITS',
+        balance: 0,
+        required: COST_PER_QUESTION,
+        detail: 'Concurrent request detected. Please try again.',
+      }, { status: 402 });
+    }
 
     // ─── Step 2: Call LLM ───
     const subjectLabel = SUBJECT_LABELS[subject] || 'Umum';
@@ -134,6 +159,7 @@ Jawab sekarang!`;
     });
   } catch (error) {
     console.error('askAIAssistant error:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    // Don't leak internal error details to frontend
+    return Response.json({ error: 'Sistem ralat. Sila cuba lagi.' }, { status: 500 });
   }
 });

@@ -22,15 +22,27 @@ Deno.serve(async (req) => {
     if (!phoneRegex.test(phone.trim())) return Response.json({ error: 'Invalid phone format' }, { status: 400 });
     if (name.trim().length < 2) return Response.json({ error: 'Name too short' }, { status: 400 });
 
-    // Rate limit — block same email more than 5 attempts/min
+    // Rate limit — guna CreditTransaction sebagai checkout attempt log
+    // Kira berapa checkout attempt user buat dalam 1 minit terakhir (5 max).
+    // Note: tak boleh guna UserSubscription sebab cuma ada 1 record per user.
     const oneMinAgo = new Date(Date.now() - 60_000).toISOString();
-    const recentAttempts = await base44.asServiceRole.entities.UserSubscription.filter({
-      email: user.email,
+    const recentTx = await base44.asServiceRole.entities.CreditTransaction.filter({
+      userEmail: user.email,
+      feature: 'checkout_attempt',
     });
-    const recent = (recentAttempts || []).filter(s => s.updated_date && s.updated_date > oneMinAgo);
-    if (recent.length > 5) {
-      return Response.json({ error: 'Too many attempts, please wait a moment' }, { status: 429 });
+    const recent = (recentTx || []).filter(t => t.created_date && t.created_date > oneMinAgo);
+    if (recent.length >= 5) {
+      return Response.json({ error: 'Too many checkout attempts. Please wait 1 minute.' }, { status: 429 });
     }
+    // Log this attempt (fire-and-forget)
+    base44.asServiceRole.entities.CreditTransaction.create({
+      userEmail: user.email,
+      type: 'admin_adjustment',
+      amount: 0,
+      feature: 'checkout_attempt',
+      description: `Checkout attempt: ${tier}`,
+      metadata: { tier, ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || null },
+    }).catch(() => {});
 
     // Validate referral code (jika ada) — tak boleh refer diri sendiri
     let validReferralCode = '';

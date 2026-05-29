@@ -322,35 +322,40 @@ Deno.serve(async (req) => {
     const base44 = createClientFromRequest(req);
     const bodyText = await req.text();
 
-    // ─── Verify Chip webhook signature (HMAC SHA256) ───
-    // Chip sends X-Signature header. We compute HMAC of raw body using CHIP_WEBHOOK_SECRET
-    // and compare. Reject if mismatch — prevents fake webhook attacks.
+    // ─── Verify Chip webhook signature (HMAC SHA256) — FAIL CLOSED ───
+    // SECURITY: kalau CHIP_WEBHOOK_SECRET tak set, REJECT semua webhook.
+    // Kalau X-Signature header tiada, REJECT. Kalau signature tak match, REJECT.
+    // Sebelum ni fail-open (accept kalau secret tak set) — risk: attacker boleh
+    // hantar fake "paid" webhook untuk activate subscription percuma.
     const webhookSecret = Deno.env.get('CHIP_WEBHOOK_SECRET');
+    if (!webhookSecret) {
+      console.error('CRITICAL: CHIP_WEBHOOK_SECRET not configured — webhook rejected');
+      return Response.json({ error: 'Webhook not configured' }, { status: 500 });
+    }
     const signatureHeader = req.headers.get('X-Signature') || req.headers.get('x-signature');
-    if (webhookSecret && signatureHeader) {
-      try {
-        const encoder = new TextEncoder();
-        const key = await crypto.subtle.importKey(
-          'raw',
-          encoder.encode(webhookSecret),
-          { name: 'HMAC', hash: 'SHA-256' },
-          false,
-          ['sign']
-        );
-        const sigBytes = await crypto.subtle.sign('HMAC', key, encoder.encode(bodyText));
-        const computedHex = Array.from(new Uint8Array(sigBytes)).map(b => b.toString(16).padStart(2, '0')).join('');
-        const provided = signatureHeader.replace(/^sha256=/, '').toLowerCase().trim();
-        if (computedHex !== provided) {
-          console.error('Webhook signature mismatch');
-          return Response.json({ error: 'Invalid signature' }, { status: 401 });
-        }
-      } catch (sigErr) {
-        console.error('Signature verification failed:', sigErr);
-        return Response.json({ error: 'Signature verification failed' }, { status: 401 });
-      }
-    } else if (webhookSecret && !signatureHeader) {
+    if (!signatureHeader) {
       console.error('Missing webhook signature header');
       return Response.json({ error: 'Missing signature' }, { status: 401 });
+    }
+    try {
+      const encoder = new TextEncoder();
+      const key = await crypto.subtle.importKey(
+        'raw',
+        encoder.encode(webhookSecret),
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['sign']
+      );
+      const sigBytes = await crypto.subtle.sign('HMAC', key, encoder.encode(bodyText));
+      const computedHex = Array.from(new Uint8Array(sigBytes)).map(b => b.toString(16).padStart(2, '0')).join('');
+      const provided = signatureHeader.replace(/^sha256=/, '').toLowerCase().trim();
+      if (computedHex !== provided) {
+        console.error('Webhook signature mismatch');
+        return Response.json({ error: 'Invalid signature' }, { status: 401 });
+      }
+    } catch (sigErr) {
+      console.error('Signature verification failed:', sigErr);
+      return Response.json({ error: 'Signature verification failed' }, { status: 401 });
     }
     // ─── End signature verification ───
 

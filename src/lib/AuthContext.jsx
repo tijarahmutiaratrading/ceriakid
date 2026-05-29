@@ -36,7 +36,19 @@ export const AuthProvider = ({ children }) => {
         const headers = { 'X-App-Id': appParams.appId };
         if (appParams.token) headers['Authorization'] = `Bearer ${appParams.token}`;
 
-        const res = await fetch(`/api/apps/public/prod/public-settings/by-id/${appParams.appId}`, { headers });
+        // Timeout protection — kalau backend slow/down, jangan stuck loading forever.
+        // 10 saat lebih dari cukup untuk public-settings (usually <1s).
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10_000);
+        let res;
+        try {
+          res = await fetch(`/api/apps/public/prod/public-settings/by-id/${appParams.appId}`, {
+            headers,
+            signal: controller.signal,
+          });
+        } finally {
+          clearTimeout(timeoutId);
+        }
 
         if (res.ok) {
           const publicSettings = await res.json();
