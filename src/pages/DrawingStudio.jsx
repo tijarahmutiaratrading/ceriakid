@@ -1103,9 +1103,14 @@ export default function DrawingStudio() {
       // Detect which letter slot this stroke was drawn in (majority of points, not avg)
       // This is more reliable kalau anak strok melintasi sempadan slot
       if (canvas) {
-        const { w } = getLogicalSize(canvas);
+        const { w, h } = getLogicalSize(canvas);
         const sideMargin = w * 0.04;
         const slotW = (w - sideMargin * 2) / LETTERS_PER_ROW;
+        const topMargin = h * 0.18;
+        const bottomMargin = h * 0.18;
+        const rowH = h - topMargin - bottomMargin;
+        const baseY = topMargin + rowH * 0.85;
+        const letterH = baseY - topMargin;
 
         // Count points per slot — majority wins
         const slotVotes = Array(LETTERS_PER_ROW).fill(0);
@@ -1120,6 +1125,33 @@ export default function DrawingStudio() {
 
         // GUARD: stroke kena dalam slot aktif sahaja (tak boleh skip slot)
         if (slotIdx !== currentLetterIndex) return;
+
+        // COVERAGE CHECK — strok mesti betul-betul cover huruf, bukan calit kecil.
+        // Kira bounding box strok + jumlah pixel distance dilalui.
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        let totalDist = 0;
+        let prev = null;
+        currentStroke.forEach((p) => {
+          if (p.x < minX) minX = p.x;
+          if (p.x > maxX) maxX = p.x;
+          if (p.y < minY) minY = p.y;
+          if (p.y > maxY) maxY = p.y;
+          if (prev) totalDist += Math.hypot(p.x - prev.x, p.y - prev.y);
+          prev = p;
+        });
+        const bboxH = maxY - minY;
+        const bboxW = maxX - minX;
+        // Strok mesti:
+        //  - cover sekurang-kurangnya 55% tinggi cell (huruf naik-turun)
+        //  - panjang lalu ≥ 70% tinggi cell (bukan calit pendek)
+        const minHeightCoverage = letterH * 0.55;
+        const minPathLength = letterH * 0.7;
+        if (bboxH < minHeightCoverage || totalDist < minPathLength) {
+          // Strok terlalu kecil — jangan kira sebagai siap, biar anak teruskan
+          return;
+        }
+        // Suppress unused warning for bboxW
+        void bboxW;
 
         // 1 strok cukup untuk complete satu slot — sama untuk huruf, nombor, dan shape.
         // Ini lebih natural untuk anak-anak: satu cubaan = satu kemajuan.
