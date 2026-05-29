@@ -89,6 +89,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           path: '/group-aktiviti',
           label: 'Aktiviti',
           submenu: [
+            { path: '/games-hub', label: 'Games Subjek' },
+            { path: '/games-hub?tab=mini', label: 'Mini Games' },
             { path: '/drawing', label: 'Studio Lukisan' },
             { path: '/story-kid', label: 'Story Kid' },
             { path: '/friends', label: 'Kawan' },

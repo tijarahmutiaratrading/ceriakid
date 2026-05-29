@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users, Palette, BookOpen, UserCircle, BarChart3, Settings,
-  UserPlus, Trophy, ChevronDown, Shield, LogOut, MessageCircle, Home, Share2
+  UserPlus, Trophy, ChevronDown, Shield, LogOut, MessageCircle, Home, Share2, Gamepad2, Puzzle
 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
@@ -23,6 +23,8 @@ const NAV_GROUPS = [
     key: 'aktiviti',
     label: 'Aktiviti',
     submenu: [
+      { path: '/games-hub', label: 'Games Subjek', icon: Gamepad2 },
+      { path: '/games-hub?tab=mini', label: 'Mini Games', icon: Puzzle },
       { path: '/drawing', label: 'Studio Lukisan', icon: Palette },
       { path: '/story-kid', label: 'Story Kid', icon: BookOpen },
       { path: '/friends', label: 'Kawan', icon: UserPlus },
