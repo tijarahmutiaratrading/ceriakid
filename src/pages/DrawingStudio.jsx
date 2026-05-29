@@ -1182,12 +1182,14 @@ export default function DrawingStudio() {
         setLetterStrokeCounts(newCounts);
 
         if (newCounts[slotIdx] >= requiredStrokes) {
-          saveMasteryRow(selectedShape.label);
-          setMastery(loadMastery());
-          playStamp();
-          confetti({ particleCount: 40, spread: 40, origin: { y: 0.55, x: (sideMargin + slotW * slotIdx + slotW / 2) / w }, colors: ['#fbbf24', '#22c55e'] });
-
           const isLastSlot = currentLetterIndex >= LETTERS_PER_ROW - 1;
+          // Hanya beri reward (mastery + confetti + sound) bila SEMUA huruf
+          // dalam baris dah siap, bukan setiap slot. Slot tengah cuma advance.
+          if (isLastSlot) {
+            saveMasteryRow(selectedShape.label);
+            setMastery(loadMastery());
+            playStamp();
+          }
           if (isLastSlot) {
             // Whole row done — calculate real accuracy from total strokes vs ideal
             const totalStrokes = newCounts.reduce((s, n) => s + n, 0);
