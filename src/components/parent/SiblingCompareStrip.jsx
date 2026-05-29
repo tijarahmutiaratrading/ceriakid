@@ -37,11 +37,19 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
           <motion.div
-            animate={{ rotate: [0, 8, -8, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            className="text-3xl"
+            animate={{ y: [0, -4, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-11 h-11 rounded-2xl overflow-hidden flex-shrink-0"
+            style={{
+              background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 100%)',
+              boxShadow: '0 3px 0 #f9a8d4',
+            }}
           >
-            👨‍👩‍👧‍👦
+            <img
+              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/bb09f323b_generated_image.png"
+              alt="Adik-beradik"
+              className="w-full h-full object-cover"
+            />
           </motion.div>
           <div>
             <p className="text-slate-800 text-base font-black leading-none">Adik-Beradik</p>
