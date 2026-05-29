@@ -16,17 +16,35 @@ export default function GamesSubjek() {
   const safeToggle = toggleAgeGroup || (() => {});
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
-      {/* Floating orbs background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
-        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
+    <div
+      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative"
+      style={{
+        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #6b21a8 100%)',
+      }}
+    >
+      {/* Extra fixed purple layer to ensure full coverage on scroll */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #6b21a8 100%)',
+          zIndex: 0,
+        }}
+      />
+
+      {/* Floating sparkles for playful vibe */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-28 left-6 text-2xl text-white/40 animate-float">✨</div>
+        <div className="absolute top-40 right-10 text-xl text-yellow-300/60 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
+        <div className="absolute top-1/3 left-1/4 text-lg text-pink-300/50 animate-float" style={{ animationDelay: '2s' }}>💫</div>
+        <div className="absolute top-1/2 right-8 text-2xl text-cyan-300/50 animate-float" style={{ animationDelay: '2.6s' }}>✨</div>
+        <div className="absolute bottom-40 left-10 text-xl text-yellow-300/60 animate-float" style={{ animationDelay: '3.5s' }}>⭐</div>
+        <div className="absolute bottom-1/3 right-1/4 text-lg text-purple-300/50 animate-float" style={{ animationDelay: '4.2s' }}>✨</div>
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" theme="dark" />
 
-      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pb-40 pt-4 space-y-8 md:space-y-10">
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pb-40 pt-4 space-y-8 md:space-y-10">
 
         {/* Back button */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
@@ -166,14 +184,6 @@ export default function GamesSubjek() {
         </motion.div>
       </div>
 
-      {/* Background overlay supaya nampak gelap macam GamesHub */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 pointer-events-none -z-10"
-        style={{
-          background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #6b21a8 100%)',
-        }}
-      />
     </div>
   );
 }
