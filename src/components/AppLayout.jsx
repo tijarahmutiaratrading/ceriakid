@@ -31,7 +31,7 @@ export default function AppLayout() {
       />
       <div className="min-h-screen w-full relative">
         <UserTopHeader />
-        <main className="w-full overflow-x-hidden md:pt-14">
+        <main className="w-full overflow-x-hidden sm:pt-14">
           <Outlet />
         </main>
       </div>
