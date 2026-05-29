@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, RotateCcw, Star, BookOpen, Sparkles, Trophy, ChevronRight } from 'lucide-react';
@@ -6,6 +6,9 @@ import AppHeader from '@/components/AppHeader';
 import StorySlideVisual from '@/components/story/StorySlideVisual';
 import StoryAudioPlayer from '@/components/story/StoryAudioPlayer';
 import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
+import { useSelectedChild } from '@/lib/SelectedChildContext';
+import { saveActivityProgress } from '@/lib/activityProgress';
 
 const SAMPLE_STORIES = [
   {
@@ -102,10 +105,13 @@ const formatDatabaseStory = (game) => ({
 });
 
 export default function StoryKid() {
+  const { user } = useAuth() || {};
+  const { selectedChild } = useSelectedChild() || {};
   const [stories, setStories] = useState([]);
   const [selected, setSelected] = useState(null);
   const [sceneIndex, setSceneIndex] = useState(0);
   const [stars, setStars] = useState(0);
+  const trackedRef = useRef(null); // ensure we track only once per story session
 
   useEffect(() => {
     const loadStories = async () => {
@@ -134,7 +140,28 @@ export default function StoryKid() {
     else setSceneIndex(choice.next);
   };
 
-  const resetStory = () => { setSceneIndex(0); setStars(0); };
+  const resetStory = () => { setSceneIndex(0); setStars(0); trackedRef.current = null; };
+
+  // Track to ParentDashboard when story is completed (sceneIndex === total scenes).
+  // Stars dikira ikut bilangan pilihan baik yang user buat:
+  //  - >= 6 stars → 3 stars (excellent)
+  //  - >= 3 stars → 2 stars (good)
+  //  - else → 1 star (completed)
+  useEffect(() => {
+    if (!story || sceneIndex < story.scenes.length) return;
+    const sessionKey = `${story.id}-${selected}`;
+    if (trackedRef.current === sessionKey) return;
+    trackedRef.current = sessionKey;
+    const earnedStars = stars >= 6 ? 3 : stars >= 3 ? 2 : 1;
+    saveActivityProgress({
+      user,
+      childName: selectedChild?.name,
+      category: 'story_kid',
+      activityId: story.id,
+      activityTitle: `Cerita: ${story.title}`,
+      stars: earnedStars,
+    }).catch(() => {});
+  }, [sceneIndex, story, selected, stars, user, selectedChild]);
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900">

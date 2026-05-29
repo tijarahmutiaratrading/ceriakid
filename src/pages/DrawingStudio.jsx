@@ -12,6 +12,9 @@ import { ApplePanel, AppleSectionLabel, AppleButton } from '@/components/drawing
 import CanvasFloatingToolbar from '@/components/drawing/CanvasFloatingToolbar';
 import StoryAudioPlayer from '@/components/story/StoryAudioPlayer';
 import { saveArtwork } from '@/lib/drawingGallery';
+import { saveActivityProgress } from '@/lib/activityProgress';
+import { useAuth } from '@/lib/AuthContext';
+import { useSelectedChild } from '@/lib/SelectedChildContext';
 import {
   playDrawTick,
   playStamp,
@@ -236,6 +239,8 @@ const MODES = [
 
 export default function DrawingStudio() {
   const navigate = useNavigate();
+  const { user } = useAuth() || {};
+  const { selectedChild } = useSelectedChild() || {};
   const canvasRef = useRef(null);
   const fsCanvasRef = useRef(null);
   const [mode, setMode] = useState('draw');
@@ -1184,6 +1189,15 @@ export default function DrawingStudio() {
           setCelebration({ open: true, accuracy: acc });
           confetti({ particleCount: 160, spread: 80, origin: { y: 0.6 }, colors: ['#fbbf24', '#8b5cf6', '#ec4899', '#f97316', '#22c55e'] });
           playTadaa();
+          // Track to parent dashboard
+          saveActivityProgress({
+            user,
+            childName: selectedChild?.name,
+            category: 'drawing_tracing',
+            activityId: `trace-${selectedShape.letter || selectedShape.label}`,
+            activityTitle: `Tracing ${selectedShape.label}`,
+            stars: 3,
+          }).catch(() => {});
         }
       }
     }
@@ -1201,6 +1215,17 @@ export default function DrawingStudio() {
       ? `Mewarna ${selectedColoringPage.label}`
       : 'Lukisan bebas';
     try { saveArtwork({ dataUrl, title: titleByMode, mode }); } catch { /* gallery is best-effort */ }
+    // Track to parent dashboard — kira 1 simpan = 1 stars (tracing dah tracked sendiri)
+    if (mode !== 'trace') {
+      saveActivityProgress({
+        user,
+        childName: selectedChild?.name,
+        category: 'drawing_art',
+        activityId: mode === 'color' ? `color-${selectedColoringPage.id}` : 'free-draw',
+        activityTitle: titleByMode,
+        stars: 1,
+      }).catch(() => {});
+    }
     // Also offer device download
     const link = document.createElement('a');
     link.download = `lukisan-saya-${Date.now()}.png`;
