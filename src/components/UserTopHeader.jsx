@@ -21,7 +21,6 @@ const NAV_GROUPS = [
     submenu: [
       { path: '/children-profiles', label: 'Profil Anak', icon: UserCircle },
       { path: '/parent-dashboard', label: 'Prestasi Anak', icon: BarChart3 },
-      { path: '/settings', label: 'Tetapan', icon: Settings },
     ],
   },
   {
@@ -44,6 +43,14 @@ const NAV_GROUPS = [
     key: 'affiliate',
     label: 'Affiliate',
     path: '/affiliate',
+  },
+  {
+    key: 'akaun',
+    label: 'Akaun',
+    submenu: [
+      { path: '/settings', label: 'Tetapan Akaun', icon: Settings },
+      { path: '/contact', label: 'Hubungi Kami', icon: MessageCircle },
+    ],
   },
 ];
 
