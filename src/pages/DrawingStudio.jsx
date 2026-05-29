@@ -1243,21 +1243,21 @@ export default function DrawingStudio() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
             <div className="min-w-0">
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-600 mb-2">Creative Studio</p>
               <h1 className="text-4xl sm:text-5xl font-black leading-[1.05] tracking-tight text-slate-900">Studio Lukisan</h1>
               <p className="text-slate-500 text-base font-medium mt-2 max-w-lg">Lukis bebas, surih huruf, atau warnakan gambar — semua dalam satu tempat.</p>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-3 lg:flex lg:flex-wrap gap-2 w-full lg:w-auto">
               {[
                 { top: mode === 'draw' ? 'Lukis Bebas' : mode === 'trace' ? 'Tracing' : 'Mewarna', bottom: 'Mode' },
                 { top: stickerMode ? `Sticker ${stickerMode}` : tool.label, bottom: 'Alat' },
                 { top: `${history.length}`, bottom: 'Undo' },
               ].map((badge, i) => (
-                <div key={i} className="px-3.5 py-2 rounded-2xl bg-white/80 backdrop-blur-md ring-1 ring-black/5 text-center min-w-[78px]" style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
-                  <p className="font-bold text-sm leading-tight text-slate-900">{badge.top}</p>
+                <div key={i} className="px-3.5 py-2 rounded-2xl bg-white/80 backdrop-blur-md ring-1 ring-black/5 text-center lg:min-w-[78px]" style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
+                  <p className="font-bold text-sm leading-tight text-slate-900 truncate">{badge.top}</p>
                   <p className="text-[10px] font-semibold uppercase tracking-wider mt-0.5 text-slate-400">{badge.bottom}</p>
                 </div>
               ))}
