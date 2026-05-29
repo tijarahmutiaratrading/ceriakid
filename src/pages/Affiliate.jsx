@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
+import { Loader2, BarChart3 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/use-toast';
 import AffiliateRegisterForm from '@/components/affiliate/AffiliateRegisterForm';
@@ -111,8 +111,8 @@ export default function AffiliatePage() {
           className="mt-8 rounded-3xl bg-white/90 backdrop-blur-sm border border-white/60 shadow-xl shadow-purple-950/10 p-5 sm:p-6"
         >
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0 text-xl">
-              📊
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+              <BarChart3 className="w-5 h-5 text-white" strokeWidth={2.5} />
             </div>
             <div>
               <p className="text-slate-900 font-black text-base leading-tight">Aktiviti & Sejarah</p>
