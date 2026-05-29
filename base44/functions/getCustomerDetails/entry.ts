@@ -20,12 +20,27 @@ Deno.serve(async (req) => {
       sr.entities.RegisteredDevice.list('-lastSeen', 1000),
       sr.entities.Affiliate.list('-created_date', 500),
       sr.entities.AffiliateReferral.list('-created_date', 1000),
-      sr.entities.User.list('-created_date', 500),
+      sr.entities.User.list('-created_date', 2000),
     ]);
 
     // Index users by email
     const userByEmail = new Map();
     users.forEach(u => { if (u.email) userByEmail.set(u.email.toLowerCase(), u); });
+
+    // Fallback — fetch missing users by email directly (subscriptions yang tak match dalam top-2000 list)
+    const missingEmails = [];
+    subscriptions.forEach(sub => {
+      const k = (sub.email || '').toLowerCase();
+      if (k && !userByEmail.has(k)) missingEmails.push(sub.email);
+    });
+    if (missingEmails.length > 0) {
+      const lookups = await Promise.all(
+        missingEmails.map(email =>
+          sr.entities.User.filter({ email }).then(arr => arr?.[0]).catch(() => null)
+        )
+      );
+      lookups.forEach(u => { if (u?.email) userByEmail.set(u.email.toLowerCase(), u); });
+    }
 
     // Index by email for fast lookup
     const creditByEmail = new Map();
@@ -68,7 +83,7 @@ Deno.serve(async (req) => {
       return {
         id: sub.id,
         email: sub.email,
-        fullName: userInfo?.full_name || '',
+        fullName: userInfo?.displayName || userInfo?.full_name || userInfo?.name || '',
         phone: userInfo?.phone || '',
         tier: sub.tier || 'free',
         status: sub.status || 'active',
