@@ -103,23 +103,28 @@ export default function AffiliatePage() {
         {/* Bank info form */}
         <AffiliateBankForm affiliate={affiliate} onSuccess={load} />
 
-        {/* Section divider */}
+        {/* Aktiviti & Sejarah — dalam satu card */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex items-center gap-3 mt-8 mb-4"
+          className="mt-8 rounded-3xl bg-white/90 backdrop-blur-sm border border-white/60 shadow-xl shadow-purple-950/10 p-5 sm:p-6"
         >
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
-          <span className="text-xs font-black text-slate-500 uppercase tracking-wider">📊 Aktiviti & Sejarah</span>
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
-        </motion.div>
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0 text-xl">
+              📊
+            </div>
+            <div>
+              <p className="text-slate-900 font-black text-base leading-tight">Aktiviti & Sejarah</p>
+              <p className="text-slate-500 text-xs font-semibold">Rujukan dan rekod payout anda</p>
+            </div>
+          </div>
 
-        {/* Referrals + Payouts history */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <AffiliateReferralList referrals={referrals} />
-          <AffiliatePayoutList payouts={payouts} />
-        </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <AffiliateReferralList referrals={referrals} />
+            <AffiliatePayoutList payouts={payouts} />
+          </div>
+        </motion.div>
       </div>
     </div>
   );
