@@ -83,8 +83,9 @@ Deno.serve(async (req) => {
       return {
         id: sub.id,
         email: sub.email,
-        fullName: userInfo?.data?.displayName || userInfo?.displayName || userInfo?.full_name || '',
-        phone: userInfo?.data?.phone || userInfo?.phone || '',
+        // Priority: checkout form (paling reliable — user input sendiri) → User entity displayName → full_name
+        fullName: sub.checkoutName || userInfo?.data?.displayName || userInfo?.displayName || userInfo?.full_name || '',
+        phone: sub.checkoutPhone || userInfo?.data?.phone || userInfo?.phone || '',
         tier: sub.tier || 'free',
         status: sub.status || 'active',
         createdDate: sub.created_date,

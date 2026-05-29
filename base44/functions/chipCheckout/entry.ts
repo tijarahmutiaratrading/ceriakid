@@ -167,6 +167,9 @@ Deno.serve(async (req) => {
 
     const subData = {
       email: user.email,
+      // Capture nama & no telefon dari checkout form — single source of truth untuk admin dashboard
+      checkoutName: name.trim(),
+      checkoutPhone: phone.trim(),
       tier: hasActivePaid ? currentSub.tier : tier,
       status: hasActivePaid ? 'active' : 'incomplete',
       currentPeriodStart: hasActivePaid ? currentSub.currentPeriodStart : new Date().toISOString(),
