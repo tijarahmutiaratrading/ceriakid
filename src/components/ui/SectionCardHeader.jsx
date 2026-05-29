@@ -18,10 +18,10 @@ export default function SectionCardHeader({
   subtitle,
   gradient = 'from-purple-500 to-pink-500',
   right = null,
-  variant = 'dark',
+  variant = 'light',
 }) {
-  const titleColor = variant === 'light' ? 'text-slate-900' : 'text-white';
-  const subtitleColor = variant === 'light' ? 'text-slate-600' : 'text-white/70';
+  const titleColor = variant === 'dark' ? 'text-white' : 'text-slate-900';
+  const subtitleColor = variant === 'dark' ? 'text-white/70' : 'text-slate-600';
 
   return (
     <div className="flex items-center gap-3">
