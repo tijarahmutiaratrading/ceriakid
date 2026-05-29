@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Loader2, ChevronDown, ChevronRight, Plus, Minus, BookOpen, Gamepad2, RefreshCw, CheckCircle2, AlertCircle } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
-import UserTopHeader from '@/components/UserTopHeader';
 
 const SUBJECT_COLORS = {
   bahasa_melayu: 'bg-blue-100 text-blue-700 border-blue-300',
@@ -106,7 +105,6 @@ export default function GameDatabase() {
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-game-manager" />
-      <UserTopHeader />
 
       {/* Toast */}
       <AnimatePresence>
@@ -162,7 +160,7 @@ export default function GameDatabase() {
         )}
       </AnimatePresence>
 
-      <div className="relative max-w-4xl mx-auto px-4 pt-8 md:pt-24 pb-8">
+      <div className="relative max-w-4xl mx-auto px-4 pt-8 pb-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 p-5 rounded-3xl" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}>
           <div>
