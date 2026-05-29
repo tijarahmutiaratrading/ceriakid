@@ -243,9 +243,9 @@ export default function Landing() {
 
 
       {/* ── NAVBAR — Floating pill, fixed with auto hide/show on scroll ── */}
-      {/* Desktop */}
+      {/* Desktop + Tablet (sm and up) */}
       <header
-        className={`hidden md:flex fixed top-5 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
+        className={`hidden sm:flex fixed top-5 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
       >
         <nav
           className="pointer-events-auto flex items-center gap-0 px-1.5 py-1.5 rounded-full shadow-xl shadow-black/20"
@@ -287,8 +287,8 @@ export default function Landing() {
         </nav>
       </header>
 
-      {/* Mobile */}
-      <nav className={`md:hidden fixed top-2 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
+      {/* Mobile only (below sm) */}
+      <nav className={`sm:hidden fixed top-2 left-0 right-0 z-50 px-3 py-3 transition-transform duration-300 ${navVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
         <div
           className="max-w-md mx-auto w-full px-3 py-2 rounded-full shadow-xl shadow-black/15 flex items-center justify-between gap-3"
           style={{
