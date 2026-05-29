@@ -20,14 +20,6 @@ const NAV_GROUPS = [
     ],
   },
   {
-    key: 'keluarga',
-    label: 'Keluarga',
-    submenu: [
-      { path: '/children-profiles', label: 'Profil Anak', icon: UserCircle },
-      { path: '/parent-dashboard', label: 'Prestasi Anak', icon: BarChart3 },
-    ],
-  },
-  {
     key: 'aktiviti',
     label: 'Aktiviti',
     submenu: [
@@ -35,6 +27,14 @@ const NAV_GROUPS = [
       { path: '/story-kid', label: 'Story Kid', icon: BookOpen },
       { path: '/friends', label: 'Kawan', icon: UserPlus },
       { path: '/challenges', label: 'Cabaran', icon: Trophy },
+    ],
+  },
+  {
+    key: 'keluarga',
+    label: 'Keluarga',
+    submenu: [
+      { path: '/children-profiles', label: 'Profil Anak', icon: UserCircle },
+      { path: '/parent-dashboard', label: 'Prestasi Anak', icon: BarChart3 },
     ],
   },
   {

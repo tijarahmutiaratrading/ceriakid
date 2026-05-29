@@ -86,14 +86,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
 
       groupedItems = [
         {
-          path: '/group-keluarga',
-          label: 'Keluarga',
-          submenu: [
-            { path: '/children-profiles', label: 'Profil Anak' },
-            { path: '/parent-dashboard', label: 'Prestasi Anak' },
-          ],
-        },
-        {
           path: '/group-aktiviti',
           label: 'Aktiviti',
           submenu: [
@@ -101,6 +93,14 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             { path: '/story-kid', label: 'Story Kid' },
             { path: '/friends', label: 'Kawan' },
             { path: '/challenges', label: 'Cabaran' },
+          ],
+        },
+        {
+          path: '/group-keluarga',
+          label: 'Keluarga',
+          submenu: [
+            { path: '/children-profiles', label: 'Profil Anak' },
+            { path: '/parent-dashboard', label: 'Prestasi Anak' },
           ],
         },
         {
