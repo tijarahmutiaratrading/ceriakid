@@ -53,10 +53,13 @@ export default function LiveSocialProof() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            className="pointer-events-auto max-w-[230px] sm:max-w-xs rounded-xl sm:rounded-2xl bg-white/95 backdrop-blur-md shadow-2xl border border-emerald-200 px-2.5 py-2 sm:px-4 sm:py-3"
+            className="pointer-events-auto max-w-[230px] sm:max-w-xs rounded-xl sm:rounded-2xl bg-white/95 backdrop-blur-md shadow-2xl border border-emerald-200 px-2.5 py-2 sm:px-4 sm:py-3 flex items-center gap-2 sm:gap-3"
           >
+            <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center flex-shrink-0 shadow text-sm sm:text-lg">
+              🎉
+            </div>
             <div className="min-w-0 flex-1">
-              <p className="text-slate-900 text-[10px] sm:text-xs font-black leading-tight truncate">🎉 {msg.name} dari {msg.loc}</p>
+              <p className="text-slate-900 text-[10px] sm:text-xs font-black leading-tight truncate">{msg.name} dari {msg.loc}</p>
               <p className="text-slate-600 text-[9px] sm:text-[11px] leading-tight truncate">{msg.action}</p>
               <p className="text-emerald-600 text-[9px] sm:text-[10px] font-bold mt-0.5">✓ {msg.timeAgo}</p>
             </div>
