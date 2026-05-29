@@ -60,7 +60,7 @@ export default function LiveSocialProof() {
               <TrendingUp className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-slate-900 text-[10px] sm:text-xs font-black leading-tight truncate">{msg.name} dari {msg.loc}</p>
+              <p className="text-slate-900 text-[10px] sm:text-xs font-black leading-tight truncate">🎉 {msg.name} dari {msg.loc}</p>
               <p className="text-slate-600 text-[9px] sm:text-[11px] leading-tight truncate">{msg.action}</p>
               <p className="text-emerald-600 text-[9px] sm:text-[10px] font-bold mt-0.5">✓ {msg.timeAgo}</p>
             </div>
