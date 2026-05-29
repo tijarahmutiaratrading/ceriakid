@@ -118,43 +118,58 @@ export default function ActionItemsCard({ childName, games }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 space-y-4"
+      className="rounded-[2rem] p-5 space-y-4"
       style={{
-        background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-        backdropFilter: 'blur(22px) saturate(150%)',
-        WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-        boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+        background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+        boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
       }}
     >
-      <SectionCardHeader
-        icon={Target}
-        title="Apa Patut Buat Seterusnya"
-        subtitle="Cadangan tindakan untuk bantu anak"
-        gradient="from-rose-400 to-pink-500"
-      />
+      <div className="flex items-center gap-2.5">
+        <motion.div
+          animate={{ rotate: [0, 10, -10, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl"
+          style={{ background: 'linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%)', boxShadow: '0 3px 0 #f472b6' }}
+        >
+          🎯
+        </motion.div>
+        <div>
+          <p className="text-slate-800 text-base font-black leading-none">Apa Patut Buat Seterusnya</p>
+          <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mt-1">Cadangan untuk bantu anak</p>
+        </div>
+      </div>
 
       <div className="space-y-2">
         {items.map((item, i) => {
-          const Icon = item.icon;
+          const palettes = [
+            { bg: '#fef3c7', shadow: '#fcd34d', iconBg: 'linear-gradient(135deg, #fde047 0%, #facc15 100%)' },
+            { bg: '#dbeafe', shadow: '#93c5fd', iconBg: 'linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%)' },
+            { bg: '#dcfce7', shadow: '#86efac', iconBg: 'linear-gradient(135deg, #86efac 0%, #4ade80 100%)' },
+          ];
+          const p = palettes[i % palettes.length];
           return (
             <Link key={i} to={item.link}>
               <motion.div
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.08 }}
-                whileTap={{ scale: 0.98 }}
-                className="rounded-2xl p-3 bg-white/12 border border-white/20 flex items-center gap-3 hover:bg-white/20 transition-all cursor-pointer"
+                whileTap={{ scale: 0.98, y: 2 }}
+                className="rounded-2xl p-3 flex items-center gap-3 cursor-pointer transition-all"
+                style={{ background: p.bg, boxShadow: `0 3px 0 ${p.shadow}` }}
               >
-                <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.accent} flex items-center justify-center text-xl flex-shrink-0 shadow-lg`}>
+                <div
+                  className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
+                  style={{ background: p.iconBg, boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}
+                >
                   {item.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white font-black text-sm leading-tight truncate">{item.title}</p>
-                  <p className="text-white/75 text-[11px] font-semibold mt-0.5 line-clamp-1">{item.desc}</p>
+                  <p className="text-slate-800 font-black text-sm leading-tight truncate">{item.title}</p>
+                  <p className="text-slate-600 text-[11px] font-semibold mt-0.5 line-clamp-1">{item.desc}</p>
                 </div>
                 <div className="flex items-center gap-1 flex-shrink-0">
-                  <span className="text-white/90 text-[10px] font-black uppercase tracking-wider hidden sm:inline">{item.cta}</span>
-                  <ChevronRight className="w-4 h-4 text-white/80" />
+                  <span className="text-slate-700 text-[10px] font-black uppercase tracking-wider hidden sm:inline">{item.cta}</span>
+                  <ChevronRight className="w-4 h-4 text-slate-600" strokeWidth={3} />
                 </div>
               </motion.div>
             </Link>

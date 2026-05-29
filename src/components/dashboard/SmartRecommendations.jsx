@@ -64,15 +64,23 @@ export default function SmartRecommendations({ userEmail, childName, ageGroup })
   };
 
   return (
-    <div className="rounded-3xl p-4" style={{
-      background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-      backdropFilter: 'blur(22px) saturate(150%)',
-      WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-      boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+    <div className="rounded-[2rem] p-5" style={{
+      background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+      boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
     }}>
-      <div className="flex items-center gap-2 mb-3">
-        <AlertCircle className="w-4 h-4 text-orange-300" />
-        <h3 className="text-white text-xs font-black uppercase tracking-wider">Perlu Bantuan</h3>
+      <div className="flex items-center gap-2.5 mb-3">
+        <motion.div
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl"
+          style={{ background: 'linear-gradient(135deg, #fdba74 0%, #fb923c 100%)', boxShadow: '0 3px 0 #f97316' }}
+        >
+          💡
+        </motion.div>
+        <div>
+          <p className="text-slate-800 text-base font-black leading-none">Perlu Bantuan</p>
+          <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mt-1">Subjek lemah</p>
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -82,22 +90,23 @@ export default function SmartRecommendations({ userEmail, childName, ageGroup })
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="rounded-2xl p-3 bg-white/8 border border-white/15 border-l-4 border-l-orange-400/70"
+            className="rounded-2xl p-3"
+            style={{ background: '#ffedd5', boxShadow: '0 3px 0 #fdba74' }}
           >
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
-                <p className="font-black text-white text-sm truncate">{categoryEmojis[rec.category]}</p>
-                <p className="text-[11px] text-white/70 font-semibold mt-0.5">
+                <p className="font-black text-slate-800 text-sm truncate">{categoryEmojis[rec.category]}</p>
+                <p className="text-[11px] text-slate-600 font-semibold mt-0.5">
                   Purata {rec.avgStars.toFixed(1)}/3 bintang — cuba lebih banyak
                 </p>
               </div>
-              <TrendingUp className="w-4 h-4 text-orange-300 flex-shrink-0" />
+              <TrendingUp className="w-4 h-4 text-orange-500 flex-shrink-0" strokeWidth={3} />
             </div>
           </motion.div>
         ))}
       </div>
 
-      <p className="text-[10px] text-white/55 mt-3 font-semibold">
+      <p className="text-[10px] text-slate-500 mt-3 font-bold">
         💡 Tip: Latihan lebih banyak dalam subjek ini untuk meningkatkan markah
       </p>
     </div>

@@ -42,18 +42,16 @@ export default function ShareSheet({ childName, totalGames, avgStars }) {
   return (
     <div className="relative">
       <motion.button
-        whileTap={{ scale: 0.95 }}
+        whileTap={{ scale: 0.95, y: 2 }}
         onClick={() => setOpen(!open)}
-        className="w-full text-white rounded-2xl min-h-12 py-3 font-black text-sm transition-all flex items-center justify-center gap-2 hover:brightness-110"
+        className="w-full text-white rounded-full min-h-12 py-3 font-black text-sm transition-all flex items-center justify-center gap-2"
         style={{
-          background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-          backdropFilter: 'blur(22px) saturate(150%)',
-          WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-          boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+          background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)',
+          boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)',
         }}
       >
-        <Share2 className="w-4 h-4" />
-        Kongsi Pencapaian {childName}
+        <Share2 className="w-4 h-4" strokeWidth={3} />
+        Kongsi Pencapaian {childName} 💕
       </motion.button>
 
       <AnimatePresence>
@@ -64,18 +62,21 @@ export default function ShareSheet({ childName, totalGames, avgStars }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setOpen(false)}
-              className="fixed inset-0 bg-black/40 z-40"
+              className="fixed inset-0 bg-black/20 z-40"
             />
             <motion.div
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute bottom-full mb-2 left-0 right-0 z-50 rounded-2xl p-2 shadow-2xl border border-white/30"
-              style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.95), rgba(88,28,135,0.92))', backdropFilter: 'blur(22px)' }}
+              className="absolute bottom-full mb-2 left-0 right-0 z-50 rounded-3xl p-3"
+              style={{
+                background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+                boxShadow: '0 12px 30px rgba(251, 207, 232, 0.4), 0 0 0 2px rgba(251, 207, 232, 0.5)',
+              }}
             >
-              <div className="flex justify-between items-center px-2 py-1 mb-1">
-                <p className="text-white/80 text-[10px] font-black uppercase tracking-wider">Pilih platform</p>
-                <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white">
+              <div className="flex justify-between items-center px-2 py-1 mb-2">
+                <p className="text-slate-600 text-[10px] font-black uppercase tracking-wider">Pilih platform 💖</p>
+                <button onClick={() => setOpen(false)} className="text-slate-400 hover:text-slate-600">
                   <X className="w-4 h-4" />
                 </button>
               </div>

@@ -54,27 +54,33 @@ export default function ChildSubjectProgress({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 space-y-4"
+      className="rounded-[2rem] p-5 space-y-4"
       style={{
-        background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-        backdropFilter: 'blur(22px) saturate(150%)',
-        WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-        boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+        background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+        boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
       }}
     >
-      <SectionCardHeader
-        icon={BookOpen}
-        title="Prestasi Per Subjek"
-        subtitle="Markah & purata bintang setiap subjek"
-        gradient="from-emerald-400 to-teal-500"
-      />
+      <div className="flex items-center gap-2.5">
+        <motion.div
+          animate={{ rotate: [0, 5, -5, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl"
+          style={{ background: 'linear-gradient(135deg, #86efac 0%, #4ade80 100%)', boxShadow: '0 3px 0 #22c55e' }}
+        >
+          📚
+        </motion.div>
+        <div>
+          <p className="text-slate-800 text-base font-black leading-none">Prestasi Per Subjek</p>
+          <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mt-1">Purata bintang setiap subjek</p>
+        </div>
+      </div>
 
       <div className="space-y-3">
         {subjects.map((s, i) => {
-          const barColor =
-            s.pct >= 75 ? 'from-emerald-400 to-teal-400'
-            : s.pct >= 50 ? 'from-yellow-400 to-amber-400'
-            : 'from-rose-400 to-pink-400';
+          const barGradient =
+            s.pct >= 75 ? 'linear-gradient(to right, #4ade80, #22c55e)'
+            : s.pct >= 50 ? 'linear-gradient(to right, #facc15, #f59e0b)'
+            : 'linear-gradient(to right, #f472b6, #ec4899)';
 
           return (
             <motion.div
@@ -84,26 +90,27 @@ export default function ChildSubjectProgress({ games }) {
               transition={{ delay: i * 0.05 }}
             >
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-white text-sm font-black flex items-center gap-1.5">
+                <span className="text-slate-800 text-sm font-black flex items-center gap-1.5">
                   <span className="text-base">{categoryEmojis[s.cat] || '📚'}</span>
                   {categoryLabels[s.cat] || s.cat}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-yellow-300 text-xs font-black">{s.totalStars}⭐</span>
-                  <span className="text-white/70 text-[10px] font-bold">{s.played} game</span>
+                  <span className="text-amber-600 text-xs font-black">{s.totalStars}⭐</span>
+                  <span className="text-slate-500 text-[10px] font-bold">{s.played} game</span>
                 </div>
               </div>
-              <div className="relative w-full bg-white/15 rounded-full h-2.5 overflow-hidden">
+              <div className="relative w-full rounded-full h-3 overflow-hidden" style={{ background: '#fef3c7' }}>
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${s.pct}%` }}
                   transition={{ duration: 0.8, delay: 0.1 + i * 0.05 }}
-                  className={`h-2.5 rounded-full bg-gradient-to-r ${barColor}`}
+                  className="h-3 rounded-full"
+                  style={{ background: barGradient }}
                 />
               </div>
               <div className="flex justify-between mt-1">
-                <span className="text-white/60 text-[10px] font-bold">Purata {s.avg.toFixed(1)}⭐</span>
-                {s.perfect > 0 && <span className="text-emerald-300 text-[10px] font-black">{s.perfect}× Perfect ⭐⭐⭐</span>}
+                <span className="text-slate-500 text-[10px] font-bold">Purata {s.avg.toFixed(1)}⭐</span>
+                {s.perfect > 0 && <span className="text-emerald-600 text-[10px] font-black">{s.perfect}× Perfect ⭐⭐⭐</span>}
               </div>
             </motion.div>
           );

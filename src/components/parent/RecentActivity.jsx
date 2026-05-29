@@ -40,20 +40,26 @@ export default function RecentActivity({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 space-y-3"
+      className="rounded-[2rem] p-5 space-y-3"
       style={{
-        background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-        backdropFilter: 'blur(22px) saturate(150%)',
-        WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-        boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+        background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+        boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
       }}
     >
-      <SectionCardHeader
-        icon={Clock}
-        title="Aktiviti Terkini"
-        subtitle="5 game terakhir dimainkan"
-        gradient="from-blue-400 to-cyan-500"
-      />
+      <div className="flex items-center gap-2.5">
+        <motion.div
+          animate={{ y: [0, -3, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl"
+          style={{ background: 'linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%)', boxShadow: '0 3px 0 #38bdf8' }}
+        >
+          ⏰
+        </motion.div>
+        <div>
+          <p className="text-slate-800 text-base font-black leading-none">Aktiviti Terkini</p>
+          <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mt-1">5 game terakhir</p>
+        </div>
+      </div>
       <div className="space-y-2">
         {recent.map((game, i) => (
           <motion.div
@@ -61,22 +67,26 @@ export default function RecentActivity({ games }) {
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="flex items-center gap-3 rounded-2xl p-2.5 bg-white/12 border border-white/20"
+            className="flex items-center gap-3 rounded-2xl p-2.5"
+            style={{ background: '#fef9f3', boxShadow: '0 2px 0 #fde68a' }}
           >
-            <div className="w-10 h-10 rounded-xl bg-white/25 flex items-center justify-center text-xl flex-shrink-0">
+            <div
+              className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
+              style={{ background: 'rgba(255,255,255,0.9)', boxShadow: '0 2px 4px rgba(0,0,0,0.06)' }}
+            >
               {categoryEmojis[game.category] || '🎮'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white font-black text-sm truncate">{categoryLabels[game.category] || game.category}</p>
-              <p className="text-white/70 text-[10px] font-semibold">{timeAgo(game.lastPlayedDate)}</p>
+              <p className="text-slate-800 font-black text-sm truncate">{categoryLabels[game.category] || game.category}</p>
+              <p className="text-slate-500 text-[10px] font-semibold">{timeAgo(game.lastPlayedDate)}</p>
             </div>
             <div className="flex flex-col items-end flex-shrink-0">
               <div className="flex gap-0.5">
                 {[1, 2, 3].map(s => (
-                  <span key={s} className={`text-xs ${(game.bestStars || 0) >= s ? 'text-yellow-300' : 'text-white/30'}`}>★</span>
+                  <span key={s} className="text-xs" style={{ color: (game.bestStars || 0) >= s ? '#facc15' : '#e2e8f0' }}>★</span>
                 ))}
               </div>
-              <p className="text-white/70 text-[10px] font-bold">{game.timesPlayed || 0}×</p>
+              <p className="text-slate-500 text-[10px] font-bold">{game.timesPlayed || 0}×</p>
             </div>
           </motion.div>
         ))}

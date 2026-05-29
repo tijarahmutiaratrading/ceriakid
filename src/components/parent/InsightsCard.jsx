@@ -48,28 +48,28 @@ export default function InsightsCard({ games }) {
       label: 'Hari Ini',
       value: todayGames,
       subtitle: `${weekGames} minggu ini`,
-      gradient: 'from-blue-400 to-cyan-500',
+      bg: '#dbeafe', shadow: '#93c5fd', iconBg: 'linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%)',
     },
     {
       icon: Award,
       label: 'Perfect 3⭐',
       value: perfectGames,
       subtitle: 'Skor penuh',
-      gradient: 'from-yellow-400 to-amber-500',
+      bg: '#fef3c7', shadow: '#fcd34d', iconBg: 'linear-gradient(135deg, #fde047 0%, #facc15 100%)',
     },
     {
       icon: TrendingUp,
       label: 'Subjek Top',
       value: bestSubject ? categoryEmojis[bestSubject.cat] || '📚' : '—',
       subtitle: bestSubject ? categoryLabels[bestSubject.cat] || bestSubject.cat : 'Belum ada',
-      gradient: 'from-emerald-400 to-teal-500',
+      bg: '#dcfce7', shadow: '#86efac', iconBg: 'linear-gradient(135deg, #86efac 0%, #4ade80 100%)',
     },
     {
       icon: Flame,
       label: 'Status',
       value: todayGames > 0 ? '🔥' : '😴',
       subtitle: todayGames > 0 ? 'Aktif!' : 'Rehat',
-      gradient: 'from-orange-400 to-pink-500',
+      bg: '#fce7f3', shadow: '#f9a8d4', iconBg: 'linear-gradient(135deg, #f9a8d4 0%, #ec4899 100%)',
     },
   ];
 
@@ -77,20 +77,26 @@ export default function InsightsCard({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 space-y-3"
+      className="rounded-[2rem] p-5 space-y-3"
       style={{
-        background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-        backdropFilter: 'blur(22px) saturate(150%)',
-        WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-        boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+        background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+        boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
       }}
     >
-      <SectionCardHeader
-        icon={Zap}
-        title="Trend & Insights"
-        subtitle="Aktiviti & prestasi terkini"
-        gradient="from-yellow-400 to-orange-500"
-      />
+      <div className="flex items-center gap-2.5">
+        <motion.div
+          animate={{ rotate: [0, 8, -8, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl"
+          style={{ background: 'linear-gradient(135deg, #fde047 0%, #facc15 100%)', boxShadow: '0 3px 0 #eab308' }}
+        >
+          ✨
+        </motion.div>
+        <div>
+          <p className="text-slate-800 text-base font-black leading-none">Trend & Insights</p>
+          <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mt-1">Prestasi terkini</p>
+        </div>
+      </div>
       <div className="grid grid-cols-2 gap-2">
         {insights.map((ins, i) => (
           <motion.div
@@ -98,14 +104,18 @@ export default function InsightsCard({ games }) {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.06 }}
-            className="rounded-2xl p-3 bg-white/15 border border-white/25"
+            className="rounded-2xl p-3"
+            style={{ background: ins.bg, boxShadow: `0 3px 0 ${ins.shadow}` }}
           >
-            <div className={`w-8 h-8 rounded-xl mb-2 bg-gradient-to-br ${ins.gradient} flex items-center justify-center shadow-md`}>
-              <ins.icon className="w-4 h-4 text-white" />
+            <div
+              className="w-9 h-9 rounded-xl mb-2 flex items-center justify-center"
+              style={{ background: ins.iconBg, boxShadow: '0 2px 4px rgba(0,0,0,0.08)' }}
+            >
+              <ins.icon className="w-4 h-4 text-white" strokeWidth={3} />
             </div>
-            <p className="text-white font-black text-xl leading-none">{ins.value}</p>
-            <p className="text-white/85 text-[10px] font-bold uppercase tracking-wider mt-1">{ins.label}</p>
-            <p className="text-white/65 text-[10px] font-semibold truncate">{ins.subtitle}</p>
+            <p className="text-slate-800 font-black text-xl leading-none">{ins.value}</p>
+            <p className="text-slate-700 text-[10px] font-black uppercase tracking-wider mt-1">{ins.label}</p>
+            <p className="text-slate-500 text-[10px] font-semibold truncate">{ins.subtitle}</p>
           </motion.div>
         ))}
       </div>

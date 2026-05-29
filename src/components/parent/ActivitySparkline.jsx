@@ -64,77 +64,96 @@ export default function ActivitySparkline({ games }) {
   }, [data]);
 
   const TrendIcon = trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus;
-  const trendColor = trend === 'up' ? 'text-emerald-300' : trend === 'down' ? 'text-rose-300' : 'text-white/60';
+  const trendColor = trend === 'up' ? '#16a34a' : trend === 'down' ? '#dc2626' : '#64748b';
+  const trendBg = trend === 'up' ? '#dcfce7' : trend === 'down' ? '#fee2e2' : '#f1f5f9';
   const trendLabel = trend === 'up' ? 'Semakin Aktif' : trend === 'down' ? 'Perlu Galakan' : 'Stabil';
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-4 space-y-3"
+      className="rounded-[2rem] p-5 space-y-3"
       style={{
-        background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-        backdropFilter: 'blur(22px) saturate(150%)',
-        WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-        boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+        background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+        boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
       }}
     >
-      <SectionCardHeader
-        icon={BarChart3}
-        title="Aktiviti 7 Hari"
-        subtitle="Bilangan sesi bermain harian"
-        gradient="from-purple-400 to-fuchsia-500"
-        right={
-          <div className={`flex items-center gap-1.5 ${trendColor} flex-shrink-0`}>
-            <TrendIcon className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-black uppercase tracking-wide">{trendLabel}</span>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <motion.div
+            animate={{ y: [0, -3, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
+            style={{ background: 'linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%)', boxShadow: '0 3px 0 #818cf8' }}
+          >
+            📊
+          </motion.div>
+          <div className="min-w-0">
+            <p className="text-slate-800 text-base font-black leading-none truncate">Aktiviti 7 Hari</p>
+            <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mt-1">Sesi bermain harian</p>
           </div>
-        }
-      />
+        </div>
+        <div
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full flex-shrink-0"
+          style={{ background: trendBg, color: trendColor }}
+        >
+          <TrendIcon className="w-3 h-3" strokeWidth={3} />
+          <span className="text-[10px] font-black uppercase tracking-wide">{trendLabel}</span>
+        </div>
+      </div>
 
-      <div className="flex items-end justify-between gap-1.5 h-20 mb-2">
-        {data.days.map((d, i) => {
-          const isToday = i === data.days.length - 1;
-          const heightPct = (d.count / data.max) * 100;
-          return (
-            <div key={i} className="flex-1 flex flex-col items-center justify-end h-full">
-              <div className="relative w-full flex items-end justify-center h-full">
-                {d.count > 0 && (
-                  <span className="absolute -top-0.5 text-white text-[9px] font-black">{d.count}</span>
-                )}
-                <motion.div
-                  initial={{ height: 0 }}
-                  animate={{ height: `${heightPct}%` }}
-                  transition={{ duration: 0.6, delay: i * 0.05, ease: 'easeOut' }}
-                  className={`w-full rounded-t-lg ${
-                    d.count === 0
-                      ? 'bg-white/15'
-                      : isToday
-                      ? 'bg-gradient-to-t from-pink-400 to-yellow-300'
-                      : 'bg-gradient-to-t from-purple-400 to-cyan-300'
-                  }`}
-                  style={{ minHeight: d.count > 0 ? '12px' : '4px' }}
-                />
+      <div
+        className="rounded-2xl p-3"
+        style={{ background: 'linear-gradient(135deg, #fef9f3 0%, #fce7f3 100%)' }}
+      >
+        <div className="flex items-end justify-between gap-1.5 h-20 mb-2">
+          {data.days.map((d, i) => {
+            const isToday = i === data.days.length - 1;
+            const heightPct = (d.count / data.max) * 100;
+            return (
+              <div key={i} className="flex-1 flex flex-col items-center justify-end h-full">
+                <div className="relative w-full flex items-end justify-center h-full">
+                  {d.count > 0 && (
+                    <span className="absolute -top-1 text-slate-700 text-[9px] font-black">{d.count}</span>
+                  )}
+                  <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: `${heightPct}%` }}
+                    transition={{ duration: 0.6, delay: i * 0.05, ease: 'easeOut' }}
+                    className="w-full rounded-t-xl"
+                    style={{
+                      background: d.count === 0
+                        ? '#e2e8f0'
+                        : isToday
+                        ? 'linear-gradient(to top, #f472b6, #fcd34d)'
+                        : 'linear-gradient(to top, #a5b4fc, #67e8f9)',
+                      minHeight: d.count > 0 ? '12px' : '4px',
+                      boxShadow: d.count > 0 ? '0 2px 4px rgba(0,0,0,0.06)' : 'none',
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
+        <div className="flex items-end justify-between gap-1.5">
+          {data.days.map((d, i) => {
+            const isToday = i === data.days.length - 1;
+            return (
+              <div key={i} className="flex-1 text-center">
+                <p className="text-[10px] font-black" style={{ color: isToday ? '#db2777' : '#64748b' }}>
+                  {d.label}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="flex items-end justify-between gap-1.5">
-        {data.days.map((d, i) => {
-          const isToday = i === data.days.length - 1;
-          return (
-            <div key={i} className="flex-1 text-center">
-              <p className={`text-[10px] font-black ${isToday ? 'text-yellow-300' : 'text-white/70'}`}>{d.label}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="mt-3 pt-3 border-t border-white/15 flex items-center justify-between">
-        <p className="text-white/80 text-[10px] font-bold">Jumlah minggu ini</p>
-        <p className="text-white font-black text-sm">{data.total} sesi 🎮</p>
+      <div className="flex items-center justify-between pt-1">
+        <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider">Minggu ini</p>
+        <p className="text-slate-800 font-black text-sm">{data.total} sesi 🎮</p>
       </div>
     </motion.div>
   );
