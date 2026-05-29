@@ -110,13 +110,13 @@ export default function ParentDashboard() {
 
   return (
     <div
-      className="min-h-screen font-nunito relative"
+      className="min-h-screen font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
       style={{
         background: 'linear-gradient(180deg, #fef9f3 0%, #fef3c7 30%, #fbcfe8 70%, #c7d2fe 100%)',
       }}
     >
       {/* Floating pastel clouds */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-20 w-72 h-72 rounded-full blur-3xl opacity-50" style={{ background: '#fef3c7' }} />
         <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full blur-3xl opacity-40" style={{ background: '#fbcfe8' }} />
         <div className="absolute bottom-40 left-1/4 w-72 h-72 rounded-full blur-3xl opacity-40" style={{ background: '#c7d2fe' }} />
