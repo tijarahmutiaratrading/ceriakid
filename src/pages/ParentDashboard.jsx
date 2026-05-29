@@ -109,9 +109,9 @@ export default function ParentDashboard() {
   const avgStarsAll = totalGamesAll > 0 ? (totalStarsAll / totalGamesAll).toFixed(1) : '0.0';
 
   return (
-    <div className="min-h-screen font-nunito">
-      <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-4">
+    <div className="min-h-screen font-nunito" style={{ background: '#ffffff' }}>
+      <AppHeader showBack={true} backTo="/dashboard" theme="dark" />
+      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 sm:pt-6">
 
         {/* 1. Family Hero — overall snapshot */}
         <ParentHeroCard
@@ -126,19 +126,21 @@ export default function ParentDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-3xl p-10 text-center"
+            className="rounded-3xl p-10 text-center bg-white"
             style={{
-              background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-              backdropFilter: 'blur(22px) saturate(150%)',
-              WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-              boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+              border: '3px solid #e2e8f0',
+              boxShadow: '0 4px 0 #cbd5e1, 0 10px 20px rgba(15,23,42,0.05)',
             }}
           >
-            <p className="text-5xl mb-4">👨‍👩‍👧‍👦</p>
-            <p className="text-white font-black text-lg mb-2 drop-shadow">Belum ada profil anak</p>
-            <p className="text-white/90 text-sm mb-5">Tambah profil anak dulu untuk lihat prestasi mereka</p>
+            <p className="text-6xl mb-4">👨‍👩‍👧‍👦</p>
+            <p className="text-slate-900 font-black text-xl mb-2">Belum ada profil anak</p>
+            <p className="text-slate-500 text-sm font-bold mb-5">Tambah profil anak dulu untuk lihat prestasi mereka</p>
             <Link to="/children-profiles">
-              <motion.button whileTap={{ scale: 0.95 }} className="min-h-12 px-6 py-3 bg-white text-purple-700 rounded-full font-black shadow-lg">
+              <motion.button
+                whileTap={{ scale: 0.95, y: 2 }}
+                className="min-h-12 px-7 py-3 rounded-2xl font-black text-white uppercase tracking-wider text-sm"
+                style={{ background: '#58cc02', boxShadow: '0 4px 0 #4fb302' }}
+              >
                 ➕ Tambah Anak
               </motion.button>
             </Link>
@@ -176,19 +178,21 @@ export default function ParentDashboard() {
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="rounded-3xl p-8 text-center"
+                      className="rounded-3xl p-8 text-center bg-white"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-                        backdropFilter: 'blur(22px) saturate(150%)',
-                        WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-                        boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+                        border: '3px solid #e2e8f0',
+                        boxShadow: '0 4px 0 #cbd5e1, 0 10px 20px rgba(15,23,42,0.05)',
                       }}
                     >
-                      <p className="text-5xl mb-3">🎮</p>
-                      <p className="text-white font-black text-base mb-2">{selectedChild} belum mula bermain</p>
-                      <p className="text-white/80 text-xs font-bold mb-4">Galakkan dia mulakan sesi pertama!</p>
+                      <p className="text-6xl mb-3">🎮</p>
+                      <p className="text-slate-900 font-black text-lg mb-2">{selectedChild} belum mula bermain</p>
+                      <p className="text-slate-500 text-xs font-bold mb-5">Galakkan dia mulakan sesi pertama!</p>
                       <Link to="/dashboard">
-                        <motion.button whileTap={{ scale: 0.95 }} className="bg-white text-purple-700 rounded-full px-6 py-2.5 font-black text-sm shadow-lg">
+                        <motion.button
+                          whileTap={{ scale: 0.95, y: 2 }}
+                          className="rounded-2xl px-7 py-3 font-black text-sm text-white uppercase tracking-wider"
+                          style={{ background: '#58cc02', boxShadow: '0 4px 0 #4fb302' }}
+                        >
                           Mula Main Game
                         </motion.button>
                       </Link>

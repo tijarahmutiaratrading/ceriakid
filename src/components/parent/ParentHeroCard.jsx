@@ -1,120 +1,146 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Zap, Star, Target, Sparkles } from 'lucide-react';
+import { Flame } from 'lucide-react';
 
+/**
+ * Duolingo-style hero card — white bg, chunky rounded, big streak number with flame,
+ * daily goal progress bar with rainbow gradient, mascot illustration on the left.
+ */
 export default function ParentHeroCard({ totalChildren, totalGames, totalStars, avgStars }) {
-  const stats = [
-    { icon: Trophy, label: 'Anak Aktif', value: totalChildren, gradient: 'from-yellow-400 to-orange-500', glow: 'shadow-yellow-500/40' },
-    { icon: Zap, label: 'Games', value: totalGames, gradient: 'from-cyan-400 to-blue-500', glow: 'shadow-cyan-500/40' },
-    { icon: Star, label: 'Bintang', value: totalStars, gradient: 'from-pink-400 to-rose-500', glow: 'shadow-pink-500/40' },
-    { icon: Target, label: 'Purata', value: `${avgStars}⭐`, gradient: 'from-emerald-400 to-teal-500', glow: 'shadow-emerald-500/40' },
-  ];
+  // Streak proxy = totalStars (overall family fire)
+  const streak = totalStars;
+  // Daily goal proxy: assume 30 stars/day target → percentage capped at 100
+  const dailyTarget = 30;
+  const dailyProgress = Math.min(100, Math.round((streak / dailyTarget) * 100));
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative isolate overflow-hidden rounded-[2rem] transform-gpu"
+      className="relative rounded-[2rem] overflow-hidden mb-4"
       style={{
-        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 35%, #d946ef 70%, #ec4899 100%)',
-        boxShadow: '0 30px 80px -20px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(255,255,255,0.1) inset',
+        background: '#f1f5f9',
+        border: '3px solid #e2e8f0',
+        boxShadow: '0 4px 0 #cbd5e1, 0 12px 24px rgba(15, 23, 42, 0.06)',
       }}
     >
-      {/* Decorative glass orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{ x: [0, 20, 0], y: [0, -10, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/20 blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, -15, 0], y: [0, 15, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-cyan-300/25 blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, 10, 0], y: [0, 8, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/2 left-1/3 w-40 h-40 rounded-full bg-yellow-300/20 blur-3xl"
-        />
+      {/* Confetti dots */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[
+          { x: '8%', y: '20%', color: '#ef4444', shape: 'rounded-full', size: 'w-2 h-2' },
+          { x: '18%', y: '12%', color: '#3b82f6', shape: 'rounded-sm', size: 'w-2.5 h-1' },
+          { x: '32%', y: '8%', color: '#10b981', shape: 'rounded-full', size: 'w-1.5 h-1.5' },
+          { x: '55%', y: '15%', color: '#f59e0b', shape: 'rounded-sm', size: 'w-2 h-1' },
+          { x: '75%', y: '10%', color: '#8b5cf6', shape: 'rounded-full', size: 'w-2 h-2' },
+          { x: '88%', y: '22%', color: '#ec4899', shape: 'rounded-sm', size: 'w-2 h-1' },
+          { x: '92%', y: '40%', color: '#fbbf24', shape: 'rounded-full', size: 'w-1.5 h-1.5' },
+        ].map((d, i) => (
+          <motion.div
+            key={i}
+            animate={{ y: [0, -6, 0], rotate: [0, 15, 0] }}
+            transition={{ duration: 3 + i * 0.3, repeat: Infinity, ease: 'easeInOut' }}
+            className={`absolute ${d.shape} ${d.size}`}
+            style={{ left: d.x, top: d.y, backgroundColor: d.color }}
+          />
+        ))}
       </div>
 
-      {/* Grid pattern overlay — adds depth */}
-      <div
-        className="absolute inset-0 opacity-[0.08] pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-          backgroundSize: '24px 24px',
-        }}
-      />
+      {/* Top section: mascot + streak */}
+      <div className="relative grid grid-cols-[auto_1fr] sm:grid-cols-[1fr_auto] items-center gap-3 sm:gap-6 p-5 sm:p-7 pb-3 sm:pb-4">
+        {/* Mascot — left side */}
+        <motion.div
+          initial={{ scale: 0, rotate: -30 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 14, delay: 0.1 }}
+          className="text-6xl sm:text-8xl leading-none order-1 sm:order-1"
+        >
+          📊
+        </motion.div>
 
-      {/* Floating sparkles */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-        className="absolute top-4 right-4 text-yellow-200/50"
-      >
-        <Sparkles className="w-8 h-8" />
-      </motion.div>
+        {/* Text + streak number — right side */}
+        <div className="min-w-0 order-2 sm:order-2 text-right">
+          <p className="text-slate-500 text-[10px] sm:text-xs font-black uppercase tracking-[0.18em] mb-1">Parent Dashboard</p>
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-none tracking-tight">
+            Prestasi Anak
+          </h1>
+          <p className="text-slate-500 text-xs sm:text-sm font-bold mt-1">Pantau dan beri motivasi</p>
 
-      <div className="relative z-10 p-5 sm:p-6 md:p-7">
-        {/* Header */}
-        <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-6">
-          <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-            className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl flex-shrink-0"
-            style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15))',
-              backdropFilter: 'blur(20px)',
-              border: '1.5px solid rgba(255,255,255,0.4)',
-              boxShadow: '0 8px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.5)',
-            }}
-          >
-            📊
-          </motion.div>
-          <div className="min-w-0 flex-1">
-            <p className="text-white/85 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.22em] leading-none">Parent Dashboard</p>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight mt-1.5 drop-shadow-md">
-              Prestasi Anak
-            </h1>
-            <p className="text-white/85 text-xs sm:text-sm font-semibold mt-1 drop-shadow">
-              Pantau perkembangan & beri motivasi
-            </p>
+          {/* BIG streak number with flame */}
+          <div className="flex items-end justify-end gap-2 mt-3 sm:mt-4">
+            <motion.span
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 200, delay: 0.3 }}
+              className="text-5xl sm:text-7xl font-black text-slate-900 leading-none tracking-tight tabular-nums"
+            >
+              {streak}
+            </motion.span>
+            <motion.span
+              animate={{ rotate: [0, -8, 8, -8, 0], scale: [1, 1.1, 1] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              className="text-4xl sm:text-6xl leading-none"
+            >
+              🔥
+            </motion.span>
           </div>
         </div>
+      </div>
 
-        {/* Stats grid — true glass tiles */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-          {stats.map((s, i) => (
+      {/* Daily Goal bar — yellow strip across full width */}
+      <div
+        className="relative px-5 sm:px-7 py-3 sm:py-4 flex items-center gap-3 sm:gap-4"
+        style={{ background: '#fbbf24', borderTop: '3px solid #f59e0b' }}
+      >
+        <div className="flex-1 min-w-0">
+          <p className="text-amber-950 text-[11px] sm:text-sm font-black mb-1.5 sm:mb-2 flex items-center gap-1.5">
+            Daily Goal:
+            <span className="text-amber-900">{streak} / {dailyTarget} bintang</span>
+            <span className="ml-auto sm:ml-2 flex gap-0.5">
+              {[1, 2, 3].map((star) => (
+                <span key={star} className={`text-base sm:text-lg ${dailyProgress >= star * 33 ? 'text-yellow-200' : 'text-amber-700/40'}`}>
+                  ⭐
+                </span>
+              ))}
+            </span>
+          </p>
+          {/* Rainbow progress bar */}
+          <div className="relative h-5 sm:h-6 rounded-full overflow-hidden bg-white shadow-inner border-2 border-amber-700/30">
             <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 15, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 0.15 + i * 0.07, type: 'spring', stiffness: 200 }}
-              whileHover={{ y: -2, scale: 1.02 }}
-              className="relative rounded-2xl p-3 sm:p-3.5 overflow-hidden"
+              initial={{ width: 0 }}
+              animate={{ width: `${dailyProgress}%` }}
+              transition={{ duration: 1.2, ease: 'easeOut', delay: 0.4 }}
+              className="absolute inset-y-0 left-0 rounded-full"
               style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1))',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.35)',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.4)',
+                background: 'linear-gradient(90deg, #ef4444 0%, #f97316 20%, #fbbf24 40%, #22c55e 60%, #3b82f6 80%, #8b5cf6 100%)',
               }}
-            >
-              {/* Icon */}
-              <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl mb-2 bg-gradient-to-br ${s.gradient} flex items-center justify-center shadow-lg ${s.glow}`}>
-                <s.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white drop-shadow" />
-              </div>
-              {/* Value */}
-              <p className="text-white font-black text-xl sm:text-2xl leading-none drop-shadow">{s.value}</p>
-              <p className="text-white/85 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider mt-1 truncate">{s.label}</p>
-
-              {/* Subtle inner highlight */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-            </motion.div>
-          ))}
+            />
+            <div className="absolute inset-0 flex items-center justify-end pr-2 sm:pr-3">
+              <span className="text-[10px] sm:text-xs font-black text-slate-900 drop-shadow-sm">{dailyProgress}%</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      {/* 4 mini stat chips below */}
+      <div className="relative grid grid-cols-4 gap-2 px-3 sm:px-5 py-3 sm:py-4 bg-white border-t-2 border-slate-100">
+        {[
+          { emoji: '👶', value: totalChildren, label: 'Anak' },
+          { emoji: '🎮', value: totalGames, label: 'Games' },
+          { emoji: '⭐', value: totalStars, label: 'Bintang' },
+          { emoji: '📈', value: avgStars, label: 'Purata' },
+        ].map((s, i) => (
+          <motion.div
+            key={s.label}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 + i * 0.06 }}
+            className="text-center"
+          >
+            <div className="text-xl sm:text-2xl mb-0.5">{s.emoji}</div>
+            <p className="text-slate-900 font-black text-base sm:text-lg leading-none tabular-nums">{s.value}</p>
+            <p className="text-slate-500 text-[9px] sm:text-[10px] font-black uppercase tracking-wider mt-0.5">{s.label}</p>
+          </motion.div>
+        ))}
       </div>
     </motion.div>
   );
