@@ -20,6 +20,19 @@ export default function PersonalInfoCard({ user }) {
     setPhone(user?.phone || '');
   }, [user?.full_name, user?.phone]);
 
+  // Fallback: kalau user entity tak ada nama/phone, ambik dari checkout form
+  // yang user dah isi masa beli subscription (UserSubscription.checkoutName/Phone)
+  useEffect(() => {
+    if (!user?.email) return;
+    if (user?.full_name && user?.phone) return; // dah ada, skip
+    base44.entities.UserSubscription.filter({ email: user.email }).then(subs => {
+      const sub = subs?.[0];
+      if (!sub) return;
+      if (!user?.full_name && sub.checkoutName) setFullName(sub.checkoutName);
+      if (!user?.phone && sub.checkoutPhone) setPhone(sub.checkoutPhone);
+    }).catch(() => {});
+  }, [user?.email, user?.full_name, user?.phone]);
+
   const handleSave = async () => {
     setError('');
     setSaving(true);
