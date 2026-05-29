@@ -959,7 +959,8 @@ export default function DrawingStudio() {
       lastPointTime.current = now;
     }
 
-    // Quadratic smoothing — draw to the midpoint with a curve through lastPoint
+    // Midpoint kept for spray/glitter/crayon texture FX only — main stroke now
+    // uses straight lineTo for a continuous, unbroken path from pen-down to pen-up.
     const midX = (lastPoint.x + pt.x) / 2;
     const midY = (lastPoint.y + pt.y) / 2;
 
@@ -1045,9 +1046,12 @@ export default function DrawingStudio() {
       actualLw = lw * angleFactor * Math.max(0.5, Math.min(1.8, 1.6 - dist * 0.04));
     }
 
+    // Straight line from lastPoint to current point — guarantees a continuous
+    // unbroken stroke even when pointer events arrive sparsely. lineCap=round
+    // makes the segments blend seamlessly into a smooth path.
     ctx.beginPath();
     ctx.moveTo(lastPoint.x, lastPoint.y);
-    ctx.quadraticCurveTo(lastPoint.x, lastPoint.y, midX, midY);
+    ctx.lineTo(pt.x, pt.y);
     ctx.lineWidth = actualLw;
     ctx.lineCap = tool.id === 'highlighter' ? 'butt' : 'round';
     ctx.lineJoin = 'round';
@@ -1061,7 +1065,7 @@ export default function DrawingStudio() {
       ctx.lineWidth = Math.max(1, lw * 0.35);
       ctx.beginPath();
       ctx.moveTo(lastPoint.x, lastPoint.y);
-      ctx.quadraticCurveTo(lastPoint.x, lastPoint.y, midX, midY);
+      ctx.lineTo(pt.x, pt.y);
       ctx.stroke();
     }
     ctx.restore();
