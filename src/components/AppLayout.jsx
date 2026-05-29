@@ -31,7 +31,7 @@ export default function AppLayout() {
       />
       <div className="min-h-screen w-full relative">
         <UserTopHeader />
-        <main className="w-full overflow-x-hidden pt-16 sm:pt-20">
+        <main className="w-full overflow-x-hidden pt-16 sm:pt-20 pb-[env(safe-area-inset-bottom)]">
           <Outlet />
         </main>
       </div>
