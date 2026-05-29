@@ -445,11 +445,14 @@ export default function DrawingStudio() {
     ctx.restore();
     ctx.fillStyle = '#fff9f0';
     ctx.fillRect(0, 0, w, h);
-    if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape, letterStrokeCounts);
+    // Tracing guide dilukis tanpa doneCounts — supaya canvas tak redraw bila
+    // letterStrokeCounts berubah (yang akan wipe lukisan user). Slot "done"
+    // indicator dipaparkan melalui UI badge je, bukan via canvas state.
+    if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape, []);
     // NOTE: Line art coloring TIDAK dilukis pada canvas. Ia rendered sebagai
     // <img> overlay (pointer-events:none) di atas canvas — supaya pemadam
     // hanya buang warna user, tak terjejas line art.
-  }, [mode, selectedShape, letterStrokeCounts]);
+  }, [mode, selectedShape]);
 
   // Workbook-style: render 1 row × LETTERS_PER_ROW letters dengan baseline guides
   // Slot 0 = solid example (contoh), slots 1..N = dotted for tracing
