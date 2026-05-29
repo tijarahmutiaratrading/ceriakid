@@ -7,12 +7,16 @@ import { TrendingUp } from 'lucide-react';
 // Tujuan: build urgency tanpa mislead.
 
 const PROOF_MESSAGES = [
-  { name: 'Puan Aishah', loc: 'Shah Alam', action: 'baru langgan pelan Keluarga' },
-  { name: 'Encik Faizal', loc: 'JB', action: 'baru langgan pelan Standard' },
-  { name: 'Puan Nurul', loc: 'KL', action: 'baru tambah profil anak' },
-  { name: 'Puan Lim', loc: 'PJ', action: 'baru langgan pelan Keluarga' },
-  { name: 'Encik Zul', loc: 'Bangi', action: 'baru main 5 game pagi ini' },
-  { name: 'Puan Roslina', loc: 'Kelantan', action: 'baru langgan pelan Asas' },
+  { name: 'Puan Aishah', loc: 'Shah Alam', action: 'baru langgan pelan Keluarga', timeAgo: '15 minit lepas' },
+  { name: 'Encik Faizal', loc: 'JB', action: 'baru langgan pelan Standard', timeAgo: '1 jam lepas' },
+  { name: 'Puan Nurul', loc: 'KL', action: 'baru tambah profil anak', timeAgo: '3 jam lepas' },
+  { name: 'Puan Lim', loc: 'PJ', action: 'langgan pelan Keluarga', timeAgo: 'semalam' },
+  { name: 'Encik Zul', loc: 'Bangi', action: 'main 12 game minggu ini', timeAgo: '2 hari lepas' },
+  { name: 'Puan Roslina', loc: 'Kelantan', action: 'langgan pelan Asas', timeAgo: '3 hari lepas' },
+  { name: 'Puan Hana', loc: 'Penang', action: 'baru tambah anak ke-2', timeAgo: '40 minit lepas' },
+  { name: 'Encik Hafiz', loc: 'Kuantan', action: 'langgan pelan Standard', timeAgo: '5 jam lepas' },
+  { name: 'Puan Siti', loc: 'Melaka', action: 'top-up 100 kredit AI', timeAgo: '20 minit lepas' },
+  { name: 'Encik Aiman', loc: 'Ipoh', action: 'langgan pelan Keluarga', timeAgo: '6 jam lepas' },
 ];
 
 export default function LiveSocialProof() {
@@ -39,7 +43,6 @@ export default function LiveSocialProof() {
   }, []);
 
   const msg = PROOF_MESSAGES[idx];
-  const minsAgo = ((idx * 3) % 14) + 2; // 2-15 min ago, deterministic
 
   return (
     <div className="fixed bottom-4 left-4 right-4 sm:right-auto z-40 pointer-events-none">
@@ -59,7 +62,7 @@ export default function LiveSocialProof() {
             <div className="min-w-0 flex-1">
               <p className="text-slate-900 text-xs font-black leading-tight truncate">{msg.name} dari {msg.loc}</p>
               <p className="text-slate-600 text-[11px] leading-tight">{msg.action}</p>
-              <p className="text-emerald-600 text-[10px] font-bold mt-0.5">✓ {minsAgo} min lepas</p>
+              <p className="text-emerald-600 text-[10px] font-bold mt-0.5">✓ {msg.timeAgo}</p>
             </div>
           </motion.div>
         )}
