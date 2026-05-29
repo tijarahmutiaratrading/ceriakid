@@ -1078,12 +1078,6 @@ export default function DrawingStudio() {
 
     setLastPoint(pt);
     if (mode === 'trace') setCurrentStroke(prev => [...prev, pt]);
-
-    // Satisfying soft tone while drawing — throttled inside playDrawTick
-    if (tool.id !== 'eraser') {
-      const canvasH = getLogicalSize(canvas).h || 1;
-      playDrawTick(pt.y / canvasH, color);
-    }
   };
 
   const endDraw = (e) => {
