@@ -220,20 +220,25 @@ export default function Challenges() {
           )}
         </AnimatePresence>
 
-        {/* Challenges List */}
-        <div>
-          <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-3 px-1">🏆 Senarai Cabaran</p>
+        {/* Challenges List — dalam satu card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-3xl p-5 bg-white shadow-xl border border-white/60"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center shadow-sm">
+              <Trophy className="w-4 h-4 text-white" strokeWidth={3} />
+            </div>
+            <p className="text-purple-700 text-xs font-black uppercase tracking-wider">Senarai Cabaran</p>
+          </div>
 
           {challenges.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-3xl p-10 text-center bg-white shadow-xl border border-white/60"
-            >
+            <div className="py-8 text-center">
               <p className="text-5xl mb-4">⚡</p>
               <p className="text-slate-800 font-black text-lg mb-2">Belum ada cabaran</p>
               <p className="text-slate-600 text-sm">Tekan + untuk cabar kawan anda bermain!</p>
-            </motion.div>
+            </div>
           ) : (
             <div className="space-y-3">
               {challenges.map((challenge, idx) => {
@@ -318,7 +323,7 @@ export default function Challenges() {
               })}
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
