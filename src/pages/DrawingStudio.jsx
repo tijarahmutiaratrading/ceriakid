@@ -242,7 +242,7 @@ export default function DrawingStudio() {
   const [tool, setTool] = useState(TOOLS[0]);
   const [color, setColor] = useState('#1a1a1a');
   const [isDrawing, setIsDrawing] = useState(false);
-  const [lastPoint, setLastPoint] = useState(null);
+  const lastPointRef = useRef(null); // ref instead of state — React state updates are async, causing dropped points on fast pointer moves
   const [history, setHistory] = useState([]);
   const [selectedTracingCategory, setSelectedTracingCategory] = useState(TRACING_CATEGORIES[0].id);
   const [selectedShape, setSelectedShape] = useState(TRACING_CATEGORIES[0].shapes[0]);
@@ -904,7 +904,7 @@ export default function DrawingStudio() {
 
     saveToHistory();
     setIsDrawing(true);
-    setLastPoint(pt);
+    lastPointRef.current = pt;
     lastPointTime.current = performance.now();
     smoothWidth.current = effectiveLineWidth();
     if (mode === 'trace') setCurrentStroke([pt]);
@@ -934,7 +934,8 @@ export default function DrawingStudio() {
     const ctx = getCtx();
     if (!ctx || !canvas) return;
     const pt = getPoint(e, canvas);
-    if (!lastPoint) { setLastPoint(pt); return; }
+    const lastPoint = lastPointRef.current;
+    if (!lastPoint) { lastPointRef.current = pt; return; }
 
     // Velocity-aware width — slower stroke = thicker line (pencil/brush feel).
     // Eraser & marker keep flat width for predictability.
@@ -975,7 +976,7 @@ export default function DrawingStudio() {
         ctx.fill();
       }
       ctx.restore();
-      setLastPoint(pt);
+      lastPointRef.current = pt;
       if (mode === 'trace') setCurrentStroke(prev => [...prev, pt]);
       return;
     }
@@ -997,7 +998,7 @@ export default function DrawingStudio() {
         ctx.fill();
       }
       ctx.restore();
-      setLastPoint(pt);
+      lastPointRef.current = pt;
       if (mode === 'trace') setCurrentStroke(prev => [...prev, pt]);
       return;
     }
@@ -1076,14 +1077,14 @@ export default function DrawingStudio() {
       ctx.restore();
     }
 
-    setLastPoint(pt);
+    lastPointRef.current = pt;
     if (mode === 'trace') setCurrentStroke(prev => [...prev, pt]);
   };
 
   const endDraw = (e) => {
     if (!isDrawing) return;
     setIsDrawing(false);
-    setLastPoint(null);
+    lastPointRef.current = null;
 
     if (mode === 'trace' && currentStroke.length > 5) {
       const canvas = getCanvas();
