@@ -242,7 +242,7 @@ export default function GamesList() {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
       <AppHeader showBack={true} backTo="/dashboard" />
-      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 overflow-x-hidden">
+      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-4 overflow-x-hidden">
 
         {/* Header Card with Background Image */}
         <motion.div

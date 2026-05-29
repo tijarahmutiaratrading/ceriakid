@@ -148,7 +148,7 @@ export default function FriendsList() {
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24 overflow-x-hidden">
+      <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-4 overflow-x-hidden">
 
         {/* Header Card */}
         <motion.div

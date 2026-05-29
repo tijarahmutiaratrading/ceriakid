@@ -83,7 +83,7 @@ export default function ClientDashboard() {
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
       <AppHeader />
 
-      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8 space-y-5">
+      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-4 space-y-5">
 
         {/* Hero Profile — Apple Fitness style (sama macam dashboard) */}
         <motion.div

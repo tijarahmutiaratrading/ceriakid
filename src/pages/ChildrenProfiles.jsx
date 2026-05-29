@@ -201,7 +201,7 @@ export default function ChildrenProfiles() {
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
       <AppHeader />
 
-      <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-8">
+      <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-4">
 
         {/* PREMIUM HERO — extracted to FamilyHeroCard component */}
         <FamilyHeroCard

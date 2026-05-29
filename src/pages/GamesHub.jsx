@@ -64,7 +64,7 @@ export default function GamesHub() {
       {/* 🐰 Arnab mascot melompat-lompat di background */}
       <HoppingBunnies />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-4">
         {/* Back button */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <Link

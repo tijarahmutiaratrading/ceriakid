@@ -48,7 +48,7 @@ export default function KafaHub() {
     <div className="min-h-screen w-full font-nunito relative">
       <AppHeader showBack={true} backTo="/dashboard" title="KAFA" />
 
-      <div className="relative w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-20 md:pt-24">
+      <div className="relative w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-4">
         {/* Hero */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
