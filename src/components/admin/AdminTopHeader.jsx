@@ -16,7 +16,7 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
   const isVisible = useScrollDirection();
 
   return (
-    <header className={`hidden md:flex fixed top-5 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
+    <header className={`hidden lg:flex fixed top-5 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
       {/* Floating pill nav (Apple Fitness style — glossy light) */}
       <nav
         className="pointer-events-auto flex items-center gap-0 px-1.5 py-1.5 rounded-full shadow-xl shadow-black/20 max-w-[calc(100vw-2rem)]"

@@ -236,13 +236,13 @@ export default function AdminDashboard() {
         <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] bg-sky-300/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <AppHeader showBack={true} backTo="/dashboard" />
       </div>
       <AdminTopHeader activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <div className="relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pt-24 md:pt-20 pb-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pt-24 lg:pt-20 pb-32">
           <main className="min-w-0 space-y-4 md:space-y-5">
         {/* Mobile tab pill (shows current section) */}
         <div className="lg:hidden pro-glass rounded-2xl px-3 py-2 flex items-center justify-between gap-2">
