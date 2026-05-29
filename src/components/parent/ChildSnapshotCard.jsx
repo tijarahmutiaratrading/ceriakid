@@ -15,7 +15,7 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
   const today = new Date().toDateString();
   const playedToday = games.some((g) => g.lastPlayedDate && new Date(g.lastPlayedDate).toDateString() === today);
 
-  const emoji = child?.ageGroup === 'sekolah_rendah' ? '📚' : '🎨';
+  const fallbackEmoji = child?.ageGroup === 'sekolah_rendah' ? '📚' : '🎨';
 
   const stats = [
     { icon: Gamepad2, label: 'Games', value: totalGames, color: '#93c5fd', soft: '#dbeafe' },
@@ -34,28 +34,27 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
         boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
       }}
     >
-      {/* Top: mascot + name + avg stars */}
+      {/* Top: avatar (synced from Children Profile) + name + avg stars */}
       <div className="flex items-center gap-4 mb-5">
-        {child?.avatarUrl ? (
-          <img
-            src={child.avatarUrl}
-            alt={child.name}
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl object-cover flex-shrink-0"
-            style={{ boxShadow: '0 4px 0 #fbcfe8, 0 6px 14px rgba(0,0,0,0.05)' }}
-          />
-        ) : (
-          <motion.div
-            animate={{ y: [0, -5, 0], rotate: [0, 3, -3, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl flex items-center justify-center text-4xl sm:text-5xl flex-shrink-0"
-            style={{
-              background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 100%)',
-              boxShadow: '0 4px 0 #f9a8d4, 0 6px 14px rgba(0,0,0,0.05)',
-            }}
-          >
-            {emoji}
-          </motion.div>
-        )}
+        <motion.div
+          animate={{ y: [0, -4, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl overflow-hidden flex-shrink-0 flex items-center justify-center"
+          style={{
+            background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 100%)',
+            boxShadow: '0 4px 0 #f9a8d4, 0 6px 14px rgba(0,0,0,0.05)',
+          }}
+        >
+          {child?.avatarUrl ? (
+            <img
+              src={child.avatarUrl}
+              alt={child.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-4xl sm:text-5xl">{fallbackEmoji}</span>
+          )}
+        </motion.div>
         <div className="flex-1 min-w-0">
           <h2 className="text-2xl sm:text-3xl font-black text-slate-800 truncate leading-tight">
             {child?.name || 'Anak'}
