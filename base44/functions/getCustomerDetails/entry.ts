@@ -83,8 +83,8 @@ Deno.serve(async (req) => {
       return {
         id: sub.id,
         email: sub.email,
-        fullName: userInfo?.displayName || userInfo?.full_name || userInfo?.name || '',
-        phone: userInfo?.phone || '',
+        fullName: userInfo?.data?.displayName || userInfo?.displayName || userInfo?.full_name || '',
+        phone: userInfo?.data?.phone || userInfo?.phone || '',
         tier: sub.tier || 'free',
         status: sub.status || 'active',
         createdDate: sub.created_date,
