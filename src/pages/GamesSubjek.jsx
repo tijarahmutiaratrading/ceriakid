@@ -16,22 +16,7 @@ export default function GamesSubjek() {
   const safeToggle = toggleAgeGroup || (() => {});
 
   return (
-    <div
-      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative"
-      style={{
-        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #6b21a8 100%)',
-      }}
-    >
-      {/* Extra fixed purple layer to ensure full coverage on scroll */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #6b21a8 100%)',
-          zIndex: 0,
-        }}
-      />
-
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
       {/* Floating sparkles for playful vibe */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-28 left-6 text-2xl text-white/40 animate-float">✨</div>
