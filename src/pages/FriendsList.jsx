@@ -265,7 +265,12 @@ export default function FriendsList() {
           transition={{ delay: 0.15 }}
           className="rounded-3xl p-5 bg-white shadow-xl border border-white/60"
         >
-          <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-4">👤 Senarai Kawan</p>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-sm">
+              <Users className="w-4 h-4 text-white" strokeWidth={3} />
+            </div>
+            <p className="text-purple-700 text-xs font-black uppercase tracking-wider">Senarai Kawan</p>
+          </div>
 
           {friends.length === 0 ? (
             <div className="py-8 text-center">
