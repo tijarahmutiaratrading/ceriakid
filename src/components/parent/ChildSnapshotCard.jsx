@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { Flame, Star, Gamepad2, Award } from 'lucide-react';
 
 /**
- * Duolingo-style child snapshot — white card, big mascot, chunky stats with
- * rounded shadows underneath (signature Duo "pressed button" look).
+ * Playful CeriaKid child snapshot — soft pastel card, bouncy mascot,
+ * candy-colored stat pills.
  */
 export default function ChildSnapshotCard({ child, games, streak = 0 }) {
   const totalGames = games.length;
@@ -18,20 +18,20 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
   const emoji = child?.ageGroup === 'sekolah_rendah' ? '📚' : '🎨';
 
   const stats = [
-    { icon: Gamepad2, label: 'Games', value: totalGames, color: '#1cb0f6', bg: '#dbeafe', shadow: '#1aa1e0' },
-    { icon: Star, label: 'Bintang', value: totalStars, color: '#ffc800', bg: '#fef9c3', shadow: '#e6b400' },
-    { icon: Award, label: 'Perfect', value: perfectGames, color: '#58cc02', bg: '#dcfce7', shadow: '#4fb302' },
-    { icon: Flame, label: 'Streak', value: `${streak}h`, color: '#ff9600', bg: '#ffedd5', shadow: '#e68600' },
+    { icon: Gamepad2, label: 'Games', value: totalGames, color: '#93c5fd', soft: '#dbeafe' },
+    { icon: Star, label: 'Bintang', value: totalStars, color: '#fcd34d', soft: '#fef3c7' },
+    { icon: Award, label: 'Perfect', value: perfectGames, color: '#86efac', soft: '#dcfce7' },
+    { icon: Flame, label: 'Streak', value: `${streak}h`, color: '#fca5a5', soft: '#fee2e2' },
   ];
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl p-5 bg-white"
+      className="rounded-[2rem] p-5"
       style={{
-        border: '3px solid #e2e8f0',
-        boxShadow: '0 4px 0 #cbd5e1, 0 10px 20px rgba(15,23,42,0.05)',
+        background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+        boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
       }}
     >
       {/* Top: mascot + name + avg stars */}
@@ -40,31 +40,39 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
           <img
             src={child.avatarUrl}
             alt={child.name}
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover flex-shrink-0"
-            style={{ border: '3px solid #e2e8f0', boxShadow: '0 4px 0 #cbd5e1' }}
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl object-cover flex-shrink-0"
+            style={{ boxShadow: '0 4px 0 #fbcfe8, 0 6px 14px rgba(0,0,0,0.05)' }}
           />
         ) : (
           <motion.div
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl flex-shrink-0"
-            style={{ background: '#fef3c7', border: '3px solid #fde68a', boxShadow: '0 4px 0 #f59e0b' }}
+            animate={{ y: [0, -5, 0], rotate: [0, 3, -3, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl flex items-center justify-center text-4xl sm:text-5xl flex-shrink-0"
+            style={{
+              background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 100%)',
+              boxShadow: '0 4px 0 #f9a8d4, 0 6px 14px rgba(0,0,0,0.05)',
+            }}
           >
             {emoji}
           </motion.div>
         )}
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 truncate leading-tight">{child?.name || 'Anak'}</h2>
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-800 truncate leading-tight">
+            {child?.name || 'Anak'}
+          </h2>
           <div className="flex items-center gap-1.5 flex-wrap mt-1.5">
-            <span className="text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md text-slate-700 bg-slate-100 uppercase tracking-wider">
-              {child?.ageGroup === 'sekolah_rendah' ? 'Sek. Rendah' : 'Prasekolah'}
+            <span
+              className="text-[10px] sm:text-xs font-black px-2.5 py-1 rounded-full"
+              style={{ background: '#e0e7ff', color: '#4338ca' }}
+            >
+              {child?.ageGroup === 'sekolah_rendah' ? '📚 Sek. Rendah' : '🎨 Prasekolah'}
             </span>
             <span
-              className="text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md flex items-center gap-1"
+              className="text-[10px] sm:text-xs font-black px-2.5 py-1 rounded-full"
               style={
                 playedToday
                   ? { background: '#dcfce7', color: '#166534' }
-                  : { background: '#fee2e2', color: '#991b1b' }
+                  : { background: '#fef3c7', color: '#92400e' }
               }
             >
               {playedToday ? '🔥 Aktif hari ni' : '💤 Belum main'}
@@ -72,15 +80,15 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
           </div>
         </div>
         <div className="text-right flex-shrink-0">
-          <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider">Purata</p>
-          <p className="text-slate-900 font-black text-3xl sm:text-4xl leading-none tabular-nums">
+          <p className="text-slate-400 text-[10px] font-black uppercase tracking-wider">Purata</p>
+          <p className="font-black text-3xl sm:text-4xl leading-none tabular-nums text-slate-800">
             {avgStars}
             <span className="text-xl sm:text-2xl ml-0.5">⭐</span>
           </p>
         </div>
       </div>
 
-      {/* Stats — 4 chunky Duolingo-style buttons */}
+      {/* Stats — soft candy pills */}
       <div className="grid grid-cols-4 gap-2 sm:gap-3">
         {stats.map((s, i) => (
           <motion.div
@@ -90,21 +98,20 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
             transition={{ delay: i * 0.06 }}
             className="rounded-2xl p-2.5 sm:p-3 text-center"
             style={{
-              background: s.bg,
-              border: `2px solid ${s.color}40`,
-              boxShadow: `0 3px 0 ${s.shadow}40`,
+              background: s.soft,
+              boxShadow: `0 3px 0 ${s.color}80`,
             }}
           >
             <div
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl mx-auto mb-1.5 flex items-center justify-center"
-              style={{ background: s.color, boxShadow: `0 2px 0 ${s.shadow}` }}
+              className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl mx-auto mb-1.5 flex items-center justify-center"
+              style={{ background: 'rgba(255,255,255,0.8)' }}
             >
-              <s.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" strokeWidth={3} />
+              <s.icon className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={3} style={{ color: s.color }} />
             </div>
-            <p className="font-black text-lg sm:text-xl leading-none tabular-nums" style={{ color: s.shadow }}>
-              {s.value}
+            <p className="font-black text-lg sm:text-xl leading-none tabular-nums text-slate-800">{s.value}</p>
+            <p className="text-slate-500 text-[9px] sm:text-[10px] font-black uppercase tracking-wider mt-1">
+              {s.label}
             </p>
-            <p className="text-slate-600 text-[9px] sm:text-[10px] font-black uppercase tracking-wider mt-1">{s.label}</p>
           </motion.div>
         ))}
       </div>

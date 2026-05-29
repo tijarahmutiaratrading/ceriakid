@@ -109,9 +109,20 @@ export default function ParentDashboard() {
   const avgStarsAll = totalGamesAll > 0 ? (totalStarsAll / totalGamesAll).toFixed(1) : '0.0';
 
   return (
-    <div className="min-h-screen font-nunito" style={{ background: '#ffffff' }}>
-      <AppHeader showBack={true} backTo="/dashboard" theme="dark" />
-      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 sm:pt-6">
+    <div
+      className="min-h-screen font-nunito relative"
+      style={{
+        background: 'linear-gradient(180deg, #fef9f3 0%, #fef3c7 30%, #fbcfe8 70%, #c7d2fe 100%)',
+      }}
+    >
+      {/* Floating pastel clouds */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 -left-20 w-72 h-72 rounded-full blur-3xl opacity-50" style={{ background: '#fef3c7' }} />
+        <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full blur-3xl opacity-40" style={{ background: '#fbcfe8' }} />
+        <div className="absolute bottom-40 left-1/4 w-72 h-72 rounded-full blur-3xl opacity-40" style={{ background: '#c7d2fe' }} />
+      </div>
+      <AppHeader showBack={true} backTo="/dashboard" theme="light" />
+      <div className="relative max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 sm:pt-6">
 
         {/* 1. Family Hero — overall snapshot */}
         <ParentHeroCard
@@ -126,20 +137,23 @@ export default function ParentDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-3xl p-10 text-center bg-white"
+            className="rounded-[2rem] p-10 text-center"
             style={{
-              border: '3px solid #e2e8f0',
-              boxShadow: '0 4px 0 #cbd5e1, 0 10px 20px rgba(15,23,42,0.05)',
+              background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+              boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
             }}
           >
-            <p className="text-6xl mb-4">👨‍👩‍👧‍👦</p>
-            <p className="text-slate-900 font-black text-xl mb-2">Belum ada profil anak</p>
-            <p className="text-slate-500 text-sm font-bold mb-5">Tambah profil anak dulu untuk lihat prestasi mereka</p>
+            <motion.p animate={{ y: [0, -8, 0] }} transition={{ duration: 2.5, repeat: Infinity }} className="text-6xl mb-4">👨‍👩‍👧‍👦</motion.p>
+            <p className="text-slate-800 font-black text-xl mb-2">Belum ada profil anak</p>
+            <p className="text-slate-500 text-sm font-bold mb-5">Tambah profil anak dulu untuk lihat prestasi mereka 💕</p>
             <Link to="/children-profiles">
               <motion.button
                 whileTap={{ scale: 0.95, y: 2 }}
-                className="min-h-12 px-7 py-3 rounded-2xl font-black text-white uppercase tracking-wider text-sm"
-                style={{ background: '#58cc02', boxShadow: '0 4px 0 #4fb302' }}
+                className="min-h-12 px-7 py-3 rounded-full font-black text-white text-sm"
+                style={{
+                  background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)',
+                  boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)',
+                }}
               >
                 ➕ Tambah Anak
               </motion.button>
@@ -178,20 +192,23 @@ export default function ParentDashboard() {
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="rounded-3xl p-8 text-center bg-white"
+                      className="rounded-[2rem] p-8 text-center"
                       style={{
-                        border: '3px solid #e2e8f0',
-                        boxShadow: '0 4px 0 #cbd5e1, 0 10px 20px rgba(15,23,42,0.05)',
+                        background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+                        boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
                       }}
                     >
-                      <p className="text-6xl mb-3">🎮</p>
-                      <p className="text-slate-900 font-black text-lg mb-2">{selectedChild} belum mula bermain</p>
-                      <p className="text-slate-500 text-xs font-bold mb-5">Galakkan dia mulakan sesi pertama!</p>
+                      <motion.p animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity }} className="text-6xl mb-3">🎮</motion.p>
+                      <p className="text-slate-800 font-black text-lg mb-2">{selectedChild} belum mula bermain</p>
+                      <p className="text-slate-500 text-xs font-bold mb-5">Galakkan dia mulakan sesi pertama! ✨</p>
                       <Link to="/dashboard">
                         <motion.button
                           whileTap={{ scale: 0.95, y: 2 }}
-                          className="rounded-2xl px-7 py-3 font-black text-sm text-white uppercase tracking-wider"
-                          style={{ background: '#58cc02', boxShadow: '0 4px 0 #4fb302' }}
+                          className="rounded-full px-7 py-3 font-black text-sm text-white"
+                          style={{
+                            background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)',
+                            boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)',
+                          }}
                         >
                           Mula Main Game
                         </motion.button>
