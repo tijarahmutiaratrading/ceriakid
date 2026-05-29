@@ -12,6 +12,16 @@ export default function ExitIntentPopup({ onCTA }) {
   useEffect(() => {
     if (sessionStorage.getItem('exit_intent_shown')) return;
 
+    // Disable on touch devices (tablet/phone) — iOS/Android simulate fake mouseleave
+    // events during momentum scrolling which causes the popup (and its scrollToPricing
+    // CTA) to auto-trigger and jump the page back to top.
+    const isTouchDevice = (
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      window.matchMedia('(hover: none)').matches
+    );
+    if (isTouchDevice) return;
+
     let timer;
     const handleMouseLeave = (e) => {
       // Hanya trigger kalau mouse keluar dari TOP window (cursor menuju ke close/URL bar)
