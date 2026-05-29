@@ -81,7 +81,7 @@ export default function ClientDashboard() {
 
   return (
     <div
-      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative"
+      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
       style={{
         background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)',
       }}
