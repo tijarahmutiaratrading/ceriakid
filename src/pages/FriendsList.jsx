@@ -273,8 +273,10 @@ export default function FriendsList() {
           </div>
 
           {friends.length === 0 ? (
-            <div className="py-8 text-center">
-              <p className="text-5xl mb-4">🤷</p>
+            <div className="py-10 text-center">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center mb-4 shadow-inner">
+                <Users className="w-8 h-8 text-purple-500" strokeWidth={2.5} />
+              </div>
               <p className="text-slate-800 font-black text-lg mb-2">Belum ada kawan</p>
               <p className="text-slate-600 text-sm">Kongsi kod undangan anda untuk bermain bersama kawan-kawan!</p>
             </div>

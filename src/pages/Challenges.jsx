@@ -137,7 +137,9 @@ export default function Challenges() {
           className="mb-5 p-5 rounded-3xl flex items-center justify-between bg-white shadow-xl border border-white/60"
         >
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-3xl shadow-lg flex-shrink-0">⚡</div>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+              <Zap className="w-7 h-7 text-white" strokeWidth={2.5} fill="white" />
+            </div>
             <div>
               <h1 className="text-2xl font-black text-slate-800 leading-tight">Cabar Kawan</h1>
               <p className="text-slate-600 text-xs font-semibold mt-0.5">{challenges.length} cabaran aktif</p>
@@ -234,8 +236,10 @@ export default function Challenges() {
           </div>
 
           {challenges.length === 0 ? (
-            <div className="py-8 text-center">
-              <p className="text-5xl mb-4">⚡</p>
+            <div className="py-10 text-center">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-orange-100 to-pink-100 flex items-center justify-center mb-4 shadow-inner">
+                <Zap className="w-8 h-8 text-orange-500" strokeWidth={2.5} fill="rgb(249 115 22)" />
+              </div>
               <p className="text-slate-800 font-black text-lg mb-2">Belum ada cabaran</p>
               <p className="text-slate-600 text-sm">Tekan + untuk cabar kawan anda bermain!</p>
             </div>
