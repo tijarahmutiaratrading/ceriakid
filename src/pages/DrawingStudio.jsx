@@ -445,16 +445,16 @@ export default function DrawingStudio() {
     ctx.restore();
     ctx.fillStyle = '#fff9f0';
     ctx.fillRect(0, 0, w, h);
-    if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape, currentLetterIndex);
+    if (mode === 'trace' && selectedShape) drawTracingGuide(ctx, w, h, selectedShape, letterStrokeCounts);
     // NOTE: Line art coloring TIDAK dilukis pada canvas. Ia rendered sebagai
     // <img> overlay (pointer-events:none) di atas canvas — supaya pemadam
     // hanya buang warna user, tak terjejas line art.
-  }, [mode, selectedShape, currentLetterIndex]);
+  }, [mode, selectedShape, letterStrokeCounts]);
 
   // Workbook-style: render 1 row × LETTERS_PER_ROW letters dengan baseline guides
   // Slot 0 = solid example (contoh), slots 1..N = dotted for tracing
-  // activeIndex = letter slot anak tengah trace sekarang (highlighted)
-  const drawTracingGuide = (ctx, w, h, shape, activeIndex = 1) => {
+  // Anak bebas trace mana-mana slot — slot yang dah qualified akan jadi "done" (faded)
+  const drawTracingGuide = (ctx, w, h, shape, doneCounts = []) => {
     ctx.save();
 
     // Layout — 1 row of letters with workbook-style 4-line ruling
@@ -534,8 +534,8 @@ export default function DrawingStudio() {
       const cellTop = topY + letterH * 0.05;
 
       const isExample = i === 0;
-      const isActive = i === activeIndex;
-      const isDone = i < activeIndex && !isExample;
+      const isDone = !isExample && (doneCounts[i] || 0) >= 1;
+      const isActive = false; // tiada konsep slot aktif lagi — anak bebas pilih
 
       // Slot number badge (top-right corner)
       ctx.save();
@@ -1123,15 +1123,9 @@ export default function DrawingStudio() {
         // GUARD: slot 0 = contoh (jangan ambil kira)
         if (slotIdx === 0) return;
 
-        // GUARD: stroke kena dalam slot aktif sahaja (tak boleh skip slot)
-        if (slotIdx !== currentLetterIndex) return;
-
-        // COVERAGE CHECK — strok mesti betul-betul ikut bentuk huruf.
-        // Kumpul SEMUA points dari semua strok dalam slot ni (anak boleh angkat
-        // pen berkali-kali untuk huruf macam A, E, F, H, T). Bila gabungan
-        // strok dah cover huruf, baru kira siap.
+        // Anak bebas trace mana-mana slot (1..N) ikut suka — tiada paksaan urutan.
+        // Kumpul SEMUA points dari semua strok dalam slot ni untuk coverage check.
         const slotStrokes = [...userStrokes, currentStroke].filter((stroke) => {
-          // Strok dalam slot aktif sahaja
           if (!stroke || stroke.length < 2) return false;
           const votes = stroke.reduce((acc, p) => {
             const idx = Math.max(0, Math.min(LETTERS_PER_ROW - 1, Math.floor((p.x - sideMargin) / slotW)));
@@ -1156,56 +1150,37 @@ export default function DrawingStudio() {
         const bboxH = maxY - minY;
         const bboxW = maxX - minX;
 
-        // Anggaran saiz huruf sebenar dalam cell — longgar sikit supaya
-        // anak tak frust. Kalau cover ~half huruf dah cukup untuk advance.
         const letterCellW = slotW * 0.78;
         const expectedH = letterH * 0.78;
-
-        // Huruf nipis (I, J, 1) tak perlukan lebar penuh
         const isThinChar = ['I', 'J', '1', 'i', 'j', 'l'].includes(selectedShape.letter);
         const minWidth = isThinChar ? letterCellW * 0.08 : letterCellW * 0.35;
         const minHeight = expectedH * 0.5;
         const minPath = expectedH * 0.7;
 
-        if (bboxH < minHeight || bboxW < minWidth || totalDist < minPath) {
-          // Belum cukup cover huruf — biar anak sambung trace, jangan advance lagi
-          return;
-        }
+        // Kira slot ni dah qualified atau belum (coverage cukup)
+        const slotQualified = bboxH >= minHeight && bboxW >= minWidth && totalDist >= minPath;
 
-        // 1 cubaan lengkap = 1 slot siap
-        const requiredStrokes = 1;
-
-        // Increment stroke count for active slot
+        // Update slot count: 1 kalau qualified, 0 kalau tak
         const newCounts = [...letterStrokeCounts];
-        newCounts[slotIdx] = (newCounts[slotIdx] || 0) + 1;
+        newCounts[slotIdx] = slotQualified ? 1 : (newCounts[slotIdx] || 0);
         setLetterStrokeCounts(newCounts);
 
-        if (newCounts[slotIdx] >= requiredStrokes) {
-          const isLastSlot = currentLetterIndex >= LETTERS_PER_ROW - 1;
-          // Hanya beri reward (mastery + confetti + sound) bila SEMUA huruf
-          // dalam baris dah siap, bukan setiap slot. Slot tengah cuma advance.
-          if (isLastSlot) {
-            saveMasteryRow(selectedShape.label);
-            setMastery(loadMastery());
-            playStamp();
-          }
-          if (isLastSlot) {
-            // Whole row done — calculate real accuracy from total strokes vs ideal
-            const totalStrokes = newCounts.reduce((s, n) => s + n, 0);
-            const idealStrokes = requiredStrokes * (LETTERS_PER_ROW - 1); // slot 1..N
-            const ratio = Math.min(1, idealStrokes / Math.max(totalStrokes, 1));
-            const acc = Math.max(75, Math.min(99, Math.round(ratio * 99)));
-            setTracingAccuracy(acc);
-            setTracingDone(true);
-            setCelebration({ open: true, accuracy: acc });
-            confetti({ particleCount: 160, spread: 80, origin: { y: 0.6 }, colors: ['#fbbf24', '#8b5cf6', '#ec4899', '#f97316', '#22c55e'] });
-            playTadaa();
-          } else {
-            // Advance to next slot after short delay
-            setTimeout(() => {
-              setCurrentLetterIndex(idx => idx + 1);
-            }, 700);
-          }
+        if (!slotQualified) return;
+
+        // Check kalau SEMUA slot trace (1..N-1) dah qualified
+        const allDone = Array.from({ length: LETTERS_PER_ROW - 1 }, (_, i) => i + 1)
+          .every((idx) => newCounts[idx] >= 1);
+
+        if (allDone && !tracingDone) {
+          saveMasteryRow(selectedShape.label);
+          setMastery(loadMastery());
+          playStamp();
+          const acc = 95;
+          setTracingAccuracy(acc);
+          setTracingDone(true);
+          setCelebration({ open: true, accuracy: acc });
+          confetti({ particleCount: 160, spread: 80, origin: { y: 0.6 }, colors: ['#fbbf24', '#8b5cf6', '#ec4899', '#f97316', '#22c55e'] });
+          playTadaa();
         }
       }
     }
@@ -1362,7 +1337,7 @@ export default function DrawingStudio() {
                   {mode === 'trace' && (
                     <>
                       <div className="px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-slate-900/85 backdrop-blur-md text-white shadow-sm">
-                        {currentLetterIndex}/{LETTERS_PER_ROW - 1}
+                        {letterStrokeCounts.slice(1).filter(c => c >= 1).length}/{LETTERS_PER_ROW - 1}
                       </div>
                       <div className="hidden sm:flex px-3 py-1.5 rounded-full text-xs font-semibold items-center gap-1.5 bg-white/90 backdrop-blur-md text-slate-700 ring-1 ring-black/5 shadow-sm">
                         <span className="text-yellow-500">★</span> Contoh
@@ -1526,24 +1501,22 @@ export default function DrawingStudio() {
                     })}
                   </div>
 
-                  {/* Workbook row progress — anak trace 4 huruf (slot 1-4), slot 0 = contoh */}
+                  {/* Workbook row progress — anak bebas trace mana-mana slot (1-4), slot 0 = contoh */}
                   <div className="mt-4 rounded-2xl p-3 bg-gradient-to-br from-purple-50 to-blue-50 ring-1 ring-purple-100">
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-xs font-bold text-purple-900">📖 Buku Latihan</p>
-                      <p className="text-xs font-black text-purple-700">{Math.max(0, currentLetterIndex - 1)}/{LETTERS_PER_ROW - 1} siap</p>
+                      <p className="text-xs font-black text-purple-700">{letterStrokeCounts.slice(1).filter(c => c >= 1).length}/{LETTERS_PER_ROW - 1} siap</p>
                     </div>
                     <div className="flex gap-1.5">
                       {Array.from({ length: LETTERS_PER_ROW }).map((_, i) => {
                         const isExample = i === 0;
-                        const isDone = !isExample && i < currentLetterIndex;
-                        const isActive = !isExample && i === currentLetterIndex;
+                        const isDone = !isExample && (letterStrokeCounts[i] || 0) >= 1;
                         return (
                           <div
                             key={i}
                             className={`flex-1 h-7 rounded-md flex items-center justify-center text-[10px] font-black transition-all ${
                               isExample ? 'bg-green-500 text-white' :
                               isDone ? 'bg-green-400 text-white' :
-                              isActive ? 'bg-blue-500 text-white animate-pulse' :
                               'bg-slate-200 text-slate-500'
                             }`}
                           >
@@ -1553,18 +1526,18 @@ export default function DrawingStudio() {
                       })}
                     </div>
                     <p className="text-[10px] font-medium text-slate-600 mt-2">
-                      ★ = contoh (jangan trace) &nbsp;•&nbsp; Trace huruf bertanda 🔵 dari kiri ke kanan
+                      ★ = contoh (jangan trace) &nbsp;•&nbsp; Trace mana-mana huruf, ikut suka 😊
                     </p>
                   </div>
 
                   <div className="mt-3 rounded-2xl p-3 bg-slate-50 ring-1 ring-black/5">
                     {tracingDone ? (
                       <div className="text-center">
-                        <p className="font-bold text-base text-slate-900">🌟 Satu baris siap! Ketepatan {tracingAccuracy}%</p>
+                        <p className="font-bold text-base text-slate-900">🌟 Semua huruf siap! Ketepatan {tracingAccuracy}%</p>
                         <AppleButton onClick={resetTracing} variant="accent" className="mt-2 !px-4 !py-1.5 !text-xs">Latih Sekali Lagi</AppleButton>
                       </div>
                     ) : (
-                      <p className="text-xs font-medium text-slate-600">📝 Trace huruf <span className="font-black text-blue-600">#{currentLetterIndex}</span> sekarang. Tinggal {LETTERS_PER_ROW - currentLetterIndex} huruf lagi!</p>
+                      <p className="text-xs font-medium text-slate-600">📝 Trace ke-4 huruf di kanvas. Bintang keluar bila semua siap! 🌟</p>
                     )}
                   </div>
                 </ApplePanel>
