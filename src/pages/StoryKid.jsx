@@ -201,11 +201,20 @@ export default function StoryKid() {
                   <motion.button
                     key={item.id || idx}
                     initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.04 }}
+                    animate={{
+                      opacity: 1,
+                      y: [0, -6, 0, 4, 0],
+                      rotate: [0, -0.8, 0, 0.8, 0],
+                    }}
+                    transition={{
+                      opacity: { delay: idx * 0.04, duration: 0.4 },
+                      y: { duration: 4 + (idx % 3) * 0.5, repeat: Infinity, ease: 'easeInOut', delay: idx * 0.25 },
+                      rotate: { duration: 5 + (idx % 3) * 0.4, repeat: Infinity, ease: 'easeInOut', delay: idx * 0.3 },
+                    }}
                     whileTap={{ scale: 0.97 }}
+                    whileHover={{ scale: 1.03, y: -8 }}
                     onClick={() => { setSelected(idx); resetStory(); }}
-                    className="group text-left rounded-[2rem] bg-white/90 backdrop-blur-xl ring-1 ring-black/5 p-3 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all overflow-hidden"
+                    className="group text-left rounded-[2rem] bg-white/90 backdrop-blur-xl ring-1 ring-black/5 p-3 shadow-lg hover:shadow-2xl transition-shadow overflow-hidden"
                   >
                     <div className="h-52 rounded-[1.5rem] overflow-hidden mb-4 ring-1 ring-black/5 bg-slate-100">
                       {item.cover ? (
