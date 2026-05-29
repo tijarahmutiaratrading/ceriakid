@@ -145,7 +145,19 @@ export default function FriendsList() {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
+    <div
+      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
+      style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)' }}
+    >
+      {/* Floating decorations — CeriaKid vibe */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 right-8 text-4xl opacity-40 animate-pulse">🌈</div>
+        <div className="absolute top-40 left-6 text-3xl opacity-30">☁️</div>
+        <div className="absolute top-1/3 right-1/4 text-2xl opacity-25">⭐</div>
+        <div className="absolute bottom-1/3 left-8 text-3xl opacity-30">💖</div>
+        <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
+      </div>
+
       <AppHeader showBack={true} backTo="/dashboard" />
 
       <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-4 overflow-x-hidden">
@@ -154,13 +166,12 @@ export default function FriendsList() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-5 p-5 rounded-3xl flex items-center gap-4"
-          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+          className="mb-5 p-5 rounded-3xl flex items-center gap-4 bg-white shadow-xl border border-white/60"
         >
-          <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl shadow-inner flex-shrink-0 ring-1 ring-white/20">👥</div>
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-3xl shadow-lg flex-shrink-0">👥</div>
           <div>
-            <h1 className="text-2xl font-black text-white leading-tight drop-shadow">Kawan-Kawan</h1>
-            <p className="text-white/80 text-xs font-semibold mt-0.5">{friends.length} kawan berdaftar</p>
+            <h1 className="text-2xl font-black text-slate-800 leading-tight">Kawan-Kawan</h1>
+            <p className="text-slate-600 text-xs font-semibold mt-0.5">{friends.length} kawan berdaftar</p>
           </div>
         </motion.div>
 
@@ -169,21 +180,20 @@ export default function FriendsList() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mb-5 rounded-3xl p-5"
-          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+          className="mb-5 rounded-3xl p-5 bg-white shadow-xl border border-white/60"
         >
-          <p className="text-white/90 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
+          <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
 
           {/* Code Display */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex-1 rounded-2xl py-4 text-center" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)' }}>
-              <p className="text-4xl font-black text-white tracking-widest drop-shadow">{inviteCode}</p>
+            <div className="flex-1 rounded-2xl py-4 text-center bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200">
+              <p className="text-4xl font-black text-purple-700 tracking-widest">{inviteCode}</p>
             </div>
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={copyCode}
-              className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${
-                copied ? 'bg-green-500' : 'bg-white/25 hover:bg-white/35'
+              className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all shadow-lg ${
+                copied ? 'bg-green-500' : 'bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
               }`}
             >
               {copied
@@ -198,7 +208,7 @@ export default function FriendsList() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
             onClick={shareInviteCode}
-            className="w-full bg-white text-purple-600 rounded-2xl font-black py-3.5 flex items-center justify-center gap-2 shadow-lg hover:bg-white/90 transition-all"
+            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-black py-3.5 flex items-center justify-center gap-2 shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all"
           >
             <Share2 className="w-4 h-4" />
             Kongsi via WhatsApp
@@ -210,10 +220,9 @@ export default function FriendsList() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12 }}
-          className="mb-5 rounded-3xl p-5"
-          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+          className="mb-5 rounded-3xl p-5 bg-white shadow-xl border border-white/60"
         >
-          <p className="text-white/90 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
+          <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
           <div className="flex gap-2">
             <input
               type="text"
@@ -221,13 +230,13 @@ export default function FriendsList() {
               value={inputCode}
               onChange={e => setInputCode(e.target.value.toUpperCase())}
               maxLength={6}
-              className="flex-1 rounded-2xl px-4 py-3 bg-white/10 text-white placeholder-white/50 font-black text-lg tracking-widest border border-white/25 outline-none focus:border-white/60 uppercase"
+              className="flex-1 rounded-2xl px-4 py-3 bg-purple-50 text-slate-800 placeholder-slate-400 font-black text-lg tracking-widest border-2 border-purple-200 outline-none focus:border-purple-400 uppercase"
             />
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={addFriendByCode}
               disabled={addingFriend || inputCode.length < 4}
-              className="px-5 py-3 rounded-2xl bg-white text-purple-600 font-black shadow-lg disabled:opacity-50 transition-all"
+              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black shadow-lg disabled:opacity-50 transition-all"
             >
               {addingFriend ? '...' : 'Tambah'}
             </motion.button>
@@ -236,7 +245,7 @@ export default function FriendsList() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className={`mt-3 text-sm font-bold ${addMessage.ok ? 'text-green-300' : 'text-red-300'}`}
+              className={`mt-3 text-sm font-bold ${addMessage.ok ? 'text-green-600' : 'text-red-600'}`}
             >
               {addMessage.text}
             </motion.p>
@@ -249,16 +258,13 @@ export default function FriendsList() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <p className="text-white/90 text-xs font-black uppercase tracking-wider mb-3 px-1 drop-shadow">👤 Senarai Kawan</p>
+          <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-3 px-1">👤 Senarai Kawan</p>
 
           {friends.length === 0 ? (
-            <div
-              className="rounded-3xl p-10 text-center"
-              style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
-            >
+            <div className="rounded-3xl p-10 text-center bg-white shadow-xl border border-white/60">
               <p className="text-5xl mb-4">🤷</p>
-              <p className="text-white font-black text-lg mb-2 drop-shadow">Belum ada kawan</p>
-              <p className="text-white/80 text-sm">Kongsi kod undangan anda untuk bermain bersama kawan-kawan!</p>
+              <p className="text-slate-800 font-black text-lg mb-2">Belum ada kawan</p>
+              <p className="text-slate-600 text-sm">Kongsi kod undangan anda untuk bermain bersama kawan-kawan!</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -270,14 +276,13 @@ export default function FriendsList() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="rounded-2xl p-4 flex items-center justify-between"
-                    style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.78), rgba(88,28,135,0.7))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
+                    className="rounded-2xl p-4 flex items-center justify-between bg-white shadow-lg border border-white/60"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-2xl ring-1 ring-white/20">👤</div>
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-2xl shadow-md">👤</div>
                       <div>
-                        <p className="font-black text-white text-sm">{friend.friendEmail}</p>
-                        <p className="text-white/70 text-xs">
+                        <p className="font-black text-slate-800 text-sm">{friend.friendEmail}</p>
+                        <p className="text-slate-500 text-xs">
                           Ditambah {friend.acceptedDate ? new Date(friend.acceptedDate).toLocaleDateString('ms-MY') : '-'}
                         </p>
                       </div>
@@ -285,9 +290,9 @@ export default function FriendsList() {
                     <motion.button
                       whileTap={{ scale: 0.9 }}
                       onClick={() => removeFriend(friend.id)}
-                      className="w-10 h-10 rounded-xl flex items-center justify-center bg-red-500/20 hover:bg-red-500/40 transition-all"
+                      className="w-10 h-10 rounded-xl flex items-center justify-center bg-red-100 hover:bg-red-200 transition-all"
                     >
-                      <Trash2 className="w-4 h-4 text-red-300" />
+                      <Trash2 className="w-4 h-4 text-red-600" />
                     </motion.button>
                   </motion.div>
                 ))}
