@@ -99,6 +99,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           submenu: [
             { path: '/drawing', label: 'Studio Lukisan' },
             { path: '/story-kid', label: 'Story Kid' },
+            { path: '/friends', label: 'Kawan' },
+            { path: '/challenges', label: 'Cabaran' },
           ],
         },
         {
@@ -109,14 +111,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             { path: '/quiz-ai', label: 'Cikgu Rosie — Kuiz' },
             { path: '/story-generator', label: 'Cikgu Mira — Cerita' },
             { path: '/bbm-generator', label: 'Cikgu Daniel — BBM' },
-          ],
-        },
-        {
-          path: '/group-sosial',
-          label: 'Sosial',
-          submenu: [
-            { path: '/friends', label: 'Kawan' },
-            { path: '/challenges', label: 'Cabaran' },
           ],
         },
 

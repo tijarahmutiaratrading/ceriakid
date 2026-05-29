@@ -33,12 +33,6 @@ const NAV_GROUPS = [
     submenu: [
       { path: '/drawing', label: 'Studio Lukisan', icon: Palette },
       { path: '/story-kid', label: 'Story Kid', icon: BookOpen },
-    ],
-  },
-  {
-    key: 'sosial',
-    label: 'Sosial',
-    submenu: [
       { path: '/friends', label: 'Kawan', icon: UserPlus },
       { path: '/challenges', label: 'Cabaran', icon: Trophy },
     ],
