@@ -186,7 +186,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen font-nunito relative overflow-x-hidden bg-slate-950">
+    <div className="min-h-screen font-nunito relative overflow-hidden bg-slate-950">
       {/* Exit-intent popup — auto-trigger bila user nak tinggalkan page */}
       <ExitIntentPopup onCTA={scrollToPricing} />
       {/* Live social proof toast — rotate at bottom-left, desktop only */}
