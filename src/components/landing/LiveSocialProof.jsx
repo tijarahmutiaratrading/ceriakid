@@ -20,28 +20,29 @@ export default function LiveSocialProof() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Mula tunjuk selepas 8 saat (jangan terlalu agresif)
+    // Mula tunjuk selepas 8 saat
     const startTimer = setTimeout(() => setVisible(true), 8000);
     return () => clearTimeout(startTimer);
   }, []);
 
   useEffect(() => {
-    if (!visible) return;
-    const rotate = setInterval(() => {
-      setVisible(false);
-      setTimeout(() => {
+    // Cycle: 3 saat muncul → 3 saat hilang → muncul mesej baru → ulang
+    const interval = setInterval(() => {
+      setVisible((v) => {
+        if (v) return false; // sedang nampak → sembunyi
+        // sedang hilang → tukar mesej dan tunjuk
         setIdx((i) => (i + 1) % PROOF_MESSAGES.length);
-        setVisible(true);
-      }, 500);
-    }, 7000);
-    return () => clearInterval(rotate);
-  }, [visible, idx]);
+        return true;
+      });
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const msg = PROOF_MESSAGES[idx];
   const minsAgo = ((idx * 3) % 14) + 2; // 2-15 min ago, deterministic
 
   return (
-    <div className="fixed bottom-4 left-4 z-40 pointer-events-none hidden sm:block">
+    <div className="fixed bottom-4 left-4 right-4 sm:right-auto z-40 pointer-events-none">
       <AnimatePresence mode="wait">
         {visible && (
           <motion.div
