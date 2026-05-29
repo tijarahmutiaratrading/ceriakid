@@ -172,7 +172,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
   return (
     <>
       {/* Top Header */}
-       <nav className="sm:hidden fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
+       <nav className="sm:hidden fixed top-0 left-0 right-0 z-40 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
          <div
            className={`max-w-[52rem] mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] ring-1 ${isDarkPill ? 'ring-white/25 shadow-2xl shadow-slate-950/25' : 'pro-glass ring-white/20'}`}
            style={isDarkPill ? { background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.82))', backdropFilter: 'blur(22px)' } : undefined}
@@ -209,7 +209,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
 
 
 
-      {/* Overlay */}
+      {/* Overlay — mobile only */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -217,12 +217,12 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className={`fixed inset-0 z-40 ${isPlayingGame ? 'bg-slate-950/35 backdrop-blur-[1px]' : 'bg-black/10'}`}
+            className={`sm:hidden fixed inset-0 z-40 ${isPlayingGame ? 'bg-slate-950/35 backdrop-blur-[1px]' : 'bg-black/10'}`}
           />
         )}
       </AnimatePresence>
 
-      {/* Menu Drawer */}
+      {/* Menu Drawer — mobile only */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -230,7 +230,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -320, opacity: 0 }}
             transition={{ type: 'spring', damping: 22, stiffness: 280 }}
-            className="fixed left-3 right-3 sm:right-auto top-20 bottom-3 z-50 sm:w-80 flex flex-col rounded-3xl overflow-hidden shadow-2xl border border-white/20"
+            className="sm:hidden fixed left-3 right-3 top-20 bottom-3 z-50 flex flex-col rounded-3xl overflow-hidden shadow-2xl border border-white/20"
             style={{ background: 'linear-gradient(160deg, rgba(71,85,105,0.78), rgba(51,65,85,0.72), rgba(71,85,105,0.78))', backdropFilter: 'blur(28px) saturate(160%)', WebkitBackdropFilter: 'blur(28px) saturate(160%)' }}
           >
             {/* Header with User Profile */}
