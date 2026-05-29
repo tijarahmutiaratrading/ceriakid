@@ -40,6 +40,8 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
     audio.preload = 'auto';
     audioRef.current = audio;
 
+    let cleanupListeners = () => {};
+
     const tryPlay = async () => {
       try {
         await audio.play();
@@ -49,24 +51,27 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
         // Autoplay blocked — tunggu user interact
         setNeedsTap(true);
         const onInteract = async () => {
-          window.removeEventListener('click', onInteract);
-          window.removeEventListener('touchstart', onInteract);
-          window.removeEventListener('keydown', onInteract);
+          cleanupListeners();
           try {
             await audio.play();
             setIsPlaying(true);
             setNeedsTap(false);
           } catch (e2) { /* ignore */ }
         };
-        window.addEventListener('click', onInteract, { once: true });
-        window.addEventListener('touchstart', onInteract, { once: true });
+        // Guna `pointerdown` (universal: mouse, touch, pen) + `keydown` sebagai fallback
+        window.addEventListener('pointerdown', onInteract, { once: true });
         window.addEventListener('keydown', onInteract, { once: true });
+        cleanupListeners = () => {
+          window.removeEventListener('pointerdown', onInteract);
+          window.removeEventListener('keydown', onInteract);
+        };
       }
     };
 
     tryPlay();
 
     return () => {
+      cleanupListeners();
       audio.pause();
       audio.src = '';
       audioRef.current = null;
@@ -96,17 +101,21 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
 
   return (
     <motion.button
+      type="button"
       whileTap={{ scale: 0.92 }}
       onClick={toggleMute}
       animate={needsTap ? { scale: [1, 1.1, 1] } : {}}
       transition={needsTap ? { duration: 1.2, repeat: Infinity } : {}}
-      className="relative w-10 h-10 rounded-full text-slate-700 flex items-center justify-center ring-1 ring-black/5 hover:bg-white transition"
+      className="relative w-11 h-11 sm:w-10 sm:h-10 rounded-full text-slate-700 flex items-center justify-center ring-1 ring-black/5 hover:bg-white transition cursor-pointer"
       style={{
         background: 'rgba(255,255,255,0.95)',
         backdropFilter: 'blur(20px) saturate(180%)',
         WebkitBackdropFilter: 'blur(20px) saturate(180%)',
         boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent',
       }}
+      aria-label={muted ? 'Hidupkan muzik' : 'Senyapkan muzik'}
       title={needsTap ? 'Tap untuk hidupkan muzik' : (muted ? 'Hidupkan muzik' : 'Senyapkan muzik')}
     >
       {muted ? <VolumeX className="w-4 h-4" strokeWidth={2.5} /> : <Volume2 className="w-4 h-4" strokeWidth={2.5} />}
