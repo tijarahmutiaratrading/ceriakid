@@ -4,9 +4,8 @@ import { Download, Undo2, Trash2, Palette, Sparkles, Brush, Ruler } from 'lucide
 import CustomColorPicker from './CustomColorPicker';
 
 /**
- * Pro floating toolbar overlay untuk canvas Drawing Studio.
- * Style: dark glass macam Procreate/Figma — setiap button ada label + preview.
- * Satu tap = popover muncul TERUS ATAS button yang ditekan.
+ * Clean iOS Notes-style floating toolbar.
+ * Pure white pill, mono icons, even spacing, no labels under icons.
  */
 export default function CanvasFloatingToolbar({
   tools,
@@ -40,54 +39,23 @@ export default function CanvasFloatingToolbar({
   }, [openPopover]);
 
   const togglePopover = (key) => setOpenPopover((cur) => (cur === key ? null : key));
-
-  const colorSwatch = tool.id === 'eraser' ? '#fff9f0' : color;
   const isEraser = tool.id === 'eraser';
+  const colorSwatch = isEraser ? '#fff9f0' : color;
 
   return (
     <div ref={rootRef} className="relative max-w-[calc(100vw-1rem)]">
       <div
-        className="relative flex items-stretch gap-0 sm:gap-1 p-0.5 sm:p-1.5 rounded-[1.25rem] sm:rounded-[1.75rem] overflow-hidden"
+        className="relative flex items-center gap-1 px-2 py-1.5 rounded-full"
         style={{
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.5) 45%, rgba(255,255,255,0.35) 100%)',
-          backdropFilter: 'blur(32px) saturate(220%)',
-          WebkitBackdropFilter: 'blur(32px) saturate(220%)',
-          boxShadow: '0 24px 60px rgba(15,23,42,0.22), 0 8px 20px rgba(15,23,42,0.1), 0 2px 0 rgba(255,255,255,0.95) inset, 0 -1px 0 rgba(15,23,42,0.04) inset, 0 0 0 1px rgba(255,255,255,0.7)',
-          border: '1px solid rgba(255,255,255,0.6)',
+          background: '#ffffff',
+          boxShadow: '0 8px 24px rgba(15,23,42,0.12), 0 2px 6px rgba(15,23,42,0.06), 0 0 0 0.5px rgba(15,23,42,0.06)',
         }}
       >
-        {/* Glossy top highlight */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-[1.75rem]"
-          style={{
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.1) 60%, transparent 100%)',
-          }}
-        />
-        {/* Specular sheen across the top */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-0 left-[8%] right-[8%] h-px"
-          style={{
-            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.95) 50%, transparent 100%)',
-          }}
-        />
-        {/* Subtle bottom inner shadow for depth */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 rounded-b-[1.75rem]"
-          style={{
-            background: 'linear-gradient(0deg, rgba(15,23,42,0.06) 0%, transparent 100%)',
-          }}
-        />
         {/* TOOL */}
-        <div className="relative z-10 flex items-stretch gap-0 sm:gap-1 w-full">
-        <ProToolButton
+        <IconButton
           active={openPopover === 'tool'}
-          isActive={!stickerMode}
           onClick={() => togglePopover('tool')}
           label={tool.label}
-          icon={<Brush className="w-3 h-3" />}
           popoverOpen={openPopover === 'tool'}
           popover={
             <Popover wide>
@@ -100,7 +68,7 @@ export default function CanvasFloatingToolbar({
                       key={t.id}
                       type="button"
                       onClick={() => { onToolChange(t); setOpenPopover(null); }}
-                      className={`relative aspect-square rounded-2xl flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 transition ${active ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg scale-105' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:scale-105'}`}
+                      className={`relative aspect-square rounded-2xl flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 transition ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
                       title={t.hint}
                     >
                       <span className="text-2xl leading-none">{t.emoji}</span>
@@ -113,18 +81,14 @@ export default function CanvasFloatingToolbar({
             </Popover>
           }
         >
-          <div className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
-            <span className="text-sm sm:text-lg leading-none">{tool.emoji}</span>
-          </div>
-        </ProToolButton>
+          <span className="text-lg leading-none">{tool.emoji}</span>
+        </IconButton>
 
         {/* SIZE */}
-        <ProToolButton
+        <IconButton
           active={openPopover === 'size'}
-          isActive
           onClick={() => togglePopover('size')}
           label={brushSize.label}
-          icon={<Ruler className="w-3 h-3" />}
           popoverOpen={openPopover === 'size'}
           popover={
             <Popover>
@@ -137,7 +101,7 @@ export default function CanvasFloatingToolbar({
                       key={s.id}
                       type="button"
                       onClick={() => { onSizeChange(s); setOpenPopover(null); }}
-                      className={`flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl transition ${active ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+                      className={`flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl transition ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
                     >
                       <span className="rounded-full" style={{ width: s.dot, height: s.dot, backgroundColor: active ? '#ffffff' : '#475569' }} />
                       <span className="text-[10px] font-bold">{s.label}</span>
@@ -148,19 +112,15 @@ export default function CanvasFloatingToolbar({
             </Popover>
           }
         >
-          <div className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
-            <span className="inline-block rounded-full bg-slate-800" style={{ width: Math.min(brushSize.dot, 12), height: Math.min(brushSize.dot, 12) }} />
-          </div>
-        </ProToolButton>
+          <span className="inline-block rounded-full bg-slate-800" style={{ width: Math.min(brushSize.dot, 14), height: Math.min(brushSize.dot, 14) }} />
+        </IconButton>
 
         {/* COLOR */}
         {!isEraser && (
-          <ProToolButton
+          <IconButton
             active={openPopover === 'color'}
-            isActive
             onClick={() => togglePopover('color')}
             label="Warna"
-            icon={<Palette className="w-3 h-3" />}
             popoverOpen={openPopover === 'color'}
             popover={
               <Popover>
@@ -177,7 +137,7 @@ export default function CanvasFloatingToolbar({
                         style={{
                           backgroundColor: c,
                           boxShadow: active
-                            ? '0 0 0 2.5px #ffffff, 0 0 0 5px #8b5cf6, 0 4px 12px rgba(139,92,246,0.4)'
+                            ? '0 0 0 2.5px #ffffff, 0 0 0 5px #0f172a, 0 4px 12px rgba(15,23,42,0.3)'
                             : '0 1px 3px rgba(0,0,0,0.12), inset 0 -1px 2px rgba(0,0,0,0.1)',
                         }}
                         aria-label={`Warna ${c}`}
@@ -191,24 +151,22 @@ export default function CanvasFloatingToolbar({
               </Popover>
             }
           >
-            <div
-              className="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-xl ring-2 ring-white/90 shadow-md"
+            <span
+              className="w-5 h-5 rounded-full"
               style={{
                 backgroundColor: colorSwatch,
-                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.12), 0 2px 4px rgba(15,23,42,0.15)',
+                boxShadow: 'inset 0 0 0 1.5px rgba(255,255,255,0.95), 0 0 0 1px rgba(15,23,42,0.15)',
               }}
             />
-          </ProToolButton>
+          </IconButton>
         )}
 
         {/* STICKER */}
         {showStickers && (
-          <ProToolButton
+          <IconButton
             active={openPopover === 'sticker' || !!stickerMode}
-            isActive={!!stickerMode}
             onClick={() => togglePopover('sticker')}
-            label={stickerMode ? 'Aktif' : 'Sticker'}
-            icon={<Sparkles className="w-3 h-3" />}
+            label="Sticker"
             popoverOpen={openPopover === 'sticker'}
             popover={
               <Popover>
@@ -222,7 +180,7 @@ export default function CanvasFloatingToolbar({
                         key={s}
                         type="button"
                         onClick={() => { onStickerToggle(s); setOpenPopover(null); }}
-                        className={`aspect-square rounded-2xl text-2xl transition flex items-center justify-center hover:scale-110 ${active ? 'bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg scale-110' : 'bg-slate-100 hover:bg-slate-200'}`}
+                        className={`aspect-square rounded-2xl text-2xl transition flex items-center justify-center hover:scale-110 ${active ? 'bg-slate-900 shadow-md scale-110' : 'bg-slate-100 hover:bg-slate-200'}`}
                       >
                         {s}
                       </button>
@@ -232,68 +190,44 @@ export default function CanvasFloatingToolbar({
               </Popover>
             }
           >
-            <div className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
-              <span className="text-sm sm:text-lg leading-none">{stickerMode || '✨'}</span>
-            </div>
-          </ProToolButton>
+            <span className="text-lg leading-none">{stickerMode || '✨'}</span>
+          </IconButton>
         )}
 
         {/* DIVIDER */}
-        <div className="self-center w-px h-6 sm:h-8 bg-slate-900/10 mx-0 sm:mx-0.5" />
+        <div className="w-px h-6 bg-slate-200 mx-0.5" />
 
         {/* ACTIONS */}
-        <ActionButton onClick={onUndo} disabled={!canUndo} label="Undo">
-          <Undo2 className="w-4 h-4" />
-        </ActionButton>
-        <ActionButton onClick={onClear} label="Kosong" danger>
-          <Trash2 className="w-4 h-4" />
-        </ActionButton>
-        <ActionButton onClick={onSave} label="Simpan">
-          <Download className="w-4 h-4" />
-        </ActionButton>
-        </div>
+        <IconButton onClick={onUndo} disabled={!canUndo} label="Undo">
+          <Undo2 className="w-[18px] h-[18px] text-slate-700" strokeWidth={2} />
+        </IconButton>
+        <IconButton onClick={onClear} label="Kosong" danger>
+          <Trash2 className="w-[18px] h-[18px] text-slate-700" strokeWidth={2} />
+        </IconButton>
+        <IconButton onClick={onSave} label="Simpan">
+          <Download className="w-[18px] h-[18px] text-slate-700" strokeWidth={2} />
+        </IconButton>
       </div>
     </div>
   );
 }
 
-function ProToolButton({ active, isActive, onClick, label, icon, children, popover, popoverOpen }) {
+function IconButton({ active, onClick, label, disabled, danger, children, popover, popoverOpen }) {
   return (
     <div className="relative">
       <button
         type="button"
         onClick={onClick}
+        disabled={disabled}
         title={label}
-        className={`group relative flex flex-col items-center justify-center gap-0.5 w-9 sm:w-16 h-9 sm:h-12 rounded-lg sm:rounded-2xl transition ${
-          active ? 'bg-white/70 ring-1 ring-slate-900/10 shadow-sm' : 'hover:bg-white/50'
+        className={`flex items-center justify-center w-10 h-10 rounded-full transition disabled:opacity-25 disabled:cursor-not-allowed ${
+          active ? 'bg-slate-100' : danger ? 'hover:bg-red-50' : 'hover:bg-slate-100'
         }`}
       >
         {children}
-        {/* Label visible on sm+ only — mobile guna icon je supaya tak terpotong */}
-        <span className={`hidden sm:flex items-center gap-0.5 text-[9px] font-bold leading-none mt-0.5 ${isActive ? 'text-slate-900' : 'text-slate-500'}`}>
-          <span className="opacity-70">{icon}</span>
-          <span className="truncate max-w-[3rem]">{label}</span>
-        </span>
       </button>
       <AnimatePresence>{popoverOpen && popover}</AnimatePresence>
     </div>
-  );
-}
-
-function ActionButton({ onClick, disabled, label, danger, children }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      title={label}
-      className={`flex flex-col items-center justify-center gap-0.5 w-8 sm:w-14 h-9 sm:h-12 rounded-lg sm:rounded-2xl transition disabled:opacity-25 disabled:cursor-not-allowed ${
-        danger ? 'text-red-500 hover:bg-red-500/10 hover:text-red-600' : 'text-slate-700 hover:bg-white/50 hover:text-slate-900'
-      }`}
-    >
-      {children}
-      <span className="hidden sm:inline text-[9px] font-bold leading-none">{label}</span>
-    </button>
   );
 }
 
@@ -321,7 +255,6 @@ function Popover({ children, wide = false }) {
       }}
     >
       {children}
-      {/* Arrow */}
       <div className="absolute left-1/2 -translate-x-1/2 -bottom-1.5 w-3 h-3 rotate-45 bg-white" style={{ boxShadow: '2px 2px 4px rgba(0,0,0,0.05)' }} />
     </motion.div>
   );
