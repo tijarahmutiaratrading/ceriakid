@@ -80,7 +80,21 @@ export default function ClientDashboard() {
   const tier = TIER_CONFIG[userTier] || TIER_CONFIG.free;
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
+    <div
+      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative"
+      style={{
+        background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)',
+      }}
+    >
+      {/* Floating decorations — CeriaKid vibe */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 right-8 text-4xl opacity-40 animate-pulse">🌈</div>
+        <div className="absolute top-40 left-6 text-3xl opacity-30">☁️</div>
+        <div className="absolute top-1/3 right-1/4 text-2xl opacity-25">⭐</div>
+        <div className="absolute bottom-1/3 left-8 text-3xl opacity-30">💖</div>
+        <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
+      </div>
+
       <AppHeader />
 
       <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-4 space-y-5">
