@@ -135,10 +135,13 @@ export default function FriendsList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center font-nunito">
+      <div
+        className="min-h-screen flex items-center justify-center font-nunito -mt-16 sm:-mt-20 pt-16 sm:pt-20"
+        style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)' }}
+      >
         <div className="text-center">
           <div className="text-6xl animate-bounce mb-4">👥</div>
-          <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );
