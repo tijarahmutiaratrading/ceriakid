@@ -458,8 +458,8 @@ export default function CustomerDatabaseTable() {
         return {
           id: sub.id,
           email: sub.email,
-          fullName: u?.displayName || u?.full_name || '',
-          phone: u?.phone || '',
+          fullName: u?.data?.displayName || u?.displayName || u?.full_name || '',
+          phone: u?.data?.phone || u?.phone || '',
           tier: sub.tier || 'free',
           status: sub.status || 'active',
           createdDate: sub.created_date,
