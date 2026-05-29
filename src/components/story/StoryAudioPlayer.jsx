@@ -86,7 +86,26 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
     }
   }, [muted]);
 
-  const toggleMute = async () => {
+  const toggleMute = async (e) => {
+    // Stop the event bubbling up to canvas/parent pointer handlers (drawing canvas)
+    // and prevent the global autoplay-unlock pointerdown from firing twice.
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    // If audio context is still locked (autoplay blocked), the first tap should
+    // start playback instead of just toggling mute state.
+    if (needsTap && audioRef.current) {
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+        setNeedsTap(false);
+        setMuted(false);
+      } catch (err) { /* ignore */ }
+      return;
+    }
+
     const next = !muted;
     setMuted(next);
 
@@ -95,7 +114,7 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
       try {
         await audioRef.current.play();
         setIsPlaying(true);
-      } catch (e) { /* ignore */ }
+      } catch (err) { /* ignore */ }
     }
   };
 
@@ -103,10 +122,10 @@ export default function StoryAudioPlayer({ autoPlay = true }) {
     <motion.button
       type="button"
       whileTap={{ scale: 0.92 }}
-      onClick={toggleMute}
+      onPointerDown={toggleMute}
       animate={needsTap ? { scale: [1, 1.1, 1] } : {}}
       transition={needsTap ? { duration: 1.2, repeat: Infinity } : {}}
-      className="relative w-11 h-11 sm:w-10 sm:h-10 rounded-full text-slate-700 flex items-center justify-center ring-1 ring-black/5 hover:bg-white transition cursor-pointer"
+      className="relative w-11 h-11 sm:w-10 sm:h-10 rounded-full text-slate-700 flex items-center justify-center ring-1 ring-black/5 hover:bg-white transition cursor-pointer touch-manipulation select-none"
       style={{
         background: 'rgba(255,255,255,0.95)',
         backdropFilter: 'blur(20px) saturate(180%)',
