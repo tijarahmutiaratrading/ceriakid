@@ -1,10 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Mail, MessageCircle } from 'lucide-react';
+import AppHeader from '@/components/AppHeader';
+import UserTopHeader from '@/components/UserTopHeader';
 
 export default function Contact() {
   return (
-    <div className="min-h-screen py-12 px-4">
+    <div
+      className="min-h-screen px-4 pt-20 sm:pt-24 pb-12"
+      style={{
+        background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)',
+      }}
+    >
+      <AppHeader />
+      <UserTopHeader />
       <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 md:p-10 shadow-2xl">
         <Link to="/" className="inline-flex items-center gap-2 text-game-purple font-bold mb-6 hover:underline">
           <ArrowLeft className="w-4 h-4" /> Kembali ke Laman Utama
