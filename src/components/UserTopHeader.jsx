@@ -62,13 +62,8 @@ export default function UserTopHeader() {
   };
 
   // Auto-detect halaman background gelap — pill jadi dark glass + text putih
-  const DARK_BG_PATHS = ['/games-hub', '/mini-games', '/story-kid', '/play/', '/parent-dashboard', '/children-profiles'];
+  const DARK_BG_PATHS = ['/games-hub', '/mini-games', '/parent-dashboard', '/children-profiles'];
   const isDarkBg = DARK_BG_PATHS.some(p => location.pathname.startsWith(p));
-
-  // Immersive pages — pages dengan own back-button / fullscreen experience (Story Kid, Drawing Studio).
-  // Sembunyikan top nav supaya tak overlap content & beri experience lebih fokus.
-  const HIDDEN_PATHS = ['/story-kid', '/drawing'];
-  const isHidden = HIDDEN_PATHS.some(p => location.pathname.startsWith(p));
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -85,8 +80,6 @@ export default function UserTopHeader() {
     setOpenMenu(null);
     setUserMenuOpen(false);
   }, [location.pathname]);
-
-  if (isHidden) return null;
 
   return (
     <header
