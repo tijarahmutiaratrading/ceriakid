@@ -39,7 +39,12 @@ export default function PersonalInfoCard({ user }) {
   return (
     <div
       className="rounded-3xl p-5 space-y-4"
-      style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.2)' }}
+      style={{
+        background: 'rgba(255,255,255,0.92)',
+        backdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255,255,255,0.9)',
+        boxShadow: '0 8px 24px rgba(251, 207, 232, 0.25)',
+      }}
     >
       <SectionCardHeader
         icon={User}
@@ -51,7 +56,7 @@ export default function PersonalInfoCard({ user }) {
       <div className="space-y-4">
         {/* Nama Penuh */}
         <div>
-          <label className="flex items-center gap-1.5 text-white/80 text-xs font-black uppercase tracking-wider mb-2">
+          <label className="flex items-center gap-1.5 text-slate-600 text-xs font-black uppercase tracking-wider mb-2">
             <User className="w-3.5 h-3.5" /> Nama Penuh
           </label>
           <input
@@ -59,13 +64,13 @@ export default function PersonalInfoCard({ user }) {
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             placeholder="Masukkan nama penuh"
-            className="w-full px-4 py-3 rounded-2xl bg-white/95 text-slate-900 font-bold text-sm placeholder-slate-400 border-2 border-transparent focus:border-orange-400 focus:outline-none transition-all"
+            className="w-full px-4 py-3 rounded-2xl bg-pink-50/60 text-slate-900 font-bold text-sm placeholder-slate-400 border-2 border-pink-100 focus:border-pink-400 focus:bg-white focus:outline-none transition-all"
           />
         </div>
 
         {/* No. Telefon */}
         <div>
-          <label className="flex items-center gap-1.5 text-white/80 text-xs font-black uppercase tracking-wider mb-2">
+          <label className="flex items-center gap-1.5 text-slate-600 text-xs font-black uppercase tracking-wider mb-2">
             <Phone className="w-3.5 h-3.5" /> No. Telefon
           </label>
           <input
@@ -73,26 +78,26 @@ export default function PersonalInfoCard({ user }) {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="Contoh: 0123456789"
-            className="w-full px-4 py-3 rounded-2xl bg-white/95 text-slate-900 font-bold text-sm placeholder-slate-400 border-2 border-transparent focus:border-orange-400 focus:outline-none transition-all"
+            className="w-full px-4 py-3 rounded-2xl bg-pink-50/60 text-slate-900 font-bold text-sm placeholder-slate-400 border-2 border-pink-100 focus:border-pink-400 focus:bg-white focus:outline-none transition-all"
           />
         </div>
 
         {/* Email (read-only) */}
         <div>
-          <label className="flex items-center gap-1.5 text-white/80 text-xs font-black uppercase tracking-wider mb-2">
+          <label className="flex items-center gap-1.5 text-slate-600 text-xs font-black uppercase tracking-wider mb-2">
             <Mail className="w-3.5 h-3.5" /> E-mel
-            <span className="text-white/50 text-[10px] font-bold normal-case tracking-normal">(tidak boleh diubah)</span>
+            <span className="text-slate-400 text-[10px] font-bold normal-case tracking-normal">(tidak boleh diubah)</span>
           </label>
           <input
             type="email"
             value={user?.email || ''}
             disabled
-            className="w-full px-4 py-3 rounded-2xl bg-white/30 text-white/70 font-bold text-sm cursor-not-allowed"
+            className="w-full px-4 py-3 rounded-2xl bg-slate-100 text-slate-500 font-bold text-sm cursor-not-allowed border-2 border-slate-200"
           />
         </div>
 
         {error && (
-          <p className="text-red-200 text-xs font-bold bg-red-500/20 px-3 py-2 rounded-xl">{error}</p>
+          <p className="text-red-700 text-xs font-bold bg-red-100 border border-red-200 px-3 py-2 rounded-xl">{error}</p>
         )}
 
         {/* Save button */}

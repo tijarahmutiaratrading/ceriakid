@@ -138,35 +138,43 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
   };
 
   return (
-    <div className="rounded-3xl p-5 space-y-4" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+    <div
+      className="rounded-3xl p-5 space-y-4"
+      style={{
+        background: 'rgba(255,255,255,0.92)',
+        backdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255,255,255,0.9)',
+        boxShadow: '0 8px 24px rgba(251, 207, 232, 0.25)',
+      }}
+    >
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg flex-shrink-0">
           <ArrowUp className="w-5 h-5 text-white" strokeWidth={3} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-white font-black text-base leading-tight">Langganan & Pakej</p>
-          <p className="text-white/70 text-xs font-semibold">
-            Pakej anda sekarang: <span className="text-yellow-300 font-black">{currentLabel}</span>
+          <p className="text-slate-800 font-black text-base leading-tight">Langganan & Pakej</p>
+          <p className="text-slate-600 text-xs font-semibold">
+            Pakej anda sekarang: <span className="text-orange-600 font-black">{currentLabel}</span>
           </p>
         </div>
       </div>
 
       {/* Status langganan semasa — papar untuk semua kecuali free tanpa tarikh */}
       {(subscription?.tier && subscription.tier !== 'free') || isExpired ? (
-        <div className={`rounded-2xl p-3 border ${isExpired ? 'bg-red-500/15 border-red-300/40' : 'bg-white/10 border-white/20'}`}>
+        <div className={`rounded-2xl p-3 border ${isExpired ? 'bg-red-50 border-red-200' : 'bg-purple-50 border-purple-100'}`}>
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2">
-              {isExpired ? <AlertCircle className="w-4 h-4 text-red-300" /> : <CheckCircle2 className="w-4 h-4 text-green-300" strokeWidth={3} />}
-              <span className="text-white font-black text-xs">{statusLabel}</span>
+              {isExpired ? <AlertCircle className="w-4 h-4 text-red-500" /> : <CheckCircle2 className="w-4 h-4 text-green-600" strokeWidth={3} />}
+              <span className="text-slate-800 font-black text-xs">{statusLabel}</span>
             </div>
             {endDate && (
               <div className="flex items-center gap-3 text-[11px] font-bold">
-                <span className="flex items-center gap-1 text-white/85">
+                <span className="flex items-center gap-1 text-slate-600">
                   <Calendar className="w-3 h-3" />
                   {endDate.toLocaleDateString('ms-MY')}
                 </span>
                 {!isExpired && daysRemaining !== null && (
-                  <span className={`flex items-center gap-1 ${daysRemaining <= 7 ? 'text-yellow-200' : 'text-white/85'}`}>
+                  <span className={`flex items-center gap-1 ${daysRemaining <= 7 ? 'text-orange-600' : 'text-slate-600'}`}>
                     <Clock className="w-3 h-3" />
                     {daysRemaining} hari lagi
                   </span>
@@ -179,10 +187,10 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
 
       {/* Jantina picker — papar hanya kalau parent component pass gender props */}
       {onGenderChange && (
-        <div className="rounded-2xl p-3 bg-white/8 border border-white/15">
+        <div className="rounded-2xl p-3 bg-pink-50/60 border border-pink-100">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-base">👤</span>
-            <p className="text-white/80 text-[11px] font-black uppercase tracking-wider">Jantina</p>
+            <p className="text-slate-600 text-[11px] font-black uppercase tracking-wider">Jantina</p>
           </div>
           <div className="grid grid-cols-2 gap-2">
             {[
@@ -196,8 +204,8 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                 onClick={() => onGenderChange(option.value)}
                 className={`py-2.5 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-1.5 ${
                   gender === option.value
-                    ? 'bg-white text-purple-600 shadow-lg'
-                    : 'bg-white/15 text-white border border-white/25 hover:bg-white/20'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                    : 'bg-white text-slate-700 border border-pink-200 hover:bg-pink-50'
                 }`}
               >
                 <span className="text-base">{option.emoji}</span>
@@ -209,17 +217,17 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
       )}
 
       {isOnTopTier && (
-        <div className="rounded-2xl p-3 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 border border-yellow-300/40 flex items-center gap-2">
+        <div className="rounded-2xl p-3 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-300 flex items-center gap-2">
           <span className="text-2xl">🏆</span>
           <div>
-            <p className="text-white font-black text-sm">Anda di pelan tertinggi!</p>
-            <p className="text-white/80 text-xs font-semibold">Terima kasih kerana menyokong CeriaKid 💜</p>
+            <p className="text-slate-800 font-black text-sm">Anda di pelan tertinggi!</p>
+            <p className="text-slate-600 text-xs font-semibold">Terima kasih kerana menyokong CeriaKid 💜</p>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="rounded-2xl p-3 bg-red-500/20 border border-red-300/40 text-white text-xs font-semibold">
+        <div className="rounded-2xl p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
           ⚠️ {error}
         </div>
       )}
@@ -321,7 +329,7 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
       </div>
 
       {!isOnTopTier && (
-        <p className="text-white/60 text-[11px] text-center leading-relaxed">
+        <p className="text-slate-500 text-[11px] text-center leading-relaxed">
           💡 Pro-rata: anda hanya bayar perbezaan harga. Tier baru aktif 1 tahun penuh sebaik bayaran berjaya.
         </p>
       )}
