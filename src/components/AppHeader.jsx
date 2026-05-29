@@ -81,6 +81,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
       dashboardItems = [
         { path: '/dashboard', label: 'Dashboard Pengguna' },
         { path: '/settings', label: 'Tetapan Akaun' },
+        { path: '/contact', label: 'Hubungi Kami' },
       ];
 
       groupedItems = [
@@ -118,13 +119,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             { path: '/challenges', label: 'Cabaran' },
           ],
         },
-        {
-          path: '/group-sokongan',
-          label: 'Sokongan',
-          submenu: [
-            { path: '/contact', label: 'Hubungi Kami' },
-          ],
-        },
+
       ];
     }
 

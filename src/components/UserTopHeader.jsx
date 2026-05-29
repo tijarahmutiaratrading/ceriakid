@@ -16,6 +16,7 @@ const NAV_GROUPS = [
     submenu: [
       { path: '/dashboard', label: 'Halaman Utama', icon: Home },
       { path: '/settings', label: 'Tetapan Akaun', icon: Settings },
+      { path: '/contact', label: 'Hubungi Kami', icon: MessageCircle },
     ],
   },
   {
