@@ -23,8 +23,8 @@ const NAV_GROUPS = [
     key: 'aktiviti',
     label: 'Aktiviti',
     submenu: [
-      { path: '/games-hub', label: 'Games Subjek', icon: Gamepad2 },
-      { path: '/games-hub?tab=mini', label: 'Mini Games', icon: Puzzle },
+      { path: '/games-subjek', label: 'Games Subjek', icon: Gamepad2 },
+      { path: '/games-hub', label: 'Mini Games', icon: Puzzle },
       { path: '/drawing', label: 'Studio Lukisan', icon: Palette },
       { path: '/story-kid', label: 'Story Kid', icon: BookOpen },
       { path: '/friends', label: 'Kawan', icon: UserPlus },
