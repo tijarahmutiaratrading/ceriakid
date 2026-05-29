@@ -45,9 +45,9 @@ export default function CanvasFloatingToolbar({
   const isEraser = tool.id === 'eraser';
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="relative max-w-[calc(100vw-1.5rem)]">
       <div
-        className="relative flex items-stretch gap-1 p-1.5 rounded-[1.75rem] overflow-hidden"
+        className="relative flex items-stretch gap-0.5 sm:gap-1 p-1 sm:p-1.5 rounded-[1.5rem] sm:rounded-[1.75rem] overflow-hidden"
         style={{
           background: 'linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.5) 45%, rgba(255,255,255,0.35) 100%)',
           backdropFilter: 'blur(32px) saturate(220%)',
@@ -81,7 +81,7 @@ export default function CanvasFloatingToolbar({
           }}
         />
         {/* TOOL */}
-        <div className="relative z-10 flex items-stretch gap-1 w-full">
+        <div className="relative z-10 flex items-stretch gap-0.5 sm:gap-1 w-full">
         <ProToolButton
           active={openPopover === 'tool'}
           isActive={!stickerMode}
@@ -113,8 +113,8 @@ export default function CanvasFloatingToolbar({
             </Popover>
           }
         >
-          <div className="flex items-center justify-center w-7 h-7 rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
-            <span className="text-lg leading-none">{tool.emoji}</span>
+          <div className="flex items-center justify-center w-7 h-7 rounded-lg sm:rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
+            <span className="text-base sm:text-lg leading-none">{tool.emoji}</span>
           </div>
         </ProToolButton>
 
@@ -148,8 +148,8 @@ export default function CanvasFloatingToolbar({
             </Popover>
           }
         >
-          <div className="flex items-center justify-center w-7 h-7 rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
-            <span className="inline-block rounded-full bg-slate-800" style={{ width: Math.min(brushSize.dot, 16), height: Math.min(brushSize.dot, 16) }} />
+          <div className="flex items-center justify-center w-7 h-7 rounded-lg sm:rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
+            <span className="inline-block rounded-full bg-slate-800" style={{ width: Math.min(brushSize.dot, 14), height: Math.min(brushSize.dot, 14) }} />
           </div>
         </ProToolButton>
 
@@ -192,7 +192,7 @@ export default function CanvasFloatingToolbar({
             }
           >
             <div
-              className="w-7 h-7 rounded-xl ring-2 ring-white/90 shadow-md"
+              className="w-7 h-7 rounded-lg sm:rounded-xl ring-2 ring-white/90 shadow-md"
               style={{
                 backgroundColor: colorSwatch,
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.12), 0 2px 4px rgba(15,23,42,0.15)',
@@ -232,14 +232,14 @@ export default function CanvasFloatingToolbar({
               </Popover>
             }
           >
-            <div className="flex items-center justify-center w-7 h-7 rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
-              <span className="text-lg leading-none">{stickerMode || '✨'}</span>
+            <div className="flex items-center justify-center w-7 h-7 rounded-lg sm:rounded-xl bg-white/80 ring-1 ring-slate-900/5 shadow-sm">
+              <span className="text-base sm:text-lg leading-none">{stickerMode || '✨'}</span>
             </div>
           </ProToolButton>
         )}
 
         {/* DIVIDER */}
-        <div className="self-center w-px h-8 bg-slate-900/10 mx-0.5" />
+        <div className="self-center w-px h-7 sm:h-8 bg-slate-900/10 mx-0 sm:mx-0.5" />
 
         {/* ACTIONS */}
         <ActionButton onClick={onUndo} disabled={!canUndo} label="Undo">
@@ -254,7 +254,7 @@ export default function CanvasFloatingToolbar({
           type="button"
           onClick={onSave}
           title="Simpan"
-          className="ml-0.5 h-12 px-3 sm:px-4 rounded-2xl inline-flex items-center gap-1.5 font-black text-xs sm:text-sm text-white shadow-lg transition hover:scale-[1.03] active:scale-95"
+          className="ml-0.5 h-11 sm:h-12 w-11 sm:w-auto px-0 sm:px-4 rounded-xl sm:rounded-2xl inline-flex items-center justify-center gap-1.5 font-black text-xs sm:text-sm text-white shadow-lg transition hover:scale-[1.03] active:scale-95 flex-shrink-0"
           style={{
             background: 'linear-gradient(135deg, #a855f7, #ec4899)',
             boxShadow: '0 8px 20px rgba(168,85,247,0.45), 0 1px 0 rgba(255,255,255,0.2) inset',
@@ -276,12 +276,13 @@ function ProToolButton({ active, isActive, onClick, label, icon, children, popov
         type="button"
         onClick={onClick}
         title={label}
-        className={`group relative flex flex-col items-center justify-center gap-0.5 w-14 sm:w-16 h-12 rounded-2xl transition ${
+        className={`group relative flex flex-col items-center justify-center gap-0.5 w-10 sm:w-16 h-11 sm:h-12 rounded-xl sm:rounded-2xl transition ${
           active ? 'bg-white/70 ring-1 ring-slate-900/10 shadow-sm' : 'hover:bg-white/50'
         }`}
       >
         {children}
-        <span className={`flex items-center gap-0.5 text-[9px] font-bold leading-none mt-0.5 ${isActive ? 'text-slate-900' : 'text-slate-500'}`}>
+        {/* Label visible on sm+ only — mobile guna icon je supaya tak terpotong */}
+        <span className={`hidden sm:flex items-center gap-0.5 text-[9px] font-bold leading-none mt-0.5 ${isActive ? 'text-slate-900' : 'text-slate-500'}`}>
           <span className="opacity-70">{icon}</span>
           <span className="truncate max-w-[3rem]">{label}</span>
         </span>
@@ -298,12 +299,12 @@ function ActionButton({ onClick, disabled, label, danger, children }) {
       onClick={onClick}
       disabled={disabled}
       title={label}
-      className={`flex flex-col items-center justify-center gap-0.5 w-12 sm:w-14 h-12 rounded-2xl transition disabled:opacity-25 disabled:cursor-not-allowed ${
+      className={`flex flex-col items-center justify-center gap-0.5 w-9 sm:w-14 h-11 sm:h-12 rounded-xl sm:rounded-2xl transition disabled:opacity-25 disabled:cursor-not-allowed ${
         danger ? 'text-red-500 hover:bg-red-500/10 hover:text-red-600' : 'text-slate-700 hover:bg-white/50 hover:text-slate-900'
       }`}
     >
       {children}
-      <span className="text-[9px] font-bold leading-none">{label}</span>
+      <span className="hidden sm:inline text-[9px] font-bold leading-none">{label}</span>
     </button>
   );
 }
