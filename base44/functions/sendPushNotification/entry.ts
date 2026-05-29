@@ -46,6 +46,9 @@ Deno.serve(async (req) => {
       subject = `mailto:${subject}`;
     }
 
+    // Debug: log VAPID config (mask private key)
+    console.log(`[VAPID] subject="${subject}" publicKey="${publicKey.substring(0, 20)}..." privateKeyLen=${privateKey.length}`);
+
     webpush.setVapidDetails(subject, publicKey, privateKey);
 
     const payload = await req.json();
@@ -80,7 +83,7 @@ Deno.serve(async (req) => {
         if (err.statusCode === 410 || err.statusCode === 404) {
           deadEndpoints.push(sub.id);
         }
-        console.error(`Push failed for ${sub.endpoint}:`, err.statusCode, err.body);
+        console.error(`Push failed for ${sub.endpoint.substring(0, 60)}... status=${err.statusCode} body=${err.body} headers=${JSON.stringify(err.headers || {})}`);
       }
     }));
 
