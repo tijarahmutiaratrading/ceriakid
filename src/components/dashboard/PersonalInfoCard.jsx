@@ -51,6 +51,7 @@ export default function PersonalInfoCard({ user }) {
         title="Maklumat Peribadi"
         subtitle="Nama, telefon & e-mel akaun anda"
         gradient="from-orange-400 to-pink-500"
+        variant="light"
       />
 
       <div className="space-y-4">
