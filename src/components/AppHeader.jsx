@@ -89,7 +89,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           submenu: [
             { path: '/children-profiles', label: 'Profil Anak' },
             { path: '/parent-dashboard', label: 'Prestasi Anak' },
-            { path: '/settings', label: 'Tetapan' },
           ],
         },
         {
@@ -119,9 +118,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           ],
         },
         {
-          path: '/group-sokongan',
-          label: 'Sokongan',
+          path: '/group-akaun',
+          label: 'Akaun Saya',
           submenu: [
+            { path: '/settings', label: 'Tetapan Akaun' },
             { path: '/contact', label: 'Hubungi Kami' },
           ],
         },
