@@ -1,7 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Crown, Check, Loader, ArrowUp, CheckCircle2, Calendar, Clock, AlertCircle } from 'lucide-react';
+import { Crown, Check, Loader, ArrowUp, CheckCircle2, Calendar, Clock, AlertCircle, Sprout, Star, Sparkles, Trophy, Heart, User, Lock, Lightbulb, AlertTriangle, Hourglass, XCircle, Gift } from 'lucide-react';
+
+// Tier visual config — gradient icon container utk consistency
+const TIER_VISUAL = {
+  free: { Icon: Sparkles, gradient: 'from-slate-400 to-slate-500', label: 'Percuma' },
+  asas: { Icon: Sprout, gradient: 'from-green-400 to-emerald-500', label: 'Asas' },
+  standard: { Icon: Star, gradient: 'from-blue-400 to-indigo-500', label: 'Standard' },
+  keluarga: { Icon: Crown, gradient: 'from-purple-500 to-pink-500', label: 'Keluarga' },
+  premium: { Icon: Crown, gradient: 'from-purple-500 to-pink-500', label: 'Keluarga' },
+  pro: { Icon: Crown, gradient: 'from-purple-500 to-pink-500', label: 'Keluarga' },
+};
+
+const TierIconBadge = ({ tierKey, size = 'md' }) => {
+  const cfg = TIER_VISUAL[tierKey] || TIER_VISUAL.free;
+  const dims = size === 'sm' ? 'w-6 h-6' : size === 'lg' ? 'w-12 h-12' : 'w-8 h-8';
+  const iconSize = size === 'sm' ? 'w-3.5 h-3.5' : size === 'lg' ? 'w-7 h-7' : 'w-4 h-4';
+  return (
+    <div className={`${dims} rounded-xl bg-gradient-to-br ${cfg.gradient} flex items-center justify-center shadow-md flex-shrink-0`}>
+      <cfg.Icon className={`${iconSize} text-white`} strokeWidth={2.5} />
+    </div>
+  );
+};
 import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
 // Tier hierarchy — used to determine which packages are upgrades vs current/lower
@@ -21,12 +42,12 @@ const buildTiers = (stats) => {
   return {
     asas: {
       name: 'asas',
-      nameMY: '🌱 Asas',
+      nameMY: 'Asas',
       priceMYR: 49,
       color: 'from-green-400 to-emerald-500',
       features: [
         asasCount ? `${fmt(asasCount)} game (50/subjek)` : '50 game/subjek',
-        '🎁 5 kredit AI percuma',
+        '5 kredit AI percuma',
         'Semua subjek (BM, English, Math, Sains, Jawi, Tamil, Mandarin)',
         'Prasekolah & Sekolah Rendah',
         'Tanpa iklan',
@@ -35,30 +56,30 @@ const buildTiers = (stats) => {
     },
     standard: {
       name: 'standard',
-      nameMY: '⭐ Standard',
+      nameMY: 'Standard',
       priceMYR: 99,
       color: 'from-blue-400 to-indigo-500',
       features: [
         standardCount ? `${fmt(standardCount)} game (100/subjek)` : '100 game/subjek',
-        '🎁 20 kredit AI percuma',
+        '20 kredit AI percuma',
         'Semua subjek',
         'Prasekolah & Sekolah Rendah',
         'Tanpa iklan',
-        'Boleh guna offline 📲',
+        'Boleh guna offline',
         'Sehingga 2 peranti',
       ],
     },
     keluarga: {
       name: 'keluarga',
-      nameMY: '👑 Keluarga',
+      nameMY: 'Keluarga',
       priceMYR: 199,
       color: 'from-purple-500 to-pink-500',
       features: [
-        keluargaCount ? `Akses penuh ${fmt(keluargaCount)} game 🔓` : 'Akses penuh semua game 🔓',
-        '🎁 50 kredit AI percuma',
+        keluargaCount ? `Akses penuh ${fmt(keluargaCount)} game` : 'Akses penuh semua game',
+        '50 kredit AI percuma',
         'Sehingga 4 profil anak',
         'Semua subjek',
-        'Boleh guna offline 📲',
+        'Boleh guna offline',
         'Sokongan prioriti',
         'Sehingga 4 peranti',
       ],
@@ -68,12 +89,12 @@ const buildTiers = (stats) => {
 };
 
 const TIER_LABEL = {
-  free: '🆓 Percuma',
-  asas: '🌱 Asas',
-  standard: '⭐ Standard',
-  keluarga: '👑 Keluarga',
-  premium: '👑 Keluarga',
-  pro: '👑 Keluarga',
+  free: 'Percuma',
+  asas: 'Asas',
+  standard: 'Standard',
+  keluarga: 'Keluarga',
+  premium: 'Keluarga',
+  pro: 'Keluarga',
 };
 
 export default function UpgradeTierCard({ currentTier, user, gender, onGenderChange }) {
@@ -94,13 +115,15 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
   const endDate = subscription?.currentPeriodEnd ? new Date(subscription.currentPeriodEnd) : null;
   const isExpired = endDate && endDate < new Date();
   const daysRemaining = endDate ? Math.max(Math.ceil((endDate - new Date()) / (1000 * 60 * 60 * 24)), 0) : null;
-  const statusLabel = isExpired
-    ? '⚠️ Langganan Tamat'
+  const statusInfo = isExpired
+    ? { label: 'Langganan Tamat', Icon: AlertTriangle, color: 'text-red-600' }
     : subscription?.status === 'active'
-      ? '✅ Aktif'
+      ? { label: 'Aktif', Icon: CheckCircle2, color: 'text-green-600' }
       : subscription?.status === 'incomplete'
-        ? '⏳ Menunggu Bayaran'
-        : currentTier === 'free' ? '🆓 Akaun Percuma' : '❌ Tidak Aktif';
+        ? { label: 'Menunggu Bayaran', Icon: Hourglass, color: 'text-amber-600' }
+        : currentTier === 'free'
+          ? { label: 'Akaun Percuma', Icon: Sparkles, color: 'text-slate-600' }
+          : { label: 'Tidak Aktif', Icon: XCircle, color: 'text-slate-500' };
 
   // Auto-generate tier features dengan real-time game count
   const ALL_TIERS = buildTiers(stats);
@@ -109,7 +132,7 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
   const allTierKeys = Object.keys(ALL_TIERS); // ['asas','standard','keluarga']
   // pro/premium/keluarga semua dianggap di pakej tertinggi (Keluarga)
   const isOnTopTier = ['keluarga', 'premium', 'pro'].includes(currentTier);
-  const currentLabel = TIER_LABEL[currentTier] || '🆓 Percuma';
+  const currentLabel = TIER_LABEL[currentTier] || 'Percuma';
 
   const handleUpgrade = async (tierName) => {
     setError('');
@@ -153,8 +176,10 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-slate-800 font-black text-base leading-tight">Langganan & Pakej</p>
-          <p className="text-slate-600 text-xs font-semibold">
-            Pakej anda sekarang: <span className="text-orange-600 font-black">{currentLabel}</span>
+          <p className="text-slate-600 text-xs font-semibold flex items-center gap-1.5">
+            Pakej anda sekarang:
+            <TierIconBadge tierKey={currentTier} size="sm" />
+            <span className="text-orange-600 font-black">{currentLabel}</span>
           </p>
         </div>
       </div>
@@ -164,8 +189,8 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
         <div className={`rounded-2xl p-3 border ${isExpired ? 'bg-red-50 border-red-200' : 'bg-purple-50 border-purple-100'}`}>
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2">
-              {isExpired ? <AlertCircle className="w-4 h-4 text-red-500" /> : <CheckCircle2 className="w-4 h-4 text-green-600" strokeWidth={3} />}
-              <span className="text-slate-800 font-black text-xs">{statusLabel}</span>
+              <statusInfo.Icon className={`w-4 h-4 ${statusInfo.color}`} strokeWidth={3} />
+              <span className="text-slate-800 font-black text-xs">{statusInfo.label}</span>
             </div>
             {endDate && (
               <div className="flex items-center gap-3 text-[11px] font-bold">
@@ -189,13 +214,15 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
       {onGenderChange && (
         <div className="rounded-2xl p-3 bg-pink-50/60 border border-pink-100">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-base">👤</span>
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-sm">
+              <User className="w-3.5 h-3.5 text-white" strokeWidth={3} />
+            </div>
             <p className="text-slate-600 text-[11px] font-black uppercase tracking-wider">Jantina</p>
           </div>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { value: 'male', label: 'Lelaki', emoji: '👨' },
-              { value: 'female', label: 'Perempuan', emoji: '👩' },
+              { value: 'male', label: 'Lelaki', gradient: 'from-blue-400 to-cyan-500' },
+              { value: 'female', label: 'Perempuan', gradient: 'from-pink-400 to-rose-500' },
             ].map((option) => (
               <motion.button
                 key={option.value}
@@ -208,7 +235,9 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                     : 'bg-white text-slate-700 border border-pink-200 hover:bg-pink-50'
                 }`}
               >
-                <span className="text-base">{option.emoji}</span>
+                <div className={`w-5 h-5 rounded-md bg-gradient-to-br ${option.gradient} flex items-center justify-center`}>
+                  <User className="w-3 h-3 text-white" strokeWidth={3} />
+                </div>
                 {option.label}
               </motion.button>
             ))}
@@ -217,18 +246,23 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
       )}
 
       {isOnTopTier && (
-        <div className="rounded-2xl p-3 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-300 flex items-center gap-2">
-          <span className="text-2xl">🏆</span>
-          <div>
+        <div className="rounded-2xl p-3 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-300 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-md flex-shrink-0">
+            <Trophy className="w-5 h-5 text-white" strokeWidth={2.5} fill="white" />
+          </div>
+          <div className="flex-1">
             <p className="text-slate-800 font-black text-sm">Anda di pelan tertinggi!</p>
-            <p className="text-slate-600 text-xs font-semibold">Terima kasih kerana menyokong CeriaKid 💜</p>
+            <p className="text-slate-600 text-xs font-semibold flex items-center gap-1">
+              Terima kasih kerana menyokong CeriaKid
+              <Heart className="w-3 h-3 text-pink-500 inline" fill="currentColor" />
+            </p>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="rounded-2xl p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
-          ⚠️ {error}
+        <div className="rounded-2xl p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 flex-shrink-0" strokeWidth={3} /> {error}
         </div>
       )}
 
@@ -264,7 +298,15 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                   POPULAR
                 </span>
               )}
-              <p className="font-black text-white text-lg leading-tight">{tier.nameMY}</p>
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-xl bg-white/25 backdrop-blur-sm ring-1 ring-white/40 flex items-center justify-center flex-shrink-0">
+                  {(() => {
+                    const TierIcon = (TIER_VISUAL[tier.name] || TIER_VISUAL.free).Icon;
+                    return <TierIcon className="w-5 h-5 text-white" strokeWidth={2.5} />;
+                  })()}
+                </div>
+                <p className="font-black text-white text-lg leading-tight">{tier.nameMY}</p>
+              </div>
 
               {/* Price display — pro-rata for upgrades, full price for current/lower */}
               {isUpgrade ? (
@@ -293,12 +335,16 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
               )}
 
               <ul className="space-y-1.5 mb-4">
-                {tier.features.map((f, i) => (
-                  <li key={i} className="flex items-center gap-1.5 text-white text-xs font-semibold">
-                    <Check className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={3} />
-                    <span>{f}</span>
-                  </li>
-                ))}
+                {tier.features.map((f, i) => {
+                  const isGift = /kredit AI percuma/i.test(f);
+                  const FeatIcon = isGift ? Gift : Check;
+                  return (
+                    <li key={i} className="flex items-center gap-1.5 text-white text-xs font-semibold">
+                      <FeatIcon className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={3} />
+                      <span>{f}</span>
+                    </li>
+                  );
+                })}
               </ul>
 
               {isCurrent ? (
@@ -329,8 +375,9 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
       </div>
 
       {!isOnTopTier && (
-        <p className="text-slate-500 text-[11px] text-center leading-relaxed">
-          💡 Pro-rata: anda hanya bayar perbezaan harga. Tier baru aktif 1 tahun penuh sebaik bayaran berjaya.
+        <p className="text-slate-500 text-[11px] text-center leading-relaxed flex items-center justify-center gap-1.5">
+          <Lightbulb className="w-3 h-3 text-amber-500 flex-shrink-0" strokeWidth={3} />
+          Pro-rata: anda hanya bayar perbezaan harga. Tier baru aktif 1 tahun penuh sebaik bayaran berjaya.
         </p>
       )}
 
@@ -352,14 +399,16 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
               className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl"
             >
               <div className="text-center mb-4">
-                <div className="text-5xl mb-2">{confirmTier.nameMY.split(' ')[0]}</div>
-                <p className="font-black text-slate-900 text-xl">Naik Taraf ke {confirmTier.nameMY.split(' ').slice(1).join(' ')}?</p>
+                <div className="w-16 h-16 mx-auto mb-3">
+                  <TierIconBadge tierKey={confirmTier.name} size="lg" />
+                </div>
+                <p className="font-black text-slate-900 text-xl">Naik Taraf ke {confirmTier.nameMY}?</p>
                 <p className="text-slate-600 text-sm mt-2">Anda akan dicaj <span className="font-black text-slate-900">RM{confirmTier.proRataPrice}</span> sahaja (perbezaan dari pelan semasa).</p>
               </div>
 
               <div className="rounded-2xl bg-green-50 border border-green-200 p-3 mb-4 space-y-1.5">
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-600 font-semibold">Harga {confirmTier.nameMY.split(' ').slice(1).join(' ')}</span>
+                  <span className="text-slate-600 font-semibold">Harga {confirmTier.nameMY}</span>
                   <span className="font-black text-slate-900">RM{confirmTier.priceMYR}</span>
                 </div>
                 {confirmTier.savings > 0 && (
@@ -372,7 +421,10 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                   <span className="text-slate-900 font-black text-sm">Anda bayar</span>
                   <span className="font-black text-green-700 text-sm">RM{confirmTier.proRataPrice}</span>
                 </div>
-                <p className="text-green-800 text-[11px] font-bold pt-1">✅ Tier baru aktif 1 tahun penuh dari hari pembayaran</p>
+                <p className="text-green-800 text-[11px] font-bold pt-1 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3 h-3 flex-shrink-0" strokeWidth={3} />
+                  Tier baru aktif 1 tahun penuh dari hari pembayaran
+                </p>
               </div>
 
               <div className="flex gap-2">
@@ -393,7 +445,7 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                   {upgrading ? (
                     <><Loader className="w-4 h-4 animate-spin" /> Memproses...</>
                   ) : (
-                    <>🔒 Teruskan Bayar</>
+                    <><Lock className="w-4 h-4" strokeWidth={3} /> Teruskan Bayar</>
                   )}
                 </button>
               </div>
