@@ -1253,23 +1253,17 @@ export default function DrawingStudio() {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900">
-      {/* Dashboard background image layer — fixed supaya kekal bila scroll */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 -z-10 pointer-events-none"
-        style={{
-          backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      />
-      {/* Floating orbs to match dashboard */}
+    <div
+      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900"
+      style={{
+        background: 'linear-gradient(180deg, #fef9f3 0%, #fef3c7 30%, #fbcfe8 70%, #c7d2fe 100%)',
+      }}
+    >
+      {/* Floating pastel clouds — sama dengan ParentDashboard */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
-        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
+        <div className="absolute top-20 -left-20 w-72 h-72 rounded-full blur-3xl opacity-50" style={{ background: '#fef3c7' }} />
+        <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full blur-3xl opacity-40" style={{ background: '#fbcfe8' }} />
+        <div className="absolute bottom-40 left-1/4 w-72 h-72 rounded-full blur-3xl opacity-40" style={{ background: '#c7d2fe' }} />
       </div>
 
       <AppHeader showBack={true} backTo="/dashboard" />
@@ -1289,34 +1283,50 @@ export default function DrawingStudio() {
 
       <main className="relative max-w-6xl mx-auto px-4 sm:px-6 pb-28 pt-20 sm:pt-4">
         <motion.button
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.95, y: 2 }}
           onClick={() => navigate('/dashboard')}
-          className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full font-bold text-sm text-slate-700 bg-white/90 backdrop-blur-md ring-1 ring-black/5 shadow-md hover:bg-white hover:text-slate-900 transition-all"
+          className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full font-black text-sm text-slate-700"
+          style={{ background: 'rgba(255,255,255,0.9)', boxShadow: '0 3px 0 #fde68a' }}
         >
-          <ArrowLeft className="w-4 h-4" /> Dashboard
+          <ArrowLeft className="w-4 h-4" strokeWidth={3} /> Dashboard
         </motion.button>
 
         <motion.section
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
+          className="relative mb-6 rounded-[2rem] p-6 sm:p-7 overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)',
+            boxShadow: '0 10px 30px rgba(251, 207, 232, 0.4), inset 0 2px 0 rgba(255,255,255,0.6)',
+          }}
         >
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+          {/* Floating decorations */}
+          <motion.div animate={{ y: [0, -8, 0], rotate: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }} className="absolute top-4 right-6 text-3xl opacity-70">🎨</motion.div>
+          <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1 }} className="absolute top-12 right-20 text-2xl opacity-60">✏️</motion.div>
+          <div className="absolute bottom-2 left-4 text-2xl opacity-40">⭐</div>
+
+          <div className="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
             <div className="min-w-0">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-600 mb-2">Creative Studio</p>
-              <h1 className="text-4xl sm:text-5xl font-black leading-[1.05] tracking-tight text-slate-900">Studio Lukisan</h1>
-              <p className="text-slate-500 text-base font-medium mt-2 max-w-lg">Lukis bebas, surih huruf, atau warnakan gambar — semua dalam satu tempat.</p>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-2" style={{ background: 'rgba(255,255,255,0.7)' }}>
+                <span className="text-[10px] font-black uppercase tracking-wider text-pink-700">✨ Creative Studio</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-black leading-[1.05] tracking-tight text-slate-800">Studio Lukisan 🎨</h1>
+              <p className="text-slate-600 text-sm sm:text-base font-bold mt-2 max-w-lg">Lukis bebas, surih huruf, atau warnakan gambar — semua dalam satu tempat ✨</p>
             </div>
 
             <div className="grid grid-cols-3 lg:flex lg:flex-wrap gap-2 w-full lg:w-auto">
               {[
-                { top: mode === 'draw' ? 'Lukis Bebas' : mode === 'trace' ? 'Tracing' : 'Mewarna', bottom: 'Mode' },
-                { top: stickerMode ? `Sticker ${stickerMode}` : tool.label, bottom: 'Alat' },
-                { top: `${history.length}`, bottom: 'Undo' },
+                { top: mode === 'draw' ? 'Lukis Bebas' : mode === 'trace' ? 'Tracing' : 'Mewarna', bottom: 'Mode', color: '#f9a8d4' },
+                { top: stickerMode ? `Sticker ${stickerMode}` : tool.label, bottom: 'Alat', color: '#93c5fd' },
+                { top: `${history.length}`, bottom: 'Undo', color: '#fcd34d' },
               ].map((badge, i) => (
-                <div key={i} className="px-3.5 py-2 rounded-2xl bg-white/80 backdrop-blur-md ring-1 ring-black/5 text-center lg:min-w-[78px]" style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
-                  <p className="font-bold text-sm leading-tight text-slate-900 truncate">{badge.top}</p>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider mt-0.5 text-slate-400">{badge.bottom}</p>
+                <div
+                  key={i}
+                  className="px-3.5 py-2 rounded-2xl text-center lg:min-w-[78px]"
+                  style={{ background: 'rgba(255,255,255,0.85)', boxShadow: `0 3px 0 ${badge.color}` }}
+                >
+                  <p className="font-black text-sm leading-tight text-slate-800 truncate">{badge.top}</p>
+                  <p className="text-[10px] font-black uppercase tracking-wider mt-0.5 text-slate-500">{badge.bottom}</p>
                 </div>
               ))}
             </div>
