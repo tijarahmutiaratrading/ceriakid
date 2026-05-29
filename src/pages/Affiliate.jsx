@@ -51,10 +51,13 @@ export default function AffiliatePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div
+        className="min-h-screen flex items-center justify-center -mt-16 sm:-mt-20 pt-16 sm:pt-20"
+        style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)' }}
+      >
         <div className="text-center">
           <Loader2 className="w-10 h-10 animate-spin text-purple-600 mx-auto mb-3" />
-          <p className="text-sm font-bold text-slate-600">Memuat dashboard affiliate...</p>
+          <p className="text-sm font-bold text-slate-700">Memuat dashboard affiliate...</p>
         </div>
       </div>
     );
@@ -71,8 +74,20 @@ export default function AffiliatePage() {
   const referralLink = `${baseUrl}/?ref=${affiliate.referralCode}`;
 
   return (
-    <div className="min-h-screen">
-      <div className="p-4 sm:p-6 max-w-6xl mx-auto">
+    <div
+      className="min-h-screen -mt-16 sm:-mt-20 pt-16 sm:pt-20 relative"
+      style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)' }}
+    >
+      {/* Floating decorations — CeriaKid vibe */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 right-8 text-4xl opacity-40 animate-pulse">🌈</div>
+        <div className="absolute top-40 left-6 text-3xl opacity-30">☁️</div>
+        <div className="absolute top-1/3 right-1/4 text-2xl opacity-25">⭐</div>
+        <div className="absolute bottom-1/3 left-8 text-3xl opacity-30">💖</div>
+        <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
+      </div>
+
+      <div className="relative p-4 sm:p-6 max-w-6xl mx-auto">
         {/* Hero with referral link & quick share */}
         <AffiliateHero affiliate={affiliate} referralLink={referralLink} />
 
