@@ -893,6 +893,10 @@ export default function DrawingStudio() {
     const canvas = getCanvas();
     const ctx = getCtx();
     if (!ctx || !canvas) return;
+    // Capture the pointer so we keep receiving move/up events even when the
+    // pointer drifts outside the canvas bounds — this is THE fix for the
+    // "dotted/broken line" bug on fast strokes (events get dropped otherwise).
+    try { if (e.pointerId !== undefined) canvas.setPointerCapture(e.pointerId); } catch { /* ignore */ }
     const pt = getPoint(e, canvas);
 
     // Sticker stamping mode — single tap drops emoji
@@ -1316,7 +1320,7 @@ export default function DrawingStudio() {
                   onPointerDown={startDraw}
                   onPointerMove={draw}
                   onPointerUp={endDraw}
-                  onPointerLeave={endDraw}
+                  onPointerCancel={endDraw}
                   className="w-full touch-none block"
                   style={{ backgroundColor: '#fff9f0', cursor: stickerMode ? 'pointer' : 'crosshair' }}
                 />
@@ -1618,7 +1622,7 @@ export default function DrawingStudio() {
                 onPointerDown={startDraw}
                 onPointerMove={draw}
                 onPointerUp={endDraw}
-                onPointerLeave={endDraw}
+                onPointerCancel={endDraw}
                 style={{ width: '100%', height: '100%', touchAction: 'none', cursor: stickerMode ? 'pointer' : 'crosshair', display: 'block', backgroundColor: '#fff9f0', position: 'absolute', inset: 0, zIndex: 1 }}
               />
               {/* Fullscreen line art overlay — sama macam normal canvas */}
