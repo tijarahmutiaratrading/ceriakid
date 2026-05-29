@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, X, Smartphone, Share, Plus, MoreVertical, Apple, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { Download, X, Smartphone, Share, Plus, MoreVertical, Apple, ChevronRight, CheckCircle2, MonitorSmartphone, AlertTriangle, Lightbulb, Sparkles, Rocket, WifiOff, Bell } from 'lucide-react';
 
 const DISMISS_KEY = 'install_guide_dismissed_until';
 
@@ -101,8 +101,8 @@ export default function InstallAppGuide() {
 
         <div className="relative z-10 p-5 sm:p-6">
           <div className="flex items-start gap-4 mb-4">
-            <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center text-2xl sm:text-3xl shadow-lg">
-              📲
+            <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center shadow-lg">
+              <MonitorSmartphone className="w-6 h-6 sm:w-7 sm:h-7 text-white" strokeWidth={2.5} />
             </div>
             <div className="flex-1 min-w-0 pr-8">
               <p className="text-white/70 text-[10px] font-black uppercase tracking-[0.18em] mb-1">Pasang Sebagai App</p>
@@ -187,7 +187,9 @@ function InstallModal({ platform, onClose, onAndroidInstall }) {
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/15">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">📲</span>
+            <div className="w-10 h-10 rounded-xl bg-white/15 ring-1 ring-white/30 flex items-center justify-center">
+              <MonitorSmartphone className="w-5 h-5 text-white" strokeWidth={2.5} />
+            </div>
             <div>
               <p className="text-white font-black text-base leading-tight">Pasang CeriaKid</p>
               <p className="text-white/70 text-[11px] font-semibold">Panduan install web app</p>
@@ -228,10 +230,10 @@ function InstallModal({ platform, onClose, onAndroidInstall }) {
               <CheckCircle2 className="w-4 h-4 text-emerald-300" /> Kelebihan pasang sebagai app:
             </p>
             <ul className="space-y-1.5 text-white/80 text-[11px] font-semibold leading-relaxed">
-              <li>✨ Buka terus dari home screen — tak perlu cari browser</li>
-              <li>🚀 Loading lebih pantas, full screen tanpa address bar</li>
-              <li>📡 Boleh main game offline (sync auto bila kembali online)</li>
-              <li>🔔 Boleh terima notifikasi reminder belajar</li>
+              <li className="flex items-start gap-2"><Sparkles className="w-3.5 h-3.5 text-yellow-300 flex-shrink-0 mt-0.5" strokeWidth={2.5} /> Buka terus dari home screen — tak perlu cari browser</li>
+              <li className="flex items-start gap-2"><Rocket className="w-3.5 h-3.5 text-pink-300 flex-shrink-0 mt-0.5" strokeWidth={2.5} /> Loading lebih pantas, full screen tanpa address bar</li>
+              <li className="flex items-start gap-2"><WifiOff className="w-3.5 h-3.5 text-cyan-300 flex-shrink-0 mt-0.5" strokeWidth={2.5} /> Boleh main game offline (sync auto bila kembali online)</li>
+              <li className="flex items-start gap-2"><Bell className="w-3.5 h-3.5 text-amber-300 flex-shrink-0 mt-0.5" strokeWidth={2.5} /> Boleh terima notifikasi reminder belajar</li>
             </ul>
           </div>
         </div>
@@ -281,7 +283,7 @@ function IOSInstructions() {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2 mb-3 p-3 rounded-2xl bg-amber-500/15 border border-amber-400/30">
-        <span className="text-xl">⚠️</span>
+        <AlertTriangle className="w-5 h-5 text-amber-300 flex-shrink-0" strokeWidth={2.5} />
         <p className="text-amber-100 text-[11px] font-bold leading-snug">
           iPhone/iPad <span className="font-black">WAJIB guna Safari</span> — Chrome di iOS tak boleh install PWA.
         </p>
@@ -346,7 +348,7 @@ function AndroidInstructions({ onInstall }) {
 
       {!onInstall && (
         <div className="flex items-center gap-2 mb-3 p-3 rounded-2xl bg-blue-500/15 border border-blue-400/30">
-          <span className="text-xl">💡</span>
+          <Lightbulb className="w-5 h-5 text-blue-300 flex-shrink-0" strokeWidth={2.5} />
           <p className="text-blue-100 text-[11px] font-bold leading-snug">
             Ikut langkah manual di bawah, atau buka semula page ini selepas seketika untuk butang auto-install.
           </p>
