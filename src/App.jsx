@@ -142,13 +142,13 @@ const AuthenticatedApp = () => {
             <Route path="/bbm-generator" element={<BBMGenerator />} />
             <Route path="/quiz-ai" element={<QuizAI />} />
             <Route path="/affiliate" element={<Affiliate />} />
+            <Route path="/drawing" element={<DrawingStudio />} />
           </Route>
 
           {/* Game-play / fullscreen pages - NO sidebar (immersive experience) */}
           <Route path="/story-kid" element={<StoryKid />} />
           <Route path="/mini-games/:categoryId/play/:gameId" element={<MiniGamePlayground />} />
           <Route path="/play/:category/:index" element={<GamePlayer />} />
-          <Route path="/drawing" element={<DrawingStudio />} />
           <Route path="/abc" element={<ABCGame />} />
           <Route path="/numbers" element={<NumberGame />} />
           <Route path="/quiz" element={<QuizGame />} />
