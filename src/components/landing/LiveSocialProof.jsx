@@ -55,7 +55,7 @@ export default function LiveSocialProof() {
             transition={{ duration: 0.3 }}
             className="pointer-events-auto max-w-[220px] sm:max-w-xs rounded-xl sm:rounded-2xl bg-white/95 backdrop-blur-md shadow-2xl px-2.5 py-2 sm:px-4 sm:py-3 flex items-center gap-2 sm:gap-3"
           >
-            <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-orange-200 to-amber-300 flex items-center justify-center flex-shrink-0 shadow text-sm sm:text-lg">
+            <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-orange-200/50 to-amber-300/50 flex items-center justify-center flex-shrink-0 shadow text-sm sm:text-lg">
               🎉
             </div>
             <div className="min-w-0 flex-1">
