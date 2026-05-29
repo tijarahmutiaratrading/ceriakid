@@ -13,7 +13,10 @@ const NAV_GROUPS = [
   {
     key: 'dashboard',
     label: 'Dashboard',
-    path: '/dashboard',
+    submenu: [
+      { path: '/dashboard', label: 'Halaman Utama', icon: Home },
+      { path: '/settings', label: 'Tetapan Akaun', icon: Settings },
+    ],
   },
   {
     key: 'keluarga',
@@ -43,14 +46,6 @@ const NAV_GROUPS = [
     key: 'affiliate',
     label: 'Affiliate',
     path: '/affiliate',
-  },
-  {
-    key: 'akaun',
-    label: 'Akaun',
-    submenu: [
-      { path: '/settings', label: 'Tetapan Akaun', icon: Settings },
-      { path: '/contact', label: 'Hubungi Kami', icon: MessageCircle },
-    ],
   },
 ];
 

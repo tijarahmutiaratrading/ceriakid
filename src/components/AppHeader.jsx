@@ -80,6 +80,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
     if (isAuthenticated) {
       dashboardItems = [
         { path: '/dashboard', label: 'Dashboard Pengguna' },
+        { path: '/settings', label: 'Tetapan Akaun' },
       ];
 
       groupedItems = [
@@ -118,10 +119,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           ],
         },
         {
-          path: '/group-akaun',
-          label: 'Akaun Saya',
+          path: '/group-sokongan',
+          label: 'Sokongan',
           submenu: [
-            { path: '/settings', label: 'Tetapan Akaun' },
             { path: '/contact', label: 'Hubungi Kami' },
           ],
         },
