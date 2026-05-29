@@ -1341,7 +1341,7 @@ export default function DrawingStudio() {
 
                 {/* FLOATING TOOLBAR — anchored di bawah canvas, semua tool dalam reach */}
                 {mode !== 'trace' && (
-                  <div className="absolute left-1/2 -translate-x-1/2 bottom-3 z-20">
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-6 sm:bottom-8 z-20">
                     <CanvasFloatingToolbar
                       tools={TOOLS}
                       brushSizes={BRUSH_SIZES}
@@ -1639,7 +1639,7 @@ export default function DrawingStudio() {
 
               {/* Floating toolbar — sama macam main canvas */}
               {mode !== 'trace' && (
-                <div className="absolute left-1/2 -translate-x-1/2 bottom-5 z-20">
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-10 sm:bottom-12 z-20">
                   <CanvasFloatingToolbar
                     tools={TOOLS}
                     brushSizes={BRUSH_SIZES}
