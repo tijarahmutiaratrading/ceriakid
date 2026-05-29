@@ -64,7 +64,16 @@ export default function OfflineModeCard() {
 
   return (
     <>
-      <div className="rounded-3xl overflow-hidden shadow-xl p-5 space-y-4" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+      <div
+        className="rounded-3xl overflow-hidden shadow-xl p-5 space-y-4"
+        style={{
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255,255,255,0.9)',
+          boxShadow: '0 8px 24px rgba(251, 207, 232, 0.25)',
+        }}
+      >
 
         <SectionCardHeader
           icon={Radio}
@@ -76,14 +85,14 @@ export default function OfflineModeCard() {
         {/* Status row */}
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${isOnline ? 'bg-emerald-500/25 border border-emerald-400/40' : 'bg-orange-500/25 border border-orange-400/40'}`}>
-              {isOnline ? <Wifi className="w-5 h-5 text-emerald-300" /> : <WifiOff className="w-5 h-5 text-orange-300" />}
+            <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${isOnline ? 'bg-emerald-100 border border-emerald-200' : 'bg-orange-100 border border-orange-200'}`}>
+              {isOnline ? <Wifi className="w-5 h-5 text-emerald-600" /> : <WifiOff className="w-5 h-5 text-orange-600" />}
             </div>
             <div className="min-w-0">
-              <p className="text-white font-black text-sm">
+              <p className="text-slate-800 font-black text-sm">
                 {isOnline ? 'Bersambung Online' : 'Mode Offline Aktif'}
               </p>
-              <p className="text-white/70 text-xs font-semibold mt-0.5">
+              <p className="text-slate-600 text-xs font-semibold mt-0.5">
                 {isOnline ? 'Progress disync automatik' : 'Anak masih boleh main game!'}
               </p>
             </div>
@@ -91,7 +100,7 @@ export default function OfflineModeCard() {
 
           <button
             onClick={() => setShowGuide(true)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-black transition-colors flex-shrink-0"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-700 text-xs font-black transition-colors flex-shrink-0"
           >
             <Info className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Panduan</span>
@@ -101,24 +110,24 @@ export default function OfflineModeCard() {
         {/* Stats grid */}
         <div className="grid grid-cols-3 gap-2">
           {/* PWA install status */}
-          <div className="rounded-xl p-2.5 text-center" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <Download className={`w-4 h-4 mx-auto mb-1 ${isPWA ? 'text-emerald-300' : 'text-white/50'}`} />
-            <p className="text-white font-black text-[11px] leading-tight">{isPWA ? 'Dipasang' : 'Browser'}</p>
-            <p className="text-white/60 text-[9px] font-bold uppercase tracking-wider mt-0.5">App</p>
+          <div className="rounded-xl p-2.5 text-center bg-slate-50 border border-slate-200">
+            <Download className={`w-4 h-4 mx-auto mb-1 ${isPWA ? 'text-emerald-600' : 'text-slate-400'}`} />
+            <p className="text-slate-800 font-black text-[11px] leading-tight">{isPWA ? 'Dipasang' : 'Browser'}</p>
+            <p className="text-slate-500 text-[9px] font-bold uppercase tracking-wider mt-0.5">App</p>
           </div>
 
           {/* Pending sync */}
-          <div className="rounded-xl p-2.5 text-center" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <Clock className={`w-4 h-4 mx-auto mb-1 ${pendingCount > 0 ? 'text-yellow-300' : 'text-white/50'}`} />
-            <p className="text-white font-black text-[11px] leading-tight">{pendingCount}</p>
-            <p className="text-white/60 text-[9px] font-bold uppercase tracking-wider mt-0.5">Belum Sync</p>
+          <div className="rounded-xl p-2.5 text-center bg-slate-50 border border-slate-200">
+            <Clock className={`w-4 h-4 mx-auto mb-1 ${pendingCount > 0 ? 'text-yellow-600' : 'text-slate-400'}`} />
+            <p className="text-slate-800 font-black text-[11px] leading-tight">{pendingCount}</p>
+            <p className="text-slate-500 text-[9px] font-bold uppercase tracking-wider mt-0.5">Belum Sync</p>
           </div>
 
           {/* Last sync */}
-          <div className="rounded-xl p-2.5 text-center" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <CheckCircle2 className="w-4 h-4 mx-auto mb-1 text-cyan-300" />
-            <p className="text-white font-black text-[10px] leading-tight truncate">{formatLastSync(lastSync)}</p>
-            <p className="text-white/60 text-[9px] font-bold uppercase tracking-wider mt-0.5">Last Sync</p>
+          <div className="rounded-xl p-2.5 text-center bg-slate-50 border border-slate-200">
+            <CheckCircle2 className="w-4 h-4 mx-auto mb-1 text-cyan-600" />
+            <p className="text-slate-800 font-black text-[10px] leading-tight truncate">{formatLastSync(lastSync)}</p>
+            <p className="text-slate-500 text-[9px] font-bold uppercase tracking-wider mt-0.5">Last Sync</p>
           </div>
         </div>
 
@@ -136,9 +145,9 @@ export default function OfflineModeCard() {
         )}
 
         {/* Helper text */}
-        <div className="rounded-xl p-3" style={{ background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.25)' }}>
-          <p className="text-white/85 text-[11px] font-semibold leading-relaxed">
-            💡 <span className="font-black">Tip:</span> Buka semua game subject ketika ada wifi. Selepas itu anak boleh main offline di mana-mana sahaja. Progress auto-sync bila kembali online.
+        <div className="rounded-xl p-3 bg-purple-50 border border-purple-200">
+          <p className="text-slate-700 text-[11px] font-semibold leading-relaxed">
+            💡 <span className="font-black text-purple-700">Tip:</span> Buka semua game subject ketika ada wifi. Selepas itu anak boleh main offline di mana-mana sahaja. Progress auto-sync bila kembali online.
           </p>
         </div>
       </div>

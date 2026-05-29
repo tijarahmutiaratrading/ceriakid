@@ -37,7 +37,16 @@ export default function ManageDevices({ userEmail, tier }) {
   }
 
   return (
-    <div className="rounded-3xl p-5 shadow-lg space-y-4" style={{ background: 'rgba(30,30,40,0.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+    <div
+      className="rounded-3xl p-5 shadow-lg space-y-4"
+      style={{
+        background: 'rgba(255,255,255,0.92)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255,255,255,0.9)',
+        boxShadow: '0 8px 24px rgba(251, 207, 232, 0.25)',
+      }}
+    >
       <SectionCardHeader
         icon={Shield}
         title="Device Berdaftar"
@@ -45,7 +54,7 @@ export default function ManageDevices({ userEmail, tier }) {
         gradient="from-cyan-400 to-pink-400"
         right={
           <span className={`px-2.5 py-1 rounded-full text-[11px] font-black flex-shrink-0 ${
-            devices.length >= limit ? 'bg-red-500/25 text-red-200 border border-red-300/40' : 'bg-green-500/25 text-green-200 border border-green-300/40'
+            devices.length >= limit ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-green-100 text-green-700 border border-green-200'
           }`}>
             {devices.length} / {limit}
           </span>
@@ -53,7 +62,7 @@ export default function ManageDevices({ userEmail, tier }) {
       />
 
       {devices.length === 0 ? (
-        <p className="text-white/60 text-sm text-center py-4">Tiada device berdaftar</p>
+        <p className="text-slate-500 text-sm text-center py-4">Tiada device berdaftar</p>
       ) : (
         <div className="space-y-3">
           {devices.map((device) => {
@@ -64,21 +73,21 @@ export default function ManageDevices({ userEmail, tier }) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`flex items-start gap-3 justify-between rounded-xl p-3 border ${
-                  isCurrent ? 'bg-purple-500/20 border-purple-300/40' : 'bg-white/5 border-white/10'
+                  isCurrent ? 'bg-purple-50 border-purple-200' : 'bg-slate-50 border-slate-200'
                 }`}
               >
                 <div className="flex items-start gap-3 min-w-0">
-                  <Smartphone className={`w-5 h-5 ${isCurrent ? 'text-purple-300' : 'text-white/50'}`} />
+                  <Smartphone className={`w-5 h-5 ${isCurrent ? 'text-purple-600' : 'text-slate-400'}`} />
                   <div className="min-w-0">
-                    <p className="font-bold text-white text-sm flex flex-wrap items-center gap-2 break-words">
+                    <p className="font-bold text-slate-800 text-sm flex flex-wrap items-center gap-2 break-words">
                       {device.deviceName}
                       {isCurrent && (
-                        <span className="text-xs bg-purple-500/30 text-purple-100 px-2 py-0.5 rounded-full font-black border border-purple-300/40">
+                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-black border border-purple-200">
                           Device Ini
                         </span>
                       )}
                     </p>
-                    <p className="text-xs text-white/55">
+                    <p className="text-xs text-slate-500">
                       Terakhir: {device.lastSeen ? format(new Date(device.lastSeen), 'dd MMM yyyy, HH:mm') : '-'}
                     </p>
                   </div>
@@ -86,7 +95,7 @@ export default function ManageDevices({ userEmail, tier }) {
                 {!isCurrent && (
                   <button
                     onClick={() => handleRemove(device)}
-                    className="p-2 text-red-300 hover:text-red-200 hover:bg-red-500/15 rounded-xl transition-all"
+                    className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -97,8 +106,8 @@ export default function ManageDevices({ userEmail, tier }) {
         </div>
       )}
 
-      <p className="text-xs text-white/70 mt-4 text-center">
-        Pakej <span className="font-bold capitalize text-white">{tier}</span> — maksimum {limit} device
+      <p className="text-xs text-slate-500 mt-4 text-center">
+        Pakej <span className="font-bold capitalize text-slate-800">{tier}</span> — maksimum {limit} device
       </p>
     </div>
   );
