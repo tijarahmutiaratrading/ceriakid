@@ -40,11 +40,14 @@ Deno.serve(async (req) => {
     }
 
     // web-push library requires subject to be a valid URL (mailto: or https://).
-    // Auto-fix common mistake: plain email → prepend mailto:
-    subject = subject.trim();
+    // Apple APNs strict: tak boleh ada space atau angle brackets <...>
+    // Auto-sanitize: strip <>, trim spaces, prepend mailto: kalau plain email
+    subject = subject.trim().replace(/[<>]/g, '').replace(/\s+/g, '');
     if (!subject.startsWith('mailto:') && !subject.startsWith('http://') && !subject.startsWith('https://')) {
       subject = `mailto:${subject}`;
     }
+    // Final cleanup: kalau ada "mailto:" dengan space lepasnya (e.g. "mailto: foo@bar.com")
+    subject = subject.replace(/^mailto:\s+/, 'mailto:');
 
     // Debug: log VAPID config (mask private key)
     console.log(`[VAPID] subject="${subject}" publicKey="${publicKey.substring(0, 20)}..." privateKeyLen=${privateKey.length}`);

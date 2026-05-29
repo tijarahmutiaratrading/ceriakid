@@ -202,8 +202,10 @@ async function notifyAdmins(base44, { title, body, url }) {
       return;
     }
     let subject = Deno.env.get('VAPID_SUBJECT') || 'mailto:admin@ceriakid.com';
-    subject = subject.trim();
+    // Apple APNs strict: strip angle brackets + spaces
+    subject = subject.trim().replace(/[<>]/g, '').replace(/\s+/g, '');
     if (!subject.startsWith('mailto:') && !subject.startsWith('http')) subject = `mailto:${subject}`;
+    subject = subject.replace(/^mailto:\s+/, 'mailto:');
     webpush.setVapidDetails(subject, publicKey, privateKey);
 
     const subs = await base44.asServiceRole.entities.PushSubscription.filter({ isAdmin: true });
