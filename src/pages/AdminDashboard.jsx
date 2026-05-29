@@ -6,6 +6,7 @@ import { Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook
 import { Link, useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import AppHeader from '@/components/AppHeader';
+import UserTopHeader from '@/components/UserTopHeader';
 import AdminTopHeader from '@/components/admin/AdminTopHeader';
 import AdminHero from '@/components/admin/AdminHero';
 import AdminQuickStats from '@/components/admin/AdminQuickStats';
@@ -239,10 +240,11 @@ export default function AdminDashboard() {
       <div className="md:hidden">
         <AppHeader showBack={true} backTo="/dashboard" />
       </div>
+      <UserTopHeader />
       <AdminTopHeader activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <div className="relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pt-24 md:pt-20 pb-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pt-24 md:pt-36 pb-32">
           <main className="min-w-0 space-y-4 md:space-y-5">
         {/* Mobile tab pill (shows current section) */}
         <div className="lg:hidden pro-glass rounded-2xl px-3 py-2 flex items-center justify-between gap-2">

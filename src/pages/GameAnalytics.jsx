@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Loader2, CheckCircle2, AlertCircle, ChevronDown } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import UserTopHeader from '@/components/UserTopHeader';
 
 export default function GameAnalytics() {
   const [analytics, setAnalytics] = useState(null);
@@ -53,8 +54,9 @@ export default function GameAnalytics() {
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       <AppHeader showBack={true} backTo="/admin-game-manager" />
+      <UserTopHeader />
 
-      <div className="relative max-w-4xl mx-auto px-4 pt-8 pb-8">
+      <div className="relative max-w-4xl mx-auto px-4 pt-8 md:pt-24 pb-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-5 rounded-3xl flex items-center gap-3" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}>
           <div className="text-4xl">📊</div>
           <div>
