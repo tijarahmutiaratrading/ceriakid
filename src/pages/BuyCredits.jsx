@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, CheckCircle2, XCircle, Info, ArrowLeft } from 'lucide-react';
+import { Sparkles, CheckCircle2, XCircle, Info, ArrowLeft, GraduationCap, BookOpen, FileText, Brain, Lightbulb } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
 import CreditPackageCard from '@/components/credits/CreditPackageCard';
@@ -122,29 +122,40 @@ export default function BuyCredits() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
-              <p className="text-2xl">🎓</p>
-              <p className="text-slate-900 font-black text-sm mt-1">Pembantu Pembelajaran</p>
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-sm">
+                <GraduationCap className="w-5 h-5 text-white" strokeWidth={2.5} />
+              </div>
+              <p className="text-slate-900 font-black text-sm mt-2">Pembantu Pembelajaran</p>
               <p className="text-slate-700 text-xs font-black">{CREDIT_COSTS.ai_assistant} kredit / soalan</p>
             </div>
             <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
-              <p className="text-2xl">📖</p>
-              <p className="text-slate-900 font-black text-sm mt-1">Penjana Cerita</p>
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center shadow-sm">
+                <BookOpen className="w-5 h-5 text-white" strokeWidth={2.5} />
+              </div>
+              <p className="text-slate-900 font-black text-sm mt-2">Penjana Cerita</p>
               <p className="text-slate-700 text-xs font-black">{CREDIT_COSTS.story_generator} kredit / cerita</p>
             </div>
             <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
-              <p className="text-2xl">📝</p>
-              <p className="text-slate-900 font-black text-sm mt-1">Penjana BBM</p>
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-sm">
+                <FileText className="w-5 h-5 text-white" strokeWidth={2.5} />
+              </div>
+              <p className="text-slate-900 font-black text-sm mt-2">Penjana BBM</p>
               <p className="text-slate-700 text-xs font-black">{CREDIT_COSTS.bbm_generator} kredit / BBM</p>
             </div>
             <div className="bg-white/95 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-sm">
-              <p className="text-2xl">🧠</p>
-              <p className="text-slate-900 font-black text-sm mt-1">Kuiz AI</p>
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-400 to-fuchsia-500 flex items-center justify-center shadow-sm">
+                <Brain className="w-5 h-5 text-white" strokeWidth={2.5} />
+              </div>
+              <p className="text-slate-900 font-black text-sm mt-2">Kuiz AI</p>
               <p className="text-slate-700 text-xs font-black">{CREDIT_COSTS.quiz_ai} kredit / soalan</p>
             </div>
           </div>
-          <p className="text-slate-900 text-xs font-bold mt-4">
-            💡 Kredit tidak luput. Boleh dipakai bila-bila masa.
-          </p>
+          <div className="flex items-start gap-2 mt-4">
+            <Lightbulb className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" strokeWidth={2.5} fill="rgb(252 211 77)" />
+            <p className="text-slate-900 text-xs font-bold">
+              Kredit tidak luput. Boleh dipakai bila-bila masa.
+            </p>
+          </div>
         </motion.div>
       </div>
     </div>

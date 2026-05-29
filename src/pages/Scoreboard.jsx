@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Trash2, Trophy, BookOpen, Hash, Brain, Palette } from 'lucide-react';
+import { Star, Trash2, Trophy, BookOpen, Hash, Brain, Palette, Gamepad2, History, Award } from 'lucide-react';
 import { useLang } from '@/lib/LanguageContext';
 import { getScores, clearScores } from '@/lib/gameData';
 import AppHeader from '@/components/AppHeader';
@@ -56,7 +56,9 @@ export default function Scoreboard() {
           style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
         >
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">🏆</div>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg flex-shrink-0">
+              <Trophy className="w-7 h-7 text-white" strokeWidth={2.5} fill="white" />
+            </div>
             <div>
               <h1 className="text-2xl font-black text-white leading-tight">{t('scoreboard')}</h1>
               <p className="text-white/70 text-xs font-semibold mt-0.5">{scores.length} rekod permainan</p>
@@ -80,7 +82,9 @@ export default function Scoreboard() {
             className="rounded-3xl p-10 text-center"
             style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.85), rgba(88,28,135,0.78))', backdropFilter: 'blur(22px)', border: '1px solid rgba(255,255,255,0.18)' }}
           >
-            <div className="text-5xl mb-4">🎮</div>
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-white/15 flex items-center justify-center mb-4 shadow-inner border border-white/20">
+              <Gamepad2 className="w-8 h-8 text-white/70" strokeWidth={2.5} />
+            </div>
             <p className="text-white font-black text-lg mb-2">{t('noScores')}</p>
             <p className="text-white/60 text-sm">Main permainan untuk rekodkan skor!</p>
           </motion.div>
@@ -96,13 +100,16 @@ export default function Scoreboard() {
             >
               <p className="text-white/70 text-xs font-black uppercase tracking-wider mb-2">{t('totalStars')}</p>
               <div className="flex items-center justify-center gap-3">
-                <span className="text-4xl">⭐</span>
+                <Star className="w-10 h-10 text-yellow-300" fill="currentColor" strokeWidth={1.5} />
                 <span className="text-5xl font-black text-yellow-300">{totalStars}</span>
               </div>
             </motion.div>
 
             {/* Best Scores */}
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3 px-1">{t('best')} ⭐</p>
+            <div className="flex items-center gap-2 mb-3 px-1">
+              <Award className="w-3.5 h-3.5 text-yellow-300" strokeWidth={3} />
+              <p className="text-white/80 text-xs font-black uppercase tracking-wider">{t('best')}</p>
+            </div>
             <div className="grid grid-cols-2 gap-3 mb-5">
               {Object.entries(bestScores).map(([gameType, score], i) => {
                 const gameInfo = gameIcons[gameType] || { emoji: '🎮' };
@@ -134,7 +141,10 @@ export default function Scoreboard() {
             </div>
 
             {/* Recent Scores */}
-            <p className="text-white/80 text-xs font-black uppercase tracking-wider mb-3 px-1">{t('recent')} 📋</p>
+            <div className="flex items-center gap-2 mb-3 px-1">
+              <History className="w-3.5 h-3.5 text-cyan-300" strokeWidth={3} />
+              <p className="text-white/80 text-xs font-black uppercase tracking-wider">{t('recent')}</p>
+            </div>
             <div className="space-y-2">
               <AnimatePresence>
                 {recentScores.map((score, i) => {

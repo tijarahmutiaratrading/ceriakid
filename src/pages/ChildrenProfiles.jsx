@@ -373,12 +373,12 @@ export default function ChildrenProfiles() {
             <motion.div
               animate={{ y: [0, -10, 0], rotate: [0, 5, -5, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              className="text-7xl mb-4 inline-block"
+              className="inline-flex w-24 h-24 mb-4 rounded-3xl bg-gradient-to-br from-pink-300 to-rose-400 items-center justify-center shadow-lg"
             >
-              👶
+              <Users className="w-12 h-12 text-white" strokeWidth={2.5} />
             </motion.div>
             <p className="text-slate-800 font-black text-xl sm:text-2xl mb-2">Belum ada anak terdaftar</p>
-            <p className="text-slate-500 text-sm font-bold mb-6 max-w-md mx-auto">Daftar profil anak pertama untuk mula track pembelajaran dan progress mereka secara individu! 💕</p>
+            <p className="text-slate-500 text-sm font-bold mb-6 max-w-md mx-auto">Daftar profil anak pertama untuk mula track pembelajaran dan progress mereka secara individu!</p>
             <motion.button
               whileTap={{ scale: 0.95, y: 2 }}
               onClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' }); }}

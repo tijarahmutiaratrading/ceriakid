@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Send, Sparkles, Loader2, GraduationCap, BookOpen, MessageCircle, Plus, Library } from 'lucide-react';
+import { Send, Sparkles, Loader2, GraduationCap, BookOpen, MessageCircle, Plus, Library, Coins, AlertTriangle } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import AIBackButton from '@/components/ai/AIBackButton';
 import AIChatMessage from '@/components/ai/AIChatMessage';
@@ -284,7 +284,7 @@ export default function AIAssistant() {
         {/* Insufficient credits banner */}
         {insufficientCredits && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 bg-amber-50 border-2 border-amber-300 rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
-            <p className="text-amber-800 text-xs font-bold">⚠️ Kredit habis — sila top up untuk teruskan</p>
+            <p className="text-amber-800 text-xs font-bold flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5" strokeWidth={3} /> Kredit habis — sila top up untuk teruskan</p>
             <Link to="/buy-credits" className="px-3 py-1.5 rounded-xl bg-amber-500 text-white font-black text-xs hover:bg-amber-600 transition-all">
               Top Up Sekarang →
             </Link>
@@ -331,8 +331,8 @@ export default function AIAssistant() {
             <span className="hidden sm:inline">Hantar</span>
           </button>
         </div>
-        <p className="text-center text-slate-500 text-[10px] mt-2 font-semibold">
-          💰 {CREDIT_COSTS.ai_assistant} kredit setiap soalan
+        <p className="text-center text-slate-500 text-[10px] mt-2 font-semibold flex items-center justify-center gap-1">
+          <Coins className="w-3 h-3 text-amber-500" strokeWidth={3} /> {CREDIT_COSTS.ai_assistant} kredit setiap soalan
         </p>
         </>
         )}

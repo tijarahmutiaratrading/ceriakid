@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, Loader2, FileText, RefreshCw, Printer } from 'lucide-react';
+import { Sparkles, Loader2, FileText, RefreshCw, Printer, BookOpen, GraduationCap, FileBox, Target, Lightbulb, AlertTriangle } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import AIBackButton from '@/components/ai/AIBackButton';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
@@ -160,7 +160,7 @@ export default function BBMGenerator() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-3xl p-5 md:p-6 space-y-4">
             {/* Subject */}
             <div>
-              <label className="block text-slate-700 text-xs font-black mb-2">📚 Subjek</label>
+              <label className="block text-slate-700 text-xs font-black mb-2 flex items-center gap-1.5"><BookOpen className="w-3 h-3" strokeWidth={3} /> Subjek</label>
               <div className="flex gap-1.5 flex-wrap">
                 {SUBJECTS.map(s => (
                   <button key={s.value} onClick={() => setSubject(s.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1 ${subject === s.value ? 'bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
@@ -172,7 +172,7 @@ export default function BBMGenerator() {
 
             {/* Level */}
             <div>
-              <label className="block text-slate-700 text-xs font-black mb-2">🎓 Tahap</label>
+              <label className="block text-slate-700 text-xs font-black mb-2 flex items-center gap-1.5"><GraduationCap className="w-3 h-3" strokeWidth={3} /> Tahap</label>
               <div className="flex gap-1.5 flex-wrap">
                 {LEVELS.map(l => (
                   <button key={l.value} onClick={() => setLevel(l.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all ${level === l.value ? 'bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
@@ -184,7 +184,7 @@ export default function BBMGenerator() {
 
             {/* Type */}
             <div>
-              <label className="block text-slate-700 text-xs font-black mb-2">📄 Jenis BBM</label>
+              <label className="block text-slate-700 text-xs font-black mb-2 flex items-center gap-1.5"><FileBox className="w-3 h-3" strokeWidth={3} /> Jenis BBM</label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {TYPES.map(t => (
                   <button
@@ -202,7 +202,7 @@ export default function BBMGenerator() {
 
             {/* Topic */}
             <div>
-              <label className="block text-slate-700 text-xs font-black mb-2">🎯 Tajuk / Topik *</label>
+              <label className="block text-slate-700 text-xs font-black mb-2 flex items-center gap-1.5"><Target className="w-3 h-3" strokeWidth={3} /> Tajuk / Topik *</label>
               <input
                 type="text"
                 value={topic}
@@ -214,7 +214,7 @@ export default function BBMGenerator() {
 
             {insufficient && (
               <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
-                <p className="text-amber-800 text-xs font-bold">⚠️ Kredit tidak mencukupi</p>
+                <p className="text-amber-800 text-xs font-bold flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5" strokeWidth={3} /> Kredit tidak mencukupi</p>
                 <Link to="/buy-credits" className="px-3 py-1.5 rounded-xl bg-amber-500 text-white font-black text-xs hover:bg-amber-600 transition-all">
                   Top Up →
                 </Link>
@@ -228,8 +228,8 @@ export default function BBMGenerator() {
             >
               {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Sedang menjana BBM...</> : <><Sparkles className="w-5 h-5" /> Jana BBM ({CREDIT_COSTS.bbm_generator} kredit)</>}
             </button>
-            <p className="text-center text-slate-500 text-[10px] font-semibold">
-              💡 BBM dijana selaras dengan sukatan KSSR/KSPK
+            <p className="text-center text-slate-500 text-[10px] font-semibold flex items-center justify-center gap-1">
+              <Lightbulb className="w-3 h-3 text-amber-500" strokeWidth={3} /> BBM dijana selaras dengan sukatan KSSR/KSPK
             </p>
           </motion.div>
         )}

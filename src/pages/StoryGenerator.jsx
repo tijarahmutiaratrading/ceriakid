@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { Sparkles, Loader2, BookOpen, RefreshCw, Printer } from 'lucide-react';
+import { Sparkles, Loader2, BookOpen, RefreshCw, Printer, FileText, User, Cake, Heart, Ruler, Lightbulb, AlertTriangle } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import AIBackButton from '@/components/ai/AIBackButton';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
@@ -179,7 +179,7 @@ export default function StoryGenerator() {
           // Form
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-3xl p-5 md:p-6 space-y-4">
             <div>
-              <label className="block text-slate-700 text-xs font-black mb-2">📝 Tema Cerita *</label>
+              <label className="block text-slate-700 text-xs font-black mb-2 flex items-center gap-1.5"><FileText className="w-3 h-3" strokeWidth={3} /> Tema Cerita *</label>
               <input
                 type="text"
                 value={theme}
@@ -197,7 +197,7 @@ export default function StoryGenerator() {
             </div>
 
             <div>
-              <label className="block text-slate-700 text-xs font-black mb-2">👤 Nama Watak Utama (pilihan)</label>
+              <label className="block text-slate-700 text-xs font-black mb-2 flex items-center gap-1.5"><User className="w-3 h-3" strokeWidth={3} /> Nama Watak Utama (pilihan)</label>
               <input
                 type="text"
                 value={childName}
@@ -208,7 +208,7 @@ export default function StoryGenerator() {
             </div>
 
             <div>
-              <label className="block text-slate-700 text-xs font-black mb-2">🎂 Umur Pembaca</label>
+              <label className="block text-slate-700 text-xs font-black mb-2 flex items-center gap-1.5"><Cake className="w-3 h-3" strokeWidth={3} /> Umur Pembaca</label>
               <div className="flex gap-1.5 flex-wrap">
                 {AGE_OPTIONS.map(o => (
                   <button key={o.value} onClick={() => setAgeRange(o.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all ${ageRange === o.value ? 'bg-gradient-to-br from-pink-500 to-rose-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
@@ -219,7 +219,7 @@ export default function StoryGenerator() {
             </div>
 
             <div>
-              <label className="block text-slate-700 text-xs font-black mb-2">💝 Pengajaran Moral</label>
+              <label className="block text-slate-700 text-xs font-black mb-2 flex items-center gap-1.5"><Heart className="w-3 h-3" strokeWidth={3} fill="currentColor" /> Pengajaran Moral</label>
               <div className="flex gap-1.5 flex-wrap">
                 {MORAL_OPTIONS.map(o => (
                   <button key={o.value} onClick={() => setMoralLesson(o.value)} className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all ${moralLesson === o.value ? 'bg-gradient-to-br from-pink-500 to-rose-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
@@ -230,7 +230,7 @@ export default function StoryGenerator() {
             </div>
 
             <div>
-              <label className="block text-slate-700 text-xs font-black mb-2">📏 Panjang Cerita</label>
+              <label className="block text-slate-700 text-xs font-black mb-2 flex items-center gap-1.5"><Ruler className="w-3 h-3" strokeWidth={3} /> Panjang Cerita</label>
               <div className="flex gap-1.5">
                 {LENGTH_OPTIONS.map(o => (
                   <button key={o.value} onClick={() => setLength(o.value)} className={`flex-1 px-3 py-1.5 rounded-xl text-xs font-black transition-all ${length === o.value ? 'bg-gradient-to-br from-pink-500 to-rose-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
@@ -242,7 +242,7 @@ export default function StoryGenerator() {
 
             {insufficient && (
               <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
-                <p className="text-amber-800 text-xs font-bold">⚠️ Kredit tidak mencukupi</p>
+                <p className="text-amber-800 text-xs font-bold flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5" strokeWidth={3} /> Kredit tidak mencukupi</p>
                 <Link to="/buy-credits" className="px-3 py-1.5 rounded-xl bg-amber-500 text-white font-black text-xs hover:bg-amber-600 transition-all">
                   Top Up →
                 </Link>
@@ -256,8 +256,8 @@ export default function StoryGenerator() {
             >
               {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Sedang mencipta cerita...</> : <><Sparkles className="w-5 h-5" /> Jana Cerita ({CREDIT_COSTS.story_generator} kredit)</>}
             </button>
-            <p className="text-center text-slate-500 text-[10px] font-semibold">
-              💡 Cerita unik dijana AI khas untuk anak anda
+            <p className="text-center text-slate-500 text-[10px] font-semibold flex items-center justify-center gap-1">
+              <Lightbulb className="w-3 h-3 text-amber-500" strokeWidth={3} /> Cerita unik dijana AI khas untuk anak anda
             </p>
           </motion.div>
         )}

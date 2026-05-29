@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Brain, Sparkles, Loader2, RefreshCw, Trophy, ArrowRight, Zap, Library } from 'lucide-react';
+import { Brain, Sparkles, Loader2, RefreshCw, Trophy, ArrowRight, Zap, Library, BookOpen, GraduationCap, Target, Coins, AlertTriangle } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import AIBackButton from '@/components/ai/AIBackButton';
 import CreditBalanceWidget from '@/components/credits/CreditBalanceWidget';
@@ -207,7 +207,7 @@ export default function QuizAI() {
         {!currentQuiz && !loading && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-3xl p-5 mb-4 space-y-4">
             <div>
-              <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-2">📚 Subjek</p>
+              <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1.5"><BookOpen className="w-3 h-3" strokeWidth={3} /> Subjek</p>
               <div className="grid grid-cols-3 gap-2">
                 {SUBJECTS.map(s => (
                   <button
@@ -225,7 +225,7 @@ export default function QuizAI() {
             </div>
 
             <div>
-              <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-2">🎓 Tahap</p>
+              <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1.5"><GraduationCap className="w-3 h-3" strokeWidth={3} /> Tahap</p>
               <div className="flex gap-1.5 overflow-x-auto pb-1">
                 {LEVELS.map(l => (
                   <button
@@ -242,7 +242,7 @@ export default function QuizAI() {
             </div>
 
             <div>
-              <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-2">⚡ Tahap Kesukaran</p>
+              <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1.5"><Zap className="w-3 h-3" strokeWidth={3} /> Tahap Kesukaran</p>
               <div className="grid grid-cols-3 gap-2">
                 {DIFFICULTIES.map(d => (
                   <button
@@ -260,7 +260,7 @@ export default function QuizAI() {
             </div>
 
             <div>
-              <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-2">🎯 Topik Khusus <span className="opacity-60">(opsyenal)</span></p>
+              <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1.5"><Target className="w-3 h-3" strokeWidth={3} /> Topik Khusus <span className="opacity-60">(opsyenal)</span></p>
               <input
                 type="text"
                 value={topic}
@@ -277,8 +277,8 @@ export default function QuizAI() {
             >
               <Zap className="w-5 h-5" /> Mula Kuiz <ArrowRight className="w-4 h-4" />
             </button>
-            <p className="text-center text-slate-500 text-[10px] font-semibold">
-              💰 1 kredit setiap soalan
+            <p className="text-center text-slate-500 text-[10px] font-semibold flex items-center justify-center gap-1">
+              <Coins className="w-3 h-3 text-amber-500" strokeWidth={3} /> 1 kredit setiap soalan
             </p>
           </motion.div>
         )}
@@ -325,7 +325,7 @@ export default function QuizAI() {
         {/* Insufficient credits banner */}
         {insufficientCredits && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 bg-amber-50 border-2 border-amber-300 rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
-            <p className="text-amber-800 text-xs font-bold">⚠️ Kredit habis — sila top up untuk teruskan</p>
+            <p className="text-amber-800 text-xs font-bold flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5" strokeWidth={3} /> Kredit habis — sila top up untuk teruskan</p>
             <Link to="/buy-credits" className="px-3 py-1.5 rounded-xl bg-amber-500 text-white font-black text-xs hover:bg-amber-600 transition-all">
               Top Up Sekarang →
             </Link>
