@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Crown, Check, Loader, ArrowUp, CheckCircle2, Calendar, Clock, AlertCircle, Sprout, Star, Sparkles, Trophy, Heart, User, Lock, Lightbulb, AlertTriangle, Hourglass, XCircle, Gift } from 'lucide-react';
+import { Crown, Check, Loader, ArrowUp, CheckCircle2, Calendar, Clock, AlertCircle, Sprout, Star, Sparkles, Trophy, Heart, User, UserRound, Lock, Lightbulb, AlertTriangle, Hourglass, XCircle, Gift } from 'lucide-react';
 
 // Tier visual config — gradient icon container utk consistency
 const TIER_VISUAL = {
@@ -221,8 +221,8 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
           </div>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { value: 'male', label: 'Lelaki', gradient: 'from-blue-400 to-cyan-500' },
-              { value: 'female', label: 'Perempuan', gradient: 'from-pink-400 to-rose-500' },
+              { value: 'male', label: 'Lelaki', gradient: 'from-blue-400 to-cyan-500', Icon: User },
+              { value: 'female', label: 'Perempuan', gradient: 'from-pink-400 to-rose-500', Icon: UserRound },
             ].map((option) => (
               <motion.button
                 key={option.value}
@@ -236,7 +236,7 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                 }`}
               >
                 <div className={`w-5 h-5 rounded-md bg-gradient-to-br ${option.gradient} flex items-center justify-center`}>
-                  <User className="w-3 h-3 text-white" strokeWidth={3} />
+                  <option.Icon className="w-3 h-3 text-white" strokeWidth={3} />
                 </div>
                 {option.label}
               </motion.button>
