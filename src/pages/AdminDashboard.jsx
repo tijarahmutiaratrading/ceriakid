@@ -236,12 +236,7 @@ export default function AdminDashboard() {
         <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] bg-sky-300/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="lg:hidden">
-        <div className="md:hidden">
-        <AppHeader showBack={true} backTo="/dashboard" />
-      </div>
-      <AdminTopHeader activeTab={activeTab} setActiveTab={setActiveTab} />
-      </div>
+      <AppHeader showBack={true} backTo="/dashboard" />
       <AdminTopHeader activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <div className="relative">
