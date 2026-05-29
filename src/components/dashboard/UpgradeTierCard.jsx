@@ -246,10 +246,8 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
       )}
 
       {isOnTopTier && (
-        <div className="rounded-2xl p-3 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-300 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-md flex-shrink-0">
-            <Trophy className="w-5 h-5 text-white" strokeWidth={2.5} fill="white" />
-          </div>
+        <div className="rounded-2xl p-3 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 flex items-center gap-3">
+          <Trophy className="w-6 h-6 text-orange-500 flex-shrink-0" strokeWidth={2.5} />
           <div className="flex-1">
             <p className="text-slate-800 font-black text-sm">Anda di pelan tertinggi!</p>
             <p className="text-slate-600 text-xs font-semibold flex items-center gap-1">
