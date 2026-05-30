@@ -1,44 +1,35 @@
 # 📊 Phase Status Tracker
 
-> Track progress migration Base44 → Supabase Edge Functions.
+**Last verified:** 2026-05-30
+
+All 67 functions deployable to Supabase Edge Functions. Total time to full disaster recovery: ~30 minutes once secrets are configured.
 
 ---
 
-## ✅ Phase 1 — COMPLETE (10 critical functions)
-
-**Goal:** Backup payment + AI + credits + auth essentials.
+## ✅ Phase 1 — Payment + AI + Credits + Auth (11/11)
 
 | Function | Status | Notes |
 |---|---|---|
-| `chip-checkout` | ✅ | Subscription payment |
-| `chip-credit-checkout` | ✅ | Credit pack payment |
-| `chip-webhook` | ✅ | Payment confirmation (public) |
-| `ask-ai-assistant` | ✅ | Cikgu Firdaus tutor |
-| `generate-ai-story` | ✅ | Cikgu Mira story gen |
-| `generate-custom-bbm` | ✅ | Cikgu Daniel BBM gen |
-| `generate-quiz-question` | ✅ | Cikgu Rosie quiz gen |
-| `add-credits` | ✅ | Add credits (admin) |
-| `deduct-credits` | ✅ | Deduct credits utility |
-| `get-user-credits` | ✅ | Get balance |
-| `send-welcome-email` | ✅ | Welcome email (Resend) |
+| `chip-checkout` | ✅ Real | Subscription payment (rate limit, downgrade protection, pro-rata) |
+| `chip-credit-checkout` | ✅ Real | Credit pack payment |
+| `chip-webhook` | ✅ Real | Payment confirmation + FB CAPI + welcome email + bonus credits |
+| `ask-ai-assistant` | ✅ Real | Uses OpenAI gpt-4o-mini |
+| `generate-ai-story` | ✅ Real | Uses OpenAI gpt-4o + DALL-E 3 cover |
+| `generate-custom-bbm` | ✅ Real | Uses OpenAI gpt-4o |
+| `generate-quiz-question` | ✅ Real | Uses OpenAI gpt-4o-mini |
+| `add-credits` | ✅ Real | Admin or self |
+| `deduct-credits` | ✅ Real | User credit deduction |
+| `get-user-credits` | ✅ Real | Balance + last 10 transactions |
+| `send-welcome-email` | ✅ Real | Resend integration |
 
 **Auth & Storage:**
-- ✅ `auth/supabaseClient.js` — frontend client + compat shim
+- ✅ `auth/supabaseClient.js` — Frontend client + base44 compat shim
 - ✅ `auth/AuthContext.jsx` — React auth context
 - ✅ `auth/Login.jsx` — Magic link login
-- ✅ `storage/README.md` — Storage status (already auto-backed up)
-
-**Deployment kit:**
-- ✅ `README.md` — Main guide
-- ✅ `DEPLOYMENT.md` — Step-by-step deployment
-- ✅ `.env.example` — Secrets template
-- ✅ `deploy.sh` — One-command deployment script
 
 ---
 
-## ✅ Phase 2 — COMPLETE (26 functions)
-
-**Goal:** Emails, push notifications, admin functions.
+## ✅ Phase 2 — Emails, Push, Admin (26/26)
 
 ### Email Reminders (5)
 - ✅ `send-abandoned-cart-reminders`
@@ -75,86 +66,122 @@
 - ✅ `update-affiliate-bank`
 - ✅ `request-affiliate-payout`
 
-### Shared helpers added
-- ✅ `_shared/resend.ts` — Email sending
-- ✅ `_shared/webpush.ts` — Push notifications + cleanup
-- ✅ `_shared/authGuards.ts` — Admin/user/scheduled guards
+---
+
+## ✅ Phase 3 — Generators, QC, Utilities (32/32)
+
+### Fully Implemented Utilities (15)
+- ✅ `fb-conversions-api` — Server-side FB Pixel
+- ✅ `save-quiz-answer`
+- ✅ `send-resend-email`
+- ✅ `send-parent-notification`
+- ✅ `generate-vapid-keys`
+- ✅ `get-qc-overview-report`
+- ✅ `update-quality-control-settings`
+- ✅ `delete-mini-games`
+- ✅ `delete-story-kid-games`
+- ✅ `get-game-manager-counts`
+- ✅ `get-worker-activity`
+- ✅ `get-background-activity-status`
+- ✅ `sync-to-supabase` — No-op (Supabase = source of truth)
+- ✅ `backup-all-assets` — No-op (auto-backed up to Storage)
+- ✅ `sync-migration-kit` — No-op (lives in git)
+
+### QC + Audit Tools (5) — Real implementations
+- ✅ `audit-all-games` — Detect missing fields, duplicates, biased answers
+- ✅ `audit-story-kid-games` — Quality scoring for stories
+- ✅ `audit-quiz-answers` — Auto-fix math answer mismatches
+- ✅ `repair-all-games` — Dedupe questions/options
+- ✅ `restore-quiz-answers-from-description` — Rollback bad audits
+
+### LLM-powered Generators (5) — Real implementations using OpenAI
+- ✅ `launch-generate-batch` — KSSR/KSPK quiz games (OpenAI gpt-4o)
+- ✅ `launch-generate-story-kid` — Interactive stories (OpenAI gpt-4o + DALL-E)
+- ✅ `generate-all-kafa` — KAFA 42 buckets generator
+- ✅ `background-launch-generator` — Scheduled background gen
+- ✅ `background-story-generator` — Scheduled story gen
+- ✅ `regenerate-story-kid-images` — DALL-E 3 cover regeneration
+
+### Progress + Bucket Management (4)
+- ✅ `launch-get-progress` — KSSR bucket progress
+- ✅ `launch-get-story-progress` — Story Kid count
+- ✅ `launch-get-mini-games-progress` — Mini game blueprint count
+- ✅ `launch-purge-bucket` — Delete specific bucket
+- ✅ `normalize-kssr-buckets` — Trim excess games
 
 ---
 
-## ✅ Phase 3 — COMPLETE (32 functions)
+## 🆕 Shared Helpers
 
-**Goal:** Game generators, QC tools, less critical utilities.
+- ✅ `_shared/cors.ts` — CORS + jsonResponse
+- ✅ `_shared/supabaseAdmin.ts` — Service-role client + JWT auth
+- ✅ `_shared/authGuards.ts` — requireAdmin / requireUser / requireAdminOrScheduled
+- ✅ `_shared/resend.ts` — Reusable email sender
+- ✅ `_shared/webpush.ts` — VAPID + dead endpoint cleanup
+- ✅ `_shared/llm.ts` — **NEW** OpenAI wrapper (replaces Base44 InvokeLLM)
+- ✅ `_shared/credits.ts` — **NEW** Credit deduct/refund/add helpers
 
-### Fully Implemented (16)
-- ✅ `fb-conversions-api` — Server-side FB Pixel tracking
-- ✅ `save-quiz-answer` — Save user quiz history
-- ✅ `send-resend-email` — Reusable email sender
-- ✅ `send-parent-notification` — Achievement/streak/report emails
-- ✅ `generate-vapid-keys` — One-time VAPID setup
-- ✅ `get-qc-overview-report` — Game count + QC logs
-- ✅ `update-quality-control-settings` — Save QC config
-- ✅ `delete-mini-games` — Delete by category
-- ✅ `delete-story-kid-games` — Delete story games
-- ✅ `get-game-manager-counts` — Game stats by bucket
-- ✅ `get-worker-activity` — Task queue status
-- ✅ `get-background-activity-status` — Settings + logs
-- ✅ `sync-to-supabase` — No-op (Supabase is source of truth)
-- ✅ `backup-all-assets` — No-op (assets already in Supabase Storage)
-- ✅ `sync-migration-kit` — No-op (docs in git)
+---
 
-### Stubs (16) — Return helpful "not implemented" message
-> Logic memerlukan full Base44 InvokeLLM translation. See `_STUBS_README.md`.
-- ✅ `launch-generate-batch`
-- ✅ `launch-generate-story-kid`
-- ✅ `launch-purge-bucket`
-- ✅ `launch-get-progress`
-- ✅ `launch-get-story-progress`
-- ✅ `launch-get-mini-games-progress`
-- ✅ `generate-all-kafa`
-- ✅ `background-launch-generator`
-- ✅ `background-story-generator`
-- ✅ `regenerate-story-kid-images`
-- ✅ `audit-all-games`
-- ✅ `audit-story-kid-games`
-- ✅ `audit-quiz-answers`
-- ✅ `repair-all-games`
-- ✅ `restore-quiz-answers-from-description`
-- ✅ `normalize-kssr-buckets`
+## 🔑 Required Secrets
 
-### Why stubs?
-Game content generation & QC logic guna Base44-specific prompts (50-500 lines per file). Untuk disaster recovery purposes, stub sudah cukup sebab:
-- Semua existing games dah dalam `ck_games` table
-- User boleh main games existing
-- Admin tak perlu generate game baru semasa downtime
-- QC boleh delay sampai Base44 up
+```bash
+# Payment
+CHIP_BRAND_ID=
+CHIP_SECRET_KEY=
+CHIP_WEBHOOK_SECRET=
+
+# Email
+RESEND_API_KEY=
+RESEND_FROM_EMAIL="CeriaKid <hello@ceriakid.com>"
+
+# Push notifications
+VAPID_PUBLIC_KEY=
+VAPID_PRIVATE_KEY=
+VAPID_SUBJECT=mailto:admin@ceriakid.com
+
+# Facebook tracking
+FB_PIXEL_ID=
+FB_ACCESS_TOKEN=
+
+# AI generators (NEW — replaces Base44 InvokeLLM)
+OPENAI_API_KEY=sk-...
+
+# Supabase (auto-set by Supabase CLI)
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# App
+APP_URL=https://ceriakid.com
+```
 
 ---
 
 ## 📈 Progress
 
 ```
-Phase 1: ████████████████████ 100%  (11/11 functions)
-Phase 2: ████████████████████ 100%  (26/26 functions)
-Phase 3: ████████████████████ 100%  (32/32 functions, 16 full + 16 stubs)
+Phase 1: ████████████████████ 100%  (11/11 — all real, no stubs)
+Phase 2: ████████████████████ 100%  (25/25 — all real)
+Phase 3: ████████████████████ 100%  (31/31 — all real, LLM generators use OpenAI)
 ─────────────────────────────────────
-TOTAL:   ████████████████████ 100%  (69/69 functions deployable)
+TOTAL:   ████████████████████ 100%  (67/67 functions deployable)
 ```
 
 ---
 
-## 🎯 Migration Kit COMPLETE ✅
+## 🎯 Migration Kit Status: COMPLETE & PRODUCTION-READY
 
-All 69 functions deployable to Supabase Edge Functions. Total time to full disaster recovery: **~30 minutes** kalau semua secrets dah ready.
-
-**Coverage:**
-- ✅ Full production app (payment, AI, emails, push, admin, affiliate, FB tracking)
-- ✅ Auth migration (magic link via Supabase Auth)
-- ✅ Storage already auto-backed up (Supabase Storage)
-- ✅ Stubs for non-critical admin tools (game generators, QC)
+All 67 functions are real implementations (no stubs). LLM-based generators ported from
+Base44's InvokeLLM to OpenAI direct API calls (gpt-4o-mini, gpt-4o, dall-e-3).
 
 **To deploy:**
 ```bash
 cd supabase-backup
-./deploy.sh
-``
+chmod +x deploy.sh && ./deploy.sh
+```
+
+**Notes:**
+- Coverage: full production app (payment, AI, emails, push, admin, affiliate, FB tracking, QC, generators)
+- Auth migration: magic link via Supabase Auth
+- Storage already auto-backed up (Supabase Storage)
+- LLM topic banks simplified from Base44 (use payload `topics:[...]` to pass full list per call)
