@@ -51,7 +51,7 @@ export default function ReferralShareCard({ affiliate, referralLink, userName })
   };
 
   const handleWhatsAppShare = async () => {
-    const message = `🎓 Anak saya belajar dengan CeriaKid! 1600+ permainan edukatif ikut KSPK/KSSR.\n\n🎁 Pakai kod saya untuk dapat diskaun:\n${referralLink}\n\nCuba 2 minit je untuk setup! 🚀`;
+    const message = `Eh, korang tau tak? 😍\n\nAnak aku dah berbulan guna CeriaKid ni — siyes lah, dia jenis suka main game, tapi sambil main tu dia belajar. Bahasa, Math, Sains, Jawi semua ada. Ikut sukatan KSPK & KSSR pulak tu.\n\n1600+ permainan dalam satu app je. Tak payah pening cari aktiviti lain dah. 📚\n\nAku share kod aku ni — korang try dulu, free je nak tengok:\n👉 ${referralLink}\n\nSetup 2 minit. Lepas tu biar anak yang sambung sendiri. 😄`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
