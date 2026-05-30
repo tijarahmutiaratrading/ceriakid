@@ -41,14 +41,9 @@ export default function DrawerMenuItem({
             isSmall ? 'px-3 py-2.5 text-xs ml-1' : 'px-4 py-3 text-sm'
           } ${
             active
-              ? 'text-white font-black shadow-lg'
-              : 'text-white hover:bg-white/15'
+              ? 'text-white font-black bg-white/25 ring-1 ring-white/30'
+              : 'text-white hover:bg-white/10'
           }`}
-          style={
-            active
-              ? { background: 'linear-gradient(135deg, #f472b6 0%, #c084fc 100%)', boxShadow: '0 4px 14px rgba(192, 132, 252, 0.4)' }
-              : undefined
-          }
         >
           <span className="flex-1 truncate">{label}</span>
 

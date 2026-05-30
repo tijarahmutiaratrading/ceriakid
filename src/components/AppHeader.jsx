@@ -422,8 +422,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                           onClick={() => { haptic('light'); setExpandedSubmenu(isExpanded ? null : item.path); }}
                           className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                             itemActive || isExpanded
-                              ? 'bg-white/95 text-pink-600 shadow-sm font-black'
-                              : 'text-white hover:bg-white/15'
+                              ? 'bg-white/25 ring-1 ring-white/30 text-white font-black'
+                              : 'text-white hover:bg-white/10'
                           }`}
                         >
                           <span>{item.label}</span>
@@ -439,7 +439,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                               transition={{ duration: 0.2 }}
                               className="overflow-hidden"
                             >
-                              <div className="ml-3 mt-1 mb-1 pl-3 border-l-2 border-pink-200 space-y-1">
+                              <div className="ml-3 mt-1 mb-1 pl-3 border-l-2 border-white/20 space-y-1">
                                 {item.submenu.map((sub) => (
                                   <DrawerMenuItem
                                     key={sub.path}
@@ -466,10 +466,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
 
             {/* Footer: Logout */}
             {isAuthenticated && (
-              <div className="px-3 py-3 border-t border-pink-100 bg-white/40">
+              <div className="px-3 py-3 border-t border-white/15">
                 <motion.button type="button" whileTap={{ scale: 0.97 }}
                   onClick={() => { haptic('medium'); closeDrawer(); logout?.(); }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-black text-sm text-white bg-rose-500 hover:bg-rose-600 transition-all">
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-black text-sm text-white bg-white/15 hover:bg-white/25 ring-1 ring-white/20 transition-all">
                   <LogOut className="w-5 h-5 flex-shrink-0" strokeWidth={2.5} />
                   <span>Log Keluar</span>
                 </motion.button>
