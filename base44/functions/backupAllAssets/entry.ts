@@ -182,16 +182,24 @@ Deno.serve(async (req) => {
     }
 
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user || user.role !== 'admin') {
-      return Response.json({ error: 'Forbidden: Admin only' }, { status: 403 });
+
+    // Parse body once — used for both auth bypass + action routing below
+    const reqBody = await req.json().catch(() => ({}));
+    const isScheduled = reqBody.scheduled === true;
+
+    // Admin check (skip kalau called by scheduled automation / service role)
+    if (!isScheduled) {
+      const user = await base44.auth.me();
+      if (!user || user.role !== 'admin') {
+        return Response.json({ error: 'Forbidden: Admin only' }, { status: 403 });
+      }
     }
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
       return Response.json({ error: 'Supabase secrets not configured' }, { status: 500 });
     }
 
-    const body = await req.json().catch(() => ({}));
+    const body = reqBody;
     const action = body.action || 'scan';
 
     // ── ACTION 1: SCAN ONLY ──

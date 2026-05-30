@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Database, RefreshCw, CheckCircle2, AlertTriangle, Clock, Play } from 'lucide-react';
+import { Database, RefreshCw, CheckCircle2, AlertTriangle, Clock, Play, Image as ImageIcon } from 'lucide-react';
 
 export default function SupabaseSyncCard() {
   const [latest, setLatest] = useState(null);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
+  const [assetResult, setAssetResult] = useState(null); // { newlyBackedUp, alreadyBackedUp, errorCount }
 
   const load = async () => {
     try {
@@ -23,12 +24,37 @@ export default function SupabaseSyncCard() {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  // Load current asset count on mount
+  const loadAssetCount = async () => {
+    try {
+      const res = await base44.functions.invoke('backupAllAssets', { action: 'manifest' });
+      if (res?.data?.success) {
+        setAssetResult({ alreadyBackedUp: res.data.totalMapped, newlyBackedUp: 0, errorCount: 0 });
+      }
+    } catch (e) {
+      console.error('Failed to load asset manifest:', e);
+    }
+  };
 
+  useEffect(() => { load(); loadAssetCount(); }, []);
+
+  // Sync EVERYTHING: data records + media assets in parallel
   const runSyncNow = async () => {
     setSyncing(true);
     try {
-      await base44.functions.invoke('syncToSupabase', {});
+      const [dataRes, assetRes] = await Promise.allSettled([
+        base44.functions.invoke('syncToSupabase', {}),
+        base44.functions.invoke('backupAllAssets', { action: 'backup', limit: 100 }),
+      ]);
+
+      if (assetRes.status === 'fulfilled' && assetRes.value?.data?.success) {
+        setAssetResult({
+          newlyBackedUp: assetRes.value.data.newlyBackedUp || 0,
+          alreadyBackedUp: assetRes.value.data.alreadyBackedUp || 0,
+          errorCount: assetRes.value.data.errorCount || 0,
+        });
+      }
+
       await load();
     } catch (e) {
       console.error('Manual sync failed:', e);
@@ -55,7 +81,7 @@ export default function SupabaseSyncCard() {
           </div>
           <div>
             <h3 className="text-slate-900 font-black text-lg leading-tight">Supabase Sync</h3>
-            <p className="text-slate-600 text-xs font-semibold">Auto-sync setiap 3 jam</p>
+            <p className="text-slate-600 text-xs font-semibold">Data + Assets · Auto setiap 3 jam</p>
           </div>
         </div>
         <button
@@ -64,9 +90,28 @@ export default function SupabaseSyncCard() {
           className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-sm flex items-center gap-2 shadow-lg disabled:opacity-60 transition-colors"
         >
           {syncing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
-          {syncing ? 'Sync...' : 'Sync Sekarang'}
+          {syncing ? 'Sync...' : 'Sync Semua Sekarang'}
         </button>
       </div>
+
+      {/* Asset Backup Status — show alongside data sync */}
+      {assetResult && (
+        <div className="mb-4 rounded-2xl p-3 bg-violet-50 ring-1 ring-violet-200 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-violet-100 flex items-center justify-center flex-shrink-0">
+            <ImageIcon className="w-4 h-4 text-violet-700" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-slate-900 text-xs font-black">
+              Media Assets: {assetResult.alreadyBackedUp + assetResult.newlyBackedUp} images backed up
+            </p>
+            <p className="text-slate-600 text-[11px] font-semibold">
+              {assetResult.newlyBackedUp > 0
+                ? `+${assetResult.newlyBackedUp} baru disync · ${assetResult.alreadyBackedUp} sedia ada`
+                : `Semua dah backup · ${assetResult.errorCount > 0 ? `${assetResult.errorCount} error` : 'no new files'}`}
+            </p>
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <div className="text-center py-8">
