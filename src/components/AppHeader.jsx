@@ -321,7 +321,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             role="dialog"
             aria-modal="true"
             aria-label="Menu navigasi"
-            className="sm:hidden fixed left-3 right-3 top-20 z-50 flex flex-col rounded-[2rem] overflow-hidden max-h-[calc(100vh-6rem)]"
+            className="sm:hidden fixed left-3 right-3 top-20 bottom-3 z-50 flex flex-col rounded-[2rem] overflow-hidden"
             style={{
               background: 'linear-gradient(165deg, #faf5ff 0%, #fdf2f8 50%, #fff7ed 100%)',
               boxShadow: '0 25px 60px -10px rgba(168, 85, 247, 0.45), 0 0 0 1px rgba(255,255,255,0.5)',
