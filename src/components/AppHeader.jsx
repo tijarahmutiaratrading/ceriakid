@@ -238,21 +238,22 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             {isAuthenticated && selectedChild && (childrenList?.length || 0) > 1 && (
               <motion.button
                 type="button"
-                whileTap={{ scale: 0.97 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={() => { haptic('light'); setHeaderSwitcherOpen(true); }}
                 aria-label={`Anak aktif: ${selectedChild.name}. Tap untuk tukar.`}
-                className="relative flex items-center gap-1.5 pl-1 pr-1.5 py-1 rounded-full bg-white/95 shadow-md flex-shrink-0 max-w-[160px]"
+                className="flex items-center gap-1.5 pl-1 pr-1.5 py-1 rounded-full bg-white/95 shadow-md hover:bg-white transition-all flex-shrink-0"
               >
                 <img
                   src={getChildAvatar(selectedChild)}
                   alt={selectedChild.name}
                   className="w-7 h-7 rounded-full object-cover ring-2 ring-pink-200 bg-white flex-shrink-0"
                 />
-                <div className="flex flex-col items-start min-w-0 leading-none">
-                  <span className="text-pink-600 text-[8px] font-black uppercase tracking-wider leading-none">Anak Aktif</span>
-                  <span className="text-slate-800 text-[11px] font-black truncate leading-tight mt-0.5 max-w-[70px]">{selectedChild.name}</span>
+                <div className="text-left leading-none">
+                  <p className="text-pink-600 text-[8px] font-black uppercase tracking-wider">Anak Aktif</p>
+                  <p className="text-slate-800 text-[11px] font-black truncate max-w-[70px] mt-0.5">{selectedChild.name}</p>
                 </div>
-                <div className="flex items-center gap-0.5 px-1.5 py-1 rounded-full bg-pink-100 flex-shrink-0">
+                <div className="flex items-center gap-0.5 px-1.5 py-1 rounded-md bg-pink-100 flex-shrink-0">
+                  <span className="text-pink-600 text-[8px] font-black uppercase tracking-wider">Tukar</span>
                   <ChevronsUpDown className="w-2.5 h-2.5 text-pink-600" strokeWidth={3} />
                 </div>
               </motion.button>
