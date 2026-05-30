@@ -13,6 +13,7 @@ import { getPinned, togglePinned, getRecent, trackRecent } from '@/lib/menuPrefs
 import DrawerProfileHeader from '@/components/header/DrawerProfileHeader';
 import DrawerSearchBar from '@/components/header/DrawerSearchBar';
 import DrawerMenuItem from '@/components/header/DrawerMenuItem';
+import ChildSwitcherModal from '@/components/header/ChildSwitcherModal';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null, theme = 'auto' }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,10 +27,12 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
   const [pendingNotifications, setPendingNotifications] = useState({ challenges: 0, sync: 0 });
   const [userTier, setUserTier] = useState('free');
 
+  const [headerSwitcherOpen, setHeaderSwitcherOpen] = useState(false);
+
   const { isAuthenticated, user, logout } = useAuth() || {};
   const [headerAvatarUrl, setHeaderAvatarUrl] = useState(user?.avatarUrl || '');
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
-  const { selectedChild, childrenList } = useSelectedChild() || {};
+  const { selectedChild, childrenList, setSelectedChild } = useSelectedChild() || {};
   const location = useSafeLocation();
   const navigate = useNavigate();
 
@@ -256,6 +259,32 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           </div>
 
           <div className="flex items-center gap-2 justify-end">
+            {/* Child avatar — tap untuk tukar anak (hanya bila ada >1 anak) */}
+            {isAuthenticated && selectedChild && (childrenList?.length || 0) > 1 && (
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.9 }}
+                onClick={() => { haptic('light'); setHeaderSwitcherOpen(true); }}
+                aria-label={`Anak aktif: ${selectedChild.name}. Tap untuk tukar.`}
+                className="relative flex-shrink-0"
+              >
+                {selectedChild.avatarUrl ? (
+                  <img
+                    src={selectedChild.avatarUrl}
+                    alt={selectedChild.name}
+                    className={`w-9 h-9 rounded-full object-cover shadow-lg ring-2 ${isDarkPill ? 'ring-yellow-300/80' : 'ring-pink-300'}`}
+                  />
+                ) : (
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-base shadow-lg ring-2 ${isDarkPill ? 'ring-yellow-300/80 bg-white/95' : 'ring-pink-300 bg-gradient-to-br from-pink-100 to-purple-100'}`}>
+                    {selectedChild.ageGroup === 'prasekolah' ? '🎨' : '📚'}
+                  </div>
+                )}
+                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 ring-2 ring-white flex items-center justify-center">
+                  <ChevronDown className="w-2 h-2 text-white" strokeWidth={4} />
+                </div>
+              </motion.button>
+            )}
+
             <Link to={isAuthenticated ? "/settings" : "/"} className="flex items-center justify-end" title={isAuthenticated ? 'Tetapan Profil' : 'CeriaKid'}>
               {isAuthenticated ? (
                 headerAvatarUrl ? (
@@ -534,6 +563,16 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Top header child switcher modal */}
+      <ChildSwitcherModal
+        open={headerSwitcherOpen}
+        children={childrenList || []}
+        selectedChild={selectedChild}
+        onSelect={setSelectedChild}
+        onClose={() => setHeaderSwitcherOpen(false)}
+        onAddChild={() => setHeaderSwitcherOpen(false)}
+      />
     </>
   );
 }

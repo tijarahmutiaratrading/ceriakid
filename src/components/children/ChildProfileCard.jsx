@@ -2,8 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import {
   Star, Award, Gamepad2, Edit2, Trash2, Camera, Loader2,
-  TrendingUp, ChevronRight, Calendar, Crown, Flame,
+  TrendingUp, ChevronRight, Calendar, Crown, Flame, CheckCircle2, UserCheck,
 } from 'lucide-react';
+import { useSelectedChild } from '@/lib/SelectedChildContext';
+import { haptic } from '@/lib/haptics';
 
 const CATEGORY_LABELS = {
   bahasa_melayu: 'BM',
@@ -37,6 +39,16 @@ export default function ChildProfileCard({
   onUploadAvatar,
   onOpenPerformance,
 }) {
+  const { selectedChild, setSelectedChild, childrenList = [] } = useSelectedChild() || {};
+  const isActive = selectedChild?.id === child.id;
+  const showSetActiveBtn = childrenList.length > 1 && !isActive;
+
+  const handleSetActive = (e) => {
+    e.stopPropagation();
+    haptic('medium');
+    setSelectedChild?.(child);
+  };
+
   const totalGames = games.length;
   const totalStars = games.reduce((s, g) => s + (g.bestStars || 0), 0);
   const perfectGames = games.filter((g) => g.bestStars === 3).length;
@@ -91,10 +103,28 @@ export default function ChildProfileCard({
       whileHover={{ y: -3 }}
       className="rounded-[2rem] relative overflow-hidden group transition-all"
       style={{
-        background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-        boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
+        background: isActive
+          ? 'linear-gradient(135deg, #ffffff 0%, #fef3c7 100%)'
+          : 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
+        boxShadow: isActive
+          ? '0 8px 24px rgba(34, 197, 94, 0.25), 0 0 0 3px rgba(34, 197, 94, 0.4)'
+          : '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
       }}
     >
+      {/* Active "Aktif" badge */}
+      {isActive && childrenList.length > 1 && (
+        <motion.div
+          initial={{ scale: 0, y: -10 }}
+          animate={{ scale: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 280, delay: 0.2 }}
+          className="absolute top-3 left-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-full"
+          style={{ background: 'linear-gradient(135deg, #4ade80 0%, #22c55e 100%)', boxShadow: '0 3px 0 #16a34a' }}
+        >
+          <CheckCircle2 className="w-3 h-3 text-white" strokeWidth={3} />
+          <span className="text-white text-[9px] font-black uppercase tracking-wider">Aktif</span>
+        </motion.div>
+      )}
+
       {/* Leader crown */}
       {isLeader && (
         <motion.div
@@ -277,31 +307,47 @@ export default function ChildProfileCard({
           </div>
         )}
 
-        {/* CTA Button */}
-        <motion.button
-          whileTap={{ scale: 0.97, y: 2 }}
-          onClick={onOpenPerformance}
-          className="w-full rounded-full py-3 font-black text-sm flex items-center justify-center gap-1.5 transition-all text-white"
-          style={
-            hasPlayed
-              ? { background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)' }
-              : { background: 'linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%)', boxShadow: '0 4px 0 #8b5cf6' }
-          }
-        >
-          {hasPlayed ? (
-            <>
-              <TrendingUp className="w-4 h-4" strokeWidth={3} />
-              Lihat Prestasi Penuh
-              <ChevronRight className="w-4 h-4" strokeWidth={3} />
-            </>
-          ) : (
-            <>
-              <Flame className="w-4 h-4" strokeWidth={3} />
-              Mulakan Pembelajaran
-              <ChevronRight className="w-4 h-4" strokeWidth={3} />
-            </>
+        {/* Action Buttons */}
+        <div className="space-y-2">
+          {/* Set Active button — only show kalau bukan aktif & ada >1 anak */}
+          {showSetActiveBtn && (
+            <motion.button
+              whileTap={{ scale: 0.97, y: 2 }}
+              onClick={handleSetActive}
+              className="w-full rounded-full py-2.5 font-black text-xs flex items-center justify-center gap-1.5 transition-all text-white"
+              style={{ background: 'linear-gradient(135deg, #4ade80 0%, #22c55e 100%)', boxShadow: '0 4px 0 #16a34a, 0 6px 14px rgba(34, 197, 94, 0.3)' }}
+            >
+              <UserCheck className="w-4 h-4" strokeWidth={3} />
+              Jadikan Aktif
+            </motion.button>
           )}
-        </motion.button>
+
+          {/* Performance CTA Button */}
+          <motion.button
+            whileTap={{ scale: 0.97, y: 2 }}
+            onClick={onOpenPerformance}
+            className="w-full rounded-full py-3 font-black text-sm flex items-center justify-center gap-1.5 transition-all text-white"
+            style={
+              hasPlayed
+                ? { background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)' }
+                : { background: 'linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%)', boxShadow: '0 4px 0 #8b5cf6' }
+            }
+          >
+            {hasPlayed ? (
+              <>
+                <TrendingUp className="w-4 h-4" strokeWidth={3} />
+                Lihat Prestasi Penuh
+                <ChevronRight className="w-4 h-4" strokeWidth={3} />
+              </>
+            ) : (
+              <>
+                <Flame className="w-4 h-4" strokeWidth={3} />
+                Mulakan Pembelajaran
+                <ChevronRight className="w-4 h-4" strokeWidth={3} />
+              </>
+            )}
+          </motion.button>
+        </div>
       </div>
     </motion.div>
   );
