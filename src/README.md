@@ -1,368 +1,177 @@
-# 🎓 Jom Belajar - Interactive Learning App for Kids
+# 🎓 CeriaKid — Interactive Learning App for Malaysian Kids
 
-A **production-ready web app** for teaching children (ages 3-12) with **200+ interactive games** in Bahasa Melayu, English, Mathematics, and Science.
-
-## 🎯 Features
-
-✅ **Landing Page** - Marketing-optimized for Facebook ads  
-✅ **Pricing Tiers** - Free, Premium (RM24.90/mo), Pro (RM44.90/mo)  
-✅ **Stripe Integration** - Secure subscription payments  
-✅ **22 Starter Games** - Expandable to 200+ games  
-✅ **Age Groups** - Prasekolah (3-5) & Sekolah Rendah (6-12)  
-✅ **Dual Language** - Bahasa Melayu & English toggle  
-✅ **Progress Tracking** - Scores, stars, scoreboard  
-✅ **Responsive Design** - Mobile, tablet, desktop optimized  
-✅ **FB Ads Ready** - Landing & pricing pages SEO-optimized  
+> Production app: **200+ educational games, AI tutors, KAFA syllabus, parent dashboard, affiliate program.**
+> Tech: React + Vite + Tailwind + Supabase + CHIP Payment + OpenAI
 
 ---
 
-## 📁 Project Structure
+## 🤖 AI Coding Agents — READ THIS FIRST
+
+> **Codex / Claude / Cursor / Lovable / Bolt — start here:**
+>
+> 👉 **[`AI_AGENT_README.md`](./AI_AGENT_README.md)** ← Complete recovery + migration playbook
+
+That file contains:
+- ✅ Step-by-step Supabase migration (7 steps, ~2 hours total)
+- ✅ Where every artifact lives (docs, edge functions, SQL, auth)
+- ✅ What NOT to do (avoid wasted refactoring)
+- ✅ Entity name mapping, LLM migration, auth migration
+
+---
+
+## 📁 Repo Map
 
 ```
-jom-belajar/
-├── pages/
-│   ├── Landing.jsx          # Marketing landing page
-│   ├── Pricing.jsx          # Subscription pricing tiers
-│   ├── Home.jsx             # Dashboard with age/category selection
-│   ├── GamesList.jsx        # List games by category
-│   ├── GamePlayer.jsx       # Dynamic game player
-│   ├── ABCGame.jsx          # Legacy alphabet game
-│   └── Scoreboard.jsx       # Progress & score tracking
-├── components/
-│   ├── game/
-│   │   ├── GameHeader.jsx
-│   │   ├── FeedbackOverlay.jsx
-│   │   ├── ScoreScreen.jsx
-│   │   └── LanguageToggle.jsx
-│   ├── home/
-│   │   ├── AgeGroupSelector.jsx
-│   │   ├── CategoryGrid.jsx
-│   │   └── GameCard.jsx
-│   └── ui/                  # shadcn/ui components
-├── lib/
-│   ├── gameLibrary.js       # 20-30 games, scalable to 200+
-│   ├── AgeGroupContext.jsx
-│   ├── LanguageContext.jsx
-│   └── i18n.js              # Translations
-├── functions/
-│   ├── createCheckoutSession.js  # Stripe checkout
-│   └── handleStripeWebhook.js    # Webhook processor
-├── entities/
-│   ├── Game.json            # Game schema
-│   ├── SubscriptionTier.json
-│   └── UserSubscription.json
-├── App.jsx                  # Router configuration
-├── index.html               # HTML + meta tags
-├── index.css                # Design system & tokens
-├── tailwind.config.js       # Tailwind configuration
-├── QUICK_START.md           # ⭐ Start here!
-├── PRODUCTION_SETUP.md      # Detailed setup guide
-├── APP_FEATURES.md          # Complete feature list
-└── README.md                # This file
+📦 CeriaKid
+├── 🤖 AI_AGENT_README.md      ← START HERE for AI agents
+├── 📚 docs/                    ← 28 architecture docs (read 00_README.md first)
+├── 🚀 supabase-backup/         ← Production-ready Supabase migration kit
+│   ├── functions/              ← 67 Edge Functions (Deno, ready to deploy)
+│   ├── _shared/                ← Reusable helpers (auth, CORS, LLM, credits)
+│   ├── auth/                   ← Frontend Supabase auth + compat shim
+│   ├── sql/                    ← pg_cron setup
+│   ├── storage/                ← Storage status (auto-backed up)
+│   └── deploy.sh               ← One-command deploy script
+├── 📄 pages/                   ← React pages (~60+)
+├── 🧩 components/              ← React components (~200+)
+├── 📚 lib/                     ← Utilities + contexts
+├── ⚙️  functions/              ← Current Base44 backend (67 functions)
+├── 🗄️  entities/               ← Base44 entity schemas (26 entities)
+└── 🤖 agents/                  ← AI agent configs
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. **Get Stripe API Keys**
+### For New Developers
 ```bash
-# Go to https://stripe.com
-# Dashboard > Developers > API Keys
-# Copy Secret Key (sk_xxx...)
+# 1. Clone repo
+git clone <repo-url>
+cd ceriakid
+
+# 2. Install
+npm install
+
+# 3. Run dev
+npm run dev
 ```
 
-### 2. **Set Secrets in Base44**
-```
-STRIPE_SECRET_KEY = sk_xxx...
-STRIPE_PRICE_PREMIUM = price_xxx...
-STRIPE_PRICE_PRO = price_xxx...
-STRIPE_WEBHOOK_SECRET = whsec_xxx...
-```
+### For Disaster Recovery (Base44 → Supabase)
+👉 See [`AI_AGENT_README.md`](./AI_AGENT_README.md)
 
-### 3. **Deploy**
-```bash
-# Commit changes
-# In Base44 Dashboard > Deploy to Production
-```
-
-### 4. **Test Payments**
-```
-1. Go to /pricing
-2. Click "Langganan Sekarang"
-3. Use test card: 4242 4242 4242 4242
-```
-
-### 5. **Set Up Webhook** (5 min)
-```
-Stripe > Webhooks > Add Endpoint
-URL: https://your-app.com/api/functions/handleStripeWebhook
-Select: subscription events
-```
-
-👉 **[Full setup guide → QUICK_START.md](./QUICK_START.md)**
+### For Documentation Deep Dive
+👉 See [`docs/00_README.md`](./docs/00_README.md)
 
 ---
 
-## 🎮 Game Library
+## 🎯 What This App Does
 
-### Current: 22 Games
-- **Bahasa Melayu** (8 games) - Letters, vocab, phonics
-- **English** (5 games) - Alphabet, sight words
-- **Matematik** (6 games) - Counting, addition, subtraction
-- **Sains** (4 games) - Animals, nature, body parts
+| Feature | Detail |
+|---|---|
+| 🎮 **Games** | 200+ interactive learning games (BM, EN, Math, Science, Jawi, KAFA) |
+| 👶 **Ages** | Prasekolah (4-6), Sekolah Rendah (Darjah 1-6), KAFA (UPKK syllabus) |
+| 🤖 **AI Tutors** | 4 Cikgu AI agents (Firdaus, Rosie, Mira, Daniel) |
+| 📚 **AI Generators** | Story Generator, BBM Generator, Quiz AI |
+| 💳 **Payments** | CHIP gateway — Asas (RM49), Standard (RM99), Keluarga (RM199) |
+| 💰 **Credits** | Top-up system for AI features |
+| 👨‍👩‍👧 **Multi-child** | Parents manage multiple children profiles |
+| 📊 **Parent Dashboard** | Progress tracking, insights, recommendations |
+| 🤝 **Affiliate** | 4-tier commission system (Bronze → Platinum) |
+| 📱 **PWA** | Mobile-friendly, offline-capable |
 
-### Expandable to 200+ Games
-Edit `lib/gameLibrary.js` to add more:
+---
 
-```javascript
-gameLibrary.prasekolah.bahasa_melayu.push({
-  title: 'New Game',
-  type: 'picture_quiz',
-  emoji: '🎮',
-  difficulty: 'easy',
-  gameData: {
-    questions: [
-      { image: '🐱', options: ['Kucing', 'Anjing'], answer: 0 },
-      // ...
-    ]
-  }
-});
+## 🏗️ Tech Stack
+
+```
+Frontend
+├── React 18 + Vite
+├── Tailwind CSS + shadcn/ui
+├── Framer Motion
+├── React Router v6
+├── TanStack Query
+└── Web Push API
+
+Backend (Production: Base44)
+├── Base44 SDK (auth + entities)
+├── 67 Deno serverless functions
+└── 9 scheduled automations
+
+Backend (Migration Target: Supabase)
+├── Supabase Auth (JWT, magic link)
+├── Supabase Database (PostgreSQL)
+├── Supabase Edge Functions (Deno)
+├── Supabase Storage
+└── pg_cron (scheduled jobs)
+
+External
+├── CHIP (Payment — Malaysia)
+├── Resend (Transactional email)
+├── Facebook Pixel + Conversions API
+├── OpenAI (GPT-4o, DALL-E 3)
+└── Web Push (VAPID)
 ```
 
-Deploy = Game appears instantly!
-
 ---
 
-## 💰 Subscription Tiers
+## 📊 Scale
 
-| | Free | Premium | Pro |
-|---|---|---|---|
-| **Price** | RM0 | RM24.90/mo | RM44.90/mo |
-| **Games** | 5 | 100+ | 200+ |
-| **Ages** | Prasekolah | Both | Both |
-| **Kids** | 1 | 1 | 4 |
-| **Offline** | No | No | Yes (beta) |
-
----
-
-## 🔐 Architecture
-
-### Frontend
-- React 18 + Framer Motion
-- Tailwind CSS (claymorphism design)
-- React Router v6
-- TanStack Query for data fetching
-
-### Backend
-- Base44 SDK for auth & entities
-- Stripe for payments
-- Webhook integration for subscriptions
-
-### Database
-- Base44 entities for:
-  - Games (game library)
-  - SubscriptionTier (pricing)
-  - UserSubscription (user status)
-  - User (built-in, for authentication)
-
-### Design System
-- Color tokens in CSS variables
-- Claymorphism aesthetic
-- Mobile-first responsive design
-- Accessibility-focused UI
-
----
-
-## 📱 Responsive Design
-
-- ✅ iPhone 12 & smaller
-- ✅ iPad & tablets
-- ✅ Desktop (1920px+)
-- ✅ Touch-optimized buttons
-- ✅ Landscape & portrait
-
----
-
-## 🌐 Bilingual Support
-
-### BM (Bahasa Melayu)
-- Default language
-- UI translations in `lib/i18n.js`
-- Game content in BM
-
-### EN (English)
-- Toggle in header
-- All UI translated
-- Game content in EN
-
-Add more languages by extending `lib/i18n.js`
-
----
-
-## 🎓 Game Types Supported
-
-1. **letter_match** - Find the correct letter
-2. **number_match** - Find the correct number
-3. **picture_quiz** - Multiple choice with images
-4. **drag_drop** - Drag-and-drop matching
-5. **multiple_choice** - 4-option answers
-6. **counting** - Count objects
-7. **word_builder** - Spell words
-8. **math_puzzle** - Solve equations
-9. **science_quiz** - Science facts
-10. **shape_sort** - Identify shapes
-11. **color_match** - Match colors
-12. **pattern_fill** - Complete patterns
-13. **memory_game** - Matching pairs
-14. **sound_match** - Audio matching
-15. **spelling** - Spell correctly
-16. **reading** - Comprehension
-17. **phonics** - Sound recognition
-
----
-
-## 📊 Analytics & Tracking
-
-### Built-in
-- Score tracking per game
-- Star ratings (1-3 stars)
-- Progress history
-- localStorage persistence
-
-### Optional
-- Google Analytics (setup in index.html)
-- Stripe payment tracking
-- Facebook Pixel (for ads)
-
----
-
-## 🔐 Security
-
-- ✅ Stripe API keys as secrets (not in code)
-- ✅ Webhook signature verification
-- ✅ User authentication via Base44 auth
-- ✅ Subscription status validation
-- ✅ HTTPS only (production)
-- ✅ No sensitive data in localStorage
-
----
-
-## 📢 Facebook Ads Setup
-
-### Landing Page Optimization
-- SEO meta tags
-- Open Graph (og:) tags
-- Mobile-friendly design
-- Fast loading (<3s)
-
-### Ad Copy Example
 ```
-🎓 Jom Belajar - 200+ Permainan Pembelajaran!
-
-Anak-anak suka bermain, anak-anak belajar!
-✅ Permainan seru untuk anak 3-12 tahun
-✅ Bahasa Melayu & Inggeris
-✅ Matematik & Sains
-✅ Tanpa iklan & aman
-✅ Langganan hanya RM24.90/bulan
-
-Mulai percubaan gratis hari ini!
+📦 Entities:              26 tables
+📄 Pages:                 ~60
+🧩 Components:            ~200
+⚙️  Backend Functions:    67
+🌍 Languages:             2 (BM + EN)
+👥 Age Groups:            3 (Prasekolah, Sekolah Rendah, KAFA)
+🎮 Games:                 1000+
+🤖 AI Agents:             4
+💳 Payment Tiers:         5 (Free, Asas, Standard, Keluarga, Premium)
 ```
 
-### Target Audience
-- Parents aged 25-50
-- Malaysia, Singapore, Indonesia
-- Interest: Education, parenting, children
-- Budget: RM100-500/day
+---
+
+## 🔒 Security
+
+- ✅ HMAC SHA-256 webhook signature verification (CHIP)
+- ✅ Row-Level Security (RLS) policies
+- ✅ Service role separation (admin vs user)
+- ✅ JWT-based auth with auto-refresh
+- ✅ Idempotency checks on all payment webhooks
+- ✅ Rate limiting on checkout endpoints
+- ✅ Admin-only endpoints with role verification
 
 ---
 
-## 🚀 Production Checklist
+## 📞 External Dashboards
 
-- [ ] Stripe account connected
-- [ ] API keys set in Base44 secrets
-- [ ] Webhook endpoint configured
-- [ ] Custom domain set up
-- [ ] Privacy policy page created
-- [ ] Terms of service page created
-- [ ] Facebook Pixel added
-- [ ] Google Analytics added
-- [ ] Payment tested (test card)
-- [ ] Email notifications configured
-- [ ] Support contact created
+- **Base44:** https://app.base44.com (current production)
+- **Supabase:** https://app.supabase.com (database + migration target)
+- **CHIP:** https://dashboard.chip-in.asia (payments)
+- **Resend:** https://resend.com/emails (transactional email)
+- **Facebook Business:** https://business.facebook.com (ads + tracking)
 
 ---
 
-## 📞 Support & Documentation
+## 📖 Documentation
 
-- **QUICK_START.md** - Get started in 30 minutes
-- **PRODUCTION_SETUP.md** - Detailed configuration
-- **APP_FEATURES.md** - Complete feature list
-- **Base44 Docs** - https://docs.base44.com
-- **Stripe Docs** - https://stripe.com/docs
+**Master index:** [`docs/00_README.md`](./docs/00_README.md)
 
----
-
-## 📈 Growth Plan
-
-### Phase 1 (Launch)
-- 22 games live
-- Free tier (5 games)
-- Stripe payments working
-- Facebook ads running
-
-### Phase 2 (Month 1-3)
-- Add 50 more games
-- Optimize Facebook ads
-- Collect user feedback
-- Add premium features
-
-### Phase 3 (Month 3-6)
-- 150+ games live
-- User referral system
-- Admin panel for game management
-- A/B test pricing
-
-### Phase 4 (6+ months)
-- 200+ games
-- Offline mode
-- Teacher dashboard
-- School partnerships
+**By scenario:**
+- 🚨 Emergency recovery → [`docs/07_RECOVERY_PLAYBOOK.md`](./docs/07_RECOVERY_PLAYBOOK.md)
+- 🌍 Platform migration → [`docs/06_SUPABASE_MIGRATION.md`](./docs/06_SUPABASE_MIGRATION.md)
+- 👥 Developer onboarding → [`docs/01_APP_OVERVIEW.md`](./docs/01_APP_OVERVIEW.md)
+- 🤖 AI agent handoff → [`AI_AGENT_README.md`](./AI_AGENT_README.md)
 
 ---
 
-## 💡 Tips for Success
+## 🔄 Auto-Sync
 
-1. **Marketing**: Start Facebook ads immediately with landing page
-2. **Content**: Add new games every week (keeps users subscribed)
-3. **Retention**: Email notifications for new games
-4. **Engagement**: Weekly challenges, monthly leaderboards
-5. **Feedback**: Collect user reviews & improve based on them
+This repo auto-syncs from Base44 every code change (via Base44 GitHub sync).
+Last sync: see `git log -1`.
 
 ---
 
-## 📄 License
-
-Built with Base44. Ready to sell & monetize. 🎉
-
----
-
-## 🎯 What's Next?
-
-1. ✅ Review QUICK_START.md
-2. ✅ Set up Stripe account
-3. ✅ Deploy app
-4. ✅ Test payments
-5. ✅ Launch Facebook ads
-6. ✅ Monitor analytics
-7. ✅ Add more games
-8. ✅ Scale to 200+ games
-
-**Happy launching!** 🚀
-
----
-
-**Created**: April 2026  
-**Version**: 1.0 (Production Ready)  
-**Status**: ✅ Ready to monetize & scale
+**Version:** Production 2026-05-30
+**Migration Kit Status:** ✅ Complete (Phase 3 — 67/67 functions ready for Supabase)
+**Disaster Recovery Time:** ~1-2 hours with [`AI_AGENT_README.md`](./AI_AGENT_README.md)
