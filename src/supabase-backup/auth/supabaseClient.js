@@ -83,41 +83,40 @@ export const base44 = {
   entities: createEntitiesProxy(),
 };
 
-// Convert PascalCase entity name → snake_case with ck_ prefix
-// e.g. "UserSubscription" → "ck_user_subscriptions"
+// Explicit entity → table map (avoid PascalCase conversion edge cases like AIStory/BBMResource/QCLog)
+const ENTITY_TABLE_MAP = {
+  User: 'ck_users',
+  UserSubscription: 'ck_user_subscriptions',
+  UserCredit: 'ck_user_credits',
+  CreditTransaction: 'ck_credit_transactions',
+  Affiliate: 'ck_affiliates',
+  AffiliateReferral: 'ck_affiliate_referrals',
+  AffiliatePayout: 'ck_affiliate_payouts',
+  Game: 'ck_games',
+  AIStory: 'ck_ai_stories',
+  BBMResource: 'ck_bbm_resources',
+  PushSubscription: 'ck_push_subscriptions',
+  ChatConversation: 'ck_chat_conversations',
+  QuizHistory: 'ck_quiz_history',
+  RegisteredDevice: 'ck_registered_devices',
+  ChildGameProgress: 'ck_child_game_progress',
+  Leaderboard: 'ck_leaderboards',
+  Achievement: 'ck_achievements',
+  DailyChallenge: 'ck_daily_challenges',
+  Friend: 'ck_friends',
+  FriendChallenge: 'ck_friend_challenges',
+  GameTask: 'ck_game_tasks',
+  QCLog: 'ck_qc_logs',
+  QCSetting: 'ck_qc_settings',
+  HealthCheckLog: 'ck_health_check_logs',
+  MonthlyGenSetting: 'ck_monthly_gen_settings',
+  SubscriptionTier: 'ck_subscription_tiers',
+};
+
 function entityNameToTable(name) {
-  const snake = name.replace(/[A-Z]/g, (m, i) => (i === 0 ? '' : '_') + m.toLowerCase());
-  // Pluralize: add 's' (simple — handle edge cases manually)
-  const pluralMap = {
-    user: 'users',
-    user_subscription: 'user_subscriptions',
-    user_credit: 'user_credits',
-    credit_transaction: 'credit_transactions',
-    affiliate: 'affiliates',
-    affiliate_referral: 'affiliate_referrals',
-    affiliate_payout: 'affiliate_payouts',
-    game: 'games',
-    a_i_story: 'ai_stories',
-    b_b_m_resource: 'bbm_resources',
-    push_subscription: 'push_subscriptions',
-    chat_conversation: 'chat_conversations',
-    quiz_history: 'quiz_history',
-    registered_device: 'registered_devices',
-    child_game_progress: 'child_game_progress',
-    leaderboard: 'leaderboards',
-    achievement: 'achievements',
-    daily_challenge: 'daily_challenges',
-    friend: 'friends',
-    friend_challenge: 'friend_challenges',
-    game_task: 'game_tasks',
-    q_c_log: 'qc_logs',
-    q_c_setting: 'qc_settings',
-    health_check_log: 'health_check_logs',
-    monthly_gen_setting: 'monthly_gen_settings',
-    subscription_tier: 'subscription_tiers',
-  };
-  const base = pluralMap[snake] || `${snake}s`;
-  return `ck_${base}`;
+  const mapped = ENTITY_TABLE_MAP[name];
+  if (!mapped) throw new Error(`Unknown entity: ${name}. Add to ENTITY_TABLE_MAP in supabaseClient.js`);
+  return mapped;
 }
 
 function createEntitiesProxy() {
