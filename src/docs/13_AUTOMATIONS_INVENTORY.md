@@ -166,8 +166,11 @@ Admin can trigger sync manually via UI:
 
 **Location:** Admin Dashboard → Health Tab → "Sync Semua Sekarang" button
 
-**What it does (parallel):**
-1. Calls `syncToSupabase` → mirrors all entities
+**What it does (3 parallel calls):**
+1. Calls `syncToSupabase` → mirrors all entities to Supabase tables
 2. Calls `backupAllAssets` (action: backup, limit: 100) → backs up next 100 new images
+3. Calls `syncMigrationKit` → generates live snapshot (entity counts, asset count, docs version) saved to `ck_migration_snapshots` table
 
-**Use case:** Force sync before major changes / verify backup status / disaster recovery dry run.
+**Use case:** Force sync before major changes / verify backup status / disaster recovery dry run / refresh migration kit reference data.
+
+> 📸 **Migration Kit Snapshot**: Every button click saves a timestamped audit row to `ck_migration_snapshots` — provides historical proof that backups were verified.

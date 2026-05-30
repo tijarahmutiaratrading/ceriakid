@@ -38,13 +38,14 @@ export default function SupabaseSyncCard() {
 
   useEffect(() => { load(); loadAssetCount(); }, []);
 
-  // Sync EVERYTHING: data records + media assets in parallel
+  // Sync EVERYTHING: data records + media assets + migration kit snapshot in parallel
   const runSyncNow = async () => {
     setSyncing(true);
     try {
-      const [dataRes, assetRes] = await Promise.allSettled([
+      const [dataRes, assetRes, kitRes] = await Promise.allSettled([
         base44.functions.invoke('syncToSupabase', {}),
         base44.functions.invoke('backupAllAssets', { action: 'backup', limit: 100 }),
+        base44.functions.invoke('syncMigrationKit', {}),
       ]);
 
       if (assetRes.status === 'fulfilled' && assetRes.value?.data?.success) {
@@ -53,6 +54,11 @@ export default function SupabaseSyncCard() {
           alreadyBackedUp: assetRes.value.data.alreadyBackedUp || 0,
           errorCount: assetRes.value.data.errorCount || 0,
         });
+      }
+
+      // Log migration kit snapshot result (silent if fails)
+      if (kitRes.status === 'fulfilled' && kitRes.value?.data?.success) {
+        console.log('[Sync] Migration kit snapshot updated:', kitRes.value.data.snapshot);
       }
 
       await load();
