@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, Check, Sparkles } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Check, Sparkles, X } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from '@/components/ui/use-toast';
 
@@ -79,6 +79,22 @@ export default function OnboardingWizard({ user, onComplete }) {
     (step === 2 && childName.trim().length >= 2) ||
     step === 3;
 
+  // Tutup wizard — mark onboarding selesai supaya tak muncul semula.
+  // Parent boleh isi profil anak manual di /children-profiles bila-bila masa.
+  const handleSkip = async () => {
+    setSaving(true);
+    try {
+      await base44.auth.updateMe({ onboardingCompleted: true });
+      onComplete?.();
+    } catch (err) {
+      console.error('Skip onboarding failed:', err);
+      // Tetap close UI walaupun save gagal — supaya tidak block user
+      onComplete?.();
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 z-[200] flex items-center justify-center p-4 font-nunito"
@@ -92,8 +108,19 @@ export default function OnboardingWizard({ user, onComplete }) {
         initial={{ scale: 0.9, opacity: 0, y: 30 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         transition={{ type: 'spring', damping: 22 }}
-        className="w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden"
+        className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden"
       >
+        {/* Close button — parent boleh skip wizard & isi manual */}
+        <button
+          type="button"
+          onClick={handleSkip}
+          disabled={saving}
+          aria-label="Tutup wizard setup"
+          className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 flex items-center justify-center text-slate-600 transition-colors disabled:opacity-50"
+        >
+          <X className="w-5 h-5" strokeWidth={2.5} />
+        </button>
+
         {/* Progress bar */}
         <div className="px-6 pt-6 pb-2">
           <div className="flex items-center justify-between mb-2">

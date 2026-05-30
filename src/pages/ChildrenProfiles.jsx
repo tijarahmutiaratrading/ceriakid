@@ -88,10 +88,24 @@ export default function ChildrenProfiles() {
   };
 
   const handleAddChild = async () => {
-    if (children.length >= MAX_CHILDREN) { setError(`Maksimum ${MAX_CHILDREN} anak`); return; }
     if (!formData.name.trim()) { setError('Sila masukkan nama anak'); return; }
+
+    // Re-fetch latest subscription untuk enforce limit atomically — elak race condition
+    // di mana user double-tap atau ada profile yang ditambah dari device lain.
+    const subs = await base44.entities.UserSubscription.filter({ email: user.email });
+    const sub = subs?.[0];
+    const existingChildren = Array.isArray(sub?.children) ? sub.children : [];
+    const currentTier = getActiveTier(sub);
+    const currentLimit = getTierLimit(currentTier, 'children');
+
+    if (existingChildren.length >= currentLimit) {
+      setChildren(existingChildren); // sync UI dengan DB sebenar
+      setError(`Maksimum ${currentLimit} anak untuk pelan anda`);
+      return;
+    }
+
     const newChild = { id: Date.now(), name: formData.name.trim(), ageGroup: formData.ageGroup, avatarUrl: formData.avatarUrl || '', createdAt: new Date().toISOString() };
-    const updated = [...children, newChild];
+    const updated = [...existingChildren, newChild];
     setChildren(updated);
     await saveChildren(updated);
     setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' });
