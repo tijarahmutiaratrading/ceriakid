@@ -36,6 +36,10 @@ Migration Kit ini adalah **blueprint lengkap** untuk:
 | [12_ASSETS_BACKUP.md](./12_ASSETS_BACKUP.md) | **Image backup → Supabase Storage** | Asset migration (CRITICAL) |
 | [13_AUTOMATIONS_INVENTORY.md](./13_AUTOMATIONS_INVENTORY.md) | **All scheduled tasks + cron config** | Recreate automations |
 | [14_MIGRATION_CHECKLIST.md](./14_MIGRATION_CHECKLIST.md) | **Step-by-step migration checklist** | Migration day playbook |
+| [15_AUTH_FLOW.md](./15_AUTH_FLOW.md) | **Auth migration: Base44 → Supabase Auth** | Auth setup (CRITICAL) |
+| [16_API_CONTRACTS.md](./16_API_CONTRACTS.md) | **Top 15 functions — input/output specs** | Backend rebuild reference |
+| [17_EMAIL_TEMPLATES.md](./17_EMAIL_TEMPLATES.md) | **6 email templates + Resend setup** | Email migration |
+| [18_ASSET_MAPPING_GUIDE.md](./18_ASSET_MAPPING_GUIDE.md) | **URL mapping: Base44 → Supabase Storage** | Asset URL swap |
 
 ---
 
