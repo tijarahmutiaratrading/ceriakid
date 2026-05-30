@@ -19,38 +19,52 @@ export default function EmptyState({
   title,
   description,
   action,
+  variant = 'playful', // 'playful' (kid zone) | 'clean' (parent zone)
   gradient = 'from-purple-100 to-pink-100',
   iconColor = 'text-purple-500',
 }) {
+  const isClean = variant === 'clean';
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="py-12 text-center px-4"
+      className={isClean ? 'py-12 text-center px-4' : 'py-12 text-center px-4'}
     >
       <motion.div
-        animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-        className={`w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-4 shadow-lg`}
+        animate={isClean ? { y: [0, -4, 0] } : { y: [0, -8, 0] }}
+        transition={{ duration: isClean ? 3 : 2.5, repeat: Infinity, ease: 'easeInOut' }}
+        className={
+          isClean
+            ? 'w-16 h-16 mx-auto rounded-2xl bg-slate-900 flex items-center justify-center mb-4'
+            : `w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-4 shadow-lg`
+        }
       >
         {Icon ? (
-          <Icon className={`w-10 h-10 ${iconColor}`} strokeWidth={2.5} />
+          <Icon className={isClean ? 'w-8 h-8 text-white' : `w-10 h-10 ${iconColor}`} strokeWidth={2} />
         ) : (
-          <span className="text-4xl">{emoji || '✨'}</span>
+          <span className={isClean ? 'text-3xl' : 'text-4xl'} aria-hidden="true">{emoji || '✨'}</span>
         )}
       </motion.div>
-      <p className="text-slate-800 font-black text-lg mb-2">{title}</p>
+      <p className={isClean ? 'text-slate-900 font-black text-lg mb-2' : 'text-slate-800 font-black text-lg mb-2'}>
+        {title}
+      </p>
       {description && (
-        <p className="text-slate-600 text-sm max-w-xs mx-auto leading-relaxed">{description}</p>
+        <p className={isClean ? 'text-slate-500 text-sm font-semibold max-w-md mx-auto leading-relaxed' : 'text-slate-600 text-sm max-w-xs mx-auto leading-relaxed'}>
+          {description}
+        </p>
       )}
       {action && (
         <motion.button
-          whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.97 }}
           onClick={action.onClick}
-          className="mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black text-sm shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all"
+          className={
+            isClean
+              ? 'mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-sm transition-colors'
+              : 'mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black text-sm shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all'
+          }
         >
-          {action.emoji && <span>{action.emoji}</span>}
+          {action.emoji && <span aria-hidden="true">{action.emoji}</span>}
           {action.label}
         </motion.button>
       )}

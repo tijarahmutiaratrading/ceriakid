@@ -7,6 +7,11 @@ module.exports = {
   		fontFamily: {
   			nunito: ['var(--font-nunito)'],
   		},
+  		letterSpacing: {
+  			label: '0.15em',
+  			'label-tight': '0.12em',
+  			'label-wide': '0.18em',
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

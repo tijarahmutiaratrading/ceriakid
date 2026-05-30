@@ -257,52 +257,47 @@ export default function ChildrenProfiles() {
         {/* Error */}
         <AnimatePresence>
           {error && (
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              className="mb-4 rounded-2xl p-3 text-red-700 text-sm font-bold"
-              style={{ background: '#fee2e2', boxShadow: '0 3px 0 #fca5a5' }}>
+            <motion.div
+              initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+              role="alert"
+              className="mb-4 rounded-xl p-3 text-red-700 text-sm font-semibold bg-red-50 ring-1 ring-red-200"
+            >
               ⚠️ {error}
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Add/Edit Form */}
+        {/* Add/Edit Form — clean Linear/Stripe style */}
         <AnimatePresence>
           {showForm && (
             <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              className="mb-5 rounded-[2rem] p-5"
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-                boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
-              }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.18 }}
+              className="mb-5 rounded-2xl p-5 bg-white ring-1 ring-slate-200 shadow-sm"
             >
-              <p className="text-slate-800 font-black text-base mb-4">{editingId ? '✏️ Ubah Profil Anak' : '➕ Tambah Anak Baru'}</p>
+              <p className="text-slate-900 font-black text-base mb-4">{editingId ? 'Ubah Profil Anak' : 'Tambah Anak Baru'}</p>
 
               {/* Avatar uploader */}
-              <div className="flex flex-col items-center mb-4">
+              <div className="flex flex-col items-center mb-5">
                 <div className="relative">
-                  <div
-                    className="w-24 h-24 rounded-3xl flex items-center justify-center text-5xl overflow-hidden"
-                    style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 100%)', boxShadow: '0 4px 0 #f9a8d4' }}
-                  >
+                  <div className="w-24 h-24 rounded-2xl flex items-center justify-center text-5xl overflow-hidden bg-slate-100 ring-1 ring-slate-200">
                     {formData.avatarUrl ? (
-                      <img src={formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                      <img src={formData.avatarUrl} alt="" className="w-full h-full object-cover" loading="lazy" />
                     ) : (
-                      <span>👶</span>
+                      <span aria-hidden="true">👶</span>
                     )}
                   </div>
                   <motion.button
                     type="button"
-                    whileTap={{ scale: 0.9 }}
+                    whileTap={{ scale: 0.92 }}
                     onClick={() => formFileInputRef.current?.click()}
                     disabled={uploadingAvatar}
-                    className="absolute -bottom-1 -right-1 w-9 h-9 rounded-full flex items-center justify-center text-white disabled:opacity-60"
-                    style={{ background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 3px 0 #db2777' }}
-                    title="Muat naik gambar"
+                    className="absolute -bottom-1 -right-1 w-9 h-9 rounded-full flex items-center justify-center text-white bg-slate-900 hover:bg-slate-800 shadow-md disabled:opacity-60 transition-colors"
+                    aria-label="Muat naik gambar avatar"
                   >
-                    {uploadingAvatar ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" strokeWidth={3} />}
+                    {uploadingAvatar ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" strokeWidth={2.5} />}
                   </motion.button>
                 </div>
                 <input
@@ -312,31 +307,32 @@ export default function ChildrenProfiles() {
                   className="hidden"
                   onChange={handleAvatarUpload}
                 />
-                <p className="text-slate-500 text-[10px] font-black mt-2 uppercase tracking-wider">
+                <p className="text-slate-500 text-[10px] font-bold mt-2 uppercase tracking-label">
                   {formData.avatarUrl ? 'Tekan kamera untuk tukar' : 'Tekan kamera untuk muat naik'}
                 </p>
                 {formData.avatarUrl && (
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, avatarUrl: '' })}
-                    className="text-rose-500 text-[10px] font-black mt-1 hover:text-rose-600"
+                    className="text-red-600 text-[10px] font-bold mt-1 hover:text-red-700"
                   >
                     Buang gambar
                   </button>
                 )}
               </div>
 
-              <div className="mb-3">
+              <div className="mb-4">
+                <label htmlFor="child-name" className="block text-[10px] font-bold uppercase tracking-label text-slate-500 mb-1.5">Nama Anak</label>
                 <input
+                  id="child-name"
                   type="text"
-                  placeholder="Nama anak..."
+                  placeholder="Contoh: Aisyah"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value.slice(0, 30) })}
                   maxLength={30}
-                  className="w-full px-4 py-3 rounded-2xl text-slate-800 placeholder-slate-400 font-semibold focus:outline-none text-sm"
-                  style={{ background: '#fef9f3', boxShadow: '0 2px 0 #fde68a inset, 0 0 0 2px #fde68a' }}
+                  className="w-full px-3.5 py-2.5 rounded-xl text-slate-900 placeholder-slate-400 font-semibold text-sm bg-white ring-1 ring-slate-200 focus:ring-2 focus:ring-slate-900 focus:outline-none transition-shadow"
                 />
-                <p className="text-right text-[10px] font-bold text-slate-400 mt-1">
+                <p className="text-right text-[10px] font-semibold text-slate-400 mt-1">
                   {formData.name.length}/30
                 </p>
               </div>
@@ -349,45 +345,47 @@ export default function ChildrenProfiles() {
               />
               <div className="mt-4" />
 
-              <p className="text-slate-700 text-xs font-black mb-2 uppercase tracking-wider">Peringkat Umur</p>
-              <div className="grid grid-cols-2 gap-3 mb-4">
+              <p className="text-[10px] font-bold uppercase tracking-label text-slate-500 mb-2">Peringkat Umur</p>
+              <div className="grid grid-cols-2 gap-2.5 mb-5" role="radiogroup" aria-label="Peringkat umur">
                 {AGE_OPTIONS.map(opt => {
                   const active = formData.ageGroup === opt.value;
                   return (
                     <motion.button
                       key={opt.value}
-                      whileTap={{ scale: 0.95, y: 2 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => setFormData({ ...formData, ageGroup: opt.value })}
-                      className="py-3 rounded-2xl font-bold text-sm flex flex-col items-center gap-1 transition-all"
-                      style={active
-                        ? { background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 4px 0 #db2777', color: 'white' }
-                        : { background: '#fef9f3', boxShadow: '0 3px 0 #fde68a', color: '#475569' }}
+                      role="radio"
+                      aria-checked={active}
+                      className={`py-3 px-2 rounded-xl text-sm flex flex-col items-center gap-0.5 transition-all ${
+                        active
+                          ? 'bg-slate-900 text-white ring-1 ring-slate-900'
+                          : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:ring-slate-300'
+                      }`}
                     >
-                      <span className="text-2xl">{opt.emoji}</span>
+                      <span className="text-xl" aria-hidden="true">{opt.emoji}</span>
                       <span className="font-black">{opt.label}</span>
-                      <span className={`text-xs font-bold ${active ? 'text-white/85' : 'text-slate-500'}`}>{opt.sub}</span>
+                      <span className={`text-[11px] font-semibold ${active ? 'text-white/70' : 'text-slate-500'}`}>{opt.sub}</span>
                     </motion.button>
                   );
                 })}
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-2.5">
                 <motion.button
-                  whileTap={{ scale: 0.95, y: 2 }}
+                  whileTap={{ scale: 0.97 }}
                   onClick={editingId ? handleUpdateChild : handleAddChild}
-                  className="flex-1 rounded-full py-3 font-black flex items-center justify-center gap-2 text-sm text-white"
-                  style={{ background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)' }}
+                  className="flex-1 rounded-xl py-2.5 font-black flex items-center justify-center gap-2 text-sm text-white bg-slate-900 hover:bg-slate-800 transition-colors"
                 >
-                  <Save className="w-4 h-4" strokeWidth={3} />
+                  <Save className="w-4 h-4" strokeWidth={2.5} />
                   {editingId ? 'Simpan' : 'Tambah Anak'}
                 </motion.button>
                 <motion.button
-                  whileTap={{ scale: 0.95, y: 2 }}
+                  whileTap={{ scale: 0.97 }}
                   onClick={handleCancel}
-                  className="px-4 rounded-full py-3 font-black flex items-center justify-center text-slate-600"
-                  style={{ background: '#fef9f3', boxShadow: '0 3px 0 #fde68a' }}
+                  aria-label="Batal"
+                  className="px-4 rounded-xl py-2.5 font-bold flex items-center justify-center text-slate-700 bg-white ring-1 ring-slate-200 hover:bg-slate-50 transition-colors"
                 >
-                  <X className="w-4 h-4" strokeWidth={3} />
+                  <X className="w-4 h-4" strokeWidth={2.5} />
                 </motion.button>
               </div>
             </motion.div>
@@ -397,30 +395,25 @@ export default function ChildrenProfiles() {
         {/* CHILDREN GRID — premium cards via ChildProfileCard */}
         {children.length === 0 ? (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="rounded-[2rem] p-10 sm:p-14 text-center relative overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-              boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
-            }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-2xl p-10 sm:p-14 text-center bg-white ring-1 ring-slate-200 shadow-sm"
           >
             <motion.div
-              animate={{ y: [0, -10, 0], rotate: [0, 5, -5, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              className="inline-flex w-24 h-24 mb-4 rounded-3xl bg-gradient-to-br from-pink-300 to-rose-400 items-center justify-center shadow-lg"
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              className="inline-flex w-20 h-20 mb-4 rounded-2xl bg-slate-900 items-center justify-center"
             >
-              <Users className="w-12 h-12 text-white" strokeWidth={2.5} />
+              <Users className="w-10 h-10 text-white" strokeWidth={2} />
             </motion.div>
-            <p className="text-slate-800 font-black text-xl sm:text-2xl mb-2">Belum ada anak terdaftar</p>
-            <p className="text-slate-500 text-sm font-bold mb-6 max-w-md mx-auto">Daftar profil anak pertama untuk mula track pembelajaran dan progress mereka secara individu!</p>
+            <p className="text-slate-900 font-black text-xl sm:text-2xl mb-2">Belum ada anak terdaftar</p>
+            <p className="text-slate-500 text-sm font-semibold mb-6 max-w-md mx-auto">Daftar profil anak pertama untuk mula track pembelajaran dan progress mereka secara individu.</p>
             <motion.button
-              whileTap={{ scale: 0.95, y: 2 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' }); }}
-              className="inline-flex items-center gap-2 text-white rounded-full px-6 py-3 font-black text-sm"
-              style={{ background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)' }}
+              className="inline-flex items-center gap-2 text-white rounded-xl px-5 py-2.5 font-black text-sm bg-slate-900 hover:bg-slate-800 transition-colors"
             >
-              <Plus className="w-5 h-5" strokeWidth={3} /> Daftar Anak Pertama
+              <Plus className="w-4 h-4" strokeWidth={2.5} /> Daftar Anak Pertama
             </motion.button>
           </motion.div>
         ) : (
