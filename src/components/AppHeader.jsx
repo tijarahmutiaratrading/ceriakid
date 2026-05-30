@@ -12,7 +12,6 @@ import { getActiveTier } from '@/lib/tierAccess';
 import { getPinned, togglePinned, getRecent, trackRecent } from '@/lib/menuPrefs';
 import { getChildAvatar } from '@/lib/childAvatars';
 import DrawerProfileHeader from '@/components/header/DrawerProfileHeader';
-import DrawerSearchBar from '@/components/header/DrawerSearchBar';
 import DrawerMenuItem from '@/components/header/DrawerMenuItem';
 import ChildSwitcherModal from '@/components/header/ChildSwitcherModal';
 
@@ -20,7 +19,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
   const [isOpen, setIsOpen] = useState(false);
   const [navVisible, setNavVisible] = useState(true);
   const [expandedSubmenu, setExpandedSubmenu] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [pinnedItems, setPinnedItems] = useState([]);
   const [recentItems, setRecentItems] = useState([]);
   const [credits, setCredits] = useState(null);
@@ -213,19 +211,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
     return 0;
   };
 
-  // Search filter — flatten semua items + match
-  const filteredResults = useMemo(() => {
-    if (!searchQuery.trim()) return null;
-    const q = searchQuery.toLowerCase();
-    const allItems = [
-      ...topItems,
-      ...dashboardItems,
-      ...groupedItems.flatMap(g => g.submenu || []),
-      ...adminItems.flatMap(a => a.submenu || []),
-    ];
-    return allItems.filter(i => !i.external && i.label.toLowerCase().includes(q));
-  }, [searchQuery, isAuthenticated, isAdmin]);
-
   const handlePinToggle = (path, label) => {
     if (!user?.email) return;
     const updated = togglePinned(user.email, path, label);
@@ -347,44 +332,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
               </div>
             )}
 
-            {/* Search */}
-            {isAuthenticated && (
-              <DrawerSearchBar
-                value={searchQuery}
-                onChange={setSearchQuery}
-                onClear={() => setSearchQuery('')}
-              />
-            )}
-
             {/* Scrollable nav */}
             <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
-
-              {/* SEARCH RESULTS */}
-              {filteredResults && (
-                <>
-                  <p className="text-pink-500 text-[10px] font-black uppercase tracking-wider px-3 pt-2 pb-1">
-                    Hasil Carian ({filteredResults.length})
-                  </p>
-                  {filteredResults.length === 0 ? (
-                    <p className="text-slate-500 text-xs font-bold px-3 py-4 text-center">Tiada hasil untuk "{searchQuery}"</p>
-                  ) : (
-                    filteredResults.map((item) => (
-                      <DrawerMenuItem
-                        key={item.path}
-                        to={item.path}
-                        label={item.label}
-                        active={isActive(item.path)}
-                        notificationCount={getNotificationCount(item.path)}
-                        onNavigate={closeDrawer}
-                      />
-                    ))
-                  )}
-                </>
-              )}
-
-              {/* DEFAULT VIEW (no search) */}
-              {!filteredResults && (
-                <>
+              <>
                   {/* Pinned */}
                   {isAuthenticated && pinnedItems.length > 0 && (
                     <>
@@ -540,8 +490,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                       </div>
                     );
                   })}
-                </>
-              )}
+              </>
             </nav>
 
             {/* Footer: Logout */}
