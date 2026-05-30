@@ -40,7 +40,7 @@ export default function DrawerProfileHeader({
       <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-pink-300/30 blur-2xl pointer-events-none" />
 
       {/* Top row: profile + close */}
-      <div className="relative flex items-center gap-3 mb-3">
+      <div className="relative flex items-center gap-3 mb-4">
         <Link
           to="/settings"
           onClick={handleProfileTap}
@@ -83,7 +83,7 @@ export default function DrawerProfileHeader({
           type="button"
           onClick={() => { haptic('light'); setSwitcherOpen(true); }}
           aria-label={`Anak aktif: ${selectedChild.name}. Tap untuk tukar.`}
-          className="relative w-full flex items-center gap-2 mb-3 px-3 py-2 rounded-2xl bg-white/95 shadow-md hover:bg-white active:scale-[0.98] transition-all"
+          className="relative w-full flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/95 shadow-md hover:bg-white active:scale-[0.98] transition-all"
         >
           <img
             src={getChildAvatar(selectedChild)}
