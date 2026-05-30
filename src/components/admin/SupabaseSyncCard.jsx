@@ -42,11 +42,16 @@ export default function SupabaseSyncCard() {
   const runSyncNow = async () => {
     setSyncing(true);
     try {
-      const [dataRes, assetRes, kitRes] = await Promise.allSettled([
+      const [dataRes, assetRes, kitRes, backendRes] = await Promise.allSettled([
         base44.functions.invoke('syncToSupabase', {}),
         base44.functions.invoke('backupAllAssets', { action: 'backup', limit: 100 }),
         base44.functions.invoke('syncMigrationKit', {}),
+        base44.functions.invoke('backupBackendToSupabase', {}),
       ]);
+
+      if (backendRes.status === 'fulfilled' && backendRes.value?.data?.success) {
+        console.log('[Sync] Backend backup:', backendRes.value.data.uploaded, 'files uploaded ke bucket supabase-backend');
+      }
 
       if (assetRes.status === 'fulfilled' && assetRes.value?.data?.success) {
         setAssetResult({
