@@ -286,17 +286,20 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ type: 'spring', damping: 22, stiffness: 280 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             role="dialog"
             aria-modal="true"
             aria-label="Menu navigasi"
-            className="sm:hidden fixed left-3 right-3 top-1/2 -translate-y-1/2 z-50 flex flex-col rounded-[2rem] overflow-hidden max-h-[85vh]"
+            className="sm:hidden fixed left-3 right-3 z-50 flex flex-col rounded-[2rem] overflow-hidden"
             style={{
+              top: '50%',
+              transform: 'translateY(-50%)',
+              maxHeight: 'calc(100dvh - 2rem)',
               background: 'rgba(255,255,255,0.18)',
               backdropFilter: 'blur(32px) saturate(180%)',
               WebkitBackdropFilter: 'blur(32px) saturate(180%)',
