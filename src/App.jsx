@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import RouteErrorBoundary from '@/components/RouteErrorBoundary'
+import PageLoader from '@/components/PageLoader'
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { trackPageView } from '@/lib/pixel';
 import PageNotFound from './lib/PageNotFound';
@@ -14,52 +16,62 @@ import { LanguageProvider } from '@/lib/LanguageContext';
 import { AgeGroupProvider } from '@/lib/AgeGroupContext';
 import { SelectedChildProvider } from '@/lib/SelectedChildContext';
 
+// Eager-load: kritikal untuk first paint (public pages + main shell)
 import Landing from '@/pages/Landing';
+import Home from '@/pages/Home';
 import Terms from '@/pages/Terms';
 import Privacy from '@/pages/Privacy';
 import Contact from '@/pages/Contact';
-import Home from '@/pages/Home';
-import AdminDashboard from '@/pages/AdminDashboard';
-import GameAnalytics from '@/pages/GameAnalytics';
-import GameDatabase from '@/pages/GameDatabase';
-import ClientDashboard from '@/pages/ClientDashboard';
-import GamesList from '@/pages/GamesList';
-
-import GamePlayer from '@/pages/GamePlayer';
-import GamesHub from '@/pages/GamesHub';
-import GamesSubjek from '@/pages/GamesSubjek';
-import MiniGamesList from '@/pages/MiniGamesList';
-import MiniGamePlayground from '@/pages/MiniGamePlayground';
-import ParentDashboard from '@/pages/ParentDashboard';
-import FriendsList from '@/pages/FriendsList';
-import Challenges from '@/pages/Challenges';
-import DrawingStudio from '@/pages/DrawingStudio';
-import ABCGame from '@/pages/ABCGame';
-import NumberGame from '@/pages/NumberGame';
-import QuizGame from '@/pages/QuizGame';
-import ShapesGame from '@/pages/ShapesGame';
-import Scoreboard from '@/pages/Scoreboard';
-import ChildrenProfiles from '@/pages/ChildrenProfiles';
-import StoryKid from '@/pages/StoryKid';
 import ThankYou from '@/pages/ThankYou';
-import BuyCredits from '@/pages/BuyCredits';
-import AIAssistant from '@/pages/AIAssistant';
-import StoryGenerator from '@/pages/StoryGenerator';
-import BBMGenerator from '@/pages/BBMGenerator';
-import QuizAI from '@/pages/QuizAI';
-import Syllabus from '@/pages/Syllabus';
-import Affiliate from '@/pages/Affiliate';
-import KafaHub from '@/pages/KafaHub';
 
-// Interactive Games
-import MemoryGame from '@/pages/games/MemoryGame';
-import DragDropGame from '@/pages/games/DragDropGame';
-import WordBuilderGame from '@/pages/games/WordBuilderGame';
-import SortingGame from '@/pages/games/SortingGame';
-import TileMatchGame from '@/pages/games/TileMatchGame';
-import StoryAdventureGame from '@/pages/games/StoryAdventureGame';
-import PhysicsGame from '@/pages/games/PhysicsGame';
-import TracingGameGamified from '@/pages/games/TracingGameGamified';
+// Lazy-load: admin pages — admin sahaja akses, kurangkan bundle untuk user biasa
+const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
+const GameAnalytics = lazy(() => import('@/pages/GameAnalytics'));
+const GameDatabase = lazy(() => import('@/pages/GameDatabase'));
+
+// Lazy-load: secondary pages — boleh loaded on-demand
+const ClientDashboard = lazy(() => import('@/pages/ClientDashboard'));
+const ChildrenProfiles = lazy(() => import('@/pages/ChildrenProfiles'));
+const ParentDashboard = lazy(() => import('@/pages/ParentDashboard'));
+const FriendsList = lazy(() => import('@/pages/FriendsList'));
+const Challenges = lazy(() => import('@/pages/Challenges'));
+const Scoreboard = lazy(() => import('@/pages/Scoreboard'));
+const BuyCredits = lazy(() => import('@/pages/BuyCredits'));
+const Syllabus = lazy(() => import('@/pages/Syllabus'));
+const Affiliate = lazy(() => import('@/pages/Affiliate'));
+const KafaHub = lazy(() => import('@/pages/KafaHub'));
+
+// Lazy-load: AI pages — heavy markdown/chat dependencies
+const AIAssistant = lazy(() => import('@/pages/AIAssistant'));
+const StoryGenerator = lazy(() => import('@/pages/StoryGenerator'));
+const BBMGenerator = lazy(() => import('@/pages/BBMGenerator'));
+const QuizAI = lazy(() => import('@/pages/QuizAI'));
+
+// Lazy-load: games hub & list (boleh ada banyak)
+const GamesHub = lazy(() => import('@/pages/GamesHub'));
+const GamesSubjek = lazy(() => import('@/pages/GamesSubjek'));
+const GamesList = lazy(() => import('@/pages/GamesList'));
+const MiniGamesList = lazy(() => import('@/pages/MiniGamesList'));
+
+// Lazy-load: game players — load bila user nak main sahaja
+const GamePlayer = lazy(() => import('@/pages/GamePlayer'));
+const MiniGamePlayground = lazy(() => import('@/pages/MiniGamePlayground'));
+const DrawingStudio = lazy(() => import('@/pages/DrawingStudio'));
+const ABCGame = lazy(() => import('@/pages/ABCGame'));
+const NumberGame = lazy(() => import('@/pages/NumberGame'));
+const QuizGame = lazy(() => import('@/pages/QuizGame'));
+const ShapesGame = lazy(() => import('@/pages/ShapesGame'));
+const StoryKid = lazy(() => import('@/pages/StoryKid'));
+
+// Lazy-load: Interactive Games (besar — three.js, physics, etc.)
+const MemoryGame = lazy(() => import('@/pages/games/MemoryGame'));
+const DragDropGame = lazy(() => import('@/pages/games/DragDropGame'));
+const WordBuilderGame = lazy(() => import('@/pages/games/WordBuilderGame'));
+const SortingGame = lazy(() => import('@/pages/games/SortingGame'));
+const TileMatchGame = lazy(() => import('@/pages/games/TileMatchGame'));
+const StoryAdventureGame = lazy(() => import('@/pages/games/StoryAdventureGame'));
+const PhysicsGame = lazy(() => import('@/pages/games/PhysicsGame'));
+const TracingGameGamified = lazy(() => import('@/pages/games/TracingGameGamified'));
 
 import OfflineBanner from '@/components/OfflineBanner';
 import AdminGuard from '@/components/AdminGuard';
@@ -68,7 +80,6 @@ const PixelPageViewTracker = () => {
   const location = useLocation();
   useEffect(() => {
     trackPageView();
-    // Capture referral code dari URL bila page bertukar (?ref=CODE)
     captureReferralFromUrl();
   }, [location.pathname, location.search]);
   return null;
@@ -83,19 +94,21 @@ const AuthenticatedAppWithChild = () => {
   );
 };
 
+// Helper: wrap route element dengan suspense + per-route error boundary
+const lazyRoute = (Component) => (
+  <RouteErrorBoundary>
+    <Suspense fallback={<PageLoader />}>
+      <Component />
+    </Suspense>
+  </RouteErrorBoundary>
+);
+
 const AuthenticatedApp = () => {
   const authContext = useAuth();
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = authContext || {};
 
   if (isLoadingPublicSettings || isLoadingAuth) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="text-6xl animate-bounce mb-4">🎓</div>
-          <div className="w-8 h-8 border-4 border-game-purple border-t-transparent rounded-full animate-spin mx-auto"></div>
-        </div>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   if (authError) {
@@ -111,58 +124,58 @@ const AuthenticatedApp = () => {
     <LanguageProvider>
       <AgeGroupProvider>
         <Routes>
-          {/* Public pages - NO sidebar */}
+          {/* Public pages - NO sidebar (eager loaded) */}
           <Route path="/" element={<Landing />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/thank-you" element={<ThankYou />} />
 
-          {/* Admin pages - have own layout, NO shared sidebar */}
-          <Route path="/admin-dashboard" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
-          <Route path="/game-analytics" element={<AdminGuard><GameAnalytics /></AdminGuard>} />
-          <Route path="/game-database" element={<AdminGuard><GameDatabase /></AdminGuard>} />
+          {/* Admin pages - lazy loaded */}
+          <Route path="/admin-dashboard" element={<AdminGuard>{lazyRoute(AdminDashboard)}</AdminGuard>} />
+          <Route path="/game-analytics" element={<AdminGuard>{lazyRoute(GameAnalytics)}</AdminGuard>} />
+          <Route path="/game-database" element={<AdminGuard>{lazyRoute(GameDatabase)}</AdminGuard>} />
 
-          {/* Authenticated user pages - WITH sidebar (navigation/hub pages) */}
+          {/* Authenticated user pages - WITH sidebar (lazy loaded) */}
           <Route element={<AppLayout />}>
-            <Route path="/dashboard" element={<Home />} />
-            <Route path="/settings" element={<ClientDashboard />} />
-            <Route path="/children-profiles" element={<ChildrenProfiles />} />
-            <Route path="/games-hub" element={<GamesHub />} />
-            <Route path="/games-subjek" element={<GamesSubjek />} />
-            <Route path="/kafa" element={<KafaHub />} />
-            <Route path="/games/:category" element={<GamesList />} />
-            <Route path="/mini-games/:type" element={<MiniGamesList />} />
-            <Route path="/parent-dashboard" element={<ParentDashboard />} />
-            <Route path="/friends" element={<FriendsList />} />
-            <Route path="/challenges" element={<Challenges />} />
-            <Route path="/scoreboard" element={<Scoreboard />} />
-            <Route path="/buy-credits" element={<BuyCredits />} />
-            <Route path="/syllabus" element={<Syllabus />} />
-            <Route path="/ai-assistant" element={<AIAssistant />} />
-            <Route path="/story-generator" element={<StoryGenerator />} />
-            <Route path="/bbm-generator" element={<BBMGenerator />} />
-            <Route path="/quiz-ai" element={<QuizAI />} />
-            <Route path="/affiliate" element={<Affiliate />} />
+            <Route path="/dashboard" element={<RouteErrorBoundary><Home /></RouteErrorBoundary>} />
+            <Route path="/settings" element={lazyRoute(ClientDashboard)} />
+            <Route path="/children-profiles" element={lazyRoute(ChildrenProfiles)} />
+            <Route path="/games-hub" element={lazyRoute(GamesHub)} />
+            <Route path="/games-subjek" element={lazyRoute(GamesSubjek)} />
+            <Route path="/kafa" element={lazyRoute(KafaHub)} />
+            <Route path="/games/:category" element={lazyRoute(GamesList)} />
+            <Route path="/mini-games/:type" element={lazyRoute(MiniGamesList)} />
+            <Route path="/parent-dashboard" element={lazyRoute(ParentDashboard)} />
+            <Route path="/friends" element={lazyRoute(FriendsList)} />
+            <Route path="/challenges" element={lazyRoute(Challenges)} />
+            <Route path="/scoreboard" element={lazyRoute(Scoreboard)} />
+            <Route path="/buy-credits" element={lazyRoute(BuyCredits)} />
+            <Route path="/syllabus" element={lazyRoute(Syllabus)} />
+            <Route path="/ai-assistant" element={lazyRoute(AIAssistant)} />
+            <Route path="/story-generator" element={lazyRoute(StoryGenerator)} />
+            <Route path="/bbm-generator" element={lazyRoute(BBMGenerator)} />
+            <Route path="/quiz-ai" element={lazyRoute(QuizAI)} />
+            <Route path="/affiliate" element={lazyRoute(Affiliate)} />
           </Route>
 
-          {/* Game-play / fullscreen pages - NO sidebar (immersive experience) */}
-          <Route path="/drawing" element={<DrawingStudio />} />
-          <Route path="/story-kid" element={<StoryKid />} />
-          <Route path="/mini-games/:categoryId/play/:gameId" element={<MiniGamePlayground />} />
-          <Route path="/play/:category/:index" element={<GamePlayer />} />
-          <Route path="/abc" element={<ABCGame />} />
-          <Route path="/numbers" element={<NumberGame />} />
-          <Route path="/quiz" element={<QuizGame />} />
-          <Route path="/shapes" element={<ShapesGame />} />
-          <Route path="/games/memory" element={<MemoryGame />} />
-          <Route path="/games/dragdrop" element={<DragDropGame />} />
-          <Route path="/games/wordbuilder" element={<WordBuilderGame />} />
-          <Route path="/games/sorting" element={<SortingGame />} />
-          <Route path="/games/tilematch" element={<TileMatchGame />} />
-          <Route path="/games/story" element={<StoryAdventureGame />} />
-          <Route path="/games/physics" element={<PhysicsGame />} />
-          <Route path="/games/tracing" element={<TracingGameGamified />} />
+          {/* Game-play / fullscreen pages - lazy loaded */}
+          <Route path="/drawing" element={lazyRoute(DrawingStudio)} />
+          <Route path="/story-kid" element={lazyRoute(StoryKid)} />
+          <Route path="/mini-games/:categoryId/play/:gameId" element={lazyRoute(MiniGamePlayground)} />
+          <Route path="/play/:category/:index" element={lazyRoute(GamePlayer)} />
+          <Route path="/abc" element={lazyRoute(ABCGame)} />
+          <Route path="/numbers" element={lazyRoute(NumberGame)} />
+          <Route path="/quiz" element={lazyRoute(QuizGame)} />
+          <Route path="/shapes" element={lazyRoute(ShapesGame)} />
+          <Route path="/games/memory" element={lazyRoute(MemoryGame)} />
+          <Route path="/games/dragdrop" element={lazyRoute(DragDropGame)} />
+          <Route path="/games/wordbuilder" element={lazyRoute(WordBuilderGame)} />
+          <Route path="/games/sorting" element={lazyRoute(SortingGame)} />
+          <Route path="/games/tilematch" element={lazyRoute(TileMatchGame)} />
+          <Route path="/games/story" element={lazyRoute(StoryAdventureGame)} />
+          <Route path="/games/physics" element={lazyRoute(PhysicsGame)} />
+          <Route path="/games/tracing" element={lazyRoute(TracingGameGamified)} />
 
           {/* Catch all */}
           <Route path="*" element={<PageNotFound />} />
@@ -173,10 +186,6 @@ const AuthenticatedApp = () => {
 };
 
 function App() {
-  // NOTE: Aggressive localStorage purge removed — was deleting user offline progress, 
-  // selected child, language preference, etc on every reload.
-  // React Query cache resets naturally on full page reload.
-
   return (
     <ErrorBoundary>
       <Router>

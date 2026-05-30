@@ -360,7 +360,7 @@ export default function Landing() {
           >
             <div className="flex -space-x-2">
               {avatars.map((src, i) => (
-                <img key={i} src={src} alt="" className="w-8 h-8 rounded-full border-2 border-white shadow object-cover" />
+                <img key={i} src={src} alt="" loading="lazy" decoding="async" className="w-8 h-8 rounded-full border-2 border-white shadow object-cover" />
               ))}
             </div>
             <div className="text-left">
@@ -479,7 +479,7 @@ export default function Landing() {
               className="overflow-hidden rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/25 transition-all"
             >
               <div className="relative h-36 overflow-hidden">
-                <img src={s.img} alt={`Budak belajar ${s.sub}`} className="w-full h-full object-cover" />
+                <img src={s.img} alt={`Budak belajar ${s.sub}`} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 <div className={`absolute inset-0 bg-gradient-to-t ${s.color} opacity-60`} />
                 <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/95 text-slate-900 font-black text-xs px-3 py-1.5 rounded-full shadow-md">{s.icon} {s.sub}</div>
               </div>
@@ -597,7 +597,7 @@ export default function Landing() {
                   <div className="inline-block bg-green-100 text-green-700 border border-green-200 text-xs font-black px-3 py-1 rounded-full mb-4">✅ {t.highlight}</div>
                 </div>
                 <div className="flex items-center gap-3 pt-3 border-t border-orange-100">
-                  <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-orange-100" />
+                  <img src={t.avatar} alt={t.name} loading="lazy" decoding="async" className="w-11 h-11 rounded-full object-cover border-2 border-orange-100" />
                   <div>
                     <p className="font-black text-slate-900 text-sm">{t.name}</p>
                     <p className="text-xs text-slate-500">{t.location}</p>
