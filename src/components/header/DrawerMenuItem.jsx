@@ -42,7 +42,7 @@ export default function DrawerMenuItem({
           } ${
             active
               ? 'text-white font-black shadow-lg'
-              : 'text-slate-700 hover:bg-white/70'
+              : 'text-white hover:bg-white/15'
           }`}
           style={
             active
@@ -76,7 +76,7 @@ export default function DrawerMenuItem({
                 className={`p-1 rounded-md transition-all ${
                   pinned
                     ? `opacity-100 ${active ? 'text-yellow-200' : 'text-amber-500'}`
-                    : `opacity-0 group-hover:opacity-50 hover:!opacity-100 ${active ? 'text-white' : 'text-slate-400 hover:text-pink-500'}`
+                    : `opacity-0 group-hover:opacity-60 hover:!opacity-100 ${active ? 'text-white' : 'text-white/70 hover:text-white'}`
                 }`}
               >
                 {pinned ? <Pin className="w-3.5 h-3.5 fill-current" /> : <PinOff className="w-3.5 h-3.5" />}

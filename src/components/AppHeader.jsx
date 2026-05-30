@@ -297,10 +297,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             aria-label="Menu navigasi"
             className="sm:hidden fixed left-3 right-3 top-20 bottom-3 z-50 flex flex-col rounded-[2rem] overflow-hidden"
             style={{
-              background: 'linear-gradient(165deg, rgba(250,245,255,0.55) 0%, rgba(253,242,248,0.55) 50%, rgba(255,247,237,0.55) 100%)',
+              background: 'linear-gradient(165deg, rgba(76, 29, 149, 0.55) 0%, rgba(157, 23, 77, 0.5) 50%, rgba(124, 58, 237, 0.55) 100%)',
               backdropFilter: 'blur(28px) saturate(180%)',
               WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-              boxShadow: '0 25px 60px -10px rgba(168, 85, 247, 0.45), inset 0 0 0 1px rgba(255,255,255,0.6)',
+              boxShadow: '0 25px 60px -10px rgba(76, 29, 149, 0.55), inset 0 0 0 1px rgba(255,255,255,0.25)',
               paddingBottom: 'env(safe-area-inset-bottom)',
             }}
           >
@@ -374,14 +374,14 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
 
                   {/* Section divider */}
                   {isAuthenticated && pinnedItems.length > 0 && (
-                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1.5">Semua Menu</p>
+                    <p className="text-white/70 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1.5">Semua Menu</p>
                   )}
 
                   {/* Top items */}
                   {topItems.map((item) =>
                     item.external ? (
                       <a key={item.path} href={item.path} onClick={closeDrawer}
-                        className="flex items-center px-4 py-3 rounded-2xl font-bold text-slate-700 hover:bg-white/70 transition-all text-sm">
+                        className="flex items-center px-4 py-3 rounded-2xl font-bold text-white hover:bg-white/15 transition-all text-sm">
                         {item.label}
                       </a>
                     ) : (
@@ -423,8 +423,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                           onClick={() => { haptic('light'); setExpandedSubmenu(isExpanded ? null : item.path); }}
                           className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                             itemActive || isExpanded
-                              ? 'bg-white text-pink-600 shadow-sm font-black'
-                              : 'text-slate-700 hover:bg-white/70'
+                              ? 'bg-white/95 text-pink-600 shadow-sm font-black'
+                              : 'text-white hover:bg-white/15'
                           }`}
                         >
                           <span>{item.label}</span>
