@@ -19,7 +19,8 @@
 
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+// Strip trailing slash to avoid double-slash bug in generated URLs
+const SUPABASE_URL = (Deno.env.get('SUPABASE_URL') || '').replace(/\/+$/, '');
 const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_KEY');
 const BUCKET_NAME = 'ck-assets';
 
@@ -342,7 +343,45 @@ Deno.serve(async (req) => {
       });
     }
 
-    return Response.json({ error: `Unknown action: ${action}. Use: scan | backup | manifest | backup-urls` }, { status: 400 });
+    // ── ACTION 5: REPAIR EXISTING MAPPING (fix double-slash bug) ──
+    if (action === 'repair-urls') {
+      const existingMapping = await getMapping();
+      const records = Object.entries(existingMapping)
+        .filter(([_, newUrl]) => newUrl.includes('.supabase.co//'))
+        .map(([originalUrl, oldUrl]) => ({
+          original_url: originalUrl,
+          new_url: oldUrl.replace('.supabase.co//', '.supabase.co/'),
+          storage_path: originalUrl.replace('https://media.base44.com/', ''),
+        }));
+
+      if (records.length === 0) {
+        return Response.json({ success: true, action: 'repair-urls', repaired: 0, message: 'No malformed URLs found.' });
+      }
+
+      // Chunked upsert
+      for (let i = 0; i < records.length; i += 500) {
+        const chunk = records.slice(i, i + 500);
+        await fetch(`${SUPABASE_URL}/rest/v1/ck_asset_mapping?on_conflict=original_url`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_SERVICE_KEY,
+            'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates',
+          },
+          body: JSON.stringify(chunk),
+        });
+      }
+
+      return Response.json({
+        success: true,
+        action: 'repair-urls',
+        repaired: records.length,
+        message: `Fixed ${records.length} URLs (removed double-slash bug).`,
+      });
+    }
+
+    return Response.json({ error: `Unknown action: ${action}. Use: scan | backup | manifest | backup-urls | repair-urls` }, { status: 400 });
   } catch (error) {
     console.error('backupAllAssets error:', error);
     return Response.json({ error: error.message, stack: error.stack }, { status: 500 });
