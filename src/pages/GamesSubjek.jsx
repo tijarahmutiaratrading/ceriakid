@@ -65,7 +65,7 @@ export default function GamesSubjek() {
             📚
           </motion.div>
           <div className="relative">
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-yellow-100 mb-2">Games Subjek</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-yellow-100 mb-2">Belajar Ikut Subjek</p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.05] tracking-tight text-white mb-2">
               Belajar Ikut Subjek! 🎓
             </h1>

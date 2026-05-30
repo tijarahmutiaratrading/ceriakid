@@ -131,7 +131,7 @@ export default function GamesHub() {
             >
               🎮
             </motion.p>
-            <h2 className="text-slate-900 font-black text-2xl mb-2">Belum ada mini games</h2>
+            <h2 className="text-slate-900 font-black text-2xl mb-2">Belum ada permainan</h2>
             <p className="text-slate-500 text-sm font-bold">Sila tunggu kandungan baru!</p>
           </div>
         )}
