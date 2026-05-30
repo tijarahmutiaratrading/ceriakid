@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users, Palette, BookOpen, UserCircle, BarChart3, Settings,
-  UserPlus, Trophy, ChevronDown, Shield, LogOut, MessageCircle, Home, Share2, Gamepad2, Puzzle
+  UserPlus, Trophy, ChevronDown, Shield, LogOut, MessageCircle, Home, Share2, Gamepad2, Puzzle,
+  GraduationCap, Brain, FileText, Sparkles
 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
@@ -37,6 +38,16 @@ const NAV_GROUPS = [
     submenu: [
       { path: '/children-profiles', label: 'Profil Anak', icon: UserCircle },
       { path: '/parent-dashboard', label: 'Prestasi Anak', icon: BarChart3 },
+    ],
+  },
+  {
+    key: 'cikgu-ai',
+    label: 'Cikgu AI',
+    submenu: [
+      { path: '/ai-assistant', label: 'Cikgu Firdaus — Tutor', icon: GraduationCap },
+      { path: '/quiz-ai', label: 'Cikgu Rosie — Kuiz', icon: Brain },
+      { path: '/story-generator', label: 'Cikgu Mira — Cerita', icon: BookOpen },
+      { path: '/bbm-generator', label: 'Cikgu Daniel — BBM', icon: FileText },
     ],
   },
   {
