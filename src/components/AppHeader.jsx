@@ -295,11 +295,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             role="dialog"
             aria-modal="true"
             aria-label="Menu navigasi"
-            className="sm:hidden fixed left-3 right-3 z-50 flex flex-col rounded-[2rem] overflow-hidden"
+            className="sm:hidden fixed left-3 right-3 top-4 bottom-4 z-50 flex flex-col rounded-[2rem] overflow-hidden"
             style={{
-              top: '50%',
-              transform: 'translateY(-50%)',
-              maxHeight: 'calc(100dvh - 2rem)',
               background: 'rgba(255,255,255,0.18)',
               backdropFilter: 'blur(32px) saturate(180%)',
               WebkitBackdropFilter: 'blur(32px) saturate(180%)',
