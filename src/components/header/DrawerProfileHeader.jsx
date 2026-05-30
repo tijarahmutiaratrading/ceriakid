@@ -4,6 +4,7 @@ import { X, ChevronRight, Flame, Coins, Crown, ChevronsUpDown } from 'lucide-rea
 import { haptic } from '@/lib/haptics';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import ChildSwitcherModal from '@/components/header/ChildSwitcherModal';
+import { getChildAvatar } from '@/lib/childAvatars';
 
 /**
  * Drawer header — profil + quick stats (kredit + streak) + active child switcher.
@@ -84,13 +85,11 @@ export default function DrawerProfileHeader({
           aria-label={`Anak aktif: ${selectedChild.name}. Tap untuk tukar.`}
           className="relative w-full flex items-center gap-2 mb-3 px-3 py-2 rounded-2xl bg-white/95 shadow-md hover:bg-white active:scale-[0.98] transition-all"
         >
-          {selectedChild.avatarUrl ? (
-            <img src={selectedChild.avatarUrl} alt={selectedChild.name} className="w-7 h-7 rounded-full object-cover ring-2 ring-pink-200" />
-          ) : (
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-200 to-pink-300 flex items-center justify-center text-sm">
-              {selectedChild.ageGroup === 'prasekolah' ? '🎨' : '📚'}
-            </div>
-          )}
+          <img
+            src={getChildAvatar(selectedChild)}
+            alt={selectedChild.name}
+            className="w-8 h-8 rounded-full object-cover ring-2 ring-pink-200 bg-white"
+          />
           <div className="flex-1 min-w-0 text-left">
             <p className="text-pink-600 text-[9px] font-black uppercase tracking-wider leading-none">Anak Aktif</p>
             <p className="text-slate-800 text-xs font-black truncate leading-tight mt-0.5">{selectedChild.name}</p>

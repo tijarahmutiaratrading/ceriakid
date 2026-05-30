@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Plus, X, Users } from 'lucide-react';
 import { haptic } from '@/lib/haptics';
+import { getChildAvatar } from '@/lib/childAvatars';
 
 /**
  * Modal pilih anak aktif — slide up dari bawah, list semua anak.
@@ -102,18 +103,12 @@ export default function ChildSwitcherModal({
                         : { background: '#fff', boxShadow: '0 2px 0 #fde68a' }
                     }
                   >
-                    {child.avatarUrl ? (
-                      <img
-                        src={child.avatarUrl}
-                        alt={child.name}
-                        loading="lazy"
-                        className={`w-12 h-12 rounded-2xl object-cover flex-shrink-0 ring-2 ${isActive ? 'ring-white' : 'ring-pink-100'}`}
-                      />
-                    ) : (
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 ring-2 ${isActive ? 'ring-white bg-white/95' : 'ring-pink-100 bg-gradient-to-br from-pink-100 to-purple-100'}`}>
-                        {levelEmoji}
-                      </div>
-                    )}
+                    <img
+                      src={getChildAvatar(child)}
+                      alt={child.name}
+                      loading="lazy"
+                      className={`w-12 h-12 rounded-2xl object-cover flex-shrink-0 ring-2 bg-white ${isActive ? 'ring-white' : 'ring-pink-100'}`}
+                    />
 
                     <div className="flex-1 min-w-0 text-left">
                       <p className={`font-black text-sm truncate ${isActive ? 'text-white drop-shadow' : 'text-slate-800'}`}>
