@@ -30,6 +30,9 @@ Migration Kit ini adalah **blueprint lengkap** untuk:
 | [06_SUPABASE_MIGRATION.md](./06_SUPABASE_MIGRATION.md) | Base44 SDK → Supabase translation | Code migration |
 | [07_RECOVERY_PLAYBOOK.md](./07_RECOVERY_PLAYBOOK.md) | Disaster recovery step-by-step | EMERGENCY |
 | [08_SECRETS_AND_ENV.md](./08_SECRETS_AND_ENV.md) | All keys & env vars checklist | Setup secrets |
+| [09_COMPLETE_SQL_SCHEMA.md](./09_COMPLETE_SQL_SCHEMA.md) | **Full SQL — copy-paste ready** | DB setup (5 min) |
+| [10_BUSINESS_LOGIC.md](./10_BUSINESS_LOGIC.md) | Tier limits, pricing, commissions | Business rules |
+| [11_PACKAGE_AND_DEPENDENCIES.md](./11_PACKAGE_AND_DEPENDENCIES.md) | package.json + setup commands | Project init |
 
 ---
 
