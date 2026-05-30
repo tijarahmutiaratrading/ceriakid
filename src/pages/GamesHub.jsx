@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Sparkles, Zap } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Sparkles, Zap } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import HoppingBunnies from '@/components/game/HoppingBunny';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
@@ -50,6 +50,22 @@ export default function GamesHub() {
       <HoppingBunnies />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-4">
+        {/* Back button */}
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-slate-700 transition-all hover:scale-[1.02]"
+            style={{
+              background: 'rgba(255,255,255,0.9)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(0,0,0,0.05)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+            }}
+          >
+            <ArrowLeft className="w-4 h-4" /> Kembali
+          </Link>
+        </motion.div>
+
         {/* Playful hero — vibrant gradient */}
         <motion.section
           initial={{ opacity: 0, y: -10 }}
