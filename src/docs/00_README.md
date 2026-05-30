@@ -52,6 +52,9 @@ Migration Kit ini adalah **blueprint lengkap** untuk:
 | [22_CRITICAL_LOGIC_DETAILS.md](./22_CRITICAL_LOGIC_DETAILS.md) | **🆕 Exact thresholds, merge rules, push payload, FB pixel dedup** | Critical nuance |
 | [23_FRONTEND_CRITICAL_COMPONENTS.md](./23_FRONTEND_CRITICAL_COMPONENTS.md) | **🆕 Checkout, ThankYou polling, PixelLoader, sw.js pseudocode** | Frontend nuance |
 | [24_MISSING_EMAIL_TEMPLATES.md](./24_MISSING_EMAIL_TEMPLATES.md) | **🆕 Promo blast + Health alert HTML templates** | Email nuance |
+| [25_CUTOVER_RUNBOOK.md](./25_CUTOVER_RUNBOOK.md) | **🆕 Migration day step-by-step + rollback plan** | Cutover execution |
+| [26_USER_PASSWORD_MIGRATION.md](./26_USER_PASSWORD_MIGRATION.md) | **🆕 Bulk password reset strategy for 177 users** | Auth migration |
+| [27_THIRD_PARTY_DASHBOARD_CONFIG.md](./27_THIRD_PARTY_DASHBOARD_CONFIG.md) | **🆕 CHIP, Resend, FB, DNS, Supabase dashboard checklist** | External setup |
 
 ---
 
