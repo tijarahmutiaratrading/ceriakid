@@ -29,6 +29,24 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Hardcoded UI asset URLs — kept in sync with src/lib/hardcodedAssets.js
+    // (duplicated here because Deno functions can't import from src/)
+    const HARDCODED_ASSET_URLS = [
+      'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png',
+    ];
+
+    // ── Backup hardcoded UI assets (fire-and-forget) ──
+    let hardcodedBackedUp = 0;
+    try {
+      const hcRes = await base44.functions.invoke('backupAllAssets', {
+        action: 'backup-urls',
+        urls: HARDCODED_ASSET_URLS,
+      });
+      hardcodedBackedUp = hcRes?.data?.newlyBackedUp || 0;
+    } catch (e) {
+      console.warn('Hardcoded asset backup warning:', e.message);
+    }
+
     // ── Gather live counts in parallel ──
     const [
       gameCount,
@@ -63,6 +81,8 @@ Deno.serve(async (req) => {
         UserSubscription: subCount,
       },
       assets_backed_up: assetManifest,
+      hardcoded_assets_registered: HARDCODED_ASSET_URLS.length,
+      hardcoded_assets_newly_backed_up: hardcodedBackedUp,
       docs_version: '2026-05-30',
       kit_files: 22, // current migration kit doc count
       note: 'Auto-generated bila admin tekan "Sync Semua Sekarang" button',
