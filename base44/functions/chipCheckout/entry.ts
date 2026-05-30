@@ -192,6 +192,23 @@ Deno.serve(async (req) => {
       await base44.asServiceRole.entities.UserSubscription.create(subData);
     }
 
+    // Auto-fill User entity kalau full_name/phone kosong — supaya hero/header app tunjuk nama betul
+    try {
+      const needsName = !user.full_name || user.full_name.trim().length === 0;
+      const needsPhone = !user.phone || user.phone.trim().length === 0;
+      if (needsName || needsPhone) {
+        const userUpdate = {};
+        if (needsName) userUpdate.full_name = name.trim();
+        if (needsPhone) userUpdate.phone = phone.trim();
+        const userMatches = await base44.asServiceRole.entities.User.filter({ email: user.email });
+        if (userMatches?.[0]) {
+          await base44.asServiceRole.entities.User.update(userMatches[0].id, userUpdate);
+        }
+      }
+    } catch (userSyncErr) {
+      console.warn('chipCheckout: User entity sync failed:', userSyncErr?.message);
+    }
+
     return Response.json({
       checkoutUrl: data.checkout_url,
       purchaseId: data.id

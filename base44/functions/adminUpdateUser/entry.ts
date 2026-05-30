@@ -43,6 +43,21 @@ Deno.serve(async (req) => {
 
     const updated = await base44.asServiceRole.entities.User.update(targetUser.id, updateData);
 
+    // Sync ke UserSubscription juga supaya admin dashboard & checkout form tunjuk data konsisten
+    try {
+      const subs = await base44.asServiceRole.entities.UserSubscription.filter({ email: email.toLowerCase() });
+      if (subs?.[0]) {
+        const subUpdate = {};
+        if (updateData.full_name) subUpdate.checkoutName = updateData.full_name;
+        if (typeof updateData.phone === 'string') subUpdate.checkoutPhone = updateData.phone;
+        if (Object.keys(subUpdate).length > 0) {
+          await base44.asServiceRole.entities.UserSubscription.update(subs[0].id, subUpdate);
+        }
+      }
+    } catch (syncErr) {
+      console.warn('adminUpdateUser: sync to UserSubscription failed:', syncErr?.message);
+    }
+
     return Response.json({
       success: true,
       user: { id: updated.id, email: updated.email, full_name: updated.full_name, phone: updated.phone },

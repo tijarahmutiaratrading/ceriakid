@@ -37,7 +37,26 @@ export default function PersonalInfoCard({ user }) {
     setError('');
     setSaving(true);
     try {
-      await base44.auth.updateMe({ full_name: fullName.trim(), phone: phone.trim() });
+      const trimmedName = fullName.trim();
+      const trimmedPhone = phone.trim();
+      await base44.auth.updateMe({ full_name: trimmedName, phone: trimmedPhone });
+
+      // Sync ke UserSubscription supaya admin dashboard & checkout form sentiasa tunjuk data terkini
+      if (user?.email) {
+        try {
+          const subs = await base44.entities.UserSubscription.filter({ email: user.email });
+          if (subs?.[0]) {
+            await base44.entities.UserSubscription.update(subs[0].id, {
+              checkoutName: trimmedName,
+              checkoutPhone: trimmedPhone,
+            });
+          }
+        } catch (syncErr) {
+          // Tak perlu fail keseluruhan save kalau sync gagal
+          console.warn('Sync to UserSubscription failed:', syncErr?.message);
+        }
+      }
+
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch (e) {
