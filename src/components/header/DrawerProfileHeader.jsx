@@ -29,7 +29,7 @@ export default function DrawerProfileHeader({
 
   return (
     <div
-      className="px-4 py-4 relative overflow-hidden"
+      className="px-4 py-4 relative overflow-hidden rounded-t-[2rem]"
       style={{
         background: 'linear-gradient(135deg, #f472b6 0%, #c084fc 60%, #a78bfa 100%)',
         paddingTop: 'max(1rem, env(safe-area-inset-top))',
