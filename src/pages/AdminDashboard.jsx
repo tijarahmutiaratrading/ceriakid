@@ -2,21 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
-import { Save, Eye, EyeOff, CheckCircle, Settings, Facebook, CreditCard, Webhook, BarChart3, RefreshCw, Bell } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Save, Eye, EyeOff, CheckCircle, Facebook, CreditCard, Webhook, Bell, DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Users2, CheckCircle2 } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import AppHeader from '@/components/AppHeader';
 import AdminTopHeader from '@/components/admin/AdminTopHeader';
-import AdminHero from '@/components/admin/AdminHero';
-import AdminQuickStats from '@/components/admin/AdminQuickStats';
-import AdminStatCard from '@/components/admin/AdminStatCard';
+import AdminUnifiedHeader from '@/components/admin/AdminUnifiedHeader';
 
 import SystemHealthPanel from '@/components/admin/SystemHealthPanel';
 import LaunchControlPanel from '@/components/admin/LaunchControlPanel';
 import AdminAffiliatePanel from '@/components/admin/AdminAffiliatePanel';
 import PushNotificationPanel from '@/components/admin/PushNotificationPanel';
 import CustomerDatabaseTable from '@/components/admin/CustomerDatabaseTable';
-import { DollarSign, ShoppingCart, TrendingUp, Clock as ClockIcon, Sparkles, Gamepad2, Activity, Share2 } from 'lucide-react';
 
 const SETTINGS_KEY = 'admin_app_settings';
 
@@ -32,8 +29,8 @@ const defaultSettings = {
 function FieldGroup({ label, hint, children }) {
   return (
     <div className="mb-5">
-      <label className="block text-sm font-black text-slate-800 mb-1.5">{label}</label>
-      {hint && <p className="text-xs text-slate-600 mb-2.5">{hint}</p>}
+      <label className="block text-sm font-bold text-slate-800 mb-1">{label}</label>
+      {hint && <p className="text-xs text-slate-500 mb-2">{hint}</p>}
       {children}
     </div>
   );
@@ -48,7 +45,7 @@ function SecretInput({ value, onChange, placeholder }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full border border-slate-300 rounded-xl px-4 py-3 pr-12 text-sm font-mono bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
+        className="w-full border border-slate-200 rounded-lg px-3.5 py-2.5 pr-10 text-sm font-mono bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 transition-all"
       />
       <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700">
         {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -64,8 +61,46 @@ function TextInput({ value, onChange, placeholder }) {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm font-mono bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
+      className="w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 transition-all"
     />
+  );
+}
+
+function SectionCard({ icon: Icon, iconBg, title, subtitle, children }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white rounded-2xl p-5 md:p-6 ring-1 ring-slate-200 shadow-sm"
+    >
+      <div className="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconBg}`}>
+          <Icon className="w-5 h-5 text-white" />
+        </div>
+        <div>
+          <h2 className="font-black text-slate-900 text-base">{title}</h2>
+          <p className="text-xs text-slate-500 font-medium">{subtitle}</p>
+        </div>
+      </div>
+      {children}
+    </motion.div>
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="h-10 bg-slate-200/60 rounded-xl animate-pulse" />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200 rounded-2xl overflow-hidden">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="bg-white p-5">
+            <div className="h-3 w-16 bg-slate-200 rounded animate-pulse mb-2" />
+            <div className="h-7 w-20 bg-slate-200 rounded animate-pulse" />
+          </div>
+        ))}
+      </div>
+      <div className="h-64 bg-slate-200/40 rounded-2xl animate-pulse" />
+    </div>
   );
 }
 
@@ -78,18 +113,15 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('analytics');
   const [settingsTab, setSettingsTab] = useState('pixel');
 
-  // Sync activeTab dgn URL ?tab=... (dari hamburger submenu AppHeader)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tabFromUrl = params.get('tab');
-    // 'customers' tab dah merge ke 'analytics' — redirect untuk backward compat
     if (tabFromUrl === 'customers') {
       setActiveTab('analytics');
     } else if (tabFromUrl && ['analytics', 'launch', 'health', 'affiliate', 'settings'].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
   }, [location.search]);
-
 
   const [settings, setSettings] = useState(() => {
     try {
@@ -104,7 +136,6 @@ export default function AdminDashboard() {
   const [secretsLoaded, setSecretsLoaded] = useState(false);
   const [loadingSecrets, setLoadingSecrets] = useState(false);
 
-  // Load semua server secrets bila masuk tab Settings — auto-fill terus dalam input
   useEffect(() => {
     if (activeTab === 'settings' && !secretsLoaded && !loadingSecrets) {
       setLoadingSecrets(true);
@@ -134,8 +165,6 @@ export default function AdminDashboard() {
     }
   }, [user]);
 
-  // NOTE: localStorage load dipindah ke useState initializer supaya tidak override server fetch yang berlaku selepas tab Settings dibuka.
-
   const loadData = async () => {
     try {
       const data = await base44.entities.UserSubscription.list();
@@ -158,16 +187,7 @@ export default function AdminDashboard() {
     );
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  // Revenue dikira berdasarkan 3 pakej berbayar sahaja (asas/standard/keluarga)
-  // Legacy tier "pro/premium/free" diabaikan dari revenue & breakdown
+  // Revenue calc
   const totalRevenue = subscriptions
     .filter(s => s.status === 'active' && ['asas', 'standard', 'keluarga'].includes(s.tier))
     .reduce((sum, s) => {
@@ -208,308 +228,308 @@ export default function AdminDashboard() {
     setTimeout(() => window.location.replace(`/clear-cache.html?fresh=${Date.now()}`), 800);
   };
 
-  const tabs = [
-    { key: 'analytics', label: '📊 Analytics', icon: <BarChart3 className="w-4 h-4" /> },
-    { key: 'launch', label: '🚀 Launch Control', icon: <Gamepad2 className="w-4 h-4" /> },
-    { key: 'health', label: '💚 System Health', icon: <Activity className="w-4 h-4" /> },
-    { key: 'affiliate', label: '🤝 Affiliate', icon: <Share2 className="w-4 h-4" /> },
-    { key: 'settings', label: '⚙️ Settings', icon: <Settings className="w-4 h-4" /> },
-  ];
-
-  const settingsTabs = [
-    { key: 'pixel', label: 'Facebook Pixel', icon: <Facebook className="w-4 h-4" /> },
-    { key: 'chip', label: 'Chip Payment', icon: <CreditCard className="w-4 h-4" /> },
-    { key: 'webhook', label: 'Webhook', icon: <Webhook className="w-4 h-4" /> },
-    { key: 'push', label: 'Notifications', icon: <Bell className="w-4 h-4" /> },
-  ];
-
   const paidCount = tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga;
   const avgOrderValue = paidCount > 0 ? (totalRevenue / paidCount).toFixed(2) : '0.00';
   const pendingCount = subscriptions.filter(s => s.status === 'incomplete' || s.status === 'past_due').length;
   const activeCount = subscriptions.filter(s => s.status === 'active').length;
+  const todayCount = subscriptions.filter(s => {
+    const d = new Date(s.created_date);
+    const today = new Date();
+    return d.toDateString() === today.toDateString();
+  }).length;
+
+  // Unified KPI strip
+  const kpiStats = [
+    { label: 'Revenue', value: `RM${totalRevenue.toFixed(0)}`, sub: `${paidCount} transaksi`, icon: DollarSign, iconColor: 'text-emerald-600' },
+    { label: 'Orders', value: subscriptions.length, sub: 'sepanjang masa', icon: ShoppingCart, iconColor: 'text-violet-600' },
+    { label: 'Active', value: activeCount, sub: 'subscription aktif', icon: CheckCircle2, iconColor: 'text-sky-600' },
+    { label: 'Pending', value: pendingCount, sub: 'menunggu bayaran', icon: ClockIcon, iconColor: 'text-amber-600' },
+  ];
+
+  const settingsTabs = [
+    { key: 'pixel', label: 'Facebook Pixel', icon: Facebook },
+    { key: 'chip', label: 'Chip Payment', icon: CreditCard },
+    { key: 'webhook', label: 'Webhook', icon: Webhook },
+    { key: 'push', label: 'Notifications', icon: Bell },
+  ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden text-foreground" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #eef2ff 35%, #fce7f3 70%, #fef3c7 100%)' }}>
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] bg-violet-300/30 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -right-24 w-[26rem] h-[26rem] bg-pink-300/30 rounded-full blur-3xl" />
-        <div className="absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] bg-sky-300/30 rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen text-foreground" style={{ background: '#fafafa' }}>
+      {/* Subtle grid pattern background */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
 
       <AppHeader showBack={true} backTo="/dashboard" />
       <AdminTopHeader activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <div className="relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pt-24 md:pt-20 pb-32">
-          <main className="min-w-0 space-y-4 md:space-y-5">
-        {/* Mobile tab pill (shows current section) */}
-        <div className="lg:hidden pro-glass rounded-2xl px-3 py-2 flex items-center justify-between gap-2">
-          <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Section</p>
-          <p className="text-slate-900 text-sm font-black truncate">
-            {tabs.find(t => t.key === activeTab)?.label || 'Dashboard'}
-          </p>
-        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-20 pb-32">
+          <main className="space-y-6">
+            {loading ? (
+              <LoadingSkeleton />
+            ) : (
+              <>
+                {/* Unified header: greeting + KPI + tabs */}
+                <AdminUnifiedHeader
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                  stats={activeTab === 'analytics' ? kpiStats : null}
+                  onRefresh={loadData}
+                  onClearCache={handleClearCache}
+                  clearingCache={clearingCache}
+                />
 
-        {/* Hero */}
-        <AdminHero setActiveTab={setActiveTab} />
+                {/* ═══ ANALYTICS TAB ═══ */}
+                {activeTab === 'analytics' && (
+                  <>
+                    {/* Sales Breakdown — minimal */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-white rounded-2xl p-5 md:p-6 ring-1 ring-slate-200 shadow-sm"
+                    >
+                      <div className="flex items-center justify-between mb-5">
+                        <div>
+                          <h2 className="text-base font-black text-slate-900">Jualan Mengikut Pelan</h2>
+                          <p className="text-xs text-slate-500 font-medium mt-0.5">Ringkasan prestasi setiap pakej langganan</p>
+                        </div>
+                        <p className="text-xs font-bold text-slate-400 tabular-nums">
+                          AOV: <span className="text-slate-900">RM{avgOrderValue}</span>
+                        </p>
+                      </div>
 
-        {/* Action bar */}
-        <div className="flex flex-wrap items-center justify-end gap-2">
-          <button type="button" onClick={loadData} className="rounded-xl bg-white/80 hover:bg-white px-3 py-2 text-xs font-black text-slate-800 transition-all flex items-center gap-1.5 ring-1 ring-slate-300 shadow-sm">
-            <RefreshCw className="w-3.5 h-3.5" /> Refresh
-          </button>
-          <button type="button" onClick={handleClearCache} disabled={clearingCache} className="rounded-xl bg-white/80 hover:bg-white px-3 py-2 text-xs font-black text-slate-800 transition-all disabled:opacity-60 flex items-center gap-1.5 ring-1 ring-slate-300 shadow-sm" title="Reload app dengan cache baru — gunakan kalau ada bug aneh">
-            <RefreshCw className={`w-3.5 h-3.5 ${clearingCache ? 'animate-spin' : ''}`} /> Cache
-          </button>
-        </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {[
+                          { label: 'Asas', price: 'RM49', value: tierBreakdown.asas, color: 'emerald', emoji: '🌱' },
+                          { label: 'Standard', price: 'RM99', value: tierBreakdown.standard, color: 'sky', emoji: '⭐' },
+                          { label: 'Keluarga', price: 'RM199', value: tierBreakdown.keluarga, color: 'violet', emoji: '👑' },
+                        ].map((item, idx) => {
+                          const colorMap = {
+                            emerald: 'from-emerald-500/10 to-emerald-500/5 ring-emerald-200 text-emerald-700',
+                            sky: 'from-sky-500/10 to-sky-500/5 ring-sky-200 text-sky-700',
+                            violet: 'from-violet-500/10 to-violet-500/5 ring-violet-200 text-violet-700',
+                          };
+                          const dotMap = {
+                            emerald: 'bg-emerald-500',
+                            sky: 'bg-sky-500',
+                            violet: 'bg-violet-500',
+                          };
+                          return (
+                            <motion.div
+                              key={idx}
+                              initial={{ opacity: 0, y: 8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: idx * 0.05 }}
+                              className={`relative rounded-xl p-4 bg-gradient-to-br ${colorMap[item.color]} ring-1`}
+                            >
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-2">
+                                  <span className={`w-1.5 h-1.5 rounded-full ${dotMap[item.color]}`} />
+                                  <p className="text-xs font-bold text-slate-700">{item.label}</p>
+                                </div>
+                                <p className="text-[10px] font-bold text-slate-500 tabular-nums">{item.price}</p>
+                              </div>
+                              <div className="flex items-end justify-between">
+                                <p className="text-3xl font-black text-slate-900 leading-none tabular-nums">{item.value}</p>
+                                <p className="text-2xl opacity-60">{item.emoji}</p>
+                              </div>
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
 
-        {/* Quick stats row */}
-        {activeTab === 'analytics' && (
-          <AdminQuickStats
-            pending={pendingCount}
-            succeeded={activeCount}
-            visitorsToday={subscriptions.filter(s => {
-              const d = new Date(s.created_date);
-              const today = new Date();
-              return d.toDateString() === today.toDateString();
-            }).length}
-            totalVisitors={subscriptions.length}
-          />
-        )}
-
-        {/* ═══ ANALYTICS TAB ═══ */}
-        {activeTab === 'analytics' && (
-          <>
-            {/* Vibrant solid-color stat cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-              <AdminStatCard icon={DollarSign} color="violet" label="Total Revenue" value={`RM${totalRevenue.toFixed(0)}`} sub={`${paidCount} transaksi`} delay={0} />
-              <AdminStatCard icon={ShoppingCart} color="amber" label="Jumlah Orders" value={subscriptions.length} sub="Pembayaran diterima" delay={0.05} />
-              <AdminStatCard icon={TrendingUp} color="sky" label="Avg. Order Value" value={`RM${avgOrderValue}`} sub="Per transaksi" delay={0.1} />
-              <AdminStatCard icon={ClockIcon} color="rose" label="Pending Revenue" value={pendingCount} sub="order menunggu" delay={0.15} />
-            </div>
-
-            {/* Sales Breakdown */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="pro-glass rounded-3xl p-5">
-              <div className="flex items-end justify-between mb-4">
-                <div>
-                  <h2 className="text-lg md:text-xl font-black text-slate-900">💳 Jualan Mengikut Pelan</h2>
-                  <p className="text-slate-600 text-xs font-semibold">Ringkasan prestasi setiap pakej langganan</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
-                {[
-                   { label: 'Asas (RM49)', value: tierBreakdown.asas, icon: '🌱', card: 'from-emerald-500 to-green-600' },
-                   { label: 'Standard (RM99)', value: tierBreakdown.standard, icon: '⭐', card: 'from-sky-500 to-blue-600' },
-                   { label: 'Keluarga (RM199)', value: tierBreakdown.keluarga, icon: '👑', card: 'from-violet-500 to-purple-600' },
-                ].map((item, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 + idx * 0.08 }}
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    className={`rounded-3xl p-4 md:p-5 text-white shadow-xl shadow-black/20 bg-gradient-to-br ${item.card} border border-white/5 hover:border-white/25 hover:shadow-2xl transition-all relative overflow-hidden`}
-                  >
-                    <div className="flex items-center justify-between gap-3 mb-4 relative">
-                      <p className="text-2xl">{item.icon}</p>
-                      <span className="text-[11px] font-black text-white bg-white/18 px-2 py-1 rounded-full">Plan</span>
-                    </div>
-                    <p className="text-xs font-bold mb-1 text-white/80 relative">{item.label}</p>
-                    <p className="text-3xl font-black text-white relative">{item.value}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Database Pelanggan — full detail (klik row untuk expand) */}
-            <CustomerDatabaseTable />
-          </>
-        )}
-
-        {/* ═══ SYSTEM HEALTH TAB ═══ */}
-        {activeTab === 'health' && <SystemHealthPanel />}
-
-        {/* ═══ LAUNCH CONTROL TAB ═══ */}
-         {activeTab === 'launch' && <LaunchControlPanel />}
-
-        {/* ═══ AFFILIATE TAB ═══ */}
-        {activeTab === 'affiliate' && <AdminAffiliatePanel />}
-
-        {/* ═══ SETTINGS TAB ═══ */}
-        {activeTab === 'settings' && (
-          <>
-            {/* Settings Sub-tabs */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="pro-glass flex gap-2 p-1.5 rounded-2xl overflow-x-auto">
-              {settingsTabs.map(tab => (
-                <button
-                  type="button"
-                  key={tab.key}
-                  onClick={() => setSettingsTab(tab.key)}
-                  className={`flex-1 py-2.5 px-3 rounded-xl font-black text-xs transition-all whitespace-nowrap flex items-center justify-center gap-2 ${settingsTab === tab.key ? 'bg-slate-900 text-white shadow' : 'text-slate-700 hover:bg-white/70'}`}
-                >
-                  {tab.icon}<span className="hidden sm:inline">{tab.label}</span><span className="sm:hidden">{tab.label.split(' ')[0]}</span>
-                </button>
-              ))}
-            </motion.div>
-
-            {/* Facebook Pixel */}
-            {settingsTab === 'pixel' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5 md:p-7">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-md">
-                    <Facebook className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="font-black text-slate-900 text-lg">Meta / Facebook Pixel</h2>
-                    <p className="text-xs text-slate-600 font-semibold">Untuk tracking FB Ads & conversion events</p>
-                  </div>
-                </div>
-
-                <FieldGroup label="Pixel ID" hint="✅ Auto-loaded dari server. Edit untuk update.">
-                  <TextInput value={settings.fb_pixel_id} onChange={v => set('fb_pixel_id', v)} placeholder="e.g. 1234567890123" />
-                </FieldGroup>
-
-                <FieldGroup label="Access Token (Conversions API)" hint="✅ Auto-loaded dari server. Optional — untuk server-side tracking.">
-                  <SecretInput value={settings.fb_access_token} onChange={v => set('fb_access_token', v)} placeholder="EAABsbCS1iHg..." />
-                </FieldGroup>
-
-                <div className="mt-6 rounded-xl p-4 text-sm bg-blue-50 border-2 border-blue-200 text-blue-900">
-                  <p className="font-black mb-1 text-blue-700">📌 Cara pasang Pixel ID:</p>
-                  <ol className="list-decimal list-inside space-y-1 text-xs leading-relaxed">
-                    <li>Pergi ke <strong>Meta Business Suite → Events Manager</strong></li>
-                    <li>Klik <strong>Connect Data Source → Web</strong></li>
-                    <li>Pilih <strong>Meta Pixel</strong> → copy Pixel ID</li>
-                    <li>Paste di sini dan Save</li>
-                  </ol>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Chip Payment */}
-            {settingsTab === 'chip' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5 md:p-7">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-md">
-                    <CreditCard className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="font-black text-slate-900 text-lg">Chip Payment Gateway</h2>
-                    <p className="text-xs text-slate-600 font-semibold">FPX, kad kredit & e-wallet Malaysia</p>
-                  </div>
-                </div>
-
-                <div className="rounded-xl p-4 bg-green-50 border-2 border-green-200">
-                  <p className="text-xs font-bold text-green-700">🟢 Production Mode — Live payments via Chip</p>
-                </div>
-
-                {loadingSecrets && (
-                  <p className="text-xs text-slate-600 mb-3">⏳ Memuat credentials dari server...</p>
+                    {/* Customer Database */}
+                    <CustomerDatabaseTable />
+                  </>
                 )}
 
-                <FieldGroup label="Brand ID" hint="✅ Auto-loaded dari server. Edit untuk update.">
-                  <TextInput value={settings.chip_brand_id} onChange={v => set('chip_brand_id', v)} placeholder="abc12345-abcd-1234-abcd-abc123456789" />
-                </FieldGroup>
+                {/* ═══ OTHER TABS ═══ */}
+                {activeTab === 'health' && <SystemHealthPanel />}
+                {activeTab === 'launch' && <LaunchControlPanel />}
+                {activeTab === 'affiliate' && <AdminAffiliatePanel />}
 
-                <FieldGroup label="API Key (Secret Key)" hint="✅ Auto-loaded dari server. Edit untuk update.">
-                  <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="sk_live_..." />
-                </FieldGroup>
-
-                <div className="mt-6 rounded-xl p-4 text-sm bg-green-50 border-2 border-green-200 text-green-900">
-                  <p className="font-black mb-1 text-green-700">📌 Cara dapatkan Chip credentials:</p>
-                  <ol className="list-decimal list-inside space-y-1 text-xs leading-relaxed">
-                    <li>Log in ke <strong>merchant.chip-in.asia</strong></li>
-                    <li>Pergi ke <strong>Settings → Brand</strong> untuk Brand ID</li>
-                    <li>Pergi ke <strong>Settings → API Keys</strong> untuk Secret Key</li>
-                    <li>Guna Sandbox dulu untuk testing</li>
-                  </ol>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Webhook */}
-            {settingsTab === 'webhook' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-3xl p-5 md:p-7">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-md">
-                    <Webhook className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="font-black text-slate-900 text-lg">Webhook Settings</h2>
-                    <p className="text-xs text-slate-600 font-semibold">Untuk receive payment callbacks dari Chip</p>
-                  </div>
-                </div>
-
-                <FieldGroup label="Chip Webhook Secret" hint="✅ Auto-loaded dari server. Edit untuk update.">
-                  <SecretInput value={settings.chip_webhook_secret} onChange={v => set('chip_webhook_secret', v)} placeholder="whsec_..." />
-                </FieldGroup>
-
-                <div className="mt-2 mb-5">
-                  <label className="block text-sm font-black text-slate-800 mb-1">Webhook URL Anda</label>
-                  <p className="text-xs text-slate-600 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
-                  <div className="flex gap-2">
-                    <div className="flex-1 bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl px-3 py-3 text-xs font-mono text-slate-700 break-all overflow-x-auto">
-                      https://ceriakid.com/functions/chipWebhook
+                {/* ═══ SETTINGS TAB ═══ */}
+                {activeTab === 'settings' && (
+                  <>
+                    {/* Settings sub-tabs */}
+                    <div className="flex gap-1 p-1 rounded-xl bg-white ring-1 ring-slate-200 overflow-x-auto shadow-sm">
+                      {settingsTabs.map(tab => {
+                        const Icon = tab.icon;
+                        const active = settingsTab === tab.key;
+                        return (
+                          <button
+                            type="button"
+                            key={tab.key}
+                            onClick={() => setSettingsTab(tab.key)}
+                            className={`relative flex-1 py-2 px-3 rounded-lg font-semibold text-xs transition-colors whitespace-nowrap flex items-center justify-center gap-1.5 ${
+                              active ? 'text-white' : 'text-slate-600 hover:text-slate-900'
+                            }`}
+                          >
+                            {active && (
+                              <motion.span
+                                layoutId="settings-tab"
+                                className="absolute inset-0 rounded-lg bg-slate-900"
+                                transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                              />
+                            )}
+                            <Icon className="relative w-3.5 h-3.5" />
+                            <span className="relative">{tab.label}</span>
+                          </button>
+                        );
+                      })}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const url = 'https://ceriakid.com/functions/chipWebhook';
-                        navigator.clipboard.writeText(url);
-                        toast({ title: '📋 URL disalin!', description: 'Paste dalam Chip Dashboard.' });
-                      }}
-                      className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-xs transition-all"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <p className="text-[11px] text-amber-700 mt-2 font-semibold">⚠️ Pastikan URL ni yang di-set dalam Chip Dashboard. Kalau tersilap, webhook tak akan trigger dan subscription customer akan stuck di status "incomplete".</p>
-                </div>
 
-                <div className="rounded-xl p-4 text-sm bg-purple-50 border-2 border-purple-200 text-purple-900">
-                  <p className="font-black mb-1 text-purple-700">📌 Events yang perlu didaftarkan:</p>
-                  <div className="space-y-1 text-xs">
-                    {['payment.paid', 'payment.pending', 'payment.expired', 'payment.cancelled'].map(event => (
-                      <div key={event} className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                        <code className="font-mono">{event}</code>
+                    {/* Facebook Pixel */}
+                    {settingsTab === 'pixel' && (
+                      <SectionCard
+                        icon={Facebook}
+                        iconBg="bg-blue-600"
+                        title="Meta / Facebook Pixel"
+                        subtitle="Tracking FB Ads & conversion events"
+                      >
+                        <FieldGroup label="Pixel ID" hint="✅ Auto-loaded dari server. Edit untuk update.">
+                          <TextInput value={settings.fb_pixel_id} onChange={v => set('fb_pixel_id', v)} placeholder="e.g. 1234567890123" />
+                        </FieldGroup>
+
+                        <FieldGroup label="Access Token (Conversions API)" hint="✅ Auto-loaded dari server. Optional — untuk server-side tracking.">
+                          <SecretInput value={settings.fb_access_token} onChange={v => set('fb_access_token', v)} placeholder="EAABsbCS1iHg..." />
+                        </FieldGroup>
+
+                        <div className="rounded-lg p-3.5 text-xs bg-blue-50 border border-blue-100 text-blue-900">
+                          <p className="font-bold mb-1.5 text-blue-700">📌 Cara pasang Pixel ID:</p>
+                          <ol className="list-decimal list-inside space-y-1 leading-relaxed">
+                            <li>Pergi ke <strong>Meta Business Suite → Events Manager</strong></li>
+                            <li>Klik <strong>Connect Data Source → Web</strong></li>
+                            <li>Pilih <strong>Meta Pixel</strong> → copy Pixel ID</li>
+                            <li>Paste di sini dan Save</li>
+                          </ol>
+                        </div>
+                      </SectionCard>
+                    )}
+
+                    {/* Chip Payment */}
+                    {settingsTab === 'chip' && (
+                      <SectionCard
+                        icon={CreditCard}
+                        iconBg="bg-emerald-600"
+                        title="Chip Payment Gateway"
+                        subtitle="FPX, kad kredit & e-wallet Malaysia"
+                      >
+                        <div className="rounded-lg p-3 mb-4 bg-emerald-50 border border-emerald-100 flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                          <p className="text-xs font-bold text-emerald-700">Production Mode — Live payments aktif</p>
+                        </div>
+
+                        {loadingSecrets && (
+                          <p className="text-xs text-slate-500 mb-3">⏳ Memuat credentials dari server...</p>
+                        )}
+
+                        <FieldGroup label="Brand ID" hint="✅ Auto-loaded dari server. Edit untuk update.">
+                          <TextInput value={settings.chip_brand_id} onChange={v => set('chip_brand_id', v)} placeholder="abc12345-abcd-1234-abcd-abc123456789" />
+                        </FieldGroup>
+
+                        <FieldGroup label="API Key (Secret Key)" hint="✅ Auto-loaded dari server. Edit untuk update.">
+                          <SecretInput value={settings.chip_api_key} onChange={v => set('chip_api_key', v)} placeholder="sk_live_..." />
+                        </FieldGroup>
+
+                        <div className="rounded-lg p-3.5 text-xs bg-emerald-50 border border-emerald-100 text-emerald-900">
+                          <p className="font-bold mb-1.5 text-emerald-700">📌 Cara dapatkan Chip credentials:</p>
+                          <ol className="list-decimal list-inside space-y-1 leading-relaxed">
+                            <li>Log in ke <strong>merchant.chip-in.asia</strong></li>
+                            <li>Pergi ke <strong>Settings → Brand</strong> untuk Brand ID</li>
+                            <li>Pergi ke <strong>Settings → API Keys</strong> untuk Secret Key</li>
+                            <li>Guna Sandbox dulu untuk testing</li>
+                          </ol>
+                        </div>
+                      </SectionCard>
+                    )}
+
+                    {/* Webhook */}
+                    {settingsTab === 'webhook' && (
+                      <SectionCard
+                        icon={Webhook}
+                        iconBg="bg-purple-600"
+                        title="Webhook Settings"
+                        subtitle="Receive payment callbacks dari Chip"
+                      >
+                        <FieldGroup label="Chip Webhook Secret" hint="✅ Auto-loaded dari server. Edit untuk update.">
+                          <SecretInput value={settings.chip_webhook_secret} onChange={v => set('chip_webhook_secret', v)} placeholder="whsec_..." />
+                        </FieldGroup>
+
+                        <div className="mb-5">
+                          <label className="block text-sm font-bold text-slate-800 mb-1">Webhook URL Anda</label>
+                          <p className="text-xs text-slate-500 mb-2">Copy URL ini dan paste dalam Chip Dashboard → Settings → Webhooks</p>
+                          <div className="flex gap-2">
+                            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-xs font-mono text-slate-700 break-all overflow-x-auto">
+                              https://ceriakid.com/functions/chipWebhook
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                navigator.clipboard.writeText('https://ceriakid.com/functions/chipWebhook');
+                                toast({ title: '📋 URL disalin!', description: 'Paste dalam Chip Dashboard.' });
+                              }}
+                              className="px-3.5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold text-xs transition-colors"
+                            >
+                              Copy
+                            </button>
+                          </div>
+                          <p className="text-[11px] text-amber-700 mt-2 font-semibold">⚠️ Pastikan URL ni yang di-set dalam Chip Dashboard.</p>
+                        </div>
+
+                        <div className="rounded-lg p-3.5 text-xs bg-purple-50 border border-purple-100 text-purple-900">
+                          <p className="font-bold mb-1.5 text-purple-700">📌 Events yang perlu didaftarkan:</p>
+                          <div className="space-y-1">
+                            {['payment.paid', 'payment.pending', 'payment.expired', 'payment.cancelled'].map(event => (
+                              <div key={event} className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
+                                <code className="font-mono">{event}</code>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </SectionCard>
+                    )}
+
+                    {settingsTab === 'push' && <PushNotificationPanel />}
+
+                    {/* Compact save button — bukan giant gradient lagi */}
+                    {settingsTab !== 'push' && (
+                      <div className="flex items-center justify-between gap-3 px-1">
+                        <p className="text-[11px] text-slate-500 font-medium">
+                          ⚠️ Tetapan disimpan tempatan. Untuk production, gunakan environment variables.
+                        </p>
+                        <motion.button
+                          type="button"
+                          whileTap={{ scale: 0.97 }}
+                          onClick={handleSave}
+                          disabled={saving}
+                          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm shadow-sm transition-all whitespace-nowrap ${
+                            saved
+                              ? 'bg-emerald-600 text-white'
+                              : 'bg-slate-900 hover:bg-slate-800 text-white'
+                          }`}
+                        >
+                          {saving ? (
+                            <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Menyimpan...</>
+                          ) : saved ? (
+                            <><CheckCircle className="w-4 h-4" /> Tersimpan</>
+                          ) : (
+                            <><Save className="w-4 h-4" /> Simpan</>
+                          )}
+                        </motion.button>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
+                    )}
+                  </>
+                )}
+              </>
             )}
-
-            {/* Push Notifications */}
-            {settingsTab === 'push' && <PushNotificationPanel />}
-
-            {/* Save Button — sembunyi di tab Push sebab panel push ada save sendiri */}
-            {settingsTab !== 'push' && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={handleSave}
-                  disabled={saving}
-                  className={`w-full py-3 md:py-4 rounded-2xl font-black text-sm md:text-lg flex items-center justify-center gap-3 shadow-lg transition-all ${
-                    saved
-                      ? 'bg-gradient-to-r from-green-400 to-emerald-600 text-white'
-                      : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
-                  }`}
-                >
-                  {saving ? (
-                    <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> Menyimpan...</>
-                  ) : saved ? (
-                    <><CheckCircle className="w-5 h-5" /> Tersimpan!</>
-                  ) : (
-                    <><Save className="w-5 h-5" /> Simpan Tetapan</>
-                  )}
-                </motion.button>
-                <p className="text-center text-xs text-slate-600 mt-4 font-semibold">⚠️ Tetapan disimpan secara tempatan. Untuk production, gunakan environment variables dalam server.</p>
-              </motion.div>
-            )}
-          </>
-        )}
           </main>
         </div>
       </div>
