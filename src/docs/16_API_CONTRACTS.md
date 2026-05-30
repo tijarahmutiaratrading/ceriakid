@@ -75,9 +75,14 @@
 **Input:**
 ```json
 {
-  "packageId": "credits_50" | "credits_150" | "credits_400"
+  "packageId": "starter" | "family" | "power"
 }
 ```
+
+> ⚠️ **Package IDs match `lib/creditPackages.js`** (NOT credits_50 style):
+> - `starter` → 50 credits, RM19
+> - `family` → 140 credits + 25 bonus, RM59
+> - `power` → 380 credits + 70 bonus, RM149
 
 **Output:**
 ```json
@@ -153,9 +158,11 @@
 {
   "to": "customer@example.com",
   "type": "credit",
-  "credits": 150
+  "credits": 165
 }
 ```
+
+> Credit amounts seen in production: `50` (starter), `165` (family: 140+25 bonus), `450` (power: 380+70 bonus).
 
 **Output:**
 ```json
