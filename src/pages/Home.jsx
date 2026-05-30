@@ -15,6 +15,7 @@ import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryB
 import AIHubCard from '@/components/home/AIHubCard';
 import InstallAppGuide from '@/components/home/InstallAppGuide';
 import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
+import OnboardingWizard from '@/components/onboarding/OnboardingWizard';
 import { checkAndRegisterDevice } from '@/lib/deviceManager';
 import { syncOfflineProgress } from '@/lib/offlineSyncManager';
 import { hasActiveSubscription } from '@/lib/tierAccess';
@@ -29,6 +30,17 @@ export default function Home() {
   const safeToggle = toggleAgeGroup || (() => {});
   const [deviceCheck, setDeviceCheck] = React.useState({ status: 'checking', devices: [] });
   const [homeAvatarUrl, setHomeAvatarUrl] = React.useState(user?.avatarUrl || '');
+  const [showOnboarding, setShowOnboarding] = React.useState(false);
+
+  // Show onboarding wizard for first-time users (lepas device check pass)
+  React.useEffect(() => {
+    if (!user) return;
+    if (deviceCheck.status !== 'allowed') return;
+    // Tunjuk wizard kalau user belum complete onboarding
+    if (user.onboardingCompleted !== true) {
+      setShowOnboarding(true);
+    }
+  }, [user, deviceCheck.status]);
 
   React.useEffect(() => {
     setHomeAvatarUrl(user?.avatarUrl || '');
@@ -92,6 +104,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
+      {/* Onboarding wizard untuk user baru */}
+      {showOnboarding && (
+        <OnboardingWizard
+          user={user}
+          onComplete={() => {
+            setShowOnboarding(false);
+            window.location.reload();
+          }}
+        />
+      )}
+
       {/* Floating orbs background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
         <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />

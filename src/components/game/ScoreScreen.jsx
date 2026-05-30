@@ -9,21 +9,44 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
   const { t } = useLang();
 
   useEffect(() => {
-    if (stars >= 2) {
-      const duration = 2000;
-      const end = Date.now() + duration;
-      const interval = setInterval(() => {
-        if (Date.now() > end) return clearInterval(interval);
-        confetti({
-          particleCount: 30,
-          angle: Math.random() * 360,
-          spread: 60,
-          origin: { x: Math.random(), y: Math.random() * 0.5 },
-          colors: ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#8b5cf6'],
-        });
-      }, 200);
-      return () => clearInterval(interval);
+    if (stars < 2) return;
+
+    const colors = ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#8b5cf6', '#fbbf24'];
+    const isPerfect = stars >= 3;
+
+    // Initial BIG burst — celebrate first sight
+    confetti({
+      particleCount: isPerfect ? 200 : 100,
+      spread: 90,
+      origin: { y: 0.5 },
+      colors,
+      startVelocity: 45,
+      scalar: isPerfect ? 1.3 : 1,
+    });
+
+    // Side cannons untuk perfect score sahaja — extra wow effect
+    if (isPerfect) {
+      setTimeout(() => {
+        confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors });
+        confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors });
+      }, 250);
     }
+
+    // Continuous sparkle rain
+    const duration = isPerfect ? 3500 : 2000;
+    const end = Date.now() + duration;
+    const interval = setInterval(() => {
+      if (Date.now() > end) return clearInterval(interval);
+      confetti({
+        particleCount: isPerfect ? 40 : 25,
+        angle: Math.random() * 360,
+        spread: 70,
+        origin: { x: Math.random(), y: Math.random() * 0.5 },
+        colors,
+        scalar: Math.random() * 0.5 + 0.7,
+      });
+    }, 200);
+    return () => clearInterval(interval);
   }, [stars]);
 
   const messages = [
