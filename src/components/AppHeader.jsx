@@ -286,22 +286,21 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ x: -320, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -320, opacity: 0 }}
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
             transition={{ type: 'spring', damping: 22, stiffness: 280 }}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             role="dialog"
             aria-modal="true"
             aria-label="Menu navigasi"
-            className="sm:hidden fixed left-3 right-3 top-20 bottom-3 z-50 flex flex-col rounded-[2rem] overflow-hidden"
+            className="sm:hidden fixed left-3 right-3 top-1/2 -translate-y-1/2 z-50 flex flex-col rounded-[2rem] overflow-hidden max-h-[85vh]"
             style={{
-              background: 'linear-gradient(165deg, rgba(76, 29, 149, 0.55) 0%, rgba(157, 23, 77, 0.5) 50%, rgba(124, 58, 237, 0.55) 100%)',
-              backdropFilter: 'blur(28px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-              boxShadow: '0 25px 60px -10px rgba(76, 29, 149, 0.55), inset 0 0 0 1px rgba(255,255,255,0.25)',
-              paddingBottom: 'env(safe-area-inset-bottom)',
+              background: 'rgba(255,255,255,0.18)',
+              backdropFilter: 'blur(32px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+              boxShadow: '0 25px 60px -10px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.35)',
             }}
           >
             {/* Header: profile + stats + active child */}
