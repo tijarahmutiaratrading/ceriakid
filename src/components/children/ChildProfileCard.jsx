@@ -166,24 +166,28 @@ export default function ChildProfileCard({
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col gap-1.5 flex-shrink-0">
+          <div className="relative z-20 flex flex-col gap-1.5 flex-shrink-0">
             <motion.button
+              type="button"
               whileTap={{ scale: 0.9 }}
-              onClick={onEdit}
-              className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-600 transition-all"
+              onClick={(e) => { e.stopPropagation(); onEdit?.(); }}
+              aria-label={`Edit profil ${child.name}`}
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-600 transition-all cursor-pointer hover:brightness-95"
               style={{ background: '#fef9f3', boxShadow: '0 2px 0 #fde68a' }}
               title="Edit"
             >
-              <Edit2 className="w-3.5 h-3.5" strokeWidth={3} />
+              <Edit2 className="w-4 h-4" strokeWidth={3} />
             </motion.button>
             <motion.button
+              type="button"
               whileTap={{ scale: 0.9 }}
-              onClick={onDelete}
-              className="w-8 h-8 rounded-xl flex items-center justify-center text-rose-600 transition-all"
+              onClick={(e) => { e.stopPropagation(); onDelete?.(); }}
+              aria-label={`Padam profil ${child.name}`}
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-rose-600 transition-all cursor-pointer hover:brightness-95"
               style={{ background: '#fee2e2', boxShadow: '0 2px 0 #fca5a5' }}
               title="Padam"
             >
-              <Trash2 className="w-3.5 h-3.5" strokeWidth={3} />
+              <Trash2 className="w-4 h-4" strokeWidth={3} />
             </motion.button>
           </div>
         </div>
