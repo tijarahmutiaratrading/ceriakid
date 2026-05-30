@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut, ChevronDown, ChevronRight, Sparkles, Pin, ChevronsUpDown } from 'lucide-react';
+import { LogOut, ChevronDown, ChevronRight, Sparkles, Pin } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
@@ -234,27 +234,22 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           </div>
 
           <div className="flex items-center gap-2 justify-end">
-            {/* Child switcher pill — match drawer style */}
+            {/* Child avatar — tap untuk tukar anak (hanya bila ada >1 anak) */}
             {isAuthenticated && selectedChild && (childrenList?.length || 0) > 1 && (
               <motion.button
                 type="button"
-                whileTap={{ scale: 0.96 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => { haptic('light'); setHeaderSwitcherOpen(true); }}
                 aria-label={`Anak aktif: ${selectedChild.name}. Tap untuk tukar.`}
-                className="flex items-center gap-1.5 pl-1 pr-1.5 py-1 rounded-full bg-white/95 shadow-md hover:bg-white transition-all flex-shrink-0"
+                className="relative flex-shrink-0"
               >
                 <img
                   src={getChildAvatar(selectedChild)}
                   alt={selectedChild.name}
-                  className="w-7 h-7 rounded-full object-cover ring-2 ring-pink-200 bg-white flex-shrink-0"
+                  className={`w-9 h-9 rounded-full object-cover shadow-lg ring-2 bg-white ${isDarkPill ? 'ring-yellow-300/80' : 'ring-pink-300'}`}
                 />
-                <div className="text-left leading-none">
-                  <p className="text-pink-600 text-[8px] font-black uppercase tracking-wider">Anak Aktif</p>
-                  <p className="text-slate-800 text-[11px] font-black truncate max-w-[70px] mt-0.5">{selectedChild.name}</p>
-                </div>
-                <div className="flex items-center gap-0.5 px-1.5 py-1 rounded-md bg-pink-100 flex-shrink-0">
-                  <span className="text-pink-600 text-[8px] font-black uppercase tracking-wider">Tukar</span>
-                  <ChevronsUpDown className="w-2.5 h-2.5 text-pink-600" strokeWidth={3} />
+                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 ring-2 ring-white flex items-center justify-center">
+                  <ChevronDown className="w-2 h-2 text-white" strokeWidth={4} />
                 </div>
               </motion.button>
             )}

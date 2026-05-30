@@ -3,14 +3,10 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, Palette, BookOpen, UserCircle, BarChart3, Settings,
-  UserPlus, Trophy, ChevronLeft, ChevronRight, ChevronDown, Shield, LogOut, ChevronsUpDown
+  UserPlus, Trophy, ChevronLeft, ChevronRight, ChevronDown, Shield, LogOut
 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
-import { useSelectedChild } from '@/lib/SelectedChildContext';
-import { getChildAvatar } from '@/lib/childAvatars';
-import { haptic } from '@/lib/haptics';
-import ChildSwitcherModal from '@/components/header/ChildSwitcherModal';
 
 const NAV_GROUPS = [
   {
@@ -52,8 +48,6 @@ const NAV_GROUPS = [
 export default function UserSidebar() {
   const { user, logout } = useAuth() || {};
   const location = useSafeLocation();
-  const { selectedChild, childrenList = [], setSelectedChild } = useSelectedChild() || {};
-  const [switcherOpen, setSwitcherOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(() => {
     if (typeof window === 'undefined') return false;
     return localStorage.getItem('sidebar-collapsed') === 'true';
@@ -101,35 +95,6 @@ export default function UserSidebar() {
           {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>
       </div>
-
-      {/* Child switcher pill — match top header style */}
-      {selectedChild && childrenList.length > 1 && (
-        <button
-          type="button"
-          onClick={() => { haptic('light'); setSwitcherOpen(true); }}
-          aria-label={`Anak aktif: ${selectedChild.name}. Tap untuk tukar.`}
-          title={!showLabels ? `Anak: ${selectedChild.name}` : undefined}
-          className={`flex items-center gap-1.5 rounded-full bg-white/95 hover:bg-white shadow-md transition-all mb-3 ${!showLabels ? 'justify-center p-1' : 'pl-1 pr-1.5 py-1 mx-1'}`}
-        >
-          <img
-            src={getChildAvatar(selectedChild)}
-            alt={selectedChild.name}
-            className="w-7 h-7 rounded-full object-cover ring-2 ring-pink-200 bg-white flex-shrink-0"
-          />
-          {showLabels && (
-            <>
-              <div className="text-left leading-none flex-1 min-w-0">
-                <p className="text-pink-600 text-[8px] font-black uppercase tracking-wider">Anak Aktif</p>
-                <p className="text-slate-800 text-[11px] font-black truncate mt-0.5">{selectedChild.name}</p>
-              </div>
-              <div className="flex items-center gap-0.5 px-1.5 py-1 rounded-md bg-pink-100 flex-shrink-0">
-                <span className="text-pink-600 text-[8px] font-black uppercase tracking-wider">Tukar</span>
-                <ChevronsUpDown className="w-2.5 h-2.5 text-pink-600" strokeWidth={3} />
-              </div>
-            </>
-          )}
-        </button>
-      )}
 
       {showLabels && (
         <div className="px-2 mb-2">
@@ -267,15 +232,6 @@ export default function UserSidebar() {
           )}
         </div>
       )}
-
-      <ChildSwitcherModal
-        open={switcherOpen}
-        children={childrenList}
-        selectedChild={selectedChild}
-        onSelect={setSelectedChild}
-        onClose={() => setSwitcherOpen(false)}
-        onAddChild={() => setSwitcherOpen(false)}
-      />
     </aside>
   );
 }

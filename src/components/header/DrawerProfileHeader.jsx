@@ -29,15 +29,15 @@ export default function DrawerProfileHeader({
 
   return (
     <div
-      className="px-4 py-4 relative overflow-hidden rounded-t-[2rem]"
+      className="px-4 py-4 relative overflow-hidden"
       style={{
         background: 'linear-gradient(135deg, #f472b6 0%, #c084fc 60%, #a78bfa 100%)',
         paddingTop: 'max(1rem, env(safe-area-inset-top))',
       }}
     >
-      {/* Decorative orbs — kept inside boundary to avoid Safari blur clipping issues */}
-      <div className="absolute top-2 right-2 w-20 h-20 rounded-full bg-yellow-300/30 blur-2xl pointer-events-none" />
-      <div className="absolute bottom-2 left-2 w-20 h-20 rounded-full bg-pink-300/30 blur-2xl pointer-events-none" />
+      {/* Decorative orbs */}
+      <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-yellow-300/30 blur-2xl pointer-events-none" />
+      <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-pink-300/30 blur-2xl pointer-events-none" />
 
       {/* Top row: profile + close */}
       <div className="relative flex items-center gap-3 mb-4">
