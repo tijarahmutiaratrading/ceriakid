@@ -4,6 +4,9 @@ import { Share2, Trash2, Users, Copy, Check } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
+import EmptyState from '@/components/ui/EmptyState';
+import CardSkeleton from '@/components/ui/CardSkeleton';
+import { toast } from '@/components/ui/use-toast';
 
 export default function FriendsList() {
   const { user, isAuthenticated, navigateToLogin } = useAuth();
@@ -50,14 +53,17 @@ export default function FriendsList() {
     try {
       await base44.entities.Friend.delete(friendId);
       setFriends(prev => prev.filter(f => f.id !== friendId));
+      toast({ title: '👋 Kawan dibuang' });
     } catch (error) {
       console.error('Failed to remove friend:', error);
+      toast({ title: 'Gagal buang kawan', description: 'Sila cuba lagi.', variant: 'destructive' });
     }
   };
 
   const copyCode = () => {
     navigator.clipboard.writeText(inviteCode);
     setCopied(true);
+    toast({ title: '📋 Kod disalin!', description: `Kongsi ${inviteCode} dengan kawan anda.` });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -119,10 +125,12 @@ export default function FriendsList() {
       });
 
       setAddMessage({ ok: true, text: `✅ Berjaya! ${friendEmail} telah ditambah sebagai kawan.` });
+      toast({ title: '🎉 Kawan baru ditambah!', description: friendEmail });
       setInputCode('');
       loadFriends();
     } catch (err) {
       setAddMessage({ ok: false, text: 'Ralat berlaku. Cuba lagi.' });
+      toast({ title: 'Gagal tambah kawan', description: 'Sila cuba lagi.', variant: 'destructive' });
     }
     setAddingFriend(false);
   };
@@ -134,16 +142,7 @@ export default function FriendsList() {
   };
 
   if (loading) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center font-nunito -mt-16 sm:-mt-20 pt-16 sm:pt-20"
-        style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)' }}
-      >
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-        </div>
-      </div>
-    );
+    return <CardSkeleton rows={3} />;
   }
 
   return (
@@ -273,13 +272,14 @@ export default function FriendsList() {
           </div>
 
           {friends.length === 0 ? (
-            <div className="py-10 text-center">
-              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center mb-4 shadow-inner">
-                <Users className="w-8 h-8 text-purple-500" strokeWidth={2.5} />
-              </div>
-              <p className="text-slate-800 font-black text-lg mb-2">Belum ada kawan</p>
-              <p className="text-slate-600 text-sm">Kongsi kod undangan anda untuk bermain bersama kawan-kawan!</p>
-            </div>
+            <EmptyState
+              icon={Users}
+              title="Belum ada kawan"
+              description="Kongsi kod undangan anda dengan kawan untuk mula bermain bersama dan cabar antara satu sama lain!"
+              gradient="from-purple-100 to-pink-100"
+              iconColor="text-purple-500"
+              action={{ label: 'Kongsi via WhatsApp', emoji: '💬', onClick: shareInviteCode }}
+            />
           ) : (
             <div className="space-y-2.5">
               <AnimatePresence>

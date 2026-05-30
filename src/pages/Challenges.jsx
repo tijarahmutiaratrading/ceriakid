@@ -5,6 +5,9 @@ import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import AppHeader from '@/components/AppHeader';
+import EmptyState from '@/components/ui/EmptyState';
+import CardSkeleton from '@/components/ui/CardSkeleton';
+import { toast } from '@/components/ui/use-toast';
 
 const categoryLabels = {
   bahasa_melayu: { label: 'Bahasa Melayu', emoji: '🇲🇾' },
@@ -59,8 +62,10 @@ export default function Challenges() {
     try {
       await base44.entities.FriendChallenge.delete(id);
       setChallenges(prev => prev.filter(c => c.id !== id));
+      toast({ title: '🗑️ Cabaran dipadam' });
     } catch (err) {
       console.error('Failed to delete challenge:', err);
+      toast({ title: 'Gagal padam', description: 'Sila cuba lagi.', variant: 'destructive' });
     }
   };
 
@@ -91,25 +96,18 @@ export default function Challenges() {
       setSelectedCategory('');
       setShowForm(false);
       await loadChallenges();
+      toast({ title: '🎯 Cabaran dihantar!', description: `Kawan anda akan dimaklumkan.` });
     } catch (error) {
       console.error('Failed to create challenge:', error);
       setError('Gagal mencipta cabaran. Cuba lagi.');
+      toast({ title: 'Gagal hantar cabaran', description: 'Sila cuba lagi.', variant: 'destructive' });
     } finally {
       setCreating(false);
     }
   };
 
   if (loading) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center font-nunito -mt-16 sm:-mt-20 pt-16 sm:pt-20"
-        style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)' }}
-      >
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-        </div>
-      </div>
-    );
+    return <CardSkeleton rows={3} />;
   }
 
   return (
@@ -236,13 +234,14 @@ export default function Challenges() {
           </div>
 
           {challenges.length === 0 ? (
-            <div className="py-10 text-center">
-              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-orange-100 to-pink-100 flex items-center justify-center mb-4 shadow-inner">
-                <Zap className="w-8 h-8 text-orange-500" strokeWidth={2.5} fill="rgb(249 115 22)" />
-              </div>
-              <p className="text-slate-800 font-black text-lg mb-2">Belum ada cabaran</p>
-              <p className="text-slate-600 text-sm">Tekan + untuk cabar kawan anda bermain!</p>
-            </div>
+            <EmptyState
+              icon={Zap}
+              title="Belum ada cabaran"
+              description="Cabar kawan anda untuk pertandingan subjek yang seronok! Pemenang akan dapat trofi."
+              gradient="from-orange-100 to-pink-100"
+              iconColor="text-orange-500"
+              action={{ label: 'Cabar Kawan Sekarang', emoji: '⚡', onClick: () => setShowForm(true) }}
+            />
           ) : (
             <div className="space-y-3">
               {challenges.map((challenge, idx) => {
