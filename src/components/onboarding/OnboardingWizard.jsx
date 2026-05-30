@@ -219,11 +219,15 @@ export default function OnboardingWizard({ user, onComplete }) {
                 <input
                   type="text"
                   value={childName}
-                  onChange={(e) => setChildName(e.target.value)}
+                  onChange={(e) => setChildName(e.target.value.slice(0, 30))}
+                  maxLength={30}
                   placeholder="Contoh: Ahmad, Siti, Aiman..."
                   autoFocus
                   className="w-full px-5 py-4 rounded-2xl bg-purple-50 border-2 border-purple-200 text-slate-900 font-bold text-lg placeholder-slate-400 focus:outline-none focus:border-purple-500 focus:bg-white transition-all"
                 />
+                <p className="text-right text-[11px] font-bold text-slate-400 mt-1.5">
+                  {childName.length}/30
+                </p>
                 <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200">
                   <p className="text-xs text-amber-800 font-semibold">
                     💡 Tip: Anda boleh tambah hingga 4 profil anak (pelan Keluarga).

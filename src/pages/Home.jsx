@@ -132,28 +132,6 @@ export default function Home() {
 
       {isAuthenticated && <InstallAppGuide />}
 
-        {/* Not logged in welcome */}
-        {!isAuthenticated && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 rounded-3xl flex items-center justify-between"
-            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)' }}
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-3xl">🎓</span>
-              <p className="text-white font-black text-lg">Selamat datang ke CeriaKid!</p>
-            </div>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => base44.auth.redirectToLogin(window.location.href)}
-              className="px-4 py-2 bg-white text-purple-600 rounded-full text-sm font-black shadow-lg"
-            >
-              Log Masuk
-            </motion.button>
-          </motion.div>
-        )}
-
         {/* Age Group Selector - Mascot Illustration Style */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -279,33 +257,6 @@ export default function Home() {
           <CategoryGrid />
         </motion.div>
 
-        {/* CTA if not logged in */}
-        {!isAuthenticated && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="mt-8 p-6 rounded-3xl text-center"
-            style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}
-          >
-            <p className="text-4xl mb-3">🎮</p>
-            <p className="text-white font-black text-lg mb-2">
-              {lang === 'bm' ? 'Belum Mendaftar?' : 'Not Registered Yet?'}
-            </p>
-            <p className="text-white/80 text-sm mb-5">
-              {lang === 'bm' ? 'Daftar sekarang untuk akses 200+ permainan edukatif!' : 'Sign up now to access 200+ educational games!'}
-            </p>
-            <Link to="/">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 bg-white text-purple-600 rounded-full font-black shadow-lg hover:shadow-xl transition-all"
-              >
-                {lang === 'bm' ? 'Lihat Pelan Sekarang' : 'View Packages'}
-              </motion.button>
-            </Link>
-          </motion.div>
-        )}
       </div>
     </div>
   );

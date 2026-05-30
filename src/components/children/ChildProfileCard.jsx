@@ -242,8 +242,8 @@ export default function ChildProfileCard({
           </div>
         )}
 
-        {/* STATS ROW: 3 stats */}
-        <div className="grid grid-cols-3 gap-1.5">
+        {/* STATS ROW: 3 stats — bigger touch targets, clearer hierarchy */}
+        <div className="grid grid-cols-3 gap-2">
           {[
             { icon: Gamepad2, value: totalGames, label: 'Main', bg: '#dbeafe', shadow: '#93c5fd', color: '#1e40af' },
             { icon: Star, value: totalStars, label: 'Bintang', bg: '#fef3c7', shadow: '#fcd34d', color: '#a16207' },
@@ -251,12 +251,12 @@ export default function ChildProfileCard({
           ].map((s, i) => (
             <div
               key={i}
-              className="rounded-xl p-2 text-center"
-              style={{ background: s.bg, boxShadow: `0 2px 0 ${s.shadow}` }}
+              className="rounded-2xl p-2.5 text-center"
+              style={{ background: s.bg, boxShadow: `0 3px 0 ${s.shadow}` }}
             >
-              <s.icon className="w-3.5 h-3.5 mx-auto mb-0.5" style={{ color: s.color }} strokeWidth={3} />
-              <p className="text-slate-800 font-black text-base leading-none">{s.value}</p>
-              <p className="text-slate-500 text-[9px] font-black uppercase tracking-wider mt-0.5">{s.label}</p>
+              <s.icon className="w-4 h-4 mx-auto mb-1" style={{ color: s.color }} strokeWidth={3} />
+              <p className="text-slate-800 font-black text-lg leading-none tabular-nums">{s.value}</p>
+              <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mt-1">{s.label}</p>
             </div>
           ))}
         </div>

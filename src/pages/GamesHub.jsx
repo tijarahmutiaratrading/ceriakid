@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ChevronRight, Sparkles, Star, Zap } from 'lucide-react';
+import { ChevronRight, Sparkles, Zap } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import HoppingBunnies from '@/components/game/HoppingBunny';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
@@ -50,22 +50,6 @@ export default function GamesHub() {
       <HoppingBunnies />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-32 pt-4">
-        {/* Back button */}
-        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
-          <Link
-            to="/dashboard"
-            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-slate-700 transition-all hover:scale-[1.02]"
-            style={{
-              background: 'rgba(255,255,255,0.9)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(0,0,0,0.05)',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-            }}
-          >
-            <ArrowLeft className="w-4 h-4" /> Kembali
-          </Link>
-        </motion.div>
-
         {/* Playful hero — vibrant gradient */}
         <motion.section
           initial={{ opacity: 0, y: -10 }}
@@ -187,49 +171,20 @@ export default function GamesHub() {
                         ✨
                       </motion.div>
 
-                      {/* Playful emoji tile — big animated emoji on vibrant gradient */}
-                      <div className={`relative h-44 rounded-[1.5rem] overflow-hidden bg-gradient-to-br ${theme.gradient}`}>
+                      {/* Playful emoji tile — compact, less animation untuk performance */}
+                      <div className={`relative h-32 sm:h-40 rounded-[1.5rem] overflow-hidden bg-gradient-to-br ${theme.gradient}`}>
                         {/* Soft pattern overlay */}
                         <div className="absolute inset-0 opacity-25" style={{
                           backgroundImage: 'radial-gradient(circle at 20% 30%, white 0%, transparent 40%), radial-gradient(circle at 80% 70%, white 0%, transparent 40%)',
                         }} />
 
-                        {/* Floating mini emojis ambience */}
-                        <motion.div
-                          animate={{ y: [0, -8, 0], rotate: [0, 8, 0] }}
-                          transition={{ duration: 3, repeat: Infinity, delay: idx * 0.3 }}
-                          className="absolute top-4 right-12 text-2xl opacity-60"
-                        >
-                          ✨
-                        </motion.div>
-                        <motion.div
-                          animate={{ y: [0, 6, 0], rotate: [0, -8, 0] }}
-                          transition={{ duration: 3.5, repeat: Infinity, delay: idx * 0.4 }}
-                          className="absolute bottom-12 left-6 text-xl opacity-50"
-                        >
-                          ⭐
-                        </motion.div>
-                        <motion.div
-                          animate={{ y: [0, -5, 0] }}
-                          transition={{ duration: 2.8, repeat: Infinity, delay: idx * 0.5 }}
-                          className="absolute top-16 left-10 text-lg opacity-40"
-                        >
-                          💫
-                        </motion.div>
-
-                        {/* BIG bouncy emoji — playful center piece */}
-                        <motion.div
-                          animate={{
-                            scale: [1, 1.12, 1],
-                            rotate: [0, 6, -6, 0],
-                            y: [0, -6, 0],
-                          }}
-                          transition={{ duration: 3, repeat: Infinity, delay: idx * 0.2 }}
-                          className="absolute inset-0 flex items-center justify-center text-8xl group-hover:scale-110 transition-transform duration-500"
+                        {/* BIG emoji — hover-only bounce untuk reduce CPU usage */}
+                        <div
+                          className="absolute inset-0 flex items-center justify-center text-7xl sm:text-8xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500"
                           style={{ filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.35))' }}
                         >
                           {theme.emoji}
-                        </motion.div>
+                        </div>
 
                         {/* Count badge — playful pill */}
                         <div

@@ -11,6 +11,8 @@ import ChildProfileCard from '@/components/children/ChildProfileCard';
 import AddChildCard from '@/components/children/AddChildCard';
 import FamilyHeroCard from '@/components/children/FamilyHeroCard';
 import DeleteChildDialog from '@/components/children/DeleteChildDialog';
+import AvatarPresetPicker from '@/components/children/AvatarPresetPicker';
+import FloatingActionButton from '@/components/ui/FloatingActionButton';
 
 const AGE_OPTIONS = [
   { value: 'prasekolah', label: 'Prasekolah', sub: '4–6 tahun', emoji: '🎨' },
@@ -324,14 +326,28 @@ export default function ChildrenProfiles() {
                 )}
               </div>
 
-              <input
-                type="text"
-                placeholder="Nama anak..."
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl text-slate-800 placeholder-slate-400 font-semibold focus:outline-none mb-3 text-sm"
-                style={{ background: '#fef9f3', boxShadow: '0 2px 0 #fde68a inset, 0 0 0 2px #fde68a' }}
+              <div className="mb-3">
+                <input
+                  type="text"
+                  placeholder="Nama anak..."
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value.slice(0, 30) })}
+                  maxLength={30}
+                  className="w-full px-4 py-3 rounded-2xl text-slate-800 placeholder-slate-400 font-semibold focus:outline-none text-sm"
+                  style={{ background: '#fef9f3', boxShadow: '0 2px 0 #fde68a inset, 0 0 0 2px #fde68a' }}
+                />
+                <p className="text-right text-[10px] font-bold text-slate-400 mt-1">
+                  {formData.name.length}/30
+                </p>
+              </div>
+
+              {/* Avatar preset picker — quick option tanpa upload */}
+              <AvatarPresetPicker
+                avatars={AVATARS}
+                selectedUrl={formData.avatarUrl}
+                onSelect={(url) => setFormData({ ...formData, avatarUrl: url })}
               />
+              <div className="mt-4" />
 
               <p className="text-slate-700 text-xs font-black mb-2 uppercase tracking-wider">Peringkat Umur</p>
               <div className="grid grid-cols-2 gap-3 mb-4">
@@ -448,6 +464,13 @@ export default function ChildrenProfiles() {
         child={children.find(c => c.id === deleteTargetId)}
         onConfirm={confirmDeleteChild}
         onCancel={() => setDeleteTargetId(null)}
+      />
+
+      {/* Mobile FAB — quick add, hanya tunjuk bila ada slot kosong & form belum buka */}
+      <FloatingActionButton
+        show={!showForm && children.length > 0 && children.length < MAX_CHILDREN}
+        label="Tambah Anak"
+        onClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' }); }}
       />
     </div>
   );

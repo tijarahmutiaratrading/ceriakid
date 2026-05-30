@@ -173,9 +173,20 @@ export default function FamilyHeroCard({
               animate={{ width: `${fillPct}%` }}
               transition={{ delay: 0.6, duration: 0.7, ease: 'easeOut' }}
               className="h-full rounded-full"
-              style={{ background: 'linear-gradient(90deg, #f472b6, #ec4899)' }}
+              style={{
+                background: fillPct >= 100
+                  ? 'linear-gradient(90deg, #f59e0b, #ef4444)'
+                  : fillPct >= 75
+                    ? 'linear-gradient(90deg, #fbbf24, #f97316)'
+                    : 'linear-gradient(90deg, #f472b6, #ec4899)',
+              }}
             />
           </div>
+          {fillPct >= 100 && (
+            <p className="text-rose-600 text-[10px] font-black mt-1.5 text-center">
+              🚫 Kapasiti penuh — naik taraf untuk lagi anak
+            </p>
+          )}
         </motion.div>
       )}
 
