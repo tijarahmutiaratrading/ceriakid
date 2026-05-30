@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { X, ChevronRight, Flame, Coins, Crown, ChevronsUpDown } from 'lucide-react';
+import { X, ChevronRight, Crown, ChevronsUpDown } from 'lucide-react';
 import { haptic } from '@/lib/haptics';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import ChildSwitcherModal from '@/components/header/ChildSwitcherModal';
@@ -110,32 +110,6 @@ export default function DrawerProfileHeader({
         onAddChild={() => { setSwitcherOpen(false); onClose?.(); }}
       />
 
-      {/* Quick stats pills */}
-      <div className="relative grid grid-cols-2 gap-2">
-        <Link
-          to="/buy-credits"
-          onClick={() => { haptic('light'); onClose?.(); }}
-          className="flex items-center gap-2 px-3 py-2.5 rounded-2xl bg-white/95 hover:bg-white shadow-md transition-all"
-        >
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-300 to-orange-400 flex items-center justify-center flex-shrink-0 shadow-sm">
-            <Coins className="w-4 h-4 text-white" strokeWidth={2.5} />
-          </div>
-          <div className="min-w-0">
-            <p className="text-orange-600 text-[9px] font-black uppercase tracking-wider leading-none">Kredit</p>
-            <p className="text-slate-800 text-sm font-black leading-tight mt-0.5">{credits ?? '—'}</p>
-          </div>
-        </Link>
-
-        <div className="flex items-center gap-2 px-3 py-2.5 rounded-2xl bg-white/95 shadow-md">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center flex-shrink-0 shadow-sm">
-            <Flame className="w-4 h-4 text-white" strokeWidth={2.5} />
-          </div>
-          <div className="min-w-0">
-            <p className="text-pink-600 text-[9px] font-black uppercase tracking-wider leading-none">Streak</p>
-            <p className="text-slate-800 text-sm font-black leading-tight mt-0.5">{streak ?? 0} hari</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
