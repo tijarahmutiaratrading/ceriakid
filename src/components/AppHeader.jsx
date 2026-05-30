@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut, ChevronDown, ChevronRight, Sparkles, Clock, Pin } from 'lucide-react';
+import { LogOut, ChevronDown, ChevronRight, Sparkles, Pin } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
@@ -9,7 +9,7 @@ import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { haptic } from '@/lib/haptics';
 import { base44 } from '@/api/base44Client';
 import { getActiveTier } from '@/lib/tierAccess';
-import { getPinned, togglePinned, getRecent, trackRecent } from '@/lib/menuPrefs';
+import { getPinned, togglePinned } from '@/lib/menuPrefs';
 import { getChildAvatar } from '@/lib/childAvatars';
 import DrawerProfileHeader from '@/components/header/DrawerProfileHeader';
 import DrawerMenuItem from '@/components/header/DrawerMenuItem';
@@ -20,7 +20,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
   const [navVisible, setNavVisible] = useState(true);
   const [expandedSubmenu, setExpandedSubmenu] = useState(null);
   const [pinnedItems, setPinnedItems] = useState([]);
-  const [recentItems, setRecentItems] = useState([]);
   const [credits, setCredits] = useState(null);
   const [streak, setStreak] = useState(0);
   const [pendingNotifications, setPendingNotifications] = useState({ challenges: 0, sync: 0 });
@@ -66,20 +65,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Track recent on route change
-  useEffect(() => {
-    if (!user?.email) return;
-    const label = pageTitles[location.pathname];
-    if (label && label !== 'CeriaKid') {
-      trackRecent(user.email, location.pathname, label);
-    }
-  }, [location.pathname, user?.email]);
-
-  // Load pinned/recent + user stats bila drawer dibuka
+  // Load pinned + user stats bila drawer dibuka
   useEffect(() => {
     if (!isOpen || !user?.email) return;
     setPinnedItems(getPinned(user.email));
-    setRecentItems(getRecent(user.email));
 
     // Fetch credits, streak, tier
     (async () => {
@@ -357,25 +346,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                     </>
                   )}
 
-                  {/* Recent */}
-                  {isAuthenticated && recentItems.length > 0 && pinnedItems.length === 0 && (
-                    <>
-                      <p className="text-cyan-600 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1.5 flex items-center gap-1.5">
-                        <Clock className="w-3 h-3" strokeWidth={3} /> Terkini
-                      </p>
-                      {recentItems.map((item) => (
-                        <DrawerMenuItem
-                          key={`recent-${item.path}`}
-                          to={item.path}
-                          label={item.label}
-                          active={isActive(item.path)}
-                          notificationCount={getNotificationCount(item.path)}
-                          onNavigate={closeDrawer}
-                        />
-                      ))}
-                    </>
-                  )}
-
                   {/* Upgrade nudge — free tier only */}
                   {isAuthenticated && userTier === 'free' && (
                     <Link
@@ -401,7 +371,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                   )}
 
                   {/* Section divider */}
-                  {isAuthenticated && (pinnedItems.length > 0 || recentItems.length > 0) && (
+                  {isAuthenticated && pinnedItems.length > 0 && (
                     <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1.5">Semua Menu</p>
                   )}
 
