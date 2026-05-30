@@ -3,6 +3,16 @@
 > Bila pindah dari Base44 Auth → Supabase Auth, password lama TAK boleh di-export
 > (hashed di Base44, tak boleh decrypt). Strategy: bulk "reset password" flow.
 > Last updated: 2026-05-30
+>
+> ⚠️ **Actual user count (2026-05-30):** **9 User records** total
+> — 3 paying customers (gajet007, ashari, rosliyana)
+> — 1 owner admin (tijarahmutiaratrading)
+> — 5 Base44 platform admins (auto-added, NOT real users — boleh skip)
+>
+> ✅ **Real migration scope: 4 users** (3 paid + 1 owner). Easy mode.
+>
+> Numbers `177` dalam doc ni adalah **placeholder untuk projection** —
+> guna nombor ni bila user base dah grow. Untuk sekarang, ganti `177` → `4`.
 
 ---
 
@@ -25,7 +35,7 @@ Even if dapat hash → format/salt beza, tak compatible.
 
 **Goal:** Educate users + capture buy-in
 
-- [ ] Send "advance notice" email ke semua 177 users
+- [ ] Send "advance notice" email ke semua active users (currently 4, future N)
 - [ ] Add in-app banner di dashboard
 - [ ] Update FAQ section dengan migration info
 
@@ -128,17 +138,19 @@ Deno.serve(async (req) => {
 });
 ```
 
-**Expected output:**
+**Expected output (varies by current user count):**
 ```json
 {
-  "created": 175,
+  "created": 4,
   "exists": 0,
-  "failed": 2,
-  "errors": [
-    { "email": "user@invalid.x", "error": "Invalid email format" }
-  ]
+  "failed": 0,
+  "errors": []
 }
 ```
+
+> Numbers scale with user base. Current production = 4 real users (3 paid + 1 owner).
+> 5 Base44 staff accounts (taid, veronikakr, ekaterinam, yevheniih, omrir) **skip** —
+> not real customers, no `hashed_password`, just collaborator access.
 
 #### Step 2: Bulk trigger reset password emails
 
@@ -296,7 +308,7 @@ WHERE raw_user_meta_data->>'migrated_from' = 'base44';
 
 | Day | Action | Target audience |
 |---|---|---|
-| Day 0 | Initial reset email | All 177 users |
+| Day 0 | Initial reset email | All active users |
 | Day 2 | Reminder #1 | Users yang belum activate |
 | Day 5 | Reminder #2 + WhatsApp blast | Still pending |
 | Day 7 | Final warning (link expire) | Still pending |
@@ -373,18 +385,20 @@ export default function ResetPassword() {
 
 Based on industry data (B2C SaaS migration):
 
-| Day | Cumulative activation | Target |
-|---|---|---|
-| Day 1 | 35-45% | 70 users |
-| Day 3 | 55-65% | 110 users |
-| Day 7 | 70-80% | 135 users |
-| Day 14 | 80-90% | 155 users |
-| Day 30 | 85-92% | 165 users |
+| Day | Cumulative activation % | If 4 users | If 100 users | If 1000 users |
+|---|---|---|---|---|
+| Day 1 | 35-45% | ~2 | ~40 | ~400 |
+| Day 3 | 55-65% | ~3 | ~60 | ~600 |
+| Day 7 | 70-80% | ~3 | ~75 | ~750 |
+| Day 14 | 80-90% | ~4 | ~85 | ~850 |
+| Day 30 | 85-92% | ~4 | ~90 | ~900 |
 
-**Realistic outcome:** ~12-25 users (7-15%) tak akan reset password.
+**Realistic outcome:** ~7-15% users tak akan reset password.
 - Inactive users yang dah lupa CeriaKid
 - Wrong email addresses (typos)
 - Spam folder issues
+
+**Untuk current 4 users:** Just WhatsApp/call directly — way more effective than email blast.
 
 **Mitigation:** Keep old Base44 read-only access for 30 days as last resort.
 
