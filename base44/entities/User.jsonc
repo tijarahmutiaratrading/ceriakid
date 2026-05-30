@@ -29,6 +29,32 @@
     "displayName": {
       "type": "string",
       "description": "Admin-editable display name (overrides full_name in admin views)"
+    },
+    "onboardingCompleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether user has completed the first-time onboarding wizard"
+    },
+    "onboardingAgeGroup": {
+      "type": "string",
+      "enum": [
+        "prasekolah",
+        "sekolah_rendah"
+      ],
+      "description": "Age group selected during onboarding"
+    },
+    "onboardingInterests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Subject interests selected during onboarding"
     }
-  }
+  },
+  "required": [
+    "gender",
+    "avatarUrl",
+    "phone",
+    "displayName"
+  ]
 }
