@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { X, ChevronRight, Flame, Coins, Crown } from 'lucide-react';
+import { X, ChevronRight, Flame, Coins, Crown, ChevronsUpDown } from 'lucide-react';
 import { haptic } from '@/lib/haptics';
+import { useSelectedChild } from '@/lib/SelectedChildContext';
+import ChildSwitcherModal from '@/components/header/ChildSwitcherModal';
 
 /**
- * Drawer header — profil + quick stats (kredit + streak) + active child.
+ * Drawer header — profil + quick stats (kredit + streak) + active child switcher.
  * Theme: pastel candy gradient (match ParentDashboard).
  */
 export default function DrawerProfileHeader({
@@ -17,6 +19,8 @@ export default function DrawerProfileHeader({
   tier,
   onClose,
 }) {
+  const [switcherOpen, setSwitcherOpen] = useState(false);
+  const { childrenList = [], setSelectedChild } = useSelectedChild() || {};
   const handleProfileTap = () => {
     haptic('light');
     onClose?.();
@@ -72,12 +76,13 @@ export default function DrawerProfileHeader({
         </button>
       </div>
 
-      {/* Active child indicator */}
+      {/* Active child switcher — tap untuk tukar anak */}
       {selectedChild && childCount > 1 && (
-        <Link
-          to="/children-profiles"
-          onClick={() => { haptic('light'); onClose?.(); }}
-          className="relative flex items-center gap-2 mb-3 px-3 py-2 rounded-2xl bg-white/95 shadow-md hover:bg-white transition-colors"
+        <button
+          type="button"
+          onClick={() => { haptic('light'); setSwitcherOpen(true); }}
+          aria-label={`Anak aktif: ${selectedChild.name}. Tap untuk tukar.`}
+          className="relative w-full flex items-center gap-2 mb-3 px-3 py-2 rounded-2xl bg-white/95 shadow-md hover:bg-white active:scale-[0.98] transition-all"
         >
           {selectedChild.avatarUrl ? (
             <img src={selectedChild.avatarUrl} alt={selectedChild.name} className="w-7 h-7 rounded-full object-cover ring-2 ring-pink-200" />
@@ -86,13 +91,25 @@ export default function DrawerProfileHeader({
               {selectedChild.ageGroup === 'prasekolah' ? '🎨' : '📚'}
             </div>
           )}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 text-left">
             <p className="text-pink-600 text-[9px] font-black uppercase tracking-wider leading-none">Anak Aktif</p>
             <p className="text-slate-800 text-xs font-black truncate leading-tight mt-0.5">{selectedChild.name}</p>
           </div>
-          <span className="text-pink-500 text-[10px] font-black uppercase tracking-wider">Tukar</span>
-        </Link>
+          <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-pink-100">
+            <span className="text-pink-600 text-[10px] font-black uppercase tracking-wider">Tukar</span>
+            <ChevronsUpDown className="w-3 h-3 text-pink-600" strokeWidth={3} />
+          </div>
+        </button>
       )}
+
+      <ChildSwitcherModal
+        open={switcherOpen}
+        children={childrenList}
+        selectedChild={selectedChild}
+        onSelect={setSelectedChild}
+        onClose={() => setSwitcherOpen(false)}
+        onAddChild={() => { setSwitcherOpen(false); onClose?.(); }}
+      />
 
       {/* Quick stats pills */}
       <div className="relative grid grid-cols-2 gap-2">
