@@ -7,18 +7,19 @@ import HoppingBunnies from '@/components/game/HoppingBunny';
 import { MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 
 // Playful vibrant gradients per category — kuat, ceria, anak-anak suka
+// Image: Pixar 3D AI-generated mascot untuk setiap category
 const categoryThemes = {
-  memory_master:    { gradient: 'from-blue-400 via-indigo-500 to-purple-600',   glow: 'rgba(99,102,241,0.5)',  emoji: '🧠', tag: 'Memori', accent: '#A5B4FC' },
-  logic_puzzles:    { gradient: 'from-purple-500 via-fuchsia-500 to-pink-500',  glow: 'rgba(168,85,247,0.5)',  emoji: '🧩', tag: 'Logik', accent: '#D8B4FE' },
-  speed_focus:      { gradient: 'from-rose-500 via-red-500 to-orange-500',      glow: 'rgba(244,63,94,0.5)',   emoji: '⚡', tag: 'Pantas', accent: '#FCA5A5' },
-  pattern_genius:   { gradient: 'from-amber-400 via-orange-500 to-red-500',     glow: 'rgba(251,146,60,0.5)',  emoji: '🎨', tag: 'Corak', accent: '#FCD34D' },
-  maze_adventure:   { gradient: 'from-emerald-400 via-green-500 to-teal-600',   glow: 'rgba(16,185,129,0.5)',  emoji: '🗺️', tag: 'Jelajah', accent: '#6EE7B7' },
-  creative_builder: { gradient: 'from-sky-400 via-cyan-500 to-blue-500',        glow: 'rgba(14,165,233,0.5)',  emoji: '🎭', tag: 'Kreatif', accent: '#7DD3FC' },
-  problem_solver:   { gradient: 'from-indigo-500 via-blue-600 to-cyan-500',     glow: 'rgba(79,70,229,0.5)',   emoji: '💡', tag: 'Selesai', accent: '#A5B4FC' },
-  brain_training:   { gradient: 'from-pink-500 via-rose-500 to-fuchsia-600',    glow: 'rgba(236,72,153,0.5)',  emoji: '🎯', tag: 'Latih', accent: '#F9A8D4' },
+  memory_master:    { gradient: 'from-blue-400 via-indigo-500 to-purple-600',   glow: 'rgba(99,102,241,0.5)',  emoji: '🧠', tag: 'Memori', accent: '#A5B4FC', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e17eafa6e_generated_image.png' },
+  logic_puzzles:    { gradient: 'from-purple-500 via-fuchsia-500 to-pink-500',  glow: 'rgba(168,85,247,0.5)',  emoji: '🧩', tag: 'Logik', accent: '#D8B4FE', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0068e716c_generated_image.png' },
+  speed_focus:      { gradient: 'from-rose-500 via-red-500 to-orange-500',      glow: 'rgba(244,63,94,0.5)',   emoji: '⚡', tag: 'Pantas', accent: '#FCA5A5', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f373e003a_generated_image.png' },
+  pattern_genius:   { gradient: 'from-amber-400 via-orange-500 to-red-500',     glow: 'rgba(251,146,60,0.5)',  emoji: '🎨', tag: 'Corak', accent: '#FCD34D', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fc39444a8_generated_image.png' },
+  maze_adventure:   { gradient: 'from-emerald-400 via-green-500 to-teal-600',   glow: 'rgba(16,185,129,0.5)',  emoji: '🗺️', tag: 'Jelajah', accent: '#6EE7B7', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a62133ee7_generated_image.png' },
+  creative_builder: { gradient: 'from-sky-400 via-cyan-500 to-blue-500',        glow: 'rgba(14,165,233,0.5)',  emoji: '🎭', tag: 'Kreatif', accent: '#7DD3FC', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1db6c7f99_generated_image.png' },
+  problem_solver:   { gradient: 'from-indigo-500 via-blue-600 to-cyan-500',     glow: 'rgba(79,70,229,0.5)',   emoji: '💡', tag: 'Selesai', accent: '#A5B4FC', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c9fb0c0de_generated_image.png' },
+  brain_training:   { gradient: 'from-pink-500 via-rose-500 to-fuchsia-600',    glow: 'rgba(236,72,153,0.5)',  emoji: '🎯', tag: 'Latih', accent: '#F9A8D4', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3a1cfe5d2_generated_image.png' },
 };
 
-const defaultTheme = { gradient: 'from-slate-400 to-slate-600', glow: 'rgba(100,116,139,0.5)', emoji: '🎮', tag: 'Main', accent: '#CBD5E1' };
+const defaultTheme = { gradient: 'from-slate-400 to-slate-600', glow: 'rgba(100,116,139,0.5)', emoji: '🎮', tag: 'Main', accent: '#CBD5E1', image: null };
 
 export default function GamesHub() {
   const counts = React.useMemo(() => {
@@ -187,20 +188,30 @@ export default function GamesHub() {
                         ✨
                       </motion.div>
 
-                      {/* Playful emoji tile — compact, less animation untuk performance */}
-                      <div className={`relative h-32 sm:h-40 rounded-[1.5rem] overflow-hidden bg-gradient-to-br ${theme.gradient}`}>
+                      {/* Pixar 3D image tile — AI-generated mascot per category */}
+                      <div className={`relative h-40 sm:h-48 rounded-[1.5rem] overflow-hidden bg-gradient-to-br ${theme.gradient}`}>
                         {/* Soft pattern overlay */}
-                        <div className="absolute inset-0 opacity-25" style={{
+                        <div className="absolute inset-0 opacity-20" style={{
                           backgroundImage: 'radial-gradient(circle at 20% 30%, white 0%, transparent 40%), radial-gradient(circle at 80% 70%, white 0%, transparent 40%)',
                         }} />
 
-                        {/* BIG emoji — hover-only bounce untuk reduce CPU usage */}
-                        <div
-                          className="absolute inset-0 flex items-center justify-center text-7xl sm:text-8xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500"
-                          style={{ filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.35))' }}
-                        >
-                          {theme.emoji}
-                        </div>
+                        {/* Pixar 3D mascot image — fallback to emoji if image missing */}
+                        {theme.image ? (
+                          <img
+                            src={theme.image}
+                            alt={category.title}
+                            loading="lazy"
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                        ) : (
+                          <div
+                            className="absolute inset-0 flex items-center justify-center text-7xl sm:text-8xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500"
+                            style={{ filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.35))' }}
+                          >
+                            {theme.emoji}
+                          </div>
+                        )}
 
                         {/* Count badge — playful pill */}
                         <div
