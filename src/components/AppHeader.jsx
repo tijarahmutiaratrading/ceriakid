@@ -469,7 +469,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
               <div className="px-3 py-3 border-t border-pink-100 bg-white/40">
                 <motion.button type="button" whileTap={{ scale: 0.97 }}
                   onClick={() => { haptic('medium'); closeDrawer(); logout?.(); }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-black text-sm text-rose-600 hover:bg-rose-50 transition-all">
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-black text-sm text-white bg-rose-500 hover:bg-rose-600 transition-all">
                   <LogOut className="w-5 h-5 flex-shrink-0" strokeWidth={2.5} />
                   <span>Log Keluar</span>
                 </motion.button>
