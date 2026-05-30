@@ -111,17 +111,17 @@ export default function ParentDashboard() {
   return (
     <div
       className="min-h-screen font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
-      style={{
-        background: 'linear-gradient(180deg, #fef9f3 0%, #fef3c7 30%, #fbcfe8 70%, #c7d2fe 100%)',
-      }}
+      style={{ background: '#fafafa' }}
     >
-      {/* Floating pastel clouds */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -left-20 w-72 h-72 rounded-full blur-3xl opacity-50" style={{ background: '#fef3c7' }} />
-        <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full blur-3xl opacity-40" style={{ background: '#fbcfe8' }} />
-        <div className="absolute bottom-40 left-1/4 w-72 h-72 rounded-full blur-3xl opacity-40" style={{ background: '#c7d2fe' }} />
-      </div>
-      <AppHeader showBack={true} backTo="/dashboard" theme="light" />
+      {/* Subtle grid pattern */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
+      <AppHeader showBack={true} backTo="/dashboard" theme="dark" />
       <div className="relative max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 sm:pt-6">
 
         {/* 1. Family Hero — overall snapshot */}

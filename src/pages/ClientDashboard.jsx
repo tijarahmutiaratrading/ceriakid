@@ -82,18 +82,16 @@ export default function ClientDashboard() {
   return (
     <div
       className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
-      style={{
-        background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)',
-      }}
+      style={{ background: '#fafafa' }}
     >
-      {/* Floating decorations — CeriaKid vibe */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 right-8 text-4xl opacity-40 animate-pulse">🌈</div>
-        <div className="absolute top-40 left-6 text-3xl opacity-30">☁️</div>
-        <div className="absolute top-1/3 right-1/4 text-2xl opacity-25">⭐</div>
-        <div className="absolute bottom-1/3 left-8 text-3xl opacity-30">💖</div>
-        <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
-      </div>
+      {/* Subtle grid pattern */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
 
       <AppHeader />
 
@@ -156,25 +154,24 @@ export default function ClientDashboard() {
           </motion.div>
         )}
 
-        {/* Save Button */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
+        {/* Save Button — Linear style */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="flex justify-end">
           <motion.button
-            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
             onClick={handleSave}
             disabled={saving}
-            className={`w-full py-4 rounded-2xl font-black text-lg shadow-xl flex items-center justify-center gap-2 transition-all ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm shadow-sm transition-all ${
               saved
-                ? 'bg-gradient-to-r from-green-400 to-green-600 text-white'
-                : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
+                ? 'bg-emerald-600 text-white'
+                : 'bg-slate-900 hover:bg-slate-800 text-white'
             } disabled:opacity-60`}
           >
             {saving ? (
-              <><Loader className="w-5 h-5 animate-spin" /> Menyimpan...</>
+              <><Loader className="w-4 h-4 animate-spin" /> Menyimpan...</>
             ) : saved ? (
-              <><CheckCircle className="w-5 h-5" /> Tersimpan!</>
+              <><CheckCircle className="w-4 h-4" /> Tersimpan</>
             ) : (
-              <>💾 Simpan Perubahan</>
+              <>Simpan Perubahan</>
             )}
           </motion.button>
         </motion.div>

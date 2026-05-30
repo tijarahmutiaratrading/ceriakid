@@ -56,7 +56,15 @@ export default function BuyCredits() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden" style={{ background: '#fafafa' }}>
+      {/* Subtle grid pattern */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
 
       <AppHeader showBack={false} title="Beli Kredit AI" />
 
@@ -85,19 +93,18 @@ export default function BuyCredits() {
           </motion.div>
         )}
 
-        {/* Hero */}
+        {/* Hero — clean Stripe style */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-6 rounded-3xl p-6"
-          style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))', backdropFilter: 'blur(26px)', border: '1px solid rgba(255,255,255,0.18)' }}
+          className="mb-6 rounded-2xl p-6 bg-white ring-1 ring-slate-200 shadow-sm"
         >
-          <div className="inline-flex items-center gap-2 bg-amber-400/20 px-3 py-1.5 rounded-full mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span className="text-amber-200 text-[11px] font-black uppercase tracking-widest">Kredit AI CeriaKid</span>
+          <div className="inline-flex items-center gap-2 bg-slate-900 px-3 py-1 rounded-full mb-3">
+            <Sparkles className="w-3 h-3 text-amber-300" />
+            <span className="text-white text-[10px] font-black uppercase tracking-widest">Kredit AI</span>
           </div>
-          <h1 className="text-2xl md:text-4xl font-black text-white mb-2">Top Up Kredit AI</h1>
-          <p className="text-white/80 text-sm md:text-base max-w-xl mx-auto">
+          <h1 className="text-2xl md:text-3xl font-black text-slate-900 mb-1">Top Up Kredit AI</h1>
+          <p className="text-slate-600 text-sm md:text-base max-w-xl">
             Gunakan kredit untuk akses ciri AI: Pembantu Pembelajaran, Penjana Cerita & BBM Tersuai
           </p>
         </motion.div>
