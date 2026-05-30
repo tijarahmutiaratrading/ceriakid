@@ -87,10 +87,25 @@ See `docs/06_SUPABASE_MIGRATION.md` for code translation pattern.
 Assets already in Supabase Storage. Need to swap URLs in code:
 
 ```bash
-# Run this script locally to replace all media.base44.com URLs
-# with Supabase Storage URLs (using mapping from ck_asset_mapping table)
+# Pre-req: set env vars first
+export SUPABASE_URL="https://xxx.supabase.co"
+export SUPABASE_SERVICE_KEY="eyJ..."
+
+# Preview dulu (tak tulis apa-apa)
+node scripts/swap-asset-urls.js --dry-run
+
+# Apply replacement
 node scripts/swap-asset-urls.js
+
+# (Optional) custom directory
+node scripts/swap-asset-urls.js --dir=./src/components
 ```
+
+Script ni akan:
+- Fetch URL mapping dari `ck_asset_mapping` table
+- Scan semua `.js/.jsx/.ts/.tsx/.md/.html/.json/.css` files dalam `src/`
+- Replace setiap Base44 URL dengan Supabase Storage URL
+- Skip `node_modules`, `.git`, `dist`, `build`
 
 Or do it dynamically via runtime URL resolver (see `docs/12_ASSETS_BACKUP.md`).
 
@@ -169,11 +184,13 @@ Or do it dynamically via runtime URL resolver (see `docs/12_ASSETS_BACKUP.md`).
 | Component | Coverage | Notes |
 |---|---|---|
 | Source code | 100% | GitHub auto-sync |
-| Database | 100% | Supabase mirror every 3 hrs |
-| Game/BBM assets | 100% | 200 files in ck-assets bucket |
-| Hardcoded UI assets | Variable | Run `scripts/find-hardcoded-urls.sh` to audit |
+| Database schema | 100% | Full SQL + RLS in docs/09 |
+| Database data | 100% | Supabase mirror every 3 hrs |
+| Game/BBM assets | 100% | Backed up to ck-assets bucket |
+| Hardcoded UI assets | 100% | Registered in `lib/hardcodedAssets.js` |
+| Asset URL swap | 100% | `scripts/swap-asset-urls.js` (dry-run + apply) |
 | Secrets | 0% (manual) | YOU must backup to 1Password |
-| Auth/passwords | 0% | Users kena reset password (limitation) |
+| Auth/passwords | 0% | Users kena reset password (Base44 magic-link limitation) |
 | Automations | 100% (logic) | Schedule config in docs/13 |
 | Webhooks (CHIP) | Manual update | Update URL in CHIP dashboard |
 | Domain/DNS | Manual update | Point to new host |

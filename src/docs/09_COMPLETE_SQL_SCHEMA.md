@@ -609,6 +609,35 @@ CREATE POLICY "payouts_own" ON ck_affiliate_payouts FOR SELECT
 -- PUSH: users manage own
 CREATE POLICY "push_own" ON ck_push_subscriptions FOR ALL
   USING (user_email = auth.jwt() ->> 'email' OR public.is_admin());
+
+-- ===================================================
+-- ADMIN-ONLY TABLES (no user access at all)
+-- ===================================================
+
+ALTER TABLE ck_game_tasks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ck_qc_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ck_qc_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ck_monthly_gen_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ck_health_check_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ck_sync_log ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "game_tasks_admin_only" ON ck_game_tasks FOR ALL USING (public.is_admin());
+CREATE POLICY "qc_logs_admin_only" ON ck_qc_logs FOR ALL USING (public.is_admin());
+CREATE POLICY "qc_settings_admin_only" ON ck_qc_settings FOR ALL USING (public.is_admin());
+CREATE POLICY "monthly_gen_admin_only" ON ck_monthly_gen_settings FOR ALL USING (public.is_admin());
+CREATE POLICY "health_log_admin_only" ON ck_health_check_logs FOR ALL USING (public.is_admin());
+CREATE POLICY "sync_log_admin_only" ON ck_sync_log FOR ALL USING (public.is_admin());
+
+-- ===================================================
+-- ASSET MAPPING TABLES (for migration kit)
+-- ===================================================
+
+ALTER TABLE ck_asset_mapping ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ck_migration_snapshots ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "asset_mapping_public_read" ON ck_asset_mapping FOR SELECT USING (true);
+CREATE POLICY "asset_mapping_admin_write" ON ck_asset_mapping FOR ALL USING (public.is_admin());
+CREATE POLICY "migration_snapshots_admin_only" ON ck_migration_snapshots FOR ALL USING (public.is_admin());
 ```
 
 ---
