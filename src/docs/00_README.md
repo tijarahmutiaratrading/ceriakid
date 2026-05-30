@@ -33,6 +33,7 @@ Migration Kit ini adalah **blueprint lengkap** untuk:
 | [09_COMPLETE_SQL_SCHEMA.md](./09_COMPLETE_SQL_SCHEMA.md) | **Full SQL — copy-paste ready** | DB setup (5 min) |
 | [10_BUSINESS_LOGIC.md](./10_BUSINESS_LOGIC.md) | Tier limits, pricing, commissions | Business rules |
 | [11_PACKAGE_AND_DEPENDENCIES.md](./11_PACKAGE_AND_DEPENDENCIES.md) | package.json + setup commands | Project init |
+| [12_ASSETS_BACKUP.md](./12_ASSETS_BACKUP.md) | **Image backup → Supabase Storage** | Asset migration (CRITICAL) |
 
 ---
 
