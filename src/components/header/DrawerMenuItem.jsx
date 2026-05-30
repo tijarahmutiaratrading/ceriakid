@@ -34,16 +34,6 @@ export default function DrawerMenuItem({
 
   return (
     <div className="relative group">
-      {/* Active indicator bar */}
-      {active && (
-        <motion.div
-          layoutId="active-menu-bar"
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 rounded-r-full z-10"
-          style={{ background: 'linear-gradient(180deg, #f472b6 0%, #a78bfa 100%)' }}
-          transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-        />
-      )}
-
       <Link to={to} onClick={handleClick}>
         <motion.div
           whileTap={{ scale: 0.97 }}
@@ -51,9 +41,14 @@ export default function DrawerMenuItem({
             isSmall ? 'px-3 py-2.5 text-xs ml-1' : 'px-4 py-3 text-sm'
           } ${
             active
-              ? 'bg-white/80 text-pink-600 font-black'
+              ? 'text-white font-black shadow-lg'
               : 'text-slate-700 hover:bg-white/70'
           }`}
+          style={
+            active
+              ? { background: 'linear-gradient(135deg, #f472b6 0%, #c084fc 100%)', boxShadow: '0 4px 14px rgba(192, 132, 252, 0.4)' }
+              : undefined
+          }
         >
           <span className="flex-1 truncate">{label}</span>
 
@@ -62,7 +57,11 @@ export default function DrawerMenuItem({
             {notificationCount > 0 && (
               <span
                 className="min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-black flex items-center justify-center text-white shadow-sm"
-                style={{ background: 'linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)' }}
+                style={{
+                  background: active
+                    ? 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)'
+                    : 'linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)',
+                }}
               >
                 {notificationCount > 9 ? '9+' : notificationCount}
               </span>
@@ -76,15 +75,15 @@ export default function DrawerMenuItem({
                 aria-label={pinned ? `Buang ${label} dari pin` : `Pin ${label}`}
                 className={`p-1 rounded-md transition-all ${
                   pinned
-                    ? 'opacity-100 text-amber-500'
-                    : 'opacity-0 group-hover:opacity-50 hover:!opacity-100 text-slate-400 hover:text-pink-500'
+                    ? `opacity-100 ${active ? 'text-yellow-200' : 'text-amber-500'}`
+                    : `opacity-0 group-hover:opacity-50 hover:!opacity-100 ${active ? 'text-white' : 'text-slate-400 hover:text-pink-500'}`
                 }`}
               >
                 {pinned ? <Pin className="w-3.5 h-3.5 fill-current" /> : <PinOff className="w-3.5 h-3.5" />}
               </button>
             )}
 
-            {active && !showPin && <ChevronRight className="w-4 h-4 text-pink-500" strokeWidth={3} />}
+            {active && !showPin && <ChevronRight className="w-4 h-4 text-white/80" strokeWidth={3} />}
           </div>
         </motion.div>
       </Link>
