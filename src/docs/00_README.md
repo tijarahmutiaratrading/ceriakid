@@ -49,6 +49,9 @@ Migration Kit ini adalah **blueprint lengkap** untuk:
 | [19_WEBHOOK_PAYLOADS.md](./19_WEBHOOK_PAYLOADS.md) | **CHIP + Resend webhook real samples** | Webhook handler dev |
 | [20_ROUTING_TABLE.md](./20_ROUTING_TABLE.md) | **All 45+ routes with access levels** | Frontend rebuild |
 | [21_BRAND_KIT.md](./21_BRAND_KIT.md) | **Colors, fonts, gradients, design tokens** | Visual rebuild |
+| [22_CRITICAL_LOGIC_DETAILS.md](./22_CRITICAL_LOGIC_DETAILS.md) | **🆕 Exact thresholds, merge rules, push payload, FB pixel dedup** | Critical nuance |
+| [23_FRONTEND_CRITICAL_COMPONENTS.md](./23_FRONTEND_CRITICAL_COMPONENTS.md) | **🆕 Checkout, ThankYou polling, PixelLoader, sw.js pseudocode** | Frontend nuance |
+| [24_MISSING_EMAIL_TEMPLATES.md](./24_MISSING_EMAIL_TEMPLATES.md) | **🆕 Promo blast + Health alert HTML templates** | Email nuance |
 
 ---
 
