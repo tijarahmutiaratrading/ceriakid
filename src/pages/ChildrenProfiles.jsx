@@ -10,6 +10,7 @@ import { getActiveTier, getTierLimit } from '@/lib/tierAccess';
 import ChildProfileCard from '@/components/children/ChildProfileCard';
 import AddChildCard from '@/components/children/AddChildCard';
 import FamilyHeroCard from '@/components/children/FamilyHeroCard';
+import DeleteChildDialog from '@/components/children/DeleteChildDialog';
 
 const AGE_OPTIONS = [
   { value: 'prasekolah', label: 'Prasekolah', sub: '4–6 tahun', emoji: '🎨' },
@@ -41,6 +42,7 @@ export default function ChildrenProfiles() {
   const [error, setError] = useState('');
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [uploadingForChildId, setUploadingForChildId] = useState(null);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
   const formFileInputRef = useRef(null);
   const cardFileInputRef = useRef(null);
 
@@ -162,12 +164,15 @@ export default function ChildrenProfiles() {
     }
   };
 
-  const handleDeleteChild = async (id) => {
-    const child = children.find(c => c.id === id);
-    const ok = window.confirm(`Padam profil "${child?.name || 'anak'}"? Progress pembelajaran anak ini akan kekal dalam sistem tetapi profil tidak akan kelihatan lagi.`);
-    if (!ok) return;
-    const updated = children.filter(c => c.id !== id);
+  const handleDeleteChild = (id) => {
+    setDeleteTargetId(id);
+  };
+
+  const confirmDeleteChild = async () => {
+    if (!deleteTargetId) return;
+    const updated = children.filter(c => c.id !== deleteTargetId);
     setChildren(updated);
+    setDeleteTargetId(null);
     await saveChildren(updated);
   };
 
@@ -436,6 +441,14 @@ export default function ChildrenProfiles() {
         )}
 
       </div>
+
+      {/* Custom delete confirmation — reliable di mobile/PWA */}
+      <DeleteChildDialog
+        open={!!deleteTargetId}
+        child={children.find(c => c.id === deleteTargetId)}
+        onConfirm={confirmDeleteChild}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 }
