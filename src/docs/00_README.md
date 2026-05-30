@@ -40,6 +40,9 @@ Migration Kit ini adalah **blueprint lengkap** untuk:
 | [16_API_CONTRACTS.md](./16_API_CONTRACTS.md) | **Top 15 functions — input/output specs** | Backend rebuild reference |
 | [17_EMAIL_TEMPLATES.md](./17_EMAIL_TEMPLATES.md) | **6 email templates + Resend setup** | Email migration |
 | [18_ASSET_MAPPING_GUIDE.md](./18_ASSET_MAPPING_GUIDE.md) | **URL mapping: Base44 → Supabase Storage** | Asset URL swap |
+| [19_WEBHOOK_PAYLOADS.md](./19_WEBHOOK_PAYLOADS.md) | **CHIP + Resend webhook real samples** | Webhook handler dev |
+| [20_ROUTING_TABLE.md](./20_ROUTING_TABLE.md) | **All 45+ routes with access levels** | Frontend rebuild |
+| [21_BRAND_KIT.md](./21_BRAND_KIT.md) | **Colors, fonts, gradients, design tokens** | Visual rebuild |
 
 ---
 
