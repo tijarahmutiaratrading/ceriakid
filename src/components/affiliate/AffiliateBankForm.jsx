@@ -34,7 +34,7 @@ export default function AffiliateBankForm({ affiliate, onSuccess }) {
   };
 
   return (
-    <div className="rounded-2xl p-5 bg-white border border-slate-200 shadow-sm">
+    <div className="rounded-2xl p-5 bg-white border border-slate-200 shadow-sm mb-6">
       <div className="flex items-center gap-2 mb-4">
         <Banknote className="w-5 h-5 text-slate-700" />
         <h3 className="font-black text-slate-900">Maklumat Bank untuk Payout</h3>

@@ -67,7 +67,7 @@ export default function ReferralShareCard({ affiliate, referralLink, userName })
   }, []);
 
   return (
-    <div className="rounded-3xl bg-white/95 backdrop-blur-sm border border-white/60 shadow-xl p-5 sm:p-6 mt-6">
+    <div className="rounded-3xl bg-white/95 backdrop-blur-sm border border-white/60 shadow-xl p-5 sm:p-6 mb-6">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
           <ImageIcon className="w-5 h-5 text-white" strokeWidth={2.5} />
