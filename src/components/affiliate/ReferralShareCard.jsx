@@ -51,7 +51,7 @@ export default function ReferralShareCard({ affiliate, referralLink, userName })
   };
 
   const handleWhatsAppShare = async () => {
-    const message = `🎓 Anak saya belajar dengan CeriaKid! 200+ permainan edukatif ikut KSPK/KSSR.\n\n🎁 Pakai kod saya untuk dapat diskaun:\n${referralLink}\n\nCuba 2 minit je untuk setup! 🚀`;
+    const message = `🎓 Anak saya belajar dengan CeriaKid! 1600+ permainan edukatif ikut KSPK/KSSR.\n\n🎁 Pakai kod saya untuk dapat diskaun:\n${referralLink}\n\nCuba 2 minit je untuk setup! 🚀`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
@@ -146,7 +146,7 @@ export default function ReferralShareCard({ affiliate, referralLink, userName })
               <span style={{ background: '#fde047', color: '#7c2d12', padding: '4px 14px', borderRadius: '10px', display: 'inline-block', marginTop: '8px', lineHeight: 1.1 }}>CeriaKid! 🌟</span>
             </h1>
             <p style={{ color: 'rgba(255,255,255,0.95)', fontSize: '15px', fontWeight: 700, marginTop: '16px', lineHeight: 1.5 }}>
-              200+ permainan edukatif KSPK/KSSR<br />
+              1600+ permainan edukatif KSPK/KSSR<br />
               📚 Bahasa • Math • Sains • Jawi
             </p>
           </div>
