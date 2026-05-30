@@ -276,8 +276,6 @@ export default function AdminDashboard() {
               <>
                 {/* Unified header: greeting + KPI + tabs */}
                 <AdminUnifiedHeader
-                  activeTab={activeTab}
-                  setActiveTab={setActiveTab}
                   stats={activeTab === 'analytics' ? kpiStats : null}
                   onRefresh={loadData}
                   onClearCache={handleClearCache}

@@ -1,24 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Shield, ChevronDown, RefreshCw, Trash2, LogOut, LayoutGrid, BarChart3, Gamepad2, Activity, Share2, Settings } from 'lucide-react';
+import { Shield, ChevronDown, RefreshCw, Trash2, LogOut, LayoutGrid } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 
-const TABS = [
-  { key: 'analytics', label: 'Dashboard', icon: BarChart3 },
-  { key: 'launch', label: 'Launch', icon: Gamepad2 },
-  { key: 'health', label: 'Health', icon: Activity },
-  { key: 'affiliate', label: 'Affiliate', icon: Share2 },
-  { key: 'settings', label: 'Settings', icon: Settings },
-];
-
 /**
- * Linear/Stripe-style consolidated admin header.
- * Combines: greeting + KPI stats + tab nav into 1 clean section.
+ * Linear/Stripe-style admin header — greeting + KPI stats + actions.
+ * Tab navigation handled separately by AdminTopHeader (floating pill).
  */
 export default function AdminUnifiedHeader({
-  activeTab,
-  setActiveTab,
   stats,
   onRefresh,
   onClearCache,
@@ -144,43 +134,6 @@ export default function AdminUnifiedHeader({
         </div>
       )}
 
-      {/* Sticky tab nav — Linear-style segmented */}
-      <div className="sticky top-2 z-30 -mx-1 px-1">
-        <div
-          className="flex items-center gap-1 p-1 rounded-xl overflow-x-auto scrollbar-hide"
-          style={{
-            background: 'rgba(255,255,255,0.85)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.04)',
-          }}
-        >
-          {TABS.map(tab => {
-            const active = activeTab === tab.key;
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.key}
-                type="button"
-                onClick={() => setActiveTab(tab.key)}
-                className={`relative flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm whitespace-nowrap transition-colors ${
-                  active ? 'text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                {active && (
-                  <motion.span
-                    layoutId="admin-unified-tab"
-                    className="absolute inset-0 rounded-lg bg-slate-900"
-                    transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-                  />
-                )}
-                <Icon className="relative w-3.5 h-3.5" />
-                <span className="relative">{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
     </div>
   );
 }
