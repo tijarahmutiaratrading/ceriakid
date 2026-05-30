@@ -78,20 +78,16 @@ async function uploadToSupabase(path, blob, contentType) {
 
 // Save mapping to Supabase table
 async function saveMapping(mapping) {
-  const records = Object.entries(mapping).map(([oldUrl, newUrl]) => ({
-    old_url: oldUrl,
+  const records = Object.entries(mapping).map(([originalUrl, newUrl]) => ({
+    original_url: originalUrl,
     new_url: newUrl,
-    backed_up_at: new Date().toISOString(),
+    storage_path: originalUrl.replace('https://media.base44.com/', ''),
   }));
 
   // Chunk inserts (500 per batch)
-  const chunks = [];
   for (let i = 0; i < records.length; i += 500) {
-    chunks.push(records.slice(i, i + 500));
-  }
-
-  for (const chunk of chunks) {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/ck_asset_mapping?on_conflict=old_url`, {
+    const chunk = records.slice(i, i + 500);
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/ck_asset_mapping?on_conflict=original_url`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_SERVICE_KEY,
@@ -110,7 +106,7 @@ async function saveMapping(mapping) {
 
 // Get existing mapping
 async function getMapping() {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/ck_asset_mapping?select=old_url,new_url&limit=10000`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/ck_asset_mapping?select=original_url,new_url&limit=10000`, {
     headers: {
       'apikey': SUPABASE_SERVICE_KEY,
       'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
@@ -119,7 +115,7 @@ async function getMapping() {
   if (!res.ok) return {};
   const data = await res.json();
   const map = {};
-  data.forEach(row => { map[row.old_url] = row.new_url; });
+  data.forEach(row => { map[row.original_url] = row.new_url; });
   return map;
 }
 
@@ -230,21 +226,24 @@ Deno.serve(async (req) => {
       const errors = [];
       let backed = 0;
       let skipped = 0;
-      const maxToProcess = body.limit || 200; // safety cap per run
+      const maxToProcess = body.limit || 50; // safety cap per run (small for timeout safety)
+      const concurrency = body.concurrency || 8;
 
-      for (const url of urls.slice(0, maxToProcess)) {
-        // Skip already backed up
-        if (existingMapping[url]) {
-          skipped++;
-          continue;
-        }
+      // First filter out already-backed-up URLs, THEN take the next batch
+      const pending = urls.filter(url => {
+        if (existingMapping[url]) { skipped++; return false; }
+        return true;
+      });
+      const todo = pending.slice(0, maxToProcess);
 
+      // Process one URL — download from Base44, upload to Supabase
+      const processOne = async (url) => {
         try {
           const path = urlToPath(url);
           const imgRes = await fetch(url);
           if (!imgRes.ok) {
             errors.push({ url, error: `Fetch failed: ${imgRes.status}` });
-            continue;
+            return;
           }
           const contentType = imgRes.headers.get('content-type') || 'image/png';
           const blob = await imgRes.blob();
@@ -254,6 +253,13 @@ Deno.serve(async (req) => {
         } catch (err) {
           errors.push({ url, error: err.message });
         }
+      };
+
+      // Run in parallel batches of `concurrency`
+      for (let i = 0; i < todo.length; i += concurrency) {
+        const batch = todo.slice(i, i + concurrency);
+        await Promise.all(batch.map(processOne));
+        console.log(`Progress: ${Math.min(i + concurrency, todo.length)}/${todo.length} processed`);
       }
 
       // Save mapping to DB
