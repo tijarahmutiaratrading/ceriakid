@@ -123,48 +123,56 @@ async function getMapping() {
   return map;
 }
 
-// Scan all entities — paginated
+// Scan all entities — proper pagination with skip
+async function scanEntity(base44, entityName, urlSet, logger = console) {
+  let totalRecords = 0;
+  let totalUrls = 0;
+  const pageSize = 200;
+  let skip = 0;
+
+  while (true) {
+    let records = [];
+    try {
+      // Base44 SDK pagination: list(sort, limit, skip)
+      records = await base44.asServiceRole.entities[entityName].list('-created_date', pageSize, skip);
+    } catch (err) {
+      logger.warn(`[${entityName}] fetch error at skip=${skip}: ${err.message}`);
+      break;
+    }
+
+    if (!records || records.length === 0) break;
+
+    records.forEach(rec => {
+      const before = urlSet.size;
+      extractUrls(rec, urlSet);
+      totalUrls += (urlSet.size - before);
+    });
+
+    totalRecords += records.length;
+    logger.log(`[${entityName}] scanned ${totalRecords} records, found ${totalUrls} unique URLs so far`);
+
+    if (records.length < pageSize) break;
+    skip += pageSize;
+    if (skip > 100000) break; // hard safety cap
+  }
+
+  return { records: totalRecords, urls: totalUrls };
+}
+
 async function scanAllUrls(base44) {
   const allUrls = new Set();
   const summary = {};
+  const entitiesToScan = ['Game', 'BBMResource', 'AIStory', 'User', 'UserSubscription'];
 
-  for (const { entity } of IMAGE_ENTITIES) {
-    let page = 1;
-    const pageSize = 100;
-    let totalFound = 0;
-
-    while (true) {
-      const records = await base44.asServiceRole.entities[entity]
-        .list(null, pageSize, (page - 1) * pageSize)
-        .catch(() => []);
-
-      if (!records || records.length === 0) break;
-
-      records.forEach(rec => {
-        const urls = extractUrls(rec);
-        urls.forEach(u => allUrls.add(u));
-        totalFound += urls.size;
-      });
-
-      if (records.length < pageSize) break;
-      page++;
-      if (page > 100) break; // safety cap
+  for (const entityName of entitiesToScan) {
+    try {
+      const result = await scanEntity(base44, entityName, allUrls);
+      summary[entityName] = { records: result.records, urls: result.urls };
+    } catch (err) {
+      console.warn(`Skipping ${entityName}: ${err.message}`);
+      summary[entityName] = { records: 0, urls: 0, error: err.message };
     }
-
-    summary[entity] = totalFound;
   }
-
-  // Also scan User entity for avatars
-  try {
-    const users = await base44.asServiceRole.entities.User.list(null, 5000).catch(() => []);
-    let userUrls = 0;
-    users.forEach(u => {
-      const urls = extractUrls(u);
-      urls.forEach(url => allUrls.add(url));
-      userUrls += urls.size;
-    });
-    summary.User = userUrls;
-  } catch {}
 
   return { urls: Array.from(allUrls), summary };
 }
