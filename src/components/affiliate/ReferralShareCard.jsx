@@ -140,9 +140,10 @@ export default function ReferralShareCard({ affiliate, referralLink, userName })
             <div style={{ display: 'inline-block', padding: '8px 16px', borderRadius: '999px', background: 'rgba(255,255,255,0.25)', color: 'white', fontSize: '12px', fontWeight: 900, letterSpacing: '0.15em', marginBottom: '20px' }}>
               🎓 CERIAKID
             </div>
-            <h1 style={{ color: 'white', fontSize: '38px', fontWeight: 900, lineHeight: 1.1, margin: 0, textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
-              Anak saya<br />belajar di<br />
-              <span style={{ background: '#fde047', color: '#7c2d12', padding: '2px 12px', borderRadius: '8px', display: 'inline-block', marginTop: '6px' }}>CeriaKid! 🌟</span>
+            <h1 style={{ color: 'white', fontSize: '38px', fontWeight: 900, lineHeight: 1.2, margin: 0, textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
+              <span style={{ display: 'block' }}>Anak saya</span>
+              <span style={{ display: 'block' }}>belajar di</span>
+              <span style={{ background: '#fde047', color: '#7c2d12', padding: '4px 14px', borderRadius: '10px', display: 'inline-block', marginTop: '8px', lineHeight: 1.1 }}>CeriaKid! 🌟</span>
             </h1>
             <p style={{ color: 'rgba(255,255,255,0.95)', fontSize: '15px', fontWeight: 700, marginTop: '16px', lineHeight: 1.5 }}>
               200+ permainan edukatif KSPK/KSSR<br />
