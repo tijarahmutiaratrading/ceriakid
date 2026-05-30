@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Pin, PinOff } from 'lucide-react';
+import { Pin, PinOff, ChevronRight } from 'lucide-react';
 import { haptic } from '@/lib/haptics';
 
 /**
- * Menu item dengan active highlight bar + notification dot + pin toggle.
+ * Menu item — pastel candy style dengan active highlight + notif badge + pin toggle.
  */
 export default function DrawerMenuItem({
   to,
@@ -16,7 +16,7 @@ export default function DrawerMenuItem({
   pinned = false,
   onPinToggle,
   onNavigate,
-  size = 'default', // 'default' | 'small' (sub-item)
+  size = 'default',
 }) {
   const handleClick = () => {
     haptic('light');
@@ -38,7 +38,8 @@ export default function DrawerMenuItem({
       {active && (
         <motion.div
           layoutId="active-menu-bar"
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-gradient-to-b from-pink-400 to-purple-400"
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 rounded-r-full"
+          style={{ background: 'linear-gradient(180deg, #f472b6 0%, #a78bfa 100%)' }}
           transition={{ type: 'spring', stiffness: 380, damping: 30 }}
         />
       )}
@@ -47,26 +48,36 @@ export default function DrawerMenuItem({
         <motion.div
           whileTap={{ scale: 0.97 }}
           className={`flex items-center justify-between rounded-2xl font-bold transition-all ${
-            isSmall ? 'px-3 py-2.5 text-xs' : 'px-4 py-3 text-sm'
+            isSmall ? 'px-3 py-2.5 text-xs ml-1' : 'px-4 py-3 text-sm'
           } ${
             active
-              ? 'bg-white text-game-purple shadow-lg font-black'
-              : 'text-white/90 hover:bg-white/15 hover:text-white'
+              ? 'text-white font-black shadow-lg'
+              : 'text-slate-700 hover:bg-white/70'
           }`}
+          style={
+            active
+              ? { background: 'linear-gradient(135deg, #f472b6 0%, #c084fc 100%)', boxShadow: '0 4px 14px rgba(192, 132, 252, 0.4)' }
+              : undefined
+          }
         >
           <span className="flex-1 truncate">{label}</span>
 
           <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
             {/* Notification badge */}
             {notificationCount > 0 && (
-              <span className={`min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black flex items-center justify-center ${
-                active ? 'bg-rose-500 text-white' : 'bg-rose-400 text-white'
-              }`}>
+              <span
+                className="min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-black flex items-center justify-center text-white shadow-sm"
+                style={{
+                  background: active
+                    ? 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)'
+                    : 'linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)',
+                }}
+              >
                 {notificationCount > 9 ? '9+' : notificationCount}
               </span>
             )}
 
-            {/* Pin toggle (only show on hover or when already pinned, top-level only) */}
+            {/* Pin toggle */}
             {showPin && (
               <button
                 type="button"
@@ -74,13 +85,15 @@ export default function DrawerMenuItem({
                 aria-label={pinned ? `Buang ${label} dari pin` : `Pin ${label}`}
                 className={`p-1 rounded-md transition-all ${
                   pinned
-                    ? 'opacity-100 text-yellow-300'
-                    : 'opacity-0 group-hover:opacity-60 hover:!opacity-100 text-white/60 hover:text-white'
-                } ${active ? '!text-purple-500' : ''}`}
+                    ? `opacity-100 ${active ? 'text-yellow-200' : 'text-amber-500'}`
+                    : `opacity-0 group-hover:opacity-50 hover:!opacity-100 ${active ? 'text-white' : 'text-slate-400 hover:text-pink-500'}`
+                }`}
               >
                 {pinned ? <Pin className="w-3.5 h-3.5 fill-current" /> : <PinOff className="w-3.5 h-3.5" />}
               </button>
             )}
+
+            {active && !showPin && <ChevronRight className="w-4 h-4 text-white/80" strokeWidth={3} />}
           </div>
         </motion.div>
       </Link>

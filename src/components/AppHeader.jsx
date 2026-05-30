@@ -297,11 +297,10 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             role="dialog"
             aria-modal="true"
             aria-label="Menu navigasi"
-            className="sm:hidden fixed left-3 right-3 top-20 bottom-3 z-50 flex flex-col rounded-3xl overflow-hidden shadow-2xl border border-white/20"
+            className="sm:hidden fixed left-3 right-3 top-20 bottom-3 z-50 flex flex-col rounded-[2rem] overflow-hidden"
             style={{
-              background: 'linear-gradient(160deg, rgba(71,85,105,0.85), rgba(51,65,85,0.82), rgba(71,85,105,0.85))',
-              backdropFilter: 'blur(28px) saturate(160%)',
-              WebkitBackdropFilter: 'blur(28px) saturate(160%)',
+              background: 'linear-gradient(165deg, #faf5ff 0%, #fdf2f8 50%, #fff7ed 100%)',
+              boxShadow: '0 25px 60px -10px rgba(168, 85, 247, 0.45), 0 0 0 1px rgba(255,255,255,0.5)',
               paddingBottom: 'env(safe-area-inset-bottom)',
             }}
           >
@@ -318,9 +317,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                 onClose={closeDrawer}
               />
             ) : (
-              <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
+              <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-br from-pink-400 to-purple-500">
                 <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-8 rounded-lg" />
-                <button type="button" onClick={closeDrawer} className="p-1.5 text-white/70 hover:text-white">✕</button>
+                <button type="button" onClick={closeDrawer} className="p-2 rounded-xl bg-white/20 text-white">✕</button>
               </div>
             )}
 
@@ -339,11 +338,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
               {/* SEARCH RESULTS */}
               {filteredResults && (
                 <>
-                  <p className="text-white/50 text-[10px] font-black uppercase tracking-wider px-3 pt-2 pb-1">
+                  <p className="text-pink-500 text-[10px] font-black uppercase tracking-wider px-3 pt-2 pb-1">
                     Hasil Carian ({filteredResults.length})
                   </p>
                   {filteredResults.length === 0 ? (
-                    <p className="text-white/60 text-xs font-bold px-3 py-4 text-center">Tiada hasil untuk "{searchQuery}"</p>
+                    <p className="text-slate-500 text-xs font-bold px-3 py-4 text-center">Tiada hasil untuk "{searchQuery}"</p>
                   ) : (
                     filteredResults.map((item) => (
                       <DrawerMenuItem
@@ -365,7 +364,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                   {/* Pinned */}
                   {isAuthenticated && pinnedItems.length > 0 && (
                     <>
-                      <p className="text-white/50 text-[10px] font-black uppercase tracking-wider px-3 pt-2 pb-1 flex items-center gap-1.5">
+                      <p className="text-amber-600 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1.5 flex items-center gap-1.5">
                         <Pin className="w-3 h-3 fill-current" /> Pin Anda
                       </p>
                       {pinnedItems.map((item) => (
@@ -387,8 +386,8 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                   {/* Recent */}
                   {isAuthenticated && recentItems.length > 0 && pinnedItems.length === 0 && (
                     <>
-                      <p className="text-white/50 text-[10px] font-black uppercase tracking-wider px-3 pt-2 pb-1 flex items-center gap-1.5">
-                        <Clock className="w-3 h-3" /> Terkini
+                      <p className="text-cyan-600 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1.5 flex items-center gap-1.5">
+                        <Clock className="w-3 h-3" strokeWidth={3} /> Terkini
                       </p>
                       {recentItems.map((item) => (
                         <DrawerMenuItem
@@ -408,15 +407,20 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                     <Link
                       to="/settings"
                       onClick={() => { haptic('medium'); closeDrawer(); }}
-                      className="block mx-1 my-2 p-3 rounded-2xl bg-gradient-to-br from-yellow-400/25 via-amber-400/25 to-orange-400/25 border border-yellow-300/40 hover:from-yellow-400/35 hover:to-orange-400/35 transition-all"
+                      className="block mx-1 my-3 p-3.5 rounded-2xl transition-all relative overflow-hidden"
+                      style={{
+                        background: 'linear-gradient(135deg, #fde047 0%, #fb923c 50%, #f472b6 100%)',
+                        boxShadow: '0 6px 20px rgba(251, 146, 60, 0.4)',
+                      }}
                     >
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center flex-shrink-0">
-                          <Sparkles className="w-4 h-4 text-white" strokeWidth={3} />
+                      <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-white/20 blur-2xl pointer-events-none" />
+                      <div className="relative flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-white/95 flex items-center justify-center flex-shrink-0 shadow">
+                          <Sparkles className="w-5 h-5 text-orange-500" strokeWidth={2.5} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-yellow-100 text-[10px] font-black uppercase tracking-wider leading-none">Naik Taraf</p>
-                          <p className="text-white text-xs font-black leading-tight mt-0.5">Buka semua game + AI →</p>
+                          <p className="text-white/90 text-[10px] font-black uppercase tracking-wider leading-none drop-shadow">Naik Taraf</p>
+                          <p className="text-white text-sm font-black leading-tight mt-1 drop-shadow">Buka semua game + AI →</p>
                         </div>
                       </div>
                     </Link>
@@ -424,14 +428,14 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
 
                   {/* Section divider */}
                   {isAuthenticated && (pinnedItems.length > 0 || recentItems.length > 0) && (
-                    <p className="text-white/50 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1">Semua Menu</p>
+                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1.5">Semua Menu</p>
                   )}
 
                   {/* Top items */}
                   {topItems.map((item) =>
                     item.external ? (
                       <a key={item.path} href={item.path} onClick={closeDrawer}
-                        className="flex items-center px-4 py-3 rounded-2xl font-bold text-white hover:bg-white/20 transition-all text-sm">
+                        className="flex items-center px-4 py-3 rounded-2xl font-bold text-slate-700 hover:bg-white/70 transition-all text-sm">
                         {item.label}
                       </a>
                     ) : (
@@ -472,7 +476,9 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                           whileTap={{ scale: 0.97 }}
                           onClick={() => { haptic('light'); setExpandedSubmenu(isExpanded ? null : item.path); }}
                           className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
-                            itemActive ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
+                            itemActive || isExpanded
+                              ? 'bg-white text-pink-600 shadow-sm font-black'
+                              : 'text-slate-700 hover:bg-white/70'
                           }`}
                         >
                           <span>{item.label}</span>
@@ -488,7 +494,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                               transition={{ duration: 0.2 }}
                               className="overflow-hidden"
                             >
-                              <div className="ml-3 mt-1 mb-1 pl-3 border-l-2 border-white/20 space-y-1">
+                              <div className="ml-3 mt-1 mb-1 pl-3 border-l-2 border-pink-200 space-y-1">
                                 {item.submenu.map((sub) => (
                                   <DrawerMenuItem
                                     key={sub.path}
@@ -516,11 +522,11 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
 
             {/* Footer: Logout */}
             {isAuthenticated && (
-              <div className="px-3 py-3 border-t border-white/10">
+              <div className="px-3 py-3 border-t border-pink-100 bg-white/40">
                 <motion.button type="button" whileTap={{ scale: 0.97 }}
                   onClick={() => { haptic('medium'); closeDrawer(); logout?.(); }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-sm text-white hover:bg-white/20 hover:text-red-300 transition-all">
-                  <LogOut className="w-5 h-5 flex-shrink-0" />
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-black text-sm text-rose-600 hover:bg-rose-50 transition-all">
+                  <LogOut className="w-5 h-5 flex-shrink-0" strokeWidth={2.5} />
                   <span>Log Keluar</span>
                 </motion.button>
               </div>
