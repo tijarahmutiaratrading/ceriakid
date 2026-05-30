@@ -18,7 +18,7 @@ const SLIDES = [
   {
     tagline: 'CUBA PERMAINAN BARU',
     title: 'Belajar dengan CeriaKid',
-    meta: '200+ Permainan • Semua Subjek',
+    meta: '1600+ Permainan • Semua Subjek',
     cta: 'Mula Sekarang',
     ctaLink: '/games-hub',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/092310156_generated_image.png',
