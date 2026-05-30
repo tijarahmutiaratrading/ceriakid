@@ -81,7 +81,7 @@ export default function ReferralShareCard({ affiliate, referralLink, userName })
       {/* Preview area */}
       <div className="relative rounded-2xl overflow-hidden bg-slate-100 aspect-[4/5] max-w-xs mx-auto mb-4 shadow-inner">
         {imageUrl ? (
-          <img src={imageUrl} alt="Referral share card" className="w-full h-full object-cover" />
+          <img src={imageUrl} alt="Referral share card" className="w-full h-full object-contain" />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
