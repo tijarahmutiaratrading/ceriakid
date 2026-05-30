@@ -1,8 +1,14 @@
 # 📚 CeriaKid Migration Kit
 
 > **Complete migration & disaster recovery documentation for CeriaKid app**
-> Last updated: 2026-05-30
+> Last updated: 2026-05-30 (synced with unified "Sync Semua" workflow)
 > Maintained by: CeriaKid team
+
+## 🆕 What's New (2026-05-30)
+- ✅ **Unified Sync**: Admin Health panel now has "Sync Semua Sekarang" button — runs `syncToSupabase` + `backupAllAssets` in parallel
+- ✅ **Auto Asset Backup**: New scheduled automation "Asset Backup (Every 3 Hours)" — pairs with existing data sync
+- ✅ **7 active automations** total (was 6) — see [doc 13](./13_AUTOMATIONS_INVENTORY.md)
+- ✅ Doc 12 (Assets Backup) updated with correct schema (`original_url` column)
 
 ---
 
@@ -33,8 +39,8 @@ Migration Kit ini adalah **blueprint lengkap** untuk:
 | [09_COMPLETE_SQL_SCHEMA.md](./09_COMPLETE_SQL_SCHEMA.md) | **Full SQL — copy-paste ready** | DB setup (5 min) |
 | [10_BUSINESS_LOGIC.md](./10_BUSINESS_LOGIC.md) | Tier limits, pricing, commissions | Business rules |
 | [11_PACKAGE_AND_DEPENDENCIES.md](./11_PACKAGE_AND_DEPENDENCIES.md) | package.json + setup commands | Project init |
-| [12_ASSETS_BACKUP.md](./12_ASSETS_BACKUP.md) | **Image backup → Supabase Storage** | Asset migration (CRITICAL) |
-| [13_AUTOMATIONS_INVENTORY.md](./13_AUTOMATIONS_INVENTORY.md) | **All scheduled tasks + cron config** | Recreate automations |
+| [12_ASSETS_BACKUP.md](./12_ASSETS_BACKUP.md) | **Image backup → Supabase Storage (auto every 3h)** | Asset migration (CRITICAL) |
+| [13_AUTOMATIONS_INVENTORY.md](./13_AUTOMATIONS_INVENTORY.md) | **7 scheduled tasks + cron config** | Recreate automations |
 | [14_MIGRATION_CHECKLIST.md](./14_MIGRATION_CHECKLIST.md) | **Step-by-step migration checklist** | Migration day playbook |
 | [15_AUTH_FLOW.md](./15_AUTH_FLOW.md) | **Auth migration: Base44 → Supabase Auth** | Auth setup (CRITICAL) |
 | [16_API_CONTRACTS.md](./16_API_CONTRACTS.md) | **Top 15 functions — input/output specs** | Backend rebuild reference |

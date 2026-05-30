@@ -53,13 +53,16 @@ Run SQL in Supabase SQL Editor:
 ```sql
 CREATE TABLE IF NOT EXISTS ck_asset_mapping (
   id BIGSERIAL PRIMARY KEY,
-  old_url TEXT UNIQUE NOT NULL,
+  original_url TEXT UNIQUE NOT NULL,
   new_url TEXT NOT NULL,
+  storage_path TEXT,
   backed_up_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_ck_asset_mapping_old_url ON ck_asset_mapping(old_url);
+CREATE INDEX idx_ck_asset_mapping_original_url ON ck_asset_mapping(original_url);
 ```
+
+> ✅ Column is `original_url` (not `old_url`). The `backupAllAssets` function upserts on this column.
 
 ### Step 3: Verify Secrets
 
@@ -305,16 +308,22 @@ Untuk faster load, consider running images through:
 - Convert PNG → WebP (50% smaller)
 - Use Supabase Image Transformations (Pro plan)
 
-### Refresh Schedule
+### Refresh Schedule — ✅ AUTOMATED
 
-Setiap kali ada content baru (AI story, BBM, etc.), run backup lagi:
+**Auto-backup sudah running:** Scheduled automation **"Asset Backup (Every 3 Hours)"** runs every 3 hours from 02:30 MY (paired with Supabase data sync at 02:00 MY).
 
 ```javascript
-// Schedule: Daily 3 AM
-await base44.functions.invoke('backupAllAssets', { action: 'backup' });
+// Automation runs this automatically:
+await base44.functions.invoke('backupAllAssets', {
+  action: 'backup',
+  limit: 100,        // process up to 100 new images per run
+  scheduled: true,   // bypasses admin role check
+});
 ```
 
-Atau buat scheduled automation untuk auto-backup setiap hari.
+**Manual trigger:** Admin Dashboard → Health Tab → "Sync Semua Sekarang" button (runs `syncToSupabase` + `backupAllAssets` in parallel from frontend).
+
+See `docs/13_AUTOMATIONS_INVENTORY.md` for full schedule.
 
 ---
 
@@ -341,14 +350,14 @@ ALTER TABLE ck_asset_mapping DISABLE ROW LEVEL SECURITY;
 
 ## ✅ Checklist Before Migration
 
-- [ ] Bucket `ck-assets` created in Supabase
-- [ ] Table `ck_asset_mapping` created
-- [ ] Run `action: 'scan'` — note total URL count
-- [ ] Run `action: 'backup'` repeatedly until `remaining: 0`
-- [ ] Run `action: 'manifest'` — export JSON
-- [ ] Save manifest to `docs/url-mapping.json` (commit to GitHub)
+- [x] Bucket `ck-assets` created in Supabase
+- [x] Table `ck_asset_mapping` created (uses `original_url` column)
+- [x] Initial `action: 'backup'` run — base images backed up
+- [x] Auto-backup automation active (every 3 hours)
+- [x] Manual sync button available (Admin → Health → "Sync Semua Sekarang")
+- [ ] Final backup before migration day (`action: 'manifest'` to verify count)
 - [ ] Test 1-2 images: open Supabase URL in browser
-- [ ] Document hardcoded URLs (grep scan)
+- [ ] Document hardcoded URLs (`scripts/find-hardcoded-urls.sh`)
 - [ ] Add to recovery playbook (docs/07)
 
 ---
