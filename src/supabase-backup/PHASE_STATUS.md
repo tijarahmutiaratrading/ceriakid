@@ -36,44 +36,49 @@
 
 ---
 
-## ⏳ Phase 2 — PENDING (~25 functions)
+## ✅ Phase 2 — COMPLETE (26 functions)
 
 **Goal:** Emails, push notifications, admin functions.
 
 ### Email Reminders (5)
-- [ ] `send-abandoned-cart-reminders`
-- [ ] `send-expiry-reminders`
-- [ ] `send-low-credit-reminders`
-- [ ] `send-streak-reminders`
-- [ ] `send-weekly-progress-report`
+- ✅ `send-abandoned-cart-reminders`
+- ✅ `send-expiry-reminders`
+- ✅ `send-low-credit-reminders`
+- ✅ `send-streak-reminders`
+- ✅ `send-weekly-progress-report`
 
 ### Push Notifications (3)
-- [ ] `subscribe-to-push`
-- [ ] `unsubscribe-from-push`
-- [ ] `send-push-notification`
+- ✅ `subscribe-to-push`
+- ✅ `unsubscribe-from-push`
+- ✅ `send-push-notification`
 
 ### Admin Functions (10)
-- [ ] `admin-update-user`
-- [ ] `admin-update-customer`
-- [ ] `admin-list-affiliates`
-- [ ] `admin-update-affiliate`
-- [ ] `admin-process-payout`
-- [ ] `bulk-update-user-names`
-- [ ] `get-customer-details`
-- [ ] `get-admin-secrets`
-- [ ] `get-supabase-sync-status`
-- [ ] `cleanup-stuck-subscriptions`
+- ✅ `admin-update-user`
+- ✅ `admin-update-customer`
+- ✅ `admin-list-affiliates`
+- ✅ `admin-update-affiliate`
+- ✅ `admin-process-payout`
+- ✅ `bulk-update-user-names`
+- ✅ `get-customer-details`
+- ✅ `get-admin-secrets`
+- ✅ `get-supabase-sync-status`
+- ✅ `cleanup-stuck-subscriptions`
 
 ### Health & Monitoring (3)
-- [ ] `run-health-check`
-- [ ] `get-game-analytics`
-- [ ] `get-public-game-stats`
+- ✅ `run-health-check`
+- ✅ `get-game-analytics`
+- ✅ `get-public-game-stats`
 
 ### Affiliate System (4)
-- [ ] `register-affiliate`
-- [ ] `get-affiliate-data`
-- [ ] `update-affiliate-bank`
-- [ ] `request-affiliate-payout`
+- ✅ `register-affiliate`
+- ✅ `get-affiliate-data`
+- ✅ `update-affiliate-bank`
+- ✅ `request-affiliate-payout`
+
+### Shared helpers added
+- ✅ `_shared/resend.ts` — Email sending
+- ✅ `_shared/webpush.ts` — Push notifications + cleanup
+- ✅ `_shared/authGuards.ts` — Admin/user/scheduled guards
 
 ---
 
@@ -124,21 +129,22 @@
 
 ```
 Phase 1: ████████████████████ 100%  (11/11 functions)
-Phase 2: ░░░░░░░░░░░░░░░░░░░░   0%  (0/25 functions)
+Phase 2: ████████████████████ 100%  (26/26 functions)
 Phase 3: ░░░░░░░░░░░░░░░░░░░░   0%  (0/32 functions)
 ─────────────────────────────────────
-TOTAL:   ████░░░░░░░░░░░░░░░░  17%  (11/68 functions)
+TOTAL:   ███████████░░░░░░░░░  54%  (37/69 functions)
 ```
 
 ---
 
 ## 🎯 Next Steps
 
-Bila ready untuk Phase 2:
-1. Ask AI: "start Phase 2"
-2. Aku akan translate 25 functions ke folder `supabase-backup/functions/`
+Bila ready untuk Phase 3:
+1. Ask AI: "start Phase 3"
+2. Aku akan translate 32 remaining functions (game generators, QC, misc utilities)
 3. Update phase status di file ni
 
 ---
 
-> 💡 **Phase 1 dah cukup untuk disaster recovery basic** — payment + AI + auth boleh up dalam ~30 minit.
+> 💡 **Phase 1+2 dah cukup untuk full production app** — payment + AI + emails + push + admin + affiliate semua complete.
+> Phase 3 = game generators & QC tools (nice-to-have, bukan critical untuk app run).
