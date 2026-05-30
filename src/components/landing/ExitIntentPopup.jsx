@@ -1,13 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Gift } from 'lucide-react';
 import { trackPixelEvent } from '@/lib/pixel';
 import { genEventID } from '@/lib/fbTracking';
 
+// A/B test variants — randomized per session, tracked via Pixel events.
+// Buat data-driven decision pasal mana convert lebih baik.
+const VARIANTS = {
+  A: {
+    id: 'A',
+    badge: 'Tunggu! Jangan pergi dulu',
+    headline: 'Cuba 50 kredit AI PERCUMA',
+    headlineHighlight: '50 kredit AI PERCUMA',
+    body: 'Langgan pelan <strong>Keluarga</strong> sekarang & dapat Cikgu AI percuma. Bayar sekali, guna setahun penuh!',
+    cta: '🎁 Tuntut Bonus Sekarang',
+    bg: 'from-purple-600 via-pink-600 to-orange-500',
+  },
+  B: {
+    id: 'B',
+    badge: 'Last chance — offer terhad',
+    headline: 'Anak anda layak dapat yang TERBAIK',
+    headlineHighlight: 'yang TERBAIK',
+    body: '5,000+ ibu bapa dah pilih CeriaKid. Setup 2 minit — anak anda terus boleh mula belajar hari ini!',
+    cta: '🚀 Mula Sekarang',
+    bg: 'from-blue-600 via-purple-600 to-pink-500',
+  },
+};
+
 // Exit-intent popup — detect mouse leave window OR mobile back gesture.
-// Hanya tunjuk SEKALI per session.
+// Hanya tunjuk SEKALI per session. A/B test 2 variants secara random.
 export default function ExitIntentPopup({ onCTA }) {
   const [show, setShow] = useState(false);
+
+  // Sticky variant selection — sama sepanjang session
+  const variant = useMemo(() => {
+    const saved = sessionStorage.getItem('exit_intent_variant');
+    if (saved && VARIANTS[saved]) return VARIANTS[saved];
+    const pick = Math.random() < 0.5 ? 'A' : 'B';
+    sessionStorage.setItem('exit_intent_variant', pick);
+    return VARIANTS[pick];
+  }, []);
 
   useEffect(() => {
     if (sessionStorage.getItem('exit_intent_shown')) return;
@@ -28,7 +60,10 @@ export default function ExitIntentPopup({ onCTA }) {
       if (e.clientY <= 0 && !sessionStorage.getItem('exit_intent_shown')) {
         sessionStorage.setItem('exit_intent_shown', '1');
         setShow(true);
-        trackPixelEvent('ViewContent', { content_name: 'exit_intent_popup' }, genEventID('ViewContent'));
+        trackPixelEvent('ViewContent', {
+          content_name: 'exit_intent_popup',
+          content_category: `variant_${variant.id}`,
+        }, genEventID('ViewContent'));
       }
     };
 
@@ -41,9 +76,14 @@ export default function ExitIntentPopup({ onCTA }) {
       clearTimeout(timer);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, []);
+  }, [variant.id]);
 
   const handleClaim = () => {
+    // Track CTA conversion per variant — bandingkan dalam FB Pixel Analytics
+    trackPixelEvent('Lead', {
+      content_name: 'exit_intent_cta_clicked',
+      content_category: `variant_${variant.id}`,
+    }, genEventID('Lead'));
     setShow(false);
     onCTA?.();
   };
@@ -66,11 +106,12 @@ export default function ExitIntentPopup({ onCTA }) {
             transition={{ type: 'spring', damping: 20 }}
             className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[201] w-[92%] max-w-md"
           >
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500">
+            <div className={`relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br ${variant.bg}`}>
               <button
                 type="button"
                 onClick={() => setShow(false)}
                 className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"
+                aria-label="Close popup"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -82,19 +123,19 @@ export default function ExitIntentPopup({ onCTA }) {
                 >
                   <Gift className="w-9 h-9 text-purple-900" />
                 </motion.div>
-                <p className="text-yellow-300 text-xs font-black uppercase tracking-widest mb-2">Tunggu! Jangan pergi dulu</p>
+                <p className="text-yellow-300 text-xs font-black uppercase tracking-widest mb-2">{variant.badge}</p>
                 <h2 className="text-white font-black text-2xl leading-tight mb-3">
-                  Cuba <span className="bg-yellow-300 text-purple-900 px-2 rounded-lg">50 kredit AI PERCUMA</span>
+                  {variant.headline.split(variant.headlineHighlight)[0]}
+                  <span className="bg-yellow-300 text-purple-900 px-2 rounded-lg">{variant.headlineHighlight}</span>
+                  {variant.headline.split(variant.headlineHighlight)[1]}
                 </h2>
-                <p className="text-white/90 text-sm mb-5 leading-relaxed">
-                  Langgan pelan <strong>Keluarga</strong> sekarang & dapat Cikgu AI percuma. Bayar sekali, guna setahun penuh!
-                </p>
+                <p className="text-white/90 text-sm mb-5 leading-relaxed" dangerouslySetInnerHTML={{ __html: variant.body }} />
                 <button
                   type="button"
                   onClick={handleClaim}
                   className="w-full py-3.5 rounded-2xl bg-yellow-300 hover:bg-yellow-200 text-purple-900 font-black text-base shadow-xl shadow-yellow-500/40 transition-all"
                 >
-                  🎁 Tuntut Bonus Sekarang
+                  {variant.cta}
                 </button>
                 <p className="text-white/70 text-xs mt-3">✓ Setup 2 minit  •  ✓ Tanpa iklan  •  ✓ Boleh offline</p>
               </div>

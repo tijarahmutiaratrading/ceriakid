@@ -11,6 +11,7 @@ import AffiliatePayoutCard from '@/components/affiliate/AffiliatePayoutCard';
 import AffiliateReferralList from '@/components/affiliate/AffiliateReferralList';
 import AffiliatePayoutList from '@/components/affiliate/AffiliatePayoutList';
 import AffiliateBankForm from '@/components/affiliate/AffiliateBankForm';
+import ReferralShareCard from '@/components/affiliate/ReferralShareCard';
 
 export default function AffiliatePage() {
   const [loading, setLoading] = useState(true);
@@ -90,6 +91,13 @@ export default function AffiliatePage() {
       <div className="relative p-4 sm:p-6 max-w-6xl mx-auto">
         {/* Hero with referral link & quick share */}
         <AffiliateHero affiliate={affiliate} referralLink={referralLink} />
+
+        {/* Viral share card — generate PNG untuk WhatsApp */}
+        <ReferralShareCard
+          affiliate={affiliate}
+          referralLink={referralLink}
+          userName={affiliate.fullName || affiliate.userEmail?.split('@')[0]}
+        />
 
         {/* Stats overview */}
         <AffiliateStatsGrid affiliate={affiliate} />
