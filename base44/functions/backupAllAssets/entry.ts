@@ -11,9 +11,10 @@
  * 3. Return JSON manifest yang boleh dipakai untuk find/replace
  *
  * Usage: Admin only.
- * - POST { action: "scan" } → list semua URLs (no download)
+ * - POST { action: "scan" } → list semua URLs dari entities (no download)
  * - POST { action: "backup" } → download + upload (full backup)
  * - POST { action: "manifest" } → get current URL mapping
+ * - POST { action: "backup-urls", urls: [...] } → backup specific URL list (untuk hardcoded UI assets)
  */
 
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
@@ -282,7 +283,66 @@ Deno.serve(async (req) => {
       });
     }
 
-    return Response.json({ error: `Unknown action: ${action}. Use: scan | backup | manifest` }, { status: 400 });
+    // ── ACTION 4: BACKUP SPECIFIC URLS (untuk hardcoded UI assets) ──
+    if (action === 'backup-urls') {
+      const inputUrls = Array.isArray(body.urls) ? body.urls : [];
+      const urls = inputUrls.filter(u => typeof u === 'string' && u.startsWith('https://media.base44.com/'));
+
+      if (urls.length === 0) {
+        return Response.json({ success: false, message: 'No valid Base44 URLs provided. Pass { urls: [...] }' }, { status: 400 });
+      }
+
+      const existingMapping = await getMapping();
+      const newMapping = {};
+      const errors = [];
+      let backed = 0;
+      let skipped = 0;
+      const concurrency = body.concurrency || 8;
+
+      const pending = urls.filter(url => {
+        if (existingMapping[url]) { skipped++; return false; }
+        return true;
+      });
+
+      const processOne = async (url) => {
+        try {
+          const path = urlToPath(url);
+          const imgRes = await fetch(url);
+          if (!imgRes.ok) {
+            errors.push({ url, error: `Fetch failed: ${imgRes.status}` });
+            return;
+          }
+          const contentType = imgRes.headers.get('content-type') || 'image/png';
+          const blob = await imgRes.blob();
+          const newUrl = await uploadToSupabase(path, blob, contentType);
+          newMapping[url] = newUrl;
+          backed++;
+        } catch (err) {
+          errors.push({ url, error: err.message });
+        }
+      };
+
+      for (let i = 0; i < pending.length; i += concurrency) {
+        const batch = pending.slice(i, i + concurrency);
+        await Promise.all(batch.map(processOne));
+      }
+
+      if (Object.keys(newMapping).length > 0) await saveMapping(newMapping);
+
+      return Response.json({
+        success: true,
+        action: 'backup-urls',
+        totalProvided: inputUrls.length,
+        validUrls: urls.length,
+        newlyBackedUp: backed,
+        alreadyBackedUp: skipped,
+        errors: errors.slice(0, 10),
+        errorCount: errors.length,
+        message: `Backed up ${backed} new UI asset(s). ${skipped} already exist.`,
+      });
+    }
+
+    return Response.json({ error: `Unknown action: ${action}. Use: scan | backup | manifest | backup-urls` }, { status: 400 });
   } catch (error) {
     console.error('backupAllAssets error:', error);
     return Response.json({ error: error.message, stack: error.stack }, { status: 500 });

@@ -34,6 +34,8 @@ Migration Kit ini adalah **blueprint lengkap** untuk:
 | [10_BUSINESS_LOGIC.md](./10_BUSINESS_LOGIC.md) | Tier limits, pricing, commissions | Business rules |
 | [11_PACKAGE_AND_DEPENDENCIES.md](./11_PACKAGE_AND_DEPENDENCIES.md) | package.json + setup commands | Project init |
 | [12_ASSETS_BACKUP.md](./12_ASSETS_BACKUP.md) | **Image backup → Supabase Storage** | Asset migration (CRITICAL) |
+| [13_AUTOMATIONS_INVENTORY.md](./13_AUTOMATIONS_INVENTORY.md) | **All scheduled tasks + cron config** | Recreate automations |
+| [14_MIGRATION_CHECKLIST.md](./14_MIGRATION_CHECKLIST.md) | **Step-by-step migration checklist** | Migration day playbook |
 
 ---
 
