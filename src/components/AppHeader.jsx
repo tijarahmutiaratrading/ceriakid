@@ -1,66 +1,141 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowLeft, LogOut, ChevronDown, ChevronRight } from 'lucide-react';
+import { LogOut, ChevronDown, ChevronRight, Sparkles, Clock, Pin } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
-
+import { useSelectedChild } from '@/lib/SelectedChildContext';
+import { haptic } from '@/lib/haptics';
+import { base44 } from '@/api/base44Client';
+import { getActiveTier } from '@/lib/tierAccess';
+import { getPinned, togglePinned, getRecent, trackRecent } from '@/lib/menuPrefs';
+import DrawerProfileHeader from '@/components/header/DrawerProfileHeader';
+import DrawerSearchBar from '@/components/header/DrawerSearchBar';
+import DrawerMenuItem from '@/components/header/DrawerMenuItem';
 
 export default function AppHeader({ showBack = null, backTo = '/', title = null, theme = 'auto' }) {
   const [isOpen, setIsOpen] = useState(false);
   const [navVisible, setNavVisible] = useState(true);
   const [expandedSubmenu, setExpandedSubmenu] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [pinnedItems, setPinnedItems] = useState([]);
+  const [recentItems, setRecentItems] = useState([]);
+  const [credits, setCredits] = useState(null);
+  const [streak, setStreak] = useState(0);
+  const [pendingNotifications, setPendingNotifications] = useState({ challenges: 0, sync: 0 });
+  const [userTier, setUserTier] = useState('free');
+
   const { isAuthenticated, user, logout } = useAuth() || {};
   const [headerAvatarUrl, setHeaderAvatarUrl] = useState(user?.avatarUrl || '');
   const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
+  const { selectedChild, childrenList } = useSelectedChild() || {};
   const location = useSafeLocation();
   const navigate = useNavigate();
+
   const isAdmin = user?.role === 'admin';
   const isLanding = location.pathname === '/' || location.pathname === '/landing';
   const isPlayingGame = location.pathname.startsWith('/play/');
-  const lastScrollY = React.useRef(0);
+  const lastScrollY = useRef(0);
+  const touchStartX = useRef(null);
 
-  // Dynamic theme: 'dark' = pill gelap utk background terang | 'light' = pill cerah utk background gelap
-  // 'auto' = ikut isPlayingGame (default lama)
   const resolvedTheme = theme === 'auto' ? (isPlayingGame ? 'dark' : 'light') : theme;
   const isDarkPill = resolvedTheme === 'dark';
-  
-  // Auto-show back button on non-home pages
   const shouldShowBack = showBack !== null ? showBack : !isLanding;
 
-  React.useEffect(() => {
-    setHeaderAvatarUrl(user?.avatarUrl || '');
-  }, [user?.avatarUrl]);
-
-  React.useEffect(() => {
+  // Avatar sync
+  useEffect(() => { setHeaderAvatarUrl(user?.avatarUrl || ''); }, [user?.avatarUrl]);
+  useEffect(() => {
     const handleAvatarUpdated = (event) => setHeaderAvatarUrl(event.detail?.avatarUrl || '');
     window.addEventListener('avatar-updated', handleAvatarUpdated);
     return () => window.removeEventListener('avatar-updated', handleAvatarUpdated);
   }, []);
 
-  React.useEffect(() => {
+  // Scroll-aware visibility
+  useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
-      if (currentY < 50) {
-        setNavVisible(true);
-      } else if (currentY > lastScrollY.current) {
-        setNavVisible(false);
-      } else {
-        setNavVisible(true);
-      }
+      if (currentY < 50) setNavVisible(true);
+      else if (currentY > lastScrollY.current) setNavVisible(false);
+      else setNavVisible(true);
       lastScrollY.current = currentY;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Track recent on route change
+  useEffect(() => {
+    if (!user?.email) return;
+    const label = pageTitles[location.pathname];
+    if (label && label !== 'CeriaKid') {
+      trackRecent(user.email, location.pathname, label);
+    }
+  }, [location.pathname, user?.email]);
 
+  // Load pinned/recent + user stats bila drawer dibuka
+  useEffect(() => {
+    if (!isOpen || !user?.email) return;
+    setPinnedItems(getPinned(user.email));
+    setRecentItems(getRecent(user.email));
 
+    // Fetch credits, streak, tier
+    (async () => {
+      try {
+        const [creditData, subs, leaderboard] = await Promise.all([
+          base44.entities.UserCredit.filter({ userEmail: user.email }).catch(() => []),
+          base44.entities.UserSubscription.filter({ email: user.email }).catch(() => []),
+          base44.entities.Leaderboard.filter({ userEmail: user.email }).catch(() => []),
+        ]);
+        setCredits(creditData?.[0]?.balance ?? 0);
+        setUserTier(getActiveTier(subs?.[0]));
+        const maxStreak = Math.max(0, ...leaderboard.map(l => l.currentStreak || 0));
+        setStreak(maxStreak);
+      } catch {}
+    })();
 
+    // Notifications (challenges pending + offline sync queue)
+    try {
+      const syncQueue = JSON.parse(localStorage.getItem('game_sync_queue') || '[]');
+      setPendingNotifications(prev => ({ ...prev, sync: syncQueue.length }));
+    } catch {}
 
-  // Determine menu based on user role and location
+    if (user?.email) {
+      base44.entities.FriendChallenge.filter({ opponent: user.email, status: 'pending' })
+        .then(c => setPendingNotifications(prev => ({ ...prev, challenges: c?.length || 0 })))
+        .catch(() => {});
+    }
+  }, [isOpen, user?.email]);
+
+  // ESC key to close
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKey = (e) => { if (e.key === 'Escape') { haptic('light'); setIsOpen(false); } };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [isOpen]);
+
+  // Body scroll lock bila drawer terbuka
+  useEffect(() => {
+    if (isOpen) {
+      const original = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = original; };
+    }
+  }, [isOpen]);
+
+  // Swipe-to-close (swipe left)
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current == null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    if (deltaX < -60) { haptic('light'); setIsOpen(false); }
+    touchStartX.current = null;
+  };
+
+  const handleToggleDrawer = () => { haptic('light'); setIsOpen(!isOpen); };
+
+  // Menu items
   let topItems = [];
   let adminItems = [];
   let dashboardItems = [];
@@ -76,18 +151,15 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
     ];
   } else {
     topItems = [{ path: '/', label: 'Halaman Utama' }];
-
     if (isAuthenticated) {
       dashboardItems = [
         { path: '/dashboard', label: 'Dashboard Pengguna' },
         { path: '/settings', label: 'Tetapan Akaun' },
         { path: '/contact', label: 'Hubungi Kami' },
       ];
-
       groupedItems = [
         {
-          path: '/group-aktiviti',
-          label: 'Aktiviti',
+          path: '/group-aktiviti', label: 'Aktiviti',
           submenu: [
             { path: '/games-subjek', label: 'Belajar Ikut Subjek' },
             { path: '/games-hub', label: 'Game Hub' },
@@ -98,16 +170,14 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           ],
         },
         {
-          path: '/group-keluarga',
-          label: 'Keluarga',
+          path: '/group-keluarga', label: 'Keluarga',
           submenu: [
             { path: '/children-profiles', label: 'Profil Anak' },
             { path: '/parent-dashboard', label: 'Prestasi Anak' },
           ],
         },
         {
-          path: '/group-cikgu-ai',
-          label: 'Cikgu AI',
+          path: '/group-cikgu-ai', label: 'Cikgu AI',
           submenu: [
             { path: '/ai-assistant', label: 'Cikgu Firdaus — Tutor' },
             { path: '/quiz-ai', label: 'Cikgu Rosie — Kuiz' },
@@ -115,106 +185,106 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             { path: '/bbm-generator', label: 'Cikgu Daniel — BBM' },
           ],
         },
-
       ];
     }
-
     if (isAdmin) {
-      adminItems = [
-        {
-          path: '/admin-dashboard',
-          label: 'Admin Dashboard',
-          submenu: [
-            { path: '/admin-dashboard?tab=analytics', label: 'Analytics' },
-            { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager' },
-            { path: '/admin-dashboard?tab=health', label: 'System Health' },
-            { path: '/admin-dashboard?tab=settings', label: 'Settings' },
-          ],
-        },
-      ];
+      adminItems = [{
+        path: '/admin-dashboard', label: 'Admin Dashboard',
+        submenu: [
+          { path: '/admin-dashboard?tab=analytics', label: 'Analytics' },
+          { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager' },
+          { path: '/admin-dashboard?tab=health', label: 'System Health' },
+          { path: '/admin-dashboard?tab=settings', label: 'Settings' },
+        ],
+      }];
     }
   }
 
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
 
-  const navItems = [
-    { emoji: '☰', label: 'Menu', action: () => setIsOpen(!isOpen) },
-    { emoji: '🎮', label: 'Games', path: '/dashboard' },
-    { emoji: '📊', label: 'Prestasi', path: '/parent-dashboard' },
-    { emoji: '🎨', label: 'Drawing', path: '/drawing' },
-    { emoji: '⬅️', label: 'Back', action: () => navigate(-1) },
-  ];
-
-  const pageTitles = {
-    '/': 'CeriaKid',
-    '/dashboard': 'Dashboard',
-    '/settings': 'Tetapan Akaun',
-    '/children-profiles': 'Profil Anak',
-    '/games-hub': 'Game Hub',
-    '/games-subjek': 'Belajar Ikut Subjek',
-    '/parent-dashboard': 'Prestasi Anak',
-    '/friends': 'Kawan',
-    '/challenges': 'Cabaran',
-    '/drawing': 'Studio Lukisan',
-    '/admin-dashboard': 'Admin Dashboard',
+  // Notification counts per menu item
+  const getNotificationCount = (path) => {
+    if (path === '/challenges') return pendingNotifications.challenges;
+    if (path === '/settings') return pendingNotifications.sync;
+    return 0;
   };
 
-  const displayTitle = title || pageTitles[location.pathname] || (location.pathname.startsWith('/games/') ? 'Permainan' : 'CeriaKid');
+  // Search filter — flatten semua items + match
+  const filteredResults = useMemo(() => {
+    if (!searchQuery.trim()) return null;
+    const q = searchQuery.toLowerCase();
+    const allItems = [
+      ...topItems,
+      ...dashboardItems,
+      ...groupedItems.flatMap(g => g.submenu || []),
+      ...adminItems.flatMap(a => a.submenu || []),
+    ];
+    return allItems.filter(i => !i.external && i.label.toLowerCase().includes(q));
+  }, [searchQuery, isAuthenticated, isAdmin]);
+
+  const handlePinToggle = (path, label) => {
+    if (!user?.email) return;
+    const updated = togglePinned(user.email, path, label);
+    setPinnedItems(updated);
+  };
+
+  const closeDrawer = () => setIsOpen(false);
 
   return (
     <>
       {/* Top Header */}
-       <nav className="sm:hidden fixed top-0 left-0 right-0 z-40 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
-         <div
-           className={`max-w-[52rem] mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] ring-1 ${isDarkPill ? 'ring-white/25 shadow-2xl shadow-slate-950/25' : 'pro-glass ring-white/20'}`}
-           style={isDarkPill ? { background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.82))', backdropFilter: 'blur(22px)' } : undefined}
-         >
-           <motion.button
-             type="button"
-             onClick={() => setIsOpen(!isOpen)}
-             whileTap={{ scale: 0.95 }}
-             className="px-3.5 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-lg hover:bg-white/95 transition-colors"
-           >
-             {isOpen ? 'Tutup' : 'Menu'}
-           </motion.button>
+      <nav className="sm:hidden fixed top-0 left-0 right-0 z-40 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(-100%)', paddingTop: 'max(0.75rem, env(safe-area-inset-top))' }}>
+        <div
+          className={`max-w-[52rem] mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] ring-1 ${isDarkPill ? 'ring-white/25 shadow-2xl shadow-slate-950/25' : 'pro-glass ring-white/20'}`}
+          style={isDarkPill ? { background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.82))', backdropFilter: 'blur(22px)' } : undefined}
+        >
+          <motion.button
+            type="button"
+            onClick={handleToggleDrawer}
+            whileTap={{ scale: 0.95 }}
+            className="px-3.5 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-lg hover:bg-white/95 transition-colors relative"
+          >
+            {isOpen ? 'Tutup' : 'Menu'}
+            {!isOpen && (pendingNotifications.challenges + pendingNotifications.sync) > 0 && (
+              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-rose-500 border-2 border-white animate-pulse" />
+            )}
+          </motion.button>
 
-           <div className="min-w-0 text-center px-1">
-             <p className={`${isDarkPill ? 'text-white/55' : 'text-slate-500'} text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] leading-none`}>CeriaKid</p>
-             <p className={`${isDarkPill ? 'text-white' : 'text-slate-900'} font-black text-sm sm:text-base truncate leading-tight mt-1`}>{displayTitle}</p>
-           </div>
+          <div className="min-w-0 text-center px-1">
+            <p className={`${isDarkPill ? 'text-white/55' : 'text-slate-500'} text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] leading-none`}>CeriaKid</p>
+            <p className={`${isDarkPill ? 'text-white' : 'text-slate-900'} font-black text-sm sm:text-base truncate leading-tight mt-1`}>{title || pageTitles[location.pathname] || 'CeriaKid'}</p>
+          </div>
 
-           <div className="flex items-center gap-2 justify-end">
-             <Link to={isAuthenticated ? "/settings" : "/"} className="flex items-center justify-end" title={isAuthenticated ? 'Tetapan Profil' : 'CeriaKid'}>
-               {isAuthenticated ? (
-                 headerAvatarUrl ? (
-                   <img src={headerAvatarUrl} alt="Avatar" className={`w-10 h-10 rounded-full object-cover cursor-pointer shadow-lg ring-2 ${isDarkPill ? 'ring-white/60' : 'ring-purple-200'}`} />
-                 ) : (
-                   <div className={`w-10 h-10 rounded-full ${isDarkPill ? 'bg-white/25 border-white/50' : 'bg-purple-100 border-purple-200'} border-2 flex items-center justify-center text-xl cursor-pointer shadow-lg`}>🐱</div>
-                 )
-               ) : (
-                 <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-2xl cursor-pointer shadow-lg ring-1 ring-white/40" />
-               )}
-             </Link>
-           </div>
-         </div>
-       </nav>
+          <div className="flex items-center gap-2 justify-end">
+            <Link to={isAuthenticated ? "/settings" : "/"} className="flex items-center justify-end" title={isAuthenticated ? 'Tetapan Profil' : 'CeriaKid'}>
+              {isAuthenticated ? (
+                headerAvatarUrl ? (
+                  <img src={headerAvatarUrl} alt="Avatar" className={`w-10 h-10 rounded-full object-cover cursor-pointer shadow-lg ring-2 ${isDarkPill ? 'ring-white/60' : 'ring-purple-200'}`} />
+                ) : (
+                  <div className={`w-10 h-10 rounded-full ${isDarkPill ? 'bg-white/25 border-white/50' : 'bg-purple-100 border-purple-200'} border-2 flex items-center justify-center text-xl cursor-pointer shadow-lg`}>🐱</div>
+                )
+              ) : (
+                <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-2xl cursor-pointer shadow-lg ring-1 ring-white/40" />
+              )}
+            </Link>
+          </div>
+        </div>
+      </nav>
 
-
-
-      {/* Overlay — mobile only */}
+      {/* Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsOpen(false)}
-            className={`sm:hidden fixed inset-0 z-40 ${isPlayingGame ? 'bg-slate-950/35 backdrop-blur-[1px]' : 'bg-black/10'}`}
+            onClick={closeDrawer}
+            className="sm:hidden fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm"
           />
         )}
       </AnimatePresence>
 
-      {/* Menu Drawer — mobile only */}
+      {/* Drawer */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -222,101 +292,185 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -320, opacity: 0 }}
             transition={{ type: 'spring', damping: 22, stiffness: 280 }}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu navigasi"
             className="sm:hidden fixed left-3 right-3 top-20 bottom-3 z-50 flex flex-col rounded-3xl overflow-hidden shadow-2xl border border-white/20"
-            style={{ background: 'linear-gradient(160deg, rgba(71,85,105,0.78), rgba(51,65,85,0.72), rgba(71,85,105,0.78))', backdropFilter: 'blur(28px) saturate(160%)', WebkitBackdropFilter: 'blur(28px) saturate(160%)' }}
+            style={{
+              background: 'linear-gradient(160deg, rgba(71,85,105,0.85), rgba(51,65,85,0.82), rgba(71,85,105,0.85))',
+              backdropFilter: 'blur(28px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(28px) saturate(160%)',
+              paddingBottom: 'env(safe-area-inset-bottom)',
+            }}
           >
-            {/* Header with User Profile */}
+            {/* Header: profile + stats + active child */}
             {isAuthenticated && user ? (
-              <div className="px-4 py-4 border-b border-white/10">
-                <div className="flex items-center gap-3">
-                  {headerAvatarUrl ? (
-                    <img src={headerAvatarUrl} alt="Avatar" className="w-12 h-12 rounded-full object-cover border-2 border-white/60 flex-shrink-0" />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-white/40 border-2 border-white/60 flex items-center justify-center text-2xl flex-shrink-0">🐱</div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white font-black text-sm truncate">{user.full_name || 'User'}</p>
-                    <p className="text-white/70 text-xs truncate">{user.email}</p>
-                  </div>
-                  <button type="button" onClick={() => setIsOpen(false)} className="p-1.5 text-white/70 hover:text-white flex-shrink-0">
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
+              <DrawerProfileHeader
+                user={user}
+                avatarUrl={headerAvatarUrl}
+                selectedChild={selectedChild}
+                childCount={childrenList?.length || 0}
+                credits={credits}
+                streak={streak}
+                tier={userTier}
+                onClose={closeDrawer}
+              />
             ) : (
               <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
                 <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-8 rounded-lg" />
-                <button type="button" onClick={() => setIsOpen(false)} className="p-1.5 text-white/70 hover:text-white">
-                  <X className="w-5 h-5" />
-                </button>
+                <button type="button" onClick={closeDrawer} className="p-1.5 text-white/70 hover:text-white">✕</button>
               </div>
             )}
 
+            {/* Search */}
+            {isAuthenticated && (
+              <DrawerSearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                onClear={() => setSearchQuery('')}
+              />
+            )}
+
             {/* Scrollable nav */}
-            <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
+            <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
 
-              {/* Top / Landing items */}
-              {topItems.map((item) =>
-                item.external ? (
-                  <a key={item.path} href={item.path} onClick={() => setIsOpen(false)}
-                    className="flex items-center px-4 py-3 rounded-2xl font-bold text-white hover:bg-white/20 transition-all text-sm">
-                    <span>{item.label}</span>
-                  </a>
-                ) : (
-                  <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
-                    <motion.div whileTap={{ scale: 0.97 }}
-                      className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
-                        isActive(item.path) ? 'bg-white text-game-purple shadow-lg' : 'text-white/90 hover:bg-white/20 hover:text-white'
-                      }`}>
-                      <span>{item.label}</span>
-                    </motion.div>
-                  </Link>
-                )
-              )}
-
-              {/* Dashboard section */}
-              {dashboardItems.length > 0 && (
+              {/* SEARCH RESULTS */}
+              {filteredResults && (
                 <>
-                  {dashboardItems.map((item) => (
-                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
-                      <motion.div whileTap={{ scale: 0.97 }}
-                        className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
-                          isActive(item.path) ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
-                        }`}>
-                        <span>{item.label}</span>
-                      </motion.div>
-                    </Link>
-                  ))}
+                  <p className="text-white/50 text-[10px] font-black uppercase tracking-wider px-3 pt-2 pb-1">
+                    Hasil Carian ({filteredResults.length})
+                  </p>
+                  {filteredResults.length === 0 ? (
+                    <p className="text-white/60 text-xs font-bold px-3 py-4 text-center">Tiada hasil untuk "{searchQuery}"</p>
+                  ) : (
+                    filteredResults.map((item) => (
+                      <DrawerMenuItem
+                        key={item.path}
+                        to={item.path}
+                        label={item.label}
+                        active={isActive(item.path)}
+                        notificationCount={getNotificationCount(item.path)}
+                        onNavigate={closeDrawer}
+                      />
+                    ))
+                  )}
                 </>
               )}
 
-              {/* Grouped features (Keluarga / Aktiviti / Sosial) + Admin section */}
-              {[...groupedItems, ...adminItems].length > 0 && (
+              {/* DEFAULT VIEW (no search) */}
+              {!filteredResults && (
                 <>
+                  {/* Pinned */}
+                  {isAuthenticated && pinnedItems.length > 0 && (
+                    <>
+                      <p className="text-white/50 text-[10px] font-black uppercase tracking-wider px-3 pt-2 pb-1 flex items-center gap-1.5">
+                        <Pin className="w-3 h-3 fill-current" /> Pin Anda
+                      </p>
+                      {pinnedItems.map((item) => (
+                        <DrawerMenuItem
+                          key={`pin-${item.path}`}
+                          to={item.path}
+                          label={item.label}
+                          active={isActive(item.path)}
+                          notificationCount={getNotificationCount(item.path)}
+                          showPin
+                          pinned
+                          onPinToggle={() => handlePinToggle(item.path, item.label)}
+                          onNavigate={closeDrawer}
+                        />
+                      ))}
+                    </>
+                  )}
+
+                  {/* Recent */}
+                  {isAuthenticated && recentItems.length > 0 && pinnedItems.length === 0 && (
+                    <>
+                      <p className="text-white/50 text-[10px] font-black uppercase tracking-wider px-3 pt-2 pb-1 flex items-center gap-1.5">
+                        <Clock className="w-3 h-3" /> Terkini
+                      </p>
+                      {recentItems.map((item) => (
+                        <DrawerMenuItem
+                          key={`recent-${item.path}`}
+                          to={item.path}
+                          label={item.label}
+                          active={isActive(item.path)}
+                          notificationCount={getNotificationCount(item.path)}
+                          onNavigate={closeDrawer}
+                        />
+                      ))}
+                    </>
+                  )}
+
+                  {/* Upgrade nudge — free tier only */}
+                  {isAuthenticated && userTier === 'free' && (
+                    <Link
+                      to="/settings"
+                      onClick={() => { haptic('medium'); closeDrawer(); }}
+                      className="block mx-1 my-2 p-3 rounded-2xl bg-gradient-to-br from-yellow-400/25 via-amber-400/25 to-orange-400/25 border border-yellow-300/40 hover:from-yellow-400/35 hover:to-orange-400/35 transition-all"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center flex-shrink-0">
+                          <Sparkles className="w-4 h-4 text-white" strokeWidth={3} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-yellow-100 text-[10px] font-black uppercase tracking-wider leading-none">Naik Taraf</p>
+                          <p className="text-white text-xs font-black leading-tight mt-0.5">Buka semua game + AI →</p>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
+
+                  {/* Section divider */}
+                  {isAuthenticated && (pinnedItems.length > 0 || recentItems.length > 0) && (
+                    <p className="text-white/50 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1">Semua Menu</p>
+                  )}
+
+                  {/* Top items */}
+                  {topItems.map((item) =>
+                    item.external ? (
+                      <a key={item.path} href={item.path} onClick={closeDrawer}
+                        className="flex items-center px-4 py-3 rounded-2xl font-bold text-white hover:bg-white/20 transition-all text-sm">
+                        {item.label}
+                      </a>
+                    ) : (
+                      <DrawerMenuItem
+                        key={item.path}
+                        to={item.path}
+                        label={item.label}
+                        active={isActive(item.path)}
+                        notificationCount={getNotificationCount(item.path)}
+                        onNavigate={closeDrawer}
+                      />
+                    )
+                  )}
+
+                  {/* Dashboard items */}
+                  {dashboardItems.map((item) => (
+                    <DrawerMenuItem
+                      key={item.path}
+                      to={item.path}
+                      label={item.label}
+                      active={isActive(item.path)}
+                      notificationCount={getNotificationCount(item.path)}
+                      showPin
+                      pinned={pinnedItems.some(p => p.path === item.path)}
+                      onPinToggle={() => handlePinToggle(item.path, item.label)}
+                      onNavigate={closeDrawer}
+                    />
+                  ))}
+
+                  {/* Grouped + admin */}
                   {[...groupedItems, ...adminItems].map((item) => {
-                    const hasSubmenu = item.submenu && item.submenu.length > 0;
                     const isExpanded = expandedSubmenu === item.path;
                     const itemActive = isActive(item.path);
-
-                    if (!hasSubmenu) {
-                      return (
-                        <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
-                          <motion.div whileTap={{ scale: 0.97 }}
-                            className={`flex items-center px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
-                              itemActive ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
-                            }`}>
-                            <span>{item.label}</span>
-                          </motion.div>
-                        </Link>
-                      );
-                    }
-
                     return (
                       <div key={item.path}>
                         <motion.button
                           type="button"
                           whileTap={{ scale: 0.97 }}
-                          onClick={() => setExpandedSubmenu(isExpanded ? null : item.path)}
+                          onClick={() => { haptic('light'); setExpandedSubmenu(isExpanded ? null : item.path); }}
                           className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                             itemActive ? 'bg-white text-game-purple shadow-sm' : 'text-white hover:bg-white/20'
                           }`}
@@ -336,12 +490,18 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                             >
                               <div className="ml-3 mt-1 mb-1 pl-3 border-l-2 border-white/20 space-y-1">
                                 {item.submenu.map((sub) => (
-                                  <Link key={sub.path} to={sub.path} onClick={() => setIsOpen(false)}>
-                                    <motion.div whileTap={{ scale: 0.97 }}
-                                      className="flex items-center px-3 py-2.5 rounded-xl font-bold text-xs text-white/85 hover:bg-white/15 hover:text-white transition-all">
-                                      <span>{sub.label}</span>
-                                    </motion.div>
-                                  </Link>
+                                  <DrawerMenuItem
+                                    key={sub.path}
+                                    to={sub.path}
+                                    label={sub.label}
+                                    active={isActive(sub.path)}
+                                    notificationCount={getNotificationCount(sub.path)}
+                                    size="small"
+                                    showPin
+                                    pinned={pinnedItems.some(p => p.path === sub.path)}
+                                    onPinToggle={() => handlePinToggle(sub.path, sub.label)}
+                                    onNavigate={closeDrawer}
+                                  />
                                 ))}
                               </div>
                             </motion.div>
@@ -358,7 +518,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             {isAuthenticated && (
               <div className="px-3 py-3 border-t border-white/10">
                 <motion.button type="button" whileTap={{ scale: 0.97 }}
-                  onClick={() => { setIsOpen(false); logout?.(); }}
+                  onClick={() => { haptic('medium'); closeDrawer(); logout?.(); }}
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-sm text-white hover:bg-white/20 hover:text-red-300 transition-all">
                   <LogOut className="w-5 h-5 flex-shrink-0" />
                   <span>Log Keluar</span>
@@ -371,3 +531,25 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
     </>
   );
 }
+
+// Page title mapping (outside component to avoid recreation)
+const pageTitles = {
+  '/': 'CeriaKid',
+  '/dashboard': 'Dashboard',
+  '/settings': 'Tetapan Akaun',
+  '/children-profiles': 'Profil Anak',
+  '/games-hub': 'Game Hub',
+  '/games-subjek': 'Belajar Ikut Subjek',
+  '/parent-dashboard': 'Prestasi Anak',
+  '/friends': 'Kawan',
+  '/challenges': 'Cabaran',
+  '/drawing': 'Studio Lukisan',
+  '/story-kid': 'Story Kid',
+  '/ai-assistant': 'Cikgu Firdaus',
+  '/quiz-ai': 'Cikgu Rosie',
+  '/story-generator': 'Cikgu Mira',
+  '/bbm-generator': 'Cikgu Daniel',
+  '/buy-credits': 'Beli Kredit',
+  '/affiliate': 'Affiliate',
+  '/admin-dashboard': 'Admin Dashboard',
+};
