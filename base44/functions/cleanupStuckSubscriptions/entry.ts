@@ -1,36 +1,74 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-// Auto-cleanup: tukar status `incomplete` yang dah lebih 1 jam jadi `free`
-// supaya user boleh retry checkout tanpa stuck di UI.
-// Dijalankan secara automatik setiap 30 minit.
+// Auto-cleanup: tukar status `incomplete` yang dah lebih 2 jam jadi `canceled`/`free`.
+// User tak bayar = tak boleh dapat akses. PERIOD.
+//
+// CRITICAL: Function ni TAK PERNAH tukar status jadi `active` SECARA AUTOMATIK.
+// Sebelum cancel, kita verify dulu dengan CHIP API — kalau betul-betul `paid`
+// (rare case: webhook tertinggal), baru activate. Kalau tak paid, terus cancel.
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Service-level cleanup — boleh dipanggil tanpa user auth (scheduled automation)
     const allSubs = await base44.asServiceRole.entities.UserSubscription.list('-created_date', 500);
-    const cutoff = Date.now() - 60 * 60 * 1000; // 1 jam lepas
+    const cutoff = Date.now() - 2 * 60 * 60 * 1000; // 2 jam lepas (cukup masa user complete bayar)
+
+    const CHIP_SECRET = Deno.env.get('CHIP_SECRET_KEY');
 
     let cleaned = 0;
+    let verifiedPaid = 0;
+    let canceled = 0;
+
     for (const sub of allSubs) {
       if (sub.status !== 'incomplete') continue;
       const updatedAt = new Date(sub.updated_date || sub.created_date).getTime();
       if (updatedAt >= cutoff) continue;
 
-      // SAFETY: jangan downgrade user yang dah ada paid subscription aktif.
-      // Kalau currentPeriodEnd masih dalam masa depan, ini bermakna mereka tengah
-      // upgrade dari paid plan — bukan first-time signup yang stuck. Kekalkan tier.
-      const periodEnd = sub.currentPeriodEnd ? new Date(sub.currentPeriodEnd).getTime() : 0;
-      const stillActive = periodEnd > Date.now();
-      const updateData = stillActive
-        ? { status: 'active' } // restore to active — payment failed but old plan still valid
-        : { status: 'canceled', tier: 'free' };
+      // Last-chance check — verify CHIP payment SEBELUM cancel.
+      // Mungkin webhook tertinggal (network issue) — bagi peluang final verify.
+      let isPaid = false;
+      if (CHIP_SECRET && sub.stripeCustomerId) {
+        try {
+          const res = await fetch(`https://gate.chip-in.asia/api/v1/purchases/${sub.stripeCustomerId}/`, {
+            headers: { 'Authorization': `Bearer ${CHIP_SECRET}` }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            isPaid = data.status === 'paid';
+          }
+        } catch (_) { /* ignore — default to cancel */ }
+      }
 
-      await base44.asServiceRole.entities.UserSubscription.update(sub.id, updateData);
+      if (isPaid) {
+        // CHIP confirm BETUL-BETUL paid → activate (rare: webhook missed)
+        const expiryDate = new Date();
+        expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+        await base44.asServiceRole.entities.UserSubscription.update(sub.id, {
+          status: 'active',
+          currentPeriodStart: new Date().toISOString(),
+          currentPeriodEnd: expiryDate.toISOString(),
+        });
+        verifiedPaid++;
+        console.log(`✅ Late activation (webhook missed): ${sub.email} → ${sub.tier}`);
+      } else {
+        // Default: TAK BAYAR = CANCEL. Status mesti jadi free.
+        await base44.asServiceRole.entities.UserSubscription.update(sub.id, {
+          status: 'canceled',
+          tier: 'free',
+        });
+        canceled++;
+        console.log(`❌ Canceled (no payment): ${sub.email}`);
+      }
       cleaned++;
     }
 
-    return Response.json({ success: true, cleaned, message: `Cleaned ${cleaned} stuck incomplete subscriptions` });
+    return Response.json({
+      success: true,
+      cleaned,
+      verifiedPaid,
+      canceled,
+      message: `Processed ${cleaned} stuck incomplete subs (${verifiedPaid} late-activated, ${canceled} canceled)`,
+    });
   } catch (error) {
     console.error('cleanupStuckSubscriptions error:', error);
     return Response.json({ error: error.message }, { status: 500 });
