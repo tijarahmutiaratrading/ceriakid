@@ -51,10 +51,9 @@ Deno.serve(async (req) => {
         verifiedPaid++;
         console.log(`✅ Late activation (webhook missed): ${sub.email} → ${sub.tier}`);
       } else {
-        // Default: TAK BAYAR = CANCEL. Status mesti jadi free.
+        // Default: TAK BAYAR = CANCEL. Tier kekal (tak ada pakej 'free') — user boleh retry checkout.
         await base44.asServiceRole.entities.UserSubscription.update(sub.id, {
           status: 'canceled',
-          tier: 'free',
         });
         canceled++;
         console.log(`❌ Canceled (no payment): ${sub.email}`);
