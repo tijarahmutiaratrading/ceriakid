@@ -50,6 +50,37 @@ Deno.serve(async (req) => {
         });
         verifiedPaid++;
         console.log(`✅ Late activation (webhook missed): ${sub.email} → ${sub.tier}`);
+
+        // Trigger welcome flow yang webhook patut buat tapi tertinggal.
+        // Idempotent: addCredits guna referenceId `welcome__<purchaseId>` — kalau dah ada, skip.
+        const WELCOME_CREDITS = { asas: 5, standard: 20, keluarga: 50 };
+        const bonusAmount = WELCOME_CREDITS[sub.tier] || 0;
+        const purchaseId = sub.stripeCustomerId;
+
+        await Promise.allSettled([
+          // Welcome email
+          base44.asServiceRole.functions.invoke('sendWelcomeEmail', {
+            to: sub.email,
+            type: 'subscription',
+            tier: sub.tier,
+            bonusCredits: bonusAmount,
+          }),
+          // Bonus credits (idempotent via referenceId)
+          bonusAmount > 0 ? base44.asServiceRole.functions.invoke('addCredits', {
+            userEmail: sub.email,
+            amount: bonusAmount,
+            type: 'bonus',
+            feature: 'bonus',
+            description: `🎁 Bonus selamat datang — pelan ${sub.tier} (${bonusAmount} kredit AI percuma) [auto-recovery]`,
+            referenceId: `welcome__${purchaseId}`,
+            metadata: { tier: sub.tier, chipPurchaseId: purchaseId, source: 'cleanup_late_activation' },
+          }) : Promise.resolve(),
+          // Admin push
+          base44.asServiceRole.functions.invoke('sendPushNotification', {
+            title: '⚠️ Late Activation (Webhook Missed)',
+            body: `${sub.email} → ${sub.tier.toUpperCase()} auto-recovered via cleanup`,
+          }),
+        ]).catch(() => {}); // fire-and-forget — jangan break loop
       } else {
         // Default: TAK BAYAR = CANCEL. Tier kekal (tak ada pakej 'free') — user boleh retry checkout.
         await base44.asServiceRole.entities.UserSubscription.update(sub.id, {

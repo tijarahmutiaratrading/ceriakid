@@ -26,13 +26,15 @@
         "rbt",
         "pjk",
         "seni",
-        "kafa_quran_jawi",
-        "kafa_ulum_syariah",
+        "kafa_quran",
+        "kafa_jawi",
+        "kafa_akidah",
+        "kafa_ibadah",
         "kafa_sirah",
         "kafa_adab",
         "kafa_bahasa_arab"
       ],
-      "description": "Subjek Prasekolah dan Sekolah Rendah (termasuk KAFA - Kelas Agama Fardhu Ain)"
+      "description": "Subjek Prasekolah dan Sekolah Rendah (termasuk KAFA - sukatan UPKK rasmi JAKIM: Al-Quran, Jawi, Akidah, Ibadah, Sirah, Adab, Bahasa Arab)"
     },
     "level": {
       "type": "string",

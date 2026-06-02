@@ -65,13 +65,15 @@
         "creative_builder",
         "problem_solver",
         "brain_training",
-        "kafa_quran_jawi",
-        "kafa_ulum_syariah",
+        "kafa_quran",
+        "kafa_jawi",
+        "kafa_akidah",
+        "kafa_ibadah",
         "kafa_sirah",
         "kafa_adab",
         "kafa_bahasa_arab"
       ],
-      "description": "Subject category or genius mini game category. Includes KAFA (Kelas Agama Fardhu Ain) Islamic studies categories."
+      "description": "Subject category or genius mini game category. KAFA (Kelas Agama Fardhu Ain) ikut sukatan UPKK rasmi JAKIM: 7 subjek (Al-Quran, Jawi, Akidah, Ibadah, Sirah, Adab, Bahasa Arab) untuk Darjah 1-6."
     },
     "ageGroup": {
       "type": "string",
