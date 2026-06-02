@@ -26,14 +26,14 @@ const buildTiers = (stats) => {
       nameMY: '🌱 Asas',
       priceMYR: '49',
       perMonth: '4.08',
-      description: asasGames ? `Semua subjek • ${fmt(asasGames)} game • 1 anak` : 'Semua subjek • 50/subjek • 1 anak'
+      description: asasGames ? `Semua subjek • ${fmt(asasGames)} game • 1 anak` : 'Semua subjek • 10 game per darjah/subjek • 1 anak'
     },
     {
       name: 'standard',
       nameMY: '⭐ Standard',
       priceMYR: '99',
       perMonth: '8.25',
-      description: standardGames ? `Semua subjek • ${fmt(standardGames)} game • 1 anak` : 'Semua subjek • 100/subjek • 1 anak'
+      description: standardGames ? `Semua subjek • ${fmt(standardGames)} game • 1 anak` : 'Semua subjek • 25 game per darjah/subjek • 1 anak'
     },
     {
       name: 'keluarga',

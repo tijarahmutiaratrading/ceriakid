@@ -10,27 +10,35 @@ Deno.serve(async (req) => {
         // Fetch all published games (service role, bypass user filtering)
         const games = await base44.asServiceRole.entities.Game.filter({ isPublished: true });
 
-        // Group by ageGroup + category to get per-subject counts
-        const subjectCounts = {};
+        // Group by BUCKET (= darjah for sekolah_rendah, or subject for prasekolah)
+        // supaya match dengan logic lock di GamesList — per-darjah quota.
+        const subjectCounts = {};  // legacy: per ageGroup-category (untuk back-compat)
+        const bucketCounts = {};   // baru: per bucket (darjah utk SR, subject utk PS)
         for (const g of games) {
-            const key = `${g.ageGroup}-${g.category}`;
-            subjectCounts[key] = (subjectCounts[key] || 0) + 1;
+            const subjectKey = `${g.ageGroup}-${g.category}`;
+            subjectCounts[subjectKey] = (subjectCounts[subjectKey] || 0) + 1;
+
+            const bucketKey = g.ageGroup === 'sekolah_rendah' && g.darjah
+                ? `${g.ageGroup}-${g.category}-${g.darjah}`
+                : subjectKey;
+            bucketCounts[bucketKey] = (bucketCounts[bucketKey] || 0) + 1;
         }
 
-        // Tier limit per subject — must match lib/tierAccess.js
-        const TIER_LIMITS = { asas: 50, standard: 100, keluarga: 200 };
+        // Per-bucket tier limit — must match lib/tierAccess.js
+        const TIER_LIMITS = { asas: 10, standard: 25, keluarga: Infinity };
 
-        // Calculate accessible games per tier:
-        // For each subject, user can access min(subjectCount, tierLimit)
+        // Untuk setiap bucket, user boleh akses min(bucketCount, tierLimit).
+        // Total accessible = sum across all buckets.
         const totalGames = games.length;
         const subjectKeys = Object.keys(subjectCounts);
+        const bucketKeys = Object.keys(bucketCounts);
         const numSubjects = subjectKeys.length;
 
         const accessibleByTier = {};
         for (const [tier, limit] of Object.entries(TIER_LIMITS)) {
             let accessible = 0;
-            for (const key of subjectKeys) {
-                accessible += Math.min(subjectCounts[key], limit);
+            for (const key of bucketKeys) {
+                accessible += Math.min(bucketCounts[key], limit);
             }
             accessibleByTier[tier] = accessible;
         }
@@ -40,7 +48,8 @@ Deno.serve(async (req) => {
             totalGames,
             numSubjects,
             subjectCounts,
-            accessibleByTier, // { asas: ~300, standard: ~600, keluarga: totalGames }
+            bucketCounts,
+            accessibleByTier, // { asas, standard, keluarga: totalGames } — kira per-bucket
         }, {
             headers: {
                 // Cache for 1 hour — counts don't change often

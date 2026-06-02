@@ -1,15 +1,18 @@
-// IMPORTANT: 'games' = max games per category accessible by tier.
-// Tiers below match what's actually sold on the Landing page.
+// IMPORTANT: 'gamesPerBucket' = max games per BUCKET accessible by tier.
+// Bucket = darjah (untuk Sekolah Rendah) atau subject (untuk Prasekolah).
+// Maksudnya setiap darjah & setiap prasekolah subject dapat quota sendiri,
+// supaya user Asas/Standard dapat rasa semua darjah (bukan stuck Darjah 1-2 sahaja).
+//
 // 'free' = no active subscription (must subscribe to access app).
 // 'premium' and 'pro' kept for legacy users only — DO NOT advertise.
 export const TIER_LIMITS = {
-  free: { games: 0, devices: 0, children: 0 },
-  asas: { games: 50, devices: 1, children: 1 },
-  standard: { games: 100, devices: 2, children: 1 },
-  keluarga: { games: 200, devices: 4, children: 4 },
-  // Legacy tiers (existing customers only)
-  premium: { games: 100, devices: 2, children: 1 },
-  pro: { games: 200, devices: 4, children: 4 },
+  free:     { gamesPerBucket: 0,        devices: 0, children: 0 },
+  asas:     { gamesPerBucket: 10,       devices: 1, children: 1 },
+  standard: { gamesPerBucket: 25,       devices: 2, children: 1 },
+  keluarga: { gamesPerBucket: Infinity, devices: 4, children: 4 },
+  // Legacy tiers (existing customers only) — map to closest new tier
+  premium:  { gamesPerBucket: 25,       devices: 2, children: 1 },
+  pro:      { gamesPerBucket: Infinity, devices: 4, children: 4 },
 };
 
 export const getActiveTier = (subscription) => {
@@ -27,8 +30,10 @@ export const hasActiveSubscription = (subscription) => {
   return tier !== 'free';
 };
 
+// Per-bucket lock check. `index` mesti index DALAM bucket (0-based), bukan global index.
+// Contoh: kalau Darjah 3 ada 30 games, indexnya 0..29 (bukan 100..129).
 export const isGameIndexLocked = ({ index, tier = 'free', isAuthenticated = false }) => {
-  if (!isAuthenticated) return index >= TIER_LIMITS.asas.games;
-  const limit = getTierLimit(tier, 'games');
+  if (!isAuthenticated) return index >= TIER_LIMITS.asas.gamesPerBucket;
+  const limit = getTierLimit(tier, 'gamesPerBucket');
   return Number.isFinite(limit) ? index >= limit : false;
 };

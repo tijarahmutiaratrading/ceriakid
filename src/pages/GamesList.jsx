@@ -182,8 +182,11 @@ export default function GamesList() {
     }
   };
 
-  const isGameLocked = useCallback((globalIdx) => (
-    isGameIndexLocked({ index: globalIdx, tier: userTier, isAuthenticated })
+  // Pass bucket-local index (not global). Bucket = darjah for Sekolah Rendah,
+  // or the whole subject for Prasekolah. This ensures every darjah has its own
+  // mix of unlocked + locked games (user Asas tak stuck kat Darjah 1-2 sahaja).
+  const isGameLocked = useCallback((bucketIdx) => (
+    isGameIndexLocked({ index: bucketIdx, tier: userTier, isAuthenticated })
   ), [isAuthenticated, userTier]);
 
   // Poll for game updates every 60 seconds (reduced from 10s)
@@ -377,11 +380,14 @@ export default function GamesList() {
           </motion.div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-            {games.map((game) => {
+            {games.map((game, bucketIdx) => {
+              // globalIdx — kekal untuk gameKey/progress tracking (jangan break old data)
               const globalIdx = allGames.findIndex((g) => g === game);
               const gameKey = `${ageGroup}-${category}-${globalIdx}`;
               const gameProgress = progress[gameKey];
-              const locked = isGameLocked(globalIdx);
+              // bucketIdx — index dalam darjah/subject semasa, dipakai utk lock check
+              // supaya setiap darjah ada quota unlock sendiri.
+              const locked = isGameLocked(bucketIdx);
               return (
                 <GameListCard
                   key={game.id || `game-${globalIdx}`}
@@ -393,7 +399,7 @@ export default function GamesList() {
                   locked={locked}
                   badge={
                     locked ? 'locked' :
-                    globalIdx < 2 ? 'new' :
+                    bucketIdx < 2 ? 'new' :
                     gameProgress && gameProgress.bestStars < 2 ? 'recommended' :
                     null
                   }
