@@ -5,20 +5,20 @@ import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby,
 import { useToast } from '@/components/ui/use-toast';
 
 const TIER_LABELS = {
-  free: { label: 'Percuma', cls: 'bg-gray-300 text-gray-900' },
-  asas: { label: 'Asas', cls: 'bg-emerald-300 text-emerald-950' },
-  standard: { label: 'Standard', cls: 'bg-sky-300 text-sky-950' },
-  keluarga: { label: 'Keluarga', cls: 'bg-violet-300 text-violet-950' },
-  premium: { label: 'Premium', cls: 'bg-rose-300 text-rose-950' },
-  pro: { label: 'Pro', cls: 'bg-rose-300 text-rose-950' },
+  free: { label: 'Percuma', cls: 'text-gray-700' },
+  asas: { label: 'Asas', cls: 'text-emerald-700' },
+  standard: { label: 'Standard', cls: 'text-sky-700' },
+  keluarga: { label: 'Keluarga', cls: 'text-violet-700' },
+  premium: { label: 'Premium', cls: 'text-rose-700' },
+  pro: { label: 'Pro', cls: 'text-rose-700' },
 };
 
 const STATUS_LABELS = {
-  active: { label: '✓ Aktif', cls: 'bg-emerald-300 text-emerald-950' },
-  trial: { label: '⏳ Trial', cls: 'bg-sky-300 text-sky-950' },
-  incomplete: { label: '⏸ Pending', cls: 'bg-amber-300 text-amber-950' },
-  past_due: { label: '⚠ Lewat', cls: 'bg-orange-300 text-orange-950' },
-  canceled: { label: '✕ Batal', cls: 'bg-rose-300 text-rose-950' },
+  active: { label: '✓ Aktif', cls: 'text-emerald-700' },
+  trial: { label: '⏳ Trial', cls: 'text-sky-700' },
+  incomplete: { label: '⏸ Pending', cls: 'text-amber-700' },
+  past_due: { label: '⚠ Lewat', cls: 'text-orange-700' },
+  canceled: { label: '✕ Batal', cls: 'text-rose-700' },
 };
 
 const RECOVERY_LABELS = {
@@ -112,12 +112,12 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
           {customer.phone && <div className="text-[10px] text-slate-600 font-semibold truncate">📞 {customer.phone}</div>}
         </td>
         <td className="py-3 px-3 whitespace-nowrap">
-          <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-[11px] font-black shadow-sm ${tier.cls}`}>
+          <span className={`text-xs font-black ${tier.cls}`}>
             {tier.label}
           </span>
         </td>
         <td className="py-3 px-3 whitespace-nowrap">
-          <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-[11px] font-black shadow-sm ${status.cls}`}>
+          <span className={`text-xs font-black ${status.cls}`}>
             {status.label}
           </span>
         </td>
