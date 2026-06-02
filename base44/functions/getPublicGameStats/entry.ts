@@ -25,7 +25,7 @@ Deno.serve(async (req) => {
         }
 
         // Per-bucket tier limit — must match lib/tierAccess.js
-        const TIER_LIMITS = { asas: 10, standard: 25, keluarga: Infinity };
+        const TIER_LIMITS = { asas: 10, standard: 20, keluarga: Infinity };
 
         // Untuk setiap bucket, user boleh akses min(bucketCount, tierLimit).
         // Total accessible = sum across all buckets.

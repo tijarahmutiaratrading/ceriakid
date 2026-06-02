@@ -33,7 +33,7 @@ const buildTiers = (stats) => {
       nameMY: '⭐ Standard',
       priceMYR: '99',
       perMonth: '8.25',
-      description: standardGames ? `Semua subjek • ${fmt(standardGames)} game • 1 anak` : 'Semua subjek • 25 game per darjah/subjek • 1 anak'
+      description: standardGames ? `Semua subjek • ${fmt(standardGames)} game • 1 anak` : 'Semua subjek • 20 game per darjah/subjek • 1 anak'
     },
     {
       name: 'keluarga',

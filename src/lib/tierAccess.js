@@ -8,10 +8,10 @@
 export const TIER_LIMITS = {
   free:     { gamesPerBucket: 0,        devices: 0, children: 0 },
   asas:     { gamesPerBucket: 10,       devices: 1, children: 1 },
-  standard: { gamesPerBucket: 25,       devices: 2, children: 1 },
+  standard: { gamesPerBucket: 20,       devices: 2, children: 1 },
   keluarga: { gamesPerBucket: Infinity, devices: 4, children: 4 },
   // Legacy tiers (existing customers only) — map to closest new tier
-  premium:  { gamesPerBucket: 25,       devices: 2, children: 1 },
+  premium:  { gamesPerBucket: 20,       devices: 2, children: 1 },
   pro:      { gamesPerBucket: Infinity, devices: 4, children: 4 },
 };
 

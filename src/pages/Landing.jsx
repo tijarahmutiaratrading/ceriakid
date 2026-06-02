@@ -64,7 +64,7 @@ const buildTiers = (stats) => {
       perMonth: '8.25',
       period: '/tahun',
       features: [
-        standardGames ? `${fmt(standardGames)} game (25 per darjah/subjek)` : '25 game per darjah/subjek',
+        standardGames ? `${fmt(standardGames)} game (20 per darjah/subjek)` : '20 game per darjah/subjek',
         '🎁 20 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)',
         'Semua subjek (Prasekolah & Darjah 1–6)',
         'Lebih luas akses setiap darjah 🎯',
