@@ -2,7 +2,6 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import UserTopHeader from '@/components/UserTopHeader';
 import PageTransition from '@/components/ui/PageTransition';
-import TierPreviewSwitcher from '@/components/admin/TierPreviewSwitcher';
 
 /**
  * App layout with a floating top header (desktop) on every authenticated page.
@@ -38,7 +37,6 @@ export default function AppLayout() {
             <Outlet />
           </PageTransition>
         </main>
-        <TierPreviewSwitcher />
       </div>
     </>
   );

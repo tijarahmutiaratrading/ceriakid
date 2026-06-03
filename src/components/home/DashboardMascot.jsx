@@ -26,26 +26,34 @@ export default function DashboardMascot() {
   const [waveTrigger, setWaveTrigger] = useState(0);
   const waveTimerRef = useRef(null);
 
-  // Restore dismiss state for this session
+  // Restore dismiss state for this session + auto-greet after mount
   useEffect(() => {
     try {
-      if (sessionStorage.getItem(DISMISS_KEY) === '1') setDismissed(true);
+      if (sessionStorage.getItem(DISMISS_KEY) === '1') {
+        setDismissed(true);
+        return;
+      }
     } catch { /* ignore */ }
+    // Auto-show first bubble after small delay (greeting)
+    const greet = setTimeout(() => setBubbleOpen(true), 1500);
+    return () => clearTimeout(greet);
   }, []);
 
-  // Periodic wave animation every 8s
+  // Periodic wave + rotate tip + re-open bubble every 12s
   useEffect(() => {
     if (dismissed) return;
     waveTimerRef.current = setInterval(() => {
       setWaveTrigger((v) => v + 1);
-    }, 8000);
+      setTipIndex((i) => (i + 1) % TIPS.length);
+      setBubbleOpen(true);
+    }, 12000);
     return () => clearInterval(waveTimerRef.current);
   }, [dismissed]);
 
-  // Auto-hide bubble after 5s
+  // Auto-hide bubble after 6s
   useEffect(() => {
     if (!bubbleOpen) return;
-    const t = setTimeout(() => setBubbleOpen(false), 5000);
+    const t = setTimeout(() => setBubbleOpen(false), 6000);
     return () => clearTimeout(t);
   }, [bubbleOpen, tipIndex]);
 

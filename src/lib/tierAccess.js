@@ -15,21 +15,7 @@ export const TIER_LIMITS = {
   pro:      { gamesPerBucket: Infinity, devices: 4, children: 4 },
 };
 
-// Admin tier preview override — only honoured when window flag set by TierPreviewSwitcher
-// (which itself only renders for admins). Safe for SSR (no window).
-const getTierPreviewOverride = () => {
-  if (typeof window === 'undefined') return null;
-  try {
-    if (!window.__ceriakid_admin_preview_enabled) return null;
-    const v = localStorage.getItem('__tier_preview_override');
-    if (v && ['asas', 'standard', 'keluarga', 'free'].includes(v)) return v;
-  } catch { /* ignore */ }
-  return null;
-};
-
 export const getActiveTier = (subscription) => {
-  const override = getTierPreviewOverride();
-  if (override) return override;
   const isExpired = subscription?.currentPeriodEnd && new Date(subscription.currentPeriodEnd) < new Date();
   if (!subscription || isExpired) return 'free';
   if (subscription.status === 'active') return subscription.tier || 'free';
