@@ -262,7 +262,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
                   <div className={`w-10 h-10 rounded-full ${isDarkPill ? 'bg-white/25 border-white/50' : 'bg-purple-100 border-purple-200'} border-2 flex items-center justify-center text-xl cursor-pointer shadow-lg`}>🐱</div>
                 )
               ) : (
-                <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-2xl cursor-pointer shadow-lg ring-1 ring-white/40" />
+                <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-2xl cursor-pointer shadow-lg ring-1 ring-white/40" />
               )}
             </Link>
           </div>
@@ -317,7 +317,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
               />
             ) : (
               <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-br from-pink-400 to-purple-500">
-                <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png" alt="CeriaKid" className="h-8 rounded-lg" />
+                <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png" alt="CeriaKid" className="h-8 rounded-lg" />
                 <button type="button" onClick={closeDrawer} className="p-2 rounded-xl bg-white/20 text-white">✕</button>
               </div>
             )}

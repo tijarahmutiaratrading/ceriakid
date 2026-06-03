@@ -20,10 +20,10 @@
 
 export const HARDCODED_ASSET_URLS = [
   // Logo & Brand
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png',
 
   // Tambah URL hardcoded yang lain di sini bila perlu...
   // Format: 'https://media.base44.com/images/public/...'
 ];
 
-export const HARDCODED_ASSETS_VERSION = '2026-05-30';
+export const HARDCODED_ASSETS_VERSION = '2026-06-03';
