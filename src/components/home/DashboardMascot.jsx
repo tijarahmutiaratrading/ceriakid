@@ -70,7 +70,7 @@ export default function DashboardMascot() {
   if (dismissed) return null;
 
   return (
-    <div className="hidden sm:block fixed bottom-4 right-4 z-40 pointer-events-none select-none">
+    <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-40 pointer-events-none select-none">
       <div className="relative pointer-events-auto">
         {/* Speech bubble */}
         <AnimatePresence>
@@ -80,7 +80,7 @@ export default function DashboardMascot() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
               transition={{ type: 'spring', stiffness: 360, damping: 24 }}
-              className="absolute bottom-20 right-[78%] w-36 rounded-2xl shadow-2xl px-2.5 py-1.5"
+              className="absolute bottom-14 sm:bottom-20 right-[78%] w-28 sm:w-36 rounded-2xl shadow-2xl px-2 py-1 sm:px-2.5 sm:py-1.5"
               style={{ background: 'linear-gradient(135deg, #FDBA74, #FB923C)' }}
             >
               <p className="text-white text-[11px] font-black leading-snug drop-shadow-sm line-clamp-2">{TIPS[tipIndex]}</p>
@@ -123,14 +123,14 @@ export default function DashboardMascot() {
             key={waveTrigger}
             src={MASCOT_URL}
             alt="Mascot CeriaKid"
-            className="w-36 h-36 lg:w-44 lg:h-44 object-contain drop-shadow-2xl"
+            className="w-20 h-20 sm:w-36 sm:h-36 lg:w-44 lg:h-44 object-contain drop-shadow-2xl"
             initial={{ rotate: 0 }}
             animate={{ rotate: [0, -12, 8, -6, 0] }}
             transition={{ duration: 1.2, ease: 'easeInOut' }}
             draggable={false}
           />
           {/* Soft glow under mascot */}
-          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-3 rounded-full bg-orange-400/30 blur-md" />
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-14 sm:w-24 h-2 sm:h-3 rounded-full bg-orange-400/30 blur-md" />
         </motion.button>
       </div>
     </div>
