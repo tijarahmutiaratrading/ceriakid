@@ -70,7 +70,7 @@ export default function DashboardMascot() {
   if (dismissed) return null;
 
   return (
-    <div className="hidden sm:block fixed bottom-4 left-4 z-40 pointer-events-none select-none">
+    <div className="hidden sm:block fixed bottom-4 right-4 z-40 pointer-events-none select-none">
       <div className="relative pointer-events-auto">
         {/* Speech bubble */}
         <AnimatePresence>
@@ -80,12 +80,12 @@ export default function DashboardMascot() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
               transition={{ type: 'spring', stiffness: 360, damping: 24 }}
-              className="absolute bottom-16 left-full ml-2 w-44 rounded-2xl shadow-2xl border border-orange-300 px-3 py-2"
+              className="absolute bottom-16 right-full mr-2 w-44 rounded-2xl shadow-2xl border border-orange-300 px-3 py-2"
               style={{ background: 'linear-gradient(135deg, #FDBA74, #FB923C)' }}
             >
               <p className="text-white text-xs font-black leading-snug drop-shadow-sm">{TIPS[tipIndex]}</p>
-              {/* Tail pointing left to mascot */}
-              <div className="absolute bottom-3 -left-1.5 w-2.5 h-2.5 border-l border-b border-orange-300 transform rotate-45" style={{ background: '#FDBA74' }} />
+              {/* Tail pointing right to mascot */}
+              <div className="absolute bottom-3 -right-1.5 w-2.5 h-2.5 border-r border-t border-orange-300 transform rotate-45" style={{ background: '#FB923C' }} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -95,7 +95,7 @@ export default function DashboardMascot() {
           type="button"
           onClick={handleDismiss}
           aria-label="Sembunyi mascot"
-          className="absolute -top-1 -right-1 z-10 w-6 h-6 rounded-full bg-slate-900/80 text-white flex items-center justify-center shadow-lg opacity-0 hover:opacity-100 focus:opacity-100 transition-opacity"
+          className="absolute -top-1 -left-1 z-10 w-6 h-6 rounded-full bg-slate-900/80 text-white flex items-center justify-center shadow-lg opacity-0 hover:opacity-100 focus:opacity-100 transition-opacity"
         >
           <X className="w-3.5 h-3.5" />
         </button>
