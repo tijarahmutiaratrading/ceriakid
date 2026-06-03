@@ -13,7 +13,6 @@ const TIPS = [
   '🔥 Konsisten 5 minit sehari = banyak progress!',
   '🏆 Buka Prestasi Anak untuk tengok markah.',
   '🎨 Cuba Studio Lukisan — seronok!',
-  '📚 Setiap subjek ada game baru setiap minggu!',
   '💡 Tahu tak? Belajar pagi lebih efektif!',
 ];
 
