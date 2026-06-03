@@ -16,6 +16,16 @@ const TIER_LABELS = {
 // Apple Fitness style hero carousel — full-bleed image, dark gradient, bottom-left content, CTA pill
 const SLIDES = [
   {
+    tagline: 'SELAMAT DATANG',
+    title: 'Ceria belajar bersama!',
+    meta: 'Pembelajaran yang menyeronokkan untuk anak Malaysia',
+    cta: 'Jom Mula',
+    ctaLink: '/games-hub',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8a7a15443_ChatGPTImageJun32026at06_28_51PM.png',
+    imageMobile: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8a7a15443_ChatGPTImageJun32026at06_28_51PM.png',
+    objectPos: 'center center',
+  },
+  {
     tagline: 'CUBA PERMAINAN BARU',
     title: 'Belajar dengan CeriaKid',
     meta: '1600+ Permainan • Semua Subjek',

@@ -7,7 +7,6 @@ import { useLang } from '@/lib/LanguageContext';
 import { t } from '@/lib/i18n';
 
 import AppHeader from '@/components/AppHeader';
-import WelcomeBanner from '@/components/home/WelcomeBanner';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
 import AppleFitnessHero from '@/components/home/AppleFitnessHero';
@@ -126,8 +125,6 @@ export default function Home() {
       <AppHeader />
 
       <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pb-40 pt-4 space-y-8 md:space-y-10">
-
-      {isAuthenticated && <WelcomeBanner />}
 
       {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl} onLogout={logout} />}
 
