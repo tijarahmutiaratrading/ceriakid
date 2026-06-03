@@ -14,6 +14,7 @@ import QuickAccessGrid from '@/components/home/QuickAccessGrid';
 import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
 import AIHubCard from '@/components/home/AIHubCard';
 import InstallAppGuide from '@/components/home/InstallAppGuide';
+import DashboardMascot from '@/components/home/DashboardMascot';
 import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
 import OnboardingWizard from '@/components/onboarding/OnboardingWizard';
 import { checkAndRegisterDevice } from '@/lib/deviceManager';
@@ -258,6 +259,9 @@ export default function Home() {
         </motion.div>
 
       </div>
+
+      {/* Floating mascot helper — bottom-left, desktop only */}
+      <DashboardMascot />
     </div>
   );
 }
