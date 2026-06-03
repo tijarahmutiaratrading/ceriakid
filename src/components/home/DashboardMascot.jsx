@@ -80,11 +80,12 @@ export default function DashboardMascot() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
               transition={{ type: 'spring', stiffness: 360, damping: 24 }}
-              className="absolute bottom-full left-20 mb-2 w-44 rounded-2xl bg-white shadow-2xl border border-orange-200 px-3 py-2"
+              className="absolute bottom-16 left-full ml-2 w-44 rounded-2xl shadow-2xl border border-orange-300 px-3 py-2"
+              style={{ background: 'linear-gradient(135deg, #FDBA74, #FB923C)' }}
             >
-              <p className="text-slate-800 text-xs font-black leading-snug">{TIPS[tipIndex]}</p>
-              {/* Tail */}
-              <div className="absolute -bottom-1.5 left-4 w-2.5 h-2.5 bg-white border-r border-b border-orange-200 transform rotate-45" />
+              <p className="text-white text-xs font-black leading-snug drop-shadow-sm">{TIPS[tipIndex]}</p>
+              {/* Tail pointing left to mascot */}
+              <div className="absolute bottom-3 -left-1.5 w-2.5 h-2.5 border-l border-b border-orange-300 transform rotate-45" style={{ background: '#FDBA74' }} />
             </motion.div>
           )}
         </AnimatePresence>
