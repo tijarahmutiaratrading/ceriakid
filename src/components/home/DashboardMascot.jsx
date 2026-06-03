@@ -8,12 +8,12 @@ const DISMISS_KEY = '__mascot_dismissed_session';
 // Rotating tips/encouragement messages
 const TIPS = [
   '👋 Hai! Jom main game hari ni!',
-  '🌟 Anak hebat! Teruskan belajar.',
-  '🎯 Cuba Cikgu AI untuk soalan susah!',
-  '🔥 Konsisten 5 minit sehari = banyak progress!',
-  '🏆 Buka Prestasi Anak untuk tengok markah.',
-  '🎨 Cuba Studio Lukisan — seronok!',
-  '💡 Tahu tak? Belajar pagi lebih efektif!',
+  '🌟 Anak hebat, teruskan belajar ya!',
+  '🎯 Tanya Cikgu AI kalau soalan susah!',
+  '🔥 5 minit sehari pun dah cukup!',
+  '🏆 Tengok markah anak di Prestasi!',
+  '🎨 Jom lukis di Studio Lukisan!',
+  '💡 Belajar pagi lagi seronok tau!',
 ];
 
 // Floating mascot helper — bottom-left of dashboard.
