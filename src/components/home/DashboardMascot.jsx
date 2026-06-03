@@ -70,7 +70,7 @@ export default function DashboardMascot() {
   if (dismissed) return null;
 
   return (
-    <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-40 pointer-events-none select-none">
+    <div className="fixed bottom-2 -right-3 sm:right-4 sm:bottom-4 z-40 pointer-events-none select-none">
       <div className="relative pointer-events-auto">
         {/* Speech bubble */}
         <AnimatePresence>
