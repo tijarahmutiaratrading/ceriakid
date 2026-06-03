@@ -80,21 +80,42 @@ export default function DashboardMascot() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
               transition={{ type: 'spring', stiffness: 360, damping: 24 }}
-              className="absolute bottom-20 right-[78%] w-36 rounded-2xl shadow-2xl px-2.5 py-1.5"
-              style={{ background: 'linear-gradient(135deg, #FDBA74, #FB923C)' }}
+              className="absolute bottom-20 right-[72%] w-40"
             >
-              <p className="text-white text-[11px] font-black leading-snug drop-shadow-sm line-clamp-2">{TIPS[tipIndex]}</p>
-              {/* Tail pointing right to mascot — clean SVG triangle, no broken borders */}
+              {/* Cloud-shape SVG background */}
               <svg
-                className="absolute bottom-3 -right-[7px]"
-                width="8"
-                height="10"
-                viewBox="0 0 8 10"
-                fill="none"
+                viewBox="0 0 160 80"
+                className="w-full h-auto drop-shadow-2xl"
                 aria-hidden="true"
               >
-                <path d="M0 0 L8 5 L0 10 Z" fill="#FB923C" />
+                <defs>
+                  <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FDBA74" />
+                    <stop offset="100%" stopColor="#FB923C" />
+                  </linearGradient>
+                </defs>
+                {/* Cloud body — overlapping circles */}
+                <path
+                  d="M 30 50
+                     a 18 18 0 0 1 6 -34
+                     a 22 22 0 0 1 42 -6
+                     a 20 20 0 0 1 38 8
+                     a 16 16 0 0 1 4 30
+                     a 14 14 0 0 1 -14 8
+                     L 40 56
+                     a 14 14 0 0 1 -10 -6 Z"
+                  fill="url(#cloudGrad)"
+                />
+                {/* Cloud tail — small puffs pointing toward mascot (right) */}
+                <circle cx="142" cy="58" r="6" fill="url(#cloudGrad)" />
+                <circle cx="152" cy="64" r="3.5" fill="url(#cloudGrad)" />
               </svg>
+              {/* Text overlay */}
+              <div className="absolute inset-0 flex items-center justify-center px-5 pb-2">
+                <p className="text-white text-[11px] font-black leading-snug drop-shadow-sm line-clamp-2 text-center">
+                  {TIPS[tipIndex]}
+                </p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
