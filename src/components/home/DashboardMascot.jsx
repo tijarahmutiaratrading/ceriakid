@@ -83,7 +83,7 @@ export default function DashboardMascot() {
               className="absolute bottom-20 sm:bottom-20 right-[78%] w-24 sm:w-36 rounded-2xl shadow-2xl px-2 py-1 sm:px-2.5 sm:py-1.5"
               style={{ background: 'linear-gradient(135deg, #FDBA74, #FB923C)' }}
             >
-              <p className="text-white text-[10px] sm:text-[11px] font-black leading-snug drop-shadow-sm line-clamp-2">{TIPS[tipIndex]}</p>
+              <p className="text-white text-[8px] sm:text-[10px] font-black leading-tight drop-shadow-sm line-clamp-2">{TIPS[tipIndex]}</p>
               {/* Tail — 2 small puff circles pointing toward mascot */}
               <div className="absolute -right-1.5 bottom-2 w-2.5 h-2.5 rounded-full" style={{ background: '#FB923C' }} />
               <div className="absolute -right-3 bottom-0.5 w-1.5 h-1.5 rounded-full" style={{ background: '#FB923C' }} />
