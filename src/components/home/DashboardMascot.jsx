@@ -81,11 +81,11 @@ export default function DashboardMascot() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
               transition={{ type: 'spring', stiffness: 360, damping: 24 }}
-              className="absolute bottom-full left-16 mb-2 w-56 rounded-2xl bg-white shadow-2xl border border-orange-200 px-4 py-3"
+              className="absolute bottom-full left-20 mb-2 w-44 rounded-2xl bg-white shadow-2xl border border-orange-200 px-3 py-2"
             >
-              <p className="text-slate-800 text-sm font-black leading-snug">{TIPS[tipIndex]}</p>
+              <p className="text-slate-800 text-xs font-black leading-snug">{TIPS[tipIndex]}</p>
               {/* Tail */}
-              <div className="absolute -bottom-1.5 left-4 w-3 h-3 bg-white border-r border-b border-orange-200 transform rotate-45" />
+              <div className="absolute -bottom-1.5 left-4 w-2.5 h-2.5 bg-white border-r border-b border-orange-200 transform rotate-45" />
             </motion.div>
           )}
         </AnimatePresence>
@@ -122,14 +122,14 @@ export default function DashboardMascot() {
             key={waveTrigger}
             src={MASCOT_URL}
             alt="Mascot CeriaKid"
-            className="w-24 h-24 lg:w-28 lg:h-28 object-contain drop-shadow-2xl"
+            className="w-36 h-36 lg:w-44 lg:h-44 object-contain drop-shadow-2xl"
             initial={{ rotate: 0 }}
             animate={{ rotate: [0, -12, 8, -6, 0] }}
             transition={{ duration: 1.2, ease: 'easeInOut' }}
             draggable={false}
           />
           {/* Soft glow under mascot */}
-          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-16 h-3 rounded-full bg-orange-400/30 blur-md" />
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-3 rounded-full bg-orange-400/30 blur-md" />
         </motion.button>
       </div>
     </div>
