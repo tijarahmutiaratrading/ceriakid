@@ -53,7 +53,7 @@ export default function AffiliatePage() {
   if (loading) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center -mt-16 sm:-mt-20 pt-16 sm:pt-20"
+        className="min-h-screen flex items-center justify-center pt-20 sm:pt-24"
         style={{ background: '#fafafa' }}
       >
         <div className="text-center">
@@ -76,7 +76,7 @@ export default function AffiliatePage() {
 
   return (
     <div
-      className="min-h-screen -mt-16 sm:-mt-20 pt-16 sm:pt-20 relative"
+      className="min-h-screen pt-20 sm:pt-24 relative"
       style={{ background: '#fafafa' }}
     >
       {/* Subtle grid pattern */}
