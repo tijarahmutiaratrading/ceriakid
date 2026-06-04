@@ -69,7 +69,7 @@ export default function AffiliateHero({ affiliate, referralLink }) {
   ];
 
   return (
-    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-purple-950/40 min-h-[520px] sm:min-h-0 sm:aspect-[16/9] md:aspect-[16/8] sm:max-h-[600px] mb-6">
+    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-purple-950/40 aspect-[4/3] sm:aspect-[16/9] md:aspect-[16/8] sm:max-h-[600px] mb-4 sm:mb-6">
       {/* Background slides */}
       <AnimatePresence mode="sync">
         <motion.div
@@ -146,8 +146,8 @@ export default function AffiliateHero({ affiliate, referralLink }) {
             </div>
           </div>
 
-          {/* Right: referral link card (glass) */}
-          <div className="lg:col-span-2 w-full">
+          {/* Right: referral link card (glass) — desktop sahaja; mobile guna card asing di luar hero */}
+          <div className="hidden lg:block lg:col-span-2 w-full">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
