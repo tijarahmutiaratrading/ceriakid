@@ -47,10 +47,15 @@ export default function GameLoadingScreen({ message = 'Menyediakan permainan...'
           />
 
           <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+            animate={{ y: [0, -10, 0], rotate: [0, -3, 3, 0] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <WavingKidMascot />
+            <img
+              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/934070eb4_ChatGPTImageJun42026at07_36_37AM.png"
+              alt="CeriaKid Mascot"
+              className="w-40 h-40 sm:w-48 sm:h-48 object-contain drop-shadow-2xl select-none"
+              draggable={false}
+            />
           </motion.div>
         </motion.div>
 
