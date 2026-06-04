@@ -13,6 +13,7 @@ import AffiliatePayoutList from '@/components/affiliate/AffiliatePayoutList';
 import AffiliateBankForm from '@/components/affiliate/AffiliateBankForm';
 import ReferralShareCard from '@/components/affiliate/ReferralShareCard';
 import ReferralLinkCard from '@/components/affiliate/ReferralLinkCard';
+import AppHeader from '@/components/AppHeader';
 
 export default function AffiliatePage() {
   const [loading, setLoading] = useState(true);
@@ -53,15 +54,18 @@ export default function AffiliatePage() {
 
   if (loading) {
     return (
-      <div
-        className="min-h-screen flex items-center justify-center pt-20 sm:pt-24"
-        style={{ background: '#fafafa' }}
-      >
-        <div className="text-center">
-          <Loader2 className="w-10 h-10 animate-spin text-slate-700 mx-auto mb-3" />
-          <p className="text-sm font-bold text-slate-700">Memuat dashboard affiliate...</p>
+      <>
+        <AppHeader title="Affiliate" />
+        <div
+          className="min-h-screen flex items-center justify-center pt-20 sm:pt-24"
+          style={{ background: '#fafafa' }}
+        >
+          <div className="text-center">
+            <Loader2 className="w-10 h-10 animate-spin text-slate-700 mx-auto mb-3" />
+            <p className="text-sm font-bold text-slate-700">Memuat dashboard affiliate...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -76,10 +80,12 @@ export default function AffiliatePage() {
   const referralLink = `${baseUrl}/?ref=${affiliate.referralCode}`;
 
   return (
-    <div
-      className="min-h-screen pt-20 sm:pt-24 relative"
-      style={{ background: '#fafafa' }}
-    >
+    <>
+      <AppHeader title="Affiliate" />
+      <div
+        className="min-h-screen pt-20 sm:pt-24 relative"
+        style={{ background: '#fafafa' }}
+      >
       {/* Subtle grid pattern */}
       <div
         className="fixed inset-0 pointer-events-none opacity-[0.015]"
@@ -139,5 +145,6 @@ export default function AffiliatePage() {
         </motion.div>
       </div>
     </div>
+    </>
   );
 }
