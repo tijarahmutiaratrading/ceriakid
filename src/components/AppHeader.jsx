@@ -146,6 +146,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
       dashboardItems = [
         { path: '/dashboard', label: 'Dashboard Pengguna' },
         { path: '/settings', label: 'Tetapan Akaun' },
+        { path: '/affiliate', label: 'Program Affiliate' },
         { path: '/contact', label: 'Hubungi Kami' },
       ];
       groupedItems = [
