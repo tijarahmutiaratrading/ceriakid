@@ -69,7 +69,7 @@ export default function AffiliateHero({ affiliate, referralLink }) {
   ];
 
   return (
-    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-purple-950/40 aspect-[16/11] sm:aspect-[16/9] md:aspect-[16/8] max-h-[600px] mb-6">
+    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-purple-950/40 min-h-[520px] sm:min-h-0 sm:aspect-[16/9] md:aspect-[16/8] sm:max-h-[600px] mb-6">
       {/* Background slides */}
       <AnimatePresence mode="sync">
         <motion.div
@@ -109,8 +109,8 @@ export default function AffiliateHero({ affiliate, referralLink }) {
       </div>
 
       {/* Content area — left side */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-end p-5 sm:p-8 md:p-10">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6 items-end">
+      <div className="absolute inset-0 z-10 flex flex-col justify-end p-4 pt-16 sm:p-8 md:p-10">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-6 items-end">
           {/* Left: animated text content */}
           <div className="lg:col-span-3 max-w-2xl">
             <AnimatePresence mode="wait">
@@ -124,10 +124,10 @@ export default function AffiliateHero({ affiliate, referralLink }) {
                 <p className="text-[#D4FF3D] font-black text-[10px] sm:text-xs tracking-[0.2em] mb-2 drop-shadow-lg">
                   {slide.tagline}
                 </p>
-                <h1 className="text-white font-black text-2xl sm:text-4xl md:text-5xl leading-tight mb-2 drop-shadow-2xl">
+                <h1 className="text-white font-black text-xl sm:text-4xl md:text-5xl leading-tight mb-1.5 sm:mb-2 drop-shadow-2xl">
                   {slide.title}
                 </h1>
-                <p className="text-white/85 text-xs sm:text-sm md:text-base font-bold mb-4 drop-shadow-md max-w-lg">
+                <p className="text-white/85 text-[11px] sm:text-sm md:text-base font-bold mb-3 sm:mb-4 drop-shadow-md max-w-lg leading-snug">
                   {slide.meta}
                 </p>
               </motion.div>
