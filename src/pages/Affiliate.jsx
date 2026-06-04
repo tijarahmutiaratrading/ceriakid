@@ -56,7 +56,7 @@ export default function AffiliatePage() {
     return (
       <>
         <AppHeader title="Affiliate" />
-        <div className="min-h-screen flex items-center justify-center pt-20 sm:pt-24">
+        <div className="min-h-[60vh] flex items-center justify-center">
           <div className="text-center">
             <Loader2 className="w-10 h-10 animate-spin text-slate-700 mx-auto mb-3" />
             <p className="text-sm font-bold text-slate-700">Memuat dashboard affiliate...</p>
@@ -79,7 +79,7 @@ export default function AffiliatePage() {
   return (
     <>
       <AppHeader title="Affiliate" />
-      <div className="min-h-screen pt-20 sm:pt-24 relative">
+      <div className="min-h-screen relative">
       {/* Subtle grid pattern */}
       <div
         className="fixed inset-0 pointer-events-none opacity-[0.015]"
