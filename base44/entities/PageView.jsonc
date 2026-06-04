@@ -1,0 +1,51 @@
+{
+  "name": "PageView",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "URL path yang dilawat (cth: /, /dashboard, /games-hub)"
+    },
+    "sessionId": {
+      "type": "string",
+      "description": "Session ID unik untuk track unique visitors (disimpan dalam sessionStorage)"
+    },
+    "userEmail": {
+      "type": "string",
+      "description": "Email user kalau dah login (kosong untuk anonymous visitor)"
+    },
+    "referrer": {
+      "type": "string",
+      "description": "document.referrer - source page user datang"
+    },
+    "source": {
+      "type": "string",
+      "description": "Detected source: facebook, google, direct, referral, etc."
+    },
+    "utmSource": {
+      "type": "string",
+      "description": "UTM source dari URL params"
+    },
+    "utmMedium": {
+      "type": "string",
+      "description": "UTM medium dari URL params"
+    },
+    "utmCampaign": {
+      "type": "string",
+      "description": "UTM campaign dari URL params"
+    },
+    "userAgent": {
+      "type": "string",
+      "description": "Browser user agent untuk identify device/bot"
+    },
+    "isFirstVisit": {
+      "type": "boolean",
+      "default": false,
+      "description": "True jika ini visit pertama dalam session"
+    }
+  },
+  "required": [
+    "path",
+    "sessionId"
+  ]
+}

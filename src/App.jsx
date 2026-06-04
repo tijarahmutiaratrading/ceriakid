@@ -7,6 +7,7 @@ import RouteErrorBoundary from '@/components/RouteErrorBoundary'
 import PageLoader from '@/components/PageLoader'
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { trackPageView } from '@/lib/pixel';
+import { logPageView } from '@/lib/pageViewTracker';
 import PageNotFound from './lib/PageNotFound';
 import { captureReferralFromUrl } from '@/lib/referralTracker';
 import AppLayout from '@/components/AppLayout';
@@ -81,6 +82,8 @@ const PixelPageViewTracker = () => {
   useEffect(() => {
     trackPageView();
     captureReferralFromUrl();
+    // Log to our own analytics — fire-and-forget, silent fail
+    logPageView(location.pathname);
   }, [location.pathname, location.search]);
   return null;
 };

@@ -14,6 +14,8 @@ import LaunchControlPanel from '@/components/admin/LaunchControlPanel';
 import AdminAffiliatePanel from '@/components/admin/AdminAffiliatePanel';
 import PushNotificationPanel from '@/components/admin/PushNotificationPanel';
 import CustomerDatabaseTable from '@/components/admin/CustomerDatabaseTable';
+import DateRangeFilter, { isInRange } from '@/components/admin/DateRangeFilter';
+import TrafficAnalyticsCard from '@/components/admin/TrafficAnalyticsCard';
 
 const SETTINGS_KEY = 'admin_app_settings';
 
@@ -109,9 +111,11 @@ export default function AdminDashboard() {
   const { toast } = useToast();
   const location = useLocation();
   const [subscriptions, setSubscriptions] = useState([]);
+  const [pageViews, setPageViews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('analytics');
   const [settingsTab, setSettingsTab] = useState('pixel');
+  const [dateRange, setDateRange] = useState('today');
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -167,10 +171,14 @@ export default function AdminDashboard() {
 
   const loadData = async () => {
     try {
-      const data = await base44.entities.UserSubscription.list();
-      setSubscriptions(data);
+      const [subs, views] = await Promise.all([
+        base44.entities.UserSubscription.list().catch(() => []),
+        base44.entities.PageView.list('-created_date', 5000).catch(() => []),
+      ]);
+      setSubscriptions(subs || []);
+      setPageViews(views || []);
     } catch (error) {
-      console.error('Failed to load subscriptions:', error);
+      console.error('Failed to load admin data:', error);
     } finally {
       setLoading(false);
     }
@@ -187,8 +195,13 @@ export default function AdminDashboard() {
     );
   }
 
-  // Revenue calc
-  const totalRevenue = subscriptions
+  // Filter subs ikut date range (guna created_date)
+  const filteredSubs = dateRange === 'all'
+    ? subscriptions
+    : subscriptions.filter(s => isInRange(s.created_date, dateRange));
+
+  // Revenue calc — ikut filter
+  const totalRevenue = filteredSubs
     .filter(s => s.status === 'active' && ['asas', 'standard', 'keluarga'].includes(s.tier))
     .reduce((sum, s) => {
       const price = s.tier === 'asas' ? 49 : s.tier === 'standard' ? 99 : s.tier === 'keluarga' ? 199 : 0;
@@ -196,9 +209,9 @@ export default function AdminDashboard() {
     }, 0);
 
   const tierBreakdown = {
-    asas: subscriptions.filter(s => s.tier === 'asas').length,
-    standard: subscriptions.filter(s => s.tier === 'standard').length,
-    keluarga: subscriptions.filter(s => s.tier === 'keluarga').length,
+    asas: filteredSubs.filter(s => s.tier === 'asas').length,
+    standard: filteredSubs.filter(s => s.tier === 'standard').length,
+    keluarga: filteredSubs.filter(s => s.tier === 'keluarga').length,
   };
 
   const set = (key, val) => setSettings(prev => ({ ...prev, [key]: val }));
@@ -230,18 +243,46 @@ export default function AdminDashboard() {
 
   const paidCount = tierBreakdown.asas + tierBreakdown.standard + tierBreakdown.keluarga;
   const avgOrderValue = paidCount > 0 ? (totalRevenue / paidCount).toFixed(2) : '0.00';
-  const pendingCount = subscriptions.filter(s => s.status === 'incomplete' || s.status === 'past_due').length;
-  const activeCount = subscriptions.filter(s => s.status === 'active').length;
-  const todayCount = subscriptions.filter(s => {
-    const d = new Date(s.created_date);
-    const today = new Date();
-    return d.toDateString() === today.toDateString();
-  }).length;
+  const pendingCount = filteredSubs.filter(s => s.status === 'incomplete' || s.status === 'past_due').length;
+  const activeCount = filteredSubs.filter(s => s.status === 'active').length;
 
-  // Unified KPI strip
+  // PageView analytics — filter ikut date range
+  const filteredViews = dateRange === 'all'
+    ? pageViews
+    : pageViews.filter(v => isInRange(v.created_date, dateRange));
+
+  const uniqueSessions = new Set(filteredViews.map(v => v.sessionId)).size;
+  const totalPageViews = filteredViews.length;
+
+  // Source breakdown — count unique sessions per source
+  const sessionsBySource = {};
+  const seenSessionsPerSource = {};
+  filteredViews.forEach(v => {
+    const src = v.source || 'unknown';
+    if (!seenSessionsPerSource[src]) seenSessionsPerSource[src] = new Set();
+    seenSessionsPerSource[src].add(v.sessionId);
+  });
+  Object.keys(seenSessionsPerSource).forEach(src => {
+    sessionsBySource[src] = seenSessionsPerSource[src].size;
+  });
+
+  // Top pages
+  const pageCount = {};
+  filteredViews.forEach(v => {
+    const p = v.path || '/';
+    pageCount[p] = (pageCount[p] || 0) + 1;
+  });
+  const topPages = Object.entries(pageCount)
+    .map(([path, count]) => ({ path, count }))
+    .sort((a, b) => b.count - a.count);
+
+  // Conversion rate: paid orders dalam range / unique visitors dalam range
+  const conversionRate = uniqueSessions > 0 ? (paidCount / uniqueSessions) * 100 : 0;
+
+  // Unified KPI strip — sekarang ikut filter
   const kpiStats = [
     { label: 'Revenue', value: `RM${totalRevenue.toFixed(0)}`, sub: `${paidCount} transaksi`, icon: DollarSign, iconColor: 'text-emerald-600' },
-    { label: 'Orders', value: subscriptions.length, sub: 'sepanjang masa', icon: ShoppingCart, iconColor: 'text-violet-600' },
+    { label: 'Orders', value: filteredSubs.length, sub: 'dalam tempoh', icon: ShoppingCart, iconColor: 'text-violet-600' },
     { label: 'Active', value: activeCount, sub: 'subscription aktif', icon: CheckCircle2, iconColor: 'text-sky-600' },
     { label: 'Pending', value: pendingCount, sub: 'menunggu bayaran', icon: ClockIcon, iconColor: 'text-amber-600' },
   ];
@@ -285,6 +326,24 @@ export default function AdminDashboard() {
                 {/* ═══ ANALYTICS TAB ═══ */}
                 {activeTab === 'analytics' && (
                   <>
+                    {/* Date filter */}
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <DateRangeFilter value={dateRange} onChange={setDateRange} />
+                      <p className="text-[11px] text-slate-500 font-bold tabular-nums">
+                        {filteredSubs.length} order • {uniqueSessions} unique visitor
+                      </p>
+                    </div>
+
+                    {/* Traffic & Visitor analytics */}
+                    <TrafficAnalyticsCard
+                      pageViews={totalPageViews}
+                      uniqueVisitors={uniqueSessions}
+                      conversionRate={conversionRate}
+                      paidOrders={paidCount}
+                      sourceBreakdown={sessionsBySource}
+                      topPages={topPages}
+                    />
+
                     {/* Sales Breakdown — minimal */}
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
