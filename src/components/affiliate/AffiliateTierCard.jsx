@@ -18,23 +18,23 @@ export default function AffiliateTierCard({ affiliate }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl p-5 mb-6 bg-white border-2 border-slate-200 shadow-md overflow-hidden relative"
+      className="rounded-2xl p-4 sm:p-5 mb-6 bg-white border-2 border-slate-200 shadow-md overflow-hidden relative"
     >
       {/* Background decoration */}
       <div className={`absolute -top-12 -right-12 w-40 h-40 rounded-full bg-gradient-to-br ${currentTier.color} opacity-10 blur-2xl`} />
 
       <div className="relative">
         {/* Header */}
-        <div className="flex items-start justify-between mb-4">
-          <div>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+          <div className="min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <Trophy className="w-4 h-4 text-slate-500" />
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tier Anda</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-4xl">{currentTier.emoji}</span>
-              <div>
-                <h3 className={`text-2xl font-black bg-gradient-to-r ${currentTier.color} bg-clip-text text-transparent`}>
+              <span className="text-3xl sm:text-4xl">{currentTier.emoji}</span>
+              <div className="min-w-0">
+                <h3 className={`text-xl sm:text-2xl font-black bg-gradient-to-r ${currentTier.color} bg-clip-text text-transparent truncate`}>
                   {currentTier.name}
                 </h3>
                 <p className="text-xs text-slate-500">{totalReferrals} jumlah rujukan</p>
@@ -43,11 +43,11 @@ export default function AffiliateTierCard({ affiliate }) {
           </div>
 
           {/* Rate badges */}
-          <div className="text-right">
-            <div className={`inline-block px-3 py-1 rounded-full ${currentTier.bgLight} ${currentTier.textColor} text-xs font-black mb-1`}>
+          <div className="flex flex-wrap gap-1.5 sm:flex-col sm:items-end sm:gap-1">
+            <div className={`inline-block px-2.5 py-1 rounded-full ${currentTier.bgLight} ${currentTier.textColor} text-[11px] sm:text-xs font-black`}>
               {affiliate.commissionRateSubscription || currentTier.subscriptionRate}% Subscription
             </div>
-            <div className={`inline-block px-3 py-1 rounded-full ${currentTier.bgLight} ${currentTier.textColor} text-xs font-black`}>
+            <div className={`inline-block px-2.5 py-1 rounded-full ${currentTier.bgLight} ${currentTier.textColor} text-[11px] sm:text-xs font-black`}>
               {affiliate.commissionRateCredit || currentTier.creditRate}% Kredit AI
             </div>
           </div>
@@ -90,14 +90,14 @@ export default function AffiliateTierCard({ affiliate }) {
         {/* All tiers preview */}
         <div className="border-t border-slate-100 pt-3 mt-3">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Semua Tier</p>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
             {TIERS.map(tier => {
               const isCurrent = tier.key === currentTier.key;
               const isPast = TIERS.findIndex(t => t.key === tier.key) < TIERS.findIndex(t => t.key === currentTier.key);
               return (
                 <div
                   key={tier.key}
-                  className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all ${
+                  className={`flex items-center gap-3 p-3 sm:p-4 rounded-2xl border-2 transition-all ${
                     isCurrent
                       ? `${tier.bgLight} border-current ${tier.textColor} scale-[1.02] shadow-md`
                       : isPast
@@ -105,11 +105,11 @@ export default function AffiliateTierCard({ affiliate }) {
                         : 'bg-slate-50 border-slate-200 opacity-60'
                   }`}
                 >
-                  <div className="text-4xl flex-shrink-0">{tier.emoji}</div>
+                  <div className="text-3xl sm:text-4xl flex-shrink-0">{tier.emoji}</div>
                   <div className="min-w-0 flex-1 text-left">
                     <p className="text-sm font-black truncate">{tier.name}</p>
-                    <p className="text-xs opacity-80 font-bold">{tier.subscriptionRate}% sub · {tier.creditRate}% kredit</p>
-                    <p className="text-[11px] opacity-70 mt-0.5">{tier.minReferrals}+ rujukan</p>
+                    <p className="text-[11px] sm:text-xs opacity-80 font-bold">{tier.subscriptionRate}% sub · {tier.creditRate}% kredit</p>
+                    <p className="text-[10px] sm:text-[11px] opacity-70 mt-0.5">{tier.minReferrals}+ rujukan</p>
                   </div>
                 </div>
               );
