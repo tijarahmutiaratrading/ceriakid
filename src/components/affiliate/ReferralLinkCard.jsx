@@ -48,47 +48,85 @@ export default function ReferralLinkCard({ referralLink }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15 }}
-      className="lg:hidden rounded-3xl p-4 sm:p-5 bg-white border border-slate-200 shadow-lg mb-4"
+      className="lg:hidden mb-5 rounded-3xl overflow-hidden shadow-xl shadow-purple-950/15 relative"
+      style={{
+        background: 'linear-gradient(135deg, #1e1b4b 0%, #4c1d95 50%, #831843 100%)',
+      }}
     >
-      <div className="flex items-center gap-2 mb-3">
-        <Share2 className="w-4 h-4 text-purple-600" />
-        <span className="text-xs font-black text-slate-700 uppercase tracking-wider">Link Rujukan</span>
-      </div>
+      {/* Glow accents */}
+      <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-pink-500/30 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-20 -left-16 w-48 h-48 rounded-full bg-purple-500/30 blur-3xl pointer-events-none" />
 
-      <div className="bg-slate-50 rounded-xl p-3 mb-3 border border-slate-100">
-        <p className="text-[12px] font-mono text-slate-700 break-all leading-snug">
-          {referralLink}
-        </p>
-      </div>
+      <div className="relative p-5">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/25">
+              <Share2 className="w-4 h-4 text-white" strokeWidth={2.5} />
+            </div>
+            <div>
+              <p className="text-white/60 text-[10px] font-black uppercase tracking-wider leading-none">Link Rujukan Anda</p>
+              <p className="text-white text-sm font-black leading-tight mt-0.5">Kongsi & dapat komisen</p>
+            </div>
+          </div>
+        </div>
 
-      <Button
-        onClick={copyLink}
-        className={`w-full font-black py-5 rounded-xl shadow-lg transition-all text-sm ${
-          copied
-            ? 'bg-emerald-500 hover:bg-emerald-600 text-white'
-            : 'bg-[#D4FF3D] text-slate-900 hover:bg-[#c5f02e]'
-        }`}
-      >
-        {copied ? (
-          <><Check className="w-4 h-4 mr-1.5" /> Disalin!</>
-        ) : (
-          <><Copy className="w-4 h-4 mr-1.5" /> Salin Link</>
-        )}
-      </Button>
+        {/* Link pill with inline copy */}
+        <button
+          type="button"
+          onClick={copyLink}
+          className="w-full group flex items-center gap-2 rounded-2xl bg-white/10 backdrop-blur-sm ring-1 ring-white/20 hover:ring-white/40 transition-all p-2.5 mb-3 text-left"
+        >
+          <div className="flex-1 min-w-0 px-2">
+            <p className="text-white/95 text-[12px] font-mono truncate font-bold">
+              {referralLink.replace(/^https?:\/\//, '')}
+            </p>
+          </div>
+          <div className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
+            copied ? 'bg-emerald-400 text-slate-900' : 'bg-[#D4FF3D] text-slate-900 group-hover:scale-105'
+          }`}>
+            {copied ? <Check className="w-4 h-4" strokeWidth={3} /> : <Copy className="w-4 h-4" strokeWidth={2.5} />}
+          </div>
+        </button>
 
-      <div className="grid grid-cols-3 gap-2 mt-2.5">
-        {shareOptions.map(opt => (
-          <a
-            key={opt.name}
-            href={opt.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex items-center justify-center gap-1.5 py-3 rounded-xl text-white text-xs font-black shadow-md transition-all ${opt.color}`}
-          >
-            <opt.icon className="w-3.5 h-3.5" />
-            <span>{opt.name}</span>
-          </a>
-        ))}
+        {/* Primary copy CTA */}
+        <Button
+          onClick={copyLink}
+          className={`w-full font-black py-5 rounded-2xl shadow-lg transition-all text-sm ${
+            copied
+              ? 'bg-emerald-400 hover:bg-emerald-500 text-slate-900'
+              : 'bg-[#D4FF3D] text-slate-900 hover:bg-[#c5f02e]'
+          }`}
+        >
+          {copied ? (
+            <><Check className="w-4 h-4 mr-1.5" strokeWidth={3} /> Link Disalin!</>
+          ) : (
+            <><Copy className="w-4 h-4 mr-1.5" strokeWidth={2.5} /> Salin Link Penuh</>
+          )}
+        </Button>
+
+        {/* Divider with label */}
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 h-px bg-white/15" />
+          <p className="text-white/50 text-[10px] font-black uppercase tracking-wider">Atau Share Terus</p>
+          <div className="flex-1 h-px bg-white/15" />
+        </div>
+
+        {/* Share buttons */}
+        <div className="grid grid-cols-3 gap-2">
+          {shareOptions.map(opt => (
+            <a
+              key={opt.name}
+              href={opt.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex flex-col items-center justify-center gap-1 py-3 rounded-2xl text-white text-[11px] font-black shadow-lg transition-transform hover:scale-105 active:scale-95 ${opt.color}`}
+            >
+              <opt.icon className="w-5 h-5" strokeWidth={2.5} />
+              <span>{opt.name}</span>
+            </a>
+          ))}
+        </div>
       </div>
     </motion.div>
   );
