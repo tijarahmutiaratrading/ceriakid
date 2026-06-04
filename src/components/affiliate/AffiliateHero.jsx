@@ -69,7 +69,7 @@ export default function AffiliateHero({ affiliate, referralLink }) {
   ];
 
   return (
-    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-purple-950/40 aspect-[4/3] sm:aspect-[16/9] md:aspect-[16/8] sm:max-h-[600px] mb-4 sm:mb-6">
+    <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-purple-950/40 aspect-[3/4] sm:aspect-[16/9] md:aspect-[16/7] sm:max-h-[640px] mb-4 sm:mb-6">
       {/* Background slides */}
       <AnimatePresence mode="sync">
         <motion.div
