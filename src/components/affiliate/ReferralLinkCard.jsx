@@ -113,16 +113,16 @@ export default function ReferralLinkCard({ referralLink }) {
         </div>
 
         {/* Share buttons */}
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-1.5">
           {shareOptions.map(opt => (
             <a
               key={opt.name}
               href={opt.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex flex-col items-center justify-center gap-1 py-3 rounded-2xl text-white text-[11px] font-black shadow-lg transition-transform hover:scale-105 active:scale-95 ${opt.color}`}
+              className={`flex items-center justify-center gap-1 py-2 rounded-xl text-white text-[10px] font-black shadow-md transition-transform active:scale-95 ${opt.color}`}
             >
-              <opt.icon className="w-5 h-5" strokeWidth={2.5} />
+              <opt.icon className="w-3.5 h-3.5" strokeWidth={2.5} />
               <span>{opt.name}</span>
             </a>
           ))}
