@@ -92,12 +92,16 @@ export default function ThankYou() {
   }, [urlTier, isCredit, user?.email]);
 
   // Poll subscription status — webhook may take 5-30 seconds.
+  // Lepas 4 attempt (12s) masih pending → trigger on-demand verify dengan Chip API
+  // supaya tak perlu tunggu webhook lambat / fail.
   useEffect(() => {
     if (isCredit) {
       // Untuk credit, tak perlu poll subscription — terus mark active
       setStatus('active');
       return;
     }
+
+    let verifyTriggered = false;
 
     const checkSubscription = async () => {
       if (!user?.email) return false;
@@ -117,12 +121,27 @@ export default function ThankYou() {
       return false;
     };
 
+    // On-demand verify dengan Chip API — fallback kalau webhook lambat/fail
+    const triggerVerify = async () => {
+      if (verifyTriggered) return;
+      verifyTriggered = true;
+      try {
+        await base44.functions.invoke('verifyAndActivatePending', {});
+      } catch (_) {
+        // Silent fail — kalau gagal, polling teruskan & user boleh manual retry
+      }
+    };
+
     const poll = async () => {
       const done = await checkSubscription();
       pollAttempts.current += 1;
       if (done) {
         if (pollRef.current) clearInterval(pollRef.current);
         return;
+      }
+      // Lepas 4 attempt (≈12s) — auto-verify dengan Chip API (silent background)
+      if (pollAttempts.current === 4) {
+        triggerVerify();
       }
       // 20 attempts × 3s = 60 saat. Chip webhook kadang-kadang lambat sampai 45s.
       if (pollAttempts.current >= 20) {
@@ -193,10 +212,14 @@ export default function ThankYou() {
             <div className="space-y-3">
               <p className="text-yellow-100 font-bold">Pembayaran diterima. Aktivasi sedang diproses — kadang-kadang ambil masa sehingga 1 minit.</p>
               <button
-                onClick={() => {
+                onClick={async () => {
                   pollAttempts.current = 0;
                   setStatus('checking');
                   if (pollRef.current) clearInterval(pollRef.current);
+                  // Force verify dengan Chip API — bypass webhook delay
+                  try {
+                    await base44.functions.invoke('verifyAndActivatePending', {});
+                  } catch (_) { /* continue to poll */ }
                   const retry = async () => {
                     if (!user?.email) return;
                     const subs = await base44.entities.UserSubscription.filter({ email: user.email });
