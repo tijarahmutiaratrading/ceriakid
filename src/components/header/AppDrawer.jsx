@@ -187,22 +187,34 @@ export default function AppDrawer({
 
         {/* Footer — logout (solid oren, compact) */}
         {isAuthenticated && (
-          <div className="px-4 pt-3 pb-3 border-t border-white/40 flex flex-col items-start gap-2">
-            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-700 ring-1 ring-emerald-800">
-              <span className="relative flex w-1.5 h-1.5">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75 animate-ping" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-200" />
-              </span>
-              <span className="text-white text-[9px] font-black uppercase tracking-wider">Online</span>
-            </div>
+          <div
+            className="px-4 pt-4 pb-5 mt-2 rounded-t-3xl flex flex-col gap-3"
+            style={{
+              background: 'linear-gradient(180deg, #1e1b4b 0%, #2e1065 100%)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
+            }}
+          >
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-orange-500 text-white font-black text-sm active:bg-orange-600 active:scale-95 transition-all shadow-lg shadow-orange-500/40"
+              className="inline-flex items-center gap-2.5 px-1 py-1 text-white/85 font-bold text-base active:text-white active:scale-[0.98] transition-all self-start"
             >
-              <LogOut className="w-4 h-4" strokeWidth={3} />
+              <LogOut className="w-5 h-5" strokeWidth={2.25} />
               <span>Log Keluar</span>
             </button>
+            <div
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl"
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              <span className="relative flex w-2 h-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-ping" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+              </span>
+              <span className="text-white/90 text-sm font-semibold">Online</span>
+            </div>
           </div>
         )}
       </aside>
