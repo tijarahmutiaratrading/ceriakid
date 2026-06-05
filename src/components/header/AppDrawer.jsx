@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { X, ChevronRight, LogOut, Crown, ChevronsUpDown, Sparkles, Pin, PinOff } from 'lucide-react';
+import { X, ChevronRight, LogOut, Crown, ChevronsUpDown, Sparkles, Pin, PinOff, Check, Plus } from 'lucide-react';
 import { haptic } from '@/lib/haptics';
 import { getChildAvatar } from '@/lib/childAvatars';
 import { getPinned, togglePinned } from '@/lib/menuPrefs';
@@ -101,18 +101,22 @@ export default function AppDrawer({
         style={{ opacity: visible ? 1 : 0 }}
       />
 
-      {/* Drawer */}
+      {/* Drawer — glass effect */}
       <aside
         role="dialog"
         aria-modal="true"
         aria-label="Menu navigasi"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
-        className="sm:hidden fixed top-0 bottom-0 left-0 z-50 w-[84%] max-w-[340px] bg-white shadow-2xl flex flex-col transition-transform duration-200 ease-out"
+        className="sm:hidden fixed top-0 bottom-0 left-0 z-50 w-[84%] max-w-[340px] flex flex-col transition-transform duration-200 ease-out"
         style={{
           transform: visible ? 'translateX(0)' : 'translateX(-100%)',
           paddingTop: 'env(safe-area-inset-top)',
           paddingBottom: 'env(safe-area-inset-bottom)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(250,245,255,0.85) 100%)',
+          backdropFilter: 'blur(28px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+          boxShadow: '8px 0 40px -8px rgba(88, 28, 135, 0.25), inset -1px 0 0 rgba(255,255,255,0.5)',
         }}
       >
         {/* Header — profile */}
@@ -183,7 +187,7 @@ export default function AppDrawer({
 
         {/* Footer — logout */}
         {isAuthenticated && (
-          <div className="px-3 py-3 border-t border-slate-100">
+          <div className="px-3 py-3 border-t border-white/40">
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
@@ -214,7 +218,7 @@ export default function AppDrawer({
 
 function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, onClose, onOpenSwitcher }) {
   return (
-    <div className="px-4 pt-4 pb-3 border-b border-slate-100">
+    <div className="px-4 pt-4 pb-3 border-b border-white/40">
       <div className="flex items-center gap-3 mb-3">
         <Link to="/settings" onClick={() => { haptic('light'); onClose?.(); }} className="flex-1 flex items-center gap-3 min-w-0">
           <div className="relative flex-shrink-0">
@@ -245,19 +249,34 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, onClo
         </button>
       </div>
 
-      {/* Child switcher chip */}
+      {/* Child switcher chip — glass */}
       {selectedChild && childCount > 1 && (
         <button
           type="button"
           onClick={() => { haptic('light'); onOpenSwitcher(); }}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl bg-pink-50 active:bg-pink-100 transition-colors"
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl active:scale-[0.98] transition-all relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, rgba(244,114,182,0.18) 0%, rgba(192,132,252,0.18) 100%)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255,255,255,0.6)',
+            boxShadow: '0 4px 16px -4px rgba(192,132,252,0.25), inset 0 1px 0 rgba(255,255,255,0.7)',
+          }}
         >
-          <img src={getChildAvatar(selectedChild)} alt="" className="w-7 h-7 rounded-full object-cover" />
-          <div className="flex-1 min-w-0 text-left">
-            <p className="text-pink-600 text-[9px] font-black uppercase tracking-wider leading-none">Anak Aktif</p>
+          <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-pink-200/40 blur-xl pointer-events-none" />
+          <img
+            src={getChildAvatar(selectedChild)}
+            alt=""
+            className="relative w-8 h-8 rounded-full object-cover ring-2 ring-white/80 shadow-sm flex-shrink-0"
+          />
+          <div className="relative flex-1 min-w-0 text-left">
+            <p className="text-pink-700 text-[9px] font-black uppercase tracking-wider leading-none">Anak Aktif</p>
             <p className="text-slate-800 text-xs font-black truncate leading-tight mt-0.5">{selectedChild.name}</p>
           </div>
-          <ChevronsUpDown className="w-3.5 h-3.5 text-pink-500 flex-shrink-0" strokeWidth={3} />
+          <div className="relative flex items-center gap-1 px-2 py-1 rounded-lg bg-white/70 shadow-sm">
+            <span className="text-pink-600 text-[9px] font-black uppercase tracking-wider">Tukar</span>
+            <ChevronsUpDown className="w-3 h-3 text-pink-600" strokeWidth={3} />
+          </div>
         </button>
       )}
     </div>
@@ -266,7 +285,7 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, onClo
 
 function GuestHeader({ onClose }) {
   return (
-    <div className="flex items-center justify-between px-4 py-4 border-b border-slate-100">
+    <div className="flex items-center justify-between px-4 py-4 border-b border-white/40">
       <img
         src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png"
         alt="CeriaKid"
@@ -374,13 +393,22 @@ function MenuItem({ to, label, active, pinned, showPin, onPinToggle, onNavigate,
       <Link
         to={to}
         onClick={() => { haptic('light'); onNavigate?.(); }}
-        className={`flex items-center justify-between mx-1 rounded-xl transition-colors ${
+        className={`flex items-center justify-between mx-1 rounded-xl transition-all ${
           isSmall ? 'px-3 py-2.5 text-xs' : 'px-4 py-3 text-sm'
         } ${
           active
-            ? 'bg-purple-50 text-purple-700 font-black'
-            : 'text-slate-700 font-bold active:bg-slate-100'
+            ? 'text-purple-700 font-black'
+            : 'text-slate-700 font-bold active:bg-white/50'
         }`}
+        style={
+          active
+            ? {
+                background: 'linear-gradient(135deg, rgba(192,132,252,0.18) 0%, rgba(244,114,182,0.12) 100%)',
+                border: '1px solid rgba(192,132,252,0.25)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6)',
+              }
+            : undefined
+        }
       >
         <span className="flex-1 truncate">{label}</span>
 
@@ -407,64 +435,119 @@ function MenuItem({ to, label, active, pinned, showPin, onPinToggle, onNavigate,
 function ChildSwitcherSheet({ children, selectedChild, onSelect, onClose, onManage }) {
   return (
     <>
+      {/* Backdrop with blur */}
       <div
         onClick={onClose}
-        className="fixed inset-0 z-[60] bg-slate-900/40"
+        className="fixed inset-0 z-[60] bg-slate-900/50"
+        style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
       />
+
+      {/* Sheet — glass design */}
       <div
         role="dialog"
         aria-modal="true"
-        className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        className="fixed inset-x-0 bottom-0 z-[60] rounded-t-[2rem] overflow-hidden"
+        style={{
+          paddingBottom: 'env(safe-area-inset-bottom)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(253,242,248,0.92) 100%)',
+          backdropFilter: 'blur(32px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+          boxShadow: '0 -20px 60px -10px rgba(168,85,247,0.35), inset 0 1px 0 rgba(255,255,255,0.8)',
+          border: '1px solid rgba(255,255,255,0.5)',
+          borderBottom: 'none',
+        }}
       >
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-          <p className="text-slate-900 font-black text-base">Tukar Anak Aktif</p>
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-1">
+          <div className="w-10 h-1 rounded-full bg-slate-300/60" />
+        </div>
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-3">
+          <div>
+            <p className="text-pink-600 text-[10px] font-black uppercase tracking-wider leading-none">Tukar Anak</p>
+            <p className="text-slate-900 font-black text-lg leading-tight mt-1">Pilih Anak Aktif</p>
+          </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-xl bg-slate-100 text-slate-600"
             aria-label="Tutup"
+            className="p-2 rounded-xl bg-white/70 active:bg-white text-slate-700 transition-colors"
+            style={{ backdropFilter: 'blur(8px)', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
           >
             <X className="w-4 h-4" strokeWidth={3} />
           </button>
         </div>
 
-        <div className="p-3 max-h-[60vh] overflow-y-auto space-y-1.5">
+        {/* Children list */}
+        <div className="px-3 pb-3 pt-1 max-h-[60vh] overflow-y-auto space-y-2">
           {(children || []).map((child) => {
             const isActive = selectedChild?.id === child.id;
-            const levelLabel = child.ageGroup === 'prasekolah' ? '🎨 Prasekolah' : '📚 Sekolah Rendah';
+            const levelEmoji = child.ageGroup === 'prasekolah' ? '🎨' : '📚';
+            const levelLabel = child.ageGroup === 'prasekolah' ? 'Prasekolah' : 'Sekolah Rendah';
             return (
               <button
                 key={child.id}
                 type="button"
                 onClick={() => { haptic('medium'); onSelect?.(child); }}
-                className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-colors ${
-                  isActive ? 'bg-purple-50 ring-1 ring-purple-200' : 'active:bg-slate-100'
-                }`}
+                className="w-full flex items-center gap-3 p-3 rounded-2xl transition-all active:scale-[0.98] relative overflow-hidden"
+                style={
+                  isActive
+                    ? {
+                        background: 'linear-gradient(135deg, rgba(244,114,182,0.95) 0%, rgba(192,132,252,0.95) 100%)',
+                        boxShadow: '0 8px 24px -6px rgba(192,132,252,0.5), inset 0 1px 0 rgba(255,255,255,0.4)',
+                      }
+                    : {
+                        background: 'rgba(255,255,255,0.65)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(255,255,255,0.7)',
+                        boxShadow: '0 2px 8px rgba(168,85,247,0.08)',
+                      }
+                }
               >
-                <img src={getChildAvatar(child)} alt="" className="w-11 h-11 rounded-xl object-cover flex-shrink-0" />
-                <div className="flex-1 min-w-0 text-left">
-                  <p className={`font-black text-sm truncate ${isActive ? 'text-purple-700' : 'text-slate-800'}`}>
+                {isActive && (
+                  <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-yellow-300/30 blur-2xl pointer-events-none" />
+                )}
+                <img
+                  src={getChildAvatar(child)}
+                  alt=""
+                  loading="lazy"
+                  className={`relative w-12 h-12 rounded-2xl object-cover flex-shrink-0 ring-2 ${
+                    isActive ? 'ring-white/80' : 'ring-pink-100'
+                  } bg-white shadow-sm`}
+                />
+                <div className="relative flex-1 min-w-0 text-left">
+                  <p className={`font-black text-sm truncate ${isActive ? 'text-white drop-shadow' : 'text-slate-800'}`}>
                     {child.name}
                   </p>
-                  <p className="text-[11px] font-bold text-slate-500 truncate">{levelLabel}</p>
+                  <p className={`text-[11px] font-bold truncate ${isActive ? 'text-white/90' : 'text-slate-500'}`}>
+                    {levelEmoji} {levelLabel}
+                  </p>
                 </div>
                 {isActive && (
-                  <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center flex-shrink-0">
-                    <ChevronRight className="w-3.5 h-3.5 text-white" strokeWidth={3.5} />
+                  <div className="relative w-7 h-7 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow">
+                    <Check className="w-4 h-4 text-pink-600" strokeWidth={4} />
                   </div>
                 )}
               </button>
             );
           })}
 
+          {/* Manage children link — glass dashed */}
           <Link
             to="/children-profiles"
             onClick={() => { haptic('light'); onManage?.(); }}
-            className="w-full flex items-center gap-3 p-3 rounded-2xl border-2 border-dashed border-slate-200 active:bg-slate-50 transition-colors"
+            className="w-full flex items-center gap-3 p-3 rounded-2xl active:scale-[0.98] transition-all"
+            style={{
+              background: 'rgba(255,255,255,0.4)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              border: '2px dashed rgba(244,114,182,0.4)',
+            }}
           >
-            <div className="w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0">
-              <span className="text-xl">⚙️</span>
+            <div className="w-12 h-12 rounded-2xl bg-white/80 flex items-center justify-center flex-shrink-0 shadow-sm">
+              <Plus className="w-5 h-5 text-pink-500" strokeWidth={3} />
             </div>
             <div className="text-left">
               <p className="text-slate-700 font-black text-sm">Urus Anak</p>
@@ -499,6 +582,21 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
     type: 'flat',
     items: [{ path: '/', label: 'Halaman Utama' }],
   }];
+
+  // Admin section — DULUKAN sebelum dashboard pengguna
+  if (isAdmin) {
+    sections.push({
+      key: 'admin',
+      type: 'grouped',
+      label: '👑 Admin',
+      items: [
+        { path: '/admin-dashboard?tab=analytics', label: 'Analytics' },
+        { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager' },
+        { path: '/admin-dashboard?tab=health', label: 'System Health' },
+        { path: '/admin-dashboard?tab=settings', label: 'Settings' },
+      ],
+    });
+  }
 
   if (isAuthenticated) {
     sections.push({
@@ -550,20 +648,6 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
         { path: '/quiz-ai', label: 'Cikgu Rosie — Kuiz' },
         { path: '/story-generator', label: 'Cikgu Mira — Cerita' },
         { path: '/bbm-generator', label: 'Cikgu Daniel — BBM' },
-      ],
-    });
-  }
-
-  if (isAdmin) {
-    sections.push({
-      key: 'admin',
-      type: 'grouped',
-      label: 'Admin',
-      items: [
-        { path: '/admin-dashboard?tab=analytics', label: 'Analytics' },
-        { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager' },
-        { path: '/admin-dashboard?tab=health', label: 'System Health' },
-        { path: '/admin-dashboard?tab=settings', label: 'Settings' },
       ],
     });
   }
