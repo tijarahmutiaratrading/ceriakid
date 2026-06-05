@@ -252,7 +252,6 @@ export default function AdminDashboard() {
     : pageViews.filter(v => isInRange(v.created_date, dateRange));
 
   const uniqueSessions = new Set(filteredViews.map(v => v.sessionId)).size;
-  const totalPageViews = filteredViews.length;
 
   // Source breakdown — count unique sessions per source
   const sessionsBySource = {};
@@ -336,7 +335,6 @@ export default function AdminDashboard() {
 
                     {/* Traffic & Visitor analytics */}
                     <TrafficAnalyticsCard
-                      pageViews={totalPageViews}
                       uniqueVisitors={uniqueSessions}
                       conversionRate={conversionRate}
                       paidOrders={paidCount}

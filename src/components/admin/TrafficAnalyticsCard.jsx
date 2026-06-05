@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Eye, Users2, MousePointer, TrendingUp, Facebook } from 'lucide-react';
+import { Users2, MousePointer, TrendingUp, Facebook } from 'lucide-react';
 
 const SOURCE_META = {
   facebook: { label: 'Facebook / IG', color: 'bg-blue-500', icon: Facebook },
@@ -27,7 +27,7 @@ function StatCell({ icon: Icon, label, value, sub, iconColor }) {
   );
 }
 
-export default function TrafficAnalyticsCard({ pageViews, uniqueVisitors, conversionRate, paidOrders, sourceBreakdown, topPages }) {
+export default function TrafficAnalyticsCard({ uniqueVisitors, conversionRate, paidOrders, sourceBreakdown, topPages }) {
   // Normalize source breakdown — sorted by count desc
   const sources = Object.entries(sourceBreakdown || {})
     .map(([key, count]) => ({ key, count, meta: SOURCE_META[key] || { label: key, color: 'bg-slate-400' } }))
@@ -47,7 +47,7 @@ export default function TrafficAnalyticsCard({ pageViews, uniqueVisitors, conver
       <div className="flex items-center justify-between px-5 md:px-6 py-4 border-b border-slate-100">
         <div>
           <h2 className="text-base font-black text-slate-900">Trafik & Pengunjung</h2>
-          <p className="text-xs text-slate-500 font-medium mt-0.5">Auto-tracked dari setiap visit (page views)</p>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">Auto-tracked — unique visitor per session</p>
         </div>
         <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 ring-1 ring-emerald-100">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -56,8 +56,7 @@ export default function TrafficAnalyticsCard({ pageViews, uniqueVisitors, conver
       </div>
 
       {/* KPI grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200">
-        <StatCell icon={Eye} label="Page Views" value={pageViews.toLocaleString()} sub="jumlah lawatan" iconColor="text-sky-500" />
+      <div className="grid grid-cols-3 gap-px bg-slate-200">
         <StatCell icon={Users2} label="Unique Visitors" value={uniqueVisitors.toLocaleString()} sub="session unik" iconColor="text-violet-500" />
         <StatCell icon={MousePointer} label="Paid Orders" value={paidOrders.toLocaleString()} sub="dari trafik ni" iconColor="text-emerald-500" />
         <StatCell icon={TrendingUp} label="Conv. Rate" value={`${conversionRate.toFixed(2)}%`} sub="visitor → bayar" iconColor="text-amber-500" />
