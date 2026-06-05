@@ -96,8 +96,11 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
   const isExpired = endDate && endDate < new Date();
   const daysLeft = endDate ? Math.ceil((endDate - new Date()) / (1000 * 60 * 60 * 24)) : null;
 
+  // Paksa guna canonical production domain — admin selalu bukak dari sandbox
+  // (app.base44.com / preview-sandbox-*.base44.app), jadi window.location.origin
+  // akan bagi link yang salah.
   const referralLink = customer.affiliate
-    ? `${window.location.origin}/?ref=${customer.affiliate.referralCode}`
+    ? `https://ceriakid.com/?ref=${customer.affiliate.referralCode}`
     : null;
 
   const copyLink = (e) => {
