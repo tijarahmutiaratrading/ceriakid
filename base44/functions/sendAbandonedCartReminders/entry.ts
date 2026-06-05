@@ -1,7 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 // Hantar reminder email kepada user yang start checkout tapi tak siap bayar.
-// Trigger: subscription status='incomplete' yang dah lebih 2 jam tapi belum 24 jam.
+// Trigger: subscription status='incomplete' yang dah lebih 10 minit tapi belum 24 jam.
 // Maksimum 1 reminder per user — tracking via `abandonedReminderSent` flag.
 //
 // Tracking detail dalam database (untuk admin dashboard):
@@ -64,7 +64,7 @@ Deno.serve(async (req) => {
     // Cari semua subscription status='incomplete', umur 2-24 jam, belum dapat reminder
     const subs = await base44.asServiceRole.entities.UserSubscription.filter({ status: 'incomplete' });
     const now = Date.now();
-    const twoHoursAgo = now - 2 * 60 * 60 * 1000;
+    const tenMinutesAgo = now - 10 * 60 * 1000;
     const oneDayAgo = now - 24 * 60 * 60 * 1000;
 
     let sent = 0, failed = 0, skipped = 0;
@@ -74,7 +74,7 @@ Deno.serve(async (req) => {
       if (sub.abandonedReminderSent) { skipped++; continue; }
       if (!sub.email || !sub.tier || sub.tier === 'free') { skipped++; continue; }
       const updated = sub.updated_date ? new Date(sub.updated_date).getTime() : 0;
-      if (updated > twoHoursAgo || updated < oneDayAgo) { skipped++; continue; }
+      if (updated > tenMinutesAgo || updated < oneDayAgo) { skipped++; continue; }
 
       const content = buildEmail(sub.tier);
       const nowIso = new Date().toISOString();
