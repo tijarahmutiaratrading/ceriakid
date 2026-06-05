@@ -193,21 +193,21 @@ export default function AppDrawer({
 
         {/* Footer — logout (solid oren, compact) */}
         {isAuthenticated && (
-          <div className="px-4 pt-3 pb-2 border-t border-white/40 flex flex-col gap-2">
+          <div className="px-3 pt-2 pb-2 border-t border-white/40 flex items-center justify-between gap-2">
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="inline-flex items-center gap-2.5 px-1 py-1 text-slate-700 font-bold text-base active:text-slate-900 active:scale-[0.98] transition-all self-start"
+              className="inline-flex items-center gap-1.5 px-1 py-1 text-slate-700 font-bold text-xs active:text-slate-900 active:scale-[0.98] transition-all"
             >
-              <LogOut className="w-5 h-5" strokeWidth={2.25} />
+              <LogOut className="w-3.5 h-3.5" strokeWidth={2.25} />
               <span>Log Keluar</span>
             </button>
-            <div className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-slate-100/70 border border-slate-200/70">
-              <span className="relative flex w-2 h-2">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100/70 border border-slate-200/70">
+              <span className="relative flex w-1.5 h-1.5">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-ping" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
               </span>
-              <span className="text-slate-700 text-sm font-semibold">Online</span>
+              <span className="text-slate-600 text-[10px] font-semibold">Online</span>
             </div>
           </div>
         )}
