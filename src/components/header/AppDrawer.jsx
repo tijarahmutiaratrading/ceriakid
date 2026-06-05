@@ -185,16 +185,24 @@ export default function AppDrawer({
           ))}
         </nav>
 
-        {/* Footer — logout */}
+        {/* Footer — logout (glass) */}
         {isAuthenticated && (
-          <div className="px-3 py-3 border-t border-white/40">
+          <div className="px-3 pt-3 pb-3 border-t border-white/40">
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-rose-600 font-black text-sm hover:bg-rose-50 active:bg-rose-100 transition-colors"
+              className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl text-rose-600 font-black text-sm active:scale-[0.98] transition-all relative overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, rgba(254,226,226,0.7) 0%, rgba(252,231,243,0.6) 100%)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(254,202,202,0.6)',
+                boxShadow: '0 4px 14px -4px rgba(244,63,94,0.2), inset 0 1px 0 rgba(255,255,255,0.7)',
+              }}
             >
-              <LogOut className="w-5 h-5" strokeWidth={2.5} />
-              <span>Log Keluar</span>
+              <div className="absolute -top-6 -right-6 w-16 h-16 rounded-full bg-rose-300/30 blur-xl pointer-events-none" />
+              <LogOut className="relative w-4 h-4" strokeWidth={3} />
+              <span className="relative tracking-wide">Log Keluar</span>
             </button>
           </div>
         )}
