@@ -13,47 +13,39 @@ export default function DeviceBlockedScreen({ devices, tier, onDeviceRemoved }) 
   };
 
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4 overflow-y-auto py-8"
-      style={{
-        backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
+    <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8 overflow-y-auto bg-slate-900/60 backdrop-blur-md">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="bg-white rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl ring-1 ring-black/5"
       >
-        <div className="text-center mb-6">
-          <div className="text-6xl mb-3">🔒</div>
-          <h2 className="text-2xl font-black text-gray-900 mb-2">Had Device Dicapai</h2>
+        <div className="text-center mb-5">
+          <div className="text-5xl mb-2">🔒</div>
+          <h2 className="text-xl font-black text-gray-900 mb-1.5">Had Device Dicapai</h2>
           <p className="text-gray-500 text-sm">
             Pakej <span className="font-black text-purple-600 capitalize">{tier}</span> anda hanya membenarkan{' '}
             <span className="font-black">{limit} device</span>. Sila buang device lama untuk teruskan.
           </p>
         </div>
 
-        <div className="space-y-3 mb-6">
-          <p className="text-xs font-black text-gray-500 uppercase tracking-wider">Device Berdaftar</p>
+        <div className="space-y-2 mb-5">
+          <p className="text-[10px] font-black text-gray-500 uppercase tracking-wider">Device Berdaftar</p>
           {devices.map((device) => (
-            <div key={device.id} className="flex items-center justify-between bg-gray-50 rounded-2xl p-4 border border-gray-100">
-              <div className="flex items-center gap-3">
-                <Smartphone className="w-5 h-5 text-purple-500" />
-                <div>
-                  <p className="font-bold text-gray-800 text-sm">{device.deviceName}</p>
-                  <p className="text-xs text-gray-400">
+            <div key={device.id} className="flex items-center justify-between bg-gray-50 rounded-xl p-3 border border-gray-100">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <Smartphone className="w-4 h-4 text-purple-500 flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="font-bold text-gray-800 text-xs truncate">{device.deviceName}</p>
+                  <p className="text-[10px] text-gray-400">
                     Terakhir: {device.lastSeen ? format(new Date(device.lastSeen), 'dd MMM yyyy') : 'Tidak diketahui'}
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => handleRemove(device)}
-                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all flex-shrink-0"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
           ))}
@@ -61,12 +53,12 @@ export default function DeviceBlockedScreen({ devices, tier, onDeviceRemoved }) 
 
         <button
           onClick={() => window.location.reload()}
-          className="w-full py-3 bg-purple-600 text-white rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-purple-700 transition-all"
+          className="w-full py-2.5 bg-purple-600 text-white rounded-xl text-sm font-black flex items-center justify-center gap-2 hover:bg-purple-700 transition-all"
         >
-          <RefreshCw className="w-4 h-4" /> Cuba Semula
+          <RefreshCw className="w-3.5 h-3.5" /> Cuba Semula
         </button>
 
-        <p className="text-center text-xs text-gray-400 mt-4">
+        <p className="text-center text-[11px] text-gray-400 mt-3">
           Nak lebih device? <a href="/settings" className="text-purple-500 font-bold">Naik taraf pakej →</a>
         </p>
       </motion.div>
