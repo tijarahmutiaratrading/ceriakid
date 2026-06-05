@@ -329,9 +329,14 @@ export default function AdminDashboard() {
                     {/* Date filter */}
                     <div className="flex items-center justify-between gap-3 flex-wrap">
                       <DateRangeFilter value={dateRange} onChange={setDateRange} />
-                      <p className="text-[11px] text-slate-500 font-bold tabular-nums">
-                        {filteredSubs.length} order • {uniqueSessions} unique visitor
-                      </p>
+                      <div className="text-right">
+                        <p className="text-[11px] text-slate-500 font-bold tabular-nums">
+                          {filteredSubs.length} order • {uniqueSessions} unique visitor
+                        </p>
+                        <p className="text-[10px] text-slate-400 tabular-nums">
+                          MYT: {new Date(Date.now() + 8*3600000).toISOString().replace('T',' ').slice(0,16)}
+                        </p>
+                      </div>
                     </div>
 
                     {/* Traffic & Visitor analytics */}
