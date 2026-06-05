@@ -71,10 +71,10 @@ export default function AffiliatePage() {
   }
 
   const { affiliate, referrals, payouts } = data;
-  // Always use production domain for shareable referral links (not sandbox/preview URLs)
-  const isProd = typeof window !== 'undefined' && /ceriakid\.com/i.test(window.location.hostname);
-  const baseUrl = isProd ? window.location.origin : 'https://ceriakid.com';
-  const referralLink = `${baseUrl}/?ref=${affiliate.referralCode}`;
+  // SEMUA referral link MESTI guna canonical production domain — tak kira admin/affiliate
+  // bukak page ni dari sandbox (app.base44.com), preview, staging, atau ceriakid.com sendiri.
+  // Ini elakkan affiliate tersilap share link yang point ke sandbox/preview.
+  const referralLink = `https://ceriakid.com/?ref=${affiliate.referralCode}`;
 
   return (
     <>
