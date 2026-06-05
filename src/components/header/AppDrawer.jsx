@@ -188,12 +188,12 @@ export default function AppDrawer({
         {/* Footer — logout (solid oren, compact) */}
         {isAuthenticated && (
           <div className="px-4 pt-3 pb-3 border-t border-white/40 flex flex-col items-start gap-2">
-            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 ring-1 ring-emerald-200">
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-700 ring-1 ring-emerald-800">
               <span className="relative flex w-1.5 h-1.5">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75 animate-ping" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-200" />
               </span>
-              <span className="text-emerald-700 text-[9px] font-black uppercase tracking-wider">Online</span>
+              <span className="text-white text-[9px] font-black uppercase tracking-wider">Online</span>
             </div>
             <button
               type="button"
