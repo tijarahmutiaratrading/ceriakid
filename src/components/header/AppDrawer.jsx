@@ -34,7 +34,7 @@ export default function AppDrawer({
 }) {
   const [mounted, setMounted] = useState(open);
   const [visible, setVisible] = useState(false);
-  const [showSwitcher, setShowSwitcher] = useState(false);
+  const [childMenuOpen, setChildMenuOpen] = useState(false);
   const [pinnedItems, setPinnedItems] = useState([]);
   const touchStartX = useRef(null);
 
@@ -132,11 +132,22 @@ export default function AppDrawer({
             tier={tier}
             selectedChild={selectedChild}
             childCount={childrenList?.length || 0}
+            childMenuOpen={childMenuOpen}
             onClose={onClose}
-            onOpenSwitcher={() => setShowSwitcher(true)}
+            onToggleChildMenu={() => { haptic('light'); setChildMenuOpen((v) => !v); }}
           />
         ) : (
           <GuestHeader onClose={onClose} />
+        )}
+
+        {/* Child switcher — inline submenu (like Aktiviti) */}
+        {isAuthenticated && selectedChild && (childrenList?.length || 0) > 1 && childMenuOpen && (
+          <ChildInlineList
+            childrenList={childrenList}
+            selectedChild={selectedChild}
+            onSelect={(c) => { onSwitchChild?.(c); setChildMenuOpen(false); }}
+            onManage={() => { setChildMenuOpen(false); onClose?.(); }}
+          />
         )}
 
         {/* Scrollable menu */}
@@ -212,24 +223,13 @@ export default function AppDrawer({
           </div>
         )}
       </aside>
-
-      {/* Child switcher (inline) */}
-      {showSwitcher && (
-        <ChildSwitcherSheet
-          children={childrenList}
-          selectedChild={selectedChild}
-          onSelect={(c) => { onSwitchChild?.(c); setShowSwitcher(false); }}
-          onClose={() => setShowSwitcher(false)}
-          onManage={() => { setShowSwitcher(false); onClose?.(); }}
-        />
-      )}
     </>
   );
 }
 
 /* ─────────────── Sub-components ─────────────── */
 
-function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, onClose, onOpenSwitcher }) {
+function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, childMenuOpen, onClose, onToggleChildMenu }) {
   return (
     <div className="px-4 pt-4 pb-3 border-b border-white/40">
       <div className="flex items-center gap-3 mb-3">
@@ -262,11 +262,12 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, onClo
         </button>
       </div>
 
-      {/* Child switcher chip — glass */}
+      {/* Child switcher chip — glass (toggles inline submenu) */}
       {selectedChild && childCount > 1 && (
         <button
           type="button"
-          onClick={() => { haptic('light'); onOpenSwitcher(); }}
+          onClick={onToggleChildMenu}
+          aria-expanded={childMenuOpen}
           className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl active:scale-[0.98] transition-all relative overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, rgba(244,114,182,0.18) 0%, rgba(192,132,252,0.18) 100%)',
@@ -288,7 +289,11 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, onClo
           </div>
           <div className="relative flex items-center gap-1 px-2 py-1 rounded-lg bg-white/70 shadow-sm">
             <span className="text-pink-600 text-[9px] font-black uppercase tracking-wider">Tukar</span>
-            <ChevronsUpDown className="w-3 h-3 text-pink-600" strokeWidth={3} />
+            <ChevronRight
+              className="w-3 h-3 text-pink-600 transition-transform duration-150"
+              strokeWidth={3}
+              style={{ transform: childMenuOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
+            />
           </div>
         </button>
       )}
@@ -455,131 +460,64 @@ function MenuItem({ to, label, icon: Icon, active, pinned, showPin, onPinToggle,
   );
 }
 
-function ChildSwitcherSheet({ children, selectedChild, onSelect, onClose, onManage }) {
+function ChildInlineList({ childrenList, selectedChild, onSelect, onManage }) {
   return (
-    <>
-      {/* Backdrop with blur */}
-      <div
-        onClick={onClose}
-        className="fixed inset-0 z-[60] bg-slate-900/50"
-        style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
-      />
+    <div className="px-3 py-2 border-b border-white/40">
+      <div className="ml-4 pl-2 border-l border-slate-200/70 space-y-1">
+        {(childrenList || []).map((child) => {
+          const isActive = selectedChild?.id === child.id;
+          const levelLabel = child.ageGroup === 'prasekolah' ? 'Prasekolah' : 'Sekolah Rendah';
+          return (
+            <button
+              key={child.id}
+              type="button"
+              onClick={() => { haptic('medium'); onSelect?.(child); }}
+              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all active:scale-[0.98] ${
+                isActive ? 'text-white' : 'text-slate-700 active:bg-white/60'
+              }`}
+              style={
+                isActive
+                  ? {
+                      background: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)',
+                      boxShadow: '0 4px 12px -2px rgba(249,115,22,0.4), inset 0 1px 0 rgba(255,255,255,0.3)',
+                    }
+                  : undefined
+              }
+            >
+              <img
+                src={getChildAvatar(child)}
+                alt=""
+                loading="lazy"
+                className={`w-7 h-7 rounded-full object-cover flex-shrink-0 ring-2 ${
+                  isActive ? 'ring-white/80' : 'ring-slate-200'
+                } bg-white`}
+              />
+              <div className="flex-1 min-w-0 text-left">
+                <p className={`text-xs font-black truncate leading-tight ${isActive ? 'text-white' : 'text-slate-800'}`}>
+                  {child.name}
+                </p>
+                <p className={`text-[10px] font-bold truncate leading-tight ${isActive ? 'text-white/90' : 'text-slate-500'}`}>
+                  {levelLabel}
+                </p>
+              </div>
+              {isActive && <Check className="w-3.5 h-3.5 text-white flex-shrink-0" strokeWidth={3.5} />}
+            </button>
+          );
+        })}
 
-      {/* Sheet — glass design */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        className="fixed inset-x-0 bottom-0 z-[60] rounded-t-[2rem] overflow-hidden"
-        style={{
-          paddingBottom: 'env(safe-area-inset-bottom)',
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(253,242,248,0.92) 100%)',
-          backdropFilter: 'blur(32px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
-          boxShadow: '0 -20px 60px -10px rgba(168,85,247,0.35), inset 0 1px 0 rgba(255,255,255,0.8)',
-          border: '1px solid rgba(255,255,255,0.5)',
-          borderBottom: 'none',
-        }}
-      >
-        {/* Drag handle */}
-        <div className="flex justify-center pt-3 pb-1">
-          <div className="w-10 h-1 rounded-full bg-slate-300/60" />
-        </div>
-
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3">
-          <div>
-            <p className="text-pink-600 text-[10px] font-black uppercase tracking-wider leading-none">Tukar Anak</p>
-            <p className="text-slate-900 font-black text-lg leading-tight mt-1">Pilih Anak Aktif</p>
+        {/* Manage children link */}
+        <Link
+          to="/children-profiles"
+          onClick={() => { haptic('light'); onManage?.(); }}
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 font-bold text-xs active:bg-white/60 transition-colors"
+        >
+          <div className="w-7 h-7 rounded-full bg-white/80 border border-dashed border-pink-300 flex items-center justify-center flex-shrink-0">
+            <Plus className="w-3.5 h-3.5 text-pink-500" strokeWidth={3} />
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Tutup"
-            className="p-2 rounded-xl bg-white/70 active:bg-white text-slate-700 transition-colors"
-            style={{ backdropFilter: 'blur(8px)', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
-          >
-            <X className="w-4 h-4" strokeWidth={3} />
-          </button>
-        </div>
-
-        {/* Children list */}
-        <div className="px-3 pb-3 pt-1 max-h-[60vh] overflow-y-auto space-y-2">
-          {(children || []).map((child) => {
-            const isActive = selectedChild?.id === child.id;
-            const levelEmoji = child.ageGroup === 'prasekolah' ? '🎨' : '📚';
-            const levelLabel = child.ageGroup === 'prasekolah' ? 'Prasekolah' : 'Sekolah Rendah';
-            return (
-              <button
-                key={child.id}
-                type="button"
-                onClick={() => { haptic('medium'); onSelect?.(child); }}
-                className="w-full flex items-center gap-3 p-3 rounded-2xl transition-all active:scale-[0.98] relative overflow-hidden"
-                style={
-                  isActive
-                    ? {
-                        background: 'linear-gradient(135deg, rgba(244,114,182,0.95) 0%, rgba(192,132,252,0.95) 100%)',
-                        boxShadow: '0 8px 24px -6px rgba(192,132,252,0.5), inset 0 1px 0 rgba(255,255,255,0.4)',
-                      }
-                    : {
-                        background: 'rgba(255,255,255,0.65)',
-                        backdropFilter: 'blur(12px)',
-                        WebkitBackdropFilter: 'blur(12px)',
-                        border: '1px solid rgba(255,255,255,0.7)',
-                        boxShadow: '0 2px 8px rgba(168,85,247,0.08)',
-                      }
-                }
-              >
-                {isActive && (
-                  <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-yellow-300/30 blur-2xl pointer-events-none" />
-                )}
-                <img
-                  src={getChildAvatar(child)}
-                  alt=""
-                  loading="lazy"
-                  className={`relative w-12 h-12 rounded-2xl object-cover flex-shrink-0 ring-2 ${
-                    isActive ? 'ring-white/80' : 'ring-pink-100'
-                  } bg-white shadow-sm`}
-                />
-                <div className="relative flex-1 min-w-0 text-left">
-                  <p className={`font-black text-sm truncate ${isActive ? 'text-white drop-shadow' : 'text-slate-800'}`}>
-                    {child.name}
-                  </p>
-                  <p className={`text-[11px] font-bold truncate ${isActive ? 'text-white/90' : 'text-slate-500'}`}>
-                    {levelEmoji} {levelLabel}
-                  </p>
-                </div>
-                {isActive && (
-                  <div className="relative w-7 h-7 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow">
-                    <Check className="w-4 h-4 text-pink-600" strokeWidth={4} />
-                  </div>
-                )}
-              </button>
-            );
-          })}
-
-          {/* Manage children link — glass dashed */}
-          <Link
-            to="/children-profiles"
-            onClick={() => { haptic('light'); onManage?.(); }}
-            className="w-full flex items-center gap-3 p-3 rounded-2xl active:scale-[0.98] transition-all"
-            style={{
-              background: 'rgba(255,255,255,0.4)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              border: '2px dashed rgba(244,114,182,0.4)',
-            }}
-          >
-            <div className="w-12 h-12 rounded-2xl bg-white/80 flex items-center justify-center flex-shrink-0 shadow-sm">
-              <Plus className="w-5 h-5 text-pink-500" strokeWidth={3} />
-            </div>
-            <div className="text-left">
-              <p className="text-slate-700 font-black text-sm">Urus Anak</p>
-              <p className="text-slate-500 text-[11px] font-bold">Tambah / edit / padam</p>
-            </div>
-          </Link>
-        </div>
+          <span>Urus Anak</span>
+        </Link>
       </div>
-    </>
+    </div>
   );
 }
 
