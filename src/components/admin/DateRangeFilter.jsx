@@ -23,9 +23,14 @@ function shiftDate(dateStr, days) {
 }
 
 // Convert timestamp ke tarikh MYT (YYYY-MM-DD)
+// PENTING: Base44 SDK return datetime tanpa 'Z' suffix (e.g. "2026-06-05T16:51:59.203000")
+// Browser parse ini sebagai LOCAL time bukan UTC — kena tambah 'Z' dulu!
 function toDateMY(val) {
   if (!val) return null;
-  const d = val instanceof Date ? val : new Date(val);
+  let str = val instanceof Date ? val.toISOString() : String(val);
+  // Kalau tiada timezone suffix, tambah 'Z' supaya parse sebagai UTC
+  if (!/[Z+\-]\d*$/.test(str.trim())) str = str.trim() + 'Z';
+  const d = new Date(str);
   if (isNaN(d.getTime())) return null;
   const myt = new Date(d.getTime() + 8 * 60 * 60 * 1000);
   return myt.toISOString().slice(0, 10);

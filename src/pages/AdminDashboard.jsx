@@ -345,7 +345,8 @@ export default function AdminDashboard() {
                       <div className="mt-2 space-y-1 font-mono max-h-48 overflow-y-auto">
                         {subscriptions.slice(0, 20).map((s, i) => {
                           const raw = s.created_date ? String(s.created_date) : 'NULL';
-                          const parsed = s.created_date ? new Date(s.created_date) : null;
+                          const rawZ = raw !== 'NULL' && !/[Z+\-]\d*$/.test(raw.trim()) ? raw.trim() + 'Z' : raw;
+                          const parsed = rawZ !== 'NULL' ? new Date(rawZ) : null;
                           const myt8 = parsed && !isNaN(parsed) ? new Date(parsed.getTime() + 8*3600000).toISOString().slice(0,16) : '?';
                           const inToday = isInRange(s.created_date, 'today');
                           const inYesterday = isInRange(s.created_date, 'yesterday');
