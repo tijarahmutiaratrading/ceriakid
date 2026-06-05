@@ -334,10 +334,30 @@ export default function AdminDashboard() {
                           {filteredSubs.length} order • {uniqueSessions} unique visitor
                         </p>
                         <p className="text-[10px] text-slate-400 tabular-nums">
-                          MYT: {new Date(Date.now() + 8*3600000).toISOString().replace('T',' ').slice(0,16)}
+                          MYT hari ini: {new Date(Date.now() + 8*3600000).toISOString().slice(0,10)}
                         </p>
                       </div>
                     </div>
+
+                    {/* DEBUG PANEL — audit created_date setiap sub */}
+                    <details className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs">
+                      <summary className="font-black text-amber-800 cursor-pointer">🔍 Debug: created_date semua subscription (klik untuk buka)</summary>
+                      <div className="mt-2 space-y-1 font-mono max-h-48 overflow-y-auto">
+                        {subscriptions.slice(0, 20).map((s, i) => {
+                          const myt = s.created_date ? new Date(new Date(s.created_date).getTime() + 8*3600000).toISOString().slice(0,16) : 'NULL';
+                          const inToday = isInRange(s.created_date, 'today');
+                          const inYesterday = isInRange(s.created_date, 'yesterday');
+                          return (
+                            <div key={i} className={`flex gap-2 text-[10px] ${inToday ? 'text-green-700 font-bold' : inYesterday ? 'text-blue-700' : 'text-slate-500'}`}>
+                              <span className="w-4">{inToday ? '✓T' : inYesterday ? '✓Y' : '—'}</span>
+                              <span className="truncate max-w-[140px]">{s.email}</span>
+                              <span>{myt}</span>
+                              <span className="text-slate-400">[{s.tier}/{s.status}]</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </details>
 
                     {/* Traffic & Visitor analytics */}
                     <TrafficAnalyticsCard

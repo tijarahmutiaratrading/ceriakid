@@ -35,8 +35,10 @@ function toDateMY(val) {
 // Check sama ada timestamp jatuh dalam range yang dipilih
 export function isInRange(val, key) {
   if (key === 'all') return true;
+  // Kalau tiada nilai, masukkan dalam semua range supaya tak hilang
+  if (!val) return true;
   const dateMY = toDateMY(val);
-  if (!dateMY) return false;
+  if (!dateMY) return true;
 
   const today = getTodayMY();
   const yesterday = shiftDate(today, -1);
@@ -53,6 +55,14 @@ export function isInRange(val, key) {
     default:
       return true;
   }
+}
+
+// Eksport untuk debug
+export function getTodayMYDebug() {
+  return getTodayMY();
+}
+export function toDateMYDebug(val) {
+  return toDateMY(val);
 }
 
 export default function DateRangeFilter({ value, onChange }) {
