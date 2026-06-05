@@ -404,15 +404,14 @@ function MenuItem({ to, label, active, pinned, showPin, onPinToggle, onNavigate,
           isSmall ? 'px-3 py-2.5 text-xs' : 'px-4 py-3 text-sm'
         } ${
           active
-            ? 'text-purple-700 font-black'
+            ? 'text-white font-black'
             : 'text-slate-700 font-bold active:bg-white/50'
         }`}
         style={
           active
             ? {
-                background: 'linear-gradient(135deg, rgba(192,132,252,0.18) 0%, rgba(244,114,182,0.12) 100%)',
-                border: '1px solid rgba(192,132,252,0.25)',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6)',
+                background: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)',
+                boxShadow: '0 4px 12px -2px rgba(249,115,22,0.4), inset 0 1px 0 rgba(255,255,255,0.3)',
               }
             : undefined
         }
@@ -432,7 +431,7 @@ function MenuItem({ to, label, active, pinned, showPin, onPinToggle, onNavigate,
               {pinned ? <Pin className="w-3.5 h-3.5 fill-current" /> : <PinOff className="w-3.5 h-3.5" />}
             </button>
           )}
-          {active && !showPin && <ChevronRight className="w-4 h-4 text-purple-500" strokeWidth={3} />}
+          {active && !showPin && <ChevronRight className="w-4 h-4 text-white" strokeWidth={3} />}
         </div>
       </Link>
     </div>
