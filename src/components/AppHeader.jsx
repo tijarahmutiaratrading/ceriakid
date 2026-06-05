@@ -1,500 +1,17 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut, ChevronDown, ChevronRight, Sparkles, Pin } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
-import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { haptic } from '@/lib/haptics';
 import { base44 } from '@/api/base44Client';
 import { getActiveTier } from '@/lib/tierAccess';
-import { getPinned, togglePinned } from '@/lib/menuPrefs';
 import { getChildAvatar } from '@/lib/childAvatars';
-import DrawerProfileHeader from '@/components/header/DrawerProfileHeader';
-import DrawerMenuItem from '@/components/header/DrawerMenuItem';
+import AppDrawer from '@/components/header/AppDrawer';
 import ChildSwitcherModal from '@/components/header/ChildSwitcherModal';
 
-export default function AppHeader({ showBack = null, backTo = '/', title = null, theme = 'auto' }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [navVisible, setNavVisible] = useState(true);
-  const [expandedSubmenu, setExpandedSubmenu] = useState(null);
-  const [pinnedItems, setPinnedItems] = useState([]);
-  const [credits, setCredits] = useState(null);
-  const [streak, setStreak] = useState(0);
-  const [pendingNotifications, setPendingNotifications] = useState({ challenges: 0, sync: 0 });
-  const [userTier, setUserTier] = useState('free');
-
-  const [headerSwitcherOpen, setHeaderSwitcherOpen] = useState(false);
-
-  const { isAuthenticated, user, logout } = useAuth() || {};
-  const [headerAvatarUrl, setHeaderAvatarUrl] = useState(user?.avatarUrl || '');
-  const { ageGroup = 'prasekolah' } = useAgeGroup() || {};
-  const { selectedChild, childrenList, setSelectedChild } = useSelectedChild() || {};
-  const location = useSafeLocation();
-  const navigate = useNavigate();
-
-  const isAdmin = user?.role === 'admin';
-  const isLanding = location.pathname === '/' || location.pathname === '/landing';
-  const isPlayingGame = location.pathname.startsWith('/play/');
-  const lastScrollY = useRef(0);
-  const touchStartX = useRef(null);
-
-  const resolvedTheme = theme === 'auto' ? (isPlayingGame ? 'dark' : 'light') : theme;
-  const isDarkPill = resolvedTheme === 'dark';
-  const shouldShowBack = showBack !== null ? showBack : !isLanding;
-
-  // Avatar sync
-  useEffect(() => { setHeaderAvatarUrl(user?.avatarUrl || ''); }, [user?.avatarUrl]);
-  useEffect(() => {
-    const handleAvatarUpdated = (event) => setHeaderAvatarUrl(event.detail?.avatarUrl || '');
-    window.addEventListener('avatar-updated', handleAvatarUpdated);
-    return () => window.removeEventListener('avatar-updated', handleAvatarUpdated);
-  }, []);
-
-  // Scroll-aware visibility
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentY = window.scrollY;
-      if (currentY < 50) setNavVisible(true);
-      else if (currentY > lastScrollY.current) setNavVisible(false);
-      else setNavVisible(true);
-      lastScrollY.current = currentY;
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Load pinned + user stats bila drawer dibuka
-  useEffect(() => {
-    if (!isOpen || !user?.email) return;
-    setPinnedItems(getPinned(user.email));
-
-    // Fetch credits, streak, tier
-    (async () => {
-      try {
-        const [creditData, subs, leaderboard] = await Promise.all([
-          base44.entities.UserCredit.filter({ userEmail: user.email }).catch(() => []),
-          base44.entities.UserSubscription.filter({ email: user.email }).catch(() => []),
-          base44.entities.Leaderboard.filter({ userEmail: user.email }).catch(() => []),
-        ]);
-        setCredits(creditData?.[0]?.balance ?? 0);
-        setUserTier(getActiveTier(subs?.[0]));
-        const maxStreak = Math.max(0, ...leaderboard.map(l => l.currentStreak || 0));
-        setStreak(maxStreak);
-      } catch {}
-    })();
-
-    // Notifications (challenges pending + offline sync queue)
-    try {
-      const syncQueue = JSON.parse(localStorage.getItem('game_sync_queue') || '[]');
-      setPendingNotifications(prev => ({ ...prev, sync: syncQueue.length }));
-    } catch {}
-
-    if (user?.email) {
-      base44.entities.FriendChallenge.filter({ opponent: user.email, status: 'pending' })
-        .then(c => setPendingNotifications(prev => ({ ...prev, challenges: c?.length || 0 })))
-        .catch(() => {});
-    }
-  }, [isOpen, user?.email]);
-
-  // ESC key to close
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKey = (e) => { if (e.key === 'Escape') { haptic('light'); setIsOpen(false); } };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [isOpen]);
-
-  // Body scroll lock bila drawer terbuka
-  useEffect(() => {
-    if (isOpen) {
-      const original = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => { document.body.style.overflow = original; };
-    }
-  }, [isOpen]);
-
-  // Swipe-to-close (swipe left)
-  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
-  const handleTouchEnd = (e) => {
-    if (touchStartX.current == null) return;
-    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-    if (deltaX < -60) { haptic('light'); setIsOpen(false); }
-    touchStartX.current = null;
-  };
-
-  const handleToggleDrawer = () => { haptic('light'); setIsOpen(!isOpen); };
-
-  // Menu items
-  let topItems = [];
-  let adminItems = [];
-  let dashboardItems = [];
-  let groupedItems = [];
-
-  if (isLanding && !isAuthenticated) {
-    topItems = [
-      { path: '/', label: 'Rumah' },
-      { path: '#features', label: 'Ciri-ciri', external: true },
-      { path: '#testimonials', label: 'Testimoni', external: true },
-      { path: '#pricing', label: 'Harga', external: true },
-      { path: '#faq', label: 'Soalan Lazim', external: true },
-    ];
-  } else {
-    topItems = [{ path: '/', label: 'Halaman Utama' }];
-    if (isAuthenticated) {
-      dashboardItems = [
-        { path: '/dashboard', label: 'Dashboard Pengguna' },
-        { path: '/settings', label: 'Tetapan Akaun' },
-        { path: '/affiliate', label: 'Program Affiliate' },
-        { path: '/contact', label: 'Hubungi Kami' },
-      ];
-      groupedItems = [
-        {
-          path: '/group-aktiviti', label: 'Aktiviti',
-          submenu: [
-            { path: '/games-subjek', label: 'Belajar Ikut Subjek' },
-            { path: '/games-hub', label: 'Game Hub' },
-            { path: '/drawing', label: 'Studio Lukisan' },
-            { path: '/story-kid', label: 'Story Kid' },
-            { path: '/friends', label: 'Kawan' },
-            { path: '/challenges', label: 'Cabaran' },
-          ],
-        },
-        {
-          path: '/group-keluarga', label: 'Keluarga',
-          submenu: [
-            { path: '/children-profiles', label: 'Profil Anak' },
-            { path: '/parent-dashboard', label: 'Prestasi Anak' },
-          ],
-        },
-        {
-          path: '/group-cikgu-ai', label: 'Cikgu AI',
-          submenu: [
-            { path: '/ai-assistant', label: 'Cikgu Firdaus — Tutor' },
-            { path: '/quiz-ai', label: 'Cikgu Rosie — Kuiz' },
-            { path: '/story-generator', label: 'Cikgu Mira — Cerita' },
-            { path: '/bbm-generator', label: 'Cikgu Daniel — BBM' },
-          ],
-        },
-      ];
-    }
-    if (isAdmin) {
-      adminItems = [{
-        path: '/admin-dashboard', label: 'Admin Dashboard',
-        submenu: [
-          { path: '/admin-dashboard?tab=analytics', label: 'Analytics' },
-          { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager' },
-          { path: '/admin-dashboard?tab=health', label: 'System Health' },
-          { path: '/admin-dashboard?tab=settings', label: 'Settings' },
-        ],
-      }];
-    }
-  }
-
-  const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(path);
-
-  // Notification counts per menu item
-  const getNotificationCount = (path) => {
-    if (path === '/challenges') return pendingNotifications.challenges;
-    if (path === '/settings') return pendingNotifications.sync;
-    return 0;
-  };
-
-  const handlePinToggle = (path, label) => {
-    if (!user?.email) return;
-    const updated = togglePinned(user.email, path, label);
-    setPinnedItems(updated);
-  };
-
-  const closeDrawer = () => setIsOpen(false);
-
-  return (
-    <>
-      {/* Top Header */}
-      <nav className="sm:hidden fixed top-0 left-0 right-0 z-40 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300" style={{ transform: navVisible ? 'translateY(0)' : 'translateY(-100%)', paddingTop: 'max(0.75rem, env(safe-area-inset-top))' }}>
-        <div
-          className={`max-w-[52rem] mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] ring-1 ${isDarkPill ? 'ring-white/25 shadow-2xl shadow-slate-950/25' : 'pro-glass ring-white/20'}`}
-          style={isDarkPill ? { background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.82))', backdropFilter: 'blur(22px)' } : undefined}
-        >
-          <motion.button
-            type="button"
-            onClick={handleToggleDrawer}
-            whileTap={{ scale: 0.95 }}
-            className="px-3.5 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-lg hover:bg-white/95 transition-colors relative"
-          >
-            {isOpen ? 'Tutup' : 'Menu'}
-            {!isOpen && (pendingNotifications.challenges + pendingNotifications.sync) > 0 && (
-              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-rose-500 border-2 border-white animate-pulse" />
-            )}
-          </motion.button>
-
-          <div className="min-w-0 text-center px-1">
-            <p className={`${isDarkPill ? 'text-white/55' : 'text-slate-500'} text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] leading-none`}>CeriaKid</p>
-            <p className={`${isDarkPill ? 'text-white' : 'text-slate-900'} font-black text-sm sm:text-base truncate leading-tight mt-1`}>{title || pageTitles[location.pathname] || 'CeriaKid'}</p>
-          </div>
-
-          <div className="flex items-center gap-2 justify-end">
-            {/* Child avatar — tap untuk tukar anak (hanya bila ada >1 anak) */}
-            {isAuthenticated && selectedChild && (childrenList?.length || 0) > 1 && (
-              <motion.button
-                type="button"
-                whileTap={{ scale: 0.9 }}
-                onClick={() => { haptic('light'); setHeaderSwitcherOpen(true); }}
-                aria-label={`Anak aktif: ${selectedChild.name}. Tap untuk tukar.`}
-                className="relative flex-shrink-0"
-              >
-                <img
-                  src={getChildAvatar(selectedChild)}
-                  alt={selectedChild.name}
-                  className={`w-9 h-9 rounded-full object-cover shadow-lg ring-2 bg-white ${isDarkPill ? 'ring-yellow-300/80' : 'ring-pink-300'}`}
-                />
-                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 ring-2 ring-white flex items-center justify-center">
-                  <ChevronDown className="w-2 h-2 text-white" strokeWidth={4} />
-                </div>
-              </motion.button>
-            )}
-
-            <Link to={isAuthenticated ? "/settings" : "/"} className="flex items-center justify-end" title={isAuthenticated ? 'Tetapan Profil' : 'CeriaKid'}>
-              {isAuthenticated ? (
-                headerAvatarUrl ? (
-                  <img src={headerAvatarUrl} alt="Avatar" className={`w-10 h-10 rounded-full object-cover cursor-pointer shadow-lg ring-2 ${isDarkPill ? 'ring-white/60' : 'ring-purple-200'}`} />
-                ) : (
-                  <div className={`w-10 h-10 rounded-full ${isDarkPill ? 'bg-white/25 border-white/50' : 'bg-purple-100 border-purple-200'} border-2 flex items-center justify-center text-xl cursor-pointer shadow-lg`}>🐱</div>
-                )
-              ) : (
-                <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png" alt="CeriaKid" className="h-9 sm:h-10 rounded-2xl cursor-pointer shadow-lg ring-1 ring-white/40" />
-              )}
-            </Link>
-          </div>
-        </div>
-      </nav>
-
-      {/* Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={closeDrawer}
-            className="sm:hidden fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm"
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Drawer */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Menu navigasi"
-            className="sm:hidden fixed left-3 right-3 top-4 bottom-4 z-50 flex flex-col rounded-[2rem] overflow-hidden"
-            style={{
-              background: 'rgba(255,255,255,0.18)',
-              backdropFilter: 'blur(32px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(32px) saturate(180%)',
-              boxShadow: '0 25px 60px -10px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.35)',
-            }}
-          >
-            {/* Header: profile + stats + active child */}
-            {isAuthenticated && user ? (
-              <DrawerProfileHeader
-                user={user}
-                avatarUrl={headerAvatarUrl}
-                selectedChild={selectedChild}
-                childCount={childrenList?.length || 0}
-                credits={credits}
-                streak={streak}
-                tier={userTier}
-                onClose={closeDrawer}
-              />
-            ) : (
-              <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-br from-pink-400 to-purple-500">
-                <img src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png" alt="CeriaKid" className="h-8 rounded-lg" />
-                <button type="button" onClick={closeDrawer} className="p-2 rounded-xl bg-white/20 text-white">✕</button>
-              </div>
-            )}
-
-            {/* Scrollable nav */}
-            <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
-              <>
-                  {/* Pinned */}
-                  {isAuthenticated && pinnedItems.length > 0 && (
-                    <>
-                      <p className="text-amber-600 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1.5 flex items-center gap-1.5">
-                        <Pin className="w-3 h-3 fill-current" /> Pin Anda
-                      </p>
-                      {pinnedItems.map((item) => (
-                        <DrawerMenuItem
-                          key={`pin-${item.path}`}
-                          to={item.path}
-                          label={item.label}
-                          active={isActive(item.path)}
-                          notificationCount={getNotificationCount(item.path)}
-                          showPin
-                          pinned
-                          onPinToggle={() => handlePinToggle(item.path, item.label)}
-                          onNavigate={closeDrawer}
-                        />
-                      ))}
-                    </>
-                  )}
-
-                  {/* Upgrade nudge — free tier only */}
-                  {isAuthenticated && userTier === 'free' && (
-                    <Link
-                      to="/settings"
-                      onClick={() => { haptic('medium'); closeDrawer(); }}
-                      className="block mx-1 my-3 p-3.5 rounded-2xl transition-all relative overflow-hidden"
-                      style={{
-                        background: 'linear-gradient(135deg, #fde047 0%, #fb923c 50%, #f472b6 100%)',
-                        boxShadow: '0 6px 20px rgba(251, 146, 60, 0.4)',
-                      }}
-                    >
-                      <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-white/20 blur-2xl pointer-events-none" />
-                      <div className="relative flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/95 flex items-center justify-center flex-shrink-0 shadow">
-                          <Sparkles className="w-5 h-5 text-orange-500" strokeWidth={2.5} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-white/90 text-[10px] font-black uppercase tracking-wider leading-none drop-shadow">Naik Taraf</p>
-                          <p className="text-white text-sm font-black leading-tight mt-1 drop-shadow">Buka semua game + AI →</p>
-                        </div>
-                      </div>
-                    </Link>
-                  )}
-
-                  {/* Section divider */}
-                  {isAuthenticated && pinnedItems.length > 0 && (
-                    <p className="text-white/70 text-[10px] font-black uppercase tracking-wider px-3 pt-3 pb-1.5">Semua Menu</p>
-                  )}
-
-                  {/* Top items */}
-                  {topItems.map((item) =>
-                    item.external ? (
-                      <a key={item.path} href={item.path} onClick={closeDrawer}
-                        className="flex items-center px-4 py-3 rounded-2xl font-bold text-white hover:bg-white/15 transition-all text-sm">
-                        {item.label}
-                      </a>
-                    ) : (
-                      <DrawerMenuItem
-                        key={item.path}
-                        to={item.path}
-                        label={item.label}
-                        active={isActive(item.path)}
-                        notificationCount={getNotificationCount(item.path)}
-                        onNavigate={closeDrawer}
-                      />
-                    )
-                  )}
-
-                  {/* Dashboard items */}
-                  {dashboardItems.map((item) => (
-                    <DrawerMenuItem
-                      key={item.path}
-                      to={item.path}
-                      label={item.label}
-                      active={isActive(item.path)}
-                      notificationCount={getNotificationCount(item.path)}
-                      showPin
-                      pinned={pinnedItems.some(p => p.path === item.path)}
-                      onPinToggle={() => handlePinToggle(item.path, item.label)}
-                      onNavigate={closeDrawer}
-                    />
-                  ))}
-
-                  {/* Grouped + admin */}
-                  {[...groupedItems, ...adminItems].map((item) => {
-                    const isExpanded = expandedSubmenu === item.path;
-                    const itemActive = isActive(item.path);
-                    return (
-                      <div key={item.path}>
-                        <motion.button
-                          type="button"
-                          whileTap={{ scale: 0.97 }}
-                          onClick={() => { haptic('light'); setExpandedSubmenu(isExpanded ? null : item.path); }}
-                          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
-                            itemActive || isExpanded
-                              ? 'bg-white/25 ring-1 ring-white/30 text-white font-black'
-                              : 'text-white hover:bg-white/10'
-                          }`}
-                        >
-                          <span>{item.label}</span>
-                          {isExpanded ? <ChevronDown className="w-4 h-4 flex-shrink-0" /> : <ChevronRight className="w-4 h-4 flex-shrink-0" />}
-                        </motion.button>
-
-                        <AnimatePresence initial={false}>
-                          {isExpanded && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.2 }}
-                              className="overflow-hidden"
-                            >
-                              <div className="ml-3 mt-1 mb-1 pl-3 border-l-2 border-white/20 space-y-1">
-                                {item.submenu.map((sub) => (
-                                  <DrawerMenuItem
-                                    key={sub.path}
-                                    to={sub.path}
-                                    label={sub.label}
-                                    active={isActive(sub.path)}
-                                    notificationCount={getNotificationCount(sub.path)}
-                                    size="small"
-                                    showPin
-                                    pinned={pinnedItems.some(p => p.path === sub.path)}
-                                    onPinToggle={() => handlePinToggle(sub.path, sub.label)}
-                                    onNavigate={closeDrawer}
-                                  />
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    );
-                  })}
-              </>
-            </nav>
-
-            {/* Footer: Logout */}
-            {isAuthenticated && (
-              <div className="px-3 py-3 border-t border-white/15">
-                <motion.button type="button" whileTap={{ scale: 0.97 }}
-                  onClick={() => { haptic('medium'); closeDrawer(); logout?.(); }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-black text-sm text-white bg-white/15 hover:bg-white/25 ring-1 ring-white/20 transition-all">
-                  <LogOut className="w-5 h-5 flex-shrink-0" strokeWidth={2.5} />
-                  <span>Log Keluar</span>
-                </motion.button>
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Top header child switcher modal */}
-      <ChildSwitcherModal
-        open={headerSwitcherOpen}
-        children={childrenList || []}
-        selectedChild={selectedChild}
-        onSelect={setSelectedChild}
-        onClose={() => setHeaderSwitcherOpen(false)}
-        onAddChild={() => setHeaderSwitcherOpen(false)}
-      />
-    </>
-  );
-}
-
-// Page title mapping (outside component to avoid recreation)
-const pageTitles = {
+const PAGE_TITLES = {
   '/': 'CeriaKid',
   '/dashboard': 'Dashboard',
   '/settings': 'Tetapan Akaun',
@@ -514,3 +31,165 @@ const pageTitles = {
   '/affiliate': 'Affiliate',
   '/admin-dashboard': 'Admin Dashboard',
 };
+
+export default function AppHeader({ showBack = null, backTo = '/', title = null, theme = 'auto' }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [navVisible, setNavVisible] = useState(true);
+  const [headerSwitcherOpen, setHeaderSwitcherOpen] = useState(false);
+  const [userTier, setUserTier] = useState('free');
+
+  const { isAuthenticated, user, logout } = useAuth() || {};
+  const [headerAvatarUrl, setHeaderAvatarUrl] = useState(user?.avatarUrl || '');
+  const { selectedChild, childrenList, setSelectedChild } = useSelectedChild() || {};
+  const location = useSafeLocation();
+
+  const isAdmin = user?.role === 'admin';
+  const isLanding = location.pathname === '/' || location.pathname === '/landing';
+  const isPlayingGame = location.pathname.startsWith('/play/');
+  const lastScrollY = useRef(0);
+
+  const resolvedTheme = theme === 'auto' ? (isPlayingGame ? 'dark' : 'light') : theme;
+  const isDarkPill = resolvedTheme === 'dark';
+  const _shouldShowBack = showBack !== null ? showBack : !isLanding;
+
+  // Avatar sync
+  useEffect(() => { setHeaderAvatarUrl(user?.avatarUrl || ''); }, [user?.avatarUrl]);
+  useEffect(() => {
+    const handler = (e) => setHeaderAvatarUrl(e.detail?.avatarUrl || '');
+    window.addEventListener('avatar-updated', handler);
+    return () => window.removeEventListener('avatar-updated', handler);
+  }, []);
+
+  // Load tier ONCE on mount (untuk show crown badge dalam drawer)
+  useEffect(() => {
+    if (!user?.email) return;
+    base44.entities.UserSubscription
+      .filter({ email: user.email })
+      .then((subs) => setUserTier(getActiveTier(subs?.[0])))
+      .catch(() => {});
+  }, [user?.email]);
+
+  // Scroll-aware visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+      if (y < 50) setNavVisible(true);
+      else if (y > lastScrollY.current) setNavVisible(false);
+      else setNavVisible(true);
+      lastScrollY.current = y;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleDrawer = () => { haptic('light'); setIsOpen((v) => !v); };
+
+  const pageTitle = title || PAGE_TITLES[location.pathname] || 'CeriaKid';
+
+  return (
+    <>
+      {/* Top Header */}
+      <nav
+        className="sm:hidden fixed top-0 left-0 right-0 z-40 px-3 sm:px-6 py-3 sm:py-4 transition-transform duration-300"
+        style={{ transform: navVisible ? 'translateY(0)' : 'translateY(-100%)', paddingTop: 'max(0.75rem, env(safe-area-inset-top))' }}
+      >
+        <div
+          className={`max-w-[52rem] mx-auto w-full grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 px-2.5 sm:px-4 py-2 rounded-[1.75rem] ring-1 ${
+            isDarkPill ? 'ring-white/25 shadow-2xl shadow-slate-950/25' : 'pro-glass ring-white/20'
+          }`}
+          style={
+            isDarkPill
+              ? { background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.82))', backdropFilter: 'blur(22px)' }
+              : undefined
+          }
+        >
+          <button
+            type="button"
+            onClick={toggleDrawer}
+            className="px-3.5 sm:px-5 py-2.5 bg-white text-game-purple rounded-full font-black text-xs sm:text-sm shadow-lg active:bg-white/95 transition-colors"
+          >
+            {isOpen ? 'Tutup' : 'Menu'}
+          </button>
+
+          <div className="min-w-0 text-center px-1">
+            <p className={`${isDarkPill ? 'text-white/55' : 'text-slate-500'} text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] leading-none`}>
+              CeriaKid
+            </p>
+            <p className={`${isDarkPill ? 'text-white' : 'text-slate-900'} font-black text-sm sm:text-base truncate leading-tight mt-1`}>
+              {pageTitle}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 justify-end">
+            {isAuthenticated && selectedChild && (childrenList?.length || 0) > 1 && (
+              <button
+                type="button"
+                onClick={() => { haptic('light'); setHeaderSwitcherOpen(true); }}
+                aria-label={`Anak aktif: ${selectedChild.name}. Tap untuk tukar.`}
+                className="relative flex-shrink-0 active:scale-95 transition-transform"
+              >
+                <img
+                  src={getChildAvatar(selectedChild)}
+                  alt={selectedChild.name}
+                  className={`w-9 h-9 rounded-full object-cover shadow-lg ring-2 bg-white ${isDarkPill ? 'ring-yellow-300/80' : 'ring-pink-300'}`}
+                />
+                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 ring-2 ring-white flex items-center justify-center">
+                  <ChevronDown className="w-2 h-2 text-white" strokeWidth={4} />
+                </div>
+              </button>
+            )}
+
+            <Link to={isAuthenticated ? '/settings' : '/'} className="flex items-center justify-end" title={isAuthenticated ? 'Tetapan Profil' : 'CeriaKid'}>
+              {isAuthenticated ? (
+                headerAvatarUrl ? (
+                  <img
+                    src={headerAvatarUrl}
+                    alt="Avatar"
+                    className={`w-10 h-10 rounded-full object-cover cursor-pointer shadow-lg ring-2 ${isDarkPill ? 'ring-white/60' : 'ring-purple-200'}`}
+                  />
+                ) : (
+                  <div className={`w-10 h-10 rounded-full ${isDarkPill ? 'bg-white/25 border-white/50' : 'bg-purple-100 border-purple-200'} border-2 flex items-center justify-center text-xl cursor-pointer shadow-lg`}>
+                    🐱
+                  </div>
+                )
+              ) : (
+                <img
+                  src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png"
+                  alt="CeriaKid"
+                  className="h-9 sm:h-10 rounded-2xl cursor-pointer shadow-lg ring-1 ring-white/40"
+                />
+              )}
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Drawer */}
+      <AppDrawer
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        user={user}
+        avatarUrl={headerAvatarUrl}
+        tier={userTier}
+        selectedChild={selectedChild}
+        childrenList={childrenList || []}
+        onSwitchChild={setSelectedChild}
+        isAuthenticated={isAuthenticated}
+        isAdmin={isAdmin}
+        isLanding={isLanding}
+        activePath={location.pathname}
+        onLogout={logout}
+      />
+
+      {/* Top-header child switcher (separate from drawer) */}
+      <ChildSwitcherModal
+        open={headerSwitcherOpen}
+        children={childrenList || []}
+        selectedChild={selectedChild}
+        onSelect={setSelectedChild}
+        onClose={() => setHeaderSwitcherOpen(false)}
+        onAddChild={() => setHeaderSwitcherOpen(false)}
+      />
+    </>
+  );
+}
