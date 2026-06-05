@@ -191,16 +191,16 @@ export default function AppDrawer({
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl text-rose-600 font-black text-sm active:scale-[0.98] transition-all relative overflow-hidden"
+              className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl text-orange-700 font-black text-sm active:scale-[0.98] transition-all relative overflow-hidden"
               style={{
-                background: 'linear-gradient(135deg, rgba(254,226,226,0.7) 0%, rgba(252,231,243,0.6) 100%)',
+                background: 'linear-gradient(135deg, rgba(255,237,213,0.8) 0%, rgba(254,215,170,0.7) 100%)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
-                border: '1px solid rgba(254,202,202,0.6)',
-                boxShadow: '0 4px 14px -4px rgba(244,63,94,0.2), inset 0 1px 0 rgba(255,255,255,0.7)',
+                border: '1px solid rgba(253,186,116,0.6)',
+                boxShadow: '0 4px 14px -4px rgba(249,115,22,0.25), inset 0 1px 0 rgba(255,255,255,0.7)',
               }}
             >
-              <div className="absolute -top-6 -right-6 w-16 h-16 rounded-full bg-rose-300/30 blur-xl pointer-events-none" />
+              <div className="absolute -top-6 -right-6 w-16 h-16 rounded-full bg-orange-300/40 blur-xl pointer-events-none" />
               <LogOut className="relative w-4 h-4" strokeWidth={3} />
               <span className="relative tracking-wide">Log Keluar</span>
             </button>
