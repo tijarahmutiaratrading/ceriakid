@@ -187,7 +187,7 @@ export default function AppDrawer({
 
         {/* Footer — logout (solid oren, compact) */}
         {isAuthenticated && (
-          <div className="px-4 pt-4 pb-5 border-t border-white/40 flex flex-col gap-3">
+          <div className="px-4 pt-3 pb-2 border-t border-white/40 flex flex-col gap-2">
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
