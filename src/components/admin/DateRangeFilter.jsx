@@ -1,5 +1,6 @@
 import React from 'react';
 import { Calendar, ChevronDown } from 'lucide-react';
+import { startOfTodayMY, addDays } from '@/lib/myTime';
 
 export const DATE_RANGES = [
   { key: 'today', label: 'Hari Ini' },
@@ -10,27 +11,18 @@ export const DATE_RANGES = [
 ];
 
 // Helper: get start date for a range key (returns null = no filter)
+// Semua range kira ikut waktu Malaysia (MYT / UTC+8) — TIDAK bergantung pada timezone browser.
 export function getRangeStart(key) {
-  const now = new Date();
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startOfToday = startOfTodayMY();
   switch (key) {
     case 'today':
       return startOfToday;
-    case 'yesterday': {
-      const y = new Date(startOfToday);
-      y.setDate(y.getDate() - 1);
-      return y;
-    }
-    case '7days': {
-      const d = new Date(startOfToday);
-      d.setDate(d.getDate() - 6);
-      return d;
-    }
-    case '30days': {
-      const d = new Date(startOfToday);
-      d.setDate(d.getDate() - 29);
-      return d;
-    }
+    case 'yesterday':
+      return addDays(startOfToday, -1);
+    case '7days':
+      return addDays(startOfToday, -6);
+    case '30days':
+      return addDays(startOfToday, -29);
     case 'all':
     default:
       return null;
@@ -38,9 +30,7 @@ export function getRangeStart(key) {
 }
 
 export function getRangeEnd(key) {
-  const now = new Date();
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  if (key === 'yesterday') return startOfToday; // exclusive end = today 00:00
+  if (key === 'yesterday') return startOfTodayMY(); // exclusive end = today 00:00 MYT
   return null;
 }
 
