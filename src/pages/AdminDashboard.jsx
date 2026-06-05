@@ -344,14 +344,15 @@ export default function AdminDashboard() {
                       <summary className="font-black text-amber-800 cursor-pointer">🔍 Debug: created_date semua subscription (klik untuk buka)</summary>
                       <div className="mt-2 space-y-1 font-mono max-h-48 overflow-y-auto">
                         {subscriptions.slice(0, 20).map((s, i) => {
-                          const myt = s.created_date ? new Date(new Date(s.created_date).getTime() + 8*3600000).toISOString().slice(0,16) : 'NULL';
+                          // Betul: tambah +8 jam untuk tunjuk MYT
+                          const mytDate = s.created_date ? new Date(new Date(s.created_date).getTime() + 8*3600000).toISOString().slice(0,16).replace('T',' ') + ' MYT' : 'NULL';
                           const inToday = isInRange(s.created_date, 'today');
                           const inYesterday = isInRange(s.created_date, 'yesterday');
                           return (
                             <div key={i} className={`flex gap-2 text-[10px] ${inToday ? 'text-green-700 font-bold' : inYesterday ? 'text-blue-700' : 'text-slate-500'}`}>
-                              <span className="w-4">{inToday ? '✓T' : inYesterday ? '✓Y' : '—'}</span>
-                              <span className="truncate max-w-[140px]">{s.email}</span>
-                              <span>{myt}</span>
+                              <span className="w-5 flex-shrink-0">{inToday ? '✓T' : inYesterday ? '✓Y' : '—'}</span>
+                              <span className="truncate w-[160px] flex-shrink-0">{s.email}</span>
+                              <span className="flex-shrink-0">{mytDate}</span>
                               <span className="text-slate-400">[{s.tier}/{s.status}]</span>
                             </div>
                           );
