@@ -193,13 +193,13 @@ export default function AppDrawer({
 
         {/* Footer — logout (solid oren, compact) */}
         {isAuthenticated && (
-          <div className="px-3 pt-2 pb-2 border-t border-white/40 flex items-center justify-between gap-2">
+          <div className="px-3 pt-3 pb-3 border-t border-white/40 flex items-center justify-between gap-2">
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="inline-flex items-center gap-1.5 px-1 py-1 text-slate-700 font-bold text-xs active:text-slate-900 active:scale-[0.98] transition-all"
+              className="inline-flex items-center gap-2 px-1 py-1 text-slate-700 font-bold text-sm active:text-slate-900 active:scale-[0.98] transition-all"
             >
-              <LogOut className="w-3.5 h-3.5" strokeWidth={2.25} />
+              <LogOut className="w-4 h-4" strokeWidth={2.25} />
               <span>Log Keluar</span>
             </button>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100/70 border border-slate-200/70">
