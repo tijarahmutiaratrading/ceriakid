@@ -172,7 +172,7 @@ export default function AdminDashboard() {
   const loadData = async () => {
     try {
       const [subs, views] = await Promise.all([
-        base44.entities.UserSubscription.list().catch(() => []),
+        base44.entities.UserSubscription.list('-created_date', 500).catch(() => []),
         base44.entities.PageView.list('-created_date', 5000).catch(() => []),
       ]);
       setSubscriptions(subs || []);
@@ -344,16 +344,15 @@ export default function AdminDashboard() {
                       <summary className="font-black text-amber-800 cursor-pointer">🔍 Debug: created_date semua subscription (klik untuk buka)</summary>
                       <div className="mt-2 space-y-1 font-mono max-h-48 overflow-y-auto">
                         {subscriptions.slice(0, 20).map((s, i) => {
-                          // Guna toLocaleString dengan timezone KL
-                          const mytDate = s.created_date ? new Date(s.created_date).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'short', timeStyle: 'short' }) + ' MYT' : 'NULL';
+                          const raw = s.created_date ? String(s.created_date) : 'NULL';
+                          const parsed = s.created_date ? new Date(s.created_date) : null;
+                          const myt8 = parsed && !isNaN(parsed) ? new Date(parsed.getTime() + 8*3600000).toISOString().slice(0,16) : '?';
                           const inToday = isInRange(s.created_date, 'today');
                           const inYesterday = isInRange(s.created_date, 'yesterday');
                           return (
-                            <div key={i} className={`flex gap-2 text-[10px] ${inToday ? 'text-green-700 font-bold' : inYesterday ? 'text-blue-700' : 'text-slate-500'}`}>
-                              <span className="w-5 flex-shrink-0">{inToday ? '✓T' : inYesterday ? '✓Y' : '—'}</span>
-                              <span className="truncate w-[160px] flex-shrink-0">{s.email}</span>
-                              <span className="flex-shrink-0">{mytDate}</span>
-                              <span className="text-slate-400">[{s.tier}/{s.status}]</span>
+                            <div key={i} className={`text-[10px] ${inToday ? 'text-green-700 font-bold' : inYesterday ? 'text-blue-700' : 'text-slate-500'}`}>
+                              <span>{inToday ? '✓T' : inYesterday ? '✓Y' : '—'} </span>
+                              <span>{s.email} | raw: {raw} | myt: {myt8} | [{s.tier}/{s.status}]</span>
                             </div>
                           );
                         })}

@@ -10,10 +10,9 @@ export const DATE_RANGES = [
 ];
 
 // Dapat tarikh hari ini dalam Malaysia (MYT = UTC+8), format YYYY-MM-DD
-// Guna toLocaleString dengan timezone explicit — paling reliable cross-environment
 function getTodayMY() {
-  return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kuala_Lumpur' });
-  // en-CA format = YYYY-MM-DD, timeZone KL = MYT UTC+8
+  const myt = new Date(Date.now() + 8 * 60 * 60 * 1000);
+  return myt.toISOString().slice(0, 10);
 }
 
 // Tolak/tambah hari dari tarikh YYYY-MM-DD string
@@ -28,8 +27,8 @@ function toDateMY(val) {
   if (!val) return null;
   const d = val instanceof Date ? val : new Date(val);
   if (isNaN(d.getTime())) return null;
-  // Guna toLocaleDateString dengan timezone explicit — consistent dengan getTodayMY
-  return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kuala_Lumpur' });
+  const myt = new Date(d.getTime() + 8 * 60 * 60 * 1000);
+  return myt.toISOString().slice(0, 10);
 }
 
 // Check sama ada timestamp jatuh dalam range yang dipilih
