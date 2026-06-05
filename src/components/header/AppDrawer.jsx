@@ -588,7 +588,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
     sections.push({
       key: 'admin',
       type: 'grouped',
-      label: '👑 Admin',
+      label: 'Admin',
       items: [
         { path: '/admin-dashboard?tab=analytics', label: 'Analytics' },
         { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager' },
