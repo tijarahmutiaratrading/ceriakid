@@ -190,11 +190,14 @@ export default function PushNotificationToggle({ vapidPublicKey }) {
   const handleTest = async () => {
     setTesting(true);
     try {
-      const res = await base44.functions.invoke('sendPushNotification', {
-        title: '🧪 Test Notification',
-        body: 'Push notification berfungsi! Anda akan terima notif macam ini bila ada order baru.',
-        url: '/admin-dashboard?tab=analytics',
-        tag: 'test-notif',
+      // Guna sendOrderNotification dengan type=subscription supaya admin nampak
+      // format sebenar notif yang akan masuk bila ada order betul
+      const res = await base44.functions.invoke('sendOrderNotification', {
+        type: 'subscription',
+        customer: { email: '[email protected]', name: 'Test Customer' },
+        amount: 99,
+        tier: 'standard',
+        purchaseId: `test_${Date.now()}`,
       });
       const data = res?.data || {};
       toast({ title: `📤 Test sent`, description: `${data.sent || 0} sent, ${data.failed || 0} failed` });

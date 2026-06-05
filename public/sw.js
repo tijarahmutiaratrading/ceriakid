@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ceriakid-v3';
+const CACHE_NAME = 'ceriakid-v4';
 const APP_SHELL = ['/', '/dashboard', '/index.html', '/manifest.json'];
 
 const shouldBypassCache = (request, url) => {
@@ -65,8 +65,10 @@ self.addEventListener('fetch', (event) => {
 });
 
 // ─────────────────────────────────────────────────────────────────
-// WEB PUSH NOTIFICATIONS — handled by same SW (iOS PWA requirement)
+// WEB PUSH NOTIFICATIONS — order notifications untuk admin
 // ─────────────────────────────────────────────────────────────────
+const DEFAULT_ICON = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png';
+
 self.addEventListener('push', (event) => {
   let data = {};
   try {
@@ -78,11 +80,26 @@ self.addEventListener('push', (event) => {
   const title = data.title || 'CeriaKid';
   const options = {
     body: data.body || '',
-    icon: data.icon || 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png',
-    badge: data.badge || 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png',
+    icon: data.icon || DEFAULT_ICON,
+    badge: data.badge || DEFAULT_ICON,
     tag: data.tag || 'ceriakid-order',
-    data: { url: data.url || '/admin-dashboard?tab=analytics' },
-    requireInteraction: !!data.requireInteraction,
+    data: {
+      url: data.url || '/admin-dashboard?tab=analytics',
+      timestamp: data.timestamp || Date.now(),
+    },
+    // requireInteraction:true → notif kekal sampai admin tap (tak hilang sendiri)
+    requireInteraction: data.requireInteraction === true,
+    // Vibration pattern — buzz kuat untuk attention (mobile only)
+    vibrate: Array.isArray(data.vibrate) ? data.vibrate : [200, 100, 200],
+    // Timestamp untuk OS sort (paling baru di atas)
+    timestamp: data.timestamp || Date.now(),
+    // Renotify:true → buzz semula kalau tag sama replace existing
+    renotify: data.renotify !== false,
+    // Action buttons (desktop & some mobile)
+    actions: Array.isArray(data.actions) ? data.actions.slice(0, 2) : [
+      { action: 'view', title: '👀 Lihat' },
+      { action: 'dismiss', title: '✓ OK' },
+    ],
   };
 
   event.waitUntil(self.registration.showNotification(title, options));
@@ -90,16 +107,33 @@ self.addEventListener('push', (event) => {
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const url = (event.notification.data && event.notification.data.url) || '/admin-dashboard';
+
+  // Handle action button clicks
+  if (event.action === 'dismiss') {
+    return; // just close, no nav
+  }
+
+  const url = (event.notification.data && event.notification.data.url) || '/admin-dashboard?tab=analytics';
+
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // Cari window yang dah open dengan app — focus + navigate
       for (const client of clientList) {
         if ('focus' in client) {
-          client.navigate(url).catch(() => {});
+          // Try navigate dulu, lepas tu focus
+          if ('navigate' in client) {
+            client.navigate(url).catch(() => {});
+          }
           return client.focus();
         }
       }
+      // Tiada window open — buka baru
       if (self.clients.openWindow) return self.clients.openWindow(url);
     })
   );
+});
+
+// Track notification close (untuk analytics nanti kalau perlu)
+self.addEventListener('notificationclose', (event) => {
+  // No-op for now
 });

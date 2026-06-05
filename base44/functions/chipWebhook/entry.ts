@@ -192,8 +192,24 @@ async function sendWelcomeEmailSafe(base44, payload) {
   }
 }
 
-// Hantar push notification TERUS via web-push library. Fire-and-forget.
-async function notifyAdmins(base44, { title, body, url }) {
+// Rich order notification — sticky (requireInteraction), vibrate, action buttons.
+// Inline kerana cross-function-invoke dari webhook context return 403 dalam Base44.
+const NOTIF_ICON = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png';
+
+function fmtRM(n) {
+  const num = Number(n) || 0;
+  return num % 1 === 0 ? `RM${num}` : `RM${num.toFixed(2)}`;
+}
+
+function maskEmail(email) {
+  if (!email) return 'unknown';
+  const [local, domain] = email.split('@');
+  if (!domain) return email;
+  if (local.length <= 3) return `${local[0]}***@${domain}`;
+  return `${local.slice(0, 3)}***@${domain}`;
+}
+
+async function notifyAdmins(base44, { title, body, url, tag, sticky = true, vibrate = true }) {
   try {
     const publicKey = Deno.env.get('VAPID_PUBLIC_KEY');
     const privateKey = Deno.env.get('VAPID_PRIVATE_KEY');
@@ -202,7 +218,6 @@ async function notifyAdmins(base44, { title, body, url }) {
       return;
     }
     let subject = Deno.env.get('VAPID_SUBJECT') || 'mailto:admin@ceriakid.com';
-    // Apple APNs strict: strip angle brackets + spaces
     subject = subject.trim().replace(/[<>]/g, '').replace(/\s+/g, '');
     if (!subject.startsWith('mailto:') && !subject.startsWith('http')) subject = `mailto:${subject}`;
     subject = subject.replace(/^mailto:\s+/, 'mailto:');
@@ -215,9 +230,20 @@ async function notifyAdmins(base44, { title, body, url }) {
     }
 
     const notifPayload = JSON.stringify({
-      title, body,
+      title,
+      body,
       url: url || '/admin-dashboard?tab=analytics',
-      tag: 'order-notif',
+      tag: tag || `order-${Date.now()}`,
+      icon: NOTIF_ICON,
+      badge: NOTIF_ICON,
+      requireInteraction: sticky, // sticky → admin nampak walaupun tertidur
+      vibrate: vibrate ? [200, 100, 200, 100, 200] : [],
+      timestamp: Date.now(),
+      renotify: true,
+      actions: [
+        { action: 'view', title: '👀 Lihat' },
+        { action: 'dismiss', title: '✓ OK' },
+      ],
     });
 
     let sent = 0, failed = 0;
@@ -226,7 +252,8 @@ async function notifyAdmins(base44, { title, body, url }) {
       try {
         await webpush.sendNotification(
           { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
-          notifPayload
+          notifPayload,
+          { TTL: 86400, urgency: 'high' } // urgency:high → push service prioritize
         );
         sent++;
       } catch (err) {
@@ -234,11 +261,10 @@ async function notifyAdmins(base44, { title, body, url }) {
         if (err.statusCode === 410 || err.statusCode === 404) deadEndpoints.push(sub.id);
       }
     }));
-    // Cleanup dead endpoints
     for (const id of deadEndpoints) {
       try { await base44.asServiceRole.entities.PushSubscription.delete(id); } catch (_) {}
     }
-    console.log(`Push sent: ${sent}/${subs.length}, failed=${failed}, cleaned=${deadEndpoints.length}`);
+    console.log(`[OrderNotif] sent=${sent}/${subs.length} failed=${failed} cleaned=${deadEndpoints.length}`);
   } catch (err) {
     console.error('notifyAdmins failed:', err?.message || err);
   }
@@ -470,11 +496,15 @@ Deno.serve(async (req) => {
 
       console.log(`Credit purchase activated: ${creditUserEmail} +${totalCredits} (pkg=${packageId})`);
 
-      // Push notification to admins — credit top-up
+      // Push notification to admins — credit top-up (structured + sticky)
       const creditPriceMYR = (verifiedPurchase.purchase?.total || 0) / 100;
+      const PKG_LABEL = { starter: 'Pek Permulaan', family: 'Pek Keluarga', power: 'Pek Power' };
       await notifyAdmins(base44, {
-        title: '💰 Credit Top-Up Baru!',
-        body: `${creditUserEmail} beli ${totalCredits} kredit (${packageId}) — RM${creditPriceMYR.toFixed(2)}`,
+        title: `💰 ${fmtRM(creditPriceMYR)} • ${totalCredits} Kredit AI`,
+        body: `${maskEmail(creditUserEmail)} beli ${PKG_LABEL[packageId] || packageId}`,
+        tag: `order-credit-${purchaseId}`,
+        sticky: true,
+        vibrate: true,
       });
 
       // Welcome email — credit purchase
@@ -597,12 +627,22 @@ Deno.serve(async (req) => {
 
     console.log(`Subscription activated: ${userEmail} → ${finalTier} until ${finalPeriodEnd}`);
 
-    // Push notification to admins — new subscription
+    // Push notification to admins — new subscription (structured + sticky)
     const subPricing = { asas: 49, standard: 99, keluarga: 199 };
     const subPriceMYR = subPricing[tier] || 0;
+    const isUpgradeNotif = currentSub && currentSub.tier && currentSub.tier !== 'free'
+      && currentSub.status === 'active' && currentSub.currentPeriodEnd
+      && new Date(currentSub.currentPeriodEnd) > new Date();
     await notifyAdmins(base44, {
-      title: '🎉 Subscription Baru!',
-      body: `${userEmail} langgan pelan ${tier.toUpperCase()} — RM${subPriceMYR}`,
+      title: isUpgradeNotif
+        ? `⬆️ ${fmtRM(subPriceMYR)} • Upgrade ${tier.toUpperCase()}`
+        : `🎉 ${fmtRM(subPriceMYR)} • Subscription ${tier.toUpperCase()}`,
+      body: isUpgradeNotif
+        ? `${maskEmail(userEmail)} naik taraf dari ${(currentSub.tier || '').toUpperCase()} → ${tier.toUpperCase()}`
+        : `${maskEmail(userEmail)} baru langgan pelan ${tier.toUpperCase()} (1 tahun)`,
+      tag: `order-sub-${purchaseId}`,
+      sticky: true,
+      vibrate: true,
     });
 
     // Welcome email — subscription (include bonus credits info)

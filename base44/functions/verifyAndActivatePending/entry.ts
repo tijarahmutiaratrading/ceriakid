@@ -61,7 +61,9 @@ async function sendWelcomeEmail(to, tier, bonusCredits) {
   }
 }
 
-async function notifyAdmins(base44, { title, body }) {
+const NOTIF_ICON = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png';
+
+async function notifyAdmins(base44, { title, body, tag }) {
   try {
     const publicKey = Deno.env.get('VAPID_PUBLIC_KEY');
     const privateKey = Deno.env.get('VAPID_PRIVATE_KEY');
@@ -72,10 +74,28 @@ async function notifyAdmins(base44, { title, body }) {
     webpush.setVapidDetails(subject, publicKey, privateKey);
     const subs = await base44.asServiceRole.entities.PushSubscription.filter({ isAdmin: true });
     if (subs.length === 0) return;
-    const payload = JSON.stringify({ title, body, url: '/admin-dashboard?tab=analytics', tag: 'order-notif' });
+    const payload = JSON.stringify({
+      title, body,
+      url: '/admin-dashboard?tab=analytics',
+      tag: tag || `order-verify-${Date.now()}`,
+      icon: NOTIF_ICON,
+      badge: NOTIF_ICON,
+      requireInteraction: true, // verify = real order, sticky
+      vibrate: [200, 100, 200, 100, 200],
+      timestamp: Date.now(),
+      renotify: true,
+      actions: [
+        { action: 'view', title: '👀 Lihat' },
+        { action: 'dismiss', title: '✓ OK' },
+      ],
+    });
     await Promise.all(subs.map(async (sub) => {
       try {
-        await webpush.sendNotification({ endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } }, payload);
+        await webpush.sendNotification(
+          { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
+          payload,
+          { TTL: 86400, urgency: 'high' }
+        );
       } catch (_) {}
     }));
   } catch (err) {
@@ -171,11 +191,13 @@ async function activateSubscription(base44, sub) {
     }
   }
 
-  // Push to admins
+  // Push to admins — verified order (sticky, urgent)
   const priceMYR = SUB_PRICING[tier] || 0;
+  const maskedEmail = userEmail.replace(/^(.{3}).*(@.*)$/, '$1***$2');
   await notifyAdmins(base44, {
-    title: '🎉 Subscription Activated!',
-    body: `${userEmail} → ${tier.toUpperCase()} (RM${priceMYR}) — on-demand verify`,
+    title: `🎉 RM${priceMYR} • Subscription ${tier.toUpperCase()}`,
+    body: `${maskedEmail} → activate via on-demand verify`,
+    tag: `order-verify-${purchaseId}`,
   });
 
   // Welcome email
