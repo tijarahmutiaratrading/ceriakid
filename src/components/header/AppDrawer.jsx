@@ -187,33 +187,21 @@ export default function AppDrawer({
 
         {/* Footer — logout (solid oren, compact) */}
         {isAuthenticated && (
-          <div
-            className="px-4 pt-4 pb-5 mt-2 rounded-t-3xl flex flex-col gap-3"
-            style={{
-              background: 'linear-gradient(180deg, #1e1b4b 0%, #2e1065 100%)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
-            }}
-          >
+          <div className="px-4 pt-4 pb-5 border-t border-white/40 flex flex-col gap-3">
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="inline-flex items-center gap-2.5 px-1 py-1 text-white/85 font-bold text-base active:text-white active:scale-[0.98] transition-all self-start"
+              className="inline-flex items-center gap-2.5 px-1 py-1 text-slate-700 font-bold text-base active:text-slate-900 active:scale-[0.98] transition-all self-start"
             >
               <LogOut className="w-5 h-5" strokeWidth={2.25} />
               <span>Log Keluar</span>
             </button>
-            <div
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl"
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.08)',
-              }}
-            >
+            <div className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-slate-100/70 border border-slate-200/70">
               <span className="relative flex w-2 h-2">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-ping" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <span className="text-white/90 text-sm font-semibold">Online</span>
+              <span className="text-slate-700 text-sm font-semibold">Online</span>
             </div>
           </div>
         )}
