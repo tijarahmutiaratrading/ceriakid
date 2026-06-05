@@ -23,7 +23,7 @@ export default function DeviceBlockedScreen({ devices, tier, onDeviceRemoved }) 
       }}
     >
       {/* Dim overlay supaya card popup lebih jelas */}
-      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm pointer-events-none" />
+      <div className="absolute inset-0 bg-slate-900/50 pointer-events-none" />
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
