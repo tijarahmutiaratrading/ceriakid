@@ -1,6 +1,5 @@
 import React from 'react';
-import { Calendar, ChevronDown } from 'lucide-react';
-import { startOfTodayMY, addDays } from '@/lib/myTime';
+import { Calendar } from 'lucide-react';
 
 export const DATE_RANGES = [
   { key: 'today', label: 'Hari Ini' },
@@ -10,40 +9,50 @@ export const DATE_RANGES = [
   { key: 'all', label: 'Semua' },
 ];
 
-// Helper: get start date for a range key (returns null = no filter)
-// Semua range kira ikut waktu Malaysia (MYT / UTC+8) — TIDAK bergantung pada timezone browser.
-export function getRangeStart(key) {
-  const startOfToday = startOfTodayMY();
+// Dapat tarikh hari ini dalam Malaysia (MYT = UTC+8), format YYYY-MM-DD
+function getTodayMY() {
+  const now = new Date();
+  const myt = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+  return myt.toISOString().slice(0, 10); // "2026-06-05"
+}
+
+// Tolak/tambah hari dari tarikh YYYY-MM-DD string
+function shiftDate(dateStr, days) {
+  const d = new Date(dateStr + 'T00:00:00Z');
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+// Convert timestamp ke tarikh MYT (YYYY-MM-DD)
+function toDateMY(val) {
+  if (!val) return null;
+  const d = val instanceof Date ? val : new Date(val);
+  if (isNaN(d.getTime())) return null;
+  const myt = new Date(d.getTime() + 8 * 60 * 60 * 1000);
+  return myt.toISOString().slice(0, 10);
+}
+
+// Check sama ada timestamp jatuh dalam range yang dipilih
+export function isInRange(val, key) {
+  if (key === 'all') return true;
+  const dateMY = toDateMY(val);
+  if (!dateMY) return false;
+
+  const today = getTodayMY();
+  const yesterday = shiftDate(today, -1);
+
   switch (key) {
     case 'today':
-      return startOfToday;
+      return dateMY === today;
     case 'yesterday':
-      return addDays(startOfToday, -1);
+      return dateMY === yesterday;
     case '7days':
-      return addDays(startOfToday, -6);
+      return dateMY >= shiftDate(today, -6) && dateMY <= today;
     case '30days':
-      return addDays(startOfToday, -29);
-    case 'all':
+      return dateMY >= shiftDate(today, -29) && dateMY <= today;
     default:
-      return null;
+      return true;
   }
-}
-
-export function getRangeEnd(key) {
-  if (key === 'yesterday') return startOfTodayMY(); // exclusive end = today 00:00 MYT
-  return null;
-}
-
-// Check if a Date falls inside the selected range
-export function isInRange(date, key) {
-  if (!date) return false;
-  const d = date instanceof Date ? date : new Date(date);
-  if (isNaN(d.getTime())) return false;
-  const start = getRangeStart(key);
-  const end = getRangeEnd(key);
-  if (start && d < start) return false;
-  if (end && d >= end) return false;
-  return true;
 }
 
 export default function DateRangeFilter({ value, onChange }) {
