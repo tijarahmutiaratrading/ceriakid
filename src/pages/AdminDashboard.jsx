@@ -208,10 +208,11 @@ export default function AdminDashboard() {
       return sum + price;
     }, 0);
 
+  // Tier breakdown — hanya kira subscription yang AKTIF (sudah bayar)
   const tierBreakdown = {
-    asas: filteredSubs.filter(s => s.tier === 'asas').length,
-    standard: filteredSubs.filter(s => s.tier === 'standard').length,
-    keluarga: filteredSubs.filter(s => s.tier === 'keluarga').length,
+    asas: filteredSubs.filter(s => s.tier === 'asas' && s.status === 'active').length,
+    standard: filteredSubs.filter(s => s.tier === 'standard' && s.status === 'active').length,
+    keluarga: filteredSubs.filter(s => s.tier === 'keluarga' && s.status === 'active').length,
   };
 
   const set = (key, val) => setSettings(prev => ({ ...prev, [key]: val }));
