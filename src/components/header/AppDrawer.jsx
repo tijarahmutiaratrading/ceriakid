@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { X, ChevronRight, LogOut, Crown, ChevronsUpDown, Sparkles, Pin, PinOff, Check, Plus } from 'lucide-react';
+import {
+  X, ChevronRight, LogOut, Crown, ChevronsUpDown, Sparkles, Pin, PinOff, Check, Plus,
+  Home, LayoutDashboard, Settings, Users, Mail, BookOpen, Gamepad2, Palette, BookMarked,
+  UserPlus, Trophy, Baby, LineChart, GraduationCap, HelpCircle, Sparkle, FileText,
+  BarChart3, Wrench, Activity, Cog, Globe, Star, MessageCircle, DollarSign,
+} from 'lucide-react';
 import { haptic } from '@/lib/haptics';
 import { getChildAvatar } from '@/lib/childAvatars';
 import { getPinned, togglePinned } from '@/lib/menuPrefs';
@@ -145,6 +150,7 @@ export default function AppDrawer({
                   key={`pin-${item.path}`}
                   to={item.path}
                   label={item.label}
+                  icon={getIconForPath(item.path)}
                   active={isActive(item.path)}
                   pinned
                   showPin
@@ -341,6 +347,7 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
               key={item.path}
               to={item.path}
               label={item.label}
+              icon={item.icon}
               active={isActive(item.path)}
               pinned={pinnedItems.some((p) => p.path === item.path)}
               showPin={section.allowPin}
@@ -378,6 +385,7 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
               key={item.path}
               to={item.path}
               label={item.label}
+              icon={item.icon}
               active={isActive(item.path)}
               pinned={pinnedItems.some((p) => p.path === item.path)}
               showPin={section.allowPin}
@@ -392,8 +400,9 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
   );
 }
 
-function MenuItem({ to, label, active, pinned, showPin, onPinToggle, onNavigate, size = 'default' }) {
+function MenuItem({ to, label, icon: Icon, active, pinned, showPin, onPinToggle, onNavigate, size = 'default' }) {
   const isSmall = size === 'small';
+  const iconSize = isSmall ? 'w-4 h-4' : 'w-[18px] h-[18px]';
 
   return (
     <div className="relative group">
@@ -416,7 +425,15 @@ function MenuItem({ to, label, active, pinned, showPin, onPinToggle, onNavigate,
             : undefined
         }
       >
-        <span className="flex-1 truncate">{label}</span>
+        <div className="flex-1 flex items-center gap-2.5 min-w-0">
+          {Icon && (
+            <Icon
+              className={`${iconSize} flex-shrink-0 ${active ? 'text-white' : 'text-slate-500'}`}
+              strokeWidth={active ? 2.5 : 2.25}
+            />
+          )}
+          <span className="truncate">{label}</span>
+        </div>
 
         <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
           {showPin && (
@@ -574,11 +591,11 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       key: 'landing',
       type: 'flat',
       items: [
-        { path: '/', label: 'Rumah' },
-        { path: '#features', label: 'Ciri-ciri', external: true },
-        { path: '#testimonials', label: 'Testimoni', external: true },
-        { path: '#pricing', label: 'Harga', external: true },
-        { path: '#faq', label: 'Soalan Lazim', external: true },
+        { path: '/', label: 'Rumah', icon: Home },
+        { path: '#features', label: 'Ciri-ciri', icon: Star, external: true },
+        { path: '#testimonials', label: 'Testimoni', icon: MessageCircle, external: true },
+        { path: '#pricing', label: 'Harga', icon: DollarSign, external: true },
+        { path: '#faq', label: 'Soalan Lazim', icon: HelpCircle, external: true },
       ],
     }];
   }
@@ -586,7 +603,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
   const sections = [{
     key: 'home',
     type: 'flat',
-    items: [{ path: '/', label: 'Halaman Utama' }],
+    items: [{ path: '/', label: 'Halaman Utama', icon: Home }],
   }];
 
   // Admin section — DULUKAN sebelum dashboard pengguna
@@ -596,10 +613,10 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       type: 'grouped',
       label: 'Admin',
       items: [
-        { path: '/admin-dashboard?tab=analytics', label: 'Analytics' },
-        { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager' },
-        { path: '/admin-dashboard?tab=health', label: 'System Health' },
-        { path: '/admin-dashboard?tab=settings', label: 'Settings' },
+        { path: '/admin-dashboard?tab=analytics', label: 'Analytics', icon: BarChart3 },
+        { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager', icon: Wrench },
+        { path: '/admin-dashboard?tab=health', label: 'System Health', icon: Activity },
+        { path: '/admin-dashboard?tab=settings', label: 'Settings', icon: Cog },
       ],
     });
   }
@@ -611,10 +628,10 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       label: 'Akaun',
       allowPin: true,
       items: [
-        { path: '/dashboard', label: 'Dashboard Pengguna' },
-        { path: '/settings', label: 'Tetapan Akaun' },
-        { path: '/affiliate', label: 'Program Affiliate' },
-        { path: '/contact', label: 'Hubungi Kami' },
+        { path: '/dashboard', label: 'Dashboard Pengguna', icon: LayoutDashboard },
+        { path: '/settings', label: 'Tetapan Akaun', icon: Settings },
+        { path: '/affiliate', label: 'Program Affiliate', icon: Users },
+        { path: '/contact', label: 'Hubungi Kami', icon: Mail },
       ],
     });
 
@@ -624,12 +641,12 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       label: 'Aktiviti',
       allowPin: true,
       items: [
-        { path: '/games-subjek', label: 'Belajar Ikut Subjek' },
-        { path: '/games-hub', label: 'Game Hub' },
-        { path: '/drawing', label: 'Studio Lukisan' },
-        { path: '/story-kid', label: 'Story Kid' },
-        { path: '/friends', label: 'Kawan' },
-        { path: '/challenges', label: 'Cabaran' },
+        { path: '/games-subjek', label: 'Belajar Ikut Subjek', icon: BookOpen },
+        { path: '/games-hub', label: 'Game Hub', icon: Gamepad2 },
+        { path: '/drawing', label: 'Studio Lukisan', icon: Palette },
+        { path: '/story-kid', label: 'Story Kid', icon: BookMarked },
+        { path: '/friends', label: 'Kawan', icon: UserPlus },
+        { path: '/challenges', label: 'Cabaran', icon: Trophy },
       ],
     });
 
@@ -639,8 +656,8 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       label: 'Keluarga',
       allowPin: true,
       items: [
-        { path: '/children-profiles', label: 'Profil Anak' },
-        { path: '/parent-dashboard', label: 'Prestasi Anak' },
+        { path: '/children-profiles', label: 'Profil Anak', icon: Baby },
+        { path: '/parent-dashboard', label: 'Prestasi Anak', icon: LineChart },
       ],
     });
 
@@ -650,13 +667,37 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       label: 'Cikgu AI',
       allowPin: true,
       items: [
-        { path: '/ai-assistant', label: 'Cikgu Firdaus — Tutor' },
-        { path: '/quiz-ai', label: 'Cikgu Rosie — Kuiz' },
-        { path: '/story-generator', label: 'Cikgu Mira — Cerita' },
-        { path: '/bbm-generator', label: 'Cikgu Daniel — BBM' },
+        { path: '/ai-assistant', label: 'Cikgu Firdaus — Tutor', icon: GraduationCap },
+        { path: '/quiz-ai', label: 'Cikgu Rosie — Kuiz', icon: HelpCircle },
+        { path: '/story-generator', label: 'Cikgu Mira — Cerita', icon: Sparkle },
+        { path: '/bbm-generator', label: 'Cikgu Daniel — BBM', icon: FileText },
       ],
     });
   }
 
   return sections;
+}
+
+/* Map path → icon for pinned items (which only store path + label) */
+function getIconForPath(path) {
+  const map = {
+    '/': Home,
+    '/dashboard': LayoutDashboard,
+    '/settings': Settings,
+    '/affiliate': Users,
+    '/contact': Mail,
+    '/games-subjek': BookOpen,
+    '/games-hub': Gamepad2,
+    '/drawing': Palette,
+    '/story-kid': BookMarked,
+    '/friends': UserPlus,
+    '/challenges': Trophy,
+    '/children-profiles': Baby,
+    '/parent-dashboard': LineChart,
+    '/ai-assistant': GraduationCap,
+    '/quiz-ai': HelpCircle,
+    '/story-generator': Sparkle,
+    '/bbm-generator': FileText,
+  };
+  return map[path] || Globe;
 }
