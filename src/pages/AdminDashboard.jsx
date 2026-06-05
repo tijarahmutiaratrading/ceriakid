@@ -334,7 +334,7 @@ export default function AdminDashboard() {
                           {filteredSubs.length} order • {uniqueSessions} unique visitor
                         </p>
                         <p className="text-[10px] text-slate-400 tabular-nums">
-                          MYT hari ini: {new Date(Date.now() + 8*3600000).toISOString().slice(0,10)}
+                          MYT hari ini: {new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kuala_Lumpur' })}
                         </p>
                       </div>
                     </div>
@@ -344,8 +344,8 @@ export default function AdminDashboard() {
                       <summary className="font-black text-amber-800 cursor-pointer">🔍 Debug: created_date semua subscription (klik untuk buka)</summary>
                       <div className="mt-2 space-y-1 font-mono max-h-48 overflow-y-auto">
                         {subscriptions.slice(0, 20).map((s, i) => {
-                          // Betul: tambah +8 jam untuk tunjuk MYT
-                          const mytDate = s.created_date ? new Date(new Date(s.created_date).getTime() + 8*3600000).toISOString().slice(0,16).replace('T',' ') + ' MYT' : 'NULL';
+                          // Guna toLocaleString dengan timezone KL
+                          const mytDate = s.created_date ? new Date(s.created_date).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'short', timeStyle: 'short' }) + ' MYT' : 'NULL';
                           const inToday = isInRange(s.created_date, 'today');
                           const inYesterday = isInRange(s.created_date, 'yesterday');
                           return (
