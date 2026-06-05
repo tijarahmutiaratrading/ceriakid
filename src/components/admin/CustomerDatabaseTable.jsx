@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check, User as UserIcon, Phone, Mail, Edit2, X, Save, Loader2 } from 'lucide-react';
+import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check, User as UserIcon, Phone, Mail, Edit2, X, Save, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const TIER_LABELS = {
@@ -47,7 +47,47 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
   const [editName, setEditName] = useState(customer.fullName || '');
   const [editPhone, setEditPhone] = useState(customer.phone || '');
   const [saving, setSaving] = useState(false);
+  const [markingPaid, setMarkingPaid] = useState(false);
   const { toast } = useToast();
+
+  const isPending = customer.status === 'incomplete' || customer.status === 'past_due';
+
+  const handleMarkAsPaid = async (e, forceSkipChip = false) => {
+    e.stopPropagation();
+    const confirmMsg = forceSkipChip
+      ? `⚠️ FORCE activate ${customer.email}?\n\nChip belum confirm paid. Hanya pilih ini kalau betul-betul dah terima bayaran via transfer manual.`
+      : `Mark ${customer.email} sebagai PAID?\n\nSistem akan:\n• Verify dengan Chip\n• Activate subscription\n• Award bonus credits\n• Hantar welcome email\n• Hantar push notification\n• Fire FB CAPI Purchase event`;
+    if (!window.confirm(confirmMsg)) return;
+    setMarkingPaid(true);
+    try {
+      const res = await base44.functions.invoke('markSubscriptionAsPaid', {
+        subscriptionId: customer.id,
+        skipChipVerify: forceSkipChip,
+      });
+      const data = res?.data;
+      if (data?.success) {
+        toast({
+          title: '✅ Subscription Activated!',
+          description: `Email: ${data.welcomeEmailSent ? '✓' : '✗'} • Push: ${data.pushNotificationsSent} • FB CAPI: ${data.fbCapiSent ? '✓' : '✗'} • Bonus: +${data.bonusCreditsAwarded} kredit`,
+        });
+        await onUpdate?.();
+      } else if (data?.chipStatus && data.chipStatus !== 'paid') {
+        // Chip kata belum paid — bagi option force
+        const force = window.confirm(`Chip kata status: "${data.chipStatus}" (belum paid).\n\nTekan OK untuk FORCE activate (kalau dah terima bayaran manual), atau Cancel.`);
+        if (force) {
+          setMarkingPaid(false);
+          return handleMarkAsPaid(e, true);
+        }
+        toast({ title: '❌ Chip belum confirm paid', description: `Status di Chip: ${data.chipStatus}`, variant: 'destructive' });
+      } else {
+        toast({ title: '❌ Gagal', description: data?.error || 'Unknown error', variant: 'destructive' });
+      }
+    } catch (err) {
+      toast({ title: '❌ Error', description: err?.response?.data?.error || err.message, variant: 'destructive' });
+    } finally {
+      setMarkingPaid(false);
+    }
+  };
 
   const tier = TIER_LABELS[customer.tier] || TIER_LABELS.free;
   const status = STATUS_LABELS[customer.status] || STATUS_LABELS.canceled;
@@ -117,9 +157,22 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
           </span>
         </td>
         <td className="py-3 px-3 whitespace-nowrap">
-          <span className={`text-xs font-black ${status.cls}`}>
-            {status.label}
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className={`text-xs font-black ${status.cls}`}>
+              {status.label}
+            </span>
+            {isPending && (
+              <button
+                onClick={handleMarkAsPaid}
+                disabled={markingPaid}
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-black shadow-sm disabled:opacity-60 transition-all"
+                title="Mark as Paid — verify dengan Chip & activate"
+              >
+                {markingPaid ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCircle2 className="w-3 h-3" />}
+                Mark Paid
+              </button>
+            )}
+          </div>
         </td>
         <td className="py-3 px-3 text-xs text-slate-700 font-bold whitespace-nowrap text-center">{customer.childrenCount}</td>
         <td className="py-3 px-3 text-xs text-slate-700 font-bold whitespace-nowrap text-center">{customer.deviceCount}</td>
