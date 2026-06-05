@@ -47,18 +47,23 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html, body {
+    overscroll-behavior: none;
+  }
+
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    height: 100%;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-nunito);
     overflow-x: hidden;
-    overscroll-behavior-y: none;
     text-rendering: optimizeLegibility;
     -webkit-tap-highlight-color: transparent;
+    min-height: 100%;
   }
 
   button, a, input, textarea, select {
