@@ -58,34 +58,49 @@ export default function GamePlayer() {
       }
       setUserTier(resolvedTier);
 
-      const isLocked = isGameIndexLocked({ index: gameIndex, tier: resolvedTier, isAuthenticated });
+      // Resolve game first — kita kena tau game ni darjah/bucket mana, baru boleh
+      // calculate bucket-local index untuk lock check (sama macam GamesList).
+      // URL `index` adalah GLOBAL index dalam category, bukan bucket-local.
+      let resolvedGame = null;
+      let allCategoryGames = [];
+      try {
+        const dbGames = await base44.entities.Game.filter({ ageGroup, category, isPublished: true });
+        if (dbGames.length > 0) {
+          dbGames.sort((a, b) => {
+            const da = DARJAH_ORDER.indexOf(a.darjah);
+            const db = DARJAH_ORDER.indexOf(b.darjah);
+            if (da !== db) return (da === -1 ? 99 : da) - (db === -1 ? 99 : db);
+            return (a.order || 0) - (b.order || 0);
+          });
+          allCategoryGames = dbGames;
+          resolvedGame = dbGames[gameIndex] || null;
+        }
+      } catch (e) {
+        // fallback below
+      }
+      if (!resolvedGame) {
+        const libGames = getGamesByAgeAndCategory(ageGroup, category) || [];
+        allCategoryGames = libGames;
+        resolvedGame = libGames[gameIndex] || null;
+      }
 
+      // Compute bucket-local index — sama logic dengan GamesList.
+      // Sekolah Rendah bucket = darjah; Prasekolah bucket = whole subject.
+      let bucketLocalIdx = gameIndex;
+      if (ageGroup === 'sekolah_rendah' && resolvedGame?.darjah) {
+        const bucketGames = allCategoryGames.filter(g => g.darjah === resolvedGame.darjah);
+        const idxInBucket = bucketGames.findIndex(g => g === resolvedGame);
+        if (idxInBucket >= 0) bucketLocalIdx = idxInBucket;
+      }
+
+      const isLocked = isGameIndexLocked({ index: bucketLocalIdx, tier: resolvedTier, isAuthenticated });
       if (isLocked) {
         setAccessDenied(true);
         setGameLoaded(true);
         return;
       }
 
-      try {
-        const dbGames = await base44.entities.Game.filter({ ageGroup, category, isPublished: true });
-        dbGames.sort((a, b) => {
-          const da = DARJAH_ORDER.indexOf(a.darjah);
-          const db = DARJAH_ORDER.indexOf(b.darjah);
-          if (da !== db) return (da === -1 ? 99 : da) - (db === -1 ? 99 : db);
-          return (a.order || 0) - (b.order || 0);
-        });
-        if (dbGames.length > gameIndex && dbGames[gameIndex]) {
-          setGame(dbGames[gameIndex]);
-          setGameLoaded(true);
-          return;
-        }
-      } catch (e) {
-        // fallback
-      }
-      // Fallback to hardcoded library
-      const libGames = getGamesByAgeAndCategory(ageGroup, category);
-      const libGame = libGames && gameIndex >= 0 && gameIndex < libGames.length ? libGames[gameIndex] : null;
-      setGame(libGame);
+      setGame(resolvedGame);
       setGameLoaded(true);
     };
     loadGame();
