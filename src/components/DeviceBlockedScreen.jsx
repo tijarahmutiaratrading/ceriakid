@@ -16,7 +16,7 @@ export default function DeviceBlockedScreen({ devices, tier, onDeviceRemoved }) 
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8 overflow-y-auto"
       style={{
-        backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2ac41cf0d_IMG_1038.png)',
+        backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
