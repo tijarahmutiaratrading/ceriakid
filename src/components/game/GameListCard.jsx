@@ -50,16 +50,41 @@ const TYPE_STYLE = {
   tracing:         { icon: PenLine,     gradient: 'from-pink-500 to-rose-400',      iconColor: 'text-white' },
 };
 
-function getGameStyle(game) {
-  return CATEGORY_STYLE[game.category] || TYPE_STYLE[game.type] || { icon: Gamepad2, gradient: 'from-slate-500 to-slate-400', iconColor: 'text-white' };
+// Pool of icons & gradients to rotate per card index
+const ICON_POOL = [
+  { icon: BookOpen,     gradient: 'from-blue-500 to-cyan-400' },
+  { icon: Brain,        gradient: 'from-violet-500 to-purple-400' },
+  { icon: Puzzle,       gradient: 'from-pink-500 to-rose-400' },
+  { icon: Layers,       gradient: 'from-amber-500 to-orange-400' },
+  { icon: Sigma,        gradient: 'from-emerald-500 to-teal-400' },
+  { icon: Palette,      gradient: 'from-fuchsia-500 to-pink-400' },
+  { icon: Music,        gradient: 'from-sky-500 to-blue-400' },
+  { icon: Shapes,       gradient: 'from-green-500 to-emerald-400' },
+  { icon: Zap,          gradient: 'from-yellow-500 to-amber-400' },
+  { icon: Star,         gradient: 'from-orange-500 to-red-400' },
+  { icon: Microscope,   gradient: 'from-indigo-500 to-violet-400' },
+  { icon: AlignLeft,    gradient: 'from-teal-500 to-cyan-400' },
+];
+
+function getGameStyle(game, idx) {
+  // Category-level override for icon only (keeps variety via idx for gradient)
+  const catStyle = CATEGORY_STYLE[game.category];
+  const typeStyle = TYPE_STYLE[game.type];
+
+  // Use pool entry based on idx for variety, but override icon if category/type has a specific one
+  const poolEntry = ICON_POOL[idx % ICON_POOL.length];
+  const icon = (catStyle || typeStyle)?.icon || poolEntry.icon;
+  const gradient = poolEntry.gradient; // always rotate gradient by idx
+
+  return { icon, gradient, iconColor: 'text-white' };
 }
 
-function GameIcon({ game, locked }) {
-  const style = getGameStyle(game);
+function GameIcon({ game, locked, idx }) {
+  const style = getGameStyle(game, idx);
   const IconComp = style.icon;
   return (
     <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${style.gradient} flex items-center justify-center shadow-md ${locked ? 'opacity-40 grayscale' : ''}`}>
-      <IconComp className={`w-7 h-7 sm:w-8 sm:h-8 ${style.iconColor}`} strokeWidth={1.75} />
+      <IconComp className="w-7 h-7 sm:w-8 sm:h-8 text-white" strokeWidth={1.75} />
     </div>
   );
 }
@@ -104,9 +129,9 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
       <div className={`absolute left-0 top-0 bottom-0 w-1 ${theme.iconBg} opacity-80`} aria-hidden="true" />
 
       <div className="relative p-4 sm:p-5 flex items-center gap-3 sm:gap-4 min-h-[100px] sm:min-h-[120px]">
-        {/* SVG icon bubble — gradient per subject */}
+        {/* SVG icon bubble — gradient varies per card */}
         <div className="flex-shrink-0">
-          <GameIcon game={game} locked={locked} />
+          <GameIcon game={game} locked={locked} idx={idx} />
         </div>
 
         {/* Content */}
