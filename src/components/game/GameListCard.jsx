@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Lock, Play, BookOpen, Calculator, FlaskConical, Globe, PenLine, Brain, Puzzle, Layers, Music, Palette, Zap, Star, Shapes, Trophy, Gamepad2, BookMarked, Sigma, Microscope, Languages, AlignLeft } from 'lucide-react';
+import { Lock, Play, BookOpen, Calculator, FlaskConical, Globe, PenLine, Brain, Puzzle, Layers, Music, Palette, Zap, Star, Shapes, Gamepad2, BookMarked, Sigma, Microscope, Languages, AlignLeft, Apple, Users, Home, Car, Shirt, School, Trees, Fish, Cat, Dog, Heart, Sun, Cloud, Droplets, Flame, Leaf, Egg, Banana, Footprints, Bus, Plane, Bike, Watch, Scissors, Pencil, Ruler, Compass, Award, Flag, Map, Mountain, Flower2, Bug, Bird, Rabbit, Baby, HandHeart, Utensils, Coffee, ShoppingBag, Building2, Landmark, Telescope, Atom, Dna, Waves, Wind, Thermometer, Moon, Sparkles } from 'lucide-react';
 import GameBadge from './GameBadge';
 import UpgradeLockModal from './UpgradeLockModal';
 
@@ -50,33 +50,88 @@ const TYPE_STYLE = {
   tracing:         { icon: PenLine,     gradient: 'from-pink-500 to-rose-400',      iconColor: 'text-white' },
 };
 
-// Pool of icons & gradients to rotate per card index
-const ICON_POOL = [
-  { icon: BookOpen,     gradient: 'from-blue-500 to-cyan-400' },
-  { icon: Brain,        gradient: 'from-violet-500 to-purple-400' },
-  { icon: Puzzle,       gradient: 'from-pink-500 to-rose-400' },
-  { icon: Layers,       gradient: 'from-amber-500 to-orange-400' },
-  { icon: Sigma,        gradient: 'from-emerald-500 to-teal-400' },
-  { icon: Palette,      gradient: 'from-fuchsia-500 to-pink-400' },
-  { icon: Music,        gradient: 'from-sky-500 to-blue-400' },
-  { icon: Shapes,       gradient: 'from-green-500 to-emerald-400' },
-  { icon: Zap,          gradient: 'from-yellow-500 to-amber-400' },
-  { icon: Star,         gradient: 'from-orange-500 to-red-400' },
-  { icon: Microscope,   gradient: 'from-indigo-500 to-violet-400' },
-  { icon: AlignLeft,    gradient: 'from-teal-500 to-cyan-400' },
+// Title keyword → { icon, gradient }
+const TITLE_KEYWORD_MAP = [
+  // Buah-buahan
+  { keys: ['buah', 'fruit', 'epal', 'mangga', 'pisang', 'limau', 'tembikai', 'durian', 'nanas', 'betik', 'ciku', 'jambu', 'rambutan', 'manggis'], icon: Apple, gradient: 'from-red-500 to-orange-400' },
+  // Keluarga
+  { keys: ['keluarga', 'family', 'ibu', 'bapa', 'ayah', 'adik', 'kakak', 'abang', 'datuk', 'nenek', 'ahli keluarga'], icon: Home, gradient: 'from-pink-500 to-rose-400' },
+  // Sayur-sayuran
+  { keys: ['sayur', 'vegetable', 'kubis', 'bayam', 'lobak', 'brokoli', 'timun', 'tomato', 'bendi', 'kangkung'], icon: Leaf, gradient: 'from-green-500 to-emerald-400' },
+  // Haiwan
+  { keys: ['haiwan', 'animal', 'binatang', 'kucing', 'anjing', 'harimau', 'gajah', 'singa', 'arnab', 'ikan', 'burung', 'monyet', 'kuda', 'lembu', 'kambing', 'ayam', 'itik', 'katak', 'ular', 'buaya'], icon: Cat, gradient: 'from-amber-500 to-orange-400' },
+  // Nombor / Matematik
+  { keys: ['nombor', 'number', 'matematik', 'math', 'tambah', 'tolak', 'darab', 'bahagi', 'kira', 'count', 'digit', 'angka', 'jumlah', 'pengiraan'], icon: Calculator, gradient: 'from-blue-500 to-indigo-400' },
+  // Huruf / Abjad
+  { keys: ['huruf', 'abjad', 'vokal', 'konsonan', 'letter', 'alphabet', 'ejaan', 'sebutan', 'fonik', 'phonics', 'eja'], icon: AlignLeft, gradient: 'from-violet-500 to-purple-400' },
+  // Warna
+  { keys: ['warna', 'colour', 'color', 'merah', 'biru', 'hijau', 'kuning', 'ungu', 'oren', 'hitam', 'putih', 'pelangi'], icon: Palette, gradient: 'from-fuchsia-500 to-pink-400' },
+  // Bentuk
+  { keys: ['bentuk', 'shape', 'bulat', 'segi', 'segitiga', 'empat', 'lonjong', 'diamond', 'bintang'], icon: Shapes, gradient: 'from-sky-500 to-blue-400' },
+  // Pakaian
+  { keys: ['pakaian', 'baju', 'cloth', 'kasut', 'seluar', 'tudung', 'topi', 'stokin', 'dress', 'uniform', 'sekolah'], icon: Shirt, gradient: 'from-purple-500 to-violet-400' },
+  // Pengangkutan / Kenderaan
+  { keys: ['pengangkutan', 'kenderaan', 'kereta', 'bas', 'vehicle', 'transport', 'kapal', 'motosikal', 'lori', 'teksi', 'tren'], icon: Car, gradient: 'from-slate-500 to-blue-400' },
+  // Sekolah / Alat tulis
+  { keys: ['sekolah', 'school', 'alat', 'tulis', 'pensil', 'pen', 'buku', 'getah', 'pembaris', 'beg', 'kelas', 'guru', 'cikgu'], icon: School, gradient: 'from-amber-500 to-yellow-400' },
+  // Alam sekitar / Alam semula jadi
+  { keys: ['alam', 'nature', 'pokok', 'hutan', 'bukit', 'sungai', 'laut', 'pantai', 'gunung', 'rumput', 'bunga', 'taman'], icon: Trees, gradient: 'from-green-600 to-teal-400' },
+  // Makanan / Minuman
+  { keys: ['makanan', 'food', 'minuman', 'makan', 'minum', 'nasi', 'roti', 'susu', 'air', 'kuih', 'lauk', 'masak', 'dapur', 'resepi'], icon: Utensils, gradient: 'from-orange-500 to-amber-400' },
+  // Anggota badan
+  { keys: ['anggota', 'badan', 'body', 'tangan', 'kaki', 'kepala', 'mata', 'telinga', 'hidung', 'mulut', 'gigi', 'rambut'], icon: Heart, gradient: 'from-red-500 to-pink-400' },
+  // Sains / Eksperimen
+  { keys: ['sains', 'science', 'eksperimen', 'fizik', 'kimia', 'biologi', 'magnet', 'cahaya', 'bunyi', 'tenaga', 'graviti'], icon: FlaskConical, gradient: 'from-purple-600 to-violet-400' },
+  // Cuaca / Alam
+  { keys: ['cuaca', 'weather', 'hujan', 'panas', 'sejuk', 'angin', 'ribut', 'banjir', 'salji', 'mendung', 'pelangi', 'matahari', 'bulan', 'bintang'], icon: Sun, gradient: 'from-yellow-500 to-orange-400' },
+  // Nama diri / Kata nama
+  { keys: ['nama', 'kata', 'perkataan', 'word', 'ayat', 'sentence', 'karangan', 'cerita', 'kisah', 'novel'], icon: BookOpen, gradient: 'from-blue-500 to-cyan-400' },
+  // Jawi / Arab
+  { keys: ['jawi', 'arab', 'quran', 'al-quran', 'hafazan', 'surah', 'doa', 'solat', 'ibadah', 'akidah', 'akhlak', 'adab', 'sirah', 'nabi'], icon: BookMarked, gradient: 'from-emerald-600 to-green-400' },
+  // Lagu / Muzik
+  { keys: ['lagu', 'muzik', 'music', 'nyanyian', 'bunyi', 'irama', 'nada'], icon: Music, gradient: 'from-pink-500 to-fuchsia-400' },
+  // Sukan / Senaman
+  { keys: ['sukan', 'sport', 'senaman', 'berlari', 'berenang', 'bola', 'badminton', 'berbasikal', 'gym', 'aktif'], icon: Bike, gradient: 'from-green-500 to-teal-400' },
+  // Profesion / Pekerjaan
+  { keys: ['profesion', 'pekerjaan', 'kerja', 'doktor', 'guru', 'polis', 'bomba', 'jurutera', 'pilot', 'chef'], icon: Building2, gradient: 'from-indigo-500 to-blue-400' },
+  // Angkasa / Ruang
+  { keys: ['angkasa', 'planet', 'space', 'bumi', 'bulan', 'matahari', 'galaksi', 'astronaut', 'roket', 'bintang'], icon: Telescope, gradient: 'from-indigo-600 to-purple-400' },
+  // Insect / Serangga
+  { keys: ['serangga', 'insect', 'rama-rama', 'lebah', 'semut', 'nyamuk', 'lipas', 'ulat', 'kumbang'], icon: Bug, gradient: 'from-lime-500 to-green-400' },
+];
+
+// Gradients pool for fallback rotation
+const GRADIENT_POOL = [
+  'from-blue-500 to-cyan-400',
+  'from-violet-500 to-purple-400',
+  'from-pink-500 to-rose-400',
+  'from-amber-500 to-orange-400',
+  'from-emerald-500 to-teal-400',
+  'from-fuchsia-500 to-pink-400',
+  'from-sky-500 to-blue-400',
+  'from-green-500 to-emerald-400',
+  'from-yellow-500 to-amber-400',
+  'from-orange-500 to-red-400',
+  'from-indigo-500 to-violet-400',
+  'from-teal-500 to-cyan-400',
 ];
 
 function getGameStyle(game, idx) {
-  // Category-level override for icon only (keeps variety via idx for gradient)
+  const titleLower = (game.title || '').toLowerCase();
+
+  // Try to match title keywords first
+  for (const entry of TITLE_KEYWORD_MAP) {
+    if (entry.keys.some(k => titleLower.includes(k))) {
+      return { icon: entry.icon, gradient: entry.gradient };
+    }
+  }
+
+  // Fallback: category/type icon + rotating gradient
   const catStyle = CATEGORY_STYLE[game.category];
   const typeStyle = TYPE_STYLE[game.type];
-
-  // Use pool entry based on idx for variety, but override icon if category/type has a specific one
-  const poolEntry = ICON_POOL[idx % ICON_POOL.length];
-  const icon = (catStyle || typeStyle)?.icon || poolEntry.icon;
-  const gradient = poolEntry.gradient; // always rotate gradient by idx
-
-  return { icon, gradient, iconColor: 'text-white' };
+  const icon = catStyle?.icon || typeStyle?.icon || Gamepad2;
+  const gradient = GRADIENT_POOL[idx % GRADIENT_POOL.length];
+  return { icon, gradient };
 }
 
 function GameIcon({ game, locked, idx }) {
