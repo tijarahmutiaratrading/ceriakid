@@ -1,9 +1,57 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Lock, Play, ChevronRight } from 'lucide-react';
+import { Lock, Play, BookOpen, Calculator, FlaskConical, Globe, PenLine, Brain, Puzzle, Layers, Music, Palette, Zap, Star, Shapes, Trophy, Gamepad2, BookMarked, Sigma, Microscope, Languages, AlignLeft } from 'lucide-react';
 import GameBadge from './GameBadge';
 import UpgradeLockModal from './UpgradeLockModal';
+
+// Map game type/category → Lucide icon component
+const GAME_ICONS = {
+  // by category
+  bahasa_melayu: BookOpen,
+  english: Globe,
+  mathematics: Calculator,
+  science: FlaskConical,
+  jawi: PenLine,
+  worksheet: PenLine,
+  bahasa_tamil: Languages,
+  bahasa_mandarin: Languages,
+  kafa_quran: BookMarked,
+  kafa_jawi: PenLine,
+  kafa_akidah: Star,
+  kafa_ibadah: BookMarked,
+  kafa_sirah: BookOpen,
+  kafa_adab: Brain,
+  kafa_bahasa_arab: Languages,
+  // by game type
+  letter_match: AlignLeft,
+  number_match: Sigma,
+  picture_quiz: Layers,
+  drag_drop: Puzzle,
+  multiple_choice: Brain,
+  counting: Calculator,
+  word_builder: BookOpen,
+  math_puzzle: Sigma,
+  science_quiz: Microscope,
+  shape_sort: Shapes,
+  color_match: Palette,
+  pattern_fill: Layers,
+  memory_game: Brain,
+  sound_match: Music,
+  spelling: BookOpen,
+  reading: BookOpen,
+  phonics: Music,
+  sorting: Layers,
+  tile_match: Gamepad2,
+  story_adventure: BookOpen,
+  physics: Zap,
+  tracing: PenLine,
+};
+
+function GameIcon({ game, className = 'w-7 h-7', strokeWidth = 1.75 }) {
+  const IconComp = GAME_ICONS[game.type] || GAME_ICONS[game.category] || Gamepad2;
+  return <IconComp className={className} strokeWidth={strokeWidth} />;
+}
 
 // Apple-style soft accent tints — rotate per card for subtle variety
 const CARD_THEMES = [
@@ -45,10 +93,10 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
       <div className={`absolute left-0 top-0 bottom-0 w-1 ${theme.iconBg} opacity-80`} aria-hidden="true" />
 
       <div className="relative p-4 sm:p-5 flex items-center gap-3 sm:gap-4 min-h-[100px] sm:min-h-[120px]">
-        {/* Emoji bubble — soft tinted circle */}
+        {/* SVG icon bubble — soft tinted circle */}
         <div className="flex-shrink-0">
-          <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl ${theme.iconBg} flex items-center justify-center text-3xl sm:text-4xl`}>
-            <span className={locked ? 'grayscale opacity-60' : ''}>{game.emoji}</span>
+          <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl ${theme.iconBg} flex items-center justify-center ${locked ? 'opacity-50' : ''}`}>
+            <GameIcon game={game} className={`w-7 h-7 sm:w-8 sm:h-8 ${theme.iconText}`} />
           </div>
         </div>
 
