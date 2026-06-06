@@ -22,44 +22,36 @@ Deno.serve(async (req) => {
     }
 
     if (games.length === 0) {
-      return Response.json({ message: 'Tiada game yang perlu di-generate', count: 0 });
+      return Response.json({ message: 'Tiada game yang perlu di-generate', total: 0, started: false });
     }
 
-    let success = 0;
-    let failed = 0;
-    const errors = [];
-
-    for (const game of games) {
-      try {
-        const prompt = `A cute, vibrant, child-friendly 3D icon for a Malaysian kids educational game called "${game.title}". 
-        Pixar/cartoon style, bright colors, simple design, white or transparent background, square format, 
-        no text, no letters. The icon should visually represent the topic of the game title.
-        High quality, glossy, playful illustration suitable for a colorful game card.`;
-
-        const result = await base44.asServiceRole.integrations.Core.GenerateImage({ prompt });
-
-        if (result?.url) {
-          await base44.asServiceRole.entities.Game.update(game.id, { iconUrl: result.url });
-          success++;
-        } else {
-          failed++;
-          errors.push(`${game.title}: no URL returned`);
-        }
-
-        // Small delay to avoid rate limiting
-        await new Promise(r => setTimeout(r, 500));
-      } catch (err) {
-        failed++;
-        errors.push(`${game.title}: ${err.message}`);
-      }
-    }
-
-    return Response.json({
-      message: `✅ Selesai! ${success} icon generated, ${failed} gagal.`,
-      success,
-      failed,
-      errors: errors.slice(0, 10),
+    // Return immediately — background processing continues after response
+    const response = Response.json({
+      message: `⏳ Background generate dimulakan untuk ${games.length} games. Tutup browser pun okay!`,
+      total: games.length,
+      started: true,
     });
+
+    // Fire-and-forget background loop
+    (async () => {
+      for (const game of games) {
+        try {
+          const prompt = `A cute, vibrant, child-friendly 3D cartoon icon for a Malaysian kids educational game called "${game.title}". Pixar/Disney style, bright vivid solid color background (auto-chosen to match the theme), large centered main character or object, glossy plastic toy look, soft shadows, no text, no letters, square format. Clearly represents the game topic. Suitable for a colorful kids app game card.`;
+
+          const result = await base44.asServiceRole.integrations.Core.GenerateImage({ prompt });
+
+          if (result?.url) {
+            await base44.asServiceRole.entities.Game.update(game.id, { iconUrl: result.url });
+          }
+
+          await new Promise(r => setTimeout(r, 500));
+        } catch (_) {
+          // silently continue to next game
+        }
+      }
+    })();
+
+    return response;
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
