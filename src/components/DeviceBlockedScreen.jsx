@@ -16,14 +16,13 @@ export default function DeviceBlockedScreen({ devices, tier, onDeviceRemoved }) 
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8 overflow-y-auto"
       style={{
-        backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
+        backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2ac41cf0d_IMG_1038.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }}
     >
-      {/* Dim overlay supaya card popup lebih jelas */}
-      <div className="absolute inset-0 bg-slate-900/50 pointer-events-none" />
+      
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
