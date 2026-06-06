@@ -31,11 +31,18 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
 
   const cardInner = (
     <div
-      className="relative h-full rounded-3xl overflow-hidden bg-white ring-1 ring-black/5"
-      style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(15,23,42,0.06)' }}
+      className="relative h-full rounded-3xl overflow-hidden ring-1 ring-white/60"
+      style={{
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.65) 100%)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.06), 0 12px 32px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9)',
+      }}
     >
+      {/* Glass shine overlay */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 60%)' }} aria-hidden="true" />
       {/* Soft tinted accent strip on left */}
-      <div className={`absolute left-0 top-0 bottom-0 w-1 ${theme.iconBg}`} aria-hidden="true" />
+      <div className={`absolute left-0 top-0 bottom-0 w-1 ${theme.iconBg} opacity-80`} aria-hidden="true" />
 
       <div className="relative p-4 sm:p-5 flex items-center gap-3 sm:gap-4 min-h-[100px] sm:min-h-[120px]">
         {/* Emoji bubble — soft tinted circle */}
