@@ -500,7 +500,7 @@ export default function GamePlayer() {
     <div
       className="min-h-screen w-full overflow-x-hidden relative"
       style={{
-        background: 'linear-gradient(135deg, #c2410c 0%, #ea580c 45%, #f97316 100%)',
+        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)',
       }}
     >
       {/* Floating sparkle decorations */}
