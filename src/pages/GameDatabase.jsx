@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Loader2, ChevronDown, ChevronRight, Plus, Minus, BookOpen, Gamepad2, RefreshCw, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronRight, Plus, Minus, BookOpen, Gamepad2, RefreshCw, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 
 const SUBJECT_COLORS = {
@@ -26,6 +26,8 @@ export default function GameDatabase() {
   const [toast, setToast] = useState(null);
   const [inputModal, setInputModal] = useState(null); // { type, file, label }
   const [inputValue, setInputValue] = useState('');
+  const [generatingIcons, setGeneratingIcons] = useState(false);
+  const [iconResult, setIconResult] = useState(null);
 
   const showToast = (msg, ok = true) => {
     setToast({ msg, ok });
@@ -83,6 +85,20 @@ export default function GameDatabase() {
       showToast('❌ Error: ' + err.message, false);
     } finally {
       setActionLoading(null);
+    }
+  };
+
+  const handleGenerateIcons = async (overwrite = false) => {
+    setGeneratingIcons(true);
+    setIconResult(null);
+    try {
+      const res = await base44.functions.invoke('generateGameIcons', { overwrite });
+      setIconResult(res.data);
+      showToast(res.data?.message || '✅ Selesai!');
+    } catch (err) {
+      showToast('❌ Error: ' + err.message, false);
+    } finally {
+      setGeneratingIcons(false);
     }
   };
 
@@ -167,10 +183,34 @@ export default function GameDatabase() {
             <h1 className="text-xl font-black text-white">🗄️ Game Database</h1>
             <p className="text-white/60 text-xs mt-1">Semua games & soalan dalam sistem</p>
           </div>
-          <button onClick={fetchData} className="p-2 bg-white/20 rounded-xl border border-white/30 hover:bg-white/30 transition-all">
-            <RefreshCw className="w-5 h-5 text-white" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleGenerateIcons(false)}
+              disabled={generatingIcons}
+              className="flex items-center gap-2 px-3 py-2 bg-yellow-400/20 hover:bg-yellow-400/30 text-yellow-200 rounded-xl border border-yellow-400/30 transition-all text-xs font-bold"
+              title="Generate icon AI untuk games yang belum ada icon"
+            >
+              {generatingIcons ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              {generatingIcons ? 'Generating...' : 'Gen Icons'}
+            </button>
+            <button onClick={fetchData} className="p-2 bg-white/20 rounded-xl border border-white/30 hover:bg-white/30 transition-all">
+              <RefreshCw className="w-5 h-5 text-white" />
+            </button>
+          </div>
         </div>
+
+        {/* Icon Generation Result */}
+        {iconResult && (
+          <div className="mb-4 p-4 rounded-2xl text-sm font-semibold text-white" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>
+            <p>✅ {iconResult.success} icon berjaya | ❌ {iconResult.failed} gagal</p>
+            {iconResult.errors?.length > 0 && (
+              <p className="text-white/60 text-xs mt-1">{iconResult.errors.join(', ')}</p>
+            )}
+            <button onClick={() => handleGenerateIcons(true)} disabled={generatingIcons} className="mt-2 text-xs text-yellow-300 underline">
+              Regenerate semua (overwrite)
+            </button>
+          </div>
+        )}
 
         {/* Summary Bar */}
         {data && (

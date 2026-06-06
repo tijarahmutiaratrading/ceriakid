@@ -135,6 +135,13 @@ function getGameStyle(game, idx) {
 }
 
 function GameIcon({ game, locked, idx }) {
+  if (game.iconUrl) {
+    return (
+      <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden shadow-md flex-shrink-0 ${locked ? 'opacity-40 grayscale' : ''}`}>
+        <img src={game.iconUrl} alt={game.title} className="w-full h-full object-cover" />
+      </div>
+    );
+  }
   const style = getGameStyle(game, idx);
   const IconComp = style.icon;
   return (

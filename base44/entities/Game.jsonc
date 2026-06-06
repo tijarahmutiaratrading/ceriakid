@@ -73,7 +73,7 @@
         "kafa_adab",
         "kafa_bahasa_arab"
       ],
-      "description": "Subject category or genius mini game category. KAFA (Kelas Agama Fardhu Ain) ikut sukatan UPKK rasmi JAKIM: 7 subjek (Al-Quran, Jawi, Akidah, Ibadah, Sirah, Adab, Bahasa Arab) untuk Darjah 1-6."
+      "description": "Subject category or genius mini game category."
     },
     "ageGroup": {
       "type": "string",
@@ -93,7 +93,7 @@
         "darjah_5",
         "darjah_6"
       ],
-      "description": "Sekolah Rendah year level. Required for new sekolah_rendah games. Leave empty for prasekolah/mini games."
+      "description": "Sekolah Rendah year level."
     },
     "difficulty": {
       "type": "string",
@@ -117,6 +117,10 @@
     "emoji": {
       "type": "string",
       "description": "Game icon emoji"
+    },
+    "iconUrl": {
+      "type": "string",
+      "description": "AI-generated icon image URL for game card display"
     },
     "totalQuestions": {
       "type": "number",
@@ -148,7 +152,7 @@
     },
     "monthTag": {
       "type": "string",
-      "description": "Month tag for rotation e.g. '2026-05'. Games older than 1 month are deleted on monthly refresh."
+      "description": "Month tag for rotation e.g. '2026-05'."
     }
   },
   "required": [
