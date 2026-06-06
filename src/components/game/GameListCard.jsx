@@ -5,52 +5,63 @@ import { Lock, Play, BookOpen, Calculator, FlaskConical, Globe, PenLine, Brain, 
 import GameBadge from './GameBadge';
 import UpgradeLockModal from './UpgradeLockModal';
 
-// Map game type/category → Lucide icon component
-const GAME_ICONS = {
-  // by category
-  bahasa_melayu: BookOpen,
-  english: Globe,
-  mathematics: Calculator,
-  science: FlaskConical,
-  jawi: PenLine,
-  worksheet: PenLine,
-  bahasa_tamil: Languages,
-  bahasa_mandarin: Languages,
-  kafa_quran: BookMarked,
-  kafa_jawi: PenLine,
-  kafa_akidah: Star,
-  kafa_ibadah: BookMarked,
-  kafa_sirah: BookOpen,
-  kafa_adab: Brain,
-  kafa_bahasa_arab: Languages,
-  // by game type
-  letter_match: AlignLeft,
-  number_match: Sigma,
-  picture_quiz: Layers,
-  drag_drop: Puzzle,
-  multiple_choice: Brain,
-  counting: Calculator,
-  word_builder: BookOpen,
-  math_puzzle: Sigma,
-  science_quiz: Microscope,
-  shape_sort: Shapes,
-  color_match: Palette,
-  pattern_fill: Layers,
-  memory_game: Brain,
-  sound_match: Music,
-  spelling: BookOpen,
-  reading: BookOpen,
-  phonics: Music,
-  sorting: Layers,
-  tile_match: Gamepad2,
-  story_adventure: BookOpen,
-  physics: Zap,
-  tracing: PenLine,
+// Category → { icon, gradient, iconColor }
+const CATEGORY_STYLE = {
+  bahasa_melayu:   { icon: BookOpen,    gradient: 'from-blue-500 to-cyan-400',      iconColor: 'text-white' },
+  english:         { icon: Globe,       gradient: 'from-emerald-500 to-teal-400',   iconColor: 'text-white' },
+  mathematics:     { icon: Calculator,  gradient: 'from-orange-500 to-amber-400',   iconColor: 'text-white' },
+  science:         { icon: FlaskConical,gradient: 'from-purple-500 to-violet-400',  iconColor: 'text-white' },
+  jawi:            { icon: PenLine,     gradient: 'from-green-600 to-emerald-400',  iconColor: 'text-white' },
+  worksheet:       { icon: PenLine,     gradient: 'from-pink-500 to-rose-400',      iconColor: 'text-white' },
+  bahasa_tamil:    { icon: Languages,   gradient: 'from-red-500 to-orange-400',     iconColor: 'text-white' },
+  bahasa_mandarin: { icon: Languages,   gradient: 'from-red-600 to-red-400',        iconColor: 'text-white' },
+  kafa_quran:      { icon: BookMarked,  gradient: 'from-green-700 to-green-500',    iconColor: 'text-white' },
+  kafa_jawi:       { icon: PenLine,     gradient: 'from-teal-600 to-cyan-500',      iconColor: 'text-white' },
+  kafa_akidah:     { icon: Star,        gradient: 'from-amber-500 to-yellow-400',   iconColor: 'text-white' },
+  kafa_ibadah:     { icon: BookMarked,  gradient: 'from-emerald-600 to-green-400',  iconColor: 'text-white' },
+  kafa_sirah:      { icon: BookOpen,    gradient: 'from-sky-600 to-blue-400',       iconColor: 'text-white' },
+  kafa_adab:       { icon: Brain,       gradient: 'from-violet-600 to-purple-400',  iconColor: 'text-white' },
+  kafa_bahasa_arab:{ icon: Languages,   gradient: 'from-orange-600 to-amber-400',   iconColor: 'text-white' },
 };
 
-function GameIcon({ game, className = 'w-7 h-7', strokeWidth = 1.75 }) {
-  const IconComp = GAME_ICONS[game.type] || GAME_ICONS[game.category] || Gamepad2;
-  return <IconComp className={className} strokeWidth={strokeWidth} />;
+// Game type fallback styles
+const TYPE_STYLE = {
+  letter_match:    { icon: AlignLeft,   gradient: 'from-blue-500 to-cyan-400',      iconColor: 'text-white' },
+  number_match:    { icon: Sigma,       gradient: 'from-orange-500 to-amber-400',   iconColor: 'text-white' },
+  picture_quiz:    { icon: Layers,      gradient: 'from-pink-500 to-rose-400',      iconColor: 'text-white' },
+  drag_drop:       { icon: Puzzle,      gradient: 'from-violet-500 to-purple-400',  iconColor: 'text-white' },
+  multiple_choice: { icon: Brain,       gradient: 'from-indigo-500 to-blue-400',    iconColor: 'text-white' },
+  counting:        { icon: Calculator,  gradient: 'from-amber-500 to-yellow-400',   iconColor: 'text-white' },
+  word_builder:    { icon: BookOpen,    gradient: 'from-teal-500 to-emerald-400',   iconColor: 'text-white' },
+  math_puzzle:     { icon: Sigma,       gradient: 'from-orange-600 to-red-400',     iconColor: 'text-white' },
+  science_quiz:    { icon: Microscope,  gradient: 'from-purple-600 to-violet-400',  iconColor: 'text-white' },
+  shape_sort:      { icon: Shapes,      gradient: 'from-sky-500 to-blue-400',       iconColor: 'text-white' },
+  color_match:     { icon: Palette,     gradient: 'from-pink-600 to-fuchsia-400',   iconColor: 'text-white' },
+  pattern_fill:    { icon: Layers,      gradient: 'from-cyan-500 to-teal-400',      iconColor: 'text-white' },
+  memory_game:     { icon: Brain,       gradient: 'from-violet-600 to-indigo-400',  iconColor: 'text-white' },
+  sound_match:     { icon: Music,       gradient: 'from-fuchsia-500 to-pink-400',   iconColor: 'text-white' },
+  spelling:        { icon: BookOpen,    gradient: 'from-blue-600 to-sky-400',       iconColor: 'text-white' },
+  reading:         { icon: BookOpen,    gradient: 'from-emerald-500 to-green-400',  iconColor: 'text-white' },
+  phonics:         { icon: Music,       gradient: 'from-rose-500 to-pink-400',      iconColor: 'text-white' },
+  sorting:         { icon: Layers,      gradient: 'from-amber-600 to-orange-400',   iconColor: 'text-white' },
+  tile_match:      { icon: Gamepad2,    gradient: 'from-indigo-600 to-violet-400',  iconColor: 'text-white' },
+  story_adventure: { icon: BookOpen,    gradient: 'from-green-500 to-teal-400',     iconColor: 'text-white' },
+  physics:         { icon: Zap,         gradient: 'from-yellow-500 to-amber-400',   iconColor: 'text-white' },
+  tracing:         { icon: PenLine,     gradient: 'from-pink-500 to-rose-400',      iconColor: 'text-white' },
+};
+
+function getGameStyle(game) {
+  return CATEGORY_STYLE[game.category] || TYPE_STYLE[game.type] || { icon: Gamepad2, gradient: 'from-slate-500 to-slate-400', iconColor: 'text-white' };
+}
+
+function GameIcon({ game, locked }) {
+  const style = getGameStyle(game);
+  const IconComp = style.icon;
+  return (
+    <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${style.gradient} flex items-center justify-center shadow-md ${locked ? 'opacity-40 grayscale' : ''}`}>
+      <IconComp className={`w-7 h-7 sm:w-8 sm:h-8 ${style.iconColor}`} strokeWidth={1.75} />
+    </div>
+  );
 }
 
 // Apple-style soft accent tints — rotate per card for subtle variety
@@ -93,11 +104,9 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
       <div className={`absolute left-0 top-0 bottom-0 w-1 ${theme.iconBg} opacity-80`} aria-hidden="true" />
 
       <div className="relative p-4 sm:p-5 flex items-center gap-3 sm:gap-4 min-h-[100px] sm:min-h-[120px]">
-        {/* SVG icon bubble — soft tinted circle */}
+        {/* SVG icon bubble — gradient per subject */}
         <div className="flex-shrink-0">
-          <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl ${theme.iconBg} flex items-center justify-center ${locked ? 'opacity-50' : ''}`}>
-            <GameIcon game={game} className={`w-7 h-7 sm:w-8 sm:h-8 ${theme.iconText}`} />
-          </div>
+          <GameIcon game={game} locked={locked} />
         </div>
 
         {/* Content */}
