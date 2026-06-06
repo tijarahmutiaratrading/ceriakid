@@ -500,22 +500,22 @@ export default function GamePlayer() {
     <div
       className="min-h-screen w-full overflow-x-hidden relative"
       style={{
-        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)',
+        background: 'linear-gradient(135deg, #fdf6ee 0%, #fce8d5 45%, #fde8f0 100%)',
       }}
     >
       {/* Floating sparkle decorations */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-32 left-6 text-2xl text-white/30 animate-float">✨</div>
-        <div className="absolute top-44 right-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
-        <div className="absolute top-1/2 left-4 text-2xl text-pink-300/40 animate-float" style={{ animationDelay: '2.4s' }}>💫</div>
-        <div className="absolute bottom-40 right-6 text-2xl text-cyan-300/35 animate-float" style={{ animationDelay: '3.1s' }}>✨</div>
-        <div className="absolute bottom-24 left-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '4s' }}>⭐</div>
-        <div className="absolute top-1/3 right-1/4 text-lg text-white/25 animate-float" style={{ animationDelay: '1.7s' }}>✨</div>
+        <div className="absolute top-32 left-6 text-2xl text-purple-300/50 animate-float">✨</div>
+        <div className="absolute top-44 right-10 text-xl text-yellow-400/50 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
+        <div className="absolute top-1/2 left-4 text-2xl text-pink-300/50 animate-float" style={{ animationDelay: '2.4s' }}>💫</div>
+        <div className="absolute bottom-40 right-6 text-2xl text-cyan-400/45 animate-float" style={{ animationDelay: '3.1s' }}>✨</div>
+        <div className="absolute bottom-24 left-10 text-xl text-yellow-400/50 animate-float" style={{ animationDelay: '4s' }}>⭐</div>
+        <div className="absolute top-1/3 right-1/4 text-lg text-purple-300/40 animate-float" style={{ animationDelay: '1.7s' }}>✨</div>
       </div>
 
       {/* Glow orbs */}
-      <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full opacity-30 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }} />
-      <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full opacity-25 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }} />
+      <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full opacity-20 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #f9a8d4 0%, transparent 70%)' }} />
+      <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full opacity-15 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #a5f3fc 0%, transparent 70%)' }} />
 
       {/* Family mascot — Ibu, Kakak, Adik */}
       <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
@@ -530,12 +530,12 @@ export default function GamePlayer() {
 
          <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full font-black text-sm transition-all"
            style={{
-             background: 'rgba(255,255,255,0.15)',
-             backdropFilter: 'blur(12px)',
-             border: '1px solid rgba(255,255,255,0.25)',
-             color: 'white',
-             boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-           }}
+              background: 'rgba(255,255,255,0.7)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(180,140,200,0.3)',
+              color: '#5b21b6',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+            }}
          >
            <ArrowLeft className="w-4 h-4" />
            Kembali ke Subjek
@@ -546,16 +546,16 @@ export default function GamePlayer() {
              {game.difficulty === 'hard' && <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-300" />}
              <span className="capitalize px-3 py-1.5 text-xs sm:text-sm rounded-full whitespace-nowrap"
                style={{
-                 background: 'rgba(255,255,255,0.18)',
+                 background: 'rgba(255,255,255,0.7)',
                  backdropFilter: 'blur(12px)',
-                 border: '1px solid rgba(255,255,255,0.3)',
-                 color: 'white',
+                 border: '1px solid rgba(180,140,200,0.3)',
+                 color: '#5b21b6',
                }}
              >
                {game.difficulty === 'easy' ? '🟢 Senang' : game.difficulty === 'medium' ? '🟡 Sedang' : '🔴 Susah'}
              </span>
            </div>
-           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-white/80">
+           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-purple-700/80">
              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
              {game.totalQuestions || 20} soalan
            </div>
@@ -580,9 +580,10 @@ export default function GamePlayer() {
            animate={{ opacity: 1, y: 0, scale: 1 }}
            className="rounded-3xl mb-6 relative overflow-hidden"
            style={{
-             background: 'rgba(255,255,255,0.12)',
+             background: 'rgba(255,255,255,0.75)',
              backdropFilter: 'blur(20px)',
-             border: '1px solid rgba(255,255,255,0.2)',
+             border: '1px solid rgba(200,160,220,0.3)',
+             boxShadow: '0 8px 32px rgba(150,100,180,0.1)',
            }}
          >
          <div className="rounded-3xl p-5 md:p-7 text-center relative">
@@ -595,34 +596,34 @@ export default function GamePlayer() {
 
           {/* Letter/Number Display */}
           {currentQuestion.letter && (
-            <div className="text-5xl sm:text-7xl font-black mb-2 text-white">
+            <div className="text-5xl sm:text-7xl font-black mb-2 text-purple-800">
               {currentQuestion.letter}
             </div>
           )}
 
           {currentQuestion.word && (
-            <p className="text-lg sm:text-2xl font-bold text-white">
+            <p className="text-lg sm:text-2xl font-bold text-purple-800">
               {currentQuestion.word}
             </p>
           )}
 
           {/* Generic question text — covers all DB game formats */}
            {currentQuestion.question && (
-             <p className={`font-black mb-2 text-white ${currentQuestion.question.length > 60 ? 'text-sm sm:text-lg' : 'text-base sm:text-2xl'}`}>
+             <p className={`font-black mb-2 text-purple-900 ${currentQuestion.question.length > 60 ? 'text-sm sm:text-lg' : 'text-base sm:text-2xl'}`}>
                {currentQuestion.question}
              </p>
            )}
 
            {/* Text Question (math, multiple choice) */}
            {currentQuestion.problem && (
-             <div className={`font-black text-white ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}>
+             <div className={`font-black text-purple-900 ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}>
                {currentQuestion.problem}
              </div>
            )}
 
            {/* Question label based on game type */}
            {currentQuestion.image && !currentQuestion.problem && !currentQuestion.question && (
-             <p className="text-base sm:text-lg font-bold text-white mt-2">
+             <p className="text-base sm:text-lg font-bold text-purple-700 mt-2">
                {game.type === 'counting' ? 'Berapakah ini?' : 'Apakah ini?'}
              </p>
            )}
