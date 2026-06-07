@@ -24,9 +24,6 @@ const CATEGORY_EMOJIS = {
   general: '🎯',
 };
 
-/**
- * Playful CeriaKid child profile card — pastel candy theme match ParentDashboard.
- */
 export default function ChildProfileCard({
   child,
   idx,
@@ -54,7 +51,7 @@ export default function ChildProfileCard({
   const perfectGames = games.filter((g) => g.bestStars === 3).length;
   const avgStars = totalGames > 0 ? (totalStars / totalGames).toFixed(1) : '0.0';
 
-  // Top subject — highest avg stars
+  // Top subject
   const subjectStats = {};
   games.forEach((g) => {
     if (!subjectStats[g.category]) subjectStats[g.category] = { stars: 0, count: 0 };
@@ -69,11 +66,7 @@ export default function ChildProfileCard({
   });
 
   // Activity status
-  const lastPlayed = games
-    .map((g) => g.lastPlayedDate)
-    .filter(Boolean)
-    .sort()
-    .reverse()[0];
+  const lastPlayed = games.map((g) => g.lastPlayedDate).filter(Boolean).sort().reverse()[0];
   const lastPlayedDate = lastPlayed ? new Date(lastPlayed) : null;
   const daysSinceLastPlay = lastPlayedDate
     ? Math.floor((Date.now() - lastPlayedDate.getTime()) / (1000 * 60 * 60 * 24))
@@ -82,272 +75,150 @@ export default function ChildProfileCard({
   const hasPlayed = totalGames > 0;
 
   const lastPlayedLabel = lastPlayedDate
-    ? daysSinceLastPlay === 0
-      ? 'Hari ini'
-      : daysSinceLastPlay === 1
-      ? 'Semalam'
-      : daysSinceLastPlay < 7
-      ? `${daysSinceLastPlay} hari lepas`
-      : lastPlayedDate.toLocaleDateString('ms-MY', { day: 'numeric', month: 'short' })
+    ? daysSinceLastPlay === 0 ? 'Hari ini'
+    : daysSinceLastPlay === 1 ? 'Semalam'
+    : daysSinceLastPlay < 7 ? `${daysSinceLastPlay} hari lepas`
+    : lastPlayedDate.toLocaleDateString('ms-MY', { day: 'numeric', month: 'short' })
     : null;
 
   const levelLabel = child.ageGroup === 'prasekolah' ? 'Prasekolah' : 'Sekolah Rendah';
   const levelEmoji = child.ageGroup === 'prasekolah' ? '🎨' : '📚';
-  const levelAge = child.ageGroup === 'prasekolah' ? '4–6 tahun' : '7–12 tahun';
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: idx * 0.05 }}
-      whileHover={{ y: -3 }}
-      className="rounded-[2rem] relative overflow-hidden group transition-all"
-      style={{
-        background: isActive
-          ? 'linear-gradient(135deg, #ffffff 0%, #fef3c7 100%)'
-          : 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-        boxShadow: isActive
-          ? '0 8px 24px rgba(34, 197, 94, 0.25), 0 0 0 3px rgba(34, 197, 94, 0.4)'
-          : '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
-      }}
+      className={`bg-white rounded-2xl ring-1 shadow-sm overflow-hidden ${
+        isActive ? 'ring-emerald-300' : 'ring-slate-200'
+      }`}
     >
-      {/* Active "Aktif" badge */}
-      {isActive && childrenList.length > 1 && (
-        <motion.div
-          initial={{ scale: 0, y: -10 }}
-          animate={{ scale: 1, y: 0 }}
-          transition={{ type: 'spring', stiffness: 280, delay: 0.2 }}
-          className="absolute top-3 left-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-full"
-          style={{ background: 'linear-gradient(135deg, #4ade80 0%, #22c55e 100%)', boxShadow: '0 3px 0 #16a34a' }}
-        >
-          <CheckCircle2 className="w-3 h-3 text-white" strokeWidth={3} />
-          <span className="text-white text-[9px] font-black uppercase tracking-wider">Aktif</span>
-        </motion.div>
-      )}
-
-      {/* Leader crown */}
-      {isLeader && (
-        <motion.div
-          initial={{ scale: 0, rotate: -30 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: 'spring', stiffness: 280, delay: 0.4 }}
-          className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-full"
-          style={{ background: 'linear-gradient(135deg, #fde047 0%, #facc15 100%)', boxShadow: '0 3px 0 #eab308' }}
-        >
-          <Crown className="w-3 h-3 text-yellow-900" strokeWidth={3} />
-          <span className="text-yellow-900 text-[9px] font-black uppercase tracking-wider">Top</span>
-        </motion.div>
-      )}
-
-      <div className="p-5 space-y-4">
-        {/* Header row: avatar + name + actions */}
-        <div className="flex items-start gap-3">
-          <div className="relative flex-shrink-0">
-            <div
-              className={`absolute inset-0 -m-1 rounded-3xl ${activeToday ? 'animate-pulse' : ''}`}
-              style={{
-                background: activeToday
-                  ? 'linear-gradient(135deg, #86efac 0%, #4ade80 100%)'
-                  : 'transparent',
-              }}
+      {/* Header */}
+      <div className="flex items-start gap-3 p-4 border-b border-slate-100">
+        {/* Avatar */}
+        <div className="relative flex-shrink-0">
+          <div className={`w-14 h-14 rounded-xl overflow-hidden ring-2 ${
+            activeToday ? 'ring-emerald-300' : 'ring-slate-200'
+          } bg-slate-100`}>
+            <img
+              src={child.avatarUrl || avatars[idx % avatars.length]}
+              alt={child.name}
+              loading="lazy"
+              className="w-full h-full object-cover"
             />
-            <div
-              className="relative w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden"
-              style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 100%)', boxShadow: '0 3px 0 #f9a8d4' }}
-            >
-              <img
-                src={child.avatarUrl || avatars[idx % avatars.length]}
-                alt={child.name}
-                loading="lazy"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={onUploadAvatar}
-              disabled={uploading}
-              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full flex items-center justify-center text-white disabled:opacity-60 z-10"
-              style={{ background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 2px 0 #db2777' }}
-              title="Tukar gambar"
-              aria-label={`Tukar gambar ${child.name}`}
-            >
-              {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Camera className="w-3.5 h-3.5" strokeWidth={3} />}
-            </motion.button>
           </div>
-
-          <div className="flex-1 min-w-0 pt-1">
-            <p className="text-slate-800 font-black text-lg leading-tight truncate">{child.name}</p>
-            <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-              <span
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
-                style={{ background: '#fef3c7', boxShadow: '0 2px 0 #fde68a' }}
-              >
-                <span className="text-xs" aria-hidden="true">{levelEmoji}</span>
-                <span className="text-slate-700 text-[10px] font-black uppercase tracking-wider">{levelLabel}</span>
-              </span>
-              <span className="text-slate-500 text-[10px] font-bold">{levelAge}</span>
-            </div>
-
-            {/* Activity status pill */}
-            <div className="mt-1.5">
-              <span
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wide"
-                style={
-                  activeToday
-                    ? { background: '#dcfce7', color: '#15803d', boxShadow: '0 2px 0 #86efac' }
-                    : hasPlayed
-                    ? { background: '#fef3c7', color: '#a16207', boxShadow: '0 2px 0 #fde68a' }
-                    : { background: '#fce7f3', color: '#be185d', boxShadow: '0 2px 0 #f9a8d4' }
-                }
-              >
-                {activeToday ? '🔥 Aktif Hari Ini' : hasPlayed ? '💤 Tidak Aktif' : '✨ Baru'}
-              </span>
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="relative z-20 flex flex-col gap-1.5 flex-shrink-0">
-            <motion.button
-              type="button"
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => { e.stopPropagation(); onEdit?.(); }}
-              aria-label={`Edit profil ${child.name}`}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-600 transition-all cursor-pointer hover:brightness-95"
-              style={{ background: '#fef9f3', boxShadow: '0 2px 0 #fde68a' }}
-              title="Edit"
-            >
-              <Edit2 className="w-4 h-4" strokeWidth={3} />
-            </motion.button>
-            <motion.button
-              type="button"
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => { e.stopPropagation(); onDelete?.(); }}
-              aria-label={`Padam profil ${child.name}`}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-rose-600 transition-all cursor-pointer hover:brightness-95"
-              style={{ background: '#fee2e2', boxShadow: '0 2px 0 #fca5a5' }}
-              title="Padam"
-            >
-              <Trash2 className="w-4 h-4" strokeWidth={3} />
-            </motion.button>
-          </div>
-        </div>
-
-        {/* HIGHLIGHT ROW: Top subject + Avg stars */}
-        {hasPlayed ? (
-          <div className="grid grid-cols-2 gap-2">
-            <div
-              className="rounded-2xl p-3"
-              style={{ background: '#fef3c7', boxShadow: '0 3px 0 #fcd34d' }}
-            >
-              <div className="flex items-center gap-1.5 mb-1">
-                <Award className="w-3 h-3 text-amber-600" strokeWidth={3} />
-                <p className="text-amber-700 text-[9px] font-black uppercase tracking-wider">Subjek Top</p>
-              </div>
-              {topSubject ? (
-                <>
-                  <p className="text-2xl leading-none" aria-hidden="true">{CATEGORY_EMOJIS[topSubject.cat] || '📚'}</p>
-                  <p className="text-slate-800 font-black text-xs mt-1 truncate">{CATEGORY_LABELS[topSubject.cat] || topSubject.cat}</p>
-                  <p className="text-amber-700 text-[10px] font-bold">{topSubject.avg.toFixed(1)}⭐ purata</p>
-                </>
-              ) : (
-                <p className="text-slate-500 text-xs">—</p>
-              )}
-            </div>
-
-            <div
-              className="rounded-2xl p-3 flex flex-col justify-center"
-              style={{ background: '#fce7f3', boxShadow: '0 3px 0 #f9a8d4' }}
-            >
-              <div className="flex items-center gap-1.5 mb-1">
-                <TrendingUp className="w-3 h-3 text-pink-600" strokeWidth={3} />
-                <p className="text-pink-700 text-[9px] font-black uppercase tracking-wider">Skor</p>
-              </div>
-              <div className="flex items-baseline gap-1">
-                <p className="text-slate-800 font-black text-3xl leading-none">{avgStars}</p>
-                <p className="text-yellow-500 text-base font-black" aria-hidden="true">⭐</p>
-              </div>
-              <p className="text-slate-500 text-[10px] font-bold mt-1">dari 3.0 maksimum</p>
-            </div>
-          </div>
-        ) : (
-          <div
-            className="rounded-2xl p-3 text-center"
-            style={{ background: '#fef9f3', boxShadow: '0 3px 0 #fde68a' }}
+          <button
+            onClick={onUploadAvatar}
+            disabled={uploading}
+            className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-slate-900 hover:bg-slate-700 flex items-center justify-center text-white disabled:opacity-60 transition-colors"
+            aria-label={`Tukar gambar ${child.name}`}
           >
-            <p className="text-3xl mb-1" aria-hidden="true">🎯</p>
-            <p className="text-slate-800 text-xs font-black">Belum mula bermain</p>
-            <p className="text-slate-500 text-[10px] font-bold mt-0.5">Mainkan game pertama untuk lihat statistik!</p>
-          </div>
-        )}
-
-        {/* STATS ROW */}
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { icon: Gamepad2, value: totalGames, label: 'Main', bg: '#dbeafe', shadow: '#93c5fd', color: '#1e40af' },
-            { icon: Star, value: totalStars, label: 'Bintang', bg: '#fef3c7', shadow: '#fcd34d', color: '#a16207' },
-            { icon: Award, value: perfectGames, label: 'Perfect', bg: '#dcfce7', shadow: '#86efac', color: '#15803d' },
-          ].map((s, i) => (
-            <div
-              key={i}
-              className="rounded-2xl p-2.5 text-center"
-              style={{ background: s.bg, boxShadow: `0 3px 0 ${s.shadow}` }}
-            >
-              <s.icon className="w-4 h-4 mx-auto mb-1" style={{ color: s.color }} strokeWidth={3} />
-              <p className="text-slate-800 font-black text-lg leading-none tabular-nums">{s.value}</p>
-              <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mt-1">{s.label}</p>
-            </div>
-          ))}
+            {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Camera className="w-3 h-3" />}
+          </button>
         </div>
 
-        {/* Last played row */}
-        {lastPlayedLabel && (
-          <div className="flex items-center gap-1.5 text-slate-500 text-[10px] font-bold">
-            <Calendar className="w-3 h-3" strokeWidth={3} />
-            <span>Terakhir main: {lastPlayedLabel}</span>
+        {/* Info */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 mb-0.5">
+            <p className="text-slate-900 font-black text-base truncate">{child.name}</p>
+            {isLeader && <Crown className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />}
+            {isActive && childrenList.length > 1 && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />}
           </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="space-y-2">
-          {/* Set Active button — only show kalau bukan aktif & ada >1 anak */}
-          {showSetActiveBtn && (
-            <motion.button
-              whileTap={{ scale: 0.97, y: 2 }}
-              onClick={handleSetActive}
-              className="w-full rounded-full py-2.5 font-black text-xs flex items-center justify-center gap-1.5 transition-all text-white"
-              style={{ background: 'linear-gradient(135deg, #4ade80 0%, #22c55e 100%)', boxShadow: '0 4px 0 #16a34a, 0 6px 14px rgba(34, 197, 94, 0.3)' }}
-            >
-              <UserCheck className="w-4 h-4" strokeWidth={3} />
-              Jadikan Aktif
-            </motion.button>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wide">
+              {levelEmoji} {levelLabel}
+            </span>
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide ${
+              activeToday ? 'bg-emerald-50 text-emerald-700'
+              : hasPlayed ? 'bg-amber-50 text-amber-700'
+              : 'bg-slate-100 text-slate-500'
+            }`}>
+              {activeToday ? '🔥 Aktif' : hasPlayed ? '💤 Tidak Aktif' : '✨ Baru'}
+            </span>
+          </div>
+          {lastPlayedLabel && (
+            <div className="flex items-center gap-1 mt-1 text-slate-400 text-[10px] font-semibold">
+              <Calendar className="w-3 h-3" />
+              <span>Terakhir main: {lastPlayedLabel}</span>
+            </div>
           )}
-
-          {/* Performance CTA Button */}
-          <motion.button
-            whileTap={{ scale: 0.97, y: 2 }}
-            onClick={onOpenPerformance}
-            className="w-full rounded-full py-3 font-black text-sm flex items-center justify-center gap-1.5 transition-all text-white"
-            style={
-              hasPlayed
-                ? { background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)' }
-                : { background: 'linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%)', boxShadow: '0 4px 0 #8b5cf6' }
-            }
-          >
-            {hasPlayed ? (
-              <>
-                <TrendingUp className="w-4 h-4" strokeWidth={3} />
-                Lihat Prestasi Penuh
-                <ChevronRight className="w-4 h-4" strokeWidth={3} />
-              </>
-            ) : (
-              <>
-                <Flame className="w-4 h-4" strokeWidth={3} />
-                Mulakan Pembelajaran
-                <ChevronRight className="w-4 h-4" strokeWidth={3} />
-              </>
-            )}
-          </motion.button>
         </div>
+
+        {/* Edit / Delete */}
+        <div className="flex gap-1.5 flex-shrink-0">
+          <button
+            onClick={(e) => { e.stopPropagation(); onEdit?.(); }}
+            className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition-colors"
+            title="Edit"
+          >
+            <Edit2 className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); onDelete?.(); }}
+            className="w-8 h-8 rounded-lg bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-500 transition-colors"
+            title="Padam"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Stats strip */}
+      <div className="grid grid-cols-3 gap-px bg-slate-100">
+        {[
+          { icon: Gamepad2, value: totalGames, label: 'Games', iconColor: 'text-sky-600' },
+          { icon: Star, value: totalStars, label: 'Bintang', iconColor: 'text-amber-500' },
+          { icon: Award, value: perfectGames, label: 'Perfect', iconColor: 'text-emerald-600' },
+        ].map((s, i) => (
+          <div key={i} className="bg-white px-3 py-3 text-center">
+            <s.icon className={`w-4 h-4 mx-auto mb-1 ${s.iconColor}`} strokeWidth={2.5} />
+            <p className="font-black text-base text-slate-900 leading-none tabular-nums">{s.value}</p>
+            <p className="text-slate-400 text-[9px] font-bold uppercase tracking-wider mt-0.5">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Top subject + avg */}
+      {hasPlayed && (
+        <div className="grid grid-cols-2 gap-px bg-slate-100">
+          <div className="bg-white px-4 py-3">
+            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-400 mb-1">Subjek Top</p>
+            {topSubject ? (
+              <div className="flex items-center gap-1.5">
+                <span className="text-lg">{CATEGORY_EMOJIS[topSubject.cat] || '📚'}</span>
+                <div>
+                  <p className="font-black text-sm text-slate-900">{CATEGORY_LABELS[topSubject.cat] || topSubject.cat}</p>
+                  <p className="text-amber-600 text-[10px] font-bold">{topSubject.avg.toFixed(1)}⭐ purata</p>
+                </div>
+              </div>
+            ) : <p className="text-slate-400 text-xs">—</p>}
+          </div>
+          <div className="bg-white px-4 py-3">
+            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-400 mb-1">Purata Skor</p>
+            <p className="font-black text-2xl text-slate-900 leading-none tabular-nums">{avgStars}<span className="text-sm ml-0.5 text-amber-500">⭐</span></p>
+            <p className="text-slate-400 text-[10px] font-semibold mt-0.5">dari 3.0</p>
+          </div>
+        </div>
+      )}
+
+      {/* Action buttons */}
+      <div className="p-4 space-y-2">
+        {showSetActiveBtn && (
+          <button
+            onClick={handleSetActive}
+            className="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+          >
+            <UserCheck className="w-3.5 h-3.5" /> Jadikan Aktif
+          </button>
+        )}
+        <button
+          onClick={onOpenPerformance}
+          className="w-full py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center justify-center gap-1.5 transition-colors"
+        >
+          <TrendingUp className="w-4 h-4" />
+          {hasPlayed ? 'Lihat Prestasi Penuh' : 'Mulakan Pembelajaran'}
+          <ChevronRight className="w-4 h-4" />
+        </button>
       </div>
     </motion.div>
   );
