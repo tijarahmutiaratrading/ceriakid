@@ -736,10 +736,10 @@ export default function Landing() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="rounded-2xl p-5 bg-white shadow-md shadow-emerald-100 border border-emerald-100 hover:shadow-lg hover:-translate-y-0.5 transition-all"
+              className="rounded-2xl p-5 bg-white shadow-md shadow-sky-100 border border-sky-100 hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
               <p className="font-black text-slate-900 mb-1.5 flex items-start gap-2">
-                <span className="text-emerald-600 flex-shrink-0">❓</span>
+                <span className="text-sky-600 flex-shrink-0">❓</span>
                 <span>{faq.q}</span>
               </p>
               <p className="text-slate-600 text-sm leading-relaxed pl-7">{faq.a}</p>
