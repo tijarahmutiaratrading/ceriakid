@@ -115,11 +115,11 @@ export default function Home() {
         />
       )}
 
-      {/* Floating orbs background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-        <div className="absolute -top-48 -right-40 md:-top-96 md:-right-96 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-yellow-300/20 rounded-full mix-blend-screen filter blur-3xl animate-float" />
-        <div className="absolute top-1/3 -left-32 md:top-1/2 md:-left-64 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-300/15 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-24 right-1/4 md:-bottom-32 md:right-1/3 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-pink-300/10 rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: '4s' }} />
+      {/* Static background gradient — no animation for performance on low-end phones */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full" aria-hidden="true">
+        <div className="absolute -top-48 -right-40 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-yellow-300/15 rounded-full mix-blend-screen filter blur-3xl" />
+        <div className="absolute top-1/3 -left-32 w-[250px] h-[250px] md:w-[400px] md:h-[400px] bg-cyan-300/10 rounded-full mix-blend-screen filter blur-3xl" />
+        <div className="absolute -bottom-24 right-1/4 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-pink-300/8 rounded-full mix-blend-screen filter blur-3xl" />
       </div>
 
       <AppHeader />
@@ -130,6 +130,17 @@ export default function Home() {
 
       {isAuthenticated && user?.email && <SubscriptionExpiryBanner userEmail={user.email} />}
 
+        {/* Daily Challenge — lebih prominent, terus selepas hero */}
+        {isAuthenticated && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+          >
+            <DailyChallenge ageGroup={safeAgeGroup} />
+          </motion.div>
+        )}
+
       {isAuthenticated && <InstallAppGuide />}
 
         {/* Age Group Selector - Mascot Illustration Style */}
@@ -138,8 +149,11 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <h2 className="text-white font-black text-xl md:text-2xl mb-4">Pilih Umur Anak</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-white font-black text-base md:text-lg">Umur Anak</h2>
+            <span className="text-white/50 text-xs font-semibold">Tap untuk tukar</span>
+          </div>
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
             {[
               {
                 key: 'prasekolah',
@@ -167,15 +181,15 @@ export default function Home() {
                 <motion.button
                   key={age.key}
                   onClick={() => safeToggle(age.key)}
-                  whileHover={{ y: -3, scale: 1.01 }}
+                  whileHover={{ y: -2, scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`group relative overflow-hidden rounded-3xl bg-gradient-to-br ${age.gradient} p-3 sm:p-3.5 text-left shadow-lg shadow-black/15 transition-all border-2 ${
+                  className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${age.gradient} p-2.5 sm:p-3 text-left shadow-lg shadow-black/15 transition-all border-2 ${
                     isActive ? 'border-white ring-2 ring-white/40' : 'border-white/40'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 sm:gap-3">
                     {/* Mascot Image */}
-                    <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-white/30 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-white/30 flex items-center justify-center">
                       <img
                         src={age.image}
                         alt={age.title}
@@ -186,28 +200,24 @@ export default function Home() {
 
                     {/* Text Content */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-black text-slate-800 text-sm sm:text-base leading-tight">
+                      <h3 className="font-black text-slate-800 text-xs sm:text-sm leading-tight">
                         {age.title}
                       </h3>
-                      <p className="font-black text-slate-800 text-sm flex items-center gap-1 mb-1">
+                      <p className="font-bold text-slate-700 text-xs flex items-center gap-1">
                         {age.age} <span>{age.emoji}</span>
-                      </p>
-                      <p className="text-slate-700 text-[11px] sm:text-xs font-semibold leading-snug line-clamp-2">
-                        {age.desc}
                       </p>
                     </div>
                   </div>
 
-                  {/* Pilih Button */}
-                  <div className="mt-2.5">
+                  <div className="mt-2">
                     <div
-                      className={`w-full py-2 rounded-full text-center font-black text-xs sm:text-sm shadow-sm transition-all ${
+                      className={`w-full py-1.5 rounded-full text-center font-black text-xs shadow-sm transition-all ${
                         isActive
                           ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                          : 'bg-white text-slate-800 group-hover:bg-slate-50'
+                          : 'bg-white/80 text-slate-700'
                       }`}
                     >
-                      {isActive ? '✓ Dipilih' : 'Pilih'}
+                      {isActive ? '✓ Aktif' : 'Pilih'}
                     </div>
                   </div>
                 </motion.button>
@@ -217,6 +227,25 @@ export default function Home() {
         </motion.div>
 
         <QuickAccessGrid />
+
+        {/* Game progress teaser — pacu anak habiskan lebih banyak game */}
+        {isAuthenticated && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12 }}
+            className="rounded-2xl border border-white/20 px-4 py-3 flex items-center justify-between gap-3"
+            style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)' }}
+          >
+            <div>
+              <p className="text-white font-black text-sm">🏆 Lihat Prestasi Anak</p>
+              <p className="text-white/60 text-xs mt-0.5">Pantau skor, subjek & streak harian</p>
+            </div>
+            <Link to="/parent-dashboard" className="flex-shrink-0 px-3 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white font-black text-xs transition-all border border-white/20">
+              Buka →
+            </Link>
+          </motion.div>
+        )}
 
         {/* Kredit AI + Ciri AI (merged) */}
         {isAuthenticated && (
@@ -229,17 +258,7 @@ export default function Home() {
           </motion.div>
         )}
 
-        {/* Daily Challenge */}
-        {isAuthenticated && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mb-5"
-          >
-            <DailyChallenge ageGroup={safeAgeGroup} />
-          </motion.div>
-        )}
+        {/* Daily Challenge — removed here, moved to top */}
 
         {/* Subject Section */}
         <motion.div

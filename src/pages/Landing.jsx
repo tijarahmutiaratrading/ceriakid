@@ -8,6 +8,7 @@ import { captureReferralFromUrl } from '@/lib/referralTracker';
 import { trackPixelEvent } from '@/lib/pixel';
 import { genEventID } from '@/lib/fbTracking';
 import PricingCheckout from '@/components/PricingCheckout';
+import CookieConsent from '@/components/CookieConsent';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import LandingHeroCarousel from '@/components/landing/LandingHeroCarousel';
@@ -77,6 +78,7 @@ const buildTiers = (stats) => {
       noFeatures: ['Sehingga 4 profil anak (1 anak sahaja)'],
       cta: 'Pilih Standard',
       highlighted: false,
+      badge: '🔥 Nilai Terbaik',
     },
     {
       name: 'keluarga',
@@ -187,10 +189,22 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen font-nunito relative overflow-hidden bg-slate-950">
+      {/* Cookie consent — PDPA Malaysia */}
+      <CookieConsent />
       {/* Exit-intent popup — auto-trigger bila user nak tinggalkan page */}
       <ExitIntentPopup onCTA={scrollToPricing} />
       {/* Live social proof toast — rotate at bottom-left, desktop only */}
       <LiveSocialProof />
+      {/* WhatsApp floating button */}
+      <a
+        href="https://wa.me/60112345678?text=Salam%2C%20saya%20ada%20soalan%20tentang%20CeriaKid"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-full bg-green-500 hover:bg-green-400 text-white font-black text-sm shadow-2xl shadow-green-500/30 transition-all hover:scale-105 active:scale-95"
+        aria-label="WhatsApp support"
+      >
+        💬 <span className="hidden sm:inline">Bantuan</span>
+      </a>
 
       <div className="relative">
 
@@ -367,17 +381,17 @@ export default function Landing() {
               <div className="flex gap-0.5 mb-0.5">
                 {[...Array(5)].map((_, i) => <span key={i} className="text-amber-500 text-sm">★</span>)}
               </div>
-              <p className="text-slate-700 text-xs font-bold">Rating ibu bapa <span className="text-slate-900">4.9/5</span></p>
+              <p className="text-slate-700 text-xs font-bold">Dipercayai <span className="text-slate-900">5,000+</span> keluarga • <span className="text-slate-900">4.9/5</span> ★</p>
             </div>
           </motion.div>
 
           {/* Stats grid — digabungkan dalam hero */}
           <div className="mt-10 md:mt-12 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {[
-              { num: '7+', label: 'Subjek Utama', icon: '📚' },
-              { num: '2', label: 'Peringkat Umur', icon: '🎯' },
-              { num: 'KSPK+KSSR', label: 'Standard Malaysia', icon: '🇲🇾' },
-              { num: '5-10', label: 'Minit Harian', icon: '🚀' },
+              { num: '1,600+', label: 'Game Interaktif', icon: '🎮' },
+              { num: '5,000+', label: 'Keluarga Malaysia', icon: '👨‍👩‍👧' },
+              { num: 'KSPK+KSSR', label: 'Standard KPM', icon: '🇲🇾' },
+              { num: '4.9★', label: 'Rating Ibu Bapa', icon: '⭐' },
             ].map((stat, i) => (
               <motion.div
                 key={i}
@@ -633,9 +647,9 @@ export default function Landing() {
             'border-amber-400 shadow-2xl shadow-amber-200/50 md:scale-105 bg-gradient-to-br from-amber-50 to-orange-50' :
             'border-blue-100 shadow-md hover:border-blue-300 bg-white'}`}
             >
-              {tier.savings &&
-              <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-amber-500 text-white' : 'bg-blue-100 text-blue-700'}`}>
-                 💰 {tier.savings}
+              {(tier.savings || tier.badge) &&
+              <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-amber-500 text-white' : 'bg-orange-100 text-orange-700'}`}>
+                 {tier.savings ? `💰 ${tier.savings}` : tier.badge}
                </div>
               }
 
@@ -782,13 +796,40 @@ export default function Landing() {
       </SectionWrapper>
 
       {/* ── FOOTER ── */}
-      <footer className="text-white py-5 text-center md:py-6 relative bg-slate-950 border-t border-white/10">
-        <p className="font-black text-lg mb-1">🎓 CeriaKid © 2026</p>
-        <p className="text-white/80 text-sm mb-5">Ceria belajar, suka bermain, maju bersama! 🎮📚</p>
-        <div className="flex justify-center gap-6 text-xs text-white/60">
-          <Link to="/terms" className="cursor-pointer hover:text-white">Terma Penggunaan</Link>
-          <Link to="/privacy" className="cursor-pointer hover:text-white">Dasar Privasi</Link>
-          <Link to="/contact" className="cursor-pointer hover:text-white">Hubungi Kami</Link>
+      <footer className="text-white py-8 md:py-10 relative bg-slate-950 border-t border-white/10">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-left">
+            {/* Brand */}
+            <div>
+              <p className="font-black text-lg mb-1">🎓 CeriaKid</p>
+              <p className="text-white/60 text-sm leading-relaxed">Platform pembelajaran interaktif untuk kanak-kanak Malaysia, berasaskan silibus KSPK & KSSR.</p>
+            </div>
+            {/* Links */}
+            <div>
+              <p className="font-black text-sm mb-3 text-white/80">Pautan</p>
+              <div className="flex flex-col gap-2 text-sm text-white/60">
+                <Link to="/terms" className="hover:text-white transition-colors">Terma Penggunaan</Link>
+                <Link to="/privacy" className="hover:text-white transition-colors">Dasar Privasi</Link>
+                <Link to="/contact" className="hover:text-white transition-colors">Hubungi Kami</Link>
+              </div>
+            </div>
+            {/* Support */}
+            <div>
+              <p className="font-black text-sm mb-3 text-white/80">Sokongan</p>
+              <a
+                href="https://wa.me/60112345678?text=Salam%2C%20saya%20ada%20soalan%20tentang%20CeriaKid"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500 hover:bg-green-400 text-white font-black text-sm transition-colors shadow-lg"
+              >
+                💬 WhatsApp Kami
+              </a>
+              <p className="text-white/50 text-xs mt-2">Isnin – Jumaat, 9am – 6pm</p>
+            </div>
+          </div>
+          <div className="border-t border-white/10 pt-5 text-center">
+            <p className="text-white/50 text-xs">© 2026 CeriaKid. Hak cipta terpelihara. Dibina dengan ❤️ untuk ibu bapa Malaysia.</p>
+          </div>
         </div>
       </footer>
 

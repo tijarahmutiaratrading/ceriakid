@@ -1,61 +1,90 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, BookOpen, Calculator, Microscope, BarChart3, LogOut } from 'lucide-react';
+import { Home, Gamepad2, GraduationCap, BarChart3, Settings } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
-import { useAgeGroup } from '@/lib/AgeGroupContext';
-import LanguageToggle from '@/components/game/LanguageToggle';
+
+const NAV_ITEMS = [
+  { path: '/dashboard', icon: Home, label: 'Home' },
+  { path: '/games-hub', icon: Gamepad2, label: 'Games' },
+  { path: '/ai-assistant', icon: GraduationCap, label: 'Cikgu AI' },
+  { path: '/parent-dashboard', icon: BarChart3, label: 'Prestasi' },
+  { path: '/settings', icon: Settings, label: 'Tetapan' },
+];
 
 export default function BottomNavigation() {
-  const { isAuthenticated, logout } = useAuth();
-  const ageGroupContext = useAgeGroup();
-  const ageGroup = ageGroupContext?.ageGroup;
-  const setAgeGroup = ageGroupContext?.setAgeGroup;
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  // Don't show nav on landing page only
-  if (location.pathname === '/') {
+  // Hanya tunjuk pada halaman authenticated, sorok pada landing, game play, dan drawing
+  const hiddenPaths = ['/', '/terms', '/privacy', '/contact', '/thank-you'];
+  const isGameplay = location.pathname.startsWith('/play/') ||
+    location.pathname.startsWith('/games/memory') ||
+    location.pathname.startsWith('/games/dragdrop') ||
+    location.pathname.startsWith('/games/wordbuilder') ||
+    location.pathname.startsWith('/games/sorting') ||
+    location.pathname.startsWith('/games/tilematch') ||
+    location.pathname.startsWith('/games/story') ||
+    location.pathname.startsWith('/games/physics') ||
+    location.pathname.startsWith('/games/tracing') ||
+    location.pathname.startsWith('/mini-games') ||
+    location.pathname === '/drawing' ||
+    location.pathname === '/story-kid';
+
+  if (!isAuthenticated || hiddenPaths.includes(location.pathname) || isGameplay) {
     return null;
   }
 
-  const navItems = [
-    { path: '/', emoji: '🏠', label: 'Home', category: 'home' },
-    { path: `/games/bahasa_melayu`, emoji: '🇲🇾', label: 'Bahasa', category: 'bahasa_melayu' },
-    { path: `/games/english`, emoji: '🇬🇧', label: 'English', category: 'english' },
-    { path: `/games/mathematics`, emoji: '🔢', label: 'Math', category: 'mathematics' },
-    { path: `/games/science`, emoji: '🔬', label: 'Science', category: 'science' },
-    ...(isAuthenticated ? [{ path: '/parent-dashboard', emoji: '📊', label: 'Prestasi', category: 'dashboard' }] : []),
-  ];
-
-  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path);
+  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
 
   return (
     <motion.nav
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.3 }}
-      className="fixed bottom-0 inset-x-0 z-40 px-4 py-4"
+      transition={{ delay: 0.2 }}
+      className="sm:hidden fixed bottom-0 inset-x-0 z-40"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="max-w-2xl mx-auto bg-gradient-to-br from-slate-700 to-slate-800 rounded-full shadow-2xl px-2 py-3">
-        {/* Navigation - Horizontal scroll on mobile, flex on desktop */}
-        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide md:justify-center">
-          {navItems.map(item => (
-            <Link key={item.path} to={item.path} className="flex-shrink-0">
-              <motion.button
-                whileTap={{ scale: 0.88 }}
-                whileHover={{ scale: 1.05 }}
-                className={`flex flex-col items-center gap-1 py-2 px-3 rounded-2xl transition-all duration-200 min-w-max ${
-                  isActive(item.path)
-                    ? 'bg-slate-500/50 text-white shadow-lg'
-                    : 'text-slate-400 hover:text-slate-300'
-                }`}
-              >
-                <span className="text-base">{item.emoji}</span>
-                <span className="text-xs font-semibold tracking-tight">{item.label}</span>
-              </motion.button>
+      <div
+        className="flex items-center justify-around px-2 py-2 border-t border-white/10"
+        style={{
+          background: 'rgba(15,10,30,0.92)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+        }}
+      >
+        {NAV_ITEMS.map(item => {
+          const Icon = item.icon;
+          const active = isActive(item.path);
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className="flex flex-col items-center gap-1 px-3 py-1.5 rounded-2xl transition-all min-w-0 flex-1"
+            >
+              <div className={`relative flex items-center justify-center w-8 h-8 rounded-xl transition-all ${
+                active ? 'bg-purple-500/30' : ''
+              }`}>
+                <Icon
+                  className={`w-5 h-5 transition-all ${active ? 'text-purple-300' : 'text-white/50'}`}
+                  strokeWidth={active ? 2.5 : 1.8}
+                />
+                {active && (
+                  <motion.div
+                    layoutId="bottom-nav-indicator"
+                    className="absolute inset-0 rounded-xl bg-purple-500/20 ring-1 ring-purple-400/40"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </div>
+              <span className={`text-[10px] font-black truncate w-full text-center leading-none transition-all ${
+                active ? 'text-purple-300' : 'text-white/40'
+              }`}>
+                {item.label}
+              </span>
             </Link>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </motion.nav>
   );

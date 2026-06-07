@@ -106,6 +106,7 @@ export default function AIHubCard() {
             <p className="text-white/80 text-[11px] md:text-xs font-bold mt-1">
               {credits?.totalUsed ?? 0} digunakan
             </p>
+            <p className="text-white/60 text-[10px] font-semibold mt-0.5">✅ Kredit tidak luput</p>
           </motion.div>
         </Link>
 
