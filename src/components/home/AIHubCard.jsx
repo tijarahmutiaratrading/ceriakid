@@ -75,10 +75,10 @@ export default function AIHubCard() {
         src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/47633d562_generated_image.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 w-full h-full object-cover opacity-15 mix-blend-luminosity z-0"
+        className="pointer-events-none absolute inset-0 w-full h-full object-cover opacity-100 z-0"
       />
       {/* White-to-transparent overlay supaya teks tetap clear */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 via-white/20 to-white/30 z-0" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30 z-0" />
 
       {/* Decorative sparkles */}
       <div className="pointer-events-none absolute top-4 left-4 text-2xl md:text-3xl opacity-80">✨</div>
