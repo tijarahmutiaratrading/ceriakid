@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useLang } from '@/lib/LanguageContext';
@@ -24,8 +24,6 @@ import { base44 } from '@/api/base44Client';
 export default function Home() {
   const authContext = useAuth();
   const { isAuthenticated, user, isLoadingAuth, logout } = authContext || {};
-  const navigate = useNavigate();
-  const adminRedirected = useRef(false);
   const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
   const { lang } = useLang();
   const safeAgeGroup = ageGroup || 'prasekolah';
@@ -60,14 +58,6 @@ export default function Home() {
       base44.auth.redirectToLogin(window.location.href);
     }
   }, [isLoadingAuth, isAuthenticated]);
-
-  // Redirect admin sekali je bila mula-mula masuk dashboard
-  React.useEffect(() => {
-    if (user?.role === 'admin' && !adminRedirected.current) {
-      adminRedirected.current = true;
-      navigate('/admin-dashboard');
-    }
-  }, [user?.role]);
 
   // Check subscription + device registration once user is known.
   // Paywall: if no active paid subscription, redirect to landing pricing.
