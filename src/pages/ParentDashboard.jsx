@@ -113,7 +113,7 @@ export default function ParentDashboard() {
       className="min-h-screen font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
       style={{ background: '#fafafa' }}
     >
-      {/* Subtle grid pattern */}
+      {/* Subtle grid pattern — same as AdminDashboard */}
       <div
         className="fixed inset-0 pointer-events-none opacity-[0.015]"
         style={{
@@ -121,8 +121,8 @@ export default function ParentDashboard() {
           backgroundSize: '40px 40px',
         }}
       />
-      <AppHeader showBack={true} backTo="/dashboard" theme="dark" />
-      <div className="relative max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-20 sm:pt-6">
+      <AppHeader showBack={true} backTo="/dashboard" theme="light" />
+      <div className="relative max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-16 pt-20 sm:pt-6">
 
         {/* 1. Family Hero — overall snapshot */}
         <ParentHeroCard
@@ -137,11 +137,7 @@ export default function ParentDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-[2rem] p-10 text-center"
-            style={{
-              background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-              boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
-            }}
+            className="rounded-2xl p-10 text-center bg-white ring-1 ring-slate-200 shadow-sm"
           >
             <motion.p animate={{ y: [0, -8, 0] }} transition={{ duration: 2.5, repeat: Infinity }} className="text-6xl mb-4">👨‍👩‍👧‍👦</motion.p>
             <p className="text-slate-800 font-black text-xl mb-2">Belum ada profil anak</p>
@@ -192,11 +188,7 @@ export default function ParentDashboard() {
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="rounded-[2rem] p-8 text-center"
-                      style={{
-                        background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-                        boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
-                      }}
+                      className="rounded-2xl p-8 text-center bg-white ring-1 ring-slate-200 shadow-sm"
                     >
                       <motion.p animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity }} className="text-6xl mb-3">🎮</motion.p>
                       <p className="text-slate-800 font-black text-lg mb-2">{selectedChild} belum mula bermain</p>

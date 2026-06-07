@@ -221,11 +221,19 @@ export default function ChildrenProfiles() {
   return (
     <div
       className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
-      style={{ background: 'linear-gradient(180deg, #fef9f3 0%, #fce7f3 50%, #ede9fe 100%)' }}
+      style={{ background: '#fafafa' }}
     >
-      <AppHeader />
+      {/* Subtle grid pattern — same as AdminDashboard */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
+      <AppHeader theme="light" />
 
-      <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-32 pt-4">
+      <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-16 pt-4">
 
         {/* PREMIUM HERO — extracted to FamilyHeroCard component */}
         <FamilyHeroCard
@@ -268,11 +276,7 @@ export default function ChildrenProfiles() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.18 }}
-              className="mb-5 rounded-[2rem] p-5 sm:p-6"
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-                boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
-              }}
+              className="mb-5 rounded-2xl p-5 sm:p-6 bg-white ring-1 ring-slate-200 shadow-sm"
             >
               <p className="text-slate-800 font-black text-base mb-4">{editingId ? '✨ Ubah Profil Anak' : '💕 Tambah Anak Baru'}</p>
 
@@ -401,11 +405,7 @@ export default function ChildrenProfiles() {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-[2rem] p-10 sm:p-14 text-center"
-            style={{
-              background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-              boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
-            }}
+            className="rounded-2xl p-10 sm:p-14 text-center bg-white ring-1 ring-slate-200 shadow-sm"
           >
             <motion.div
               animate={{ y: [0, -8, 0], rotate: [0, 5, -5, 0] }}
