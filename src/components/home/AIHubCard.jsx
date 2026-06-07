@@ -92,17 +92,18 @@ export default function AIHubCard() {
         <Link to="/buy-credits" className="block w-full md:w-auto md:flex-1 md:max-w-md">
           <motion.div
             whileHover={{ scale: 1.02, y: -2 }}
-            className="bg-white rounded-2xl p-3.5 md:p-4 shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-white/80"
+            className="rounded-2xl p-3.5 md:p-4 border border-white/40"
+            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(16px)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
           >
-            <p className="text-slate-900 font-black text-[10px] md:text-xs tracking-wide mb-0.5">BAKI KREDIT AI</p>
+            <p className="text-white font-black text-[10px] md:text-xs tracking-wide mb-0.5">BAKI KREDIT AI</p>
             {loading ? (
               <div className="flex items-center gap-2 my-1">
-                <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+                <Loader2 className="w-5 h-5 animate-spin text-white/70" />
               </div>
             ) : (
-              <p className="text-slate-900 text-3xl md:text-4xl font-black leading-none my-0.5">{balance}</p>
+              <p className="text-white text-3xl md:text-4xl font-black leading-none my-0.5">{balance}</p>
             )}
-            <p className="text-slate-600 text-[11px] md:text-xs font-bold mt-1">
+            <p className="text-white/80 text-[11px] md:text-xs font-bold mt-1">
               {credits?.totalUsed ?? 0} digunakan
             </p>
           </motion.div>
@@ -114,13 +115,14 @@ export default function AIHubCard() {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 rounded-full bg-white text-slate-900 font-black text-xs md:text-sm shadow-[0_6px_20px_rgba(0,0,0,0.08)] border border-white/80 hover:shadow-lg transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 rounded-full text-white font-black text-xs md:text-sm border border-white/40 hover:bg-white/30 transition-all"
+              style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(16px)' }}
             >
               <Plus className="w-4 h-4" /> Top Up
             </motion.div>
           </Link>
           {isLow && (
-            <p className="text-slate-700 font-bold text-xs md:text-sm flex items-center gap-1">
+            <p className="text-white font-bold text-xs md:text-sm flex items-center gap-1">
               Baki rendah — top up sekarang <ArrowRight className="w-3.5 h-3.5" />
             </p>
           )}
@@ -128,7 +130,7 @@ export default function AIHubCard() {
       </div>
 
       {/* Section title */}
-      <h2 className="relative z-10 text-slate-900 font-black text-base md:text-lg tracking-wide mb-3 md:mb-4">
+      <h2 className="relative z-10 text-white font-black text-base md:text-lg tracking-wide mb-3 md:mb-4">
         CIRI AI CERIAKID
       </h2>
 
@@ -141,7 +143,8 @@ export default function AIHubCard() {
               <motion.div
                 whileHover={{ scale: 1.02, y: -3 }}
                 whileTap={{ scale: 0.98 }}
-                className={`group relative h-full overflow-hidden rounded-2xl bg-gradient-to-br ${f.bg} p-3 md:p-3.5 shadow-[0_6px_24px_rgba(0,0,0,0.06)] border border-white/60 flex items-center gap-2.5 md:gap-3`}
+                className="group relative h-full overflow-hidden rounded-2xl p-3 md:p-3.5 border border-white/30 flex items-center gap-2.5 md:gap-3"
+                style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(14px)', boxShadow: '0 4px 16px rgba(0,0,0,0.1)' }}
               >
                 {/* Avatar */}
                 {f.avatar ? (
@@ -158,13 +161,13 @@ export default function AIHubCard() {
 
                 {/* Text */}
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-slate-700 text-xs md:text-sm leading-tight">
+                  <p className="font-black text-white/80 text-xs md:text-sm leading-tight">
                     {f.title}
                   </p>
-                  <p className="font-black text-slate-900 text-sm md:text-base leading-tight mt-0.5">
+                  <p className="font-black text-white text-sm md:text-base leading-tight mt-0.5">
                     {f.desc}
                   </p>
-                  <span className="inline-block mt-1.5 text-[10px] md:text-xs font-black bg-white/80 text-slate-700 px-2 py-0.5 rounded-full shadow-sm">
+                  <span className="inline-block mt-1.5 text-[10px] md:text-xs font-black bg-white/25 text-white px-2 py-0.5 rounded-full">
                     {f.cost}
                   </span>
                 </div>
