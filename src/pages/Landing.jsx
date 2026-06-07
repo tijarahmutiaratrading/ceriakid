@@ -747,39 +747,7 @@ export default function Landing() {
           ))}
         </div>
 
-        {/* Final CTA sub-section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-16 md:mt-20 max-w-3xl mx-auto text-center rounded-3xl p-8 md:p-12 bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-950 shadow-2xl relative overflow-hidden"
-        >
-          <div className="absolute top-0 -left-20 w-72 h-72 rounded-full bg-pink-500/20 blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 -right-20 w-72 h-72 rounded-full bg-orange-500/20 blur-3xl pointer-events-none" />
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-5">
-              <span>🎓</span>
-              <span className="text-white/90 text-xs sm:text-sm font-bold">SEDIA UNTUK MULAKAN?</span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4 text-white leading-[1.1] tracking-tight">
-              Anak anda layak dapat{' '}
-              <span className="bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">yang terbaik</span>
-            </h3>
-            <p className="text-white/75 text-base sm:text-lg mb-6 max-w-xl mx-auto leading-relaxed">
-              Mulakan dengan latihan pendek yang anak boleh konsisten buat setiap hari — lebih mudah, lebih ceria, lebih teratur.
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={scrollToPricing}
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 sm:px-7 sm:py-3.5 rounded-full font-black text-white text-sm sm:text-base shadow-2xl"
-              style={{ background: 'linear-gradient(135deg, #F97316, #EA580C)', boxShadow: '0 10px 30px rgba(234,88,12,0.5)' }}
-            >
-              🎮 Pilih Pelan Sekarang <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-            </motion.button>
-            <p className="text-white/60 text-sm mt-4">✅ Setup 2 minit &nbsp;•&nbsp; ✅ Tanpa iklan &nbsp;•&nbsp; ✅ Dashboard ibu bapa</p>
-          </div>
-        </motion.div>
+
       </SectionWrapper>
 
       {/* ── FOOTER ── */}
