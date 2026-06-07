@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { GraduationCap, Users, BookMarked, ExternalLink, Info, Sparkles } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
-import AIBackButton from '@/components/ai/AIBackButton';
 import SyllabusTopicCard from '@/components/syllabus/SyllabusTopicCard';
 import { KSPK_TUNJANG, KSSR_DARJAH, SYLLABUS_INFO } from '@/lib/syllabusData';
 
@@ -20,11 +19,7 @@ export default function Syllabus() {
         <AppHeader showBack={true} backTo="/dashboard" title="Silibus KSPK & KSSR" />
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-20 md:pt-8 pb-16">
-        <div className="mb-5">
-          <AIBackButton to="/dashboard" label="Kembali ke Dashboard" />
-        </div>
-
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-20 md:pt-6 pb-16">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <div className="flex items-center gap-3">
