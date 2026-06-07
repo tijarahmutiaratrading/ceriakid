@@ -61,7 +61,7 @@ export default function ScarcityBanner() {
             </div>
           </div>
           
-          <div className="flex gap-1.5 sm:gap-2 items-center justify-end flex-grow sm:flex-grow-0 pr-1 sm:pr-2">
+          <div className="flex gap-1.5 sm:gap-2 items-center justify-end flex-grow sm:flex-grow-0 pr-3 sm:pr-4">
             {[
               { value: timeLeft.hours },
               { value: timeLeft.minutes },
