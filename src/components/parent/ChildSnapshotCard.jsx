@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Flame, Star, Gamepad2, Award, TrendingUp } from 'lucide-react';
+import { getChildAvatar } from '@/lib/childAvatars';
 
 export default function ChildSnapshotCard({ child, games, streak = 0 }) {
   const totalGames = games.length;
@@ -27,12 +28,8 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
     >
       {/* Header row */}
       <div className="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
-        <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center ring-1 ring-slate-200">
-          {child?.avatarUrl ? (
-            <img src={child.avatarUrl} alt={child.name} className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-3xl">{fallbackEmoji}</span>
-          )}
+        <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 ring-1 ring-slate-200">
+          <img src={getChildAvatar(child)} alt={child?.name} className="w-full h-full object-cover" />
         </div>
 
         <div className="flex-1 min-w-0">
