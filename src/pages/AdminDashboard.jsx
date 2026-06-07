@@ -340,26 +340,6 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
-                    {/* DEBUG PANEL — audit created_date setiap sub */}
-                    <details className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs">
-                      <summary className="font-black text-amber-800 cursor-pointer">🔍 Debug: created_date semua subscription (klik untuk buka)</summary>
-                      <div className="mt-2 space-y-1 font-mono max-h-48 overflow-y-auto">
-                        {subscriptions.slice(0, 20).map((s, i) => {
-                          const raw = s.created_date ? String(s.created_date) : 'NULL';
-                          const rawZ = raw !== 'NULL' && !/[Z+\-]\d*$/.test(raw.trim()) ? raw.trim() + 'Z' : raw;
-                          const parsed = rawZ !== 'NULL' ? new Date(rawZ) : null;
-                          const myt8 = parsed && !isNaN(parsed) ? new Date(parsed.getTime() + 8*3600000).toISOString().slice(0,16) : '?';
-                          const inToday = isInRange(s.created_date, 'today');
-                          const inYesterday = isInRange(s.created_date, 'yesterday');
-                          return (
-                            <div key={i} className={`text-[10px] ${inToday ? 'text-green-700 font-bold' : inYesterday ? 'text-blue-700' : 'text-slate-500'}`}>
-                              <span>{inToday ? '✓T' : inYesterday ? '✓Y' : '—'} </span>
-                              <span>{s.email} | raw: {raw} | myt: {myt8} | [{s.tier}/{s.status}]</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </details>
 
                     {/* Traffic & Visitor analytics */}
                     <TrafficAnalyticsCard
