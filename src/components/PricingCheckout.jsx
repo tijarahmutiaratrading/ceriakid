@@ -6,6 +6,7 @@ import { trackPixelEvent } from '@/lib/pixel';
 import { genEventID, getFbCookies } from '@/lib/fbTracking';
 import { getStoredReferralCode } from '@/lib/referralTracker';
 import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
+import ScarcityBanner from '@/components/ScarcityBanner';
 
 const TIER_VALUES = {
   asas: 49,
@@ -144,6 +145,8 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <ScarcityBanner />
+
       {!isAuthenticated && (
         <div className="rounded-2xl bg-yellow-100 border border-yellow-300/60 p-4 text-slate-800 text-sm font-bold">
           Log masuk dahulu supaya pembayaran dan langganan boleh diaktifkan pada akaun anda.
