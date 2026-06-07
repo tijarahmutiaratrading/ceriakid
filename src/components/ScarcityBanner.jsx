@@ -51,18 +51,18 @@ export default function ScarcityBanner() {
       {/* Countdown Timer Banner */}
       <div className="relative rounded-2xl overflow-hidden shadow-lg">
         <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 opacity-95" />
-        <div className="relative px-3 sm:px-5 py-3 sm:py-4 flex flex-row items-center justify-between gap-2 sm:gap-4 overflow-x-auto">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/20 backdrop-blur flex items-center justify-center animate-pulse flex-shrink-0">
-              <Flame className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-white" />
+        <div className="relative px-3 sm:px-5 py-3 sm:py-4 flex flex-row items-center justify-between gap-2 sm:gap-4">
+          <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-shrink-0">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-white/20 backdrop-blur flex items-center justify-center animate-pulse flex-shrink-0">
+              <Flame className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 hidden sm:block">
               <p className="text-white font-black text-xs sm:text-sm leading-tight">Harga promo tamat tengah malam ini!</p>
               <p className="text-white/80 text-[10px] sm:text-[11px] font-semibold mt-0.5 leading-tight">Tawaran terbatas 24 jam</p>
             </div>
           </div>
           
-          <div className="flex gap-1 sm:gap-2 items-center justify-center sm:justify-end flex-shrink-0">
+          <div className="flex gap-1 sm:gap-2 items-center justify-end flex-grow sm:flex-grow-0">
             {[
               { label: 'j', value: timeLeft.hours },
               { label: 'm', value: timeLeft.minutes },
