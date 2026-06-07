@@ -40,16 +40,7 @@ export default function AppLayout() {
         </main>
         <BottomNavigation />
 
-        {/* WhatsApp floating support button */}
-        <a
-          href="https://wa.me/60112345678?text=Salam%2C%20saya%20ada%20soalan%20tentang%20CeriaKid"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden sm:flex fixed bottom-6 right-6 z-50 items-center gap-2 px-4 py-3 rounded-full bg-green-500 hover:bg-green-400 text-white font-black text-sm shadow-2xl shadow-green-500/30 transition-all hover:scale-105 active:scale-95"
-          aria-label="Hubungi kami via WhatsApp"
-        >
-          💬 <span>Bantuan</span>
-        </a>
+
       </div>
     </>
   );

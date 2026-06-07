@@ -8,7 +8,6 @@ import { captureReferralFromUrl } from '@/lib/referralTracker';
 import { trackPixelEvent } from '@/lib/pixel';
 import { genEventID } from '@/lib/fbTracking';
 import PricingCheckout from '@/components/PricingCheckout';
-import CookieConsent from '@/components/CookieConsent';
 import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import LandingHeroCarousel from '@/components/landing/LandingHeroCarousel';
@@ -189,22 +188,10 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen font-nunito relative overflow-hidden bg-slate-950">
-      {/* Cookie consent — PDPA Malaysia */}
-      <CookieConsent />
       {/* Exit-intent popup — auto-trigger bila user nak tinggalkan page */}
       <ExitIntentPopup onCTA={scrollToPricing} />
       {/* Live social proof toast — rotate at bottom-left, desktop only */}
       <LiveSocialProof />
-      {/* WhatsApp floating button */}
-      <a
-        href="https://wa.me/60112345678?text=Salam%2C%20saya%20ada%20soalan%20tentang%20CeriaKid"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-full bg-green-500 hover:bg-green-400 text-white font-black text-sm shadow-2xl shadow-green-500/30 transition-all hover:scale-105 active:scale-95"
-        aria-label="WhatsApp support"
-      >
-        💬 <span className="hidden sm:inline">Bantuan</span>
-      </a>
 
       <div className="relative">
 
@@ -816,14 +803,9 @@ export default function Landing() {
             {/* Support */}
             <div>
               <p className="font-black text-sm mb-3 text-white/80">Sokongan</p>
-              <a
-                href="https://wa.me/60112345678?text=Salam%2C%20saya%20ada%20soalan%20tentang%20CeriaKid"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500 hover:bg-green-400 text-white font-black text-sm transition-colors shadow-lg"
-              >
-                💬 WhatsApp Kami
-              </a>
+              <Link to="/contact" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-black text-sm transition-colors border border-white/20">
+                ✉️ Hubungi Kami
+              </Link>
               <p className="text-white/50 text-xs mt-2">Isnin – Jumaat, 9am – 6pm</p>
             </div>
           </div>
