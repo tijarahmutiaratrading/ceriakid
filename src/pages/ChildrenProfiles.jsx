@@ -221,14 +221,16 @@ export default function ChildrenProfiles() {
   return (
     <div
       className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
-      style={{ background: '#fafafa' }}
     >
-      {/* Subtle grid pattern — same as AdminDashboard */}
+      {/* Override AppLayout background image with solid #fafafa — same as AdminDashboard */}
+      <div className="fixed inset-0 pointer-events-none" style={{ background: '#fafafa', zIndex: -1 }} />
+      {/* Subtle grid pattern */}
       <div
         className="fixed inset-0 pointer-events-none opacity-[0.015]"
         style={{
           backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
           backgroundSize: '40px 40px',
+          zIndex: -1,
         }}
       />
       <AppHeader theme="light" />
