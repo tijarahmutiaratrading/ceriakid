@@ -2,7 +2,6 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import UserTopHeader from '@/components/UserTopHeader';
 import PageTransition from '@/components/ui/PageTransition';
-import BottomNavigation from '@/components/BottomNavigation';
 
 /**
  * App layout with a floating top header (desktop) on every authenticated page.
@@ -33,12 +32,11 @@ export default function AppLayout() {
       />
       <div className="min-h-screen w-full relative">
         <UserTopHeader />
-        <main className="w-full overflow-x-hidden pt-16 sm:pt-20 pb-20 sm:pb-0">
+        <main className="w-full overflow-x-hidden pt-16 sm:pt-20">
           <PageTransition>
             <Outlet />
           </PageTransition>
         </main>
-        <BottomNavigation />
 
 
       </div>
