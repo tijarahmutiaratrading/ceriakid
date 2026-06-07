@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useLang } from '@/lib/LanguageContext';
@@ -24,6 +24,8 @@ import { base44 } from '@/api/base44Client';
 export default function Home() {
   const authContext = useAuth();
   const { isAuthenticated, user, isLoadingAuth, logout } = authContext || {};
+  const navigate = useNavigate();
+  const adminRedirected = useRef(false);
   const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
   const { lang } = useLang();
   const safeAgeGroup = ageGroup || 'prasekolah';
@@ -59,10 +61,11 @@ export default function Home() {
     }
   }, [isLoadingAuth, isAuthenticated]);
 
-  // Redirect admin terus ke admin dashboard
+  // Redirect admin sekali je bila mula-mula masuk dashboard
   React.useEffect(() => {
-    if (user?.role === 'admin') {
-      window.location.href = '/admin-dashboard';
+    if (user?.role === 'admin' && !adminRedirected.current) {
+      adminRedirected.current = true;
+      navigate('/admin-dashboard');
     }
   }, [user?.role]);
 
