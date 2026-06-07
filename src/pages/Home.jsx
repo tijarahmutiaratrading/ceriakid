@@ -59,6 +59,13 @@ export default function Home() {
     }
   }, [isLoadingAuth, isAuthenticated]);
 
+  // Redirect admin terus ke admin dashboard
+  React.useEffect(() => {
+    if (user?.role === 'admin') {
+      window.location.href = '/admin-dashboard';
+    }
+  }, [user?.role]);
+
   // Check subscription + device registration once user is known.
   // Paywall: if no active paid subscription, redirect to landing pricing.
   React.useEffect(() => {
