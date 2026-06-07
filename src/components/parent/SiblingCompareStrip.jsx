@@ -1,11 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Flame } from 'lucide-react';
+import { Trophy, Flame, Users } from 'lucide-react';
 
-/**
- * Playful CeriaKid sibling strip — pastel candy cards, bouncy mascots,
- * gold crown for the leader, soft rainbow vibes.
- */
 export default function SiblingCompareStrip({ children, childrenData, selectedChild, onSelect }) {
   if (!children || children.length < 2) return null;
 
@@ -14,10 +10,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
     const totalStars = games.reduce((sum, g) => sum + (g.bestStars || 0), 0);
     const totalGames = games.length;
     const avg = totalGames > 0 ? totalStars / totalGames : 0;
-    const lastPlayed = games
-      .map((g) => (g.lastPlayedDate ? new Date(g.lastPlayedDate).getTime() : 0))
-      .reduce((a, b) => Math.max(a, b), 0);
-    return { ...child, totalStars, totalGames, avg, lastPlayed };
+    return { ...child, totalStars, totalGames, avg };
   });
 
   const leader = [...stats].sort((a, b) => b.totalStars - a.totalStars)[0];
@@ -27,48 +20,29 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-[2rem] p-5 mb-4"
-      style={{
-        background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-        boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
-      }}
+      className="bg-white rounded-2xl ring-1 ring-slate-200 shadow-sm mb-4 overflow-hidden"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <motion.div
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-11 h-11 rounded-2xl overflow-hidden flex-shrink-0"
-            style={{
-              background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 100%)',
-              boxShadow: '0 3px 0 #f9a8d4',
-            }}
-          >
-            <img
-              src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/bb09f323b_generated_image.png"
-              alt="Adik-beradik"
-              className="w-full h-full object-cover"
-            />
-          </motion.div>
+          <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
+            <Users className="w-4 h-4 text-white" />
+          </div>
           <div>
-            <p className="text-slate-800 text-base font-black leading-none">Adik-Beradik</p>
-            <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mt-1">Tap untuk pilih anak</p>
+            <p className="text-slate-900 text-sm font-black leading-none">Adik-Beradik</p>
+            <p className="text-slate-400 text-[10px] font-semibold mt-0.5">Tap untuk pilih anak</p>
           </div>
         </div>
         {leaderName && (
-          <div
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-            style={{ background: '#fef3c7', boxShadow: '0 2px 0 #fcd34d' }}
-          >
-            <Trophy className="w-3.5 h-3.5 text-amber-600" strokeWidth={3} />
-            <span className="text-amber-800 text-[10px] font-black uppercase tracking-wider">{leaderName} #1</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 border border-amber-200">
+            <Trophy className="w-3 h-3 text-amber-600" />
+            <span className="text-amber-700 text-[10px] font-bold">{leaderName} #1</span>
           </div>
         )}
       </div>
 
       {/* Cards */}
-      <div className="flex gap-3 overflow-x-auto overflow-y-visible pb-2 pt-3 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
+      <div className="flex gap-2 overflow-x-auto pb-3 pt-3 px-4 snap-x snap-mandatory scrollbar-hide">
         {stats.map((c, i) => {
           const isActive = c.name === selectedChild;
           const isLeader = c.name === leaderName;
@@ -78,118 +52,59 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
           return (
             <motion.button
               key={c.name}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.06, type: 'spring', stiffness: 220 }}
-              whileTap={{ scale: 0.96, y: 2 }}
+              transition={{ delay: i * 0.05 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => onSelect(c.name)}
-              className="relative flex-shrink-0 rounded-3xl p-3 min-w-[170px] text-left snap-start transition-all"
-              style={
+              className={`relative flex-shrink-0 rounded-xl p-3 min-w-[160px] text-left snap-start border transition-all ${
                 isActive
-                  ? {
-                      background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 100%)',
-                      boxShadow: '0 5px 0 #f9a8d4, 0 8px 20px rgba(251, 207, 232, 0.4)',
-                    }
-                  : {
-                      background: '#ffffff',
-                      boxShadow: '0 3px 0 #e2e8f0, 0 4px 10px rgba(0,0,0,0.04)',
-                    }
-              }
+                  ? 'bg-violet-50 border-violet-300 ring-1 ring-violet-200'
+                  : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+              }`}
             >
-              {/* Leader crown */}
               {isLeader && (
-                <motion.div
-                  initial={{ scale: 0, rotate: -30 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ type: 'spring', stiffness: 300, delay: 0.3 }}
-                  className="absolute -top-3 -right-2 w-9 h-9 rounded-full flex items-center justify-center z-10"
-                  style={{
-                    background: 'linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%)',
-                    border: '2.5px solid white',
-                    boxShadow: '0 3px 8px rgba(251, 191, 36, 0.5)',
-                  }}
-                  title="Pemimpin keluarga"
-                >
-                  <Trophy className="w-4 h-4 text-white" strokeWidth={3} />
-                </motion.div>
+                <div className="absolute -top-2 -right-1 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-amber-400 border border-white">
+                  <Trophy className="w-2.5 h-2.5 text-white" />
+                  <span className="text-white text-[8px] font-black">TOP</span>
+                </div>
               )}
 
-              {/* Header: avatar + name */}
               <div className="flex items-center gap-2 mb-2.5">
                 {c.avatarUrl ? (
-                  <img
-                    src={c.avatarUrl}
-                    alt={c.name}
-                    className="w-12 h-12 rounded-2xl object-cover flex-shrink-0"
-                    style={{ boxShadow: `0 3px 0 ${isActive ? '#f9a8d4' : '#e2e8f0'}` }}
-                  />
+                  <img src={c.avatarUrl} alt={c.name} className="w-10 h-10 rounded-lg object-cover flex-shrink-0 ring-1 ring-slate-200" />
                 ) : (
-                  <motion.div
-                    animate={isActive ? { y: [0, -3, 0] } : {}}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
-                    style={{
-                      background: isActive ? 'rgba(255,255,255,0.8)' : '#fef9f3',
-                      boxShadow: `0 3px 0 ${isActive ? '#f9a8d4' : '#fde68a'}`,
-                    }}
-                  >
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl flex-shrink-0 bg-white ring-1 ring-slate-200">
                     {emoji}
-                  </motion.div>
+                  </div>
                 )}
-                <div className="min-w-0 flex-1">
-                  <p className="font-black text-sm truncate leading-tight text-slate-800">{c.name}</p>
-                  <p className="text-[9px] font-black uppercase tracking-wide truncate text-slate-500 mt-0.5">
-                    {ageLabel}
-                  </p>
+                <div className="min-w-0">
+                  <p className="font-black text-sm truncate text-slate-900">{c.name}</p>
+                  <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide">{ageLabel}</p>
                 </div>
               </div>
 
-              {/* Stats row */}
-              <div
-                className="grid grid-cols-2 gap-1.5 rounded-2xl p-2"
-                style={{ background: isActive ? 'rgba(255,255,255,0.7)' : '#fef9f3' }}
-              >
-                <div className="text-center">
-                  <p className="text-[9px] font-black uppercase tracking-wider leading-none text-amber-600">
-                    ⭐ Bintang
-                  </p>
-                  <p className="font-black text-lg leading-none mt-1 text-slate-800 tabular-nums">{c.totalStars}</p>
+              <div className="grid grid-cols-2 gap-1.5">
+                <div className="bg-white rounded-lg px-2 py-1.5 text-center ring-1 ring-slate-100">
+                  <p className="text-[9px] font-bold text-amber-600 uppercase tracking-wide">Bintang</p>
+                  <p className="font-black text-base text-slate-900 leading-tight tabular-nums">{c.totalStars}</p>
                 </div>
-                <div className="text-center border-l-2" style={{ borderColor: isActive ? '#fbcfe8' : '#fde68a' }}>
-                  <p className="text-[9px] font-black uppercase tracking-wider leading-none text-blue-500">
-                    🎮 Games
-                  </p>
-                  <p className="font-black text-lg leading-none mt-1 text-slate-800 tabular-nums">{c.totalGames}</p>
+                <div className="bg-white rounded-lg px-2 py-1.5 text-center ring-1 ring-slate-100">
+                  <p className="text-[9px] font-bold text-sky-600 uppercase tracking-wide">Games</p>
+                  <p className="font-black text-base text-slate-900 leading-tight tabular-nums">{c.totalGames}</p>
                 </div>
               </div>
 
-              {/* Streak badge */}
               {c.currentStreak > 0 && (
-                <div
-                  className="flex items-center justify-center gap-1 mt-2 px-2 py-1.5 rounded-full text-[10px] font-black"
-                  style={{ background: '#fee2e2', color: '#991b1b' }}
-                >
-                  <Flame className="w-3 h-3" strokeWidth={3} />
-                  <span>{c.currentStreak}h streak</span>
+                <div className="flex items-center gap-1 mt-2 px-2 py-1 rounded-md bg-red-50 border border-red-100">
+                  <Flame className="w-3 h-3 text-red-500" />
+                  <span className="text-red-600 text-[10px] font-bold">{c.currentStreak}h streak</span>
                 </div>
               )}
             </motion.button>
           );
         })}
       </div>
-
-      {/* Mobile leader pill */}
-      {leaderName && (
-        <div className="sm:hidden flex justify-center mt-3">
-          <div
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-            style={{ background: '#fef3c7', boxShadow: '0 2px 0 #fcd34d' }}
-          >
-            <Trophy className="w-3.5 h-3.5 text-amber-600" strokeWidth={3} />
-            <span className="text-amber-800 text-[10px] font-black uppercase tracking-wider">{leaderName} #1</span>
-          </div>
-        </div>
-      )}
     </motion.div>
   );
 }
