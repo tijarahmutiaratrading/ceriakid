@@ -72,7 +72,7 @@ export default function AIHubCard() {
     >
       {/* AI-generated background image (very soft, faded) */}
       <img
-        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/47633d562_generated_image.png"
+        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/f3ee2b827_generated_image.png"
         alt=""
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 w-full h-full object-cover opacity-100 z-0"
