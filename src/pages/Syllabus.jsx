@@ -23,8 +23,8 @@ export default function Syllabus() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-20 md:pt-6 pb-16">
-        {/* Back button — desktop only (mobile ada AppHeader) */}
-        <div className="hidden md:block mb-4">
+        {/* Back button — semua screen size */}
+        <div className="mb-4">
           <Link
             to="/dashboard"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm transition-colors shadow-sm"
