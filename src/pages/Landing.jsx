@@ -719,7 +719,7 @@ export default function Landing() {
         title="Sebelum anda"
         titleAccent="mula menggunakan"
         subtitle="Jawapan ringkas untuk soalan yang biasa ditanya ibu bapa."
-        variant="bright"
+        variant="sky"
       >
         <div className="space-y-3 max-w-3xl mx-auto">
           {[
