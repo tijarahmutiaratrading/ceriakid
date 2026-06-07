@@ -69,9 +69,9 @@ export default function ScarcityBanner() {
               { label: 's', value: timeLeft.seconds },
             ].map((unit, i) => (
               <div key={unit.label} className="flex items-center gap-0.5 sm:gap-1">
-                <div className="bg-white/30 backdrop-blur px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg min-w-[3.5rem] sm:min-w-[4rem] text-center">
-                  <p className="text-white font-black text-sm sm:text-base tabular-nums">{padZero(unit.value)}</p>
-                  <p className="text-white/70 text-[7px] sm:text-[9px] font-bold uppercase tracking-wide">{unit.label}</p>
+                <div className="bg-white/30 backdrop-blur px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg flex items-center gap-1.5 sm:gap-2">
+                  <p className="text-white font-black text-sm sm:text-base tabular-nums leading-none">{padZero(unit.value)}</p>
+                  <p className="text-white/70 text-[7px] sm:text-[8px] font-bold uppercase tracking-wider leading-none">{unit.label}</p>
                 </div>
                 {i < 2 && <p className="text-white font-black text-base sm:text-xl opacity-60">:</p>}
               </div>
