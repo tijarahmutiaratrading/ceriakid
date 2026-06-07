@@ -90,21 +90,12 @@ export default function InstallAppGuide() {
         <div className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200/25 rounded-full blur-2xl pointer-events-none" />
         <div className="absolute -bottom-12 -left-10 w-40 h-40 bg-pink-300/25 rounded-full blur-2xl pointer-events-none" />
 
-        {/* Dismiss button */}
-        <button
-          onClick={handleDismiss}
-          aria-label="Tutup"
-          className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-white/15 hover:bg-white/30 text-white/80 hover:text-white flex items-center justify-center transition-colors"
-        >
-          <X className="w-4 h-4" />
-        </button>
-
         <div className="relative z-10 p-5 sm:p-6">
           <div className="flex items-start gap-4 mb-4">
             <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center shadow-lg">
               <MonitorSmartphone className="w-6 h-6 sm:w-7 sm:h-7 text-white" strokeWidth={2.5} />
             </div>
-            <div className="flex-1 min-w-0 pr-8">
+            <div className="flex-1 min-w-0">
               <p className="text-white/70 text-[10px] font-black uppercase tracking-[0.18em] mb-1">Pasang Sebagai App</p>
               <p className="text-white font-black text-base sm:text-lg leading-tight">Buka CeriaKid macam app biasa!</p>
               <p className="text-white/80 text-xs font-semibold mt-1.5 leading-relaxed">
