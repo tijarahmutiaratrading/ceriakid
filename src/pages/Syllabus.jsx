@@ -23,11 +23,12 @@ export default function Syllabus() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-14 md:pt-6 pb-16">
-        {/* Back button — semua screen size */}
+        {/* Back button */}
         <div className="mb-4">
           <Link
             to="/dashboard"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm transition-all shadow-sm"
+            style={{ background: 'rgba(15,23,42,0.85)', backdropFilter: 'blur(12px)', color: '#fff', border: '1px solid rgba(255,255,255,0.15)' }}
           >
             <ArrowLeft className="w-4 h-4" /> Kembali
           </Link>
@@ -35,8 +36,11 @@ export default function Syllabus() {
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
+          <div
+            className="flex items-center gap-3 rounded-2xl p-4"
+            style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}
+          >
+            <div className="w-11 h-11 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
               <BookMarked className="w-5 h-5 text-amber-600" />
             </div>
             <div>
@@ -47,11 +51,11 @@ export default function Syllabus() {
         </motion.div>
 
         {/* MODE TOGGLE */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-1 mb-4 grid grid-cols-2 gap-1">
+        <div className="rounded-xl p-1 mb-4 grid grid-cols-2 gap-1" style={{ background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
           <button
             onClick={() => setMode('parent')}
             className={`py-2 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-all ${
-              mode === 'parent' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-50'
+              mode === 'parent' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 hover:bg-white/60'
             }`}
           >
             <Users className="w-4 h-4" /> Mod Ibu Bapa
@@ -59,7 +63,7 @@ export default function Syllabus() {
           <button
             onClick={() => setMode('teacher')}
             className={`py-2 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-all ${
-              mode === 'teacher' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-50'
+              mode === 'teacher' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 hover:bg-white/60'
             }`}
           >
             <GraduationCap className="w-4 h-4" /> Mod Cikgu
@@ -71,8 +75,9 @@ export default function Syllabus() {
           <button
             onClick={() => setActiveTab('kspk')}
             className={`flex-shrink-0 px-3.5 py-1.5 rounded-lg font-bold text-xs transition-all ${
-              isKSPK ? 'bg-slate-900 text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+              isKSPK ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 border border-white/80 hover:bg-white/80'
             }`}
+            style={!isKSPK ? { background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(10px)' } : {}}
           >
             🌱 KSPK
           </button>
@@ -81,8 +86,9 @@ export default function Syllabus() {
               key={d.id}
               onClick={() => setActiveTab(d.id)}
               className={`flex-shrink-0 px-3.5 py-1.5 rounded-lg font-bold text-xs transition-all ${
-                activeTab === d.id ? 'bg-slate-900 text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                activeTab === d.id ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 border border-white/80 hover:bg-white/80'
               }`}
+              style={activeTab !== d.id ? { background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(10px)' } : {}}
             >
               {d.label}
             </button>
@@ -94,7 +100,8 @@ export default function Syllabus() {
           key={activeTab}
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white border border-slate-200 rounded-xl p-3.5 mb-4 flex gap-3 shadow-sm"
+          className="rounded-xl p-3.5 mb-4 flex gap-3"
+          style={{ background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
         >
           <Info className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
           <div className="min-w-0">
@@ -135,7 +142,7 @@ export default function Syllabus() {
         </motion.div>
 
         {/* FOOTER NOTE */}
-        <div className="mt-6 bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+        <div className="mt-6 rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
           <p className="text-slate-500 text-xs leading-relaxed">
             <strong className="text-slate-700">Nota:</strong> Maklumat di atas adalah <em>ringkasan rujukan</em> berdasarkan struktur rasmi {SYLLABUS_INFO.source}. Untuk DSKP penuh, sila rujuk laman web rasmi KPM.
           </p>
