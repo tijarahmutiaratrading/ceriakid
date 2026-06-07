@@ -22,7 +22,7 @@ export default function Syllabus() {
         <AppHeader showBack={true} backTo="/dashboard" title="Silibus KSPK & KSSR" />
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-20 md:pt-6 pb-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-14 md:pt-6 pb-16">
         {/* Back button — semua screen size */}
         <div className="mb-4">
           <Link
