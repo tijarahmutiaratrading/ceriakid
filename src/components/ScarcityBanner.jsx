@@ -52,10 +52,8 @@ export default function ScarcityBanner() {
       <div className="relative rounded-2xl overflow-hidden shadow-lg">
         <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 opacity-95" />
         <div className="relative px-3 sm:px-5 py-3 sm:py-4 flex flex-row items-center justify-between gap-2 sm:gap-4">
-          <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-shrink-0">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-white/20 backdrop-blur flex items-center justify-center animate-pulse flex-shrink-0">
-              <Flame className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
-            </div>
+          <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-shrink-0 px-1 sm:px-2">
+            <Flame className="w-4 sm:w-5 h-4 sm:h-5 text-white animate-pulse flex-shrink-0" />
             <div className="min-w-0">
               <p className="text-white font-black text-[11px] sm:text-sm leading-tight sm:hidden truncate">Harga promo tamat ...</p>
               <p className="text-white font-black text-xs sm:text-sm leading-snug hidden sm:block">Harga promo tamat<br/>tengah malam ini!</p>
