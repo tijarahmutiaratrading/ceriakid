@@ -62,17 +62,17 @@ export default function ScarcityBanner() {
             </div>
           </div>
           
-          <div className="flex gap-1 sm:gap-2 items-center justify-end flex-grow sm:flex-grow-0">
+          <div className="flex gap-1.5 sm:gap-2 items-center justify-end flex-grow sm:flex-grow-0">
             {[
-              { label: 'j', value: timeLeft.hours },
-              { label: 'm', value: timeLeft.minutes },
-              { label: 's', value: timeLeft.seconds },
+              { value: timeLeft.hours },
+              { value: timeLeft.minutes },
+              { value: timeLeft.seconds },
             ].map((unit, i) => (
-              <div key={unit.label} className="flex items-center gap-0.5 sm:gap-1">
-                <div className="bg-white/30 backdrop-blur px-2.5 sm:px-3.5 py-2 sm:py-2.5 rounded-lg min-w-[3rem] sm:min-w-[3.5rem] text-center">
-                  <p className="text-white font-black text-base sm:text-lg tabular-nums">{padZero(unit.value)}</p>
+              <div key={i} className="flex items-center gap-0.5 sm:gap-1">
+                <div className="bg-white/25 backdrop-blur w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center">
+                  <p className="text-white font-black text-sm sm:text-base tabular-nums">{padZero(unit.value)}</p>
                 </div>
-                {i < 2 && <p className="text-white font-black text-base sm:text-xl opacity-60">:</p>}
+                {i < 2 && <p className="text-white font-black text-xs sm:text-sm">:</p>}
               </div>
             ))}
           </div>
