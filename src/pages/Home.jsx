@@ -143,87 +143,34 @@ export default function Home() {
 
       {isAuthenticated && <InstallAppGuide />}
 
-        {/* Age Group Selector - Mascot Illustration Style */}
+        {/* Age Group Selector - Simple Pill Tabs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
+          className="flex gap-3"
         >
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-white font-black text-base md:text-lg">Umur Anak</h2>
-            <span className="text-white/50 text-xs font-semibold">Tap untuk tukar</span>
-          </div>
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
-            {[
-              {
-                key: 'prasekolah',
-                title: `${t('prasekolah', lang)} (KSPK)`,
-                age: '4–6 Tahun',
-                emoji: '🎨',
-                desc: 'Tahap umur Prasekolah (KSPK) 4–6 Tahun',
-                sub: 'Bahasa, Matematik, Sains & banyak lagi',
-                image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/98cf1f885_generated_image.png',
-                gradient: 'from-sky-200 via-cyan-200 to-emerald-200',
-              },
-              {
-                key: 'sekolah_rendah',
-                title: `${t('sekolahRendah', lang)} (KSSR)`,
-                age: '7–12 Tahun',
-                emoji: '📚',
-                desc: 'Tahap umur Sekolah Rendah (KSSR) 7–12 Tahun',
-                sub: 'Darjah 1 hingga Darjah 6 mengikut KSSR',
-                image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d1137d39a_generated_image.png',
-                gradient: 'from-pink-200 via-rose-200 to-amber-200',
-              },
-            ].map((age) => {
-              const isActive = safeAgeGroup === age.key;
-              return (
-                <motion.button
-                  key={age.key}
-                  onClick={() => safeToggle(age.key)}
-                  whileHover={{ y: -2, scale: 1.01 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${age.gradient} p-2.5 sm:p-3 text-left shadow-lg shadow-black/15 transition-all border-2 ${
-                    isActive ? 'border-white ring-2 ring-white/40' : 'border-white/40'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 sm:gap-3">
-                    {/* Mascot Image */}
-                    <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-white/30 flex items-center justify-center">
-                      <img
-                        src={age.image}
-                        alt={age.title}
-                        className="w-full h-full object-cover"
-                        onError={(e) => { e.target.style.display = 'none'; }}
-                      />
-                    </div>
-
-                    {/* Text Content */}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-black text-slate-800 text-xs sm:text-sm leading-tight">
-                        {age.title}
-                      </h3>
-                      <p className="font-bold text-slate-700 text-xs flex items-center gap-1">
-                        {age.age} <span>{age.emoji}</span>
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-2">
-                    <div
-                      className={`w-full py-1.5 rounded-full text-center font-black text-xs shadow-sm transition-all ${
-                        isActive
-                          ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                          : 'bg-white/80 text-slate-700'
-                      }`}
-                    >
-                      {isActive ? '✓ Aktif' : 'Pilih'}
-                    </div>
-                  </div>
-                </motion.button>
-              );
-            })}
-          </div>
+          {[
+            { key: 'prasekolah', label: `🎨 ${t('prasekolah', lang)}`, sub: '4–6 Tahun' },
+            { key: 'sekolah_rendah', label: `📚 ${t('sekolahRendah', lang)}`, sub: '7–12 Tahun' },
+          ].map((age) => {
+            const isActive = safeAgeGroup === age.key;
+            return (
+              <motion.button
+                key={age.key}
+                onClick={() => safeToggle(age.key)}
+                whileTap={{ scale: 0.96 }}
+                className={`flex-1 py-3 px-4 rounded-2xl font-black text-sm transition-all border-2 ${
+                  isActive
+                    ? 'bg-white text-purple-700 border-white shadow-lg shadow-white/20'
+                    : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
+                }`}
+              >
+                <div>{age.label}</div>
+                <div className={`text-xs font-semibold mt-0.5 ${isActive ? 'text-purple-500' : 'text-white/60'}`}>{age.sub}</div>
+              </motion.button>
+            );
+          })}
         </motion.div>
 
         <QuickAccessGrid />
