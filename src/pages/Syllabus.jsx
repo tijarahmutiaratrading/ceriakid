@@ -15,6 +15,8 @@ export default function Syllabus() {
 
   return (
     <div className="min-h-screen" style={{ background: '#fafafa' }}>
+      {/* Override AppLayout background image */}
+      <div aria-hidden="true" className="pointer-events-none" style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#fafafa' }} />
       <div className="md:hidden">
         <AppHeader showBack={true} backTo="/dashboard" title="Silibus KSPK & KSSR" />
       </div>
