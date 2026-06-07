@@ -57,7 +57,8 @@ export default function ScarcityBanner() {
               <Flame className="w-3 sm:w-4 h-3 sm:h-4 text-white" />
             </div>
             <div className="min-w-0">
-              <p className="text-white font-black text-[11px] sm:text-sm leading-tight truncate">Harga promo tamat ...</p>
+              <p className="text-white font-black text-[11px] sm:text-sm leading-tight sm:hidden">Harga promo tamat ...</p>
+              <p className="text-white font-black text-[11px] sm:text-sm leading-tight hidden sm:block">Harga promo tamat tengah malam ini!</p>
               <p className="text-white/80 text-[9px] sm:text-[11px] font-semibold mt-0.5 leading-tight hidden sm:block">Tawaran terbatas 24 jam</p>
             </div>
           </div>
