@@ -783,7 +783,7 @@ export default function Landing() {
       </SectionWrapper>
 
       {/* ── FOOTER ── */}
-      <footer className="text-white py-8 md:py-10 relative bg-slate-950 border-t border-white/10">
+      <footer className="text-white py-8 md:py-10 relative border-t border-orange-400/30" style={{ background: 'linear-gradient(135deg, #7c2d12, #9a3412, #c2410c)' }}>
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-left">
             {/* Brand */}
