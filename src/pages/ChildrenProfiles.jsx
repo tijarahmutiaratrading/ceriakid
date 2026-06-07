@@ -260,143 +260,134 @@ export default function ChildrenProfiles() {
         <AnimatePresence>
           {error && (
             <motion.div
-              initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+              initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               role="alert"
-              className="mb-4 rounded-2xl p-3 text-rose-700 text-sm font-black"
-              style={{ background: '#fee2e2', boxShadow: '0 3px 0 #fca5a5' }}
+              className="mb-4 rounded-xl px-4 py-3 text-red-700 text-sm font-semibold bg-red-50 border border-red-200 flex items-center gap-2"
             >
-              ⚠️ {error}
+              <span className="text-red-500">⚠️</span> {error}
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Add/Edit Form — playful pastel candy style */}
+        {/* Add/Edit Form — clean SaaS style */}
         <AnimatePresence>
           {showForm && (
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.18 }}
-              className="mb-5 rounded-2xl p-5 sm:p-6 bg-white ring-1 ring-slate-200 shadow-sm"
+              transition={{ duration: 0.2 }}
+              className="mb-5 rounded-2xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden"
             >
-              <p className="text-slate-800 font-black text-base mb-4">{editingId ? '✨ Ubah Profil Anak' : '💕 Tambah Anak Baru'}</p>
+              {/* Form header */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-slate-50">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
+                    <Users className="w-4 h-4 text-white" />
+                  </div>
+                  <p className="text-slate-900 font-black text-sm">{editingId ? 'Ubah Profil Anak' : 'Tambah Anak Baru'}</p>
+                </div>
+                <button onClick={handleCancel} className="w-8 h-8 rounded-lg bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors">
+                  <X className="w-4 h-4 text-slate-600" />
+                </button>
+              </div>
 
-              {/* Avatar uploader */}
-              <div className="flex flex-col items-center mb-5">
-                <div className="relative">
-                  <div
-                    className="w-24 h-24 rounded-3xl flex items-center justify-center text-5xl overflow-hidden"
-                    style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 100%)', boxShadow: '0 4px 0 #f9a8d4' }}
-                  >
-                    {formData.avatarUrl ? (
-                      <img src={formData.avatarUrl} alt="" className="w-full h-full object-cover" loading="lazy" />
-                    ) : (
-                      <span aria-hidden="true">👶</span>
+              <div className="p-5 space-y-5">
+                {/* Avatar uploader */}
+                <div className="flex items-center gap-4">
+                  <div className="relative flex-shrink-0">
+                    <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 ring-2 ring-slate-200 flex items-center justify-center text-4xl">
+                      {formData.avatarUrl
+                        ? <img src={formData.avatarUrl} alt="" className="w-full h-full object-cover" loading="lazy" />
+                        : <span>👶</span>
+                      }
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => formFileInputRef.current?.click()}
+                      disabled={uploadingAvatar}
+                      className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-slate-900 hover:bg-slate-700 flex items-center justify-center text-white disabled:opacity-60 transition-colors"
+                      aria-label="Muat naik gambar avatar"
+                    >
+                      {uploadingAvatar ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Camera className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-slate-900 mb-1">Gambar Profil</p>
+                    <p className="text-xs text-slate-500 mb-2">Pilih avatar atau muat naik gambar sendiri</p>
+                    {formData.avatarUrl && (
+                      <button type="button" onClick={() => setFormData({ ...formData, avatarUrl: '' })}
+                        className="text-xs font-semibold text-red-500 hover:text-red-700 transition-colors">
+                        Buang gambar
+                      </button>
                     )}
                   </div>
-                  <motion.button
-                    type="button"
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => formFileInputRef.current?.click()}
-                    disabled={uploadingAvatar}
-                    className="absolute -bottom-1 -right-1 w-9 h-9 rounded-full flex items-center justify-center text-white disabled:opacity-60"
-                    style={{ background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 3px 0 #db2777' }}
-                    aria-label="Muat naik gambar avatar"
-                  >
-                    {uploadingAvatar ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" strokeWidth={3} />}
-                  </motion.button>
                 </div>
-                <input
-                  type="file"
-                  ref={formFileInputRef}
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleAvatarUpload}
+
+                <input type="file" ref={formFileInputRef} accept="image/*" className="hidden" onChange={handleAvatarUpload} />
+
+                {/* Avatar preset picker */}
+                <AvatarPresetPicker
+                  avatars={AVATARS}
+                  selectedUrl={formData.avatarUrl}
+                  onSelect={(url) => setFormData({ ...formData, avatarUrl: url })}
                 />
-                <p className="text-slate-500 text-[10px] font-black mt-2 uppercase tracking-wider">
-                  {formData.avatarUrl ? 'Tekan kamera untuk tukar' : 'Tekan kamera untuk muat naik'}
-                </p>
-                {formData.avatarUrl && (
+
+                {/* Name input */}
+                <div>
+                  <label htmlFor="child-name" className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Nama Anak</label>
+                  <input
+                    id="child-name"
+                    type="text"
+                    placeholder="Contoh: Aisyah"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value.slice(0, 30) })}
+                    maxLength={30}
+                    className="w-full px-4 py-2.5 rounded-xl text-slate-900 placeholder-slate-400 font-medium text-sm bg-white border border-slate-200 focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none transition-all"
+                  />
+                  <p className="text-right text-[10px] font-semibold text-slate-400 mt-1">{formData.name.length}/30</p>
+                </div>
+
+                {/* Age group */}
+                <div>
+                  <p className="text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">Peringkat Umur</p>
+                  <div className="grid grid-cols-2 gap-2.5" role="radiogroup">
+                    {AGE_OPTIONS.map(opt => {
+                      const active = formData.ageGroup === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          onClick={() => setFormData({ ...formData, ageGroup: opt.value })}
+                          role="radio"
+                          aria-checked={active}
+                          className={`py-3 px-3 rounded-xl text-sm flex flex-col items-center gap-1 transition-all border-2 ${
+                            active
+                              ? 'border-violet-500 bg-violet-50 text-violet-800'
+                              : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                          }`}
+                        >
+                          <span className="text-2xl">{opt.emoji}</span>
+                          <span className="font-black text-sm">{opt.label}</span>
+                          <span className={`text-[11px] font-semibold ${active ? 'text-violet-600' : 'text-slate-400'}`}>{opt.sub}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-2.5 pt-1">
                   <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, avatarUrl: '' })}
-                    className="text-rose-600 text-[10px] font-black mt-1 hover:text-rose-700"
+                    onClick={editingId ? handleUpdateChild : handleAddChild}
+                    className="flex-1 py-2.5 rounded-xl font-bold text-sm text-white bg-violet-600 hover:bg-violet-700 flex items-center justify-center gap-2 transition-colors"
                   >
-                    Buang gambar
+                    <Save className="w-4 h-4" />
+                    {editingId ? 'Simpan Perubahan' : 'Tambah Anak'}
                   </button>
-                )}
-              </div>
-
-              <div className="mb-4">
-                <label htmlFor="child-name" className="block text-[10px] font-black uppercase tracking-wider text-pink-700 mb-1.5">Nama Anak</label>
-                <input
-                  id="child-name"
-                  type="text"
-                  placeholder="Contoh: Aisyah"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value.slice(0, 30) })}
-                  maxLength={30}
-                  className="w-full px-4 py-3 rounded-2xl text-slate-800 placeholder-slate-400 font-bold text-sm bg-white border-2 border-pink-200 focus:border-pink-400 focus:outline-none transition-colors"
-                />
-                <p className="text-right text-[10px] font-bold text-slate-400 mt-1">
-                  {formData.name.length}/30
-                </p>
-              </div>
-
-              {/* Avatar preset picker — quick option tanpa upload */}
-              <AvatarPresetPicker
-                avatars={AVATARS}
-                selectedUrl={formData.avatarUrl}
-                onSelect={(url) => setFormData({ ...formData, avatarUrl: url })}
-              />
-              <div className="mt-4" />
-
-              <p className="text-[10px] font-black uppercase tracking-wider text-pink-700 mb-2">Peringkat Umur</p>
-              <div className="grid grid-cols-2 gap-2.5 mb-5" role="radiogroup" aria-label="Peringkat umur">
-                {AGE_OPTIONS.map(opt => {
-                  const active = formData.ageGroup === opt.value;
-                  return (
-                    <motion.button
-                      key={opt.value}
-                      whileTap={{ scale: 0.97, y: 2 }}
-                      onClick={() => setFormData({ ...formData, ageGroup: opt.value })}
-                      role="radio"
-                      aria-checked={active}
-                      className="py-3 px-2 rounded-2xl text-sm flex flex-col items-center gap-0.5 transition-all"
-                      style={
-                        active
-                          ? { background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', color: '#fff', boxShadow: '0 4px 0 #db2777' }
-                          : { background: '#fff', color: '#475569', boxShadow: '0 3px 0 #fde68a' }
-                      }
-                    >
-                      <span className="text-xl" aria-hidden="true">{opt.emoji}</span>
-                      <span className="font-black">{opt.label}</span>
-                      <span className={`text-[11px] font-bold ${active ? 'text-white/85' : 'text-slate-500'}`}>{opt.sub}</span>
-                    </motion.button>
-                  );
-                })}
-              </div>
-
-              <div className="flex gap-2.5">
-                <motion.button
-                  whileTap={{ scale: 0.97, y: 2 }}
-                  onClick={editingId ? handleUpdateChild : handleAddChild}
-                  className="flex-1 rounded-full py-3 font-black flex items-center justify-center gap-2 text-sm text-white"
-                  style={{ background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)' }}
-                >
-                  <Save className="w-4 h-4" strokeWidth={3} />
-                  {editingId ? 'Simpan' : 'Tambah Anak'}
-                </motion.button>
-                <motion.button
-                  whileTap={{ scale: 0.97, y: 2 }}
-                  onClick={handleCancel}
-                  aria-label="Batal"
-                  className="px-5 rounded-full py-3 font-black flex items-center justify-center text-slate-700"
-                  style={{ background: '#fff', boxShadow: '0 3px 0 #fde68a' }}
-                >
-                  <X className="w-4 h-4" strokeWidth={3} />
-                </motion.button>
+                  <button onClick={handleCancel} className="px-4 py-2.5 rounded-xl font-bold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors">
+                    Batal
+                  </button>
+                </div>
               </div>
             </motion.div>
           )}
@@ -407,26 +398,19 @@ export default function ChildrenProfiles() {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl p-10 sm:p-14 text-center bg-white ring-1 ring-slate-200 shadow-sm"
+            className="rounded-2xl p-12 sm:p-16 text-center bg-white ring-1 ring-slate-200 shadow-sm"
           >
-            <motion.div
-              animate={{ y: [0, -8, 0], rotate: [0, 5, -5, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              className="inline-flex w-20 h-20 mb-4 rounded-3xl items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 5px 0 #db2777, 0 8px 20px rgba(236, 72, 153, 0.3)' }}
-            >
-              <Users className="w-10 h-10 text-white" strokeWidth={2.5} />
-            </motion.div>
-            <p className="text-slate-800 font-black text-xl sm:text-2xl mb-2">Belum ada anak terdaftar 💕</p>
-            <p className="text-slate-600 text-sm font-bold mb-6 max-w-md mx-auto">Daftar profil anak pertama untuk mula track pembelajaran dan progress mereka secara individu.</p>
-            <motion.button
-              whileTap={{ scale: 0.97, y: 2 }}
+            <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mx-auto mb-4">
+              <Users className="w-8 h-8 text-violet-600" />
+            </div>
+            <p className="text-slate-900 font-black text-xl mb-2">Belum ada profil anak</p>
+            <p className="text-slate-500 text-sm font-medium mb-6 max-w-sm mx-auto">Daftar profil anak pertama untuk mula track pembelajaran dan progress mereka.</p>
+            <button
               onClick={() => { setShowForm(true); setEditingId(null); setFormData({ name: '', ageGroup: 'prasekolah', avatarUrl: '' }); }}
-              className="inline-flex items-center gap-2 text-white rounded-full px-6 py-3 font-black text-sm"
-              style={{ background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)' }}
+              className="inline-flex items-center gap-2 text-white rounded-xl px-6 py-2.5 font-bold text-sm bg-violet-600 hover:bg-violet-700 transition-colors"
             >
-              <Plus className="w-4 h-4" strokeWidth={3} /> Daftar Anak Pertama
-            </motion.button>
+              <Plus className="w-4 h-4" /> Daftar Anak Pertama
+            </button>
           </motion.div>
         ) : (
           <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">

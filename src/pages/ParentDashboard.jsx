@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { Plus } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
@@ -139,22 +140,17 @@ export default function ParentDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl p-10 text-center bg-white ring-1 ring-slate-200 shadow-sm"
+            className="rounded-2xl p-12 text-center bg-white ring-1 ring-slate-200 shadow-sm"
           >
-            <motion.p animate={{ y: [0, -8, 0] }} transition={{ duration: 2.5, repeat: Infinity }} className="text-6xl mb-4">👨‍👩‍👧‍👦</motion.p>
-            <p className="text-slate-800 font-black text-xl mb-2">Belum ada profil anak</p>
-            <p className="text-slate-500 text-sm font-bold mb-5">Tambah profil anak dulu untuk lihat prestasi mereka 💕</p>
+            <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mx-auto mb-4">
+              <span className="text-3xl">👨‍👩‍👧‍👦</span>
+            </div>
+            <p className="text-slate-900 font-black text-xl mb-2">Belum ada profil anak</p>
+            <p className="text-slate-500 text-sm font-medium mb-5 max-w-sm mx-auto">Tambah profil anak dulu untuk lihat prestasi mereka.</p>
             <Link to="/children-profiles">
-              <motion.button
-                whileTap={{ scale: 0.95, y: 2 }}
-                className="min-h-12 px-7 py-3 rounded-full font-black text-white text-sm"
-                style={{
-                  background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)',
-                  boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)',
-                }}
-              >
-                ➕ Tambah Anak
-              </motion.button>
+              <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-white text-sm bg-violet-600 hover:bg-violet-700 transition-colors">
+                <Plus className="w-4 h-4" /> Tambah Anak
+              </button>
             </Link>
           </motion.div>
         ) : (
@@ -190,22 +186,17 @@ export default function ParentDashboard() {
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="rounded-2xl p-8 text-center bg-white ring-1 ring-slate-200 shadow-sm"
+                      className="rounded-2xl p-10 text-center bg-white ring-1 ring-slate-200 shadow-sm"
                     >
-                      <motion.p animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity }} className="text-6xl mb-3">🎮</motion.p>
-                      <p className="text-slate-800 font-black text-lg mb-2">{selectedChild} belum mula bermain</p>
-                      <p className="text-slate-500 text-xs font-bold mb-5">Galakkan dia mulakan sesi pertama! ✨</p>
+                      <div className="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center mx-auto mb-4">
+                        <span className="text-2xl">🎮</span>
+                      </div>
+                      <p className="text-slate-900 font-black text-lg mb-2">{selectedChild} belum mula bermain</p>
+                      <p className="text-slate-500 text-sm font-medium mb-5">Galakkan dia mulakan sesi pertama!</p>
                       <Link to="/dashboard">
-                        <motion.button
-                          whileTap={{ scale: 0.95, y: 2 }}
-                          className="rounded-full px-7 py-3 font-black text-sm text-white"
-                          style={{
-                            background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)',
-                            boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)',
-                          }}
-                        >
+                        <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm text-white bg-sky-600 hover:bg-sky-700 transition-colors">
                           Mula Main Game
-                        </motion.button>
+                        </button>
                       </Link>
                     </motion.div>
                   ) : (
