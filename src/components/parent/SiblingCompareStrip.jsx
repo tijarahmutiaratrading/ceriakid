@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Flame, Users } from 'lucide-react';
+import { getChildAvatar } from '@/lib/childAvatars';
 
 export default function SiblingCompareStrip({ children, childrenData, selectedChild, onSelect }) {
   if (!children || children.length < 2) return null;
@@ -71,13 +72,11 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
               )}
 
               <div className="flex items-center gap-2 mb-2.5">
-                {c.avatarUrl ? (
-                  <img src={c.avatarUrl} alt={c.name} className="w-10 h-10 rounded-lg object-cover flex-shrink-0 ring-1 ring-slate-200" />
-                ) : (
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl flex-shrink-0 bg-white ring-1 ring-slate-200">
-                    {emoji}
-                  </div>
-                )}
+                <img
+                  src={getChildAvatar(c)}
+                  alt={c.name}
+                  className="w-10 h-10 rounded-lg object-cover flex-shrink-0 ring-1 ring-slate-200"
+                />
                 <div className="min-w-0">
                   <p className="font-black text-sm truncate text-slate-900">{c.name}</p>
                   <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide">{ageLabel}</p>
