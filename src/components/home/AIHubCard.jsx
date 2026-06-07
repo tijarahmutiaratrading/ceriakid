@@ -77,8 +77,8 @@ export default function AIHubCard() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 w-full h-full object-cover opacity-100 z-0"
       />
-      {/* Soft overlay supaya teks tetap clear */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 z-0" />
+      {/* Tinted overlay */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-purple-900/40 via-purple-800/25 to-indigo-900/45 z-0" />
 
       {/* Decorative sparkles */}
       <div className="pointer-events-none absolute top-4 left-4 text-2xl md:text-3xl opacity-80">✨</div>
