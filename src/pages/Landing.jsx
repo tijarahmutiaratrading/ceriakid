@@ -789,28 +789,28 @@ export default function Landing() {
             {/* Brand */}
             <div>
               <p className="font-black text-lg mb-1">🎓 CeriaKid</p>
-              <p className="text-white/60 text-sm leading-relaxed">Platform pembelajaran interaktif untuk kanak-kanak Malaysia, berasaskan silibus KSPK & KSSR.</p>
+              <p className="text-white text-sm leading-relaxed">Platform pembelajaran interaktif untuk kanak-kanak Malaysia, berasaskan silibus KSPK & KSSR.</p>
             </div>
             {/* Links */}
             <div>
-              <p className="font-black text-sm mb-3 text-white/80">Pautan</p>
-              <div className="flex flex-col gap-2 text-sm text-white/60">
-                <Link to="/terms" className="hover:text-white transition-colors">Terma Penggunaan</Link>
-                <Link to="/privacy" className="hover:text-white transition-colors">Dasar Privasi</Link>
-                <Link to="/contact" className="hover:text-white transition-colors">Hubungi Kami</Link>
+              <p className="font-black text-sm mb-3 text-white">Pautan</p>
+              <div className="flex flex-col gap-2 text-sm text-white">
+                <Link to="/terms" className="hover:underline transition-colors">Terma Penggunaan</Link>
+                <Link to="/privacy" className="hover:underline transition-colors">Dasar Privasi</Link>
+                <Link to="/contact" className="hover:underline transition-colors">Hubungi Kami</Link>
               </div>
             </div>
             {/* Support */}
             <div>
-              <p className="font-black text-sm mb-3 text-white/80">Sokongan</p>
-              <Link to="/contact" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-black text-sm transition-colors border border-white/20">
+              <p className="font-black text-sm mb-3 text-white">Sokongan</p>
+              <Link to="/contact" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 text-white font-black text-sm transition-colors border border-white/40">
                 ✉️ Hubungi Kami
               </Link>
-              <p className="text-white/50 text-xs mt-2">Isnin – Jumaat, 9am – 6pm</p>
+              <p className="text-white text-xs mt-2">Isnin – Jumaat, 9am – 6pm</p>
             </div>
           </div>
-          <div className="border-t border-white/10 pt-5 text-center">
-            <p className="text-white/50 text-xs">© 2026 CeriaKid. Hak cipta terpelihara. Dibina dengan ❤️ untuk ibu bapa Malaysia.</p>
+          <div className="border-t border-white/30 pt-5 text-center">
+            <p className="text-white text-xs">© 2026 CeriaKid. Hak cipta terpelihara. Dibina dengan ❤️ untuk ibu bapa Malaysia.</p>
           </div>
         </div>
       </footer>
