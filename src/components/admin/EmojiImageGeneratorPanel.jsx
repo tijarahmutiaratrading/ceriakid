@@ -34,6 +34,13 @@ export default function EmojiImageGeneratorPanel() {
     }
   };
 
+  // Auto-refresh progress setiap 10 saat selepas mula jana (background masih jalan walau browser tutup)
+  useEffect(() => {
+    if (!result?.started) return;
+    const t = setInterval(loadStats, 10000);
+    return () => clearInterval(t);
+  }, [result]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
