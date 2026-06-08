@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check, User as UserIcon, Phone, Mail, Edit2, X, Save, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check, User as UserIcon, Phone, Mail, Edit2, X, Save, Loader2, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const TIER_LABELS = {
@@ -31,7 +31,10 @@ const RECOVERY_LABELS = {
 
 const WELCOME_EMAIL_LABELS = {
   not_sent: { label: '✕ Belum', cls: 'bg-slate-200 text-slate-600' },
-  sent: { label: '✓ Dihantar', cls: 'bg-emerald-200 text-emerald-900' },
+  sent: { label: '📤 Dihantar', cls: 'bg-blue-200 text-blue-900' },
+  delivered: { label: '✓ Delivered', cls: 'bg-emerald-300 text-emerald-950' },
+  bounced: { label: '⚠ Bounce', cls: 'bg-red-200 text-red-900' },
+  complained: { label: '🚫 Spam', cls: 'bg-orange-200 text-orange-900' },
   failed: { label: '⚠ Gagal', cls: 'bg-red-200 text-red-900' },
 };
 
@@ -54,7 +57,34 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
   const [editPhone, setEditPhone] = useState(customer.phone || '');
   const [saving, setSaving] = useState(false);
   const [markingPaid, setMarkingPaid] = useState(false);
+  const [checkingEmail, setCheckingEmail] = useState(false);
   const { toast } = useToast();
+
+  const handleCheckEmailStatus = async (e) => {
+    e.stopPropagation();
+    setCheckingEmail(true);
+    try {
+      const res = await base44.functions.invoke('checkWelcomeEmailStatus', { subscriptionId: customer.id });
+      const data = res?.data;
+      if (data?.success) {
+        const result = data.results?.[0];
+        if (result?.error) {
+          toast({ title: '⚠️ Tak dapat semak', description: result.error, variant: 'destructive' });
+        } else if (result?.status) {
+          toast({ title: '✅ Status dikemas kini', description: `Resend: ${result.status}` });
+          await onUpdate?.();
+        } else {
+          toast({ title: 'ℹ️ Tiada message ID', description: 'Email ni tiada Resend ID untuk disemak.' });
+        }
+      } else {
+        toast({ title: '❌ Gagal', description: data?.error || 'Unknown error', variant: 'destructive' });
+      }
+    } catch (err) {
+      toast({ title: '❌ Error', description: err?.response?.data?.error || err.message, variant: 'destructive' });
+    } finally {
+      setCheckingEmail(false);
+    }
+  };
 
   const isPending = customer.status === 'incomplete' || customer.status === 'past_due';
 
@@ -210,9 +240,21 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
           )}
         </td>
         <td className="py-3 px-3 whitespace-nowrap text-center">
-          <span className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-[10px] font-black ${welcomeEmail.cls}`} title={customer.welcomeEmailSentAt ? `Dihantar: ${new Date(customer.welcomeEmailSentAt).toLocaleString('ms-MY')}` : (customer.welcomeEmailError || 'Belum dihantar')}>
-            {welcomeEmail.label}
-          </span>
+          <div className="flex items-center justify-center gap-1.5">
+            <span className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-[10px] font-black ${welcomeEmail.cls}`} title={customer.welcomeEmailSentAt ? `Dihantar: ${new Date(customer.welcomeEmailSentAt).toLocaleString('ms-MY')}${customer.welcomeEmailLastCheckedAt ? ` • Semak: ${new Date(customer.welcomeEmailLastCheckedAt).toLocaleString('ms-MY')}` : ''}` : (customer.welcomeEmailError || 'Belum dihantar')}>
+              {welcomeEmail.label}
+            </span>
+            {customer.welcomeEmailMessageId && (
+              <button
+                onClick={handleCheckEmailStatus}
+                disabled={checkingEmail}
+                className="p-1 rounded-md bg-blue-100 hover:bg-blue-200 text-blue-700 disabled:opacity-60 transition-all"
+                title="Semak status sebenar dengan Resend"
+              >
+                {checkingEmail ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+              </button>
+            )}
+          </div>
         </td>
         <td className="py-3 px-3 whitespace-nowrap text-center">
           <span className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-[10px] font-black ${recovery.cls}`} title={customer.abandonedReminderSentAt ? `Hantar: ${new Date(customer.abandonedReminderSentAt).toLocaleString('ms-MY')}` : ''}>
@@ -540,6 +582,8 @@ export default function CustomerDatabaseTable() {
           recoveredAt: sub.recoveredAt || null,
           welcomeEmailStatus: sub.welcomeEmailStatus || 'not_sent',
           welcomeEmailSentAt: sub.welcomeEmailSentAt || null,
+          welcomeEmailMessageId: sub.welcomeEmailMessageId || null,
+          welcomeEmailLastCheckedAt: sub.welcomeEmailLastCheckedAt || null,
           welcomeEmailError: sub.welcomeEmailError || null,
           childrenCount: Array.isArray(sub.children) ? sub.children.length : 0,
           children: Array.isArray(sub.children) ? sub.children.map(c => ({ name: c.name, ageGroup: c.ageGroup })) : [],

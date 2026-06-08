@@ -136,19 +136,31 @@
       "enum": [
         "not_sent",
         "sent",
+        "delivered",
+        "bounced",
+        "complained",
         "failed"
       ],
       "default": "not_sent",
-      "description": "Status welcome email: not_sent (belum hantar), sent (berjaya hantar via Resend), failed (hantar gagal)"
+      "description": "Status welcome email: not_sent (belum hantar), sent (dah hantar ke Resend), delivered (Resend confirm delivered), bounced (email bounce/tak sampai), complained (mark spam), failed (hantar gagal)"
     },
     "welcomeEmailSentAt": {
       "type": "string",
       "format": "date-time",
       "description": "Timestamp bila welcome email berjaya dihantar"
     },
+    "welcomeEmailMessageId": {
+      "type": "string",
+      "description": "Resend message ID untuk semak status delivery sebenar"
+    },
     "welcomeEmailError": {
       "type": "string",
       "description": "Error message kalau welcome email gagal dihantar"
+    },
+    "welcomeEmailLastCheckedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp bila status welcome email terakhir disemak dengan Resend"
     }
   },
   "required": [

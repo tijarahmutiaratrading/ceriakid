@@ -664,6 +664,7 @@ Deno.serve(async (req) => {
         await base44.asServiceRole.entities.UserSubscription.update(subIdForEmail, {
           welcomeEmailStatus: welcomeEmailResult?.sent ? 'sent' : 'failed',
           welcomeEmailSentAt: welcomeEmailResult?.sent ? new Date().toISOString() : undefined,
+          welcomeEmailMessageId: welcomeEmailResult?.messageId || undefined,
           welcomeEmailError: welcomeEmailResult?.sent ? '' : (welcomeEmailResult?.error || 'Unknown error'),
         });
       }

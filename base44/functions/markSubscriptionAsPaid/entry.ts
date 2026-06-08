@@ -56,7 +56,8 @@ async function sendWelcomeEmail(to, tier, bonusCredits) {
       const errText = await res.text();
       return { sent: false, error: errText };
     }
-    return { sent: true };
+    const data = await res.json().catch(() => ({}));
+    return { sent: true, messageId: data?.id };
   } catch (err) {
     return { sent: false, error: err?.message };
   }
@@ -262,6 +263,7 @@ Deno.serve(async (req) => {
       await base44.asServiceRole.entities.UserSubscription.update(sub.id, {
         welcomeEmailStatus: emailResult.sent ? 'sent' : 'failed',
         welcomeEmailSentAt: emailResult.sent ? now.toISOString() : undefined,
+        welcomeEmailMessageId: emailResult.messageId || undefined,
         welcomeEmailError: emailResult.sent ? '' : (emailResult.error || 'Unknown error'),
       });
     } catch (trackErr) {

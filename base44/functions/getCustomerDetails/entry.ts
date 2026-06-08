@@ -100,6 +100,8 @@ Deno.serve(async (req) => {
         // Welcome email tracking
         welcomeEmailStatus: sub.welcomeEmailStatus || 'not_sent',
         welcomeEmailSentAt: sub.welcomeEmailSentAt || null,
+        welcomeEmailMessageId: sub.welcomeEmailMessageId || null,
+        welcomeEmailLastCheckedAt: sub.welcomeEmailLastCheckedAt || null,
         welcomeEmailError: sub.welcomeEmailError || null,
         // Children
         childrenCount: Array.isArray(sub.children) ? sub.children.length : 0,
