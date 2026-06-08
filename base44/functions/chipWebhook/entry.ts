@@ -622,10 +622,13 @@ Deno.serve(async (req) => {
       console.log(`🎉 Abandoned cart RECOVERED: ${userEmail} (tier=${finalTier})`);
     }
 
+    let activeSubId;
     if (existing.length > 0) {
       await base44.asServiceRole.entities.UserSubscription.update(existing[0].id, subData);
+      activeSubId = existing[0].id;
     } else {
-      await base44.asServiceRole.entities.UserSubscription.create(subData);
+      const createdSub = await base44.asServiceRole.entities.UserSubscription.create(subData);
+      activeSubId = createdSub.id;
     }
 
     console.log(`Subscription activated: ${userEmail} → ${finalTier} until ${finalPeriodEnd}`);
@@ -659,9 +662,8 @@ Deno.serve(async (req) => {
 
     // Track welcome email status pada subscription supaya admin boleh tengok
     try {
-      const subIdForEmail = existing.length > 0 ? existing[0].id : null;
-      if (subIdForEmail) {
-        await base44.asServiceRole.entities.UserSubscription.update(subIdForEmail, {
+      if (activeSubId) {
+        await base44.asServiceRole.entities.UserSubscription.update(activeSubId, {
           welcomeEmailStatus: welcomeEmailResult?.sent ? 'sent' : 'failed',
           welcomeEmailSentAt: welcomeEmailResult?.sent ? new Date().toISOString() : undefined,
           welcomeEmailMessageId: welcomeEmailResult?.messageId || undefined,

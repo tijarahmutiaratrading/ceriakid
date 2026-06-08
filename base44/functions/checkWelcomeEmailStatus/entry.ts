@@ -33,6 +33,8 @@ async function checkOne(RESEND_API_KEY, messageId) {
   if (!res.ok) {
     return { ok: false, error: data?.message || data?.error || `HTTP ${res.status}` };
   }
+  // Resend return `last_event` (status terkini). Log penuh untuk debug kalau field hilang.
+  console.log(`Resend email ${messageId} response:`, JSON.stringify(data));
   return { ok: true, lastEvent: data?.last_event || 'sent' };
 }
 
