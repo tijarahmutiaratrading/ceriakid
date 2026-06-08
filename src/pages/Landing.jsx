@@ -15,6 +15,7 @@ import SectionWrapper from '@/components/landing/SectionWrapper';
 import LandingAISection from '@/components/landing/LandingAISection';
 import ExitIntentPopup from '@/components/landing/ExitIntentPopup';
 import LiveSocialProof from '@/components/landing/LiveSocialProof';
+import LandingFooter from '@/components/LandingFooter';
 import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
 
@@ -751,37 +752,7 @@ export default function Landing() {
       </SectionWrapper>
 
       {/* ── FOOTER ── */}
-      <footer className="text-white py-8 md:py-10 relative border-t border-orange-400/30" style={{ background: 'linear-gradient(135deg, #f97316, #fb923c, #fdba74)' }}>
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-left">
-            {/* Brand */}
-            <div>
-              <p className="font-black text-lg mb-1">🎓 CeriaKid</p>
-              <p className="text-white text-sm leading-relaxed">Platform pembelajaran interaktif untuk kanak-kanak Malaysia, berasaskan silibus KSPK & KSSR.</p>
-            </div>
-            {/* Links */}
-            <div>
-              <p className="font-black text-sm mb-3 text-white">Pautan</p>
-              <div className="flex flex-col gap-2 text-sm text-white">
-                <Link to="/terms" className="hover:underline transition-colors">Terma Penggunaan</Link>
-                <Link to="/privacy" className="hover:underline transition-colors">Dasar Privasi</Link>
-                <Link to="/contact" className="hover:underline transition-colors">Hubungi Kami</Link>
-              </div>
-            </div>
-            {/* Support */}
-            <div>
-              <p className="font-black text-sm mb-3 text-white">Sokongan</p>
-              <Link to="/contact" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 text-white font-black text-sm transition-colors border border-white/40">
-                ✉️ Hubungi Kami
-              </Link>
-              <p className="text-white text-xs mt-2">Isnin – Jumaat, 9am – 6pm</p>
-            </div>
-          </div>
-          <div className="border-t border-white/30 pt-5 text-center">
-            <p className="text-white text-xs">© 2026 CeriaKid. Hak cipta terpelihara. Dibina dengan ❤️ untuk ibu bapa Malaysia.</p>
-          </div>
-        </div>
-      </footer>
+      <LandingFooter />
 
       </div>
     </div>);
