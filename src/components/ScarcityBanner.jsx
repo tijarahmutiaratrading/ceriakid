@@ -106,7 +106,7 @@ export default function ScarcityBanner() {
           </div>
           <div className="min-w-0">
             <p className="text-amber-700 font-black text-xs sm:text-sm tabular-nums">{soldToday}</p>
-            <p className="text-amber-600 text-[9px] sm:text-[10px] font-semibold leading-tight">terjual hari ini</p>
+            <p className="text-amber-600 text-[9px] sm:text-[10px] font-semibold leading-tight">paket premium terjual</p>
           </div>
         </motion.div>
       </div>
