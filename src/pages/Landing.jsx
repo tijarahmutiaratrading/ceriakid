@@ -15,7 +15,6 @@ import SectionWrapper from '@/components/landing/SectionWrapper';
 import LandingAISection from '@/components/landing/LandingAISection';
 import ExitIntentPopup from '@/components/landing/ExitIntentPopup';
 import LiveSocialProof from '@/components/landing/LiveSocialProof';
-import LandingFooter from '@/components/LandingFooter';
 import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
 
@@ -752,7 +751,44 @@ export default function Landing() {
       </SectionWrapper>
 
       {/* ── FOOTER ── */}
-      <LandingFooter />
+      <footer className="text-white py-8 md:py-10 relative border-t border-white/10 bg-slate-900">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-left">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-2.5 mb-2">
+                <img
+                  src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png"
+                  alt="CeriaKid"
+                  className="h-9 w-9 rounded-full object-cover ring-1 ring-white/30"
+                />
+                <p className="font-black text-lg">CeriaKid</p>
+              </div>
+              <p className="text-white/70 text-sm leading-relaxed">Platform pembelajaran interaktif untuk kanak-kanak Malaysia, berasaskan silibus KSPK & KSSR.</p>
+            </div>
+            {/* Links */}
+            <div>
+              <p className="font-black text-sm mb-3 text-white">Pautan</p>
+              <div className="flex flex-col gap-2 text-sm text-white/70">
+                <Link to="/terms" className="hover:text-white hover:underline transition-colors">Terma Penggunaan</Link>
+                <Link to="/privacy" className="hover:text-white hover:underline transition-colors">Dasar Privasi</Link>
+                <Link to="/contact" className="hover:text-white hover:underline transition-colors">Hubungi Kami</Link>
+              </div>
+            </div>
+            {/* Support */}
+            <div>
+              <p className="font-black text-sm mb-3 text-white">Sokongan</p>
+              <Link to="/contact" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 text-white font-black text-sm transition-colors border border-white/30">
+                ✉️ Hubungi Kami
+              </Link>
+              <p className="text-white/60 text-xs mt-2">Isnin – Jumaat, 9am – 6pm</p>
+            </div>
+          </div>
+          <div className="border-t border-white/15 pt-5 text-center">
+            <p className="text-white/60 text-xs">© 2026 CeriaKid. Hak cipta terpelihara. Dibina dengan ❤️ untuk ibu bapa Malaysia.</p>
+          </div>
+        </div>
+      </footer>
 
       </div>
     </div>);
