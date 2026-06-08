@@ -31,10 +31,10 @@ export default function ScarcityBanner() {
   useEffect(() => {
     const randomizeMetrics = () => {
       setViewers(Math.floor(Math.random() * 15) + 18); // 18-32
-      setSoldToday(Math.floor(Math.random() * 12) + 35); // 35-46
     };
 
     randomizeMetrics();
+    setSoldToday(42); // Fixed value — only increases in real scenario
     const interval = setInterval(randomizeMetrics, 4000);
     return () => clearInterval(interval);
   }, []);
