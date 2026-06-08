@@ -159,10 +159,10 @@ function DragDropMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={Object.keys(placed).length} total={targets.length} />
       <div className={panel}>
-        <p className="text-purple-500 text-[10px] font-black mb-2 uppercase tracking-wider">Pilih item</p>
-        <div className="flex flex-wrap gap-2">
+        <p className="text-purple-500 text-xs font-black mb-2 uppercase tracking-wider">Pilih item</p>
+        <div className="grid grid-cols-2 gap-2.5">
           {items.filter(item => !Object.values(placed).includes(item)).map(item => (
-            <button key={item} type="button" onClick={() => setSelectedItem(item)} className={`px-4 py-3 rounded-xl font-black text-xl transition-all ${selectedItem === item ? 'bg-yellow-300 text-orange-900 ring-2 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-1 ring-purple-100'}`}>{item}</button>
+            <button key={item} type="button" onClick={() => setSelectedItem(item)} className={`w-full px-4 py-5 rounded-2xl font-black text-2xl transition-all ${selectedItem === item ? 'bg-yellow-300 text-orange-900 ring-4 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-2 ring-purple-100'}`}>{item}</button>
           ))}
         </div>
       </div>
@@ -245,10 +245,10 @@ function SortingMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={used.length} total={items.length} />
       <div className={panel}>
-        <p className="text-purple-500 text-[10px] font-black mb-2 uppercase">Pilih item</p>
-        <div className="flex flex-wrap gap-2">
+        <p className="text-purple-500 text-xs font-black mb-2 uppercase">Pilih item</p>
+        <div className="grid grid-cols-2 gap-2.5">
           {items.filter(item => !used.includes(item.text)).map(item => (
-            <button key={item.text} onClick={() => setSelected(item)} className={`px-4 py-3 rounded-xl font-black text-xl transition-all ${selected?.text === item.text ? 'bg-yellow-300 text-orange-900 ring-2 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-1 ring-purple-100'}`}>{item.text}</button>
+            <button key={item.text} onClick={() => setSelected(item)} className={`w-full px-4 py-5 rounded-2xl font-black text-2xl transition-all ${selected?.text === item.text ? 'bg-yellow-300 text-orange-900 ring-4 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-2 ring-purple-100'}`}>{item.text}</button>
           ))}
         </div>
       </div>
