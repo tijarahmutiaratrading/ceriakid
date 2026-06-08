@@ -184,11 +184,14 @@ async function sendWelcomeEmailSafe(base44, payload) {
     const data = await res.json().catch(() => ({}));
     if (res.ok) {
       console.log(`Welcome email sent (${payload.type}) to ${payload.to} — id=${data.id}`);
+      return { sent: true, messageId: data.id };
     } else {
       console.error(`Resend failed (${res.status}):`, JSON.stringify(data));
+      return { sent: false, error: `Resend ${res.status}: ${JSON.stringify(data)}` };
     }
   } catch (err) {
     console.error('sendWelcomeEmail failed:', err?.message || err);
+    return { sent: false, error: err?.message || String(err) };
   }
 }
 
@@ -647,12 +650,26 @@ Deno.serve(async (req) => {
 
     // Welcome email — subscription (include bonus credits info)
     const welcomeBonus = { asas: 5, standard: 20, keluarga: 50 }[tier] || 0;
-    await sendWelcomeEmailSafe(base44, {
+    const welcomeEmailResult = await sendWelcomeEmailSafe(base44, {
       to: userEmail,
       type: 'subscription',
       tier,
       bonusCredits: welcomeBonus,
     });
+
+    // Track welcome email status pada subscription supaya admin boleh tengok
+    try {
+      const subIdForEmail = existing.length > 0 ? existing[0].id : null;
+      if (subIdForEmail) {
+        await base44.asServiceRole.entities.UserSubscription.update(subIdForEmail, {
+          welcomeEmailStatus: welcomeEmailResult?.sent ? 'sent' : 'failed',
+          welcomeEmailSentAt: welcomeEmailResult?.sent ? new Date().toISOString() : undefined,
+          welcomeEmailError: welcomeEmailResult?.sent ? '' : (welcomeEmailResult?.error || 'Unknown error'),
+        });
+      }
+    } catch (trackErr) {
+      console.error('Failed to track welcome email status:', trackErr?.message);
+    }
 
     // ─── BONUS WELCOME CREDITS ikut tier ───
     // Asas: 5 | Standard: 20 | Keluarga: 50

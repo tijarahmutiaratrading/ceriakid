@@ -29,6 +29,12 @@ const RECOVERY_LABELS = {
   recovered: { label: '🎉 Recovered', cls: 'bg-emerald-400 text-emerald-950', short: '🎉 Recovered' },
 };
 
+const WELCOME_EMAIL_LABELS = {
+  not_sent: { label: '✕ Belum', cls: 'bg-slate-200 text-slate-600' },
+  sent: { label: '✓ Dihantar', cls: 'bg-emerald-200 text-emerald-900' },
+  failed: { label: '⚠ Gagal', cls: 'bg-red-200 text-red-900' },
+};
+
 function StatBubble({ icon: Icon, label, value, accent }) {
   return (
     <div className={`rounded-2xl p-3 ${accent}`}>
@@ -92,6 +98,7 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
   const tier = TIER_LABELS[customer.tier] || TIER_LABELS.free;
   const status = STATUS_LABELS[customer.status] || STATUS_LABELS.canceled;
   const recovery = RECOVERY_LABELS[customer.abandonedReminderStatus] || RECOVERY_LABELS.not_sent;
+  const welcomeEmail = WELCOME_EMAIL_LABELS[customer.welcomeEmailStatus] || WELCOME_EMAIL_LABELS.not_sent;
   const endDate = customer.currentPeriodEnd ? new Date(customer.currentPeriodEnd) : null;
   const isExpired = endDate && endDate < new Date();
   const daysLeft = endDate ? Math.ceil((endDate - new Date()) / (1000 * 60 * 60 * 24)) : null;
@@ -203,6 +210,11 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
           )}
         </td>
         <td className="py-3 px-3 whitespace-nowrap text-center">
+          <span className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-[10px] font-black ${welcomeEmail.cls}`} title={customer.welcomeEmailSentAt ? `Dihantar: ${new Date(customer.welcomeEmailSentAt).toLocaleString('ms-MY')}` : (customer.welcomeEmailError || 'Belum dihantar')}>
+            {welcomeEmail.label}
+          </span>
+        </td>
+        <td className="py-3 px-3 whitespace-nowrap text-center">
           <span className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-[10px] font-black ${recovery.cls}`} title={customer.abandonedReminderSentAt ? `Hantar: ${new Date(customer.abandonedReminderSentAt).toLocaleString('ms-MY')}` : ''}>
             {recovery.short}
           </span>
@@ -212,7 +224,7 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
       <AnimatePresence>
         {expanded && (
           <tr>
-            <td colSpan={10} className="p-0">
+            <td colSpan={11} className="p-0">
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
@@ -526,6 +538,9 @@ export default function CustomerDatabaseTable() {
           abandonedReminderMessageId: sub.abandonedReminderMessageId || null,
           abandonedReminderError: sub.abandonedReminderError || null,
           recoveredAt: sub.recoveredAt || null,
+          welcomeEmailStatus: sub.welcomeEmailStatus || 'not_sent',
+          welcomeEmailSentAt: sub.welcomeEmailSentAt || null,
+          welcomeEmailError: sub.welcomeEmailError || null,
           childrenCount: Array.isArray(sub.children) ? sub.children.length : 0,
           children: Array.isArray(sub.children) ? sub.children.map(c => ({ name: c.name, ageGroup: c.ageGroup })) : [],
           deviceCount: userDevices.length,
@@ -630,6 +645,7 @@ export default function CustomerDatabaseTable() {
                 <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider">Kredit</th>
                 <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider">Affiliate</th>
                 <th className="text-left py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider"><Calendar className="w-3.5 h-3.5 inline mr-1" />Tarikh Tamat</th>
+                <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider"><Mail className="w-3.5 h-3.5 inline mr-1" />Welcome Email</th>
                 <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider"><Mail className="w-3.5 h-3.5 inline mr-1" />Recovery</th>
               </tr>
             </thead>
@@ -645,7 +661,7 @@ export default function CustomerDatabaseTable() {
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={10} className="py-12 text-center text-slate-500 font-semibold">
+                  <td colSpan={11} className="py-12 text-center text-slate-500 font-semibold">
                     {customers.length === 0 ? 'Tiada pelanggan lagi.' : 'Tiada pelanggan sepadan dengan tapisan.'}
                   </td>
                 </tr>

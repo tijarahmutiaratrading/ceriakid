@@ -130,6 +130,25 @@
       "type": "string",
       "format": "date-time",
       "description": "Timestamp bila user complete payment lepas dapat abandoned cart reminder"
+    },
+    "welcomeEmailStatus": {
+      "type": "string",
+      "enum": [
+        "not_sent",
+        "sent",
+        "failed"
+      ],
+      "default": "not_sent",
+      "description": "Status welcome email: not_sent (belum hantar), sent (berjaya hantar via Resend), failed (hantar gagal)"
+    },
+    "welcomeEmailSentAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp bila welcome email berjaya dihantar"
+    },
+    "welcomeEmailError": {
+      "type": "string",
+      "description": "Error message kalau welcome email gagal dihantar"
     }
   },
   "required": [

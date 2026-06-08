@@ -97,6 +97,10 @@ Deno.serve(async (req) => {
         abandonedReminderMessageId: sub.abandonedReminderMessageId || null,
         abandonedReminderError: sub.abandonedReminderError || null,
         recoveredAt: sub.recoveredAt || null,
+        // Welcome email tracking
+        welcomeEmailStatus: sub.welcomeEmailStatus || 'not_sent',
+        welcomeEmailSentAt: sub.welcomeEmailSentAt || null,
+        welcomeEmailError: sub.welcomeEmailError || null,
         // Children
         childrenCount: Array.isArray(sub.children) ? sub.children.length : 0,
         children: Array.isArray(sub.children) ? sub.children.map(c => ({

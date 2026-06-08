@@ -257,6 +257,17 @@ Deno.serve(async (req) => {
       }),
     ]);
 
+    // Track welcome email status pada subscription supaya admin boleh tengok
+    try {
+      await base44.asServiceRole.entities.UserSubscription.update(sub.id, {
+        welcomeEmailStatus: emailResult.sent ? 'sent' : 'failed',
+        welcomeEmailSentAt: emailResult.sent ? now.toISOString() : undefined,
+        welcomeEmailError: emailResult.sent ? '' : (emailResult.error || 'Unknown error'),
+      });
+    } catch (trackErr) {
+      console.error('Failed to track welcome email status:', trackErr?.message);
+    }
+
     return Response.json({
       success: true,
       email: userEmail,
