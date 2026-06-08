@@ -139,6 +139,20 @@
   animation: wiggle 0.5s ease-in-out;
 }
 
+/* Glow-up flash animation for pricing cards */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
+  }
+  50% {
+    box-shadow: 0 0 28px 4px rgba(249, 115, 22, 0.45);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+
 /* App-wide UI polish */
 @layer utilities {
   .safe-page {

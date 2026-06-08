@@ -629,10 +629,11 @@ export default function Landing() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className={`rounded-3xl p-6 relative border-2 transition-all ${
+            className={`rounded-3xl p-6 relative border-2 transition-all animate-glow-pulse ${
             tier.highlighted ?
             'border-amber-400 shadow-2xl shadow-amber-200/50 md:scale-105 bg-gradient-to-br from-amber-50 to-orange-50' :
             'border-blue-100 shadow-md hover:border-blue-300 bg-white'}`}
+            style={{ animationDelay: `${i * 0.4}s` }}
             >
               {(tier.savings || tier.badge) &&
               <div className={`inline-block text-xs font-black px-3 py-1 rounded-full mb-3 ${tier.highlighted ? 'bg-amber-500 text-white' : 'bg-orange-100 text-orange-700'}`}>
@@ -655,7 +656,7 @@ export default function Landing() {
               whileTap={{ scale: 0.97 }}
               onClick={() => handleTierSelect(tier.name)}
               className={`w-full py-3.5 rounded-2xl font-black text-base mb-6 shadow-md transition-all ${
-              tier.highlighted ? 'bg-slate-900 text-amber-200 hover:bg-slate-800' : 'bg-orange-600 text-white hover:bg-orange-700'} ${
+              tier.highlighted ? 'bg-slate-900 text-amber-200 hover:bg-slate-800' : 'bg-orange-500 text-white hover:bg-orange-600'} ${
               selectedTierForCheckout === tier.name ? 'ring-4 ring-amber-400' : ''}`}>
                 {tier.cta}
               </motion.button>
