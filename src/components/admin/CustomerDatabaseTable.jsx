@@ -244,16 +244,14 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
             <span className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-[10px] font-black ${welcomeEmail.cls}`} title={customer.welcomeEmailSentAt ? `Dihantar: ${new Date(customer.welcomeEmailSentAt).toLocaleString('ms-MY')}${customer.welcomeEmailLastCheckedAt ? ` • Semak: ${new Date(customer.welcomeEmailLastCheckedAt).toLocaleString('ms-MY')}` : ''}` : (customer.welcomeEmailError || 'Belum dihantar')}>
               {welcomeEmail.label}
             </span>
-            {customer.welcomeEmailMessageId && (
-              <button
-                onClick={handleCheckEmailStatus}
-                disabled={checkingEmail}
-                className="p-1 rounded-md bg-blue-100 hover:bg-blue-200 text-blue-700 disabled:opacity-60 transition-all"
-                title="Semak status sebenar dengan Resend"
-              >
-                {checkingEmail ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
-              </button>
-            )}
+            <button
+              onClick={handleCheckEmailStatus}
+              disabled={checkingEmail}
+              className="p-1 rounded-md bg-blue-100 hover:bg-blue-200 text-blue-700 disabled:opacity-60 transition-all"
+              title="Semak status sebenar dengan Resend (ikut email)"
+            >
+              {checkingEmail ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+            </button>
           </div>
         </td>
         <td className="py-3 px-3 whitespace-nowrap text-center">
