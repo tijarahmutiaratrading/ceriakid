@@ -50,7 +50,7 @@ export default function ScarcityBanner() {
     >
       {/* Countdown Timer Banner */}
       <div className="relative rounded-2xl overflow-hidden shadow-lg">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 opacity-95" />
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 opacity-95" />
         <div className="relative px-3 sm:px-8 py-3 sm:py-4 flex flex-row items-center justify-between gap-2 sm:gap-4">
           <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-shrink-0 px-1 sm:px-2">
             <Flame className="w-4 sm:w-5 h-4 sm:h-5 text-white animate-pulse flex-shrink-0" />
