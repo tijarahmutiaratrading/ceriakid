@@ -2,8 +2,10 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import MiniFeedback from '@/components/game/MiniFeedback';
 import ProMiniGameShell from '@/components/game/ProMiniGameShell';
+import EmojiOrImage from '@/components/game/EmojiOrImage';
 import useGameProgress from '@/hooks/useGameProgress';
 import useMiniFeedback from '@/hooks/useMiniFeedback';
+import useEmojiImages from '@/hooks/useEmojiImages';
 
 // Light pastel panel — match shell harmony
 const panel = 'rounded-2xl p-4 bg-gradient-to-br from-purple-50 to-pink-50 ring-1 ring-purple-100 shadow-sm';
@@ -64,6 +66,7 @@ function MiniProgress({ current, total }) {
 function MemoryMode() {
   const { reportProgress, roundData } = useGameProgress();
   const { feedback, showFeedback } = useMiniFeedback();
+  const { map: emojiMap } = useEmojiImages();
   const cards = useMemo(() => shuffle((roundData?.pairs || []).flatMap((pair, pairId) => pair.map((text) => ({ pairId, text })))), [roundData]);
   const totalPairs = roundData?.pairs?.length || 1;
   const [open, setOpen] = useState([]);
@@ -117,7 +120,11 @@ function MemoryMode() {
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 {isOpen ? (
-                  <p className="text-lg sm:text-xl text-center px-2 leading-tight" style={{ color: palette.text }}>{card.text}</p>
+                  emojiMap[String(card.text).trim()] ? (
+                    <EmojiOrImage value={card.text} map={emojiMap} imgClassName="w-3/4 h-3/4 object-contain" />
+                  ) : (
+                    <p className="text-lg sm:text-xl text-center px-2 leading-tight" style={{ color: palette.text }}>{card.text}</p>
+                  )
                 ) : (
                   <span className="text-3xl drop-shadow">{backEmoji}</span>
                 )}
@@ -271,6 +278,7 @@ function SortingMode() {
 function TileMatchMode() {
   const { reportProgress, roundData } = useGameProgress();
   const { feedback, showFeedback } = useMiniFeedback();
+  const { map: emojiMap } = useEmojiImages();
   // Shuffle jubin sekali sahaja supaya anak tak nampak pasangan bersebelahan
   const tiles = useMemo(() => {
     const raw = roundData?.tiles || [];
@@ -313,9 +321,11 @@ function TileMatchMode() {
               key={idx}
               onClick={() => tap(idx)}
               disabled={isGone}
-              className={`min-h-16 text-2xl ${action} ${isSelected ? 'ring-4 ring-yellow-400 scale-105 bg-yellow-50' : ''} ${isGone ? 'opacity-25 line-through' : ''}`}
+              className={`min-h-16 text-2xl flex items-center justify-center p-2 ${action} ${isSelected ? 'ring-4 ring-yellow-400 scale-105 bg-yellow-50' : ''} ${isGone ? 'opacity-25 line-through' : ''}`}
             >
-              {t.tile}
+              {emojiMap[String(t.tile).trim()] ? (
+                <EmojiOrImage value={t.tile} map={emojiMap} imgClassName="h-12 w-12 object-contain" />
+              ) : t.tile}
             </button>
           );
         })}
@@ -468,6 +478,7 @@ function TracingMode() {
 function BalloonPopMode() {
   const { reportProgress, roundData } = useGameProgress();
   const { feedback, showFeedback } = useMiniFeedback();
+  const { map: emojiMap } = useEmojiImages();
   const items = roundData?.items || [];
   const target = roundData?.target;
   const targetIndexes = useMemo(() => items.map((it, i) => isSame(getItemText(it), target) ? i : -1).filter(i => i >= 0), [items, target]);
@@ -490,7 +501,7 @@ function BalloonPopMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={popped.length} total={totalTargets} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-700 font-black text-sm">Pop sasaran: <span className={targetPill + ' ml-1'}>{target}</span></p>
+        <p className="text-purple-700 font-black text-sm">Pop sasaran: <span className={targetPill + ' ml-1'}>{emojiMap[String(target).trim()] ? <EmojiOrImage value={target} map={emojiMap} imgClassName="inline-block h-6 w-6 object-contain align-middle" /> : target}</span></p>
       </div>
       <div className="relative h-72 rounded-2xl bg-gradient-to-b from-sky-100 to-pink-100 overflow-hidden ring-2 ring-white">
         {items.map((item, i) => !popped.includes(i) && (
@@ -506,8 +517,8 @@ function BalloonPopMode() {
             style={{ left: `${8 + (i * 17) % 80}%` }}
           >
             <span className="text-6xl leading-none">🎈</span>
-            <span className="-mt-8 px-3 py-1 rounded-full bg-white text-purple-900 text-lg font-black ring-2 ring-purple-200 shadow-sm pointer-events-none whitespace-nowrap">
-              {getItemText(item)}
+            <span className="-mt-8 px-2 py-1 rounded-full bg-white text-purple-900 text-lg font-black ring-2 ring-purple-200 shadow-sm pointer-events-none whitespace-nowrap flex items-center justify-center">
+              {emojiMap[String(getItemText(item)).trim()] ? <EmojiOrImage value={getItemText(item)} map={emojiMap} imgClassName="h-8 w-8 object-contain" /> : getItemText(item)}
             </span>
           </motion.button>
         ))}
@@ -519,6 +530,7 @@ function BalloonPopMode() {
 function FallingCatchMode() {
   const { reportProgress, roundData } = useGameProgress();
   const { feedback, showFeedback } = useMiniFeedback();
+  const { map: emojiMap } = useEmojiImages();
   const items = roundData?.items || [];
   const target = roundData?.target;
   const targetIndexes = useMemo(() => items.map((it, i) => isSame(getItemText(it), target) ? i : -1).filter(i => i >= 0), [items, target]);
@@ -534,7 +546,7 @@ function FallingCatchMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={caught.length} total={totalTargets} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-700 font-black text-sm">Tangkap: <span className={targetPill + ' ml-1'}>{target}</span></p>
+        <p className="text-purple-700 font-black text-sm">Tangkap: <span className={targetPill + ' ml-1'}>{emojiMap[String(target).trim()] ? <EmojiOrImage value={target} map={emojiMap} imgClassName="inline-block h-6 w-6 object-contain align-middle" /> : target}</span></p>
       </div>
       <div className="h-72 rounded-2xl bg-gradient-to-b from-sky-100 to-blue-200 relative overflow-hidden ring-2 ring-white">
         {items.map((item, i) => !caught.includes(i) && (
@@ -550,9 +562,9 @@ function FallingCatchMode() {
               showFeedback(ok ? 'correct' : 'wrong', ok ? 'Tangkap betul!' : 'Bukan sasaran.');
               if (ok && !caught.includes(i)) setCaught(prev => [...prev, i]);
             }}
-            className="absolute w-16 h-16 rounded-full bg-white text-purple-700 font-black text-2xl shadow-md ring-2 ring-purple-200 flex items-center justify-center"
+            className="absolute w-16 h-16 rounded-full bg-white text-purple-700 font-black text-2xl shadow-md ring-2 ring-purple-200 flex items-center justify-center overflow-hidden"
             style={{ left: `${10 + (i * 13) % 80}%` }}
-          >{getItemText(item)}</motion.button>
+          >{emojiMap[String(getItemText(item)).trim()] ? <EmojiOrImage value={getItemText(item)} map={emojiMap} imgClassName="h-12 w-12 object-contain" /> : getItemText(item)}</motion.button>
         ))}
         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-5xl">🧺</div>
       </div>
@@ -786,6 +798,7 @@ function SpinWheelMode() {
 function PictureHuntMode() {
   const { reportProgress, roundData } = useGameProgress();
   const { feedback, showFeedback } = useMiniFeedback();
+  const { map: emojiMap } = useEmojiImages();
   const items = roundData?.items || [];
   const target = roundData?.target;
   const [found, setFound] = useState(false);
@@ -805,11 +818,11 @@ function PictureHuntMode() {
     <div className="space-y-3">
       <MiniFeedback feedback={feedback} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-700 font-black text-sm">Cari: <span className={targetPill + ' ml-1'}>{target}</span></p>
+        <p className="text-purple-700 font-black text-sm">Cari: <span className={targetPill + ' ml-1'}>{emojiMap[String(target).trim()] ? <EmojiOrImage value={target} map={emojiMap} imgClassName="inline-block h-6 w-6 object-contain align-middle" /> : target}</span></p>
       </div>
       <div className="grid grid-cols-3 gap-2">
         {items.map((item, i) => (
-          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white ring-2 ring-purple-100 text-5xl shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center">{getItemText(item)}</button>
+          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white ring-2 ring-purple-100 text-5xl shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center p-2 overflow-hidden">{emojiMap[String(getItemText(item)).trim()] ? <EmojiOrImage value={getItemText(item)} map={emojiMap} imgClassName="h-full w-full object-contain" /> : getItemText(item)}</button>
         ))}
       </div>
     </div>
@@ -848,6 +861,7 @@ function TypingMode() {
 function MiniSimulationMode() {
   const { reportProgress, roundData } = useGameProgress();
   const { feedback, showFeedback } = useMiniFeedback();
+  const { map: emojiMap } = useEmojiImages();
   const items = roundData?.items || [];
   const target = roundData?.target;
   const targetIndexes = useMemo(() => items.map((it, i) => isSame(getItemGroup(it), target) ? i : -1).filter(i => i >= 0), [items, target]);
@@ -875,7 +889,7 @@ function MiniSimulationMode() {
       </div>
       <div className="grid grid-cols-3 gap-2">
         {items.map((item, i) => (
-          <button key={i} onClick={() => pick(item, i)} className={`${chip} ${picked.includes(i) ? 'opacity-30 bg-green-100' : ''}`}>{getItemText(item)}</button>
+          <button key={i} onClick={() => pick(item, i)} className={`${chip} flex items-center justify-center overflow-hidden ${picked.includes(i) ? 'opacity-30 bg-green-100' : ''}`}>{emojiMap[String(getItemText(item)).trim()] ? <EmojiOrImage value={getItemText(item)} map={emojiMap} imgClassName="h-12 w-12 object-contain" /> : getItemText(item)}</button>
         ))}
       </div>
     </div>
@@ -1048,6 +1062,7 @@ function ReactionSpeedMode() {
 
 function ColoringMode() {
   const { reportProgress, roundData } = useGameProgress();
+  const { map: emojiMap } = useEmojiImages();
   const items = roundData?.items || [];
   const [colored, setColored] = useState([]);
   const colors = ['#FCA5A5','#FDBA74','#FCD34D','#86EFAC','#7DD3FC','#A78BFA','#F472B6','#FBBF24'];
@@ -1064,10 +1079,10 @@ function ColoringMode() {
           <button
             key={i}
             onClick={() => setColored(p => p.includes(i) ? p : [...p, i])}
-            className={`aspect-square rounded-2xl text-4xl ring-4 transition-all ${colored.includes(i) ? 'ring-white scale-105' : 'bg-white ring-purple-100 grayscale'}`}
+            className={`aspect-square rounded-2xl text-4xl ring-4 transition-all flex items-center justify-center p-2 overflow-hidden ${colored.includes(i) ? 'ring-white scale-105' : 'bg-white ring-purple-100 grayscale'}`}
             style={colored.includes(i) ? { background: `linear-gradient(135deg, ${colors[i % colors.length]}, ${colors[(i + 2) % colors.length]})` } : {}}
           >
-            {item}
+            {emojiMap[String(item).trim()] ? <EmojiOrImage value={item} map={emojiMap} imgClassName="h-full w-full object-contain" /> : item}
           </button>
         ))}
       </div>

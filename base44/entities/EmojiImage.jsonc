@@ -1,0 +1,31 @@
+{
+  "name": "EmojiImage",
+  "type": "object",
+  "properties": {
+    "emoji": {
+      "type": "string",
+      "description": "Emoji karakter yang dipetakan (cth: \ud83d\ude97, \ud83d\udc36, \ud83c\udf4e)"
+    },
+    "label": {
+      "type": "string",
+      "description": "Nama objek dalam BM untuk prompt AI (cth: kereta, anjing, epal)"
+    },
+    "imageUrl": {
+      "type": "string",
+      "description": "URL gambar AI yang dijana & disimpan kekal"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "done",
+        "failed"
+      ],
+      "default": "pending",
+      "description": "Status penjanaan gambar"
+    }
+  },
+  "required": [
+    "emoji"
+  ]
+}
