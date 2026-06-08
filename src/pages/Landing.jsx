@@ -779,9 +779,9 @@ export default function Landing() {
             {/* Support */}
             <div>
               <p className="font-black text-sm mb-3 text-white">Sokongan</p>
-              <Link to="/contact" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 text-white font-black text-sm transition-colors border border-white/30">
-                ✉️ Hubungi Kami
-              </Link>
+              <a href="https://wa.me/60177844120" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500 hover:bg-green-600 text-white font-black text-sm transition-colors border border-green-400">
+                💬 WhatsApp Kami
+              </a>
               <p className="text-white/60 text-xs mt-2">Isnin – Jumaat, 9am – 6pm</p>
             </div>
           </div>
