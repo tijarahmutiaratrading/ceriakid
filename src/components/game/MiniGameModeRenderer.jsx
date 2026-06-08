@@ -8,8 +8,8 @@ import useMiniFeedback from '@/hooks/useMiniFeedback';
 // Light pastel panel — match shell harmony
 const panel = 'rounded-2xl p-4 bg-gradient-to-br from-purple-50 to-pink-50 ring-1 ring-purple-100 shadow-sm';
 const action = 'rounded-2xl bg-white text-purple-700 font-black shadow-md ring-2 ring-purple-100 active:scale-95 hover:-translate-y-0.5 transition-all';
-const chip = 'px-4 py-3 rounded-2xl bg-white text-purple-700 font-black shadow-md ring-2 ring-purple-100 active:scale-95 hover:-translate-y-0.5 transition-all';
-const targetPill = 'px-3 py-1.5 rounded-full bg-gradient-to-r from-yellow-300 to-orange-300 text-orange-900 font-black text-sm shadow-md ring-2 ring-white inline-block';
+const chip = 'px-4 py-3.5 rounded-2xl bg-white text-purple-700 font-black text-xl shadow-md ring-2 ring-purple-100 active:scale-95 hover:-translate-y-0.5 transition-all';
+const targetPill = 'px-3.5 py-1.5 rounded-full bg-gradient-to-r from-yellow-300 to-orange-300 text-orange-900 font-black text-lg shadow-md ring-2 ring-white inline-block';
 
 export default function MiniGameModeRenderer({ game, onComplete }) {
   const data = game?.gameData || {};
@@ -162,15 +162,15 @@ function DragDropMode() {
         <p className="text-purple-500 text-[10px] font-black mb-2 uppercase tracking-wider">Pilih item</p>
         <div className="flex flex-wrap gap-2">
           {items.filter(item => !Object.values(placed).includes(item)).map(item => (
-            <button key={item} type="button" onClick={() => setSelectedItem(item)} className={`px-3 py-2 rounded-xl font-black text-sm transition-all ${selectedItem === item ? 'bg-yellow-300 text-orange-900 ring-2 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-1 ring-purple-100'}`}>{item}</button>
+            <button key={item} type="button" onClick={() => setSelectedItem(item)} className={`px-4 py-3 rounded-xl font-black text-xl transition-all ${selectedItem === item ? 'bg-yellow-300 text-orange-900 ring-2 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-1 ring-purple-100'}`}>{item}</button>
           ))}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2.5">
         {targets.map(target => (
           <button key={target} type="button" onClick={() => placeItem(target)} className={`min-h-20 rounded-2xl p-3 text-center transition-all ${placed[target] ? 'bg-green-100 ring-2 ring-green-400' : selectedItem ? 'bg-yellow-50 ring-2 ring-yellow-400 animate-pulse' : 'bg-white ring-2 ring-purple-100'}`}>
-            <p className="text-purple-400 text-[10px] font-black uppercase">{target}</p>
-            <p className="text-purple-900 text-base font-black mt-1">{placed[target] || (selectedItem ? '↓ Letak sini' : '—')}</p>
+            <p className="text-purple-400 text-xs font-black uppercase">{target}</p>
+            <p className="text-purple-900 text-xl font-black mt-1">{placed[target] || (selectedItem ? '↓ Letak sini' : '—')}</p>
           </button>
         ))}
       </div>
@@ -208,7 +208,7 @@ function WordBuilderMode() {
       </div>
       <div className="grid grid-cols-4 gap-2">
         {chunks.map((chunk, idx) => (
-          <button key={idx} disabled={complete} onClick={() => setBuilt(v => v + chunk)} className={`py-3 ${action} disabled:opacity-50`}>{chunk}</button>
+          <button key={idx} disabled={complete} onClick={() => setBuilt(v => v + chunk)} className={`py-4 text-2xl ${action} disabled:opacity-50`}>{chunk}</button>
         ))}
       </div>
       <div className="flex gap-2">
@@ -248,17 +248,17 @@ function SortingMode() {
         <p className="text-purple-500 text-[10px] font-black mb-2 uppercase">Pilih item</p>
         <div className="flex flex-wrap gap-2">
           {items.filter(item => !used.includes(item.text)).map(item => (
-            <button key={item.text} onClick={() => setSelected(item)} className={`px-3 py-2 rounded-xl font-black text-sm transition-all ${selected?.text === item.text ? 'bg-yellow-300 text-orange-900 ring-2 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-1 ring-purple-100'}`}>{item.text}</button>
+            <button key={item.text} onClick={() => setSelected(item)} className={`px-4 py-3 rounded-xl font-black text-xl transition-all ${selected?.text === item.text ? 'bg-yellow-300 text-orange-900 ring-2 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-1 ring-purple-100'}`}>{item.text}</button>
           ))}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2.5">
         {groups.map(group => (
           <button key={group} onClick={() => place(group)} className={`min-h-32 rounded-2xl p-3 text-left transition-all ${selected ? 'bg-yellow-50 ring-2 ring-yellow-400 animate-pulse' : 'bg-white ring-2 ring-purple-100'}`}>
-            <p className="text-purple-900 font-black mb-2 text-sm">{group}</p>
+            <p className="text-purple-900 font-black mb-2 text-lg">{group}</p>
             <div className="space-y-1">
               {(sorted[group] || []).map(item => (
-                <div key={item.text} className="px-2 py-1 rounded-lg bg-green-100 text-green-900 font-black text-xs">{item.text}</div>
+                <div key={item.text} className="px-2 py-1.5 rounded-lg bg-green-100 text-green-900 font-black text-base">{item.text}</div>
               ))}
             </div>
           </button>
@@ -313,7 +313,7 @@ function TileMatchMode() {
               key={idx}
               onClick={() => tap(idx)}
               disabled={isGone}
-              className={`min-h-16 ${action} ${isSelected ? 'ring-4 ring-yellow-400 scale-105 bg-yellow-50' : ''} ${isGone ? 'opacity-25 line-through' : ''}`}
+              className={`min-h-16 text-2xl ${action} ${isSelected ? 'ring-4 ring-yellow-400 scale-105 bg-yellow-50' : ''} ${isGone ? 'opacity-25 line-through' : ''}`}
             >
               {t.tile}
             </button>
@@ -355,7 +355,7 @@ function StoryMode() {
       </div>
       <div className="space-y-2">
         {(scene.choices || []).map((choice, idx) => (
-          <button key={idx} onClick={() => pick(idx)} disabled={done} className={`w-full p-3 ${action} disabled:opacity-50 text-left`}>{choice}</button>
+          <button key={idx} onClick={() => pick(idx)} disabled={done} className={`w-full p-4 text-lg ${action} disabled:opacity-50 text-left`}>{choice}</button>
         ))}
       </div>
     </div>
@@ -505,8 +505,8 @@ function BalloonPopMode() {
             className="absolute top-0 flex flex-col items-center"
             style={{ left: `${8 + (i * 17) % 80}%` }}
           >
-            <span className="text-5xl leading-none">🎈</span>
-            <span className="-mt-7 px-2 py-0.5 rounded-full bg-white text-purple-900 text-xs font-black ring-2 ring-purple-200 shadow-sm pointer-events-none whitespace-nowrap">
+            <span className="text-6xl leading-none">🎈</span>
+            <span className="-mt-8 px-3 py-1 rounded-full bg-white text-purple-900 text-lg font-black ring-2 ring-purple-200 shadow-sm pointer-events-none whitespace-nowrap">
               {getItemText(item)}
             </span>
           </motion.button>
@@ -550,7 +550,7 @@ function FallingCatchMode() {
               showFeedback(ok ? 'correct' : 'wrong', ok ? 'Tangkap betul!' : 'Bukan sasaran.');
               if (ok && !caught.includes(i)) setCaught(prev => [...prev, i]);
             }}
-            className="absolute w-12 h-12 rounded-full bg-white text-purple-700 font-black text-lg shadow-md ring-2 ring-purple-200"
+            className="absolute w-16 h-16 rounded-full bg-white text-purple-700 font-black text-2xl shadow-md ring-2 ring-purple-200 flex items-center justify-center"
             style={{ left: `${10 + (i * 13) % 80}%` }}
           >{getItemText(item)}</motion.button>
         ))}
@@ -809,7 +809,7 @@ function PictureHuntMode() {
       </div>
       <div className="grid grid-cols-3 gap-2">
         {items.map((item, i) => (
-          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white ring-2 ring-purple-100 text-4xl shadow-md active:scale-95 disabled:opacity-50">{getItemText(item)}</button>
+          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white ring-2 ring-purple-100 text-5xl shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center">{getItemText(item)}</button>
         ))}
       </div>
     </div>
@@ -962,7 +962,7 @@ function ConnectDotsMode() {
       </div>
       <div className="grid grid-cols-2 gap-3 p-3">
         {items.map((dot, i) => (
-          <button key={dot} onClick={() => tap(dot, i)} className={`aspect-square rounded-full text-2xl font-black ring-4 transition-all ${dots.includes(dot) ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white ring-green-200 scale-105' : 'bg-white text-purple-700 ring-purple-100'}`}>{dot}</button>
+          <button key={dot} onClick={() => tap(dot, i)} className={`aspect-square rounded-full text-3xl font-black ring-4 transition-all ${dots.includes(dot) ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white ring-green-200 scale-105' : 'bg-white text-purple-700 ring-purple-100'}`}>{dot}</button>
         ))}
       </div>
     </div>
