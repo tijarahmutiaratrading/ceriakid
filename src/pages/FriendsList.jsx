@@ -190,8 +190,8 @@ export default function FriendsList() {
 
           {/* Code Display */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex-1 rounded-2xl py-4 text-center bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200">
-              <p className="text-4xl font-black text-purple-700 tracking-widest">{inviteCode}</p>
+            <div className="flex-1 min-w-0 rounded-2xl py-4 text-center bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200">
+              <p className="text-3xl sm:text-4xl font-black text-purple-700 tracking-[0.2em] sm:tracking-widest">{inviteCode}</p>
             </div>
             <motion.button
               whileTap={{ scale: 0.9 }}
@@ -291,11 +291,11 @@ export default function FriendsList() {
                     transition={{ delay: idx * 0.05 }}
                     className="rounded-2xl p-3.5 flex items-center justify-between bg-purple-50/60 border border-purple-100"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-2xl shadow-md flex-shrink-0">👤</div>
-                      <div>
-                        <p className="font-black text-slate-800 text-sm">{friend.friendEmail}</p>
-                        <p className="text-slate-500 text-xs">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-black text-slate-800 text-sm break-all leading-tight">{friend.friendEmail}</p>
+                        <p className="text-slate-500 text-xs mt-0.5">
                           Ditambah {friend.acceptedDate ? new Date(friend.acceptedDate).toLocaleDateString('ms-MY') : '-'}
                         </p>
                       </div>
