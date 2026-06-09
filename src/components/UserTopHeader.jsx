@@ -141,7 +141,7 @@ export default function UserTopHeader() {
               <Link
                 key={group.key}
                 to={group.path}
-                className={`relative px-1.5 py-0.5 lg:px-2 lg:py-0.5 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
+                className={`relative px-3 py-1.5 lg:px-4 lg:py-2 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
                   showActive
                     ? 'text-white'
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
@@ -164,7 +164,7 @@ export default function UserTopHeader() {
               <button
                 type="button"
                 onClick={() => setOpenMenu(isOpen ? null : group.key)}
-                className={`relative flex items-center gap-0.5 px-1.5 py-0.5 lg:px-2 lg:py-0.5 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
+                className={`relative flex items-center gap-0.5 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
                   showActive
                     ? 'text-white'
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
