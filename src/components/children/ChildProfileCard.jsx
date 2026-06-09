@@ -15,14 +15,7 @@ const CATEGORY_LABELS = {
   jawi: 'Jawi',
   general: 'Umum',
 };
-const CATEGORY_EMOJIS = {
-  bahasa_melayu: '🇲🇾',
-  english: '🇬🇧',
-  mathematics: '🔢',
-  science: '🔬',
-  jawi: '✍️',
-  general: '🎯',
-};
+
 
 export default function ChildProfileCard({
   child,
@@ -82,7 +75,6 @@ export default function ChildProfileCard({
     : null;
 
   const levelLabel = child.ageGroup === 'prasekolah' ? 'Prasekolah' : 'Sekolah Rendah';
-  const levelEmoji = child.ageGroup === 'prasekolah' ? '🎨' : '📚';
 
   return (
     <motion.div
@@ -126,14 +118,17 @@ export default function ChildProfileCard({
           </div>
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wide">
-              {levelEmoji} {levelLabel}
+              {levelLabel}
             </span>
-            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide ${
+            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide ${
               activeToday ? 'bg-purple-50 text-purple-700'
               : hasPlayed ? 'bg-fuchsia-50 text-fuchsia-700'
               : 'bg-slate-100 text-slate-500'
             }`}>
-              {activeToday ? '🔥 Aktif' : hasPlayed ? '💤 Tidak Aktif' : '✨ Baru'}
+              <span className={`w-1.5 h-1.5 rounded-full ${
+                activeToday ? 'bg-purple-500' : hasPlayed ? 'bg-fuchsia-500' : 'bg-slate-400'
+              }`} />
+              {activeToday ? 'Aktif' : hasPlayed ? 'Tidak Aktif' : 'Baru'}
             </span>
           </div>
           {lastPlayedLabel && (
@@ -184,18 +179,22 @@ export default function ChildProfileCard({
           <div className="bg-white px-4 py-3">
             <p className="text-[10px] font-bold uppercase tracking-wide text-slate-400 mb-1">Subjek Top</p>
             {topSubject ? (
-              <div className="flex items-center gap-1.5">
-                <span className="text-lg">{CATEGORY_EMOJIS[topSubject.cat] || '📚'}</span>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
+                  <Star className="w-4 h-4 fill-purple-600 text-purple-600" />
+                </div>
                 <div>
                   <p className="font-black text-sm text-slate-900">{CATEGORY_LABELS[topSubject.cat] || topSubject.cat}</p>
-                  <p className="text-purple-600 text-[10px] font-bold">{topSubject.avg.toFixed(1)}⭐ purata</p>
+                  <p className="text-purple-600 text-[10px] font-bold">{topSubject.avg.toFixed(1)} purata</p>
                 </div>
               </div>
             ) : <p className="text-slate-400 text-xs">—</p>}
           </div>
           <div className="bg-white px-4 py-3">
             <p className="text-[10px] font-bold uppercase tracking-wide text-slate-400 mb-1">Purata Skor</p>
-            <p className="font-black text-2xl text-slate-900 leading-none tabular-nums">{avgStars}<span className="text-sm ml-0.5 text-fuchsia-500">⭐</span></p>
+            <p className="font-black text-2xl text-slate-900 leading-none tabular-nums flex items-center gap-1">
+              {avgStars}<Star className="w-4 h-4 fill-fuchsia-500 text-fuchsia-500" />
+            </p>
             <p className="text-slate-400 text-[10px] font-semibold mt-0.5">dari 3.0</p>
           </div>
         </div>

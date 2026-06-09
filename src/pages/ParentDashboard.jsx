@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Plus } from 'lucide-react';
+import { Plus, Users, Gamepad2 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
@@ -113,16 +113,8 @@ export default function ParentDashboard() {
     <div
       className="min-h-screen font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
     >
-      {/* Floating decorations — CeriaKid vibe (same as Challenges) */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 right-8 text-4xl opacity-40 animate-pulse">🌈</div>
-        <div className="absolute top-40 left-6 text-3xl opacity-30">☁️</div>
-        <div className="absolute top-1/3 right-1/4 text-2xl opacity-25">⭐</div>
-        <div className="absolute bottom-1/3 left-8 text-3xl opacity-30">💖</div>
-        <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
-      </div>
       <AppHeader showBack={true} backTo="/dashboard" theme="light" />
-      <div className="relative max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 pb-16 pt-20 sm:pt-6">
+      <div className="relative max-w-3xl mx-auto px-3 sm:px-6 lg:px-8 pb-16 pt-20 sm:pt-6">
 
         {/* 1. Family Hero — overall snapshot */}
         <ParentHeroCard
@@ -140,7 +132,7 @@ export default function ParentDashboard() {
             className="rounded-3xl p-12 text-center bg-white shadow-xl border border-white/60"
           >
             <div className="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl">👨‍👩‍👧‍👦</span>
+              <Users className="w-8 h-8 text-purple-600" />
             </div>
             <p className="text-slate-900 font-black text-xl mb-2">Belum ada profil anak</p>
             <p className="text-slate-500 text-sm font-medium mb-5 max-w-sm mx-auto">Tambah profil anak dulu untuk lihat prestasi mereka.</p>
@@ -169,7 +161,7 @@ export default function ParentDashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.25 }}
-                  className="space-y-4"
+                  className="space-y-5"
                 >
                   {/* Child snapshot */}
                   <ChildSnapshotCard
@@ -186,7 +178,7 @@ export default function ParentDashboard() {
                       className="rounded-3xl p-10 text-center bg-white shadow-xl border border-white/60"
                     >
                       <div className="w-14 h-14 rounded-2xl bg-purple-100 flex items-center justify-center mx-auto mb-4">
-                        <span className="text-2xl">🎮</span>
+                        <Gamepad2 className="w-7 h-7 text-purple-600" />
                       </div>
                       <p className="text-slate-900 font-black text-lg mb-2">{selectedChild} belum mula bermain</p>
                       <p className="text-slate-500 text-sm font-medium mb-5">Galakkan dia mulakan sesi pertama!</p>
@@ -201,17 +193,17 @@ export default function ParentDashboard() {
                       {/* Action items — what to do next */}
                       <ActionItemsCard childName={selectedChild} games={selectedGames} />
 
+                      {/* Subject progress — full width, primary focus */}
+                      <ChildSubjectProgress games={selectedGames} />
+
                       {/* Activity trend (7-day) + Insights */}
-                      <div className="grid lg:grid-cols-2 gap-4">
+                      <div className="grid lg:grid-cols-2 gap-5">
                         <ActivitySparkline games={selectedGames} />
                         <InsightsCard games={selectedGames} />
                       </div>
 
-                      {/* Subject progress */}
-                      <ChildSubjectProgress games={selectedGames} />
-
                       {/* Recent activity + Smart Recommendations */}
-                      <div className="grid lg:grid-cols-2 gap-4">
+                      <div className="grid lg:grid-cols-2 gap-5">
                         <RecentActivity games={selectedGames} />
                         <SmartRecommendations userEmail={user.email} childName={selectedChild} ageGroup={ageGroup} />
                       </div>

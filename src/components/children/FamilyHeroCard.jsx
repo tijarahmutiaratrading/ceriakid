@@ -10,7 +10,7 @@ export default function FamilyHeroCard({ children, maxCount, familyStats, leader
     { label: 'Profil Anak', value: children.length, icon: Users, iconBg: 'bg-purple-600' },
     { label: 'Games Dimain', value: familyStats.totalGames, icon: BarChart2, iconBg: 'bg-purple-500' },
     { label: 'Jumlah Bintang', value: familyStats.totalStars, icon: Star, iconBg: 'bg-fuchsia-500' },
-    { label: 'Perfect 3⭐', value: familyStats.totalPerfect, icon: Target, iconBg: 'bg-pink-500' },
+    { label: 'Perfect Score', value: familyStats.totalPerfect, icon: Target, iconBg: 'bg-pink-500' },
   ];
 
   return (
@@ -32,7 +32,7 @@ export default function FamilyHeroCard({ children, maxCount, familyStats, leader
               <h1 className="font-black text-white text-lg leading-tight">Profil Anak</h1>
               <p className="text-white/70 text-xs font-semibold mt-0.5">
                 {children.length}/{maxCount} slot digunakan
-                {leaderName && <span className="ml-2">· 🏆 {leaderName} memimpin</span>}
+                {leaderName && <span className="ml-2 inline-flex items-center gap-1"><Trophy className="w-3 h-3" /> {leaderName} memimpin</span>}
               </p>
             </div>
           </div>

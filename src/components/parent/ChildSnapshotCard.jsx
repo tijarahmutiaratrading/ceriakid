@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Flame, Star, Gamepad2, Award, TrendingUp } from 'lucide-react';
+import { Flame, Star, Gamepad2, Award } from 'lucide-react';
 import { getChildAvatar } from '@/lib/childAvatars';
 
 export default function ChildSnapshotCard({ child, games, streak = 0 }) {
@@ -36,19 +36,22 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
           <h2 className="text-lg font-black text-slate-900 truncate leading-tight">{child?.name || 'Anak'}</h2>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wide">
-              {child?.ageGroup === 'sekolah_rendah' ? '📚 Sek. Rendah' : '🎨 Prasekolah'}
+              {child?.ageGroup === 'sekolah_rendah' ? 'Sek. Rendah' : 'Prasekolah'}
             </span>
-            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide ${
-              playedToday ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide ${
+              playedToday ? 'bg-purple-50 text-purple-700' : 'bg-slate-100 text-slate-500'
             }`}>
-              {playedToday ? '🔥 Aktif hari ni' : '💤 Belum main'}
+              <span className={`w-1.5 h-1.5 rounded-full ${playedToday ? 'bg-purple-500' : 'bg-slate-400'}`} />
+              {playedToday ? 'Aktif hari ni' : 'Belum main'}
             </span>
           </div>
         </div>
 
         <div className="text-right flex-shrink-0">
           <p className="text-[10px] font-bold uppercase tracking-wide text-slate-400 mb-0.5">Purata</p>
-          <p className="font-black text-2xl text-slate-900 leading-none tabular-nums">{avgStars}<span className="text-base ml-0.5">⭐</span></p>
+          <p className="font-black text-2xl text-slate-900 leading-none tabular-nums flex items-center gap-1 justify-end">
+            {avgStars}<Star className="w-4 h-4 fill-fuchsia-500 text-fuchsia-500" />
+          </p>
         </div>
       </div>
 

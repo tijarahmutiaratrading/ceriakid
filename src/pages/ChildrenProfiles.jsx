@@ -222,17 +222,9 @@ export default function ChildrenProfiles() {
     <div
       className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
     >
-      {/* Floating decorations — CeriaKid vibe (same as Challenges) */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 right-8 text-4xl opacity-40 animate-pulse">🌈</div>
-        <div className="absolute top-40 left-6 text-3xl opacity-30">☁️</div>
-        <div className="absolute top-1/3 right-1/4 text-2xl opacity-25">⭐</div>
-        <div className="absolute bottom-1/3 left-8 text-3xl opacity-30">💖</div>
-        <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
-      </div>
       <AppHeader theme="light" />
 
-      <div className="relative w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 pb-16 pt-4">
+      <div className="relative w-full max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 pb-16 pt-4">
 
         {/* PREMIUM HERO — extracted to FamilyHeroCard component */}
         <FamilyHeroCard

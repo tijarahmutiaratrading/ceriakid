@@ -35,9 +35,9 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
           </div>
         </div>
         {leaderName && (
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 border border-amber-200">
-            <Trophy className="w-3 h-3 text-amber-600" />
-            <span className="text-amber-700 text-[10px] font-bold">{leaderName} #1</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-50 border border-purple-200">
+            <Trophy className="w-3 h-3 text-purple-600" />
+            <span className="text-purple-700 text-[10px] font-bold">{leaderName} #1</span>
           </div>
         )}
       </div>
@@ -47,7 +47,6 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
         {stats.map((c, i) => {
           const isActive = c.name === selectedChild;
           const isLeader = c.name === leaderName;
-          const emoji = c.ageGroup === 'sekolah_rendah' ? '📚' : '🎨';
           const ageLabel = c.ageGroup === 'sekolah_rendah' ? 'Sek. Rendah' : 'Prasekolah';
 
           return (
@@ -65,7 +64,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
               }`}
             >
               {isLeader && (
-                <div className="absolute -top-2 -right-1 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-amber-400 border border-white">
+                <div className="absolute -top-2 -right-1 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border border-white">
                   <Trophy className="w-2.5 h-2.5 text-white" />
                   <span className="text-white text-[8px] font-black">TOP</span>
                 </div>
@@ -95,9 +94,9 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
               </div>
 
               {c.currentStreak > 0 && (
-                <div className="flex items-center gap-1 mt-2 px-2 py-1 rounded-md bg-red-50 border border-red-100">
-                  <Flame className="w-3 h-3 text-red-500" />
-                  <span className="text-red-600 text-[10px] font-bold">{c.currentStreak}h streak</span>
+                <div className="flex items-center gap-1 mt-2 px-2 py-1 rounded-md bg-pink-50 border border-pink-100">
+                  <Flame className="w-3 h-3 text-pink-500" />
+                  <span className="text-pink-600 text-[10px] font-bold">{c.currentStreak}h streak</span>
                 </div>
               )}
             </motion.button>
