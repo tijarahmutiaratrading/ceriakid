@@ -62,7 +62,24 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [subscription, setSubscription] = useState(null);
   const [credits, setCredits] = useState(0);
+  const [liveAvatar, setLiveAvatar] = useState(avatarUrl || '');
   const slide = SLIDES[index];
+
+  // Sentiasa baca avatar terkini dari user + dengar event tukar avatar
+  useEffect(() => { setLiveAvatar(avatarUrl || user?.avatarUrl || ''); }, [avatarUrl, user?.avatarUrl]);
+  useEffect(() => {
+    const handler = (e) => setLiveAvatar(e.detail?.avatarUrl || '');
+    window.addEventListener('avatar-updated', handler);
+    return () => window.removeEventListener('avatar-updated', handler);
+  }, []);
+
+  // Fallback: kalau user.avatarUrl belum sync, ambil terus dari DB
+  useEffect(() => {
+    if (liveAvatar || !user?.email) return;
+    base44.auth.me().then((fresh) => {
+      if (fresh?.avatarUrl) setLiveAvatar(fresh.avatarUrl);
+    }).catch(() => {});
+  }, [user?.email, liveAvatar]);
 
   // Auto-advance every 6s
   useEffect(() => {
@@ -164,9 +181,9 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
           onClick={() => setMenuOpen(!menuOpen)}
           className="flex items-center gap-3 group"
         >
-          {avatarUrl ? (
+          {liveAvatar ? (
             <img
-              src={avatarUrl}
+              src={liveAvatar}
               alt="Avatar"
               className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover ring-2 ring-white/40 group-hover:ring-white/70 shadow-xl transition-all"
             />
