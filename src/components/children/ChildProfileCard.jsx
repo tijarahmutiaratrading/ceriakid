@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { haptic } from '@/lib/haptics';
+import { getChildAvatar } from '@/lib/childAvatars';
 
 const CATEGORY_LABELS = {
   bahasa_melayu: 'BM',
@@ -93,7 +94,7 @@ export default function ChildProfileCard({
             activeToday ? 'ring-purple-300' : 'ring-slate-200'
           } bg-slate-100`}>
             <img
-              src={child.avatarUrl || avatars[idx % avatars.length]}
+              src={getChildAvatar(child)}
               alt={child.name}
               loading="lazy"
               className="w-full h-full object-cover"
