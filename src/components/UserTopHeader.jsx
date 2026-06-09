@@ -238,7 +238,6 @@ export default function UserTopHeader() {
                 {(user?.full_name || user?.email || '?').charAt(0).toUpperCase()}
               </span>
             )}
-            <ChevronDown className={`w-3 h-3 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
           </button>
 
           <AnimatePresence>
