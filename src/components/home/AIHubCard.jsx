@@ -70,7 +70,7 @@ export default function AIHubCard() {
     >
       {/* Classroom background image */}
       <img
-        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/cb2d61a7d_generated_image.png"
+        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/368f95434_generated_image.png"
         alt=""
         className="absolute inset-0 w-full h-full object-cover object-center"
       />
