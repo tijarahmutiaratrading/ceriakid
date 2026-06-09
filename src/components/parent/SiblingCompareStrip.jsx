@@ -43,7 +43,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-1 gap-3 p-4">
+      <div className="grid sm:grid-cols-2 gap-3 p-4">
         {stats.map((c, i) => {
           const isActive = c.name === selectedChild;
           const isLeader = c.name === leaderName;
