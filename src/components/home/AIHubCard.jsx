@@ -146,7 +146,7 @@ export default function AIHubCard() {
                   <img
                     src={f.avatar}
                     alt={f.title}
-                    className="h-12 w-12 md:h-14 md:w-14 rounded-xl object-cover flex-shrink-0 shadow-md ring-2 ring-white/80"
+                    className="h-12 w-12 md:h-14 md:w-14 rounded-full object-cover flex-shrink-0 shadow-md ring-2 ring-white/80"
                   />
                 ) : (
                   <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-xl bg-white ring-2 ring-white/80 flex-shrink-0 shadow-md">
