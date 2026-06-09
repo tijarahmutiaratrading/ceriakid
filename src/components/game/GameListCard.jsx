@@ -219,7 +219,7 @@ export default function GameListCard({ game, gameKey, gameProgress, idx, categor
               <Lock className="w-4 h-4 text-amber-600" strokeWidth={2.25} />
             </div>
           ) : (
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-orange-500 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full brand-gradient-br flex items-center justify-center shadow-sm">
               <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" strokeWidth={2} />
             </div>
           )}
