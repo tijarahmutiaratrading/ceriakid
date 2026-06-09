@@ -57,6 +57,8 @@ export default function BuyCredits() {
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: '#ffffff' }}>
+      {/* Lapisan putih penuh skrin untuk tutup sebarang background di belakang (cth: awan) */}
+      <div className="fixed inset-0 bg-white z-0 pointer-events-none" />
       {/* Subtle grid pattern */}
       <div
         className="fixed inset-0 pointer-events-none opacity-[0.015]"
