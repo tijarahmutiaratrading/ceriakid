@@ -219,31 +219,36 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
             </div>
             <p className="text-slate-600 text-[11px] font-black uppercase tracking-wider">Jantina</p>
           </div>
-          <div className="grid grid-cols-2 gap-2.5" role="radiogroup">
+          <div className="grid grid-cols-2 gap-3" role="radiogroup">
             {[
-              { value: 'male', label: 'Lelaki', sub: 'Budak lelaki', img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0783525bd_generated_image.png' },
-              { value: 'female', label: 'Perempuan', sub: 'Budak perempuan', img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6cea77cec_generated_image.png' },
+              { value: 'male', label: 'Lelaki', img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0783525bd_generated_image.png', tint: 'from-blue-400/90 to-cyan-500/90' },
+              { value: 'female', label: 'Perempuan', img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6cea77cec_generated_image.png', tint: 'from-pink-400/90 to-rose-500/90' },
             ].map((option) => {
               const active = gender === option.value;
               return (
                 <motion.button
                   key={option.value}
                   type="button"
-                  whileTap={{ scale: 0.97 }}
+                  whileTap={{ scale: 0.96 }}
                   role="radio"
                   aria-checked={active}
                   onClick={() => onGenderChange(option.value)}
-                  className={`py-3 px-3 rounded-xl text-sm flex flex-col items-center gap-1.5 transition-all border-2 ${
-                    active
-                      ? 'border-purple-500 bg-purple-50 text-purple-800'
-                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                  className={`relative aspect-[4/5] rounded-2xl overflow-hidden transition-all ${
+                    active ? 'ring-4 ring-purple-400 shadow-xl' : 'ring-1 ring-slate-200 opacity-90 hover:opacity-100'
                   }`}
                 >
-                  <div className={`w-16 h-16 rounded-2xl overflow-hidden ring-2 ${active ? 'ring-purple-300' : 'ring-slate-200'}`}>
-                    <img src={option.img} alt={option.label} className="w-full h-full object-cover" loading="lazy" />
-                  </div>
-                  <span className="font-black text-sm">{option.label}</span>
-                  <span className={`text-[11px] font-semibold ${active ? 'text-purple-600' : 'text-slate-400'}`}>{option.sub}</span>
+                  <img src={option.img} alt={option.label} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                  {/* Bottom gradient label */}
+                  <div className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${active ? option.tint : 'from-black/70 to-transparent'}`} />
+                  <span className="absolute bottom-2.5 inset-x-0 text-center text-white font-black text-sm drop-shadow-md">
+                    {option.label}
+                  </span>
+                  {/* Check badge when active */}
+                  {active && (
+                    <span className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-md">
+                      <Check className="w-3.5 h-3.5 text-purple-600" strokeWidth={4} />
+                    </span>
+                  )}
                 </motion.button>
               );
             })}
