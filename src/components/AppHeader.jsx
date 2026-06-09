@@ -121,24 +121,6 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
           </div>
 
           <div className="flex items-center gap-2 justify-end">
-            {isAuthenticated && selectedChild && (childrenList?.length || 0) > 1 && (
-              <button
-                type="button"
-                onClick={() => { haptic('light'); setHeaderSwitcherOpen(true); }}
-                aria-label={`Anak aktif: ${selectedChild.name}. Tap untuk tukar.`}
-                className="relative flex-shrink-0 active:scale-95 transition-transform"
-              >
-                <img
-                  src={getChildAvatar(selectedChild)}
-                  alt={selectedChild.name}
-                  className={`w-9 h-9 rounded-full object-cover shadow-lg ring-2 bg-white ${isDarkPill ? 'ring-yellow-300/80' : 'ring-pink-300'}`}
-                />
-                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 ring-2 ring-white flex items-center justify-center">
-                  <ChevronDown className="w-2 h-2 text-white" strokeWidth={4} />
-                </div>
-              </button>
-            )}
-
             <Link to={isAuthenticated ? '/settings' : '/'} className="flex items-center justify-end" title={isAuthenticated ? 'Tetapan Profil' : 'CeriaKid'}>
               {isAuthenticated ? (
                 headerAvatarUrl ? (
