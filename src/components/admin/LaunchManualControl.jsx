@@ -6,6 +6,7 @@ import { RefreshCw, Play, Loader2, Trash2, CheckCircle2 } from 'lucide-react';
 
 const SUBJECT_LABELS = {
   bahasa_melayu: 'BM', english: 'English', mathematics: 'Math', science: 'Sains', jawi: 'Jawi', pendidikan_islam: 'P. Islam',
+  pendidikan_moral: 'P. Moral', sejarah: 'Sejarah', rbt: 'RBT', pjk: 'PJK', seni: 'Seni',
 };
 
 const LEVEL_LABELS = {

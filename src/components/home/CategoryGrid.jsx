@@ -13,9 +13,17 @@ const CATEGORY_MAP = {
   bahasa_mandarin: 'bahasa_mandarin',
   jawi: 'jawi',
   pendidikan_islam: 'pendidikan_islam',
+  pendidikan_moral: 'pendidikan_moral',
+  sejarah: 'sejarah',
+  rbt: 'rbt',
+  pjk: 'pjk',
+  seni: 'seni',
   // KAFA — single hub card (klik → /kafa, dalam tu pecah jadi 7 subjek UPKK)
   kafa: 'kafa',
 };
+
+// Subjek yang hanya wujud di peringkat sekolah rendah (tiada di prasekolah)
+const SR_ONLY = ['jawi', 'pendidikan_islam', 'pendidikan_moral', 'sejarah', 'rbt', 'pjk', 'seni', 'kafa'];
 
 // 7 subjek sebenar KAFA — guna untuk kira total games dalam hub card
 const KAFA_SUBJECTS = ['kafa_quran', 'kafa_jawi', 'kafa_akidah', 'kafa_ibadah', 'kafa_sirah', 'kafa_adab', 'kafa_bahasa_arab'];
@@ -74,12 +82,8 @@ export default function CategoryGrid() {
   }, [ageGroup]);
 
   const categories = Object.keys(CATEGORY_MAP).filter(category => {
-    // Prasekolah: tiada jawi, Pendidikan Islam & KAFA (bermula peringkat sekolah rendah)
-    if (ageGroup !== 'sekolah_rendah') {
-      if (category === 'jawi') return false;
-      if (category === 'pendidikan_islam') return false;
-      if (category === 'kafa') return false;
-    }
+    // Prasekolah: subjek SR_ONLY hanya muncul di peringkat sekolah rendah
+    if (ageGroup !== 'sekolah_rendah' && SR_ONLY.includes(category)) return false;
     return true;
   });
 

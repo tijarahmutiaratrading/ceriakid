@@ -3,12 +3,12 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const BUCKETS = [
   { ageGroup: 'prasekolah', darjah: null, categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_1', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_2', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_3', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_4', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_5', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_6', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_1', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam', 'pendidikan_moral', 'rbt', 'pjk', 'seni'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_2', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam', 'pendidikan_moral', 'rbt', 'pjk', 'seni'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_3', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam', 'pendidikan_moral', 'rbt', 'pjk', 'seni'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_4', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam', 'pendidikan_moral', 'sejarah', 'rbt', 'pjk', 'seni'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_5', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam', 'pendidikan_moral', 'sejarah', 'rbt', 'pjk', 'seni'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_6', categories: ['bahasa_melayu', 'english', 'mathematics', 'science', 'jawi', 'pendidikan_islam', 'pendidikan_moral', 'sejarah', 'rbt', 'pjk', 'seni'] },
 ];
 
 Deno.serve(async (req) => {

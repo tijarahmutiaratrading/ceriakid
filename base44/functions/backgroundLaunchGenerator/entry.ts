@@ -3,12 +3,12 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 // Same bucket structure as launchGetProgress
 const BUCKETS = [
   { ageGroup: 'prasekolah', darjah: null, subjects: ['bahasa_melayu','english','mathematics','science','jawi'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_1', subjects: ['bahasa_melayu','english','mathematics','science','jawi'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_2', subjects: ['bahasa_melayu','english','mathematics','science','jawi'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_3', subjects: ['bahasa_melayu','english','mathematics','science','jawi'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_4', subjects: ['bahasa_melayu','english','mathematics','science','jawi'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_5', subjects: ['bahasa_melayu','english','mathematics','science','jawi'] },
-  { ageGroup: 'sekolah_rendah', darjah: 'darjah_6', subjects: ['bahasa_melayu','english','mathematics','science','jawi'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_1', subjects: ['bahasa_melayu','english','mathematics','science','jawi','pendidikan_islam','pendidikan_moral','rbt','pjk','seni'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_2', subjects: ['bahasa_melayu','english','mathematics','science','jawi','pendidikan_islam','pendidikan_moral','rbt','pjk','seni'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_3', subjects: ['bahasa_melayu','english','mathematics','science','jawi','pendidikan_islam','pendidikan_moral','rbt','pjk','seni'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_4', subjects: ['bahasa_melayu','english','mathematics','science','jawi','pendidikan_islam','pendidikan_moral','sejarah','rbt','pjk','seni'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_5', subjects: ['bahasa_melayu','english','mathematics','science','jawi','pendidikan_islam','pendidikan_moral','sejarah','rbt','pjk','seni'] },
+  { ageGroup: 'sekolah_rendah', darjah: 'darjah_6', subjects: ['bahasa_melayu','english','mathematics','science','jawi','pendidikan_islam','pendidikan_moral','sejarah','rbt','pjk','seni'] },
 ];
 
 // KAFA buckets — 7 subjek UPKK JAKIM × 6 darjah. Cap kecil dulu (10 per bucket).
