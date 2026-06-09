@@ -72,7 +72,7 @@ export default function AIHubCard() {
       <img
         src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2bab62545_generated_image.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover object-center"
       />
 
       {/* Decorative sparkles */}
