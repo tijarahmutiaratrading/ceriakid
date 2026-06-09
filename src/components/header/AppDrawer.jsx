@@ -219,7 +219,7 @@ export default function AppDrawer({
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-blue-600 text-white font-black text-sm active:scale-[0.98] transition-all"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-white border border-slate-200 text-slate-900 font-black text-sm active:scale-[0.98] transition-all"
             >
               <LogOut className="w-4 h-4" strokeWidth={2.5} />
               <span>Log Keluar</span>
