@@ -15,8 +15,11 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Email pelanggan — kalau login guna email user, kalau guest guna email form
-    const customerEmail = (user?.email || email).trim().toLowerCase();
+    // Email pelanggan — SENTIASA utamakan email yang user isi dalam form checkout.
+    // Ini penting untuk guest checkout & upgrade flow: user yang login dengan satu akaun
+    // boleh beli pelan guna email lain (cth: untuk anak/saudara). Downgrade check, subscription
+    // record & webhook semua kena ikut email form, bukan email session.
+    const customerEmail = (email || user?.email).trim().toLowerCase();
 
     // Strict validation server-side
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
