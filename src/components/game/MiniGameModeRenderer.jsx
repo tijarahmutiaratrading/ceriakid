@@ -255,10 +255,10 @@ function SortingMode() {
       <div className="grid grid-cols-2 gap-2.5">
         {groups.map(group => (
           <button key={group} onClick={() => place(group)} className={`min-h-20 rounded-2xl p-2.5 text-center transition-all ${selected ? 'bg-yellow-50 ring-2 ring-yellow-400 animate-pulse' : 'bg-white ring-2 ring-purple-100'}`}>
-            <p className="text-purple-900 font-black mb-1.5 text-sm">{group}</p>
+            <p className="text-purple-900 font-black mb-1.5 text-base">{group}</p>
             <div className="space-y-1">
               {(sorted[group] || []).map(item => (
-                <div key={item.text} className="px-2 py-1 rounded-lg bg-green-100 text-green-900 font-black text-sm text-center">{item.text}</div>
+                <div key={item.text} className="px-2 py-1 rounded-lg bg-green-100 text-green-900 font-black text-lg text-center">{item.text}</div>
               ))}
             </div>
           </button>
