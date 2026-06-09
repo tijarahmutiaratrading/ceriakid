@@ -4,7 +4,7 @@ import {
   X, ChevronRight, LogOut, Crown, ChevronsUpDown, Sparkles, Pin, PinOff, Check, Plus,
   Home, LayoutDashboard, Settings, Users, Mail, BookOpen, Gamepad2, Palette, BookMarked,
   UserPlus, Trophy, Baby, LineChart, GraduationCap, HelpCircle, Sparkle, FileText,
-  BarChart3, Wrench, Activity, Cog, Globe, Star, MessageCircle, DollarSign,
+  BarChart3, Wrench, Activity, Cog, Globe, Star, MessageCircle, DollarSign, Shield,
 } from 'lucide-react';
 import { haptic } from '@/lib/haptics';
 import { getChildAvatar } from '@/lib/childAvatars';
@@ -385,7 +385,14 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
           expanded ? 'bg-white/80 text-slate-900 shadow-sm border border-white/60' : 'text-slate-700 active:bg-white/60'
         }`}
       >
-        <span>{section.label}</span>
+        <span className="flex items-center gap-2.5">
+          {section.icon && (
+            <span className={`w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${expanded ? 'bg-purple-100' : 'bg-slate-100'}`}>
+              <section.icon className={`w-4 h-4 ${expanded ? 'text-purple-600' : 'text-slate-500'}`} strokeWidth={2.4} />
+            </span>
+          )}
+          <span>{section.label}</span>
+        </span>
         <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${expanded ? 'bg-purple-100' : 'bg-slate-100'}`}>
           <ChevronRight
             className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-150 ${expanded ? 'text-purple-500' : 'text-slate-400'}`}
@@ -542,6 +549,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       key: 'admin',
       type: 'grouped',
       label: 'Admin',
+      icon: Shield,
       items: [
         { path: '/admin-dashboard?tab=analytics', label: 'Analytics', icon: BarChart3 },
         { path: '/admin-dashboard?tab=gamemanager', label: 'Game Manager', icon: Wrench },
@@ -557,6 +565,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       key: 'dashboard',
       type: 'grouped',
       label: 'Dashboard',
+      icon: LayoutDashboard,
       allowPin: true,
       items: [
         { path: '/dashboard', label: 'Halaman Utama', icon: Home },
@@ -569,6 +578,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       key: 'belajar',
       type: 'grouped',
       label: 'Belajar',
+      icon: Gamepad2,
       allowPin: true,
       items: [
         { path: '/games-subjek', label: 'Belajar Ikut Subjek', icon: Gamepad2 },
@@ -584,6 +594,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       key: 'keluarga',
       type: 'grouped',
       label: 'Keluarga',
+      icon: Users,
       allowPin: true,
       items: [
         { path: '/children-profiles', label: 'Profil Anak', icon: Baby },
@@ -596,6 +607,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       key: 'cikgu-ai',
       type: 'grouped',
       label: 'Cikgu AI',
+      icon: GraduationCap,
       allowPin: true,
       items: [
         { path: '/ai-assistant', label: 'Cikgu Firdaus — Tutor', icon: GraduationCap },
