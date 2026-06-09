@@ -89,8 +89,8 @@ export default function ChildProfileCard({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: idx * 0.05 }}
-      className={`bg-white rounded-2xl ring-1 shadow-sm overflow-hidden ${
-        isActive ? 'ring-emerald-300' : 'ring-slate-200'
+      className={`bg-white rounded-3xl shadow-xl overflow-hidden border ${
+        isActive ? 'border-emerald-300 ring-1 ring-emerald-200' : 'border-white/60'
       }`}
     >
       {/* Header */}

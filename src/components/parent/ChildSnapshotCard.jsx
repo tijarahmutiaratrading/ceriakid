@@ -24,7 +24,7 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-2xl ring-1 ring-slate-200 shadow-sm overflow-hidden"
+      className="bg-white rounded-3xl shadow-xl border border-white/60 overflow-hidden"
     >
       {/* Header row */}
       <div className="flex items-center gap-4 px-5 py-4 border-b border-slate-100">

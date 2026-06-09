@@ -39,7 +39,7 @@ export default function InsightsCard({ games }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-2xl ring-1 ring-slate-200 shadow-sm overflow-hidden"
+      className="bg-white rounded-3xl shadow-xl border border-white/60 overflow-hidden"
     >
       <div className="flex items-center gap-2.5 px-5 py-4 border-b border-slate-100">
         <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center">

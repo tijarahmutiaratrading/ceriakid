@@ -17,7 +17,7 @@ export default function FamilyHeroCard({ children, maxCount, familyStats, leader
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-2xl ring-1 ring-slate-200 shadow-sm mb-5 overflow-hidden"
+      className="bg-white rounded-3xl shadow-xl border border-white/60 mb-5 overflow-hidden"
     >
       {/* Gradient banner */}
       <div className="px-6 py-5 bg-gradient-to-r from-violet-600 to-indigo-600 relative overflow-hidden">

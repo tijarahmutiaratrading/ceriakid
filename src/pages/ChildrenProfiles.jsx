@@ -275,7 +275,7 @@ export default function ChildrenProfiles() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2 }}
-              className="mb-5 rounded-2xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden"
+              className="mb-5 rounded-3xl bg-white shadow-xl border border-white/60 overflow-hidden"
             >
               {/* Form header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-slate-50">
@@ -396,7 +396,7 @@ export default function ChildrenProfiles() {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl p-12 sm:p-16 text-center bg-white ring-1 ring-slate-200 shadow-sm"
+            className="rounded-3xl p-12 sm:p-16 text-center bg-white shadow-xl border border-white/60"
           >
             <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mx-auto mb-4">
               <Users className="w-8 h-8 text-violet-600" />

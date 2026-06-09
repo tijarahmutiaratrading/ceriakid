@@ -138,7 +138,7 @@ export default function ParentDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl p-12 text-center bg-white ring-1 ring-slate-200 shadow-sm"
+            className="rounded-3xl p-12 text-center bg-white shadow-xl border border-white/60"
           >
             <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mx-auto mb-4">
               <span className="text-3xl">👨‍👩‍👧‍👦</span>
@@ -184,7 +184,7 @@ export default function ParentDashboard() {
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="rounded-2xl p-10 text-center bg-white ring-1 ring-slate-200 shadow-sm"
+                      className="rounded-3xl p-10 text-center bg-white shadow-xl border border-white/60"
                     >
                       <div className="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center mx-auto mb-4">
                         <span className="text-2xl">🎮</span>
