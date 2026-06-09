@@ -93,13 +93,13 @@ export default function BuyCredits() {
           </motion.div>
         )}
 
-        {/* Hero — clean Stripe style */}
+        {/* Header ringkas */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 rounded-2xl p-6 bg-white ring-1 ring-slate-200 shadow-sm"
+          className="mb-4"
         >
-          <div className="inline-flex items-center gap-2 bg-slate-900 px-3 py-1 rounded-full mb-3">
+          <div className="inline-flex items-center gap-2 bg-slate-900 px-3 py-1 rounded-full mb-2">
             <Sparkles className="w-3 h-3 text-amber-300" />
             <span className="text-white text-[10px] font-black uppercase tracking-widest">Kredit AI</span>
           </div>
