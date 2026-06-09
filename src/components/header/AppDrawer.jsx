@@ -285,8 +285,8 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, child
           aria-expanded={childMenuOpen}
           className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl active:scale-[0.98] transition-all relative overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
-            boxShadow: '0 4px 14px -2px rgba(124,58,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25)',
+            background: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)',
+            boxShadow: '0 4px 14px -2px rgba(249,115,22,0.45), inset 0 1px 0 rgba(255,255,255,0.25)',
           }}
         >
           <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-white/15 blur-xl pointer-events-none" />
