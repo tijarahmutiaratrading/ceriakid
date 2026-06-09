@@ -66,13 +66,19 @@ export default function AIHubCard() {
   return (
     <div
       className="relative overflow-hidden rounded-[1.75rem] p-4 md:p-6 lg:p-7 shadow-xl border border-white/60"
-      style={{
-        background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-        backdropFilter: 'blur(22px) saturate(150%)',
-        WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-        boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
-      }}
+      style={{ boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)' }}
     >
+      {/* Classroom background image */}
+      <img
+        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2bab62545_generated_image.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      {/* Dark gradient overlay for readability */}
+      <div
+        className="absolute inset-0"
+        style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.85), rgba(190,24,93,0.72))' }}
+      />
 
       {/* Decorative sparkles */}
       <div className="pointer-events-none absolute top-4 left-4 text-2xl md:text-3xl opacity-80">✨</div>
