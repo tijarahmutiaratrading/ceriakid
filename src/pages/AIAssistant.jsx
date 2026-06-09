@@ -174,7 +174,7 @@ export default function AIAssistant() {
         <AppHeader showBack={true} backTo="/dashboard" title="Cikgu Firdaus" />
       </div>
 
-      <div className="relative max-w-5xl mx-auto page-px pt-4 pb-32">
+      <div className="relative max-w-7xl mx-auto page-px pt-4 pb-32">
         <div className="mb-4">
           <AIBackButton to="/dashboard" label="Kembali ke Dashboard" />
         </div>

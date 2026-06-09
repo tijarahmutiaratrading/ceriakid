@@ -160,7 +160,7 @@ export default function FriendsList() {
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative w-full max-w-5xl mx-auto page-px pb-32 pt-4 overflow-x-hidden">
+      <div className="relative w-full max-w-7xl mx-auto page-px pb-32 pt-4 overflow-x-hidden">
 
         {/* Header Card */}
         <motion.div
