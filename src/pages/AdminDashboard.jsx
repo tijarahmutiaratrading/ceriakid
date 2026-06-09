@@ -10,7 +10,6 @@ import AdminTopHeader from '@/components/admin/AdminTopHeader';
 import AdminUnifiedHeader from '@/components/admin/AdminUnifiedHeader';
 
 import SystemHealthPanel from '@/components/admin/SystemHealthPanel';
-import GameIconGeneratorPanel from '@/components/admin/GameIconGeneratorPanel';
 import LaunchControlPanel from '@/components/admin/LaunchControlPanel';
 import AdminAffiliatePanel from '@/components/admin/AdminAffiliatePanel';
 import PushNotificationPanel from '@/components/admin/PushNotificationPanel';
@@ -417,7 +416,6 @@ export default function AdminDashboard() {
                 {activeTab === 'launch' && (
                   <>
                     <LaunchControlPanel />
-                    <GameIconGeneratorPanel />
                   </>
                 )}
                 {activeTab === 'affiliate' && <AdminAffiliatePanel />}
