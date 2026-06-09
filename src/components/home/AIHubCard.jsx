@@ -67,11 +67,12 @@ export default function AIHubCard() {
     <div
       className="relative overflow-hidden rounded-[1.75rem] p-4 md:p-6 lg:p-7 shadow-xl border border-white/60"
       style={{
-        background: 'linear-gradient(135deg, #fef3e7 0%, #fde8d4 30%, #fce7f3 70%, #fbcfe8 100%)',
+        background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
+        backdropFilter: 'blur(22px) saturate(150%)',
+        WebkitBackdropFilter: 'blur(22px) saturate(150%)',
+        boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
       }}
     >
-      {/* Tinted overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-purple-900/40 via-purple-800/25 to-indigo-900/45 z-0" />
 
       {/* Decorative sparkles */}
       <div className="pointer-events-none absolute top-4 left-4 text-2xl md:text-3xl opacity-80">✨</div>
