@@ -113,7 +113,6 @@ export default function Challenges() {
   return (
     <div
       className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
-      style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)' }}
     >
       {/* Floating decorations — CeriaKid vibe */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
