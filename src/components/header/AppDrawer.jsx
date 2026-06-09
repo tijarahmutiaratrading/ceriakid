@@ -80,12 +80,12 @@ export default function AppDrawer({
     setPinnedItems(togglePinned(user.email, path, label));
   };
 
-  // Swipe-to-close
-  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  // Swipe-down-to-close
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientY; };
   const onTouchEnd = (e) => {
     if (touchStartX.current == null) return;
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    if (dx < -60) { haptic('light'); onClose?.(); }
+    const dy = e.changedTouches[0].clientY - touchStartX.current;
+    if (dy > 70) { haptic('light'); onClose?.(); }
     touchStartX.current = null;
   };
 
@@ -106,22 +106,28 @@ export default function AppDrawer({
         style={{ opacity: visible ? 1 : 0 }}
       />
 
-      {/* Drawer — glass effect */}
+      {/* Drawer — floating glass panel */}
       <aside
         role="dialog"
         aria-modal="true"
         aria-label="Menu navigasi"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
-        className="sm:hidden fixed top-0 bottom-0 left-0 z-50 w-[84%] max-w-[340px] flex flex-col transition-transform duration-200 ease-out"
+        className="sm:hidden fixed left-3 right-3 z-50 flex flex-col overflow-hidden rounded-[2rem] transition-all duration-200 ease-out"
         style={{
-          transform: visible ? 'translateX(0)' : 'translateX(-100%)',
-          paddingTop: 'env(safe-area-inset-top)',
-          paddingBottom: 'env(safe-area-inset-bottom)',
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(250,245,255,0.85) 100%)',
+          top: 'calc(env(safe-area-inset-top) + 0.75rem)',
+          bottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)',
+          maxWidth: '380px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          transform: visible ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.96)',
+          opacity: visible ? 1 : 0,
+          transformOrigin: 'top center',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(250,245,255,0.92) 100%)',
           backdropFilter: 'blur(28px) saturate(180%)',
           WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-          boxShadow: '8px 0 40px -8px rgba(88, 28, 135, 0.25), inset -1px 0 0 rgba(255,255,255,0.5)',
+          boxShadow: '0 24px 60px -12px rgba(88, 28, 135, 0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+          border: '1px solid rgba(255,255,255,0.5)',
         }}
       >
         {/* Header — profile */}
