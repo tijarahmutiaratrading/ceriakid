@@ -30,6 +30,7 @@ export default function ClientDashboard() {
   const [gender, setGender] = useState(user?.gender || '');
   const [userTier, setUserTier] = useState('free');
   const [saved, setSaved] = useState(false);
+  const [avatarPickerOpen, setAvatarPickerOpen] = useState(false);
 
   useEffect(() => {
     if (user?.email) {
@@ -59,6 +60,7 @@ export default function ClientDashboard() {
       const uploadedUrl = response?.file_url || response?.url;
       if (uploadedUrl) {
         setAvatarUrl(uploadedUrl);
+        setAvatarPickerOpen(false);
         window.dispatchEvent(new CustomEvent('avatar-updated', { detail: { avatarUrl: uploadedUrl } }));
         await base44.auth.updateMe({ avatarUrl: uploadedUrl });
         setSaved(true);
@@ -73,6 +75,7 @@ export default function ClientDashboard() {
 
   const handleSelectAvatar = async (url) => {
     setAvatarUrl(url);
+    setAvatarPickerOpen(false);
     window.dispatchEvent(new CustomEvent('avatar-updated', { detail: { avatarUrl: url } }));
     await base44.auth.updateMe({ avatarUrl: url });
     setSaved(true);
@@ -118,22 +121,7 @@ export default function ClientDashboard() {
             avatarUrl={avatarUrl}
             userTier={userTier}
             saving={saving}
-            onAvatarUpload={handleAvatarUpload}
-          />
-        </motion.div>
-
-        {/* Pilih / Upload Avatar Parent */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.08 }}
-          className="mb-4"
-        >
-          <ParentAvatarPicker
-            selectedUrl={avatarUrl}
-            saving={saving}
-            onSelect={handleSelectAvatar}
-            onUpload={handleAvatarUpload}
+            onEditAvatar={() => setAvatarPickerOpen(true)}
           />
         </motion.div>
 
@@ -210,6 +198,15 @@ export default function ClientDashboard() {
         </motion.div>
 
       </div>
+
+      <ParentAvatarPicker
+        open={avatarPickerOpen}
+        selectedUrl={avatarUrl}
+        saving={saving}
+        onSelect={handleSelectAvatar}
+        onUpload={handleAvatarUpload}
+        onClose={() => setAvatarPickerOpen(false)}
+      />
     </div>
   );
 }

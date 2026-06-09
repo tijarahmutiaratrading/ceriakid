@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Upload, Loader, Crown, Sparkles, Star, Heart } from 'lucide-react';
+import { Pencil, Loader, Crown, Sparkles, Star, Heart } from 'lucide-react';
 
 const TIER_LABELS = {
   free: 'Percuma',
@@ -20,7 +20,7 @@ const HERO_IMAGE_MOBILE = 'https://media.base44.com/images/public/69f1c132ffcd7c
  * - Gradient ring berkilau pada avatar
  * - Glow effect untuk premium tiers
  */
-export default function SettingsHero({ user, avatarUrl, userTier, saving, onAvatarUpload }) {
+export default function SettingsHero({ user, avatarUrl, userTier, saving, onEditAvatar }) {
   const tier = userTier || 'free';
   const tierLabel = TIER_LABELS[tier] || 'Percuma';
   const isFree = tier === 'free';
@@ -135,10 +135,15 @@ export default function SettingsHero({ user, avatarUrl, userTier, saving, onAvat
                 </div>
               )}
             </div>
-            <label className="absolute -bottom-0.5 -right-0.5 w-7 h-7 bg-gradient-to-br from-orange-400 to-pink-500 rounded-full flex items-center justify-center cursor-pointer shadow-xl shadow-orange-500/50 hover:scale-110 transition-transform ring-2 ring-white/80 z-10">
-              <input type="file" accept="image/*" onChange={onAvatarUpload} disabled={saving} className="hidden" />
-              {saving ? <Loader className="w-3 h-3 text-white animate-spin" /> : <Upload className="w-3 h-3 text-white" />}
-            </label>
+            <button
+              type="button"
+              onClick={onEditAvatar}
+              disabled={saving}
+              aria-label="Tukar gambar profil"
+              className="absolute -bottom-0.5 -right-0.5 w-7 h-7 bg-gradient-to-br from-orange-400 to-pink-500 rounded-full flex items-center justify-center cursor-pointer shadow-xl shadow-orange-500/50 hover:scale-110 transition-transform ring-2 ring-white/80 z-10"
+            >
+              {saving ? <Loader className="w-3 h-3 text-white animate-spin" /> : <Pencil className="w-3 h-3 text-white" />}
+            </button>
           </div>
 
           {/* Name + tier chip */}
