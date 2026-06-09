@@ -57,8 +57,6 @@ export default function BuyCredits() {
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: '#ffffff' }}>
-      {/* Jalur putih di belakang header supaya tiada background lain menembus */}
-      <div className="fixed top-0 left-0 right-0 h-24 bg-white z-30 pointer-events-none" />
       {/* Subtle grid pattern */}
       <div
         className="fixed inset-0 pointer-events-none opacity-[0.015]"
