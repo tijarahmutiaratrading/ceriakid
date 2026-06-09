@@ -65,7 +65,7 @@ export default function AIHubCard() {
 
   return (
     <div
-      className="relative overflow-hidden rounded-[1.75rem] p-4 md:p-6 lg:p-7 shadow-xl border border-white/60"
+      className="relative overflow-hidden rounded-[1.75rem] p-4 md:p-6 lg:p-7 shadow-xl border border-white/60 min-h-[520px] md:min-h-0"
       style={{ boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)' }}
     >
       {/* Classroom background image */}
