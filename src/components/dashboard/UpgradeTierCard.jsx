@@ -233,11 +233,11 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                   role="radio"
                   aria-checked={active}
                   onClick={() => onGenderChange(option.value)}
-                  className={`relative aspect-[2/1] rounded-2xl overflow-hidden transition-all ${
+                  className={`relative aspect-square rounded-2xl overflow-hidden transition-all ${
                     active ? 'ring-4 ring-purple-400 shadow-xl' : 'ring-1 ring-slate-200 opacity-90 hover:opacity-100'
                   }`}
                 >
-                  <img src={option.img} alt={option.label} className="absolute inset-0 w-full h-full object-cover object-top" loading="lazy" />
+                  <img src={option.img} alt={option.label} className="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" />
                   {/* Bottom gradient label */}
                   <div className={`absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t ${active ? option.tint : 'from-black/70 to-transparent'}`} />
                   <span className="absolute bottom-2.5 inset-x-0 text-center text-white font-black text-sm drop-shadow-md">
