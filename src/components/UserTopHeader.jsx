@@ -123,7 +123,7 @@ export default function UserTopHeader() {
         {isAdmin && (
           <Link
             to="/admin-dashboard"
-            className={`flex items-center gap-1.5 px-2 py-1 lg:px-3 lg:py-1.5 rounded-full text-xs lg:text-sm font-black transition-all ${
+            className={`flex items-center gap-1.5 px-2 py-1 lg:px-3 lg:py-1.5 rounded-full text-sm lg:text-base font-black transition-all ${
               isDarkBg
                 ? 'text-amber-300 hover:text-amber-200 hover:bg-white/15'
                 : 'text-amber-700 hover:text-amber-900 hover:bg-white/50'
@@ -145,7 +145,7 @@ export default function UserTopHeader() {
               <Link
                 key={group.key}
                 to={group.path}
-                className={`relative px-2 py-1 lg:px-3 lg:py-1.5 rounded-full font-black text-xs lg:text-sm transition-colors ${
+                className={`relative px-2 py-1 lg:px-3 lg:py-1.5 rounded-full font-black text-sm lg:text-base transition-colors ${
                   showActive
                     ? 'text-white'
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
@@ -169,7 +169,7 @@ export default function UserTopHeader() {
               <button
                 type="button"
                 onClick={() => setOpenMenu(isOpen ? null : group.key)}
-                className={`relative flex items-center gap-1 px-2 py-1 lg:px-3 lg:py-1.5 rounded-full font-black text-xs lg:text-sm transition-colors ${
+                className={`relative flex items-center gap-1 px-2 py-1 lg:px-3 lg:py-1.5 rounded-full font-black text-sm lg:text-base transition-colors ${
                   showActive
                     ? 'text-white'
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
