@@ -103,7 +103,7 @@ export default function UserTopHeader() {
     >
       {/* Center: Floating pill nav (Apple Fitness style — adaptive glass) */}
       <nav
-        className="pointer-events-auto flex items-center gap-0.5 px-2 py-2 rounded-full shadow-xl shadow-black/20"
+        className="pointer-events-auto flex items-center gap-0.5 px-2 py-1.5 rounded-full shadow-xl shadow-black/20"
         style={{
           background: isDarkBg
             ? 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(30,41,59,0.45))'
@@ -119,7 +119,7 @@ export default function UserTopHeader() {
         {isAdmin && (
           <Link
             to="/admin-dashboard"
-            className={`flex items-center gap-1 px-1.5 py-1.5 lg:px-2 lg:py-1.5 rounded-full text-sm lg:text-[15px] font-black transition-all ${
+            className={`flex items-center gap-1 px-1.5 py-1 lg:px-2 lg:py-1 rounded-full text-sm lg:text-[15px] font-black transition-all ${
               isDarkBg
                 ? 'text-amber-300 hover:text-amber-200 hover:bg-white/15'
                 : 'text-amber-700 hover:text-amber-900 hover:bg-white/50'
@@ -141,7 +141,7 @@ export default function UserTopHeader() {
               <Link
                 key={group.key}
                 to={group.path}
-                className={`relative px-1.5 py-1.5 lg:px-2 lg:py-1.5 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
+                className={`relative px-1.5 py-1 lg:px-2 lg:py-1 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
                   showActive
                     ? 'text-white'
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
@@ -165,7 +165,7 @@ export default function UserTopHeader() {
               <button
                 type="button"
                 onClick={() => setOpenMenu(isOpen ? null : group.key)}
-                className={`relative flex items-center gap-0.5 px-1.5 py-1.5 lg:px-2 lg:py-1.5 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
+                className={`relative flex items-center gap-0.5 px-1.5 py-1 lg:px-2 lg:py-1 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
                   showActive
                     ? 'text-white'
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
