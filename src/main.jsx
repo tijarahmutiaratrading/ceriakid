@@ -2,6 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from '@/App.jsx'
 import '@/index.css'
+import { loadAndApplyTheme } from '@/lib/themeManager'
+
+// Apply tema yang dipilih admin seawal mungkin
+loadAndApplyTheme();
 
 window.addEventListener('unhandledrejection', (event) => {
   const reason = event.reason;

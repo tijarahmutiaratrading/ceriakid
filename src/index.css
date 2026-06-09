@@ -40,6 +40,9 @@
     --game-purple: 280 60% 55%;
     --game-orange: 25 95% 58%;
     --game-red: 0 75% 58%;
+
+    --brand-gradient-from: #a855f7;
+    --brand-gradient-to: #ec4899;
   }
 }
 
@@ -188,6 +191,20 @@
   }
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Brand gradient yang dikawal oleh Theme Switcher admin */
+  .brand-gradient {
+    background-image: linear-gradient(to right, var(--brand-gradient-from), var(--brand-gradient-to));
+  }
+  .brand-gradient-br {
+    background-image: linear-gradient(to bottom right, var(--brand-gradient-from), var(--brand-gradient-to));
+  }
+  .text-brand-gradient {
+    background-image: linear-gradient(to right, var(--brand-gradient-from), var(--brand-gradient-to));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }
 

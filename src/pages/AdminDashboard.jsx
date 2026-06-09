@@ -16,6 +16,7 @@ import PushNotificationPanel from '@/components/admin/PushNotificationPanel';
 import CustomerDatabaseTable from '@/components/admin/CustomerDatabaseTable';
 import DateRangeFilter, { isInRange } from '@/components/admin/DateRangeFilter';
 import TrafficAnalyticsCard from '@/components/admin/TrafficAnalyticsCard';
+import ThemeSwitcherPanel from '@/components/admin/ThemeSwitcherPanel';
 
 const SETTINGS_KEY = 'admin_app_settings';
 
@@ -423,6 +424,9 @@ export default function AdminDashboard() {
                 {/* ═══ SETTINGS TAB ═══ */}
                 {activeTab === 'settings' && (
                   <>
+                    {/* Theme Switcher — tukar warna app */}
+                    <ThemeSwitcherPanel />
+
                     {/* Settings sub-tabs */}
                     <div className="flex gap-1 p-1 rounded-xl bg-white ring-1 ring-slate-200 overflow-x-auto shadow-sm">
                       {settingsTabs.map(tab => {

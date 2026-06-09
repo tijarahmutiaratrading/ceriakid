@@ -1,0 +1,38 @@
+{
+  "name": "AppTheme",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "default": "active",
+      "description": "Singleton key, sentiasa 'active' supaya hanya satu rekod tema aktif"
+    },
+    "presetId": {
+      "type": "string",
+      "description": "ID preset yang dipilih (cth: purple_pink, orange_pink), atau 'custom'"
+    },
+    "primary": {
+      "type": "string",
+      "description": "Warna utama dalam format HSL channel (cth: '280 60% 55%')"
+    },
+    "secondary": {
+      "type": "string",
+      "description": "Warna kedua dalam format HSL channel"
+    },
+    "accent": {
+      "type": "string",
+      "description": "Warna aksen dalam format HSL channel"
+    },
+    "gradientFrom": {
+      "type": "string",
+      "description": "Warna mula gradient dalam hex (cth: '#a855f7')"
+    },
+    "gradientTo": {
+      "type": "string",
+      "description": "Warna akhir gradient dalam hex (cth: '#ec4899')"
+    }
+  },
+  "required": [
+    "key"
+  ]
+}
