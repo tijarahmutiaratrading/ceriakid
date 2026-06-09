@@ -114,7 +114,7 @@ export default function ParentDashboard() {
       className="min-h-screen font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
     >
       <AppHeader showBack={true} backTo="/dashboard" theme="light" />
-      <div className="relative max-w-3xl mx-auto px-3 sm:px-6 lg:px-8 pb-16 pt-24 sm:pt-10">
+      <div className="relative max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 pb-16 pt-24 sm:pt-10">
 
         {/* 1. Family Hero — overall snapshot */}
         <ParentHeroCard
