@@ -126,7 +126,7 @@ export default function UserTopHeader() {
             }`}
             title="Tukar ke Admin Panel"
           >
-            <Shield className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
+            <Shield className="w-4 h-4 lg:w-[18px] lg:h-[18px]" />
             <span>Admin</span>
           </Link>
         )}
