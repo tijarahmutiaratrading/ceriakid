@@ -1468,7 +1468,7 @@ export default function DrawingStudio() {
                       key={m.id}
                       whileTap={{ scale: 0.96 }}
                       onClick={() => setMode(m.id)}
-                      className={`relative py-4 px-3 rounded-2xl transition-all flex flex-col items-center gap-1 ${isActive ? 'bg-slate-900 text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                      className={`relative py-4 px-3 rounded-2xl transition-all flex flex-col items-center gap-1 ${isActive ? 'brand-gradient-br text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
                     >
                       <div className="text-3xl leading-none">{icons[m.id]}</div>
                       <p className="font-semibold text-sm">{labelMap[m.id]}</p>
@@ -1503,7 +1503,7 @@ export default function DrawingStudio() {
                             setSelectedTracingCategory(category.id);
                             setSelectedShape(category.shapes[0]);
                           }}
-                          className={`px-4 py-2 rounded-full font-bold text-xs transition-all ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                          className={`px-4 py-2 rounded-full font-bold text-xs transition-all ${active ? 'brand-gradient text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
                         >
                           {category.label}
                         </motion.button>
@@ -1525,7 +1525,7 @@ export default function DrawingStudio() {
                           key={s.label}
                           whileTap={{ scale: 0.94 }}
                           onClick={() => setSelectedShape(s)}
-                          className={`relative flex items-center justify-center aspect-square rounded-2xl font-black text-xl sm:text-2xl transition-all ${active ? 'bg-blue-500 text-white shadow-md ring-2 ring-blue-300' : 'bg-slate-50 text-slate-800 hover:bg-slate-100'}`}
+                          className={`relative flex items-center justify-center aspect-square rounded-2xl font-black text-xl sm:text-2xl transition-all ${active ? 'brand-gradient text-white shadow-md ring-2 ring-white/40' : 'bg-slate-50 text-slate-800 hover:bg-slate-100'}`}
                           title={s.label}
                         >
                           <span>{s.letter}</span>
@@ -1604,7 +1604,7 @@ export default function DrawingStudio() {
                               key={page.id}
                               whileTap={{ scale: 0.94 }}
                               onClick={() => setSelectedColoringPage(page)}
-                              className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${active ? 'bg-blue-500 text-white shadow-md ring-2 ring-blue-300' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+                              className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${active ? 'brand-gradient text-white shadow-md ring-2 ring-white/40' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
                             >
                               <span className="text-3xl leading-none">{page.emoji}</span>
                               <span className="text-[10px] font-semibold truncate w-full text-center">{cleanLabel}</span>
