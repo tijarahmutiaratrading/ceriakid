@@ -1,19 +1,22 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
 
-    if (!user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // Guest checkout dibenarkan — user TAK perlu login.
+    // Cuba ambil user kalau dah login (untuk upgrade flow), tapi tak wajib.
+    let user = null;
+    try { user = await base44.auth.me(); } catch { user = null; }
 
     const { tier, email, name, phone, isUpgrade, referralCode, fbp, fbc, checkoutEventID } = await req.json();
 
     if (!tier || !email || !name || !phone) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
+
+    // Email pelanggan — kalau login guna email user, kalau guest guna email form
+    const customerEmail = (user?.email || email).trim().toLowerCase();
 
     // Strict validation server-side
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -27,7 +30,7 @@ Deno.serve(async (req) => {
     // Note: tak boleh guna UserSubscription sebab cuma ada 1 record per user.
     const oneMinAgo = new Date(Date.now() - 60_000).toISOString();
     const recentTx = await base44.asServiceRole.entities.CreditTransaction.filter({
-      userEmail: user.email,
+      userEmail: customerEmail,
       feature: 'checkout_attempt',
     });
     const recent = (recentTx || []).filter(t => t.created_date && t.created_date > oneMinAgo);
@@ -36,7 +39,7 @@ Deno.serve(async (req) => {
     }
     // Log this attempt (fire-and-forget)
     base44.asServiceRole.entities.CreditTransaction.create({
-      userEmail: user.email,
+      userEmail: customerEmail,
       type: 'admin_adjustment',
       amount: 0,
       feature: 'checkout_attempt',
@@ -48,7 +51,7 @@ Deno.serve(async (req) => {
     let validReferralCode = '';
     if (referralCode) {
       const aff = await base44.asServiceRole.entities.Affiliate.filter({ referralCode: referralCode.toUpperCase().trim() });
-      if (aff.length > 0 && aff[0].status === 'active' && aff[0].userEmail !== user.email) {
+      if (aff.length > 0 && aff[0].status === 'active' && aff[0].userEmail !== customerEmail) {
         validReferralCode = aff[0].referralCode;
       }
     }
@@ -71,7 +74,7 @@ Deno.serve(async (req) => {
     // ─── DOWNGRADE PROTECTION ───
     // Kalau user dah ada active subscription pada tier yang LEBIH TINGGI atau SAMA
     // dan belum expired, halang checkout. User mesti tunggu expiry atau hubungi support.
-    const existingSubCheck = await base44.asServiceRole.entities.UserSubscription.filter({ email: user.email });
+    const existingSubCheck = await base44.asServiceRole.entities.UserSubscription.filter({ email: customerEmail });
     const currentSub = existingSubCheck[0];
     if (currentSub && currentSub.status === 'active' && currentSub.tier !== 'free') {
       const stillValid = currentSub.currentPeriodEnd && new Date(currentSub.currentPeriodEnd) > new Date();
@@ -137,8 +140,8 @@ Deno.serve(async (req) => {
       success_callback: `https://api.base44.com/api/apps/${Deno.env.get('BASE44_APP_ID')}/functions/chipWebhook`,
       send_receipt: true,
       reference: validReferralCode
-        ? `${user.email}__${tier}__${Date.now()}__ref_${validReferralCode}`
-        : `${user.email}__${tier}__${Date.now()}`,
+        ? `${customerEmail}__${tier}__${Date.now()}__ref_${validReferralCode}`
+        : `${customerEmail}__${tier}__${Date.now()}`,
     };
 
     const response = await fetch('https://gate.chip-in.asia/api/v1/purchases/', {
@@ -166,7 +169,7 @@ Deno.serve(async (req) => {
     const hasActivePaid = currentSub && currentSub.status === 'active' && currentSub.tier !== 'free';
 
     const subData = {
-      email: user.email,
+      email: customerEmail,
       // Capture nama & no telefon dari checkout form — single source of truth untuk admin dashboard
       checkoutName: name.trim(),
       checkoutPhone: phone.trim(),
@@ -192,21 +195,24 @@ Deno.serve(async (req) => {
       await base44.asServiceRole.entities.UserSubscription.create(subData);
     }
 
-    // Auto-fill User entity kalau full_name/phone kosong — supaya hero/header app tunjuk nama betul
-    try {
-      const needsName = !user.full_name || user.full_name.trim().length === 0;
-      const needsPhone = !user.phone || user.phone.trim().length === 0;
-      if (needsName || needsPhone) {
-        const userUpdate = {};
-        if (needsName) userUpdate.full_name = name.trim();
-        if (needsPhone) userUpdate.phone = phone.trim();
-        const userMatches = await base44.asServiceRole.entities.User.filter({ email: user.email });
-        if (userMatches?.[0]) {
-          await base44.asServiceRole.entities.User.update(userMatches[0].id, userUpdate);
+    // Auto-fill User entity kalau full_name/phone kosong — supaya hero/header app tunjuk nama betul.
+    // Hanya untuk user yang dah login (guest belum ada User record).
+    if (user) {
+      try {
+        const needsName = !user.full_name || user.full_name.trim().length === 0;
+        const needsPhone = !user.phone || user.phone.trim().length === 0;
+        if (needsName || needsPhone) {
+          const userUpdate = {};
+          if (needsName) userUpdate.full_name = name.trim();
+          if (needsPhone) userUpdate.phone = phone.trim();
+          const userMatches = await base44.asServiceRole.entities.User.filter({ email: customerEmail });
+          if (userMatches?.[0]) {
+            await base44.asServiceRole.entities.User.update(userMatches[0].id, userUpdate);
+          }
         }
+      } catch (userSyncErr) {
+        console.warn('chipCheckout: User entity sync failed:', userSyncErr?.message);
       }
-    } catch (userSyncErr) {
-      console.warn('chipCheckout: User entity sync failed:', userSyncErr?.message);
     }
 
     return Response.json({
