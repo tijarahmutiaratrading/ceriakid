@@ -99,7 +99,7 @@ export default function UserTopHeader() {
   return (
     <header
       ref={navRef}
-      className={`hidden sm:flex fixed top-3 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
+      className={`hidden sm:flex fixed top-5 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}
     >
       {/* Center: Floating pill nav (Apple Fitness style — adaptive glass) */}
       <nav
