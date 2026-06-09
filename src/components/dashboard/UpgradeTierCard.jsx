@@ -239,7 +239,7 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                 >
                   <img src={option.img} alt={option.label} className="absolute inset-0 w-full h-full object-cover object-top" loading="lazy" />
                   {/* Bottom gradient label */}
-                  <div className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${active ? option.tint : 'from-black/70 to-transparent'}`} />
+                  <div className={`absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t ${active ? option.tint : 'from-black/70 to-transparent'}`} />
                   <span className="absolute bottom-2.5 inset-x-0 text-center text-white font-black text-sm drop-shadow-md">
                     {option.label}
                   </span>
