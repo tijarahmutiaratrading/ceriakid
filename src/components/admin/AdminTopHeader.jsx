@@ -32,17 +32,17 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
           <img
             src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png"
             alt="CeriaKid"
-            className="h-9 w-9 rounded-full object-cover ml-1 mr-2 ring-1 ring-white/60 shadow-sm hover:ring-amber-300 transition-all"
+            className="h-8 w-8 lg:h-9 lg:w-9 rounded-full object-cover ml-1 mr-1.5 lg:mr-2 ring-1 ring-white/60 shadow-sm hover:ring-amber-300 transition-all"
           />
         </Link>
 
         {/* Switch ke user dashboard */}
         <Link
           to="/dashboard"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-colors whitespace-nowrap"
+          className="flex items-center gap-1.5 px-2 py-1 lg:px-3 lg:py-1.5 rounded-full text-xs lg:text-sm font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-colors whitespace-nowrap"
           title="Tukar ke Dashboard Pengguna"
         >
-          <LayoutGrid className="w-3.5 h-3.5" />
+          <LayoutGrid className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
           <span>Pengguna</span>
         </Link>
 
@@ -54,7 +54,7 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
               key={item.key}
               type="button"
               onClick={() => setActiveTab(item.key)}
-              className={`relative px-3 py-1.5 rounded-full font-black text-sm transition-colors whitespace-nowrap ${
+              className={`relative px-2 py-1 lg:px-3 lg:py-1.5 rounded-full font-black text-xs lg:text-sm transition-colors whitespace-nowrap ${
                 active ? 'text-white' : 'text-slate-800 hover:text-slate-900'
               }`}
             >
