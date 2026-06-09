@@ -28,7 +28,7 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
     >
       {/* Header row */}
       <div className="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
-        <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 ring-1 ring-slate-200">
+        <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-purple-300">
           <img src={getChildAvatar(child)} alt={child?.name} className="w-full h-full object-cover" />
         </div>
 
