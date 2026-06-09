@@ -100,7 +100,7 @@ function MemoryMode() {
   const backEmojis = ['🎁','🎈','⭐','🌈','✨','🎀'];
 
   return (
-    <>
+    <div className="space-y-3">
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={matched.length} total={totalPairs} />
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -131,7 +131,7 @@ function MemoryMode() {
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
 
@@ -302,13 +302,9 @@ function TileMatchMode() {
   };
 
   return (
-    <>
+    <div className="space-y-3">
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={gone.length} total={totalPairs} />
-      <div className={`${panel} text-center`}>
-        <p className="text-purple-700 font-black text-sm">Cari 2 jubin yang sepadan</p>
-        <p className="text-purple-400 text-[10px] font-bold mt-0.5">Tekan 2 jubin satu demi satu</p>
-      </div>
       <div className="grid grid-cols-2 gap-2">
         {tiles.map((t, idx) => {
           const isSelected = selected.includes(idx);
@@ -325,7 +321,7 @@ function TileMatchMode() {
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
 
