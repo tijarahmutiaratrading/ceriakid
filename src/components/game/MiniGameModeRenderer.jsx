@@ -168,9 +168,9 @@ function DragDropMode() {
       </div>
       <div className="grid grid-cols-2 gap-2.5">
         {targets.map(target => (
-          <button key={target} type="button" onClick={() => placeItem(target)} className={`min-h-20 rounded-2xl p-3 text-center transition-all ${placed[target] ? 'bg-green-100 ring-2 ring-green-400' : selectedItem ? 'bg-yellow-50 ring-2 ring-yellow-400 animate-pulse' : 'bg-white ring-2 ring-purple-100'}`}>
-            <p className="text-purple-400 text-xs font-black uppercase">{target}</p>
-            <p className="text-purple-900 text-xl font-black mt-1">{placed[target] || (selectedItem ? '↓ Letak sini' : '—')}</p>
+          <button key={target} type="button" onClick={() => placeItem(target)} className={`min-h-16 rounded-2xl p-2 text-center transition-all ${placed[target] ? 'bg-green-100 ring-2 ring-green-400' : selectedItem ? 'bg-yellow-50 ring-2 ring-yellow-400 animate-pulse' : 'bg-white ring-2 ring-purple-100'}`}>
+            <p className="text-purple-400 text-sm font-black uppercase">{target}</p>
+            <p className="text-purple-900 text-2xl font-black mt-1">{placed[target] || (selectedItem ? '↓ Letak sini' : '—')}</p>
           </button>
         ))}
       </div>
