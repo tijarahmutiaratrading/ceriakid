@@ -20,14 +20,14 @@ const AGE_OPTIONS = [
 ];
 
 const AVATARS = [
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3df7477bd_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a716e8427_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/cc2c8d491_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8a9bbc813_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1255ecf00_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/208266350_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/fcff737ee_generated_image.png',
-  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/980a2e0ce_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/879177e93_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4a9ccff0c_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/dbe708f86_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/859709ce1_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a7f6702d9_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/ac896fb01_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/7aff2307a_generated_image.png',
+  'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c6be5434d_generated_image.png',
 ];
 
 export default function ChildrenProfiles() {
