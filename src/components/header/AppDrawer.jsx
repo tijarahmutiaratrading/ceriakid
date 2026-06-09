@@ -539,11 +539,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
     }];
   }
 
-  const sections = [{
-    key: 'home',
-    type: 'flat',
-    items: [{ path: '/', label: 'Halaman Utama', icon: Home }],
-  }];
+  const sections = [];
 
   // Admin section — DULUKAN sebelum dashboard pengguna
   if (isAdmin) {
@@ -561,27 +557,27 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
   }
 
   if (isAuthenticated) {
+    // Group sama macam UserTopHeader
     sections.push({
-      key: 'account',
-      type: 'flat',
-      label: 'Akaun',
+      key: 'dashboard',
+      type: 'grouped',
+      label: 'Dashboard',
       allowPin: true,
       items: [
-        { path: '/dashboard', label: 'Dashboard Pengguna', icon: LayoutDashboard },
-        { path: '/settings', label: 'Tetapan Akaun', icon: Settings },
-        { path: '/affiliate', label: 'Program Affiliate', icon: Users },
-        { path: '/contact', label: 'Hubungi Kami', icon: Mail },
+        { path: '/dashboard', label: 'Halaman Utama', icon: Home },
+        { path: '/', label: 'Landing Page', icon: Sparkles },
+        { path: '/contact', label: 'Hubungi Kami', icon: MessageCircle },
       ],
     });
 
     sections.push({
-      key: 'aktiviti',
+      key: 'belajar',
       type: 'grouped',
-      label: 'Aktiviti',
+      label: 'Belajar',
       allowPin: true,
       items: [
-        { path: '/games-subjek', label: 'Belajar Ikut Subjek', icon: BookOpen },
-        { path: '/games-hub', label: 'Game Hub', icon: Gamepad2 },
+        { path: '/games-subjek', label: 'Belajar Ikut Subjek', icon: Gamepad2 },
+        { path: '/games-hub', label: 'Game Hub', icon: BookOpen },
         { path: '/drawing', label: 'Studio Lukisan', icon: Palette },
         { path: '/story-kid', label: 'Story Kid', icon: BookMarked },
         { path: '/friends', label: 'Kawan', icon: UserPlus },
@@ -597,6 +593,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
       items: [
         { path: '/children-profiles', label: 'Profil Anak', icon: Baby },
         { path: '/parent-dashboard', label: 'Prestasi Anak', icon: LineChart },
+        { path: '/affiliate', label: 'Program Affiliate', icon: Users },
       ],
     });
 
