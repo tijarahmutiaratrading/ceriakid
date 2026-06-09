@@ -206,7 +206,7 @@ export default function ChildProfileCard({
         {showSetActiveBtn && (
           <button
             onClick={handleSetActive}
-            className="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+            className="w-full py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
           >
             <UserCheck className="w-3.5 h-3.5" /> Jadikan Aktif
           </button>
