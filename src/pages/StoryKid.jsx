@@ -284,8 +284,7 @@ export default function StoryKid() {
                       </div>
                     </div>
                     <div
-                      className="mt-4 mx-1 py-3 rounded-full text-white text-center font-black text-sm flex items-center justify-center gap-1.5"
-                      style={{ background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', boxShadow: '0 4px 0 #db2777, 0 6px 14px rgba(236, 72, 153, 0.3)' }}
+                      className="brand-gradient-br mt-4 mx-1 py-3 rounded-full text-white text-center font-black text-sm flex items-center justify-center gap-1.5 shadow-lg"
                     >
                       Baca Cerita <ChevronRight className="w-4 h-4" strokeWidth={3} />
                     </div>
