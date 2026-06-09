@@ -10,6 +10,7 @@ import { getDefaultAvatar } from '@/lib/avatarGenerator';
 import UpgradeTierCard from '@/components/dashboard/UpgradeTierCard';
 import PersonalInfoCard from '@/components/dashboard/PersonalInfoCard';
 import SettingsHero from '@/components/dashboard/SettingsHero';
+import ParentAvatarPicker from '@/components/dashboard/ParentAvatarPicker';
 import ManageDevices from '@/components/ManageDevices';
 import OfflineModeCard from '@/components/offline/OfflineModeCard';
 import ThemeSwitcherPanel from '@/components/admin/ThemeSwitcherPanel';
@@ -70,6 +71,14 @@ export default function ClientDashboard() {
     }
   };
 
+  const handleSelectAvatar = async (url) => {
+    setAvatarUrl(url);
+    window.dispatchEvent(new CustomEvent('avatar-updated', { detail: { avatarUrl: url } }));
+    await base44.auth.updateMe({ avatarUrl: url });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
+
   const handleSave = async () => {
     setSaving(true);
     await base44.auth.updateMe({ gender, avatarUrl });
@@ -110,6 +119,21 @@ export default function ClientDashboard() {
             userTier={userTier}
             saving={saving}
             onAvatarUpload={handleAvatarUpload}
+          />
+        </motion.div>
+
+        {/* Pilih / Upload Avatar Parent */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.08 }}
+          className="mb-4"
+        >
+          <ParentAvatarPicker
+            selectedUrl={avatarUrl}
+            saving={saving}
+            onSelect={handleSelectAvatar}
+            onUpload={handleAvatarUpload}
           />
         </motion.div>
 
