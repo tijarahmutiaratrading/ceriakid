@@ -123,11 +123,11 @@ export default function AppDrawer({
           transform: visible ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.96)',
           opacity: visible ? 1 : 0,
           transformOrigin: 'top center',
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(250,245,255,0.92) 100%)',
-          backdropFilter: 'blur(28px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-          boxShadow: '0 24px 60px -12px rgba(88, 28, 135, 0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
-          border: '1px solid rgba(255,255,255,0.5)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(250,245,255,0.35) 100%)',
+          backdropFilter: 'blur(40px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(40px) saturate(180%)',
+          boxShadow: '0 24px 60px -12px rgba(88, 28, 135, 0.28), inset 0 1px 0 rgba(255,255,255,0.7)',
+          border: '1px solid rgba(255,255,255,0.45)',
         }}
       >
         {/* Drag handle pill */}
@@ -188,9 +188,9 @@ export default function AppDrawer({
             <Link
               to="/settings"
               onClick={() => { haptic('medium'); onClose?.(); }}
-              className="mx-3 my-3 flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-br from-amber-50 to-pink-50 border border-amber-200 active:bg-amber-100 transition-colors"
+              className="mx-3 my-3 flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-br from-amber-100/40 to-pink-100/40 backdrop-blur-md border border-white/50 active:bg-amber-100/50 transition-colors"
             >
-              <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center flex-shrink-0 shadow-sm">
+              <div className="w-9 h-9 rounded-xl bg-white/50 backdrop-blur-md border border-white/50 flex items-center justify-center flex-shrink-0 shadow-sm">
                 <Sparkles className="w-4 h-4 text-amber-500" strokeWidth={2.5} />
               </div>
               <div className="flex-1 min-w-0">
@@ -274,7 +274,7 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, child
           type="button"
           onClick={() => { haptic('light'); onClose?.(); }}
           aria-label="Tutup menu"
-          className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex-shrink-0 transition-colors"
+          className="p-2 rounded-xl bg-white/30 border border-white/40 backdrop-blur-md hover:bg-white/50 text-slate-700 flex-shrink-0 transition-colors"
         >
           <X className="w-5 h-5" strokeWidth={2.5} />
         </button>
@@ -331,7 +331,7 @@ function GuestHeader({ onClose }) {
         type="button"
         onClick={() => { haptic('light'); onClose?.(); }}
         aria-label="Tutup menu"
-        className="p-2 rounded-xl bg-slate-100 text-slate-600"
+        className="p-2 rounded-xl bg-white/30 border border-white/40 backdrop-blur-md text-slate-700"
       >
         <X className="w-5 h-5" strokeWidth={2.5} />
       </button>
@@ -389,8 +389,8 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
       <button
         type="button"
         onClick={() => { haptic('light'); setExpanded(!expanded); }}
-        className={`w-full flex items-center justify-between mx-1 px-4 py-3 rounded-2xl text-sm font-bold transition-colors ${
-          expanded ? 'bg-white/70 text-slate-900 shadow-sm' : 'text-slate-700 active:bg-white/50'
+        className={`w-full flex items-center justify-between mx-1 px-4 py-3 rounded-2xl text-sm font-bold transition-colors backdrop-blur-md ${
+          expanded ? 'bg-white/35 text-slate-900 shadow-sm border border-white/40' : 'text-slate-700 active:bg-white/30'
         }`}
         style={{ width: 'calc(100% - 0.5rem)' }}
       >
