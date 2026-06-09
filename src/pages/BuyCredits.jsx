@@ -70,7 +70,7 @@ export default function BuyCredits() {
 
       <AppHeader showBack={false} title="Beli Kredit AI" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-4 pb-32">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-4 pb-32">
         {/* Back button */}
         <Link
           to="/dashboard"

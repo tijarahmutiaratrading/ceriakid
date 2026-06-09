@@ -84,7 +84,7 @@ export default function AffiliatePage() {
         <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
       </div>
 
-      <div className="relative p-4 sm:p-6 max-w-6xl mx-auto">
+      <div className="relative p-4 sm:p-6 max-w-5xl mx-auto">
         {/* Hero with referral link & quick share */}
         <AffiliateHero affiliate={affiliate} referralLink={referralLink} />
 

@@ -125,7 +125,7 @@ export default function Challenges() {
 
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 pb-32 pt-4 overflow-x-hidden">
+      <div className="relative w-full max-w-5xl mx-auto px-4 sm:px-6 pb-32 pt-4 overflow-x-hidden">
 
         {/* Header Card */}
         <motion.div

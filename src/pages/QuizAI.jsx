@@ -135,7 +135,7 @@ export default function QuizAI() {
         <AppHeader showBack={true} backTo="/dashboard" title="Kuiz AI" />
       </div>
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-4 pb-16">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pt-4 pb-16">
         <div className="mb-4">
           <AIBackButton to="/dashboard" label="Kembali ke Dashboard" />
         </div>
