@@ -29,7 +29,7 @@ export default function GamesSubjek() {
 
       <AppHeader showBack={true} backTo="/dashboard" theme="dark" />
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 pb-40 pt-4 space-y-8 md:space-y-10">
+      <div className="relative z-10 w-full max-w-5xl mx-auto page-px pb-40 pt-4 space-y-8 md:space-y-10">
 
         {/* Back button */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
