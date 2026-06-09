@@ -61,8 +61,17 @@ export default function UserTopHeader() {
   const location = useSafeLocation();
   const [openMenu, setOpenMenu] = useState(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || '');
   const navRef = useRef(null);
   const isVisible = useScrollDirection();
+
+  // Sync avatar dengan user & event avatar-updated
+  useEffect(() => { setAvatarUrl(user?.avatarUrl || ''); }, [user?.avatarUrl]);
+  useEffect(() => {
+    const handler = (e) => setAvatarUrl(e.detail?.avatarUrl || '');
+    window.addEventListener('avatar-updated', handler);
+    return () => window.removeEventListener('avatar-updated', handler);
+  }, []);
 
   const isAdmin = user?.role === 'admin';
   const isActive = (path) => {
@@ -232,9 +241,13 @@ export default function UserTopHeader() {
             }`}
             title="Akaun"
           >
-            <span className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white text-xs font-black ring-1 ring-white/60">
-              {(user?.full_name || user?.email || '?').charAt(0).toUpperCase()}
-            </span>
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="Avatar" className="w-7 h-7 rounded-full object-cover ring-1 ring-white/60 shadow-sm" />
+            ) : (
+              <span className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white text-xs font-black ring-1 ring-white/60">
+                {(user?.full_name || user?.email || '?').charAt(0).toUpperCase()}
+              </span>
+            )}
             <ChevronDown className={`w-3 h-3 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
           </button>
 
