@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { RefreshCw, Play, Loader2, Trash2, CheckCircle2 } from 'lucide-react';
 
 const SUBJECT_LABELS = {
-  bahasa_melayu: 'BM', english: 'English', mathematics: 'Math', science: 'Sains', jawi: 'Jawi',
+  bahasa_melayu: 'BM', english: 'English', mathematics: 'Math', science: 'Sains', jawi: 'Jawi', pendidikan_islam: 'P. Islam',
 };
 
 const LEVEL_LABELS = {
