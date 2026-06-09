@@ -224,7 +224,7 @@ export default function AppDrawer({
               <LogOut className="w-4 h-4" strokeWidth={2.5} />
               <span>Log Keluar</span>
             </button>
-            <div className="inline-flex items-center gap-1.5 px-3 py-3 rounded-2xl bg-emerald-50 border border-emerald-100">
+            <div className="inline-flex items-center gap-1.5 px-2">
               <span className="relative flex w-2 h-2">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-ping" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
