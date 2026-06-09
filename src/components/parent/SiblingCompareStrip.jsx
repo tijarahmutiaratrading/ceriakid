@@ -74,7 +74,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
                 <img
                   src={getChildAvatar(c)}
                   alt={c.name}
-                  className="w-10 h-10 rounded-lg object-cover flex-shrink-0 ring-1 ring-slate-200"
+                  className="w-10 h-10 rounded-full object-cover flex-shrink-0 ring-2 ring-purple-300"
                 />
                 <div className="min-w-0">
                   <p className="font-black text-sm truncate text-slate-900">{c.name}</p>
