@@ -234,14 +234,14 @@ export default function Home() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12 }}
-            className="rounded-2xl border border-white/20 px-4 py-3 flex items-center justify-between gap-3"
-            style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)' }}
+            className="rounded-2xl border border-white/30 px-4 py-3 flex items-center justify-between gap-3 shadow-lg"
+            style={{ background: 'linear-gradient(135deg, #7c3aed, #db2777)' }}
           >
             <div>
               <p className="text-white font-black text-sm">🏆 Lihat Prestasi Anak</p>
-              <p className="text-white/60 text-xs mt-0.5">Pantau skor, subjek & streak harian</p>
+              <p className="text-white/85 text-xs mt-0.5">Pantau skor, subjek & streak harian</p>
             </div>
-            <Link to="/parent-dashboard" className="flex-shrink-0 px-3 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white font-black text-xs transition-all border border-white/20">
+            <Link to="/parent-dashboard" className="flex-shrink-0 px-3 py-1.5 rounded-full bg-white hover:bg-white/90 text-purple-700 font-black text-xs transition-all">
               Buka →
             </Link>
           </motion.div>
