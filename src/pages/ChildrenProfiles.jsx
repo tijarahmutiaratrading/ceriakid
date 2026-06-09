@@ -224,7 +224,7 @@ export default function ChildrenProfiles() {
     >
       <AppHeader theme="light" />
 
-      <div className="relative w-full max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 pb-16 pt-4">
+      <div className="relative w-full max-w-6xl mx-auto p-4 sm:p-6 pb-16 pt-4">
 
         {/* PREMIUM HERO — extracted to FamilyHeroCard component */}
         <FamilyHeroCard
