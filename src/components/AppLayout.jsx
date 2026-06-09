@@ -13,7 +13,7 @@ import PageTransition from '@/components/ui/PageTransition';
 export default function AppLayout() {
   return (
     <>
-      {/* Shared dashboard background image — applied to all authenticated pages */}
+      {/* Shared dashboard background — solid pastel gradient (sama tema Challenges), tiada gambar awan */}
       <div
         aria-hidden="true"
         className="pointer-events-none"
@@ -24,10 +24,7 @@ export default function AppLayout() {
           right: 0,
           bottom: 0,
           zIndex: -2,
-          backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/3f4216218_generated_image.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)',
         }}
       />
       <div className="min-h-screen w-full relative">
