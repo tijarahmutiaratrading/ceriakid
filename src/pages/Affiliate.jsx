@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Loader2, BarChart3 } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
+import PageLoader from '@/components/PageLoader';
 import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/use-toast';
 import AffiliateRegisterForm from '@/components/affiliate/AffiliateRegisterForm';
@@ -54,18 +55,7 @@ export default function AffiliatePage() {
 
   if (loading) {
     return (
-      <>
-        <AppHeader title="Affiliate" theme="light" />
-        <div
-          className="min-h-screen flex items-center justify-center -mt-16 sm:-mt-20 pt-16 sm:pt-20"
-          style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)' }}
-        >
-          <div className="text-center">
-            <Loader2 className="w-10 h-10 animate-spin text-purple-600 mx-auto mb-3" />
-            <p className="text-sm font-bold text-slate-700">Memuat dashboard affiliate...</p>
-          </div>
-        </div>
-      </>
+      <PageLoader />
     );
   }
 
