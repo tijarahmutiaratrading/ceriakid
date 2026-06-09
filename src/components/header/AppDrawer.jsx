@@ -391,9 +391,9 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
         }`}
       >
         <span>{section.label}</span>
-        <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${expanded ? 'bg-orange-100' : 'bg-slate-100'}`}>
+        <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${expanded ? 'bg-purple-100' : 'bg-slate-100'}`}>
           <ChevronRight
-            className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-150 ${expanded ? 'text-orange-500' : 'text-slate-400'}`}
+            className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-150 ${expanded ? 'text-purple-500' : 'text-slate-400'}`}
             strokeWidth={2.5}
             style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
           />
@@ -435,22 +435,14 @@ function MenuItem({ to, label, icon: Icon, active, pinned, showPin, onPinToggle,
           isSmall ? 'px-3 py-2.5 text-xs' : 'px-4 py-3 text-sm'
         } ${
           active
-            ? 'text-white font-black'
+            ? 'bg-white text-purple-700 font-black shadow-sm border border-slate-100'
             : 'text-slate-700 font-bold active:bg-white/50'
         }`}
-        style={
-          active
-            ? {
-                background: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)',
-                boxShadow: '0 4px 12px -2px rgba(249,115,22,0.4), inset 0 1px 0 rgba(255,255,255,0.3)',
-              }
-            : undefined
-        }
       >
         <div className="flex-1 flex items-center gap-2.5 min-w-0">
           {Icon && (
             <Icon
-              className={`${iconSize} flex-shrink-0 ${active ? 'text-white' : 'text-slate-500'}`}
+              className={`${iconSize} flex-shrink-0 ${active ? 'text-purple-600' : 'text-slate-500'}`}
               strokeWidth={active ? 2.5 : 2.25}
             />
           )}
@@ -470,7 +462,7 @@ function MenuItem({ to, label, icon: Icon, active, pinned, showPin, onPinToggle,
               {pinned ? <Pin className="w-3.5 h-3.5 fill-current" /> : <PinOff className="w-3.5 h-3.5" />}
             </button>
           )}
-          {active && !showPin && <ChevronRight className="w-4 h-4 text-white" strokeWidth={3} />}
+          {active && !showPin && <ChevronRight className="w-4 h-4 text-purple-500" strokeWidth={3} />}
         </div>
       </Link>
     </div>
@@ -490,34 +482,26 @@ function ChildInlineList({ childrenList, selectedChild, onSelect, onManage }) {
               type="button"
               onClick={() => { haptic('medium'); onSelect?.(child); }}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all active:scale-[0.98] ${
-                isActive ? 'text-white' : 'text-slate-700 active:bg-white/60'
+                isActive ? 'bg-white shadow-sm border border-slate-100' : 'text-slate-700 active:bg-white/60'
               }`}
-              style={
-                isActive
-                  ? {
-                      background: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)',
-                      boxShadow: '0 4px 12px -2px rgba(249,115,22,0.4), inset 0 1px 0 rgba(255,255,255,0.3)',
-                    }
-                  : undefined
-              }
             >
               <img
                 src={getChildAvatar(child)}
                 alt=""
                 loading="lazy"
                 className={`w-7 h-7 rounded-full object-cover flex-shrink-0 ring-2 ${
-                  isActive ? 'ring-white/80' : 'ring-slate-200'
+                  isActive ? 'ring-purple-300' : 'ring-slate-200'
                 } bg-white`}
               />
               <div className="flex-1 min-w-0 text-left">
-                <p className={`text-xs font-black truncate leading-tight ${isActive ? 'text-white' : 'text-slate-800'}`}>
+                <p className={`text-xs font-black truncate leading-tight ${isActive ? 'text-purple-700' : 'text-slate-800'}`}>
                   {child.name}
                 </p>
-                <p className={`text-[10px] font-bold truncate leading-tight ${isActive ? 'text-white/90' : 'text-slate-500'}`}>
+                <p className={`text-[10px] font-bold truncate leading-tight ${isActive ? 'text-purple-400' : 'text-slate-500'}`}>
                   {levelLabel}
                 </p>
               </div>
-              {isActive && <Check className="w-3.5 h-3.5 text-white flex-shrink-0" strokeWidth={3.5} />}
+              {isActive && <Check className="w-3.5 h-3.5 text-purple-600 flex-shrink-0" strokeWidth={3.5} />}
             </button>
           );
         })}
