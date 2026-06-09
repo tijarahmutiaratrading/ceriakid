@@ -187,8 +187,8 @@ export default function UserTopHeader() {
                     className="absolute top-full left-1/2 -translate-x-1/2 mt-3 min-w-[14rem] rounded-2xl p-2 z-50"
                     style={{
                       background: isDarkBg
-                        ? 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(30,41,59,0.45))'
-                        : 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
+                        ? 'linear-gradient(135deg, rgba(15,23,42,0.8), rgba(30,41,59,0.65))'
+                        : 'linear-gradient(135deg, rgba(30,20,55,0.55), rgba(20,14,38,0.45))',
                       backdropFilter: 'blur(20px) saturate(180%)',
                       WebkitBackdropFilter: 'blur(20px) saturate(180%)',
                     }}
@@ -203,7 +203,7 @@ export default function UserTopHeader() {
                           className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
                             subActive
                               ? 'brand-gradient-br text-white'
-                              : (isDarkBg ? 'text-white/85 hover:bg-white/10 hover:text-white' : 'text-slate-800 hover:bg-white/50 hover:text-slate-900')
+                              : 'text-white/85 hover:bg-white/10 hover:text-white'
                           }`}
                         >
                           <SubIcon className="w-3.5 h-3.5 flex-shrink-0" />
