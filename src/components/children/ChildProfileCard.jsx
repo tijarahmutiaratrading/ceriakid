@@ -213,7 +213,7 @@ export default function ChildProfileCard({
         )}
         <button
           onClick={onOpenPerformance}
-          className="w-full py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center justify-center gap-1.5 transition-colors"
+          className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold text-sm flex items-center justify-center gap-1.5 shadow-lg transition-all"
         >
           <TrendingUp className="w-4 h-4" />
           {hasPlayed ? 'Lihat Prestasi Penuh' : 'Mulakan Pembelajaran'}

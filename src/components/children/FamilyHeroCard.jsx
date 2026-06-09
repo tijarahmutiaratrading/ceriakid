@@ -92,7 +92,7 @@ export default function FamilyHeroCard({ children, maxCount, familyStats, leader
         <div className="px-5 py-3 border-t border-slate-100 sm:hidden">
           <button
             onClick={onAddClick}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold text-sm shadow-lg transition-all"
           >
             <Plus className="w-4 h-4" /> Tambah Anak Baru
           </button>

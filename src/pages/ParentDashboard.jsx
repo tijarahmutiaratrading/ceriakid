@@ -146,7 +146,7 @@ export default function ParentDashboard() {
             <p className="text-slate-900 font-black text-xl mb-2">Belum ada profil anak</p>
             <p className="text-slate-500 text-sm font-medium mb-5 max-w-sm mx-auto">Tambah profil anak dulu untuk lihat prestasi mereka.</p>
             <Link to="/children-profiles">
-              <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-white text-sm bg-violet-600 hover:bg-violet-700 transition-colors">
+              <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-white text-sm bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg transition-all">
                 <Plus className="w-4 h-4" /> Tambah Anak
               </button>
             </Link>
@@ -192,7 +192,7 @@ export default function ParentDashboard() {
                       <p className="text-slate-900 font-black text-lg mb-2">{selectedChild} belum mula bermain</p>
                       <p className="text-slate-500 text-sm font-medium mb-5">Galakkan dia mulakan sesi pertama!</p>
                       <Link to="/dashboard">
-                        <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm text-white bg-sky-600 hover:bg-sky-700 transition-colors">
+                        <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg transition-all">
                           Mula Main Game
                         </button>
                       </Link>
