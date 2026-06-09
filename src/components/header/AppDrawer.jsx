@@ -130,6 +130,11 @@ export default function AppDrawer({
           border: '1px solid rgba(255,255,255,0.5)',
         }}
       >
+        {/* Drag handle pill */}
+        <div className="flex justify-center pt-2.5 pb-0.5 flex-shrink-0">
+          <div className="w-10 h-1.5 rounded-full bg-slate-300/80" />
+        </div>
+
         {/* Header — profile */}
         {isAuthenticated && user ? (
           <ProfileHeader
@@ -157,7 +162,7 @@ export default function AppDrawer({
         )}
 
         {/* Scrollable menu */}
-        <nav className="flex-1 overflow-y-auto py-2">
+        <nav className="flex-1 overflow-y-auto py-2 scrollbar-hide">
           {/* Pinned */}
           {isAuthenticated && pinnedItems.length > 0 && (
             <>
@@ -329,7 +334,7 @@ function GuestHeader({ onClose }) {
 
 function SectionLabel({ icon, label }) {
   return (
-    <p className="px-4 pt-3 pb-1.5 text-slate-400 text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
+    <p className="px-4 pt-4 pb-2 text-slate-400 text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-1.5">
       {icon}
       {label}
     </p>
@@ -377,16 +382,19 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
       <button
         type="button"
         onClick={() => { haptic('light'); setExpanded(!expanded); }}
-        className={`w-full flex items-center justify-between mx-1 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
-          expanded ? 'bg-slate-50 text-slate-900' : 'text-slate-700 active:bg-slate-100'
+        className={`w-full flex items-center justify-between mx-1 px-4 py-3 rounded-2xl text-sm font-bold transition-colors ${
+          expanded ? 'bg-white/70 text-slate-900 shadow-sm' : 'text-slate-700 active:bg-white/50'
         }`}
         style={{ width: 'calc(100% - 0.5rem)' }}
       >
         <span>{section.label}</span>
-        <ChevronRight
-          className="w-4 h-4 flex-shrink-0 transition-transform duration-150"
-          style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
-        />
+        <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${expanded ? 'bg-orange-100' : 'bg-slate-100'}`}>
+          <ChevronRight
+            className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-150 ${expanded ? 'text-orange-500' : 'text-slate-400'}`}
+            strokeWidth={2.5}
+            style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
+          />
+        </div>
       </button>
 
       {expanded && (
