@@ -219,28 +219,32 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
             </div>
             <p className="text-slate-600 text-[11px] font-black uppercase tracking-wider">Jantina</p>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2.5" role="radiogroup">
             {[
-              { value: 'male', label: 'Lelaki', gradient: 'from-blue-400 to-cyan-500', Icon: User },
-              { value: 'female', label: 'Perempuan', gradient: 'from-pink-400 to-rose-500', Icon: UserRound },
-            ].map((option) => (
-              <motion.button
-                key={option.value}
-                type="button"
-                whileTap={{ scale: 0.95 }}
-                onClick={() => onGenderChange(option.value)}
-                className={`py-2.5 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-1.5 ${
-                  gender === option.value
-                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                    : 'bg-white text-slate-700 border border-pink-200 hover:bg-pink-50'
-                }`}
-              >
-                <div className={`w-5 h-5 rounded-md bg-gradient-to-br ${option.gradient} flex items-center justify-center`}>
-                  <option.Icon className="w-3 h-3 text-white" strokeWidth={3} />
-                </div>
-                {option.label}
-              </motion.button>
-            ))}
+              { value: 'male', label: 'Lelaki', sub: 'Budak lelaki', emoji: '👦' },
+              { value: 'female', label: 'Perempuan', sub: 'Budak perempuan', emoji: '👧' },
+            ].map((option) => {
+              const active = gender === option.value;
+              return (
+                <motion.button
+                  key={option.value}
+                  type="button"
+                  whileTap={{ scale: 0.97 }}
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => onGenderChange(option.value)}
+                  className={`py-3 px-3 rounded-xl text-sm flex flex-col items-center gap-1 transition-all border-2 ${
+                    active
+                      ? 'border-purple-500 bg-purple-50 text-purple-800'
+                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                  }`}
+                >
+                  <span className="text-2xl">{option.emoji}</span>
+                  <span className="font-black text-sm">{option.label}</span>
+                  <span className={`text-[11px] font-semibold ${active ? 'text-purple-600' : 'text-slate-400'}`}>{option.sub}</span>
+                </motion.button>
+              );
+            })}
           </div>
         </div>
       )}
