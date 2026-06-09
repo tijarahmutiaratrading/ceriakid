@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import AppHeader from '@/components/AppHeader';
 import EmptyState from '@/components/ui/EmptyState';
-import CardSkeleton from '@/components/ui/CardSkeleton';
+import PageLoader from '@/components/PageLoader';
 import { toast } from '@/components/ui/use-toast';
 
 const categoryLabels = {
@@ -107,7 +107,7 @@ export default function Challenges() {
   };
 
   if (loading) {
-    return <CardSkeleton rows={3} />;
+    return <PageLoader />;
   }
 
   return (

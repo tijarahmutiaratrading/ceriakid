@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import AppHeader from '@/components/AppHeader';
 import EmptyState from '@/components/ui/EmptyState';
-import CardSkeleton from '@/components/ui/CardSkeleton';
+import PageLoader from '@/components/PageLoader';
 import { toast } from '@/components/ui/use-toast';
 
 export default function FriendsList() {
@@ -142,7 +142,7 @@ export default function FriendsList() {
   };
 
   if (loading) {
-    return <CardSkeleton rows={3} />;
+    return <PageLoader />;
   }
 
   return (
