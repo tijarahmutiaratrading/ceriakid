@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BarChart3, Loader2 } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
+import MascotLoading from '@/components/game/MascotLoading';
 import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/use-toast';
 import AffiliateRegisterForm from '@/components/affiliate/AffiliateRegisterForm';
@@ -54,12 +55,7 @@ export default function AffiliatePage() {
 
   if (loading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-10 h-10 animate-spin text-purple-600 mx-auto mb-3" />
-          <p className="text-sm font-bold text-slate-700">Tunggu sebentar...</p>
-        </div>
-      </div>
+      <MascotLoading />
     );
   }
 
