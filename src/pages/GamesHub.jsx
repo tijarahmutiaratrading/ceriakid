@@ -37,7 +37,7 @@ export default function GamesHub() {
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
       <AppHeader showBack={true} backTo="/dashboard" theme="dark" />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pb-32 pt-4">
+      <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 pb-32 pt-4">
         {/* Back button */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <Link

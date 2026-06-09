@@ -35,7 +35,7 @@ export default function MiniGamesList() {
     <div className="min-h-screen w-full font-nunito">
       <AppHeader showBack={true} backTo="/games-hub" />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pb-24 pt-4">
+      <div className="relative max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 pb-24 pt-4">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <Link

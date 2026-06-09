@@ -46,7 +46,7 @@ export default function Scoreboard() {
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
       <AppHeader showBack={true} backTo="/dashboard" />
 
-      <div className="relative w-full max-w-5xl mx-auto px-4 sm:px-6 pb-32 pt-4 overflow-x-hidden">
+      <div className="relative w-full max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 pb-32 pt-4 overflow-x-hidden">
 
         {/* Header */}
         <motion.div

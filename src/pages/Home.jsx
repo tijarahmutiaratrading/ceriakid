@@ -124,7 +124,7 @@ export default function Home() {
 
       <AppHeader />
 
-      <div className="relative w-full max-w-5xl mx-auto px-4 sm:px-6 pb-40 pt-4 space-y-8 md:space-y-10">
+      <div className="relative w-full max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 pb-40 pt-4 space-y-8 md:space-y-10">
 
       {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl} onLogout={logout} />}
 

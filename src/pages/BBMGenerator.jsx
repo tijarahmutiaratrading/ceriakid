@@ -92,7 +92,7 @@ export default function BBMGenerator() {
         <AppHeader showBack={true} backTo="/dashboard" title="Penjana BBM AI" />
       </div>
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pt-4 pb-32">
+      <div className="relative max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 pt-4 pb-32">
         <div className="mb-4 print:hidden">
           <AIBackButton to="/dashboard" label="Kembali ke Dashboard" />
         </div>
