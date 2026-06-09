@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart3 } from 'lucide-react';
-import MascotLoading from '@/components/game/MascotLoading';
+import PageLoader from '@/components/PageLoader';
 import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/use-toast';
 import AffiliateRegisterForm from '@/components/affiliate/AffiliateRegisterForm';
@@ -55,7 +55,7 @@ export default function AffiliatePage() {
 
   if (loading) {
     return (
-      <MascotLoading />
+      <PageLoader />
     );
   }
 
