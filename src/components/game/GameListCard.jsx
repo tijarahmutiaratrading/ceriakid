@@ -1,103 +1,80 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Lock, Play, BookOpen, Calculator, FlaskConical, Globe, PenLine, Brain, Puzzle, Layers, Music, Palette, Zap, Star, Shapes, Gamepad2, BookMarked, Sigma, Microscope, Languages, AlignLeft, Apple, Users, Home, Car, Shirt, School, Trees, Fish, Cat, Dog, Heart, Sun, Cloud, Droplets, Flame, Leaf, Egg, Banana, Footprints, Bus, Plane, Bike, Watch, Scissors, Pencil, Ruler, Compass, Award, Flag, Map, Mountain, Flower2, Bug, Bird, Rabbit, Baby, HandHeart, Utensils, Coffee, ShoppingBag, Building2, Landmark, Telescope, Atom, Dna, Waves, Wind, Thermometer, Moon, Sparkles } from 'lucide-react';
+import { Lock, Play } from 'lucide-react';
 import GameBadge from './GameBadge';
 import UpgradeLockModal from './UpgradeLockModal';
 
-// Category → { icon, gradient, iconColor }
+// Category → { emoji, gradient }
 const CATEGORY_STYLE = {
-  bahasa_melayu:   { icon: BookOpen,    gradient: 'from-blue-500 to-cyan-400',      iconColor: 'text-white' },
-  english:         { icon: Globe,       gradient: 'from-emerald-500 to-teal-400',   iconColor: 'text-white' },
-  mathematics:     { icon: Calculator,  gradient: 'from-orange-500 to-amber-400',   iconColor: 'text-white' },
-  science:         { icon: FlaskConical,gradient: 'from-purple-500 to-violet-400',  iconColor: 'text-white' },
-  jawi:            { icon: PenLine,     gradient: 'from-green-600 to-emerald-400',  iconColor: 'text-white' },
-  worksheet:       { icon: PenLine,     gradient: 'from-pink-500 to-rose-400',      iconColor: 'text-white' },
-  bahasa_tamil:    { icon: Languages,   gradient: 'from-red-500 to-orange-400',     iconColor: 'text-white' },
-  bahasa_mandarin: { icon: Languages,   gradient: 'from-red-600 to-red-400',        iconColor: 'text-white' },
-  kafa_quran:      { icon: BookMarked,  gradient: 'from-green-700 to-green-500',    iconColor: 'text-white' },
-  kafa_jawi:       { icon: PenLine,     gradient: 'from-teal-600 to-cyan-500',      iconColor: 'text-white' },
-  kafa_akidah:     { icon: Star,        gradient: 'from-amber-500 to-yellow-400',   iconColor: 'text-white' },
-  kafa_ibadah:     { icon: BookMarked,  gradient: 'from-emerald-600 to-green-400',  iconColor: 'text-white' },
-  kafa_sirah:      { icon: BookOpen,    gradient: 'from-sky-600 to-blue-400',       iconColor: 'text-white' },
-  kafa_adab:       { icon: Brain,       gradient: 'from-violet-600 to-purple-400',  iconColor: 'text-white' },
-  kafa_bahasa_arab:{ icon: Languages,   gradient: 'from-orange-600 to-amber-400',   iconColor: 'text-white' },
+  bahasa_melayu:   { emoji: '📖', gradient: 'from-blue-500 to-cyan-400' },
+  english:         { emoji: '🌍', gradient: 'from-emerald-500 to-teal-400' },
+  mathematics:     { emoji: '🔢', gradient: 'from-orange-500 to-amber-400' },
+  science:         { emoji: '🔬', gradient: 'from-purple-500 to-violet-400' },
+  jawi:            { emoji: '✍️', gradient: 'from-green-600 to-emerald-400' },
+  worksheet:       { emoji: '📝', gradient: 'from-pink-500 to-rose-400' },
+  bahasa_tamil:    { emoji: '🔤', gradient: 'from-red-500 to-orange-400' },
+  bahasa_mandarin: { emoji: '🀄', gradient: 'from-red-600 to-red-400' },
+  kafa_quran:      { emoji: '📕', gradient: 'from-green-700 to-green-500' },
+  kafa_jawi:       { emoji: '✍️', gradient: 'from-teal-600 to-cyan-500' },
+  kafa_akidah:     { emoji: '⭐', gradient: 'from-amber-500 to-yellow-400' },
+  kafa_ibadah:     { emoji: '🕌', gradient: 'from-emerald-600 to-green-400' },
+  kafa_sirah:      { emoji: '📜', gradient: 'from-sky-600 to-blue-400' },
+  kafa_adab:       { emoji: '🤲', gradient: 'from-violet-600 to-purple-400' },
+  kafa_bahasa_arab:{ emoji: '🔤', gradient: 'from-orange-600 to-amber-400' },
 };
 
 // Game type fallback styles
 const TYPE_STYLE = {
-  letter_match:    { icon: AlignLeft,   gradient: 'from-blue-500 to-cyan-400',      iconColor: 'text-white' },
-  number_match:    { icon: Sigma,       gradient: 'from-orange-500 to-amber-400',   iconColor: 'text-white' },
-  picture_quiz:    { icon: Layers,      gradient: 'from-pink-500 to-rose-400',      iconColor: 'text-white' },
-  drag_drop:       { icon: Puzzle,      gradient: 'from-violet-500 to-purple-400',  iconColor: 'text-white' },
-  multiple_choice: { icon: Brain,       gradient: 'from-indigo-500 to-blue-400',    iconColor: 'text-white' },
-  counting:        { icon: Calculator,  gradient: 'from-amber-500 to-yellow-400',   iconColor: 'text-white' },
-  word_builder:    { icon: BookOpen,    gradient: 'from-teal-500 to-emerald-400',   iconColor: 'text-white' },
-  math_puzzle:     { icon: Sigma,       gradient: 'from-orange-600 to-red-400',     iconColor: 'text-white' },
-  science_quiz:    { icon: Microscope,  gradient: 'from-purple-600 to-violet-400',  iconColor: 'text-white' },
-  shape_sort:      { icon: Shapes,      gradient: 'from-sky-500 to-blue-400',       iconColor: 'text-white' },
-  color_match:     { icon: Palette,     gradient: 'from-pink-600 to-fuchsia-400',   iconColor: 'text-white' },
-  pattern_fill:    { icon: Layers,      gradient: 'from-cyan-500 to-teal-400',      iconColor: 'text-white' },
-  memory_game:     { icon: Brain,       gradient: 'from-violet-600 to-indigo-400',  iconColor: 'text-white' },
-  sound_match:     { icon: Music,       gradient: 'from-fuchsia-500 to-pink-400',   iconColor: 'text-white' },
-  spelling:        { icon: BookOpen,    gradient: 'from-blue-600 to-sky-400',       iconColor: 'text-white' },
-  reading:         { icon: BookOpen,    gradient: 'from-emerald-500 to-green-400',  iconColor: 'text-white' },
-  phonics:         { icon: Music,       gradient: 'from-rose-500 to-pink-400',      iconColor: 'text-white' },
-  sorting:         { icon: Layers,      gradient: 'from-amber-600 to-orange-400',   iconColor: 'text-white' },
-  tile_match:      { icon: Gamepad2,    gradient: 'from-indigo-600 to-violet-400',  iconColor: 'text-white' },
-  story_adventure: { icon: BookOpen,    gradient: 'from-green-500 to-teal-400',     iconColor: 'text-white' },
-  physics:         { icon: Zap,         gradient: 'from-yellow-500 to-amber-400',   iconColor: 'text-white' },
-  tracing:         { icon: PenLine,     gradient: 'from-pink-500 to-rose-400',      iconColor: 'text-white' },
+  letter_match:    { emoji: '🔡', gradient: 'from-blue-500 to-cyan-400' },
+  number_match:    { emoji: '🔢', gradient: 'from-orange-500 to-amber-400' },
+  picture_quiz:    { emoji: '🖼️', gradient: 'from-pink-500 to-rose-400' },
+  drag_drop:       { emoji: '🧩', gradient: 'from-violet-500 to-purple-400' },
+  multiple_choice: { emoji: '🧠', gradient: 'from-indigo-500 to-blue-400' },
+  counting:        { emoji: '🔢', gradient: 'from-amber-500 to-yellow-400' },
+  word_builder:    { emoji: '📝', gradient: 'from-teal-500 to-emerald-400' },
+  math_puzzle:     { emoji: '➗', gradient: 'from-orange-600 to-red-400' },
+  science_quiz:    { emoji: '🔬', gradient: 'from-purple-600 to-violet-400' },
+  shape_sort:      { emoji: '🔷', gradient: 'from-sky-500 to-blue-400' },
+  color_match:     { emoji: '🎨', gradient: 'from-pink-600 to-fuchsia-400' },
+  pattern_fill:    { emoji: '🔲', gradient: 'from-cyan-500 to-teal-400' },
+  memory_game:     { emoji: '🧠', gradient: 'from-violet-600 to-indigo-400' },
+  sound_match:     { emoji: '🎵', gradient: 'from-fuchsia-500 to-pink-400' },
+  spelling:        { emoji: '🔤', gradient: 'from-blue-600 to-sky-400' },
+  reading:         { emoji: '📖', gradient: 'from-emerald-500 to-green-400' },
+  phonics:         { emoji: '🗣️', gradient: 'from-rose-500 to-pink-400' },
+  sorting:         { emoji: '📊', gradient: 'from-amber-600 to-orange-400' },
+  tile_match:      { emoji: '🎮', gradient: 'from-indigo-600 to-violet-400' },
+  story_adventure: { emoji: '📚', gradient: 'from-green-500 to-teal-400' },
+  physics:         { emoji: '⚡', gradient: 'from-yellow-500 to-amber-400' },
+  tracing:         { emoji: '✏️', gradient: 'from-pink-500 to-rose-400' },
 };
 
-// Title keyword → { icon, gradient }
+// Title keyword → { emoji, gradient }
 const TITLE_KEYWORD_MAP = [
-  // Buah-buahan
-  { keys: ['buah', 'fruit', 'epal', 'mangga', 'pisang', 'limau', 'tembikai', 'durian', 'nanas', 'betik', 'ciku', 'jambu', 'rambutan', 'manggis'], icon: Apple, gradient: 'from-red-500 to-orange-400' },
-  // Keluarga
-  { keys: ['keluarga', 'family', 'ibu', 'bapa', 'ayah', 'adik', 'kakak', 'abang', 'datuk', 'nenek', 'ahli keluarga'], icon: Home, gradient: 'from-pink-500 to-rose-400' },
-  // Sayur-sayuran
-  { keys: ['sayur', 'vegetable', 'kubis', 'bayam', 'lobak', 'brokoli', 'timun', 'tomato', 'bendi', 'kangkung'], icon: Leaf, gradient: 'from-green-500 to-emerald-400' },
-  // Haiwan
-  { keys: ['haiwan', 'animal', 'binatang', 'kucing', 'anjing', 'harimau', 'gajah', 'singa', 'arnab', 'ikan', 'burung', 'monyet', 'kuda', 'lembu', 'kambing', 'ayam', 'itik', 'katak', 'ular', 'buaya'], icon: Cat, gradient: 'from-amber-500 to-orange-400' },
-  // Nombor / Matematik
-  { keys: ['nombor', 'number', 'matematik', 'math', 'tambah', 'tolak', 'darab', 'bahagi', 'kira', 'count', 'digit', 'angka', 'jumlah', 'pengiraan'], icon: Calculator, gradient: 'from-blue-500 to-indigo-400' },
-  // Huruf / Abjad
-  { keys: ['huruf', 'abjad', 'vokal', 'konsonan', 'letter', 'alphabet', 'ejaan', 'sebutan', 'fonik', 'phonics', 'eja'], icon: AlignLeft, gradient: 'from-violet-500 to-purple-400' },
-  // Warna
-  { keys: ['warna', 'colour', 'color', 'merah', 'biru', 'hijau', 'kuning', 'ungu', 'oren', 'hitam', 'putih', 'pelangi'], icon: Palette, gradient: 'from-fuchsia-500 to-pink-400' },
-  // Bentuk
-  { keys: ['bentuk', 'shape', 'bulat', 'segi', 'segitiga', 'empat', 'lonjong', 'diamond', 'bintang'], icon: Shapes, gradient: 'from-sky-500 to-blue-400' },
-  // Pakaian
-  { keys: ['pakaian', 'baju', 'cloth', 'kasut', 'seluar', 'tudung', 'topi', 'stokin', 'dress', 'uniform', 'sekolah'], icon: Shirt, gradient: 'from-purple-500 to-violet-400' },
-  // Pengangkutan / Kenderaan
-  { keys: ['pengangkutan', 'kenderaan', 'kereta', 'bas', 'vehicle', 'transport', 'kapal', 'motosikal', 'lori', 'teksi', 'tren'], icon: Car, gradient: 'from-slate-500 to-blue-400' },
-  // Sekolah / Alat tulis
-  { keys: ['sekolah', 'school', 'alat', 'tulis', 'pensil', 'pen', 'buku', 'getah', 'pembaris', 'beg', 'kelas', 'guru', 'cikgu'], icon: School, gradient: 'from-amber-500 to-yellow-400' },
-  // Alam sekitar / Alam semula jadi
-  { keys: ['alam', 'nature', 'pokok', 'hutan', 'bukit', 'sungai', 'laut', 'pantai', 'gunung', 'rumput', 'bunga', 'taman'], icon: Trees, gradient: 'from-green-600 to-teal-400' },
-  // Makanan / Minuman
-  { keys: ['makanan', 'food', 'minuman', 'makan', 'minum', 'nasi', 'roti', 'susu', 'air', 'kuih', 'lauk', 'masak', 'dapur', 'resepi'], icon: Utensils, gradient: 'from-orange-500 to-amber-400' },
-  // Anggota badan
-  { keys: ['anggota', 'badan', 'body', 'tangan', 'kaki', 'kepala', 'mata', 'telinga', 'hidung', 'mulut', 'gigi', 'rambut'], icon: Heart, gradient: 'from-red-500 to-pink-400' },
-  // Sains / Eksperimen
-  { keys: ['sains', 'science', 'eksperimen', 'fizik', 'kimia', 'biologi', 'magnet', 'cahaya', 'bunyi', 'tenaga', 'graviti'], icon: FlaskConical, gradient: 'from-purple-600 to-violet-400' },
-  // Cuaca / Alam
-  { keys: ['cuaca', 'weather', 'hujan', 'panas', 'sejuk', 'angin', 'ribut', 'banjir', 'salji', 'mendung', 'pelangi', 'matahari', 'bulan', 'bintang'], icon: Sun, gradient: 'from-yellow-500 to-orange-400' },
-  // Nama diri / Kata nama
-  { keys: ['nama', 'kata', 'perkataan', 'word', 'ayat', 'sentence', 'karangan', 'cerita', 'kisah', 'novel'], icon: BookOpen, gradient: 'from-blue-500 to-cyan-400' },
-  // Jawi / Arab
-  { keys: ['jawi', 'arab', 'quran', 'al-quran', 'hafazan', 'surah', 'doa', 'solat', 'ibadah', 'akidah', 'akhlak', 'adab', 'sirah', 'nabi'], icon: BookMarked, gradient: 'from-emerald-600 to-green-400' },
-  // Lagu / Muzik
-  { keys: ['lagu', 'muzik', 'music', 'nyanyian', 'bunyi', 'irama', 'nada'], icon: Music, gradient: 'from-pink-500 to-fuchsia-400' },
-  // Sukan / Senaman
-  { keys: ['sukan', 'sport', 'senaman', 'berlari', 'berenang', 'bola', 'badminton', 'berbasikal', 'gym', 'aktif'], icon: Bike, gradient: 'from-green-500 to-teal-400' },
-  // Profesion / Pekerjaan
-  { keys: ['profesion', 'pekerjaan', 'kerja', 'doktor', 'guru', 'polis', 'bomba', 'jurutera', 'pilot', 'chef'], icon: Building2, gradient: 'from-indigo-500 to-blue-400' },
-  // Angkasa / Ruang
-  { keys: ['angkasa', 'planet', 'space', 'bumi', 'bulan', 'matahari', 'galaksi', 'astronaut', 'roket', 'bintang'], icon: Telescope, gradient: 'from-indigo-600 to-purple-400' },
-  // Insect / Serangga
-  { keys: ['serangga', 'insect', 'rama-rama', 'lebah', 'semut', 'nyamuk', 'lipas', 'ulat', 'kumbang'], icon: Bug, gradient: 'from-lime-500 to-green-400' },
+  { keys: ['buah', 'fruit', 'epal', 'mangga', 'pisang', 'limau', 'tembikai', 'durian', 'nanas', 'betik', 'ciku', 'jambu', 'rambutan', 'manggis'], emoji: '🍎', gradient: 'from-red-500 to-orange-400' },
+  { keys: ['keluarga', 'family', 'ibu', 'bapa', 'ayah', 'adik', 'kakak', 'abang', 'datuk', 'nenek', 'ahli keluarga'], emoji: '👨‍👩‍👧', gradient: 'from-pink-500 to-rose-400' },
+  { keys: ['sayur', 'vegetable', 'kubis', 'bayam', 'lobak', 'brokoli', 'timun', 'tomato', 'bendi', 'kangkung'], emoji: '🥦', gradient: 'from-green-500 to-emerald-400' },
+  { keys: ['haiwan', 'animal', 'binatang', 'kucing', 'anjing', 'harimau', 'gajah', 'singa', 'arnab', 'ikan', 'burung', 'monyet', 'kuda', 'lembu', 'kambing', 'ayam', 'itik', 'katak', 'ular', 'buaya'], emoji: '🐱', gradient: 'from-amber-500 to-orange-400' },
+  { keys: ['nombor', 'number', 'matematik', 'math', 'tambah', 'tolak', 'darab', 'bahagi', 'kira', 'count', 'digit', 'angka', 'jumlah', 'pengiraan'], emoji: '🔢', gradient: 'from-blue-500 to-indigo-400' },
+  { keys: ['huruf', 'abjad', 'vokal', 'konsonan', 'letter', 'alphabet', 'ejaan', 'sebutan', 'fonik', 'phonics', 'eja'], emoji: '🔤', gradient: 'from-violet-500 to-purple-400' },
+  { keys: ['warna', 'colour', 'color', 'merah', 'biru', 'hijau', 'kuning', 'ungu', 'oren', 'hitam', 'putih', 'pelangi'], emoji: '🎨', gradient: 'from-fuchsia-500 to-pink-400' },
+  { keys: ['bentuk', 'shape', 'bulat', 'segi', 'segitiga', 'empat', 'lonjong', 'diamond', 'bintang'], emoji: '🔷', gradient: 'from-sky-500 to-blue-400' },
+  { keys: ['pakaian', 'baju', 'cloth', 'kasut', 'seluar', 'tudung', 'topi', 'stokin', 'dress', 'uniform'], emoji: '👕', gradient: 'from-purple-500 to-violet-400' },
+  { keys: ['pengangkutan', 'kenderaan', 'kereta', 'bas', 'vehicle', 'transport', 'kapal', 'motosikal', 'lori', 'teksi', 'tren'], emoji: '🚗', gradient: 'from-slate-500 to-blue-400' },
+  { keys: ['sekolah', 'school', 'alat', 'tulis', 'pensil', 'pen', 'buku', 'getah', 'pembaris', 'beg', 'kelas', 'guru', 'cikgu'], emoji: '🏫', gradient: 'from-amber-500 to-yellow-400' },
+  { keys: ['alam', 'nature', 'pokok', 'hutan', 'bukit', 'sungai', 'laut', 'pantai', 'gunung', 'rumput', 'bunga', 'taman'], emoji: '🌳', gradient: 'from-green-600 to-teal-400' },
+  { keys: ['makanan', 'food', 'minuman', 'makan', 'minum', 'nasi', 'roti', 'susu', 'air', 'kuih', 'lauk', 'masak', 'dapur', 'resepi'], emoji: '🍽️', gradient: 'from-orange-500 to-amber-400' },
+  { keys: ['anggota', 'badan', 'body', 'tangan', 'kaki', 'kepala', 'mata', 'telinga', 'hidung', 'mulut', 'gigi', 'rambut'], emoji: '🫀', gradient: 'from-red-500 to-pink-400' },
+  { keys: ['sains', 'science', 'eksperimen', 'fizik', 'kimia', 'biologi', 'magnet', 'cahaya', 'bunyi', 'tenaga', 'graviti'], emoji: '🔬', gradient: 'from-purple-600 to-violet-400' },
+  { keys: ['cuaca', 'weather', 'hujan', 'panas', 'sejuk', 'angin', 'ribut', 'banjir', 'salji', 'mendung', 'pelangi', 'matahari'], emoji: '☀️', gradient: 'from-yellow-500 to-orange-400' },
+  { keys: ['nama', 'kata', 'perkataan', 'word', 'ayat', 'sentence', 'karangan', 'cerita', 'kisah', 'novel'], emoji: '📖', gradient: 'from-blue-500 to-cyan-400' },
+  { keys: ['jawi', 'arab', 'quran', 'al-quran', 'hafazan', 'surah', 'doa', 'solat', 'ibadah', 'akidah', 'akhlak', 'adab', 'sirah', 'nabi'], emoji: '📕', gradient: 'from-emerald-600 to-green-400' },
+  { keys: ['lagu', 'muzik', 'music', 'nyanyian', 'irama', 'nada'], emoji: '🎵', gradient: 'from-pink-500 to-fuchsia-400' },
+  { keys: ['sukan', 'sport', 'senaman', 'berlari', 'berenang', 'bola', 'badminton', 'berbasikal', 'gym', 'aktif'], emoji: '⚽', gradient: 'from-green-500 to-teal-400' },
+  { keys: ['profesion', 'pekerjaan', 'kerja', 'doktor', 'polis', 'bomba', 'jurutera', 'pilot', 'chef'], emoji: '👷', gradient: 'from-indigo-500 to-blue-400' },
+  { keys: ['angkasa', 'planet', 'space', 'bumi', 'bulan', 'galaksi', 'astronaut', 'roket'], emoji: '🚀', gradient: 'from-indigo-600 to-purple-400' },
+  { keys: ['serangga', 'insect', 'rama-rama', 'lebah', 'semut', 'nyamuk', 'lipas', 'ulat', 'kumbang'], emoji: '🐛', gradient: 'from-lime-500 to-green-400' },
 ];
 
 // Gradients pool for fallback rotation
@@ -122,24 +99,24 @@ function getGameStyle(game, idx) {
   // Try to match title keywords first
   for (const entry of TITLE_KEYWORD_MAP) {
     if (entry.keys.some(k => titleLower.includes(k))) {
-      return { icon: entry.icon, gradient: entry.gradient };
+      return { emoji: entry.emoji, gradient: entry.gradient };
     }
   }
 
-  // Fallback: category/type icon + rotating gradient
+  // Fallback: category/type emoji + rotating gradient
   const catStyle = CATEGORY_STYLE[game.category];
   const typeStyle = TYPE_STYLE[game.type];
-  const icon = catStyle?.icon || typeStyle?.icon || Gamepad2;
+  const emoji = catStyle?.emoji || typeStyle?.emoji || '🎮';
   const gradient = GRADIENT_POOL[idx % GRADIENT_POOL.length];
-  return { icon, gradient };
+  return { emoji, gradient };
 }
 
 function GameIcon({ game, locked, idx }) {
   const style = getGameStyle(game, idx);
-  const IconComp = style.icon;
+  const emoji = game.emoji || style.emoji;
   return (
     <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${style.gradient} flex items-center justify-center shadow-md ${locked ? 'opacity-40 grayscale' : ''}`}>
-      <IconComp className="w-7 h-7 sm:w-8 sm:h-8 text-white" strokeWidth={1.75} />
+      <span className="text-3xl sm:text-4xl leading-none">{emoji}</span>
     </div>
   );
 }
