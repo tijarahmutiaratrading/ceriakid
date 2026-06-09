@@ -11,6 +11,11 @@ const action = 'rounded-2xl bg-white text-purple-700 font-black shadow-md ring-2
 const chip = 'px-4 py-3.5 rounded-2xl bg-white text-purple-700 font-black text-xl shadow-md ring-2 ring-purple-100 active:scale-95 hover:-translate-y-0.5 transition-all';
 const targetPill = 'px-3.5 py-1.5 rounded-full bg-gradient-to-r from-yellow-300 to-orange-300 text-orange-900 font-black text-lg shadow-md ring-2 ring-white inline-block';
 
+// STANDARD font sizes — kekalkan konsisten merentas semua mini game modes
+const answerText = 'text-xl';      // teks jawapan utama (pilihan/chip/tile)
+const answerLabel = 'text-xs font-black uppercase tracking-wider'; // label kecil ("Pilih item", target name)
+const answerSlot = 'text-xl';      // teks dalam slot/target yang dah diisi
+
 export default function MiniGameModeRenderer({ game, onComplete }) {
   const data = game?.gameData || {};
   const mode = data.mode || game?.category;
@@ -117,7 +122,7 @@ function MemoryMode() {
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 {isOpen ? (
-                  <p className="text-lg sm:text-xl text-center px-2 leading-tight" style={{ color: palette.text }}>{card.text}</p>
+                  <p className={`${answerText} text-center px-2 leading-tight`} style={{ color: palette.text }}>{card.text}</p>
                 ) : (
                   <span className="text-3xl drop-shadow">{backEmoji}</span>
                 )}
@@ -159,18 +164,18 @@ function DragDropMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={Object.keys(placed).length} total={targets.length} />
       <div className={panel}>
-        <p className="text-purple-500 text-xs font-black mb-2 uppercase tracking-wider">Pilih item</p>
+        <p className={`text-purple-500 mb-2 ${answerLabel}`}>Pilih item</p>
         <div className="grid grid-cols-2 gap-2.5">
           {items.filter(item => !Object.values(placed).includes(item)).map(item => (
-            <button key={item} type="button" onClick={() => setSelectedItem(item)} className={`w-full px-4 py-5 rounded-2xl font-black text-2xl transition-all ${selectedItem === item ? 'bg-yellow-300 text-orange-900 ring-4 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-2 ring-purple-100'}`}>{item}</button>
+            <button key={item} type="button" onClick={() => setSelectedItem(item)} className={`w-full px-4 py-5 rounded-2xl font-black ${answerText} transition-all ${selectedItem === item ? 'bg-yellow-300 text-orange-900 ring-4 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-2 ring-purple-100'}`}>{item}</button>
           ))}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2.5">
         {targets.map(target => (
           <button key={target} type="button" onClick={() => placeItem(target)} className={`min-h-16 rounded-2xl p-2 text-center transition-all ${placed[target] ? 'bg-green-100 ring-2 ring-green-400' : selectedItem ? 'bg-yellow-50 ring-2 ring-yellow-400 animate-pulse' : 'bg-white ring-2 ring-purple-100'}`}>
-            <p className="text-purple-400 text-sm font-black uppercase">{target}</p>
-            <p className="text-purple-900 text-2xl font-black mt-1">{placed[target] || (selectedItem ? '↓ Letak sini' : '—')}</p>
+            <p className={`text-purple-400 ${answerLabel}`}>{target}</p>
+            <p className={`text-purple-900 ${answerSlot} font-black mt-1`}>{placed[target] || (selectedItem ? '↓ Letak sini' : '—')}</p>
           </button>
         ))}
       </div>
@@ -245,20 +250,20 @@ function SortingMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={used.length} total={items.length} />
       <div className={panel}>
-        <p className="text-purple-500 text-xs font-black mb-2 uppercase">Pilih item</p>
+        <p className={`text-purple-500 mb-2 ${answerLabel}`}>Pilih item</p>
         <div className="grid grid-cols-2 gap-2.5">
           {items.filter(item => !used.includes(item.text)).map(item => (
-            <button key={item.text} onClick={() => setSelected(item)} className={`w-full px-4 py-5 rounded-2xl font-black text-2xl transition-all ${selected?.text === item.text ? 'bg-yellow-300 text-orange-900 ring-4 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-2 ring-purple-100'}`}>{item.text}</button>
+            <button key={item.text} onClick={() => setSelected(item)} className={`w-full px-4 py-5 rounded-2xl font-black ${answerText} transition-all ${selected?.text === item.text ? 'bg-yellow-300 text-orange-900 ring-4 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-2 ring-purple-100'}`}>{item.text}</button>
           ))}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2.5">
         {groups.map(group => (
           <button key={group} onClick={() => place(group)} className={`min-h-20 rounded-2xl p-2.5 text-center transition-all ${selected ? 'bg-yellow-50 ring-2 ring-yellow-400 animate-pulse' : 'bg-white ring-2 ring-purple-100'}`}>
-            <p className="text-purple-900 font-black mb-1.5 text-base">{group}</p>
+            <p className={`text-purple-900 mb-1.5 ${answerLabel}`}>{group}</p>
             <div className="space-y-1">
               {(sorted[group] || []).map(item => (
-                <div key={item.text} className="px-2 py-1 rounded-lg bg-green-100 text-green-900 font-black text-lg text-center">{item.text}</div>
+                <div key={item.text} className={`px-2 py-1 rounded-lg bg-green-100 text-green-900 font-black ${answerSlot} text-center`}>{item.text}</div>
               ))}
             </div>
           </button>
@@ -313,7 +318,7 @@ function TileMatchMode() {
               key={idx}
               onClick={() => tap(idx)}
               disabled={isGone}
-              className={`min-h-16 text-2xl flex items-center justify-center p-2 ${action} ${isSelected ? 'ring-4 ring-yellow-400 scale-105 bg-yellow-50' : ''} ${isGone ? 'opacity-25 line-through' : ''}`}
+              className={`min-h-16 ${answerText} flex items-center justify-center p-2 ${action} ${isSelected ? 'ring-4 ring-yellow-400 scale-105 bg-yellow-50' : ''} ${isGone ? 'opacity-25 line-through' : ''}`}
             >
               {t.tile}
             </button>
@@ -355,7 +360,7 @@ function StoryMode() {
       </div>
       <div className="space-y-2">
         {(scene.choices || []).map((choice, idx) => (
-          <button key={idx} onClick={() => pick(idx)} disabled={done} className={`w-full p-4 text-lg ${action} disabled:opacity-50 text-left`}>{choice}</button>
+          <button key={idx} onClick={() => pick(idx)} disabled={done} className={`w-full p-4 ${answerText} ${action} disabled:opacity-50 text-left`}>{choice}</button>
         ))}
       </div>
     </div>
@@ -747,7 +752,7 @@ function SwipeSelectMode() {
       </div>
       <div className={`grid gap-2 ${groups.length <= 2 ? 'grid-cols-2' : 'grid-cols-2'}`}>
         {groups.map((g, i) => (
-          <button key={g} onClick={() => pick(g)} className={`py-4 rounded-2xl bg-gradient-to-br ${colors[i % colors.length]} text-white font-black shadow-md active:scale-95`}>{g}</button>
+          <button key={g} onClick={() => pick(g)} className={`py-4 rounded-2xl bg-gradient-to-br ${colors[i % colors.length]} text-white font-black ${answerText} shadow-md active:scale-95`}>{g}</button>
         ))}
       </div>
     </div>
