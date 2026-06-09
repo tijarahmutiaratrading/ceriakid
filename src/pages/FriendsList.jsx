@@ -227,20 +227,20 @@ export default function FriendsList() {
           className="mb-5 rounded-3xl p-5 bg-white shadow-xl border border-white/60"
         >
           <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2.5">
             <input
               type="text"
               placeholder="Masukkan kod kawan..."
               value={inputCode}
               onChange={e => setInputCode(e.target.value.toUpperCase())}
               maxLength={6}
-              className="flex-1 rounded-2xl px-4 py-3 bg-purple-50 text-slate-800 placeholder-slate-400 font-black text-lg tracking-widest border-2 border-purple-200 outline-none focus:border-purple-400 uppercase"
+              className="w-full rounded-2xl px-4 py-3 bg-purple-50 text-slate-800 placeholder-slate-400 font-black text-lg tracking-widest border-2 border-purple-200 outline-none focus:border-purple-400 uppercase"
             />
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={addFriendByCode}
               disabled={addingFriend || inputCode.length < 4}
-              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black shadow-lg disabled:opacity-50 transition-all"
+              className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black shadow-lg disabled:opacity-50 transition-all"
             >
               {addingFriend ? '...' : 'Tambah'}
             </motion.button>
