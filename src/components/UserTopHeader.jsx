@@ -9,6 +9,7 @@ import {
 import { useAuth } from '@/lib/AuthContext';
 import { useSafeLocation } from '@/hooks/useSafeLocation';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { base44 } from '@/api/base44Client';
 
 const NAV_GROUPS = [
   {
@@ -69,6 +70,14 @@ export default function UserTopHeader() {
     window.addEventListener('avatar-updated', handler);
     return () => window.removeEventListener('avatar-updated', handler);
   }, []);
+
+  // Fallback: kalau user.avatarUrl belum sync, ambil terus dari DB (sama macam hero)
+  useEffect(() => {
+    if (avatarUrl || !user?.email) return;
+    base44.auth.me().then((fresh) => {
+      if (fresh?.avatarUrl) setAvatarUrl(fresh.avatarUrl);
+    }).catch(() => {});
+  }, [user?.email, avatarUrl]);
 
   const isAdmin = user?.role === 'admin';
   const isActive = (path) => {
