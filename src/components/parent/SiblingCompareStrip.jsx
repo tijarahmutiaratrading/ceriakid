@@ -43,7 +43,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
       </div>
 
       {/* Cards */}
-      <div className="flex gap-3 overflow-x-auto pb-4 pt-4 px-5 snap-x snap-mandatory scrollbar-hide">
+      <div className="grid sm:grid-cols-2 gap-3 p-4">
         {stats.map((c, i) => {
           const isActive = c.name === selectedChild;
           const isLeader = c.name === leaderName;
@@ -57,7 +57,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
               transition={{ delay: i * 0.05 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => onSelect(c.name)}
-              className={`relative flex-shrink-0 rounded-xl p-3 min-w-[160px] text-left snap-start border transition-all ${
+              className={`relative w-full rounded-xl p-3 text-left border transition-all ${
                 isActive
                   ? 'bg-purple-50 border-purple-300 ring-1 ring-purple-200'
                   : 'bg-slate-50 border-slate-200 hover:border-slate-300'
