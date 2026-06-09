@@ -248,8 +248,13 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         disabled={loading}
-        type="submit" className="min-h-12 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 font-bold rounded-2xl w-full transition-all hover:shadow-lg disabled:opacity-50 shadow-md">
-        {loading ? '🔄 Memproses...' : `💳 Bayar RM${TIER_VALUES[formData.selectedTier] || 0} Sekarang`}
+        type="submit" className="min-h-12 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 font-bold rounded-2xl w-full transition-all hover:shadow-lg disabled:opacity-50 shadow-md flex items-center justify-center gap-2">
+        {loading ? (
+          <>
+            <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+            Memproses...
+          </>
+        ) : `💳 Bayar RM${TIER_VALUES[formData.selectedTier] || 0} Sekarang`}
       </motion.button>
 
       {/* Trust Badges */}
