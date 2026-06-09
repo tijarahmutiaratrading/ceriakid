@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check, User as UserIcon, Phone, Mail, Edit2, X, Save, Loader2, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
+import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check, User as UserIcon, Phone, Mail, Edit2, X, Save, Loader2, CheckCircle2, AlertCircle, RefreshCw, Trash2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const TIER_LABELS = {
@@ -58,7 +58,27 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
   const [saving, setSaving] = useState(false);
   const [markingPaid, setMarkingPaid] = useState(false);
   const [checkingEmail, setCheckingEmail] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const { toast } = useToast();
+
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    if (!window.confirm(`Padam order untuk ${customer.email}?\n\nIni akan buang rekod langganan ini secara kekal. Tindakan ini tidak boleh dibatalkan.`)) return;
+    setDeleting(true);
+    try {
+      const res = await base44.functions.invoke('adminDeleteOrder', { subscriptionId: customer.id });
+      if (res?.data?.success) {
+        toast({ title: '🗑️ Order dipadam', description: `Order ${customer.email} telah dibuang.` });
+        await onUpdate?.();
+      } else {
+        toast({ title: '❌ Gagal', description: res?.data?.error || 'Unknown error', variant: 'destructive' });
+      }
+    } catch (err) {
+      toast({ title: '❌ Error', description: err?.response?.data?.error || err.message, variant: 'destructive' });
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const handleCheckEmailStatus = async (e) => {
     e.stopPropagation();
@@ -249,12 +269,23 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
             {recovery.short}
           </span>
         </td>
+        <td className="py-3 px-3 whitespace-nowrap text-center">
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-red-500 hover:bg-red-600 text-white text-[10px] font-black shadow-sm disabled:opacity-60 transition-all"
+            title="Padam order ini"
+          >
+            {deleting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+            Padam
+          </button>
+        </td>
       </tr>
 
       <AnimatePresence>
         {expanded && (
           <tr>
-            <td colSpan={11} className="p-0">
+            <td colSpan={12} className="p-0">
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
@@ -679,6 +710,7 @@ export default function CustomerDatabaseTable() {
                 <th className="text-left py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider"><Calendar className="w-3.5 h-3.5 inline mr-1" />Tarikh Tamat</th>
                 <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider"><Mail className="w-3.5 h-3.5 inline mr-1" />Welcome Email</th>
                 <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider"><Mail className="w-3.5 h-3.5 inline mr-1" />Recovery</th>
+                <th className="text-center py-3 px-3 font-black text-slate-700 text-xs uppercase tracking-wider">Tindakan</th>
               </tr>
             </thead>
             <tbody>
@@ -693,7 +725,7 @@ export default function CustomerDatabaseTable() {
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={11} className="py-12 text-center text-slate-500 font-semibold">
+                  <td colSpan={12} className="py-12 text-center text-slate-500 font-semibold">
                     {customers.length === 0 ? 'Tiada pelanggan lagi.' : 'Tiada pelanggan sepadan dengan tapisan.'}
                   </td>
                 </tr>
