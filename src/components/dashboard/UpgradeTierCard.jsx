@@ -221,8 +221,8 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
           </div>
           <div className="grid grid-cols-2 gap-3" role="radiogroup">
             {[
-              { value: 'male', label: 'Lelaki', img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0783525bd_generated_image.png', tint: 'from-blue-400/90 to-cyan-500/90' },
-              { value: 'female', label: 'Perempuan', img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6cea77cec_generated_image.png', tint: 'from-pink-400/90 to-rose-500/90' },
+              { value: 'male', label: 'Lelaki', Icon: User, activeColor: 'from-blue-400 to-cyan-500' },
+              { value: 'female', label: 'Perempuan', Icon: UserRound, activeColor: 'from-pink-400 to-rose-500' },
             ].map((option) => {
               const active = gender === option.value;
               return (
@@ -233,22 +233,15 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                   role="radio"
                   aria-checked={active}
                   onClick={() => onGenderChange(option.value)}
-                  className={`relative aspect-square rounded-2xl overflow-hidden transition-all ${
-                    active ? 'ring-4 ring-purple-400 shadow-xl' : 'ring-1 ring-slate-200 opacity-90 hover:opacity-100'
+                  className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm transition-all ${
+                    active
+                      ? `bg-gradient-to-r ${option.activeColor} text-white shadow-lg ring-2 ring-purple-400`
+                      : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:ring-purple-300'
                   }`}
                 >
-                  <img src={option.img} alt={option.label} className="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" />
-                  {/* Bottom gradient label */}
-                  <div className={`absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t ${active ? option.tint : 'from-black/70 to-transparent'}`} />
-                  <span className="absolute bottom-2.5 inset-x-0 text-center text-white font-black text-sm drop-shadow-md">
-                    {option.label}
-                  </span>
-                  {/* Check badge when active */}
-                  {active && (
-                    <span className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-md">
-                      <Check className="w-3.5 h-3.5 text-purple-600" strokeWidth={4} />
-                    </span>
-                  )}
+                  <option.Icon className="w-4 h-4" strokeWidth={2.5} />
+                  {option.label}
+                  {active && <Check className="w-4 h-4" strokeWidth={3} />}
                 </motion.button>
               );
             })}
