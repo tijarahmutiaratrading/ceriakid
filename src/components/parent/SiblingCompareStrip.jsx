@@ -21,7 +21,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-3xl shadow-xl border border-white/60 mb-4 overflow-hidden"
+      className="bg-white rounded-3xl shadow-xl border border-white/60 mb-5 overflow-hidden"
     >
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100">
