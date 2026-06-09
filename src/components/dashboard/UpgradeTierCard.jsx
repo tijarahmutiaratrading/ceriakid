@@ -221,8 +221,8 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
           </div>
           <div className="grid grid-cols-2 gap-2.5" role="radiogroup">
             {[
-              { value: 'male', label: 'Lelaki', sub: 'Budak lelaki', emoji: '👦' },
-              { value: 'female', label: 'Perempuan', sub: 'Budak perempuan', emoji: '👧' },
+              { value: 'male', label: 'Lelaki', sub: 'Budak lelaki', img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/0783525bd_generated_image.png' },
+              { value: 'female', label: 'Perempuan', sub: 'Budak perempuan', img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6cea77cec_generated_image.png' },
             ].map((option) => {
               const active = gender === option.value;
               return (
@@ -233,13 +233,15 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                   role="radio"
                   aria-checked={active}
                   onClick={() => onGenderChange(option.value)}
-                  className={`py-3 px-3 rounded-xl text-sm flex flex-col items-center gap-1 transition-all border-2 ${
+                  className={`py-3 px-3 rounded-xl text-sm flex flex-col items-center gap-1.5 transition-all border-2 ${
                     active
                       ? 'border-purple-500 bg-purple-50 text-purple-800'
                       : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                   }`}
                 >
-                  <span className="text-2xl">{option.emoji}</span>
+                  <div className={`w-16 h-16 rounded-2xl overflow-hidden ring-2 ${active ? 'ring-purple-300' : 'ring-slate-200'}`}>
+                    <img src={option.img} alt={option.label} className="w-full h-full object-cover" loading="lazy" />
+                  </div>
                   <span className="font-black text-sm">{option.label}</span>
                   <span className={`text-[11px] font-semibold ${active ? 'text-purple-600' : 'text-slate-400'}`}>{option.sub}</span>
                 </motion.button>
