@@ -196,17 +196,13 @@ export default function ParentDashboard() {
                       {/* Subject progress — full width, primary focus */}
                       <ChildSubjectProgress games={selectedGames} />
 
-                      {/* Activity trend (7-day) + Insights */}
-                      <div className="grid lg:grid-cols-2 gap-5">
-                        <ActivitySparkline games={selectedGames} />
-                        <InsightsCard games={selectedGames} />
-                      </div>
+                      {/* Activity trend (7-day) + Insights — single column */}
+                      <ActivitySparkline games={selectedGames} />
+                      <InsightsCard games={selectedGames} />
 
-                      {/* Recent activity + Smart Recommendations */}
-                      <div className="grid lg:grid-cols-2 gap-5">
-                        <RecentActivity games={selectedGames} />
-                        <SmartRecommendations userEmail={user.email} childName={selectedChild} ageGroup={ageGroup} />
-                      </div>
+                      {/* Recent activity + Smart Recommendations — single column */}
+                      <RecentActivity games={selectedGames} />
+                      <SmartRecommendations userEmail={user.email} childName={selectedChild} ageGroup={ageGroup} />
 
                       {/* Share */}
                       <ShareSheet
