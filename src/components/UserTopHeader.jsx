@@ -222,6 +222,61 @@ export default function UserTopHeader() {
             </div>
           );
         })}
+
+        {/* User menu — profil & logout */}
+        <div className="relative ml-1">
+          <button
+            type="button"
+            onClick={() => setUserMenuOpen(!userMenuOpen)}
+            className={`flex items-center gap-1 pl-1 pr-2 py-1 rounded-full font-black text-sm transition-colors ${
+              isDarkBg ? 'text-white hover:bg-white/15' : 'text-slate-800 hover:bg-white/50'
+            }`}
+            title="Akaun"
+          >
+            <span className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white text-xs font-black ring-1 ring-white/60">
+              {(user?.full_name || user?.email || '?').charAt(0).toUpperCase()}
+            </span>
+            <ChevronDown className={`w-3 h-3 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          <AnimatePresence>
+            {userMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -6, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -6, scale: 0.96 }}
+                transition={{ duration: 0.15 }}
+                className="absolute top-full right-0 mt-3 min-w-[14rem] rounded-2xl p-2 shadow-2xl z-50"
+                style={{
+                  background: 'rgba(20, 14, 38, 0.92)',
+                  backdropFilter: 'blur(28px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                }}
+              >
+                <div className="px-3 py-2.5 border-b border-white/10 mb-1">
+                  <p className="text-white font-black text-xs truncate">{user?.full_name || 'Pengguna'}</p>
+                  <p className="text-white/60 font-bold text-[10px] truncate">{user?.email}</p>
+                </div>
+                <Link
+                  to="/settings"
+                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold text-xs text-white/85 hover:bg-white/10 hover:text-white transition-all"
+                >
+                  <Settings className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span>Tetapan Akaun</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => logout?.()}
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold text-xs text-red-300 hover:bg-red-500/15 hover:text-red-200 transition-all"
+                >
+                  <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span>Log Keluar</span>
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </nav>
     </header>
   );
