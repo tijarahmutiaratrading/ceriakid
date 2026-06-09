@@ -232,7 +232,7 @@ export default function UserTopHeader() {
             title="Akaun"
           >
             {avatarUrl ? (
-              <img src={avatarUrl} alt="Avatar" className="w-7 h-7 lg:w-8 lg:h-8 rounded-full object-cover ring-1 ring-white/60 shadow-sm" />
+              <img src={avatarUrl} alt="Avatar" className="w-9 h-9 lg:w-10 lg:h-10 rounded-full object-cover ring-1 ring-white/60 shadow-sm" />
             ) : (
               <span className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white text-xs font-black ring-1 ring-white/60">
                 {(user?.full_name || user?.email || '?').charAt(0).toUpperCase()}
