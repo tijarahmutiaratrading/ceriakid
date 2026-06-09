@@ -78,16 +78,19 @@ export default function AffiliatePage() {
 
   return (
     <>
-      <AppHeader title="Affiliate" />
-      <div className="min-h-screen relative">
-      {/* Subtle grid pattern */}
+      <AppHeader title="Affiliate" theme="light" />
       <div
-        className="fixed inset-0 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+        className="min-h-screen relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
+        style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)' }}
+      >
+      {/* Floating decorations — CeriaKid vibe (same as Challenges) */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 right-8 text-4xl opacity-40 animate-pulse">🌈</div>
+        <div className="absolute top-40 left-6 text-3xl opacity-30">☁️</div>
+        <div className="absolute top-1/3 right-1/4 text-2xl opacity-25">⭐</div>
+        <div className="absolute bottom-1/3 left-8 text-3xl opacity-30">💖</div>
+        <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
+      </div>
 
       <div className="relative p-4 sm:p-6 max-w-6xl mx-auto">
         {/* Hero with referral link & quick share */}
