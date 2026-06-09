@@ -90,11 +90,6 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
     e.preventDefault();
     setError('');
 
-    if (!isAuthenticated) {
-      base44.auth.redirectToLogin(window.location.href);
-      return;
-    }
-
     // Strict validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[+0-9\s-]{8,15}$/;
@@ -147,11 +142,9 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
     <form onSubmit={handleSubmit} className="space-y-4">
       <ScarcityBanner />
 
-      {!isAuthenticated && (
-        <div className="rounded-2xl bg-yellow-100 border border-yellow-300/60 p-4 text-slate-800 text-sm font-bold">
-          Log masuk dahulu supaya pembayaran dan langganan boleh diaktifkan pada akaun anda.
-        </div>
-      )}
+      <div className="rounded-2xl bg-blue-50 border border-blue-200 p-4 text-slate-800 text-sm font-bold">
+        💡 Tak perlu log masuk! Isi maklumat & bayar terus. Selepas bayar, daftar akaun guna <span className="text-blue-700">email yang sama</span> untuk auto-aktif langganan.
+      </div>
 
       {/* Tier Selection */}
       <div>
@@ -245,7 +238,7 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
         whileTap={{ scale: 0.98 }}
         disabled={loading}
         type="submit" className="min-h-12 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 font-bold rounded-2xl w-full transition-all hover:shadow-lg disabled:opacity-50 shadow-md">
-        {loading ? '🔄 Memproses...' : isAuthenticated ? `💳 Bayar RM${TIER_VALUES[formData.selectedTier] || 0} Sekarang` : '🔐 Log Masuk untuk Teruskan'}
+        {loading ? '🔄 Memproses...' : `💳 Bayar RM${TIER_VALUES[formData.selectedTier] || 0} Sekarang`}
       </motion.button>
 
       {/* Trust Badges */}
