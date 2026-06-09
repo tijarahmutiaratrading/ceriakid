@@ -103,17 +103,13 @@ export default function UserTopHeader() {
     >
       {/* Center: Floating pill nav (Apple Fitness style — adaptive glass) */}
       <nav
-        className="pointer-events-auto flex items-center gap-0 px-1.5 py-0.5 rounded-full shadow-xl shadow-black/20"
+        className="pointer-events-auto flex items-center gap-0 px-1.5 py-0.5 rounded-full"
         style={{
           background: isDarkBg
             ? 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(30,41,59,0.45))'
             : 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
           backdropFilter: 'blur(20px) saturate(180%)',
           WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-          border: isDarkBg ? '1px solid rgba(255,255,255,0.18)' : '1px solid rgba(255,255,255,0.6)',
-          boxShadow: isDarkBg
-            ? '0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15)'
-            : '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
         }}
       >
         {isAdmin && (
