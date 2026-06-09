@@ -8,7 +8,7 @@ const categoryConfigs = {
   mathematics: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b948e01dd_generated_image.png', label: 'Matematik', color: 'from-pink-300 to-rose-400', accentBg: 'bg-pink-100/30' },
   science: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6f0853b3a_generated_image.png', label: 'Sains', color: 'from-emerald-300 to-green-400', accentBg: 'bg-emerald-100/30' },
   jawi: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/110e1698a_generated_image.png', label: 'Aksara Jawi', color: 'from-purple-300 to-indigo-400', accentBg: 'bg-purple-100/30' },
-  pendidikan_islam: { emoji: '🕌', label: 'Pendidikan Islam', color: 'from-emerald-400 via-teal-500 to-green-600', accentBg: 'bg-emerald-100/30' },
+  pendidikan_islam: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/36da49399_generated_image.png', label: 'Pendidikan Islam', color: 'from-emerald-400 via-teal-500 to-green-600', accentBg: 'bg-emerald-100/30' },
   pendidikan_moral: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d8ef5568b_generated_image.png', label: 'Pendidikan Moral', color: 'from-rose-300 via-pink-400 to-fuchsia-500', accentBg: 'bg-rose-100/30' },
   sejarah: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/277b4c5c5_generated_image.png', label: 'Sejarah', color: 'from-amber-400 via-orange-500 to-red-500', accentBg: 'bg-amber-100/30' },
   rbt: { image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/007f4d767_generated_image.png', label: 'Reka Bentuk & Teknologi', color: 'from-slate-400 via-cyan-500 to-blue-600', accentBg: 'bg-cyan-100/30' },
