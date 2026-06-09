@@ -19,7 +19,7 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
     <header className={`hidden sm:flex fixed top-5 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
       {/* Floating pill nav (Apple Fitness style — glossy light) */}
       <nav
-        className="pointer-events-auto flex items-center gap-0 px-1.5 py-1 rounded-full shadow-xl shadow-black/20 max-w-[calc(100vw-2rem)]"
+        className="pointer-events-auto flex items-center gap-1 px-2.5 py-1.5 rounded-full shadow-xl shadow-black/20 max-w-[calc(100vw-2rem)]"
         style={{
           background: 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
           backdropFilter: 'blur(20px) saturate(180%)',
@@ -32,17 +32,17 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
           <img
             src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png"
             alt="CeriaKid"
-            className="h-8 w-8 rounded-full object-cover ml-1 mr-2 ring-1 ring-white/60 shadow-sm hover:ring-amber-300 transition-all"
+            className="h-10 w-10 rounded-full object-cover ml-1 mr-2 ring-1 ring-white/60 shadow-sm hover:ring-amber-300 transition-all"
           />
         </Link>
 
         {/* Switch ke user dashboard */}
         <Link
           to="/dashboard"
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-sm font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-colors whitespace-nowrap"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[15px] font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-colors whitespace-nowrap"
           title="Tukar ke Dashboard Pengguna"
         >
-          <LayoutGrid className="w-3.5 h-3.5" />
+          <LayoutGrid className="w-4 h-4" />
           <span>Pengguna</span>
         </Link>
 
@@ -54,7 +54,7 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
               key={item.key}
               type="button"
               onClick={() => setActiveTab(item.key)}
-              className={`relative px-2.5 py-1.5 rounded-full font-black text-sm transition-colors whitespace-nowrap ${
+              className={`relative px-3.5 py-2 rounded-full font-black text-[15px] transition-colors whitespace-nowrap ${
                 active ? 'text-white' : 'text-slate-800 hover:text-slate-900'
               }`}
             >
