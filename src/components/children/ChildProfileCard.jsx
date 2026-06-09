@@ -202,21 +202,21 @@ export default function ChildProfileCard({
       )}
 
       {/* Action buttons */}
-      <div className="p-4 space-y-2">
+      <div className="p-4 flex items-stretch gap-2">
         {showSetActiveBtn && (
           <button
             onClick={handleSetActive}
-            className="w-full py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+            className="flex-1 py-2.5 rounded-xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
           >
             <UserCheck className="w-3.5 h-3.5" /> Jadikan Aktif
           </button>
         )}
         <button
           onClick={onOpenPerformance}
-          className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold text-sm flex items-center justify-center gap-1.5 shadow-lg transition-all"
+          className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg transition-all"
         >
           <TrendingUp className="w-4 h-4" />
-          {hasPlayed ? 'Lihat Prestasi Penuh' : 'Mulakan Pembelajaran'}
+          {hasPlayed ? 'Lihat Prestasi' : 'Mula Belajar'}
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
