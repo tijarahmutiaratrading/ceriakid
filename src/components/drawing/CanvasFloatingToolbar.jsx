@@ -68,7 +68,7 @@ export default function CanvasFloatingToolbar({
                       key={t.id}
                       type="button"
                       onClick={() => { onToolChange(t); setOpenPopover(null); }}
-                      className={`relative aspect-square rounded-2xl flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 transition ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+                      className={`relative aspect-square rounded-2xl flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 transition ${active ? 'brand-gradient-br text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
                       title={t.hint}
                     >
                       <span className="text-2xl leading-none">{t.emoji}</span>
@@ -101,7 +101,7 @@ export default function CanvasFloatingToolbar({
                       key={s.id}
                       type="button"
                       onClick={() => { onSizeChange(s); setOpenPopover(null); }}
-                      className={`flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl transition ${active ? 'bg-slate-900 text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+                      className={`flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl transition ${active ? 'brand-gradient-br text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
                     >
                       <span className="rounded-full" style={{ width: s.dot, height: s.dot, backgroundColor: active ? '#ffffff' : '#475569' }} />
                       <span className="text-[10px] font-bold">{s.label}</span>
@@ -180,7 +180,7 @@ export default function CanvasFloatingToolbar({
                         key={s}
                         type="button"
                         onClick={() => { onStickerToggle(s); setOpenPopover(null); }}
-                        className={`aspect-square rounded-2xl text-2xl transition flex items-center justify-center hover:scale-110 ${active ? 'bg-slate-900 shadow-md scale-110' : 'bg-slate-100 hover:bg-slate-200'}`}
+                        className={`aspect-square rounded-2xl text-2xl transition flex items-center justify-center hover:scale-110 ${active ? 'brand-gradient-br shadow-md scale-110' : 'bg-slate-100 hover:bg-slate-200'}`}
                       >
                         {s}
                       </button>
