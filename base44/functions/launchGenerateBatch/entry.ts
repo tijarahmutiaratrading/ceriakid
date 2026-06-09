@@ -13,6 +13,7 @@ const SUBJECT_LABELS = {
   mathematics: 'Mathematics',
   science: 'Science',
   jawi: 'Jawi (Arabic-Malay script)',
+  pendidikan_islam: 'Pendidikan Islam (Islamic Studies KSSR)',
 };
 
 const DARJAH_TOPICS = {
@@ -37,6 +38,8 @@ const DARJAH_TOPICS = {
     kafa_sirah: ['Nama penuh Nabi Muhammad SAW', 'Tarikh & tempat kelahiran Nabi', 'Nama ayah & ibu Nabi (Abdullah & Aminah)', 'Datuk Nabi (Abdul Muttalib)', 'Bapa saudara Nabi (Abu Talib)', 'Ibu susuan Nabi (Halimah Sa\'diah)', 'Sifat Nabi sebagai Al-Amin', 'Pekerjaan Nabi semasa muda (mengembala)', 'Isteri pertama Nabi (Siti Khadijah)', 'Anak-anak Nabi Muhammad SAW'],
     kafa_adab: ['Adab makan & minum (mulakan bismillah)', 'Adab tidur (doa sebelum tidur)', 'Adab masuk tandas (kaki kiri dulu)', 'Adab keluar tandas (kaki kanan)', 'Adab dengan ibu bapa (cium tangan)', 'Adab di sekolah (hormat guru)', 'Adab memberi salam', 'Adab menjawab salam', 'Adab berkawan (jujur, baik)', 'Adab bercakap (sopan, tidak menjerit)'],
     kafa_bahasa_arab: ['Huruf hijaiyah Arab Alif sampai Jim', 'Huruf hijaiyah Arab Ha sampai Zai', 'Salam: As-salamu alaikum & jawapan', 'Perkataan Arab: ana (saya), anta (kamu)', 'Nama keluarga Arab: abi (ayah), ummi (ibu)', 'Bilangan Arab 1-5 (wahid, ithnan, thalatha, arba\'a, khamsa)', 'Warna Arab: ahmar (merah), asfar (kuning)', 'Haiwan Arab: qittun (kucing), kalbun (anjing)', 'Anggota badan: ra\'s (kepala), yad (tangan)', 'Buah Arab: tuffah (epal), mawz (pisang)'],
+    // Pendidikan Islam KSSR Darjah 1
+    pendidikan_islam: ['Rukun Islam lima perkara', 'Rukun Iman enam perkara', 'Kalimah Syahadah & maksud', 'Mengenal Allah sebagai Pencipta', 'Nama-nama Allah (Ar-Rahman, Ar-Rahim)', 'Cara berwuduk asas', 'Nama solat lima waktu', 'Bilangan rakaat solat fardhu', 'Bacaan Al-Fatihah', 'Adab makan & minum (bismillah)', 'Adab dengan ibu bapa', 'Doa sebelum & selepas makan', 'Doa sebelum tidur', 'Mengenal huruf hijaiyah Alif Ba Ta', 'Surah Al-Fatihah hafazan', 'Nabi Muhammad SAW (nama & keluarga)', 'Kebersihan diri dalam Islam', 'Adab memberi salam', 'Sifat jujur & amanah', 'Bismillah dalam kehidupan harian'],
   },
   darjah_2: {
     bahasa_melayu: ['Diftong (ai, au, oi)', 'Konsonan bergabung (ng, ny, sy)', 'Imbuhan awalan "me-, ber-, ter-"', 'Imbuhan akhiran "-an, -kan"', 'Kata ganti nama diri', 'Kata bilangan', 'Kata sendi nama', 'Ayat penyata', 'Ayat tanya', 'Ayat perintah', 'Penanda wacana asas', 'Karangan 3 ayat', 'Membaca petikan pendek', 'Sinonim & antonim luas', 'Peribahasa mudah', 'Sajak kanak-kanak', 'Surat tidak rasmi', 'Iklan ringkas', 'Tanda baca tanda tanya & seru', 'Cerita rakyat ringkas'],
@@ -52,6 +55,8 @@ const DARJAH_TOPICS = {
     kafa_sirah: ['Nabi Muhammad mendapat wahyu pertama', 'Tempat wahyu pertama (Gua Hira)', 'Malaikat Jibril menyampaikan wahyu', 'Wahyu pertama (Iqra\' bismi rabbik)', 'Dakwah secara sembunyi 3 tahun', 'Para sahabat awal masuk Islam', 'Abu Bakar As-Siddiq sahabat pertama lelaki', 'Khadijah binti Khuwailid isteri & sahabat pertama', 'Ali bin Abi Talib kanak-kanak pertama Islam', 'Penindasan kafir Quraisy ke atas umat Islam awal'],
     kafa_adab: ['Adab di masjid (tidak bercakap kuat)', 'Adab membaca Al-Quran (berwuduk)', 'Adab berdoa (angkat tangan, ikhlas)', 'Adab terhadap jiran', 'Adab terhadap guru di sekolah', 'Adab makan secara berjemaah', 'Adab dalam perjalanan', 'Adab menjaga kebersihan', 'Adab menjaga lidah (tidak mengumpat)', 'Adab membantu rakan'],
     kafa_bahasa_arab: ['Huruf hijaiyah Arab lengkap 28', 'Bilangan Arab 6-10 (sittah, sab\'a, thamaniyah, tis\'a, asyarah)', 'Hari dalam Arab (al-ahad, al-ithnain, al-thulatha)', 'Bulan Hijrah dalam Arab (Muharram, Safar, Rabiul Awal)', 'Anggota keluarga Arab (akhi, ukhti, jaddi)', 'Pekerjaan Arab (mudarris-guru, tabib-doktor)', 'Bahagian rumah Arab (bait-rumah, bab-pintu)', 'Bahagian sekolah (madrasah, kitab, qalam)', 'Soal jawab mudah: ma ismuka? (apa nama kamu?)', 'Perbualan mudah: kaifa haluk? (apa khabar?)'],
+    // Pendidikan Islam KSSR Darjah 2
+    pendidikan_islam: ['Rukun Islam terperinci', 'Rukun Iman terperinci', 'Syarat sah wuduk', 'Perkara membatalkan wuduk', 'Rukun solat', 'Bacaan dalam rukuk & sujud', 'Bacaan tahiyat', 'Hafazan Surah Al-Ikhlas', 'Hafazan Surah An-Nas', 'Hafazan Surah Al-Falaq', 'Adab masuk & keluar tandas', 'Adab di masjid', 'Doa naik kenderaan', 'Doa masuk rumah', 'Huruf hijaiyah & baris (fathah, kasrah, dommah)', 'Kisah Nabi Adam AS', 'Kisah Nabi Nuh AS', 'Akhlak terpuji: sabar & syukur', 'Adab dengan guru', 'Cara bersuci (istinja)'],
   },
   darjah_3: {
     bahasa_melayu: ['Imbuhan kompleks (memper-, diper-)', 'Kata majmuk', 'Kata ganda', 'Penjodoh bilangan', 'Ayat majmuk gabungan', 'Ayat aktif & pasif', 'Karangan naratif pendek', 'Karangan deskriptif', 'Surat rasmi format', 'Laporan ringkas', 'Iklan kreatif', 'Pantun 4 kerat', 'Sajak bertema', 'Cerpen kanak-kanak', 'Perbahasan pendek', 'Tanda baca lengkap', 'Penanda wacana lanjutan', 'Sinonim & antonim lanjutan', 'Peribahasa Melayu', 'Tatabahasa lengkap'],
@@ -67,6 +72,8 @@ const DARJAH_TOPICS = {
     kafa_sirah: ['Hijrah Nabi ke Madinah', 'Sebab hijrah ke Madinah', 'Gua Thur dalam hijrah', 'Pembinaan Masjid Quba', 'Pembinaan Masjid Nabawi', 'Piagam Madinah', 'Perang Badar (perang pertama)', 'Perang Uhud', 'Perang Khandak', 'Pembukaan Mekah (Fathu Makkah)'],
     kafa_adab: ['Adab ziarah orang sakit', 'Adab di rumah (membantu kerja rumah)', 'Adab memberi & menerima hadiah', 'Adab makan secara Islam (kanan, duduk)', 'Adab tidur (wuduk dulu, doa)', 'Adab kepada kitab Al-Quran', 'Adab dengan adik beradik', 'Adab menjaga maruah diri', 'Adab berpakaian (menutup aurat)', 'Adab menghormati orang tua'],
     kafa_bahasa_arab: ['Kosa kata haiwan: ghazal (rusa), thaalab (musang), jamal (unta)', 'Kosa kata buah: burtuqal (oren), inab (anggur)', 'Warna lengkap: abyad (putih), aswad (hitam), akhdar (hijau)', 'Hari dalam Arab lengkap 7 hari', 'Bulan dalam Arab Hijrah lengkap', 'Bilangan Arab 11-20', 'Soal jawab: ayna...? (di mana...?)', 'Perbualan: min ayna anta? (kamu dari mana?)', 'Kosa kata sekolah: mu\'allim (cikgu), tilmiz (pelajar)', 'Doa harian dalam Arab: bismillah, alhamdulillah, insya Allah'],
+    // Pendidikan Islam KSSR Darjah 3
+    pendidikan_islam: ['Solat berjemaah cara & adab', 'Bacaan iftitah', 'Sujud sahwi', 'Hukum tajwid asas (mad asli)', 'Hafazan Surah Al-Kauthar', 'Hafazan Surah Al-Asr', 'Hafazan Surah Al-Maun', 'Sifat wajib Allah (Wujud, Qidam, Baqa)', 'Beriman kepada Malaikat & tugasnya', 'Beriman kepada Kitab Allah', 'Kisah Nabi Ibrahim AS', 'Kisah Nabi Ismail AS', 'Hijrah Nabi ke Madinah', 'Akhlak: jujur, amanah, hormat', 'Adab ziarah orang sakit', 'Adab dengan jiran', 'Puasa Ramadhan pengenalan', 'Doa untuk ibu bapa', 'Cara mandi wajib pengenalan', 'Asmaul Husna 5 nama pertama'],
   },
   darjah_4: {
     bahasa_melayu: ['Tatabahasa lanjutan', 'Imbuhan apitan (per-...-an, ke-...-an)', 'Frasa nama, kerja, adjektif', 'Klausa', 'Ayat songsang', 'Ayat tanya khusus', 'Karangan fakta', 'Karangan keperihalan', 'Surat rasmi lengkap', 'Laporan aktiviti', 'Ulasan buku/filem', 'Syair', 'Gurindam', 'Peribahasa lanjutan', 'Bidalan & pepatah', 'Bahasa kiasan', 'Cerpen analisis watak', 'Komsas asas', 'Karangan berformat', 'Soalan KBAT'],
@@ -82,6 +89,8 @@ const DARJAH_TOPICS = {
     kafa_sirah: ['Khulafa Ar-Rasyidin (4 khalifah)', 'Saidina Abu Bakar As-Siddiq', 'Saidina Umar bin Al-Khattab', 'Saidina Uthman bin Affan', 'Saidina Ali bin Abi Talib', '10 Sahabat dijamin syurga', 'Bilal bin Rabah (muazzin pertama)', 'Khadijah binti Khuwailid', 'Aisyah binti Abu Bakar', 'Fatimah Az-Zahra (puteri Nabi)'],
     kafa_adab: ['Akhlak terpuji: Jujur (siddiq)', 'Akhlak terpuji: Amanah', 'Akhlak terpuji: Sabar', 'Akhlak terpuji: Tolong-menolong', 'Akhlak tercela: Bohong (kazib)', 'Akhlak tercela: Khianat', 'Akhlak tercela: Marah berlebihan', 'Akhlak tercela: Tamak (rakus)', 'Adab dalam majlis ilmu', 'Adab terhadap binatang & alam sekitar'],
     kafa_bahasa_arab: ['Kata ganti nama: ana, anta, anti, huwa, hiya', 'Kata kerja Arab asas: yaktub (menulis), yaqra\' (membaca)', 'Ayat nominal mudah (jumlah ismiyyah)', 'Ayat verbal mudah (jumlah fi\'liyyah)', 'Kosa kata pakaian: qamis (baju), sirwal (seluar)', 'Kosa kata makanan: khubz (roti), labn (susu)', 'Kosa kata waktu: sabah (pagi), masa\' (petang)', 'Doa harian Arab lengkap: doa makan, tidur', 'Soal jawab: kam umruk? (umur kamu berapa?)', 'Asmaul Husna asas: Ar-Rahman, Ar-Rahim, Al-Malik'],
+    // Pendidikan Islam KSSR Darjah 4
+    pendidikan_islam: ['Solat fardhu lengkap (rukun, syarat, sunat)', 'Tajwid: hukum nun mati & tanwin', 'Hafazan Surah Al-Fil', 'Hafazan Surah Quraisy', 'Hafazan Surah Al-Humazah', 'Sifat 20 Allah pengenalan', '25 Rasul wajib diketahui', 'Mukjizat para Nabi', 'Kisah Nabi Musa AS', 'Kisah Nabi Isa AS', 'Puasa Ramadhan hukum & syarat', 'Perkara membatalkan puasa', 'Zakat fitrah pengenalan', 'Akhlak terpuji: ikhlas & tawaduk', 'Akhlak tercela: bohong & khianat', 'Adab menuntut ilmu', 'Khulafa Ar-Rasyidin pengenalan', 'Sahabat Nabi: Abu Bakar & Umar', 'Solat sunat Rawatib', 'Doa selepas solat'],
   },
   darjah_5: {
     bahasa_melayu: ['Tatabahasa kompleks', 'Ayat majmuk pancangan', 'Ayat majmuk relatif', 'Ayat majmuk komplemen', 'Penjodoh bilangan lanjutan', 'Karangan berformat (rencana, ucapan)', 'Karangan respons terbuka', 'Karangan tidak berformat', 'Komsas sajak', 'Komsas cerpen', 'Komsas prosa tradisional', 'Komsas drama', 'Analisis watak', 'Tema & persoalan', 'Plot & latar', 'Gaya bahasa', 'Pemahaman petikan KBAT', 'Tatabahasa KBAT', 'Penulisan ulasan', 'Penulisan rumusan'],
@@ -97,6 +106,8 @@ const DARJAH_TOPICS = {
     kafa_sirah: ['Tahun-tahun penting hijrah Nabi', 'Perjanjian Hudaibiyyah', 'Pembebasan Mekah (Fathu Makkah)', 'Haji Wida\' (haji perpisahan)', 'Wafatnya Rasulullah SAW', 'Pemilihan Khalifah Abu Bakar', 'Perang Riddah (Murtaddin)', 'Pengumpulan Al-Quran zaman Abu Bakar', 'Penaklukan zaman Umar (Syam, Mesir, Parsi)', 'Pembukuan Al-Quran zaman Uthman'],
     kafa_adab: ['Akhlak terpuji: Ikhlas', 'Akhlak terpuji: Tawaduk (rendah diri)', 'Akhlak terpuji: Syukur', 'Akhlak terpuji: Adil', 'Akhlak tercela: Riya\' (menunjuk-nunjuk)', 'Akhlak tercela: Takabbur (sombong)', 'Akhlak tercela: Hasad dengki', 'Akhlak tercela: Kufur nikmat', 'Adab dengan jiran (toleransi)', 'Adab dalam masyarakat (gotong-royong)'],
     kafa_bahasa_arab: ['Kata kerja madhi (lampau) - kataba (telah menulis)', 'Kata kerja mudhari\' (sekarang) - yaktub', 'Kata kerja amr (suruhan) - uktub!', 'Isim mufrad, mudhanna, jama\' (tunggal, dua, jamak)', 'Isim ma\'rifah & nakirah (al-)', 'Idhafah (gabungan kata)', 'Soal jawab lengkap: matha tadhhab? (bila kamu pergi?)', 'Doa selepas solat dalam Arab', 'Hadis pendek dalam Arab dengan terjemahan', 'Asmaul Husna 99 nama (10 pertama)'],
+    // Pendidikan Islam KSSR Darjah 5
+    pendidikan_islam: ['Solat fardhu & sunat lengkap', 'Tajwid: hukum mim mati & qalqalah', 'Hafazan Surah At-Tin', 'Hafazan Surah Al-Alaq', 'Hafazan Surah Al-Qadr', 'Sifat 20 Allah lengkap', 'Tauhid Rububiyyah & Uluhiyyah', 'Bahaya syirik', 'Hari Akhirat & tanda kiamat', 'Kisah Nabi Yusuf AS', 'Kisah Nabi Sulaiman AS', 'Puasa sunat (Isnin Khamis)', 'Zakat harta jenis & nisab', 'Solat jenazah pengenalan', 'Akhlak: adil & syukur', 'Akhlak tercela: riak & sombong', 'Perang Badar & Uhud', 'Wanita teladan: Khadijah & Aisyah', 'Adab dalam masyarakat (gotong-royong)', 'Korban & akikah pengenalan'],
   },
   darjah_6: {
     bahasa_melayu: ['Tatabahasa UPSR review', 'Karangan respons terhad', 'Karangan respons bebas', 'Karangan KBAT', 'Komsas semua genre', 'Penulisan ringkasan', 'Penulisan ulasan', 'Pemahaman petikan tinggi', 'Tatabahasa kontekstual', 'Sinonim antonim peribahasa', 'Kata majmuk & ganda lanjutan', 'Imbuhan semua jenis', 'Ayat songsang & susunan biasa', 'Klausa & frasa lanjutan', 'Penanda wacana semua jenis', 'Stilistik bahasa', 'Bahasa kiasan & perlambangan', 'Soalan KBAT bahasa', 'Karangan format pidato', 'Karangan format laporan'],
@@ -112,6 +123,8 @@ const DARJAH_TOPICS = {
     kafa_sirah: ['Sirah Nabi Muhammad SAW lengkap (kelahiran hingga wafat)', 'Khulafa Ar-Rasyidin 4 orang lengkap', '10 sahabat dijamin syurga lengkap', 'Tokoh-tokoh Islam (Umar Abdul Aziz, Salahuddin Al-Ayyubi)', 'Wanita-wanita teladan Islam (Khadijah, Aisyah, Fatimah)', 'Perang-perang utama zaman Nabi (Badar, Uhud, Khandak, Fathu Makkah)', 'Hijrah ke Habsyah & Madinah', 'Piagam Madinah & Perjanjian Hudaibiyyah', 'Penyebaran Islam zaman Khulafa Ar-Rasyidin', 'Soalan UPKK gaya Sirah'],
     kafa_adab: ['Akhlak terpuji lengkap (10 sifat utama)', 'Akhlak tercela lengkap (10 sifat utama)', 'Adab harian lengkap (makan, tidur, tandas, masjid)', 'Adab dengan ibu bapa lengkap', 'Adab dengan guru & murid', 'Adab berkawan & jiran', 'Adab di masjid & Al-Quran', 'Adab menuntut ilmu', 'Adab terhadap binatang & alam', 'Soalan UPKK gaya Adab Islamiah'],
     kafa_bahasa_arab: ['Kata kerja Arab lengkap (madhi, mudhari\', amr)', 'Tasrif kata kerja (perubahan dhomir)', 'Isim mufrad, mudhanna, jama\' lengkap', 'Ayat nominal & verbal lanjutan', 'Asmaul Husna 99 nama lengkap', 'Doa-doa harian dalam Arab lengkap', 'Hadis pendek dalam Arab dengan terjemahan', 'Soalan UPKK Bahasa Arab gaya pilihan ganda', 'Perbualan Arab harian lengkap', 'Kosa kata Arab umum (sekolah, rumah, masyarakat) lengkap'],
+    // Pendidikan Islam KSSR Darjah 6 — persediaan UPSR
+    pendidikan_islam: ['Solat fardhu, sunat & jenazah lengkap', 'Tajwid lengkap (review UPSR)', 'Hafazan Surah Ad-Dhuha', 'Hafazan Surah Al-Insyirah', 'Hafazan juzuk Amma pilihan', 'Rukun Iman 6 lengkap dengan dalil', 'Sifat 20 Allah lengkap dengan maksud', '25 Rasul lengkap dengan mukjizat', 'Hari Akhirat lengkap (mahsyar, mizan, syurga, neraka)', 'Qada & Qadar', 'Kisah Nabi Muhammad SAW lengkap', 'Khulafa Ar-Rasyidin lengkap', 'Puasa, zakat, haji & umrah lengkap', 'Korban & akikah lengkap', 'Akhlak terpuji & tercela lengkap', 'Adab harian lengkap', 'Adab menuntut ilmu', 'Perang utama zaman Nabi', 'Tokoh Islam (Salahuddin Al-Ayyubi)', 'Soalan KBAT Pendidikan Islam'],
   },
 };
 
@@ -131,6 +144,7 @@ const SUBJECT_LANG_RULE = {
   mathematics: 'Write questions in BAHASA MELAYU. Numbers and math symbols only.',
   science: 'Write ALL questions, options, and content in BAHASA MELAYU only.',
   jawi: 'Write questions in BAHASA MELAYU. Include Jawi script (Arabic-Malay characters) where relevant in options or problem.',
+  pendidikan_islam: 'Write ALL questions, options, and content in BAHASA MELAYU only. Use authentic Islamic terms (Arabic words like solat, wuduk, rukun) where appropriate. Facts must follow Ahli Sunnah Wal Jamaah and Malaysian KSSR Pendidikan Islam syllabus.',
 };
 
 function buildPrompt({ ageGroup, darjah, category, topic, gameIndex }) {
@@ -186,7 +200,7 @@ function validateGame(game, category) {
     if (new Set(q.options).size !== 4) errors.push(`Q${i+1}: duplicate options`);
 
     // Language mixing check (BM subjects shouldn't have heavy English)
-    if (['bahasa_melayu', 'science', 'mathematics', 'jawi'].includes(category)) {
+    if (['bahasa_melayu', 'science', 'mathematics', 'jawi', 'pendidikan_islam'].includes(category)) {
       const text = q.problem + ' ' + q.options.join(' ');
       const englishWords = ['the ', 'is ', 'are ', 'what ', 'which ', 'where ', 'how ', 'when ', 'this ', 'that '];
       const englishCount = englishWords.filter(w => text.toLowerCase().includes(w)).length;

@@ -12,6 +12,7 @@ export const gameLibrary = {
   sekolah_rendah: {
     bahasa_melayu: [],
     jawi: [],
+    pendidikan_islam: [],
     english: [],
     mathematics: [],
     science: [],

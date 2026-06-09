@@ -12,6 +12,7 @@ const CATEGORY_MAP = {
   bahasa_tamil: 'bahasa_tamil',
   bahasa_mandarin: 'bahasa_mandarin',
   jawi: 'jawi',
+  pendidikan_islam: 'pendidikan_islam',
   // KAFA — single hub card (klik → /kafa, dalam tu pecah jadi 7 subjek UPKK)
   kafa: 'kafa',
 };
@@ -73,9 +74,10 @@ export default function CategoryGrid() {
   }, [ageGroup]);
 
   const categories = Object.keys(CATEGORY_MAP).filter(category => {
-    // Prasekolah: tiada jawi & KAFA (KAFA bermula peringkat sekolah rendah)
+    // Prasekolah: tiada jawi, Pendidikan Islam & KAFA (bermula peringkat sekolah rendah)
     if (ageGroup !== 'sekolah_rendah') {
       if (category === 'jawi') return false;
+      if (category === 'pendidikan_islam') return false;
       if (category === 'kafa') return false;
     }
     return true;
