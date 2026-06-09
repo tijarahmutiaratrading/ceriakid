@@ -31,7 +31,7 @@ export default function RecentActivity({ games }) {
       className="bg-white rounded-3xl shadow-xl border border-white/60 overflow-hidden"
     >
       <div className="flex items-center gap-2.5 px-5 py-4 border-b border-slate-100">
-        <div className="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center">
           <Clock className="w-4 h-4 text-white" />
         </div>
         <div>

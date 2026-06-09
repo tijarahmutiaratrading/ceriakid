@@ -7,10 +7,10 @@ export default function FamilyHeroCard({ children, maxCount, familyStats, leader
   const fillPct = Math.min(100, (children.length / maxCount) * 100);
 
   const stats = [
-    { label: 'Profil Anak', value: children.length, icon: Users, iconBg: 'bg-violet-600' },
-    { label: 'Games Dimain', value: familyStats.totalGames, icon: BarChart2, iconBg: 'bg-sky-600' },
-    { label: 'Jumlah Bintang', value: familyStats.totalStars, icon: Star, iconBg: 'bg-amber-500' },
-    { label: 'Perfect 3⭐', value: familyStats.totalPerfect, icon: Target, iconBg: 'bg-emerald-600' },
+    { label: 'Profil Anak', value: children.length, icon: Users, iconBg: 'bg-purple-600' },
+    { label: 'Games Dimain', value: familyStats.totalGames, icon: BarChart2, iconBg: 'bg-purple-500' },
+    { label: 'Jumlah Bintang', value: familyStats.totalStars, icon: Star, iconBg: 'bg-fuchsia-500' },
+    { label: 'Perfect 3⭐', value: familyStats.totalPerfect, icon: Target, iconBg: 'bg-pink-500' },
   ];
 
   return (
@@ -20,7 +20,7 @@ export default function FamilyHeroCard({ children, maxCount, familyStats, leader
       className="bg-white rounded-3xl shadow-xl border border-white/60 mb-5 overflow-hidden"
     >
       {/* Gradient banner */}
-      <div className="px-6 py-5 bg-gradient-to-r from-violet-600 to-indigo-600 relative overflow-hidden">
+      <div className="px-6 py-5 bg-gradient-to-r from-purple-500 to-pink-500 relative overflow-hidden">
         <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-white/10 pointer-events-none" />
         <div className="absolute -bottom-8 right-16 w-24 h-24 rounded-full bg-white/5 pointer-events-none" />
         <div className="relative flex items-center justify-between gap-3">
@@ -79,7 +79,7 @@ export default function FamilyHeroCard({ children, maxCount, familyStats, leader
               initial={{ width: 0 }}
               animate={{ width: `${fillPct}%` }}
               transition={{ delay: 0.3, duration: 0.6, ease: 'easeOut' }}
-              className={`h-full rounded-full ${fillPct >= 100 ? 'bg-red-500' : 'bg-violet-500'}`}
+              className={`h-full rounded-full ${fillPct >= 100 ? 'bg-red-500' : 'bg-purple-500'}`}
             />
           </div>
           <p className="text-[11px] font-semibold text-slate-500 whitespace-nowrap tabular-nums">{children.length}/{maxCount}</p>

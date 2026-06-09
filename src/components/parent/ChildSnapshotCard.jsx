@@ -14,10 +14,10 @@ export default function ChildSnapshotCard({ child, games, streak = 0 }) {
   const fallbackEmoji = child?.ageGroup === 'sekolah_rendah' ? '📚' : '🎨';
 
   const stats = [
-    { icon: Gamepad2, label: 'Games', value: totalGames, iconColor: 'text-sky-600' },
-    { icon: Star, label: 'Bintang', value: totalStars, iconColor: 'text-amber-500' },
-    { icon: Award, label: 'Perfect', value: perfectGames, iconColor: 'text-emerald-600' },
-    { icon: Flame, label: 'Streak', value: `${streak}h`, iconColor: 'text-red-500' },
+    { icon: Gamepad2, label: 'Games', value: totalGames, iconColor: 'text-purple-600' },
+    { icon: Star, label: 'Bintang', value: totalStars, iconColor: 'text-fuchsia-500' },
+    { icon: Award, label: 'Perfect', value: perfectGames, iconColor: 'text-purple-500' },
+    { icon: Flame, label: 'Streak', value: `${streak}h`, iconColor: 'text-pink-500' },
   ];
 
   return (

@@ -37,7 +37,7 @@ export default function ChildSubjectProgress({ games }) {
       className="bg-white rounded-3xl shadow-xl border border-white/60 overflow-hidden"
     >
       <div className="flex items-center gap-2.5 px-5 py-4 border-b border-slate-100">
-        <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center">
           <BookOpen className="w-4 h-4 text-white" />
         </div>
         <div>
@@ -48,7 +48,7 @@ export default function ChildSubjectProgress({ games }) {
 
       <div className="px-5 py-4 space-y-4">
         {subjects.map((s, i) => {
-          const barColor = s.pct >= 75 ? 'bg-emerald-500' : s.pct >= 50 ? 'bg-amber-400' : 'bg-rose-400';
+          const barColor = s.pct >= 75 ? 'bg-purple-500' : s.pct >= 50 ? 'bg-fuchsia-400' : 'bg-pink-300';
           return (
             <motion.div
               key={s.cat}
@@ -62,7 +62,7 @@ export default function ChildSubjectProgress({ games }) {
                   {categoryLabels[s.cat] || s.cat}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-amber-600 text-xs font-bold">{s.totalStars}⭐</span>
+                  <span className="text-purple-600 text-xs font-bold">{s.totalStars}⭐</span>
                   <span className="text-slate-400 text-[10px] font-semibold">{s.played} game</span>
                 </div>
               </div>
@@ -76,7 +76,7 @@ export default function ChildSubjectProgress({ games }) {
               </div>
               <div className="flex justify-between mt-1">
                 <span className="text-slate-400 text-[10px] font-semibold">Purata {s.avg.toFixed(1)}⭐</span>
-                {s.perfect > 0 && <span className="text-emerald-600 text-[10px] font-bold">{s.perfect}× Perfect</span>}
+                {s.perfect > 0 && <span className="text-purple-600 text-[10px] font-bold">{s.perfect}× Perfect</span>}
               </div>
             </motion.div>
           );

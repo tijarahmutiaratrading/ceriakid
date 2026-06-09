@@ -26,7 +26,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center">
             <Users className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -60,7 +60,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
               onClick={() => onSelect(c.name)}
               className={`relative flex-shrink-0 rounded-xl p-3 min-w-[160px] text-left snap-start border transition-all ${
                 isActive
-                  ? 'bg-violet-50 border-violet-300 ring-1 ring-violet-200'
+                  ? 'bg-purple-50 border-purple-300 ring-1 ring-purple-200'
                   : 'bg-slate-50 border-slate-200 hover:border-slate-300'
               }`}
             >
@@ -85,11 +85,11 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
 
               <div className="grid grid-cols-2 gap-1.5">
                 <div className="bg-white rounded-lg px-2 py-1.5 text-center ring-1 ring-slate-100">
-                  <p className="text-[9px] font-bold text-amber-600 uppercase tracking-wide">Bintang</p>
+                  <p className="text-[9px] font-bold text-fuchsia-600 uppercase tracking-wide">Bintang</p>
                   <p className="font-black text-base text-slate-900 leading-tight tabular-nums">{c.totalStars}</p>
                 </div>
                 <div className="bg-white rounded-lg px-2 py-1.5 text-center ring-1 ring-slate-100">
-                  <p className="text-[9px] font-bold text-sky-600 uppercase tracking-wide">Games</p>
+                  <p className="text-[9px] font-bold text-purple-600 uppercase tracking-wide">Games</p>
                   <p className="font-black text-base text-slate-900 leading-tight tabular-nums">{c.totalGames}</p>
                 </div>
               </div>

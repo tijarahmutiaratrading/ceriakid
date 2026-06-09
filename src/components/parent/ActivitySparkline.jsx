@@ -57,7 +57,7 @@ export default function ActivitySparkline({ games }) {
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center">
             <BarChart3 className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -87,7 +87,7 @@ export default function ActivitySparkline({ games }) {
                     initial={{ height: 0 }}
                     animate={{ height: `${heightPct}%` }}
                     transition={{ duration: 0.6, delay: i * 0.05, ease: 'easeOut' }}
-                    className={`w-full rounded-t-md ${isToday ? 'bg-violet-500' : d.count > 0 ? 'bg-sky-400' : 'bg-slate-200'}`}
+                    className={`w-full rounded-t-md ${isToday ? 'bg-pink-500' : d.count > 0 ? 'bg-purple-400' : 'bg-slate-200'}`}
                     style={{ minHeight: d.count > 0 ? '10px' : '3px' }}
                   />
                 </div>
@@ -100,7 +100,7 @@ export default function ActivitySparkline({ games }) {
             const isToday = i === data.days.length - 1;
             return (
               <div key={i} className="flex-1 text-center">
-                <p className={`text-[10px] font-bold ${isToday ? 'text-violet-600' : 'text-slate-400'}`}>{d.label}</p>
+                <p className={`text-[10px] font-bold ${isToday ? 'text-pink-600' : 'text-slate-400'}`}>{d.label}</p>
               </div>
             );
           })}

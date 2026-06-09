@@ -29,10 +29,10 @@ export default function InsightsCard({ games }) {
   const perfectGames = games.filter(g => g.bestStars === 3).length;
 
   const insights = [
-    { icon: Clock, iconColor: 'text-sky-600', label: 'Hari Ini', value: todayGames, subtitle: `${weekGames} minggu ini` },
-    { icon: Award, iconColor: 'text-amber-500', label: 'Perfect 3⭐', value: perfectGames, subtitle: 'Skor penuh' },
-    { icon: TrendingUp, iconColor: 'text-emerald-600', label: 'Subjek Top', value: bestSubject ? categoryEmojis[bestSubject.cat] || '📚' : '—', subtitle: bestSubject ? categoryLabels[bestSubject.cat] || bestSubject.cat : 'Belum ada' },
-    { icon: Flame, iconColor: 'text-red-500', label: 'Status', value: todayGames > 0 ? '🔥' : '😴', subtitle: todayGames > 0 ? 'Aktif!' : 'Rehat' },
+    { icon: Clock, iconColor: 'text-purple-600', label: 'Hari Ini', value: todayGames, subtitle: `${weekGames} minggu ini` },
+    { icon: Award, iconColor: 'text-fuchsia-500', label: 'Perfect 3⭐', value: perfectGames, subtitle: 'Skor penuh' },
+    { icon: TrendingUp, iconColor: 'text-purple-500', label: 'Subjek Top', value: bestSubject ? categoryEmojis[bestSubject.cat] || '📚' : '—', subtitle: bestSubject ? categoryLabels[bestSubject.cat] || bestSubject.cat : 'Belum ada' },
+    { icon: Flame, iconColor: 'text-pink-500', label: 'Status', value: todayGames > 0 ? '🔥' : '😴', subtitle: todayGames > 0 ? 'Aktif!' : 'Rehat' },
   ];
 
   return (
@@ -42,7 +42,7 @@ export default function InsightsCard({ games }) {
       className="bg-white rounded-3xl shadow-xl border border-white/60 overflow-hidden"
     >
       <div className="flex items-center gap-2.5 px-5 py-4 border-b border-slate-100">
-        <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center">
           <Zap className="w-4 h-4 text-white" />
         </div>
         <div>

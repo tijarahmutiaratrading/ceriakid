@@ -140,7 +140,7 @@ export default function ParentDashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="rounded-3xl p-12 text-center bg-white shadow-xl border border-white/60"
           >
-            <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center mx-auto mb-4">
               <span className="text-3xl">👨‍👩‍👧‍👦</span>
             </div>
             <p className="text-slate-900 font-black text-xl mb-2">Belum ada profil anak</p>
@@ -186,7 +186,7 @@ export default function ParentDashboard() {
                       animate={{ opacity: 1 }}
                       className="rounded-3xl p-10 text-center bg-white shadow-xl border border-white/60"
                     >
-                      <div className="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center mx-auto mb-4">
+                      <div className="w-14 h-14 rounded-2xl bg-purple-100 flex items-center justify-center mx-auto mb-4">
                         <span className="text-2xl">🎮</span>
                       </div>
                       <p className="text-slate-900 font-black text-lg mb-2">{selectedChild} belum mula bermain</p>

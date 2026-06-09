@@ -166,9 +166,9 @@ export default function ChildProfileCard({
       {/* Stats strip */}
       <div className="grid grid-cols-3 gap-px bg-slate-100">
         {[
-          { icon: Gamepad2, value: totalGames, label: 'Games', iconColor: 'text-sky-600' },
-          { icon: Star, value: totalStars, label: 'Bintang', iconColor: 'text-amber-500' },
-          { icon: Award, value: perfectGames, label: 'Perfect', iconColor: 'text-emerald-600' },
+          { icon: Gamepad2, value: totalGames, label: 'Games', iconColor: 'text-purple-600' },
+          { icon: Star, value: totalStars, label: 'Bintang', iconColor: 'text-fuchsia-500' },
+          { icon: Award, value: perfectGames, label: 'Perfect', iconColor: 'text-purple-500' },
         ].map((s, i) => (
           <div key={i} className="bg-white px-3 py-3 text-center">
             <s.icon className={`w-4 h-4 mx-auto mb-1 ${s.iconColor}`} strokeWidth={2.5} />
@@ -188,14 +188,14 @@ export default function ChildProfileCard({
                 <span className="text-lg">{CATEGORY_EMOJIS[topSubject.cat] || '📚'}</span>
                 <div>
                   <p className="font-black text-sm text-slate-900">{CATEGORY_LABELS[topSubject.cat] || topSubject.cat}</p>
-                  <p className="text-amber-600 text-[10px] font-bold">{topSubject.avg.toFixed(1)}⭐ purata</p>
+                  <p className="text-purple-600 text-[10px] font-bold">{topSubject.avg.toFixed(1)}⭐ purata</p>
                 </div>
               </div>
             ) : <p className="text-slate-400 text-xs">—</p>}
           </div>
           <div className="bg-white px-4 py-3">
             <p className="text-[10px] font-bold uppercase tracking-wide text-slate-400 mb-1">Purata Skor</p>
-            <p className="font-black text-2xl text-slate-900 leading-none tabular-nums">{avgStars}<span className="text-sm ml-0.5 text-amber-500">⭐</span></p>
+            <p className="font-black text-2xl text-slate-900 leading-none tabular-nums">{avgStars}<span className="text-sm ml-0.5 text-fuchsia-500">⭐</span></p>
             <p className="text-slate-400 text-[10px] font-semibold mt-0.5">dari 3.0</p>
           </div>
         </div>

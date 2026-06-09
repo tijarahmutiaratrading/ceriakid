@@ -280,7 +280,7 @@ export default function ChildrenProfiles() {
               {/* Form header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-slate-50">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center">
                     <Users className="w-4 h-4 text-white" />
                   </div>
                   <p className="text-slate-900 font-black text-sm">{editingId ? 'Ubah Profil Anak' : 'Tambah Anak Baru'}</p>
@@ -341,7 +341,7 @@ export default function ChildrenProfiles() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value.slice(0, 30) })}
                     maxLength={30}
-                    className="w-full px-4 py-2.5 rounded-xl text-slate-900 placeholder-slate-400 font-medium text-sm bg-white border border-slate-200 focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none transition-all"
+                    className="w-full px-4 py-2.5 rounded-xl text-slate-900 placeholder-slate-400 font-medium text-sm bg-white border border-slate-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 focus:outline-none transition-all"
                   />
                   <p className="text-right text-[10px] font-semibold text-slate-400 mt-1">{formData.name.length}/30</p>
                 </div>
@@ -360,13 +360,13 @@ export default function ChildrenProfiles() {
                           aria-checked={active}
                           className={`py-3 px-3 rounded-xl text-sm flex flex-col items-center gap-1 transition-all border-2 ${
                             active
-                              ? 'border-violet-500 bg-violet-50 text-violet-800'
+                              ? 'border-purple-500 bg-purple-50 text-purple-800'
                               : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                           }`}
                         >
                           <span className="text-2xl">{opt.emoji}</span>
                           <span className="font-black text-sm">{opt.label}</span>
-                          <span className={`text-[11px] font-semibold ${active ? 'text-violet-600' : 'text-slate-400'}`}>{opt.sub}</span>
+                          <span className={`text-[11px] font-semibold ${active ? 'text-purple-600' : 'text-slate-400'}`}>{opt.sub}</span>
                         </button>
                       );
                     })}
@@ -398,8 +398,8 @@ export default function ChildrenProfiles() {
             animate={{ opacity: 1, y: 0 }}
             className="rounded-3xl p-12 sm:p-16 text-center bg-white shadow-xl border border-white/60"
           >
-            <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mx-auto mb-4">
-              <Users className="w-8 h-8 text-violet-600" />
+            <div className="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center mx-auto mb-4">
+              <Users className="w-8 h-8 text-purple-600" />
             </div>
             <p className="text-slate-900 font-black text-xl mb-2">Belum ada profil anak</p>
             <p className="text-slate-500 text-sm font-medium mb-6 max-w-sm mx-auto">Daftar profil anak pertama untuk mula track pembelajaran dan progress mereka.</p>

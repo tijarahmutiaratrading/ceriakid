@@ -12,9 +12,9 @@ const categoryEmojis = {
 };
 
 const ACCENT_COLORS = [
-  { dot: 'bg-amber-500', badge: 'bg-amber-50 text-amber-700 border-amber-200' },
-  { dot: 'bg-sky-500', badge: 'bg-sky-50 text-sky-700 border-sky-200' },
-  { dot: 'bg-emerald-500', badge: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+  { dot: 'bg-purple-500', badge: 'bg-purple-50 text-purple-700 border-purple-200' },
+  { dot: 'bg-fuchsia-500', badge: 'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200' },
+  { dot: 'bg-pink-500', badge: 'bg-pink-50 text-pink-700 border-pink-200' },
 ];
 
 export default function ActionItemsCard({ childName, games }) {
@@ -88,7 +88,7 @@ export default function ActionItemsCard({ childName, games }) {
       className="bg-white rounded-3xl shadow-xl border border-white/60 overflow-hidden"
     >
       <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100">
-        <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center">
           <Lightbulb className="w-4 h-4 text-white" />
         </div>
         <div>
