@@ -72,12 +72,7 @@ export default function AIHubCard() {
       <img
         src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2bab62545_generated_image.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover object-top"
-      />
-      {/* Subtle dark overlay for text readability on mobile */}
-      <div
-        className="absolute inset-0"
-        style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.55), rgba(88,28,135,0.5))' }}
+        className="absolute inset-0 w-full h-full object-cover"
       />
 
       {/* Decorative sparkles */}
