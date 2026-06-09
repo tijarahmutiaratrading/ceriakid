@@ -5,7 +5,7 @@
 // Designed to be called repeatedly (1 bucket per call) to avoid timeout.
 //
 // Payload: { ageGroup, darjah, category, targetCount=30, dryRun=false }
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 const SUBJECT_LABELS = {
   bahasa_melayu: 'Bahasa Melayu',

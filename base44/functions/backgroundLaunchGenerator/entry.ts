@@ -1,4 +1,8 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
+
+// Delay kecil antara setiap query database untuk elak rate limit (429)
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const QUERY_DELAY_MS = 400;
 
 // Same bucket structure as launchGetProgress
 const BUCKETS = [
@@ -18,6 +22,87 @@ const KAFA_BUCKETS = ['darjah_1','darjah_2','darjah_3','darjah_4','darjah_5','da
 }));
 const KAFA_TARGET_CAP = 10;
 
+// ── Self-contained generation (no cross-function invoke — that returns 403) ──
+const SUBJECT_LABELS = {
+  bahasa_melayu: 'Bahasa Melayu', english: 'English Language', mathematics: 'Mathematics',
+  science: 'Science', jawi: 'Jawi (Arabic-Malay script)', pendidikan_islam: 'Pendidikan Islam',
+  pendidikan_moral: 'Pendidikan Moral', sejarah: 'Sejarah (History)', rbt: 'Reka Bentuk dan Teknologi',
+  pjk: 'Pendidikan Jasmani dan Kesihatan', seni: 'Pendidikan Seni Visual',
+  kafa_quran: 'KAFA Al-Quran', kafa_jawi: 'KAFA Jawi', kafa_akidah: 'KAFA Akidah',
+  kafa_ibadah: 'KAFA Ibadah', kafa_sirah: 'KAFA Sirah', kafa_adab: 'KAFA Adab Islamiah',
+  kafa_bahasa_arab: 'KAFA Bahasa Arab',
+};
+const AGE_BAND = {
+  prasekolah: 'preschool children aged 4-6 (very simple language)',
+  darjah_1: 'Year 1 (age 7, KSSR)', darjah_2: 'Year 2 (age 8, KSSR)', darjah_3: 'Year 3 (age 9, KSSR)',
+  darjah_4: 'Year 4 (age 10, KSSR)', darjah_5: 'Year 5 (age 11, KSSR)', darjah_6: 'Year 6 (age 12, KSSR/UPSR)',
+};
+const LANG_RULE = (cat) => {
+  if (cat === 'english') return 'Write everything in ENGLISH only.';
+  if (cat === 'kafa_bahasa_arab') return 'Write questions in BAHASA MELAYU with Arabic words/script where relevant.';
+  if (cat === 'jawi' || cat === 'kafa_jawi' || cat === 'kafa_quran') return 'Write questions in BAHASA MELAYU. Include Jawi/Arabic script where relevant.';
+  return 'Write everything in BAHASA MELAYU only. No English mixing.';
+};
+
+async function generateAndInsert(base44, { ageGroup, darjah, category, gameIndex, existingTitles }) {
+  const level = darjah || ageGroup;
+  const prompt = `You are an expert Malaysian KSSR/Prasekolah/KAFA curriculum designer creating a 10-question multiple-choice quiz game.
+
+Subject: ${SUBJECT_LABELS[category] || category}
+Level: ${AGE_BAND[level] || level}
+LANGUAGE RULE: ${LANG_RULE(category)}
+
+Pick ONE specific syllabus topic for this subject & level that is NOT already covered by these existing game titles: ${JSON.stringify(existingTitles).slice(0, 800)}.
+
+RULES:
+1. EXACTLY 10 questions on that one topic. 2. EXACTLY 4 options each. 3. "answer" = index 0-3 of correct option (randomize). 4. Facts 100% accurate to Malaysian syllabus. 5. Plausible distractors. 6. Match the level difficulty. 7. No language mixing. 8. Include an emoji per question. 9. No duplicate questions.
+
+Return ONLY JSON: {"title":"...","emoji":"...","description":"...","questions":[{"problem":"...","options":["..","..","..",".."],"answer":0,"emoji":"🎯"}]}`;
+
+  const isKafa = category.startsWith('kafa_');
+  const result = await base44.integrations.Core.InvokeLLM({
+    prompt,
+    model: isKafa ? 'gpt_5_5' : 'claude_opus_4_7',
+    response_json_schema: {
+      type: 'object',
+      properties: {
+        title: { type: 'string' }, emoji: { type: 'string' }, description: { type: 'string' },
+        questions: { type: 'array', items: { type: 'object', properties: {
+          problem: { type: 'string' }, options: { type: 'array', items: { type: 'string' } },
+          answer: { type: 'number' }, emoji: { type: 'string' },
+        }, required: ['problem', 'options', 'answer'] } },
+      },
+      required: ['title', 'questions'],
+    },
+  });
+
+  let g = result;
+  if (result?.response && typeof result.response === 'object') g = result.response;
+  if (!g?.questions || g.questions.length !== 10) return false;
+  for (const q of g.questions) {
+    if (!Array.isArray(q.options) || q.options.length !== 4) return false;
+    if (typeof q.answer !== 'number' || q.answer < 0 || q.answer > 3) return false;
+  }
+
+  await base44.asServiceRole.entities.Game.create({
+    title: g.title,
+    description: g.description || g.title,
+    type: 'multiple_choice',
+    category, ageGroup, darjah: darjah || null,
+    difficulty: gameIndex < 10 ? 'easy' : gameIndex < 20 ? 'medium' : 'hard',
+    tier: gameIndex < 5 ? 'free' : gameIndex < 15 ? 'premium' : 'pro',
+    emoji: g.emoji || '🎮',
+    totalQuestions: g.questions.length,
+    gameData: { questions: g.questions.map(q => ({
+      type: 'multiple_choice', problem: q.problem, options: q.options, answer: q.answer,
+      emoji: q.emoji || g.emoji || '🎯',
+    })) },
+    isPublished: true, status: 'ready', order: gameIndex + 1,
+    monthTag: new Date().toISOString().slice(0, 7),
+  });
+  return true;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -33,36 +118,17 @@ Deno.serve(async (req) => {
       return Response.json({ success: true, skipped: true, reason: 'disabled' });
     }
 
-    // STEP 1: Trim excess — delete any bucket with > targetCap games (keep newest 30)
-    let totalTrimmed = 0;
-    for (const b of BUCKETS) {
-      for (const subject of b.subjects) {
-        const filter = { ageGroup: b.ageGroup, category: subject, isPublished: true };
-        if (b.darjah) filter.darjah = b.darjah;
-        const existing = await base44.asServiceRole.entities.Game.filter(filter, '-created_date');
-        if (existing.length > targetCap) {
-          const excess = existing.slice(targetCap); // older ones beyond top 30
-          console.log(`✂️ Trimming ${excess.length} excess games from ${b.ageGroup}/${b.darjah || 'pra'}/${subject}`);
-          for (const g of excess) {
-            try {
-              await base44.asServiceRole.entities.Game.delete(g.id);
-              totalTrimmed++;
-            } catch (e) {
-              console.error(`Failed to delete game ${g.id}:`, e.message);
-            }
-          }
-        }
-      }
-    }
-    if (totalTrimmed > 0) {
-      console.log(`✂️ Trimmed total ${totalTrimmed} excess games`);
-    }
+    // NOTA: Trim step dibuang — terlalu berat (langgar rate limit). Cap dikawal masa generate.
+    const totalTrimmed = 0;
 
-    // STEP 2a: Find first incomplete bucket — KAFA dulu (priority), sebab cap kecil & quick win
+    // STEP 1: Cari bucket pertama yang belum cukup — KAFA dulu (priority, cap kecil).
+    // Query satu-satu dengan delay kecil & berhenti SERTA-MERTA bila jumpa (elak 429).
     let targetBucket = null;
     let bucketCap = targetCap;
+
     for (const b of KAFA_BUCKETS) {
       for (const subject of b.subjects) {
+        await sleep(QUERY_DELAY_MS);
         const existing = await base44.asServiceRole.entities.Game.filter({
           ageGroup: b.ageGroup, darjah: b.darjah, category: subject, isPublished: true,
         });
@@ -81,10 +147,11 @@ Deno.serve(async (req) => {
       if (targetBucket) break;
     }
 
-    // STEP 2b: Kalau KAFA dah cukup, baru sambung KSSR biasa
+    // STEP 2: Kalau KAFA dah cukup, baru sambung KSSR biasa
     if (!targetBucket) {
       for (const b of BUCKETS) {
         for (const subject of b.subjects) {
+          await sleep(QUERY_DELAY_MS);
           const filter = { ageGroup: b.ageGroup, category: subject, isPublished: true };
           if (b.darjah) filter.darjah = b.darjah;
           const existing = await base44.asServiceRole.entities.Game.filter(filter);
@@ -114,18 +181,36 @@ Deno.serve(async (req) => {
 
     console.log(`🚀 Background generating: ${targetBucket.ageGroup}/${targetBucket.darjah || 'pra'}/${targetBucket.category} (${targetBucket.count}/${bucketCap})`);
 
-    // Call existing launchGenerateBatch function
-    const res = await base44.asServiceRole.functions.invoke('launchGenerateBatch', {
-      ageGroup: targetBucket.ageGroup,
-      darjah: targetBucket.darjah,
-      category: targetBucket.category,
-      targetCount: bucketCap,
-      dryRun: false,
-      internalCall: true,
-    });
+    // Ambil tajuk sedia ada (untuk elak topik berulang)
+    const bucketFilter = { ageGroup: targetBucket.ageGroup, category: targetBucket.category, isPublished: true };
+    if (targetBucket.darjah) bucketFilter.darjah = targetBucket.darjah;
+    const existingGames = await base44.asServiceRole.entities.Game.filter(bucketFilter);
+    const existingTitles = existingGames.map(g => g.title).filter(Boolean);
 
-    const generated = res?.data?.generated || 0;
-    const failed = res?.data?.failed || 0;
+    // Generate INLINE (no cross-function invoke). Slow & steady — max 3 per run.
+    const toGenerate = Math.min(targetBucket.needed, 3);
+    let generated = 0;
+    let failed = 0;
+
+    for (let i = 0; i < toGenerate; i++) {
+      const gameIndex = targetBucket.count + generated;
+      try {
+        const ok = await generateAndInsert(base44, {
+          ageGroup: targetBucket.ageGroup,
+          darjah: targetBucket.darjah,
+          category: targetBucket.category,
+          gameIndex,
+          existingTitles,
+        });
+        if (ok) generated++;
+        else failed++;
+      } catch (e) {
+        console.error(`Generate failed:`, e.message);
+        failed++;
+      }
+      await sleep(QUERY_DELAY_MS);
+    }
+
     console.log(`✅ Generated ${generated} games (${failed} failed) for ${targetBucket.category}`);
 
     return Response.json({
