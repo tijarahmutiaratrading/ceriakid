@@ -74,11 +74,6 @@ export default function AIHubCard() {
         alt=""
         className="absolute inset-0 w-full h-full object-cover"
       />
-      {/* Dark gradient overlay for readability */}
-      <div
-        className="absolute inset-0"
-        style={{ background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(88,28,135,0.85), rgba(190,24,93,0.72))' }}
-      />
 
       {/* Decorative sparkles */}
       <div className="pointer-events-none absolute top-4 left-4 text-2xl md:text-3xl opacity-80">✨</div>
