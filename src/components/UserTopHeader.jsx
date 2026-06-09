@@ -16,7 +16,6 @@ const NAV_GROUPS = [
     label: 'Dashboard',
     submenu: [
       { path: '/dashboard', label: 'Halaman Utama', icon: Home },
-      { path: '/settings', label: 'Tetapan Akaun', icon: Settings },
       { path: '/contact', label: 'Hubungi Kami', icon: MessageCircle },
     ],
   },
@@ -258,6 +257,13 @@ export default function UserTopHeader() {
                   <p className="text-white font-black text-xs truncate">{user?.full_name || 'Pengguna'}</p>
                   <p className="text-white/60 font-bold text-[10px] truncate">{user?.email}</p>
                 </div>
+                <Link
+                  to="/settings"
+                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold text-xs text-white/85 hover:bg-white/10 hover:text-white transition-all"
+                >
+                  <Settings className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span>Tetapan Akaun</span>
+                </Link>
                 <button
                   type="button"
                   onClick={() => logout?.()}
