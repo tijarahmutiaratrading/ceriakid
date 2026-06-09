@@ -221,8 +221,8 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
           </div>
           <div className="grid grid-cols-2 gap-3" role="radiogroup">
             {[
-              { value: 'male', label: 'Lelaki', Icon: User, activeColor: 'from-blue-400 to-cyan-500' },
-              { value: 'female', label: 'Perempuan', Icon: UserRound, activeColor: 'from-pink-400 to-rose-500' },
+              { value: 'male', label: 'Lelaki', Icon: User },
+              { value: 'female', label: 'Perempuan', Icon: UserRound },
             ].map((option) => {
               const active = gender === option.value;
               return (
@@ -235,7 +235,7 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                   onClick={() => onGenderChange(option.value)}
                   className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm transition-all ${
                     active
-                      ? `bg-gradient-to-r ${option.activeColor} text-white shadow-lg ring-2 ring-purple-400`
+                      ? 'brand-gradient text-white shadow-lg ring-2 ring-purple-400'
                       : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:ring-purple-300'
                   }`}
                 >
