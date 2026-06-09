@@ -165,22 +165,8 @@ export default function StoryKid() {
 
   return (
     <div
-      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900"
-      style={{
-        background: story && sceneIndex < (story?.scenes?.length || 0)
-          ? undefined
-          : 'linear-gradient(180deg, #fef9f3 0%, #fef3c7 30%, #fbcfe8 70%, #c7d2fe 100%)',
-      }}
+      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900 -mt-16 sm:-mt-20 pt-16 sm:pt-20"
     >
-      {/* Floating pastel clouds — only on listing/end page (not during fullscreen story) */}
-      {(!story || sceneIndex >= (story?.scenes?.length || 0)) && (
-        <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full">
-          <div className="absolute top-20 -left-20 w-72 h-72 rounded-full blur-3xl opacity-50" style={{ background: '#fef3c7' }} />
-          <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full blur-3xl opacity-40" style={{ background: '#fbcfe8' }} />
-          <div className="absolute bottom-40 left-1/4 w-72 h-72 rounded-full blur-3xl opacity-40" style={{ background: '#c7d2fe' }} />
-        </div>
-      )}
-
       {!story && <AppHeader showBack={true} backTo="/dashboard" />}
 
       <div className={`relative w-full ${story && sceneIndex < (story?.scenes?.length || 0) ? '' : 'max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-28 pt-20 sm:pt-4'} overflow-x-hidden`}>

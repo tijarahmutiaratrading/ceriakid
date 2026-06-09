@@ -160,11 +160,11 @@ const AuthenticatedApp = () => {
             <Route path="/bbm-generator" element={lazyRoute(BBMGenerator)} />
             <Route path="/quiz-ai" element={lazyRoute(QuizAI)} />
             <Route path="/affiliate" element={lazyRoute(Affiliate)} />
+            <Route path="/story-kid" element={lazyRoute(StoryKid)} />
           </Route>
 
           {/* Game-play / fullscreen pages - lazy loaded */}
           <Route path="/drawing" element={lazyRoute(DrawingStudio)} />
-          <Route path="/story-kid" element={lazyRoute(StoryKid)} />
           <Route path="/mini-games/:categoryId/play/:gameId" element={lazyRoute(MiniGamePlayground)} />
           <Route path="/play/:category/:index" element={lazyRoute(GamePlayer)} />
           <Route path="/abc" element={lazyRoute(ABCGame)} />
