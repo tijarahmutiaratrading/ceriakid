@@ -21,8 +21,8 @@ const NAV_GROUPS = [
     ],
   },
   {
-    key: 'aktiviti',
-    label: 'Aktiviti',
+    key: 'belajar',
+    label: 'Belajar',
     submenu: [
       { path: '/games-subjek', label: 'Belajar Ikut Subjek', icon: Gamepad2 },
       { path: '/games-hub', label: 'Game Hub', icon: Puzzle },
@@ -38,6 +38,7 @@ const NAV_GROUPS = [
     submenu: [
       { path: '/children-profiles', label: 'Profil Anak', icon: UserCircle },
       { path: '/parent-dashboard', label: 'Prestasi Anak', icon: BarChart3 },
+      { path: '/affiliate', label: 'Program Affiliate', icon: Share2 },
     ],
   },
   {
@@ -49,11 +50,6 @@ const NAV_GROUPS = [
       { path: '/story-generator', label: 'Cikgu Mira — Cerita', icon: BookOpen },
       { path: '/bbm-generator', label: 'Cikgu Daniel — BBM', icon: FileText },
     ],
-  },
-  {
-    key: 'affiliate',
-    label: 'Affiliate',
-    path: '/affiliate',
   },
 ];
 
