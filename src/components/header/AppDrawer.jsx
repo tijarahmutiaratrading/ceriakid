@@ -213,23 +213,23 @@ export default function AppDrawer({
           ))}
         </nav>
 
-        {/* Footer — logout (solid oren, compact) */}
+        {/* Footer — logout */}
         {isAuthenticated && (
-          <div className="px-3 pt-3 pb-1.5 border-t border-white/40 flex items-center justify-between gap-2">
+          <div className="px-3 pt-3 pb-2 border-t border-white/40 flex items-center gap-2" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="inline-flex items-center gap-2 px-1 py-1 text-slate-700 font-bold text-sm active:text-slate-900 active:scale-[0.98] transition-all"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-red-50 text-red-600 font-black text-sm border border-red-100 active:bg-red-100 active:scale-[0.98] transition-all"
             >
-              <LogOut className="w-4 h-4" strokeWidth={2.25} />
+              <LogOut className="w-4 h-4" strokeWidth={2.5} />
               <span>Log Keluar</span>
             </button>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100/70 border border-slate-200/70">
-              <span className="relative flex w-1.5 h-1.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-3 rounded-2xl bg-emerald-50 border border-emerald-100">
+              <span className="relative flex w-2 h-2">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-ping" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <span className="text-slate-600 text-[10px] font-semibold">Online</span>
+              <span className="text-emerald-600 text-[11px] font-black">Online</span>
             </div>
           </div>
         )}
