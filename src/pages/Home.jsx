@@ -126,7 +126,7 @@ export default function Home() {
 
       <div className="relative w-full max-w-7xl mx-auto page-px pb-40 pt-4 space-y-8 md:space-y-10">
 
-      {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl} onLogout={logout} />}
+      {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl || user?.avatarUrl} onLogout={logout} />}
 
       {isAuthenticated && user?.email && <SubscriptionExpiryBanner userEmail={user.email} />}
 
