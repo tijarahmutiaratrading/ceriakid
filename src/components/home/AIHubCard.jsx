@@ -88,7 +88,7 @@ export default function AIHubCard() {
           <motion.div
             whileHover={{ scale: 1.02, y: -2 }}
             className="rounded-2xl p-3.5 md:p-4 border border-white/40"
-            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(16px)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
+            style={{ background: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(16px)', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}
           >
             <p className="text-white font-black text-[10px] md:text-xs tracking-wide mb-0.5">BAKI KREDIT AI</p>
             {loading ? (
@@ -112,7 +112,7 @@ export default function AIHubCard() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 rounded-full text-white font-black text-xs md:text-sm border border-white/40 hover:bg-white/30 transition-all"
-              style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(16px)' }}
+              style={{ background: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(16px)' }}
             >
               <Plus className="w-4 h-4" /> Top Up
             </motion.div>
@@ -140,7 +140,7 @@ export default function AIHubCard() {
                 whileHover={{ scale: 1.02, y: -3 }}
                 whileTap={{ scale: 0.98 }}
                 className="group relative h-full overflow-hidden rounded-2xl p-3 md:p-3.5 border border-white/30 flex items-center gap-2.5 md:gap-3"
-                style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(14px)', boxShadow: '0 4px 16px rgba(0,0,0,0.1)' }}
+                style={{ background: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(14px)', boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}
               >
                 {/* Avatar */}
                 {f.avatar ? (
