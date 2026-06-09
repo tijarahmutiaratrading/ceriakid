@@ -380,9 +380,7 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
       >
         <span className="flex items-center gap-2.5">
           {section.icon && (
-            <span className={`w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${expanded ? 'bg-purple-100' : 'bg-slate-100'}`}>
-              <section.icon className={`w-4 h-4 ${expanded ? 'text-purple-600' : 'text-slate-500'}`} strokeWidth={2.4} />
-            </span>
+            <section.icon className={`w-[18px] h-[18px] flex-shrink-0 ${expanded ? 'text-purple-600' : 'text-slate-500'}`} strokeWidth={2.4} />
           )}
           <span>{section.label}</span>
         </span>
