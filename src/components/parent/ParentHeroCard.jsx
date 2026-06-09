@@ -17,7 +17,7 @@ export default function ParentHeroCard({ totalChildren, totalGames, totalStars, 
       className="mb-5 rounded-3xl overflow-hidden bg-white shadow-xl border border-white/60"
     >
       {/* Gradient banner */}
-      <div className="px-6 py-5 bg-gradient-to-r from-purple-500 to-pink-500 relative overflow-hidden">
+      <div className="px-6 py-5 brand-gradient relative overflow-hidden">
         <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-white/10 pointer-events-none" />
         <div className="absolute -bottom-8 right-16 w-24 h-24 rounded-full bg-white/5 pointer-events-none" />
         <div className="relative flex items-center gap-3">

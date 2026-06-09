@@ -213,7 +213,7 @@ export default function Home() {
                     <div
                       className={`w-full py-1.5 rounded-full text-center font-black text-xs shadow-sm transition-all ${
                         isActive
-                          ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                          ? 'brand-gradient text-white'
                           : 'bg-white/80 text-slate-700'
                       }`}
                     >
@@ -234,8 +234,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12 }}
-            className="rounded-2xl border border-white/30 px-4 py-3 flex items-center justify-between gap-3 shadow-lg"
-            style={{ background: 'linear-gradient(135deg, #7c3aed, #db2777)' }}
+            className="rounded-2xl border border-white/30 px-4 py-3 flex items-center justify-between gap-3 shadow-lg brand-gradient-br"
           >
             <div>
               <p className="text-white font-black text-sm">🏆 Lihat Prestasi Anak</p>

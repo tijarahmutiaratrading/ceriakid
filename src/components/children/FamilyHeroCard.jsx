@@ -20,7 +20,7 @@ export default function FamilyHeroCard({ children, maxCount, familyStats, leader
       className="bg-white rounded-3xl shadow-xl border border-white/60 mb-5 overflow-hidden"
     >
       {/* Gradient banner */}
-      <div className="px-6 py-5 bg-gradient-to-r from-purple-500 to-pink-500 relative overflow-hidden">
+      <div className="px-6 py-5 brand-gradient relative overflow-hidden">
         <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-white/10 pointer-events-none" />
         <div className="absolute -bottom-8 right-16 w-24 h-24 rounded-full bg-white/5 pointer-events-none" />
         <div className="relative flex items-center justify-between gap-3">
@@ -92,7 +92,7 @@ export default function FamilyHeroCard({ children, maxCount, familyStats, leader
         <div className="px-5 py-3 border-t border-slate-100 sm:hidden">
           <button
             onClick={onAddClick}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold text-sm shadow-lg transition-all"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl brand-gradient text-white font-bold text-sm shadow-lg transition-all"
           >
             <Plus className="w-4 h-4" /> Tambah Anak Baru
           </button>

@@ -146,7 +146,7 @@ export default function Challenges() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowForm(!showForm)}
-            className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 flex items-center justify-center transition-all shadow-lg"
+            className="w-12 h-12 rounded-2xl brand-gradient-br flex items-center justify-center transition-all shadow-lg"
           >
             {showForm ? <X className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
           </motion.button>
@@ -187,7 +187,7 @@ export default function Challenges() {
                       onClick={() => setSelectedCategory(cat)}
                       className={`rounded-2xl py-3 px-3 font-bold text-sm flex items-center gap-2 transition-all ${
                         selectedCategory === cat
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                          ? 'brand-gradient text-white shadow-lg'
                           : 'bg-purple-50 text-slate-700 border-2 border-purple-200 hover:bg-purple-100'
                       }`}
                     >
@@ -207,7 +207,7 @@ export default function Challenges() {
                 whileTap={{ scale: 0.97 }}
                 onClick={createChallenge}
                 disabled={creating}
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-black py-3.5 flex items-center justify-center gap-2 shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-60"
+                className="w-full brand-gradient text-white rounded-2xl font-black py-3.5 flex items-center justify-center gap-2 shadow-lg transition-all disabled:opacity-60"
               >
                 {creating ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

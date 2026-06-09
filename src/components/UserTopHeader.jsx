@@ -150,8 +150,7 @@ export default function UserTopHeader() {
                 {showActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full ring-1 ring-purple-300/40 shadow-lg shadow-purple-500/30"
-                    style={{ background: 'linear-gradient(135deg, #a855f7, #7c3aed)' }}
+                    className="absolute inset-0 rounded-full ring-1 ring-purple-300/40 shadow-lg shadow-purple-500/30 brand-gradient-br"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -174,8 +173,7 @@ export default function UserTopHeader() {
                 {showActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full ring-1 ring-purple-300/40 shadow-lg shadow-purple-500/30"
-                    style={{ background: 'linear-gradient(135deg, #a855f7, #7c3aed)' }}
+                    className="absolute inset-0 rounded-full ring-1 ring-purple-300/40 shadow-lg shadow-purple-500/30 brand-gradient-br"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}

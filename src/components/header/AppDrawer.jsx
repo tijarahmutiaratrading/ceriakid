@@ -219,9 +219,8 @@ export default function AppDrawer({
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl text-white font-black text-sm active:scale-[0.98] transition-all"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl text-white font-black text-sm active:scale-[0.98] transition-all brand-gradient-br"
               style={{
-                background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
                 boxShadow: '0 4px 14px -2px rgba(124,58,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25)',
               }}
             >
@@ -283,9 +282,8 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, child
           type="button"
           onClick={onToggleChildMenu}
           aria-expanded={childMenuOpen}
-          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl active:scale-[0.98] transition-all relative overflow-hidden"
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl active:scale-[0.98] transition-all relative overflow-hidden brand-gradient-br"
           style={{
-            background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
             boxShadow: '0 4px 14px -2px rgba(124,58,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25)',
           }}
         >

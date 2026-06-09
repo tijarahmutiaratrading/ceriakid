@@ -64,7 +64,7 @@ export default function SiblingCompareStrip({ children, childrenData, selectedCh
               }`}
             >
               {isLeader && (
-                <div className="absolute -top-2 -right-1 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border border-white">
+                <div className="absolute -top-2 -right-1 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full brand-gradient border border-white">
                   <Trophy className="w-2.5 h-2.5 text-white" />
                   <span className="text-white text-[8px] font-black">TOP</span>
                 </div>
