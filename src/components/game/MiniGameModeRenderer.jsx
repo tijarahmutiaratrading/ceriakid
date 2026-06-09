@@ -13,7 +13,7 @@ const targetPill = 'px-3.5 py-1.5 rounded-full bg-gradient-to-r from-yellow-300 
 
 // STANDARD font sizes — kekalkan konsisten merentas semua mini game modes
 const answerText = 'text-xl';      // teks jawapan utama (pilihan/chip/tile)
-const answerLabel = 'text-xs font-black uppercase tracking-wider'; // label kecil ("Pilih item", target name)
+const answerLabel = 'text-base font-black uppercase tracking-wide'; // label ("Pilih item", target/group name)
 const answerSlot = 'text-xl';      // teks dalam slot/target yang dah diisi
 
 export default function MiniGameModeRenderer({ game, onComplete }) {
