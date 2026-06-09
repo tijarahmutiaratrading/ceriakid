@@ -150,8 +150,8 @@ export default function UserTopHeader() {
                 {showActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full ring-1 ring-orange-300/40 shadow-lg shadow-orange-500/30"
-                    style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)' }}
+                    className="absolute inset-0 rounded-full ring-1 ring-purple-300/40 shadow-lg shadow-purple-500/30"
+                    style={{ background: 'linear-gradient(135deg, #a855f7, #7c3aed)' }}
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -174,8 +174,8 @@ export default function UserTopHeader() {
                 {showActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full ring-1 ring-orange-300/40 shadow-lg shadow-orange-500/30"
-                    style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)' }}
+                    className="absolute inset-0 rounded-full ring-1 ring-purple-300/40 shadow-lg shadow-purple-500/30"
+                    style={{ background: 'linear-gradient(135deg, #a855f7, #7c3aed)' }}
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -206,7 +206,7 @@ export default function UserTopHeader() {
                           key={sub.path}
                           to={sub.path}
                           className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
-                            subActive ? 'bg-white/15 text-amber-300' : 'text-white/85 hover:bg-white/10 hover:text-white'
+                            subActive ? 'bg-white/15 text-purple-300' : 'text-white/85 hover:bg-white/10 hover:text-white'
                           }`}
                         >
                           <SubIcon className="w-3.5 h-3.5 flex-shrink-0" />
