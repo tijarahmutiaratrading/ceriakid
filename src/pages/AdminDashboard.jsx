@@ -11,7 +11,6 @@ import AdminUnifiedHeader from '@/components/admin/AdminUnifiedHeader';
 
 import SystemHealthPanel from '@/components/admin/SystemHealthPanel';
 import GameIconGeneratorPanel from '@/components/admin/GameIconGeneratorPanel';
-import EmojiImageGeneratorPanel from '@/components/admin/EmojiImageGeneratorPanel';
 import LaunchControlPanel from '@/components/admin/LaunchControlPanel';
 import AdminAffiliatePanel from '@/components/admin/AdminAffiliatePanel';
 import PushNotificationPanel from '@/components/admin/PushNotificationPanel';
@@ -419,7 +418,6 @@ export default function AdminDashboard() {
                   <>
                     <LaunchControlPanel />
                     <GameIconGeneratorPanel />
-                    <EmojiImageGeneratorPanel />
                   </>
                 )}
                 {activeTab === 'affiliate' && <AdminAffiliatePanel />}
