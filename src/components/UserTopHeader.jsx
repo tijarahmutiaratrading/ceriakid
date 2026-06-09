@@ -107,7 +107,7 @@ export default function UserTopHeader() {
     >
       {/* Center: Floating pill nav (Apple Fitness style — adaptive glass) */}
       <nav
-        className="pointer-events-auto flex items-center gap-1 px-2.5 py-1.5 rounded-full shadow-xl shadow-black/20"
+        className="pointer-events-auto flex items-center gap-0.5 px-2 py-1 rounded-full shadow-xl shadow-black/20"
         style={{
           background: isDarkBg
             ? 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(30,41,59,0.45))'
@@ -123,14 +123,14 @@ export default function UserTopHeader() {
         {isAdmin && (
           <Link
             to="/admin-dashboard"
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[15px] font-black transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-black transition-all ${
               isDarkBg
                 ? 'text-amber-300 hover:text-amber-200 hover:bg-white/15'
                 : 'text-amber-700 hover:text-amber-900 hover:bg-white/50'
             }`}
             title="Tukar ke Admin Panel"
           >
-            <Shield className="w-4 h-4" />
+            <Shield className="w-3.5 h-3.5" />
             <span>Admin</span>
           </Link>
         )}
@@ -145,7 +145,7 @@ export default function UserTopHeader() {
               <Link
                 key={group.key}
                 to={group.path}
-                className={`relative px-3.5 py-2 rounded-full font-black text-[15px] transition-colors ${
+                className={`relative px-3 py-1.5 rounded-full font-black text-sm transition-colors ${
                   showActive
                     ? 'text-white'
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
@@ -169,7 +169,7 @@ export default function UserTopHeader() {
               <button
                 type="button"
                 onClick={() => setOpenMenu(isOpen ? null : group.key)}
-                className={`relative flex items-center gap-1 px-3.5 py-2 rounded-full font-black text-[15px] transition-colors ${
+                className={`relative flex items-center gap-1 px-3 py-1.5 rounded-full font-black text-sm transition-colors ${
                   showActive
                     ? 'text-white'
                     : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
@@ -230,19 +230,19 @@ export default function UserTopHeader() {
           <button
             type="button"
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className={`flex items-center gap-1 pl-1.5 pr-2.5 py-1 rounded-full font-black text-[15px] transition-colors ${
+            className={`flex items-center gap-1 pl-1 pr-2 py-1 rounded-full font-black text-sm transition-colors ${
               isDarkBg ? 'text-white hover:bg-white/15' : 'text-slate-800 hover:bg-white/50'
             }`}
             title="Akaun"
           >
             {avatarUrl ? (
-              <img src={avatarUrl} alt="Avatar" className="w-9 h-9 rounded-full object-cover ring-1 ring-white/60 shadow-sm" />
+              <img src={avatarUrl} alt="Avatar" className="w-8 h-8 rounded-full object-cover ring-1 ring-white/60 shadow-sm" />
             ) : (
-              <span className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white text-sm font-black ring-1 ring-white/60">
+              <span className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white text-xs font-black ring-1 ring-white/60">
                 {(user?.full_name || user?.email || '?').charAt(0).toUpperCase()}
               </span>
             )}
-            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`w-3 h-3 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
           </button>
 
           <AnimatePresence>
