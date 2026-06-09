@@ -103,7 +103,7 @@ export default function UserTopHeader() {
     >
       {/* Center: Floating pill nav (Apple Fitness style — adaptive glass) */}
       <nav
-        className="pointer-events-auto flex items-center gap-0.5 px-2 py-1 rounded-full shadow-xl shadow-black/20"
+        className="pointer-events-auto flex items-center gap-0.5 px-1.5 py-0.5 rounded-full shadow-xl shadow-black/20"
         style={{
           background: isDarkBg
             ? 'linear-gradient(135deg, rgba(15,23,42,0.65), rgba(30,41,59,0.45))'
