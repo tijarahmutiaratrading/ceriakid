@@ -162,7 +162,7 @@ export default function AppDrawer({
         )}
 
         {/* Scrollable menu */}
-        <nav className="flex-1 overflow-y-auto py-2 scrollbar-hide">
+        <nav className="flex-1 overflow-y-auto py-2 px-1 space-y-0.5 scrollbar-hide">
           {/* Pinned */}
           {isAuthenticated && pinnedItems.length > 0 && (
             <>
@@ -338,7 +338,7 @@ function GuestHeader({ onClose }) {
 
 function SectionLabel({ icon, label }) {
   return (
-    <p className="px-4 pt-4 pb-2 text-slate-400 text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-1.5">
+    <p className="px-4 pt-3 pb-1.5 text-slate-400 text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-1.5">
       {icon}
       {label}
     </p>
@@ -358,7 +358,7 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
               key={item.path}
               href={item.path}
               onClick={onNavigate}
-              className="block px-4 py-3 mx-1 rounded-xl text-slate-700 font-bold text-sm active:bg-slate-100 transition-colors"
+              className="block px-4 py-3 rounded-xl text-slate-700 font-bold text-sm active:bg-slate-100 transition-colors"
             >
               {item.label}
             </a>
@@ -386,10 +386,9 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
       <button
         type="button"
         onClick={() => { haptic('light'); setExpanded(!expanded); }}
-        className={`w-full flex items-center justify-between mx-1 px-4 py-3 rounded-2xl text-sm font-bold transition-colors ${
+        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-bold transition-colors ${
           expanded ? 'bg-white/80 text-slate-900 shadow-sm border border-white/60' : 'text-slate-700 active:bg-white/60'
         }`}
-        style={{ width: 'calc(100% - 0.5rem)' }}
       >
         <span>{section.label}</span>
         <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${expanded ? 'bg-orange-100' : 'bg-slate-100'}`}>
@@ -402,7 +401,7 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
       </button>
 
       {expanded && (
-        <div className="ml-4 pl-2 border-l border-slate-100">
+        <div className="ml-4 pl-2 my-1 border-l border-slate-200/70 space-y-0.5">
           {section.items.map((item) => (
             <MenuItem
               key={item.path}
@@ -432,7 +431,7 @@ function MenuItem({ to, label, icon: Icon, active, pinned, showPin, onPinToggle,
       <Link
         to={to}
         onClick={() => { haptic('light'); onNavigate?.(); }}
-        className={`flex items-center justify-between mx-1 rounded-xl transition-all ${
+        className={`flex items-center justify-between rounded-xl transition-all ${
           isSmall ? 'px-3 py-2.5 text-xs' : 'px-4 py-3 text-sm'
         } ${
           active
