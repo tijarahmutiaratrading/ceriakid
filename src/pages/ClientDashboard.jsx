@@ -96,7 +96,7 @@ export default function ClientDashboard() {
 
       <AppHeader />
 
-      <div className="relative w-full max-w-7xl mx-auto page-px pb-32 pt-4 space-y-5">
+      <div className="relative w-full max-w-7xl mx-auto page-px pb-12 pt-4 space-y-5">
 
         {/* Hero Profile — Apple Fitness style (sama macam dashboard) */}
         <motion.div
@@ -171,10 +171,8 @@ export default function ClientDashboard() {
             whileTap={{ scale: 0.97 }}
             onClick={handleSave}
             disabled={saving}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm shadow-sm transition-all ${
-              saved
-                ? 'bg-emerald-600 text-white'
-                : 'bg-slate-900 hover:bg-slate-800 text-white'
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm shadow-sm transition-all ${
+              saved ? 'bg-emerald-600 text-white' : 'brand-gradient text-white'
             } disabled:opacity-60`}
           >
             {saving ? (
