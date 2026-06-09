@@ -184,13 +184,12 @@ export default function UserTopHeader() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -6, scale: 0.96 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-3 min-w-[14rem] rounded-2xl p-2 z-50"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-3 min-w-[14rem] rounded-2xl p-2 shadow-2xl z-50"
                     style={{
-                      background: isDarkBg
-                        ? 'linear-gradient(135deg, rgba(15,23,42,0.8), rgba(30,41,59,0.65))'
-                        : 'linear-gradient(135deg, rgba(30,20,55,0.55), rgba(20,14,38,0.45))',
-                      backdropFilter: 'blur(20px) saturate(180%)',
-                      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                      background: 'rgba(20, 14, 38, 0.92)',
+                      backdropFilter: 'blur(28px) saturate(180%)',
+                      WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+                      border: '1px solid rgba(255,255,255,0.12)',
                     }}
                   >
                     {group.submenu.map(sub => {
@@ -201,9 +200,7 @@ export default function UserTopHeader() {
                           key={sub.path}
                           to={sub.path}
                           className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold text-xs transition-all ${
-                            subActive
-                              ? 'brand-gradient-br text-white'
-                              : 'text-white/85 hover:bg-white/10 hover:text-white'
+                            subActive ? 'bg-white/15 text-purple-300' : 'text-white/85 hover:bg-white/10 hover:text-white'
                           }`}
                         >
                           <SubIcon className="w-3.5 h-3.5 flex-shrink-0" />
