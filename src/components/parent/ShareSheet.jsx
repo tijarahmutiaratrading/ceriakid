@@ -41,7 +41,7 @@ export default function ShareSheet({ childName, totalGames, avgStars }) {
       <motion.button
         whileTap={{ scale: 0.97 }}
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition-colors"
+        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold text-sm transition-all shadow-lg"
       >
         <Share2 className="w-4 h-4" />
         Kongsi Pencapaian {childName}
