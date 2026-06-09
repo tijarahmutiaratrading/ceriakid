@@ -127,11 +127,22 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
       if (response.data?.checkoutUrl) {
         window.location.href = response.data.checkoutUrl;
+      } else if (response.data?.message) {
+        // Mesej jelas dari backend (cth: downgrade blocked — dah ada pelan aktif)
+        setError(response.data.message);
       } else {
-        setError('Tidak dapat membuat pembayaran. Sila cuba lagi.');
+        setError('Tidak dapat membuat pembayaran buat masa ini. Sila hubungi kami di WhatsApp untuk bantuan.');
       }
     } catch (err) {
-      setError('Ralat semasa memproses pembayaran. Sila cuba lagi.');
+      // Backend hantar mesej spesifik (cth: dah ada pelan aktif) dalam response error
+      const backendMsg = err?.response?.data?.message || err?.response?.data?.error;
+      if (backendMsg && backendMsg !== 'DOWNGRADE_BLOCKED') {
+        setError(backendMsg);
+      } else if (backendMsg === 'DOWNGRADE_BLOCKED') {
+        setError(err?.response?.data?.message || 'Email ini sudah ada pelan aktif. Sila guna email lain atau hubungi kami di WhatsApp.');
+      } else {
+        setError('Tidak dapat memproses pembayaran. Sila semak sambungan internet atau hubungi kami di WhatsApp.');
+      }
       console.error('Checkout error:', err);
     } finally {
       setLoading(false);
