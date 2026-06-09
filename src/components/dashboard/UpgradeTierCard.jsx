@@ -233,7 +233,7 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                   role="radio"
                   aria-checked={active}
                   onClick={() => onGenderChange(option.value)}
-                  className={`relative aspect-[3/2] rounded-2xl overflow-hidden transition-all ${
+                  className={`relative aspect-[5/2] rounded-2xl overflow-hidden transition-all ${
                     active ? 'ring-4 ring-purple-400 shadow-xl' : 'ring-1 ring-slate-200 opacity-90 hover:opacity-100'
                   }`}
                 >
