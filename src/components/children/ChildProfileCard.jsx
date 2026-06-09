@@ -90,7 +90,7 @@ export default function ChildProfileCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: idx * 0.05 }}
       className={`bg-white rounded-3xl shadow-xl overflow-hidden border ${
-        isActive ? 'border-emerald-300 ring-1 ring-emerald-200' : 'border-white/60'
+        isActive ? 'border-purple-300 ring-1 ring-purple-200' : 'border-white/60'
       }`}
     >
       {/* Header */}
@@ -98,7 +98,7 @@ export default function ChildProfileCard({
         {/* Avatar */}
         <div className="relative flex-shrink-0">
           <div className={`w-14 h-14 rounded-xl overflow-hidden ring-2 ${
-            activeToday ? 'ring-emerald-300' : 'ring-slate-200'
+            activeToday ? 'ring-purple-300' : 'ring-slate-200'
           } bg-slate-100`}>
             <img
               src={child.avatarUrl || avatars[idx % avatars.length]}
@@ -122,15 +122,15 @@ export default function ChildProfileCard({
           <div className="flex items-center gap-1.5 mb-0.5">
             <p className="text-slate-900 font-black text-base truncate">{child.name}</p>
             {isLeader && <Crown className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />}
-            {isActive && childrenList.length > 1 && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />}
+            {isActive && childrenList.length > 1 && <CheckCircle2 className="w-3.5 h-3.5 text-purple-500 flex-shrink-0" />}
           </div>
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wide">
               {levelEmoji} {levelLabel}
             </span>
             <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide ${
-              activeToday ? 'bg-emerald-50 text-emerald-700'
-              : hasPlayed ? 'bg-amber-50 text-amber-700'
+              activeToday ? 'bg-purple-50 text-purple-700'
+              : hasPlayed ? 'bg-fuchsia-50 text-fuchsia-700'
               : 'bg-slate-100 text-slate-500'
             }`}>
               {activeToday ? '🔥 Aktif' : hasPlayed ? '💤 Tidak Aktif' : '✨ Baru'}
