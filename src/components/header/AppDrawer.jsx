@@ -285,27 +285,24 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, child
           aria-expanded={childMenuOpen}
           className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl active:scale-[0.98] transition-all relative overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, rgba(244,114,182,0.18) 0%, rgba(192,132,252,0.18) 100%)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255,255,255,0.6)',
-            boxShadow: '0 4px 16px -4px rgba(192,132,252,0.25), inset 0 1px 0 rgba(255,255,255,0.7)',
+            background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
+            boxShadow: '0 4px 14px -2px rgba(124,58,237,0.45), inset 0 1px 0 rgba(255,255,255,0.25)',
           }}
         >
-          <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-pink-200/40 blur-xl pointer-events-none" />
+          <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-white/15 blur-xl pointer-events-none" />
           <img
             src={getChildAvatar(selectedChild)}
             alt=""
             className="relative w-8 h-8 rounded-full object-cover ring-2 ring-white/80 shadow-sm flex-shrink-0"
           />
           <div className="relative flex-1 min-w-0 text-left">
-            <p className="text-pink-700 text-[9px] font-black uppercase tracking-wider leading-none">Anak Aktif</p>
-            <p className="text-slate-800 text-xs font-black truncate leading-tight mt-0.5">{selectedChild.name}</p>
+            <p className="text-white/70 text-[9px] font-black uppercase tracking-wider leading-none">Anak Aktif</p>
+            <p className="text-white text-xs font-black truncate leading-tight mt-0.5">{selectedChild.name}</p>
           </div>
-          <div className="relative flex items-center gap-1 px-2 py-1 rounded-lg bg-white/70 shadow-sm">
-            <span className="text-pink-600 text-[9px] font-black uppercase tracking-wider">Tukar</span>
+          <div className="relative flex items-center gap-1 px-2 py-1 rounded-lg bg-white/25 shadow-sm">
+            <span className="text-white text-[9px] font-black uppercase tracking-wider">Tukar</span>
             <ChevronRight
-              className="w-3 h-3 text-pink-600 transition-transform duration-150"
+              className="w-3 h-3 text-white transition-transform duration-150"
               strokeWidth={3}
               style={{ transform: childMenuOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
             />
