@@ -92,8 +92,8 @@ export default function GamesHub() {
               Latih otak dengan permainan seronok — memori, logik, pantas dan banyak lagi!
             </p>
 
-            {/* Playful stats badges */}
-            <div className="flex flex-wrap gap-2 mt-4">
+            {/* Playful stats badges — grid 3 kolum supaya kemas & tak terabur di semua skrin */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-4 max-w-md">
               {[
                 { top: visibleCategories.length, bottom: 'Kategori', emoji: '📚', bg: 'from-pink-400 to-rose-500' },
                 { top: totalGames, bottom: 'Games', emoji: '🎮', bg: 'from-cyan-400 to-blue-500' },
@@ -104,14 +104,12 @@ export default function GamesHub() {
                   initial={{ scale: 0, rotate: -10 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.2 + i * 0.1, type: 'spring', damping: 10 }}
-                  className={`px-3 py-2 rounded-2xl bg-gradient-to-br ${badge.bg} text-white shadow-lg flex items-center gap-2`}
+                  className={`px-2 py-2 rounded-2xl bg-gradient-to-br ${badge.bg} text-white shadow-lg flex flex-col items-center justify-center text-center`}
                   style={{ boxShadow: '0 6px 16px rgba(0,0,0,0.2)' }}
                 >
-                  <span className="text-lg">{badge.emoji}</span>
-                  <div className="leading-tight">
-                    <p className="font-black text-base">{badge.top}</p>
-                    <p className="text-[9px] font-bold uppercase tracking-wider opacity-90">{badge.bottom}</p>
-                  </div>
+                  <span className="text-lg leading-none mb-0.5">{badge.emoji}</span>
+                  <p className="font-black text-base leading-none">{badge.top}</p>
+                  <p className="text-[9px] font-bold uppercase tracking-wider opacity-90 mt-0.5">{badge.bottom}</p>
                 </motion.div>
               ))}
             </div>
