@@ -42,7 +42,6 @@ export default function GameHeader({ title, score, total, currentQ, totalQ, onPr
           background: 'linear-gradient(135deg, rgba(251,191,36,0.25), rgba(236,72,153,0.25))',
           backdropFilter: 'blur(16px)',
           border: '1.5px solid rgba(255,255,255,0.35)',
-          boxShadow: '0 4px 16px rgba(236,72,153,0.25), inset 0 1px 1px rgba(255,255,255,0.4)',
         }}
       >
         <p className="text-[10px] text-white/80 font-black uppercase tracking-wider">{t('score')}</p>
