@@ -138,21 +138,21 @@ export default function FriendsPanel({ onCountChange }) {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-5 rounded-2xl p-5 md:p-6 bg-white ring-1 ring-slate-200 shadow-sm"
+        className="mb-5 rounded-2xl p-4 md:p-6 bg-white ring-1 ring-slate-200 shadow-sm"
       >
         <div className="grid grid-cols-2 gap-3 md:gap-6 divide-x divide-slate-100">
           {/* Kod Undangan */}
           <div className="pr-3 md:pr-6">
-            <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
+            <p className="text-slate-500 text-[10px] md:text-xs font-black uppercase tracking-wider mb-2.5 md:mb-3">🎫 Kod Undangan</p>
 
-            <div className="flex items-center gap-2.5 mb-3">
-              <div className="flex-1 min-w-0 rounded-xl py-3 text-center bg-white ring-1 ring-slate-200">
-                <p className="text-2xl font-black text-slate-900 tracking-[0.18em]">{inviteCode}</p>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5 mb-2.5 md:mb-3">
+              <div className="flex-1 min-w-0 rounded-xl py-2.5 md:py-3 text-center bg-white ring-1 ring-slate-200">
+                <p className="text-lg md:text-2xl font-black text-slate-900 tracking-[0.12em] md:tracking-[0.18em]">{inviteCode}</p>
               </div>
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={copyCode}
-                className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all shadow-sm ${
+                className={`w-full sm:w-11 h-9 sm:h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all shadow-sm ${
                   copied ? 'bg-green-500' : 'brand-gradient-br'
                 }`}
               >
@@ -164,30 +164,30 @@ export default function FriendsPanel({ onCountChange }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
               onClick={shareInviteCode}
-              className="w-full brand-gradient text-white rounded-xl font-bold text-sm py-2.5 flex items-center justify-center gap-2 shadow-sm transition-all"
+              className="w-full brand-gradient text-white rounded-xl font-bold text-xs md:text-sm py-2 md:py-2.5 flex items-center justify-center gap-1.5 md:gap-2 shadow-sm transition-all"
             >
-              <Share2 className="w-4 h-4" />
-              Kongsi via WhatsApp
+              <Share2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
+              <span className="truncate">WhatsApp</span>
             </motion.button>
           </div>
 
           {/* Tambah Kawan */}
           <div className="pl-3 md:pl-6">
-            <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
-            <div className="flex flex-col gap-2.5">
+            <p className="text-slate-500 text-[10px] md:text-xs font-black uppercase tracking-wider mb-2.5 md:mb-3">➕ Tambah Kawan</p>
+            <div className="flex flex-col gap-2 md:gap-2.5">
               <input
                 type="text"
-                placeholder="Masukkan kod kawan..."
+                placeholder="Kod kawan..."
                 value={inputCode}
                 onChange={e => setInputCode(e.target.value.toUpperCase())}
                 maxLength={6}
-                className="w-full rounded-xl px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 font-bold text-base tracking-wider border border-slate-200 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 uppercase transition-all"
+                className="w-full rounded-xl px-3 md:px-3.5 py-2 md:py-2.5 bg-white text-slate-900 placeholder-slate-400 font-bold text-sm md:text-base tracking-wider border border-slate-200 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 uppercase transition-all"
               />
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={addFriendByCode}
                 disabled={addingFriend || inputCode.length < 4}
-                className="w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-sm shadow-sm disabled:opacity-50 transition-all"
+                className="w-full py-2 md:py-2.5 rounded-xl brand-gradient text-white font-bold text-xs md:text-sm shadow-sm disabled:opacity-50 transition-all"
               >
                 {addingFriend ? '...' : 'Tambah'}
               </motion.button>
