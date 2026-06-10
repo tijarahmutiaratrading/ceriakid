@@ -55,8 +55,14 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    const user = await base44.auth.me();
-    if (!user || user.role !== 'admin') {
+    // Benarkan dua jenis pemanggil:
+    //  1. Admin yang login (semakan manual dari dashboard)
+    //  2. Automation berjadual — hantar { auto: true } tanpa user context
+    const body = await req.json().catch(() => ({}));
+    let user = null;
+    try { user = await base44.auth.me(); } catch { /* automation context — tiada user */ }
+    const isAuto = body?.auto === true;
+    if (!isAuto && (!user || user.role !== 'admin')) {
       return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
@@ -65,7 +71,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Resend not configured' }, { status: 500 });
     }
 
-    const { subscriptionId } = await req.json().catch(() => ({}));
+    const { subscriptionId } = body;
     const sr = base44.asServiceRole;
     const nowIso = new Date().toISOString();
 
