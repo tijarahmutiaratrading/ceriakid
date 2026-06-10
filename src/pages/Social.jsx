@@ -50,7 +50,7 @@ export default function Social() {
           <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
         </div>
 
-        <div className="relative p-4 sm:p-6 max-w-5xl mx-auto pb-32">
+        <div className="relative p-4 sm:p-6 max-w-5xl mx-auto pb-16">
           <SocialHero
             tab={tab}
             setTab={setTab}
