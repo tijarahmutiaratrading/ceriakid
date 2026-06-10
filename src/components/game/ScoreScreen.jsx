@@ -110,9 +110,9 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.03 }}
             onClick={onPlayAgain}
-            className="flex-1 clay-button rounded-xl py-2.5 px-4 bg-game-green/20 flex items-center justify-center gap-2 font-bold text-sm"
+            className="flex-1 clay-button rounded-2xl py-3.5 px-5 bg-game-green/20 flex items-center justify-center gap-2 font-bold text-base"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-5 h-5" />
             {t('playAgain')}
           </motion.button>
 
@@ -120,9 +120,9 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
             <motion.button
               whileTap={{ scale: 0.95 }}
               whileHover={{ scale: 1.03 }}
-              className="w-full clay-button rounded-xl py-2.5 px-4 bg-game-blue/20 flex items-center justify-center gap-2 font-bold text-sm"
+              className="w-full clay-button rounded-2xl py-3.5 px-5 bg-game-blue/20 flex items-center justify-center gap-2 font-bold text-base"
             >
-              <Home className="w-4 h-4" />
+              <Home className="w-5 h-5" />
               {t('backToMenu')}
             </motion.button>
           </Link>
@@ -134,9 +134,9 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.02 }}
             onClick={onGenerateNew}
-            className="w-full py-2.5 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 text-white brand-gradient-br whitespace-nowrap"
+            className="w-full py-3.5 px-5 rounded-2xl font-bold text-base flex items-center justify-center gap-2 text-white brand-gradient-br whitespace-nowrap"
           >
-            <Sparkles className="w-4 h-4" /> Main Semula (Soalan Berbeza)
+            <Sparkles className="w-5 h-5" /> Main Semula (Soalan Berbeza)
           </motion.button>
         ) : (
           <Link to="/#pricing">
