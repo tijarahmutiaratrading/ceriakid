@@ -134,7 +134,7 @@ export default function FriendsPanel({ onCountChange }) {
 
   return (
     <div>
-      {/* Invite Code Card */}
+      {/* Kod Undangan + Tambah Kawan — satu kad */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -166,15 +166,10 @@ export default function FriendsPanel({ onCountChange }) {
           <Share2 className="w-4 h-4" />
           Kongsi via WhatsApp
         </motion.button>
-      </motion.div>
 
-      {/* Add Friend by Code */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
-        className="mb-5 rounded-3xl p-5 bg-white shadow-xl border border-white/60"
-      >
+        {/* Pembahagi */}
+        <div className="my-5 border-t border-purple-100" />
+
         <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
         <div className="flex flex-col gap-2.5">
           <input
@@ -205,7 +200,7 @@ export default function FriendsPanel({ onCountChange }) {
         )}
       </motion.div>
 
-      {/* Friends List */}
+      {/* Friends List */}{/* end gabungan */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
