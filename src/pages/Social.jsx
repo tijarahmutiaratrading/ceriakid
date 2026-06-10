@@ -40,7 +40,7 @@ export default function Social() {
   return (
     <>
       <AppHeader title="Kawan & Cabaran" theme="light" />
-      <div className="min-h-screen relative -mt-16 sm:mt-0 pt-16 sm:pt-0">
+      <div className="min-h-screen relative -mt-16 pt-16 sm:mt-0 sm:pt-0">
         {/* Floating decorations */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute top-20 right-8 text-4xl opacity-40 animate-pulse">🌈</div>
@@ -50,7 +50,7 @@ export default function Social() {
           <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
         </div>
 
-        <div className="relative p-4 sm:p-6 max-w-5xl mx-auto pb-16">
+        <div className="relative px-4 sm:px-6 pt-4 sm:pt-2 max-w-5xl mx-auto pb-16">
           <SocialHero
             tab={tab}
             setTab={setTab}
