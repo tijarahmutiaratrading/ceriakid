@@ -145,18 +145,18 @@ export default function FriendsPanel({ onCountChange }) {
           <div className="md:pr-6">
             <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
 
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex-1 min-w-0 rounded-2xl py-4 text-center bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200">
-                <p className="text-3xl sm:text-4xl font-black text-purple-700 tracking-[0.2em] sm:tracking-widest">{inviteCode}</p>
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="flex-1 min-w-0 rounded-xl py-3 text-center bg-gradient-to-br from-purple-100 to-pink-100 border border-purple-200">
+                <p className="text-2xl font-black text-purple-700 tracking-[0.18em]">{inviteCode}</p>
               </div>
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={copyCode}
-                className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all shadow-lg ${
+                className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all shadow-sm ${
                   copied ? 'bg-green-500' : 'bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
                 }`}
               >
-                {copied ? <Check className="w-5 h-5 text-white" /> : <Copy className="w-5 h-5 text-white" />}
+                {copied ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-white" />}
               </motion.button>
             </div>
 
@@ -164,7 +164,7 @@ export default function FriendsPanel({ onCountChange }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
               onClick={shareInviteCode}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-black py-3.5 flex items-center justify-center gap-2 shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all"
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold text-sm py-2.5 flex items-center justify-center gap-2 shadow-sm hover:from-purple-600 hover:to-pink-600 transition-all"
             >
               <Share2 className="w-4 h-4" />
               Kongsi via WhatsApp
@@ -184,13 +184,13 @@ export default function FriendsPanel({ onCountChange }) {
                 value={inputCode}
                 onChange={e => setInputCode(e.target.value.toUpperCase())}
                 maxLength={6}
-                className="w-full rounded-2xl px-4 py-3 bg-purple-50 text-slate-800 placeholder-slate-400 font-black text-lg tracking-widest border-2 border-purple-200 outline-none focus:border-purple-400 uppercase"
+                className="w-full rounded-xl px-3.5 py-2.5 bg-purple-50 text-slate-800 placeholder-slate-400 font-bold text-base tracking-wider border border-purple-200 outline-none focus:border-purple-400 uppercase"
               />
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={addFriendByCode}
                 disabled={addingFriend || inputCode.length < 4}
-                className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black shadow-lg disabled:opacity-50 transition-all"
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-sm shadow-sm disabled:opacity-50 transition-all"
               >
                 {addingFriend ? '...' : 'Tambah'}
               </motion.button>
