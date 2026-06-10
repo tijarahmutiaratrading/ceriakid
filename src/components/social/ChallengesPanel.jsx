@@ -108,7 +108,7 @@ export default function ChallengesPanel({ onCountChange }) {
         className="mb-5 p-5 md:p-6 rounded-2xl flex items-center justify-between bg-white ring-1 ring-slate-200 shadow-sm"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center shadow-sm flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl brand-gradient-br flex items-center justify-center shadow-sm flex-shrink-0">
             <Zap className="w-5 h-5 text-white" strokeWidth={2.5} fill="white" />
           </div>
           <div>
@@ -195,7 +195,7 @@ export default function ChallengesPanel({ onCountChange }) {
         className="rounded-2xl p-5 md:p-6 bg-white ring-1 ring-slate-200 shadow-sm"
       >
         <div className="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center shadow-sm flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl brand-gradient-br flex items-center justify-center shadow-sm flex-shrink-0">
             <Trophy className="w-5 h-5 text-white" strokeWidth={2.5} />
           </div>
           <div>
