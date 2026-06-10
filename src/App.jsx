@@ -34,8 +34,7 @@ const GameDatabase = lazy(() => import('@/pages/GameDatabase'));
 const ClientDashboard = lazy(() => import('@/pages/ClientDashboard'));
 const ChildrenProfiles = lazy(() => import('@/pages/ChildrenProfiles'));
 const ParentDashboard = lazy(() => import('@/pages/ParentDashboard'));
-const FriendsList = lazy(() => import('@/pages/FriendsList'));
-const Challenges = lazy(() => import('@/pages/Challenges'));
+const Social = lazy(() => import('@/pages/Social'));
 const Scoreboard = lazy(() => import('@/pages/Scoreboard'));
 const BuyCredits = lazy(() => import('@/pages/BuyCredits'));
 const Syllabus = lazy(() => import('@/pages/Syllabus'));
@@ -150,8 +149,9 @@ const AuthenticatedApp = () => {
             <Route path="/games/:category" element={lazyRoute(GamesList)} />
             <Route path="/mini-games/:type" element={lazyRoute(MiniGamesList)} />
             <Route path="/parent-dashboard" element={lazyRoute(ParentDashboard)} />
-            <Route path="/friends" element={lazyRoute(FriendsList)} />
-            <Route path="/challenges" element={lazyRoute(Challenges)} />
+            <Route path="/social" element={lazyRoute(Social)} />
+            <Route path="/friends" element={lazyRoute(Social)} />
+            <Route path="/challenges" element={lazyRoute(Social)} />
             <Route path="/scoreboard" element={lazyRoute(Scoreboard)} />
             <Route path="/buy-credits" element={lazyRoute(BuyCredits)} />
             <Route path="/syllabus" element={lazyRoute(Syllabus)} />

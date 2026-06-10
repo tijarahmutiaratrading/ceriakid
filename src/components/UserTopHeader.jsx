@@ -29,8 +29,7 @@ const NAV_GROUPS = [
       { path: '/games-hub', label: 'Game Hub', icon: Puzzle },
       { path: '/drawing', label: 'Studio Lukisan', icon: Palette },
       { path: '/story-kid', label: 'Story Kid', icon: BookOpen },
-      { path: '/friends', label: 'Kawan', icon: UserPlus },
-      { path: '/challenges', label: 'Cabaran', icon: Trophy },
+      { path: '/social', label: 'Kawan & Cabaran', icon: UserPlus },
     ],
   },
   {

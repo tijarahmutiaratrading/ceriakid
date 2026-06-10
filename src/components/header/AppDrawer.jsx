@@ -576,8 +576,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
         { path: '/games-hub', label: 'Game Hub', icon: BookOpen },
         { path: '/drawing', label: 'Studio Lukisan', icon: Palette },
         { path: '/story-kid', label: 'Story Kid', icon: BookMarked },
-        { path: '/friends', label: 'Kawan', icon: UserPlus },
-        { path: '/challenges', label: 'Cabaran', icon: Trophy },
+        { path: '/social', label: 'Kawan & Cabaran', icon: UserPlus },
       ],
     });
 
@@ -624,6 +623,7 @@ function getIconForPath(path) {
     '/games-hub': Gamepad2,
     '/drawing': Palette,
     '/story-kid': BookMarked,
+    '/social': UserPlus,
     '/friends': UserPlus,
     '/challenges': Trophy,
     '/children-profiles': Baby,
