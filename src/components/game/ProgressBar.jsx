@@ -40,12 +40,15 @@ export default function ProgressBar({ current, total, score }) {
           className="h-full rounded-full relative"
           style={{
             background: 'linear-gradient(90deg, #fbbf24, #ec4899, #8b5cf6)',
+            boxShadow: '0 0 12px rgba(236,72,153,0.5), inset 0 1px 1px rgba(255,255,255,0.4)',
           }}
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
           <div className="absolute inset-0 rounded-full opacity-50" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.4), transparent)' }} />
+          {/* Glow tip */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white" style={{ boxShadow: '0 0 10px 3px rgba(255,255,255,0.8)' }} />
         </motion.div>
       </div>
 
