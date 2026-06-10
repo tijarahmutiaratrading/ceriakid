@@ -153,7 +153,7 @@ export default function FriendsPanel({ onCountChange }) {
                 whileTap={{ scale: 0.9 }}
                 onClick={copyCode}
                 className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all shadow-sm ${
-                  copied ? 'bg-green-500' : 'bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+                  copied ? 'bg-green-500' : 'brand-gradient-br'
                 }`}
               >
                 {copied ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-white" />}
@@ -164,7 +164,7 @@ export default function FriendsPanel({ onCountChange }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
               onClick={shareInviteCode}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold text-sm py-2.5 flex items-center justify-center gap-2 shadow-sm hover:from-purple-600 hover:to-pink-600 transition-all"
+              className="w-full brand-gradient text-white rounded-xl font-bold text-sm py-2.5 flex items-center justify-center gap-2 shadow-sm transition-all"
             >
               <Share2 className="w-4 h-4" />
               Kongsi via WhatsApp
@@ -190,7 +190,7 @@ export default function FriendsPanel({ onCountChange }) {
                 whileTap={{ scale: 0.95 }}
                 onClick={addFriendByCode}
                 disabled={addingFriend || inputCode.length < 4}
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-sm shadow-sm disabled:opacity-50 transition-all"
+                className="w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-sm shadow-sm disabled:opacity-50 transition-all"
               >
                 {addingFriend ? '...' : 'Tambah'}
               </motion.button>
