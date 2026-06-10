@@ -33,7 +33,7 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
           title="Tukar ke Dashboard Pengguna"
         >
           <LayoutGrid className="w-4 h-4 lg:w-[18px] lg:h-[18px]" />
-          <span>Pengguna</span>
+          <span>User</span>
         </Link>
 
         {/* Admin tabs */}
