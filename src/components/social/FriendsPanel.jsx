@@ -153,7 +153,7 @@ export default function FriendsPanel({ onCountChange }) {
                 whileTap={{ scale: 0.9 }}
                 onClick={copyCode}
                 className={`w-full sm:w-11 h-9 sm:h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all shadow-sm ${
-                  copied ? 'bg-green-500' : 'brand-gradient-br'
+                  copied ? 'bg-green-500' : 'bg-gradient-to-br from-purple-500 to-pink-500'
                 }`}
               >
                 {copied ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-white" />}
