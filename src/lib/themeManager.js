@@ -60,7 +60,7 @@ export const THEME_PRESETS = [
   },
 ];
 
-export const DEFAULT_THEME = THEME_PRESETS[0];
+export const DEFAULT_THEME = THEME_PRESETS.find((t) => t.id === 'red_orange');
 
 // Apply tema ke CSS variables + custom properties global untuk gradient.
 export function applyTheme(theme) {
