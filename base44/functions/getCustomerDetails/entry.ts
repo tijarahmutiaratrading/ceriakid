@@ -88,7 +88,8 @@ Deno.serve(async (req) => {
         phone: sub.checkoutPhone || userInfo?.data?.phone || userInfo?.phone || '',
         tier: sub.tier || 'free',
         status: sub.status || 'active',
-        createdDate: sub.created_date,
+        // Pastikan ISO string lengkap dengan penanda UTC 'Z' supaya frontend tak salah tafsir zon waktu
+        createdDate: sub.created_date ? new Date(sub.created_date).toISOString() : null,
         currentPeriodEnd: sub.currentPeriodEnd || null,
         currentPeriodStart: sub.currentPeriodStart || null,
         // Abandoned cart recovery tracking
