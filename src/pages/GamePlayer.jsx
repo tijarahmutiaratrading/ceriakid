@@ -582,8 +582,7 @@ export default function GamePlayer() {
            className="rounded-3xl mb-6 relative"
            style={{
              padding: '2px',
-             background: 'linear-gradient(135deg, rgba(251,191,36,0.7), rgba(236,72,153,0.7), rgba(34,211,238,0.7))',
-             boxShadow: '0 16px 40px rgba(0,0,0,0.35), 0 0 32px rgba(236,72,153,0.25)',
+             background: 'rgba(255,255,255,0.25)',
            }}
          >
          <div className="rounded-[calc(1.5rem-2px)] p-5 md:p-7 text-center relative overflow-hidden"

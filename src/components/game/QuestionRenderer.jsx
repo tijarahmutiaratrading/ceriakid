@@ -44,7 +44,6 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
 
           let bg = 'linear-gradient(145deg, rgba(255,255,255,0.20), rgba(255,255,255,0.08))';
           let border = '1.5px solid rgba(255,255,255,0.30)';
-          let shadow = '0 8px 24px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.35)';
           let badgeBg = badgeGradients[i % badgeGradients.length];
           let badgeIcon = letters[i];
           let dimmed = false;
@@ -52,19 +51,16 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
           if (isSelected && isCorrect) {
             bg = 'linear-gradient(145deg, rgba(34,197,94,0.55), rgba(16,185,129,0.40))';
             border = '2px solid #4ade80';
-            shadow = '0 8px 28px rgba(34,197,94,0.45), inset 0 1px 1px rgba(255,255,255,0.4)';
             badgeBg = 'linear-gradient(135deg, #4ade80, #16a34a)';
             badgeIcon = '✓';
           } else if (isSelected && !isCorrect) {
             bg = 'linear-gradient(145deg, rgba(239,68,68,0.55), rgba(220,38,38,0.40))';
             border = '2px solid #f87171';
-            shadow = '0 8px 28px rgba(239,68,68,0.45), inset 0 1px 1px rgba(255,255,255,0.4)';
             badgeBg = 'linear-gradient(135deg, #f87171, #dc2626)';
             badgeIcon = '✗';
           } else if (isCorrectAnswer) {
             bg = 'linear-gradient(145deg, rgba(34,197,94,0.35), rgba(16,185,129,0.22))';
             border = '2px solid rgba(74,222,128,0.8)';
-            shadow = '0 8px 24px rgba(34,197,94,0.3)';
             badgeBg = 'linear-gradient(135deg, #4ade80, #16a34a)';
             badgeIcon = '✓';
           } else if (showFeedback) {
@@ -86,14 +82,12 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
                 background: bg,
                 backdropFilter: 'blur(16px)',
                 border,
-                boxShadow: shadow,
               }}
             >
               <span
                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-sm sm:text-base flex-shrink-0 text-white font-black"
                 style={{
                   background: badgeBg,
-                  boxShadow: '0 3px 8px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.45)',
                   textShadow: '0 1px 2px rgba(0,0,0,0.25)',
                 }}
               >
