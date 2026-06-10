@@ -19,43 +19,28 @@ export default function ProgressBar({ current, total, score }) {
       className="mb-6"
     >
       <div className="flex justify-between items-center mb-2 px-1">
-        <span className="font-black text-slate-600 text-sm">
+        <span className="font-bold text-slate-400 text-xs">
           Soalan {current} / {total}
         </span>
-        <span className="text-sm font-black text-amber-500 flex items-center gap-1">
+        <span className="text-xs font-bold text-slate-500 flex items-center gap-1 tabular-nums">
           ⭐ {score}/{total}
         </span>
       </div>
 
-      <div
-        className="w-full rounded-full h-3.5 overflow-hidden relative"
-        style={{
-          background: 'rgba(0,0,0,0.06)',
-          border: '1px solid rgba(0,0,0,0.05)',
-          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.08)',
-        }}
-      >
+      <div className="w-full rounded-full h-2.5 overflow-hidden relative bg-slate-200/70">
         <motion.div
-          className="h-full rounded-full relative"
-          style={{
-            background: 'linear-gradient(90deg, #fbbf24, #ec4899, #8b5cf6)',
-            boxShadow: '0 0 12px rgba(236,72,153,0.5), inset 0 1px 1px rgba(255,255,255,0.4)',
-          }}
+          className="h-full rounded-full bg-slate-900"
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-        >
-          <div className="absolute inset-0 rounded-full opacity-50" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.4), transparent)' }} />
-          {/* Glow tip */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white" style={{ boxShadow: '0 0 10px 3px rgba(255,255,255,0.8)' }} />
-        </motion.div>
+        />
       </div>
 
       <motion.p
         key={messageIndex}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center text-sm font-black text-brand-gradient mt-2"
+        className="text-center text-xs font-bold text-slate-400 mt-2"
       >
         {messages[messageIndex]}
       </motion.p>

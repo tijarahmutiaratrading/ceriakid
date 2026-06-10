@@ -523,20 +523,18 @@ export default function GamePlayer() {
       <AppHeader showBack={true} backTo={`/games/${category}`} />
       <div className="relative max-w-lg mx-auto px-4 md:px-6 py-3 md:py-6 pb-12 md:pb-40 pt-24 md:pt-32">
 
-         <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full font-black text-sm transition-all bg-white text-game-purple border border-slate-200 shadow-sm hover:bg-slate-50">
+         <Link to={`/games/${category}`} className="inline-flex items-center gap-1.5 mb-4 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors">
            <ArrowLeft className="w-4 h-4" />
            Kembali ke Subjek
          </Link>
 
-         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold">
-             {game.difficulty === 'hard' && <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500" />}
-             <span className="capitalize px-3 py-1.5 text-xs sm:text-sm rounded-full whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-sm">
-               {game.difficulty === 'easy' ? '🟢 Senang' : game.difficulty === 'medium' ? '🟡 Sedang' : '🔴 Susah'}
-             </span>
-           </div>
-           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-500">
-             <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+         <div className="flex items-center justify-between gap-2 mb-4">
+           <span className="inline-flex items-center gap-1.5 capitalize px-3 py-1.5 text-xs font-bold rounded-lg whitespace-nowrap bg-white text-slate-700 ring-1 ring-slate-200 shadow-sm">
+             {game.difficulty === 'hard' && <Zap className="w-3.5 h-3.5 text-amber-500" />}
+             {game.difficulty === 'easy' ? '🟢 Senang' : game.difficulty === 'medium' ? '🟡 Sedang' : '🔴 Susah'}
+           </span>
+           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
+             <Clock className="w-3.5 h-3.5" />
              {game.totalQuestions || 20} soalan
            </div>
          </div>
@@ -559,14 +557,9 @@ export default function GamePlayer() {
            initial={{ opacity: 0, y: 30, scale: 0.95 }}
            animate={{ opacity: 1, y: 0, scale: 1 }}
            transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-           className="rounded-3xl mb-6 relative"
-           style={{
-             padding: '2px',
-             background: 'linear-gradient(135deg, rgba(251,191,36,0.7), rgba(236,72,153,0.7), rgba(34,211,238,0.7))',
-             boxShadow: '0 12px 32px rgba(0,0,0,0.10)',
-           }}
+           className="rounded-2xl mb-6 relative bg-white ring-1 ring-slate-200 shadow-sm"
          >
-         <div className="rounded-[calc(1.5rem-2px)] p-5 md:p-7 text-center relative overflow-hidden bg-white">
+         <div className="rounded-2xl p-6 md:p-8 text-center relative overflow-hidden">
 
 
           {/* Picture Quiz — image only */}

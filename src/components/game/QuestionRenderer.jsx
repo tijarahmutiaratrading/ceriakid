@@ -27,14 +27,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
   // Multiple Choice & True/False
   if (['multiple_choice', 'true_false', 'yes_no'].includes(type)) {
     const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
-    const badgeGradients = [
-      'linear-gradient(135deg, #fbbf24, #f59e0b)',
-      'linear-gradient(135deg, #ec4899, #db2777)',
-      'linear-gradient(135deg, #22d3ee, #0891b2)',
-      'linear-gradient(135deg, #a78bfa, #7c3aed)',
-      'linear-gradient(135deg, #34d399, #059669)',
-      'linear-gradient(135deg, #fb923c, #ea580c)',
-    ];
+    const badgeGradients = ['#f1f5f9', '#f1f5f9', '#f1f5f9', '#f1f5f9', '#f1f5f9', '#f1f5f9'];
 
     return (
       <div className="grid grid-cols-2 gap-3">
@@ -43,33 +36,37 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
           const isCorrectAnswer = showFeedback && i === question.answer;
 
           let bg = '#ffffff';
-          let border = '1.5px solid #e2e8f0';
-          let shadow = '0 4px 14px rgba(0,0,0,0.06)';
+          let border = '1px solid #e2e8f0';
+          let shadow = '0 1px 3px rgba(0,0,0,0.04)';
           let textColor = '#1e293b';
           let badgeBg = badgeGradients[i % badgeGradients.length];
+          let badgeText = '#64748b';
           let badgeIcon = letters[i];
           let dimmed = false;
 
           if (isSelected && isCorrect) {
-            bg = 'linear-gradient(145deg, #dcfce7, #bbf7d0)';
-            border = '2px solid #4ade80';
-            shadow = '0 6px 20px rgba(34,197,94,0.25)';
+            bg = '#f0fdf4';
+            border = '1.5px solid #4ade80';
+            shadow = '0 4px 14px rgba(34,197,94,0.18)';
             textColor = '#166534';
-            badgeBg = 'linear-gradient(135deg, #4ade80, #16a34a)';
+            badgeBg = '#16a34a';
+            badgeText = '#ffffff';
             badgeIcon = '✓';
           } else if (isSelected && !isCorrect) {
-            bg = 'linear-gradient(145deg, #fee2e2, #fecaca)';
-            border = '2px solid #f87171';
-            shadow = '0 6px 20px rgba(239,68,68,0.25)';
+            bg = '#fef2f2';
+            border = '1.5px solid #f87171';
+            shadow = '0 4px 14px rgba(239,68,68,0.18)';
             textColor = '#991b1b';
-            badgeBg = 'linear-gradient(135deg, #f87171, #dc2626)';
+            badgeBg = '#dc2626';
+            badgeText = '#ffffff';
             badgeIcon = '✗';
           } else if (isCorrectAnswer) {
-            bg = 'linear-gradient(145deg, #dcfce7, #bbf7d0)';
-            border = '2px solid rgba(74,222,128,0.8)';
-            shadow = '0 6px 20px rgba(34,197,94,0.2)';
+            bg = '#f0fdf4';
+            border = '1.5px solid #86efac';
+            shadow = '0 4px 14px rgba(34,197,94,0.12)';
             textColor = '#166534';
-            badgeBg = 'linear-gradient(135deg, #4ade80, #16a34a)';
+            badgeBg = '#16a34a';
+            badgeText = '#ffffff';
             badgeIcon = '✓';
           } else if (showFeedback) {
             dimmed = true;
@@ -85,7 +82,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
               whileHover={{ scale: disabled ? 1 : 1.04, y: disabled ? 0 : -2 }}
               onClick={(e) => !disabled && onAnswer(i, e)}
               disabled={disabled}
-              className="min-h-16 rounded-2xl py-3.5 pl-3 pr-3.5 font-black text-left transition-all text-sm sm:text-base break-words flex items-center gap-2.5"
+              className="min-h-16 rounded-xl py-3.5 pl-3 pr-3.5 font-bold text-left transition-all text-sm sm:text-base break-words flex items-center gap-3"
               style={{
                 background: bg,
                 border,
@@ -94,15 +91,15 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
               }}
             >
               <span
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-sm sm:text-base flex-shrink-0 text-white font-black"
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center text-sm sm:text-base flex-shrink-0 font-black"
                 style={{
                   background: badgeBg,
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+                  color: badgeText,
                 }}
               >
                 {badgeIcon}
               </span>
-              <span className="flex-1 text-center">
+              <span className="flex-1 text-left">
                 {typeof option === 'string' ? option : option?.label ?? String(option)}
               </span>
             </motion.button>
