@@ -516,7 +516,7 @@ export default function GamePlayer() {
       <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
         <CikguMascot size={300} />
       </div>
-      <div className="md:hidden fixed bottom-2 -right-2 z-0 opacity-90">
+      <div className="md:hidden fixed bottom-2 left-2 z-0 opacity-90">
         <CikguMascot size={150} />
       </div>
 
