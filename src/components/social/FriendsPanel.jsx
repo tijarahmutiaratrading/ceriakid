@@ -190,7 +190,7 @@ export default function FriendsPanel({ onCountChange }) {
                 whileTap={{ scale: 0.95 }}
                 onClick={addFriendByCode}
                 disabled={addingFriend || inputCode.length < 4}
-                className="w-full py-2 md:py-2.5 rounded-xl brand-gradient text-white font-bold text-xs md:text-sm shadow-sm disabled:opacity-50 transition-all"
+                className="w-full py-2 md:py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-xs md:text-sm shadow-sm disabled:opacity-50 transition-all"
               >
                 {addingFriend ? '...' : 'Tambah'}
               </motion.button>
