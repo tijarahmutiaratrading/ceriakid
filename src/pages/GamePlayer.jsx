@@ -526,7 +526,7 @@ export default function GamePlayer() {
       </div>
 
       <AppHeader showBack={true} backTo={`/games/${category}`} />
-      <div className="relative max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
+      <div className="relative max-w-lg mx-auto px-4 md:px-6 py-3 md:py-6 pb-24 md:pb-40 pt-20 md:pt-32">
 
          <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full font-black text-sm transition-all"
            style={{
