@@ -122,7 +122,7 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
               whileHover={{ scale: 1.03 }}
               className="w-full clay-button rounded-2xl py-3.5 px-5 bg-game-blue/20 flex items-center justify-center gap-2 font-bold text-base"
             >
-              <Home className="w-6 h-6" />
+              <Home className="w-7 h-7" />
               {t('backToMenu')}
             </motion.button>
           </Link>
