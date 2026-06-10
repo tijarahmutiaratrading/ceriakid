@@ -19,7 +19,7 @@ const statusConfig = {
   completed: { label: 'Selesai', emoji: '✅', bg: 'bg-green-100', text: 'text-green-700' },
 };
 
-export default function ChallengesPanel() {
+export default function ChallengesPanel({ onCountChange }) {
   const { user } = useAuth();
   const [challenges, setChallenges] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -41,6 +41,7 @@ export default function ChallengesPanel() {
       const all = [...(myChallenges || []), ...(opponentChallenges || [])];
       all.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
       setChallenges(all);
+      onCountChange?.(all.length);
     } catch (error) {
       console.error('Failed to load challenges:', error);
     }
@@ -49,7 +50,11 @@ export default function ChallengesPanel() {
   const deleteChallenge = async (id) => {
     try {
       await base44.entities.FriendChallenge.delete(id);
-      setChallenges(prev => prev.filter(c => c.id !== id));
+      setChallenges(prev => {
+        const next = prev.filter(c => c.id !== id);
+        onCountChange?.(next.length);
+        return next;
+      });
       toast({ title: '🗑️ Cabaran dipadam' });
     } catch (err) {
       console.error('Failed to delete challenge:', err);

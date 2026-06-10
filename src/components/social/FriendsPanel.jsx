@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import EmptyState from '@/components/ui/EmptyState';
 import { toast } from '@/components/ui/use-toast';
 
-export default function FriendsPanel() {
+export default function FriendsPanel({ onCountChange }) {
   const { user } = useAuth();
   const [friends, setFriends] = useState([]);
   const [copied, setCopied] = useState(false);
@@ -34,6 +34,7 @@ export default function FriendsPanel() {
         status: 'accepted',
       }) || [];
       setFriends(acceptedFriends);
+      onCountChange?.(acceptedFriends.length);
     } catch (error) {
       console.error('Failed to load friends:', error);
     }
@@ -42,7 +43,11 @@ export default function FriendsPanel() {
   const removeFriend = async (friendId) => {
     try {
       await base44.entities.Friend.delete(friendId);
-      setFriends(prev => prev.filter(f => f.id !== friendId));
+      setFriends(prev => {
+        const next = prev.filter(f => f.id !== friendId);
+        onCountChange?.(next.length);
+        return next;
+      });
       toast({ title: '👋 Kawan dibuang' });
     } catch (error) {
       console.error('Failed to remove friend:', error);
