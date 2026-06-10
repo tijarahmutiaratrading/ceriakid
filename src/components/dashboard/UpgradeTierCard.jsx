@@ -235,7 +235,7 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                   onClick={() => onGenderChange(option.value)}
                   className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm transition-all ${
                     active
-                      ? 'brand-gradient text-white shadow-lg ring-2 ring-purple-400'
+                      ? 'brand-gradient text-white shadow-lg'
                       : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:ring-purple-300'
                   }`}
                 >
