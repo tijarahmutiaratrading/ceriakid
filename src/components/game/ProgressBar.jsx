@@ -29,7 +29,7 @@ export default function ProgressBar({ current, total, score }) {
 
       <div className="w-full rounded-full h-2.5 overflow-hidden relative bg-slate-200/70">
         <motion.div
-          className="h-full rounded-full bg-slate-900"
+          className="h-full rounded-full brand-gradient"
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
