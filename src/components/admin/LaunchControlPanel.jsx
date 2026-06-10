@@ -7,6 +7,7 @@ import LaunchSettingsModal from '@/components/admin/LaunchSettingsModal';
 import LaunchOverview from '@/components/admin/LaunchOverview';
 import LaunchManualControl from '@/components/admin/LaunchManualControl';
 import BackgroundActivityPanel from '@/components/admin/BackgroundActivityPanel';
+import ResumeGenerateButton from '@/components/admin/ResumeGenerateButton';
 
 export default function LaunchControlPanel() {
   const [tab, setTab] = useState('overview');
@@ -68,7 +69,8 @@ export default function LaunchControlPanel() {
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
+            <ResumeGenerateButton />
             <Button
               onClick={() => setShowSettings(true)}
               variant="outline"
