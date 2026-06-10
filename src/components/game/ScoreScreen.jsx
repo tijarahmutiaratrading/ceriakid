@@ -4,26 +4,9 @@ import { Link } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { Star, RotateCcw, Home, Sparkles, Loader2 } from 'lucide-react';
 import { useLang } from '@/lib/LanguageContext';
-import ReviewPromptModal from '@/components/game/ReviewPromptModal';
 
 export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenerateNew, isPremium }) {
   const { t } = useLang();
-  const [showReviewPrompt, setShowReviewPrompt] = useState(false);
-
-  // Track perfect scores — trigger review prompt selepas 5 kali 3-star
-  useEffect(() => {
-    if (stars < 3) return;
-    const dismissed = localStorage.getItem('review_prompt_dismissed');
-    if (dismissed) return;
-    const current = parseInt(localStorage.getItem('perfect_scores_count') || '0', 10);
-    const next = current + 1;
-    localStorage.setItem('perfect_scores_count', String(next));
-    if (next >= 5) {
-      // Delay supaya confetti settle dulu
-      const timer = setTimeout(() => setShowReviewPrompt(true), 2500);
-      return () => clearTimeout(timer);
-    }
-  }, [stars]);
 
   useEffect(() => {
     if (stars < 2) return;
@@ -144,9 +127,6 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
             </motion.button>
           </Link>
         </div>
-
-        {/* Review prompt modal — appears selepas 5 perfect scores */}
-        <ReviewPromptModal open={showReviewPrompt} onClose={() => setShowReviewPrompt(false)} />
 
         {/* AI Generate New Questions Button */}
         {isPremium ? (
