@@ -563,17 +563,10 @@ export default function GamePlayer() {
            style={{
              padding: '2px',
              background: 'linear-gradient(135deg, rgba(251,191,36,0.7), rgba(236,72,153,0.7), rgba(34,211,238,0.7))',
-             boxShadow: '0 16px 40px rgba(0,0,0,0.35), 0 0 32px rgba(236,72,153,0.25)',
+             boxShadow: '0 12px 32px rgba(0,0,0,0.10)',
            }}
          >
-         <div className="rounded-[calc(1.5rem-2px)] p-5 md:p-7 text-center relative overflow-hidden"
-           style={{
-             background: 'linear-gradient(160deg, rgba(76,29,149,0.92), rgba(88,28,135,0.88), rgba(131,24,67,0.9))',
-             backdropFilter: 'blur(20px)',
-           }}
-         >
-          {/* Inner glow sheen */}
-          <div className="absolute inset-x-0 top-0 h-20 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.12), transparent)' }} />
+         <div className="rounded-[calc(1.5rem-2px)] p-5 md:p-7 text-center relative overflow-hidden bg-white">
 
 
           {/* Picture Quiz — image only */}
@@ -583,36 +576,34 @@ export default function GamePlayer() {
 
           {/* Letter/Number Display */}
           {currentQuestion.letter && (
-            <div className="text-5xl sm:text-7xl font-black mb-2 text-white">
+            <div className="text-5xl sm:text-7xl font-black mb-2 text-brand-gradient">
               {currentQuestion.letter}
             </div>
           )}
 
           {currentQuestion.word && (
-            <p className="text-lg sm:text-2xl font-bold text-white">
+            <p className="text-lg sm:text-2xl font-bold text-slate-800">
               {currentQuestion.word}
             </p>
           )}
 
           {/* Generic question text — covers all DB game formats */}
            {currentQuestion.question && (
-             <p className={`font-black mb-2 text-white ${currentQuestion.question.length > 60 ? 'text-sm sm:text-lg' : 'text-base sm:text-2xl'}`}>
+             <p className={`font-black mb-2 text-slate-800 ${currentQuestion.question.length > 60 ? 'text-sm sm:text-lg' : 'text-base sm:text-2xl'}`}>
                {currentQuestion.question}
              </p>
            )}
 
            {/* Text Question (math, multiple choice) */}
            {currentQuestion.problem && (
-             <div className={`font-black text-white leading-snug ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}
-               style={{ textShadow: '0 2px 10px rgba(0,0,0,0.4)' }}
-             >
+             <div className={`font-black text-slate-800 leading-snug ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}>
                {currentQuestion.problem}
              </div>
            )}
 
            {/* Question label based on game type */}
            {currentQuestion.image && !currentQuestion.problem && !currentQuestion.question && (
-             <p className="text-base sm:text-lg font-bold text-white mt-2">
+             <p className="text-base sm:text-lg font-bold text-slate-700 mt-2">
                {game.type === 'counting' ? 'Berapakah ini?' : 'Apakah ini?'}
              </p>
            )}

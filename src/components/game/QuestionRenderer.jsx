@@ -42,29 +42,33 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
           const isSelected = showFeedback && selectedIdx === i;
           const isCorrectAnswer = showFeedback && i === question.answer;
 
-          let bg = 'linear-gradient(145deg, rgba(255,255,255,0.20), rgba(255,255,255,0.08))';
-          let border = '1.5px solid rgba(255,255,255,0.30)';
-          let shadow = '0 8px 24px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.35)';
+          let bg = '#ffffff';
+          let border = '1.5px solid #e2e8f0';
+          let shadow = '0 4px 14px rgba(0,0,0,0.06)';
+          let textColor = '#1e293b';
           let badgeBg = badgeGradients[i % badgeGradients.length];
           let badgeIcon = letters[i];
           let dimmed = false;
 
           if (isSelected && isCorrect) {
-            bg = 'linear-gradient(145deg, rgba(34,197,94,0.55), rgba(16,185,129,0.40))';
+            bg = 'linear-gradient(145deg, #dcfce7, #bbf7d0)';
             border = '2px solid #4ade80';
-            shadow = '0 8px 28px rgba(34,197,94,0.45), inset 0 1px 1px rgba(255,255,255,0.4)';
+            shadow = '0 6px 20px rgba(34,197,94,0.25)';
+            textColor = '#166534';
             badgeBg = 'linear-gradient(135deg, #4ade80, #16a34a)';
             badgeIcon = '✓';
           } else if (isSelected && !isCorrect) {
-            bg = 'linear-gradient(145deg, rgba(239,68,68,0.55), rgba(220,38,38,0.40))';
+            bg = 'linear-gradient(145deg, #fee2e2, #fecaca)';
             border = '2px solid #f87171';
-            shadow = '0 8px 28px rgba(239,68,68,0.45), inset 0 1px 1px rgba(255,255,255,0.4)';
+            shadow = '0 6px 20px rgba(239,68,68,0.25)';
+            textColor = '#991b1b';
             badgeBg = 'linear-gradient(135deg, #f87171, #dc2626)';
             badgeIcon = '✗';
           } else if (isCorrectAnswer) {
-            bg = 'linear-gradient(145deg, rgba(34,197,94,0.35), rgba(16,185,129,0.22))';
+            bg = 'linear-gradient(145deg, #dcfce7, #bbf7d0)';
             border = '2px solid rgba(74,222,128,0.8)';
-            shadow = '0 8px 24px rgba(34,197,94,0.3)';
+            shadow = '0 6px 20px rgba(34,197,94,0.2)';
+            textColor = '#166534';
             badgeBg = 'linear-gradient(135deg, #4ade80, #16a34a)';
             badgeIcon = '✓';
           } else if (showFeedback) {
@@ -81,25 +85,24 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
               whileHover={{ scale: disabled ? 1 : 1.04, y: disabled ? 0 : -2 }}
               onClick={(e) => !disabled && onAnswer(i, e)}
               disabled={disabled}
-              className="min-h-16 rounded-2xl py-3.5 pl-3 pr-3.5 font-black text-left transition-all text-sm sm:text-base break-words text-white flex items-center gap-2.5"
+              className="min-h-16 rounded-2xl py-3.5 pl-3 pr-3.5 font-black text-left transition-all text-sm sm:text-base break-words flex items-center gap-2.5"
               style={{
                 background: bg,
-                backdropFilter: 'blur(16px)',
                 border,
                 boxShadow: shadow,
+                color: textColor,
               }}
             >
               <span
                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-sm sm:text-base flex-shrink-0 text-white font-black"
                 style={{
                   background: badgeBg,
-                  boxShadow: '0 3px 8px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.45)',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.25)',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
                 }}
               >
                 {badgeIcon}
               </span>
-              <span className="flex-1 text-center" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
+              <span className="flex-1 text-center">
                 {typeof option === 'string' ? option : option?.label ?? String(option)}
               </span>
             </motion.button>
