@@ -523,34 +523,19 @@ export default function GamePlayer() {
       <AppHeader showBack={true} backTo={`/games/${category}`} />
       <div className="relative max-w-lg mx-auto px-4 md:px-6 py-3 md:py-6 pb-12 md:pb-40 pt-24 md:pt-32">
 
-         <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full font-black text-sm transition-all"
-           style={{
-             background: 'rgba(255,255,255,0.15)',
-             backdropFilter: 'blur(12px)',
-             border: '1px solid rgba(255,255,255,0.25)',
-             color: 'white',
-             boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-           }}
-         >
+         <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full font-black text-sm transition-all bg-white text-game-purple border border-slate-200 shadow-sm hover:bg-slate-50">
            <ArrowLeft className="w-4 h-4" />
            Kembali ke Subjek
          </Link>
 
          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold">
-             {game.difficulty === 'hard' && <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-300" />}
-             <span className="capitalize px-3 py-1.5 text-xs sm:text-sm rounded-full whitespace-nowrap"
-               style={{
-                 background: 'rgba(255,255,255,0.18)',
-                 backdropFilter: 'blur(12px)',
-                 border: '1px solid rgba(255,255,255,0.3)',
-                 color: 'white',
-               }}
-             >
+             {game.difficulty === 'hard' && <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500" />}
+             <span className="capitalize px-3 py-1.5 text-xs sm:text-sm rounded-full whitespace-nowrap bg-white text-slate-700 border border-slate-200 shadow-sm">
                {game.difficulty === 'easy' ? '🟢 Senang' : game.difficulty === 'medium' ? '🟡 Sedang' : '🔴 Susah'}
              </span>
            </div>
-           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-white/80">
+           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-500">
              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
              {game.totalQuestions || 20} soalan
            </div>

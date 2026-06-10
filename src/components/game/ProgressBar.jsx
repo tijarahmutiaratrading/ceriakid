@@ -19,10 +19,10 @@ export default function ProgressBar({ current, total, score }) {
       className="mb-6"
     >
       <div className="flex justify-between items-center mb-2 px-1">
-        <span className="font-black text-white/90 text-sm" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
+        <span className="font-black text-slate-600 text-sm">
           Soalan {current} / {total}
         </span>
-        <span className="text-sm font-black text-yellow-300 flex items-center gap-1" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
+        <span className="text-sm font-black text-amber-500 flex items-center gap-1">
           ⭐ {score}/{total}
         </span>
       </div>
@@ -30,10 +30,9 @@ export default function ProgressBar({ current, total, score }) {
       <div
         className="w-full rounded-full h-3.5 overflow-hidden relative"
         style={{
-          background: 'rgba(255,255,255,0.12)',
-          backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(255,255,255,0.2)',
-          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)',
+          background: 'rgba(0,0,0,0.06)',
+          border: '1px solid rgba(0,0,0,0.05)',
+          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.08)',
         }}
       >
         <motion.div
@@ -56,8 +55,7 @@ export default function ProgressBar({ current, total, score }) {
         key={messageIndex}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center text-sm font-black text-yellow-300 mt-2"
-        style={{ textShadow: '0 1px 6px rgba(0,0,0,0.35)' }}
+        className="text-center text-sm font-black text-brand-gradient mt-2"
       >
         {messages[messageIndex]}
       </motion.p>
