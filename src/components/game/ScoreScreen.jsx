@@ -110,9 +110,9 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.03 }}
             onClick={onPlayAgain}
-            className="flex-1 clay-button rounded-2xl py-4 px-6 bg-game-green/20 flex items-center justify-center gap-2 font-extrabold text-lg"
+            className="flex-1 clay-button rounded-xl py-2.5 px-4 bg-game-green/20 flex items-center justify-center gap-2 font-bold text-sm"
           >
-            <RotateCcw className="w-5 h-5" />
+            <RotateCcw className="w-4 h-4" />
             {t('playAgain')}
           </motion.button>
 
@@ -120,9 +120,9 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
             <motion.button
               whileTap={{ scale: 0.95 }}
               whileHover={{ scale: 1.03 }}
-              className="w-full clay-button rounded-2xl py-4 px-6 bg-game-blue/20 flex items-center justify-center gap-2 font-extrabold text-lg"
+              className="w-full clay-button rounded-xl py-2.5 px-4 bg-game-blue/20 flex items-center justify-center gap-2 font-bold text-sm"
             >
-              <Home className="w-5 h-5" />
+              <Home className="w-4 h-4" />
               {t('backToMenu')}
             </motion.button>
           </Link>
