@@ -557,7 +557,14 @@ export default function GamePlayer() {
            initial={{ opacity: 0, y: 30, scale: 0.95 }}
            animate={{ opacity: 1, y: 0, scale: 1 }}
            transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-           className="rounded-2xl mb-6 relative bg-white ring-1 ring-slate-200 shadow-sm"
+           className="rounded-2xl mb-6 relative"
+           style={{
+             background: 'rgba(255,255,255,0.55)',
+             backdropFilter: 'blur(20px) saturate(160%)',
+             WebkitBackdropFilter: 'blur(20px) saturate(160%)',
+             border: '1px solid rgba(255,255,255,0.7)',
+             boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+           }}
          >
          <div className="rounded-2xl p-6 md:p-8 text-center relative overflow-hidden">
 

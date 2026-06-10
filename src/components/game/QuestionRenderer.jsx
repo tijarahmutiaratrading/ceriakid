@@ -27,7 +27,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
   // Multiple Choice & True/False
   if (['multiple_choice', 'true_false', 'yes_no'].includes(type)) {
     const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
-    const badgeGradients = ['#f1f5f9', '#f1f5f9', '#f1f5f9', '#f1f5f9', '#f1f5f9', '#f1f5f9'];
+    const badgeGradients = ['rgba(255,255,255,0.65)', 'rgba(255,255,255,0.65)', 'rgba(255,255,255,0.65)', 'rgba(255,255,255,0.65)', 'rgba(255,255,255,0.65)', 'rgba(255,255,255,0.65)'];
 
     return (
       <div className="grid grid-cols-2 gap-3">
@@ -35,9 +35,9 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
           const isSelected = showFeedback && selectedIdx === i;
           const isCorrectAnswer = showFeedback && i === question.answer;
 
-          let bg = '#ffffff';
-          let border = '1px solid #e2e8f0';
-          let shadow = '0 1px 3px rgba(0,0,0,0.04)';
+          let bg = 'rgba(255,255,255,0.5)';
+          let border = '1px solid rgba(255,255,255,0.7)';
+          let shadow = '0 4px 16px rgba(0,0,0,0.06)';
           let textColor = '#1e293b';
           let badgeBg = badgeGradients[i % badgeGradients.length];
           let badgeText = '#64748b';
@@ -45,25 +45,25 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
           let dimmed = false;
 
           if (isSelected && isCorrect) {
-            bg = '#f0fdf4';
-            border = '1.5px solid #4ade80';
-            shadow = '0 4px 14px rgba(34,197,94,0.18)';
+            bg = 'rgba(220,252,231,0.6)';
+            border = '1.5px solid rgba(74,222,128,0.8)';
+            shadow = '0 4px 16px rgba(34,197,94,0.18)';
             textColor = '#166534';
             badgeBg = '#16a34a';
             badgeText = '#ffffff';
             badgeIcon = '✓';
           } else if (isSelected && !isCorrect) {
-            bg = '#fef2f2';
-            border = '1.5px solid #f87171';
-            shadow = '0 4px 14px rgba(239,68,68,0.18)';
+            bg = 'rgba(254,226,226,0.6)';
+            border = '1.5px solid rgba(248,113,113,0.8)';
+            shadow = '0 4px 16px rgba(239,68,68,0.18)';
             textColor = '#991b1b';
             badgeBg = '#dc2626';
             badgeText = '#ffffff';
             badgeIcon = '✗';
           } else if (isCorrectAnswer) {
-            bg = '#f0fdf4';
-            border = '1.5px solid #86efac';
-            shadow = '0 4px 14px rgba(34,197,94,0.12)';
+            bg = 'rgba(220,252,231,0.55)';
+            border = '1.5px solid rgba(134,239,172,0.8)';
+            shadow = '0 4px 16px rgba(34,197,94,0.12)';
             textColor = '#166534';
             badgeBg = '#16a34a';
             badgeText = '#ffffff';
@@ -85,6 +85,8 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
               className="min-h-16 rounded-xl py-3.5 pl-3 pr-3.5 font-bold text-left transition-all text-sm sm:text-base break-words flex items-center gap-3"
               style={{
                 background: bg,
+                backdropFilter: 'blur(16px) saturate(150%)',
+                WebkitBackdropFilter: 'blur(16px) saturate(150%)',
                 border,
                 boxShadow: shadow,
                 color: textColor,
