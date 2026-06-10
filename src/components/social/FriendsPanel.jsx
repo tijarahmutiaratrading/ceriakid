@@ -136,11 +136,11 @@ export default function FriendsPanel({ onCountChange }) {
     <div>
       {/* Kod Undangan + Tambah Kawan — satu kad */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-5 rounded-3xl p-5 bg-white shadow-xl border border-white/60"
+        className="mb-5 rounded-2xl p-5 md:p-6 bg-white ring-1 ring-slate-200 shadow-sm"
       >
-        <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
+        <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
 
         <div className="flex items-center gap-3 mb-4">
           <div className="flex-1 min-w-0 rounded-2xl py-4 text-center bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200">
@@ -168,9 +168,9 @@ export default function FriendsPanel({ onCountChange }) {
         </motion.button>
 
         {/* Pembahagi */}
-        <div className="my-5 border-t border-purple-100" />
+        <div className="my-5 border-t border-slate-100" />
 
-        <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
+        <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
         <div className="flex flex-col gap-2.5">
           <input
             type="text"
@@ -200,18 +200,21 @@ export default function FriendsPanel({ onCountChange }) {
         )}
       </motion.div>
 
-      {/* Friends List */}{/* end gabungan */}
+      {/* Friends List */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="rounded-3xl p-5 bg-white shadow-xl border border-white/60"
+        className="rounded-2xl p-5 md:p-6 bg-white ring-1 ring-slate-200 shadow-sm"
       >
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-sm">
-            <Users className="w-4 h-4 text-white" strokeWidth={3} />
+        <div className="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-sm flex-shrink-0">
+            <Users className="w-5 h-5 text-white" strokeWidth={2.5} />
           </div>
-          <p className="text-purple-700 text-xs font-black uppercase tracking-wider">Senarai Kawan ({friends.length})</p>
+          <div>
+            <p className="font-black text-slate-900 text-base leading-tight">Senarai Kawan</p>
+            <p className="text-xs text-slate-500 font-medium">{friends.length} kawan disambung</p>
+          </div>
         </div>
 
         {friends.length === 0 ? (
@@ -233,10 +236,10 @@ export default function FriendsPanel({ onCountChange }) {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="rounded-2xl p-3.5 flex items-center justify-between bg-purple-50/60 border border-purple-100"
+                  className="rounded-xl p-3.5 flex items-center justify-between bg-slate-50 ring-1 ring-slate-100"
                 >
                   <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-2xl shadow-md flex-shrink-0">👤</div>
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-2xl shadow-sm flex-shrink-0">👤</div>
                     <div className="min-w-0 flex-1">
                       <p className="font-black text-slate-800 text-sm break-all leading-tight">{friend.friendEmail}</p>
                       <p className="text-slate-500 text-xs mt-0.5">

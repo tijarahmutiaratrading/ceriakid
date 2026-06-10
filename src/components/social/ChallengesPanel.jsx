@@ -103,24 +103,23 @@ export default function ChallengesPanel({ onCountChange }) {
     <div>
       {/* Action Header */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-5 p-4 rounded-3xl flex items-center justify-between bg-white shadow-xl border border-white/60"
+        className="mb-5 p-5 md:p-6 rounded-2xl flex items-center justify-between bg-white ring-1 ring-slate-200 shadow-sm"
       >
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
-            <Zap className="w-6 h-6 text-white" strokeWidth={2.5} fill="white" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center shadow-sm flex-shrink-0">
+            <Zap className="w-5 h-5 text-white" strokeWidth={2.5} fill="white" />
           </div>
           <div>
-            <p className="text-base font-black text-slate-800 leading-tight">Cabar Kawan</p>
-            <p className="text-slate-500 text-xs font-semibold mt-0.5">{challenges.length} cabaran</p>
+            <p className="text-base font-black text-slate-900 leading-tight">Cabar Kawan</p>
+            <p className="text-slate-500 text-xs font-medium mt-0.5">{challenges.length} cabaran</p>
           </div>
         </div>
         <motion.button
-          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowForm(!showForm)}
-          className="w-12 h-12 rounded-2xl brand-gradient-br flex items-center justify-center transition-all shadow-lg"
+          className="w-10 h-10 rounded-xl brand-gradient-br flex items-center justify-center transition-all shadow-sm"
         >
           {showForm ? <X className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
         </motion.button>
@@ -134,9 +133,9 @@ export default function ChallengesPanel({ onCountChange }) {
             animate={{ opacity: 1, height: 'auto', y: 0 }}
             exit={{ opacity: 0, height: 0, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="mb-5 rounded-3xl p-5 overflow-hidden bg-white shadow-xl border border-white/60"
+            className="mb-5 rounded-2xl p-5 md:p-6 overflow-hidden bg-white ring-1 ring-slate-200 shadow-sm"
           >
-            <p className="text-purple-700 text-xs font-black uppercase tracking-wider mb-4">🎯 Cabaran Baru</p>
+            <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-4">🎯 Cabaran Baru</p>
 
             <div className="mb-3">
               <p className="text-slate-700 text-xs font-bold mb-1.5">Email Kawan</p>
@@ -145,7 +144,7 @@ export default function ChallengesPanel({ onCountChange }) {
                 value={friendEmail}
                 onChange={e => setFriendEmail(e.target.value)}
                 placeholder="email@kawan.com"
-                className="w-full rounded-2xl px-4 py-3 text-sm font-semibold bg-purple-50 text-slate-800 placeholder-slate-400 border-2 border-purple-200 focus:outline-none focus:border-purple-400"
+                className="w-full rounded-xl px-3.5 py-2.5 text-sm font-semibold bg-white text-slate-900 placeholder-slate-400 border border-slate-200 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 transition-all"
               />
             </div>
 
@@ -157,10 +156,10 @@ export default function ChallengesPanel({ onCountChange }) {
                     key={cat}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`rounded-2xl py-3 px-3 font-bold text-sm flex items-center gap-2 transition-all ${
+                    className={`rounded-xl py-3 px-3 font-bold text-sm flex items-center gap-2 transition-all ${
                       selectedCategory === cat
-                        ? 'brand-gradient text-white shadow-lg'
-                        : 'bg-purple-50 text-slate-700 border-2 border-purple-200 hover:bg-purple-100'
+                        ? 'brand-gradient text-white shadow-sm'
+                        : 'bg-slate-50 text-slate-700 ring-1 ring-slate-200 hover:bg-slate-100'
                     }`}
                   >
                     <span>{emoji}</span>
@@ -191,15 +190,18 @@ export default function ChallengesPanel({ onCountChange }) {
 
       {/* Challenges List */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-3xl p-5 bg-white shadow-xl border border-white/60"
+        className="rounded-2xl p-5 md:p-6 bg-white ring-1 ring-slate-200 shadow-sm"
       >
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center shadow-sm">
-            <Trophy className="w-4 h-4 text-white" strokeWidth={3} />
+        <div className="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center shadow-sm flex-shrink-0">
+            <Trophy className="w-5 h-5 text-white" strokeWidth={2.5} />
           </div>
-          <p className="text-purple-700 text-xs font-black uppercase tracking-wider">Senarai Cabaran</p>
+          <div>
+            <p className="font-black text-slate-900 text-base leading-tight">Senarai Cabaran</p>
+            <p className="text-xs text-slate-500 font-medium">{challenges.length} cabaran semua</p>
+          </div>
         </div>
 
         {challenges.length === 0 ? (
@@ -224,11 +226,11 @@ export default function ChallengesPanel({ onCountChange }) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="rounded-2xl p-4 bg-white shadow-lg border border-white/60"
+                  className="rounded-xl p-4 bg-slate-50 ring-1 ring-slate-100"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-xl shadow-md">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-xl shadow-sm">
                         {cat?.emoji || '🎮'}
                       </div>
                       <div>
