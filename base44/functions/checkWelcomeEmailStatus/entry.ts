@@ -38,12 +38,21 @@ async function fetchResendEmails(RESEND_API_KEY) {
   return Array.isArray(data?.data) ? data.data : [];
 }
 
-// Cari email terkini yang dihantar ke `email` (case-insensitive)
+// Kenal pasti welcome email ikut subjek (bukan recovery/abandoned cart email).
+// Welcome email subjek: "Selamat datang ke CeriaKid" atau "kredit AI dah masuk".
+function isWelcomeSubject(subject) {
+  const s = String(subject || '').toLowerCase();
+  return s.includes('selamat datang ke ceriakid') || s.includes('kredit ai dah masuk');
+}
+
+// Cari WELCOME email terkini yang dihantar ke `email` (case-insensitive).
+// Penting: tapis ikut subjek supaya recovery/abandoned cart email TIDAK tersilap dikira.
 function findLatestForEmail(emails, email) {
   const target = String(email).toLowerCase().trim();
   const matches = emails.filter((e) => {
     const to = Array.isArray(e.to) ? e.to : [e.to];
-    return to.some((addr) => String(addr).toLowerCase().trim() === target);
+    const toMatch = to.some((addr) => String(addr).toLowerCase().trim() === target);
+    return toMatch && isWelcomeSubject(e.subject);
   });
   if (matches.length === 0) return null;
   // Susun ikut created_at descending, ambil yang paling baru
