@@ -112,7 +112,7 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
             onClick={onPlayAgain}
             className="flex-1 clay-button rounded-2xl py-3.5 px-5 bg-game-green/20 flex items-center justify-center gap-2 font-bold text-base"
           >
-            <RotateCcw className="w-5 h-5" />
+            <RotateCcw className="w-6 h-6" />
             {t('playAgain')}
           </motion.button>
 
@@ -122,7 +122,7 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
               whileHover={{ scale: 1.03 }}
               className="w-full clay-button rounded-2xl py-3.5 px-5 bg-game-blue/20 flex items-center justify-center gap-2 font-bold text-base"
             >
-              <Home className="w-5 h-5" />
+              <Home className="w-6 h-6" />
               {t('backToMenu')}
             </motion.button>
           </Link>
