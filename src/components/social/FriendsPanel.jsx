@@ -184,7 +184,7 @@ export default function FriendsPanel({ onCountChange }) {
                 value={inputCode}
                 onChange={e => setInputCode(e.target.value.toUpperCase())}
                 maxLength={6}
-                className="w-full rounded-xl px-3.5 py-2.5 bg-purple-50 text-slate-800 placeholder-slate-400 font-bold text-base tracking-wider border border-purple-200 outline-none focus:border-purple-400 uppercase"
+                className="w-full rounded-xl px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 font-bold text-base tracking-wider border border-slate-200 outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 uppercase transition-all"
               />
               <motion.button
                 whileTap={{ scale: 0.95 }}
