@@ -641,12 +641,17 @@ export default function CustomerDatabaseTable() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
 
-    // Kira sempadan tarikh ikut pilihan date range
+    // Kira sempadan tarikh ikut pilihan date range — guna zon waktu Malaysia (UTC+8)
+    // supaya konsisten walaupun pelayar admin dalam UTC.
+    const MY_OFFSET_MS = 8 * 60 * 60 * 1000;
     let startBound = null;
     if (dateFilter !== 'all') {
       const now = new Date();
       if (dateFilter === 'today') {
-        startBound = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        // Tengah malam hari ini di Malaysia, ditukar balik ke UTC
+        const myNow = new Date(now.getTime() + MY_OFFSET_MS);
+        const myMidnightUTC = Date.UTC(myNow.getUTCFullYear(), myNow.getUTCMonth(), myNow.getUTCDate());
+        startBound = new Date(myMidnightUTC - MY_OFFSET_MS);
       } else if (dateFilter === '7days') {
         startBound = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       } else if (dateFilter === '30days') {
