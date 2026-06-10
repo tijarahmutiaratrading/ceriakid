@@ -140,9 +140,9 @@ export default function FriendsPanel({ onCountChange }) {
         animate={{ opacity: 1, y: 0 }}
         className="mb-5 rounded-2xl p-4 md:p-6 bg-white ring-1 ring-slate-200 shadow-sm"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 sm:divide-x sm:divide-slate-100">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 divide-x divide-slate-100">
           {/* Kod Undangan */}
-          <div className="sm:pr-6">
+          <div className="pr-3 sm:pr-6">
             <p className="text-slate-500 text-[10px] md:text-xs font-black uppercase tracking-wider mb-2.5 md:mb-3">🎫 Kod Undangan</p>
 
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5 mb-2.5 md:mb-3">
@@ -171,11 +171,8 @@ export default function FriendsPanel({ onCountChange }) {
             </motion.button>
           </div>
 
-          {/* Pembahagi mobile sahaja */}
-          <div className="border-t border-slate-100 sm:hidden" />
-
           {/* Tambah Kawan */}
-          <div className="sm:pl-6">
+          <div className="pl-3 sm:pl-6">
             <p className="text-slate-500 text-[10px] md:text-xs font-black uppercase tracking-wider mb-2.5 md:mb-3">➕ Tambah Kawan</p>
             <div className="flex flex-col gap-2 md:gap-2.5">
               <input
