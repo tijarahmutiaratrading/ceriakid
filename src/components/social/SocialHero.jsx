@@ -95,7 +95,7 @@ export default function SocialHero({ tab, setTab, friendCount = 0, challengeCoun
               }`}
             >
               <Users className="w-4 h-4" strokeWidth={2.5} />
-              Kawan
+              Social
               <span className={`px-1.5 py-0.5 rounded-md text-[10px] ${tab === 'friends' ? 'bg-purple-100 text-purple-700' : 'bg-white/20 text-white'}`}>
                 {friendCount}
               </span>
@@ -107,7 +107,7 @@ export default function SocialHero({ tab, setTab, friendCount = 0, challengeCoun
               }`}
             >
               <Zap className="w-4 h-4" strokeWidth={2.5} />
-              Cabaran
+              Challenge
               <span className={`px-1.5 py-0.5 rounded-md text-[10px] ${tab === 'challenges' ? 'bg-purple-100 text-purple-700' : 'bg-white/20 text-white'}`}>
                 {challengeCount}
               </span>
