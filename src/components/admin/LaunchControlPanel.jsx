@@ -8,6 +8,7 @@ import LaunchOverview from '@/components/admin/LaunchOverview';
 import LaunchManualControl from '@/components/admin/LaunchManualControl';
 import BackgroundActivityPanel from '@/components/admin/BackgroundActivityPanel';
 import ResumeGenerateButton from '@/components/admin/ResumeGenerateButton';
+import ContentProgressBar from '@/components/admin/ContentProgressBar';
 
 export default function LaunchControlPanel() {
   const [tab, setTab] = useState('overview');
@@ -92,6 +93,9 @@ export default function LaunchControlPanel() {
           </div>
         </div>
       </motion.div>
+
+      {/* Progress ringkas keseluruhan content */}
+      <ContentProgressBar />
 
       {/* Tabs */}
       <div className="pro-glass flex gap-2 p-1.5 rounded-2xl">

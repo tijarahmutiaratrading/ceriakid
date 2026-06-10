@@ -4,6 +4,25 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const QUERY_DELAY_MS = 400;
 
+// Auto-retry bila kena rate limit (429) — tunggu & cuba lagi, jangan terus fail
+const isRateLimit = (e) => {
+  const msg = `${e?.message || ''} ${e?.status || ''} ${JSON.stringify(e?.response?.data || '')}`;
+  return msg.includes('429') || msg.toLowerCase().includes('rate limit') || msg.toLowerCase().includes('too many requests');
+};
+
+async function withRetry(fn, retries = 2) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (attempt >= retries || !isRateLimit(e)) throw e;
+      const wait = 10000 * (attempt + 1);
+      console.log(`⏳ Rate limit — retry ${attempt + 1}/${retries} selepas ${wait / 1000}s`);
+      await sleep(wait);
+    }
+  }
+}
+
 // Same bucket structure as launchGetProgress
 const BUCKETS = [
   { ageGroup: 'prasekolah', darjah: null, subjects: ['bahasa_melayu','english','mathematics','science','jawi'] },
@@ -129,9 +148,9 @@ Deno.serve(async (req) => {
     for (const b of KAFA_BUCKETS) {
       for (const subject of b.subjects) {
         await sleep(QUERY_DELAY_MS);
-        const existing = await base44.asServiceRole.entities.Game.filter({
+        const existing = await withRetry(() => base44.asServiceRole.entities.Game.filter({
           ageGroup: b.ageGroup, darjah: b.darjah, category: subject, isPublished: true,
-        });
+        }));
         if (existing.length < KAFA_TARGET_CAP) {
           targetBucket = {
             ageGroup: b.ageGroup,
@@ -154,7 +173,7 @@ Deno.serve(async (req) => {
           await sleep(QUERY_DELAY_MS);
           const filter = { ageGroup: b.ageGroup, category: subject, isPublished: true };
           if (b.darjah) filter.darjah = b.darjah;
-          const existing = await base44.asServiceRole.entities.Game.filter(filter);
+          const existing = await withRetry(() => base44.asServiceRole.entities.Game.filter(filter));
           if (existing.length < targetCap) {
             targetBucket = {
               ageGroup: b.ageGroup,
@@ -176,6 +195,17 @@ Deno.serve(async (req) => {
       if (setting?.id) {
         await base44.asServiceRole.entities.QCSetting.update(setting.id, { backgroundLaunchEnabled: false });
       }
+      // Notify admin via push — content dah siap sepenuhnya
+      try {
+        await base44.asServiceRole.functions.invoke('sendPushNotification', {
+          title: '🎉 Content Siap!',
+          body: 'Semua games KSSR + KAFA dah lengkap dijana. Background generator auto-OFF.',
+          url: '/admin-dashboard',
+          tag: 'content-complete',
+        });
+      } catch (e) {
+        console.error('Push notify failed (non-critical):', e.message);
+      }
       return Response.json({ success: true, allComplete: true });
     }
 
@@ -195,13 +225,13 @@ Deno.serve(async (req) => {
     for (let i = 0; i < toGenerate; i++) {
       const gameIndex = targetBucket.count + generated;
       try {
-        const ok = await generateAndInsert(base44, {
+        const ok = await withRetry(() => generateAndInsert(base44, {
           ageGroup: targetBucket.ageGroup,
           darjah: targetBucket.darjah,
           category: targetBucket.category,
           gameIndex,
           existingTitles,
-        });
+        }));
         if (ok) generated++;
         else failed++;
       } catch (e) {
