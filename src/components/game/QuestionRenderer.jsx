@@ -82,7 +82,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
               whileHover={{ scale: disabled ? 1 : 1.04, y: disabled ? 0 : -2 }}
               onClick={(e) => !disabled && onAnswer(i, e)}
               disabled={disabled}
-              className="min-h-16 rounded-xl py-3.5 pl-3 pr-3.5 font-bold text-left transition-all text-sm sm:text-base break-words flex items-center gap-3"
+              className="min-h-16 rounded-3xl py-3.5 pl-3 pr-3.5 font-bold text-left transition-all text-sm sm:text-base break-words flex items-center gap-3"
               style={{
                 background: bg,
                 backdropFilter: 'blur(16px) saturate(150%)',
