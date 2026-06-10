@@ -146,8 +146,8 @@ export default function FriendsPanel({ onCountChange }) {
             <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
 
             <div className="flex items-center gap-2.5 mb-3">
-              <div className="flex-1 min-w-0 rounded-xl py-3 text-center brand-gradient-br">
-                <p className="text-2xl font-black text-white tracking-[0.18em]">{inviteCode}</p>
+              <div className="flex-1 min-w-0 rounded-xl py-3 text-center bg-white ring-1 ring-slate-200">
+                <p className="text-2xl font-black text-slate-900 tracking-[0.18em]">{inviteCode}</p>
               </div>
               <motion.button
                 whileTap={{ scale: 0.9 }}
