@@ -61,7 +61,7 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
               {active && (
                 <motion.span
                   layoutId="admin-nav-pill"
-                  className="absolute inset-0 rounded-full bg-slate-900 ring-1 ring-white/20"
+                  className="absolute inset-0 rounded-full brand-gradient-br"
                   transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                 />
               )}
