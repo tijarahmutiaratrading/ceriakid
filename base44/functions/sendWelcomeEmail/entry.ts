@@ -121,7 +121,7 @@ function buildSubscriptionEmail({ tier, bonusCredits }) {
         <tr><td style="padding:0 32px 32px;text-align:center;">
           <p style="margin:0 0 12px;color:#64748b;font-size:14px;">Ada soalan? Kami sedia membantu — WhatsApp terus!</p>
           <a href="${WHATSAPP_URL}" style="display:inline-block;padding:13px 28px;background:#25D366;color:#fff;text-decoration:none;font-weight:800;border-radius:12px;font-size:15px;box-shadow:0 8px 20px rgba(37,211,102,0.3);">
-            💬 WhatsApp: 017-784 4120
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="18" height="18" alt="" style="vertical-align:middle;margin-right:8px;margin-top:-3px;"> WhatsApp
           </a>
         </td></tr>
 
@@ -182,7 +182,7 @@ function buildCreditEmail({ credits }) {
         <tr><td style="padding:0 32px 32px;text-align:center;">
           <p style="margin:0 0 12px;color:#64748b;font-size:14px;">Ada soalan? WhatsApp kami terus!</p>
           <a href="${WHATSAPP_URL}" style="display:inline-block;padding:13px 28px;background:#25D366;color:#fff;text-decoration:none;font-weight:800;border-radius:12px;font-size:15px;box-shadow:0 8px 20px rgba(37,211,102,0.3);">
-            💬 WhatsApp: 017-784 4120
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="18" height="18" alt="" style="vertical-align:middle;margin-right:8px;margin-top:-3px;"> WhatsApp
           </a>
         </td></tr>
 
