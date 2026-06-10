@@ -140,64 +140,72 @@ export default function FriendsPanel({ onCountChange }) {
         animate={{ opacity: 1, y: 0 }}
         className="mb-5 rounded-2xl p-5 md:p-6 bg-white ring-1 ring-slate-200 shadow-sm"
       >
-        <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6 md:divide-x md:divide-slate-100">
+          {/* Kod Undangan */}
+          <div className="md:pr-6">
+            <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-3">🎫 Kod Undangan Anda</p>
 
-        <div className="flex items-center gap-3 mb-4">
-          <div className="flex-1 min-w-0 rounded-2xl py-4 text-center bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200">
-            <p className="text-3xl sm:text-4xl font-black text-purple-700 tracking-[0.2em] sm:tracking-widest">{inviteCode}</p>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex-1 min-w-0 rounded-2xl py-4 text-center bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200">
+                <p className="text-3xl sm:text-4xl font-black text-purple-700 tracking-[0.2em] sm:tracking-widest">{inviteCode}</p>
+              </div>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={copyCode}
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all shadow-lg ${
+                  copied ? 'bg-green-500' : 'bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+                }`}
+              >
+                {copied ? <Check className="w-5 h-5 text-white" /> : <Copy className="w-5 h-5 text-white" />}
+              </motion.button>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={shareInviteCode}
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-black py-3.5 flex items-center justify-center gap-2 shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all"
+            >
+              <Share2 className="w-4 h-4" />
+              Kongsi via WhatsApp
+            </motion.button>
           </div>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={copyCode}
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all shadow-lg ${
-              copied ? 'bg-green-500' : 'bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
-            }`}
-          >
-            {copied ? <Check className="w-5 h-5 text-white" /> : <Copy className="w-5 h-5 text-white" />}
-          </motion.button>
+
+          {/* Pembahagi mobile sahaja */}
+          <div className="my-5 border-t border-slate-100 md:hidden" />
+
+          {/* Tambah Kawan */}
+          <div className="md:pl-6">
+            <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
+            <div className="flex flex-col gap-2.5">
+              <input
+                type="text"
+                placeholder="Masukkan kod kawan..."
+                value={inputCode}
+                onChange={e => setInputCode(e.target.value.toUpperCase())}
+                maxLength={6}
+                className="w-full rounded-2xl px-4 py-3 bg-purple-50 text-slate-800 placeholder-slate-400 font-black text-lg tracking-widest border-2 border-purple-200 outline-none focus:border-purple-400 uppercase"
+              />
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={addFriendByCode}
+                disabled={addingFriend || inputCode.length < 4}
+                className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black shadow-lg disabled:opacity-50 transition-all"
+              >
+                {addingFriend ? '...' : 'Tambah'}
+              </motion.button>
+            </div>
+            {addMessage && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className={`mt-3 text-sm font-bold ${addMessage.ok ? 'text-green-600' : 'text-red-600'}`}
+              >
+                {addMessage.text}
+              </motion.p>
+            )}
+          </div>
         </div>
-
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={shareInviteCode}
-          className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-black py-3.5 flex items-center justify-center gap-2 shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all"
-        >
-          <Share2 className="w-4 h-4" />
-          Kongsi via WhatsApp
-        </motion.button>
-
-        {/* Pembahagi */}
-        <div className="my-5 border-t border-slate-100" />
-
-        <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-3">➕ Tambah Kawan</p>
-        <div className="flex flex-col gap-2.5">
-          <input
-            type="text"
-            placeholder="Masukkan kod kawan..."
-            value={inputCode}
-            onChange={e => setInputCode(e.target.value.toUpperCase())}
-            maxLength={6}
-            className="w-full rounded-2xl px-4 py-3 bg-purple-50 text-slate-800 placeholder-slate-400 font-black text-lg tracking-widest border-2 border-purple-200 outline-none focus:border-purple-400 uppercase"
-          />
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={addFriendByCode}
-            disabled={addingFriend || inputCode.length < 4}
-            className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black shadow-lg disabled:opacity-50 transition-all"
-          >
-            {addingFriend ? '...' : 'Tambah'}
-          </motion.button>
-        </div>
-        {addMessage && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className={`mt-3 text-sm font-bold ${addMessage.ok ? 'text-green-600' : 'text-red-600'}`}
-          >
-            {addMessage.text}
-          </motion.p>
-        )}
       </motion.div>
 
       {/* Friends List */}
