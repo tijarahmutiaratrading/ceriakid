@@ -19,13 +19,11 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
     <header className={`hidden sm:flex fixed top-5 left-0 right-0 z-50 justify-center px-4 pointer-events-none transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[150%]'}`}>
       {/* Floating pill nav (Apple Fitness style — glossy light) */}
       <nav
-        className="pointer-events-auto flex items-center gap-0 px-1.5 py-0.5 rounded-full shadow-xl shadow-black/20 max-w-[calc(100vw-2rem)]"
+        className="pointer-events-auto flex items-center gap-0 px-1.5 py-0.5 rounded-full max-w-[calc(100vw-2rem)]"
         style={{
           background: 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
           backdropFilter: 'blur(20px) saturate(180%)',
           WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-          border: '1px solid rgba(255,255,255,0.6)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7)',
         }}
       >
         {/* Switch ke user dashboard */}
