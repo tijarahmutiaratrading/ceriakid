@@ -241,7 +241,6 @@ export default function UpgradeTierCard({ currentTier, user, gender, onGenderCha
                 >
                   <option.Icon className="w-4 h-4" strokeWidth={2.5} />
                   {option.label}
-                  {active && <Check className="w-4 h-4" strokeWidth={3} />}
                 </motion.button>
               );
             })}
