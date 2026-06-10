@@ -538,6 +538,7 @@ export default function CustomerDatabaseTable() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [tierFilter, setTierFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState('all');
   const [expandedId, setExpandedId] = useState(null);
 
   const refreshData = async () => {
@@ -639,17 +640,35 @@ export default function CustomerDatabaseTable() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
+
+    // Kira sempadan tarikh ikut pilihan date range
+    let startBound = null;
+    if (dateFilter !== 'all') {
+      const now = new Date();
+      if (dateFilter === 'today') {
+        startBound = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      } else if (dateFilter === '7days') {
+        startBound = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      } else if (dateFilter === '30days') {
+        startBound = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      }
+    }
+
     return customers.filter(c => {
       // Sembunyi tier "free" — kita hanya ada 3 pakej berbayar
       if (c.tier === 'free') return false;
       if (tierFilter !== 'all' && c.tier !== tierFilter) return false;
+      if (startBound) {
+        const created = c.createdDate ? new Date(c.createdDate) : null;
+        if (!created || created < startBound) return false;
+      }
       if (!q) return true;
       return (
         (c.email || '').toLowerCase().includes(q) ||
         (c.affiliate?.referralCode || '').toLowerCase().includes(q)
       );
     });
-  }, [customers, search, tierFilter]);
+  }, [customers, search, tierFilter, dateFilter]);
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="pro-glass rounded-3xl p-5">
@@ -676,6 +695,22 @@ export default function CustomerDatabaseTable() {
             placeholder="Cari email atau kod referral..."
             className="w-full pl-10 pr-3 py-2 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-violet-500"
           />
+        </div>
+        <div className="flex gap-1 bg-white rounded-xl p-1 ring-1 ring-slate-200">
+          {[
+            { id: 'today', label: 'Hari Ini' },
+            { id: '7days', label: '7 Hari' },
+            { id: '30days', label: '30 Hari' },
+            { id: 'all', label: 'Semua' },
+          ].map(d => (
+            <button
+              key={d.id}
+              onClick={() => setDateFilter(d.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all whitespace-nowrap ${dateFilter === d.id ? 'bg-violet-600 text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+              {d.label}
+            </button>
+          ))}
         </div>
         <div className="flex gap-1 bg-white rounded-xl p-1 ring-1 ring-slate-200">
           {['all', 'asas', 'standard', 'keluarga'].map(t => (
