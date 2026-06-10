@@ -154,8 +154,7 @@ export default function ScoreScreen({ score, total, stars, onPlayAgain, onGenera
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.02 }}
             onClick={onGenerateNew}
-            className="w-full py-4 px-6 rounded-2xl font-extrabold text-base flex items-center justify-center gap-2 text-white"
-            style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)' }}
+            className="w-full py-4 px-6 rounded-2xl font-extrabold text-base flex items-center justify-center gap-2 text-white brand-gradient-br"
           >
             <Sparkles className="w-5 h-5" /> 🔀 Main Semula (Soalan Berbeza)
           </motion.button>
