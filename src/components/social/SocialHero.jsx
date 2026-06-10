@@ -87,7 +87,7 @@ export default function SocialHero({ tab, setTab, friendCount = 0, challengeCoun
           </AnimatePresence>
 
           {/* Tab switcher — inside hero */}
-          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/[0.12] backdrop-blur-2xl border border-white/25 shadow-2xl">
+          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-[1.5rem] bg-white/[0.12] backdrop-blur-2xl border border-white/25 shadow-2xl">
             <button
               onClick={() => setTab('friends')}
               className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm transition-all ${
