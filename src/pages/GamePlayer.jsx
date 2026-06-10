@@ -500,22 +500,17 @@ export default function GamePlayer() {
     <div
       className="min-h-screen w-full overflow-x-hidden relative"
       style={{
-        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)',
+        background: '#fafafa',
       }}
     >
-      {/* Floating sparkle decorations */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-32 left-6 text-2xl text-white/30 animate-float">✨</div>
-        <div className="absolute top-44 right-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
-        <div className="absolute top-1/2 left-4 text-2xl text-pink-300/40 animate-float" style={{ animationDelay: '2.4s' }}>💫</div>
-        <div className="absolute bottom-40 right-6 text-2xl text-cyan-300/35 animate-float" style={{ animationDelay: '3.1s' }}>✨</div>
-        <div className="absolute bottom-24 left-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '4s' }}>⭐</div>
-        <div className="absolute top-1/3 right-1/4 text-lg text-white/25 animate-float" style={{ animationDelay: '1.7s' }}>✨</div>
-      </div>
-
-      {/* Glow orbs */}
-      <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full opacity-30 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }} />
-      <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full opacity-25 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }} />
+      {/* Subtle grid pattern background — sama macam Admin */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
 
       {/* Family mascot — Ibu, Kakak, Adik */}
       <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
