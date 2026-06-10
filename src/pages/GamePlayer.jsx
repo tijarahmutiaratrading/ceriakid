@@ -578,14 +578,22 @@ export default function GamePlayer() {
            key={state.currentQ}
            initial={{ opacity: 0, y: 30, scale: 0.95 }}
            animate={{ opacity: 1, y: 0, scale: 1 }}
-           className="rounded-3xl mb-6 relative overflow-hidden"
+           transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+           className="rounded-3xl mb-6 relative"
            style={{
-             background: 'rgba(255,255,255,0.12)',
-             backdropFilter: 'blur(20px)',
-             border: '1px solid rgba(255,255,255,0.2)',
+             padding: '2px',
+             background: 'linear-gradient(135deg, rgba(251,191,36,0.7), rgba(236,72,153,0.7), rgba(34,211,238,0.7))',
+             boxShadow: '0 16px 40px rgba(0,0,0,0.35), 0 0 32px rgba(236,72,153,0.25)',
            }}
          >
-         <div className="rounded-3xl p-5 md:p-7 text-center relative">
+         <div className="rounded-[calc(1.5rem-2px)] p-5 md:p-7 text-center relative overflow-hidden"
+           style={{
+             background: 'linear-gradient(160deg, rgba(76,29,149,0.92), rgba(88,28,135,0.88), rgba(131,24,67,0.9))',
+             backdropFilter: 'blur(20px)',
+           }}
+         >
+          {/* Inner glow sheen */}
+          <div className="absolute inset-x-0 top-0 h-20 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.12), transparent)' }} />
 
 
           {/* Picture Quiz — image only */}
@@ -615,7 +623,9 @@ export default function GamePlayer() {
 
            {/* Text Question (math, multiple choice) */}
            {currentQuestion.problem && (
-             <div className={`font-black text-white ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}>
+             <div className={`font-black text-white leading-snug ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}
+               style={{ textShadow: '0 2px 10px rgba(0,0,0,0.4)' }}
+             >
                {currentQuestion.problem}
              </div>
            )}
