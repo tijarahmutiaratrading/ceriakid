@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 /**
  * Hantar email selamat datang kepada customer baru selepas pembelian berjaya.
@@ -26,7 +26,9 @@ const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent
 function buildSubscriptionEmail({ tier, bonusCredits }) {
   const tierName = TIER_LABEL[tier] || tier;
   const bonusLine = bonusCredits > 0
-    ? `<p style="margin:0 0 12px;color:#475569"><strong>🎁 Bonus selamat datang:</strong> Anda dapat <strong>${bonusCredits} kredit AI percuma</strong> untuk cuba ciri-ciri Cikgu AI!</p>`
+    ? `<div style="background:linear-gradient(135deg,#f5f3ff,#fdf2f8);border:1px solid #e9d5ff;border-radius:14px;padding:14px 18px;margin:0 0 4px;">
+         <p style="margin:0;color:#6b21a8;font-size:14.5px;line-height:1.6;"><strong>🎁 Bonus selamat datang:</strong> Anda dapat <strong>${bonusCredits} kredit AI percuma</strong> untuk cuba ciri-ciri Cikgu AI!</p>
+       </div>`
     : '';
 
   return {
@@ -34,47 +36,48 @@ function buildSubscriptionEmail({ tier, bonusCredits }) {
     html: `<!DOCTYPE html>
 <html lang="ms">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;padding:24px 0;">
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#eef2ff;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef2ff;padding:32px 12px;">
     <tr><td align="center">
-      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 20px 50px rgba(80,40,160,0.15);">
 
         <!-- Hero -->
-        <tr><td style="background:linear-gradient(135deg,#a855f7,#ec4899);padding:32px 24px;text-align:center;">
-          <h1 style="margin:0;color:#fff;font-size:28px;font-weight:900;">🎉 Tahniah!</h1>
-          <p style="margin:8px 0 0;color:rgba(255,255,255,0.95);font-size:16px;">Pelan <strong>${tierName}</strong> anda dah aktif</p>
+        <tr><td style="background:linear-gradient(135deg,#7c3aed 0%,#a855f7 45%,#ec4899 100%);padding:48px 32px 44px;text-align:center;">
+          <div style="display:inline-block;width:76px;height:76px;line-height:76px;border-radius:50%;background:rgba(255,255,255,0.18);font-size:40px;margin-bottom:18px;">🎉</div>
+          <h1 style="margin:0;color:#ffffff;font-size:30px;font-weight:900;letter-spacing:-0.5px;">Tahniah!</h1>
+          <p style="margin:10px 0 0;color:rgba(255,255,255,0.95);font-size:16px;font-weight:600;">Pelan <strong>${tierName}</strong> anda dah aktif 🎊</p>
         </td></tr>
 
         <!-- Body -->
-        <tr><td style="padding:28px 24px;">
-          <p style="margin:0 0 16px;color:#1e293b;font-size:16px;">Hai! 👋</p>
-          <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.6;">
-            Terima kasih sebab langgan CeriaKid. Subscription anda dah aktif untuk <strong>1 tahun penuh</strong>. Anak-anak dah boleh mula belajar sambil bermain sekarang!
+        <tr><td style="padding:36px 32px 8px;">
+          <p style="margin:0 0 14px;color:#0f172a;font-size:18px;font-weight:800;">Hai! 👋</p>
+          <p style="margin:0 0 18px;color:#475569;font-size:15px;line-height:1.7;">
+            Terima kasih sebab langgan <strong>CeriaKid</strong>. Subscription anda dah aktif untuk <strong>1 tahun penuh</strong>. Anak-anak dah boleh mula belajar sambil bermain sekarang!
           </p>
           ${bonusLine}
         </td></tr>
 
         <!-- IMPORTANT NOTICE -->
-        <tr><td style="padding:0 24px 20px;">
-          <div style="background:#fef3c7;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;">
-            <p style="margin:0;color:#78350f;font-size:14px;font-weight:700;">⚠️ PENTING — Sila baca dulu</p>
-            <p style="margin:6px 0 0;color:#92400e;font-size:13px;line-height:1.6;">
+        <tr><td style="padding:8px 32px 24px;">
+          <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:16px;padding:18px 20px;">
+            <p style="margin:0;color:#92400e;font-size:14px;font-weight:800;">⚠️ PENTING — Sila baca dulu</p>
+            <p style="margin:8px 0 0;color:#a16207;font-size:13.5px;line-height:1.65;">
               Anda <strong>perlu daftar akaun dulu</strong> di CeriaKid sebelum boleh login. Pastikan guna <strong>email yang SAMA</strong> dengan email anda beli pelan tadi, supaya subscription auto-aktif.
             </p>
           </div>
         </td></tr>
 
         <!-- CTA Login -->
-        <tr><td style="padding:0 24px 24px;text-align:center;">
-          <a href="${APP_URL}" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;text-decoration:none;font-weight:700;border-radius:12px;font-size:16px;">
+        <tr><td style="padding:0 32px 32px;text-align:center;">
+          <a href="${APP_URL}" style="display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#7c3aed,#ec4899);color:#fff;text-decoration:none;font-weight:800;border-radius:14px;font-size:16px;box-shadow:0 10px 24px rgba(124,58,237,0.35);">
             🚀 Daftar / Login Sekarang
           </a>
-          <p style="margin:12px 0 0;color:#94a3b8;font-size:13px;">Klik butang <strong>"Dashboard"</strong> di header untuk daftar/login</p>
+          <p style="margin:14px 0 0;color:#94a3b8;font-size:13px;">Klik butang <strong>"Dashboard"</strong> di header untuk daftar/login</p>
         </td></tr>
 
         <!-- Quick Start Guide -->
-        <tr><td style="padding:0 24px 24px;">
-          <div style="background:#f8fafc;border-radius:12px;padding:20px;">
+        <tr><td style="padding:0 32px 24px;">
+          <div style="background:#f8fafc;border:1px solid #eef2f7;border-radius:16px;padding:22px;">
             <h2 style="margin:0 0 16px;color:#1e293b;font-size:18px;font-weight:800;">📋 Panduan Ringkas — 4 Langkah</h2>
 
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
@@ -102,10 +105,10 @@ function buildSubscriptionEmail({ tier, bonusCredits }) {
         </td></tr>
 
         <!-- AI Features -->
-        <tr><td style="padding:0 24px 24px;">
-          <div style="background:#fef3c7;border-radius:12px;padding:20px;">
-            <h3 style="margin:0 0 12px;color:#78350f;font-size:16px;font-weight:800;">✨ Cuba Cikgu AI (guna kredit anda)</h3>
-            <p style="margin:0;color:#92400e;font-size:14px;line-height:1.6;">
+        <tr><td style="padding:0 32px 24px;">
+          <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:16px;padding:22px;">
+            <h3 style="margin:0 0 12px;color:#92400e;font-size:16px;font-weight:800;">✨ Cuba Cikgu AI (guna kredit anda)</h3>
+            <p style="margin:0;color:#a16207;font-size:14px;line-height:1.8;">
               • <strong>Cikgu Firdaus</strong> — Tutor AI untuk jawab soalan<br>
               • <strong>Cikgu Rosie</strong> — Jana kuiz custom<br>
               • <strong>Cikgu Mira</strong> — Jana cerita pengajaran<br>
@@ -115,17 +118,18 @@ function buildSubscriptionEmail({ tier, bonusCredits }) {
         </td></tr>
 
         <!-- Support -->
-        <tr><td style="padding:0 24px 28px;text-align:center;">
+        <tr><td style="padding:0 32px 32px;text-align:center;">
           <p style="margin:0 0 12px;color:#64748b;font-size:14px;">Ada soalan? Kami sedia membantu — WhatsApp terus!</p>
-          <a href="${WHATSAPP_URL}" style="display:inline-block;padding:12px 24px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;border-radius:10px;font-size:15px;">
+          <a href="${WHATSAPP_URL}" style="display:inline-block;padding:13px 28px;background:#25D366;color:#fff;text-decoration:none;font-weight:800;border-radius:12px;font-size:15px;box-shadow:0 8px 20px rgba(37,211,102,0.3);">
             💬 WhatsApp: 017-784 4120
           </a>
         </td></tr>
 
         <!-- Footer -->
-        <tr><td style="background:#f8fafc;padding:20px 24px;text-align:center;border-top:1px solid #e2e8f0;">
-          <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.5;">
-            © CeriaKid — Platform Pembelajaran Interaktif untuk Anak Malaysia<br>
+        <tr><td style="background:#faf5ff;padding:24px;text-align:center;border-top:1px solid #f1e9fb;">
+          <p style="margin:0 0 6px;color:#7c3aed;font-size:14px;font-weight:800;">CeriaKid</p>
+          <p style="margin:0;color:#a78bca;font-size:12px;line-height:1.6;">
+            Platform Pembelajaran Interaktif untuk Anak Malaysia<br>
             Anda terima email ini sebab anda baru langgan CeriaKid.
           </p>
         </td></tr>
@@ -144,22 +148,23 @@ function buildCreditEmail({ credits }) {
     html: `<!DOCTYPE html>
 <html lang="ms">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;padding:24px 0;">
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#fff7ed;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fff7ed;padding:32px 12px;">
     <tr><td align="center">
-      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 20px 50px rgba(180,90,30,0.15);">
 
-        <tr><td style="background:linear-gradient(135deg,#f59e0b,#ef4444);padding:32px 24px;text-align:center;">
-          <h1 style="margin:0;color:#fff;font-size:28px;font-weight:900;">💰 Kredit Dah Masuk!</h1>
-          <p style="margin:8px 0 0;color:rgba(255,255,255,0.95);font-size:18px;font-weight:700;">+${credits} Kredit AI</p>
+        <tr><td style="background:linear-gradient(135deg,#f59e0b 0%,#fb923c 45%,#ef4444 100%);padding:48px 32px 44px;text-align:center;">
+          <div style="display:inline-block;width:76px;height:76px;line-height:76px;border-radius:50%;background:rgba(255,255,255,0.18);font-size:40px;margin-bottom:18px;">💰</div>
+          <h1 style="margin:0;color:#fff;font-size:30px;font-weight:900;letter-spacing:-0.5px;">Kredit Dah Masuk!</h1>
+          <p style="margin:10px 0 0;color:rgba(255,255,255,0.95);font-size:20px;font-weight:800;">+${credits} Kredit AI</p>
         </td></tr>
 
-        <tr><td style="padding:28px 24px;">
-          <p style="margin:0 0 16px;color:#1e293b;font-size:16px;">Hai! 👋</p>
-          <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.6;">
+        <tr><td style="padding:36px 32px 8px;">
+          <p style="margin:0 0 14px;color:#0f172a;font-size:18px;font-weight:800;">Hai! 👋</p>
+          <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
             Terima kasih! <strong>${credits} kredit AI</strong> dah ditambah ke akaun anda. Gunakan kredit ini untuk:
           </p>
-          <ul style="margin:0 0 16px;padding-left:20px;color:#475569;font-size:15px;line-height:1.8;">
+          <ul style="margin:0 0 8px;padding-left:20px;color:#475569;font-size:15px;line-height:1.9;">
             <li>💬 Tanya soalan dengan <strong>Cikgu Firdaus</strong> (tutor AI)</li>
             <li>📝 Jana kuiz custom dengan <strong>Cikgu Rosie</strong></li>
             <li>📚 Jana cerita pengajaran dengan <strong>Cikgu Mira</strong></li>
@@ -167,22 +172,23 @@ function buildCreditEmail({ credits }) {
           </ul>
         </td></tr>
 
-        <tr><td style="padding:0 24px 20px;text-align:center;">
-          <a href="${APP_URL}/dashboard" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;text-decoration:none;font-weight:700;border-radius:12px;font-size:16px;">
+        <tr><td style="padding:8px 32px 28px;text-align:center;">
+          <a href="${APP_URL}/dashboard" style="display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;text-decoration:none;font-weight:800;border-radius:14px;font-size:16px;box-shadow:0 10px 24px rgba(239,68,68,0.32);">
             🚀 Mula Guna Sekarang
           </a>
         </td></tr>
 
         <!-- Support -->
-        <tr><td style="padding:0 24px 24px;text-align:center;">
+        <tr><td style="padding:0 32px 32px;text-align:center;">
           <p style="margin:0 0 12px;color:#64748b;font-size:14px;">Ada soalan? WhatsApp kami terus!</p>
-          <a href="${WHATSAPP_URL}" style="display:inline-block;padding:12px 24px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;border-radius:10px;font-size:15px;">
+          <a href="${WHATSAPP_URL}" style="display:inline-block;padding:13px 28px;background:#25D366;color:#fff;text-decoration:none;font-weight:800;border-radius:12px;font-size:15px;box-shadow:0 8px 20px rgba(37,211,102,0.3);">
             💬 WhatsApp: 017-784 4120
           </a>
         </td></tr>
 
-        <tr><td style="background:#f8fafc;padding:20px 24px;text-align:center;border-top:1px solid #e2e8f0;">
-          <p style="margin:0;color:#94a3b8;font-size:12px;">© CeriaKid — Platform Pembelajaran Interaktif</p>
+        <tr><td style="background:#fffbeb;padding:24px;text-align:center;border-top:1px solid #fef0c7;">
+          <p style="margin:0 0 6px;color:#d97706;font-size:14px;font-weight:800;">CeriaKid</p>
+          <p style="margin:0;color:#d4a574;font-size:12px;">Platform Pembelajaran Interaktif</p>
         </td></tr>
 
       </table>
