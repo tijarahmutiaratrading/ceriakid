@@ -576,7 +576,7 @@ function buildMenuSections({ isAuthenticated, isAdmin, isLanding }) {
         { path: '/games-hub', label: 'Game Hub', icon: BookOpen },
         { path: '/drawing', label: 'Studio Lukisan', icon: Palette },
         { path: '/story-kid', label: 'Story Kid', icon: BookMarked },
-        { path: '/social', label: 'Kawan & Cabaran', icon: UserPlus },
+        { path: '/social', label: 'Social & Challenge', icon: UserPlus },
       ],
     });
 
