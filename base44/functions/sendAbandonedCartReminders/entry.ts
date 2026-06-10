@@ -30,8 +30,8 @@ function buildEmail(tier) {
 <tr><td style="padding:0 24px 20px;text-align:center"><a href="${APP_URL}/#pricing" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;text-decoration:none;font-weight:700;border-radius:12px;font-size:15px">🚀 Sambung Pendaftaran</a></td></tr>
 <tr><td style="padding:0 24px 24px"><div style="background:#f0fdf4;border-left:4px solid #22c55e;border-radius:8px;padding:14px"><p style="margin:0;color:#166534;font-size:13px;font-weight:700">💡 Kenapa ibu bapa pilih CeriaKid?</p>
 <p style="margin:6px 0 0;color:#15803d;font-size:13px;line-height:1.6">✅ Tanpa iklan • ✅ Ikut KSPK/KSSR • ✅ Dashboard untuk pantau anak • ✅ Boleh guna offline</p></div></td></tr>
-<tr><td style="padding:0 24px 24px;text-align:center"><p style="margin:0 0 8px;color:#64748b;font-size:13px">Ada soalan? WhatsApp kami:</p>
-<a href="${WHATSAPP_URL}" style="display:inline-block;padding:10px 20px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;border-radius:10px;font-size:14px">💬 017-784 4120</a></td></tr>
+<tr><td style="padding:0 24px 24px;text-align:center"><p style="margin:0 0 10px;color:#64748b;font-size:13px">Ada soalan? Hubungi kami terus:</p>
+<a href="${WHATSAPP_URL}" style="display:inline-block;padding:12px 24px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;border-radius:12px;font-size:14px"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="18" height="18" alt="WhatsApp" style="vertical-align:middle;margin-right:8px" />WhatsApp · 017-784 4120</a></td></tr>
 <tr><td style="background:#f8fafc;padding:16px 24px;text-align:center;border-top:1px solid #e2e8f0"><p style="margin:0;color:#94a3b8;font-size:11px">© CeriaKid</p></td></tr>
 </table></td></tr></table></body></html>`,
   };
