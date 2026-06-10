@@ -517,12 +517,12 @@ export default function GamePlayer() {
       <div className="hidden lg:block fixed bottom-2 left-8 z-0">
         <CikguMascot size={300} />
       </div>
-      {/* Tablet (md) — saiz sederhana */}
-      <div className="hidden md:block lg:hidden fixed bottom-2 left-4 z-0 opacity-90">
+      {/* Tablet (sm–lg) — saiz sederhana */}
+      <div className="hidden sm:block lg:hidden fixed bottom-2 left-4 z-0 opacity-90">
         <CikguMascot size={220} />
       </div>
       {/* Mobile — saiz kecil */}
-      <div className="md:hidden fixed bottom-2 left-2 z-0 opacity-90">
+      <div className="sm:hidden fixed bottom-2 left-2 z-0 opacity-90">
         <CikguMascot size={150} />
       </div>
 
