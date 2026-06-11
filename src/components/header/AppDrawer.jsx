@@ -123,10 +123,10 @@ export default function AppDrawer({
           transform: visible ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.96)',
           opacity: visible ? 1 : 0,
           transformOrigin: 'top center',
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(250,245,255,0.94) 100%)',
+          background: 'rgba(255,255,255,0.98)',
           backdropFilter: 'blur(32px) saturate(180%)',
           WebkitBackdropFilter: 'blur(32px) saturate(180%)',
-          boxShadow: '0 24px 60px -12px rgba(88, 28, 135, 0.35), inset 0 1px 0 rgba(255,255,255,0.8)',
+          boxShadow: '0 24px 60px -12px rgba(15, 23, 42, 0.30), inset 0 1px 0 rgba(255,255,255,0.8)',
           border: '1px solid rgba(255,255,255,0.7)',
         }}
       >
@@ -188,13 +188,13 @@ export default function AppDrawer({
             <Link
               to="/settings"
               onClick={() => { haptic('medium'); onClose?.(); }}
-              className="mx-3 my-3 flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-br from-amber-50 to-pink-50 border border-amber-200 active:bg-amber-100 transition-colors"
-            >
+              className="mx-3 my-3 flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200 active:bg-slate-100 transition-colors"
+              >
               <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center flex-shrink-0 shadow-sm">
-                <Sparkles className="w-4 h-4 text-amber-500" strokeWidth={2.5} />
+                <Sparkles className="w-4 h-4 text-slate-700" strokeWidth={2.5} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-amber-700 text-[10px] font-black uppercase tracking-wider leading-none">Naik Taraf</p>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider leading-none">Naik Taraf</p>
                 <p className="text-slate-800 text-sm font-black leading-tight mt-1">Buka semua game + AI →</p>
               </div>
             </Link>
@@ -219,7 +219,7 @@ export default function AppDrawer({
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl text-white font-black text-sm active:scale-[0.98] transition-all brand-gradient-br"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-slate-900 text-white font-black text-sm active:scale-[0.98] transition-all hover:bg-slate-800"
             >
               <LogOut className="w-4 h-4" strokeWidth={2.5} />
               <span>Log Keluar</span>
@@ -249,7 +249,7 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, child
             {avatarUrl ? (
               <img src={avatarUrl} alt="" className="w-12 h-12 rounded-2xl object-cover" />
             ) : (
-              <div className="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-2xl">🐱</div>
+              <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-2xl">🐱</div>
             )}
             {tier && tier !== 'free' && (
               <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-amber-400 flex items-center justify-center ring-2 ring-white">
@@ -279,7 +279,7 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, child
           type="button"
           onClick={onToggleChildMenu}
           aria-expanded={childMenuOpen}
-          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl active:scale-[0.98] transition-all relative overflow-hidden brand-gradient-br"
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl active:scale-[0.98] transition-all relative overflow-hidden bg-slate-900"
         >
           <img
             src={getChildAvatar(selectedChild)}
@@ -380,13 +380,13 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
       >
         <span className="flex items-center gap-2.5">
           {section.icon && (
-            <section.icon className={`w-[18px] h-[18px] flex-shrink-0 ${expanded ? 'text-purple-600' : 'text-slate-500'}`} strokeWidth={2.4} />
+            <section.icon className={`w-[18px] h-[18px] flex-shrink-0 ${expanded ? 'text-slate-900' : 'text-slate-500'}`} strokeWidth={2.4} />
           )}
           <span>{section.label}</span>
         </span>
-        <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${expanded ? 'bg-purple-100' : 'bg-slate-100'}`}>
+        <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${expanded ? 'bg-slate-200' : 'bg-slate-100'}`}>
           <ChevronRight
-            className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-150 ${expanded ? 'text-purple-500' : 'text-slate-400'}`}
+            className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-150 ${expanded ? 'text-slate-700' : 'text-slate-400'}`}
             strokeWidth={2.5}
             style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
           />
@@ -428,14 +428,14 @@ function MenuItem({ to, label, icon: Icon, active, pinned, showPin, onPinToggle,
           isSmall ? 'px-3 py-2.5 text-xs' : 'px-4 py-3 text-sm'
         } ${
           active
-            ? 'bg-white text-purple-700 font-black shadow-sm border border-slate-100'
+            ? 'bg-white text-slate-900 font-black shadow-sm border border-slate-100'
             : 'text-slate-700 font-bold active:bg-white/50'
         }`}
       >
         <div className="flex-1 flex items-center gap-2.5 min-w-0">
           {Icon && (
             <Icon
-              className={`${iconSize} flex-shrink-0 ${active ? 'text-purple-600' : 'text-slate-500'}`}
+              className={`${iconSize} flex-shrink-0 ${active ? 'text-slate-900' : 'text-slate-500'}`}
               strokeWidth={active ? 2.5 : 2.25}
             />
           )}
@@ -455,7 +455,7 @@ function MenuItem({ to, label, icon: Icon, active, pinned, showPin, onPinToggle,
               {pinned ? <Pin className="w-3.5 h-3.5 fill-current" /> : <PinOff className="w-3.5 h-3.5" />}
             </button>
           )}
-          {active && !showPin && <ChevronRight className="w-4 h-4 text-purple-500" strokeWidth={3} />}
+          {active && !showPin && <ChevronRight className="w-4 h-4 text-slate-700" strokeWidth={3} />}
         </div>
       </Link>
     </div>
@@ -483,18 +483,18 @@ function ChildInlineList({ childrenList, selectedChild, onSelect, onManage }) {
                 alt=""
                 loading="lazy"
                 className={`w-7 h-7 rounded-full object-cover flex-shrink-0 ring-2 ${
-                  isActive ? 'ring-purple-300' : 'ring-slate-200'
+                  isActive ? 'ring-slate-400' : 'ring-slate-200'
                 } bg-white`}
               />
               <div className="flex-1 min-w-0 text-left">
-                <p className={`text-xs font-black truncate leading-tight ${isActive ? 'text-purple-700' : 'text-slate-800'}`}>
+                <p className={`text-xs font-black truncate leading-tight ${isActive ? 'text-slate-900' : 'text-slate-800'}`}>
                   {child.name}
                 </p>
-                <p className={`text-[10px] font-bold truncate leading-tight ${isActive ? 'text-purple-400' : 'text-slate-500'}`}>
+                <p className={`text-[10px] font-bold truncate leading-tight ${isActive ? 'text-slate-500' : 'text-slate-500'}`}>
                   {levelLabel}
                 </p>
               </div>
-              {isActive && <Check className="w-3.5 h-3.5 text-purple-600 flex-shrink-0" strokeWidth={3.5} />}
+              {isActive && <Check className="w-3.5 h-3.5 text-slate-900 flex-shrink-0" strokeWidth={3.5} />}
             </button>
           );
         })}
@@ -505,8 +505,8 @@ function ChildInlineList({ childrenList, selectedChild, onSelect, onManage }) {
           onClick={() => { haptic('light'); onManage?.(); }}
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 font-bold text-xs active:bg-white/60 transition-colors"
         >
-          <div className="w-7 h-7 rounded-full bg-white/80 border border-dashed border-pink-300 flex items-center justify-center flex-shrink-0">
-            <Plus className="w-3.5 h-3.5 text-pink-500" strokeWidth={3} />
+          <div className="w-7 h-7 rounded-full bg-white/80 border border-dashed border-slate-300 flex items-center justify-center flex-shrink-0">
+            <Plus className="w-3.5 h-3.5 text-slate-500" strokeWidth={3} />
           </div>
           <span>Urus Anak</span>
         </Link>
