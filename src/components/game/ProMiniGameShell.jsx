@@ -136,7 +136,7 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
       <div className="relative">
         {/* Streak banner — flame indicator macam GamePlayer subjek */}
         {streak >= 2 && !finished && (
-          <div className="flex justify-center mb-3">
+          <div className="flex justify-end mb-3">
             <StreakIndicator streak={streak} />
           </div>
         )}
