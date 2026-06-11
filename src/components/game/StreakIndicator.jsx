@@ -15,9 +15,8 @@ export default function StreakIndicator({ streak = 0 }) {
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
         transition={{ type: 'spring', damping: 12, stiffness: 280 }}
-        className="fixed left-1/2 -translate-x-1/2 z-[60] inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full brand-gradient shadow-xl border-2 border-white/60 pointer-events-none"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full brand-gradient shadow-xl border-2 border-white/60"
         style={{
-          top: 'calc(env(safe-area-inset-top) + 4.5rem)',
           boxShadow: `0 0 ${20 + intensity * 30}px hsla(35, 95%, 60%, ${0.4 + intensity * 0.4})`,
         }}
       >

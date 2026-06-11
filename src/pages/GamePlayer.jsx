@@ -476,6 +476,11 @@ export default function GamePlayer() {
             <ArrowLeft className="w-4 h-4" />
             Kembali ke Subjek
           </Link>
+          {state.streak >= 2 && (
+            <div className="flex justify-center mb-3">
+              <StreakIndicator streak={state.streak} />
+            </div>
+          )}
           <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} />
           {state.finished ? (
             <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} onGenerateNew={handleGenerateNew} isPremium={isPremium} />
@@ -490,7 +495,6 @@ export default function GamePlayer() {
           )}
         </div>
         <FeedbackOverlay show={state.showFeedback} isCorrect={state.isCorrect} message={state.feedbackMsg} onDone={handleFeedbackDone} combo={state.streak} comboMessage={state.comboMessage} />
-        <StreakIndicator streak={state.streak} />
         <AnswerBurst />
       </div>
     );
@@ -544,6 +548,12 @@ export default function GamePlayer() {
              {game.totalQuestions || 20} soalan
            </div>
          </div>
+
+        {state.streak >= 2 && (
+          <div className="flex justify-center mb-3">
+            <StreakIndicator streak={state.streak} />
+          </div>
+        )}
 
         <GameHeader
           title={game.title}
@@ -646,7 +656,6 @@ export default function GamePlayer() {
         comboMessage={state.comboMessage}
       />
 
-      <StreakIndicator streak={state.streak} />
       <AnswerBurst />
 
       <AchievementBadges badges={state.unlockedBadges} />
