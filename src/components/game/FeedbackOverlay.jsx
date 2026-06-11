@@ -94,7 +94,7 @@ export default function FeedbackOverlay({ isCorrect, show, message, onDone, comb
                 initial={{ scale: 0, y: 20, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 transition={{ delay: 0.7, type: 'spring', damping: 10, stiffness: 250 }}
-                className="mt-4 inline-block px-5 py-2 rounded-full bg-gradient-to-r from-orange-500 via-pink-500 to-rose-500 shadow-lg border-2 border-white"
+                className="mt-4 inline-block px-5 py-2 rounded-full brand-gradient shadow-lg border-2 border-white"
               >
                 <p className={`font-black text-white drop-shadow ${comboMessage.size === 'mega' ? 'text-2xl' : comboMessage.size === 'large' ? 'text-xl' : 'text-base'}`}>
                   {comboMessage.msg}
