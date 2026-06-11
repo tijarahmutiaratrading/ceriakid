@@ -27,7 +27,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
   // Multiple Choice & True/False
   if (['multiple_choice', 'true_false', 'yes_no'].includes(type)) {
     const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
-    const badgeGradients = ['rgba(255,255,255,0.65)', 'rgba(255,255,255,0.65)', 'rgba(255,255,255,0.65)', 'rgba(255,255,255,0.65)', 'rgba(255,255,255,0.65)', 'rgba(255,255,255,0.65)'];
+    const badgeGradients = ['#a855f7', '#0ea5e9', '#f59e0b', '#ec4899', '#10b981', '#6366f1'];
 
     return (
       <div className="grid grid-cols-2 gap-3">
@@ -40,7 +40,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
           let shadow = '0 4px 16px rgba(0,0,0,0.06)';
           let textColor = '#1e293b';
           let badgeBg = badgeGradients[i % badgeGradients.length];
-          let badgeText = '#64748b';
+          let badgeText = '#ffffff';
           let badgeIcon = letters[i];
           let dimmed = false;
 
