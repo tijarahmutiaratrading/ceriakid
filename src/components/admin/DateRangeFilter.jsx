@@ -5,7 +5,8 @@ export const DATE_RANGES = [
   { key: 'today', label: 'Hari Ini' },
   { key: 'yesterday', label: 'Semalam' },
   { key: '7days', label: '7 Hari' },
-  { key: '30days', label: '30 Hari' },
+  { key: 'thisMonth', label: 'Bulan Ini' },
+  { key: 'lastMonth', label: 'Bulan Lepas' },
   { key: 'all', label: 'Semua' },
 ];
 
@@ -54,8 +55,18 @@ export function isInRange(val, key) {
       return dateMY === yesterday;
     case '7days':
       return dateMY >= shiftDate(today, -6) && dateMY <= today;
-    case '30days':
-      return dateMY >= shiftDate(today, -29) && dateMY <= today;
+    case 'thisMonth': {
+      // Bulan semasa: dari hari pertama bulan ini hingga hari ini
+      const firstOfMonth = today.slice(0, 8) + '01';
+      return dateMY >= firstOfMonth && dateMY <= today;
+    }
+    case 'lastMonth': {
+      // Bulan lepas: dari hari pertama hingga hari terakhir bulan sebelum ini
+      const firstOfThisMonth = today.slice(0, 8) + '01';
+      const lastOfLastMonth = shiftDate(firstOfThisMonth, -1);
+      const firstOfLastMonth = lastOfLastMonth.slice(0, 8) + '01';
+      return dateMY >= firstOfLastMonth && dateMY <= lastOfLastMonth;
+    }
     default:
       return true;
   }
