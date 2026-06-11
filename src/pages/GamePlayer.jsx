@@ -533,10 +533,13 @@ export default function GamePlayer() {
       <AppHeader showBack={true} backTo={`/games/${category}`} />
       <div className="relative max-w-lg mx-auto px-4 md:px-6 py-3 md:py-6 pb-12 md:pb-40 pt-24 md:pt-32">
 
-         <Link to={`/games/${category}`} className="inline-flex items-center gap-1.5 mb-4 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors">
-           <ArrowLeft className="w-4 h-4" />
-           Kembali ke Subjek
-         </Link>
+         <div className="flex items-center justify-between gap-2 mb-4">
+           <Link to={`/games/${category}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors">
+             <ArrowLeft className="w-4 h-4" />
+             Kembali ke Subjek
+           </Link>
+           {state.streak >= 2 && <StreakIndicator streak={state.streak} />}
+         </div>
 
          <div className="flex items-center justify-between gap-2 mb-4">
            <span className="inline-flex items-center gap-1.5 capitalize px-3 py-1.5 text-xs font-bold rounded-lg whitespace-nowrap bg-white text-slate-700 ring-1 ring-slate-200 shadow-sm">
@@ -548,12 +551,6 @@ export default function GamePlayer() {
              {game.totalQuestions || 20} soalan
            </div>
          </div>
-
-        {state.streak >= 2 && (
-          <div className="flex justify-end mb-2 px-1 sm:px-2">
-            <StreakIndicator streak={state.streak} />
-          </div>
-        )}
 
         <GameHeader
           title={game.title}
