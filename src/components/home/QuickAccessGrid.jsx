@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Gamepad2, Palette, BookOpen, GraduationCap, Library } from 'lucide-react';
+import { ArrowRight, Gamepad2, Palette, BookOpen, GraduationCap, Library, Sparkles } from 'lucide-react';
 
 const actions = [
   { to: '/games-hub', icon: Gamepad2, emoji: '🎮', title: 'Game Hub', subtitle: 'Permainan interaktif', tone: 'from-violet-400/30 to-blue-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c313ca888_generated_image.png' },
   { to: '/3m', icon: GraduationCap, emoji: '📚', title: 'Modul 3M', subtitle: 'Membaca · Menulis · Mengira', tone: 'from-blue-400/30 to-emerald-400/20', featured: true, image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/dd42df217_generated_image.png' },
+  { to: '/ai-hub', icon: Sparkles, emoji: '🤖', title: 'AI Hub', subtitle: 'Cikgu AI · Kuiz · Cerita · BBM', tone: 'from-indigo-400/30 to-fuchsia-400/20', featured: true, image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2ad5ce117_generated_image.png' },
   { to: '/library', icon: Library, emoji: '📒', title: 'Library Hub', subtitle: 'Nota & mind map silibus', tone: 'from-purple-400/30 to-pink-400/20', featured: true, image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/cbafc9750_generated_image.png' },
   { to: '/drawing', icon: Palette, emoji: '🎨', title: 'Studio Lukisan', subtitle: 'Lukis bebas & tracing', tone: 'from-pink-400/30 to-orange-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1bf081296_generated_image.png' },
   { to: '/story-kid', icon: BookOpen, emoji: '📖', title: 'Story Kid', subtitle: 'Cerita interaktif', tone: 'from-yellow-300/30 to-pink-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/71823ab6e_generated_image.png' },
@@ -13,7 +14,7 @@ const actions = [
 
 export default function QuickAccessGrid() {
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4">
       {actions.map((item) => {
         const Icon = item.icon;
         return (
