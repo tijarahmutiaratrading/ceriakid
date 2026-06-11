@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Gamepad2, Palette, BookOpen, BookMarked } from 'lucide-react';
+import { ArrowRight, Gamepad2, Palette, BookOpen, GraduationCap } from 'lucide-react';
 
 const actions = [
   { to: '/games-hub', icon: Gamepad2, emoji: '🎮', title: 'Game Hub', subtitle: 'Permainan interaktif', tone: 'from-violet-400/30 to-blue-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c313ca888_generated_image.png' },
+  { to: '/3m', icon: GraduationCap, emoji: '📚', title: 'Modul 3M', subtitle: 'Membaca · Menulis · Mengira', tone: 'from-blue-400/30 to-emerald-400/20', featured: true },
   { to: '/drawing', icon: Palette, emoji: '🎨', title: 'Studio Lukisan', subtitle: 'Lukis bebas & tracing', tone: 'from-pink-400/30 to-orange-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1bf081296_generated_image.png' },
-  { to: '/story-kid', icon: BookOpen, emoji: '📖', title: 'Story Kid', subtitle: 'Cerita interaktif', tone: 'from-yellow-300/30 to-pink-400/20', featured: true, image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/71823ab6e_generated_image.png' },
-  { to: '/syllabus', icon: BookMarked, emoji: '📚', title: 'Silibus KSPK/KSSR', subtitle: 'Rujukan rasmi KPM', tone: 'from-amber-400/30 to-orange-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b3209024a_generated_image.png' },
+  { to: '/story-kid', icon: BookOpen, emoji: '📖', title: 'Story Kid', subtitle: 'Cerita interaktif', tone: 'from-yellow-300/30 to-pink-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/71823ab6e_generated_image.png' },
 ];
 
 export default function QuickAccessGrid() {
