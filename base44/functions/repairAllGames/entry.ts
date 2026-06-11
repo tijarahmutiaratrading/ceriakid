@@ -1,11 +1,10 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 // Repair semua games yang ada isu structural:
 // 1. Delete games dengan no_questions (kosong)
 // 2. Remove duplicate questions dalam game yang ada duplikat
 // 3. Remove duplicate options dalam soalan (shift answer index kalau perlu)
-//
-// Tak sentuh biased_answers — sebab itu mungkin betul untuk content factual.
+// 4. Shuffle pilihan jawapan kalau jawapan betul cenderung di posisi sama (biased_answers)
 
 function repairGame(game) {
   const actions = [];
@@ -53,6 +52,34 @@ function repairGame(game) {
     return q;
   });
 
+  // 3. Shuffle options untuk elak biased_answers (jawapan betul selalu di posisi sama)
+  const answerable = questions.filter(q => Array.isArray(q.options) && q.options.length > 1 && typeof q.answer === 'number');
+  if (answerable.length >= 4) {
+    // Kira berapa banyak jawapan betul di posisi yang sama
+    const posCount = {};
+    answerable.forEach(q => { posCount[q.answer] = (posCount[q.answer] || 0) + 1; });
+    const maxSame = Math.max(...Object.values(posCount));
+    const biasRatio = maxSame / answerable.length;
+
+    if (biasRatio > 0.6) {
+      let shuffled = 0;
+      questions = questions.map((q, qi) => {
+        if (!Array.isArray(q.options) || q.options.length <= 1 || typeof q.answer !== 'number') return q;
+        const correctOpt = q.options[q.answer];
+        if (correctOpt === undefined) return q;
+        // Sasarkan posisi baru ikut giliran (round-robin) supaya tersebar rata
+        const targetIdx = qi % q.options.length;
+        if (targetIdx === q.answer) return q;
+        const newOptions = [...q.options];
+        // Tukar tempat option betul dengan option di targetIdx
+        [newOptions[q.answer], newOptions[targetIdx]] = [newOptions[targetIdx], newOptions[q.answer]];
+        shuffled++;
+        return { ...q, options: newOptions, answer: targetIdx };
+      });
+      if (shuffled > 0) actions.push(`Acak posisi jawapan ${shuffled} soalan`);
+    }
+  }
+
   return { questions, actions, isEmpty: questions.length === 0 };
 }
 
@@ -78,24 +105,34 @@ Deno.serve(async (req) => {
     }
 
     console.log(`Repairing ${allGames.length} games...`);
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+    // Had bilangan tulis (update/delete) per run untuk elak 429.
+    // Panggil berulang sampai results.remaining === 0.
+    const body = await req.json().catch(() => ({}));
+    const maxWrites = body.maxWrites || 80;
 
     const results = {
       total: allGames.length,
       deleted: 0,
       repaired: 0,
       unchanged: 0,
+      remaining: 0,
       errors: [],
       deletedIds: [],
       repairedDetails: [],
     };
 
+    let writes = 0;
     for (const game of allGames) {
+      if (writes >= maxWrites) { results.remaining++; continue; }
       try {
         const questions = game.gameData?.questions || [];
 
         // CASE 1: Delete games dengan no questions
         if (!Array.isArray(questions) || questions.length === 0) {
           await base44.asServiceRole.entities.Game.delete(game.id);
+          writes++;
           results.deleted++;
           results.deletedIds.push({ id: game.id, title: game.title, category: game.category });
           continue;
@@ -107,6 +144,7 @@ Deno.serve(async (req) => {
         if (isEmpty) {
           // All questions were duplicates — delete
           await base44.asServiceRole.entities.Game.delete(game.id);
+          writes++;
           results.deleted++;
           results.deletedIds.push({ id: game.id, title: game.title, category: game.category, reason: 'all_duplicates' });
           continue;
@@ -117,6 +155,8 @@ Deno.serve(async (req) => {
             gameData: { ...game.gameData, questions: newQuestions },
             totalQuestions: newQuestions.length,
           });
+          writes++;
+          await sleep(120); // elak rate limit (429) bila banyak update
           results.repaired++;
           results.repairedDetails.push({
             id: game.id,
