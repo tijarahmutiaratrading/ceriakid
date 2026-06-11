@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Download, MessageCircle, Loader2, Sparkles, ImageIcon } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { toast } from '@/components/ui/use-toast';
+import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
 /**
  * Generate a beautiful shareable image with the user's referral code.
@@ -14,6 +15,8 @@ export default function ReferralShareCard({ affiliate, referralLink, userName })
   const cardRef = useRef(null);
   const [generating, setGenerating] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
+  const { stats } = useGameStats();
+  const gameCount = stats?.totalGames ? formatGameCount(stats.totalGames) : '2,500+';
 
   const generateImage = async () => {
     if (!cardRef.current) return null;
@@ -51,7 +54,7 @@ export default function ReferralShareCard({ affiliate, referralLink, userName })
   };
 
   const handleWhatsAppShare = async () => {
-    const message = `Eh, korang tau tak? 😍\n\nAnak aku dah berbulan guna CeriaKid ni — siyes lah, dia jenis suka main game, tapi sambil main tu dia belajar. Bahasa, Math, Sains, Jawi semua ada. Ikut sukatan KSPK & KSSR pulak tu.\n\n2,040+ permainan dalam satu app je. Tak payah pening cari aktiviti lain dah. 📚\n\nAku share kod aku ni — korang try dulu, free je nak tengok:\n👉 ${referralLink}\n\nSetup 2 minit. Lepas tu biar anak yang sambung sendiri. 😄`;
+    const message = `Eh, korang tau tak? 😍\n\nAnak aku dah berbulan guna CeriaKid ni — siyes lah, dia jenis suka main game, tapi sambil main tu dia belajar. Bahasa, Math, Sains, Jawi semua ada. Ikut sukatan KSPK & KSSR pulak tu.\n\n${gameCount} permainan dalam satu app je. Tak payah pening cari aktiviti lain dah. 📚\n\nAku share kod aku ni — korang try dulu, free je nak tengok:\n👉 ${referralLink}\n\nSetup 2 minit. Lepas tu biar anak yang sambung sendiri. 😄`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
@@ -146,7 +149,7 @@ export default function ReferralShareCard({ affiliate, referralLink, userName })
               <span style={{ background: '#fde047', color: '#7c2d12', padding: '12px 18px 14px', borderRadius: '12px', display: 'inline-block', marginTop: '10px', lineHeight: 1, boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>CeriaKid! 🌟</span>
             </h1>
             <p style={{ color: 'rgba(255,255,255,0.95)', fontSize: '15px', fontWeight: 700, marginTop: '16px', lineHeight: 1.5 }}>
-              2,040+ permainan edukatif KSPK/KSSR<br />
+              {gameCount} permainan edukatif KSPK/KSSR<br />
               📚 Bahasa • Math • Sains • Jawi
             </p>
           </div>

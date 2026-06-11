@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, LogOut, Settings, Sparkles, Crown, AlertCircle } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
 
 const TIER_LABELS = {
   free: 'Percuma',
@@ -18,7 +19,7 @@ const SLIDES = [
   {
     tagline: 'CUBA PERMAINAN BARU',
     title: 'Belajar dengan CeriaKid',
-    meta: '2,040+ Permainan • Semua Subjek',
+    meta: '__GAME_COUNT__ Permainan • Semua Subjek',
     cta: 'Mula Sekarang',
     ctaLink: '/games-hub',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/092310156_generated_image.png',
@@ -63,7 +64,9 @@ export default function AppleFitnessHero({ user, avatarUrl, onLogout }) {
   const [subscription, setSubscription] = useState(null);
   const [credits, setCredits] = useState(0);
   const [liveAvatar, setLiveAvatar] = useState(avatarUrl || '');
-  const slide = SLIDES[index];
+  const { stats } = useGameStats();
+  const gameCount = stats?.totalGames ? formatGameCount(stats.totalGames) : '2,500+';
+  const slide = { ...SLIDES[index], meta: SLIDES[index].meta.replace('__GAME_COUNT__', gameCount) };
 
   // Sentiasa baca avatar terkini dari user + dengar event tukar avatar
   useEffect(() => { setLiveAvatar(avatarUrl || user?.avatarUrl || ''); }, [avatarUrl, user?.avatarUrl]);
