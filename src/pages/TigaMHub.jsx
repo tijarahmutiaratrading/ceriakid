@@ -10,29 +10,48 @@ export default function TigaMHub() {
     <div className="min-h-screen w-full font-nunito relative">
       <AppHeader showBack={true} backTo="/dashboard" title="3M" />
 
-      <div className="relative w-full max-w-7xl mx-auto page-px pb-16 pt-4">
-        {/* Hero */}
+      <div className="relative w-full max-w-7xl mx-auto page-px pb-16 pt-4 space-y-6">
+        {/* Back button */}
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full font-black text-sm text-slate-700 transition-all hover:scale-[1.02]"
+            style={{
+              background: 'rgba(255,255,255,0.9)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(0,0,0,0.05)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+            }}
+          >
+            <ArrowLeft className="w-4 h-4" /> Kembali
+          </Link>
+        </motion.div>
+
+        {/* Hero — style ikut Games Subjek */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative isolate overflow-hidden mb-6 p-6 rounded-3xl shadow-2xl border border-white/30"
-          style={{ background: 'linear-gradient(135deg, hsl(220 80% 55%), hsl(160 70% 45%), hsl(35 95% 55%))' }}
+          className="rounded-[2rem] p-5 sm:p-6 relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)',
+            boxShadow: '0 20px 50px rgba(168,85,247,0.4), 0 8px 20px rgba(0,0,0,0.15)',
+          }}
         >
-          <div className="absolute inset-0 opacity-20" style={{
-            backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.5) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.4) 0%, transparent 40%)'
-          }} />
-          <Link to="/dashboard" className="relative inline-flex items-center gap-2 text-white/95 text-xs font-black mb-3 drop-shadow-md">
-            <ArrowLeft className="w-4 h-4" /> Kembali ke kategori
-          </Link>
-          <div className="relative flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-white/25 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center text-4xl shadow-lg flex-shrink-0">
-              📚
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight drop-shadow-lg">Modul 3M</h1>
-              <p className="text-white/95 text-sm font-bold mt-1 drop-shadow-md">Membaca · Menulis · Mengira</p>
-              <p className="text-white/80 text-xs font-semibold mt-0.5">Kemahiran asas untuk Prasekolah & Darjah Rendah</p>
-            </div>
+          <motion.div
+            animate={{ y: [0, -8, 0], rotate: [0, 5, 0] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="absolute top-3 right-4 text-4xl"
+          >
+            📚
+          </motion.div>
+          <div className="relative">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-yellow-100 mb-2">Modul 3M</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.05] tracking-tight text-white mb-2">
+              Membaca · Menulis · Mengira 🎓
+            </h1>
+            <p className="text-white/85 text-sm sm:text-base font-bold max-w-lg leading-snug">
+              Kemahiran asas untuk Prasekolah & Darjah Rendah. Pilih modul untuk mula belajar.
+            </p>
           </div>
         </motion.div>
 
