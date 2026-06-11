@@ -91,7 +91,7 @@ export const playTap = () => {
 
 // Combo encouragement messages
 export const getComboMessage = (combo) => {
-  if (combo >= 10) return { msg: '🔥 TIDAK DAPAT DIHALANG!', emoji: '🔥', size: 'mega' };
+  if (combo >= 10) return { msg: '🔥 SUPER POWER!', emoji: '🔥', size: 'mega' };
   if (combo >= 7) return { msg: '⚡ SANGAT HEBAT!', emoji: '⚡', size: 'large' };
   if (combo >= 5) return { msg: '🌟 SUPER STREAK!', emoji: '🌟', size: 'large' };
   if (combo >= 3) return { msg: '✨ Combo!', emoji: '✨', size: 'medium' };
