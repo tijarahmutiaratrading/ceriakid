@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Zap, Loader2, Settings, LayoutDashboard, Wrench, Activity } from 'lucide-react';
+import { Zap, Loader2, Settings, LayoutDashboard, Wrench, Activity, Library } from 'lucide-react';
 import LaunchSettingsModal from '@/components/admin/LaunchSettingsModal';
 import LaunchOverview from '@/components/admin/LaunchOverview';
 import LaunchManualControl from '@/components/admin/LaunchManualControl';
 import BackgroundActivityPanel from '@/components/admin/BackgroundActivityPanel';
 import ResumeGenerateButton from '@/components/admin/ResumeGenerateButton';
 import ContentProgressBar from '@/components/admin/ContentProgressBar';
+import LibraryGeneratorPanel from '@/components/admin/LibraryGeneratorPanel';
 
 export default function LaunchControlPanel() {
   const [tab, setTab] = useState('overview');
@@ -123,12 +124,21 @@ export default function LaunchControlPanel() {
         >
           <Wrench className="w-4 h-4" /> Manual Control
         </button>
+        <button
+          onClick={() => setTab('library')}
+          className={`flex-1 py-2.5 px-3 rounded-xl font-black text-sm transition-all flex items-center justify-center gap-1.5 ${
+            tab === 'library' ? 'bg-slate-900 text-white shadow' : 'text-slate-700 hover:bg-white/70'
+          }`}
+        >
+          <Library className="w-4 h-4" /> Library
+        </button>
       </div>
 
       {/* Tab content */}
       {tab === 'overview' && <LaunchOverview />}
       {tab === 'activity' && <BackgroundActivityPanel />}
       {tab === 'manual' && <LaunchManualControl />}
+      {tab === 'library' && <LibraryGeneratorPanel />}
 
       {/* Settings modal */}
       <LaunchSettingsModal
