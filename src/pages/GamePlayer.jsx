@@ -477,7 +477,7 @@ export default function GamePlayer() {
             Kembali ke Subjek
           </Link>
           {state.streak >= 2 && (
-            <div className="flex justify-center mb-3">
+            <div className="flex justify-end mb-2 px-1 sm:px-2">
               <StreakIndicator streak={state.streak} />
             </div>
           )}
@@ -550,7 +550,7 @@ export default function GamePlayer() {
          </div>
 
         {state.streak >= 2 && (
-          <div className="flex justify-center mb-3">
+          <div className="flex justify-end mb-2 px-1 sm:px-2">
             <StreakIndicator streak={state.streak} />
           </div>
         )}
