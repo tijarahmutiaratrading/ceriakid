@@ -13,7 +13,7 @@ export default function StudyNoteReader({ note, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4"
           onClick={onClose}
         >
           <motion.div
@@ -21,7 +21,7 @@ export default function StudyNoteReader({ note, onClose }) {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 40, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl shadow-2xl"
+            className="bg-white w-full sm:max-w-2xl max-h-[88vh] overflow-y-auto rounded-3xl shadow-2xl"
           >
             {/* Header */}
             <div className={`sticky top-0 z-10 bg-gradient-to-br ${getSubjectMeta(note.subject)?.gradient || 'from-purple-400 to-pink-500'} p-5 text-white`}>
