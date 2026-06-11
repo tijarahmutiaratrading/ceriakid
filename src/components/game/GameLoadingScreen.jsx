@@ -6,12 +6,11 @@ import { motion } from 'framer-motion';
 export default function GameLoadingScreen({ message = 'Menyediakan permainan...' }) {
   return (
     <div
-      className="fixed inset-0 z-[9999] w-screen h-screen flex items-center justify-center overflow-hidden p-4"
-      style={{ background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)' }}
+      className="brand-gradient-br fixed inset-0 z-[9999] w-screen h-screen flex items-center justify-center overflow-hidden p-4"
     >
       {/* Glow orbs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-30 blur-3xl" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }} />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full opacity-25 blur-3xl" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }} />
+      <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-25 blur-3xl bg-white/30" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl bg-white/20" />
 
       {/* Floating sparkles */}
       {['✨', '⭐', '💫', '🌟', '✨', '⭐'].map((s, i) => (
