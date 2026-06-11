@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ScorePop, StreakBadge, fireRoundConfetti, fireFinalCelebration, triggerHaptic } from './SatisfyingEffects';
 import { playSound } from '@/lib/soundManager';
+import StreakIndicator from './StreakIndicator';
 
 // Context — RoundContext carries roundData AND onProgress callback (set by shell)
 export const RoundContext = React.createContext({ roundData: null, roundIdx: 0, totalRounds: 1, onProgress: () => {} });
@@ -141,6 +142,13 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
           boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 50px rgba(15,23,42,0.10)',
         }}
       >
+        {/* Streak banner — flame indicator macam GamePlayer subjek */}
+        {streak >= 2 && !finished && (
+          <div className="flex justify-center mb-3">
+            <StreakIndicator streak={streak} />
+          </div>
+        )}
+
         {/* Top bar — Apple-clean with streak badge */}
         <div className="flex items-center gap-3 mb-3">
           <div className="relative flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-50 ring-1 ring-black/5">
