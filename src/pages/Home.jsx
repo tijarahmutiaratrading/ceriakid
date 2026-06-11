@@ -234,13 +234,24 @@ export default function Home() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12 }}
-            className="rounded-2xl border border-white/30 px-4 py-3 flex items-center justify-between gap-3 shadow-lg brand-gradient-br"
+            className="rounded-2xl border border-white/30 px-4 py-3 flex items-center justify-between gap-3"
+            style={{
+              background: 'rgba(255,255,255,0.12)',
+              backdropFilter: 'blur(16px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(16px) saturate(160%)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+            }}
           >
-            <div>
-              <p className="text-white font-black text-sm">🏆 Lihat Prestasi Anak</p>
-              <p className="text-white/85 text-xs mt-0.5">Pantau skor, subjek & streak harian</p>
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white ring-2 ring-white/80 flex-shrink-0 shadow-md text-xl">
+                🏆
+              </div>
+              <div className="min-w-0">
+                <p className="text-white font-black text-sm leading-tight">Lihat Prestasi Anak</p>
+                <p className="text-white/80 text-xs mt-0.5 leading-tight">Pantau skor, subjek & streak harian</p>
+              </div>
             </div>
-            <Link to="/parent-dashboard" className="flex-shrink-0 px-3 py-1.5 rounded-full bg-white hover:bg-white/90 text-purple-700 font-black text-xs transition-all">
+            <Link to="/parent-dashboard" className="flex-shrink-0 px-3 py-1.5 rounded-full bg-white/25 hover:bg-white/35 text-white font-black text-xs transition-all">
               Buka →
             </Link>
           </motion.div>
