@@ -246,8 +246,8 @@ export default function Home() {
                 🏆
               </div>
               <div className="min-w-0">
-                <p className="text-slate-900 font-black text-sm leading-tight">Lihat Prestasi Anak</p>
-                <p className="text-slate-700 text-xs mt-0.5 leading-tight">Pantau skor, subjek & streak harian</p>
+                <p className="text-white font-black text-sm leading-tight">Lihat Prestasi Anak</p>
+                <p className="text-white/80 text-xs mt-0.5 leading-tight">Pantau skor, subjek & streak harian</p>
               </div>
             </div>
             <Link to="/parent-dashboard" className="flex-shrink-0 px-3 py-1.5 rounded-full bg-white/70 hover:bg-white text-slate-900 font-black text-xs transition-all">
