@@ -133,15 +133,7 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
       {/* Floating score pop — outside game area for max visibility */}
       <ScorePop trigger={scorePopTrigger} />
 
-      <div
-        className="relative overflow-hidden rounded-[2rem] p-3 sm:p-4"
-        style={{
-          background: 'rgba(255,255,255,0.95)',
-          backdropFilter: 'blur(24px)',
-          border: '1px solid rgba(0,0,0,0.04)',
-          boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 50px rgba(15,23,42,0.10)',
-        }}
-      >
+      <div className="relative">
         {/* Streak banner — flame indicator macam GamePlayer subjek */}
         {streak >= 2 && !finished && (
           <div className="flex justify-center mb-3">
@@ -201,8 +193,8 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
           </p>
         </motion.div>
 
-        {/* Game area — clean white with soft inner */}
-        <div className="relative rounded-3xl p-3 sm:p-4 bg-white ring-1 ring-black/5 min-h-[260px]" style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.6)' }}>
+        {/* Game area — open, no extra card wrapper (macam GamePlayer subjek) */}
+        <div className="relative min-h-[260px]">
           <AnimatePresence mode="wait">
             {finished ? (
               <motion.div
