@@ -119,7 +119,7 @@ export default function AIHubCard() {
       </div>
 
       {/* AI Features Grid - 2x2 */}
-      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-2.5 md:gap-3">
+      <div className="relative z-10 grid grid-cols-2 gap-2.5 md:gap-3">
         {FEATURES.map((f) => {
           const Icon = f.icon;
           return (
