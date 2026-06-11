@@ -47,25 +47,45 @@ export const mengiraGames = [
       { prompt: '⚽⚽⚽⚽⚽⚽ ➕ ⚽⚽⚽⚽⚽⚽ — Jumlah bola?', target: '12' },
     ]),
   },
-  // ── KONSTRUK 3: Memahami nilai nombor (banyak/sedikit, banding) ──
+  // ── KONSTRUK 3: Memahami nilai nombor (ganjil/genap, besar/kecil) ──
   {
     id: 'kira-k3-nilai-nombor',
-    title: 'Konstruk 3: Banyak atau Sedikit',
+    title: 'Konstruk 3: Nilai Nombor',
     emoji: '⚖️',
     mode: 'swipe_select',
-    objective: 'Pilih kumpulan yang lebih banyak nilainya.',
+    objective: 'Kelaskan nombor — besar atau kecil, ganjil atau genap.',
     reward: 'Compare badge',
     rounds: makeRounds([
-      { items: [{ text: '🍎🍎 vs 🍎🍎🍎', group: 'Kanan' }], groups: ['Kiri', 'Kanan'] },
-      { items: [{ text: '⭐⭐⭐⭐ vs ⭐⭐', group: 'Kiri' }], groups: ['Kiri', 'Kanan'] },
-      { items: [{ text: '🐟 vs 🐟🐟🐟', group: 'Kanan' }], groups: ['Kiri', 'Kanan'] },
-      { items: [{ text: '🎈🎈🎈🎈🎈 vs 🎈🎈', group: 'Kiri' }], groups: ['Kiri', 'Kanan'] },
-      { items: [{ text: '3 vs 7', group: 'Kanan' }], groups: ['Kiri', 'Kanan'] },
-      { items: [{ text: '9 vs 4', group: 'Kiri' }], groups: ['Kiri', 'Kanan'] },
-      { items: [{ text: '6 vs 8', group: 'Kanan' }], groups: ['Kiri', 'Kanan'] },
-      { items: [{ text: '12 vs 5', group: 'Kiri' }], groups: ['Kiri', 'Kanan'] },
-      { items: [{ text: '15 vs 20', group: 'Kanan' }], groups: ['Kiri', 'Kanan'] },
-      { items: [{ text: '30 vs 18', group: 'Kiri' }], groups: ['Kiri', 'Kanan'] },
+      { groups: ['Kecil', 'Besar'], items: [
+        { text: '2', group: 'Kecil' }, { text: '9', group: 'Besar' }, { text: '1', group: 'Kecil' }, { text: '8', group: 'Besar' },
+      ] },
+      { groups: ['Kecil', 'Besar'], items: [
+        { text: '3', group: 'Kecil' }, { text: '7', group: 'Besar' }, { text: '10', group: 'Besar' }, { text: '4', group: 'Kecil' },
+      ] },
+      { groups: ['Kurang 5', 'Lebih 5'], items: [
+        { text: '2', group: 'Kurang 5' }, { text: '8', group: 'Lebih 5' }, { text: '6', group: 'Lebih 5' }, { text: '3', group: 'Kurang 5' },
+      ] },
+      { groups: ['Kurang 10', 'Lebih 10'], items: [
+        { text: '7', group: 'Kurang 10' }, { text: '15', group: 'Lebih 10' }, { text: '12', group: 'Lebih 10' }, { text: '4', group: 'Kurang 10' },
+      ] },
+      { groups: ['Genap', 'Ganjil'], items: [
+        { text: '2', group: 'Genap' }, { text: '3', group: 'Ganjil' }, { text: '4', group: 'Genap' }, { text: '5', group: 'Ganjil' },
+      ] },
+      { groups: ['Genap', 'Ganjil'], items: [
+        { text: '6', group: 'Genap' }, { text: '7', group: 'Ganjil' }, { text: '8', group: 'Genap' }, { text: '9', group: 'Ganjil' },
+      ] },
+      { groups: ['Genap', 'Ganjil'], items: [
+        { text: '10', group: 'Genap' }, { text: '11', group: 'Ganjil' }, { text: '12', group: 'Genap' }, { text: '13', group: 'Ganjil' }, { text: '14', group: 'Genap' },
+      ] },
+      { groups: ['Kurang 10', 'Lebih 10'], items: [
+        { text: '8', group: 'Kurang 10' }, { text: '14', group: 'Lebih 10' }, { text: '9', group: 'Kurang 10' }, { text: '20', group: 'Lebih 10' }, { text: '6', group: 'Kurang 10' }, { text: '18', group: 'Lebih 10' },
+      ] },
+      { groups: ['Genap', 'Ganjil'], items: [
+        { text: '15', group: 'Ganjil' }, { text: '16', group: 'Genap' }, { text: '17', group: 'Ganjil' }, { text: '18', group: 'Genap' }, { text: '19', group: 'Ganjil' }, { text: '20', group: 'Genap' },
+      ] },
+      { groups: ['Kurang 50', 'Lebih 50'], items: [
+        { text: '30', group: 'Kurang 50' }, { text: '70', group: 'Lebih 50' }, { text: '45', group: 'Kurang 50' }, { text: '80', group: 'Lebih 50' }, { text: '25', group: 'Kurang 50' }, { text: '60', group: 'Lebih 50' }, { text: '90', group: 'Lebih 50' },
+      ] },
     ]),
   },
   // ── KONSTRUK 4: Seriasi (susun nombor menaik/menurun & corak) ──
@@ -119,16 +139,16 @@ export const mengiraGames = [
     objective: 'Pilih waktu yang betul ikut jam.',
     reward: 'Jam badge',
     rounds: makeRounds([
-      { target: '🕐 Pukul 1', items: [{text:'🕐 Pukul 1',value:'1'},{text:'🕒 Pukul 3',value:'0'},{text:'🕔 Pukul 5',value:'0'}] },
-      { target: '🕕 Pukul 6', items: [{text:'🕕 Pukul 6',value:'1'},{text:'🕗 Pukul 8',value:'0'},{text:'🕙 Pukul 10',value:'0'}] },
-      { target: '🕛 Pukul 12', items: [{text:'🕛 Pukul 12',value:'1'},{text:'🕘 Pukul 9',value:'0'},{text:'🕓 Pukul 4',value:'0'},{text:'🕖 Pukul 7',value:'0'}] },
-      { target: 'Pagi 🌅', items: [{text:'Pagi 🌅',value:'1'},{text:'Malam 🌙',value:'0'},{text:'Tengah hari ☀️',value:'0'}] },
-      { target: 'Malam 🌙', items: [{text:'Malam 🌙',value:'1'},{text:'Pagi 🌅',value:'0'},{text:'Petang 🌇',value:'0'},{text:'Tengah hari ☀️',value:'0'}] },
-      { target: 'Sarapan 🍳', items: [{text:'Sarapan 🍳',value:'1'},{text:'Makan malam 🍽️',value:'0'},{text:'Tidur 😴',value:'0'},{text:'Mandi 🚿',value:'0'}] },
-      { target: '🕞 Pukul 3:30', items: [{text:'🕞 Pukul 3:30',value:'1'},{text:'🕒 Pukul 3:00',value:'0'},{text:'🕟 Pukul 4:30',value:'0'},{text:'🕝 Pukul 2:30',value:'0'},{text:'🕓 Pukul 4:00',value:'0'}] },
-      { target: '7 hari = 1 minggu', items: [{text:'7 hari = 1 minggu',value:'1'},{text:'5 hari = 1 minggu',value:'0'},{text:'10 hari = 1 minggu',value:'0'},{text:'30 hari = 1 minggu',value:'0'}] },
-      { target: '12 bulan = 1 tahun', items: [{text:'12 bulan = 1 tahun',value:'1'},{text:'10 bulan = 1 tahun',value:'0'},{text:'7 bulan = 1 tahun',value:'0'},{text:'24 bulan = 1 tahun',value:'0'},{text:'6 bulan = 1 tahun',value:'0'}] },
-      { target: '60 minit = 1 jam', items: [{text:'60 minit = 1 jam',value:'1'},{text:'30 minit = 1 jam',value:'0'},{text:'100 minit = 1 jam',value:'0'},{text:'24 minit = 1 jam',value:'0'},{text:'12 minit = 1 jam',value:'0'}] },
+      { target: '🕐 1:00', items: [{text:'🕐 1:00'},{text:'🕒 3:00'},{text:'🕔 5:00'}] },
+      { target: '🕕 6:00', items: [{text:'🕕 6:00'},{text:'🕗 8:00'},{text:'🕙 10:00'}] },
+      { target: '🕛 12:00', items: [{text:'🕛 12:00'},{text:'🕘 9:00'},{text:'🕓 4:00'},{text:'🕖 7:00'}] },
+      { target: 'Pagi 🌅', items: [{text:'Pagi 🌅'},{text:'Malam 🌙'},{text:'Tengah hari ☀️'}] },
+      { target: 'Malam 🌙', items: [{text:'Malam 🌙'},{text:'Pagi 🌅'},{text:'Petang 🌇'},{text:'Tengah hari ☀️'}] },
+      { target: 'Sarapan 🍳', items: [{text:'Sarapan 🍳'},{text:'Makan malam 🍽️'},{text:'Tidur 😴'},{text:'Mandi 🚿'}] },
+      { target: '🕞 3:30', items: [{text:'🕞 3:30'},{text:'🕒 3:00'},{text:'🕟 4:30'},{text:'🕝 2:30'},{text:'🕓 4:00'}] },
+      { target: '7 hari = 1 minggu', items: [{text:'7 hari = 1 minggu'},{text:'5 hari = 1 minggu'},{text:'10 hari = 1 minggu'},{text:'30 hari = 1 minggu'}] },
+      { target: '12 bulan = 1 tahun', items: [{text:'12 bulan = 1 tahun'},{text:'10 bulan = 1 tahun'},{text:'7 bulan = 1 tahun'},{text:'24 bulan = 1 tahun'},{text:'6 bulan = 1 tahun'}] },
+      { target: '60 minit = 1 jam', items: [{text:'60 minit = 1 jam'},{text:'30 minit = 1 jam'},{text:'100 minit = 1 jam'},{text:'24 minit = 1 jam'},{text:'12 minit = 1 jam'}] },
     ]),
   },
   // ── KONSTRUK 7: Operasi asas — Tambah ──
