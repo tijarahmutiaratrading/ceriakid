@@ -104,23 +104,24 @@ async function seedOneBucket(base44, subject, level, perBucket) {
     ? `JANGAN ulang tajuk-tajuk ini yang sudah wujud: ${existingTitles.join(', ')}.`
     : '';
 
-  const prompt = `Anda pakar pendidikan KSSR Malaysia. Bina ${need} NOTA RINGKAS + MIND MAP berbeza untuk kanak-kanak.
+  const prompt = `Anda pakar pendidikan KSSR Malaysia. Bina ${need} NOTA RUJUKAN MENGAJAR (mind map + visual) untuk CIKGU guna semasa mengajar murid.
 
 Subjek: ${subjectLabel}
 Tahap: ${levelLabel}
 
-Setiap nota mesti TOPIK BERBEZA dalam silibus KSSR rasmi untuk subjek & tahap ini.
+PENTING: Setiap nota mesti ikut TOPIK SEBENAR dalam SILIBUS KSSR/DSKP rasmi Kementerian Pendidikan Malaysia — topik yang betul-betul diajar cikgu di dalam kelas untuk subjek & tahap ini. Ikut urutan & tajuk topik standard buku teks KSSR.
 ${avoidLine}
 
+FOKUS UTAMA: MIND MAP yang jelas + visual menarik supaya cikgu mudah rujuk & terangkan kepada murid.
+
 KEPERLUAN setiap nota:
-- Tepat dengan SILIBUS KSSR rasmi Kementerian Pendidikan Malaysia untuk tahap ini.
-- Bahasa mudah, mesra kanak-kanak, dalam Bahasa Melayu (kecuali subjek English, guna English).
-- "title": tajuk topik ringkas & menarik.
+- "title": nama topik tepat ikut silibus KSSR (cth topik sebenar dari buku teks, bukan rekaan).
 - "emoji": satu emoji mewakili topik.
-- "summary": satu ayat ringkas.
-- "keyPoints": 4-6 poin (setiap satu: emoji ikon, teks pendek maks 12 patah perkataan, warna berbeza-beza dari purple/pink/blue/green/orange/yellow/red).
-- "mindMap": "central" topik tengah, "branches" 3-4 cabang (label, emoji, warna berbeza, 2-4 children ringkas).
-- "funFact": satu fakta menarik.
+- "summary": satu ayat ringkas untuk cikgu — apa yang murid akan belajar.
+- "keyPoints": 4-6 isi penting yang cikgu perlu ajar (setiap satu: emoji ikon, teks pendek & padat, warna berbeza-beza dari purple/pink/blue/green/orange/yellow/red).
+- "mindMap" (PALING PENTING): "central" topik tengah, "branches" 4-5 cabang lengkap mewakili sub-topik utama silibus (setiap cabang: label jelas, emoji, warna berbeza, 3-4 children spesifik & berguna untuk pengajaran).
+- "funFact": satu fakta menarik untuk tarik minat murid.
+- Bahasa mudah & mesra murid, dalam Bahasa Melayu (kecuali subjek English, guna English).
 
 Pulangkan ${need} nota dalam array "notes".`;
 
