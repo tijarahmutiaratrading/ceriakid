@@ -375,7 +375,7 @@ export default function Landing() {
           {/* Stats grid — digabungkan dalam hero */}
           <div className="mt-10 md:mt-12 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {[
-              { num: '1,600+', label: 'Game Interaktif', icon: '🎮' },
+              { num: '2,040+', label: 'Game Interaktif', icon: '🎮' },
               { num: '5,000+', label: 'Keluarga Malaysia', icon: '👨‍👩‍👧' },
               { num: 'KSPK+KSSR', label: 'Standard KPM', icon: '🇲🇾' },
               { num: '4.9★', label: 'Rating Ibu Bapa', icon: '⭐' },
