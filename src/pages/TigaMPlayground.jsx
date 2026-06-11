@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Lock, Loader2, Sparkles } from 'lucide-react';
+import { ArrowLeft, Lock, Loader2, Sparkles, Clock } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
-import MiniGameMascot from '@/components/game/MiniGameMascot';
+import CikguMascot from '@/components/game/CikguMascot';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
 import { findTigaMGame, findTigaMCategory, TIGA_M_CATEGORIES } from '@/lib/tigaMBlueprints';
 import { useAuth } from '@/lib/AuthContext';
@@ -47,81 +47,67 @@ export default function TigaMPlayground() {
   return (
     <div
       className="min-h-screen w-full overflow-x-hidden relative font-nunito"
-      style={{ background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)' }}
+      style={{ background: '#fafafa' }}
     >
-      {/* Floating sparkle decorations */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-32 left-6 text-2xl text-white/30 animate-float">✨</div>
-        <div className="absolute top-44 right-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
-        <div className="absolute bottom-40 right-6 text-2xl text-cyan-300/35 animate-float" style={{ animationDelay: '3.1s' }}>✨</div>
-      </div>
+      {/* Subtle grid pattern background — sama macam game player subjek */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
 
-      {/* Glow orbs */}
-      <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full opacity-30 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }} />
-      <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full opacity-25 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }} />
-
-      {/* Mascot */}
-      <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
-        <MiniGameMascot size={300} />
+      {/* Family mascot — Ibu, Kakak, Adik */}
+      <div className="hidden lg:block fixed bottom-2 left-8 z-0">
+        <CikguMascot size={300} />
       </div>
-      <div className="md:hidden fixed bottom-2 -right-2 z-0 opacity-90">
-        <MiniGameMascot size={150} />
+      <div className="hidden sm:block lg:hidden fixed bottom-2 left-4 z-0 opacity-90">
+        <CikguMascot size={220} />
+      </div>
+      <div className="sm:hidden fixed bottom-2 left-2 z-0 opacity-90">
+        <CikguMascot size={150} />
       </div>
 
       <AppHeader showBack={true} backTo={`/3m/${category.id}`} />
 
-      <div className="relative max-w-lg mx-auto px-4 sm:px-6 pb-16 pt-20 md:pt-24">
-        {/* Back button */}
-        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+      <div className="relative max-w-lg mx-auto px-4 md:px-6 pb-12 md:pb-40 pt-24 md:pt-32">
+        {/* Back link */}
+        <div className="flex items-center justify-between gap-2 mb-4">
           <Link
             to={`/3m/${category.id}`}
-            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-white transition-all hover:scale-[1.02]"
-            style={{
-              background: 'rgba(255,255,255,0.15)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.25)',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-            }}
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> {category.title}
           </Link>
-        </motion.div>
+        </div>
 
-        {/* Game header */}
+        {/* Game header — light glass card */}
         {!locked && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-5 rounded-3xl p-4"
-            style={{
-              background: 'rgba(255,255,255,0.12)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-            }}
+            className="mb-5 rounded-3xl p-4 bg-white ring-1 ring-slate-200 shadow-sm"
           >
             <div className="flex items-center gap-3">
-              <div
-                className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(236,72,153,0.35) 0%, rgba(168,85,247,0.35) 100%)',
-                  border: '1px solid rgba(255,255,255,0.3)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)',
-                }}
-              >
+              <div className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl bg-gradient-to-br from-purple-100 to-pink-100 ring-1 ring-slate-100">
                 {game.emoji || category.emoji}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-yellow-200 mb-0.5 flex items-center gap-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-purple-500 mb-0.5 flex items-center gap-1">
                   <Sparkles className="w-3 h-3" />
                   {category.title}
                 </p>
-                <h1 className="text-base sm:text-lg font-black text-white leading-tight tracking-tight line-clamp-1">
+                <h1 className="text-base sm:text-lg font-black text-slate-900 leading-tight tracking-tight line-clamp-1">
                   {game.title}
                 </h1>
               </div>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400 flex-shrink-0">
+                <Clock className="w-3.5 h-3.5" />
+                10
+              </div>
             </div>
-            <p className="text-xs font-medium text-white/75 leading-relaxed mt-3 pl-1">
+            <p className="text-xs font-medium text-slate-500 leading-relaxed mt-3 pl-1">
               {game.objective || 'Mini Game'}
             </p>
           </motion.div>
@@ -129,7 +115,7 @@ export default function TigaMPlayground() {
 
         {!tierLoaded ? (
           <div className="flex justify-center py-10">
-            <Loader2 className="w-7 h-7 animate-spin text-white/80" />
+            <Loader2 className="w-7 h-7 animate-spin text-purple-500" />
           </div>
         ) : locked ? (
           <motion.div
