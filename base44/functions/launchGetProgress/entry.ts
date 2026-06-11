@@ -28,16 +28,35 @@ Deno.serve(async (req) => {
       }
     } catch (e) { /* use default */ }
 
+    // Ambil SEMUA published games sekali sahaja (page-by-page) lalu kira dalam memory.
+    // Ini elak 68 panggilan .filter() serentak yang cetuskan rate limit (429 → 500).
+    const counts = {}; // key: `${ageGroup}|${darjah||''}|${category}` → count
+    let page = 0;
+    const PAGE_SIZE = 200;
+    while (true) {
+      const batch = await base44.asServiceRole.entities.Game.filter(
+        { isPublished: true },
+        '-created_date',
+        PAGE_SIZE,
+        page * PAGE_SIZE
+      );
+      if (!batch || batch.length === 0) break;
+      for (const g of batch) {
+        const key = `${g.ageGroup}|${g.darjah || ''}|${g.category}`;
+        counts[key] = (counts[key] || 0) + 1;
+      }
+      if (batch.length < PAGE_SIZE) break;
+      page++;
+    }
+
     const rows = [];
     let totalExisting = 0;
     let totalNeeded = 0;
 
     for (const b of BUCKETS) {
       for (const cat of b.categories) {
-        const filter = { ageGroup: b.ageGroup, category: cat, isPublished: true };
-        if (b.darjah) filter.darjah = b.darjah;
-        const games = await base44.asServiceRole.entities.Game.filter(filter);
-        const count = games.length;
+        const key = `${b.ageGroup}|${b.darjah || ''}|${cat}`;
+        const count = counts[key] || 0;
         const needed = Math.max(0, TARGET - count);
         totalExisting += count;
         totalNeeded += needed;
