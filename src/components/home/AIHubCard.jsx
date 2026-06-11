@@ -64,7 +64,7 @@ export default function AIHubCard() {
   const isLow = !loading && balance < 10;
 
   return (
-    <div className="relative rounded-[1.75rem] p-4 md:p-6 lg:p-7">
+    <div className="relative">
       {/* TOP ROW: Big credit card (left) + Top Up + status (right) */}
       <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4 mb-4 md:mb-6">
         {/* Big white credit card */}
