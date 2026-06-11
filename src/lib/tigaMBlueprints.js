@@ -12,7 +12,7 @@ export const TIGA_M_CATEGORIES = [
     title: 'Membaca',
     emoji: '📖',
     color: 'from-blue-500 to-indigo-500',
-    objective: 'Kenal huruf, suku kata dan perkataan.',
+    objective: 'Konstruk LINUS: huruf → suku kata terbuka/tertutup → diftong.',
     games: membacaGames,
   },
   {
@@ -20,7 +20,7 @@ export const TIGA_M_CATEGORIES = [
     title: 'Menulis',
     emoji: '✍️',
     color: 'from-emerald-500 to-teal-500',
-    objective: 'Surih huruf, nombor dan susun tulisan.',
+    objective: 'Konstruk LINUS: surih → perkataan → imbuhan → ayat mudah.',
     games: menulisGames,
   },
   {
@@ -28,7 +28,7 @@ export const TIGA_M_CATEGORIES = [
     title: 'Mengira',
     emoji: '🔢',
     color: 'from-amber-500 to-orange-500',
-    objective: 'Kenal nombor, kira, tambah dan tolak asas.',
+    objective: 'Konstruk LINUS: angka → bilang → nilai → wang → waktu → operasi.',
     games: mengiraGames,
   },
 ];
