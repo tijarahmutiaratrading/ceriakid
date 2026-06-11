@@ -10,6 +10,7 @@ export default function LibraryGeneratorPanel() {
   const [level, setLevel] = useState('darjah_1');
   const [topic, setTopic] = useState('');
   const [generating, setGenerating] = useState(false);
+  const [autoGenerating, setAutoGenerating] = useState(false);
   const [message, setMessage] = useState(null);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,6 +39,27 @@ export default function LibraryGeneratorPanel() {
       setMessage({ type: 'err', text: e.message || 'Ralat berlaku.' });
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const handleAutoGenerate = async () => {
+    setAutoGenerating(true);
+    setMessage(null);
+    try {
+      const res = await base44.functions.invoke('seedLibraryNotes', {});
+      const d = res?.data;
+      if (d?.done) {
+        setMessage({ type: 'ok', text: 'Semua topik silibus dah lengkap! 🎉' });
+      } else if (d?.success) {
+        setMessage({ type: 'ok', text: `+${d.created || 0} nota dijana (${d.subject || ''} · ${d.level || ''}). Tekan lagi untuk sambung.` });
+        loadNotes();
+      } else {
+        setMessage({ type: 'err', text: d?.error || 'Gagal jana.' });
+      }
+    } catch (e) {
+      setMessage({ type: 'err', text: e.message || 'Ralat berlaku.' });
+    } finally {
+      setAutoGenerating(false);
     }
   };
 
@@ -106,7 +128,7 @@ export default function LibraryGeneratorPanel() {
 
         <button
           onClick={handleGenerate}
-          disabled={generating}
+          disabled={generating || autoGenerating}
           className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-black text-sm shadow-sm transition-colors disabled:opacity-60"
         >
           {generating ? (
@@ -115,6 +137,22 @@ export default function LibraryGeneratorPanel() {
             <><Sparkles className="h-4 w-4" /> Jana Nota Sekarang</>
           )}
         </button>
+
+        {/* Auto-generate ikut silibus — berasingan dari Resume Generate (games) */}
+        <button
+          onClick={handleAutoGenerate}
+          disabled={autoGenerating || generating}
+          className="mt-2.5 w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-sm shadow-sm transition-colors disabled:opacity-60"
+        >
+          {autoGenerating ? (
+            <><Loader2 className="h-4 w-4 animate-spin" /> Auto-jana silibus...</>
+          ) : (
+            <><Library className="h-4 w-4" /> Auto-Generate Library (ikut silibus)</>
+          )}
+        </button>
+        <p className="text-[11px] text-slate-400 font-medium mt-2 text-center">
+          Auto-jana 5 nota setiap tekan, mengikut topik silibus KSSR. Berasingan dari "Resume Generate" (games).
+        </p>
       </div>
 
       {/* Senarai nota sedia ada */}
