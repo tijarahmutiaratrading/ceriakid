@@ -47,7 +47,7 @@ export default function QuickAccessGrid() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
-        className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory -mx-4 px-4 pb-2 md:gap-4"
+        className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-2 pr-6 md:gap-4"
       >
         {actions.map((item) => {
           const Icon = item.icon;
