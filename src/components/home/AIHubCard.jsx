@@ -64,31 +64,15 @@ export default function AIHubCard() {
   const isLow = !loading && balance < 10;
 
   return (
-    <div
-      className="relative overflow-hidden rounded-[1.75rem] p-4 md:p-6 lg:p-7 shadow-xl border border-white/60 min-h-[520px] md:min-h-0"
-      style={{ boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)' }}
-    >
-      {/* Classroom background image */}
-      <img
-        src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/368f95434_generated_image.png"
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover object-center"
-      />
-
-      {/* Decorative sparkles */}
-      <div className="pointer-events-none absolute top-4 left-4 text-2xl md:text-3xl opacity-80">✨</div>
-      <div className="pointer-events-none absolute top-6 right-6 text-2xl md:text-3xl opacity-80">✨</div>
-      <div className="pointer-events-none absolute bottom-6 left-6 text-xl md:text-2xl opacity-70">✨</div>
-      <div className="pointer-events-none absolute top-1/2 right-12 text-xl md:text-2xl opacity-60 hidden md:block">🎓</div>
-
+    <div className="relative rounded-[1.75rem] p-4 md:p-6 lg:p-7">
       {/* TOP ROW: Big credit card (left) + Top Up + status (right) */}
       <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4 mb-4 md:mb-6">
         {/* Big white credit card */}
         <Link to="/buy-credits" className="block w-full md:w-auto md:flex-1 md:max-w-md">
           <motion.div
             whileHover={{ scale: 1.02, y: -2 }}
-            className="rounded-2xl p-3.5 md:p-4 border border-white/40"
-            style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(16px)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
+            className="rounded-2xl p-3.5 md:p-4"
+            style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
             <p className="text-white font-black text-[10px] md:text-xs tracking-wide mb-0.5">BAKI KREDIT AI</p>
             {loading ? (
@@ -111,14 +95,14 @@ export default function AIHubCard() {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 rounded-full text-white font-black text-xs md:text-sm border border-white/40 hover:bg-white/30 transition-all"
-              style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(16px)' }}
+              className="flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 rounded-full text-white font-black text-xs md:text-sm transition-all"
+              style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}
             >
               <Plus className="w-4 h-4" /> Top Up
             </motion.div>
           </Link>
           {isLow && (
-            <p className="text-white font-bold text-xs md:text-sm flex items-center gap-1">
+            <p className="text-rose-600 font-bold text-xs md:text-sm flex items-center gap-1">
               Baki rendah — top up sekarang <ArrowRight className="w-3.5 h-3.5" />
             </p>
           )}
@@ -126,7 +110,7 @@ export default function AIHubCard() {
       </div>
 
       {/* Section title */}
-      <h2 className="relative z-10 text-white font-black text-base md:text-lg tracking-wide mb-3 md:mb-4">
+      <h2 className="relative z-10 text-slate-800 font-black text-base md:text-lg tracking-wide mb-3 md:mb-4">
         CIRI AI CERIAKID
       </h2>
 
