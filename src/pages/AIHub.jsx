@@ -11,7 +11,7 @@ const AI_CIKGU = [
     name: 'Cikgu Firdaus',
     role: 'Tutor AI Serba Boleh',
     desc: 'Tanya apa sahaja — soalan sekolah, penjelasan topik & bantuan belajar.',
-    emoji: '🧑‍🏫',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/61dba1f3a_generated_image.png',
     color: 'from-violet-500 via-purple-500 to-fuchsia-500',
   },
   {
@@ -19,7 +19,7 @@ const AI_CIKGU = [
     name: 'Cikgu Rosie',
     role: 'Penjana Kuiz',
     desc: 'Latih anak dengan kuiz interaktif ikut subjek & tahap.',
-    emoji: '🦉',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4347879e0_generated_image.png',
     color: 'from-sky-500 via-blue-500 to-cyan-500',
   },
   {
@@ -27,7 +27,7 @@ const AI_CIKGU = [
     name: 'Cikgu Mira',
     role: 'Pencipta Cerita',
     desc: 'Hasilkan cerita penuh pengajaran moral untuk anak.',
-    emoji: '📖',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d2061d998_generated_image.png',
     color: 'from-pink-500 via-rose-500 to-orange-400',
   },
   {
@@ -35,7 +35,7 @@ const AI_CIKGU = [
     name: 'Cikgu Daniel',
     role: 'Penjana BBM',
     desc: 'Cipta bahan bantu mengajar — lembaran kerja, nota & lagi.',
-    emoji: '📝',
+    avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4c8ddef8e_generated_image.png',
     color: 'from-emerald-500 via-teal-500 to-green-500',
   },
 ];
@@ -112,9 +112,11 @@ export default function AIHub() {
                 }} />
                 <div className="relative z-10 p-5 h-full min-h-[160px] flex flex-col justify-between">
                   <div>
-                    <div className="w-14 h-14 rounded-2xl bg-white/25 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center text-3xl shadow-md mb-3">
-                      {cikgu.emoji}
-                    </div>
+                    <img
+                      src={cikgu.avatar}
+                      alt={cikgu.name}
+                      className="w-16 h-16 rounded-full object-cover ring-2 ring-white/70 shadow-md mb-3"
+                    />
                     <p className="text-[10px] font-black uppercase tracking-[0.15em] text-white/80">{cikgu.role}</p>
                     <h3 className="font-black text-xl sm:text-2xl text-white leading-tight drop-shadow-md">{cikgu.name}</h3>
                     <p className="text-white/85 text-xs font-semibold mt-1 drop-shadow-md line-clamp-2">{cikgu.desc}</p>
