@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, Play, Loader2, Trash2, CheckCircle2 } from 'lucide-react';
+import ResumeGenerateButton from '@/components/admin/ResumeGenerateButton';
 
 const SUBJECT_LABELS = {
   bahasa_melayu: 'BM', english: 'English', mathematics: 'Math', science: 'Sains', jawi: 'Jawi', pendidikan_islam: 'P. Islam',
@@ -126,6 +127,14 @@ export default function LaunchManualControl() {
 
   return (
     <div className="space-y-4">
+      {/* Resume — trigger satu pusingan KSSR generate secara manual */}
+      <div className="pro-glass rounded-2xl p-3 flex items-center justify-between gap-3 flex-wrap">
+        <p className="text-xs font-semibold text-slate-600">
+          Sambung generate bucket KSSR yang belum siap (sekali jalan, tanpa hidupkan auto).
+        </p>
+        <ResumeGenerateButton />
+      </div>
+
       {/* Section tabs */}
       <div className="pro-glass flex gap-1.5 p-1.5 rounded-xl">
         {[

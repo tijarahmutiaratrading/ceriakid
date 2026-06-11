@@ -6,7 +6,6 @@ import { Zap, Loader2, Settings, Activity, Wrench, Library } from 'lucide-react'
 import LaunchSettingsModal from '@/components/admin/LaunchSettingsModal';
 import LaunchManualControl from '@/components/admin/LaunchManualControl';
 import BackgroundActivityPanel from '@/components/admin/BackgroundActivityPanel';
-import ResumeGenerateButton from '@/components/admin/ResumeGenerateButton';
 import ContentProgressBar from '@/components/admin/ContentProgressBar';
 import LibraryGeneratorPanel from '@/components/admin/LibraryGeneratorPanel';
 
@@ -70,15 +69,15 @@ export default function LaunchControlPanel() {
               </p>
             </div>
           </div>
-          <div className="flex gap-2 flex-wrap">
-            <ResumeGenerateButton />
+          <div className="flex items-center gap-2">
             <Button
               onClick={() => setShowSettings(true)}
               variant="outline"
-              size="sm"
-              className="bg-white text-slate-800 hover:bg-slate-50 border-slate-300"
+              size="icon"
+              title="Set targets"
+              className="bg-white text-slate-800 hover:bg-slate-50 border-slate-300 shrink-0"
             >
-              <Settings className="w-4 h-4 mr-1.5" /> Targets
+              <Settings className="w-4 h-4" />
             </Button>
             <Button
               onClick={toggleBackground}
