@@ -110,9 +110,13 @@ export default function AIHubCard() {
       </div>
 
       {/* Section title */}
-      <h2 className="relative z-10 text-slate-800 font-black text-base md:text-lg tracking-wide mb-3 md:mb-4">
-        CIRI AI CERIAKID
-      </h2>
+      <div className="mb-6 flex items-center gap-3">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-4 py-2.5 backdrop-blur-md">
+          <span className="text-xl">🤖</span>
+          <h2 className="text-white font-black text-lg md:text-xl">Ciri AI CeriaKid</h2>
+        </div>
+        <div className="h-1 flex-1 bg-gradient-to-r from-cyan-300 via-pink-300 to-transparent rounded-full" />
+      </div>
 
       {/* AI Features Grid - 2x2 */}
       <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-2.5 md:gap-3">
