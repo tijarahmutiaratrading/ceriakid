@@ -406,8 +406,8 @@ export default function AdminDashboard() {
                       </div>
                     </motion.div>
 
-                    {/* Customer Database */}
-                    <CustomerDatabaseTable />
+                    {/* Customer Database — ikut date filter di atas */}
+                    <CustomerDatabaseTable dateFilter={dateRange} />
                   </>
                 )}
 

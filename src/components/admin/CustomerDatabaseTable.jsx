@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { ChevronDown, ChevronRight, Search, Users, CreditCard, Smartphone, Baby, Share2, Calendar, Copy, Check, User as UserIcon, Phone, Mail, Edit2, X, Save, Loader2, CheckCircle2, AlertCircle, RefreshCw, Trash2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { isInRange } from '@/components/admin/DateRangeFilter';
 
 const TIER_LABELS = {
   free: { label: 'Percuma', cls: 'text-gray-700' },
@@ -533,12 +534,11 @@ function CustomerRow({ customer, expanded, onToggle, onUpdate }) {
   );
 }
 
-export default function CustomerDatabaseTable() {
+export default function CustomerDatabaseTable({ dateFilter = 'all' }) {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [tierFilter, setTierFilter] = useState('all');
-  const [dateFilter, setDateFilter] = useState('all');
   const [expandedId, setExpandedId] = useState(null);
 
   const refreshData = async () => {
@@ -641,32 +641,12 @@ export default function CustomerDatabaseTable() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
 
-    // Kira sempadan tarikh ikut pilihan date range — guna zon waktu Malaysia (UTC+8)
-    // supaya konsisten walaupun pelayar admin dalam UTC.
-    const MY_OFFSET_MS = 8 * 60 * 60 * 1000;
-    let startBound = null;
-    if (dateFilter !== 'all') {
-      const now = new Date();
-      if (dateFilter === 'today') {
-        // Tengah malam hari ini di Malaysia, ditukar balik ke UTC
-        const myNow = new Date(now.getTime() + MY_OFFSET_MS);
-        const myMidnightUTC = Date.UTC(myNow.getUTCFullYear(), myNow.getUTCMonth(), myNow.getUTCDate());
-        startBound = new Date(myMidnightUTC - MY_OFFSET_MS);
-      } else if (dateFilter === '7days') {
-        startBound = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      } else if (dateFilter === '30days') {
-        startBound = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-      }
-    }
-
     return customers.filter(c => {
       // Sembunyi tier "free" — kita hanya ada 3 pakej berbayar
       if (c.tier === 'free') return false;
       if (tierFilter !== 'all' && c.tier !== tierFilter) return false;
-      if (startBound) {
-        const created = c.createdDate ? new Date(c.createdDate) : null;
-        if (!created || created < startBound) return false;
-      }
+      // Ikut date filter dari atas (guna helper yang sama dengan DateRangeFilter)
+      if (!isInRange(c.createdDate, dateFilter)) return false;
       if (!q) return true;
       return (
         (c.email || '').toLowerCase().includes(q) ||
@@ -700,22 +680,6 @@ export default function CustomerDatabaseTable() {
             placeholder="Cari email atau kod referral..."
             className="w-full pl-10 pr-3 py-2 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-violet-500"
           />
-        </div>
-        <div className="flex gap-1 bg-white rounded-xl p-1 ring-1 ring-slate-200">
-          {[
-            { id: 'today', label: 'Hari Ini' },
-            { id: '7days', label: '7 Hari' },
-            { id: '30days', label: '30 Hari' },
-            { id: 'all', label: 'Semua' },
-          ].map(d => (
-            <button
-              key={d.id}
-              onClick={() => setDateFilter(d.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all whitespace-nowrap ${dateFilter === d.id ? 'bg-violet-600 text-white' : 'text-slate-600 hover:bg-slate-100'}`}
-            >
-              {d.label}
-            </button>
-          ))}
         </div>
         <div className="flex gap-1 bg-white rounded-xl p-1 ring-1 ring-slate-200">
           {['all', 'asas', 'standard', 'keluarga'].map(t => (
