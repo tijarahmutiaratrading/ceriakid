@@ -82,12 +82,12 @@ export function toDateMYDebug(val) {
 
 export default function DateRangeFilter({ value, onChange }) {
   return (
-    <div className="flex items-center gap-2 flex-wrap">
-      <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider mr-1">
+    <div className="flex items-center gap-2 w-full sm:w-auto min-w-0">
+      <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider mr-1 shrink-0">
         <Calendar className="w-3.5 h-3.5" />
         <span>Tempoh</span>
       </div>
-      <div className="flex gap-1 p-1 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-x-auto scrollbar-hide">
+      <div className="flex gap-1 p-1 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-x-auto scrollbar-hide w-full sm:w-auto">
         {DATE_RANGES.map(r => {
           const active = value === r.key;
           return (
@@ -95,7 +95,7 @@ export default function DateRangeFilter({ value, onChange }) {
               key={r.key}
               type="button"
               onClick={() => onChange(r.key)}
-              className={`relative px-3 py-1.5 rounded-lg font-bold text-xs whitespace-nowrap transition-colors ${
+              className={`relative shrink-0 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold text-[11px] sm:text-xs whitespace-nowrap transition-colors ${
                 active ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
