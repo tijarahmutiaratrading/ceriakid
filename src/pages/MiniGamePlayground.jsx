@@ -105,7 +105,7 @@ export default function MiniGamePlayground() {
 
       <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} />
 
-      <div className="relative max-w-lg mx-auto px-4 sm:px-6 pb-32 pt-20 md:pt-24">
+      <div className="relative max-w-lg mx-auto px-4 sm:px-6 pb-16 pt-20 md:pt-24">
         {/* Back button — glass on gradient */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <Link
