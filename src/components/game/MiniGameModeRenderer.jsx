@@ -810,7 +810,7 @@ function PictureHuntMode() {
       </div>
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
         {items.map((item, i) => (
-          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white/55 backdrop-blur-xl ring-1 ring-white/70 text-3xl sm:text-4xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] active:scale-95 disabled:opacity-50 flex items-center justify-center p-2 overflow-hidden">{getItemText(item)}</button>
+          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white/55 backdrop-blur-xl ring-1 ring-white/70 text-base sm:text-lg font-black text-slate-800 shadow-[0_4px_16px_rgba(0,0,0,0.06)] active:scale-95 disabled:opacity-50 flex items-center justify-center p-2 overflow-hidden leading-tight text-center">{getItemText(item)}</button>
         ))}
       </div>
     </div>
