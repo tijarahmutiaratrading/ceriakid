@@ -67,6 +67,14 @@ export default function TigaMHub() {
                 whileTap={{ scale: 0.96 }}
                 className={`rounded-3xl overflow-hidden cursor-pointer h-full min-h-[170px] sm:min-h-[200px] relative border border-white/50 shadow-lg shadow-black/10 hover:shadow-xl transition-shadow bg-gradient-to-br ${category.color}`}
               >
+                {category.bgImage && (
+                  <img
+                    src={category.bgImage}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover opacity-50 mix-blend-luminosity"
+                  />
+                )}
+                <div className={`absolute inset-0 bg-gradient-to-t opacity-80 ${category.color}`} style={{ maskImage: 'linear-gradient(to top, black 30%, transparent 100%)' }} />
                 <div className="absolute inset-0 opacity-20" style={{
                   backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(255,255,255,0.6) 0%, transparent 45%)'
                 }} />
