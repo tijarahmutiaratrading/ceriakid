@@ -14,12 +14,17 @@ const actions = [
 
 export default function QuickAccessGrid() {
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15 }}
+      className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory -mx-4 px-4 pb-2 md:gap-4"
+    >
       {actions.map((item) => {
         const Icon = item.icon;
         return (
-          <Link key={item.to} to={item.to} className="block min-w-0" aria-label={`Buka ${item.title}`}>
-            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} className={`group relative h-full min-h-[130px] overflow-hidden rounded-[1.75rem] border border-white/40 bg-gradient-to-br ${item.tone} p-5 shadow-lg shadow-purple-200/20 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.75rem)] md:p-6`}>
+          <Link key={item.to} to={item.to} className="block snap-start shrink-0 w-[180px] sm:w-[210px]" aria-label={`Buka ${item.title}`}>
+            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} className={`group relative h-full min-h-[170px] overflow-hidden rounded-[1.75rem] border border-white/40 bg-gradient-to-br ${item.tone} p-5 shadow-lg shadow-purple-200/20 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.75rem)] md:p-6`}>
               {item.image && (
                 <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-110 transition-transform duration-500" onError={(e) => e.target.style.display = 'none'} />
               )}
