@@ -141,9 +141,9 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
           </div>
         )}
 
-        {/* Top bar — Apple-clean with streak badge */}
-        <div className="flex items-center gap-3 mb-3">
-          <div className="relative flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-50 ring-1 ring-black/5">
+        {/* Top bar — tiru GamePlayer subjek: round info kiri, skor pill brand-gradient kanan */}
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <div className="relative flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm flex-shrink-0">
             <span className="text-lg">{data.emoji || '🎮'}</span>
             <div className="leading-tight">
               <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400">Pusingan</p>
@@ -151,28 +151,27 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col gap-1">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">Skor</span>
-              <motion.span
-                key={score}
-                initial={{ scale: 1.4, color: '#FBBF24' }}
-                animate={{ scale: 1, color: '#0F172A' }}
-                transition={{ duration: 0.4 }}
-                className="text-xs font-black"
-              >
-                {score}/{totalRounds} ⭐
-              </motion.span>
-            </div>
-            <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-              <motion.div
-                animate={{ width: `${progressPct}%` }}
-                transition={{ type: 'spring', damping: 18, stiffness: 200 }}
-                className="h-full rounded-full"
-                style={{ background: 'linear-gradient(90deg, #F472B6 0%, #A855F7 50%, #22D3EE 100%)' }}
-              />
-            </div>
+          <div className="rounded-xl px-3.5 py-2 text-center flex-shrink-0 brand-gradient-br">
+            <p className="text-[9px] text-white/60 font-black uppercase tracking-[0.15em]">Skor</p>
+            <motion.p
+              key={score}
+              initial={{ scale: 1.3 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="text-lg font-black text-white tabular-nums leading-tight"
+            >
+              {score}/{totalRounds}
+            </motion.p>
           </div>
+        </div>
+
+        {/* Progress bar — brand-gradient macam GamePlayer subjek */}
+        <div className="w-full rounded-full h-2.5 overflow-hidden relative bg-slate-200/70 mb-3">
+          <motion.div
+            className="h-full rounded-full brand-gradient"
+            animate={{ width: `${progressPct}%` }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          />
         </div>
 
         {/* Instruction — Apple-style soft card */}
