@@ -11,7 +11,7 @@ const FEATURES = [
     title: 'Cikgu Firdaus',
     desc: 'Tutor peribadi anak',
     cost: '1 kredit',
-    bg: 'linear-gradient(135deg, rgba(249,115,22,0.55), rgba(245,158,11,0.4))',
+    bg: 'linear-gradient(135deg, #f97316, #f59e0b)',
     avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/61dba1f3a_generated_image.png',
   },
   {
@@ -20,7 +20,7 @@ const FEATURES = [
     title: 'Cikgu Rosie',
     desc: 'Kuiz adaptif',
     cost: '1 kredit',
-    bg: 'linear-gradient(135deg, rgba(14,165,233,0.55), rgba(6,182,212,0.4))',
+    bg: 'linear-gradient(135deg, #0ea5e9, #06b6d4)',
     avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4347879e0_generated_image.png',
   },
   {
@@ -29,7 +29,7 @@ const FEATURES = [
     title: 'Cikgu Mira',
     desc: 'Penjana cerita',
     cost: '5 kredit',
-    bg: 'linear-gradient(135deg, rgba(244,63,94,0.55), rgba(236,72,153,0.4))',
+    bg: 'linear-gradient(135deg, #f43f5e, #ec4899)',
     avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d2061d998_generated_image.png',
   },
   {
@@ -38,7 +38,7 @@ const FEATURES = [
     title: 'Cikgu Daniel',
     desc: 'Penjana BBM',
     cost: '10 kredit',
-    bg: 'linear-gradient(135deg, rgba(139,92,246,0.55), rgba(168,85,247,0.4))',
+    bg: 'linear-gradient(135deg, #8b5cf6, #a855f7)',
     avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4c8ddef8e_generated_image.png',
   },
 ];
@@ -140,7 +140,7 @@ export default function AIHubCard() {
                 whileHover={{ scale: 1.02, y: -3 }}
                 whileTap={{ scale: 0.98 }}
                 className="group relative h-full overflow-hidden rounded-2xl p-3 md:p-3.5 border border-white/30 flex items-center gap-2.5 md:gap-3"
-                style={{ background: f.bg, backdropFilter: 'blur(14px)', boxShadow: '0 4px 16px rgba(0,0,0,0.1)' }}
+                style={{ background: f.bg, boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}
               >
                 {/* Avatar */}
                 {f.avatar ? (
