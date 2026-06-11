@@ -235,7 +235,7 @@ export default function Home() {
             transition={{ delay: 0.12 }}
             className="rounded-2xl border border-white/30 px-4 py-3 flex items-center justify-between gap-3"
             style={{
-              background: 'rgba(255,255,255,0.12)',
+              background: 'rgba(71,85,105,0.35)',
               backdropFilter: 'blur(16px) saturate(160%)',
               WebkitBackdropFilter: 'blur(16px) saturate(160%)',
               boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
