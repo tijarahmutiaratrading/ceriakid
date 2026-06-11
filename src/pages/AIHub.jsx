@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
+import CreditTopUpBar from '@/components/home/CreditTopUpBar';
 
 const AI_CIKGU = [
   {
@@ -87,6 +88,11 @@ export default function AIHub() {
               Pilih Cikgu AI untuk bantu anak belajar, jana kuiz, cerita & bahan mengajar.
             </p>
           </div>
+        </motion.div>
+
+        {/* Baki kredit + Top Up */}
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          <CreditTopUpBar />
         </motion.div>
 
         {/* Cikgu Grid */}

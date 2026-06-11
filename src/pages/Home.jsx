@@ -12,7 +12,6 @@ import DailyChallenge from '@/components/home/DailyChallenge';
 import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import QuickAccessGrid from '@/components/home/QuickAccessGrid';
 import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
-import AIHubCard from '@/components/home/AIHubCard';
 import InstallAppGuide from '@/components/home/InstallAppGuide';
 import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
 import OnboardingWizard from '@/components/onboarding/OnboardingWizard';
@@ -254,17 +253,6 @@ export default function Home() {
             <Link to="/parent-dashboard" className="flex-shrink-0 px-3 py-1.5 rounded-full bg-white/70 hover:bg-white text-slate-900 font-black text-xs transition-all">
               Buka →
             </Link>
-          </motion.div>
-        )}
-
-        {/* Kredit AI + Ciri AI (merged) */}
-        {isAuthenticated && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-          >
-            <AIHubCard />
           </motion.div>
         )}
 
