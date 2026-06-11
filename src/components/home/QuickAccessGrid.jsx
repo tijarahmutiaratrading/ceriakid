@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Gamepad2, Palette, BookOpen, GraduationCap, Library, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Gamepad2, Palette, BookOpen, GraduationCap, Library, Sparkles } from 'lucide-react';
 
 const actions = [
   { to: '/games-hub', icon: Gamepad2, emoji: '🎮', title: 'Game Hub', subtitle: 'Permainan interaktif', tone: 'from-violet-400/30 to-blue-400/20', image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c313ca888_generated_image.png' },
@@ -13,17 +13,46 @@ const actions = [
 ];
 
 export default function QuickAccessGrid() {
+  const scrollRef = useRef(null);
+
+  const scrollBy = (dir) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * el.clientWidth * 0.7, behavior: 'smooth' });
+  };
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15 }}
-      className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory -mx-4 px-4 pb-2 md:gap-4"
-    >
-      {actions.map((item) => {
-        const Icon = item.icon;
-        return (
-          <Link key={item.to} to={item.to} className="block snap-start shrink-0 w-[180px] sm:w-[210px]" aria-label={`Buka ${item.title}`}>
+    <div className="relative">
+      {/* Arrow glass kiri */}
+      <button
+        type="button"
+        onClick={() => scrollBy(-1)}
+        aria-label="Scroll kiri"
+        className="hidden sm:flex absolute left-1 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/70 backdrop-blur-xl ring-1 ring-white/80 shadow-lg text-purple-700 hover:bg-white transition-colors"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      {/* Arrow glass kanan */}
+      <button
+        type="button"
+        onClick={() => scrollBy(1)}
+        aria-label="Scroll kanan"
+        className="flex absolute right-1 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/70 backdrop-blur-xl ring-1 ring-white/80 shadow-lg text-purple-700 hover:bg-white transition-colors animate-pulse"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
+
+      <motion.div
+        ref={scrollRef}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory -mx-4 px-4 pb-2 md:gap-4"
+      >
+        {actions.map((item) => {
+          const Icon = item.icon;
+          return (
+            <Link key={item.to} to={item.to} className="block snap-start shrink-0 w-[68%] sm:w-[58%] md:w-[42%]" aria-label={`Buka ${item.title}`}>
             <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} className={`group relative h-full min-h-[170px] overflow-hidden rounded-[1.75rem] border border-white/40 bg-gradient-to-br ${item.tone} p-5 shadow-lg shadow-purple-200/20 backdrop-blur-xl transform-gpu [clip-path:inset(0_round_1.75rem)] md:p-6`}>
               {item.image && (
                 <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-110 transition-transform duration-500" onError={(e) => e.target.style.display = 'none'} />
@@ -47,7 +76,8 @@ export default function QuickAccessGrid() {
             </motion.div>
           </Link>
         );
-      })}
-    </motion.div>
+        })}
+      </motion.div>
+    </div>
   );
 }
