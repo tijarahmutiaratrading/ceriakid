@@ -149,7 +149,6 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
               <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400">Pusingan</p>
               <p className="text-xs font-black text-slate-900">{roundIdx + 1}/{totalRounds}</p>
             </div>
-            <StreakBadge streak={streak} />
           </div>
 
           <div className="flex-1 flex flex-col gap-1">
