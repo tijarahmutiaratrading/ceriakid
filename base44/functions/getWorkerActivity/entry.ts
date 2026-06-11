@@ -21,6 +21,30 @@ Deno.serve(async (req) => {
     const settings = await base44.asServiceRole.entities.QCSetting.list();
     const setting = settings[0] || {};
 
+    // ── Library Hub (StudyNote) live activity ──
+    const SUBJECT_LABEL = {
+      bahasa_melayu: 'BM', english: 'English', mathematics: 'Math', science: 'Sains',
+      jawi: 'Jawi', pendidikan_islam: 'P. Islam', pendidikan_moral: 'P. Moral',
+      sejarah: 'Sejarah', rbt: 'RBT', pjk: 'PJK', seni: 'Seni',
+      '3m_membaca': 'Membaca', '3m_menulis': 'Menulis', '3m_mengira': 'Mengira',
+    };
+    const recentNotesRaw = await base44.asServiceRole.entities.StudyNote.list('-created_date', 15).catch(() => []);
+    const recentNotes = recentNotesRaw.map(n => {
+      const ageMin = Math.floor((now - new Date(n.created_date).getTime()) / 60000);
+      return {
+        id: n.id,
+        title: n.title,
+        emoji: n.emoji || '📘',
+        subject: SUBJECT_LABEL[n.subject] || n.subject,
+        level: n.level,
+        branches: n.mindMap?.branches?.length || 0,
+        ageMin,
+      };
+    });
+    const notesLast5Min = recentNotes.filter(n => n.ageMin < 5).length;
+    const notesLast15Min = recentNotes.filter(n => n.ageMin < 15).length;
+    const notesLast24h = recentNotesRaw.filter(n => (now - new Date(n.created_date).getTime()) < 86400000).length;
+
     // Last 15 games created across whole app
     const recentGames = await base44.asServiceRole.entities.Game.list('-created_date', 15);
     const games = recentGames.map(g => {
@@ -91,6 +115,12 @@ Deno.serve(async (req) => {
       enabled: {
         kssr: setting.backgroundLaunchEnabled === true,
         story: setting.backgroundStoryEnabled === true,
+      },
+      library: {
+        last5Min: notesLast5Min,
+        last15Min: notesLast15Min,
+        last24h: notesLast24h,
+        recentNotes,
       },
       counts: {
         last5Min: last5MinGames.length,

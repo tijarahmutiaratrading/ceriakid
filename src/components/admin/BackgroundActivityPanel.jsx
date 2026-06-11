@@ -3,8 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import {
   Activity, Loader2, RefreshCw, Zap, BookOpen, Gamepad2,
-  Clock, Sparkles, AlertCircle, CheckCircle2, Pause
+  Clock, Sparkles, AlertCircle, CheckCircle2, Pause, Library
 } from 'lucide-react';
+
+const LIB_LEVEL_LABEL = {
+  prasekolah: 'Pra', darjah_1: 'D1', darjah_2: 'D2', darjah_3: 'D3',
+  darjah_4: 'D4', darjah_5: 'D5', darjah_6: 'D6',
+};
 
 const CATEGORY_LABEL = {
   bahasa_melayu: 'BM', english: 'English', mathematics: 'Math',
@@ -89,7 +94,8 @@ export default function BackgroundActivityPanel() {
     );
   }
 
-  const { liveStatus, currentActivity, enabled, counts, recentGames, hourlyBreakdown } = data;
+  const { liveStatus, currentActivity, enabled, counts, recentGames, hourlyBreakdown, library } = data;
+  const lib = library || { last5Min: 0, last15Min: 0, last24h: 0, recentNotes: [] };
   const maxHourly = Math.max(...hourlyBreakdown.map(h => h.count), 1);
 
   const statusColors = {
@@ -140,6 +146,9 @@ export default function BackgroundActivityPanel() {
           </span>
           <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black ring-1 ${enabled.story ? 'bg-sky-500 text-white ring-sky-600' : 'bg-white text-slate-500 ring-slate-300'}`}>
             <BookOpen className="w-3 h-3" /> Story {enabled.story ? 'ON · 10min' : 'OFF'}
+          </span>
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black ring-1 ${lib.last5Min > 0 ? 'bg-fuchsia-500 text-white ring-fuchsia-600' : 'bg-white text-slate-500 ring-slate-300'}`}>
+            <Library className="w-3 h-3" /> Library {lib.last5Min > 0 ? `LIVE · ${lib.last5Min}` : `${lib.last24h}/24j`}
           </span>
         </div>
       </motion.div>
@@ -255,6 +264,52 @@ export default function BackgroundActivityPanel() {
         <p className="text-[10px] text-slate-500 mt-3 text-center font-semibold">
           ℹ️ Background generator create terus ke DB. Refresh setiap 30s untuk tengok live.
         </p>
+      </motion.div>
+
+      {/* Live feed — Library notes terbaru */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-2xl p-4">
+        <h3 className="text-slate-900 font-black text-sm mb-3 flex items-center gap-2">
+          <Library className="w-4 h-4 text-fuchsia-600" /> Nota Library Terbaru (15 terakhir)
+        </h3>
+        {lib.recentNotes.length === 0 ? (
+          <div className="text-center py-6">
+            <Pause className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+            <p className="text-slate-600 text-sm font-semibold">Tiada nota dijana lagi</p>
+          </div>
+        ) : (
+          <div className="space-y-1.5 max-h-[400px] overflow-y-auto pr-1">
+            <AnimatePresence initial={false}>
+              {lib.recentNotes.map(n => {
+                const isHot = n.ageMin < 5;
+                return (
+                  <motion.div
+                    key={n.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    className={`rounded-lg p-2.5 ring-1 flex items-center justify-between gap-2 ${isHot ? 'bg-fuchsia-50 ring-fuchsia-300' : 'bg-white ring-slate-200'}`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                      <span className="text-xl shrink-0">{n.emoji}</span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <span className="text-[9px] font-black px-1.5 py-0.5 rounded ring-1 bg-fuchsia-100 text-fuchsia-800 ring-fuchsia-300">
+                            {n.subject}
+                          </span>
+                          <span className="text-[9px] font-bold text-slate-600">{LIB_LEVEL_LABEL[n.level] || n.level} · {n.branches} cabang</span>
+                        </div>
+                        <p className="text-slate-900 font-bold text-xs truncate">{n.title}</p>
+                      </div>
+                    </div>
+                    <span className={`text-[10px] font-black whitespace-nowrap shrink-0 ${isHot ? 'text-fuchsia-700' : 'text-slate-600'}`}>
+                      {timeAgo(n.ageMin)}
+                    </span>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+        )}
       </motion.div>
     </div>
   );
