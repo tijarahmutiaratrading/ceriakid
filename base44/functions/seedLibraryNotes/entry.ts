@@ -148,8 +148,8 @@ async function seedOneBucket(base44, subject, level) {
   const missing = topics.filter((t) => !existingTitles.has(String(t).trim().toLowerCase()));
   if (missing.length === 0) return { created: 0, alreadyFull: true, totalTopics: topics.length };
 
-  // Hadkan 8 nota setiap larian supaya tak timeout — baki diselesaikan larian seterusnya.
-  const batch = missing.slice(0, 8);
+  // Hadkan 5 nota setiap larian supaya tak timeout — baki diselesaikan larian seterusnya.
+  const batch = missing.slice(0, 5);
   const records = [];
   for (const topic of batch) {
     const n = await generateNoteForTopic(base44, subjectLabel, levelLabel, topic).catch(() => null);
@@ -188,14 +188,20 @@ Deno.serve(async (req) => {
       return Response.json({ success: true, ...r, subject: body.subject, level: body.level });
     }
 
-    // Mode 2: auto — cari bucket pertama yang topik silibus belum lengkap, proses (untuk automation).
+    // Mode 2: auto — utamakan bucket yang LANGSUNG TIADA nota dulu (subjek belum disentuh),
+    // supaya semua subjek dapat liputan asas dahulu sebelum disempurnakan.
+    // Skip pantas tanpa panggil LLM untuk bucket yang sudah ada nota cukup.
+    const MIN_PER_BUCKET = 5;
     for (const subject of SUBJECTS) {
       for (const level of LEVELS) {
         if (!bucketAllowed(subject, level)) continue;
+        const count = await base44.asServiceRole.entities.StudyNote
+          .filter({ subject, level }, '-created_date', MIN_PER_BUCKET)
+          .then((x) => x?.length || 0)
+          .catch(() => 0);
+        if (count >= MIN_PER_BUCKET) continue; // dah cukup asas — skip tanpa panggil LLM
         const r = await seedOneBucket(base44, subject, level);
-        if (r.created > 0 || r.remaining > 0) {
-          return Response.json({ success: true, ...r, subject, level, mode: 'auto' });
-        }
+        return Response.json({ success: true, ...r, subject, level, mode: 'auto' });
       }
     }
 
