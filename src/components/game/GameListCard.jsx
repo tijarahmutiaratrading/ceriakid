@@ -115,8 +115,8 @@ function GameIcon({ game, locked, idx }) {
   const style = getGameStyle(game, idx);
   const emoji = game.emoji || style.emoji;
   return (
-    <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${style.gradient} flex items-center justify-center shadow-md ${locked ? 'opacity-40 grayscale' : ''}`}>
-      <span className="text-3xl sm:text-4xl leading-none">{emoji}</span>
+    <div className={`w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center ${locked ? 'opacity-40 grayscale' : ''}`}>
+      <span className="text-4xl sm:text-5xl leading-none">{emoji}</span>
     </div>
   );
 }
