@@ -52,8 +52,8 @@ Deno.serve(async (req) => {
             accessibleByTier, // { asas, standard, keluarga: totalGames } — kira per-bucket
         }, {
             headers: {
-                // Cache for 1 hour — counts don't change often
-                'Cache-Control': 'public, max-age=3600',
+                // Cache 5 minit sahaja supaya kiraan game cepat segar bila bertambah
+                'Cache-Control': 'public, max-age=300',
             }
         });
     } catch (error) {
