@@ -213,6 +213,69 @@ export default function BackgroundActivityPanel() {
         </div>
       </motion.div>
 
+      {/* Library counts ringkas — supaya activity Library jelas nampak */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: 'Library · 5 min', value: lib.last5Min, hot: lib.last5Min > 0 },
+          { label: 'Library · 15 min', value: lib.last15Min },
+          { label: 'Library · 24 jam', value: lib.last24h },
+        ].map((s, i) => (
+          <div key={i} className={`rounded-xl p-3 ring-1 shadow-sm ${s.hot ? 'bg-fuchsia-100 ring-fuchsia-300' : 'bg-white ring-slate-200'}`}>
+            <p className="text-[10px] font-black text-slate-600 uppercase tracking-wider mb-1 flex items-center gap-1">
+              <Library className="w-3 h-3 text-fuchsia-600" /> {s.label}
+            </p>
+            <p className={`text-2xl font-black ${s.hot ? 'text-fuchsia-700' : 'text-fuchsia-600'}`}>{s.value}</p>
+            <p className="text-[10px] text-slate-500 mt-0.5 font-semibold">nota dijana</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Live feed — Library notes terbaru (diutamakan di atas) */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-2xl p-4">
+        <h3 className="text-slate-900 font-black text-sm mb-3 flex items-center gap-2">
+          <Library className="w-4 h-4 text-fuchsia-600" /> Nota Library Terbaru (15 terakhir)
+        </h3>
+        {lib.recentNotes.length === 0 ? (
+          <div className="text-center py-6">
+            <Pause className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+            <p className="text-slate-600 text-sm font-semibold">Tiada nota dijana lagi</p>
+          </div>
+        ) : (
+          <div className="space-y-1.5 max-h-[400px] overflow-y-auto pr-1">
+            <AnimatePresence initial={false}>
+              {lib.recentNotes.map(n => {
+                const isHot = n.ageMin < 5;
+                return (
+                  <motion.div
+                    key={n.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    className={`rounded-lg p-2.5 ring-1 flex items-center justify-between gap-2 ${isHot ? 'bg-fuchsia-50 ring-fuchsia-300' : 'bg-white ring-slate-200'}`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                      <span className="text-xl shrink-0">{n.emoji}</span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <span className="text-[9px] font-black px-1.5 py-0.5 rounded ring-1 bg-fuchsia-100 text-fuchsia-800 ring-fuchsia-300">
+                            {n.subject}
+                          </span>
+                          <span className="text-[9px] font-bold text-slate-600">{LIB_LEVEL_LABEL[n.level] || n.level} · {n.branches} cabang</span>
+                        </div>
+                        <p className="text-slate-900 font-bold text-xs truncate">{n.title}</p>
+                      </div>
+                    </div>
+                    <span className={`text-[10px] font-black whitespace-nowrap shrink-0 ${isHot ? 'text-fuchsia-700' : 'text-slate-600'}`}>
+                      {timeAgo(n.ageMin)}
+                    </span>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+        )}
+      </motion.div>
+
       {/* Live feed — last 15 games */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-2xl p-4">
         <h3 className="text-slate-900 font-black text-sm mb-3 flex items-center gap-2">
@@ -264,52 +327,6 @@ export default function BackgroundActivityPanel() {
         <p className="text-[10px] text-slate-500 mt-3 text-center font-semibold">
           ℹ️ Background generator create terus ke DB. Refresh setiap 30s untuk tengok live.
         </p>
-      </motion.div>
-
-      {/* Live feed — Library notes terbaru */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pro-glass rounded-2xl p-4">
-        <h3 className="text-slate-900 font-black text-sm mb-3 flex items-center gap-2">
-          <Library className="w-4 h-4 text-fuchsia-600" /> Nota Library Terbaru (15 terakhir)
-        </h3>
-        {lib.recentNotes.length === 0 ? (
-          <div className="text-center py-6">
-            <Pause className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-            <p className="text-slate-600 text-sm font-semibold">Tiada nota dijana lagi</p>
-          </div>
-        ) : (
-          <div className="space-y-1.5 max-h-[400px] overflow-y-auto pr-1">
-            <AnimatePresence initial={false}>
-              {lib.recentNotes.map(n => {
-                const isHot = n.ageMin < 5;
-                return (
-                  <motion.div
-                    key={n.id}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                    className={`rounded-lg p-2.5 ring-1 flex items-center justify-between gap-2 ${isHot ? 'bg-fuchsia-50 ring-fuchsia-300' : 'bg-white ring-slate-200'}`}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                      <span className="text-xl shrink-0">{n.emoji}</span>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5 mb-0.5">
-                          <span className="text-[9px] font-black px-1.5 py-0.5 rounded ring-1 bg-fuchsia-100 text-fuchsia-800 ring-fuchsia-300">
-                            {n.subject}
-                          </span>
-                          <span className="text-[9px] font-bold text-slate-600">{LIB_LEVEL_LABEL[n.level] || n.level} · {n.branches} cabang</span>
-                        </div>
-                        <p className="text-slate-900 font-bold text-xs truncate">{n.title}</p>
-                      </div>
-                    </div>
-                    <span className={`text-[10px] font-black whitespace-nowrap shrink-0 ${isHot ? 'text-fuchsia-700' : 'text-slate-600'}`}>
-                      {timeAgo(n.ageMin)}
-                    </span>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </div>
-        )}
       </motion.div>
     </div>
   );
