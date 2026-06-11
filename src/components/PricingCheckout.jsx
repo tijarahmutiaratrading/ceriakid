@@ -67,6 +67,8 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
     if (leadFired) return;
     setLeadFired(true);
     trackPixelEvent('Lead', { content_name: 'pricing_form_started', currency: 'MYR' }, genEventID('Lead'));
+    // Funnel tracking — user mula isi borang (signal niat kuat)
+    base44.analytics.track({ eventName: 'checkout_form_started', properties: { tier: formData.selectedTier } });
   };
 
   // Sync when parent changes the selected tier (via pricing card buttons)
@@ -99,6 +101,9 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
 
     setLoading(true);
 
+    // Funnel tracking — user klik Bayar & validation pass (cuba ke gateway)
+    base44.analytics.track({ eventName: 'checkout_pay_clicked', properties: { tier: formData.selectedTier } });
+
     // Fire InitiateCheckout SELEPAS validation pass (bukan sebelum)
     const checkoutEventID = genEventID('InitiateCheckout');
     trackPixelEvent('InitiateCheckout', {
@@ -126,6 +131,8 @@ export default function PricingCheckout({ onClose, selectedTier: initialTier, on
       });
 
       if (response.data?.checkoutUrl) {
+        // Funnel tracking — berjaya jana URL Chip, redirect ke gateway pembayaran
+        base44.analytics.track({ eventName: 'checkout_redirected_to_gateway', properties: { tier: formData.selectedTier } });
         window.location.href = response.data.checkoutUrl;
       } else if (response.data?.message) {
         // Mesej jelas dari backend (cth: downgrade blocked — dah ada pelan aktif)

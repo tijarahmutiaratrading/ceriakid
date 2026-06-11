@@ -175,12 +175,32 @@ export default function Landing() {
     return () => observer.disconnect();
   }, []);
 
+  // Funnel tracking — checkout form jadi visible (orang sampai ke borang isi maklumat)
+  useEffect(() => {
+    let fired = false;
+    const observer = new IntersectionObserver((entries) => {
+      if (fired) return;
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          fired = true;
+          base44.analytics.track({ eventName: 'checkout_form_viewed', properties: { tier: selectedTierForCheckout } });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    const target = document.getElementById('checkout-form');
+    if (target) observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
+
 
 
   const scrollToPricing = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
 
   const handleTierSelect = (tierName) => {
     setSelectedTierForCheckout(tierName);
+    // Funnel tracking — user klik butang pilih pelan (signal niat beli)
+    base44.analytics.track({ eventName: 'pricing_tier_clicked', properties: { tier: tierName } });
     setTimeout(() => {
       document.getElementById('checkout-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
