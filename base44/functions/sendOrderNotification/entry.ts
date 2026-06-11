@@ -47,10 +47,10 @@ function buildNotification(payload) {
 
   switch (type) {
     case 'subscription': {
-      const tierName = (TIER_LABEL[tier] || tier || 'Subscription').toUpperCase();
+      const tierName = TIER_LABEL[tier] || tier || 'Langganan';
       return {
-        title: `🎉 ${formatRM(amount)} • Subscription ${tierName}`,
-        body: `${customerDisplay} baru langgan pelan ${tierName} (1 tahun)`,
+        title: `Order Baru! 🎉`,
+        body: `${customerDisplay} beli Pakej ${tierName} - ${formatRM(amount)}`,
         tag: `order-sub-${purchaseId || Date.now()}`,
         requireInteraction: true,
         url: '/admin-dashboard?tab=analytics',
@@ -59,20 +59,20 @@ function buildNotification(payload) {
     case 'credit': {
       const pkgName = PACKAGE_LABEL[packageId] || packageId || 'Top-Up';
       return {
-        title: `💰 ${formatRM(amount)} • ${credits} Kredit AI`,
-        body: `${customerDisplay} beli pakej ${pkgName}`,
+        title: `Order Baru! 🎉`,
+        body: `${customerDisplay} beli ${pkgName} (${credits} Kredit AI) - ${formatRM(amount)}`,
         tag: `order-credit-${purchaseId || Date.now()}`,
         requireInteraction: true,
         url: '/admin-dashboard?tab=analytics',
       };
     }
     case 'recovery': {
-      const tierName = (TIER_LABEL[tier] || tier || 'Subscription').toUpperCase();
+      const tierName = TIER_LABEL[tier] || tier || 'Langganan';
       return {
-        title: `♻️ ${formatRM(amount)} • Recovered ${tierName}`,
-        body: `${customerDisplay} → auto-activate dari pending`,
+        title: `Order Baru! 🎉`,
+        body: `${customerDisplay} beli Pakej ${tierName} - ${formatRM(amount)}`,
         tag: `order-recovery-${purchaseId || Date.now()}`,
-        requireInteraction: false, // less critical
+        requireInteraction: true,
         url: '/admin-dashboard?tab=analytics',
       };
     }
