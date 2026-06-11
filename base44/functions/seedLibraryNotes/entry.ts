@@ -152,7 +152,7 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json().catch(() => ({}));
-    const perBucket = Math.min(Math.max(Number(body.perBucket) || 10, 1), 10);
+    const perBucket = Math.min(Math.max(Number(body.perBucket) || 5, 1), 10);
 
     // Mode 1: bucket khusus diberi.
     if (body.subject && body.level) {
