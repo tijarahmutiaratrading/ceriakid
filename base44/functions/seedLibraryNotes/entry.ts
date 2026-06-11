@@ -91,56 +91,84 @@ function bucketAllowed(subject, level) {
   return levelNum(level) >= minLvl;
 }
 
-async function seedOneBucket(base44, subject, level, perBucket) {
-  const subjectLabel = SUBJECT_LABELS[subject] || subject;
-  const levelLabel = LEVEL_LABELS[level] || level;
+// Langkah 1: minta AI senaraikan SEMUA topik silibus KSSR rasmi untuk subjek+tahap ini.
+async function listSyllabusTopics(base44, subjectLabel, levelLabel) {
+  const prompt = `Anda pakar silibus KSSR/DSKP Kementerian Pendidikan Malaysia.
 
-  const existing = await base44.asServiceRole.entities.StudyNote.filter({ subject, level }, '-created_date', 200).catch(() => []);
-  const existingTitles = (existing || []).map((n) => n.title).filter(Boolean);
-  const need = Math.max(0, perBucket - existingTitles.length);
-  if (need === 0) return { created: 0, alreadyFull: true };
-
-  const avoidLine = existingTitles.length
-    ? `JANGAN ulang tajuk-tajuk ini yang sudah wujud: ${existingTitles.join(', ')}.`
-    : '';
-
-  const prompt = `Anda pakar pendidikan KSSR Malaysia. Bina ${need} NOTA RUJUKAN MENGAJAR (mind map + visual) untuk CIKGU guna semasa mengajar murid.
-
+Senaraikan SEMUA topik/tajuk utama dalam SILIBUS KSSR rasmi untuk:
 Subjek: ${subjectLabel}
 Tahap: ${levelLabel}
 
-PENTING: Setiap nota mesti ikut TOPIK SEBENAR dalam SILIBUS KSSR/DSKP rasmi Kementerian Pendidikan Malaysia — topik yang betul-betul diajar cikgu di dalam kelas untuk subjek & tahap ini. Ikut urutan & tajuk topik standard buku teks KSSR.
-${avoidLine}
+PERATURAN:
+- Senaraikan topik SEBENAR ikut buku teks & DSKP rasmi KPM untuk tahap ini sahaja.
+- Ikut urutan standard silibus.
+- Setiap item = satu tajuk topik silibus (bukan sub-poin kecil).
+- Jangan reka topik yang bukan dalam silibus tahap ini.
+- Bilangan topik ikut SEBENAR silibus (boleh 5, 10, 15 — apa sahaja yang betul).
 
-FOKUS UTAMA: MIND MAP yang jelas + visual menarik supaya cikgu mudah rujuk & terangkan kepada murid.
+Pulangkan dalam array "topics" (senarai string tajuk topik).`;
+  const schema = { type: 'object', properties: { topics: { type: 'array', items: { type: 'string' } } }, required: ['topics'] };
+  const res = await base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: schema, model: 'gemini_3_flash' });
+  return Array.isArray(res?.topics) ? res.topics.filter(Boolean) : [];
+}
 
-KEPERLUAN setiap nota:
-- "title": nama topik tepat ikut silibus KSSR (cth topik sebenar dari buku teks, bukan rekaan).
+// Langkah 2: jana 1 nota mind-map untuk SATU topik silibus.
+async function generateNoteForTopic(base44, subjectLabel, levelLabel, topic) {
+  const prompt = `Anda pakar pendidikan KSSR Malaysia. Bina SATU NOTA RUJUKAN MENGAJAR (mind map + visual) untuk CIKGU guna semasa mengajar murid.
+
+Subjek: ${subjectLabel}
+Tahap: ${levelLabel}
+Topik silibus: "${topic}"
+
+FOKUS UTAMA: MIND MAP yang jelas + visual menarik supaya cikgu mudah rujuk & terangkan topik ini kepada murid.
+
+KEPERLUAN:
+- "title": guna nama topik silibus ini ("${topic}").
 - "emoji": satu emoji mewakili topik.
-- "summary": satu ayat ringkas untuk cikgu — apa yang murid akan belajar.
-- "keyPoints": 4-6 isi penting yang cikgu perlu ajar (setiap satu: emoji ikon, teks pendek & padat, warna berbeza-beza dari purple/pink/blue/green/orange/yellow/red).
-- "mindMap" (PALING PENTING): "central" topik tengah, "branches" 4-5 cabang lengkap mewakili sub-topik utama silibus (setiap cabang: label jelas, emoji, warna berbeza, 3-4 children spesifik & berguna untuk pengajaran).
+- "summary": satu ayat ringkas untuk cikgu — apa yang murid akan belajar dalam topik ini.
+- "keyPoints": 4-6 isi penting yang cikgu perlu ajar (setiap satu: emoji ikon, teks pendek & padat, warna berbeza dari purple/pink/blue/green/orange/yellow/red).
+- "mindMap" (PALING PENTING): "central" = topik ini, "branches" 4-5 cabang mewakili sub-topik utama (setiap cabang: label jelas, emoji, warna berbeza, 3-4 children spesifik untuk pengajaran).
 - "funFact": satu fakta menarik untuk tarik minat murid.
-- Bahasa mudah & mesra murid, dalam Bahasa Melayu (kecuali subjek English, guna English).
+- Bahasa mudah & mesra murid, dalam Bahasa Melayu (kecuali subjek English, guna English).`;
+  const res = await base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: NOTE_ITEM_SCHEMA, model: 'gemini_3_flash' });
+  return res;
+}
 
-Pulangkan ${need} nota dalam array "notes".`;
+// Proses 1 bucket: jana 1 nota untuk SETIAP topik silibus yang belum ada.
+async function seedOneBucket(base44, subject, level) {
+  const subjectLabel = SUBJECT_LABELS[subject] || subject;
+  const levelLabel = LEVEL_LABELS[level] || level;
 
-  const result = await base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: BATCH_SCHEMA, model: 'gemini_3_flash' });
-  const notes = Array.isArray(result?.notes) ? result.notes : [];
-  const records = notes.map((n) => ({
-    title: n.title,
-    subject,
-    level,
-    emoji: n.emoji || '📘',
-    summary: n.summary || '',
-    keyPoints: n.keyPoints || [],
-    mindMap: n.mindMap || { central: n.title, branches: [] },
-    funFact: n.funFact || '',
-    tier: 'premium',
-    isPublished: true,
-  }));
+  const topics = await listSyllabusTopics(base44, subjectLabel, levelLabel);
+  if (topics.length === 0) return { created: 0, noTopics: true };
+
+  const existing = await base44.asServiceRole.entities.StudyNote.filter({ subject, level }, '-created_date', 500).catch(() => []);
+  const existingTitles = new Set((existing || []).map((n) => String(n.title || '').trim().toLowerCase()));
+
+  const missing = topics.filter((t) => !existingTitles.has(String(t).trim().toLowerCase()));
+  if (missing.length === 0) return { created: 0, alreadyFull: true, totalTopics: topics.length };
+
+  // Hadkan 8 nota setiap larian supaya tak timeout — baki diselesaikan larian seterusnya.
+  const batch = missing.slice(0, 8);
+  const records = [];
+  for (const topic of batch) {
+    const n = await generateNoteForTopic(base44, subjectLabel, levelLabel, topic).catch(() => null);
+    if (!n?.title) continue;
+    records.push({
+      title: n.title,
+      subject,
+      level,
+      emoji: n.emoji || '📘',
+      summary: n.summary || '',
+      keyPoints: n.keyPoints || [],
+      mindMap: n.mindMap || { central: n.title, branches: [] },
+      funFact: n.funFact || '',
+      tier: 'premium',
+      isPublished: true,
+    });
+  }
   if (records.length > 0) await base44.asServiceRole.entities.StudyNote.bulkCreate(records);
-  return { created: records.length };
+  return { created: records.length, totalTopics: topics.length, remaining: missing.length - records.length };
 }
 
 Deno.serve(async (req) => {
@@ -153,26 +181,25 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json().catch(() => ({}));
-    const perBucket = Math.min(Math.max(Number(body.perBucket) || 5, 1), 10);
 
     // Mode 1: bucket khusus diberi.
     if (body.subject && body.level) {
-      const r = await seedOneBucket(base44, body.subject, body.level, perBucket);
+      const r = await seedOneBucket(base44, body.subject, body.level);
       return Response.json({ success: true, ...r, subject: body.subject, level: body.level });
     }
 
-    // Mode 2: auto — cari bucket pertama yang belum penuh, proses 1 (untuk automation).
+    // Mode 2: auto — cari bucket pertama yang topik silibus belum lengkap, proses (untuk automation).
     for (const subject of SUBJECTS) {
       for (const level of LEVELS) {
         if (!bucketAllowed(subject, level)) continue;
-        const existing = await base44.asServiceRole.entities.StudyNote.filter({ subject, level }, '-created_date', 200).catch(() => []);
-        if ((existing?.length || 0) >= perBucket) continue;
-        const r = await seedOneBucket(base44, subject, level, perBucket);
-        return Response.json({ success: true, ...r, subject, level, mode: 'auto' });
+        const r = await seedOneBucket(base44, subject, level);
+        if (r.created > 0 || r.remaining > 0) {
+          return Response.json({ success: true, ...r, subject, level, mode: 'auto' });
+        }
       }
     }
 
-    return Response.json({ success: true, done: true, message: 'Semua bucket sudah penuh.' });
+    return Response.json({ success: true, done: true, message: 'Semua topik silibus sudah lengkap.' });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
