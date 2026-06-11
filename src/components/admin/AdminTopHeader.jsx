@@ -7,6 +7,7 @@ import { useScrollDirection } from '@/hooks/useScrollDirection';
 const ADMIN_MENU = [
   { key: 'analytics', label: 'Dashboard' },
   { key: 'launch', label: 'Launch' },
+  { key: 'library', label: 'Library' },
   { key: 'health', label: 'Health' },
   { key: 'affiliate', label: 'Affiliate' },
   { key: 'settings', label: 'Settings' },

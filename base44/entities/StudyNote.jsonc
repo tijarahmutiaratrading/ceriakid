@@ -1,0 +1,134 @@
+{
+  "name": "StudyNote",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Tajuk nota (cth: 'Haiwan dan Habitat')"
+    },
+    "subject": {
+      "type": "string",
+      "enum": [
+        "bahasa_melayu",
+        "english",
+        "mathematics",
+        "science",
+        "jawi",
+        "pendidikan_islam",
+        "pendidikan_moral",
+        "sejarah",
+        "rbt",
+        "pjk",
+        "seni",
+        "3m_membaca",
+        "3m_menulis",
+        "3m_mengira"
+      ],
+      "description": "Subjek nota ikut KSSR / 3M"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "prasekolah",
+        "darjah_1",
+        "darjah_2",
+        "darjah_3",
+        "darjah_4",
+        "darjah_5",
+        "darjah_6"
+      ],
+      "description": "Tahap Prasekolah / Darjah"
+    },
+    "emoji": {
+      "type": "string",
+      "description": "Emoji ikon untuk nota"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Ringkasan satu ayat tentang topik nota"
+    },
+    "keyPoints": {
+      "type": "array",
+      "description": "Senarai poin ringkas berwarna",
+      "items": {
+        "type": "object",
+        "properties": {
+          "icon": {
+            "type": "string",
+            "description": "Emoji untuk poin"
+          },
+          "text": {
+            "type": "string",
+            "description": "Teks poin ringkas"
+          },
+          "color": {
+            "type": "string",
+            "description": "Nama warna tema: purple, pink, blue, green, orange, yellow, red"
+          }
+        }
+      }
+    },
+    "mindMap": {
+      "type": "object",
+      "description": "Struktur mind map berpusat",
+      "properties": {
+        "central": {
+          "type": "string",
+          "description": "Topik tengah mind map"
+        },
+        "branches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Tajuk cabang utama"
+              },
+              "emoji": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string",
+                "description": "purple, pink, blue, green, orange, yellow, red"
+              },
+              "children": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Sub-poin dalam cabang"
+              }
+            }
+          }
+        }
+      }
+    },
+    "funFact": {
+      "type": "string",
+      "description": "Fakta menarik untuk tarik minat budak"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "free",
+        "premium"
+      ],
+      "default": "premium",
+      "description": "Akses: subscriber sahaja secara default (premium)"
+    },
+    "isPublished": {
+      "type": "boolean",
+      "default": true
+    },
+    "order": {
+      "type": "number",
+      "description": "Susunan paparan"
+    }
+  },
+  "required": [
+    "title",
+    "subject",
+    "level"
+  ]
+}

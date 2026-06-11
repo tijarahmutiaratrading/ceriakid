@@ -16,6 +16,7 @@ import PushNotificationPanel from '@/components/admin/PushNotificationPanel';
 import CustomerDatabaseTable from '@/components/admin/CustomerDatabaseTable';
 import DateRangeFilter, { isInRange } from '@/components/admin/DateRangeFilter';
 import TrafficAnalyticsCard from '@/components/admin/TrafficAnalyticsCard';
+import LibraryGeneratorPanel from '@/components/admin/LibraryGeneratorPanel';
 
 const SETTINGS_KEY = 'admin_app_settings';
 
@@ -122,7 +123,7 @@ export default function AdminDashboard() {
     const tabFromUrl = params.get('tab');
     if (tabFromUrl === 'customers') {
       setActiveTab('analytics');
-    } else if (tabFromUrl && ['analytics', 'launch', 'health', 'affiliate', 'settings'].includes(tabFromUrl)) {
+    } else if (tabFromUrl && ['analytics', 'launch', 'library', 'health', 'affiliate', 'settings'].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
   }, [location.search]);
@@ -412,6 +413,7 @@ export default function AdminDashboard() {
                 )}
 
                 {/* ═══ OTHER TABS ═══ */}
+                {activeTab === 'library' && <LibraryGeneratorPanel />}
                 {activeTab === 'health' && <SystemHealthPanel />}
                 {activeTab === 'launch' && (
                   <>

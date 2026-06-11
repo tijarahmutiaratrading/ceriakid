@@ -43,6 +43,7 @@ const KafaHub = lazy(() => import('@/pages/KafaHub'));
 const TigaMHub = lazy(() => import('@/pages/TigaMHub'));
 const TigaMList = lazy(() => import('@/pages/TigaMList'));
 const TigaMPlayground = lazy(() => import('@/pages/TigaMPlayground'));
+const LibraryHub = lazy(() => import('@/pages/LibraryHub'));
 
 // Lazy-load: AI pages — heavy markdown/chat dependencies
 const AIAssistant = lazy(() => import('@/pages/AIAssistant'));
@@ -150,6 +151,7 @@ const AuthenticatedApp = () => {
             <Route path="/games-subjek" element={lazyRoute(GamesSubjek)} />
             <Route path="/kafa" element={lazyRoute(KafaHub)} />
             <Route path="/3m" element={lazyRoute(TigaMHub)} />
+            <Route path="/library" element={lazyRoute(LibraryHub)} />
             <Route path="/3m/:categoryId" element={lazyRoute(TigaMList)} />
             <Route path="/games/:category" element={lazyRoute(GamesList)} />
             <Route path="/mini-games/:type" element={lazyRoute(MiniGamesList)} />
