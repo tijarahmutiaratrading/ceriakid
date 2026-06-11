@@ -808,9 +808,9 @@ function PictureHuntMode() {
       <div className={`${panel} text-center`}>
         <p className="text-purple-700 font-black text-sm">Cari: <span className={targetPill + ' ml-1'}>{target}</span></p>
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2 max-w-xs mx-auto">
         {items.map((item, i) => (
-          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white ring-2 ring-purple-100 text-5xl shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center p-2 overflow-hidden">{getItemText(item)}</button>
+          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white ring-2 ring-purple-100 text-3xl sm:text-4xl shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center p-2 overflow-hidden">{getItemText(item)}</button>
         ))}
       </div>
     </div>
