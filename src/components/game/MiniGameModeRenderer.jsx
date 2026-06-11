@@ -5,11 +5,11 @@ import ProMiniGameShell from '@/components/game/ProMiniGameShell';
 import useGameProgress from '@/hooks/useGameProgress';
 import useMiniFeedback from '@/hooks/useMiniFeedback';
 
-// Light pastel panel — match shell harmony
-const panel = 'rounded-2xl p-4 bg-gradient-to-br from-purple-50 to-pink-50 ring-1 ring-purple-100 shadow-sm';
-const action = 'rounded-2xl bg-white text-purple-700 font-black shadow-md ring-2 ring-purple-100 active:scale-95 hover:-translate-y-0.5 transition-all';
-const chip = 'px-4 py-3.5 rounded-2xl bg-white text-purple-700 font-black text-xl shadow-md ring-2 ring-purple-100 active:scale-95 hover:-translate-y-0.5 transition-all';
-const targetPill = 'px-3.5 py-1.5 rounded-full bg-gradient-to-r from-yellow-300 to-orange-300 text-orange-900 font-black text-lg shadow-md ring-2 ring-white inline-block';
+// Glassmorphism — tiru GamePlayer subjek (kad putih lutsinar + backdrop blur)
+const panel = 'rounded-3xl p-4 bg-white/55 backdrop-blur-xl ring-1 ring-white/70 shadow-[0_8px_30px_rgba(0,0,0,0.06)]';
+const action = 'rounded-2xl bg-white/55 backdrop-blur-xl text-slate-800 font-black shadow-[0_4px_16px_rgba(0,0,0,0.06)] ring-1 ring-white/70 active:scale-95 hover:-translate-y-0.5 transition-all';
+const chip = 'px-4 py-3.5 rounded-2xl bg-white/55 backdrop-blur-xl text-slate-800 font-black text-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] ring-1 ring-white/70 active:scale-95 hover:-translate-y-0.5 transition-all';
+const targetPill = 'px-3.5 py-1.5 rounded-full brand-gradient-br text-white font-black text-lg shadow-md ring-2 ring-white/60 inline-block';
 
 // STANDARD font sizes — kekalkan konsisten merentas semua mini game modes
 const answerText = 'text-xl';      // teks jawapan utama (pilihan/chip/tile)
