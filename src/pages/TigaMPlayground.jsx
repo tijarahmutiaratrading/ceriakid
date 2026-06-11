@@ -5,7 +5,7 @@ import { ArrowLeft, Lock, Loader2, Sparkles, Clock } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import CikguMascot from '@/components/game/CikguMascot';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
-import { findTigaMGame, findTigaMCategory, TIGA_M_CATEGORIES } from '@/lib/tigaMBlueprints';
+import { findTigaMGame, findTigaMCategory } from '@/lib/tigaMBlueprints';
 import { useAuth } from '@/lib/AuthContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
@@ -19,9 +19,8 @@ export default function TigaMPlayground() {
   const [userTier, setUserTier] = React.useState('free');
   const [tierLoaded, setTierLoaded] = React.useState(false);
   const { category, game } = findTigaMGame(categoryId, gameId);
-  const categoryOffset = Math.max(0, TIGA_M_CATEGORIES.findIndex(c => c.id === category.id)) * 10;
-  const blueprintIndex = Math.max(0, category.games.findIndex(g => g.id === gameId));
-  const gameIndex = categoryOffset + blueprintIndex;
+  // Setiap kategori 3M = satu bucket sendiri (ikut Games Subjek), tanpa offset.
+  const gameIndex = Math.max(0, category.games.findIndex(g => g.id === gameId));
   const locked = tierLoaded && isGameIndexLocked({ index: gameIndex, tier: userTier, isAuthenticated });
 
   React.useEffect(() => {

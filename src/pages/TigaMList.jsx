@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import TigaMGameCard from '@/components/game/TigaMGameCard';
-import { findTigaMCategory, TIGA_M_CATEGORIES } from '@/lib/tigaMBlueprints';
+import { findTigaMCategory } from '@/lib/tigaMBlueprints';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
@@ -14,8 +14,6 @@ export default function TigaMList() {
   const { user, isAuthenticated } = useAuth();
   const [userTier, setUserTier] = React.useState('free');
   const category = findTigaMCategory(categoryId);
-  // Offset unik supaya locking konsisten merentas kategori 3M
-  const categoryOffset = Math.max(0, TIGA_M_CATEGORIES.findIndex(c => c.id === category.id)) * 10;
 
   React.useEffect(() => {
     if (!user?.email) return;
@@ -53,8 +51,8 @@ export default function TigaMList() {
         {/* Games grid — glass card style ikut Games Subjek */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
           {category.games.map((game, idx) => {
-            const globalIdx = categoryOffset + idx;
-            const locked = isGameIndexLocked({ index: globalIdx, tier: userTier, isAuthenticated });
+            // Setiap kategori 3M = satu bucket sendiri (ikut Games Subjek)
+            const locked = isGameIndexLocked({ index: idx, tier: userTier, isAuthenticated });
             return (
               <TigaMGameCard
                 key={game.id}

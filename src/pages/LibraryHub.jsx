@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Lock, Library, Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
-import { getActiveTier, hasActiveSubscription } from '@/lib/tierAccess';
+import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
 import { NOTE_SUBJECTS, NOTE_LEVELS } from '@/lib/libraryConfig';
 import StudyNoteCard from '@/components/library/StudyNoteCard';
 import StudyNoteReader from '@/components/library/StudyNoteReader';
@@ -34,7 +34,27 @@ export default function LibraryHub() {
     return () => { alive = false; };
   }, [user?.email]);
 
-  const isSubscriber = useMemo(() => hasActiveSubscription({ status: 'active', tier }), [tier]);
+  // Lock per-bucket macam Games Subjek: setiap kombinasi subject+level dapat
+  // quota sendiri ikut tier. Susun nota dalam bucket ikut tarikh cipta (lama dulu)
+  // supaya nota awal yang dibuka untuk tier rendah.
+  const lockedIds = useMemo(() => {
+    const buckets = {};
+    [...notes]
+      .sort((a, b) => new Date(a.created_date || 0) - new Date(b.created_date || 0))
+      .forEach((n) => {
+        const key = `${n.subject}|${n.level}`;
+        const idx = buckets[key] ?? 0;
+        buckets[key] = idx + 1;
+        if (isGameIndexLocked({ index: idx, tier, isAuthenticated })) {
+          n.__locked = true;
+        } else {
+          n.__locked = false;
+        }
+      });
+    return notes.reduce((acc, n) => { acc[n.id] = !!n.__locked; return acc; }, {});
+  }, [notes, tier, isAuthenticated]);
+
+  const isFree = tier === 'free';
 
   const filtered = useMemo(() => notes.filter((n) =>
     (activeSubject === 'all' || n.subject === activeSubject) &&
@@ -42,7 +62,7 @@ export default function LibraryHub() {
   ), [notes, activeSubject, activeLevel]);
 
   const handleOpen = (note) => {
-    if (!isSubscriber) return; // locked
+    if (lockedIds[note.id]) return; // locked ikut tier
     setOpenNote(note);
   };
 
@@ -76,13 +96,13 @@ export default function LibraryHub() {
           </div>
         </motion.div>
 
-        {/* Subscriber banner */}
-        {!isSubscriber && (
+        {/* Tier banner — ikut sistem lock Games Subjek */}
+        {isFree && (
           <div className="mb-5 rounded-2xl bg-amber-50 ring-1 ring-amber-200 p-4 flex items-center gap-3">
             <Lock className="h-5 w-5 text-amber-500 flex-shrink-0" />
             <div className="flex-1">
-              <p className="font-black text-amber-800 text-sm">Nota untuk subscriber sahaja</p>
-              <p className="text-amber-700 text-xs font-bold">Langgan untuk buka semua nota & mind map.</p>
+              <p className="font-black text-amber-800 text-sm">Nota terkunci</p>
+              <p className="text-amber-700 text-xs font-bold">Langgan untuk buka nota & mind map ikut pakej anda.</p>
             </div>
             <Link to="/settings" className="px-4 py-2 rounded-xl brand-gradient text-white font-black text-xs shadow-md whitespace-nowrap">Langgan</Link>
           </div>
@@ -118,7 +138,7 @@ export default function LibraryHub() {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {filtered.map((note) => (
-              <StudyNoteCard key={note.id} note={note} locked={!isSubscriber} onOpen={handleOpen} />
+              <StudyNoteCard key={note.id} note={note} locked={lockedIds[note.id]} onOpen={handleOpen} />
             ))}
           </div>
         )}
