@@ -148,8 +148,8 @@ async function seedOneBucket(base44, subject, level) {
   const missing = topics.filter((t) => !existingTitles.has(String(t).trim().toLowerCase()));
   if (missing.length === 0) return { created: 0, alreadyFull: true, totalTopics: topics.length };
 
-  // Hadkan 5 nota setiap larian supaya tak timeout — baki diselesaikan larian seterusnya.
-  const batch = missing.slice(0, 5);
+  // Hadkan 3 nota setiap larian supaya tak timeout — baki diselesaikan larian seterusnya.
+  const batch = missing.slice(0, 3);
   const records = [];
   for (const topic of batch) {
     const n = await generateNoteForTopic(base44, subjectLabel, levelLabel, topic).catch(() => null);
