@@ -90,52 +90,42 @@ export default function InstallAppGuide() {
         <div className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200/25 rounded-full blur-2xl pointer-events-none" />
         <div className="absolute -bottom-12 -left-10 w-40 h-40 bg-pink-300/25 rounded-full blur-2xl pointer-events-none" />
 
-        <div className="relative z-10 p-5 sm:p-6">
-          <div className="flex items-start gap-4 mb-4">
-            <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center shadow-lg">
-              <MonitorSmartphone className="w-6 h-6 sm:w-7 sm:h-7 text-white" strokeWidth={2.5} />
+        <div className="relative z-10 p-3.5 sm:p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center shadow-lg">
+              <MonitorSmartphone className="w-5 h-5 text-white" strokeWidth={2.5} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white/70 text-[10px] font-black uppercase tracking-[0.18em] mb-1">Pasang Sebagai App</p>
-              <p className="text-white font-black text-base sm:text-lg leading-tight">Buka CeriaKid macam app biasa!</p>
-              <p className="text-white/80 text-xs font-semibold mt-1.5 leading-relaxed">
-                Pasang di skrin phone/tablet — tak perlu buka browser. Cepat, offline-ready, & full screen.
-              </p>
+              <p className="text-white font-black text-sm leading-tight">Pasang CeriaKid sebagai app</p>
+              <p className="text-white/70 text-[11px] font-semibold leading-tight">Cepat, offline-ready & full screen.</p>
             </div>
           </div>
 
           {/* Platform-specific CTA */}
-          <div className="grid grid-cols-2 gap-2 mt-4">
+          <div className="grid grid-cols-2 gap-2 mt-3">
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => { setPlatform('ios'); setShowModal(true); }}
-              className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-xs sm:text-sm transition-all ${
+              className={`flex items-center justify-center gap-1.5 py-2 rounded-xl font-black text-xs transition-all ${
                 platform === 'ios'
                   ? 'bg-white text-purple-700 shadow-lg'
                   : 'bg-white/15 text-white border border-white/25'
               }`}
             >
-              <Apple className="w-4 h-4" /> iPhone / iPad
+              <Apple className="w-3.5 h-3.5" /> iPhone
             </motion.button>
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => { setPlatform('android'); deferredPrompt ? handleAndroidInstall() : setShowModal(true); }}
-              className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-xs sm:text-sm transition-all ${
+              className={`flex items-center justify-center gap-1.5 py-2 rounded-xl font-black text-xs transition-all ${
                 platform === 'android'
                   ? 'bg-white text-purple-700 shadow-lg'
                   : 'bg-white/15 text-white border border-white/25'
               }`}
             >
-              <Smartphone className="w-4 h-4" /> Android
+              <Smartphone className="w-3.5 h-3.5" /> Android
             </motion.button>
           </div>
-
-          <button
-            onClick={() => setShowModal(true)}
-            className="w-full mt-3 flex items-center justify-center gap-1.5 text-white/80 hover:text-white text-[11px] font-bold transition-colors"
-          >
-            Lihat panduan lengkap step-by-step <ChevronRight className="w-3 h-3" />
-          </button>
         </div>
       </motion.div>
 
