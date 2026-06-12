@@ -2,10 +2,16 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
+import { sfx, Particles, Shaker, Pops } from '@/components/arcade/engine';
 
 const W = 400, H = 600;
-const GOOD = ['🍎', '🍌', '📚', '🥛', '🍊', '✏️'];
-const BAD = ['🗑️', '🧨', '🦴', '👟'];
+const GOOD = ['🍎', '🍌', '📚', '🥛', '🍊', '✏️', '🍇', '⚽'];
+const BAD = ['🗑️', '🧨', '🦴', '👟', '🪳'];
+const POWERUPS = [
+  { kind: 'slow', emoji: '⏰' },
+  { kind: 'life', emoji: '❤️' },
+  { kind: 'star', emoji: '🌟' },
+];
 
 export default function CatchGame() {
   const canvasRef = useRef(null);
@@ -19,29 +25,19 @@ export default function CatchGame() {
   const [started, setStarted] = useState(false);
 
   const initState = () => ({
-    basketX: W / 2,
-    targetX: W / 2,
-    items: [],
-    collected: [],
-    score: 0,
-    lives: 3,
-    nextItem: 40,
-    speed: 2.5,
-    frame: 0,
-    dead: false,
-    pops: [],
+    basketX: W / 2, targetX: W / 2, tilt: 0,
+    items: [], collected: [], score: 0, lives: 3, level: 1,
+    combo: 0, fever: 0, slow: 0, star: 0,
+    nextItem: 40, frame: 0, dead: false, levelBanner: 0,
+    bgBubbles: [...Array(8)].map(() => ({ x: Math.random() * W, y: Math.random() * H, r: 8 + Math.random() * 22, v: 0.3 + Math.random() * 0.5 })),
+    particles: new Particles(), shaker: new Shaker(), pops: new Pops(),
   });
 
   const startGame = useCallback(() => {
     stateRef.current = initState();
-    setScore(0);
-    setLives(3);
-    setTokenCount(0);
-    setGameOver(false);
-    setStarted(true);
+    setScore(0); setLives(3); setTokenCount(0); setGameOver(false); setStarted(true);
   }, []);
 
-  // Pointer / keyboard control
   const moveTo = useCallback((clientX) => {
     const canvas = canvasRef.current;
     if (!canvas || !stateRef.current) return;
@@ -54,99 +50,191 @@ export default function CatchGame() {
     const onKey = (e) => {
       const s = stateRef.current;
       if (!s) return;
-      if (e.code === 'ArrowLeft') s.targetX = Math.max(40, s.targetX - 55);
-      if (e.code === 'ArrowRight') s.targetX = Math.min(W - 40, s.targetX + 55);
+      if (e.code === 'ArrowLeft') s.targetX = Math.max(40, s.targetX - 60);
+      if (e.code === 'ArrowRight') s.targetX = Math.min(W - 40, s.targetX + 60);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // Game loop
   useEffect(() => {
-    stateRef.current = initState();
-    const ctx = canvasRef.current.getContext('2d');
+    if (!stateRef.current) stateRef.current = initState();
+    const c = canvasRef.current.getContext('2d');
 
     const loop = () => {
       const s = stateRef.current;
-      ctx.clearRect(0, 0, W, H);
+      c.setTransform(1, 0, 0, 1, 0, 0);
+      c.clearRect(0, 0, W, H);
+      s.shaker.apply(c);
 
-      // Background
-      const grad = ctx.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, '#fbcfe8');
-      grad.addColorStop(1, '#fef9c3');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
-      ctx.font = '28px serif';
-      ctx.fillText('🌈', 30, 60);
-      ctx.fillText('☀️', 340, 50);
+      // ── BACKGROUND (fever mode = rainbow) ──
+      const grad = c.createLinearGradient(0, 0, 0, H);
+      if (s.fever > 0) {
+        const hue = (s.frame * 3) % 360;
+        grad.addColorStop(0, `hsl(${hue}, 80%, 80%)`);
+        grad.addColorStop(1, `hsl(${(hue + 60) % 360}, 80%, 88%)`);
+      } else {
+        grad.addColorStop(0, '#fbcfe8');
+        grad.addColorStop(1, '#fef9c3');
+      }
+      c.fillStyle = grad;
+      c.fillRect(-20, -20, W + 40, H + 40);
 
-      if (started && !s.dead) {
+      // Bubbles latar
+      s.bgBubbles.forEach((b) => {
+        b.y -= b.v;
+        if (b.y < -30) { b.y = H + 30; b.x = Math.random() * W; }
+        c.fillStyle = 'rgba(255,255,255,0.25)';
+        c.beginPath(); c.arc(b.x, b.y, b.r, 0, Math.PI * 2); c.fill();
+      });
+      c.font = '30px serif';
+      c.fillText('🌈', 30, 60);
+      c.fillText('☀️', 345, 50);
+
+      const moving = started && !s.dead;
+      const slowMult = s.slow > 0 ? 0.45 : 1;
+
+      if (moving) {
         s.frame++;
-        s.speed = Math.min(7, 2.5 + s.score / 120);
+        if (s.fever > 0) s.fever--;
+        if (s.slow > 0) s.slow--;
+        if (s.star > 0) s.star--;
+        if (s.levelBanner > 0) s.levelBanner--;
 
-        // Smooth basket follow
-        s.basketX += (s.targetX - s.basketX) * 0.25;
+        const newLevel = 1 + Math.floor(s.score / 150);
+        if (newLevel > s.level) {
+          s.level = newLevel; s.levelBanner = 90;
+          s.pops.add(W / 2, 200, `LEVEL ${s.level}! 🚀`, '#7c3aed', 30);
+          sfx.powerup();
+        }
 
-        // Spawn items
+        const fallSpeed = (2.5 + s.level * 0.7) * slowMult;
+
+        // Smooth basket + tilt
+        const dx = s.targetX - s.basketX;
+        s.basketX += dx * 0.25;
+        s.tilt = Math.max(-0.3, Math.min(0.3, dx * 0.01));
+
+        // Spawn
         s.nextItem--;
         if (s.nextItem <= 0) {
           const r = Math.random();
           let item;
-          if (r < 0.15) item = { kind: 'token', token: randomToken() };
-          else if (r < 0.7) item = { kind: 'good', emoji: GOOD[Math.floor(Math.random() * GOOD.length)] };
+          if (r < 0.1) item = { kind: 'token', token: randomToken() };
+          else if (r < 0.16) item = { kind: 'power', power: POWERUPS[Math.floor(Math.random() * POWERUPS.length)] };
+          else if (r < 0.68) item = { kind: 'good', emoji: GOOD[Math.floor(Math.random() * GOOD.length)] };
           else item = { kind: 'bad', emoji: BAD[Math.floor(Math.random() * BAD.length)] };
-          s.items.push({ ...item, x: 40 + Math.random() * (W - 80), y: -20, wobble: Math.random() * Math.PI * 2 });
-          s.nextItem = Math.max(18, 45 - s.score / 15);
+          s.items.push({ ...item, x: 40 + Math.random() * (W - 80), y: -25, wobble: Math.random() * Math.PI * 2, spin: 0 });
+          s.nextItem = Math.max(14, 42 - s.level * 3);
         }
 
-        // Move + catch items
+        // Move + catch
         s.items = s.items.filter((it) => {
-          it.y += s.speed + (it.kind === 'bad' ? 1 : 0);
-          it.x += Math.sin(it.wobble + s.frame * 0.05) * 0.8;
+          it.y += fallSpeed + (it.kind === 'bad' ? 1 : 0);
+          it.x += Math.sin(it.wobble + s.frame * 0.05) * 0.9;
+          it.spin += 0.05;
+          // Star power: magnet semua item baik
+          if (s.star > 0 && it.kind !== 'bad') {
+            const ddx = s.basketX - it.x, ddy = 535 - it.y;
+            const d = Math.hypot(ddx, ddy);
+            if (d < 220) { it.x += ddx / d * 5; it.y += ddy / d * 3; }
+          }
 
-          // Catch zone
-          if (it.y > 510 && it.y < 560 && Math.abs(it.x - s.basketX) < 48) {
+          if (it.y > 505 && it.y < 565 && Math.abs(it.x - s.basketX) < 50) {
             if (it.kind === 'bad') {
-              s.lives--;
+              if (s.star > 0) {
+                // Star = kebal, musnahkan
+                s.particles.burst(it.x, 530, { count: 10, color: '#fde047', speed: 4 });
+                s.pops.add(it.x, 510, 'ZAP! ⚡', '#d97706', 18);
+                sfx.coin();
+                return false;
+              }
+              s.lives--; s.combo = 0; s.fever = 0;
               setLives(s.lives);
-              s.pops.push({ x: it.x, y: 520, text: '💥', t: 30 });
-              if (s.lives <= 0) s.dead = true;
+              s.particles.burst(it.x, 530, { count: 16, color: '#ef4444', speed: 5 });
+              s.pops.add(it.x, 505, 'Aduh! 💥', '#dc2626', 22);
+              s.shaker.shake(14);
+              sfx.hit();
+              if (s.lives <= 0) { s.dead = true; sfx.die(); }
             } else if (it.kind === 'token') {
               s.collected.push(it.token);
-              s.score += 25;
+              s.score += 30;
               setTokenCount(s.collected.length);
-              s.pops.push({ x: it.x, y: 520, text: `+25 ${it.token.emoji}`, t: 35 });
+              s.particles.burst(it.x, 530, { count: 14, color: '#34d399', speed: 4 });
+              s.pops.add(it.x, 500, `${it.token.emoji} ${it.token.name}!`, '#059669', 17);
+              sfx.token();
+            } else if (it.kind === 'power') {
+              const pw = it.power;
+              if (pw.kind === 'slow') { s.slow = 300; s.pops.add(it.x, 500, '⏰ Masa Perlahan!', '#0891b2', 18); }
+              if (pw.kind === 'life') { s.lives = Math.min(3, s.lives + 1); setLives(s.lives); s.pops.add(it.x, 500, '❤️ +1 Nyawa!', '#dc2626', 18); }
+              if (pw.kind === 'star') { s.star = 300; s.pops.add(it.x, 500, '🌟 Super Star!', '#d97706', 18); }
+              s.particles.burst(it.x, 530, { count: 18, color: '#a78bfa', speed: 5 });
+              sfx.powerup();
             } else {
-              s.score += 10;
-              s.pops.push({ x: it.x, y: 520, text: '+10', t: 25 });
+              s.combo++;
+              const mult = s.fever > 0 ? 2 : 1;
+              const pts = 10 * mult;
+              s.score += pts;
+              s.particles.burst(it.x, 530, { count: 7, color: s.fever > 0 ? '#f0abfc' : '#fbbf24', speed: 3.5 });
+              s.pops.add(it.x, 505, `+${pts}`, s.fever > 0 ? '#c026d3' : '#7c3aed', 18);
+              if (s.combo > 0 && s.combo % 8 === 0) {
+                s.fever = 360;
+                s.pops.add(W / 2, 250, 'FEVER MODE! 🔥✨', '#db2777', 28);
+                sfx.powerup();
+              } else sfx.coin();
             }
             setScore(s.score);
             return false;
           }
-          // Missed good item — tiada penalti, cuma hilang
+          if (it.y > H + 30 && it.kind === 'good') s.combo = 0; // terlepas = combo reset
           return it.y < H + 30;
         });
       }
 
-      // Items
-      ctx.textAlign = 'center';
+      // ── ITEMS render ──
+      c.textAlign = 'center';
       s.items.forEach((it) => {
-        ctx.font = it.kind === 'token' ? '32px serif' : '34px serif';
-        ctx.fillText(it.kind === 'token' ? it.token.emoji : it.emoji, it.x, it.y);
+        c.save();
+        c.translate(it.x, it.y);
+        if (it.kind === 'bad') c.rotate(Math.sin(it.spin * 3) * 0.3);
+        if (it.kind === 'token' || it.kind === 'power') {
+          c.shadowColor = it.kind === 'token' ? '#34d399' : '#a78bfa';
+          c.shadowBlur = 14;
+        }
+        c.font = '34px serif';
+        c.fillText(it.kind === 'token' ? it.token.emoji : it.kind === 'power' ? it.power.emoji : it.emoji, 0, 0);
+        c.restore();
       });
 
-      // Pops (feedback text)
-      s.pops = s.pops.filter((p) => {
-        p.t--; p.y -= 1.5;
-        ctx.font = 'bold 20px Nunito, sans-serif';
-        ctx.fillStyle = `rgba(124, 58, 237, ${p.t / 30})`;
-        ctx.fillText(p.text, p.x, p.y);
-        return p.t > 0;
-      });
+      // ── BASKET ──
+      c.save();
+      c.translate(s.basketX, 545);
+      c.rotate(s.tilt);
+      if (s.star > 0) { c.shadowColor = '#fde047'; c.shadowBlur = 25; }
+      c.font = '58px serif';
+      c.fillText('🧺', 0, 0);
+      c.restore();
+      if (s.star > 0) {
+        c.strokeStyle = `rgba(253,224,71,${0.4 + Math.sin(s.frame * 0.3) * 0.3})`;
+        c.lineWidth = 3;
+        c.beginPath(); c.arc(s.basketX, 530, 50, 0, Math.PI * 2); c.stroke();
+      }
 
-      // Basket
-      ctx.font = '56px serif';
-      ctx.fillText('🧺', s.basketX, 560);
+      // ── HUD: combo + level ──
+      if (s.combo > 2) {
+        c.fillStyle = 'rgba(0,0,0,0.3)';
+        c.beginPath(); c.roundRect(W / 2 - 65, 14, 130, 26, 13); c.fill();
+        c.font = '900 14px Nunito, sans-serif'; c.fillStyle = s.fever > 0 ? '#f0abfc' : '#fde047'; c.textAlign = 'center';
+        c.fillText(s.fever > 0 ? `🔥 FEVER x2!` : `🔥 Combo ${s.combo}`, W / 2, 32);
+      }
+      c.fillStyle = 'rgba(0,0,0,0.3)';
+      c.beginPath(); c.roundRect(10, 14, 80, 26, 13); c.fill();
+      c.font = '900 13px Nunito, sans-serif'; c.fillStyle = '#fff'; c.textAlign = 'left';
+      c.fillText(`Lvl ${s.level}`, 24, 32);
+      if (s.slow > 0) { c.font = '20px serif'; c.fillText('⏰', W - 40, 34); }
+
+      s.particles.update(c);
+      s.pops.update(c);
 
       if (s.dead && !gameOver) {
         setBest(saveBest('catch', s.score));
@@ -171,7 +259,11 @@ export default function CatchGame() {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm pointer-events-none">
             <div className="text-6xl mb-3 animate-bounce">🧺</div>
             <p className="text-white font-black text-2xl mb-2">Tangkap Ceria</p>
-            <p className="text-white/70 font-bold text-sm text-center px-8">Gerakkan bakul untuk tangkap benda baik 🍎📚<br />Elak benda buruk 🗑️ — 3 nyawa sahaja!</p>
+            <div className="text-white/80 font-bold text-xs text-center px-6 space-y-1">
+              <p>👆 Gerakkan jari = gerak bakul</p>
+              <p>🍎 Tangkap 8 berturut = FEVER x2! 🔥</p>
+              <p>⏰ Slow · ❤️ Nyawa · 🌟 Super Star kebal!</p>
+            </div>
             <div className="mt-5 px-6 py-3 rounded-full bg-amber-300 text-slate-900 font-black animate-pulse">Tap untuk Mula!</div>
           </div>
         )}
