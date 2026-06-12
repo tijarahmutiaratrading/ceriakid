@@ -4,6 +4,7 @@ import { useLang } from '@/lib/LanguageContext';
 import GameHeader from '@/components/game/GameHeader';
 import FeedbackOverlay from '@/components/game/FeedbackOverlay';
 import ScoreScreen from '@/components/game/ScoreScreen';
+import GamePlayShell from '@/components/game/GamePlayShell';
 import { numberQuestions, shuffleArray, calculateStars, saveScore } from '@/lib/gameData';
 
 const TOTAL_QUESTIONS = 8;
@@ -99,51 +100,49 @@ export default function NumberGame() {
   const countDisplay = Array(question.correct.number).fill(question.correct.countEmoji).join(' ');
 
   return (
-    <div className="min-h-screen bg-pattern">
-      <div className="max-w-lg mx-auto px-4 py-6 pb-24">
-        <GameHeader
-          title={t('numberGame')}
-          score={state.score}
-          total={TOTAL_QUESTIONS}
-          currentQ={state.currentQ + 1}
-          totalQ={TOTAL_QUESTIONS}
-        />
+    <GamePlayShell backTo="/games-hub" backLabel={t('numberGame')}>
+      <GameHeader
+        title={t('numberGame')}
+        score={state.score}
+        total={TOTAL_QUESTIONS}
+        currentQ={state.currentQ + 1}
+        totalQ={TOTAL_QUESTIONS}
+      />
 
-        {/* Question Card */}
-        <motion.div
-          key={state.currentQ}
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="clay rounded-3xl p-6 text-center mb-6 bg-gradient-to-br from-pink-50 to-rose-100"
-        >
-          <p className="text-lg font-bold text-muted-foreground mb-3">
-            {t('findNumber')} <span className="text-game-pink font-black">❓</span>
-          </p>
-          <div className="text-4xl leading-relaxed mb-2 flex flex-wrap justify-center gap-1">
-            {countDisplay}
-          </div>
-          <p className="text-sm font-semibold text-muted-foreground">
-            ({t('tapCorrectNumber')})
-          </p>
-        </motion.div>
-
-        {/* Options Grid */}
-        <div className="grid grid-cols-3 gap-3">
-          {question.options.map((num, i) => (
-            <motion.button
-              key={`${state.currentQ}-${num}-${i}`}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.05 }}
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.05 }}
-              onClick={() => handleAnswer(num)}
-              className="clay-button rounded-2xl py-5 text-3xl font-black bg-white/60 hover:bg-white/80 transition-colors"
-            >
-              {num}
-            </motion.button>
-          ))}
+      {/* Question Card — glass */}
+      <motion.div
+        key={state.currentQ}
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="rounded-3xl p-6 text-center mb-6 bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-[0_8px_30px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.08)]"
+      >
+        <p className="text-lg font-bold text-white/70 mb-3">
+          {t('findNumber')} <span className="text-game-pink font-black">❓</span>
+        </p>
+        <div className="text-4xl leading-relaxed mb-2 flex flex-wrap justify-center gap-1">
+          {countDisplay}
         </div>
+        <p className="text-sm font-semibold text-white/60">
+          ({t('tapCorrectNumber')})
+        </p>
+      </motion.div>
+
+      {/* Options Grid */}
+      <div className="grid grid-cols-3 gap-3">
+        {question.options.map((num, i) => (
+          <motion.button
+            key={`${state.currentQ}-${num}-${i}`}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: i * 0.05 }}
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => handleAnswer(num)}
+            className="rounded-2xl py-5 text-3xl font-black text-white bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-sm hover:bg-white/15 transition-colors"
+          >
+            {num}
+          </motion.button>
+        ))}
       </div>
 
       <FeedbackOverlay
@@ -152,6 +151,6 @@ export default function NumberGame() {
         message={state.feedbackMsg}
         onDone={handleFeedbackDone}
       />
-    </div>
+    </GamePlayShell>
   );
 }

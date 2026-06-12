@@ -4,6 +4,7 @@ import { useLang } from '@/lib/LanguageContext';
 import GameHeader from '@/components/game/GameHeader';
 import FeedbackOverlay from '@/components/game/FeedbackOverlay';
 import ScoreScreen from '@/components/game/ScoreScreen';
+import GamePlayShell from '@/components/game/GamePlayShell';
 import { quizQuestions, shuffleArray, calculateStars, saveScore } from '@/lib/gameData';
 
 const TOTAL_QUESTIONS = 8;
@@ -90,46 +91,44 @@ export default function QuizGame() {
   const currentQuestion = questions[state.currentQ];
 
   return (
-    <div className="min-h-screen bg-pattern">
-      <div className="max-w-lg mx-auto px-4 py-6 pb-24">
-        <GameHeader
-          title={t('quizGame')}
-          score={state.score}
-          total={TOTAL_QUESTIONS}
-          currentQ={state.currentQ + 1}
-          totalQ={TOTAL_QUESTIONS}
-        />
+    <GamePlayShell backTo="/games-hub" backLabel={t('quizGame')}>
+      <GameHeader
+        title={t('quizGame')}
+        score={state.score}
+        total={TOTAL_QUESTIONS}
+        currentQ={state.currentQ + 1}
+        totalQ={TOTAL_QUESTIONS}
+      />
 
-        {/* Question Card */}
-        <motion.div
-          key={state.currentQ}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="clay rounded-3xl p-6 text-center mb-6 bg-gradient-to-br from-sky-50 to-blue-100"
-        >
-          <div className="text-5xl mb-2">🧩</div>
-          <p className="text-xl font-extrabold leading-relaxed">
-            {currentQuestion.question}
-          </p>
-        </motion.div>
+      {/* Question Card — glass */}
+      <motion.div
+        key={state.currentQ}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="rounded-3xl p-6 text-center mb-6 bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-[0_8px_30px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.08)]"
+      >
+        <div className="text-5xl mb-2">🧩</div>
+        <p className="text-xl font-extrabold leading-relaxed text-white">
+          {currentQuestion.question}
+        </p>
+      </motion.div>
 
-        {/* Options */}
-        <div className="grid grid-cols-2 gap-3">
-          {currentQuestion.options.map((option, i) => (
-            <motion.button
-              key={`${state.currentQ}-${i}`}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.08 }}
-              whileTap={{ scale: 0.93 }}
-              whileHover={{ scale: 1.03 }}
-              onClick={() => handleAnswer(i)}
-              className={`clay-button rounded-2xl py-5 px-4 text-lg font-extrabold bg-gradient-to-br ${optionColors[i]} transition-all`}
-            >
-              {option}
-            </motion.button>
-          ))}
-        </div>
+      {/* Options — glass */}
+      <div className="grid grid-cols-2 gap-3">
+        {currentQuestion.options.map((option, i) => (
+          <motion.button
+            key={`${state.currentQ}-${i}`}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: i * 0.08 }}
+            whileTap={{ scale: 0.93 }}
+            whileHover={{ scale: 1.03 }}
+            onClick={() => handleAnswer(i)}
+            className="rounded-2xl py-5 px-4 text-lg font-extrabold text-white bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-sm hover:bg-white/15 transition-all"
+          >
+            {option}
+          </motion.button>
+        ))}
       </div>
 
       <FeedbackOverlay
@@ -138,6 +137,6 @@ export default function QuizGame() {
         message={state.feedbackMsg}
         onDone={handleFeedbackDone}
       />
-    </div>
+    </GamePlayShell>
   );
 }
