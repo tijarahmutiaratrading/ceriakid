@@ -476,39 +476,8 @@ export default function Landing() {
         <AppPreviewShowcase />
       </div>
 
-      {/* ── 3M + LIBRARY HUB HIGHLIGHT ── */}
-      <LandingFeatureHighlight />
-
-      {/* ── INVESTOR WOW ── */}
-      <SectionWrapper
-        badge="SEMUA DALAM SATU APP"
-        badgeIcon="🚀"
-        title="Lebih mudah untuk anak,"
-        titleAccent="lebih senang untuk ibu bapa"
-        subtitle="CeriaKid gabungkan game interaktif, dashboard ibu bapa, kandungan KSPK/KSSR dan progress tracking dalam satu pengalaman yang mudah digunakan."
-        variant="sky"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {[
-            { icon: '🎮', title: 'Game Engine', desc: 'Soalan interaktif pelbagai format untuk subjek utama.' },
-            { icon: '📊', title: 'Parent Analytics', desc: 'Pantau skor, progress, streak dan prestasi anak.' },
-            { icon: '🔒', title: 'Pembelajaran Selamat', desc: 'Pengalaman tanpa iklan dan lebih terkawal untuk kanak-kanak.' },
-          ].map((item, i) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
-              className="rounded-3xl p-6 bg-white shadow-xl shadow-blue-100 border border-blue-100 hover:shadow-2xl hover:-translate-y-1 transition-all"
-            >
-              <div className="text-4xl mb-3">{item.icon}</div>
-              <h3 className="font-black text-lg mb-2 text-slate-900">{item.title}</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </SectionWrapper>
+      {/* ── 3M + LIBRARY HUB HIGHLIGHT (semua ciri) ── */}
+      <LandingFeatureHighlight onCTAClick={scrollToPricing} />
 
       {/* ── HOW IT WORKS + TESTIMONIALS (combined) ── */}
       <SectionWrapper
@@ -703,7 +672,7 @@ export default function Landing() {
         title="Sebelum anda"
         titleAccent="mula menggunakan"
         subtitle="Jawapan ringkas untuk soalan yang biasa ditanya ibu bapa."
-        variant="sky"
+        variant="cream"
       >
         <div className="space-y-3 max-w-3xl mx-auto">
           {[

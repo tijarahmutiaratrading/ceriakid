@@ -86,7 +86,7 @@ const HIGHLIGHTS = [
   },
 ];
 
-export default function LandingFeatureHighlight() {
+export default function LandingFeatureHighlight({ onCTAClick }) {
   return (
     <SectionWrapper
       badge="SEMUA DALAM SATU APP"
@@ -150,6 +150,26 @@ export default function LandingFeatureHighlight() {
           </motion.div>
         ))}
       </div>
+
+      {/* CTA selepas senarai ciri */}
+      {onCTAClick && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-10 text-center"
+        >
+          <p className="text-white/80 text-sm sm:text-base font-bold mb-4">Semua ini dalam satu langganan — sedia untuk anak anda.</p>
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={onCTAClick}
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-black text-base bg-amber-300 text-slate-900 shadow-xl shadow-amber-400/30 hover:bg-amber-200 transition-colors"
+          >
+            Lihat Pelan & Harga →
+          </motion.button>
+        </motion.div>
+      )}
     </SectionWrapper>
   );
 }
