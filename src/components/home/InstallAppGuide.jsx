@@ -78,7 +78,7 @@ export default function InstallAppGuide() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-3xl overflow-hidden shadow-xl"
+        className="relative isolate rounded-3xl overflow-hidden shadow-xl [transform:translateZ(0)]"
         style={{
           background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
           backdropFilter: 'blur(22px) saturate(150%)',
