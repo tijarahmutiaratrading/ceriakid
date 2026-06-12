@@ -4,14 +4,20 @@ import { motion } from 'framer-motion';
 // Rail thumbnail gaya PS5 — tile terpilih membesar dengan ring bercahaya
 export default function CinematicRail({ items, selected, onSelect, onActivate }) {
   const tileRefs = useRef({});
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     const el = tileRefs.current[selected];
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    const container = scrollRef.current;
+    if (el && container) {
+      // Scroll dalam container sahaja (jangan guna scrollIntoView yang boleh anjak seluruh page)
+      const target = el.offsetLeft - container.clientWidth / 2 + el.clientWidth / 2;
+      container.scrollTo({ left: target, behavior: 'smooth' });
+    }
   }, [selected]);
 
   return (
-    <div className="flex gap-3 sm:gap-4 overflow-x-auto overflow-y-visible scrollbar-hide pt-10 pb-8 px-3 -mx-3 snap-x">
+    <div ref={scrollRef} className="flex gap-3 sm:gap-4 overflow-x-auto overflow-y-visible scrollbar-hide pt-10 pb-8 px-3 -mx-3 snap-x">
       {items.map((it, i) => {
         const isSel = i === selected;
         return (
