@@ -163,7 +163,7 @@ export default function Home() {
                 desc: 'Tahap umur Prasekolah (KSPK) 4–6 Tahun',
                 sub: 'Bahasa, Matematik, Sains & banyak lagi',
                 image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/98cf1f885_generated_image.png',
-                gradient: 'from-sky-200 via-cyan-200 to-emerald-200',
+                gradient: 'from-cyan-500/40 to-emerald-500/30',
               },
               {
                 key: 'sekolah_rendah',
@@ -173,7 +173,7 @@ export default function Home() {
                 desc: 'Tahap umur Sekolah Rendah (KSSR) 7–12 Tahun',
                 sub: 'Darjah 1 hingga Darjah 6 mengikut KSSR',
                 image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d1137d39a_generated_image.png',
-                gradient: 'from-pink-200 via-rose-200 to-amber-200',
+                gradient: 'from-fuchsia-500/40 to-amber-500/30',
               },
             ].map((age) => {
               const isActive = safeAgeGroup === age.key;
@@ -181,15 +181,18 @@ export default function Home() {
                 <motion.button
                   key={age.key}
                   onClick={() => safeToggle(age.key)}
-                  whileHover={{ y: -2, scale: 1.01 }}
+                  whileHover={{ y: -3, scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${age.gradient} p-2.5 sm:p-3 text-left shadow-lg shadow-black/15 transition-all border-2 ${
-                    isActive ? 'border-white ring-2 ring-white/40' : 'border-white/40'
+                  className={`group relative overflow-hidden rounded-2xl bg-slate-900 p-2.5 sm:p-3 text-left shadow-2xl shadow-black/40 transition-all ring-1 ${
+                    isActive ? 'ring-2 ring-white shadow-[0_0_30px_rgba(255,255,255,0.2)]' : 'ring-white/10 hover:ring-white/25'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5 sm:gap-3">
+                  {/* Glow accent */}
+                  <div className={`absolute -right-6 -top-6 h-20 w-20 rounded-full bg-gradient-to-br ${age.gradient} blur-2xl opacity-70 group-hover:opacity-100 transition-opacity`} />
+
+                  <div className="relative flex items-center gap-2.5 sm:gap-3">
                     {/* Mascot Image */}
-                    <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-white/30 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl overflow-hidden ring-1 ring-white/15 bg-white/5 flex items-center justify-center">
                       <img
                         src={age.image}
                         alt={age.title}
@@ -200,21 +203,21 @@ export default function Home() {
 
                     {/* Text Content */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-black text-slate-800 text-xs sm:text-sm leading-tight">
+                      <h3 className="font-black text-white text-xs sm:text-sm leading-tight">
                         {age.title}
                       </h3>
-                      <p className="font-bold text-slate-700 text-xs flex items-center gap-1">
+                      <p className="font-bold text-white/60 text-xs flex items-center gap-1">
                         {age.age} <span>{age.emoji}</span>
                       </p>
                     </div>
                   </div>
 
-                  <div className="mt-2">
+                  <div className="relative mt-2">
                     <div
-                      className={`w-full py-1.5 rounded-full text-center font-black text-xs shadow-sm transition-all ${
+                      className={`w-full py-1.5 rounded-full text-center font-black text-xs transition-all ${
                         isActive
-                          ? 'brand-gradient text-white'
-                          : 'bg-white/80 text-slate-700'
+                          ? 'bg-white text-slate-900 shadow-lg'
+                          : 'bg-white/10 text-white/70 border border-white/15'
                       }`}
                     >
                       {isActive ? '✓ Aktif' : 'Pilih'}

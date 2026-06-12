@@ -36,7 +36,7 @@ export default function CategoryCard({ category, gameCount, idx }) {
         transition={{ delay: idx * 0.08 }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.96 }}
-        className="rounded-[2rem] overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative border border-white/50 shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-black/15 transition-shadow transform-gpu [clip-path:inset(0_round_2rem)]"
+        className="rounded-[2rem] overflow-hidden cursor-pointer h-full min-h-[160px] sm:min-h-[200px] group relative ring-1 ring-white/10 hover:ring-white/30 shadow-2xl shadow-black/40 transition-all transform-gpu [clip-path:inset(0_round_2rem)]"
         >
         {/* Background — Image OR gradient (untuk KAFA yang takde image) */}
         {hasImage ? (
@@ -55,8 +55,8 @@ export default function CategoryCard({ category, gameCount, idx }) {
           </div>
         )}
 
-        {/* Dark gradient only at bottom for text legibility */}
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/75 via-black/35 to-transparent z-[1]" />
+        {/* Cinematic dark gradient for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent z-[1]" />
 
         {/* Content */}
         <div className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-between">
@@ -68,10 +68,10 @@ export default function CategoryCard({ category, gameCount, idx }) {
           </div>
 
           <div className="flex items-end justify-start gap-3">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-black shadow-xl shadow-black/20 ring-1 ring-white/40 bg-gradient-to-br from-white/35 to-white/15 backdrop-blur-lg hover:from-white/45 hover:to-white/25 transition-all">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-black shadow-lg bg-white/10 border border-white/15 backdrop-blur-lg group-hover:bg-white group-hover:text-slate-900 transition-all">
               <span className="text-base">🎮</span>
-              <p className="text-xs text-white whitespace-nowrap leading-none font-bold">
-                {gameCount} <span className="text-white/90">Game</span>
+              <p className="text-xs text-white group-hover:text-slate-900 whitespace-nowrap leading-none font-black">
+                {gameCount} <span className="opacity-80">Game</span>
               </p>
             </div>
           </div>
