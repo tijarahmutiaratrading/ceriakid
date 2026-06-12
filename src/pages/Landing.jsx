@@ -13,6 +13,7 @@ import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import LandingHeroCarousel from '@/components/landing/LandingHeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
 import LandingAISection from '@/components/landing/LandingAISection';
+import LandingFeatureHighlight from '@/components/landing/LandingFeatureHighlight';
 import ExitIntentPopup from '@/components/landing/ExitIntentPopup';
 import LiveSocialProof from '@/components/landing/LiveSocialProof';
 import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
@@ -45,6 +46,8 @@ const buildTiers = (stats) => {
       period: '/tahun',
       features: [
         asasGames ? `${fmt(asasGames)} game (10 per darjah/subjek)` : '10 game per darjah/subjek',
+        '📚 Modul 3M — Membaca, Menulis, Mengira (10 per kategori)',
+        '📒 Library Hub — Nota & Mind Map silibus (akses asas)',
         '🎁 5 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)',
         'Semua subjek (Prasekolah & Darjah 1–6)',
         'Akses sampling setiap darjah 🎯',
@@ -65,6 +68,8 @@ const buildTiers = (stats) => {
       period: '/tahun',
       features: [
         standardGames ? `${fmt(standardGames)} game (20 per darjah/subjek)` : '20 game per darjah/subjek',
+        '📚 Modul 3M — Membaca, Menulis, Mengira (20 per kategori)',
+        '📒 Library Hub — Nota & Mind Map silibus (akses lebih luas)',
         '🎁 20 KREDIT AI PERCUMA (cuba Cikgu Firdaus!)',
         'Semua subjek (Prasekolah & Darjah 1–6)',
         'Lebih luas akses setiap darjah 🎯',
@@ -88,6 +93,8 @@ const buildTiers = (stats) => {
       savings: 'PALING POPULAR',
       features: [
         keluargaGames ? `Akses penuh ${fmt(keluargaGames)} game 🔓` : 'Akses penuh semua game 🔓',
+        '📚 Modul 3M PENUH — Membaca, Menulis, Mengira 🔓',
+        '📒 Library Hub PENUH — Semua Nota & Mind Map silibus 🔓',
         '🎁 50 KREDIT AI PERCUMA (Cikgu Firdaus + Penjana Cerita)',
         'Semua subjek (Prasekolah & Darjah 1–6)',
         'Tiada had setiap darjah 🎯',
@@ -512,6 +519,9 @@ export default function Landing() {
           ))}
         </div>
       </SectionWrapper>
+
+      {/* ── 3M + LIBRARY HUB HIGHLIGHT ── */}
+      <LandingFeatureHighlight />
 
       {/* ── AI FEATURES ── */}
       <LandingAISection />
