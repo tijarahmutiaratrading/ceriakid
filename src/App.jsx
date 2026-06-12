@@ -49,6 +49,13 @@ const ArcadeZone = lazy(() => import('@/pages/ArcadeZone'));
 const RunnerGame = lazy(() => import('@/pages/arcade/RunnerGame'));
 const CatchGame = lazy(() => import('@/pages/arcade/CatchGame'));
 const FlappyGame = lazy(() => import('@/pages/arcade/FlappyGame'));
+const SpaceGame = lazy(() => import('@/pages/arcade/SpaceGame'));
+const JumpGame = lazy(() => import('@/pages/arcade/JumpGame'));
+const BrickGame = lazy(() => import('@/pages/arcade/BrickGame'));
+const SnakeGame = lazy(() => import('@/pages/arcade/SnakeGame'));
+const RacerGame = lazy(() => import('@/pages/arcade/RacerGame'));
+const WhackGame = lazy(() => import('@/pages/arcade/WhackGame'));
+const BalloonGame = lazy(() => import('@/pages/arcade/BalloonGame'));
 
 // Lazy-load: AI pages — heavy markdown/chat dependencies
 const AIAssistant = lazy(() => import('@/pages/AIAssistant'));
@@ -182,6 +189,13 @@ const AuthenticatedApp = () => {
           <Route path="/arcade/runner" element={lazyRoute(RunnerGame)} />
           <Route path="/arcade/catch" element={lazyRoute(CatchGame)} />
           <Route path="/arcade/flappy" element={lazyRoute(FlappyGame)} />
+          <Route path="/arcade/space" element={lazyRoute(SpaceGame)} />
+          <Route path="/arcade/jump" element={lazyRoute(JumpGame)} />
+          <Route path="/arcade/brick" element={lazyRoute(BrickGame)} />
+          <Route path="/arcade/snake" element={lazyRoute(SnakeGame)} />
+          <Route path="/arcade/racer" element={lazyRoute(RacerGame)} />
+          <Route path="/arcade/whack" element={lazyRoute(WhackGame)} />
+          <Route path="/arcade/balloon" element={lazyRoute(BalloonGame)} />
           <Route path="/mini-games/:categoryId/play/:gameId" element={lazyRoute(MiniGamePlayground)} />
           <Route path="/3m/:categoryId/play/:gameId" element={lazyRoute(TigaMPlayground)} />
           <Route path="/play/:category/:index" element={lazyRoute(GamePlayer)} />
