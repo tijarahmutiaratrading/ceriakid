@@ -35,11 +35,12 @@ export default function GamesSubjek() {
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <Link
             to="/dashboard"
-            className="inline-flex items-center gap-2 mb-2 px-4 py-2.5 rounded-full font-black text-sm text-white transition-all hover:scale-[1.02] hover:bg-white/15"
+            className="inline-flex items-center gap-2 mb-2 px-4 py-2.5 rounded-full font-black text-sm text-slate-700 transition-all hover:scale-[1.02]"
             style={{
-              background: 'rgba(255,255,255,0.08)',
+              background: 'rgba(255,255,255,0.9)',
               backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.15)',
+              border: '1px solid rgba(0,0,0,0.05)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
             }}
           >
             <ArrowLeft className="w-4 h-4" /> Kembali
@@ -52,10 +53,8 @@ export default function GamesSubjek() {
           animate={{ opacity: 1, y: 0 }}
           className="rounded-[2rem] p-5 sm:p-6 relative overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, rgba(30,41,59,0.75), rgba(15,23,42,0.85))',
-            backdropFilter: 'blur(20px) saturate(160%)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            boxShadow: '0 20px 60px rgba(99,102,241,0.25), 0 8px 20px rgba(0,0,0,0.3)',
+            background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)',
+            boxShadow: '0 20px 50px rgba(168,85,247,0.4), 0 8px 20px rgba(0,0,0,0.15)',
           }}
         >
           <motion.div
@@ -111,8 +110,8 @@ export default function GamesSubjek() {
                   onClick={() => safeToggle(age.key)}
                   whileHover={{ y: -3, scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`group relative overflow-hidden rounded-3xl ps-glass p-3 sm:p-3.5 text-left transition-all ${
-                    isActive ? 'ring-2 ring-white/50' : ''
+                  className={`group relative overflow-hidden rounded-3xl bg-gradient-to-br ${age.gradient} p-3 sm:p-3.5 text-left shadow-lg shadow-black/15 transition-all border-2 ${
+                    isActive ? 'border-white ring-2 ring-white/40' : 'border-white/40'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 sm:gap-3">
@@ -125,13 +124,13 @@ export default function GamesSubjek() {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-black text-white text-sm sm:text-base leading-tight">
+                      <h3 className="font-black text-slate-800 text-sm sm:text-base leading-tight">
                         {age.title}
                       </h3>
-                      <p className="font-black text-white/90 text-sm flex items-center gap-1 mb-1">
+                      <p className="font-black text-slate-800 text-sm flex items-center gap-1 mb-1">
                         {age.age} <span>{age.emoji}</span>
                       </p>
-                      <p className="text-white/60 text-[11px] sm:text-xs font-semibold leading-snug line-clamp-2">
+                      <p className="text-slate-700 text-[11px] sm:text-xs font-semibold leading-snug line-clamp-2">
                         {age.desc}
                       </p>
                     </div>
@@ -140,8 +139,8 @@ export default function GamesSubjek() {
                     <div
                       className={`w-full py-2 rounded-full text-center font-black text-xs sm:text-sm shadow-sm transition-all ${
                         isActive
-                          ? 'bg-white text-slate-900'
-                          : 'bg-white/15 text-white group-hover:bg-white/25 border border-white/15'
+                          ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                          : 'bg-white text-slate-800 group-hover:bg-slate-50'
                       }`}
                     >
                       {isActive ? '✓ Dipilih' : 'Pilih'}

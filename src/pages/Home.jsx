@@ -182,8 +182,8 @@ export default function Home() {
                   onClick={() => safeToggle(age.key)}
                   whileHover={{ y: -2, scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`group relative overflow-hidden rounded-2xl ps-glass p-2.5 sm:p-3 text-left transition-all ${
-                    isActive ? 'ring-2 ring-white/50' : ''
+                  className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${age.gradient} p-2.5 sm:p-3 text-left shadow-lg shadow-black/15 transition-all border-2 ${
+                    isActive ? 'border-white ring-2 ring-white/40' : 'border-white/40'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 sm:gap-3">
@@ -199,10 +199,10 @@ export default function Home() {
 
                     {/* Text Content */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-black text-white text-xs sm:text-sm leading-tight">
+                      <h3 className="font-black text-slate-800 text-xs sm:text-sm leading-tight">
                         {age.title}
                       </h3>
-                      <p className="font-bold text-white/70 text-xs flex items-center gap-1">
+                      <p className="font-bold text-slate-700 text-xs flex items-center gap-1">
                         {age.age} <span>{age.emoji}</span>
                       </p>
                     </div>
@@ -212,8 +212,8 @@ export default function Home() {
                     <div
                       className={`w-full py-1.5 rounded-full text-center font-black text-xs shadow-sm transition-all ${
                         isActive
-                          ? 'bg-white text-slate-900'
-                          : 'bg-white/15 text-white border border-white/15'
+                          ? 'brand-gradient text-white'
+                          : 'bg-white/80 text-slate-700'
                       }`}
                     >
                       {isActive ? '✓ Aktif' : 'Pilih'}

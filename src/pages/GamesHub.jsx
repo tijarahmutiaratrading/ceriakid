@@ -42,11 +42,12 @@ export default function GamesHub() {
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <Link
             to="/dashboard"
-            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-white transition-all hover:scale-[1.02] hover:bg-white/15"
+            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-slate-700 transition-all hover:scale-[1.02]"
             style={{
-              background: 'rgba(255,255,255,0.08)',
+              background: 'rgba(255,255,255,0.9)',
               backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.15)',
+              border: '1px solid rgba(0,0,0,0.05)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
             }}
           >
             <ArrowLeft className="w-4 h-4" /> Kembali
@@ -59,10 +60,8 @@ export default function GamesHub() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 rounded-[2rem] p-5 sm:p-6 relative overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, rgba(30,41,59,0.75), rgba(15,23,42,0.85))',
-            backdropFilter: 'blur(20px) saturate(160%)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            boxShadow: '0 20px 60px rgba(99,102,241,0.25), 0 8px 20px rgba(0,0,0,0.3)',
+            background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)',
+            boxShadow: '0 20px 50px rgba(168,85,247,0.4), 0 8px 20px rgba(0,0,0,0.15)',
           }}
         >
           {/* Decorative bouncing emojis in hero */}
@@ -122,10 +121,9 @@ export default function GamesHub() {
           <div
             className="rounded-[2rem] p-10 text-center"
             style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04))',
+              background: 'rgba(255,255,255,0.95)',
               backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
             }}
           >
             <motion.p
@@ -135,8 +133,8 @@ export default function GamesHub() {
             >
               🎮
             </motion.p>
-            <h2 className="text-white font-black text-2xl mb-2">Belum ada permainan</h2>
-            <p className="text-white/50 text-sm font-bold">Sila tunggu kandungan baru!</p>
+            <h2 className="text-slate-900 font-black text-2xl mb-2">Belum ada permainan</h2>
+            <p className="text-slate-500 text-sm font-bold">Sila tunggu kandungan baru!</p>
           </div>
         )}
 
@@ -160,10 +158,10 @@ export default function GamesHub() {
                     <div
                       className="h-full rounded-[2rem] p-3 transition-all overflow-hidden relative"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04))',
-                        backdropFilter: 'blur(18px) saturate(160%)',
-                        boxShadow: `0 12px 30px ${theme.glow}, 0 8px 24px rgba(0,0,0,0.35)`,
-                        border: '1px solid rgba(255,255,255,0.12)',
+                        background: 'rgba(255,255,255,0.95)',
+                        backdropFilter: 'blur(20px)',
+                        boxShadow: `0 12px 30px ${theme.glow}, 0 4px 12px rgba(0,0,0,0.1)`,
+                        border: '1px solid rgba(255,255,255,0.4)',
                       }}
                     >
                       {/* Floating sparkle on card */}
@@ -230,16 +228,16 @@ export default function GamesHub() {
                       {/* Card body */}
                       <div className="px-2 pt-4 pb-2">
                         <div className="flex items-start justify-between gap-3 mb-2">
-                          <h2 className="text-white font-black text-lg leading-tight">{category.title}</h2>
+                          <h2 className="text-slate-900 font-black text-lg leading-tight">{category.title}</h2>
                           <motion.div
                             animate={{ x: [0, 4, 0] }}
                             transition={{ duration: 1.5, repeat: Infinity }}
                             className="flex-shrink-0 mt-1"
                           >
-                            <ChevronRight className="w-5 h-5 text-white/40 group-hover:text-white" />
+                            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-700" />
                           </motion.div>
                         </div>
-                        <p className="text-white/60 text-xs font-bold leading-relaxed line-clamp-2">
+                        <p className="text-slate-600 text-xs font-bold leading-relaxed line-clamp-2">
                           {category.objective}
                         </p>
                       </div>
@@ -266,10 +264,9 @@ export default function GamesHub() {
           transition={{ delay: 0.4 }}
           className="rounded-[1.5rem] p-5 relative overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04))',
-            backdropFilter: 'blur(18px)',
-            boxShadow: '0 12px 30px rgba(251,146,60,0.18)',
-            border: '1px solid rgba(251,191,36,0.25)',
+            background: 'linear-gradient(135deg, rgba(251,191,36,0.95) 0%, rgba(249,115,22,0.95) 100%)',
+            boxShadow: '0 12px 30px rgba(251,146,60,0.4)',
+            border: '1px solid rgba(255,255,255,0.3)',
           }}
         >
           <motion.div
@@ -291,8 +288,8 @@ export default function GamesHub() {
               💡
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-amber-300 mb-1">Tips Ibu Bapa</p>
-              <p className="text-white/90 text-sm font-black leading-snug">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/90 mb-1">Tips Ibu Bapa</p>
+              <p className="text-white text-sm font-black leading-snug">
                 Main 10-15 minit sehari untuk asah daya ingatan, fokus, dan kemahiran selesai masalah!
               </p>
             </div>
