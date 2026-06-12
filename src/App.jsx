@@ -159,9 +159,6 @@ const AuthenticatedApp = () => {
             <Route path="/dashboard" element={<RouteErrorBoundary><Home /></RouteErrorBoundary>} />
             <Route path="/settings" element={lazyRoute(ClientDashboard)} />
             <Route path="/children-profiles" element={lazyRoute(ChildrenProfiles)} />
-            <Route path="/games-subjek" element={lazyRoute(GamesSubjek)} />
-            <Route path="/kafa" element={lazyRoute(KafaHub)} />
-            <Route path="/3m/:categoryId" element={lazyRoute(TigaMList)} />
             <Route path="/parent-dashboard" element={lazyRoute(ParentDashboard)} />
             <Route path="/social" element={lazyRoute(Social)} />
             <Route path="/friends" element={lazyRoute(Social)} />
@@ -180,7 +177,10 @@ const AuthenticatedApp = () => {
           <Route path="/drawing" element={lazyRoute(DrawingStudio)} />
           <Route path="/games-hub" element={lazyRoute(GamesHub)} />
           <Route path="/games/:category" element={lazyRoute(GamesList)} />
+          <Route path="/games-subjek" element={lazyRoute(GamesSubjek)} />
+          <Route path="/kafa" element={lazyRoute(KafaHub)} />
           <Route path="/3m" element={lazyRoute(TigaMHub)} />
+          <Route path="/3m/:categoryId" element={lazyRoute(TigaMList)} />
           <Route path="/library" element={lazyRoute(LibraryHub)} />
           <Route path="/ai-hub" element={lazyRoute(AIHub)} />
           <Route path="/story-kid" element={lazyRoute(StoryKid)} />
