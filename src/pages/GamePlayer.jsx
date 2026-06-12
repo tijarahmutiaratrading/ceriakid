@@ -569,7 +569,7 @@ export default function GamePlayer() {
              backdropFilter: 'blur(20px) saturate(160%)',
              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
              border: '1px solid rgba(255,255,255,0.15)',
-             boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+             boxShadow: '0 8px 32px rgba(0,0,0,0.4), 0 0 50px -10px rgba(139,92,246,0.4), inset 0 1px 0 rgba(255,255,255,0.08)',
            }}
          >
          <div className="rounded-2xl p-6 md:p-8 text-center relative overflow-hidden">

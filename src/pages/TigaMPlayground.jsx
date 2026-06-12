@@ -81,7 +81,7 @@ export default function TigaMPlayground() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-5 rounded-3xl p-4 bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-sm"
+            className="mb-5 rounded-3xl p-4 bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-[0_8px_30px_rgba(0,0,0,0.4),0_0_50px_-10px_rgba(139,92,246,0.4),inset_0_1px_0_rgba(255,255,255,0.08)]"
           >
             <div className="flex items-center gap-3">
               <div className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl bg-gradient-to-br from-violet-500/30 to-pink-500/30 ring-1 ring-white/20">
