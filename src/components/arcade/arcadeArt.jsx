@@ -14,11 +14,11 @@ export const ARCADE_ART = {
 
 // Watak 3D Pixar penuh (sprite transparent untuk player characters)
 export const ARCADE_SPRITES = {
-  fox: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/48327e623_generated_image.png',
-  bird: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/942705ef6_generated_image.png',
-  rabbit: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9ef8117bc_generated_image.png',
-  rocket: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/bf79b1e9f_generated_image.png',
-  car: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/df2c76f8e_generated_image.png',
-  mole: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/356fcfbe3_generated_image.png',
-  basket: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1bf328cea_generated_image.png',
+  fox: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/82eccb6eb_generated_image.png',
+  bird: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d14d31d45_generated_image.png',
+  rabbit: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d7aa16c12_generated_image.png',
+  rocket: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8bdc28438_generated_image.png',
+  car: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/764612d4f_generated_image.png',
+  mole: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8b3060f40_generated_image.png',
+  basket: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/96fb75ec2_generated_image.png',
 };
