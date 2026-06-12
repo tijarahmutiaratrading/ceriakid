@@ -10,7 +10,8 @@ import AppHeader from '@/components/AppHeader';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
 import AppleFitnessHero from '@/components/home/AppleFitnessHero';
-import QuickAccessGrid from '@/components/home/QuickAccessGrid';
+import HomeHubShowcase from '@/components/home/HomeHubShowcase';
+import CinematicTips from '@/components/hub/CinematicTips';
 import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
 import InstallAppGuide from '@/components/home/InstallAppGuide';
 import DeviceBlockedScreen from '@/components/DeviceBlockedScreen';
@@ -229,7 +230,18 @@ export default function Home() {
           </div>
         </motion.div>
 
-        <QuickAccessGrid />
+        {/* Hub Showcase — gaya PS5: hero besar + rail tile boleh scroll */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">🎮 Hub Utama</p>
+            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Pilih &amp; Buka</span>
+          </div>
+          <HomeHubShowcase />
+        </motion.div>
 
         {/* Game progress teaser — pacu anak habiskan lebih banyak game */}
         {isAuthenticated && (
@@ -268,15 +280,14 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <div className="mb-6 flex items-center gap-3">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2.5 backdrop-blur-md">
-              <span className="text-xl">📚</span>
-              <h2 className="text-white font-black text-lg md:text-xl">Pilih Subjek</h2>
-            </div>
-            <div className="h-1 flex-1 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-transparent rounded-full" />
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">📚 Pilih Subjek</p>
+            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Scroll →</span>
           </div>
           <CategoryGrid />
         </motion.div>
+
+        <CinematicTips />
 
       </div>
 

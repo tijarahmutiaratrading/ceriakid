@@ -88,15 +88,22 @@ export default function CategoryGrid() {
   });
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-      {categories.map((category, i) => (
-        <CategoryCard
-          key={category}
-          category={category}
-          gameCount={games[category]?.length || 0}
-          idx={i}
-        />
-      ))}
+    <div className="relative -mx-4 sm:-mx-6 lg:-mx-8">
+      {/* Fade tepi gaya PS5 */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-slate-950 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-slate-950 to-transparent z-10" />
+
+      <div className="flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pb-2">
+        {categories.map((category, i) => (
+          <div key={category} className="snap-start shrink-0 w-[240px] sm:w-[280px]">
+            <CategoryCard
+              category={category}
+              gameCount={games[category]?.length || 0}
+              idx={i}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
