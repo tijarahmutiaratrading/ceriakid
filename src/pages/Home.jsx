@@ -7,7 +7,7 @@ import { useLang } from '@/lib/LanguageContext';
 import { t } from '@/lib/i18n';
 
 import AppHeader from '@/components/AppHeader';
-import CategoryGrid from '@/components/home/CategoryGrid';
+import HomeSubjectShowcase from '@/components/home/HomeSubjectShowcase';
 import DailyChallenge from '@/components/home/DailyChallenge';
 import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import HomeHubShowcase from '@/components/home/HomeHubShowcase';
@@ -242,9 +242,9 @@ export default function Home() {
         >
           <div className="flex items-center justify-between mb-3">
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">📚 Pilih Subjek</p>
-            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Scroll →</span>
+            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Pilih &amp; Buka</span>
           </div>
-          <CategoryGrid />
+          <HomeSubjectShowcase />
         </motion.div>
 
         <CinematicTips />
