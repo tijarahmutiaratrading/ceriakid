@@ -42,10 +42,15 @@ const HIGHLIGHTS = [
     emoji: '🤖',
     title: 'Cikgu AI',
     accent: 'Belajar, Kuiz, Cerita & BBM',
-    desc: 'Tutor AI yang sentiasa sedia membantu anak — boleh tanya soalan, jana kuiz, cipta cerita pendidikan dan bahan bantu mengajar. Macam ada cikgu peribadi dalam poket.',
+    desc: 'Empat tutor AI yang sentiasa sedia membantu anak — setiap seorang ada kepakaran tersendiri. Macam ada sekumpulan cikgu peribadi dalam poket.',
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2ad5ce117_generated_image.png',
-    points: ['Cikgu Firdaus jawab soalan anak', 'Jana kuiz & cerita pendidikan', 'Bahan bantu mengajar (BBM) segera'],
     color: 'from-indigo-500 via-violet-400 to-fuchsia-300',
+    tutors: [
+      { name: 'Cikgu Firdaus', role: 'Tutor Peribadi', desc: 'Jawab soalan anak untuk Matematik, Sains, BM, English & Jawi.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/512f26c46_generated_image.png' },
+      { name: 'Cikgu Rosie', role: 'Kuiz AI Adaptif', desc: 'Jana kuiz interaktif yang adapt ikut tahap anak — semakin main, semakin pandai.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e997c6e39_generated_image.png' },
+      { name: 'Cikgu Mira', role: 'Penjana Cerita', desc: 'Cipta cerita pendidikan berdasarkan tema pilihan — AI jana cerita penuh.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png' },
+      { name: 'Cikgu Daniel', role: 'Penjana BBM', desc: 'Hasilkan lembaran kerja & latihan ikut subjek dan tahap anak.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/af9063c28_generated_image.png' },
+    ],
   },
   {
     badge: 'SERONOK & MENCABAR',
@@ -116,14 +121,29 @@ export default function LandingFeatureHighlight() {
               <h3 className="text-2xl md:text-3xl font-black text-white leading-tight">{h.title}</h3>
               <p className="text-white/90 font-bold text-base mb-3">{h.accent}</p>
               <p className="text-white/65 text-sm leading-relaxed mb-5">{h.desc}</p>
-              <div className="space-y-2.5">
-                {h.points.map((p) => (
-                  <div key={p} className="flex items-center gap-2.5 text-white/85 text-sm font-semibold">
-                    <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-white/15 text-xs">✓</span>
-                    {p}
-                  </div>
-                ))}
-              </div>
+              {h.tutors ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {h.tutors.map((t) => (
+                    <div key={t.name} className="flex items-start gap-3 rounded-2xl bg-white/10 border border-white/15 p-3">
+                      <img src={t.avatar} alt={t.name} loading="lazy" decoding="async" className="w-11 h-11 rounded-full object-cover ring-2 ring-white/30 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="font-black text-white text-sm leading-tight">{t.name}</p>
+                        <p className="text-white/70 text-[11px] font-black uppercase tracking-wide mb-1">{t.role}</p>
+                        <p className="text-white/65 text-xs leading-snug">{t.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-2.5">
+                  {h.points.map((p) => (
+                    <div key={p} className="flex items-center gap-2.5 text-white/85 text-sm font-semibold">
+                      <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-white/15 text-xs">✓</span>
+                      {p}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </motion.div>
         ))}
