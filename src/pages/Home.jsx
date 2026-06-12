@@ -102,7 +102,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative bg-slate-950">
       {/* Onboarding wizard untuk user baru */}
       {showOnboarding && (
         <OnboardingWizard
@@ -114,11 +114,12 @@ export default function Home() {
         />
       )}
 
-      {/* Static background gradient — no animation for performance on low-end phones */}
+      {/* Latar sinematik PS5-style — gelap dengan glow halus */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full" aria-hidden="true">
-        <div className="absolute -top-48 -right-40 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-yellow-300/15 rounded-full mix-blend-screen filter blur-3xl" />
-        <div className="absolute top-1/3 -left-32 w-[250px] h-[250px] md:w-[400px] md:h-[400px] bg-cyan-300/10 rounded-full mix-blend-screen filter blur-3xl" />
-        <div className="absolute -bottom-24 right-1/4 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-pink-300/8 rounded-full mix-blend-screen filter blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950 to-slate-950" />
+        <div className="absolute -top-48 -right-40 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-violet-600/20 rounded-full filter blur-3xl" />
+        <div className="absolute top-1/3 -left-32 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-500/12 rounded-full filter blur-3xl" />
+        <div className="absolute -bottom-24 right-1/4 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-fuchsia-500/12 rounded-full filter blur-3xl" />
       </div>
 
       <AppHeader />
@@ -149,8 +150,8 @@ export default function Home() {
           transition={{ delay: 0.1 }}
         >
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-white font-black text-base md:text-lg">Umur Anak</h2>
-            <span className="text-white/50 text-xs font-semibold">Tap untuk tukar</span>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">Umur Anak</p>
+            <span className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em]">Tap untuk tukar</span>
           </div>
           <div className="grid grid-cols-2 gap-3 md:gap-4">
             {[
@@ -265,11 +266,11 @@ export default function Home() {
           transition={{ delay: 0.25 }}
         >
           <div className="mb-6 flex items-center gap-3">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-4 py-2.5 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2.5 backdrop-blur-md">
               <span className="text-xl">📚</span>
               <h2 className="text-white font-black text-lg md:text-xl">Pilih Subjek</h2>
             </div>
-            <div className="h-1 flex-1 bg-gradient-to-r from-cyan-300 via-pink-300 to-transparent rounded-full" />
+            <div className="h-1 flex-1 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-transparent rounded-full" />
           </div>
           <CategoryGrid />
         </motion.div>
