@@ -89,11 +89,11 @@ const HIGHLIGHTS = [
 export default function LandingFeatureHighlight() {
   return (
     <SectionWrapper
-      badge="BARU & EKSKLUSIF"
+      badge="SEMUA DALAM SATU APP"
       badgeIcon="✨"
       title="Bukan sekadar game —"
-      titleAccent="ada nota & modul 3M"
-      subtitle="Dua ciri yang paling ibu bapa suka: Modul 3M untuk asas membaca, menulis, mengira dan Library Hub penuh nota & mind map silibus."
+      titleAccent="semua untuk pembelajaran anak"
+      subtitle="Modul 3M, Library Hub nota & mind map, semua subjek sekolah, 4 Cikgu AI, mini games latih otak, studio lukisan dan cerita interaktif — lengkap dalam satu app."
       variant="vibrant"
     >
       <div className="space-y-6 md:space-y-8">
