@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useAuth } from '@/lib/AuthContext';
@@ -7,8 +7,9 @@ import { useLang } from '@/lib/LanguageContext';
 import { t } from '@/lib/i18n';
 import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
-import GameListCard from '@/components/game/GameListCard';
 import GameLoadingScreen from '@/components/game/GameLoadingScreen';
+import CinematicShowcase from '@/components/hub/CinematicShowcase';
+import CinematicRail from '@/components/hub/CinematicRail';
 import { ArrowLeft, Gamepad2 } from 'lucide-react';
 import { getSubjectArt, getSubjectAccent } from '@/lib/subjectArt';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
@@ -139,6 +140,13 @@ export default function GamesList() {
   const [selectedDarjah, setSelectedDarjah] = useState(null);
   const [userTier, setUserTier] = useState('free');
   const [allGames, setAllGames] = useState([]);
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const navigate = useNavigate();
+
+  // Reset pilihan bila tukar darjah/kategori
+  useEffect(() => {
+    setSelectedIdx(0);
+  }, [selectedDarjah, category, ageGroup]);
 
   useEffect(() => {
     if (user) {
@@ -277,36 +285,6 @@ export default function GamesList() {
           </div>
         </div>
 
-        {/* Hero showcase — art Pixar 3D subjek */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl mb-6 sm:mb-8"
-        >
-          <div className="relative h-52 sm:h-72">
-            {art ? (
-              <img src={art} alt={getCategoryLabel(category, lang)} className="absolute inset-0 h-full w-full object-cover" />
-            ) : (
-              <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${accent}88, ${accent}33)` }} />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7">
-              <div
-                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white mb-2.5 backdrop-blur"
-                style={{ background: `${accent}55`, border: `1px solid ${accent}88` }}
-              >
-                {getCategoryEmoji(category)} {ageGroup === 'sekolah_rendah' ? 'Sekolah Rendah (KSSR)' : 'Prasekolah (KSPK)'}
-              </div>
-              <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight drop-shadow-lg leading-tight">
-                {getCategoryLabel(category, lang)}
-              </h1>
-              <p className="text-white/80 text-sm font-bold mt-1.5 drop-shadow-md">
-                🎮 {games.length} {t('games', lang)} · {t('selectForPlay', lang)}
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
         {/* Darjah Tabs - Only for Sekolah Rendah — pill glass gelap */}
         {hasDarjah && (
           <motion.div
@@ -343,7 +321,7 @@ export default function GamesList() {
           </motion.div>
         )}
 
-        {/* Games List */}
+        {/* Showcase + rail gaya PS5 */}
         {games.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -363,36 +341,53 @@ export default function GamesList() {
               </motion.button>
             </Link>
           </motion.div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-            {games.map((game, bucketIdx) => {
-              // globalIdx — kekal untuk gameKey/progress tracking (jangan break old data)
-              const globalIdx = allGames.findIndex((g) => g === game);
-              const gameKey = `${ageGroup}-${category}-${globalIdx}`;
-              const gameProgress = progress[gameKey];
-              // bucketIdx — index dalam darjah/subject semasa, dipakai utk lock check
-              // supaya setiap darjah ada quota unlock sendiri.
-              const locked = isGameLocked(bucketIdx);
-              return (
-                <GameListCard
-                  key={game.id || `game-${globalIdx}`}
-                  game={game}
-                  gameKey={gameKey}
-                  gameProgress={gameProgress}
-                  idx={globalIdx}
-                  category={category}
-                  locked={locked}
-                  badge={
-                    locked ? 'locked' :
-                    bucketIdx < 2 ? 'new' :
-                    gameProgress && gameProgress.bestStars < 2 ? 'recommended' :
-                    null
-                  }
-                />
-              );
-            })}
-          </div>
-        )}
+        ) : (() => {
+          // Bina item rail — kekalkan globalIdx untuk progress & route, bucketIdx untuk lock
+          const items = games.map((game, bucketIdx) => {
+            const globalIdx = allGames.findIndex((g) => g === game);
+            const gameKey = `${ageGroup}-${category}-${globalIdx}`;
+            const gameProgress = progress[gameKey];
+            const locked = isGameLocked(bucketIdx);
+            const stars = gameProgress?.bestStars || 0;
+            return {
+              key: game.id || `game-${globalIdx}`,
+              title: game.title,
+              desc: game.description,
+              emoji: game.emoji || '🎮',
+              art: game.iconUrl || art,
+              accent,
+              badge: locked ? '🔒 Premium' : getCategoryLabel(category, lang),
+              metaChips: [
+                `❓ ${game.totalQuestions || 8} soalan`,
+                gameProgress ? `⭐ ${stars}/3 bintang` : '✨ Belum dimainkan',
+                ...(game.darjah ? [`🎓 ${DARJAH_LABELS[game.darjah] || ''}`] : []),
+              ],
+              locked,
+              globalIdx,
+            };
+          });
+          const safeIdx = Math.min(selectedIdx, items.length - 1);
+          const item = items[safeIdx];
+          const handlePlay = () => {
+            if (item.locked) navigate('/settings');
+            else navigate(`/play/${category}/${item.globalIdx}`);
+          };
+          return (
+            <>
+              <CinematicShowcase
+                item={item}
+                playLabel={item.locked ? '🔒 Buka dengan Langganan' : 'Main Sekarang'}
+                onPlay={handlePlay}
+              />
+              <div className="mt-8 sm:mt-12">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-1">
+                  Pilih Game · {safeIdx + 1}/{items.length}
+                </p>
+                <CinematicRail items={items} selected={safeIdx} onSelect={setSelectedIdx} onActivate={handlePlay} />
+              </div>
+            </>
+          );
+        })()}
       </div>
     </div>
   );
