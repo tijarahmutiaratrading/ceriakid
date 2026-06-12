@@ -10,7 +10,7 @@ import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
 import GameLoadingScreen from '@/components/game/GameLoadingScreen';
 import CinematicShowcase from '@/components/hub/CinematicShowcase';
 import CinematicRail from '@/components/hub/CinematicRail';
-import { getGameArt } from '@/lib/gameArtPool';
+import { getGameArtFor } from '@/lib/gameArtPool';
 import { ArrowLeft, Gamepad2 } from 'lucide-react';
 import { getSubjectArt, getSubjectAccent } from '@/lib/subjectArt';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
@@ -350,7 +350,7 @@ export default function GamesList() {
             const gameProgress = progress[gameKey];
             const locked = isGameLocked(bucketIdx);
             const stars = gameProgress?.bestStars || 0;
-            const gameArt = getGameArt(globalIdx);
+            const gameArt = getGameArtFor(game, globalIdx);
             // Buang description yang mengandungi JSON mentah (gameData) — papar teks bersih sahaja
             const rawDesc = (game.description || '').trim();
             const cleanDesc = rawDesc.startsWith('{') || rawDesc.startsWith('[') || rawDesc.includes('"questions"') || rawDesc.includes('"options"')
