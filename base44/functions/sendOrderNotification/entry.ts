@@ -24,7 +24,7 @@ import webpush from 'npm:web-push@3.6.7';
 
 const ICON_URL = 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c0ad02d9e_ChatGPTImageMay12026at12_29_37PM.png';
 
-const TIER_LABEL = { asas: 'Asas', standard: 'Standard', keluarga: 'Keluarga' };
+const TIER_LABEL = { asas: 'Pakej Asas', standard: 'Pakej Standard', keluarga: 'Pakej Keluarga' };
 const PACKAGE_LABEL = { starter: 'Pek Permulaan', family: 'Pek Keluarga', power: 'Pek Power' };
 
 function formatRM(amount) {
@@ -50,7 +50,7 @@ function buildNotification(payload) {
       const tierName = TIER_LABEL[tier] || tier || 'Langganan';
       return {
         title: `Order Baru! 🎉`,
-        body: `${customerDisplay} beli Pakej ${tierName} - ${formatRM(amount)}`,
+        body: `${customerDisplay} beli ${tierName} - ${formatRM(amount)}`,
         tag: `order-sub-${purchaseId || Date.now()}`,
         requireInteraction: true,
         url: '/admin-dashboard?tab=analytics',
@@ -70,7 +70,7 @@ function buildNotification(payload) {
       const tierName = TIER_LABEL[tier] || tier || 'Langganan';
       return {
         title: `Order Baru! 🎉`,
-        body: `${customerDisplay} beli Pakej ${tierName} - ${formatRM(amount)}`,
+        body: `${customerDisplay} beli ${tierName} - ${formatRM(amount)}`,
         tag: `order-recovery-${purchaseId || Date.now()}`,
         requireInteraction: true,
         url: '/admin-dashboard?tab=analytics',
