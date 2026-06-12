@@ -114,6 +114,17 @@ function getGameStyle(game, idx) {
 function GameIcon({ game, locked, idx }) {
   const style = getGameStyle(game, idx);
   const emoji = game.emoji || style.emoji;
+  const hasArt = game.iconUrl && String(game.iconUrl).startsWith('http');
+
+  // Kalau gambar AI dah dijana — papar gambar tu dalam card
+  if (hasArt) {
+    return (
+      <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden ring-1 ring-black/5 shadow-sm ${locked ? 'opacity-40 grayscale' : ''}`}>
+        <img src={game.iconUrl} alt={game.title} loading="lazy" className="w-full h-full object-cover" />
+      </div>
+    );
+  }
+
   return (
     <div className={`w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center ${locked ? 'opacity-40 grayscale' : ''}`}>
       <span className="text-4xl sm:text-5xl leading-none">{emoji}</span>
