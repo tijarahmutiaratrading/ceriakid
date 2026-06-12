@@ -13,7 +13,6 @@ import SettingsHero from '@/components/dashboard/SettingsHero';
 import ParentAvatarPicker from '@/components/dashboard/ParentAvatarPicker';
 import ManageDevices from '@/components/ManageDevices';
 import OfflineModeCard from '@/components/offline/OfflineModeCard';
-import ThemeSwitcherPanel from '@/components/admin/ThemeSwitcherPanel';
 
 const TIER_CONFIG = {
   free:      { label: 'Percuma',  emoji: '🆓', color: 'from-gray-400 to-gray-500' },
@@ -153,16 +152,6 @@ export default function ClientDashboard() {
           className="mb-5"
         >
           <ManageDevices userEmail={user?.email} tier={userTier} />
-        </motion.div>
-
-        {/* Tema Warna App */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.21 }}
-          className="mb-5"
-        >
-          <ThemeSwitcherPanel />
         </motion.div>
 
         {/* Offline Mode — hanya untuk Standard, Keluarga (+ legacy premium/pro) */}

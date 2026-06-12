@@ -6,11 +6,12 @@ import { motion } from 'framer-motion';
 export default function GameLoadingScreen({ message = 'Menyediakan permainan...' }) {
   return (
     <div
-      className="brand-gradient-br fixed inset-0 z-[9999] w-screen h-screen flex items-center justify-center overflow-hidden p-4"
+      className="bg-slate-950 fixed inset-0 z-[9999] w-screen h-screen flex items-center justify-center overflow-hidden p-4"
     >
-      {/* Glow orbs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-25 blur-3xl bg-white/30" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl bg-white/20" />
+      {/* Glow orbs — cinematic PS5 */}
+      <div className="absolute -top-24 left-1/4 w-96 h-96 rounded-full opacity-30 blur-3xl bg-violet-600/40" />
+      <div className="absolute -bottom-24 right-1/4 w-96 h-96 rounded-full opacity-25 blur-3xl bg-fuchsia-500/30" />
+      <div className="absolute top-1/3 -left-20 w-80 h-80 rounded-full opacity-20 blur-3xl bg-cyan-500/30" />
 
       {/* Floating sparkles */}
       {['✨', '⭐', '💫', '🌟', '✨', '⭐'].map((s, i) => (
@@ -63,13 +64,13 @@ export default function GameLoadingScreen({ message = 'Menyediakan permainan...'
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="relative px-5 py-3 rounded-2xl bg-white/95 shadow-2xl"
+          className="relative px-5 py-3 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/15 shadow-2xl"
         >
-          <p className="font-black text-base sm:text-lg text-slate-800 text-center">
+          <p className="font-black text-base sm:text-lg text-white text-center">
             👋 Hai! Sekejap ya...
           </p>
           {/* Tail */}
-          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/95 rotate-45" />
+          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/10 border-l border-t border-white/15 rotate-45" />
         </motion.div>
 
         {/* Loading message + dots */}
