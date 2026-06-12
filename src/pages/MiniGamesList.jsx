@@ -1,19 +1,23 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Play, ArrowLeft, Lock, Loader2 } from 'lucide-react';
-import AppHeader from '@/components/AppHeader';
+import { ArrowLeft, Gamepad2, Loader2 } from 'lucide-react';
 import { findMiniCategory, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { getCategoryIllustration } from '@/lib/miniCategoryIllustrations';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
+import CinematicShowcase from '@/components/hub/CinematicShowcase';
+import CinematicRail from '@/components/hub/CinematicRail';
+import { getGameArt } from '@/lib/gameArtPool';
 
 export default function MiniGamesList() {
   const { type } = useParams();
+  const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const [userTier, setUserTier] = React.useState('free');
   const [loadingGames, setLoadingGames] = React.useState(true);
+  const [selectedIdx, setSelectedIdx] = React.useState(0);
   const category = findMiniCategory(type);
   const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 10;
 
@@ -26,104 +30,82 @@ export default function MiniGamesList() {
 
   React.useEffect(() => {
     setLoadingGames(false);
+    setSelectedIdx(0);
   }, [category.id]);
 
   const gamesToShow = category.games;
   const illustration = getCategoryIllustration(category.id);
 
+  // Bina item untuk showcase + rail
+  const items = gamesToShow.map((game, idx) => {
+    const globalIdx = categoryOffset + idx;
+    const locked = isGameIndexLocked({ index: globalIdx, tier: userTier, isAuthenticated });
+    const gameArt = getGameArt(idx);
+    return {
+      key: game.id,
+      title: game.title,
+      desc: game.objective || 'Cabaran menarik menanti!',
+      emoji: game.emoji || category.emoji,
+      art: gameArt.art,
+      accent: gameArt.accent,
+      badge: locked ? '🔒 Premium' : category.title,
+      metaChips: [`🎯 Pusingan ${idx + 1}`, '⭐ 3 tahap kesukaran'],
+      locked,
+      gameId: game.id,
+    };
+  });
+
+  const safeIdx = Math.min(selectedIdx, items.length - 1);
+  const item = items[safeIdx];
+
+  const handlePlay = () => {
+    if (!item) return;
+    if (item.locked) navigate('/settings');
+    else navigate(`/mini-games/${category.id}/play/${item.gameId}`);
+  };
+
   return (
-    <div className="min-h-screen w-full font-nunito">
-      <AppHeader showBack={true} backTo="/games-hub" />
+    <div className="min-h-screen w-full font-nunito bg-slate-950">
+      {/* Latar sinematik blur */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0" style={{ background: `radial-gradient(circle at 30% 20%, ${item?.accent || '#7c3aed'}33, transparent 55%), #0a0a12` }} />
+      </div>
 
       <div className="relative max-w-7xl mx-auto page-px pb-24 pt-4">
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+        <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-6">
           <Link
             to="/games-hub"
-            className="inline-flex items-center gap-2 mb-4 px-3.5 py-2 rounded-full bg-white text-slate-700 font-bold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/10 text-white font-bold text-xs sm:text-sm hover:bg-white/20 transition-all"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Kembali ke kategori
           </Link>
-
-          <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-md flex items-center gap-3 sm:gap-4 border border-slate-100">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-game-purple to-game-pink flex items-center justify-center overflow-hidden flex-shrink-0">
-              {illustration ? (
-                <img src={illustration} alt={category.title} className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-4xl">{category.emoji}</span>
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 leading-tight">{category.title}</h1>
-              <p className="text-slate-500 text-xs sm:text-sm font-bold mt-0.5">
-                {loadingGames ? 'Syncing...' : `${gamesToShow.length} pusingan`} · 3 tahap kesukaran
-              </p>
-              <p className="text-slate-600 text-xs sm:text-sm font-medium mt-1 line-clamp-2">
-                {category.objective}
-              </p>
-            </div>
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-2 text-xs font-black text-white">
+            <Gamepad2 className="w-4 h-4" /> MINI GAMES
           </div>
         </motion.div>
 
-        {/* Games grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          {loadingGames && (
-            <div className="col-span-full flex justify-center py-8">
-              <Loader2 className="w-6 h-6 animate-spin text-game-purple" />
+        {loadingGames || !item ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="w-7 h-7 animate-spin text-white/60" />
+          </div>
+        ) : (
+          <>
+            <CinematicShowcase
+              item={item}
+              playLabel={item.locked ? '🔒 Buka dengan Langganan' : 'Main Sekarang'}
+              onPlay={handlePlay}
+            />
+            <div className="mt-8 sm:mt-12">
+              <div className="flex items-center gap-2 mb-1">
+                {illustration && <img src={illustration} alt="" className="w-6 h-6 rounded-md object-cover" />}
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
+                  {category.title} · {safeIdx + 1}/{items.length}
+                </p>
+              </div>
+              <CinematicRail items={items} selected={safeIdx} onSelect={setSelectedIdx} onActivate={handlePlay} />
             </div>
-          )}
-
-          {!loadingGames && gamesToShow.map((game, idx) => {
-            const globalIdx = categoryOffset + idx;
-            const locked = isGameIndexLocked({ index: globalIdx, tier: userTier, isAuthenticated });
-            const CardWrapper = locked ? 'div' : Link;
-            const wrapperProps = locked ? {} : { to: `/mini-games/${category.id}/play/${game.id}` };
-
-            return (
-              <motion.div
-                key={game.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.04 }}
-                whileHover={!locked ? { y: -3 } : {}}
-                whileTap={!locked ? { scale: 0.98 } : {}}
-              >
-                <CardWrapper {...wrapperProps} className={`block ${locked ? 'cursor-not-allowed' : ''}`}>
-                  <div className={`bg-white rounded-2xl shadow-md hover:shadow-lg transition-all overflow-hidden border border-slate-100 ${locked ? 'opacity-70' : ''}`}>
-                    <div className="flex items-center gap-3 p-3 sm:p-4">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-game-purple/15 to-game-pink/15 flex items-center justify-center flex-shrink-0 relative">
-                        <span className="text-2xl">{game.emoji || category.emoji}</span>
-                        <div className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full bg-amber-400 flex items-center justify-center shadow-sm">
-                          <span className="text-amber-900 font-black text-[10px]">{idx + 1}</span>
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-slate-900 font-black text-sm sm:text-base leading-tight line-clamp-1">{game.title}</p>
-                        <p className="text-slate-500 text-xs font-medium mt-0.5 line-clamp-1">
-                          {game.objective || 'Cabaran menarik menanti!'}
-                        </p>
-                      </div>
-                      <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${locked ? 'bg-slate-200' : 'bg-game-purple text-white'}`}>
-                        {locked ? (
-                          <Lock className="w-4 h-4 text-slate-500" />
-                        ) : (
-                          <Play className="w-4 h-4 fill-white ml-0.5" />
-                        )}
-                      </div>
-                    </div>
-                    {locked && (
-                      <div className="px-3 pb-3">
-                        <p className="text-center text-[10px] font-black text-white bg-game-purple rounded-full px-2 py-1">
-                          🔒 Naik taraf untuk akses
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </CardWrapper>
-              </motion.div>
-            );
-          })}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
