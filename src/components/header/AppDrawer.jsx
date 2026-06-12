@@ -171,7 +171,7 @@ export default function AppDrawer({
         </div>
 
         {/* Scrollable menu */}
-        <nav className="relative z-10 flex-1 overflow-y-auto py-2 px-1 space-y-0.5 scrollbar-hide">
+        <nav className="relative z-10 flex-1 overflow-y-auto py-2 px-1 space-y-1.5 scrollbar-hide">
           {/* Pinned */}
           {isAuthenticated && pinnedItems.length > 0 && (
             <>
@@ -403,7 +403,7 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
       </button>
 
       {expanded && (
-        <div className="ml-4 pl-2 my-1 border-l border-white/15 space-y-0.5">
+        <div className="ml-4 pl-2 mt-2 mb-2 border-l border-white/15 space-y-1">
           {section.items.map((item) => (
             <MenuItem
               key={item.path}
