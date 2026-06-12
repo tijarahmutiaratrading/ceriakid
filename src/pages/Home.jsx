@@ -8,7 +8,6 @@ import { t } from '@/lib/i18n';
 
 import AppHeader from '@/components/AppHeader';
 import HomeSubjectShowcase from '@/components/home/HomeSubjectShowcase';
-import DailyChallenge from '@/components/home/DailyChallenge';
 import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import HomeHubShowcase from '@/components/home/HomeHubShowcase';
 import CinematicTips from '@/components/hub/CinematicTips';
@@ -130,17 +129,6 @@ export default function Home() {
       {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl || user?.avatarUrl} onLogout={logout} />}
 
       {isAuthenticated && user?.email && <SubscriptionExpiryBanner userEmail={user.email} />}
-
-        {/* Daily Challenge — lebih prominent, terus selepas hero */}
-        {isAuthenticated && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-          >
-            <DailyChallenge ageGroup={safeAgeGroup} />
-          </motion.div>
-        )}
 
       {isAuthenticated && <InstallAppGuide />}
 
