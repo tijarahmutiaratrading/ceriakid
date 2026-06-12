@@ -78,22 +78,17 @@ export default function MiniGamePlayground() {
     <div
       className="min-h-screen w-full overflow-x-hidden relative font-nunito"
       style={{
-        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)',
+        background: '#fafafa',
       }}
     >
-      {/* Floating sparkle decorations */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-32 left-6 text-2xl text-white/30 animate-float">✨</div>
-        <div className="absolute top-44 right-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '1.2s' }}>⭐</div>
-        <div className="absolute top-1/2 left-4 text-2xl text-pink-300/40 animate-float" style={{ animationDelay: '2.4s' }}>💫</div>
-        <div className="absolute bottom-40 right-6 text-2xl text-cyan-300/35 animate-float" style={{ animationDelay: '3.1s' }}>✨</div>
-        <div className="absolute bottom-24 left-10 text-xl text-yellow-300/40 animate-float" style={{ animationDelay: '4s' }}>⭐</div>
-        <div className="absolute top-1/3 right-1/4 text-lg text-white/25 animate-float" style={{ animationDelay: '1.7s' }}>✨</div>
-      </div>
-
-      {/* Glow orbs */}
-      <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full opacity-30 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }} />
-      <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full opacity-25 pointer-events-none blur-3xl" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }} />
+      {/* Subtle grid pattern background — sama macam Games Subjek */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
 
       {/* Mini Game mascot — Panda, Kucing, Arnab */}
       <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
@@ -110,13 +105,7 @@ export default function MiniGamePlayground() {
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <Link
             to={`/mini-games/${category.id}`}
-            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-white transition-all hover:scale-[1.02]"
-            style={{
-              background: 'rgba(255,255,255,0.15)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.25)',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-            }}
+            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-slate-700 bg-white ring-1 ring-slate-200 shadow-sm transition-all hover:scale-[1.02] hover:text-slate-900"
           >
             <ArrowLeft className="w-4 h-4" /> {category.title}
           </Link>
@@ -127,39 +116,28 @@ export default function MiniGamePlayground() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-5 rounded-3xl p-4"
-            style={{
-              background: 'rgba(255,255,255,0.12)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-            }}
+            className="mb-5 rounded-3xl p-4 bg-white ring-1 ring-slate-200 shadow-sm"
           >
             <div className="flex items-center gap-3">
-              {/* Icon tile — vibrant glass */}
+              {/* Icon tile — soft brand gradient */}
               <div
-                className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(236,72,153,0.35) 0%, rgba(168,85,247,0.35) 100%)',
-                  border: '1px solid rgba(255,255,255,0.3)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)',
-                }}
+                className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl brand-gradient-br ring-1 ring-white/60 shadow"
               >
                 {game.emoji || category.emoji}
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-yellow-200 mb-0.5 flex items-center gap-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-game-purple mb-0.5 flex items-center gap-1">
                   <Sparkles className="w-3 h-3" />
                   {category.title}
                 </p>
-                <h1 className="text-base sm:text-lg font-black text-white leading-tight tracking-tight line-clamp-1">
+                <h1 className="text-base sm:text-lg font-black text-slate-900 leading-tight tracking-tight line-clamp-1">
                   {game.title}
                 </h1>
               </div>
             </div>
 
-            <p className="text-xs font-medium text-white/75 leading-relaxed mt-3 pl-1">
+            <p className="text-xs font-medium text-slate-500 leading-relaxed mt-3 pl-1">
               {guideByMode[game.mode] || 'Mini Game'}
             </p>
           </motion.div>
@@ -167,7 +145,7 @@ export default function MiniGamePlayground() {
 
         {loadingGame || !tierLoaded ? (
           <div className="flex justify-center py-10">
-            <Loader2 className="w-7 h-7 animate-spin text-white/80" />
+            <Loader2 className="w-7 h-7 animate-spin text-game-purple" />
           </div>
         ) : locked ? (
           <motion.div
