@@ -11,3 +11,14 @@ export const ARCADE_ART = {
   whack: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/bb50c7fbc_generated_image.png',
   balloon: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/111ab8a20_generated_image.png',
 };
+
+// Watak 3D Pixar penuh (sprite transparent untuk player characters)
+export const ARCADE_SPRITES = {
+  fox: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/48327e623_generated_image.png',
+  bird: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/942705ef6_generated_image.png',
+  rabbit: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/9ef8117bc_generated_image.png',
+  rocket: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/bf79b1e9f_generated_image.png',
+  car: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/df2c76f8e_generated_image.png',
+  mole: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/356fcfbe3_generated_image.png',
+  basket: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1bf328cea_generated_image.png',
+};

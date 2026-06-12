@@ -2,10 +2,11 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops, loadImage, drawCover } from '@/components/arcade/engine';
-import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+import { sfx, Particles, Shaker, Pops, loadImage, drawCover, drawSprite } from '@/components/arcade/engine';
+import { ARCADE_ART, ARCADE_SPRITES } from '@/components/arcade/arcadeArt';
 
 const bgImg = loadImage(ARCADE_ART.space);
+const rocketImg = loadImage(ARCADE_SPRITES.rocket);
 
 const W = 400, H = 600;
 
@@ -164,8 +165,12 @@ export default function SpaceGame() {
         c.translate(s.shipX, s.shipY);
         c.rotate((s.targetX - s.shipX) * 0.008);
         if (s.shield) { c.shadowColor = '#60a5fa'; c.shadowBlur = 20; }
-        c.font = '40px serif';
-        c.fillText('🚀', 0, 14);
+        c.rotate(-Math.PI / 2); // sprite menghadap kanan → pusing ke atas
+        if (!drawSprite(c, rocketImg, 0, 0, 66)) {
+          c.rotate(Math.PI / 2);
+          c.font = '40px serif';
+          c.fillText('🚀', 0, 14);
+        }
         c.restore();
         if (s.shield) {
           c.strokeStyle = 'rgba(96,165,250,0.7)'; c.lineWidth = 3;
@@ -196,7 +201,7 @@ export default function SpaceGame() {
         <canvas ref={canvasRef} width={W} height={H} className="h-full w-auto max-w-full touch-none" />
         {!started && !gameOver && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm pointer-events-none">
-            <div className="text-6xl mb-3 animate-bounce">🚀</div>
+            <img src={ARCADE_SPRITES.rocket} alt="" className="w-28 h-28 object-contain mb-3 animate-bounce drop-shadow-2xl -rotate-90" />
             <p className="text-white font-black text-2xl mb-2">Angkasa Ceria</p>
             <div className="text-white/80 font-bold text-xs text-center px-6 space-y-1">
               <p>👆 Gerakkan jari = kemudi roket</p>

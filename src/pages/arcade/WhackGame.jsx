@@ -4,7 +4,7 @@ import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
 import { sfx } from '@/components/arcade/engine';
-import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+import { ARCADE_ART, ARCADE_SPRITES } from '@/components/arcade/arcadeArt';
 
 const GAME_TIME = 45;
 
@@ -152,9 +152,13 @@ export default function WhackGame() {
                     transition={{ type: 'spring', stiffness: 500, damping: 26 }}
                     className="absolute inset-0 flex items-center justify-center pointer-events-none"
                   >
-                    <span className={`text-5xl drop-shadow-lg ${mole.kind === 'token' ? 'animate-pulse' : ''}`}>
-                      {mole.kind === 'token' ? mole.token.emoji : mole.emoji}
-                    </span>
+                    {mole.kind === 'good' ? (
+                      <img src={ARCADE_SPRITES.mole} alt="" className="w-16 h-16 object-contain drop-shadow-lg" draggable={false} />
+                    ) : (
+                      <span className={`text-5xl drop-shadow-lg ${mole.kind === 'token' ? 'animate-pulse' : ''}`}>
+                        {mole.kind === 'token' ? mole.token.emoji : mole.emoji}
+                      </span>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>

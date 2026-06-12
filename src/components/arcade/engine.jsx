@@ -144,6 +144,16 @@ export const drawCover = (c, img, w, h, offX = 0) => {
   return true;
 };
 
+// Lukis sprite watak centered di (x, y) dengan saiz max `size` (kekal aspect ratio)
+export const drawSprite = (c, img, x, y, size) => {
+  if (!img?.complete || !img.naturalWidth) return false;
+  const ratio = img.naturalWidth / img.naturalHeight;
+  let w = size, h = size;
+  if (ratio > 1) h = size / ratio; else w = size * ratio;
+  c.drawImage(img, x - w / 2, y - h / 2, w, h);
+  return true;
+};
+
 // Lerp warna langit ikut progress (day → sunset → night → day)
 export const skyCycle = (t) => {
   const phases = [

@@ -2,10 +2,11 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover } from '@/components/arcade/engine';
-import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover, drawSprite } from '@/components/arcade/engine';
+import { ARCADE_ART, ARCADE_SPRITES } from '@/components/arcade/arcadeArt';
 
 const bgImg = loadImage(ARCADE_ART.runner);
+const foxImg = loadImage(ARCADE_SPRITES.fox);
 
 const W = 400, H = 600;
 const GROUND_Y = 470;
@@ -270,11 +271,16 @@ export default function RunnerGame() {
       c.save();
       c.translate(PLAYER_X, s.playerY + 28 + bounce);
       if (s.flip > 0) c.rotate(-s.flip * 1.2);
-      c.scale(-1 * (2 - s.squash), s.squash);
       // Boost trail
       if (s.boost > 0) { c.shadowColor = '#fbbf24'; c.shadowBlur = 25; }
-      c.font = '46px serif';
-      c.fillText('🦊', 0, 0);
+      if (foxImg.complete && foxImg.naturalWidth) {
+        c.scale(2 - s.squash, s.squash);
+        drawSprite(c, foxImg, 0, -20, 68);
+      } else {
+        c.scale(-1 * (2 - s.squash), s.squash);
+        c.font = '46px serif';
+        c.fillText('🦊', 0, 0);
+      }
       c.restore();
       // Shield bubble
       if (s.shield) {
@@ -327,7 +333,7 @@ export default function RunnerGame() {
         <canvas ref={canvasRef} width={W} height={H} className="h-full w-auto max-w-full" />
         {!started && !gameOver && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm pointer-events-none">
-            <div className="text-6xl mb-3 animate-bounce">🦊</div>
+            <img src={ARCADE_SPRITES.fox} alt="" className="w-28 h-28 object-contain mb-3 animate-bounce drop-shadow-2xl" />
             <p className="text-white font-black text-2xl mb-2">Lari Si Comel</p>
             <div className="text-white/80 font-bold text-xs text-center px-6 space-y-1">
               <p>👆 Tap = lompat · Tap 2x = lompat berganda</p>

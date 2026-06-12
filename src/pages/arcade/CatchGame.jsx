@@ -2,10 +2,11 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops, loadImage, drawCover } from '@/components/arcade/engine';
-import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+import { sfx, Particles, Shaker, Pops, loadImage, drawCover, drawSprite } from '@/components/arcade/engine';
+import { ARCADE_ART, ARCADE_SPRITES } from '@/components/arcade/arcadeArt';
 
 const bgImg = loadImage(ARCADE_ART.catch);
+const basketImg = loadImage(ARCADE_SPRITES.basket);
 
 const W = 400, H = 600;
 const GOOD = ['🍎', '🍌', '📚', '🥛', '🍊', '✏️', '🍇', '⚽'];
@@ -214,8 +215,10 @@ export default function CatchGame() {
       c.translate(s.basketX, 545);
       c.rotate(s.tilt);
       if (s.star > 0) { c.shadowColor = '#fde047'; c.shadowBlur = 25; }
-      c.font = '58px serif';
-      c.fillText('🧺', 0, 0);
+      if (!drawSprite(c, basketImg, 0, -24, 92)) {
+        c.font = '58px serif';
+        c.fillText('🧺', 0, 0);
+      }
       c.restore();
       if (s.star > 0) {
         c.strokeStyle = `rgba(253,224,71,${0.4 + Math.sin(s.frame * 0.3) * 0.3})`;
@@ -260,7 +263,7 @@ export default function CatchGame() {
         <canvas ref={canvasRef} width={W} height={H} className="h-full w-auto max-w-full" />
         {!started && !gameOver && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm pointer-events-none">
-            <div className="text-6xl mb-3 animate-bounce">🧺</div>
+            <img src={ARCADE_SPRITES.basket} alt="" className="w-28 h-28 object-contain mb-3 animate-bounce drop-shadow-2xl" />
             <p className="text-white font-black text-2xl mb-2">Tangkap Ceria</p>
             <div className="text-white/80 font-bold text-xs text-center px-6 space-y-1">
               <p>👆 Gerakkan jari = gerak bakul</p>
