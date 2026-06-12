@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Gamepad2 } from 'lucide-react';
 import { getBest } from '@/components/arcade/arcadeValues';
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
-import ArcadeShowcase from '@/components/arcade/ArcadeShowcase';
-import ArcadeRail from '@/components/arcade/ArcadeRail';
+import CinematicShowcase from '@/components/hub/CinematicShowcase';
+import CinematicRail from '@/components/hub/CinematicRail';
 import CinematicTips from '@/components/hub/CinematicTips';
 
 const GAMES = [
@@ -24,9 +24,28 @@ const GAMES = [
 const VALUES = ['⭐ Jujur', '❤️ Baik Hati', '🤝 Tolong-Menolong', '📖 Rajin Belajar', '🙏 Hormat', '😊 Sabar'];
 
 export default function ArcadeZone() {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState(0);
   const game = GAMES[selected];
   const bestScores = useMemo(() => Object.fromEntries(GAMES.map((g) => [g.key, getBest(g.key)])), []);
+
+  // Map data game → format item sinematik standard
+  const items = GAMES.map((g) => ({
+    key: g.key,
+    title: g.title,
+    desc: g.desc,
+    emoji: g.emoji,
+    art: ARCADE_ART[g.key],
+    accent: g.accent,
+    badge: 'Arcade',
+    to: g.to,
+    metaChips: [
+      `🎮 ${g.how}`,
+      ...(bestScores[g.key] > 0 ? [`🏆 Rekod: ${bestScores[g.key]}`] : []),
+    ],
+  }));
+  const item = items[selected];
+  const handlePlay = () => navigate(game.to);
 
   return (
     <div className="min-h-screen bg-slate-950 pb-28 relative overflow-hidden">
@@ -71,14 +90,14 @@ export default function ArcadeZone() {
         </div>
 
         {/* Hero showcase */}
-        <ArcadeShowcase game={game} best={bestScores[game.key]} />
+        <CinematicShowcase item={item} playLabel="Main Sekarang" onPlay={handlePlay} />
 
         {/* Rail thumbnail */}
         <div className="mt-8 sm:mt-12">
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-1">
             Pilih Permainan · {selected + 1}/{GAMES.length}
           </p>
-          <ArcadeRail games={GAMES} selected={selected} onSelect={setSelected} bestScores={bestScores} />
+          <CinematicRail items={items} selected={selected} onSelect={setSelected} onActivate={handlePlay} />
         </div>
 
         {/* Nilai murni */}
