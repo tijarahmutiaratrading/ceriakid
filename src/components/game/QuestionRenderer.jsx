@@ -37,9 +37,9 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
           const isSelected = showFeedback && selectedIdx === i;
           const isCorrectAnswer = showFeedback && i === question.answer;
 
-          let bg = isDark ? 'rgba(255,255,255,0.08)' : '#ffffff';
-          let border = isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(148,163,184,0.25)';
-          let shadow = isDark ? '0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' : '0 4px 12px rgba(148,163,184,0.18)';
+          let bg = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.55)';
+          let border = isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(255,255,255,0.7)';
+          let shadow = isDark ? '0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' : '0 4px 16px rgba(148,163,184,0.25), inset 0 1px 0 rgba(255,255,255,0.8)';
           let textColor = isDark ? '#ffffff' : '#0f172a';
           let badgeBg = badgeGradients[i % badgeGradients.length];
           let badgeText = '#ffffff';

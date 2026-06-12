@@ -581,9 +581,11 @@ export default function GamePlayer() {
              border: '1px solid rgba(255,255,255,0.15)',
              boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)',
            } : {
-             background: '#ffffff',
-             border: '1px solid rgba(148,163,184,0.25)',
-             boxShadow: '0 8px 24px rgba(148,163,184,0.18)',
+             background: 'rgba(255,255,255,0.55)',
+             backdropFilter: 'blur(20px) saturate(160%)',
+             WebkitBackdropFilter: 'blur(20px) saturate(160%)',
+             border: '1px solid rgba(255,255,255,0.7)',
+             boxShadow: '0 8px 32px rgba(148,163,184,0.25), inset 0 1px 0 rgba(255,255,255,0.8)',
            }}
          >
          <div className="rounded-2xl p-6 md:p-8 text-center relative overflow-hidden">
