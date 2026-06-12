@@ -6,7 +6,7 @@ import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover, initHiDPI
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import { drawFox } from '@/components/arcade/characters';
 import CharacterCanvas from '@/components/arcade/CharacterCanvas';
-import { drawCoin, drawTokenBadge, drawPowerBadge, drawRock, drawCactus, drawLog, drawSpikeBall, drawTreeProp, drawCloudProp, drawSun, drawMoon, drawVignette } from '@/components/arcade/props';
+import { drawCoin, drawTokenBadge, drawPowerBadge, drawRock, drawCactus, drawLog, drawSpikeBall, drawTreeProp, drawCloudProp, drawSun, drawMoon, drawVignette, drawGround } from '@/components/arcade/props';
 
 const OB_DRAW = { rock: drawRock, cactus: drawCactus, log: drawLog, spike: drawSpikeBall };
 
@@ -134,17 +134,8 @@ export default function RunnerGame() {
         c.restore();
       });
 
-      // ── GROUND tiles ──
-      c.fillStyle = isNight ? '#1e293b' : '#92622a';
-      c.fillRect(-20, GROUND_Y + 38, W + 40, H - GROUND_Y);
-      c.fillStyle = isNight ? '#334155' : '#65a30d';
-      c.fillRect(-20, GROUND_Y + 38, W + 40, 12);
-      // grass tufts bergerak
-      c.fillStyle = isNight ? '#475569' : '#84cc16';
-      const tileOff = (s.distance * 10) % 40;
-      for (let x = -tileOff; x < W; x += 40) {
-        c.fillRect(x, GROUND_Y + 38, 20, 5);
-      }
+      // ── GROUND gaya Wheely — rumput beralun + tanah berlapis ──
+      drawGround(c, W, GROUND_Y + 36, H - GROUND_Y, s.distance * 10, isNight);
 
       if (moving) {
         s.frame++;

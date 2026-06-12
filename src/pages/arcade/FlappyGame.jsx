@@ -6,7 +6,7 @@ import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover, initHiDPI
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import { drawBird } from '@/components/arcade/characters';
 import CharacterCanvas from '@/components/arcade/CharacterCanvas';
-import { drawCoin, drawTokenBadge, drawPowerBadge, drawCloudProp, drawSun, drawMoon, drawVignette } from '@/components/arcade/props';
+import { drawCoin, drawTokenBadge, drawPowerBadge, drawCloudProp, drawSun, drawMoon, drawVignette, drawGround, drawPillar, drawPillarCap } from '@/components/arcade/props';
 
 const bgImg = loadImage(ARCADE_ART.flappy);
 
@@ -111,6 +111,8 @@ export default function FlappyGame() {
         if (moving) { b.x -= speed * 0.35; if (b.x < -90) { b.x += 500; b.h = 40 + Math.random() * 60; } }
         c.fillRect(b.x, H - 30 - b.h, 75, b.h + 30);
       });
+      // Tanah rumput Wheely di bawah
+      drawGround(c, W, H - 24, 24, s.frame * 2.8, isNight);
       // Clouds
       s.clouds.forEach((cl) => {
         if (moving) { cl.x -= speed * 0.5; if (cl.x < -50) { cl.x = W + 40; cl.y = 50 + Math.random() * 150; } }
@@ -212,22 +214,12 @@ export default function FlappyGame() {
         s.frame++;
       }
 
-      // ── PIPES render (pokok hijau dengan shading) ──
+      // ── PIPES render (tiang kartun 3D dengan outline tebal) ──
       s.pipes.forEach((p) => {
-        const pipeGrad = c.createLinearGradient(p.x, 0, p.x + PIPE_W, 0);
-        pipeGrad.addColorStop(0, '#15803d');
-        pipeGrad.addColorStop(0.5, '#22c55e');
-        pipeGrad.addColorStop(1, '#15803d');
-        c.fillStyle = pipeGrad;
-        c.fillRect(p.x, 0, PIPE_W, p.topH);
-        c.fillRect(p.x, p.topH + GAP, PIPE_W, H - p.topH - GAP);
-        c.fillStyle = '#166534';
-        c.beginPath(); c.roundRect(p.x - 6, p.topH - 24, PIPE_W + 12, 24, 6); c.fill();
-        c.beginPath(); c.roundRect(p.x - 6, p.topH + GAP, PIPE_W + 12, 24, 6); c.fill();
-        // daun hiasan
-        c.font = '18px serif';
-        c.fillText('🍃', p.x + 8, p.topH - 28);
-        c.fillText('🍃', p.x + PIPE_W - 8, p.topH + GAP + 40);
+        drawPillar(c, p.x, PIPE_W, -10, p.topH - 18);
+        drawPillarCap(c, p.x, PIPE_W, p.topH - 26);
+        drawPillar(c, p.x, PIPE_W, p.topH + GAP + 18, H + 10);
+        drawPillarCap(c, p.x, PIPE_W, p.topH + GAP);
       });
 
       // ── PICKUPS render ──

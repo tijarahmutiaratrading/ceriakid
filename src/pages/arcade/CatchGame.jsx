@@ -6,7 +6,7 @@ import { sfx, Particles, Shaker, Pops, loadImage, drawCover, initHiDPI } from '@
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import { drawBasket } from '@/components/arcade/characters';
 import CharacterCanvas from '@/components/arcade/CharacterCanvas';
-import { drawFruit, drawTokenBadge, drawPowerBadge, drawBomb, drawTrash, drawSun, drawVignette } from '@/components/arcade/props';
+import { drawFruit, drawTokenBadge, drawPowerBadge, drawBomb, drawTrash, drawSun, drawVignette, drawGround } from '@/components/arcade/props';
 
 const bgImg = loadImage(ARCADE_ART.catch);
 
@@ -215,6 +215,9 @@ export default function CatchGame() {
         }
         c.restore();
       });
+
+      // Tanah rumput Wheely bawah
+      drawGround(c, W, H - 26, 26, 0, false);
 
       // ── BASKET ──
       c.save();

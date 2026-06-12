@@ -6,7 +6,7 @@ import { sfx, Particles, Shaker, Pops, loadImage, drawCover, initHiDPI } from '@
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import { drawCar } from '@/components/arcade/characters';
 import CharacterCanvas from '@/components/arcade/CharacterCanvas';
-import { drawEnemyCar, drawCoin, drawTokenBadge, drawPowerBadge, drawTreeProp, drawVignette } from '@/components/arcade/props';
+import { drawEnemyCar, drawCoin, drawTokenBadge, drawPowerBadge, drawTreeProp, drawVignette, drawRoad } from '@/components/arcade/props';
 
 const bgImg = loadImage(ARCADE_ART.racer);
 
@@ -70,13 +70,8 @@ export default function RacerGame() {
         c.fillStyle = '#4d7c0f';
         c.fillRect(-20, -20, W + 40, H + 40);
       }
-      // Jalan
-      c.fillStyle = '#374151';
-      c.fillRect(50, -20, 300, H + 40);
-      // Garisan tepi
-      c.fillStyle = '#fbbf24';
-      c.fillRect(52, -20, 6, H + 40);
-      c.fillRect(342, -20, 6, H + 40);
+      // Jalan litar lumba — asphalt bertekstur + kerb merah-putih
+      drawRoad(c, 50, 300, H, s.roadOff);
 
       const moving = started && !s.dead;
       const spd = (6 + s.distance / 300) * s.deathSlow * (s.boost > 0 ? 1.5 : 1);

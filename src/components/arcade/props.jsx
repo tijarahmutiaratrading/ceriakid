@@ -500,6 +500,122 @@ export const drawEnemyCar = (c, color = '#3b82f6') => {
   gloss(c, -4, -2, 3, 7, 0.06, 0.4);
 };
 
+// ── TANAH gaya Wheely — rumput beralun + tanah berlapis + batu tertanam ──
+export const drawGround = (c, w, top, h, scroll = 0, night = false) => {
+  const grassH = 20;
+  // Tanah (dirt) berlapis
+  const dg = c.createLinearGradient(0, top, 0, top + Math.max(h, 60));
+  if (night) { dg.addColorStop(0, '#475569'); dg.addColorStop(0.5, '#334155'); dg.addColorStop(1, '#1e293b'); }
+  else { dg.addColorStop(0, '#a16207'); dg.addColorStop(0.4, '#7c4a12'); dg.addColorStop(1, '#451a03'); }
+  c.fillStyle = dg;
+  c.fillRect(-30, top, w + 60, h + 30);
+  // Batu & kerikil tertanam (bergerak ikut scroll)
+  const so = scroll % 96;
+  for (let x = -so - 96; x < w + 96; x += 96) {
+    c.fillStyle = night ? 'rgba(148,163,184,0.35)' : 'rgba(120,53,15,0.85)';
+    E(c, x + 22, top + 36, 8, 5.5); c.fill();
+    E(c, x + 70, top + 54, 5.5, 4); c.fill();
+    c.fillStyle = night ? 'rgba(226,232,240,0.18)' : 'rgba(254,243,199,0.3)';
+    E(c, x + 20, top + 34, 3.5, 2); c.fill();
+    E(c, x + 48, top + 46, 3, 2.2); c.fill();
+  }
+  // Rumput beralun gaya Wheely (scalloped bumps)
+  const bw = 26;
+  const bo = scroll % bw;
+  const gg = c.createLinearGradient(0, top - 8, 0, top + grassH);
+  if (night) { gg.addColorStop(0, '#64748b'); gg.addColorStop(1, '#334155'); }
+  else { gg.addColorStop(0, '#a3e635'); gg.addColorStop(0.5, '#65a30d'); gg.addColorStop(1, '#3f6212'); }
+  c.fillStyle = gg;
+  c.beginPath();
+  c.moveTo(-30, top + grassH);
+  c.lineTo(-30, top + 4);
+  for (let x = -bo - bw; x < w + bw; x += bw) {
+    c.quadraticCurveTo(x + bw / 2, top - 8, x + bw, top + 4);
+  }
+  c.lineTo(w + 30, top + grassH);
+  c.closePath();
+  c.fill();
+  // Outline kartun gelap bawah rumput
+  c.fillStyle = night ? 'rgba(15,23,42,0.55)' : 'rgba(54,83,20,0.9)';
+  c.fillRect(-30, top + grassH - 3, w + 60, 3.5);
+  // Rim highlight atas alun rumput
+  c.strokeStyle = night ? 'rgba(203,213,225,0.4)' : 'rgba(236,252,203,0.85)';
+  c.lineWidth = 2.5; c.lineCap = 'round';
+  c.beginPath();
+  for (let x = -bo - bw; x < w + bw; x += bw) {
+    c.moveTo(x + 5, top + 1);
+    c.quadraticCurveTo(x + bw / 2, top - 6, x + bw - 5, top + 1);
+  }
+  c.stroke();
+  // Helai rumput menonjol
+  c.strokeStyle = night ? '#94a3b8' : '#84cc16';
+  c.lineWidth = 2;
+  const to = scroll % 58;
+  for (let x = -to - 58; x < w + 58; x += 58) {
+    c.beginPath(); c.moveTo(x + 9, top + 1); c.quadraticCurveTo(x + 5, top - 9, x + 9, top - 13); c.stroke();
+    c.beginPath(); c.moveTo(x + 14, top + 1); c.quadraticCurveTo(x + 17, top - 7, x + 14, top - 10); c.stroke();
+  }
+};
+
+// ── TIANG/BATANG kartun (Flappy) — outline tebal + silinder 3D ──
+export const drawPillar = (c, x, w, y0, y1) => {
+  if (y1 <= y0) return;
+  const g = c.createLinearGradient(x, 0, x + w, 0);
+  g.addColorStop(0, '#14532d'); g.addColorStop(0.16, '#16a34a'); g.addColorStop(0.4, '#4ade80');
+  g.addColorStop(0.65, '#22c55e'); g.addColorStop(1, '#14532d');
+  c.fillStyle = g;
+  c.beginPath(); c.roundRect(x, y0, w, y1 - y0, 5); c.fill();
+  c.lineWidth = 3; c.strokeStyle = '#052e16'; c.stroke();
+  // Jalur highlight kiri (kilauan silinder)
+  c.fillStyle = 'rgba(236,252,203,0.5)';
+  c.beginPath(); c.roundRect(x + 8, y0 + 8, 6, Math.max(0, y1 - y0 - 16), 3); c.fill();
+  // Garis tekstur
+  c.strokeStyle = 'rgba(5,46,22,0.25)'; c.lineWidth = 1.5;
+  c.beginPath(); c.moveTo(x + w * 0.7, y0 + 6); c.lineTo(x + w * 0.7, y1 - 6); c.stroke();
+};
+export const drawPillarCap = (c, x, w, y) => {
+  const g = c.createLinearGradient(x - 8, 0, x + w + 8, 0);
+  g.addColorStop(0, '#14532d'); g.addColorStop(0.28, '#4ade80'); g.addColorStop(0.6, '#22c55e'); g.addColorStop(1, '#14532d');
+  c.fillStyle = g;
+  c.beginPath(); c.roundRect(x - 8, y, w + 16, 26, 9); c.fill();
+  c.lineWidth = 3; c.strokeStyle = '#052e16'; c.stroke();
+  c.fillStyle = 'rgba(236,252,203,0.55)';
+  c.beginPath(); c.roundRect(x - 1, y + 4, w * 0.42, 5.5, 3); c.fill();
+  // Daun kecil di tepi cap
+  [[x - 6, y + 2], [x + w + 6, y + 22]].forEach(([lx, ly]) => {
+    E(c, lx, ly, 6, 4, -0.4);
+    c.fillStyle = rg3(c, lx - 2, ly - 2, 6, '#86efac', '#22c55e', '#14532d'); c.fill();
+    c.strokeStyle = '#052e16'; c.lineWidth = 1.4; c.stroke();
+  });
+};
+
+// ── JALAN RAYA litar lumba (Racer) — asphalt + kerb merah-putih ──
+export const drawRoad = (c, x, w, H, off = 0) => {
+  const g = c.createLinearGradient(x, 0, x + w, 0);
+  g.addColorStop(0, '#1f2937'); g.addColorStop(0.5, '#4b5563'); g.addColorStop(1, '#1f2937');
+  c.fillStyle = g;
+  c.fillRect(x, -20, w, H + 40);
+  // Tekstur bintik asphalt bergerak
+  c.fillStyle = 'rgba(255,255,255,0.06)';
+  const t = off % 60;
+  for (let y = -60 + t; y < H + 40; y += 34) {
+    for (let i = 0; i < 5; i++) {
+      c.fillRect(x + 24 + ((i * 73 + Math.abs(y) * 7) % (w - 48)), y + (i * 11) % 28, 3, 3);
+    }
+  }
+  // Kerb merah-putih bergerak (gaya litar)
+  const kerbH = 28;
+  const ko = off % (kerbH * 2);
+  [x - 11, x + w + 1].forEach((kx) => {
+    for (let y = -kerbH * 2 + ko; y < H + 40; y += kerbH * 2) {
+      c.fillStyle = '#dc2626'; c.fillRect(kx, y, 10, kerbH);
+      c.fillStyle = '#f8fafc'; c.fillRect(kx, y + kerbH, 10, kerbH);
+    }
+    c.fillStyle = 'rgba(2,6,23,0.4)';
+    c.fillRect(kx < x ? kx + 8 : kx, -20, 2.5, H + 40);
+  });
+};
+
 // ── SPRING platform (Lompat Awan) ──
 export const drawSpring = (c, f = 0) => {
   const sq = 1 + Math.sin(f * 0.25) * 0.1;
