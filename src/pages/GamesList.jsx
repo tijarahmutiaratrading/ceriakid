@@ -10,6 +10,7 @@ import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
 import GameLoadingScreen from '@/components/game/GameLoadingScreen';
 import CinematicShowcase from '@/components/hub/CinematicShowcase';
 import CinematicRail from '@/components/hub/CinematicRail';
+import { getGameArt } from '@/lib/gameArtPool';
 import { ArrowLeft, Gamepad2 } from 'lucide-react';
 import { getSubjectArt, getSubjectAccent } from '@/lib/subjectArt';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
@@ -349,13 +350,14 @@ export default function GamesList() {
             const gameProgress = progress[gameKey];
             const locked = isGameLocked(bucketIdx);
             const stars = gameProgress?.bestStars || 0;
+            const gameArt = getGameArt(globalIdx);
             return {
               key: game.id || `game-${globalIdx}`,
               title: game.title,
               desc: game.description,
               emoji: game.emoji || '🎮',
-              art: game.iconUrl || art,
-              accent,
+              art: game.iconUrl || gameArt.art,
+              accent: gameArt.accent,
               badge: locked ? '🔒 Premium' : getCategoryLabel(category, lang),
               metaChips: [
                 `❓ ${game.totalQuestions || 8} soalan`,
