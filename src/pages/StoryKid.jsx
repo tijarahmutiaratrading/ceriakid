@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, RotateCcw, Star, BookOpen, Sparkles, Trophy, ChevronRight } from 'lucide-react';
-import AppHeader from '@/components/AppHeader';
+import CinematicHub from '@/components/hub/CinematicHub';
 import StorySlideVisual from '@/components/story/StorySlideVisual';
 import StoryAudioPlayer from '@/components/story/StoryAudioPlayer';
 import { base44 } from '@/api/base44Client';
@@ -163,137 +163,37 @@ export default function StoryKid() {
     }).catch(() => {});
   }, [sceneIndex, story, selected, stars, user, selectedChild]);
 
+  // Senarai cerita → hub sinematik gaya PS5
+  const ACCENTS = ['#ec4899', '#8b5cf6', '#22c55e', '#f59e0b', '#0ea5e9'];
+  if (!story) {
+    const storyItems = stories.map((item, idx) => ({
+      key: item.id || String(idx),
+      index: idx,
+      title: item.title,
+      desc: item.moral,
+      emoji: item.emoji,
+      art: item.cover,
+      accent: ACCENTS[idx % ACCENTS.length],
+      badge: 'Story Kid',
+      metaChips: [`📖 ${item.scenes?.length || 0} halaman`, '⭐ Kumpul bintang'],
+    }));
+    return (
+      <CinematicHub
+        label="Story Kid"
+        items={storyItems}
+        playLabel="Baca Cerita"
+        railLabel="Pilih Cerita"
+        onPlay={(item) => { setSelected(item.index); resetStory(); }}
+      />
+    );
+  }
+
   return (
-    <div
-      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900 -mt-16 sm:-mt-20 pt-16 sm:pt-20"
-    >
-      {!story && <AppHeader showBack={true} backTo="/dashboard" />}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative text-slate-900">
+
 
       <div className={`relative w-full ${story && sceneIndex < (story?.scenes?.length || 0) ? '' : 'max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-28 pt-20 sm:pt-4'} overflow-x-hidden`}>
-        {!story && (
-          <Link
-            to="/dashboard"
-            className="inline-flex items-center gap-2 mb-5 px-4 py-2 rounded-full text-slate-700 font-black text-sm transition-all"
-            style={{ background: 'rgba(255,255,255,0.9)', boxShadow: '0 3px 0 #fde68a' }}
-          >
-            <ArrowLeft className="w-4 h-4" strokeWidth={3} /> Kembali ke Dashboard
-          </Link>
-        )}
-
-        {!story ? (
-          <>
-            {/* Playful CeriaKid hero — pastel candy gradient */}
-            <motion.section
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="relative mb-8 rounded-[2rem] p-6 sm:p-7 overflow-hidden"
-              style={{
-                background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)',
-                boxShadow: '0 10px 30px rgba(251, 207, 232, 0.4), inset 0 2px 0 rgba(255,255,255,0.6)',
-              }}
-            >
-              <motion.div animate={{ y: [0, -8, 0], rotate: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }} className="absolute top-4 right-6 text-3xl opacity-70">📖</motion.div>
-              <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1 }} className="absolute top-12 right-20 text-2xl opacity-60">✨</motion.div>
-              <div className="absolute bottom-2 left-4 text-2xl opacity-40">⭐</div>
-
-              <div className="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
-                <div className="min-w-0">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-2" style={{ background: 'rgba(255,255,255,0.7)' }}>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-pink-700">📖 Interactive Storytime</span>
-                  </div>
-                  <h1 className="text-3xl sm:text-4xl font-black leading-[1.05] tracking-tight text-slate-800">Story Kid 💕</h1>
-                  <p className="text-slate-600 text-sm sm:text-base font-bold mt-2 max-w-lg">Pilih cerita, baca bersama anak dan kumpul bintang melalui pilihan yang baik ✨</p>
-                </div>
-
-                <div className="grid grid-cols-3 lg:flex lg:flex-wrap gap-2 w-full lg:w-auto">
-                  {[
-                    { top: stories.length, bottom: 'Cerita', color: '#f9a8d4' },
-                    { top: '⭐', bottom: 'Bintang', color: '#fcd34d' },
-                    { top: '🎨', bottom: 'Pixar', color: '#93c5fd' },
-                  ].map((badge, i) => (
-                    <div
-                      key={i}
-                      className="px-3.5 py-2 rounded-2xl text-center lg:min-w-[78px]"
-                      style={{ background: 'rgba(255,255,255,0.85)', boxShadow: `0 3px 0 ${badge.color}` }}
-                    >
-                      <p className="font-black text-sm leading-tight text-slate-800 truncate">{badge.top}</p>
-                      <p className="text-[10px] font-black uppercase tracking-wider mt-0.5 text-slate-500">{badge.bottom}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.section>
-
-            {stories.length === 0 ? (
-              <div
-                className="rounded-[2rem] p-10 text-center"
-                style={{
-                  background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-                  boxShadow: '0 8px 20px rgba(251, 207, 232, 0.25), 0 0 0 2px rgba(251, 207, 232, 0.3)',
-                }}
-              >
-                <motion.p animate={{ y: [0, -8, 0] }} transition={{ duration: 2.5, repeat: Infinity }} className="text-6xl mb-4">📭</motion.p>
-                <h2 className="text-slate-800 font-black text-2xl mb-2">Belum ada Story Kid</h2>
-                <p className="text-slate-500 text-sm font-bold">Cerita yang dipadam di management tidak akan muncul di sini 💔</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {stories.map((item, idx) => (
-                  <motion.button
-                    key={item.id || idx}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{
-                      opacity: 1,
-                      y: [0, -6, 0, 4, 0],
-                      rotate: [0, -0.8, 0, 0.8, 0],
-                    }}
-                    transition={{
-                      opacity: { delay: idx * 0.04, duration: 0.4 },
-                      y: { duration: 4 + (idx % 3) * 0.5, repeat: Infinity, ease: 'easeInOut', delay: idx * 0.25 },
-                      rotate: { duration: 5 + (idx % 3) * 0.4, repeat: Infinity, ease: 'easeInOut', delay: idx * 0.3 },
-                    }}
-                    whileTap={{ scale: 0.97, y: 2 }}
-                    whileHover={{ scale: 1.03, y: -8 }}
-                    onClick={() => { setSelected(idx); resetStory(); }}
-                    className="group text-left rounded-[2rem] p-3 overflow-hidden transition-all"
-                    style={{
-                      background: 'linear-gradient(135deg, #ffffff 0%, #fef9f3 100%)',
-                      boxShadow: '0 8px 20px rgba(251, 207, 232, 0.3), 0 0 0 2px rgba(251, 207, 232, 0.4)',
-                    }}
-                  >
-                    <div
-                      className="h-52 rounded-[1.5rem] overflow-hidden mb-4"
-                      style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 100%)' }}
-                    >
-                      {item.cover ? (
-                        <img src={item.cover} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      ) : (
-                        <StorySlideVisual visual={item.scenes?.[0]?.slideVisual} emoji={item.emoji} compact />
-                      )}
-                    </div>
-                    <div className="flex items-start gap-3 px-2">
-                      <div
-                        className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
-                        style={{ background: 'linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%)', boxShadow: '0 3px 0 #f472b6' }}
-                      >
-                        {item.emoji}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <h2 className="text-slate-800 font-black text-lg leading-tight">{item.title}</h2>
-                        <p className="text-slate-500 text-xs font-bold mt-1 line-clamp-2">{item.moral}</p>
-                      </div>
-                    </div>
-                    <div
-                      className="brand-gradient-br mt-4 mx-1 py-3 rounded-full text-white text-center font-black text-sm flex items-center justify-center gap-1.5 shadow-lg"
-                    >
-                      Baca Cerita <ChevronRight className="w-4 h-4" strokeWidth={3} />
-                    </div>
-                  </motion.button>
-                ))}
-              </div>
-            )}
-          </>
-        ) : sceneIndex >= story.scenes.length ? (
+        {sceneIndex >= story.scenes.length ? (
           <div
             className="fixed inset-0 z-40 flex items-center justify-center p-4"
             style={{

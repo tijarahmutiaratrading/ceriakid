@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { Trash2, Download, Undo2, Maximize2, Minimize2, ArrowLeft, Images } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import AppHeader from '@/components/AppHeader';
+import CinematicHub from '@/components/hub/CinematicHub';
+import { MODE_HUB_ITEMS } from '@/components/drawing/modeHubItems';
 import SparkleTrail from '@/components/drawing/SparkleTrail';
 import TracingCelebration from '@/components/drawing/TracingCelebration';
 import MyArtGallery from '@/components/drawing/MyArtGallery';
@@ -244,6 +246,7 @@ export default function DrawingStudio() {
   const canvasRef = useRef(null);
   const fsCanvasRef = useRef(null);
   const [mode, setMode] = useState('draw');
+  const [entered, setEntered] = useState(false);
   const [tool, setTool] = useState(TOOLS[0]);
   const [color, setColor] = useState('#1a1a1a');
   const [isDrawing, setIsDrawing] = useState(false);
@@ -773,7 +776,7 @@ export default function DrawingStudio() {
       window.removeEventListener('resize', setupNormal);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [entered]);
 
   // Fullscreen setup + sync drawings between normal ↔ fullscreen.
   // Critical: we capture a snapshot of the SOURCE canvas BEFORE the fullscreen
@@ -1251,6 +1254,19 @@ export default function DrawingStudio() {
       clearCanvas(ctx, w, h);
     }
   };
+
+  // Hub sinematik — pilih mod dulu sebelum masuk studio
+  if (!entered) {
+    return (
+      <CinematicHub
+        label="Studio Lukisan"
+        items={MODE_HUB_ITEMS}
+        playLabel="Mula Sekarang"
+        railLabel="Pilih Aktiviti"
+        onPlay={(item) => { setMode(item.key); setEntered(true); }}
+      />
+    );
+  }
 
   return (
     <div
