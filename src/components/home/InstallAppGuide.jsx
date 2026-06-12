@@ -78,14 +78,18 @@ export default function InstallAppGuide() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative isolate rounded-3xl overflow-hidden shadow-xl [transform:translateZ(0)]"
-        style={{
-          background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-          backdropFilter: 'blur(22px) saturate(150%)',
-          WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-          boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
-        }}
+        className="relative isolate rounded-3xl overflow-hidden shadow-xl"
+        style={{ boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)' }}
       >
+        {/* Background gradient layer — di dalam supaya ikut radius */}
+        <div
+          className="absolute inset-0 rounded-3xl"
+          style={{
+            background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
+            backdropFilter: 'blur(22px) saturate(150%)',
+            WebkitBackdropFilter: 'blur(22px) saturate(150%)',
+          }}
+        />
         {/* Decorative orbs */}
         <div className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200/25 rounded-full blur-2xl pointer-events-none" />
         <div className="absolute -bottom-12 -left-10 w-40 h-40 bg-pink-300/25 rounded-full blur-2xl pointer-events-none" />
