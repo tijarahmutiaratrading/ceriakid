@@ -46,10 +46,10 @@ const HIGHLIGHTS = [
     image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/2ad5ce117_generated_image.png',
     color: 'from-indigo-500 via-violet-400 to-fuchsia-300',
     tutors: [
-      { name: 'Cikgu Firdaus', role: 'Tutor Peribadi', desc: 'Jawab soalan anak untuk Matematik, Sains, BM, English & Jawi.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/512f26c46_generated_image.png' },
-      { name: 'Cikgu Rosie', role: 'Kuiz AI Adaptif', desc: 'Jana kuiz interaktif yang adapt ikut tahap anak — semakin main, semakin pandai.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e997c6e39_generated_image.png' },
-      { name: 'Cikgu Mira', role: 'Penjana Cerita', desc: 'Cipta cerita pendidikan berdasarkan tema pilihan — AI jana cerita penuh.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e057bebe4_generated_image.png' },
-      { name: 'Cikgu Daniel', role: 'Penjana BBM', desc: 'Hasilkan lembaran kerja & latihan ikut subjek dan tahap anak.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/af9063c28_generated_image.png' },
+      { name: 'Cikgu Firdaus', role: 'Tutor AI Serba Boleh', desc: 'Tanya apa sahaja — soalan sekolah, penjelasan topik & bantuan belajar.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/61dba1f3a_generated_image.png' },
+      { name: 'Cikgu Rosie', role: 'Penjana Kuiz', desc: 'Latih anak dengan kuiz interaktif ikut subjek & tahap.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4347879e0_generated_image.png' },
+      { name: 'Cikgu Mira', role: 'Pencipta Cerita', desc: 'Hasilkan cerita penuh pengajaran moral untuk anak.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d2061d998_generated_image.png' },
+      { name: 'Cikgu Daniel', role: 'Penjana BBM', desc: 'Cipta bahan bantu mengajar — lembaran kerja, nota & lagi.', avatar: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4c8ddef8e_generated_image.png' },
     ],
   },
   {
