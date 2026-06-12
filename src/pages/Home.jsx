@@ -176,6 +176,8 @@ export default function Home() {
           <HomeSubjectShowcase />
         </motion.div>
 
+        {isAuthenticated && <InstallAppGuide />}
+
         {/* Hub Showcase — gaya PS5: hero besar + rail tile boleh scroll */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -188,8 +190,6 @@ export default function Home() {
           </div>
           <HomeHubShowcase />
         </motion.div>
-
-        {isAuthenticated && <InstallAppGuide />}
 
         <CinematicTips />
 

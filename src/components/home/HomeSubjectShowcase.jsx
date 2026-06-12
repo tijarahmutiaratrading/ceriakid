@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { base44 } from '@/api/base44Client';
 import { getGamesByAge } from '@/lib/gameLibrary';
@@ -84,6 +85,19 @@ export default function HomeSubjectShowcase() {
 
   return (
     <div className="relative">
+      {/* Glow latar ikut warna subjek terpilih */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={item.key}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          className="absolute -inset-8 rounded-[3rem] blur-3xl opacity-25 pointer-events-none"
+          style={{ background: `radial-gradient(ellipse at center, ${item.accent}, transparent 70%)` }}
+        />
+      </AnimatePresence>
+
       <div className="relative">
         <CinematicShowcase item={item} playLabel="Pilih Subjek Ini" onPlay={handlePlay} />
         <CinematicRail items={items} selected={safeIdx} onSelect={setSelectedIdx} onActivate={handlePlay} />
