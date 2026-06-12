@@ -504,9 +504,9 @@ export default function GamePlayer() {
     <div className="min-h-screen w-full overflow-x-hidden relative bg-slate-950">
       {/* Latar sinematik PS5-style — glow halus */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-40 -right-32 w-[400px] h-[400px] bg-violet-600/20 rounded-full filter blur-3xl" />
-        <div className="absolute top-1/3 -left-32 w-[350px] h-[350px] bg-cyan-500/12 rounded-full filter blur-3xl" />
-        <div className="absolute -bottom-24 right-1/4 w-[400px] h-[400px] bg-fuchsia-500/12 rounded-full filter blur-3xl" />
+        <div className="absolute -top-40 -right-32 w-[450px] h-[450px] bg-violet-600/40 rounded-full filter blur-3xl" />
+        <div className="absolute top-1/3 -left-32 w-[400px] h-[400px] bg-cyan-500/30 rounded-full filter blur-3xl" />
+        <div className="absolute -bottom-24 right-1/4 w-[450px] h-[450px] bg-fuchsia-500/35 rounded-full filter blur-3xl" />
       </div>
 
       {/* Family mascot — Ibu, Kakak, Adik */}
@@ -569,7 +569,7 @@ export default function GamePlayer() {
              backdropFilter: 'blur(20px) saturate(160%)',
              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
              border: '1px solid rgba(255,255,255,0.15)',
-             boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 60px 0px rgba(139,92,246,0.55), 0 0 30px -5px rgba(236,72,153,0.4), inset 0 1px 0 rgba(255,255,255,0.12)',
+             boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)',
            }}
          >
          <div className="rounded-2xl p-6 md:p-8 text-center relative overflow-hidden">
