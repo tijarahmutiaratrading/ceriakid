@@ -12,7 +12,6 @@ import TrustedMarquee from '@/components/landing/TrustedMarquee';
 import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import LandingHeroCarousel from '@/components/landing/LandingHeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
-import LandingAISection from '@/components/landing/LandingAISection';
 import LandingFeatureHighlight from '@/components/landing/LandingFeatureHighlight';
 import ExitIntentPopup from '@/components/landing/ExitIntentPopup';
 import LiveSocialProof from '@/components/landing/LiveSocialProof';
@@ -292,7 +291,6 @@ export default function Landing() {
           />
           {[
             { href: '#features', label: 'Ciri-ciri' },
-            { href: '#ai', label: 'Cikgu AI' },
             { href: '#testimonials', label: 'Testimoni' },
             { href: '#pricing', label: 'Order Now' },
             { href: '#faq', label: 'FAQ' },
@@ -480,9 +478,6 @@ export default function Landing() {
 
       {/* ── 3M + LIBRARY HUB HIGHLIGHT ── */}
       <LandingFeatureHighlight />
-
-      {/* ── AI FEATURES ── */}
-      <LandingAISection />
 
       {/* ── INVESTOR WOW ── */}
       <SectionWrapper
