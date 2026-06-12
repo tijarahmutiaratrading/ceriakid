@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover } from '@/components/arcade/engine';
+import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover, initHiDPI } from '@/components/arcade/engine';
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import { drawBird } from '@/components/arcade/characters';
 import CharacterCanvas from '@/components/arcade/CharacterCanvas';
@@ -61,11 +61,12 @@ export default function FlappyGame() {
 
   useEffect(() => {
     if (!stateRef.current) stateRef.current = initState();
+    const dpr = initHiDPI(canvasRef.current, W, H);
     const c = canvasRef.current.getContext('2d');
 
     const loop = () => {
       const s = stateRef.current;
-      c.setTransform(1, 0, 0, 1, 0, 0);
+      c.setTransform(dpr, 0, 0, dpr, 0, 0);
       c.clearRect(0, 0, W, H);
       s.shaker.apply(c);
 

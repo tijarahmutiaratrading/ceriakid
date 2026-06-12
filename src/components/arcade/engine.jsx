@@ -120,6 +120,17 @@ export class Pops {
   }
 }
 
+// ── HiDPI / RETINA — buat canvas tajam pada skrin high-DPI ──
+export const initHiDPI = (canvas, w, h) => {
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  const c = canvas.getContext('2d');
+  c.imageSmoothingEnabled = true;
+  c.imageSmoothingQuality = 'high';
+  return dpr;
+};
+
 // ── BACKGROUND IMAGE (Pixar art) ──
 const imgCache = {};
 export const loadImage = (url) => {
