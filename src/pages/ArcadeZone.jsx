@@ -1,201 +1,96 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Play, Trophy } from 'lucide-react';
-import AppHeader from '@/components/AppHeader';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Gamepad2 } from 'lucide-react';
 import { getBest } from '@/components/arcade/arcadeValues';
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+import ArcadeShowcase from '@/components/arcade/ArcadeShowcase';
+import ArcadeRail from '@/components/arcade/ArcadeRail';
 
 const GAMES = [
-  {
-    to: '/arcade/runner',
-    key: 'runner',
-    emoji: '🦊',
-    title: 'Lari Si Comel',
-    desc: 'Lompat elak halangan, kutip nilai murni sambil berlari sejauh mungkin!',
-    how: 'Tap untuk lompat',
-    color: 'from-orange-400 to-amber-300',
-    bg: 'bg-orange-50 border-orange-100',
-  },
-  {
-    to: '/arcade/catch',
-    key: 'catch',
-    emoji: '🧺',
-    title: 'Tangkap Ceria',
-    desc: 'Tangkap buah & buku yang jatuh, elak sampah! Pantas & seronok.',
-    how: 'Gerakkan bakul kiri-kanan',
-    color: 'from-pink-400 to-rose-300',
-    bg: 'bg-pink-50 border-pink-100',
-  },
-  {
-    to: '/arcade/flappy',
-    key: 'flappy',
-    emoji: '🐦',
-    title: 'Burung Ceria',
-    desc: 'Terbang lalu celah pokok, kutip bintang nilai murni di udara!',
-    how: 'Tap untuk terbang',
-    color: 'from-sky-400 to-cyan-300',
-    bg: 'bg-sky-50 border-sky-100',
-  },
-  {
-    to: '/arcade/space',
-    key: 'space',
-    emoji: '🚀',
-    title: 'Angkasa Ceria',
-    desc: 'Kemudi roket elak asteroid, kutip bintang & nilai murni di angkasa!',
-    how: 'Gerakkan jari kemudi roket',
-    color: 'from-indigo-500 to-purple-400',
-    bg: 'bg-indigo-50 border-indigo-100',
-  },
-  {
-    to: '/arcade/jump',
-    key: 'jump',
-    emoji: '🐰',
-    title: 'Lompat Awan',
-    desc: 'Lompat platform demi platform sampai ke angkasa — spring lompat super!',
-    how: 'Gerakkan jari kiri-kanan',
-    color: 'from-cyan-400 to-emerald-300',
-    bg: 'bg-cyan-50 border-cyan-100',
-  },
-  {
-    to: '/arcade/brick',
-    key: 'brick',
-    emoji: '🧱',
-    title: 'Pecah Blok',
-    desc: 'Pecahkan semua blok dengan bola, naik level & dapatkan power-up!',
-    how: 'Gerakkan paddle kiri-kanan',
-    color: 'from-violet-500 to-fuchsia-400',
-    bg: 'bg-violet-50 border-violet-100',
-  },
-  {
-    to: '/arcade/snake',
-    key: 'snake',
-    emoji: '🐍',
-    title: 'Ular Ceria',
-    desc: 'Klasik! Makan buah, jadi panjang — jangan langgar diri sendiri!',
-    how: 'Swipe untuk tukar arah',
-    color: 'from-lime-400 to-green-300',
-    bg: 'bg-lime-50 border-lime-100',
-  },
-  {
-    to: '/arcade/racer',
-    key: 'racer',
-    emoji: '🏎️',
-    title: 'Pelumba Ceria',
-    desc: 'Tukar lorong elak kereta lain, kutip syiling & nitro kebal!',
-    how: 'Tap kiri/kanan tukar lorong',
-    color: 'from-red-500 to-orange-400',
-    bg: 'bg-red-50 border-red-100',
-  },
-  {
-    to: '/arcade/whack',
-    key: 'whack',
-    emoji: '🔨',
-    title: 'Ketuk Ceria',
-    desc: 'Ketuk tikus secepat kilat dalam 45 saat — tapi jangan ketuk bom!',
-    how: 'Tap tikus yang muncul',
-    color: 'from-amber-400 to-yellow-300',
-    bg: 'bg-amber-50 border-amber-100',
-  },
-  {
-    to: '/arcade/balloon',
-    key: 'balloon',
-    emoji: '🎈',
-    title: 'Letup Belon',
-    desc: 'Letupkan belon berwarna-warni sebelum terbang — elak bom!',
-    how: 'Tap belon untuk letup',
-    color: 'from-rose-400 to-pink-300',
-    bg: 'bg-rose-50 border-rose-100',
-  },
+  { to: '/arcade/runner', key: 'runner', emoji: '🦊', title: 'Lari Si Comel', desc: 'Lompat elak halangan, kutip nilai murni sambil berlari sejauh mungkin!', how: 'Tap untuk lompat', accent: '#f97316' },
+  { to: '/arcade/catch', key: 'catch', emoji: '🧺', title: 'Tangkap Ceria', desc: 'Tangkap buah & buku yang jatuh, elak sampah! Pantas & seronok.', how: 'Gerakkan bakul kiri-kanan', accent: '#ec4899' },
+  { to: '/arcade/flappy', key: 'flappy', emoji: '🐦', title: 'Burung Ceria', desc: 'Terbang lalu celah pokok, kutip bintang nilai murni di udara!', how: 'Tap untuk terbang', accent: '#0ea5e9' },
+  { to: '/arcade/space', key: 'space', emoji: '🚀', title: 'Angkasa Ceria', desc: 'Kemudi roket elak asteroid, kutip bintang & nilai murni di angkasa!', how: 'Gerakkan jari kemudi roket', accent: '#8b5cf6' },
+  { to: '/arcade/jump', key: 'jump', emoji: '🐰', title: 'Lompat Awan', desc: 'Lompat platform demi platform sampai ke angkasa — spring lompat super!', how: 'Gerakkan jari kiri-kanan', accent: '#06b6d4' },
+  { to: '/arcade/brick', key: 'brick', emoji: '🧱', title: 'Pecah Blok', desc: 'Pecahkan semua blok dengan bola, naik level & dapatkan power-up!', how: 'Gerakkan paddle kiri-kanan', accent: '#a855f7' },
+  { to: '/arcade/snake', key: 'snake', emoji: '🐍', title: 'Ular Ceria', desc: 'Klasik! Makan buah, jadi panjang — jangan langgar diri sendiri!', how: 'Swipe untuk tukar arah', accent: '#22c55e' },
+  { to: '/arcade/racer', key: 'racer', emoji: '🏎️', title: 'Pelumba Ceria', desc: 'Tukar lorong elak kereta lain, kutip syiling & nitro kebal!', how: 'Tap kiri/kanan tukar lorong', accent: '#ef4444' },
+  { to: '/arcade/whack', key: 'whack', emoji: '🔨', title: 'Ketuk Ceria', desc: 'Ketuk tikus secepat kilat dalam 45 saat — tapi jangan ketuk bom!', how: 'Tap tikus yang muncul', accent: '#f59e0b' },
+  { to: '/arcade/balloon', key: 'balloon', emoji: '🎈', title: 'Letup Belon', desc: 'Letupkan belon berwarna-warni sebelum terbang — elak bom!', how: 'Tap belon untuk letup', accent: '#fb7185' },
 ];
 
+const VALUES = ['⭐ Jujur', '❤️ Baik Hati', '🤝 Tolong-Menolong', '📖 Rajin Belajar', '🙏 Hormat', '😊 Sabar'];
+
 export default function ArcadeZone() {
+  const [selected, setSelected] = useState(0);
+  const game = GAMES[selected];
+  const bestScores = useMemo(() => Object.fromEntries(GAMES.map((g) => [g.key, getBest(g.key)])), []);
+
   return (
-    <div className="min-h-screen bg-background bg-pattern pb-24">
-      <AppHeader title="Arcade Zone" />
-
-      <div className="max-w-7xl mx-auto page-px pt-20 sm:pt-8">
-        <Link to="/dashboard" className="inline-flex items-center gap-1.5 text-sm font-black text-purple-600 hover:text-purple-800 mb-4 transition-colors">
-          <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
-        </Link>
-
-        {/* Hero */}
+    <div className="min-h-screen bg-slate-950 pb-28 relative overflow-hidden">
+      {/* ── Latar sinematik: art game terpilih blur penuh skrin ── */}
+      <AnimatePresence mode="sync">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-600 p-6 sm:p-8 mb-6 shadow-xl"
-        >
-          <div className="absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-white/15 border border-white/25 px-3 py-1 text-[11px] font-black text-white mb-3">
-              🕹️ ZON SANTAI & SERONOK
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white mb-2">Arcade Zone 🎮</h1>
-            <p className="text-white/80 text-sm sm:text-base font-bold max-w-lg">
-              Game arcade sebenar untuk anak release tension — sambil kutip nilai murni macam jujur, baik hati & rajin belajar! ⭐
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Game cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {GAMES.map((g, i) => {
-            const best = getBest(g.key);
-            return (
-              <motion.div
-                key={g.key}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
-              >
-                <Link to={g.to} className="block group">
-                  <div className={`rounded-3xl border ${g.bg} bg-white shadow-xl border-white/60 overflow-hidden hover:-translate-y-1 hover:shadow-2xl transition-all`}>
-                    <div className={`relative h-40 bg-gradient-to-br ${g.color} overflow-hidden`}>
-                      <img
-                        src={ARCADE_ART[g.key]}
-                        alt={g.title}
-                        loading="lazy"
-                        decoding="async"
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                      <span className="absolute bottom-2 left-3 text-4xl drop-shadow-lg">{g.emoji}</span>
-                      {best > 0 && (
-                        <div className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-black text-amber-600 shadow">
-                          <Trophy className="w-3 h-3" /> {best}
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-black text-slate-900 text-lg mb-1">{g.title}</h3>
-                      <p className="text-slate-600 text-xs font-semibold leading-snug mb-3">{g.desc}</p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-black text-slate-400 uppercase tracking-wide">👆 {g.how}</span>
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 px-4 py-2 text-xs font-black text-white shadow group-hover:opacity-90">
-                          <Play className="w-3 h-3 fill-white" /> Main
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Nilai murni info */}
-        <motion.div
+          key={game.key}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mt-6 rounded-3xl bg-white shadow-xl border border-white/60 p-5"
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+          className="absolute inset-0 pointer-events-none"
         >
-          <h3 className="font-black text-slate-900 text-sm mb-3">⭐ Kutip Nilai Murni Dalam Setiap Game!</h3>
+          <img
+            src={ARCADE_ART[game.key]}
+            alt=""
+            className="h-full w-full object-cover scale-110 blur-2xl opacity-30"
+          />
+        </motion.div>
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/55 to-slate-950 pointer-events-none" />
+      {/* Glow ambient ikut warna game */}
+      <motion.div
+        animate={{ background: `radial-gradient(60% 50% at 70% 30%, ${game.accent}33 0%, transparent 70%)` }}
+        transition={{ duration: 0.8 }}
+        className="absolute inset-0 pointer-events-none"
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto page-px pt-6 sm:pt-10">
+        {/* Top bar */}
+        <div className="flex items-center justify-between mb-8 sm:mb-12">
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 backdrop-blur px-4 py-2 text-sm font-black text-white hover:bg-white/20 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" /> Dashboard
+          </Link>
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 backdrop-blur px-4 py-2">
+            <Gamepad2 className="w-4 h-4 text-white" />
+            <span className="text-xs font-black text-white uppercase tracking-[0.25em]">Arcade Zone</span>
+          </div>
+        </div>
+
+        {/* Hero showcase */}
+        <ArcadeShowcase game={game} best={bestScores[game.key]} />
+
+        {/* Rail thumbnail */}
+        <div className="mt-8 sm:mt-12">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-1">
+            Pilih Permainan · {selected + 1}/{GAMES.length}
+          </p>
+          <ArcadeRail games={GAMES} selected={selected} onSelect={setSelected} bestScores={bestScores} />
+        </div>
+
+        {/* Nilai murni */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mt-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl p-5"
+        >
+          <h3 className="font-black text-white/90 text-sm mb-3">⭐ Kutip Nilai Murni Dalam Setiap Game!</h3>
           <div className="flex flex-wrap gap-2">
-            {[
-              '⭐ Jujur', '❤️ Baik Hati', '🤝 Tolong-Menolong', '📖 Rajin Belajar', '🙏 Hormat', '😊 Sabar',
-            ].map((v) => (
-              <span key={v} className="rounded-full bg-purple-50 border border-purple-100 px-3 py-1.5 text-xs font-black text-purple-700">
+            {VALUES.map((v) => (
+              <span key={v} className="rounded-full bg-white/10 border border-white/10 px-3 py-1.5 text-xs font-black text-white/80">
                 {v}
               </span>
             ))}
