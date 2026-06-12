@@ -162,7 +162,6 @@ const AuthenticatedApp = () => {
             <Route path="/games-subjek" element={lazyRoute(GamesSubjek)} />
             <Route path="/kafa" element={lazyRoute(KafaHub)} />
             <Route path="/3m/:categoryId" element={lazyRoute(TigaMList)} />
-            <Route path="/games/:category" element={lazyRoute(GamesList)} />
             <Route path="/mini-games/:type" element={lazyRoute(MiniGamesList)} />
             <Route path="/parent-dashboard" element={lazyRoute(ParentDashboard)} />
             <Route path="/social" element={lazyRoute(Social)} />
@@ -181,6 +180,7 @@ const AuthenticatedApp = () => {
           {/* Game-play / fullscreen pages - lazy loaded */}
           <Route path="/drawing" element={lazyRoute(DrawingStudio)} />
           <Route path="/games-hub" element={lazyRoute(GamesHub)} />
+          <Route path="/games/:category" element={lazyRoute(GamesList)} />
           <Route path="/3m" element={lazyRoute(TigaMHub)} />
           <Route path="/library" element={lazyRoute(LibraryHub)} />
           <Route path="/ai-hub" element={lazyRoute(AIHub)} />
