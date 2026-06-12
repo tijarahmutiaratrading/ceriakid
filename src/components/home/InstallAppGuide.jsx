@@ -78,30 +78,17 @@ export default function InstallAppGuide() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative isolate rounded-3xl overflow-hidden shadow-xl"
+        className="relative isolate rounded-3xl overflow-hidden shadow-xl bg-white/10 backdrop-blur-xl border border-white/15"
         style={{ boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)' }}
       >
-        {/* Background gradient layer — di dalam supaya ikut radius */}
-        <div
-          className="absolute inset-0 rounded-3xl"
-          style={{
-            background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
-            backdropFilter: 'blur(22px) saturate(150%)',
-            WebkitBackdropFilter: 'blur(22px) saturate(150%)',
-          }}
-        />
-        {/* Decorative orbs */}
-        <div className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200/25 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute -bottom-12 -left-10 w-40 h-40 bg-pink-300/25 rounded-full blur-2xl pointer-events-none" />
-
         <div className="relative z-10 p-3.5 sm:p-4">
           <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center shadow-lg">
+            <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-white/15 backdrop-blur-md ring-1 ring-white/25 flex items-center justify-center shadow-lg">
               <MonitorSmartphone className="w-5 h-5 text-white" strokeWidth={2.5} />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-white font-black text-sm leading-tight">Pasang CeriaKid sebagai app</p>
-              <p className="text-white/70 text-[11px] font-semibold leading-tight">Cepat, offline-ready & full screen.</p>
+              <p className="text-white/60 text-[11px] font-semibold leading-tight">Cepat, offline-ready & full screen.</p>
             </div>
           </div>
 
@@ -112,8 +99,8 @@ export default function InstallAppGuide() {
               onClick={() => { setPlatform('ios'); setShowModal(true); }}
               className={`flex items-center justify-center gap-1.5 py-2 rounded-xl font-black text-xs transition-all ${
                 platform === 'ios'
-                  ? 'bg-white text-purple-700 shadow-lg'
-                  : 'bg-white/15 text-white border border-white/25'
+                  ? 'bg-white text-slate-900 shadow-lg'
+                  : 'bg-white/10 text-white border border-white/20'
               }`}
             >
               <Apple className="w-3.5 h-3.5" /> iPhone
@@ -123,8 +110,8 @@ export default function InstallAppGuide() {
               onClick={() => { setPlatform('android'); deferredPrompt ? handleAndroidInstall() : setShowModal(true); }}
               className={`flex items-center justify-center gap-1.5 py-2 rounded-xl font-black text-xs transition-all ${
                 platform === 'android'
-                  ? 'bg-white text-purple-700 shadow-lg'
-                  : 'bg-white/15 text-white border border-white/25'
+                  ? 'bg-white text-slate-900 shadow-lg'
+                  : 'bg-white/10 text-white border border-white/20'
               }`}
             >
               <Smartphone className="w-3.5 h-3.5" /> Android
