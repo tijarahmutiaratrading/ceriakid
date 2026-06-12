@@ -11,7 +11,7 @@ export default function CinematicRail({ items, selected, onSelect, onActivate })
   }, [selected]);
 
   return (
-    <div className="flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide py-6 px-1 -mx-1 snap-x">
+    <div className="flex gap-3 sm:gap-4 overflow-x-auto overflow-y-visible scrollbar-hide pt-10 pb-8 px-3 -mx-3 snap-x">
       {items.map((it, i) => {
         const isSel = i === selected;
         return (
