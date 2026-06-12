@@ -5,7 +5,6 @@ import { ArrowLeft, RotateCcw, Star, BookOpen, Sparkles, Trophy, ChevronRight } 
 import CinematicHub from '@/components/hub/CinematicHub';
 import StorySlideVisual from '@/components/story/StorySlideVisual';
 import StoryAudioPlayer from '@/components/story/StoryAudioPlayer';
-import AIStoryReader from '@/components/story/AIStoryReader';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
@@ -109,7 +108,6 @@ export default function StoryKid() {
   const { user } = useAuth() || {};
   const { selectedChild } = useSelectedChild() || {};
   const [stories, setStories] = useState([]);
-  const [aiStories, setAiStories] = useState([]);
   const [selected, setSelected] = useState(null);
   const [sceneIndex, setSceneIndex] = useState(0);
   const [stars, setStars] = useState(0);
@@ -126,13 +124,6 @@ export default function StoryKid() {
         setStories(storyKidStories.length > 0 ? storyKidStories : SAMPLE_STORIES);
       } catch (e) {
         setStories(SAMPLE_STORIES);
-      }
-      // Cerita yang dijana melalui Story Generator (entity AIStory)
-      try {
-        const ai = await base44.entities.AIStory.list('-created_date', 100);
-        setAiStories(ai.filter(s => s.story));
-      } catch (e) {
-        setAiStories([]);
       }
     };
 
@@ -172,31 +163,10 @@ export default function StoryKid() {
     }).catch(() => {});
   }, [sceneIndex, story, selected, stars, user, selectedChild]);
 
-  // Cerita AIStory dipilih → papar pembaca linear
-  const selectedAiStory = typeof selected === 'string' && selected.startsWith('ai-')
-    ? aiStories[Number(selected.slice(3))]
-    : null;
-  if (selectedAiStory) {
-    return (
-      <AIStoryReader
-        story={selectedAiStory}
-        onBack={() => setSelected(null)}
-        onComplete={() => saveActivityProgress({
-          user,
-          childName: selectedChild?.name,
-          category: 'story_kid',
-          activityId: selectedAiStory.id,
-          activityTitle: `Cerita: ${selectedAiStory.title}`,
-          stars: 3,
-        }).catch(() => {})}
-      />
-    );
-  }
-
   // Senarai cerita → hub sinematik gaya PS5
   const ACCENTS = ['#ec4899', '#8b5cf6', '#22c55e', '#f59e0b', '#0ea5e9'];
   if (!story) {
-    const interactiveItems = stories.map((item, idx) => ({
+    const storyItems = stories.map((item, idx) => ({
       key: item.id || String(idx),
       index: idx,
       title: item.title,
@@ -204,21 +174,9 @@ export default function StoryKid() {
       emoji: item.emoji,
       art: item.cover,
       accent: ACCENTS[idx % ACCENTS.length],
-      badge: 'Cerita Interaktif',
+      badge: 'Story Kid',
       metaChips: [`📖 ${item.scenes?.length || 0} halaman`, '⭐ Kumpul bintang'],
     }));
-    const aiItems = aiStories.map((item, idx) => ({
-      key: `ai-${item.id || idx}`,
-      index: `ai-${idx}`,
-      title: item.title,
-      desc: item.moralSummary || item.theme || 'Cerita yang anda jana',
-      emoji: item.emoji || '📖',
-      art: item.coverImage,
-      accent: ACCENTS[(idx + 2) % ACCENTS.length],
-      badge: 'Cerita AI',
-      metaChips: ['✨ Dijana AI', `👦 ${item.childName || 'Watak'}`],
-    }));
-    const storyItems = [...aiItems, ...interactiveItems];
     return (
       <CinematicHub
         label="Story Kid"
