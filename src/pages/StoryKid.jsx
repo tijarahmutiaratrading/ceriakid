@@ -194,35 +194,32 @@ export default function StoryKid() {
 
       <div className={`relative w-full ${story && sceneIndex < (story?.scenes?.length || 0) ? '' : 'max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 pb-28 pt-20 sm:pt-4'} overflow-x-hidden`}>
         {sceneIndex >= story.scenes.length ? (
-          <div
-            className="fixed inset-0 z-40 flex items-center justify-center p-4"
-            style={{
-              backgroundImage: 'url(https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b16329ff6_generated_image.png)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-b from-white/50 via-white/65 to-white/80 backdrop-blur-sm" />
+          <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-slate-950">
+            <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+              <div className="absolute -top-32 -right-24 w-96 h-96 rounded-full bg-violet-600/25 blur-3xl" />
+              <div className="absolute -bottom-32 -left-24 w-96 h-96 rounded-full bg-fuchsia-500/20 blur-3xl" />
+              <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-amber-400/10 blur-3xl" />
+            </div>
             <motion.div
               initial={{ opacity: 0, scale: 0.94, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              className="relative max-w-xl w-full rounded-[2rem] bg-white/95 backdrop-blur-2xl p-7 text-center shadow-2xl ring-1 ring-black/5"
+              className="relative max-w-xl w-full rounded-[2rem] bg-white/10 backdrop-blur-2xl p-7 text-center shadow-2xl border border-white/15"
             >
               <div className="text-7xl mb-3">🏆</div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-purple-600 mb-1">Tahniah!</p>
-              <h2 className="text-3xl font-black text-slate-900 mb-3 tracking-tight">Cerita Selesai</h2>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-100 text-yellow-700 font-black text-lg mb-5 ring-1 ring-yellow-200">
-                <Star className="w-5 h-5 fill-yellow-500 text-yellow-500" /> {stars} bintang dikumpul
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-violet-300 mb-1">Tahniah!</p>
+              <h2 className="text-3xl font-black text-white mb-3 tracking-tight">Cerita Selesai</h2>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-400/15 text-yellow-200 font-black text-lg mb-5 ring-1 ring-yellow-300/25">
+                <Star className="w-5 h-5 fill-yellow-300 text-yellow-300" /> {stars} bintang dikumpul
               </div>
-              <div className="rounded-2xl bg-slate-50 p-5 mb-6 ring-1 ring-black/5">
-                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.18em] mb-2">Moral cerita</p>
-                <p className="text-slate-900 text-base font-bold leading-relaxed">{story.moral}</p>
+              <div className="rounded-2xl bg-white/5 p-5 mb-6 ring-1 ring-white/10">
+                <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.18em] mb-2">Moral cerita</p>
+                <p className="text-white text-base font-bold leading-relaxed">{story.moral}</p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <button onClick={resetStory} className="py-3.5 rounded-2xl bg-slate-100 text-slate-800 font-bold text-sm hover:bg-slate-200 transition-all flex items-center justify-center gap-2">
+                <button onClick={resetStory} className="py-3.5 rounded-2xl bg-white/10 text-white font-bold text-sm hover:bg-white/20 transition-all flex items-center justify-center gap-2 border border-white/15">
                   <RotateCcw className="w-4 h-4" /> Baca Semula
                 </button>
-                <button onClick={() => setSelected(null)} className="py-3.5 rounded-2xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-all">
+                <button onClick={() => setSelected(null)} className="py-3.5 rounded-2xl bg-white text-slate-900 font-bold text-sm hover:bg-white/90 transition-all">
                   Cerita Lain
                 </button>
               </div>
