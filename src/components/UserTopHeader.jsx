@@ -148,7 +148,7 @@ export default function UserTopHeader() {
                 className={`relative px-2 py-1.5 lg:px-2.5 lg:py-2 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
                   showActive
                     ? 'text-white'
-                    : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
+                    : 'text-white hover:text-white'
                 }`}
               >
                 {showActive && (
@@ -171,7 +171,7 @@ export default function UserTopHeader() {
                 className={`relative flex items-center gap-0.5 px-2 py-1.5 lg:px-2.5 lg:py-2 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
                   showActive
                     ? 'text-white'
-                    : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
+                    : 'text-white hover:text-white'
                 }`}
               >
                 {showActive && (
