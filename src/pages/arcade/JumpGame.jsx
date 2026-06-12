@@ -2,11 +2,12 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Pops, loadImage, drawCover, drawSprite } from '@/components/arcade/engine';
-import { ARCADE_ART, ARCADE_SPRITES } from '@/components/arcade/arcadeArt';
+import { sfx, Particles, Pops, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+import { drawRabbit } from '@/components/arcade/characters';
+import CharacterCanvas from '@/components/arcade/CharacterCanvas';
 
 const bgImg = loadImage(ARCADE_ART.jump);
-const rabbitImg = loadImage(ARCADE_SPRITES.rabbit);
 
 const W = 400, H = 600;
 const GRAVITY = 0.38;
@@ -200,10 +201,7 @@ export default function JumpGame() {
       c.translate(s.px, s.py);
       c.scale(2 - s.squash, s.squash);
       if (s.vx < -0.5) c.scale(-1, 1);
-      if (!drawSprite(c, rabbitImg, 0, -6, 62)) {
-        c.font = '38px serif';
-        c.fillText('🐰', 0, 14);
-      }
+      drawRabbit(c, s.frame);
       c.restore();
 
       s.particles.update(c);
@@ -226,7 +224,7 @@ export default function JumpGame() {
         <canvas ref={canvasRef} width={W} height={H} className="h-full w-auto max-w-full touch-none" />
         {!started && !gameOver && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm pointer-events-none">
-            <img src={ARCADE_SPRITES.rabbit} alt="" className="w-28 h-28 object-contain mb-3 animate-bounce drop-shadow-2xl" />
+            <CharacterCanvas draw={drawRabbit} className="mb-3 drop-shadow-2xl" />
             <p className="text-white font-black text-2xl mb-2">Lompat Awan</p>
             <div className="text-white/80 font-bold text-xs text-center px-6 space-y-1">
               <p>👆 Gerakkan jari kiri-kanan = kemudi arnab</p>

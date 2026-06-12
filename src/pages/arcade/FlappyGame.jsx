@@ -2,11 +2,12 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover, drawSprite } from '@/components/arcade/engine';
-import { ARCADE_ART, ARCADE_SPRITES } from '@/components/arcade/arcadeArt';
+import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+import { drawBird } from '@/components/arcade/characters';
+import CharacterCanvas from '@/components/arcade/CharacterCanvas';
 
 const bgImg = loadImage(ARCADE_ART.flappy);
-const birdImg = loadImage(ARCADE_SPRITES.bird);
 
 const W = 400, H = 600;
 const GRAVITY = 0.42;
@@ -252,10 +253,7 @@ export default function FlappyGame() {
       const wingScale = 1 + s.wing * 0.25;
       c.scale(wingScale, 2 - wingScale);
       if (s.shield) { c.shadowColor = '#60a5fa'; c.shadowBlur = 20; }
-      if (!drawSprite(c, birdImg, 0, 0, 58)) {
-        c.font = '40px serif';
-        c.fillText('🐦', 0, 12);
-      }
+      drawBird(c, s.frame, s.wing);
       c.restore();
       if (s.shield) {
         c.strokeStyle = 'rgba(96,165,250,0.7)'; c.lineWidth = 3;
@@ -289,7 +287,7 @@ export default function FlappyGame() {
         <canvas ref={canvasRef} width={W} height={H} className="h-full w-auto max-w-full" />
         {!started && !gameOver && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm pointer-events-none">
-            <img src={ARCADE_SPRITES.bird} alt="" className="w-28 h-28 object-contain mb-3 animate-bounce drop-shadow-2xl" />
+            <CharacterCanvas draw={drawBird} className="mb-3 drop-shadow-2xl" />
             <p className="text-white font-black text-2xl mb-2">Burung Ceria</p>
             <div className="text-white/80 font-bold text-xs text-center px-6 space-y-1">
               <p>👆 Tap = terbang · Lalu celah pokok</p>
