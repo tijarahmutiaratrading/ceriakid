@@ -144,11 +144,25 @@ export default function Home() {
 
       {isAuthenticated && <InstallAppGuide />}
 
+        {/* Hub Showcase — gaya PS5: hero besar + rail tile boleh scroll */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">🎮 Hub Utama</p>
+            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Pilih &amp; Buka</span>
+          </div>
+          <HomeHubShowcase />
+        </motion.div>
+
+
         {/* Age Group Selector - Mascot Illustration Style */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
+          transition={{ delay: 0.22 }}
         >
           <div className="flex items-center justify-between mb-3">
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">Umur Anak</p>
@@ -161,8 +175,6 @@ export default function Home() {
                 title: `${t('prasekolah', lang)} (KSPK)`,
                 age: '4–6 Tahun',
                 emoji: '🎨',
-                desc: 'Tahap umur Prasekolah (KSPK) 4–6 Tahun',
-                sub: 'Bahasa, Matematik, Sains & banyak lagi',
                 image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/98cf1f885_generated_image.png',
                 gradient: 'from-cyan-500/40 to-emerald-500/30',
               },
@@ -171,8 +183,6 @@ export default function Home() {
                 title: `${t('sekolahRendah', lang)} (KSSR)`,
                 age: '7–12 Tahun',
                 emoji: '📚',
-                desc: 'Tahap umur Sekolah Rendah (KSSR) 7–12 Tahun',
-                sub: 'Darjah 1 hingga Darjah 6 mengikut KSSR',
                 image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d1137d39a_generated_image.png',
                 gradient: 'from-fuchsia-500/40 to-amber-500/30',
               },
@@ -188,11 +198,8 @@ export default function Home() {
                     isActive ? 'ring-2 ring-white shadow-[0_0_30px_rgba(255,255,255,0.2)]' : 'ring-white/10 hover:ring-white/25'
                   }`}
                 >
-                  {/* Glow accent */}
                   <div className={`absolute -right-6 -top-6 h-20 w-20 rounded-full bg-gradient-to-br ${age.gradient} blur-2xl opacity-70 group-hover:opacity-100 transition-opacity`} />
-
                   <div className="relative flex items-center gap-2.5 sm:gap-3">
-                    {/* Mascot Image */}
                     <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl overflow-hidden ring-1 ring-white/15 bg-white/5 flex items-center justify-center">
                       <img
                         src={age.image}
@@ -201,8 +208,6 @@ export default function Home() {
                         onError={(e) => { e.target.style.display = 'none'; }}
                       />
                     </div>
-
-                    {/* Text Content */}
                     <div className="flex-1 min-w-0">
                       <h3 className="font-black text-white text-xs sm:text-sm leading-tight">
                         {age.title}
@@ -212,7 +217,6 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-
                   <div className="relative mt-2">
                     <div
                       className={`w-full py-1.5 rounded-full text-center font-black text-xs transition-all ${
@@ -229,20 +233,6 @@ export default function Home() {
             })}
           </div>
         </motion.div>
-
-        {/* Hub Showcase — gaya PS5: hero besar + rail tile boleh scroll */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">🎮 Hub Utama</p>
-            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Pilih &amp; Buka</span>
-          </div>
-          <HomeHubShowcase />
-        </motion.div>
-
 
         {/* Subject Section */}
         <motion.div
