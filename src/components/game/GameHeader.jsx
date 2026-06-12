@@ -27,8 +27,8 @@ export default function GameHeader({ title, score, total, currentQ, totalQ, onPr
       </div>
 
       <div className="rounded-xl px-3.5 py-2 text-center flex-shrink-0 brand-gradient-br">
-        <p className="text-[9px] text-white/60 font-black uppercase tracking-[0.15em]">{t('score')}</p>
-        <p className="text-lg font-black text-white tabular-nums leading-tight">
+        <p style={{ color: 'rgba(255,255,255,0.6)' }} className="text-[9px] font-black uppercase tracking-[0.15em]">{t('score')}</p>
+        <p style={{ color: '#ffffff' }} className="text-lg font-black tabular-nums leading-tight">
           {score}/{total}
         </p>
       </div>
