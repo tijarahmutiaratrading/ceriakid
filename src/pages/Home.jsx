@@ -7,8 +7,7 @@ import { useLang } from '@/lib/LanguageContext';
 import { t } from '@/lib/i18n';
 
 import AppHeader from '@/components/AppHeader';
-import HomeSubjectShowcase from '@/components/home/HomeSubjectShowcase';
-import HomeHubShowcase from '@/components/home/HomeHubShowcase';
+import HomeBrowseShowcase from '@/components/home/HomeBrowseShowcase';
 import CinematicTips from '@/components/hub/CinematicTips';
 import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
 import InstallAppGuide from '@/components/home/InstallAppGuide';
@@ -163,33 +162,16 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Subject Section */}
+        {/* Browse Section — toggle Subjek / Hub dalam satu section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">📚 Pilih Subjek</p>
-            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Pilih &amp; Buka</span>
-          </div>
-          <HomeSubjectShowcase />
+          <HomeBrowseShowcase />
         </motion.div>
 
         {isAuthenticated && <InstallAppGuide />}
-
-        {/* Hub Showcase — gaya PS5: hero besar + rail tile boleh scroll */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">🎮 Hub Utama</p>
-            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Pilih &amp; Buka</span>
-          </div>
-          <HomeHubShowcase />
-        </motion.div>
 
         <CinematicTips />
 
