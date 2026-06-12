@@ -23,6 +23,20 @@ const HIGHLIGHTS = [
     points: ['Nota ringkas ikut topik silibus', 'Mind map berwarna mudah faham', 'Fakta menarik untuk tarik minat anak'],
     color: 'from-purple-500 via-fuchsia-400 to-pink-300',
   },
+  {
+    badge: 'IKUT SILIBUS KSPK & KSSR',
+    emoji: '🎓',
+    title: 'Semua Subjek Sekolah',
+    accent: 'Prasekolah hingga Darjah 6',
+    desc: 'Liputan penuh subjek sekolah anak — daripada Bahasa Melayu, English, Matematik sampai Sains, Jawi dan banyak lagi. Setiap subjek ada game, nota dan latihan yang disusun ikut tahap anak.',
+    image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/c313ca888_generated_image.png',
+    points: [
+      '📖 Bahasa Melayu · 🔤 English · ➗ Matematik',
+      '🔬 Sains · ✍️ Jawi · 🕌 Pendidikan Islam',
+      '🌍 Sejarah · 💛 Pendidikan Moral · 🎨 Seni & lagi',
+    ],
+    color: 'from-orange-500 via-amber-400 to-yellow-300',
+  },
 ];
 
 export default function LandingFeatureHighlight() {
