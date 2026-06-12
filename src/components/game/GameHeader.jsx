@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { useLang } from '@/lib/LanguageContext';
 
-export default function GameHeader({ title, score, total, currentQ, totalQ, onPrevious, dark = false }) {
+export default function GameHeader({ title, score, total, currentQ, totalQ, onPrevious }) {
   const { t } = useLang();
 
   return (
@@ -12,20 +12,16 @@ export default function GameHeader({ title, score, total, currentQ, totalQ, onPr
         whileTap={{ scale: 0.92 }}
         onClick={onPrevious}
         disabled={currentQ === 1}
-        className={`rounded-xl w-11 h-11 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed transition-all flex-shrink-0 ${
-          dark
-            ? 'bg-white/10 text-white ring-1 ring-white/15 backdrop-blur hover:bg-white/20'
-            : 'bg-white text-slate-700 ring-1 ring-slate-200 shadow-sm hover:bg-slate-50'
-        }`}
+        className="rounded-xl w-11 h-11 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed transition-all flex-shrink-0 bg-white text-slate-700 ring-1 ring-slate-200 shadow-sm hover:bg-slate-50"
       >
         <ArrowLeft className="w-5 h-5" />
       </motion.button>
 
       <div className="text-center min-w-0 flex-1">
-        <h2 className={`text-base sm:text-xl font-black leading-tight break-words ${dark ? 'text-white drop-shadow' : 'text-slate-900'}`}>
+        <h2 className="text-base sm:text-xl font-black leading-tight break-words text-slate-900">
           {title}
         </h2>
-        <p className={`text-xs sm:text-sm font-semibold mt-0.5 ${dark ? 'text-white/50' : 'text-slate-400'}`}>
+        <p className="text-xs sm:text-sm text-slate-400 font-semibold mt-0.5">
           {t('question')} {currentQ} {t('of')} {totalQ}
         </p>
       </div>

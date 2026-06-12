@@ -20,7 +20,6 @@ import AchievementBadges from '@/components/game/AchievementBadges';
 import QuestionRenderer from '@/components/game/QuestionRenderer';
 import CikguMascot from '@/components/game/CikguMascot';
 import GameLoadingScreen from '@/components/game/GameLoadingScreen';
-import CinematicBackdrop from '@/components/game/CinematicBackdrop';
 import { playSound } from '@/lib/soundManager';
 import { playCorrectReward, playGentleWrong, playComboFanfare, playVictory, getComboMessage, haptic } from '@/lib/gameRewards';
 import StreakIndicator from '@/components/game/StreakIndicator';
@@ -30,18 +29,6 @@ import { queueGameProgress, syncOfflineProgress } from '@/lib/offlineSyncManager
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
 
 const DARJAH_ORDER = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
-
-// Warna glow ambient ikut subjek — gaya PS5
-const CATEGORY_ACCENTS = {
-  bahasa_melayu: '#a855f7',
-  english: '#3b82f6',
-  mathematics: '#f97316',
-  science: '#22c55e',
-  jawi: '#10b981',
-  pendidikan_islam: '#14b8a6',
-  sejarah: '#f59e0b',
-  seni: '#ec4899',
-};
 
 export default function GamePlayer() {
   const { category, index } = useParams();
@@ -479,16 +466,13 @@ export default function GamePlayer() {
   const currentQuestion = questions[state.currentQ];
   const isTracingGame = game?.type === 'tracing';
 
-  const accent = CATEGORY_ACCENTS[category] || '#8b5cf6';
-
   // Tracing game — render canvas for each letter
   if (isTracingGame) {
     return (
-      <div className="min-h-screen bg-slate-950 relative">
-        <CinematicBackdrop accent={accent} />
-        <AppHeader showBack={true} backTo={`/games/${category}`} theme="dark" />
-        <div className="relative max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
-          <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/10 backdrop-blur border border-white/15 text-white font-black text-sm shadow-lg hover:bg-white/20 transition-all">
+      <div className="min-h-screen bg-pattern">
+        <AppHeader showBack={true} backTo={`/games/${category}`} />
+        <div className="max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
+          <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
             <ArrowLeft className="w-4 h-4" />
             Kembali ke Subjek
           </Link>
@@ -497,7 +481,7 @@ export default function GamePlayer() {
               <StreakIndicator streak={state.streak} />
             </div>
           )}
-          <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} dark />
+          <GameHeader title={game.title} score={state.score} total={questions.length} currentQ={state.currentQ + 1} totalQ={questions.length} />
           {state.finished ? (
             <ScoreScreen score={state.score} total={questions.length} stars={calculateStars(state.score, questions.length)} onPlayAgain={handlePlayAgain} onGenerateNew={handleGenerateNew} isPremium={isPremium} />
           ) : (
@@ -517,9 +501,20 @@ export default function GamePlayer() {
   }
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden relative bg-slate-950">
-      {/* Latar sinematik gaya PS5 */}
-      <CinematicBackdrop accent={accent} />
+    <div
+      className="min-h-screen w-full overflow-x-hidden relative"
+      style={{
+        background: '#fafafa',
+      }}
+    >
+      {/* Subtle grid pattern background — sama macam Admin */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
 
       {/* Family mascot — Ibu, Kakak, Adik */}
       {/* Desktop (lg+) — saiz penuh */}
@@ -535,11 +530,11 @@ export default function GamePlayer() {
         <CikguMascot size={150} />
       </div>
 
-      <AppHeader showBack={true} backTo={`/games/${category}`} theme="dark" />
+      <AppHeader showBack={true} backTo={`/games/${category}`} />
       <div className="relative max-w-lg mx-auto px-4 md:px-6 py-3 md:py-6 pb-12 md:pb-40 pt-24 md:pt-32">
 
          <div className="flex items-center justify-between gap-2 mb-4">
-           <Link to={`/games/${category}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-white/60 hover:text-white transition-colors">
+           <Link to={`/games/${category}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors">
              <ArrowLeft className="w-4 h-4" />
              Kembali ke Subjek
            </Link>
@@ -547,11 +542,11 @@ export default function GamePlayer() {
          </div>
 
          <div className="flex items-center justify-between gap-2 mb-4">
-           <span className="inline-flex items-center gap-1.5 capitalize px-3 py-1.5 text-xs font-bold rounded-lg whitespace-nowrap bg-white/10 backdrop-blur text-white ring-1 ring-white/15">
+           <span className="inline-flex items-center gap-1.5 capitalize px-3 py-1.5 text-xs font-bold rounded-lg whitespace-nowrap bg-white text-slate-700 ring-1 ring-slate-200 shadow-sm">
              {game.difficulty === 'hard' && <Zap className="w-3.5 h-3.5 text-amber-500" />}
              {game.difficulty === 'easy' ? '🟢 Senang' : game.difficulty === 'medium' ? '🟡 Sedang' : '🔴 Susah'}
            </span>
-           <div className="flex items-center gap-1.5 text-xs font-bold text-white/45">
+           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
              <Clock className="w-3.5 h-3.5" />
              {game.totalQuestions || 20} soalan
            </div>
@@ -564,11 +559,10 @@ export default function GamePlayer() {
           currentQ={state.currentQ + 1}
           totalQ={questions.length}
           onPrevious={handlePrevious}
-          dark
         />
 
         {/* Progress Bar with encouraging messages */}
-        <ProgressBar current={state.currentQ + 1} total={questions.length} score={state.score} dark />
+        <ProgressBar current={state.currentQ + 1} total={questions.length} score={state.score} />
 
         {/* Question Display - glass card with vibrant gradient border */}
          <motion.div
@@ -578,11 +572,11 @@ export default function GamePlayer() {
            transition={{ type: 'spring', stiffness: 260, damping: 24 }}
            className="rounded-2xl mb-6 relative"
            style={{
-             background: 'rgba(255,255,255,0.94)',
+             background: 'rgba(255,255,255,0.55)',
              backdropFilter: 'blur(20px) saturate(160%)',
              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
-             border: '1px solid rgba(255,255,255,0.5)',
-             boxShadow: `0 24px 70px rgba(0,0,0,0.5), 0 0 50px ${accent}26`,
+             border: '1px solid rgba(255,255,255,0.7)',
+             boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
            }}
          >
          <div className="rounded-2xl p-6 md:p-8 text-center relative overflow-hidden">
