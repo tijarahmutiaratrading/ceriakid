@@ -37,7 +37,7 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
 
           let bg = 'rgba(255,255,255,0.08)';
           let border = '1px solid rgba(255,255,255,0.15)';
-          let shadow = '0 4px 16px rgba(0,0,0,0.3), 0 0 28px -8px rgba(139,92,246,0.4), inset 0 1px 0 rgba(255,255,255,0.1)';
+          let shadow = '0 4px 16px rgba(0,0,0,0.35), 0 0 32px 0px rgba(139,92,246,0.5), inset 0 1px 0 rgba(255,255,255,0.12)';
           let textColor = '#ffffff';
           let badgeBg = badgeGradients[i % badgeGradients.length];
           let badgeText = '#ffffff';
