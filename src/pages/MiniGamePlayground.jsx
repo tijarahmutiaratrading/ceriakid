@@ -5,6 +5,7 @@ import { ArrowLeft, Lock, Loader2, Sparkles } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import MiniGameMascot from '@/components/game/MiniGameMascot';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
+import CinematicBackdrop from '@/components/game/CinematicBackdrop';
 import { findMiniGame, findMiniCategory, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { useAuth } from '@/lib/AuthContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
@@ -75,12 +76,10 @@ export default function MiniGamePlayground() {
   };
 
   return (
-    <div
-      className="min-h-screen w-full overflow-x-hidden relative font-nunito"
-      style={{
-        background: 'linear-gradient(135deg, #312e81 0%, #581c87 45%, #be185d 100%)',
-      }}
-    >
+    <div className="min-h-screen w-full overflow-x-hidden relative font-nunito bg-slate-950">
+      {/* Latar sinematik gaya PS5 */}
+      <CinematicBackdrop accent="#ec4899" accent2="#06b6d4" />
+
       {/* Floating sparkle decorations */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-32 left-6 text-2xl text-white/30 animate-float">✨</div>
@@ -103,7 +102,7 @@ export default function MiniGamePlayground() {
         <MiniGameMascot size={150} />
       </div>
 
-      <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} />
+      <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} theme="dark" />
 
       <div className="relative max-w-lg mx-auto px-4 sm:px-6 pb-16 pt-20 md:pt-24">
         {/* Back button — glass on gradient */}
