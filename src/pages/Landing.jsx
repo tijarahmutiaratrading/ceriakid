@@ -478,48 +478,6 @@ export default function Landing() {
         <AppPreviewShowcase />
       </div>
 
-      {/* ── SUBJECTS ── */}
-      <SectionWrapper
-        badge="SUBJEK PEMBELAJARAN"
-        badgeIcon="📚"
-        title="Subjek yang anak"
-        titleAccent="boleh belajar"
-        subtitle="Pilih topik mengikut silibus dan tahap anak — semuanya dalam gaya permainan yang menyeronokkan."
-        variant="vibrant"
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/866fc318d_generated_image.png', icon: '🇲🇾', sub: 'Bahasa Melayu', word: 'Baca • Eja • Faham', info: 'Latihan ayat mudah dan kosa kata harian.', color: 'from-blue-500 via-sky-400 to-cyan-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🇬🇧', sub: 'English', word: 'Read • Speak • Play', info: 'Belajar perkataan English dengan cara seronok.', color: 'from-emerald-500 via-green-400 to-lime-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🔢', sub: 'Matematik', word: 'Kira • Banding • Selesaikan', info: 'Nombor dan operasi asas dalam bentuk game.', color: 'from-violet-500 via-purple-400 to-fuchsia-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/866fc318d_generated_image.png', icon: '🧪', sub: 'Sains', word: 'Lihat • Tanya • Cuba', info: 'Kenal alam, haiwan dan eksperimen ringkas.', color: 'from-orange-500 via-amber-400 to-yellow-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🕌', sub: 'Jawi', word: 'Kenal • Sebut • Tulis', info: 'Huruf Jawi dan suku kata secara perlahan.', color: 'from-teal-500 via-cyan-400 to-blue-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/e595cc1aa_generated_image.png', icon: '🌺', sub: 'Tamil', word: 'அ • சொல் • வாசி', info: 'Asas huruf dan perkataan Tamil untuk anak.', color: 'from-rose-500 via-pink-400 to-orange-300' },
-            { img: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/637932d3e_generated_image.png', icon: '🏮', sub: 'Mandarin', word: '听 • 说 • 认字', info: 'Kenal bunyi, nombor dan perkataan Mandarin.', color: 'from-red-500 via-orange-400 to-yellow-300' },
-          ].map((s, i) => (
-            <motion.div
-              key={s.sub}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -4 }}
-              transition={{ delay: i * 0.06 }}
-              className="overflow-hidden rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/25 transition-all"
-            >
-              <div className="relative h-36 overflow-hidden">
-                <img src={s.img} alt={`Budak belajar ${s.sub}`} loading="lazy" decoding="async" className="w-full h-full object-cover" />
-                <div className={`absolute inset-0 bg-gradient-to-t ${s.color} opacity-60`} />
-                <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/95 text-slate-900 font-black text-xs px-3 py-1.5 rounded-full shadow-md">{s.icon} {s.sub}</div>
-              </div>
-              <div className="p-4 text-left">
-                <h3 className="font-black text-white text-lg leading-tight">{s.word}</h3>
-                <p className="text-white/60 text-xs leading-snug mt-2">{s.info}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </SectionWrapper>
-
       {/* ── 3M + LIBRARY HUB HIGHLIGHT ── */}
       <LandingFeatureHighlight />
 
