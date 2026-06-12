@@ -6,6 +6,7 @@ import { sfx, Particles, Pops, loadImage, drawCover, initHiDPI } from '@/compone
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import { drawRabbit } from '@/components/arcade/characters';
 import CharacterCanvas from '@/components/arcade/CharacterCanvas';
+import { drawCoin, drawTokenBadge, drawCloudProp, drawSpring, drawVignette } from '@/components/arcade/props';
 
 const bgImg = loadImage(ARCADE_ART.jump);
 
@@ -90,13 +91,15 @@ export default function JumpGame() {
       const moving = started && !s.dead;
 
       // Clouds (ikut camera)
-      c.font = '40px serif';
       s.clouds.forEach((cl) => {
         const sy = cl.y - s.cameraY * 0.5;
         if (sy > H + 50) cl.y -= 1500;
-        c.globalAlpha = 0.7;
-        c.fillText(alt > 0.7 ? '✨' : '☁️', cl.x, ((sy % (H + 100)) + H + 100) % (H + 100) - 50);
-        c.globalAlpha = 1;
+        const yy = ((sy % (H + 100)) + H + 100) % (H + 100) - 50;
+        if (alt > 0.7) {
+          c.globalAlpha = 0.7; c.font = '40px serif'; c.fillText('✨', cl.x, yy); c.globalAlpha = 1;
+        } else {
+          c.save(); c.translate(cl.x, yy); drawCloudProp(c, 1, 0.7); c.restore();
+        }
       });
 
       if (moving) {
@@ -180,11 +183,21 @@ export default function JumpGame() {
 
       // Platforms
       s.platforms.forEach((p) => {
-        c.fillStyle = p.type === 'spring' ? '#f9a8d4' : '#4ade80';
+        // Bayang lembut bawah platform (kedalaman 3D)
+        c.fillStyle = 'rgba(2,6,23,0.18)';
+        c.beginPath(); c.roundRect(p.x + 3, p.y + 5, 70, 14, 7); c.fill();
+        const pg = c.createLinearGradient(0, p.y, 0, p.y + 14);
+        if (p.type === 'spring') { pg.addColorStop(0, '#fce7f3'); pg.addColorStop(0.5, '#f9a8d4'); pg.addColorStop(1, '#db2777'); }
+        else { pg.addColorStop(0, '#bbf7d0'); pg.addColorStop(0.5, '#4ade80'); pg.addColorStop(1, '#15803d'); }
+        c.fillStyle = pg;
         c.beginPath(); c.roundRect(p.x, p.y, 70, 14, 7); c.fill();
-        c.fillStyle = p.type === 'spring' ? '#ec4899' : '#16a34a';
-        c.beginPath(); c.roundRect(p.x, p.y + 8, 70, 6, 3); c.fill();
-        if (p.type === 'spring') { c.font = '16px serif'; c.textAlign = 'center'; c.fillText('🌀', p.x + 35, p.y - 4); }
+        c.strokeStyle = p.type === 'spring' ? 'rgba(157,23,77,0.5)' : 'rgba(20,83,45,0.5)';
+        c.lineWidth = 1; c.stroke();
+        c.fillStyle = 'rgba(255,255,255,0.45)';
+        c.beginPath(); c.roundRect(p.x + 4, p.y + 1.5, 62, 3.5, 2); c.fill();
+        if (p.type === 'spring') {
+          c.save(); c.translate(p.x + 35, p.y); drawSpring(c, s.frame); c.restore();
+        }
       });
 
       // Pickups
@@ -192,8 +205,8 @@ export default function JumpGame() {
       s.pickups.forEach((pk) => {
         const bob = Math.sin((s.frame + pk.x) * 0.1) * 3;
         c.save(); c.translate(pk.x, pk.y + bob);
-        if (pk.kind === 'coin') { c.font = '22px serif'; c.fillText('🪙', 0, 8); }
-        else { c.shadowColor = '#34d399'; c.shadowBlur = 12; c.font = '26px serif'; c.fillText(pk.token.emoji, 0, 9); }
+        if (pk.kind === 'coin') drawCoin(c, s.frame + pk.x, 10);
+        else drawTokenBadge(c, pk.token.emoji, s.frame + pk.x, 14);
         c.restore();
       });
 
@@ -208,6 +221,8 @@ export default function JumpGame() {
       s.particles.update(c);
       s.pops.update(c);
       c.restore();
+
+      drawVignette(c, W, H);
 
       rafRef.current = requestAnimationFrame(loop);
     };

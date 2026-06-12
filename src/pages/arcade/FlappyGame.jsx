@@ -6,6 +6,7 @@ import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover, initHiDPI
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import { drawBird } from '@/components/arcade/characters';
 import CharacterCanvas from '@/components/arcade/CharacterCanvas';
+import { drawCoin, drawTokenBadge, drawPowerBadge, drawCloudProp, drawSun, drawMoon, drawVignette } from '@/components/arcade/props';
 
 const bgImg = loadImage(ARCADE_ART.flappy);
 
@@ -84,8 +85,9 @@ export default function FlappyGame() {
       if (phaseF === 1) { c.fillStyle = 'rgba(251,146,60,0.28)'; c.fillRect(-20, -20, W + 40, H + 40); }
       if (phaseF === 2) { c.fillStyle = 'rgba(15,23,42,0.55)'; c.fillRect(-20, -20, W + 40, H + 40); }
       if (phaseF === 3) { c.fillStyle = 'rgba(240,171,252,0.22)'; c.fillRect(-20, -20, W + 40, H + 40); }
-      c.font = '34px serif';
-      c.fillText(isNight ? '🌙' : '☀️', 335, 65);
+      c.save(); c.translate(335, 58);
+      if (isNight) drawMoon(c); else drawSun(c, 16, s.frame);
+      c.restore();
       if (isNight) { c.font = '10px serif'; c.fillText('✦', 80, 60); c.fillText('✦', 200, 100); c.fillText('✦', 300, 45); }
 
       const moving = started && !s.dead;
@@ -110,10 +112,11 @@ export default function FlappyGame() {
         c.fillRect(b.x, H - 30 - b.h, 75, b.h + 30);
       });
       // Clouds
-      c.font = '32px serif';
       s.clouds.forEach((cl) => {
         if (moving) { cl.x -= speed * 0.5; if (cl.x < -50) { cl.x = W + 40; cl.y = 50 + Math.random() * 150; } }
-        c.globalAlpha = 0.8; c.fillText('☁️', cl.x, cl.y); c.globalAlpha = 1;
+        c.save(); c.translate(cl.x, cl.y);
+        drawCloudProp(c, 0.85, 0.8);
+        c.restore();
       });
 
       if (moving) {
@@ -233,17 +236,9 @@ export default function FlappyGame() {
         const bob = Math.sin((s.frame + t.x) * 0.1) * 3;
         c.save();
         c.translate(t.x, t.y + bob);
-        if (t.kind === 'coin') {
-          const sc = Math.abs(Math.sin((s.frame + t.x) * 0.1));
-          c.scale(0.4 + sc * 0.6, 1);
-          c.font = '24px serif'; c.fillText('🪙', 0, 8);
-        } else if (t.kind === 'token') {
-          c.shadowColor = '#34d399'; c.shadowBlur = 14;
-          c.font = '28px serif'; c.fillText(t.token.emoji, 0, 9);
-        } else {
-          c.shadowColor = '#60a5fa'; c.shadowBlur = 16;
-          c.font = '28px serif'; c.fillText('🛡️', 0, 9);
-        }
+        if (t.kind === 'coin') drawCoin(c, s.frame + t.x, 10);
+        else if (t.kind === 'token') drawTokenBadge(c, t.token.emoji, s.frame + t.x, 14);
+        else drawPowerBadge(c, 'shield', s.frame + t.x);
         c.restore();
       });
 
@@ -268,6 +263,7 @@ export default function FlappyGame() {
       c.font = '900 14px Nunito, sans-serif'; c.fillStyle = '#fff'; c.textAlign = 'left';
       c.fillText(`🪙 ${s.coins}`, 22, 32);
 
+      drawVignette(c, W, H);
       s.particles.update(c);
       s.pops.update(c);
 

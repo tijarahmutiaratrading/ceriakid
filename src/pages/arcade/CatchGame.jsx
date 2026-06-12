@@ -6,12 +6,13 @@ import { sfx, Particles, Shaker, Pops, loadImage, drawCover, initHiDPI } from '@
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import { drawBasket } from '@/components/arcade/characters';
 import CharacterCanvas from '@/components/arcade/CharacterCanvas';
+import { drawFruit, drawTokenBadge, drawPowerBadge, drawBomb, drawTrash, drawSun, drawVignette } from '@/components/arcade/props';
 
 const bgImg = loadImage(ARCADE_ART.catch);
 
 const W = 400, H = 600;
-const GOOD = ['🍎', '🍌', '📚', '🥛', '🍊', '✏️', '🍇', '⚽'];
-const BAD = ['🗑️', '🧨', '🦴', '👟', '🪳'];
+const GOOD = ['apple', 'banana', 'book', 'milk', 'orange', 'pencil', 'grape', 'ball'];
+const BAD = ['trash', 'bomb'];
 const POWERUPS = [
   { kind: 'slow', emoji: '⏰' },
   { kind: 'life', emoji: '❤️' },
@@ -93,9 +94,7 @@ export default function CatchGame() {
         c.fillStyle = 'rgba(255,255,255,0.25)';
         c.beginPath(); c.arc(b.x, b.y, b.r, 0, Math.PI * 2); c.fill();
       });
-      c.font = '30px serif';
-      c.fillText('🌈', 30, 60);
-      c.fillText('☀️', 345, 50);
+      c.save(); c.translate(345, 50); drawSun(c, 15, s.frame); c.restore();
 
       const moving = started && !s.dead;
       const slowMult = s.slow > 0 ? 0.45 : 1;
@@ -128,8 +127,8 @@ export default function CatchGame() {
           let item;
           if (r < 0.1) item = { kind: 'token', token: randomToken() };
           else if (r < 0.16) item = { kind: 'power', power: POWERUPS[Math.floor(Math.random() * POWERUPS.length)] };
-          else if (r < 0.68) item = { kind: 'good', emoji: GOOD[Math.floor(Math.random() * GOOD.length)] };
-          else item = { kind: 'bad', emoji: BAD[Math.floor(Math.random() * BAD.length)] };
+          else if (r < 0.68) item = { kind: 'good', fruit: GOOD[Math.floor(Math.random() * GOOD.length)] };
+          else item = { kind: 'bad', bad: BAD[Math.floor(Math.random() * BAD.length)] };
           s.items.push({ ...item, x: 40 + Math.random() * (W - 80), y: -25, wobble: Math.random() * Math.PI * 2, spin: 0 });
           s.nextItem = Math.max(14, 42 - s.level * 3);
         }
@@ -202,13 +201,18 @@ export default function CatchGame() {
       s.items.forEach((it) => {
         c.save();
         c.translate(it.x, it.y);
-        if (it.kind === 'bad') c.rotate(Math.sin(it.spin * 3) * 0.3);
-        if (it.kind === 'token' || it.kind === 'power') {
-          c.shadowColor = it.kind === 'token' ? '#34d399' : '#a78bfa';
-          c.shadowBlur = 14;
+        if (it.kind === 'bad') {
+          c.rotate(Math.sin(it.spin * 3) * 0.3);
+          (it.bad === 'bomb' ? drawBomb : drawTrash)(c, s.frame);
+        } else if (it.kind === 'token') {
+          drawTokenBadge(c, it.token.emoji, s.frame + it.x);
+        } else if (it.kind === 'power') {
+          drawPowerBadge(c, it.power.kind, s.frame + it.x, 15);
+        } else {
+          c.rotate(Math.sin(it.spin) * 0.2);
+          c.scale(1.25, 1.25);
+          drawFruit(c, it.fruit);
         }
-        c.font = '34px serif';
-        c.fillText(it.kind === 'token' ? it.token.emoji : it.kind === 'power' ? it.power.emoji : it.emoji, 0, 0);
         c.restore();
       });
 
@@ -240,6 +244,7 @@ export default function CatchGame() {
       c.fillText(`Lvl ${s.level}`, 24, 32);
       if (s.slow > 0) { c.font = '20px serif'; c.fillText('⏰', W - 40, 34); }
 
+      drawVignette(c, W, H);
       s.particles.update(c);
       s.pops.update(c);
 

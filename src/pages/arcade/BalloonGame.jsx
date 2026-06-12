@@ -5,6 +5,8 @@ import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues
 import { sfx, Particles, Shaker, Pops, loadImage, drawCover, initHiDPI } from '@/components/arcade/engine';
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 
+import { drawBomb, drawBalloon, drawVignette } from '@/components/arcade/props';
+
 const bgImg = loadImage(ARCADE_ART.balloon);
 
 const W = 400, H = 600;
@@ -146,18 +148,10 @@ export default function BalloonGame() {
         c.quadraticCurveTo(6, 42, 0, 56);
         c.stroke();
         if (b.kind === 'bomb') {
-          c.font = '40px serif'; c.textAlign = 'center';
-          c.fillText('💣', 0, 14);
+          c.scale(1.25, 1.25);
+          drawBomb(c, s.frame);
         } else {
-          // Belon
-          c.fillStyle = b.color;
-          c.beginPath(); c.ellipse(0, 0, 24, 30, 0, 0, Math.PI * 2); c.fill();
-          // Highlight
-          c.fillStyle = 'rgba(255,255,255,0.45)';
-          c.beginPath(); c.ellipse(-8, -10, 7, 11, -0.4, 0, Math.PI * 2); c.fill();
-          // Knot
-          c.fillStyle = b.color;
-          c.beginPath(); c.moveTo(-5, 28); c.lineTo(5, 28); c.lineTo(0, 34); c.fill();
+          drawBalloon(c, b.color);
           if (b.kind === 'token') {
             c.shadowColor = '#34d399'; c.shadowBlur = 10;
             c.font = '22px serif'; c.textAlign = 'center';
@@ -179,6 +173,7 @@ export default function BalloonGame() {
       c.font = '900 13px Nunito, sans-serif'; c.fillStyle = '#fff'; c.textAlign = 'left';
       c.fillText(`Lvl ${s.level}`, 24, 32);
 
+      drawVignette(c, W, H);
       s.particles.update(c);
       s.pops.update(c);
 

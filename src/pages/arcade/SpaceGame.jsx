@@ -6,6 +6,7 @@ import { sfx, Particles, Shaker, Pops, loadImage, drawCover, initHiDPI } from '@
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import { drawRocket } from '@/components/arcade/characters';
 import CharacterCanvas from '@/components/arcade/CharacterCanvas';
+import { drawAsteroidProp, drawStarProp, drawTokenBadge, drawPowerBadge, drawPlanet, drawVignette } from '@/components/arcade/props';
 
 const bgImg = loadImage(ARCADE_ART.space);
 
@@ -71,7 +72,8 @@ export default function SpaceGame() {
         c.fillStyle = `rgba(255,255,255,${0.3 + st.s * 0.25})`;
         c.fillRect(st.x, st.y, st.s, st.s * 3);
       });
-      c.font = '24px serif'; c.fillText('🪐', 340, 80); c.fillText('🌍', 40, 140);
+      c.save(); c.translate(340, 80); drawPlanet(c, 12, true); c.restore();
+      c.save(); c.translate(40, 140); drawPlanet(c, 10, false); c.restore();
 
       if (moving) {
         s.frame++;
@@ -148,16 +150,15 @@ export default function SpaceGame() {
       c.textAlign = 'center';
       s.asteroids.forEach((a) => {
         c.save(); c.translate(a.x, a.y); c.rotate(a.rot);
-        c.font = `${a.size}px serif`; c.fillText('☄️', 0, a.size / 3);
+        drawAsteroidProp(c, a.size * 1.1);
         c.restore();
       });
       // Render pickups
       s.pickups.forEach((p) => {
         c.save(); c.translate(p.x, p.y);
-        c.shadowBlur = 12;
-        if (p.kind === 'star') { c.shadowColor = '#fde047'; c.font = '26px serif'; c.fillText('⭐', 0, 9); }
-        else if (p.kind === 'token') { c.shadowColor = '#34d399'; c.font = '28px serif'; c.fillText(p.token.emoji, 0, 10); }
-        else { c.shadowColor = '#60a5fa'; c.font = '26px serif'; c.fillText('🛡️', 0, 9); }
+        if (p.kind === 'star') drawStarProp(c, 12, s.frame + p.x);
+        else if (p.kind === 'token') drawTokenBadge(c, p.token.emoji, s.frame + p.x);
+        else drawPowerBadge(c, 'shield', s.frame + p.x);
         c.restore();
       });
 
@@ -175,6 +176,7 @@ export default function SpaceGame() {
         }
       }
 
+      drawVignette(c, W, H);
       s.particles.update(c);
       s.pops.update(c);
 

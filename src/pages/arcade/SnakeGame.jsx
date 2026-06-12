@@ -5,13 +5,15 @@ import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues
 import { sfx, Particles, Shaker, Pops, loadImage, drawCover, initHiDPI } from '@/components/arcade/engine';
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 
+import { drawFruit, drawTokenBadge, drawVignette } from '@/components/arcade/props';
+
 const bgImg = loadImage(ARCADE_ART.snake);
 
 const W = 400, H = 600;
 const CELL = 25;
 const COLS = W / CELL; // 16
 const ROWS = H / CELL; // 24
-const FOODS = ['🍎', '🍌', '🍇', '🍊', '🍓'];
+const FOODS = ['apple', 'banana', 'grape', 'orange', 'strawberry'];
 
 export default function SnakeGame() {
   const canvasRef = useRef(null);
@@ -36,7 +38,7 @@ export default function SnakeGame() {
     const snake = [{ x: 8, y: 12 }, { x: 7, y: 12 }, { x: 6, y: 12 }];
     return {
       snake, dir: { x: 1, y: 0 }, nextDir: { x: 1, y: 0 },
-      food: { ...randCell(snake), emoji: FOODS[0], kind: 'food' },
+      food: { ...randCell(snake), fruit: FOODS[0], kind: 'food' },
       collected: [], score: 0, eaten: 0, frame: 0, tick: 0, speed: 9, dead: false,
       particles: new Particles(), shaker: new Shaker(), pops: new Pops(),
     };
@@ -130,7 +132,7 @@ export default function SnakeGame() {
               if ((s.eaten + 1) % 4 === 0) {
                 s.food = { ...randCell(s.snake), kind: 'token', token: randomToken() };
               } else {
-                s.food = { ...randCell(s.snake), kind: 'food', emoji: FOODS[Math.floor(Math.random() * FOODS.length)] };
+                s.food = { ...randCell(s.snake), kind: 'food', fruit: FOODS[Math.floor(Math.random() * FOODS.length)] };
               }
             } else {
               s.snake.pop();
@@ -148,6 +150,11 @@ export default function SnakeGame() {
         c.beginPath();
         c.roundRect(seg.x * CELL + pad, seg.y * CELL + pad, CELL - pad * 2, CELL - pad * 2, isHead ? 9 : 7);
         c.fill();
+        // Gloss 3D atas setiap segmen
+        c.fillStyle = 'rgba(255,255,255,0.22)';
+        c.beginPath();
+        c.roundRect(seg.x * CELL + pad + 2, seg.y * CELL + pad + 1.5, CELL - pad * 2 - 4, (CELL - pad * 2) * 0.38, 5);
+        c.fill();
         if (isHead) {
           // Mata
           c.fillStyle = '#fff';
@@ -164,11 +171,11 @@ export default function SnakeGame() {
       const bob = Math.sin(s.frame * 0.12) * 2;
       c.save();
       c.translate(s.food.x * CELL + CELL / 2, s.food.y * CELL + CELL / 2 + bob);
-      if (s.food.kind === 'token') { c.shadowColor = '#a78bfa'; c.shadowBlur = 14; }
-      c.font = '22px serif'; c.textAlign = 'center';
-      c.fillText(s.food.kind === 'token' ? s.food.token.emoji : s.food.emoji, 0, 8);
+      if (s.food.kind === 'token') drawTokenBadge(c, s.food.token.emoji, s.frame, 13);
+      else { c.scale(0.85, 0.85); drawFruit(c, s.food.fruit); }
       c.restore();
 
+      drawVignette(c, W, H);
       s.particles.update(c);
       s.pops.update(c);
 

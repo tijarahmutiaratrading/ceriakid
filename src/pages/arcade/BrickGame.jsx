@@ -5,6 +5,8 @@ import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues
 import { sfx, Particles, Shaker, Pops, loadImage, drawCover, initHiDPI } from '@/components/arcade/engine';
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 
+import { drawTokenBadge, drawPowerBadge, drawVignette } from '@/components/arcade/props';
+
 const bgImg = loadImage(ARCADE_ART.brick);
 
 const W = 400, H = 600;
@@ -169,20 +171,31 @@ export default function BrickGame() {
 
       // ── Render bricks ──
       s.bricks.forEach((b) => {
+        // Bayang bawah (kedalaman)
+        c.fillStyle = 'rgba(2,6,23,0.3)';
+        c.beginPath(); c.roundRect(b.x + 2, b.y + 3, b.w, b.h, 5); c.fill();
         c.fillStyle = b.color;
         c.beginPath(); c.roundRect(b.x, b.y, b.w, b.h, 5); c.fill();
-        c.fillStyle = 'rgba(255,255,255,0.3)';
-        c.beginPath(); c.roundRect(b.x, b.y, b.w, 7, 5); c.fill();
-        if (b.special) { c.font = '12px serif'; c.textAlign = 'center'; c.fillText(b.special === 'token' ? '⭐' : '↔️', b.x + b.w / 2, b.y + 15); }
+        c.fillStyle = 'rgba(0,0,0,0.26)';
+        c.beginPath(); c.roundRect(b.x, b.y + b.h - 6, b.w, 6, 4); c.fill();
+        c.fillStyle = 'rgba(255,255,255,0.45)';
+        c.beginPath(); c.roundRect(b.x + 2, b.y + 1.5, b.w - 4, 5, 3); c.fill();
+        c.strokeStyle = 'rgba(2,6,23,0.3)'; c.lineWidth = 1;
+        c.beginPath(); c.roundRect(b.x, b.y, b.w, b.h, 5); c.stroke();
+        if (b.special) {
+          c.save(); c.translate(b.x + b.w / 2, b.y + b.h / 2);
+          c.scale(0.55, 0.55);
+          drawPowerBadge(c, b.special === 'token' ? 'star' : 'wide', s.frame);
+          c.restore();
+        }
       });
 
       // Drops
       c.textAlign = 'center';
       s.drops.forEach((d) => {
         c.save(); c.translate(d.x, d.y);
-        c.shadowColor = '#a78bfa'; c.shadowBlur = 12;
-        c.font = '24px serif';
-        c.fillText(d.kind === 'token' ? d.token.emoji : '↔️', 0, 8);
+        if (d.kind === 'token') drawTokenBadge(c, d.token.emoji, s.frame + d.x, 14);
+        else drawPowerBadge(c, 'wide', s.frame + d.x);
         c.restore();
       });
 
@@ -191,11 +204,17 @@ export default function BrickGame() {
       pGrad.addColorStop(0, '#ec4899'); pGrad.addColorStop(0.5, '#f9a8d4'); pGrad.addColorStop(1, '#ec4899');
       c.fillStyle = pGrad;
       c.beginPath(); c.roundRect(s.paddleX - s.paddleW / 2, H - 64, s.paddleW, 14, 7); c.fill();
+      c.fillStyle = 'rgba(255,255,255,0.5)';
+      c.beginPath(); c.roundRect(s.paddleX - s.paddleW / 2 + 6, H - 62.5, s.paddleW - 12, 4, 2); c.fill();
+      c.strokeStyle = 'rgba(131,24,67,0.5)'; c.lineWidth = 1;
+      c.beginPath(); c.roundRect(s.paddleX - s.paddleW / 2, H - 64, s.paddleW, 14, 7); c.stroke();
 
       // Ball
       if (!s.dead) {
-        c.shadowColor = '#fde047'; c.shadowBlur = 14;
-        c.fillStyle = '#fef08a';
+        c.shadowColor = '#fde047'; c.shadowBlur = 16;
+        const ballG = c.createRadialGradient(s.ballX - 2.6, s.ballY - 2.8, 1, s.ballX, s.ballY, 9);
+        ballG.addColorStop(0, '#ffffff'); ballG.addColorStop(0.45, '#fde047'); ballG.addColorStop(1, '#b45309');
+        c.fillStyle = ballG;
         c.beginPath(); c.arc(s.ballX, s.ballY, 8, 0, Math.PI * 2); c.fill();
         c.shadowBlur = 0;
       }
@@ -211,6 +230,7 @@ export default function BrickGame() {
         c.fillText('Tap untuk lancar bola! 👆', W / 2, H / 2 + 60);
       }
 
+      drawVignette(c, W, H);
       s.particles.update(c);
       s.pops.update(c);
 

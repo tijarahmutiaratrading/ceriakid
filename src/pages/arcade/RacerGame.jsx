@@ -6,13 +6,14 @@ import { sfx, Particles, Shaker, Pops, loadImage, drawCover, initHiDPI } from '@
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import { drawCar } from '@/components/arcade/characters';
 import CharacterCanvas from '@/components/arcade/CharacterCanvas';
+import { drawEnemyCar, drawCoin, drawTokenBadge, drawPowerBadge, drawTreeProp, drawVignette } from '@/components/arcade/props';
 
 const bgImg = loadImage(ARCADE_ART.racer);
 
 const W = 400, H = 600;
 const LANES = [100, 200, 300];
 const CAR_Y = 480;
-const ENEMIES = ['🚗', '🚙', '🚕', '🚜', '🚚'];
+const ENEMIES = ['#3b82f6', '#22c55e', '#eab308', '#a855f7', '#06b6d4'];
 
 export default function RacerGame() {
   const canvasRef = useRef(null);
@@ -88,10 +89,12 @@ export default function RacerGame() {
         c.fillRect(247, y, 6, 32);
       }
       // Pokok tepi jalan
-      c.font = '34px serif'; c.textAlign = 'center';
+      c.textAlign = 'center';
       s.trees.forEach((t) => {
         if (moving || s.dead) { t.y += spd * 0.8; if (t.y > H + 40) { t.y = -60; t.side = Math.random() < 0.5 ? 0 : 1; } }
-        c.fillText('🌳', t.side === 0 ? 25 : W - 25, t.y);
+        c.save(); c.translate(t.side === 0 ? 25 : W - 25, t.y);
+        drawTreeProp(c, 0.8);
+        c.restore();
       });
 
       if (moving) {
@@ -104,11 +107,11 @@ export default function RacerGame() {
         s.nextEnemy--;
         if (s.nextEnemy <= 0) {
           const lane = Math.floor(Math.random() * 3);
-          s.enemies.push({ lane, x: LANES[lane], y: -50, emoji: ENEMIES[Math.floor(Math.random() * ENEMIES.length)], v: 0.55 + Math.random() * 0.2 });
+          s.enemies.push({ lane, x: LANES[lane], y: -50, color: ENEMIES[Math.floor(Math.random() * ENEMIES.length)], v: 0.55 + Math.random() * 0.2 });
           // double bila laju
           if (s.distance > 300 && Math.random() < 0.4) {
             const lane2 = (lane + 1 + Math.floor(Math.random() * 2)) % 3;
-            s.enemies.push({ lane: lane2, x: LANES[lane2], y: -160, emoji: ENEMIES[Math.floor(Math.random() * ENEMIES.length)], v: 0.55 });
+            s.enemies.push({ lane: lane2, x: LANES[lane2], y: -160, color: ENEMIES[Math.floor(Math.random() * ENEMIES.length)], v: 0.55 });
           }
           s.nextEnemy = Math.max(28, 60 - s.distance / 50);
         }
@@ -185,23 +188,19 @@ export default function RacerGame() {
 
       // ── Render musuh (menghadap bawah) ──
       s.enemies.forEach((en) => {
-        c.save(); c.translate(en.x, en.y); c.scale(1, -1);
-        c.font = '44px serif'; c.fillText(en.emoji, 0, 15);
+        c.save(); c.translate(en.x, en.y);
+        c.scale(1.15, 1.15);
+        drawEnemyCar(c, en.color);
         c.restore();
       });
       // Pickups
       s.pickups.forEach((p) => {
         const bob = Math.sin((s.frame + p.y) * 0.1) * 3;
         c.save(); c.translate(p.x, p.y + bob);
-        if (p.kind === 'coin') {
-          const sc = Math.abs(Math.sin((s.frame + p.y) * 0.1));
-          c.scale(0.4 + sc * 0.6, 1); c.font = '26px serif'; c.fillText('🪙', 0, 9);
-        } else {
-          c.shadowBlur = 12;
-          if (p.kind === 'token') { c.shadowColor = '#34d399'; c.font = '28px serif'; c.fillText(p.token.emoji, 0, 10); }
-          else if (p.kind === 'shield') { c.shadowColor = '#60a5fa'; c.font = '26px serif'; c.fillText('🛡️', 0, 9); }
-          else { c.shadowColor = '#fde047'; c.font = '26px serif'; c.fillText('⚡', 0, 9); }
-        }
+        if (p.kind === 'coin') drawCoin(c, s.frame + p.y);
+        else if (p.kind === 'token') drawTokenBadge(c, p.token.emoji, s.frame + p.y);
+        else if (p.kind === 'shield') drawPowerBadge(c, 'shield', s.frame + p.y);
+        else drawPowerBadge(c, 'boost', s.frame + p.y);
         c.restore();
       });
 
@@ -232,6 +231,7 @@ export default function RacerGame() {
       c.fillText(`🪙 ${s.coins}`, 22, 32);
       if (s.boost > 0) { c.font = '900 13px Nunito, sans-serif'; c.fillStyle = '#fde047'; c.textAlign = 'center'; c.fillText('⚡ NITRO KEBAL!', W / 2, 32); }
 
+      drawVignette(c, W, H);
       s.particles.update(c);
       s.pops.update(c);
 
