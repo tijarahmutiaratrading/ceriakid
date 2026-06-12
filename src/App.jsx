@@ -162,7 +162,6 @@ const AuthenticatedApp = () => {
             <Route path="/games-subjek" element={lazyRoute(GamesSubjek)} />
             <Route path="/kafa" element={lazyRoute(KafaHub)} />
             <Route path="/3m/:categoryId" element={lazyRoute(TigaMList)} />
-            <Route path="/mini-games/:type" element={lazyRoute(MiniGamesList)} />
             <Route path="/parent-dashboard" element={lazyRoute(ParentDashboard)} />
             <Route path="/social" element={lazyRoute(Social)} />
             <Route path="/friends" element={lazyRoute(Social)} />
@@ -185,6 +184,7 @@ const AuthenticatedApp = () => {
           <Route path="/library" element={lazyRoute(LibraryHub)} />
           <Route path="/ai-hub" element={lazyRoute(AIHub)} />
           <Route path="/story-kid" element={lazyRoute(StoryKid)} />
+          <Route path="/mini-games/:type" element={lazyRoute(MiniGamesList)} />
           <Route path="/arcade" element={lazyRoute(ArcadeZone)} />
           <Route path="/arcade/runner" element={lazyRoute(RunnerGame)} />
           <Route path="/arcade/catch" element={lazyRoute(CatchGame)} />
