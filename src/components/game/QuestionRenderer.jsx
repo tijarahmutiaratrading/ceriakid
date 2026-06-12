@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useGameTheme } from '@/lib/GameThemeContext';
 
 export default function QuestionRenderer({ question, onAnswer, disabled, selectedIdx, isCorrect, showFeedback }) {
+  const { isDark } = useGameTheme();
   const type = question?.type || 'multiple_choice';
 
   // Reset all input state whenever the question changes
@@ -35,10 +37,10 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
           const isSelected = showFeedback && selectedIdx === i;
           const isCorrectAnswer = showFeedback && i === question.answer;
 
-          let bg = 'rgba(255,255,255,0.08)';
-          let border = '1px solid rgba(255,255,255,0.15)';
-          let shadow = '0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)';
-          let textColor = '#ffffff';
+          let bg = isDark ? 'rgba(255,255,255,0.08)' : '#ffffff';
+          let border = isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(148,163,184,0.25)';
+          let shadow = isDark ? '0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' : '0 4px 12px rgba(148,163,184,0.18)';
+          let textColor = isDark ? '#ffffff' : '#0f172a';
           let badgeBg = badgeGradients[i % badgeGradients.length];
           let badgeText = '#ffffff';
           let badgeIcon = letters[i];

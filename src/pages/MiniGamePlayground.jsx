@@ -5,6 +5,9 @@ import { ArrowLeft, Lock, Loader2, Sparkles } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import MiniGameMascot from '@/components/game/MiniGameMascot';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
+import GameThemeBackground from '@/components/game/GameThemeBackground';
+import GameThemeToggle from '@/components/game/GameThemeToggle';
+import { useGameTheme } from '@/lib/GameThemeContext';
 import { findMiniGame, findMiniCategory, MINI_GAME_CATEGORIES } from '@/lib/miniGameBlueprints';
 import { useAuth } from '@/lib/AuthContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
@@ -46,6 +49,7 @@ export default function MiniGamePlayground() {
   const [tierLoaded, setTierLoaded] = React.useState(false);
   const [loadingGame, setLoadingGame] = React.useState(false);
   const { category, game: blueprintGame } = findMiniGame(categoryId, gameId);
+  const { isDark } = useGameTheme();
   const game = blueprintGame;
   const gameData = game || {};
   const categoryOffset = Math.max(0, MINI_GAME_CATEGORIES.findIndex(item => item.id === category.id)) * 10;
@@ -75,13 +79,8 @@ export default function MiniGamePlayground() {
   };
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden relative font-nunito bg-slate-950">
-      {/* Latar sinematik PS5 — gelap dengan glow halus */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-40 -right-32 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-violet-600/20 rounded-full filter blur-3xl" />
-        <div className="absolute top-1/3 -left-28 w-[250px] h-[250px] md:w-[440px] md:h-[440px] bg-cyan-500/12 rounded-full filter blur-3xl" />
-        <div className="absolute -bottom-24 right-1/4 w-[280px] h-[280px] md:w-[440px] md:h-[440px] bg-fuchsia-500/12 rounded-full filter blur-3xl" />
-      </div>
+    <div data-game-theme={isDark ? 'dark' : 'light'} className={`min-h-screen w-full overflow-x-hidden relative font-nunito ${isDark ? 'bg-slate-950' : 'bg-slate-50'}`}>
+      <GameThemeBackground />
 
       {/* Mini Game mascot — Panda, Kucing, Arnab */}
       <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
@@ -94,14 +93,15 @@ export default function MiniGamePlayground() {
       <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} />
 
       <div className="relative max-w-lg mx-auto px-4 sm:px-6 pb-16 pt-20 md:pt-24">
-        {/* Back button — glass on gradient */}
-        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+        {/* Back button + theme toggle */}
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between gap-2 mb-5">
           <Link
             to={`/mini-games/${category.id}`}
-            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-white bg-white/10 ring-1 ring-white/15 shadow-sm transition-all hover:scale-[1.02] hover:bg-white/20"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full font-black text-sm text-white bg-white/10 ring-1 ring-white/15 shadow-sm transition-all hover:scale-[1.02] hover:bg-white/20"
           >
             <ArrowLeft className="w-4 h-4" /> {category.title}
           </Link>
+          <GameThemeToggle />
         </motion.div>
 
         {/* Game header — glass card */}

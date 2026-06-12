@@ -16,6 +16,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { LanguageProvider } from '@/lib/LanguageContext';
 import { AgeGroupProvider } from '@/lib/AgeGroupContext';
 import { SelectedChildProvider } from '@/lib/SelectedChildContext';
+import { GameThemeProvider } from '@/lib/GameThemeContext';
 
 // Eager-load: kritikal untuk first paint (public pages + main shell)
 import Landing from '@/pages/Landing';
@@ -226,9 +227,11 @@ function App() {
       <Router>
         <QueryClientProvider client={queryClientInstance}>
           <AuthProvider>
-            <OfflineBanner />
-            <AuthenticatedAppWithChild />
-            <Toaster />
+            <GameThemeProvider>
+              <OfflineBanner />
+              <AuthenticatedAppWithChild />
+              <Toaster />
+            </GameThemeProvider>
           </AuthProvider>
         </QueryClientProvider>
       </Router>

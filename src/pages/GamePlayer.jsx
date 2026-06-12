@@ -9,6 +9,9 @@ import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory, shuffleArray, calculateStars, saveScore } from '@/lib/gameLibrary';
 import AppHeader from '@/components/AppHeader';
+import GameThemeBackground from '@/components/game/GameThemeBackground';
+import GameThemeToggle from '@/components/game/GameThemeToggle';
+import { useGameTheme } from '@/lib/GameThemeContext';
 import GameHeader from '@/components/game/GameHeader';
 import FeedbackOverlay from '@/components/game/FeedbackOverlay';
 import ScoreScreen from '@/components/game/ScoreScreen';
@@ -35,6 +38,7 @@ export default function GamePlayer() {
   const { ageGroup } = useAgeGroup();
   const { user, isAuthenticated } = useAuth();
   const { selectedChild } = useSelectedChild();
+  const { isDark } = useGameTheme();
   const gameIndex = parseInt(index);
 
   const [game, setGame] = useState(null);
@@ -501,15 +505,16 @@ export default function GamePlayer() {
   }
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden relative bg-slate-950">
-      {/* Latar sinematik PS5-style — glow halus */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-40 -right-32 w-[450px] h-[450px] bg-violet-600/40 rounded-full filter blur-3xl" />
-        <div className="absolute top-1/3 -left-32 w-[400px] h-[400px] bg-cyan-500/30 rounded-full filter blur-3xl" />
-        <div className="absolute -bottom-24 right-1/4 w-[450px] h-[450px] bg-fuchsia-500/35 rounded-full filter blur-3xl" />
-        {/* Overlay gelap halus — kekalkan contrast teks atas glow */}
-        <div className="absolute inset-0 bg-slate-950/55" />
-      </div>
+    <div data-game-theme={isDark ? 'dark' : 'light'} className={`min-h-screen w-full overflow-x-hidden relative ${isDark ? 'bg-slate-950' : 'bg-slate-50'}`}>
+      <GameThemeBackground />
+      {isDark && (
+        <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <div className="absolute -top-40 -right-32 w-[450px] h-[450px] bg-violet-600/40 rounded-full filter blur-3xl" />
+          <div className="absolute top-1/3 -left-32 w-[400px] h-[400px] bg-cyan-500/30 rounded-full filter blur-3xl" />
+          <div className="absolute -bottom-24 right-1/4 w-[450px] h-[450px] bg-fuchsia-500/35 rounded-full filter blur-3xl" />
+          <div className="absolute inset-0 bg-slate-950/55" />
+        </div>
+      )}
 
       {/* Family mascot — Ibu, Kakak, Adik */}
       {/* Desktop (lg+) — saiz penuh */}
@@ -533,7 +538,10 @@ export default function GamePlayer() {
              <ArrowLeft className="w-4 h-4" />
              Kembali ke Subjek
            </Link>
-           {state.streak >= 2 && <StreakIndicator streak={state.streak} />}
+           <div className="flex items-center gap-2">
+             {state.streak >= 2 && <StreakIndicator streak={state.streak} />}
+             <GameThemeToggle />
+           </div>
          </div>
 
          <div className="flex items-center justify-between gap-2 mb-4">
@@ -566,12 +574,16 @@ export default function GamePlayer() {
            animate={{ opacity: 1, y: 0, scale: 1 }}
            transition={{ type: 'spring', stiffness: 260, damping: 24 }}
            className="rounded-2xl mb-6 relative"
-           style={{
+           style={isDark ? {
              background: 'rgba(255,255,255,0.08)',
              backdropFilter: 'blur(20px) saturate(160%)',
              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
              border: '1px solid rgba(255,255,255,0.15)',
              boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)',
+           } : {
+             background: '#ffffff',
+             border: '1px solid rgba(148,163,184,0.25)',
+             boxShadow: '0 8px 24px rgba(148,163,184,0.18)',
            }}
          >
          <div className="rounded-2xl p-6 md:p-8 text-center relative overflow-hidden">

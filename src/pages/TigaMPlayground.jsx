@@ -5,6 +5,9 @@ import { ArrowLeft, Lock, Loader2, Sparkles, Clock } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import CikguMascot from '@/components/game/CikguMascot';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
+import GameThemeBackground from '@/components/game/GameThemeBackground';
+import GameThemeToggle from '@/components/game/GameThemeToggle';
+import { useGameTheme } from '@/lib/GameThemeContext';
 import { findTigaMGame, findTigaMCategory } from '@/lib/tigaMBlueprints';
 import { useAuth } from '@/lib/AuthContext';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
@@ -18,6 +21,7 @@ export default function TigaMPlayground() {
   const { selectedChild } = useSelectedChild() || {};
   const [userTier, setUserTier] = React.useState('free');
   const [tierLoaded, setTierLoaded] = React.useState(false);
+  const { isDark } = useGameTheme();
   const { category, game } = findTigaMGame(categoryId, gameId);
   // Setiap kategori 3M = satu bucket sendiri (ikut Games Subjek), tanpa offset.
   const gameIndex = Math.max(0, category.games.findIndex(g => g.id === gameId));
@@ -44,13 +48,8 @@ export default function TigaMPlayground() {
   };
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden relative font-nunito bg-slate-950">
-      {/* Latar sinematik PS5 — gelap dengan glow halus */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-40 -right-32 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-violet-600/20 rounded-full filter blur-3xl" />
-        <div className="absolute top-1/3 -left-28 w-[250px] h-[250px] md:w-[440px] md:h-[440px] bg-cyan-500/12 rounded-full filter blur-3xl" />
-        <div className="absolute -bottom-24 right-1/4 w-[280px] h-[280px] md:w-[440px] md:h-[440px] bg-fuchsia-500/12 rounded-full filter blur-3xl" />
-      </div>
+    <div data-game-theme={isDark ? 'dark' : 'light'} className={`min-h-screen w-full overflow-x-hidden relative font-nunito ${isDark ? 'bg-slate-950' : 'bg-slate-50'}`}>
+      <GameThemeBackground />
 
       {/* Family mascot — Ibu, Kakak, Adik */}
       <div className="hidden lg:block fixed bottom-2 left-8 z-0">
@@ -66,7 +65,7 @@ export default function TigaMPlayground() {
       <AppHeader showBack={true} backTo={`/3m/${category.id}`} />
 
       <div className="relative max-w-lg mx-auto px-4 md:px-6 pb-12 md:pb-40 pt-24 md:pt-32">
-        {/* Back link */}
+        {/* Back link + theme toggle */}
         <div className="flex items-center justify-between gap-2 mb-4">
           <Link
             to={`/3m/${category.id}`}
@@ -74,6 +73,7 @@ export default function TigaMPlayground() {
           >
             <ArrowLeft className="w-4 h-4" /> {category.title}
           </Link>
+          <GameThemeToggle />
         </div>
 
         {/* Game header — light glass card */}
