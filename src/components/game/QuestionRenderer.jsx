@@ -35,10 +35,10 @@ export default function QuestionRenderer({ question, onAnswer, disabled, selecte
           const isSelected = showFeedback && selectedIdx === i;
           const isCorrectAnswer = showFeedback && i === question.answer;
 
-          let bg = 'rgba(255,255,255,0.5)';
-          let border = '1px solid rgba(255,255,255,0.7)';
-          let shadow = '0 4px 16px rgba(0,0,0,0.06)';
-          let textColor = '#1e293b';
+          let bg = 'rgba(255,255,255,0.08)';
+          let border = '1px solid rgba(255,255,255,0.15)';
+          let shadow = '0 4px 16px rgba(0,0,0,0.3)';
+          let textColor = '#ffffff';
           let badgeBg = badgeGradients[i % badgeGradients.length];
           let badgeText = '#ffffff';
           let badgeIcon = letters[i];

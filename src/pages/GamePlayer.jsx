@@ -383,17 +383,17 @@ export default function GamePlayer() {
 
   if (accessDenied) {
     return (
-      <div className="min-h-screen bg-pattern flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="clay rounded-3xl p-8 text-center max-w-sm"
+          className="rounded-3xl p-8 text-center max-w-sm bg-white/8 backdrop-blur-xl border border-white/15"
         >
           <p className="text-5xl mb-4">🔒</p>
-          <p className="text-2xl font-black mb-2 text-gray-800">Permainan Terkunci</p>
-          <p className="text-gray-600 mb-6">Naik taraf langganan anda untuk akses permainan ini.</p>
+          <p className="text-2xl font-black mb-2 text-white">Permainan Terkunci</p>
+          <p className="text-white/60 mb-6">Naik taraf langganan anda untuk akses permainan ini.</p>
           <Link to="/">
-            <motion.button whileHover={{ scale: 1.05 }} className="px-6 py-3 bg-orange-500 text-white rounded-full font-bold">
+            <motion.button whileHover={{ scale: 1.05 }} className="px-6 py-3 bg-white text-slate-900 rounded-full font-bold">
               Lihat Pelan →
             </motion.button>
           </Link>
@@ -404,19 +404,19 @@ export default function GamePlayer() {
 
   if (!game) {
     return (
-      <div className="min-h-screen bg-pattern flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="clay rounded-3xl p-8 text-center max-w-sm"
+          className="rounded-3xl p-8 text-center max-w-sm bg-white/8 backdrop-blur-xl border border-white/15"
         >
           <p className="text-5xl mb-4">🎮</p>
-          <p className="text-2xl font-black mb-2 text-gray-800">Permainan Tidak Dijumpai</p>
-          <p className="text-gray-600 mb-6">Permainan yang diminta tidak tersedia.</p>
+          <p className="text-2xl font-black mb-2 text-white">Permainan Tidak Dijumpai</p>
+          <p className="text-white/60 mb-6">Permainan yang diminta tidak tersedia.</p>
           <Link to={`/games/${category}`}>
             <motion.button
               whileHover={{ scale: 1.05 }}
-              className="px-6 py-3 bg-game-purple text-white rounded-full font-bold"
+              className="px-6 py-3 bg-white text-slate-900 rounded-full font-bold"
             >
               ← Balik
             </motion.button>
@@ -445,15 +445,15 @@ export default function GamePlayer() {
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen bg-pattern flex items-center justify-center p-4">
-        <div className="clay rounded-3xl p-8 text-center max-w-sm">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+        <div className="rounded-3xl p-8 text-center max-w-sm bg-white/8 backdrop-blur-xl border border-white/15">
           <p className="text-3xl mb-3">⚠️</p>
-          <p className="text-lg font-bold mb-4">Permainan Belum Siap</p>
-          <p className="text-gray-600 mb-6">Permainan ini masih dalam pembangunan.</p>
+          <p className="text-lg font-bold mb-4 text-white">Permainan Belum Siap</p>
+          <p className="text-white/60 mb-6">Permainan ini masih dalam pembangunan.</p>
           <Link to={`/games/${category}`}>
             <motion.button
               whileHover={{ scale: 1.05 }}
-              className="px-6 py-2 bg-game-purple text-white rounded-full font-bold"
+              className="px-6 py-2 bg-white text-slate-900 rounded-full font-bold"
             >
               Kembali
             </motion.button>
@@ -469,10 +469,10 @@ export default function GamePlayer() {
   // Tracing game — render canvas for each letter
   if (isTracingGame) {
     return (
-      <div className="min-h-screen bg-pattern">
+      <div className="min-h-screen bg-slate-950">
         <AppHeader showBack={true} backTo={`/games/${category}`} />
         <div className="max-w-lg mx-auto px-4 md:px-6 py-4 md:py-6 pb-40 pt-28 md:pt-32">
-          <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/80 text-game-purple font-black text-sm shadow-lg hover:bg-white transition-all">
+          <Link to={`/games/${category}`} className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-white/10 text-white font-black text-sm shadow-lg hover:bg-white/20 transition-all">
             <ArrowLeft className="w-4 h-4" />
             Kembali ke Subjek
           </Link>
@@ -501,20 +501,13 @@ export default function GamePlayer() {
   }
 
   return (
-    <div
-      className="min-h-screen w-full overflow-x-hidden relative"
-      style={{
-        background: '#fafafa',
-      }}
-    >
-      {/* Subtle grid pattern background — sama macam Admin */}
-      <div
-        className="fixed inset-0 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+    <div className="min-h-screen w-full overflow-x-hidden relative bg-slate-950">
+      {/* Latar sinematik PS5-style — glow halus */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute -top-40 -right-32 w-[400px] h-[400px] bg-violet-600/20 rounded-full filter blur-3xl" />
+        <div className="absolute top-1/3 -left-32 w-[350px] h-[350px] bg-cyan-500/12 rounded-full filter blur-3xl" />
+        <div className="absolute -bottom-24 right-1/4 w-[400px] h-[400px] bg-fuchsia-500/12 rounded-full filter blur-3xl" />
+      </div>
 
       {/* Family mascot — Ibu, Kakak, Adik */}
       {/* Desktop (lg+) — saiz penuh */}
@@ -534,7 +527,7 @@ export default function GamePlayer() {
       <div className="relative max-w-lg mx-auto px-4 md:px-6 py-3 md:py-6 pb-12 md:pb-40 pt-24 md:pt-32">
 
          <div className="flex items-center justify-between gap-2 mb-4">
-           <Link to={`/games/${category}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors">
+           <Link to={`/games/${category}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-white/60 hover:text-white transition-colors">
              <ArrowLeft className="w-4 h-4" />
              Kembali ke Subjek
            </Link>
@@ -542,11 +535,11 @@ export default function GamePlayer() {
          </div>
 
          <div className="flex items-center justify-between gap-2 mb-4">
-           <span className="inline-flex items-center gap-1.5 capitalize px-3 py-1.5 text-xs font-bold rounded-lg whitespace-nowrap bg-white text-slate-700 ring-1 ring-slate-200 shadow-sm">
-             {game.difficulty === 'hard' && <Zap className="w-3.5 h-3.5 text-amber-500" />}
+           <span className="inline-flex items-center gap-1.5 capitalize px-3 py-1.5 text-xs font-bold rounded-lg whitespace-nowrap bg-white/10 text-white ring-1 ring-white/15 shadow-sm">
+             {game.difficulty === 'hard' && <Zap className="w-3.5 h-3.5 text-amber-400" />}
              {game.difficulty === 'easy' ? '🟢 Senang' : game.difficulty === 'medium' ? '🟡 Sedang' : '🔴 Susah'}
            </span>
-           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
+           <div className="flex items-center gap-1.5 text-xs font-bold text-white/50">
              <Clock className="w-3.5 h-3.5" />
              {game.totalQuestions || 20} soalan
            </div>
@@ -572,11 +565,11 @@ export default function GamePlayer() {
            transition={{ type: 'spring', stiffness: 260, damping: 24 }}
            className="rounded-2xl mb-6 relative"
            style={{
-             background: 'rgba(255,255,255,0.55)',
+             background: 'rgba(255,255,255,0.08)',
              backdropFilter: 'blur(20px) saturate(160%)',
              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
-             border: '1px solid rgba(255,255,255,0.7)',
-             boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+             border: '1px solid rgba(255,255,255,0.15)',
+             boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
            }}
          >
          <div className="rounded-2xl p-6 md:p-8 text-center relative overflow-hidden">
@@ -595,28 +588,28 @@ export default function GamePlayer() {
           )}
 
           {currentQuestion.word && (
-            <p className="text-lg sm:text-2xl font-bold text-slate-800">
+            <p className="text-lg sm:text-2xl font-bold text-white">
               {currentQuestion.word}
             </p>
           )}
 
           {/* Generic question text — covers all DB game formats */}
            {currentQuestion.question && (
-             <p className={`font-black mb-2 text-slate-800 ${currentQuestion.question.length > 60 ? 'text-sm sm:text-lg' : 'text-base sm:text-2xl'}`}>
+             <p className={`font-black mb-2 text-white ${currentQuestion.question.length > 60 ? 'text-sm sm:text-lg' : 'text-base sm:text-2xl'}`}>
                {currentQuestion.question}
              </p>
            )}
 
            {/* Text Question (math, multiple choice) */}
            {currentQuestion.problem && (
-             <div className={`font-black text-slate-800 leading-snug ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}>
+             <div className={`font-black text-white leading-snug ${currentQuestion.problem.length > 20 ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-4xl'}`}>
                {currentQuestion.problem}
              </div>
            )}
 
            {/* Question label based on game type */}
            {currentQuestion.image && !currentQuestion.problem && !currentQuestion.question && (
-             <p className="text-base sm:text-lg font-bold text-slate-700 mt-2">
+             <p className="text-base sm:text-lg font-bold text-white/80 mt-2">
                {game.type === 'counting' ? 'Berapakah ini?' : 'Apakah ini?'}
              </p>
            )}
