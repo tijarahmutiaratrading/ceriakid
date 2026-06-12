@@ -13,6 +13,7 @@ import AppPreviewShowcase from '@/components/landing/AppPreviewShowcase';
 import LandingHeroCarousel from '@/components/landing/LandingHeroCarousel';
 import SectionWrapper from '@/components/landing/SectionWrapper';
 import LandingAISection from '@/components/landing/LandingAISection';
+import LandingFeatureHighlight from '@/components/landing/LandingFeatureHighlight';
 import ExitIntentPopup from '@/components/landing/ExitIntentPopup';
 import LiveSocialProof from '@/components/landing/LiveSocialProof';
 import { useGameStats, formatGameCount } from '@/hooks/useGameStats';
@@ -518,6 +519,9 @@ export default function Landing() {
           ))}
         </div>
       </SectionWrapper>
+
+      {/* ── 3M + LIBRARY HUB HIGHLIGHT ── */}
+      <LandingFeatureHighlight />
 
       {/* ── AI FEATURES ── */}
       <LandingAISection />
