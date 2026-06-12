@@ -84,9 +84,8 @@ export default function UserTopHeader() {
     return location.pathname === path || location.pathname.startsWith(path);
   };
 
-  // Auto-detect halaman background gelap — pill jadi dark glass + text putih
-  const DARK_BG_PATHS = ['/games-hub', '/mini-games', '/parent-dashboard', '/children-profiles'];
-  const isDarkBg = DARK_BG_PATHS.some(p => location.pathname.startsWith(p));
+  // Tema PS5 — semua halaman authenticated guna latar gelap, pill sentiasa dark glass
+  const isDarkBg = true;
 
   useEffect(() => {
     const handleClickOutside = (e) => {
