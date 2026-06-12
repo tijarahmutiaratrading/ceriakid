@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import CinematicShowcase from './CinematicShowcase';
 import CinematicRail from './CinematicRail';
+import CinematicTips from './CinematicTips';
 
 // Hub sinematik gaya PS5 — latar gelap dengan art item terpilih, showcase besar + rail thumbnail.
 // items: [{ key, title, desc, emoji, art, accent, to?, metaChips?: [string] }]
@@ -92,6 +93,8 @@ export default function CinematicHub({
         </div>
 
         {typeof children === 'function' ? children(item, selected) : children}
+
+        <CinematicTips />
       </div>
     </div>
   );

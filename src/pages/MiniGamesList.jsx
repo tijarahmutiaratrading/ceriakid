@@ -9,6 +9,7 @@ import { base44 } from '@/api/base44Client';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
 import CinematicShowcase from '@/components/hub/CinematicShowcase';
 import CinematicRail from '@/components/hub/CinematicRail';
+import CinematicTips from '@/components/hub/CinematicTips';
 import { getGameArt } from '@/lib/gameArtPool';
 
 export default function MiniGamesList() {
@@ -104,6 +105,7 @@ export default function MiniGamesList() {
               </div>
               <CinematicRail items={items} selected={safeIdx} onSelect={setSelectedIdx} onActivate={handlePlay} />
             </div>
+            <CinematicTips />
           </>
         )}
       </div>
