@@ -130,12 +130,20 @@ export default function AppDrawer({
           border: '1px solid rgba(255,255,255,0.12)',
         }}
       >
+        {/* Glowing red radial accents — cinematic vibe */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[2rem]" aria-hidden="true">
+          <div className="absolute -top-24 -right-16 w-72 h-72 rounded-full bg-red-500/30 blur-3xl" />
+          <div className="absolute -bottom-28 -left-16 w-80 h-80 rounded-full bg-rose-600/20 blur-3xl" />
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full bg-orange-500/12 blur-3xl" />
+        </div>
+
         {/* Drag handle pill */}
-        <div className="flex justify-center pt-2.5 pb-0.5 flex-shrink-0">
+        <div className="relative z-10 flex justify-center pt-2.5 pb-0.5 flex-shrink-0">
           <div className="w-10 h-1.5 rounded-full bg-white/25" />
         </div>
 
         {/* Header — profile */}
+        <div className="relative z-10">
         {isAuthenticated && user ? (
           <ProfileHeader
             user={user}
@@ -160,9 +168,10 @@ export default function AppDrawer({
             onManage={() => { setChildMenuOpen(false); onClose?.(); }}
           />
         )}
+        </div>
 
         {/* Scrollable menu */}
-        <nav className="flex-1 overflow-y-auto py-2 px-1 space-y-0.5 scrollbar-hide">
+        <nav className="relative z-10 flex-1 overflow-y-auto py-2 px-1 space-y-0.5 scrollbar-hide">
           {/* Pinned */}
           {isAuthenticated && pinnedItems.length > 0 && (
             <>
@@ -215,7 +224,7 @@ export default function AppDrawer({
 
         {/* Footer — logout */}
         {isAuthenticated && (
-          <div className="px-3 pt-3 pb-2 border-t border-white/10 flex items-center gap-2" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+          <div className="relative z-10 px-3 pt-3 pb-2 border-t border-white/10 flex items-center gap-2" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
