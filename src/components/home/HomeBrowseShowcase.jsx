@@ -16,7 +16,7 @@ export default function HomeBrowseShowcase() {
     <div>
       {/* Toggle pill */}
       <div className="flex items-center justify-between mb-4">
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">Terokai</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white px-1">Terokai</p>
         <div className="flex gap-1 p-1 rounded-full bg-white/10 border border-white/15">
           {TABS.map((t) => {
             const active = tab === t.key;
