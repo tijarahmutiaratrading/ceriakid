@@ -39,7 +39,7 @@ export default function CinematicRail({ items, selected, onSelect, onActivate })
               }`}
             >
               {it.art ? (
-                <img src={it.art} alt={it.title} loading="lazy" className="h-full w-full object-cover" />
+                <img src={it.art} alt={it.title} loading="lazy" className="h-full w-full object-cover" style={{ objectPosition: it.artPosition || 'center' }} />
               ) : (
                 <div className="h-full w-full flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${it.accent}, #0f172a)` }}>
                   <span className="text-3xl">{it.emoji}</span>

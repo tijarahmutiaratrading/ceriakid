@@ -14,6 +14,7 @@ const AI_CIKGU = [
     emoji: '🤖',
     art: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/61dba1f3a_generated_image.png',
     accent: '#8b5cf6',
+    artPosition: 'top',
     metaChips: ['💬 Chat interaktif', '📚 Semua subjek'],
   },
   {
@@ -25,6 +26,7 @@ const AI_CIKGU = [
     emoji: '❓',
     art: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4347879e0_generated_image.png',
     accent: '#0ea5e9',
+    artPosition: 'top',
     metaChips: ['❓ Kuiz ikut tahap', '⚡ Jawapan segera'],
   },
   {
@@ -36,6 +38,7 @@ const AI_CIKGU = [
     emoji: '📖',
     art: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d2061d998_generated_image.png',
     accent: '#ec4899',
+    artPosition: 'top',
     metaChips: ['📖 Cerita moral', '✨ Nama anak sendiri'],
   },
   {
@@ -47,6 +50,7 @@ const AI_CIKGU = [
     emoji: '📝',
     art: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/4c8ddef8e_generated_image.png',
     accent: '#10b981',
+    artPosition: 'top',
     metaChips: ['📝 Lembaran kerja', '🖨️ Boleh print'],
   },
 ];

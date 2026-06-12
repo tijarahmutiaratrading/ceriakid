@@ -80,6 +80,7 @@ export default function CinematicShowcase({ item, playLabel, onPlay }) {
                   src={item.art}
                   alt={item.title}
                   className="w-full aspect-[16/10] object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                  style={{ objectPosition: item.artPosition || 'center' }}
                 />
               ) : (
                 <div
