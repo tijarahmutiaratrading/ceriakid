@@ -10,6 +10,7 @@ import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
 import GameLoadingScreen from '@/components/game/GameLoadingScreen';
 import CinematicShowcase from '@/components/hub/CinematicShowcase';
 import CinematicRail from '@/components/hub/CinematicRail';
+import CinematicTips from '@/components/hub/CinematicTips';
 import { getGameArtFor } from '@/lib/gameArtPool';
 import { ArrowLeft, Gamepad2 } from 'lucide-react';
 import { getSubjectArt, getSubjectAccent } from '@/lib/subjectArt';
@@ -392,6 +393,7 @@ export default function GamesList() {
                 </p>
                 <CinematicRail items={items} selected={safeIdx} onSelect={setSelectedIdx} onActivate={handlePlay} />
               </div>
+              <CinematicTips />
             </>
           );
         })()}

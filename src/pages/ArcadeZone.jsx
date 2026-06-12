@@ -6,6 +6,7 @@ import { getBest } from '@/components/arcade/arcadeValues';
 import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 import ArcadeShowcase from '@/components/arcade/ArcadeShowcase';
 import ArcadeRail from '@/components/arcade/ArcadeRail';
+import CinematicTips from '@/components/hub/CinematicTips';
 
 const GAMES = [
   { to: '/arcade/runner', key: 'runner', emoji: '🦊', title: 'Lari Si Comel', desc: 'Lompat elak halangan, kutip nilai murni sambil berlari sejauh mungkin!', how: 'Tap untuk lompat', accent: '#f97316' },
@@ -96,6 +97,8 @@ export default function ArcadeZone() {
             ))}
           </div>
         </motion.div>
+
+        <CinematicTips />
       </div>
     </div>
   );
