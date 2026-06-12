@@ -69,8 +69,6 @@ export default function GameLoadingScreen({ message = 'Menyediakan permainan...'
           <p className="font-black text-base sm:text-lg text-white text-center">
             👋 Hai! Sekejap ya...
           </p>
-          {/* Tail */}
-          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/10 border-l border-t border-white/15 rotate-45" />
         </motion.div>
 
         {/* Loading message + dots */}
