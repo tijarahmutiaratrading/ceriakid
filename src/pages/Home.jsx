@@ -8,7 +8,6 @@ import { t } from '@/lib/i18n';
 
 import AppHeader from '@/components/AppHeader';
 import HomeSubjectShowcase from '@/components/home/HomeSubjectShowcase';
-import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import HomeHubShowcase from '@/components/home/HomeHubShowcase';
 import CinematicTips from '@/components/hub/CinematicTips';
 import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
@@ -126,25 +125,7 @@ export default function Home() {
 
       <div className="relative w-full max-w-7xl mx-auto page-px pb-40 pt-4 space-y-8 md:space-y-10">
 
-      {isAuthenticated && <AppleFitnessHero user={user} avatarUrl={homeAvatarUrl || user?.avatarUrl} onLogout={logout} />}
-
       {isAuthenticated && user?.email && <SubscriptionExpiryBanner userEmail={user.email} />}
-
-      {isAuthenticated && <InstallAppGuide />}
-
-        {/* Hub Showcase — gaya PS5: hero besar + rail tile boleh scroll */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">🎮 Hub Utama</p>
-            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Pilih &amp; Buka</span>
-          </div>
-          <HomeHubShowcase />
-        </motion.div>
-
 
         {/* Age Group Selector - Mascot Illustration Style */}
         <motion.div
@@ -194,6 +175,21 @@ export default function Home() {
           </div>
           <HomeSubjectShowcase />
         </motion.div>
+
+        {/* Hub Showcase — gaya PS5: hero besar + rail tile boleh scroll */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">🎮 Hub Utama</p>
+            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Pilih &amp; Buka</span>
+          </div>
+          <HomeHubShowcase />
+        </motion.div>
+
+        {isAuthenticated && <InstallAppGuide />}
 
         <CinematicTips />
 
