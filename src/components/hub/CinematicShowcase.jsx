@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play } from 'lucide-react';
 
 // Showcase hero — item terpilih dipaparkan besar dengan info & butang utama
-export default function CinematicShowcase({ item, playLabel, onPlay, fit = 'cover', aspect = 'aspect-[16/10]' }) {
+export default function CinematicShowcase({ item, playLabel, onPlay }) {
   return (
     <div className="grid lg:grid-cols-[1fr_1.2fr] gap-6 lg:gap-10 items-center">
       {/* Info panel */}
@@ -79,7 +79,7 @@ export default function CinematicShowcase({ item, playLabel, onPlay, fit = 'cove
                 <img
                   src={item.art}
                   alt={item.title}
-                  className={`w-full ${aspect} ${fit === 'contain' ? 'object-contain p-2' : 'object-cover object-top'} group-hover:scale-[1.04] transition-transform duration-700`}
+                  className="w-full aspect-[16/10] object-cover group-hover:scale-[1.04] transition-transform duration-700"
                 />
               ) : (
                 <div
