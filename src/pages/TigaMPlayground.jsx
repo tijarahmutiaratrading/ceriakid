@@ -44,18 +44,13 @@ export default function TigaMPlayground() {
   };
 
   return (
-    <div
-      className="min-h-screen w-full overflow-x-hidden relative font-nunito"
-      style={{ background: '#fafafa' }}
-    >
-      {/* Subtle grid pattern background — sama macam game player subjek */}
-      <div
-        className="fixed inset-0 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+    <div className="min-h-screen w-full overflow-x-hidden relative font-nunito bg-slate-950">
+      {/* Latar sinematik PS5 — gelap dengan glow halus */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute -top-40 -right-32 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-violet-600/20 rounded-full filter blur-3xl" />
+        <div className="absolute top-1/3 -left-28 w-[250px] h-[250px] md:w-[440px] md:h-[440px] bg-cyan-500/12 rounded-full filter blur-3xl" />
+        <div className="absolute -bottom-24 right-1/4 w-[280px] h-[280px] md:w-[440px] md:h-[440px] bg-fuchsia-500/12 rounded-full filter blur-3xl" />
+      </div>
 
       {/* Family mascot — Ibu, Kakak, Adik */}
       <div className="hidden lg:block fixed bottom-2 left-8 z-0">
@@ -75,7 +70,7 @@ export default function TigaMPlayground() {
         <div className="flex items-center justify-between gap-2 mb-4">
           <Link
             to={`/3m/${category.id}`}
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-white/70 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> {category.title}
           </Link>
@@ -86,27 +81,27 @@ export default function TigaMPlayground() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-5 rounded-3xl p-4 bg-white ring-1 ring-slate-200 shadow-sm"
+            className="mb-5 rounded-3xl p-4 bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-sm"
           >
             <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl bg-gradient-to-br from-purple-100 to-pink-100 ring-1 ring-slate-100">
+              <div className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl bg-gradient-to-br from-violet-500/30 to-pink-500/30 ring-1 ring-white/20">
                 {game.emoji || category.emoji}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-purple-500 mb-0.5 flex items-center gap-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-300 mb-0.5 flex items-center gap-1">
                   <Sparkles className="w-3 h-3" />
                   {category.title}
                 </p>
-                <h1 className="text-base sm:text-lg font-black text-slate-900 leading-tight tracking-tight line-clamp-1">
+                <h1 className="text-base sm:text-lg font-black text-white leading-tight tracking-tight line-clamp-1">
                   {game.title}
                 </h1>
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400 flex-shrink-0">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-white/50 flex-shrink-0">
                 <Clock className="w-3.5 h-3.5" />
                 10
               </div>
             </div>
-            <p className="text-xs font-medium text-slate-500 leading-relaxed mt-3 pl-1">
+            <p className="text-xs font-medium text-white/60 leading-relaxed mt-3 pl-1">
               {game.objective || 'Mini Game'}
             </p>
           </motion.div>
@@ -122,10 +117,10 @@ export default function TigaMPlayground() {
             animate={{ opacity: 1, y: 0 }}
             className="rounded-[2rem] p-8 text-center"
             style={{
-              background: 'rgba(255,255,255,0.95)',
+              background: 'rgba(255,255,255,0.06)',
               backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.3)',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
             }}
           >
             <div
@@ -137,15 +132,11 @@ export default function TigaMPlayground() {
             >
               <Lock className="h-9 w-9 text-white" />
             </div>
-            <p className="text-2xl font-black text-slate-900 mb-2 tracking-tight">Game Terkunci</p>
-            <p className="text-slate-500 font-medium text-sm mb-6">Naik taraf pakej untuk akses game ini.</p>
+            <p className="text-2xl font-black text-white mb-2 tracking-tight">Game Terkunci</p>
+            <p className="text-white/60 font-medium text-sm mb-6">Naik taraf pakej untuk akses game ini.</p>
             <Link
               to="/"
-              className="inline-flex rounded-full px-6 py-3 font-bold text-sm text-white transition-all hover:scale-[1.02] active:scale-95"
-              style={{
-                background: 'linear-gradient(135deg, #0F172A 0%, #334155 100%)',
-                boxShadow: '0 8px 20px rgba(15,23,42,0.25)',
-              }}
+              className="inline-flex rounded-full px-6 py-3 font-bold text-sm text-slate-900 bg-white transition-all hover:scale-[1.02] active:scale-95"
             >
               Lihat Pakej
             </Link>

@@ -5,10 +5,10 @@ import ProMiniGameShell from '@/components/game/ProMiniGameShell';
 import useGameProgress from '@/hooks/useGameProgress';
 import useMiniFeedback from '@/hooks/useMiniFeedback';
 
-// Glassmorphism — tiru GamePlayer subjek (kad putih lutsinar + backdrop blur)
-const panel = 'rounded-3xl p-4 bg-white/55 backdrop-blur-xl ring-1 ring-white/70 shadow-[0_8px_30px_rgba(0,0,0,0.06)]';
-const action = 'rounded-2xl bg-white/55 backdrop-blur-xl text-slate-800 font-black shadow-[0_4px_16px_rgba(0,0,0,0.06)] ring-1 ring-white/70 active:scale-95 hover:-translate-y-0.5 transition-all';
-const chip = 'px-4 py-3.5 rounded-2xl bg-white/55 backdrop-blur-xl text-slate-800 font-black text-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] ring-1 ring-white/70 active:scale-95 hover:-translate-y-0.5 transition-all';
+// Glassmorphism gelap — PS5 style (glass gelap + backdrop blur)
+const panel = 'rounded-3xl p-4 bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-[0_8px_30px_rgba(0,0,0,0.4)]';
+const action = 'rounded-2xl bg-white/10 backdrop-blur-xl text-white font-black shadow-[0_4px_16px_rgba(0,0,0,0.3)] ring-1 ring-white/15 active:scale-95 hover:-translate-y-0.5 transition-all';
+const chip = 'px-4 py-3.5 rounded-2xl bg-white/10 backdrop-blur-xl text-white font-black text-xl shadow-[0_4px_16px_rgba(0,0,0,0.3)] ring-1 ring-white/15 active:scale-95 hover:-translate-y-0.5 transition-all';
 const targetPill = 'px-3.5 py-1.5 rounded-full brand-gradient-br text-white font-black text-lg shadow-md ring-2 ring-white/60 inline-block';
 
 // STANDARD font sizes — kekalkan konsisten merentas semua mini game modes
@@ -43,7 +43,7 @@ export default function MiniGameModeRenderer({ game, onComplete }) {
     if (mode === 'maze') return <MazeMode />;
     if (mode === 'reaction_speed') return <ReactionSpeedMode />;
     if (mode === 'coloring') return <ColoringMode />;
-    return <div className={panel}><p className="text-purple-700 font-bold">Mini game belum tersedia.</p></div>;
+    return <div className={panel}><p className="text-white/80 font-bold">Mini game belum tersedia.</p></div>;
   };
 
   return <ProMiniGameShell data={data} mode={mode} onComplete={onComplete}>{renderMode()}</ProMiniGameShell>;
@@ -52,12 +52,12 @@ export default function MiniGameModeRenderer({ game, onComplete }) {
 function MiniProgress({ current, total }) {
   const percent = Math.min(100, Math.round((current / Math.max(1, total)) * 100));
   return (
-    <div className="mb-3 rounded-xl bg-white/70 ring-1 ring-purple-100 px-3 py-2">
-      <div className="flex items-center justify-between text-purple-700">
+    <div className="mb-3 rounded-xl bg-white/8 backdrop-blur-xl ring-1 ring-white/15 px-3 py-2">
+      <div className="flex items-center justify-between text-white/80">
         <span className="font-black text-xs">Progress: {current}/{total}</span>
         <span className="font-black text-xs">{percent}%</span>
       </div>
-      <div className="mt-1.5 h-2 rounded-full bg-purple-100 overflow-hidden">
+      <div className="mt-1.5 h-2 rounded-full bg-white/10 overflow-hidden">
         <motion.div animate={{ width: `${percent}%` }} className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400" />
       </div>
     </div>
@@ -164,7 +164,7 @@ function DragDropMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={Object.keys(placed).length} total={targets.length} />
       <div className={panel}>
-        <p className={`text-purple-500 mb-2 ${answerLabel}`}>Pilih item</p>
+        <p className={`text-violet-300 mb-2 ${answerLabel}`}>Pilih item</p>
         <div className="grid grid-cols-2 gap-2.5">
           {items.filter(item => !Object.values(placed).includes(item)).map(item => (
             <button key={item} type="button" onClick={() => setSelectedItem(item)} className={`w-full px-4 py-5 rounded-2xl font-black ${answerText} transition-all ${selectedItem === item ? 'bg-yellow-300 text-orange-900 ring-4 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-2 ring-purple-100'}`}>{item}</button>
@@ -205,7 +205,7 @@ function WordBuilderMode() {
     <div className="space-y-3">
       <MiniFeedback feedback={feedback} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-500 text-[10px] font-black uppercase">Sasaran</p>
+        <p className="text-violet-300 text-[10px] font-black uppercase">Sasaran</p>
         <p className={targetPill + ' mt-1 mb-3 text-base'}>{target}</p>
         <div className="rounded-xl bg-white py-3 px-2 ring-2 ring-purple-100">
           <p className="text-3xl font-black text-purple-900 tracking-wider">{built || '_'.repeat(target.length)}</p>
@@ -250,7 +250,7 @@ function SortingMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={used.length} total={items.length} />
       <div className={panel}>
-        <p className={`text-purple-500 mb-2 ${answerLabel}`}>Pilih item</p>
+        <p className={`text-violet-300 mb-2 ${answerLabel}`}>Pilih item</p>
         <div className="grid grid-cols-2 gap-2.5">
           {items.filter(item => !used.includes(item.text)).map(item => (
             <button key={item.text} onClick={() => setSelected(item)} className={`w-full px-4 py-5 rounded-2xl font-black ${answerText} transition-all ${selected?.text === item.text ? 'bg-yellow-300 text-orange-900 ring-4 ring-orange-400 scale-105' : 'bg-white text-purple-700 ring-2 ring-purple-100'}`}>{item.text}</button>
@@ -352,7 +352,7 @@ function StoryMode() {
       <MiniProgress current={done ? scenes.length : sceneIdx} total={scenes.length} />
       <div className={`${panel} text-center`}>
         <p className="text-5xl mb-2">{scene.emoji || guessSceneEmoji(scene.text)}</p>
-        <p className="text-purple-900 text-base font-black leading-relaxed">{scene.text}</p>
+        <p className="text-white text-base font-black leading-relaxed">{scene.text}</p>
       </div>
       <div className="space-y-2">
         {(scene.choices || []).map((choice, idx) => (
@@ -388,8 +388,8 @@ function TrueFalseMode() {
     return (
       <div className={`${panel} text-center py-6`}>
         <p className="text-5xl mb-2">{correct >= Math.ceil(statements.length * 0.6) ? '🎉' : '💡'}</p>
-        <p className="text-purple-900 font-black text-lg">{correct}/{statements.length} jawapan betul</p>
-        <p className="text-purple-500 text-sm mt-1 font-bold">{correct >= Math.ceil(statements.length * 0.6) ? 'Bagus!' : 'Cuba lagi untuk maju.'}</p>
+        <p className="text-white font-black text-lg">{correct}/{statements.length} jawapan betul</p>
+        <p className="text-white/60 text-sm mt-1 font-bold">{correct >= Math.ceil(statements.length * 0.6) ? 'Bagus!' : 'Cuba lagi untuk maju.'}</p>
       </div>
     );
   }
@@ -400,7 +400,7 @@ function TrueFalseMode() {
       <MiniProgress current={idx} total={statements.length} />
       <div className={`${panel} text-center min-h-32`}>
         <p className="text-4xl mb-2">💭</p>
-        <p className="text-purple-900 text-lg font-black leading-snug">{current.text}</p>
+        <p className="text-white text-lg font-black leading-snug">{current.text}</p>
       </div>
       <div className="grid grid-cols-2 gap-2.5">
         <button onClick={() => pick(true)} className="py-5 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 text-white font-black text-xl shadow-md active:scale-95">✓ Betul</button>
@@ -426,14 +426,14 @@ function TracingMode() {
     <div className="space-y-3">
       <MiniProgress current={marks.length} total={totalDots} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-500 text-[10px] font-black uppercase mb-1">Surih huruf ini</p>
+        <p className="text-violet-300 text-[10px] font-black uppercase mb-1">Surih huruf ini</p>
         <div className="rounded-2xl bg-white py-6 text-8xl font-black text-purple-700 ring-2 ring-purple-100 relative">
           <span style={{ opacity: 0.25 }}>{letter}</span>
           <span className="absolute inset-0 flex items-center justify-center" style={{ opacity: Math.min(1, marks.length / totalDots) }}>
             <span className="text-purple-700">{letter}</span>
           </span>
         </div>
-        <p className="text-purple-600 text-xs font-black mt-2">
+        <p className="text-white/70 text-xs font-black mt-2">
           Tap titik bernombor mengikut turutan ({marks.length}/{totalDots})
         </p>
       </div>
@@ -491,7 +491,7 @@ function BalloonPopMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={popped.length} total={totalTargets} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-700 font-black text-sm">Pop sasaran: <span className={targetPill + ' ml-1'}>{target}</span></p>
+        <p className="text-white/80 font-black text-sm">Pop sasaran: <span className={targetPill + ' ml-1'}>{target}</span></p>
       </div>
       <div className="relative h-72 rounded-2xl bg-gradient-to-b from-sky-100 to-pink-100 overflow-hidden ring-2 ring-white">
         {items.map((item, i) => !popped.includes(i) && (
@@ -535,7 +535,7 @@ function FallingCatchMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={caught.length} total={totalTargets} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-700 font-black text-sm">Tangkap: <span className={targetPill + ' ml-1'}>{target}</span></p>
+        <p className="text-white/80 font-black text-sm">Tangkap: <span className={targetPill + ' ml-1'}>{target}</span></p>
       </div>
       <div className="h-72 rounded-2xl bg-gradient-to-b from-sky-100 to-blue-200 relative overflow-hidden ring-2 ring-white">
         {items.map((item, i) => !caught.includes(i) && (
@@ -576,7 +576,7 @@ function StackingMode() {
     <div className="space-y-3">
       <MiniProgress current={count} total={target} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-700 font-black text-sm mb-3">Bina menara setinggi <span className={targetPill + ' ml-1'}>{target} blok</span></p>
+        <p className="text-white/80 font-black text-sm mb-3">Bina menara setinggi <span className={targetPill + ' ml-1'}>{target} blok</span></p>
         <div className="flex flex-col-reverse items-center gap-1 min-h-56 justify-end">
           {Array.from({ length: count }).map((_, i) => (
             <motion.div
@@ -628,7 +628,7 @@ function SequenceMode() {
       {/* CORAK SASARAN — ingat ini! */}
       <div className={panel}>
         <div className="flex items-center justify-between mb-2">
-          <p className="text-purple-500 text-[10px] font-black uppercase">
+          <p className="text-violet-300 text-[10px] font-black uppercase">
             {showHint ? '👀 Ingat corak ini' : '🧠 Pilih ikut ingatan'}
           </p>
           <button
@@ -666,7 +666,7 @@ function SequenceMode() {
 
       {/* SUSUNAN ANAK */}
       <div className={panel}>
-        <p className="text-purple-500 text-[10px] font-black uppercase text-center mb-2">
+        <p className="text-violet-300 text-[10px] font-black uppercase text-center mb-2">
           Susunan kamu ({picked.length}/{answer.length})
         </p>
         <div className="min-h-14 rounded-xl bg-white ring-2 ring-purple-100 p-3 flex flex-wrap items-center justify-center gap-2">
@@ -731,7 +731,7 @@ function SwipeSelectMode() {
     return (
       <div className={`${panel} text-center py-6`}>
         <p className="text-5xl mb-2">{correct >= Math.ceil(items.length * 0.6) ? '🎉' : '💡'}</p>
-        <p className="text-purple-900 font-black text-lg">{correct}/{items.length} pilihan betul</p>
+        <p className="text-white font-black text-lg">{correct}/{items.length} pilihan betul</p>
       </div>
     );
   }
@@ -743,8 +743,8 @@ function SwipeSelectMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={idx} total={items.length} />
       <div className={`${panel} text-center min-h-32 flex flex-col items-center justify-center`}>
-        <p className="text-purple-500 text-[10px] font-black uppercase mb-2">Item</p>
-        <p className="text-purple-900 text-4xl font-black">{item.text}</p>
+        <p className="text-violet-300 text-[10px] font-black uppercase mb-2">Item</p>
+        <p className="text-white text-4xl font-black">{item.text}</p>
       </div>
       <div className={`grid gap-2 ${groups.length <= 2 ? 'grid-cols-2' : 'grid-cols-2'}`}>
         {groups.map((g, i) => (
@@ -772,7 +772,7 @@ function SpinWheelMode() {
       <MiniProgress current={spinCount} total={target} />
       <div className={`${panel} text-center`}>
         <motion.div animate={{ rotate: spin }} transition={{ duration: 1.5 }} className="mx-auto w-44 h-44 rounded-full bg-gradient-to-br from-yellow-300 via-pink-400 to-purple-500 flex items-center justify-center text-5xl ring-8 ring-white shadow-xl">🎡</motion.div>
-        <p className="text-purple-900 font-black mt-3 text-lg">{choice || `Putar untuk pilih`}</p>
+        <p className="text-white font-black mt-3 text-lg">{choice || `Putar untuk pilih`}</p>
       </div>
       <button onClick={() => {
         const next = items[Math.floor(Math.random() * items.length)];
@@ -806,11 +806,11 @@ function PictureHuntMode() {
     <div className="space-y-3">
       <MiniFeedback feedback={feedback} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-700 font-black text-sm">Cari: <span className={targetPill + ' ml-1'}>{target}</span></p>
+        <p className="text-white/80 font-black text-sm">Cari: <span className={targetPill + ' ml-1'}>{target}</span></p>
       </div>
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
         {items.map((item, i) => (
-          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white/55 backdrop-blur-xl ring-1 ring-white/70 text-base sm:text-lg font-black text-slate-800 shadow-[0_4px_16px_rgba(0,0,0,0.06)] active:scale-95 disabled:opacity-50 flex items-center justify-center p-2 overflow-hidden leading-tight text-center">{getItemText(item)}</button>
+          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white/10 backdrop-blur-xl ring-1 ring-white/15 text-base sm:text-lg font-black text-white shadow-[0_4px_16px_rgba(0,0,0,0.3)] active:scale-95 disabled:opacity-50 flex items-center justify-center p-2 overflow-hidden leading-tight text-center">{getItemText(item)}</button>
         ))}
       </div>
     </div>
@@ -831,8 +831,8 @@ function TypingMode() {
   return (
     <div className="space-y-3">
       <div className={`${panel} text-center`}>
-        <p className="text-purple-500 text-[10px] font-black uppercase">{prompt ? 'Soalan' : 'Taip perkataan'}</p>
-        <p className="text-2xl sm:text-3xl font-black text-purple-900 my-3">{prompt || target}</p>
+        <p className="text-violet-300 text-[10px] font-black uppercase">{prompt ? 'Soalan' : 'Taip perkataan'}</p>
+        <p className="text-2xl sm:text-3xl font-black text-white my-3">{prompt || target}</p>
         <input
           value={value}
           onChange={e => setValue(e.target.value)}
@@ -872,7 +872,7 @@ function MiniSimulationMode() {
       <MiniProgress current={picked.length} total={totalTargets} />
       <div className={`${panel} text-center`}>
         <p className="text-5xl mb-1">🧲</p>
-        <p className="text-purple-700 font-black text-sm">Cari: <span className={targetPill + ' ml-1'}>{target}</span></p>
+        <p className="text-white/80 font-black text-sm">Cari: <span className={targetPill + ' ml-1'}>{target}</span></p>
       </div>
       <div className="grid grid-cols-3 gap-2">
         {items.map((item, i) => (
@@ -898,7 +898,7 @@ function RhythmTapMode() {
       <MiniProgress current={beat} total={items.length} />
       <div className={`${panel} text-center`}>
         <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ repeat: Infinity, duration: 0.8 }} className="text-5xl mb-2">🥁</motion.div>
-        <p className="text-purple-500 text-[10px] font-black uppercase mb-2">Baca & tap satu demi satu</p>
+        <p className="text-violet-300 text-[10px] font-black uppercase mb-2">Baca & tap satu demi satu</p>
 
         {/* Tunjuk semua items dengan highlight pada beat semasa */}
         <div className="flex flex-wrap justify-center gap-2 mb-2">
@@ -919,8 +919,8 @@ function RhythmTapMode() {
         </div>
 
         {!isDone ? (
-          <p className="text-purple-700 text-sm font-black">
-            Sekarang sebut: <span className="text-orange-600">"{items[beat]}"</span>
+          <p className="text-white/80 text-sm font-black">
+            Sekarang sebut: <span className="text-orange-300">"{items[beat]}"</span>
           </p>
         ) : (
           <p className="text-green-600 text-sm font-black">🎉 Habis semua rentak!</p>
@@ -959,7 +959,7 @@ function ConnectDotsMode() {
       <MiniFeedback feedback={feedback} />
       <MiniProgress current={dots.length} total={items.length} />
       <div className={`${panel} text-center`}>
-        <p className="text-purple-700 font-black text-sm">Tap mengikut turutan: <span className={targetPill + ' ml-1'}>{items.join(' → ')}</span></p>
+        <p className="text-white/80 font-black text-sm">Tap mengikut turutan: <span className={targetPill + ' ml-1'}>{items.join(' → ')}</span></p>
       </div>
       <div className="grid grid-cols-2 gap-3 p-3">
         {items.map((dot, i) => (

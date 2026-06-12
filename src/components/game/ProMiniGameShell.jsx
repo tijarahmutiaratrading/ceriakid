@@ -143,11 +143,11 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
 
         {/* Top bar — tiru GamePlayer subjek: round info kiri, skor pill brand-gradient kanan */}
         <div className="flex items-center justify-between gap-3 mb-3">
-          <div className="relative flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm flex-shrink-0">
+          <div className="relative flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-sm flex-shrink-0">
             <span className="text-lg">{data.emoji || '🎮'}</span>
             <div className="leading-tight">
-              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400">Pusingan</p>
-              <p className="text-xs font-black text-slate-900">{roundIdx + 1}/{totalRounds}</p>
+              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/50">Pusingan</p>
+              <p className="text-xs font-black text-white">{roundIdx + 1}/{totalRounds}</p>
             </div>
           </div>
 
@@ -166,7 +166,7 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
         </div>
 
         {/* Progress bar — brand-gradient macam GamePlayer subjek */}
-        <div className="w-full rounded-full h-2.5 overflow-hidden relative bg-slate-200/70 mb-3">
+        <div className="w-full rounded-full h-2.5 overflow-hidden relative bg-white/10 mb-3">
           <motion.div
             className="h-full rounded-full brand-gradient"
             animate={{ width: `${progressPct}%` }}
@@ -179,14 +179,14 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
           key={`inst-${roundIdx}-${roundKey}`}
           initial={{ scale: 0.96, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="mb-3 rounded-2xl px-4 py-2.5 text-center bg-slate-50 ring-1 ring-black/5"
+          className="mb-3 rounded-2xl px-4 py-2.5 text-center bg-white/8 backdrop-blur-xl ring-1 ring-white/10"
         >
           {roundLabel && (
-            <span className="inline-block text-[9px] font-bold uppercase tracking-[0.2em] text-purple-500 mb-0.5">
+            <span className="inline-block text-[9px] font-bold uppercase tracking-[0.2em] text-violet-300 mb-0.5">
               {roundLabel}
             </span>
           )}
-          <p className="text-sm sm:text-base font-bold leading-snug text-slate-800">
+          <p className="text-sm sm:text-base font-bold leading-snug text-white/90">
             {modeInstruction}
           </p>
         </motion.div>
@@ -213,7 +213,7 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
                   initial={{ y: 10, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="text-3xl font-black mb-1 text-slate-900 tracking-tight"
+                  className="text-3xl font-black mb-1 text-white tracking-tight"
                 >
                   Yeay! Tahniah!
                 </motion.p>
@@ -221,7 +221,7 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
                   initial={{ y: 10, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className="font-bold mb-4 text-slate-500"
+                  className="font-bold mb-4 text-white/60"
                 >
                   Lengkap {score}/{totalRounds} pusingan
                 </motion.p>
@@ -312,7 +312,7 @@ export default function ProMiniGameShell({ data = {}, mode, children, onComplete
                 type="button"
                 onClick={restartRound}
                 whileTap={{ scale: 0.96 }}
-                className="flex-1 py-3 rounded-2xl font-bold text-sm bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+                className="flex-1 py-3 rounded-2xl font-bold text-sm bg-white/10 text-white hover:bg-white/20 transition-colors"
               >
                 🔄 Ulang
               </motion.button>

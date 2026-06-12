@@ -75,20 +75,13 @@ export default function MiniGamePlayground() {
   };
 
   return (
-    <div
-      className="min-h-screen w-full overflow-x-hidden relative font-nunito"
-      style={{
-        background: '#fafafa',
-      }}
-    >
-      {/* Subtle grid pattern background — sama macam Games Subjek */}
-      <div
-        className="fixed inset-0 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+    <div className="min-h-screen w-full overflow-x-hidden relative font-nunito bg-slate-950">
+      {/* Latar sinematik PS5 — gelap dengan glow halus */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute -top-40 -right-32 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-violet-600/20 rounded-full filter blur-3xl" />
+        <div className="absolute top-1/3 -left-28 w-[250px] h-[250px] md:w-[440px] md:h-[440px] bg-cyan-500/12 rounded-full filter blur-3xl" />
+        <div className="absolute -bottom-24 right-1/4 w-[280px] h-[280px] md:w-[440px] md:h-[440px] bg-fuchsia-500/12 rounded-full filter blur-3xl" />
+      </div>
 
       {/* Mini Game mascot — Panda, Kucing, Arnab */}
       <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
@@ -105,7 +98,7 @@ export default function MiniGamePlayground() {
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <Link
             to={`/mini-games/${category.id}`}
-            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-slate-700 bg-white ring-1 ring-slate-200 shadow-sm transition-all hover:scale-[1.02] hover:text-slate-900"
+            className="inline-flex items-center gap-2 mb-5 px-4 py-2.5 rounded-full font-black text-sm text-white bg-white/10 ring-1 ring-white/15 shadow-sm transition-all hover:scale-[1.02] hover:bg-white/20"
           >
             <ArrowLeft className="w-4 h-4" /> {category.title}
           </Link>
@@ -116,28 +109,28 @@ export default function MiniGamePlayground() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-5 rounded-3xl p-4 bg-white ring-1 ring-slate-200 shadow-sm"
+            className="mb-5 rounded-3xl p-4 bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-sm"
           >
             <div className="flex items-center gap-3">
               {/* Icon tile — soft brand gradient */}
               <div
-                className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl brand-gradient-br ring-1 ring-white/60 shadow"
+                className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl brand-gradient-br ring-1 ring-white/20 shadow"
               >
                 {game.emoji || category.emoji}
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-game-purple mb-0.5 flex items-center gap-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-300 mb-0.5 flex items-center gap-1">
                   <Sparkles className="w-3 h-3" />
                   {category.title}
                 </p>
-                <h1 className="text-base sm:text-lg font-black text-slate-900 leading-tight tracking-tight line-clamp-1">
+                <h1 className="text-base sm:text-lg font-black text-white leading-tight tracking-tight line-clamp-1">
                   {game.title}
                 </h1>
               </div>
             </div>
 
-            <p className="text-xs font-medium text-slate-500 leading-relaxed mt-3 pl-1">
+            <p className="text-xs font-medium text-white/60 leading-relaxed mt-3 pl-1">
               {guideByMode[game.mode] || 'Mini Game'}
             </p>
           </motion.div>
@@ -153,10 +146,10 @@ export default function MiniGamePlayground() {
             animate={{ opacity: 1, y: 0 }}
             className="rounded-[2rem] p-8 text-center"
             style={{
-              background: 'rgba(255,255,255,0.95)',
+              background: 'rgba(255,255,255,0.06)',
               backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.3)',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
             }}
           >
             <div
@@ -168,15 +161,11 @@ export default function MiniGamePlayground() {
             >
               <Lock className="h-9 w-9 text-white" />
             </div>
-            <p className="text-2xl font-black text-slate-900 mb-2 tracking-tight">Mini Game Terkunci</p>
-            <p className="text-slate-500 font-medium text-sm mb-6">Naik taraf pakej untuk akses mini game ini.</p>
+            <p className="text-2xl font-black text-white mb-2 tracking-tight">Mini Game Terkunci</p>
+            <p className="text-white/60 font-medium text-sm mb-6">Naik taraf pakej untuk akses mini game ini.</p>
             <Link
               to="/"
-              className="inline-flex rounded-full px-6 py-3 font-bold text-sm text-white transition-all hover:scale-[1.02] active:scale-95"
-              style={{
-                background: 'linear-gradient(135deg, #0F172A 0%, #334155 100%)',
-                boxShadow: '0 8px 20px rgba(15,23,42,0.25)',
-              }}
+              className="inline-flex rounded-full px-6 py-3 font-bold text-sm text-slate-900 bg-white transition-all hover:scale-[1.02] active:scale-95"
             >
               Lihat Pakej
             </Link>
