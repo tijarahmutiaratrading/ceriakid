@@ -45,6 +45,10 @@ const TigaMList = lazy(() => import('@/pages/TigaMList'));
 const TigaMPlayground = lazy(() => import('@/pages/TigaMPlayground'));
 const LibraryHub = lazy(() => import('@/pages/LibraryHub'));
 const AIHub = lazy(() => import('@/pages/AIHub'));
+const ArcadeZone = lazy(() => import('@/pages/ArcadeZone'));
+const RunnerGame = lazy(() => import('@/pages/arcade/RunnerGame'));
+const CatchGame = lazy(() => import('@/pages/arcade/CatchGame'));
+const FlappyGame = lazy(() => import('@/pages/arcade/FlappyGame'));
 
 // Lazy-load: AI pages — heavy markdown/chat dependencies
 const AIAssistant = lazy(() => import('@/pages/AIAssistant'));
@@ -154,6 +158,7 @@ const AuthenticatedApp = () => {
             <Route path="/3m" element={lazyRoute(TigaMHub)} />
             <Route path="/library" element={lazyRoute(LibraryHub)} />
             <Route path="/ai-hub" element={lazyRoute(AIHub)} />
+            <Route path="/arcade" element={lazyRoute(ArcadeZone)} />
             <Route path="/3m/:categoryId" element={lazyRoute(TigaMList)} />
             <Route path="/games/:category" element={lazyRoute(GamesList)} />
             <Route path="/mini-games/:type" element={lazyRoute(MiniGamesList)} />
@@ -174,6 +179,9 @@ const AuthenticatedApp = () => {
 
           {/* Game-play / fullscreen pages - lazy loaded */}
           <Route path="/drawing" element={lazyRoute(DrawingStudio)} />
+          <Route path="/arcade/runner" element={lazyRoute(RunnerGame)} />
+          <Route path="/arcade/catch" element={lazyRoute(CatchGame)} />
+          <Route path="/arcade/flappy" element={lazyRoute(FlappyGame)} />
           <Route path="/mini-games/:categoryId/play/:gameId" element={lazyRoute(MiniGamePlayground)} />
           <Route path="/3m/:categoryId/play/:gameId" element={lazyRoute(TigaMPlayground)} />
           <Route path="/play/:category/:index" element={lazyRoute(GamePlayer)} />
