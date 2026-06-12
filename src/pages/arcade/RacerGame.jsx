@@ -2,7 +2,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops } from '@/components/arcade/engine';
+import { sfx, Particles, Shaker, Pops, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+
+const bgImg = loadImage(ARCADE_ART.racer);
 
 const W = 400, H = 600;
 const LANES = [100, 200, 300];
@@ -58,9 +61,11 @@ export default function RacerGame() {
       c.clearRect(0, 0, W, H);
       s.shaker.apply(c);
 
-      // Rumput tepi
-      c.fillStyle = '#4d7c0f';
-      c.fillRect(-20, -20, W + 40, H + 40);
+      // Tepi jalan: Pixar countryside art
+      if (!drawCover(c, bgImg, W, H, 0)) {
+        c.fillStyle = '#4d7c0f';
+        c.fillRect(-20, -20, W + 40, H + 40);
+      }
       // Jalan
       c.fillStyle = '#374151';
       c.fillRect(50, -20, 300, H + 40);

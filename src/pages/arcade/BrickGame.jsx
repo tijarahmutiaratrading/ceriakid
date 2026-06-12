@@ -2,7 +2,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops } from '@/components/arcade/engine';
+import { sfx, Particles, Shaker, Pops, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+
+const bgImg = loadImage(ARCADE_ART.brick);
 
 const W = 400, H = 600;
 const COLORS = ['#f87171', '#fb923c', '#fbbf24', '#4ade80', '#60a5fa', '#a78bfa'];
@@ -64,9 +67,14 @@ export default function BrickGame() {
       c.clearRect(0, 0, W, H);
       s.shaker.apply(c);
 
-      const grad = c.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, '#1e1b4b'); grad.addColorStop(1, '#4c1d95');
-      c.fillStyle = grad;
+      if (!drawCover(c, bgImg, W, H, 0)) {
+        const grad = c.createLinearGradient(0, 0, 0, H);
+        grad.addColorStop(0, '#1e1b4b'); grad.addColorStop(1, '#4c1d95');
+        c.fillStyle = grad;
+        c.fillRect(-20, -20, W + 40, H + 40);
+      }
+      // Overlay gelap supaya blok & bola jelas
+      c.fillStyle = 'rgba(15,23,42,0.45)';
       c.fillRect(-20, -20, W + 40, H + 40);
 
       const moving = started && !s.dead;

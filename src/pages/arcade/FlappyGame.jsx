@@ -2,7 +2,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops, skyCycle } from '@/components/arcade/engine';
+import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+
+const bgImg = loadImage(ARCADE_ART.flappy);
 
 const W = 400, H = 600;
 const GRAVITY = 0.42;
@@ -64,14 +67,20 @@ export default function FlappyGame() {
       c.clearRect(0, 0, W, H);
       s.shaker.apply(c);
 
-      // ── SKY (day/night ikut skor) ──
+      // ── SKY: Pixar art + day/night tint ──
       const cycle = (s.score / 15) % 4;
-      const [skyTop, skyBot] = skyCycle(cycle);
-      const grad = c.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, skyTop); grad.addColorStop(1, skyBot);
-      c.fillStyle = grad;
-      c.fillRect(-20, -20, W + 40, H + 40);
-      const isNight = Math.floor(cycle) === 2;
+      if (!drawCover(c, bgImg, W, H, s.frame * 0.6)) {
+        const [skyTop, skyBot] = skyCycle(cycle);
+        const grad = c.createLinearGradient(0, 0, 0, H);
+        grad.addColorStop(0, skyTop); grad.addColorStop(1, skyBot);
+        c.fillStyle = grad;
+        c.fillRect(-20, -20, W + 40, H + 40);
+      }
+      const phaseF = Math.floor(cycle);
+      const isNight = phaseF === 2;
+      if (phaseF === 1) { c.fillStyle = 'rgba(251,146,60,0.28)'; c.fillRect(-20, -20, W + 40, H + 40); }
+      if (phaseF === 2) { c.fillStyle = 'rgba(15,23,42,0.55)'; c.fillRect(-20, -20, W + 40, H + 40); }
+      if (phaseF === 3) { c.fillStyle = 'rgba(240,171,252,0.22)'; c.fillRect(-20, -20, W + 40, H + 40); }
       c.font = '34px serif';
       c.fillText(isNight ? '🌙' : '☀️', 335, 65);
       if (isNight) { c.font = '10px serif'; c.fillText('✦', 80, 60); c.fillText('✦', 200, 100); c.fillText('✦', 300, 45); }

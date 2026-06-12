@@ -2,7 +2,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops, skyCycle } from '@/components/arcade/engine';
+import { sfx, Particles, Shaker, Pops, skyCycle, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+
+const bgImg = loadImage(ARCADE_ART.runner);
 
 const W = 400, H = 600;
 const GROUND_Y = 470;
@@ -87,14 +90,20 @@ export default function RunnerGame() {
       c.clearRect(0, 0, W, H);
       s.shaker.apply(c);
 
-      // ── SKY (day/night cycle ikut jarak) ──
+      // ── SKY: Pixar art background + day/night tint ──
       const cycle = (s.distance / 1500) % 4;
-      const [skyTop, skyBot] = skyCycle(cycle);
-      const grad = c.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, skyTop); grad.addColorStop(1, skyBot);
-      c.fillStyle = grad;
-      c.fillRect(-20, -20, W + 40, H + 40);
-      const isNight = Math.floor(cycle) === 2;
+      if (!drawCover(c, bgImg, W, H, s.distance * 2)) {
+        const [skyTop, skyBot] = skyCycle(cycle);
+        const grad = c.createLinearGradient(0, 0, 0, H);
+        grad.addColorStop(0, skyTop); grad.addColorStop(1, skyBot);
+        c.fillStyle = grad;
+        c.fillRect(-20, -20, W + 40, H + 40);
+      }
+      const phase = Math.floor(cycle);
+      const isNight = phase === 2;
+      if (phase === 1) { c.fillStyle = 'rgba(251,146,60,0.28)'; c.fillRect(-20, -20, W + 40, H + 40); }
+      if (phase === 2) { c.fillStyle = 'rgba(15,23,42,0.55)'; c.fillRect(-20, -20, W + 40, H + 40); }
+      if (phase === 3) { c.fillStyle = 'rgba(240,171,252,0.22)'; c.fillRect(-20, -20, W + 40, H + 40); }
       c.font = '36px serif';
       c.fillText(isNight ? '🌙' : '☀️', 330, 70);
       if (isNight) { c.font = '10px serif'; c.fillText('✦', 60, 50); c.fillText('✦', 150, 90); c.fillText('✦', 250, 40); }
@@ -103,31 +112,6 @@ export default function RunnerGame() {
       const spd = s.speed * s.deathSlow * (s.boost > 0 ? 1.6 : 1);
 
       // ── PARALLAX ──
-      // Mountains (jauh)
-      c.fillStyle = isNight ? '#312e81' : '#94a3b8';
-      s.mountains.forEach((m) => {
-        if (moving) { m.x -= spd * 0.15; if (m.x < -180) m.x += 540; }
-        c.beginPath();
-        c.moveTo(m.x, GROUND_Y + 40);
-        c.lineTo(m.x + 90, GROUND_Y - 110);
-        c.lineTo(m.x + 180, GROUND_Y + 40);
-        c.fill();
-        c.fillStyle = isNight ? '#4338ca' : '#cbd5e1';
-        c.beginPath();
-        c.moveTo(m.x + 70, GROUND_Y - 85);
-        c.lineTo(m.x + 90, GROUND_Y - 110);
-        c.lineTo(m.x + 110, GROUND_Y - 85);
-        c.fill();
-        c.fillStyle = isNight ? '#312e81' : '#94a3b8';
-      });
-      // Hills (sederhana)
-      c.fillStyle = isNight ? '#3730a3' : '#86efac';
-      s.hills.forEach((h) => {
-        if (moving) { h.x -= spd * 0.35; if (h.x < -140) h.x += 560; }
-        c.beginPath();
-        c.arc(h.x + 70, GROUND_Y + 70, 80, Math.PI, 0);
-        c.fill();
-      });
       // Clouds
       c.font = '34px serif';
       s.clouds.forEach((cl) => {

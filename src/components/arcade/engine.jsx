@@ -120,6 +120,30 @@ export class Pops {
   }
 }
 
+// ── BACKGROUND IMAGE (Pixar art) ──
+const imgCache = {};
+export const loadImage = (url) => {
+  if (!imgCache[url]) {
+    const i = new Image();
+    i.crossOrigin = 'anonymous';
+    i.src = url;
+    imgCache[url] = i;
+  }
+  return imgCache[url];
+};
+
+// Lukis gambar cover penuh canvas dengan parallax offset (ping-pong supaya tiada seam)
+export const drawCover = (c, img, w, h, offX = 0) => {
+  if (!img?.complete || !img.naturalWidth) return false;
+  const scale = Math.max((w * 1.4) / img.naturalWidth, h / img.naturalHeight);
+  const dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+  const maxOff = Math.max(0, dw - w);
+  let ox = maxOff ? Math.abs(offX) % (maxOff * 2) : 0;
+  if (ox > maxOff) ox = maxOff * 2 - ox;
+  c.drawImage(img, -ox, (h - dh) / 2, dw, dh);
+  return true;
+};
+
 // Lerp warna langit ikut progress (day → sunset → night → day)
 export const skyCycle = (t) => {
   const phases = [

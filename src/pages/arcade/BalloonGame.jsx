@@ -2,7 +2,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops } from '@/components/arcade/engine';
+import { sfx, Particles, Shaker, Pops, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+
+const bgImg = loadImage(ARCADE_ART.balloon);
 
 const W = 400, H = 600;
 const BALLOON_COLORS = ['#f87171', '#fb923c', '#fbbf24', '#4ade80', '#60a5fa', '#a78bfa', '#f472b6'];
@@ -92,15 +95,13 @@ export default function BalloonGame() {
       c.clearRect(0, 0, W, H);
       s.shaker.apply(c);
 
-      // Sky
-      const grad = c.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, '#7dd3fc'); grad.addColorStop(1, '#fef3c7');
-      c.fillStyle = grad;
-      c.fillRect(-20, -20, W + 40, H + 40);
-      c.font = '34px serif';
-      c.fillText('☀️', 340, 60);
-      c.fillText('☁️', 60 + Math.sin(s.frame * 0.01) * 20, 110);
-      c.fillText('☁️', 280 + Math.cos(s.frame * 0.008) * 25, 170);
+      // Sky: Pixar carnival art
+      if (!drawCover(c, bgImg, W, H, s.frame * 0.1)) {
+        const grad = c.createLinearGradient(0, 0, 0, H);
+        grad.addColorStop(0, '#7dd3fc'); grad.addColorStop(1, '#fef3c7');
+        c.fillStyle = grad;
+        c.fillRect(-20, -20, W + 40, H + 40);
+      }
 
       const moving = started && !s.dead;
 

@@ -2,7 +2,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Pops } from '@/components/arcade/engine';
+import { sfx, Particles, Pops, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+
+const bgImg = loadImage(ARCADE_ART.jump);
 
 const W = 400, H = 600;
 const GRAVITY = 0.38;
@@ -67,13 +70,19 @@ export default function JumpGame() {
       c.setTransform(1, 0, 0, 1, 0, 0);
       c.clearRect(0, 0, W, H);
 
-      // Sky gradient ikut ketinggian (makin tinggi makin gelap → angkasa)
+      // Sky: Pixar art + tint gelap bila makin tinggi (→ angkasa)
       const alt = Math.min(1, s.maxHeight / 6000);
-      const grad = c.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, alt > 0.7 ? '#1e1b4b' : alt > 0.4 ? '#7c3aed' : '#7dd3fc');
-      grad.addColorStop(1, alt > 0.7 ? '#4c1d95' : '#e0f2fe');
-      c.fillStyle = grad;
-      c.fillRect(0, 0, W, H);
+      if (!drawCover(c, bgImg, W, H, Math.abs(s.cameraY) * 0.08)) {
+        const grad = c.createLinearGradient(0, 0, 0, H);
+        grad.addColorStop(0, alt > 0.7 ? '#1e1b4b' : '#7dd3fc');
+        grad.addColorStop(1, alt > 0.7 ? '#4c1d95' : '#e0f2fe');
+        c.fillStyle = grad;
+        c.fillRect(0, 0, W, H);
+      }
+      if (alt > 0.3) {
+        c.fillStyle = `rgba(30,27,75,${(alt - 0.3) * 0.8})`;
+        c.fillRect(0, 0, W, H);
+      }
 
       const moving = started && !s.dead;
 

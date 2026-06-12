@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Play, Trophy } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
 import { getBest } from '@/components/arcade/arcadeValues';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 
 const GAMES = [
   {
@@ -149,8 +150,16 @@ export default function ArcadeZone() {
               >
                 <Link to={g.to} className="block group">
                   <div className={`rounded-3xl border ${g.bg} bg-white shadow-xl border-white/60 overflow-hidden hover:-translate-y-1 hover:shadow-2xl transition-all`}>
-                    <div className={`relative h-32 bg-gradient-to-br ${g.color} flex items-center justify-center`}>
-                      <span className="text-6xl group-hover:scale-110 transition-transform drop-shadow-lg">{g.emoji}</span>
+                    <div className={`relative h-40 bg-gradient-to-br ${g.color} overflow-hidden`}>
+                      <img
+                        src={ARCADE_ART[g.key]}
+                        alt={g.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                      <span className="absolute bottom-2 left-3 text-4xl drop-shadow-lg">{g.emoji}</span>
                       {best > 0 && (
                         <div className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-black text-amber-600 shadow">
                           <Trophy className="w-3 h-3" /> {best}

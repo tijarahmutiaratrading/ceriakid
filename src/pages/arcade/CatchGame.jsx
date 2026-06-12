@@ -2,7 +2,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops } from '@/components/arcade/engine';
+import { sfx, Particles, Shaker, Pops, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+
+const bgImg = loadImage(ARCADE_ART.catch);
 
 const W = 400, H = 600;
 const GOOD = ['🍎', '🍌', '📚', '🥛', '🍊', '✏️', '🍇', '⚽'];
@@ -67,18 +70,18 @@ export default function CatchGame() {
       c.clearRect(0, 0, W, H);
       s.shaker.apply(c);
 
-      // ── BACKGROUND (fever mode = rainbow) ──
-      const grad = c.createLinearGradient(0, 0, 0, H);
+      // ── BACKGROUND: Pixar art + fever rainbow overlay ──
+      if (!drawCover(c, bgImg, W, H, s.frame * 0.15)) {
+        const grad = c.createLinearGradient(0, 0, 0, H);
+        grad.addColorStop(0, '#fbcfe8'); grad.addColorStop(1, '#fef9c3');
+        c.fillStyle = grad;
+        c.fillRect(-20, -20, W + 40, H + 40);
+      }
       if (s.fever > 0) {
         const hue = (s.frame * 3) % 360;
-        grad.addColorStop(0, `hsl(${hue}, 80%, 80%)`);
-        grad.addColorStop(1, `hsl(${(hue + 60) % 360}, 80%, 88%)`);
-      } else {
-        grad.addColorStop(0, '#fbcfe8');
-        grad.addColorStop(1, '#fef9c3');
+        c.fillStyle = `hsla(${hue}, 90%, 70%, 0.32)`;
+        c.fillRect(-20, -20, W + 40, H + 40);
       }
-      c.fillStyle = grad;
-      c.fillRect(-20, -20, W + 40, H + 40);
 
       // Bubbles latar
       s.bgBubbles.forEach((b) => {

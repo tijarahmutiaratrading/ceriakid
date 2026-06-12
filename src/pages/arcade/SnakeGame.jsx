@@ -2,7 +2,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops } from '@/components/arcade/engine';
+import { sfx, Particles, Shaker, Pops, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+
+const bgImg = loadImage(ARCADE_ART.snake);
 
 const W = 400, H = 600;
 const CELL = 25;
@@ -72,11 +75,16 @@ export default function SnakeGame() {
       c.clearRect(0, 0, W, H);
       s.shaker.apply(c);
 
-      // Padang rumput checkerboard
+      // Padang rumput: Pixar art + grid halus
+      const hasBg = drawCover(c, bgImg, W, H, 0);
       for (let y = 0; y < ROWS; y++) {
         for (let x = 0; x < COLS; x++) {
-          c.fillStyle = (x + y) % 2 === 0 ? '#a3e635' : '#84cc16';
-          c.fillRect(x * CELL, y * CELL, CELL, CELL);
+          if (hasBg) {
+            if ((x + y) % 2 === 0) { c.fillStyle = 'rgba(255,255,255,0.08)'; c.fillRect(x * CELL, y * CELL, CELL, CELL); }
+          } else {
+            c.fillStyle = (x + y) % 2 === 0 ? '#a3e635' : '#84cc16';
+            c.fillRect(x * CELL, y * CELL, CELL, CELL);
+          }
         }
       }
 

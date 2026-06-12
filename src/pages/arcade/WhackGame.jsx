@@ -4,6 +4,7 @@ import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
 import { sfx } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
 
 const GAME_TIME = 45;
 
@@ -115,7 +116,10 @@ export default function WhackGame() {
 
   return (
     <ArcadeShell title="Ketuk Ceria" emoji="🔨" score={score} tokenCount={tokens.length}>
-      <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-lime-200 to-green-300 p-4">
+      <div
+        className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-cover bg-center"
+        style={{ backgroundImage: `url(${ARCADE_ART.whack})` }}
+      >
         {started && !gameOver && (
           <div className="flex items-center gap-3 mb-5">
             <div className={`rounded-full px-4 py-1.5 font-black text-sm shadow ${timeLeft <= 10 ? 'bg-red-500 text-white animate-pulse' : 'bg-white text-slate-800'}`}>
@@ -167,7 +171,7 @@ export default function WhackGame() {
           ))}
         </div>
 
-        <p className="mt-5 text-emerald-900/70 font-black text-xs text-center">
+        <p className="mt-5 rounded-full bg-white/85 backdrop-blur px-4 py-2 text-emerald-900 font-black text-xs text-center shadow">
           🐹 Ketuk = +10 · 💣 JANGAN ketuk bom! · ⭐ Nilai murni = +30
         </p>
 

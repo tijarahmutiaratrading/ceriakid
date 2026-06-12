@@ -2,7 +2,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ArcadeShell from '@/components/arcade/ArcadeShell';
 import ArcadeGameOver from '@/components/arcade/ArcadeGameOver';
 import { randomToken, getBest, saveBest } from '@/components/arcade/arcadeValues';
-import { sfx, Particles, Shaker, Pops } from '@/components/arcade/engine';
+import { sfx, Particles, Shaker, Pops, loadImage, drawCover } from '@/components/arcade/engine';
+import { ARCADE_ART } from '@/components/arcade/arcadeArt';
+
+const bgImg = loadImage(ARCADE_ART.space);
 
 const W = 400, H = 600;
 
@@ -48,11 +51,13 @@ export default function SpaceGame() {
       c.clearRect(0, 0, W, H);
       s.shaker.apply(c);
 
-      // Angkasa background
-      const grad = c.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, '#0f172a'); grad.addColorStop(1, '#312e81');
-      c.fillStyle = grad;
-      c.fillRect(-20, -20, W + 40, H + 40);
+      // Angkasa: Pixar nebula background
+      if (!drawCover(c, bgImg, W, H, s.frame * 0.2)) {
+        const grad = c.createLinearGradient(0, 0, 0, H);
+        grad.addColorStop(0, '#0f172a'); grad.addColorStop(1, '#312e81');
+        c.fillStyle = grad;
+        c.fillRect(-20, -20, W + 40, H + 40);
+      }
 
       const moving = started && !s.dead;
       const spd = (3 + s.score / 400) * s.deathSlow;
