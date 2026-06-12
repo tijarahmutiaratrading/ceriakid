@@ -133,7 +133,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.22 }}
         >
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-2 px-1">Pilih Umur Anak</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-2 px-1">Pilih Umur Anak</p>
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
             {[
               { key: 'prasekolah', label: `${t('prasekolah', lang)} (KSPK)`, sub: '4–6 Tahun', emoji: '🎨' },
