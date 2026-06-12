@@ -507,6 +507,8 @@ export default function GamePlayer() {
         <div className="absolute -top-40 -right-32 w-[450px] h-[450px] bg-violet-600/40 rounded-full filter blur-3xl" />
         <div className="absolute top-1/3 -left-32 w-[400px] h-[400px] bg-cyan-500/30 rounded-full filter blur-3xl" />
         <div className="absolute -bottom-24 right-1/4 w-[450px] h-[450px] bg-fuchsia-500/35 rounded-full filter blur-3xl" />
+        {/* Overlay gelap halus — kekalkan contrast teks atas glow */}
+        <div className="absolute inset-0 bg-slate-950/55" />
       </div>
 
       {/* Family mascot — Ibu, Kakak, Adik */}
