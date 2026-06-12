@@ -351,10 +351,15 @@ export default function GamesList() {
             const locked = isGameLocked(bucketIdx);
             const stars = gameProgress?.bestStars || 0;
             const gameArt = getGameArt(globalIdx);
+            // Buang description yang mengandungi JSON mentah (gameData) — papar teks bersih sahaja
+            const rawDesc = (game.description || '').trim();
+            const cleanDesc = rawDesc.startsWith('{') || rawDesc.startsWith('[') || rawDesc.includes('"questions"') || rawDesc.includes('"options"')
+              ? `${game.totalQuestions || 8} soalan menyeronokkan untuk anak belajar!`
+              : rawDesc;
             return {
               key: game.id || `game-${globalIdx}`,
               title: game.title,
-              desc: game.description,
+              desc: cleanDesc,
               emoji: game.emoji || '🎮',
               art: game.iconUrl || gameArt.art,
               accent: gameArt.accent,
