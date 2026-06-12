@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Zap, Loader2, Settings, Activity, Wrench, Library } from 'lucide-react';
+import { Zap, Loader2, Settings, Activity, Wrench, Library, Image as ImageIcon } from 'lucide-react';
 import LaunchSettingsModal from '@/components/admin/LaunchSettingsModal';
 import LaunchManualControl from '@/components/admin/LaunchManualControl';
 import BackgroundActivityPanel from '@/components/admin/BackgroundActivityPanel';
 import ContentProgressBar from '@/components/admin/ContentProgressBar';
 import LibraryGeneratorPanel from '@/components/admin/LibraryGeneratorPanel';
+import GameArtPanel from '@/components/admin/GameArtPanel';
 
 export default function LaunchControlPanel() {
   const [tab, setTab] = useState('monitor');
@@ -100,6 +101,7 @@ export default function LaunchControlPanel() {
       <div className="pro-glass flex gap-2 p-1.5 rounded-2xl">
         {[
           { key: 'monitor', label: 'Monitor', icon: Activity },
+          { key: 'art', label: 'Gambar', icon: ImageIcon },
           { key: 'manual', label: 'Manual', icon: Wrench },
           { key: 'library', label: 'Library', icon: Library },
         ].map(({ key, label, icon: Icon }) => (
@@ -117,6 +119,7 @@ export default function LaunchControlPanel() {
 
       {/* Tab content */}
       {tab === 'monitor' && <BackgroundActivityPanel />}
+      {tab === 'art' && <GameArtPanel />}
       {tab === 'manual' && <LaunchManualControl />}
       {tab === 'library' && <LibraryGeneratorPanel />}
 
