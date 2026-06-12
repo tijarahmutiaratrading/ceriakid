@@ -152,70 +152,30 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.22 }}
         >
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 px-1">Umur Anak</p>
-            <span className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em]">Tap untuk tukar</span>
-          </div>
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-2 px-1">Pilih Umur Anak</p>
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
             {[
-              {
-                key: 'prasekolah',
-                title: `${t('prasekolah', lang)} (KSPK)`,
-                age: '4–6 Tahun',
-                emoji: '🎨',
-                image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/98cf1f885_generated_image.png',
-                gradient: 'from-cyan-500/40 to-emerald-500/30',
-              },
-              {
-                key: 'sekolah_rendah',
-                title: `${t('sekolahRendah', lang)} (KSSR)`,
-                age: '7–12 Tahun',
-                emoji: '📚',
-                image: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/d1137d39a_generated_image.png',
-                gradient: 'from-fuchsia-500/40 to-amber-500/30',
-              },
+              { key: 'prasekolah', label: `${t('prasekolah', lang)} (KSPK)`, sub: '4–6 Tahun', emoji: '🎨' },
+              { key: 'sekolah_rendah', label: `${t('sekolahRendah', lang)} (KSSR)`, sub: '7–12 Tahun', emoji: '📚' },
             ].map((age) => {
               const isActive = safeAgeGroup === age.key;
               return (
                 <motion.button
                   key={age.key}
+                  whileTap={{ scale: 0.96 }}
                   onClick={() => safeToggle(age.key)}
-                  whileHover={{ y: -3, scale: 1.01 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`group relative overflow-hidden rounded-2xl bg-slate-900 p-2.5 sm:p-3 text-left shadow-2xl shadow-black/40 transition-all ring-1 ${
-                    isActive ? 'ring-2 ring-white shadow-[0_0_30px_rgba(255,255,255,0.2)]' : 'ring-white/10 hover:ring-white/25'
+                  className={`flex-shrink-0 min-h-10 px-4 py-2 rounded-full font-black text-sm transition-all inline-flex items-center gap-2 ${
+                    isActive
+                      ? 'bg-white text-slate-900 shadow-lg'
+                      : 'bg-white/10 text-white/70 border border-white/15 hover:bg-white/20'
                   }`}
                 >
-                  <div className={`absolute -right-6 -top-6 h-20 w-20 rounded-full bg-gradient-to-br ${age.gradient} blur-2xl opacity-70 group-hover:opacity-100 transition-opacity`} />
-                  <div className="relative flex items-center gap-2.5 sm:gap-3">
-                    <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl overflow-hidden ring-1 ring-white/15 bg-white/5 flex items-center justify-center">
-                      <img
-                        src={age.image}
-                        alt={age.title}
-                        className="w-full h-full object-cover"
-                        onError={(e) => { e.target.style.display = 'none'; }}
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-black text-white text-xs sm:text-sm leading-tight">
-                        {age.title}
-                      </h3>
-                      <p className="font-bold text-white/60 text-xs flex items-center gap-1">
-                        {age.age} <span>{age.emoji}</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="relative mt-2">
-                    <div
-                      className={`w-full py-1.5 rounded-full text-center font-black text-xs transition-all ${
-                        isActive
-                          ? 'bg-white text-slate-900 shadow-lg'
-                          : 'bg-white/10 text-white/70 border border-white/15'
-                      }`}
-                    >
-                      {isActive ? '✓ Aktif' : 'Pilih'}
-                    </div>
-                  </div>
+                  {age.emoji} {age.label}
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                    isActive ? 'bg-slate-900/10 text-slate-700' : 'bg-white/10 text-white/60'
+                  }`}>
+                    {age.sub}
+                  </span>
                 </motion.button>
               );
             })}
