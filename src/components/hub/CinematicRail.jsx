@@ -2,9 +2,10 @@ import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 // Rail thumbnail gaya PS5 — tile terpilih membesar dengan ring bercahaya
-export default function CinematicRail({ items, selected, onSelect, onActivate }) {
+export default function CinematicRail({ items, selected, onSelect, onActivate, autoScroll = false }) {
   const tileRefs = useRef({});
   const scrollRef = useRef(null);
+  const pausedUntilRef = useRef(0);
 
   useEffect(() => {
     const el = tileRefs.current[selected];
@@ -15,6 +16,36 @@ export default function CinematicRail({ items, selected, onSelect, onActivate })
       container.scrollTo({ left: target, behavior: 'smooth' });
     }
   }, [selected]);
+
+  // Auto-scroll perlahan — berhenti seketika bila user berinteraksi, sambung semula selepas 3s
+  useEffect(() => {
+    if (!autoScroll) return;
+    const container = scrollRef.current;
+    if (!container) return;
+
+    let dir = 1;
+    const tick = () => {
+      if (Date.now() < pausedUntilRef.current) return;
+      const max = container.scrollWidth - container.clientWidth;
+      if (max <= 0) return;
+      if (container.scrollLeft >= max - 1) dir = -1;
+      else if (container.scrollLeft <= 0) dir = 1;
+      container.scrollLeft += dir * 0.6;
+    };
+
+    const id = setInterval(tick, 16);
+    const pause = () => { pausedUntilRef.current = Date.now() + 3000; };
+    container.addEventListener('pointerdown', pause);
+    container.addEventListener('wheel', pause, { passive: true });
+    container.addEventListener('touchmove', pause, { passive: true });
+
+    return () => {
+      clearInterval(id);
+      container.removeEventListener('pointerdown', pause);
+      container.removeEventListener('wheel', pause);
+      container.removeEventListener('touchmove', pause);
+    };
+  }, [autoScroll]);
 
   return (
     <div ref={scrollRef} className="flex gap-3 sm:gap-4 overflow-x-auto overflow-y-visible scrollbar-hide pt-10 pb-8 px-4 snap-x">
