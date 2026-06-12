@@ -93,7 +93,7 @@ export default function HomeSubjectShowcase() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
-          className="absolute -inset-8 rounded-[3rem] blur-3xl opacity-25 pointer-events-none"
+          className="absolute -inset-10 rounded-[3rem] blur-3xl opacity-50 pointer-events-none"
           style={{ background: `radial-gradient(ellipse at center, ${item.accent}, transparent 70%)` }}
         />
       </AnimatePresence>
