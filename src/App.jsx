@@ -165,7 +165,6 @@ const AuthenticatedApp = () => {
             <Route path="/3m" element={lazyRoute(TigaMHub)} />
             <Route path="/library" element={lazyRoute(LibraryHub)} />
             <Route path="/ai-hub" element={lazyRoute(AIHub)} />
-            <Route path="/arcade" element={lazyRoute(ArcadeZone)} />
             <Route path="/3m/:categoryId" element={lazyRoute(TigaMList)} />
             <Route path="/games/:category" element={lazyRoute(GamesList)} />
             <Route path="/mini-games/:type" element={lazyRoute(MiniGamesList)} />
@@ -186,6 +185,7 @@ const AuthenticatedApp = () => {
 
           {/* Game-play / fullscreen pages - lazy loaded */}
           <Route path="/drawing" element={lazyRoute(DrawingStudio)} />
+          <Route path="/arcade" element={lazyRoute(ArcadeZone)} />
           <Route path="/arcade/runner" element={lazyRoute(RunnerGame)} />
           <Route path="/arcade/catch" element={lazyRoute(CatchGame)} />
           <Route path="/arcade/flappy" element={lazyRoute(FlappyGame)} />
