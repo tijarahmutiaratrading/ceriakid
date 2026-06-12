@@ -19,6 +19,7 @@ export default function CinematicHub({
   playLabel = 'Mula Sekarang',
   railLabel = 'Pilih',
   onPlay,
+  showcaseFit = 'cover',
   children,
 }) {
   const navigate = useNavigate();
@@ -83,7 +84,7 @@ export default function CinematicHub({
           </div>
         </div>
 
-        <CinematicShowcase item={item} playLabel={playLabel} onPlay={handlePlay} />
+        <CinematicShowcase item={item} playLabel={playLabel} onPlay={handlePlay} fit={showcaseFit} />
 
         <div className="mt-8 sm:mt-12">
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-1">
