@@ -16,7 +16,7 @@ export default function ArcadeRail({ games, selected, onSelect, bestScores }) {
   }, [selected]);
 
   return (
-    <div ref={railRef} className="flex gap-3 sm:gap-4 overflow-x-auto overflow-y-visible scrollbar-hide pt-8 pb-4 px-3 -mx-3 snap-x">
+    <div ref={railRef} className="flex gap-3 sm:gap-4 overflow-x-auto overflow-y-visible scrollbar-hide pt-8 pb-4 px-6 -mx-3 snap-x">
       {games.map((g, i) => {
         const isSel = i === selected;
         const best = bestScores[g.key] || 0;
