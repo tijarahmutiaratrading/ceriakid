@@ -200,13 +200,19 @@
     background-color: #ffffff !important;
   }
   [data-game-theme="light"] .bg-white\/10 {
-    background-color: #f8fafc !important;
+    background-color: rgba(148, 163, 184, 0.18) !important;
   }
   [data-game-theme="light"] .ring-white\/15 {
     --tw-ring-color: rgba(148, 163, 184, 0.25) !important;
   }
+  [data-game-theme="light"] .ring-white\/10 {
+    --tw-ring-color: rgba(148, 163, 184, 0.2) !important;
+  }
   [data-game-theme="light"] .text-white {
     color: #0f172a !important;
+  }
+  [data-game-theme="light"] .text-white\/90 {
+    color: rgba(15, 23, 42, 0.82) !important;
   }
   [data-game-theme="light"] .text-white\/80 {
     color: rgba(15, 23, 42, 0.75) !important;
