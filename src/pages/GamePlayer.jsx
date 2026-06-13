@@ -138,7 +138,8 @@ export default function GamePlayer() {
   const questions = useMemo(() => {
     if (!game?.gameData?.questions) return [];
     const all = game.gameData.questions;
-    const limit = game.totalQuestions || 20;
+    // Hadkan maksimum 10 soalan setiap game — trim kalau lebih
+    const limit = Math.min(game.totalQuestions || 10, 10);
     if (questionSeed === 0) return all.slice(0, limit);
     // Shuffle with seed so each replay gives different order
     const shuffled = [...all].sort(() => Math.random() - 0.5);
@@ -551,7 +552,7 @@ export default function GamePlayer() {
            </span>
            <div className="flex items-center gap-1.5 text-xs font-bold text-white/50">
              <Clock className="w-3.5 h-3.5" />
-             {game.totalQuestions || 20} soalan
+             {Math.min(game.totalQuestions || 10, 10)} soalan
            </div>
          </div>
 
