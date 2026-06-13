@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Lock, Loader2, Sparkles } from 'lucide-react';
 import AppHeader from '@/components/AppHeader';
-import MiniGameMascot from '@/components/game/MiniGameMascot';
+import CikguMascot from '@/components/game/CikguMascot';
 import MiniGameModeRenderer from '@/components/game/MiniGameModeRenderer';
 import GameThemeBackground from '@/components/game/GameThemeBackground';
 import GameThemeToggle from '@/components/game/GameThemeToggle';
@@ -81,13 +81,24 @@ export default function MiniGamePlayground() {
   return (
     <div data-game-theme={isDark ? 'dark' : 'light'} className={`min-h-screen w-full overflow-x-hidden relative font-nunito ${isDark ? 'bg-slate-950' : 'bg-slate-50'}`}>
       <GameThemeBackground />
+      {isDark && (
+        <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <div className="absolute -top-40 -right-32 w-[450px] h-[450px] bg-violet-600/40 rounded-full filter blur-3xl" />
+          <div className="absolute top-1/3 -left-32 w-[400px] h-[400px] bg-cyan-500/30 rounded-full filter blur-3xl" />
+          <div className="absolute -bottom-24 right-1/4 w-[450px] h-[450px] bg-fuchsia-500/35 rounded-full filter blur-3xl" />
+          <div className="absolute inset-0 bg-slate-950/55" />
+        </div>
+      )}
 
-      {/* Mini Game mascot — Panda, Kucing, Arnab */}
-      <div className="hidden md:block fixed bottom-2 left-4 lg:left-8 z-0">
-        <MiniGameMascot size={300} />
+      {/* Family mascot — Ibu, Kakak, Adik */}
+      <div className="hidden lg:block fixed bottom-2 left-8 z-0">
+        <CikguMascot size={300} />
       </div>
-      <div className="md:hidden fixed bottom-2 -right-2 z-0 opacity-90">
-        <MiniGameMascot size={150} />
+      <div className="hidden sm:block lg:hidden fixed bottom-2 left-4 z-0 opacity-90">
+        <CikguMascot size={220} />
+      </div>
+      <div className="sm:hidden fixed bottom-2 left-2 z-0 opacity-90">
+        <CikguMascot size={150} />
       </div>
 
       <AppHeader showBack={true} backTo={`/mini-games/${category.id}`} />
