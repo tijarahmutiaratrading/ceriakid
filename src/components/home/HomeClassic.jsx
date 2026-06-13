@@ -6,7 +6,7 @@ import { t } from '@/lib/i18n';
 
 import CategoryGrid from '@/components/home/CategoryGrid';
 import DailyChallenge from '@/components/home/DailyChallenge';
-import DashboardHero from '@/components/home/DashboardHero';
+import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import QuickAccessGrid from '@/components/home/QuickAccessGrid';
 import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
 import InstallAppGuide from '@/components/home/InstallAppGuide';
@@ -29,7 +29,7 @@ export default function HomeClassic({ user, avatarUrl, onLogout, ageGroup, toggl
 
       <div className="relative w-full max-w-7xl mx-auto page-px pb-40 pt-4 space-y-8 md:space-y-10">
 
-        <DashboardHero user={user} avatarUrl={avatarUrl || user?.avatarUrl} lang={lang} />
+        <AppleFitnessHero user={user} avatarUrl={avatarUrl || user?.avatarUrl} onLogout={onLogout} />
 
         {user?.email && <SubscriptionExpiryBanner userEmail={user.email} />}
 
