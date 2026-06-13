@@ -133,7 +133,7 @@ export default function Home() {
           transition={{ delay: 0.22 }}
         >
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-2 px-1">Pilih Umur Anak</p>
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
+          <div className="grid grid-cols-2 gap-2">
             {[
               { key: 'prasekolah', label: `${t('prasekolah', lang)} (KSPK)`, sub: '4–6 Tahun', emoji: '🎨' },
               { key: 'sekolah_rendah', label: `${t('sekolahRendah', lang)} (KSSR)`, sub: '7–12 Tahun', emoji: '📚' },
@@ -144,14 +144,14 @@ export default function Home() {
                   key={age.key}
                   whileTap={{ scale: 0.96 }}
                   onClick={() => safeToggle(age.key)}
-                  className={`flex-shrink-0 min-h-10 px-4 py-2 rounded-full font-black text-sm transition-all inline-flex items-center gap-2 ${
+                  className={`min-w-0 min-h-10 px-3 py-2 rounded-full font-black text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 ${
                     isActive
                       ? 'bg-white text-slate-900 shadow-lg'
                       : 'bg-white/10 text-white/70 border border-white/15 hover:bg-white/20'
                   }`}
                 >
-                  {age.emoji} {age.label}
-                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                  <span className="truncate">{age.emoji} {age.label}</span>
+                  <span className={`flex-shrink-0 text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
                     isActive ? 'bg-slate-900/10 text-slate-700' : 'bg-white/10 text-white/60'
                   }`}>
                     {age.sub}
