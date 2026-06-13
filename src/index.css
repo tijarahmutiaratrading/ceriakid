@@ -198,15 +198,19 @@
      Ini hanya kesan dalam halaman main game sahaja. */
   [data-game-theme="light"] .bg-white\/8 {
     background-color: #ffffff !important;
+    border: 1px solid rgba(148, 163, 184, 0.28);
   }
+  /* Element interaktif (tile pilihan, butang) — slate lembut + garis jelas
+     supaya tak jadi putih-atas-putih dalam mode cerah */
   [data-game-theme="light"] .bg-white\/10 {
-    background-color: rgba(148, 163, 184, 0.18) !important;
+    background-color: #f1f5f9 !important;
+    border: 1px solid rgba(148, 163, 184, 0.4);
   }
   [data-game-theme="light"] .ring-white\/15 {
-    --tw-ring-color: rgba(148, 163, 184, 0.25) !important;
+    --tw-ring-color: rgba(148, 163, 184, 0.45) !important;
   }
   [data-game-theme="light"] .ring-white\/10 {
-    --tw-ring-color: rgba(148, 163, 184, 0.2) !important;
+    --tw-ring-color: rgba(148, 163, 184, 0.4) !important;
   }
   [data-game-theme="light"] .text-white {
     color: #0f172a !important;
