@@ -56,19 +56,10 @@ export default function BuyCredits() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: '#ffffff' }}>
-      {/* Lapisan putih penuh skrin untuk tutup sebarang background di belakang (cth: awan) */}
-      <div className="fixed inset-0 bg-white z-0 pointer-events-none" />
-      {/* Subtle grid pattern */}
-      <div
-        className="fixed inset-0 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
-
-      <AppHeader showBack={false} title="Beli Kredit AI" />
+    <div className="min-h-screen relative overflow-hidden">
+      <div className="md:hidden">
+        <AppHeader showBack={false} title="Beli Kredit AI" />
+      </div>
 
       <div className="relative z-10 max-w-7xl mx-auto page-px pt-4 pb-32">
         {/* Back button */}
@@ -105,8 +96,8 @@ export default function BuyCredits() {
             <Sparkles className="w-3 h-3 text-amber-300" />
             <span className="text-white text-[10px] font-black uppercase tracking-widest">Kredit AI</span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-black text-slate-900 mb-1">Top Up Kredit AI</h1>
-          <p className="text-slate-600 text-sm md:text-base max-w-xl">
+          <h1 className="text-2xl md:text-3xl font-black text-white mb-1">Top Up Kredit AI</h1>
+          <p className="text-white/70 text-sm md:text-base max-w-xl">
             Gunakan kredit untuk akses ciri AI: Pembantu Pembelajaran, Penjana Cerita & BBM Tersuai
           </p>
         </motion.div>
