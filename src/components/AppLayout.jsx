@@ -19,9 +19,9 @@ export default function AppLayout() {
         className="pointer-events-none fixed inset-0 -z-10"
         style={{
           background:
-            'radial-gradient(900px circle at 20% 15%, rgba(239,68,68,0.22), transparent 55%),' +
-            'radial-gradient(800px circle at 85% 80%, rgba(220,38,38,0.18), transparent 55%),' +
-            'radial-gradient(700px circle at 50% 50%, rgba(127,29,29,0.12), transparent 60%),' +
+            'radial-gradient(900px circle at 20% 15%, rgba(239,68,68,0.55), transparent 58%),' +
+            'radial-gradient(850px circle at 85% 80%, rgba(220,38,38,0.5), transparent 58%),' +
+            'radial-gradient(750px circle at 50% 45%, rgba(185,28,28,0.32), transparent 62%),' +
             '#0a0a12',
         }}
       />
