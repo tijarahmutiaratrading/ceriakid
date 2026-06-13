@@ -6,12 +6,18 @@ import { motion } from 'framer-motion';
 export default function GameLoadingScreen({ message = 'Menyediakan permainan...' }) {
   return (
     <div
-      className="bg-slate-950 fixed inset-0 z-[9999] w-screen h-screen flex items-center justify-center overflow-hidden p-4"
+      className="fixed inset-0 z-[9999] w-screen h-screen flex items-center justify-center overflow-hidden p-4"
+      style={{
+        background:
+          'radial-gradient(900px circle at 20% 15%, rgba(239,68,68,0.55), transparent 58%),' +
+          'radial-gradient(850px circle at 85% 80%, rgba(220,38,38,0.5), transparent 58%),' +
+          'radial-gradient(750px circle at 50% 45%, rgba(185,28,28,0.32), transparent 62%),' +
+          '#0a0a12',
+      }}
     >
-      {/* Glow orbs — cinematic PS5 */}
-      <div className="absolute -top-24 left-1/4 w-96 h-96 rounded-full opacity-30 blur-3xl bg-violet-600/40" />
-      <div className="absolute -bottom-24 right-1/4 w-96 h-96 rounded-full opacity-25 blur-3xl bg-fuchsia-500/30" />
-      <div className="absolute top-1/3 -left-20 w-80 h-80 rounded-full opacity-20 blur-3xl bg-cyan-500/30" />
+      {/* Glow orbs — tema merah CeriaKid */}
+      <div className="absolute -top-24 left-1/4 w-96 h-96 rounded-full opacity-40 blur-3xl bg-red-600/50" />
+      <div className="absolute -bottom-24 right-1/4 w-96 h-96 rounded-full opacity-35 blur-3xl bg-red-500/40" />
 
       {/* Floating sparkles */}
       {['✨', '⭐', '💫', '🌟', '✨', '⭐'].map((s, i) => (
