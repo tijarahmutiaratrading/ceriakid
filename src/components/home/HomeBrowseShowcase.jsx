@@ -14,30 +14,26 @@ export default function HomeBrowseShowcase() {
 
   return (
     <div>
-      {/* Toggle pill */}
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white px-1">Terokai</p>
-        <div className="flex gap-1 p-1 rounded-full bg-white/10 border border-white/15">
-          {TABS.map((t) => {
-            const active = tab === t.key;
-            return (
-              <button
-                key={t.key}
-                onClick={() => setTab(t.key)}
-                className="relative px-4 py-1.5 rounded-full text-xs font-black transition-colors"
-              >
-                {active && (
-                  <motion.span
-                    layoutId="browse-tab-pill"
-                    className="absolute inset-0 rounded-full bg-white"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
-                <span className={`relative ${active ? 'text-slate-900' : 'text-white/70'}`}>{t.label}</span>
-              </button>
-            );
-          })}
-        </div>
+      {/* Tajuk + butang pilih kategori — jelas macam pemilih umur */}
+      <p className="text-sm font-black uppercase tracking-[0.2em] text-white px-1 mb-3">Pilih Kategori</p>
+      <div className="flex gap-3 mb-5">
+        {TABS.map((t) => {
+          const active = tab === t.key;
+          return (
+            <motion.button
+              key={t.key}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setTab(t.key)}
+              className={`flex-1 rounded-2xl py-3.5 px-4 font-black text-sm flex items-center justify-center gap-2 transition-all ${
+                active
+                  ? 'bg-white text-slate-900 shadow-xl ring-2 ring-white'
+                  : 'bg-white/10 text-white/70 border border-white/15 hover:bg-white/15'
+              }`}
+            >
+              {t.label}
+            </motion.button>
+          );
+        })}
       </div>
 
       <AnimatePresence mode="wait">
