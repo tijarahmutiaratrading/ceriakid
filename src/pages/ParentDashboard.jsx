@@ -110,10 +110,10 @@ export default function ParentDashboard() {
   const avgStarsAll = totalGamesAll > 0 ? (totalStarsAll / totalGamesAll).toFixed(1) : '0.0';
 
   return (
-    <div className="min-h-screen font-nunito relative">
-      <div className="md:hidden">
-        <AppHeader showBack={true} backTo="/dashboard" />
-      </div>
+    <div
+      className="min-h-screen font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
+    >
+      <AppHeader showBack={true} backTo="/dashboard" theme="light" />
       <div className="relative w-full max-w-5xl mx-auto p-4 sm:p-6 pb-16 pt-4">
 
         {/* 1. Family Hero — overall snapshot */}

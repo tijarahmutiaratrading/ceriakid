@@ -6,7 +6,6 @@ import { useLang } from '@/lib/LanguageContext';
 import GameHeader from '@/components/game/GameHeader';
 import FeedbackOverlay from '@/components/game/FeedbackOverlay';
 import ScoreScreen from '@/components/game/ScoreScreen';
-import GamePlayShell from '@/components/game/GamePlayShell';
 import { shapeItems, colorItems, shuffleArray, calculateStars, saveScore } from '@/lib/gameData';
 
 const TOTAL_ROUNDS = 6;
@@ -117,93 +116,95 @@ export default function ShapesGame() {
   const round = rounds[state.currentRound];
 
   return (
-    <GamePlayShell backTo="/games-hub" backLabel={t('shapeGame')}>
-      <GameHeader
-        title={t('shapeGame')}
-        score={state.score}
-        total={TOTAL_ROUNDS}
-        currentQ={state.currentRound + 1}
-        totalQ={TOTAL_ROUNDS}
-      />
+    <div className="min-h-screen bg-pattern">
+      <div className="max-w-lg mx-auto px-4 py-6 pb-24">
+        <GameHeader
+          title={t('shapeGame')}
+          score={state.score}
+          total={TOTAL_ROUNDS}
+          currentQ={state.currentRound + 1}
+          totalQ={TOTAL_ROUNDS}
+        />
 
-      {/* Question — glass */}
-      <motion.div
-        key={state.currentRound}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="rounded-3xl p-6 text-center mb-6 bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-[0_8px_30px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.08)]"
-      >
-        <p className="text-lg font-bold text-white/70 mb-3">
-          {round.type === 'shape' ? t('matchShape') : t('matchColor')}
-        </p>
-        <div className="text-6xl mb-2">{round.target.emoji}</div>
-        <p className="text-xl font-extrabold text-white">
-          {round.type === 'shape' ? t(round.target.shape) : t(round.target.id)}
-        </p>
-      </motion.div>
+        {/* Question */}
+        <motion.div
+          key={state.currentRound}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="clay rounded-3xl p-6 text-center mb-6 bg-gradient-to-br from-emerald-50 to-green-100"
+        >
+          <p className="text-lg font-bold text-muted-foreground mb-3">
+            {round.type === 'shape' ? t('matchShape') : t('matchColor')}
+          </p>
+          <div className="text-6xl mb-2">{round.target.emoji}</div>
+          <p className="text-xl font-extrabold">
+            {round.type === 'shape' ? t(round.target.shape) : t(round.target.id)}
+          </p>
+        </motion.div>
 
-      <DragDropContext onDragEnd={handleDragEnd}>
-        {/* Drop Zone */}
-        <Droppable droppableId="dropzone">
-          {(provided, snapshot) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className={`rounded-3xl p-6 mb-6 text-center border-2 border-dashed transition-colors min-h-[80px] flex items-center justify-center backdrop-blur-xl ${
-                snapshot.isDraggingOver
-                  ? 'border-game-green bg-green-500/15'
-                  : 'border-white/25 bg-white/8'
-              }`}
-            >
-              {!state.droppedId && (
-                <p className="text-lg font-bold text-white/70">
-                  {t('dragHere')} 👇
-                </p>
-              )}
-              {state.droppedId && (
-                <div className="text-4xl">
-                  {round.options.find(o => o.id === state.droppedId)?.emoji}
-                </div>
-              )}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          {/* Drop Zone */}
+          <Droppable droppableId="dropzone">
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className={`clay rounded-3xl p-6 mb-6 text-center border-2 border-dashed transition-colors min-h-[80px] flex items-center justify-center ${
+                  snapshot.isDraggingOver
+                    ? 'border-game-green bg-green-50/50'
+                    : 'border-gray-300'
+                }`}
+              >
+                {!state.droppedId && (
+                  <p className="text-lg font-bold text-muted-foreground">
+                    {t('dragHere')} 👇
+                  </p>
+                )}
+                {state.droppedId && (
+                  <div className="text-4xl">
+                    {round.options.find(o => o.id === state.droppedId)?.emoji}
+                  </div>
+                )}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
 
-        {/* Draggable Options */}
-        <Droppable droppableId="options" direction="horizontal">
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className="grid grid-cols-4 gap-3"
-            >
-              {round.options.map((option, index) => (
-                <Draggable
-                  key={`${state.currentRound}-${option.id}`}
-                  draggableId={option.id}
-                  index={index}
-                  isDragDisabled={state.showFeedback}
-                >
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className={`rounded-2xl p-4 text-center text-4xl cursor-grab active:cursor-grabbing transition-shadow bg-white/8 backdrop-blur-xl ring-1 ring-white/15 ${
-                        snapshot.isDragging ? 'shadow-xl scale-110 z-10' : ''
-                      }`}
-                    >
-                      {option.emoji}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+          {/* Draggable Options */}
+          <Droppable droppableId="options" direction="horizontal">
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="grid grid-cols-4 gap-3"
+              >
+                {round.options.map((option, index) => (
+                  <Draggable
+                    key={`${state.currentRound}-${option.id}`}
+                    draggableId={option.id}
+                    index={index}
+                    isDragDisabled={state.showFeedback}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className={`clay-button rounded-2xl p-4 text-center text-4xl cursor-grab active:cursor-grabbing transition-shadow ${
+                          snapshot.isDragging ? 'shadow-xl scale-110 z-10' : ''
+                        }`}
+                      >
+                        {option.emoji}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </div>
 
       <FeedbackOverlay
         show={state.showFeedback}
@@ -211,6 +212,6 @@ export default function ShapesGame() {
         message={state.feedbackMsg}
         onDone={handleFeedbackDone}
       />
-    </GamePlayShell>
+    </div>
   );
 }

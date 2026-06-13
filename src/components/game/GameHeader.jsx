@@ -12,23 +12,23 @@ export default function GameHeader({ title, score, total, currentQ, totalQ, onPr
         whileTap={{ scale: 0.92 }}
         onClick={onPrevious}
         disabled={currentQ === 1}
-        className="rounded-xl w-11 h-11 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed transition-all flex-shrink-0 bg-white/10 text-white ring-1 ring-white/15 shadow-sm hover:bg-white/20"
+        className="rounded-xl w-11 h-11 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed transition-all flex-shrink-0 bg-white text-slate-700 ring-1 ring-slate-200 shadow-sm hover:bg-slate-50"
       >
         <ArrowLeft className="w-5 h-5" />
       </motion.button>
 
       <div className="text-center min-w-0 flex-1">
-        <h2 className="text-base sm:text-xl font-black leading-tight break-words text-white">
+        <h2 className="text-base sm:text-xl font-black leading-tight break-words text-slate-900">
           {title}
         </h2>
-        <p className="text-xs sm:text-sm text-white/50 font-semibold mt-0.5">
+        <p className="text-xs sm:text-sm text-slate-400 font-semibold mt-0.5">
           {t('question')} {currentQ} {t('of')} {totalQ}
         </p>
       </div>
 
       <div className="rounded-xl px-3.5 py-2 text-center flex-shrink-0 brand-gradient-br">
-        <p style={{ color: 'rgba(255,255,255,0.6)' }} className="text-[9px] font-black uppercase tracking-[0.15em]">{t('score')}</p>
-        <p style={{ color: '#ffffff' }} className="text-lg font-black tabular-nums leading-tight">
+        <p className="text-[9px] text-white/60 font-black uppercase tracking-[0.15em]">{t('score')}</p>
+        <p className="text-lg font-black text-white tabular-nums leading-tight">
           {score}/{total}
         </p>
       </div>

@@ -5,6 +5,7 @@ import { useLang } from '@/lib/LanguageContext';
 import { t } from '@/lib/i18n';
 import { base44 } from '@/api/base44Client';
 import { Upload, Loader, User, Mail, Calendar, Shield, Smartphone, Crown, CheckCircle } from 'lucide-react';
+import AppHeader from '@/components/AppHeader';
 import { getDefaultAvatar } from '@/lib/avatarGenerator';
 import UpgradeTierCard from '@/components/dashboard/UpgradeTierCard';
 import PersonalInfoCard from '@/components/dashboard/PersonalInfoCard';
@@ -12,7 +13,7 @@ import SettingsHero from '@/components/dashboard/SettingsHero';
 import ParentAvatarPicker from '@/components/dashboard/ParentAvatarPicker';
 import ManageDevices from '@/components/ManageDevices';
 import OfflineModeCard from '@/components/offline/OfflineModeCard';
-import UIThemeSwitcher from '@/components/dashboard/UIThemeSwitcher';
+import ThemeSwitcherPanel from '@/components/admin/ThemeSwitcherPanel';
 
 const TIER_CONFIG = {
   free:      { label: 'Percuma',  emoji: '🆓', color: 'from-gray-400 to-gray-500' },
@@ -92,7 +93,20 @@ export default function ClientDashboard() {
   const tier = TIER_CONFIG[userTier] || TIER_CONFIG.free;
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
+    <div
+      className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative -mt-16 sm:-mt-20 pt-16 sm:pt-20"
+      style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fbcfe8 50%, #c7d2fe 100%)' }}
+    >
+      {/* Floating decorations — CeriaKid vibe (same as Challenges) */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 right-8 text-4xl opacity-40 animate-pulse">🌈</div>
+        <div className="absolute top-40 left-6 text-3xl opacity-30">☁️</div>
+        <div className="absolute top-1/3 right-1/4 text-2xl opacity-25">⭐</div>
+        <div className="absolute bottom-1/3 left-8 text-3xl opacity-30">💖</div>
+        <div className="absolute bottom-20 right-12 text-3xl opacity-35">✨</div>
+      </div>
+
+      <AppHeader />
 
       <div className="relative w-full max-w-7xl mx-auto page-px pb-16 pt-4 space-y-5">
 
@@ -131,16 +145,6 @@ export default function ClientDashboard() {
           <UpgradeTierCard currentTier={userTier} user={user} gender={gender} onGenderChange={setGender} />
         </motion.div>
 
-        {/* Tema Paparan — pilih PS5 atau Klasik */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.18 }}
-          className="mb-5"
-        >
-          <UIThemeSwitcher />
-        </motion.div>
-
         {/* Manage Devices */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -149,6 +153,16 @@ export default function ClientDashboard() {
           className="mb-5"
         >
           <ManageDevices userEmail={user?.email} tier={userTier} />
+        </motion.div>
+
+        {/* Tema Warna App */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.21 }}
+          className="mb-5"
+        >
+          <ThemeSwitcherPanel />
         </motion.div>
 
         {/* Offline Mode — hanya untuk Standard, Keluarga (+ legacy premium/pro) */}

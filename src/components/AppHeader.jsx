@@ -116,10 +116,7 @@ export default function AppHeader({ showBack = null, backTo = '/', title = null,
             <p className={`${isDarkPill ? 'text-white/55' : 'text-slate-500'} text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] leading-none`}>
               CeriaKid
             </p>
-            <p
-              style={isDarkPill ? { color: '#ffffff' } : undefined}
-              className={`${isDarkPill ? '' : 'text-slate-900'} font-black text-sm sm:text-base truncate leading-tight mt-1`}
-            >
+            <p className={`${isDarkPill ? 'text-white' : 'text-slate-900'} font-black text-sm sm:text-base truncate leading-tight mt-1`}>
               {pageTitle}
             </p>
           </div>

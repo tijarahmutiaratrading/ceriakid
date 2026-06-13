@@ -78,45 +78,64 @@ export default function InstallAppGuide() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative isolate rounded-3xl overflow-hidden shadow-xl bg-white/10 backdrop-blur-xl border border-white/15"
-        style={{ boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)' }}
+        className="relative rounded-3xl overflow-hidden shadow-xl"
+        style={{
+          background: 'linear-gradient(135deg, rgba(15,23,42,0.88), rgba(88,28,135,0.82), rgba(190,24,93,0.72))',
+          backdropFilter: 'blur(22px) saturate(150%)',
+          WebkitBackdropFilter: 'blur(22px) saturate(150%)',
+          boxShadow: '0 18px 50px rgba(31, 16, 92, 0.25)',
+        }}
       >
-        <div className="relative z-10 p-3.5 sm:p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-white/15 backdrop-blur-md ring-1 ring-white/25 flex items-center justify-center shadow-lg">
-              <MonitorSmartphone className="w-5 h-5 text-white" strokeWidth={2.5} />
+        {/* Decorative orbs */}
+        <div className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200/25 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-12 -left-10 w-40 h-40 bg-pink-300/25 rounded-full blur-2xl pointer-events-none" />
+
+        <div className="relative z-10 p-5 sm:p-6">
+          <div className="flex items-start gap-4 mb-4">
+            <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center shadow-lg">
+              <MonitorSmartphone className="w-6 h-6 sm:w-7 sm:h-7 text-white" strokeWidth={2.5} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white font-black text-sm leading-tight">Pasang CeriaKid sebagai app</p>
-              <p className="text-white/60 text-[11px] font-semibold leading-tight">Cepat, offline-ready & full screen.</p>
+              <p className="text-white/70 text-[10px] font-black uppercase tracking-[0.18em] mb-1">Pasang Sebagai App</p>
+              <p className="text-white font-black text-base sm:text-lg leading-tight">Buka CeriaKid macam app biasa!</p>
+              <p className="text-white/80 text-xs font-semibold mt-1.5 leading-relaxed">
+                Pasang di skrin phone/tablet — tak perlu buka browser. Cepat, offline-ready, & full screen.
+              </p>
             </div>
           </div>
 
           {/* Platform-specific CTA */}
-          <div className="grid grid-cols-2 gap-2 mt-3">
+          <div className="grid grid-cols-2 gap-2 mt-4">
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => { setPlatform('ios'); setShowModal(true); }}
-              className={`flex items-center justify-center gap-1.5 py-2 rounded-xl font-black text-xs transition-all ${
+              className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-xs sm:text-sm transition-all ${
                 platform === 'ios'
-                  ? 'bg-white text-slate-900 shadow-lg'
-                  : 'bg-white/10 text-white border border-white/20'
+                  ? 'bg-white text-purple-700 shadow-lg'
+                  : 'bg-white/15 text-white border border-white/25'
               }`}
             >
-              <Apple className="w-3.5 h-3.5" /> iPhone
+              <Apple className="w-4 h-4" /> iPhone / iPad
             </motion.button>
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => { setPlatform('android'); deferredPrompt ? handleAndroidInstall() : setShowModal(true); }}
-              className={`flex items-center justify-center gap-1.5 py-2 rounded-xl font-black text-xs transition-all ${
+              className={`flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-xs sm:text-sm transition-all ${
                 platform === 'android'
-                  ? 'bg-white text-slate-900 shadow-lg'
-                  : 'bg-white/10 text-white border border-white/20'
+                  ? 'bg-white text-purple-700 shadow-lg'
+                  : 'bg-white/15 text-white border border-white/25'
               }`}
             >
-              <Smartphone className="w-3.5 h-3.5" /> Android
+              <Smartphone className="w-4 h-4" /> Android
             </motion.button>
           </div>
+
+          <button
+            onClick={() => setShowModal(true)}
+            className="w-full mt-3 flex items-center justify-center gap-1.5 text-white/80 hover:text-white text-[11px] font-bold transition-colors"
+          >
+            Lihat panduan lengkap step-by-step <ChevronRight className="w-3 h-3" />
+          </button>
         </div>
       </motion.div>
 

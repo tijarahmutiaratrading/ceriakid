@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Lock, Play } from 'lucide-react';
 import GameBadge from './GameBadge';
 import UpgradeLockModal from './UpgradeLockModal';
-import { useUITheme } from '@/lib/UIThemeContext';
 
 // Category → { emoji, gradient }
 const CATEGORY_STYLE = {
@@ -113,21 +112,8 @@ function getGameStyle(game, idx) {
 }
 
 function GameIcon({ game, locked, idx }) {
-  const { isClassic } = useUITheme();
   const style = getGameStyle(game, idx);
   const emoji = game.emoji || style.emoji;
-  // Tema Klasik — sentiasa guna emoji (jangan papar gambar 3D PS5)
-  const hasArt = !isClassic && game.iconUrl && String(game.iconUrl).startsWith('http');
-
-  // Kalau gambar AI dah dijana — papar gambar tu dalam card
-  if (hasArt) {
-    return (
-      <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden ring-1 ring-black/5 shadow-sm ${locked ? 'opacity-40 grayscale' : ''}`}>
-        <img src={game.iconUrl} alt={game.title} loading="lazy" className="w-full h-full object-cover" />
-      </div>
-    );
-  }
-
   return (
     <div className={`w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center ${locked ? 'opacity-40 grayscale' : ''}`}>
       <span className="text-4xl sm:text-5xl leading-none">{emoji}</span>

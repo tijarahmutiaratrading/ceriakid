@@ -11,17 +11,12 @@ export default function ArcadeRail({ games, selected, onSelect, bestScores }) {
   const tileRefs = useRef({});
 
   useEffect(() => {
-    const rail = railRef.current;
     const el = tileRefs.current[selected];
-    if (!rail || !el) return;
-    // Scroll manual (horizontal sahaja) supaya tile terpilih ke tengah —
-    // elak scrollIntoView yang boleh ganggu animasi scale & sebabkan senget.
-    const target = el.offsetLeft - rail.clientWidth / 2 + el.clientWidth / 2;
-    rail.scrollTo({ left: target, behavior: 'smooth' });
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }, [selected]);
 
   return (
-    <div ref={railRef} className="flex gap-3 sm:gap-4 overflow-x-auto overflow-y-visible scrollbar-hide pt-8 pb-4 snap-x px-4">
+    <div ref={railRef} className="flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide py-6 px-1 -mx-1 snap-x">
       {games.map((g, i) => {
         const isSel = i === selected;
         const best = bestScores[g.key] || 0;

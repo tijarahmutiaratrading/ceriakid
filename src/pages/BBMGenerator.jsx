@@ -108,7 +108,7 @@ export default function BBMGenerator() {
               <p className="text-violet-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> Bersama Cikgu Daniel
               </p>
-              <h1 className="text-xl md:text-2xl font-black text-white">Penjana BBM AI</h1>
+              <h1 className="text-xl md:text-2xl font-black text-slate-900">Penjana BBM AI</h1>
             </div>
           </div>
           <CreditBalanceWidget compact />

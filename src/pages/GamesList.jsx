@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAgeGroup } from '@/lib/AgeGroupContext';
 import { useAuth } from '@/lib/AuthContext';
@@ -7,16 +7,12 @@ import { useLang } from '@/lib/LanguageContext';
 import { t } from '@/lib/i18n';
 import { base44 } from '@/api/base44Client';
 import { getGamesByAgeAndCategory } from '@/lib/gameLibrary';
+import GameListCard from '@/components/game/GameListCard';
+import AppHeader from '@/components/AppHeader';
 import GameLoadingScreen from '@/components/game/GameLoadingScreen';
-import CinematicShowcase from '@/components/hub/CinematicShowcase';
-import CinematicRail from '@/components/hub/CinematicRail';
-import CinematicTips from '@/components/hub/CinematicTips';
-import { getGameArtFor } from '@/lib/gameArtPool';
-import { ArrowLeft, Gamepad2 } from 'lucide-react';
-import { getSubjectArt, getSubjectAccent } from '@/lib/subjectArt';
+import { ArrowLeft } from 'lucide-react';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
-import { useUITheme } from '@/lib/UIThemeContext';
 
 const KAFA_LABELS = {
   kafa_quran: 'KAFA · Al-Quran & Hafazan',
@@ -119,7 +115,34 @@ const getCategoryEmoji = (category) => {
   return emojis[category] || '📚';
 };
 
+const CATEGORY_BG_IMAGES = {
+  bahasa_melayu: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/a82b01ff6_generated_image.png',
+  english: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/8ffcc1bb9_generated_image.png',
+  mathematics: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/b948e01dd_generated_image.png',
+  science: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/6f0853b3a_generated_image.png',
+  jawi: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/110e1698a_generated_image.png',
+  worksheet: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/5e14e4531_generated_image.png',
+  bahasa_tamil: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/1dac8b0f4_generated_image.png',
+  bahasa_mandarin: 'https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/477e24964_generated_image.png',
+};
 
+// Animated emojis per subject — cartoon-style mascots/items that float around the background
+const CATEGORY_ANIMATIONS = {
+  bahasa_melayu: ['📖', '✍️', '🇲🇾', '📝', '🎭', '💬'],
+  english: ['📚', '🔤', '🇬🇧', '✏️', '🗣️', '📖'],
+  mathematics: ['🔢', '➕', '➖', '✖️', '➗', '📐', '🧮'],
+  science: ['🧪', '⚗️', '🔬', '🧫', '🔭', '🧬', '⚛️'],
+  jawi: ['🕌', '📜', '🌙', '⭐', '📿'],
+  pendidikan_islam: ['🕋', '🕌', '📖', '🌙', '⭐', '🤲'],
+  pendidikan_moral: ['🤝', '❤️', '🌟', '🫶', '😊', '🕊️'],
+  sejarah: ['📜', '🏛️', '⚔️', '👑', '🗺️', '🇲🇾'],
+  rbt: ['🔧', '🔨', '⚙️', '🪛', '💡', '📐'],
+  pjk: ['⚽', '🏃', '🤸', '🏋️', '🥦', '💪'],
+  seni: ['🎨', '🖌️', '✏️', '🖍️', '🌈', '🖼️'],
+  worksheet: ['✏️', '📝', '📋', '✂️', '📎', '🖍️'],
+  bahasa_tamil: ['📖', '✍️', '🇮🇳', '🪷', '🎭'],
+  bahasa_mandarin: ['📖', '🏮', '🇨🇳', '🐉', '🧧'],
+};
 
 const DARJAH_ORDER = ['darjah_1', 'darjah_2', 'darjah_3', 'darjah_4', 'darjah_5', 'darjah_6'];
 
@@ -138,19 +161,11 @@ export default function GamesList() {
   const { ageGroup } = useAgeGroup();
   const { lang } = useLang();
   const { selectedChild } = useSelectedChild();
-  const { isClassic } = useUITheme();
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState({});
   const [selectedDarjah, setSelectedDarjah] = useState(null);
   const [userTier, setUserTier] = useState('free');
   const [allGames, setAllGames] = useState([]);
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const navigate = useNavigate();
-
-  // Reset pilihan bila tukar darjah/kategori
-  useEffect(() => {
-    setSelectedIdx(0);
-  }, [selectedDarjah, category, ageGroup]);
 
   useEffect(() => {
     if (user) {
@@ -253,51 +268,95 @@ export default function GamesList() {
     return <GameLoadingScreen message="Memuatkan senarai permainan..." />;
   }
 
-  const art = getSubjectArt(category);
-  const accent = getSubjectAccent(category);
-  const backTo = category?.startsWith('kafa_') ? '/kafa' : '/games-subjek';
-  const backLabel = category?.startsWith('kafa_') ? 'KAFA' : 'Subjek';
-
   return (
-    <div className="min-h-screen bg-slate-950 pb-28 relative overflow-hidden font-nunito">
-      {/* Latar sinematik — art subjek blur penuh skrin */}
-      <div className="absolute inset-0 pointer-events-none">
-        {art ? (
-          <img src={art} alt="" className="h-full w-full object-cover scale-110 blur-2xl opacity-30" />
-        ) : (
-          <div className="h-full w-full" style={{ background: `radial-gradient(80% 80% at 50% 30%, ${accent}44, transparent)` }} />
-        )}
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/55 to-slate-950 pointer-events-none" />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: `radial-gradient(60% 50% at 70% 30%, ${accent}33 0%, transparent 70%)` }}
-      />
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative">
+      <AppHeader showBack={true} backTo="/dashboard" />
+      <div className="relative w-full max-w-7xl mx-auto page-px pb-32 pt-4 overflow-x-hidden">
 
-      <div className="relative z-10 max-w-7xl mx-auto page-px pt-6 sm:pt-10">
-        {/* Top bar */}
-        <div className="flex items-center justify-between mb-6 sm:mb-8">
-          <Link
-            to={backTo}
-            className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 backdrop-blur px-4 py-2 text-sm font-black text-white hover:bg-white/20 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" /> {backLabel}
-          </Link>
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 backdrop-blur px-4 py-2">
-            <Gamepad2 className="w-4 h-4 text-white" />
-            <span className="text-xs font-black text-white uppercase tracking-[0.25em]">Games</span>
+        {/* Header Card with Background Image */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative isolate overflow-hidden mb-5 p-5 rounded-3xl shadow-2xl border border-white/30 transform-gpu [clip-path:inset(0_round_1.5rem)] min-h-[180px]"
+        >
+          {/* Background image */}
+          {CATEGORY_BG_IMAGES[category] && (
+            <img
+              src={CATEGORY_BG_IMAGES[category]}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover z-0"
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+          )}
+          {/* Animated floating emojis based on subject */}
+          <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none">
+            {(CATEGORY_ANIMATIONS[category] || ['✨', '⭐', '🎈']).map((emoji, i) => {
+              const items = CATEGORY_ANIMATIONS[category] || ['✨', '⭐', '🎈'];
+              const total = items.length;
+              const leftPct = 8 + (i * (84 / Math.max(total - 1, 1)));
+              const topPct = 15 + ((i * 37) % 65);
+              const duration = 4 + (i % 3);
+              const delay = (i * 0.4) % 2;
+              const size = 26 + (i % 3) * 8;
+              return (
+                <motion.span
+                  key={`${category}-${i}`}
+                  className="absolute select-none drop-shadow-lg"
+                  style={{
+                    left: `${leftPct}%`,
+                    top: `${topPct}%`,
+                    fontSize: `${size}px`,
+                    filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))',
+                  }}
+                  animate={{
+                    y: [0, -14, 0, -8, 0],
+                    x: [0, 6, 0, -4, 0],
+                    rotate: [0, 12, -8, 6, 0],
+                    scale: [1, 1.12, 1, 1.06, 1],
+                  }}
+                  transition={{
+                    duration,
+                    delay,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                >
+                  {emoji}
+                </motion.span>
+              );
+            })}
           </div>
-        </div>
 
-        {/* Darjah Tabs - Only for Sekolah Rendah — pill glass gelap */}
+          {/* Gradient overlay for text legibility */}
+          <div className="absolute inset-0 z-[2] bg-gradient-to-br from-purple-900/25 via-transparent to-pink-700/20" />
+          <div className="absolute inset-x-0 bottom-0 h-2/3 z-[2] bg-gradient-to-t from-black/65 via-black/25 to-transparent" />
+
+          {/* Content */}
+          <div className="relative z-10">
+            <Link to={category?.startsWith('kafa_') ? '/kafa' : '/dashboard'} className="inline-flex items-center gap-2 text-white/95 text-xs font-black mb-4 drop-shadow-md">
+              <ArrowLeft className="w-4 h-4" /> {category?.startsWith('kafa_') ? 'Kembali ke KAFA' : 'Kembali ke kategori'}
+            </Link>
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-white/25 backdrop-blur-md ring-1 ring-white/40 flex items-center justify-center text-3xl shadow-lg flex-shrink-0">
+                {getCategoryEmoji(category)}
+              </div>
+              <div>
+                <h1 className="text-2xl font-black text-white leading-tight drop-shadow-lg tracking-tight">{getCategoryLabel(category, lang)}</h1>
+                <p className="text-white text-sm font-bold mt-1 drop-shadow-md">🎮 {games.length} {t('games', lang)} · {t('selectForPlay', lang)}</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Darjah Tabs - Only for Sekolah Rendah — Apple pill style on glass */}
         {hasDarjah && (
           <motion.div
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
+            className="mb-5"
           >
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-2 px-1">{t('selectDarjah', lang)}</p>
-            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
+            <p className="text-slate-700 text-[11px] font-black uppercase tracking-[0.18em] mb-2 px-1">{t('selectDarjah', lang)}</p>
+            <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
               {availableDarjah.map(d => {
                 const active = selectedDarjah === d;
                 const count = allGames.filter(g => g.darjah === d).length;
@@ -306,15 +365,15 @@ export default function GamesList() {
                     key={d}
                     whileTap={{ scale: 0.96 }}
                     onClick={() => setSelectedDarjah(d)}
-                    className={`flex-shrink-0 min-h-10 px-4 py-2 rounded-full font-black text-sm transition-all inline-flex items-center gap-2 ${
+                    className={`flex-shrink-0 min-h-10 px-4 py-2 rounded-full font-semibold text-sm transition-all inline-flex items-center gap-2 ${
                       active
-                        ? 'bg-white text-slate-900 shadow-lg'
-                        : 'bg-white/10 text-white/70 border border-white/15 hover:bg-white/20'
+                        ? 'bg-gradient-to-br from-purple-600 to-pink-600 text-white shadow-lg'
+                        : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50 shadow-sm'
                     }`}
                   >
                     {DARJAH_LABELS[d] || `Darjah ${d}`}
                     <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-                      active ? 'bg-slate-900/10 text-slate-700' : 'bg-white/10 text-white/60'
+                      active ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-600'
                     }`}>
                       {count}
                     </span>
@@ -325,7 +384,7 @@ export default function GamesList() {
           </motion.div>
         )}
 
-        {/* Showcase + rail gaya PS5 */}
+        {/* Games List */}
         {games.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -345,61 +404,36 @@ export default function GamesList() {
               </motion.button>
             </Link>
           </motion.div>
-        ) : (() => {
-          // Bina item rail — kekalkan globalIdx untuk progress & route, bucketIdx untuk lock
-          const items = games.map((game, bucketIdx) => {
-            const globalIdx = allGames.findIndex((g) => g === game);
-            const gameKey = `${ageGroup}-${category}-${globalIdx}`;
-            const gameProgress = progress[gameKey];
-            const locked = isGameLocked(bucketIdx);
-            const stars = gameProgress?.bestStars || 0;
-            const gameArt = getGameArtFor(game, globalIdx);
-            // Buang description yang mengandungi JSON mentah (gameData) — papar teks bersih sahaja
-            const rawDesc = (game.description || '').trim();
-            const cleanDesc = rawDesc.startsWith('{') || rawDesc.startsWith('[') || rawDesc.includes('"questions"') || rawDesc.includes('"options"')
-              ? `${game.totalQuestions || 8} soalan menyeronokkan untuk anak belajar!`
-              : rawDesc;
-            return {
-              key: game.id || `game-${globalIdx}`,
-              title: game.title,
-              desc: cleanDesc,
-              emoji: game.emoji || '🎮',
-              // Tema Klasik — guna emoji sahaja (jangan papar gambar 3D)
-              art: isClassic ? null : (game.iconUrl || gameArt.art),
-              accent: gameArt.accent,
-              badge: locked ? '🔒 Premium' : getCategoryLabel(category, lang),
-              metaChips: [
-                `❓ ${game.totalQuestions || 8} soalan`,
-                gameProgress ? `⭐ ${stars}/3 bintang` : '✨ Belum dimainkan',
-                ...(game.darjah ? [`🎓 ${DARJAH_LABELS[game.darjah] || ''}`] : []),
-              ],
-              locked,
-              globalIdx,
-            };
-          });
-          const safeIdx = Math.min(selectedIdx, items.length - 1);
-          const item = items[safeIdx];
-          const handlePlay = () => {
-            if (item.locked) navigate('/settings');
-            else navigate(`/play/${category}/${item.globalIdx}`);
-          };
-          return (
-            <>
-              <CinematicShowcase
-                item={item}
-                playLabel={item.locked ? '🔒 Buka dengan Langganan' : 'Main Sekarang'}
-                onPlay={handlePlay}
-              />
-              <div className="mt-8 sm:mt-12">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-1">
-                  Pilih Game · {safeIdx + 1}/{items.length}
-                </p>
-                <CinematicRail items={items} selected={safeIdx} onSelect={setSelectedIdx} onActivate={handlePlay} />
-              </div>
-              <CinematicTips />
-            </>
-          );
-        })()}
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+            {games.map((game, bucketIdx) => {
+              // globalIdx — kekal untuk gameKey/progress tracking (jangan break old data)
+              const globalIdx = allGames.findIndex((g) => g === game);
+              const gameKey = `${ageGroup}-${category}-${globalIdx}`;
+              const gameProgress = progress[gameKey];
+              // bucketIdx — index dalam darjah/subject semasa, dipakai utk lock check
+              // supaya setiap darjah ada quota unlock sendiri.
+              const locked = isGameLocked(bucketIdx);
+              return (
+                <GameListCard
+                  key={game.id || `game-${globalIdx}`}
+                  game={game}
+                  gameKey={gameKey}
+                  gameProgress={gameProgress}
+                  idx={globalIdx}
+                  category={category}
+                  locked={locked}
+                  badge={
+                    locked ? 'locked' :
+                    bucketIdx < 2 ? 'new' :
+                    gameProgress && gameProgress.bestStars < 2 ? 'recommended' :
+                    null
+                  }
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

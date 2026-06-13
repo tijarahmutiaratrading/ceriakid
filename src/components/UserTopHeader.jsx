@@ -123,7 +123,11 @@ export default function UserTopHeader() {
         {isAdmin && (
           <Link
             to="/admin-dashboard"
-            className="flex items-center gap-1 px-1.5 py-0.5 lg:px-2 lg:py-0.5 rounded-full text-sm lg:text-[15px] font-black transition-all text-white hover:bg-white/15"
+            className={`flex items-center gap-1 px-1.5 py-0.5 lg:px-2 lg:py-0.5 rounded-full text-sm lg:text-[15px] font-black transition-all ${
+              isDarkBg
+                ? 'text-amber-300 hover:text-amber-200 hover:bg-white/15'
+                : 'text-amber-700 hover:text-amber-900 hover:bg-white/50'
+            }`}
             title="Tukar ke Admin Panel"
           >
             <Shield className="w-4 h-4 lg:w-[18px] lg:h-[18px]" />
@@ -144,7 +148,7 @@ export default function UserTopHeader() {
                 className={`relative px-2 py-1.5 lg:px-2.5 lg:py-2 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
                   showActive
                     ? 'text-white'
-                    : 'text-white hover:text-white'
+                    : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
                 }`}
               >
                 {showActive && (
@@ -167,7 +171,7 @@ export default function UserTopHeader() {
                 className={`relative flex items-center gap-0.5 px-2 py-1.5 lg:px-2.5 lg:py-2 rounded-full font-black text-sm lg:text-[15px] transition-colors ${
                   showActive
                     ? 'text-white'
-                    : 'text-white hover:text-white'
+                    : (isDarkBg ? 'text-white hover:text-white' : 'text-slate-800 hover:text-slate-900')
                 }`}
               >
                 {showActive && (

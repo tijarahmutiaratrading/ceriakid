@@ -194,8 +194,8 @@ export default function AIAssistant() {
               <p className="text-amber-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> Tutor Peribadi Anak
               </p>
-              <h1 className="text-xl md:text-2xl font-black text-white">Cikgu Firdaus 👨‍🏫</h1>
-              <p className="text-white/70 text-[10px] font-semibold">Sedia membantu · Pakar pelajaran sekolah</p>
+              <h1 className="text-xl md:text-2xl font-black text-slate-900">Cikgu Firdaus 👨‍🏫</h1>
+              <p className="text-slate-600 text-[10px] font-semibold">Sedia membantu · Pakar pelajaran sekolah</p>
             </div>
           </div>
           <CreditBalanceWidget compact />

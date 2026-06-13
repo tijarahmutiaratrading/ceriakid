@@ -123,27 +123,19 @@ export default function AppDrawer({
           transform: visible ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.96)',
           opacity: visible ? 1 : 0,
           transformOrigin: 'top center',
-          background: 'rgba(15,23,42,0.92)',
-          backdropFilter: 'blur(32px) saturate(160%)',
-          WebkitBackdropFilter: 'blur(32px) saturate(160%)',
-          boxShadow: '0 24px 60px -12px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.08)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          background: 'rgba(255,255,255,0.98)',
+          backdropFilter: 'blur(32px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+          boxShadow: '0 24px 60px -12px rgba(15, 23, 42, 0.30), inset 0 1px 0 rgba(255,255,255,0.8)',
+          border: '1px solid rgba(255,255,255,0.7)',
         }}
       >
-        {/* Glowing red radial accents — cinematic vibe */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[2rem]" aria-hidden="true">
-          <div className="absolute -top-24 -right-16 w-72 h-72 rounded-full bg-red-500/30 blur-3xl" />
-          <div className="absolute -bottom-28 -left-16 w-80 h-80 rounded-full bg-rose-600/20 blur-3xl" />
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full bg-orange-500/12 blur-3xl" />
-        </div>
-
         {/* Drag handle pill */}
-        <div className="relative z-10 flex justify-center pt-2.5 pb-0.5 flex-shrink-0">
-          <div className="w-10 h-1.5 rounded-full bg-white/25" />
+        <div className="flex justify-center pt-2.5 pb-0.5 flex-shrink-0">
+          <div className="w-10 h-1.5 rounded-full bg-slate-300/80" />
         </div>
 
         {/* Header — profile */}
-        <div className="relative z-10">
         {isAuthenticated && user ? (
           <ProfileHeader
             user={user}
@@ -168,10 +160,9 @@ export default function AppDrawer({
             onManage={() => { setChildMenuOpen(false); onClose?.(); }}
           />
         )}
-        </div>
 
         {/* Scrollable menu */}
-        <nav className="relative z-10 flex-1 overflow-y-auto py-2 px-1 space-y-1.5 scrollbar-hide">
+        <nav className="flex-1 overflow-y-auto py-2 px-1 space-y-0.5 scrollbar-hide">
           {/* Pinned */}
           {isAuthenticated && pinnedItems.length > 0 && (
             <>
@@ -197,14 +188,14 @@ export default function AppDrawer({
             <Link
               to="/settings"
               onClick={() => { haptic('medium'); onClose?.(); }}
-              className="mx-3 my-3 flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10 active:bg-white/10 transition-colors"
+              className="mx-3 my-3 flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200 active:bg-slate-100 transition-colors"
               >
-              <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0 shadow-sm">
-                <Sparkles className="w-4 h-4 text-white" strokeWidth={2.5} />
+              <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                <Sparkles className="w-4 h-4 text-slate-700" strokeWidth={2.5} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-white/50 text-[10px] font-black uppercase tracking-wider leading-none">Naik Taraf</p>
-                <p className="text-white text-sm font-black leading-tight mt-1">Buka semua game + AI →</p>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider leading-none">Naik Taraf</p>
+                <p className="text-slate-800 text-sm font-black leading-tight mt-1">Buka semua game + AI →</p>
               </div>
             </Link>
           )}
@@ -224,11 +215,11 @@ export default function AppDrawer({
 
         {/* Footer — logout */}
         {isAuthenticated && (
-          <div className="relative z-10 px-3 pt-3 pb-2 border-t border-white/10 flex items-center gap-2" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+          <div className="px-3 pt-3 pb-2 border-t border-white/40 flex items-center gap-2" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
             <button
               type="button"
               onClick={() => { haptic('medium'); onClose?.(); onLogout?.(); }}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-white text-slate-900 font-black text-sm active:scale-[0.98] transition-all hover:bg-white/90"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-slate-900 text-white font-black text-sm active:scale-[0.98] transition-all hover:bg-slate-800"
             >
               <LogOut className="w-4 h-4" strokeWidth={2.5} />
               <span>Log Keluar</span>
@@ -238,7 +229,7 @@ export default function AppDrawer({
                 <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-ping" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <span className="text-emerald-400 text-[11px] font-black">Online</span>
+              <span className="text-emerald-600 text-[11px] font-black">Online</span>
             </div>
           </div>
         )}
@@ -251,32 +242,32 @@ export default function AppDrawer({
 
 function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, childMenuOpen, onClose, onToggleChildMenu }) {
   return (
-    <div className="px-4 pt-4 pb-3 border-b border-white/10">
+    <div className="px-4 pt-4 pb-3 border-b border-white/40">
       <div className="flex items-center gap-3 mb-3">
         <Link to="/settings" onClick={() => { haptic('light'); onClose?.(); }} className="flex-1 flex items-center gap-3 min-w-0">
           <div className="relative flex-shrink-0">
             {avatarUrl ? (
               <img src={avatarUrl} alt="" className="w-12 h-12 rounded-2xl object-cover" />
             ) : (
-              <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl">🐱</div>
+              <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-2xl">🐱</div>
             )}
             {tier && tier !== 'free' && (
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-amber-400 flex items-center justify-center ring-2 ring-slate-900">
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-amber-400 flex items-center justify-center ring-2 ring-white">
                 <Crown className="w-3 h-3 text-amber-900" strokeWidth={3} />
               </div>
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-white font-black text-sm truncate">{user?.full_name || 'User'}</p>
-            <p className="text-white/50 text-[11px] font-semibold truncate">{user?.email}</p>
+            <p className="text-slate-900 font-black text-sm truncate">{user?.full_name || 'User'}</p>
+            <p className="text-slate-500 text-[11px] font-semibold truncate">{user?.email}</p>
           </div>
-          <ChevronRight className="w-4 h-4 text-white/40 flex-shrink-0" />
+          <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
         </Link>
         <button
           type="button"
           onClick={() => { haptic('light'); onClose?.(); }}
           aria-label="Tutup menu"
-          className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white flex-shrink-0 transition-colors"
+          className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex-shrink-0 transition-colors"
         >
           <X className="w-5 h-5" strokeWidth={2.5} />
         </button>
@@ -288,7 +279,7 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, child
           type="button"
           onClick={onToggleChildMenu}
           aria-expanded={childMenuOpen}
-          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl active:scale-[0.98] transition-all relative overflow-hidden bg-white/10 border border-white/15"
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl active:scale-[0.98] transition-all relative overflow-hidden bg-slate-900"
         >
           <img
             src={getChildAvatar(selectedChild)}
@@ -315,7 +306,7 @@ function ProfileHeader({ user, avatarUrl, tier, selectedChild, childCount, child
 
 function GuestHeader({ onClose }) {
   return (
-    <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
+    <div className="flex items-center justify-between px-4 py-4 border-b border-white/40">
       <img
         src="https://media.base44.com/images/public/69f1c132ffcd7c660466eec5/443c6c7e7_ChatGPTImageJun32026at06_14_57PM.png"
         alt="CeriaKid"
@@ -325,7 +316,7 @@ function GuestHeader({ onClose }) {
         type="button"
         onClick={() => { haptic('light'); onClose?.(); }}
         aria-label="Tutup menu"
-        className="p-2 rounded-xl bg-white/10 text-white"
+        className="p-2 rounded-xl bg-slate-100 text-slate-600"
       >
         <X className="w-5 h-5" strokeWidth={2.5} />
       </button>
@@ -335,7 +326,7 @@ function GuestHeader({ onClose }) {
 
 function SectionLabel({ icon, label }) {
   return (
-    <p className="px-4 pt-3 pb-1.5 text-white/40 text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-1.5">
+    <p className="px-4 pt-3 pb-1.5 text-slate-400 text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-1.5">
       {icon}
       {label}
     </p>
@@ -355,7 +346,7 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
               key={item.path}
               href={item.path}
               onClick={onNavigate}
-              className="block px-4 py-3 rounded-xl text-white/80 font-bold text-sm active:bg-white/10 transition-colors"
+              className="block px-4 py-3 rounded-xl text-slate-700 font-bold text-sm active:bg-slate-100 transition-colors"
             >
               {item.label}
             </a>
@@ -384,18 +375,18 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
         type="button"
         onClick={() => { haptic('light'); setExpanded(!expanded); }}
         className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-bold transition-colors ${
-          expanded ? 'bg-white/10 text-white shadow-sm border border-white/15' : 'text-white/80 active:bg-white/10'
+          expanded ? 'bg-white/80 text-slate-900 shadow-sm border border-white/60' : 'text-slate-700 active:bg-white/60'
         }`}
       >
         <span className="flex items-center gap-2.5">
           {section.icon && (
-            <section.icon className={`w-[18px] h-[18px] flex-shrink-0 ${expanded ? 'text-white' : 'text-white/50'}`} strokeWidth={2.4} />
+            <section.icon className={`w-[18px] h-[18px] flex-shrink-0 ${expanded ? 'text-slate-900' : 'text-slate-500'}`} strokeWidth={2.4} />
           )}
           <span>{section.label}</span>
         </span>
-        <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${expanded ? 'bg-white/20' : 'bg-white/10'}`}>
+        <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${expanded ? 'bg-slate-200' : 'bg-slate-100'}`}>
           <ChevronRight
-            className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-150 ${expanded ? 'text-white' : 'text-white/40'}`}
+            className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-150 ${expanded ? 'text-slate-700' : 'text-slate-400'}`}
             strokeWidth={2.5}
             style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
           />
@@ -403,7 +394,7 @@ function MenuSection({ section, isActive, pinnedItems, onPinToggle, onNavigate }
       </button>
 
       {expanded && (
-        <div className="ml-4 pl-2 mt-2 mb-2 border-l border-white/15 space-y-1">
+        <div className="ml-4 pl-2 my-1 border-l border-slate-200/70 space-y-0.5">
           {section.items.map((item) => (
             <MenuItem
               key={item.path}
@@ -437,14 +428,14 @@ function MenuItem({ to, label, icon: Icon, active, pinned, showPin, onPinToggle,
           isSmall ? 'px-3 py-2.5 text-xs' : 'px-4 py-3 text-sm'
         } ${
           active
-            ? 'bg-white text-slate-900 font-black shadow-sm border border-white/20'
-            : 'text-white/80 font-bold active:bg-white/10'
+            ? 'bg-white text-slate-900 font-black shadow-sm border border-slate-100'
+            : 'text-slate-700 font-bold active:bg-white/50'
         }`}
       >
         <div className="flex-1 flex items-center gap-2.5 min-w-0">
           {Icon && (
             <Icon
-              className={`${iconSize} flex-shrink-0 ${active ? 'text-slate-900' : 'text-white/50'}`}
+              className={`${iconSize} flex-shrink-0 ${active ? 'text-slate-900' : 'text-slate-500'}`}
               strokeWidth={active ? 2.5 : 2.25}
             />
           )}
@@ -458,13 +449,13 @@ function MenuItem({ to, label, icon: Icon, active, pinned, showPin, onPinToggle,
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onPinToggle?.(); }}
               aria-label={pinned ? `Buang ${label} dari pin` : `Pin ${label}`}
               className={`p-1 rounded-md transition-opacity ${
-                pinned ? 'opacity-100 text-amber-400' : 'opacity-0 group-hover:opacity-50 text-white/40'
+                pinned ? 'opacity-100 text-amber-500' : 'opacity-0 group-hover:opacity-50 text-slate-400'
               }`}
             >
               {pinned ? <Pin className="w-3.5 h-3.5 fill-current" /> : <PinOff className="w-3.5 h-3.5" />}
             </button>
           )}
-          {active && !showPin && <ChevronRight className="w-4 h-4 text-slate-900" strokeWidth={3} />}
+          {active && !showPin && <ChevronRight className="w-4 h-4 text-slate-700" strokeWidth={3} />}
         </div>
       </Link>
     </div>
@@ -473,8 +464,8 @@ function MenuItem({ to, label, icon: Icon, active, pinned, showPin, onPinToggle,
 
 function ChildInlineList({ childrenList, selectedChild, onSelect, onManage }) {
   return (
-    <div className="px-3 py-2 border-b border-white/10">
-      <div className="ml-4 pl-2 border-l border-white/15 space-y-1">
+    <div className="px-3 py-2 border-b border-white/40">
+      <div className="ml-4 pl-2 border-l border-slate-200/70 space-y-1">
         {(childrenList || []).map((child) => {
           const isActive = selectedChild?.id === child.id;
           const levelLabel = child.ageGroup === 'prasekolah' ? 'Prasekolah' : 'Sekolah Rendah';
@@ -484,7 +475,7 @@ function ChildInlineList({ childrenList, selectedChild, onSelect, onManage }) {
               type="button"
               onClick={() => { haptic('medium'); onSelect?.(child); }}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all active:scale-[0.98] ${
-                isActive ? 'bg-white shadow-sm border border-white/20' : 'text-white/80 active:bg-white/10'
+                isActive ? 'bg-white shadow-sm border border-slate-100' : 'text-slate-700 active:bg-white/60'
               }`}
             >
               <img
@@ -492,14 +483,14 @@ function ChildInlineList({ childrenList, selectedChild, onSelect, onManage }) {
                 alt=""
                 loading="lazy"
                 className={`w-7 h-7 rounded-full object-cover flex-shrink-0 ring-2 ${
-                  isActive ? 'ring-slate-300' : 'ring-white/20'
+                  isActive ? 'ring-slate-400' : 'ring-slate-200'
                 } bg-white`}
               />
               <div className="flex-1 min-w-0 text-left">
-                <p className={`text-xs font-black truncate leading-tight ${isActive ? 'text-slate-900' : 'text-white'}`}>
+                <p className={`text-xs font-black truncate leading-tight ${isActive ? 'text-slate-900' : 'text-slate-800'}`}>
                   {child.name}
                 </p>
-                <p className={`text-[10px] font-bold truncate leading-tight ${isActive ? 'text-slate-500' : 'text-white/50'}`}>
+                <p className={`text-[10px] font-bold truncate leading-tight ${isActive ? 'text-slate-500' : 'text-slate-500'}`}>
                   {levelLabel}
                 </p>
               </div>
@@ -512,10 +503,10 @@ function ChildInlineList({ childrenList, selectedChild, onSelect, onManage }) {
         <Link
           to="/children-profiles"
           onClick={() => { haptic('light'); onManage?.(); }}
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-white/60 font-bold text-xs active:bg-white/10 transition-colors"
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 font-bold text-xs active:bg-white/60 transition-colors"
         >
-          <div className="w-7 h-7 rounded-full bg-white/10 border border-dashed border-white/25 flex items-center justify-center flex-shrink-0">
-            <Plus className="w-3.5 h-3.5 text-white/60" strokeWidth={3} />
+          <div className="w-7 h-7 rounded-full bg-white/80 border border-dashed border-slate-300 flex items-center justify-center flex-shrink-0">
+            <Plus className="w-3.5 h-3.5 text-slate-500" strokeWidth={3} />
           </div>
           <span>Urus Anak</span>
         </Link>
