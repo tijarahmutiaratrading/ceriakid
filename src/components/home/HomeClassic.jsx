@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLang } from '@/lib/LanguageContext';
 import { t } from '@/lib/i18n';
 
-import CategoryGrid from '@/components/home/CategoryGrid';
+import CategoryGridClassic from '@/components/home/CategoryGridClassic';
 import DailyChallenge from '@/components/home/DailyChallenge';
 import AppleFitnessHero from '@/components/home/AppleFitnessHero';
 import QuickAccessGrid from '@/components/home/QuickAccessGrid';
@@ -154,7 +154,7 @@ export default function HomeClassic({ user, avatarUrl, onLogout, ageGroup, toggl
             </div>
             <div className="h-1 flex-1 bg-gradient-to-r from-cyan-300 via-pink-300 to-transparent rounded-full" />
           </div>
-          <CategoryGrid />
+          <CategoryGridClassic />
         </motion.div>
 
       </div>
