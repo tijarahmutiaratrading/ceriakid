@@ -74,7 +74,7 @@ export default function CinematicShowcase({ item, playLabel, onPlay }) {
             className="relative"
           >
             <div className="absolute -inset-4 rounded-[2rem] blur-3xl opacity-40" style={{ background: item.accent }} />
-            <button onClick={onPlay} className="relative block w-full overflow-hidden rounded-[1.75rem] border border-white/15 shadow-2xl group text-left">
+            <button onClick={onPlay} className="relative block w-full overflow-hidden rounded-[1.75rem] border border-white/15 shadow-2xl group text-left isolate [transform:translateZ(0)] [clip-path:inset(0_round_1.75rem)]">
               {item.art ? (
                 <img
                   src={item.art}

@@ -63,7 +63,7 @@ export default function CinematicRail({ items, selected, onSelect, onActivate, a
             aria-label={it.title}
           >
             <div
-              className={`relative h-20 w-20 sm:h-24 sm:w-24 overflow-hidden rounded-2xl transition-all duration-300 ${
+              className={`relative h-20 w-20 sm:h-24 sm:w-24 overflow-hidden rounded-2xl [transform:translateZ(0)] [clip-path:inset(0_round_1rem)] transition-all duration-300 ${
                 isSel
                   ? 'ring-[3px] ring-white shadow-[0_0_30px_rgba(255,255,255,0.35)]'
                   : 'ring-1 ring-white/15 opacity-60 hover:opacity-90'
