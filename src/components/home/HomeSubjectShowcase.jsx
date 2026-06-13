@@ -100,7 +100,7 @@ export default function HomeSubjectShowcase() {
 
       <div className="relative">
         <CinematicShowcase item={item} playLabel="Pilih Subjek Ini" onPlay={handlePlay} />
-        <CinematicRail items={items} selected={safeIdx} onSelect={setSelectedIdx} onActivate={handlePlay} />
+        <CinematicRail items={items} selected={safeIdx} onSelect={setSelectedIdx} onActivate={handlePlay} autoScroll />
       </div>
     </div>
   );
