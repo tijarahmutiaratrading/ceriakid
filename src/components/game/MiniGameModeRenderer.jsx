@@ -6,9 +6,9 @@ import useGameProgress from '@/hooks/useGameProgress';
 import useMiniFeedback from '@/hooks/useMiniFeedback';
 
 // Glassmorphism gelap — PS5 style (glass gelap + glow accent + backdrop blur)
-const panel = 'rounded-3xl p-4 bg-white/8 backdrop-blur-xl ring-1 ring-white/15 shadow-[0_8px_30px_rgba(0,0,0,0.4),0_0_40px_-8px_rgba(139,92,246,0.35),inset_0_1px_0_rgba(255,255,255,0.08)]';
-const action = 'rounded-2xl bg-white/10 backdrop-blur-xl text-white font-black shadow-[0_4px_16px_rgba(0,0,0,0.3),0_0_24px_-6px_rgba(139,92,246,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-white/15 active:scale-95 hover:-translate-y-0.5 transition-all';
-const chip = 'px-4 py-3.5 rounded-2xl bg-white/10 backdrop-blur-xl text-white font-black text-xl shadow-[0_4px_16px_rgba(0,0,0,0.3),0_0_24px_-6px_rgba(139,92,246,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] ring-1 ring-white/15 active:scale-95 hover:-translate-y-0.5 transition-all';
+const panel = 'rounded-3xl p-4 bg-white/8 backdrop-blur-xl ring-1 ring-white/15';
+const action = 'rounded-2xl bg-white/10 backdrop-blur-xl text-white font-black ring-1 ring-white/15 active:scale-95 hover:-translate-y-0.5 transition-all';
+const chip = 'px-4 py-3.5 rounded-2xl bg-white/10 backdrop-blur-xl text-white font-black text-xl ring-1 ring-white/15 active:scale-95 hover:-translate-y-0.5 transition-all';
 const targetPill = 'px-3.5 py-1.5 rounded-full brand-gradient-br text-white font-black text-lg shadow-md ring-2 ring-white/60 inline-block';
 
 // STANDARD font sizes — kekalkan konsisten merentas semua mini game modes
@@ -810,7 +810,7 @@ function PictureHuntMode() {
       </div>
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
         {items.map((item, i) => (
-          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white/10 backdrop-blur-xl ring-1 ring-white/15 text-base sm:text-lg font-black text-white shadow-[0_4px_16px_rgba(0,0,0,0.3)] active:scale-95 disabled:opacity-50 flex items-center justify-center p-2 overflow-hidden leading-tight text-center">{getItemText(item)}</button>
+          <button key={i} onClick={() => pick(item)} disabled={found} className="aspect-square rounded-2xl bg-white/10 backdrop-blur-xl ring-1 ring-white/15 text-base sm:text-lg font-black text-white active:scale-95 disabled:opacity-50 flex items-center justify-center p-2 overflow-hidden leading-tight text-center">{getItemText(item)}</button>
         ))}
       </div>
     </div>
