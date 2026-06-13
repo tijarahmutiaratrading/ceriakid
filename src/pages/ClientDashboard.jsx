@@ -12,6 +12,7 @@ import SettingsHero from '@/components/dashboard/SettingsHero';
 import ParentAvatarPicker from '@/components/dashboard/ParentAvatarPicker';
 import ManageDevices from '@/components/ManageDevices';
 import OfflineModeCard from '@/components/offline/OfflineModeCard';
+import UIThemeSwitcher from '@/components/dashboard/UIThemeSwitcher';
 
 const TIER_CONFIG = {
   free:      { label: 'Percuma',  emoji: '🆓', color: 'from-gray-400 to-gray-500' },
@@ -128,6 +129,16 @@ export default function ClientDashboard() {
           className="mb-4"
         >
           <UpgradeTierCard currentTier={userTier} user={user} gender={gender} onGenderChange={setGender} />
+        </motion.div>
+
+        {/* Tema Paparan — pilih PS5 atau Klasik */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18 }}
+          className="mb-5"
+        >
+          <UIThemeSwitcher />
         </motion.div>
 
         {/* Manage Devices */}

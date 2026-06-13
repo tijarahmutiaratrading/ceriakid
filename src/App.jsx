@@ -17,6 +17,7 @@ import { LanguageProvider } from '@/lib/LanguageContext';
 import { AgeGroupProvider } from '@/lib/AgeGroupContext';
 import { SelectedChildProvider } from '@/lib/SelectedChildContext';
 import { GameThemeProvider } from '@/lib/GameThemeContext';
+import { UIThemeProvider } from '@/lib/UIThemeContext';
 
 // Eager-load: kritikal untuk first paint (public pages + main shell)
 import Landing from '@/pages/Landing';
@@ -227,11 +228,13 @@ function App() {
       <Router>
         <QueryClientProvider client={queryClientInstance}>
           <AuthProvider>
+            <UIThemeProvider>
             <GameThemeProvider>
               <OfflineBanner />
               <AuthenticatedAppWithChild />
               <Toaster />
             </GameThemeProvider>
+            </UIThemeProvider>
           </AuthProvider>
         </QueryClientProvider>
       </Router>
