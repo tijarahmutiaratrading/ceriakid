@@ -7,6 +7,8 @@ import { useLang } from '@/lib/LanguageContext';
 import { t } from '@/lib/i18n';
 
 import AppHeader from '@/components/AppHeader';
+import HomeClassic from '@/components/home/HomeClassic';
+import { useUITheme } from '@/lib/UIThemeContext';
 import HomeBrowseShowcase from '@/components/home/HomeBrowseShowcase';
 import CinematicTips from '@/components/hub/CinematicTips';
 import SubscriptionExpiryBanner from '@/components/dashboard/SubscriptionExpiryBanner';
@@ -23,6 +25,7 @@ export default function Home() {
   const { isAuthenticated, user, isLoadingAuth, logout } = authContext || {};
   const { ageGroup, toggleAgeGroup } = useAgeGroup() || {};
   const { lang } = useLang();
+  const { isClassic } = useUITheme();
   const safeAgeGroup = ageGroup || 'prasekolah';
   const safeToggle = toggleAgeGroup || (() => {});
   const [deviceCheck, setDeviceCheck] = React.useState({ status: 'checking', devices: [] });
@@ -99,18 +102,37 @@ export default function Home() {
     );
   }
 
+  const onboarding = showOnboarding ? (
+    <OnboardingWizard
+      user={user}
+      onComplete={() => {
+        setShowOnboarding(false);
+        window.location.reload();
+      }}
+    />
+  ) : null;
+
+  // Tema KLASIK CERIA — versi lama cerah & berwarna
+  if (isClassic) {
+    return (
+      <>
+        {onboarding}
+        <AppHeader theme="light" />
+        <HomeClassic
+          user={user}
+          avatarUrl={homeAvatarUrl || user?.avatarUrl}
+          onLogout={logout}
+          ageGroup={safeAgeGroup}
+          toggleAgeGroup={safeToggle}
+        />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-nunito relative bg-slate-950">
       {/* Onboarding wizard untuk user baru */}
-      {showOnboarding && (
-        <OnboardingWizard
-          user={user}
-          onComplete={() => {
-            setShowOnboarding(false);
-            window.location.reload();
-          }}
-        />
-      )}
+      {onboarding}
 
       {/* Latar sinematik PS5-style — gelap dengan glow halus */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full" aria-hidden="true">
