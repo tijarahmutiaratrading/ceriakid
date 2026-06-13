@@ -174,7 +174,15 @@ export default function Home() {
 
         {isAuthenticated && <InstallAppGuide />}
 
-        <CinematicTips />
+        <div className="relative">
+          <div className="absolute -inset-x-10 -inset-y-8 pointer-events-none" aria-hidden="true">
+            <div className="absolute left-1/4 top-1/2 -translate-y-1/2 w-[280px] h-[280px] md:w-[450px] md:h-[450px] bg-red-600/20 rounded-full filter blur-3xl" />
+            <div className="absolute right-1/4 bottom-0 w-[260px] h-[260px] md:w-[420px] md:h-[420px] bg-red-500/16 rounded-full filter blur-3xl" />
+          </div>
+          <div className="relative">
+            <CinematicTips />
+          </div>
+        </div>
 
       </div>
 
