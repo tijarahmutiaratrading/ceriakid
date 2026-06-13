@@ -152,7 +152,7 @@ export default function QuizAI() {
               <p className="text-cyan-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> Bersama Cikgu Rosie
               </p>
-              <h1 className="text-xl md:text-2xl font-black text-slate-900">Kuiz AI</h1>
+              <h1 className="text-xl md:text-2xl font-black text-white">Kuiz AI</h1>
             </div>
           </div>
           <CreditBalanceWidget compact />
