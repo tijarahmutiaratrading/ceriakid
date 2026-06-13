@@ -15,7 +15,7 @@ export default function HomeBrowseShowcase() {
   return (
     <div>
       {/* Tajuk + butang pilih kategori — jelas macam pemilih umur */}
-      <p className="text-sm font-black uppercase tracking-[0.2em] text-white px-1 mb-3">Pilih Kategori</p>
+      <p className="text-xs font-black uppercase tracking-[0.2em] text-white px-1 mb-2">Pilih Kategori</p>
       <div className="flex gap-3 mb-5">
         {TABS.map((t) => {
           const active = tab === t.key;
@@ -24,9 +24,9 @@ export default function HomeBrowseShowcase() {
               key={t.key}
               whileTap={{ scale: 0.95 }}
               onClick={() => setTab(t.key)}
-              className={`flex-1 rounded-2xl py-3.5 px-4 font-black text-sm flex items-center justify-center gap-2 transition-all ${
+              className={`flex-1 rounded-2xl py-3 px-4 font-bold text-sm flex items-center justify-center gap-2 transition-all ${
                 active
-                  ? 'bg-white text-slate-900 shadow-xl ring-2 ring-white'
+                  ? 'bg-white text-slate-900 shadow-lg ring-2 ring-white'
                   : 'bg-white/10 text-white/70 border border-white/15 hover:bg-white/15'
               }`}
             >
