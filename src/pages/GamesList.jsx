@@ -16,6 +16,7 @@ import { ArrowLeft, Gamepad2 } from 'lucide-react';
 import { getSubjectArt, getSubjectAccent } from '@/lib/subjectArt';
 import { useSelectedChild } from '@/lib/SelectedChildContext';
 import { getActiveTier, isGameIndexLocked } from '@/lib/tierAccess';
+import { useUITheme } from '@/lib/UIThemeContext';
 
 const KAFA_LABELS = {
   kafa_quran: 'KAFA · Al-Quran & Hafazan',
@@ -137,6 +138,7 @@ export default function GamesList() {
   const { ageGroup } = useAgeGroup();
   const { lang } = useLang();
   const { selectedChild } = useSelectedChild();
+  const { isClassic } = useUITheme();
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState({});
   const [selectedDarjah, setSelectedDarjah] = useState(null);
@@ -362,7 +364,8 @@ export default function GamesList() {
               title: game.title,
               desc: cleanDesc,
               emoji: game.emoji || '🎮',
-              art: game.iconUrl || gameArt.art,
+              // Tema Klasik — guna emoji sahaja (jangan papar gambar 3D)
+              art: isClassic ? null : (game.iconUrl || gameArt.art),
               accent: gameArt.accent,
               badge: locked ? '🔒 Premium' : getCategoryLabel(category, lang),
               metaChips: [

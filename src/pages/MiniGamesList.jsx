@@ -11,11 +11,13 @@ import CinematicShowcase from '@/components/hub/CinematicShowcase';
 import CinematicRail from '@/components/hub/CinematicRail';
 import CinematicTips from '@/components/hub/CinematicTips';
 import { getGameArt } from '@/lib/gameArtPool';
+import { useUITheme } from '@/lib/UIThemeContext';
 
 export default function MiniGamesList() {
   const { type } = useParams();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
+  const { isClassic } = useUITheme();
   const [userTier, setUserTier] = React.useState('free');
   const [loadingGames, setLoadingGames] = React.useState(true);
   const [selectedIdx, setSelectedIdx] = React.useState(0);
@@ -47,7 +49,7 @@ export default function MiniGamesList() {
       title: game.title,
       desc: game.objective || 'Cabaran menarik menanti!',
       emoji: game.emoji || category.emoji,
-      art: gameArt.art,
+      art: isClassic ? null : gameArt.art,
       accent: gameArt.accent,
       badge: locked ? '🔒 Premium' : category.title,
       metaChips: [`🎯 Pusingan ${idx + 1}`, '⭐ 3 tahap kesukaran'],
