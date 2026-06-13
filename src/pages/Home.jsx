@@ -115,9 +115,10 @@ export default function Home() {
       {/* Latar sinematik PS5-style — gelap dengan glow halus */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none max-w-full" aria-hidden="true">
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950 to-slate-950" />
-        <div className="absolute -top-48 -right-40 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-violet-600/20 rounded-full filter blur-3xl" />
-        <div className="absolute top-1/3 -left-32 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-cyan-500/12 rounded-full filter blur-3xl" />
-        <div className="absolute -bottom-24 right-1/4 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-fuchsia-500/12 rounded-full filter blur-3xl" />
+        <div className="absolute -top-48 -right-40 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-red-600/20 rounded-full filter blur-3xl" />
+        <div className="absolute top-1/3 -left-32 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-red-500/14 rounded-full filter blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[320px] h-[320px] md:w-[600px] md:h-[600px] bg-red-600/18 rounded-full filter blur-3xl" />
+        <div className="absolute -bottom-32 left-1/4 w-[300px] h-[300px] md:w-[550px] md:h-[550px] bg-red-500/14 rounded-full filter blur-3xl" />
       </div>
 
       <AppHeader />
