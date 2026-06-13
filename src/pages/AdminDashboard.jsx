@@ -295,7 +295,9 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen text-foreground" style={{ background: '#fafafa' }}>
+    <div className="min-h-screen text-foreground relative">
+      {/* Latar terang penuh skrin — elak latar gelap body terlihat di admin */}
+      <div className="fixed inset-0 -z-10" style={{ background: '#fafafa' }} />
       {/* Subtle grid pattern background */}
       <div
         className="fixed inset-0 pointer-events-none opacity-[0.015]"
