@@ -24,9 +24,9 @@ export default function HomeBrowseShowcase() {
               key={t.key}
               whileTap={{ scale: 0.95 }}
               onClick={() => setTab(t.key)}
-              className={`flex-1 rounded-2xl py-3 px-4 font-bold text-sm flex items-center justify-center gap-2 transition-all ${
+              className={`rounded-full py-2 px-4 font-bold text-xs flex items-center justify-center gap-1.5 transition-all ${
                 active
-                  ? 'bg-white text-slate-900 shadow-lg ring-2 ring-white'
+                  ? 'bg-white text-slate-900 shadow-md'
                   : 'bg-white/10 text-white/70 border border-white/15 hover:bg-white/15'
               }`}
             >
