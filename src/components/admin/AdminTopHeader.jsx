@@ -21,15 +21,17 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
       <nav
         className="pointer-events-auto flex items-center gap-0 px-1.5 py-0.5 rounded-full max-w-[calc(100vw-2rem)]"
         style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25))',
+          background: 'linear-gradient(135deg, rgba(15,23,42,0.92), rgba(30,41,59,0.85))',
           backdropFilter: 'blur(20px) saturate(180%)',
           WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
         }}
       >
         {/* Switch ke user dashboard */}
         <Link
           to="/dashboard"
-          className="flex items-center gap-1 px-1.5 py-0.5 lg:px-2 lg:py-0.5 rounded-full text-sm lg:text-[15px] font-black text-amber-700 hover:text-amber-900 hover:bg-white/50 transition-colors whitespace-nowrap"
+          className="flex items-center gap-1 px-1.5 py-0.5 lg:px-2 lg:py-0.5 rounded-full text-sm lg:text-[15px] font-black text-amber-300 hover:text-amber-200 hover:bg-white/10 transition-colors whitespace-nowrap"
           title="Tukar ke Dashboard Pengguna"
         >
           <LayoutGrid className="w-4 h-4 lg:w-[18px] lg:h-[18px]" />
@@ -45,7 +47,7 @@ export default function AdminTopHeader({ activeTab, setActiveTab }) {
               type="button"
               onClick={() => setActiveTab(item.key)}
               className={`relative px-2 py-1.5 lg:px-2.5 lg:py-2 rounded-full font-black text-sm lg:text-[15px] transition-colors whitespace-nowrap ${
-                active ? 'text-white' : 'text-slate-800 hover:text-slate-900'
+                active ? 'text-white' : 'text-slate-300 hover:text-white'
               }`}
             >
               {active && (
