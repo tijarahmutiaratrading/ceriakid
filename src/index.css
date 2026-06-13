@@ -230,6 +230,21 @@
     color: #7c3aed !important;
   }
 
+  /* Latar gradient oren (brand-gradient) — teks WAJIB putih dalam kedua-dua tema,
+     atasi override mode cerah supaya teks tak jadi gelap & hilang atas oren. */
+  [data-game-theme="light"] .brand-gradient .text-white,
+  [data-game-theme="light"] .brand-gradient-br .text-white,
+  [data-game-theme="light"] .brand-gradient .text-white\/80,
+  [data-game-theme="light"] .brand-gradient-br .text-white\/80,
+  [data-game-theme="light"] .brand-gradient .text-white\/70,
+  [data-game-theme="light"] .brand-gradient-br .text-white\/70,
+  [data-game-theme="light"] .brand-gradient .text-white\/60,
+  [data-game-theme="light"] .brand-gradient-br .text-white\/60,
+  [data-game-theme="light"] .brand-gradient .text-white\/50,
+  [data-game-theme="light"] .brand-gradient-br .text-white\/50 {
+    color: #ffffff !important;
+  }
+
   /* Brand gradient yang dikawal oleh Theme Switcher admin */
   .brand-gradient {
     background-image: linear-gradient(to right, var(--brand-gradient-from), var(--brand-gradient-to));
