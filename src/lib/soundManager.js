@@ -2,8 +2,26 @@
 
 const audioContext = typeof window !== 'undefined' ? new (window.AudioContext || window.webkitAudioContext)() : null;
 
+// Browser (terutama mobile/iOS) "suspend" AudioContext sampai ada interaksi user.
+// Sekali user tap (mula main game), kita resume context supaya bunyi boleh keluar.
+if (typeof window !== 'undefined' && audioContext) {
+  const resumeAudio = () => {
+    if (audioContext.state === 'suspended') {
+      audioContext.resume().catch(() => {});
+    }
+  };
+  window.addEventListener('pointerdown', resumeAudio);
+  window.addEventListener('touchstart', resumeAudio);
+  window.addEventListener('keydown', resumeAudio);
+}
+
 export const playSound = (type) => {
   if (!audioContext) return;
+
+  // Resume kalau masih suspended (cth: bunyi auto selepas confetti tanpa tap baru)
+  if (audioContext.state === 'suspended') {
+    audioContext.resume().catch(() => {});
+  }
 
   const now = audioContext.currentTime;
   const duration = type === 'correct' ? 0.4 : 0.3;
